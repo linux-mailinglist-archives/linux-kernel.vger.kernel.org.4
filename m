@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A78262EBE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 03:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A93E62EBEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 03:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235055AbiKRC0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 21:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S240707AbiKRC3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 21:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiKRC0r (ORCPT
+        with ESMTP id S232004AbiKRC3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 21:26:47 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A048D499;
-        Thu, 17 Nov 2022 18:26:45 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id f3so3827730pgc.2;
-        Thu, 17 Nov 2022 18:26:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=arx2yAZXD7tXt4zd2qXLeGoq4uS1K0CObnvxKkUjNtY=;
-        b=M5Te2Gus9S/luukvsmnBjkLptVKESqmvDi8nkuzxysjVUcDyD0oY49SHAVpKPT5SUE
-         fiKWBzQdz8Ps9tHgyGDj1dNP67j1mvLO3nnSeMw6r/SnQQarZvfAVfc34rd/cUQI20Op
-         Ejs12yNU2ZZ0rKBrVBI9XiEVJt1IcjKcZuonYvHLAkGdfHNvFVWHrpSjC8snGDY/nrb6
-         CiTvwzzKDTY+fyD/GmOaa7JorTHt2k2bJEXA8mkofI0UJpWTBPsK3nEdzDtYdIB551T5
-         QjW4tHS4aYqYSfZA0admjf0dEqREIgvAOtDP8FGhWBEMi62R3o6FBneigfBkTxlPtsb1
-         sN9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=arx2yAZXD7tXt4zd2qXLeGoq4uS1K0CObnvxKkUjNtY=;
-        b=QaH11z79h/rvFxgOdIdQ0awED22Y2iqbo/citPPKjaT/bLVe0Iz7aO1jMaQYCfXuNy
-         F68un0q86QmqX8H+ecwBxWGNDwk+6my4SKFWZwGrVBDaRO8tLZUyKI1aVik+/O4I5W2P
-         xBq4lqLHMx14Y2Yib0Y1p9ZFNJnDxTwWEi/V7qdknd/5qgL+rnRmfdjxJMM28K7aduA2
-         SborDI5crGXluFm6dTeYxF4EZs4m2daTNKTMUOdsmxGLKc7D1PA7BRFPBE3F+dX1I83z
-         QRiWOiLGqhAZcLvkm4usTjMtNAsXFQxM8sZelcGy/Mnuz0fCXU3JoPh+pS6zTEpfhHXL
-         L+Wg==
-X-Gm-Message-State: ANoB5pnlE9ctbZ+6yuImazxQcSenpbWyq7MdiqPfGmXszoUedd84LGpJ
-        CChm3JbUkfXeMhsYzwCZHgA=
-X-Google-Smtp-Source: AA0mqf6Medvh+BapW5ok5snoYBLyP3U/JFRwJzdkevdqvL9d6iw+bsXvxa7Ft4bYznjZG4iHYQdgAA==
-X-Received: by 2002:aa7:9243:0:b0:56d:dd2a:f6b6 with SMTP id 3-20020aa79243000000b0056ddd2af6b6mr5610098pfp.30.1668738404704;
-        Thu, 17 Nov 2022 18:26:44 -0800 (PST)
-Received: from MacBook-Pro-5.local ([2620:10d:c090:400::5:411c])
-        by smtp.gmail.com with ESMTPSA id a13-20020a170902eccd00b0016d4f05eb95sm2131141plh.272.2022.11.17.18.26.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 18:26:44 -0800 (PST)
-Date:   Thu, 17 Nov 2022 18:26:40 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
-        yhs@fb.com, song@kernel.org, sdf@google.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
-        haoluo@google.com, tj@kernel.org, kernel-team@fb.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 1/3] bpf: Allow trusted pointers to be passed
- to KF_TRUSTED_ARGS kfuncs
-Message-ID: <20221118022640.borhn6iy4v2fhl7g@MacBook-Pro-5.local>
-References: <20221117032402.2356776-1-void@manifault.com>
- <20221117032402.2356776-2-void@manifault.com>
+        Thu, 17 Nov 2022 21:29:46 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213974AF03;
+        Thu, 17 Nov 2022 18:29:44 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4ND126472Wz15Mbg;
+        Fri, 18 Nov 2022 10:29:18 +0800 (CST)
+Received: from [10.174.187.128] (10.174.187.128) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 18 Nov 2022 10:29:41 +0800
+Subject: Re: disabling halt polling broken? (was Re: [PATCH 00/14] KVM:
+ Halt-polling fixes, cleanups and a new stat)
+To:     David Matlack <dmatlack@google.com>
+CC:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>, kvm <kvm@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Jon Cargille <jcargill@google.com>,
+        kvm-ppc <kvm-ppc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Jim Mattson <jmattson@google.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+        <wangyuan38@huawei.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+ <03f2f5ab-e809-2ba5-bd98-3393c3b843d2@de.ibm.com>
+ <YVHcY6y1GmvGJnMg@google.com>
+ <f37ab68c-61ce-b6fb-7a49-831bacfc7424@redhat.com>
+ <43e42f5c-9d9f-9e8b-3a61-9a053a818250@de.ibm.com>
+ <CABgObfYtS6wiQe=BhF3t5usr7J6q4PWE4=rwZMMukfC9wT_6fA@mail.gmail.com>
+ <YVIAdVxc+q2UWB+J@google.com>
+ <32810c89-44c6-6780-9d05-e49f6b897b6e@huawei.com>
+ <Y3UboELxugwDJkIG@google.com>
+From:   "wangyanan (Y)" <wangyanan55@huawei.com>
+Message-ID: <e124456c-0691-460b-c471-00ac1d7b0254@huawei.com>
+Date:   Fri, 18 Nov 2022 10:29:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117032402.2356776-2-void@manifault.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y3UboELxugwDJkIG@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.187.128]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500023.china.huawei.com (7.185.36.83)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,533 +79,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 09:24:00PM -0600, David Vernet wrote:
-> Kfuncs currently support specifying the KF_TRUSTED_ARGS flag to signal
-> to the verifier that it should enforce that a BPF program passes it a
-> "safe", trusted pointer. Currently, "safe" means that the pointer is
-> either PTR_TO_CTX, or is refcounted. There may be cases, however, where
-> the kernel passes a BPF program a safe / trusted pointer to an object
-> that the BPF program wishes to use as a kptr, but because the object
-> does not yet have a ref_obj_id from the perspective of the verifier, the
-> program would be unable to pass it to a KF_ACQUIRE | KF_TRUSTED_ARGS
-> kfunc.
-> 
-> The solution is to expand the set of pointers that are considered
-> trusted according to KF_TRUSTED_ARGS, so that programs can invoke kfuncs
-> with these pointers without getting rejected by the verifier.
-> 
-> There is already a PTR_UNTRUSTED flag that is set in some scenarios,
-> such as when a BPF program reads a kptr directly from a map
-> without performing a bpf_kptr_xchg() call. These pointers of course can
-> and should be rejected by the verifier. Unfortunately, however,
-> PTR_UNTRUSTED does not cover all the cases for safety that need to
-> be addressed to adequately protect kfuncs. Specifically, pointers
-> obtained by a BPF program "walking" a struct are _not_ considered
-> PTR_UNTRUSTED according to BPF. For example, say that we were to add a
-> kfunc called bpf_task_acquire(), with KF_ACQUIRE | KF_TRUSTED_ARGS, to
-> acquire a struct task_struct *. If we only used PTR_UNTRUSTED to signal
-> that a task was unsafe to pass to a kfunc, the verifier would mistakenly
-> allow the following unsafe BPF program to be loaded:
-> 
-> SEC("tp_btf/task_newtask")
-> int BPF_PROG(unsafe_acquire_task,
->              struct task_struct *task,
->              u64 clone_flags)
-> {
->         struct task_struct *acquired, *nested;
-> 
->         nested = task->last_wakee;
-> 
->         /* Would not be rejected by the verifier. */
->         acquired = bpf_task_acquire(nested);
->         if (!acquired)
->                 return 0;
-> 
->         bpf_task_release(acquired);
->         return 0;
-> }
-> 
-> To address this, this patch defines a new type flag called PTR_TRUSTED
-> which tracks whether a PTR_TO_BTF_ID pointer is safe to pass to a
-> KF_TRUSTED_ARGS kfunc or a BPF helper function. PTR_TRUSTED pointers are
-> passed directly from the kernel as a tracepoint or struct_ops callback
-> argument. Any nested pointer that is obtained from walking a PTR_TRUSTED
-> pointer is no longer PTR_TRUSTED. From the example above, the struct
-> task_struct *task argument is PTR_TRUSTED, but the 'nested' pointer
-> obtained from 'task->last_wakee' is not PTR_TRUSTED.
-> 
-> A subsequent patch will add kfuncs for storing a task kfunc as a kptr,
-> and then another patch will add selftests to validate.
-> 
-> Signed-off-by: David Vernet <void@manifault.com>
-> ---
->  Documentation/bpf/kfuncs.rst                  | 30 ++++-----
->  include/linux/bpf.h                           | 30 +++++++++
->  include/linux/btf.h                           | 65 ++++++++++++-------
->  kernel/bpf/btf.c                              | 38 +++++++++--
->  kernel/bpf/verifier.c                         | 45 ++++++++-----
->  kernel/trace/bpf_trace.c                      |  2 +-
->  net/ipv4/bpf_tcp_ca.c                         |  4 +-
->  tools/testing/selftests/bpf/verifier/calls.c  |  2 +-
->  .../selftests/bpf/verifier/ref_tracking.c     |  4 +-
->  9 files changed, 154 insertions(+), 66 deletions(-)
-> 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 0f858156371d..67b7e2f46ec6 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -137,22 +137,20 @@ KF_ACQUIRE and KF_RET_NULL flags.
->  --------------------------
->  
->  The KF_TRUSTED_ARGS flag is used for kfuncs taking pointer arguments. It
-> -indicates that the all pointer arguments will always have a guaranteed lifetime,
-> -and pointers to kernel objects are always passed to helpers in their unmodified
-> -form (as obtained from acquire kfuncs).
+
+
+On 2022/11/17 1:19, David Matlack wrote:
+> On Tue, Nov 15, 2022 at 11:28:56AM +0800, wangyanan (Y) wrote:
+>> Hi Sean, Paolo,
+>>
+>> I recently also notice the behavior change of param halt_poll_ns.
+>> Now it loses the ability to:
+>> 1) dynamically disable halt polling for all the running VMs
+>> by `echo 0 > /sys`
+>> 2) dynamically adjust the halt polling interval for all the
+>> running VMs by `echo * > /sys`
+>>
+>> While in our cases, we usually use above two abilities, and
+>> KVM_CAP_HALT_POLL is not used yet.
+> I think the right path forward is to make KVM_CAP_HALT_POLL a pure
+> override of halt_poll_ns, and restore the pre-existing behavior of
+> halt_poll_ns whenever KVM_CAP_HALT_POLL is not used. e.g. see the patch
+> below.
+Agree with this.
+kvm.halt_poll_ns serves like a legacy method to control halt polling
+globally. Once KVM_CAP_HALT_POLL is used for a VM, it should
+hold 100% responsibility to control on the VM, including disabling
+the polling. This strategy helps to keep the two mechanisms
+decoupled.
+> That will fix issues (1) and (2) above for any VM not using
+> KVM_CAP_HALT_POLL. If a VM is using KVM_CAP_HALT_POLL, it will ignore
+> all changes to halt_poll_ns. If we truly need a mechanism for admins to
+> disable halt-polling on VMs using KVM_CAP_HALT_POLL, we can introduce a
+> separate module parameter for that. But IMO, any setup that is
+> sophisticated enough to use KVM_CAP_HALT_POLL should also be able to use
+> KVM_CAP_HALT_POLL to disable halt polling.
+>
+> If everyone is happy with this approach I can test and send a real patch
+> to the mailing list.
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index e6e66c5e56f2..253ad055b6ad 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -788,6 +788,7 @@ struct kvm {
+>   	struct srcu_struct srcu;
+>   	struct srcu_struct irq_srcu;
+>   	pid_t userspace_pid;
+> +	bool override_halt_poll_ns;
+>   	unsigned int max_halt_poll_ns;
+>   	u32 dirty_ring_size;
+>   	bool vm_bugged;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 43bbe4fde078..479d0d0da0b5 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1198,8 +1198,6 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+>   			goto out_err_no_arch_destroy_vm;
+>   	}
+>   
+> -	kvm->max_halt_poll_ns = halt_poll_ns;
 > -
-> -It can be used to enforce that a pointer to a refcounted object acquired from a
-> -kfunc or BPF helper is passed as an argument to this kfunc without any
-> -modifications (e.g. pointer arithmetic) such that it is trusted and points to
-> -the original object.
-> -
-> -Meanwhile, it is also allowed pass pointers to normal memory to such kfuncs,
-> -but those can have a non-zero offset.
-> -
-> -This flag is often used for kfuncs that operate (change some property, perform
-> -some operation) on an object that was obtained using an acquire kfunc. Such
-> -kfuncs need an unchanged pointer to ensure the integrity of the operation being
-> -performed on the expected object.
-> +indicates that the all pointer arguments are valid, and that all pointers to
-> +BTF objects have been passed in their unmodified form (that is, at a zero
-> +offset, and without having been obtained from walking another pointer).
+>   	r = kvm_arch_init_vm(kvm, type);
+>   	if (r)
+>   		goto out_err_no_arch_destroy_vm;
+> @@ -3371,7 +3369,7 @@ void kvm_sigset_deactivate(struct kvm_vcpu *vcpu)
+>   	sigemptyset(&current->real_blocked);
+>   }
+>   
+> -static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
+> +static void grow_halt_poll_ns(struct kvm_vcpu *vcpu, unsigned int max)
+>   {
+>   	unsigned int old, val, grow, grow_start;
+>   
+> @@ -3385,8 +3383,8 @@ static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
+>   	if (val < grow_start)
+>   		val = grow_start;
+>   
+> -	if (val > vcpu->kvm->max_halt_poll_ns)
+> -		val = vcpu->kvm->max_halt_poll_ns;
+> +	if (val > max)
+> +		val = max;
+>   
+>   	vcpu->halt_poll_ns = val;
+>   out:
+> @@ -3501,10 +3499,17 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+>   {
+>   	bool halt_poll_allowed = !kvm_arch_no_poll(vcpu);
+>   	bool do_halt_poll = halt_poll_allowed && vcpu->halt_poll_ns;
+> +	unsigned int max_halt_poll_ns;
+>   	ktime_t start, cur, poll_end;
+> +	struct kvm *kvm = vcpu->kvm;
+>   	bool waited = false;
+>   	u64 halt_ns;
+>   
+> +	if (kvm->override_halt_poll_ns)
+> +		max_halt_poll_ns = kvm->max_halt_poll_ns;
+> +	else
+> +		max_halt_poll_ns = READ_ONCE(halt_poll_ns);
 > +
-> +There are two types of pointers to kernel objects which are considered "valid":
-> +
-> +1. Pointers which are passed as tracepoint or struct_ops callback arguments.
-> +2. Pointers which were returned from a KF_ACQUIRE or KF_KPTR_GET kfunc.
-> +
-> +Pointers to non-BTF objects (e.g. scalar pointers) may also be passed to
-> +KF_TRUSTED_ARGS kfuncs, and may have a non-zero offset.
-> +
-> +The definition of "valid" pointers is subject to change at any time, and has
-> +absolutely no ABI stability guarantees.
->  
->  2.4.6 KF_SLEEPABLE flag
->  -----------------------
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 54462dd28824..763ae250693e 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -524,6 +524,35 @@ enum bpf_type_flag {
->  	/* Size is known at compile time. */
->  	MEM_FIXED_SIZE		= BIT(10 + BPF_BASE_TYPE_BITS),
->  
-> +	/* PTR was passed from the kernel in a trusted context, and may be
-> +	 * passed to KF_TRUSTED_ARGS kfuncs or BPF helper functions.
-> +	 * Confusingly, this is _not_ the opposite of PTR_UNTRUSTED above.
-> +	 * PTR_UNTRUSTED refers to a kptr that was read directly from a map
-> +	 * without invoking bpf_kptr_xchg(). What we really need to know is
-> +	 * whether a pointer is safe to pass to a kfunc or BPF helper function.
-> +	 * While PTR_UNTRUSTED pointers are unsafe to pass to kfuncs and BPF
-> +	 * helpers, they do not cover all possible instances of unsafe
-> +	 * pointers. For example, a pointer that was obtained from walking a
-> +	 * struct will _not_ get the PTR_UNTRUSTED type modifier, despite the
-> +	 * fact that it may be NULL, invalid, etc. This is due to backwards
-> +	 * compatibility requirements, as this was the behavior that was first
-> +	 * introduced when kptrs were added. The behavior is now considered
-> +	 * deprecated, and PTR_UNTRUSTED will eventually be removed.
-> +	 *
-> +	 * PTR_TRUSTED, on the other hand, is a pointer that the kernel
-> +	 * guarantees to be valid and safe to pass to kfuncs and BPF helpers.
-> +	 * For example, pointers passed to tracepoint arguments are considered
-> +	 * PTR_TRUSTED, as are pointers that are passed to struct_ops
-> +	 * callbacks. As alluded to above, pointers that are obtained from
-> +	 * walking PTR_TRUSTED pointers are _not_ trusted. For example, if a
-> +	 * struct task_struct *task is PTR_TRUSTED, then accessing
-> +	 * task->last_wakee will lose the PTR_TRUSTED modifier when it's stored
-> +	 * in a BPF register. Similarly, pointers passed to certain programs
-> +	 * types such as kretprobes are not guaranteed to be valid, as they may
-> +	 * for example contain an object that was recently freed.
-> +	 */
-> +	PTR_TRUSTED		= BIT(11 + BPF_BASE_TYPE_BITS),
-> +
->  	__BPF_TYPE_FLAG_MAX,
->  	__BPF_TYPE_LAST_FLAG	= __BPF_TYPE_FLAG_MAX - 1,
->  };
-> @@ -617,6 +646,7 @@ enum bpf_return_type {
->  	RET_PTR_TO_RINGBUF_MEM_OR_NULL	= PTR_MAYBE_NULL | MEM_RINGBUF | RET_PTR_TO_MEM,
->  	RET_PTR_TO_DYNPTR_MEM_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_MEM,
->  	RET_PTR_TO_BTF_ID_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
-> +	RET_PTR_TO_BTF_ID_TRUSTED	= PTR_TRUSTED	 | RET_PTR_TO_BTF_ID,
->  
->  	/* This must be the last entry. Its purpose is to ensure the enum is
->  	 * wide enough to hold the higher bits reserved for bpf_type_flag.
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index d80345fa566b..13b969e74d3b 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -17,36 +17,53 @@
->  #define KF_RELEASE	(1 << 1) /* kfunc is a release function */
->  #define KF_RET_NULL	(1 << 2) /* kfunc returns a pointer that may be NULL */
->  #define KF_KPTR_GET	(1 << 3) /* kfunc returns reference to a kptr */
-> -/* Trusted arguments are those which are meant to be referenced arguments with
-> - * unchanged offset. It is used to enforce that pointers obtained from acquire
-> - * kfuncs remain unmodified when being passed to helpers taking trusted args.
-> +/* Trusted arguments are those which are guaranteed to be valid when passed to
-> + * the kfunc. It is used to enforce that pointers obtained from either acquire
-> + * kfuncs, or from the main kernel on a tracepoint or struct_ops callback
-> + * invocation, remain unmodified when being passed to helpers taking trusted
-> + * args.
->   *
-> - * Consider
-> - *	struct foo {
-> - *		int data;
-> - *		struct foo *next;
-> - *	};
-> + * Consider, for example, the following new task tracepoint:
->   *
-> - *	struct bar {
-> - *		int data;
-> - *		struct foo f;
-> - *	};
-> + *	SEC("tp_btf/task_newtask")
-> + *	int BPF_PROG(new_task_tp, struct task_struct *task, u64 clone_flags)
-> + *	{
-> + *		...
-> + *	}
->   *
-> - *	struct foo *f = alloc_foo(); // Acquire kfunc
-> - *	struct bar *b = alloc_bar(); // Acquire kfunc
-> + * And the following kfunc:
->   *
-> - * If a kfunc set_foo_data() wants to operate only on the allocated object, it
-> - * will set the KF_TRUSTED_ARGS flag, which will prevent unsafe usage like:
-> + *	BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_TRUSTED_ARGS)
->   *
-> - *	set_foo_data(f, 42);	   // Allowed
-> - *	set_foo_data(f->next, 42); // Rejected, non-referenced pointer
-> - *	set_foo_data(&f->next, 42);// Rejected, referenced, but wrong type
-> - *	set_foo_data(&b->f, 42);   // Rejected, referenced, but bad offset
-> + * All invocations to the kfunc must pass the unmodified, unwalked task:
->   *
-> - * In the final case, usually for the purposes of type matching, it is deduced
-> - * by looking at the type of the member at the offset, but due to the
-> - * requirement of trusted argument, this deduction will be strict and not done
-> - * for this case.
-> + *	bpf_task_acquire(task);		    // Allowed
-> + *	bpf_task_acquire(task->last_wakee); // Rejected, walked task
-> + *
-> + * Programs may also pass referenced tasks directly to the kfunc:
-> + *
-> + *	struct task_struct *acquired;
-> + *
-> + *	acquired = bpf_task_acquire(task);	// Allowed, same as above
-> + *	bpf_task_acquire(acquired);		// Allowed
-> + *	bpf_task_acquire(task);			// Allowed
-> + *	bpf_task_acquire(acquired->last_wakee); // Rejected, walked task
-> + *
-> + * Programs may _not_, however, pass a task from an arbitrary fentry/fexit, or
-> + * kprobe/kretprobe to the kfunc, as BPF cannot guarantee that all of these
-> + * pointers are guaranteed to be safe. For example, the following BPF program
-> + * would be rejected:
-> + *
-> + * SEC("kretprobe/free_task")
-> + * int BPF_PROG(free_task_probe, struct task_struct *tsk)
-> + * {
-> + *	struct task_struct *acquired;
-> + *
-> + *	acquired = bpf_task_acquire(acquired); // Rejected, not a trusted pointer
-> + *	bpf_task_release(acquired);
-> + *
-> + *	return 0;
-> + * }
->   */
->  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
->  #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 875355ff3718..8291f2911624 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -5579,6 +5579,11 @@ static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type *func_proto,
->  	return nr_args + 1;
->  }
->  
-> +static bool prog_type_args_trusted(enum bpf_prog_type prog_type)
-> +{
-> +	return prog_type == BPF_PROG_TYPE_TRACING || prog_type == BPF_PROG_TYPE_STRUCT_OPS;
-> +}
-> +
->  bool btf_ctx_access(int off, int size, enum bpf_access_type type,
->  		    const struct bpf_prog *prog,
->  		    struct bpf_insn_access_aux *info)
-> @@ -5722,6 +5727,9 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
->  	}
->  
->  	info->reg_type = PTR_TO_BTF_ID;
-> +	if (prog_type_args_trusted(prog->type))
-> +		info->reg_type |= PTR_TRUSTED;
-> +
->  	if (tgt_prog) {
->  		enum bpf_prog_type tgt_type;
->  
-> @@ -6558,15 +6566,26 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  		/* These register types have special constraints wrt ref_obj_id
->  		 * and offset checks. The rest of trusted args don't.
->  		 */
-> -		obj_ptr = reg->type == PTR_TO_CTX || reg->type == PTR_TO_BTF_ID ||
-> +		obj_ptr = reg->type == PTR_TO_CTX ||
-> +			  base_type(reg->type) == PTR_TO_BTF_ID ||
->  			  reg2btf_ids[base_type(reg->type)];
->  
->  		/* Check if argument must be a referenced pointer, args + i has
->  		 * been verified to be a pointer (after skipping modifiers).
->  		 * PTR_TO_CTX is ok without having non-zero ref_obj_id.
-> +		 *
-> +		 * All object pointers must be refcounted, other than:
-> +		 * - PTR_TO_CTX
-> +		 * - PTR_TRUSTED pointers
->  		 */
-> -		if (is_kfunc && trusted_args && (obj_ptr && reg->type != PTR_TO_CTX) && !reg->ref_obj_id) {
-> -			bpf_log(log, "R%d must be referenced\n", regno);
-> +		if (is_kfunc &&
-> +		    trusted_args &&
-> +		    obj_ptr &&
-> +		    base_type(reg->type) != PTR_TO_CTX &&
-> +		    (!(type_flag(reg->type) & PTR_TRUSTED) ||
-> +		     (type_flag(reg->type) & ~PTR_TRUSTED)) &&
-> +		    !reg->ref_obj_id) {
+>   	start = cur = poll_end = ktime_get();
+>   	if (do_halt_poll) {
+>   		ktime_t stop = ktime_add_ns(start, vcpu->halt_poll_ns);
+> @@ -3545,17 +3550,16 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+>   	if (halt_poll_allowed) {
+>   		if (!vcpu_valid_wakeup(vcpu)) {
+>   			shrink_halt_poll_ns(vcpu);
+> -		} else if (vcpu->kvm->max_halt_poll_ns) {
+> +		} else if (max_halt_poll_ns) {
+>   			if (halt_ns <= vcpu->halt_poll_ns)
+>   				;
+>   			/* we had a long block, shrink polling */
+> -			else if (vcpu->halt_poll_ns &&
+> -				 halt_ns > vcpu->kvm->max_halt_poll_ns)
+> +			else if (vcpu->halt_poll_ns && halt_ns > max_halt_poll_ns)
+>   				shrink_halt_poll_ns(vcpu);
+>   			/* we had a short halt and our poll time is too small */
+> -			else if (vcpu->halt_poll_ns < vcpu->kvm->max_halt_poll_ns &&
+> -				 halt_ns < vcpu->kvm->max_halt_poll_ns)
+> -				grow_halt_poll_ns(vcpu);
+> +			else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
+> +				 halt_ns < max_halt_poll_ns)
+> +				grow_halt_poll_ns(vcpu, max_halt_poll_ns);
+>   		} else {
+>   			vcpu->halt_poll_ns = 0;
+>   		}
+> @@ -4588,6 +4592,7 @@ static int kvm_vm_ioctl_enable_cap_generic(struct kvm *kvm,
+>   		if (cap->flags || cap->args[0] != (unsigned int)cap->args[0])
+>   			return -EINVAL;
+>   
+> +		kvm->override_halt_poll_ns = true;
+>   		kvm->max_halt_poll_ns = cap->args[0];
+>   		return 0;
+>   	}
+Looks sensible to me overall.
+I will look at the RFC series, thanks for your quick response.
 
-This is pretty hard to read.
-Is this checking:
-!(reg->type == PTR_TO_BTF_ID || reg->type == (PTR_TO_BTF_ID | PTR_TRUSTED))
-?
+Yanan
+.
+>> On 2021/9/28 1:33, Sean Christopherson wrote:
+>>> On Mon, Sep 27, 2021, Paolo Bonzini wrote:
+>>>> On Mon, Sep 27, 2021 at 5:17 PM Christian Borntraeger
+>>>> <borntraeger@de.ibm.com> wrote:
+>>>>>> So I think there are two possibilities that makes sense:
+>>>>>>
+>>>>>> * track what is using KVM_CAP_HALT_POLL, and make writes to halt_poll_ns follow that
+>>>>> what about using halt_poll_ns for those VMs that did not uses KVM_CAP_HALT_POLL and the private number for those that did.
+>>>> Yes, that's what I meant.  David pointed out that doesn't allow you to
+>>>> disable halt polling altogether, but for that you can always ask each
+>>>> VM's userspace one by one, or just not use KVM_CAP_HALT_POLL. (Also, I
+>>>> don't know about Google's usecase, but mine was actually more about
+>>>> using KVM_CAP_HALT_POLL to *disable* halt polling on some VMs!).
+>>> I kinda like the idea if special-casing halt_poll_ns=0, e.g. for testing or
+>>> in-the-field mitigation if halt-polling is broken.  It'd be trivial to support, e.g.
+>> Do we have any plan to repost the diff as a fix?
+>> I would be very nice that this issue can be solved.
+>>
+>> Besides, I think we may need some Doc for users to describe
+>> how halt_poll_ns works with KVM_CAP_HALT_POLL, like
+>> "Documentation/virt/guest-halt-polling.rst".
+>>> @@ -3304,19 +3304,23 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+>>>                   update_halt_poll_stats(vcpu, start, poll_end, !waited);
+>>>
+>>>           if (halt_poll_allowed) {
+>>> +               max_halt_poll_ns = vcpu->kvm->max_halt_poll_ns;
+>>> +               if (!max_halt_poll_ns || !halt_poll_ns)  <------ squish the max if halt_poll_ns==0
+>>> +                       max_halt_poll_ns = halt_poll_ns;
+>>> +
+>> Does this mean that KVM_CAP_HALT_POLL will not be able to
+>> disable halt polling for a VM individually when halt_poll_ns !=0?
+>>>                   if (!vcpu_valid_wakeup(vcpu)) {
+>>>                           shrink_halt_poll_ns(vcpu);
+>>> -               } else if (vcpu->kvm->max_halt_poll_ns) {
+>>> +               } else if (max_halt_poll_ns) {
+>>>                           if (halt_ns <= vcpu->halt_poll_ns)
+>>>                                   ;
+>>>                           /* we had a long block, shrink polling */
+>>>                           else if (vcpu->halt_poll_ns &&
+>>> -                                halt_ns > vcpu->kvm->max_halt_poll_ns)
+>>> +                                halt_ns > max_halt_poll_ns)
+>>>                                   shrink_halt_poll_ns(vcpu);
+>>>                           /* we had a short halt and our poll time is too small */
+>>> -                       else if (vcpu->halt_poll_ns < vcpu->kvm->max_halt_poll_ns &&
+>>> -                                halt_ns < vcpu->kvm->max_halt_poll_ns)
+>>> -                               grow_halt_poll_ns(vcpu);
+>>> +                       else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
+>>> +                                halt_ns < max_halt_poll_ns)
+>>> +                               grow_halt_poll_ns(vcpu, max_halt_poll_ns);
+>>>                   } else {
+>>>                           vcpu->halt_poll_ns = 0;
+>>>                   }
+>>> _______________________________________________
+>>> kvmarm mailing list
+>>> kvmarm@lists.cs.columbia.edu
+>>> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
+>>> .
+>> Thanks,
+>> Yanan
+> .
 
-Why not to use the above?
-Similar in other places... type_flag(reg->type) & ~PTR_TRUSTED is not easy.
-Maybe add a helper that will do
-bool ff(reg)
-{ 
-  return reg->type == PTR_TO_BTF_ID || reg->type == (PTR_TO_BTF_ID | PTR_TRUSTED);
-}
-
-?
-
-> +			bpf_log(log, "R%d must be referenced or trusted\n", regno);
->  			return -EINVAL;
->  		}
->  
-> @@ -6646,8 +6665,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  					i, btf_type_str(t));
->  				return -EINVAL;
->  			}
-> -		} else if (is_kfunc && (reg->type == PTR_TO_BTF_ID ||
-> -			   (reg2btf_ids[base_type(reg->type)] && !type_flag(reg->type)))) {
-> +		} else if (is_kfunc && (base_type(reg->type) == PTR_TO_BTF_ID ||
-> +			   (reg2btf_ids[base_type(reg->type)]))) {
->  			const struct btf_type *reg_ref_t;
->  			const struct btf *reg_btf;
->  			const char *reg_ref_tname;
-> @@ -6660,7 +6679,13 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  				return -EINVAL;
->  			}
->  
-> -			if (reg->type == PTR_TO_BTF_ID) {
-> +			if ((type_flag(reg->type) & ~PTR_TRUSTED)) {
-
-and use that helper here?
-
-> +				bpf_log(log, "kernel function %s arg#%d pointer had unexpected modifiers %d\n",
-> +					func_name, i, type_flag(reg->type));
-> +				return -EINVAL;
-> +			}
-> +
-> +			if (base_type(reg->type) == PTR_TO_BTF_ID) {
->  				reg_btf = reg->btf;
->  				reg_ref_id = reg->btf_id;
->  			} else {
-> @@ -6988,6 +7013,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
->  			}
->  
->  			reg->type = PTR_TO_MEM | PTR_MAYBE_NULL;
-> +
->  			reg->id = ++env->id_gen;
->  
->  			continue;
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 0312d9ce292f..f5b6b1f969d9 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -543,7 +543,7 @@ static bool is_cmpxchg_insn(const struct bpf_insn *insn)
->  static const char *reg_type_str(struct bpf_verifier_env *env,
->  				enum bpf_reg_type type)
->  {
-> -	char postfix[16] = {0}, prefix[32] = {0};
-> +	char postfix[16] = {0}, prefix[64] = {0};
->  	static const char * const str[] = {
->  		[NOT_INIT]		= "?",
->  		[SCALAR_VALUE]		= "scalar",
-> @@ -575,16 +575,14 @@ static const char *reg_type_str(struct bpf_verifier_env *env,
->  			strncpy(postfix, "_or_null", 16);
->  	}
->  
-> -	if (type & MEM_RDONLY)
-> -		strncpy(prefix, "rdonly_", 32);
-> -	if (type & MEM_RINGBUF)
-> -		strncpy(prefix, "ringbuf_", 32);
-> -	if (type & MEM_USER)
-> -		strncpy(prefix, "user_", 32);
-> -	if (type & MEM_PERCPU)
-> -		strncpy(prefix, "percpu_", 32);
-> -	if (type & PTR_UNTRUSTED)
-> -		strncpy(prefix, "untrusted_", 32);
-> +	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s",
-> +		 type & MEM_RDONLY ? "rdonly_" : "",
-> +		 type & MEM_RINGBUF ? "ringbuf_" : "",
-> +		 type & MEM_USER ? "user_" : "",
-> +		 type & MEM_PERCPU ? "percpu_" : "",
-> +		 type & PTR_UNTRUSTED ? "untrusted_" : "",
-> +		 type & PTR_TRUSTED ? "trusted_" : ""
-> +	);
->  
->  	snprintf(env->type_str_buf, TYPE_STR_BUF_LEN, "%s%s%s",
->  		 prefix, str[base_type(type)], postfix);
-> @@ -3844,7 +3842,7 @@ static int map_kptr_match_type(struct bpf_verifier_env *env,
->  			       struct bpf_reg_state *reg, u32 regno)
->  {
->  	const char *targ_name = kernel_type_name(kptr_field->kptr.btf, kptr_field->kptr.btf_id);
-> -	int perm_flags = PTR_MAYBE_NULL;
-> +	int perm_flags = PTR_MAYBE_NULL | PTR_TRUSTED;
->  	const char *reg_name = "";
->  
->  	/* Only unreferenced case accepts untrusted pointers */
-> @@ -4707,6 +4705,9 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
->  	if (type_flag(reg->type) & PTR_UNTRUSTED)
->  		flag |= PTR_UNTRUSTED;
->  
-> +	/* Any pointer obtained from walking a trusted pointer is no longer trusted. */
-> +	flag &= ~PTR_TRUSTED;
-> +
->  	if (atype == BPF_READ && value_regno >= 0)
->  		mark_btf_ld_reg(env, regs, value_regno, ret, reg->btf, btf_id, flag);
->  
-> @@ -5774,6 +5775,7 @@ static const struct bpf_reg_types btf_id_sock_common_types = {
->  		PTR_TO_TCP_SOCK,
->  		PTR_TO_XDP_SOCK,
->  		PTR_TO_BTF_ID,
-> +		PTR_TO_BTF_ID | PTR_TRUSTED,
->  	},
->  	.btf_id = &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
->  };
-> @@ -5807,9 +5809,19 @@ static const struct bpf_reg_types scalar_types = { .types = { SCALAR_VALUE } };
->  static const struct bpf_reg_types context_types = { .types = { PTR_TO_CTX } };
->  static const struct bpf_reg_types ringbuf_mem_types = { .types = { PTR_TO_MEM | MEM_RINGBUF } };
->  static const struct bpf_reg_types const_map_ptr_types = { .types = { CONST_PTR_TO_MAP } };
-> -static const struct bpf_reg_types btf_ptr_types = { .types = { PTR_TO_BTF_ID } };
-> +static const struct bpf_reg_types btf_ptr_types = {
-> +	.types = {
-> +		PTR_TO_BTF_ID,
-> +		PTR_TO_BTF_ID | PTR_TRUSTED,
-> +	},
-> +};
->  static const struct bpf_reg_types spin_lock_types = { .types = { PTR_TO_MAP_VALUE } };
-> -static const struct bpf_reg_types percpu_btf_ptr_types = { .types = { PTR_TO_BTF_ID | MEM_PERCPU } };
-> +static const struct bpf_reg_types percpu_btf_ptr_types = {
-> +	.types = {
-> +		PTR_TO_BTF_ID | MEM_PERCPU,
-> +		PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED,
-> +	}
-> +};
->  static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
->  static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
->  static const struct bpf_reg_types const_str_ptr_types = { .types = { PTR_TO_MAP_VALUE } };
-> @@ -5897,7 +5909,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
->  	return -EACCES;
->  
->  found:
-> -	if (reg->type == PTR_TO_BTF_ID) {
-> +	if (base_type(reg->type) == PTR_TO_BTF_ID && !(type_flag(reg->type) & ~PTR_TRUSTED)) {
->  		/* For bpf_sk_release, it needs to match against first member
->  		 * 'struct sock_common', hence make an exception for it. This
->  		 * allows bpf_sk_release to work for multiple socket types.
-> @@ -5973,6 +5985,7 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
->  	 * fixed offset.
->  	 */
->  	case PTR_TO_BTF_ID:
-> +	case PTR_TO_BTF_ID | PTR_TRUSTED:
->  		/* When referenced PTR_TO_BTF_ID is passed to release function,
->  		 * it's fixed offset must be 0.	In the other cases, fixed offset
->  		 * can be non-zero.
-> @@ -13690,6 +13703,8 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
->  			break;
->  		case PTR_TO_BTF_ID:
->  		case PTR_TO_BTF_ID | PTR_UNTRUSTED:
-> +		case PTR_TO_BTF_ID | PTR_TRUSTED:
-> +		case PTR_TO_BTF_ID | PTR_UNTRUSTED | PTR_TRUSTED:
->  			if (type == BPF_READ) {
->  				insn->code = BPF_LDX | BPF_PROBE_MEM |
->  					BPF_SIZE((insn)->code);
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index f2d8d070d024..5b9008bc597b 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -774,7 +774,7 @@ BPF_CALL_0(bpf_get_current_task_btf)
->  const struct bpf_func_proto bpf_get_current_task_btf_proto = {
->  	.func		= bpf_get_current_task_btf,
->  	.gpl_only	= true,
-> -	.ret_type	= RET_PTR_TO_BTF_ID,
-> +	.ret_type	= RET_PTR_TO_BTF_ID_TRUSTED,
->  	.ret_btf_id	= &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
->  };
->  
-> diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-> index d15c91de995f..0006b5438ff7 100644
-> --- a/net/ipv4/bpf_tcp_ca.c
-> +++ b/net/ipv4/bpf_tcp_ca.c
-> @@ -61,7 +61,9 @@ static bool bpf_tcp_ca_is_valid_access(int off, int size,
->  	if (!bpf_tracing_btf_ctx_access(off, size, type, prog, info))
->  		return false;
->  
-> -	if (info->reg_type == PTR_TO_BTF_ID && info->btf_id == sock_id)
-> +	if (base_type(info->reg_type) == PTR_TO_BTF_ID &&
-> +	    !(type_flag(info->reg_type) & ~PTR_TRUSTED) &&
-> +	    info->btf_id == sock_id)
->  		/* promote it to tcp_sock */
->  		info->btf_id = tcp_sock_id;
->  
-> diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-> index e1a937277b54..7ac947f00df4 100644
-> --- a/tools/testing/selftests/bpf/verifier/calls.c
-> +++ b/tools/testing/selftests/bpf/verifier/calls.c
-> @@ -109,7 +109,7 @@
->  	},
->  	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
->  	.result = REJECT,
-> -	.errstr = "arg#0 pointer type STRUCT prog_test_ref_kfunc must point",
-> +	.errstr = "arg#0 pointer had unexpected modifiers",
->  	.fixup_kfunc_btf_id = {
->  		{ "bpf_kfunc_call_test_acquire", 3 },
->  		{ "bpf_kfunc_call_test_release", 5 },
-> diff --git a/tools/testing/selftests/bpf/verifier/ref_tracking.c b/tools/testing/selftests/bpf/verifier/ref_tracking.c
-> index fd683a32a276..d9367f2894b9 100644
-> --- a/tools/testing/selftests/bpf/verifier/ref_tracking.c
-> +++ b/tools/testing/selftests/bpf/verifier/ref_tracking.c
-> @@ -142,7 +142,7 @@
->  	.kfunc = "bpf",
->  	.expected_attach_type = BPF_LSM_MAC,
->  	.flags = BPF_F_SLEEPABLE,
-> -	.errstr = "arg#0 pointer type STRUCT bpf_key must point to scalar, or struct with scalar",
-> +	.errstr = "arg#0 pointer had unexpected modifiers",
->  	.fixup_kfunc_btf_id = {
->  		{ "bpf_lookup_user_key", 2 },
->  		{ "bpf_key_put", 4 },
-> @@ -163,7 +163,7 @@
->  	.kfunc = "bpf",
->  	.expected_attach_type = BPF_LSM_MAC,
->  	.flags = BPF_F_SLEEPABLE,
-> -	.errstr = "arg#0 pointer type STRUCT bpf_key must point to scalar, or struct with scalar",
-> +	.errstr = "arg#0 pointer had unexpected modifiers",
->  	.fixup_kfunc_btf_id = {
->  		{ "bpf_lookup_system_key", 1 },
->  		{ "bpf_key_put", 3 },
-> -- 
-> 2.38.1
-> 
