@@ -2,64 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B5462EED2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9987362EED9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241279AbiKRIBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 03:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S241309AbiKRIDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 03:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiKRIBu (ORCPT
+        with ESMTP id S241034AbiKRIDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 03:01:50 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD686A1AC
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:01:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KQNE2xd9tPn0Zb+jKbifQFfOM1ctrKpJPYI8m278BgE=; b=STi4dfBwrwhIaA6LQJCigXd/CS
-        QJd+ZKlBmAivBILmPYix3Bojwl11I7oysAfqyycSgTjfUBzj5uvir5xD0lpGJuJk/eU7UJK0y0j8g
-        /bs9y8EFW8cHZLWbR8lBRBgaPwv3MrU65OYE+NzKodQt31mzucr8gtXATlRFynUBWAUeyUmaUtVLB
-        fw6SW67c2V3NERVa/mtEFfx5w5cV1fhorDMo6IZYHr6scYXnaeeP2pByG03vbTn3EMcPjeIIeLovj
-        jleiqGne2VVPnKAhBAsbSPqCbVPPg261JoPjMP5FWwYN7YQ+vrje9JG3sFvDLs0cnyP0Xbbxu3xG1
-        BN6hz7qw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovwJq-0024WM-Tv; Fri, 18 Nov 2022 08:01:50 +0000
-Date:   Fri, 18 Nov 2022 08:01:50 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, stephen.s.brennan@oracle.com,
-        urezki@gmail.com, hch@infradead.org
-Subject: Re: [PATCH RFC 3/3] mm/vmalloc.c: allow vread() to read out
- vm_map_ram areas
-Message-ID: <Y3c77o95A9vKQ745@casper.infradead.org>
-References: <20221109033535.269229-1-bhe@redhat.com>
- <20221109033535.269229-4-bhe@redhat.com>
+        Fri, 18 Nov 2022 03:03:23 -0500
+Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460E8A1AC;
+        Fri, 18 Nov 2022 00:03:21 -0800 (PST)
+From:   Denis Arefev <arefev@swemel.ru>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
+        t=1668758598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Y44J0Pt/nPO/pSFOAkMZfH8CxwueGH3Mwo6TRIGNryY=;
+        b=FD3cv8GSsHNdpUradPl+tbsouvGeOVBrKzpKMCCfsnh+FaxwTusA77Ln0eEfgq1Ww9FrtZ
+        D2a/MSg7Vet+FVU+usqJGBC+ngO6xDIW+9msuHNaPE3fLe4n3e+3CR1PicupTvyZuwb4ir
+        HenHsjazlccNVJqh+UIdXio4iqEEyUI=
+To:     Simon Horman <simon.horman@netronome.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, oss-drivers@netronome.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
+Subject: [PATCH net v3] nfp: flower: Added pointer check and continue
+Date:   Fri, 18 Nov 2022 11:03:17 +0300
+Message-Id: <20221118080317.119749-1-arefev@swemel.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109033535.269229-4-bhe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 11:35:34AM +0800, Baoquan He wrote:
-> Currently, vread() can read out vmalloc areas which is associated with
-> a vm_struct. While this doesn't work for areas created by vm_map_ram()
-> interface because it doesn't allocate a vm_struct. Then in vread(),
-> these areas will be skipped.
-> 
-> Here, add a new function vb_vread() to read out areas managed by
-> vmap_block specifically. Then recognize vm_map_ram areas via vmap->flags
-> and handle  them respectively.
+Return value of a function 'kmalloc_array' is dereferenced at 
+lag_conf.c:347 without checking for null, 
+but it is usually checked for this function.
 
-i don't understand how this deals with the original problem identified,
-that the vread() can race with an unmap.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Fixes: bb9a8d031140 ("nfp: flower: monitor and offload LAG groups")
+Signed-off-by: Denis Arefev <arefev@swemel.ru>
+---
+ drivers/net/ethernet/netronome/nfp/flower/lag_conf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c b/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
+index 63907aeb3884..1aaec4cb9f55 100644
+--- a/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
++++ b/drivers/net/ethernet/netronome/nfp/flower/lag_conf.c
+@@ -276,7 +276,7 @@ static void nfp_fl_lag_do_work(struct work_struct *work)
+ 
+ 	mutex_lock(&lag->lock);
+ 	list_for_each_entry_safe(entry, storage, &lag->group_list, list) {
+-		struct net_device *iter_netdev, **acti_netdevs;
++		struct net_device *iter_netdev, **acti_netdevs = NULL;
+ 		struct nfp_flower_repr_priv *repr_priv;
+ 		int active_count = 0, slaves = 0;
+ 		struct nfp_repr *repr;
+@@ -308,6 +308,10 @@ static void nfp_fl_lag_do_work(struct work_struct *work)
+ 
+ 		acti_netdevs = kmalloc_array(entry->slave_cnt,
+ 					     sizeof(*acti_netdevs), GFP_KERNEL);
++		if (!acti_netdevs) {
++			schedule_delayed_work(&lag->work, NFP_FL_LAG_DELAY);
++			continue;
++		}
+ 
+ 		/* Include sanity check in the loop. It may be that a bond has
+ 		 * changed between processing the last notification and the
+-- 
+2.25.1
+
