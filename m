@@ -2,153 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6818062EA04
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3853862EA07
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbiKRAEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 19:04:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
+        id S238946AbiKRAFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 19:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240414AbiKRAEK (ORCPT
+        with ESMTP id S233270AbiKRAFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 19:04:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775023F051
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:04:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E22F0622C6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:04:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C89C433D6;
-        Fri, 18 Nov 2022 00:04:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668729848;
-        bh=mK0fXfcmMTUtxxGFZQCuyZs069DXktNhvNUJRupxs30=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=juXNzO82X3euW+WCpC/AAzcm6Z+0/8bDpiNs7f1fNI4RqG3gGpX87WAxGBmLicHoq
-         mwqorWSamkKf8YJI4xh+DWN0yT1TC2r7Piy1lW/J4kxF5QTjxp684pgAnSBkZ18Bvd
-         YiTZBygFAyEz4SewKQ2YLj+BaSKaHRHllPruU0RNhzZIhscDyYoLBq3By3s4u0SdUv
-         IMFGxYA03geBYR1GrfyWAH63pKM49x/2YeoS8UOEElzPzYbAfYmmymu1LML8KyoFGo
-         qsEs32ebovRYzqr2AwzIesUVRe2em6asFJKEqx1/2Ue0+zpyBLCqdwZlk7QatyZDRp
-         6X/fYCKTm18Yw==
-Date:   Fri, 18 Nov 2022 09:04:05 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, mhiramat@kernel.org,
-        revest@chromium.org, rostedt@goodmis.org, will@kernel.org
-Subject: Re: [PATCH v2 0/4] arm64/ftrace: move to DYNAMIC_FTRACE_WITH_ARGS
-Message-Id: <20221118090405.5dc0c9f2caaec4e9720a47cd@kernel.org>
-In-Reply-To: <20221103170520.931305-1-mark.rutland@arm.com>
-References: <20221103170520.931305-1-mark.rutland@arm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Nov 2022 19:05:30 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C7ABC0;
+        Thu, 17 Nov 2022 16:05:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668729929; x=1700265929;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hWL8ZNgUOuvv1B4SV56p3dDMPMbvsjEleV962v2qcqc=;
+  b=RjVMaBgDDUqIB3RA8JHiiYYKXgzaF/Dm8V9C71i0jLSP8h8khC+XCr+n
+   T8gZwQ5yv36gaA+29UvaxC8ndzzzEHGg+OyaIiTOJH1py68nvwhsjT+HT
+   tmJiJs9e91MFG2uajznUD+JGZ2BqrLXOu1BId21OpDnrxvMQBwXWKonyH
+   u6gdWwt9IP4FCdLrk9163NVysTjheBROnmnNKXNkzxJiQJxQssU2xuoNg
+   gohLESHOCwNM7lY0twhvbxmr2Q/4K7t+5eJadzxijGBW3hndfrKnmD2xB
+   8DbXMV4wZi0zgvf87ErURkvO3wPzbzLCcSJ/yZ08y+duU2MYr23Zj7F4r
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="300546400"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="300546400"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 16:05:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="590814123"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="590814123"
+Received: from jmartin2-mobl.amr.corp.intel.com (HELO localhost) ([10.209.2.15])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 16:05:27 -0800
+From:   ira.weiny@intel.com
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Gregory Price <gregory.price@memverge.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-cxl@vger.kernel.org
+Subject: [PATCH V2] PCI/DOE: Detect on stack work items automatically
+Date:   Thu, 17 Nov 2022 16:05:24 -0800
+Message-Id: <20221118000524.1477383-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  3 Nov 2022 17:05:16 +0000
-Mark Rutland <mark.rutland@arm.com> wrote:
+From: Ira Weiny <ira.weiny@intel.com>
 
-> This series replaces arm64's support for FTRACE_WITH_REGS with support
-> for FTRACE_WITH_ARGS. This removes some overhead and complexity, and
-> removes some latent issues with inconsistent presentation of struct
-> pt_regs (which can only be reliably saved/restored at exception
-> boundaries).
-> 
-> The existing FTRACE_WITH_REGS support was added for two major reasons:
-> 
-> (1) To make it possible to use the ftrace graph tracer with pointer
->     authentication, where it's necessary to snapshot/manipulate the LR
->     before it is signed by the instrumented function.
-> 
-> (2) To make it possible to implement LIVEPATCH in future, where we need
->     to hook function entry before an instrumented function manipulates
->     the stack or argument registers. Practically speaking, we need to
->     preserve the argument/return registers, PC, LR, and SP.
-> 
-> Neither of these requires the full set of pt_regs, and only requires us
-> to save/restore a subset of registers used for passing
-> arguments/return-values and context/return information (which is the
-> minimum set we always need to save/restore today).
-> 
-> As there is no longer a need to save different sets of registers for
-> different features, we no longer need distinct `ftrace_caller` and
-> `ftrace_regs_caller` trampolines. This allows the trampoline assembly to
-> be simpler, and simplifies code which previously had to handle the two
-> trampolines.
-> 
-> I've tested this with the ftrace selftests, where there are no
-> unexpected failures.
-> 
-> I plan to build atop this with subsequent patches to add per-callsite
-> ftrace_ops, and I'm sending these patches on their own as I think they
-> make sense regardless.
+Work item initialization needs to be done with either
+INIT_WORK_ONSTACK() or INIT_WORK() depending on how the work item is
+allocated.
 
-Thanks! this series looks good to me.
+The callers of pci_doe_submit_task() allocate struct pci_doe_task on the
+stack and pci_doe_submit_task() incorrectly used INIT_WORK().
 
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Jonathan suggested creating doe task allocation macros such as
+DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this is the work
+function is not known to the callers and must be initialized correctly.
 
-So it is the good time to rewrite the new fprobe event handler
-based on these interfaces :)
+A follow up suggestion was to have an internal 'pci_doe_work' item
+allocated by pci_doe_submit_task().[2]  This requires an allocation which
+could restrict the context where tasks are used.
 
-> 
-> Since v1 [1]:
-> * Change ifdeferry per Steve's request
-> * Add ftrace_regs_query_register_offset() per Masami's request
-> * Fix a bunch of typos
-> 
-> [1] https://lore.kernel.org/lkml/20221024140846.3555435-1-mark.rutland@arm.com
-> 
-> This series can be found in my 'arm64/ftrace/minimal-regs' branch on
-> kernel.org:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/
->   git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-> 
-> This version is tagged as:
-> 
->   arm64-ftrace-minimal-regs-20221103
-> 
-> Thanks,
-> Mark.
-> 
-> Mark Rutland (4):
->   ftrace: pass fregs to arch_ftrace_set_direct_caller()
->   ftrace: rename ftrace_instruction_pointer_set() ->
->     ftrace_regs_set_instruction_pointer()
->   ftrace: abstract DYNAMIC_FTRACE_WITH_ARGS accesses
->   ftrace: arm64: move from REGS to ARGS
-> 
->  arch/arm64/Kconfig                |  18 +++--
->  arch/arm64/Makefile               |   2 +-
->  arch/arm64/include/asm/ftrace.h   |  72 ++++++++++++++++--
->  arch/arm64/kernel/asm-offsets.c   |  13 ++++
->  arch/arm64/kernel/entry-ftrace.S  | 117 ++++++++++++------------------
->  arch/arm64/kernel/ftrace.c        |  82 ++++++++++++---------
->  arch/arm64/kernel/module.c        |   3 -
->  arch/powerpc/include/asm/ftrace.h |  24 +++++-
->  arch/s390/include/asm/ftrace.h    |  29 +++++++-
->  arch/x86/include/asm/ftrace.h     |  49 +++++++++----
->  include/linux/ftrace.h            |  47 +++++++++---
->  kernel/livepatch/patch.c          |   2 +-
->  kernel/trace/Kconfig              |   6 +-
->  kernel/trace/ftrace.c             |   3 +-
->  14 files changed, 309 insertions(+), 158 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
+Another idea was to have an intermediate step to initialize the task
+struct with a new call.[3]  This added a lot of complexity.
 
+Lukas pointed out that object_is_on_stack() is available to detect this
+automatically.
 
+Use object_is_on_stack() to determine the correct init work function to
+call.
+
+[1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
+[2] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m63c636c5135f304480370924f4d03c00357be667
+[3] https://lore.kernel.org/all/20221115011943.1051039-1-ira.weiny@intel.com/
+
+Cc: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Reported-by: Gregory Price <gregory.price@memverge.com>
+Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Suggested-by: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+
+---
+Changes from V1
+	Update oneliner
+	Use object_is_on_stack() to make this a simple fix
+---
+ drivers/pci/doe.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
+index e402f05068a5..42de517022d9 100644
+--- a/drivers/pci/doe.c
++++ b/drivers/pci/doe.c
+@@ -19,6 +19,7 @@
+ #include <linux/pci.h>
+ #include <linux/pci-doe.h>
+ #include <linux/workqueue.h>
++#include <linux/sched/task_stack.h>
+ 
+ #define PCI_DOE_PROTOCOL_DISCOVERY 0
+ 
+@@ -529,7 +530,10 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+ 		return -EIO;
+ 
+ 	task->doe_mb = doe_mb;
+-	INIT_WORK(&task->work, doe_statemachine_work);
++	if (object_is_on_stack(&task->work))
++		INIT_WORK_ONSTACK(&task->work, doe_statemachine_work);
++	else
++		INIT_WORK(&task->work, doe_statemachine_work);
+ 	queue_work(doe_mb->work_queue, &task->work);
+ 	return 0;
+ }
+
+base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
+prerequisite-patch-id: dfea657e07f37aa9d7c3d477d68b07f64fe78721
+prerequisite-patch-id: e27264e76e637214ee50cdab0e5854b223d44b4e
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.37.2
+
