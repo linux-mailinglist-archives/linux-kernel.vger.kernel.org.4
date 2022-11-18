@@ -2,106 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A540C62EAD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7B162EAD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235086AbiKRBWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 20:22:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S234928AbiKRBYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 20:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiKRBWK (ORCPT
+        with ESMTP id S235041AbiKRBYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:22:10 -0500
-Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B566BDF9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:22:09 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id A624A2012C;
-        Fri, 18 Nov 2022 02:22:07 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1NwpyYRF_7Nn; Fri, 18 Nov 2022 02:22:07 +0100 (CET)
-Received: from begin (lfbn-bor-1-376-208.w109-215.abo.wanadoo.fr [109.215.91.208])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 020D62011C;
-        Fri, 18 Nov 2022 02:22:06 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1ovq50-005R3b-1q;
-        Fri, 18 Nov 2022 02:22:06 +0100
-Date:   Fri, 18 Nov 2022 02:22:06 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, speakup@linux-speakup.org
-Subject: [PATCH] speakup: Fix building as extmod
-Message-ID: <20221118012206.j6hq6b6nfx2jhqg6@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        speakup@linux-speakup.org
+        Thu, 17 Nov 2022 20:24:50 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FC269DE7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:24:48 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id r81so2831432iod.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:24:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R4T4enbQOsqO6XmAV2f5zgRx0vHX3wK4skHjCmqpICo=;
+        b=tRE8MM8ca79bEn0b3rkDQO5fw0/vkOWKZR1tr+6audLccXPFKXC4mMpzZrEnQ9Rstr
+         I4lbu9pQcWPcS5m05iK8xB2g6dLdJikgg+I7JKxU3RSpVo7rYenwhKYV+maXu5Gnb8sa
+         da9yZCzhVhRxfwlmoD01NV8jLinl+wLctMmxx2+PLcrUNdxNQUJolSTlrIXOg62ccbhf
+         Pt+GqFxBC4fZ4c2/o5Z94wZuBvxnvPMnVz6W13PArWGHzVfScmN/bqWlDq8KiDpmkyNS
+         gU6G67Z5VCRqDUGFk9bhZz3789ejikfK7LH83pOfy0jt0E/NQgtBT4+wDBKuO6302iyQ
+         kP+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R4T4enbQOsqO6XmAV2f5zgRx0vHX3wK4skHjCmqpICo=;
+        b=iE89Fs/Q0pX5+2YgalBwQo3udNDXwM+i1BCk4+sOhUp7ovgkWeLNfLn2VaKL8kZFaz
+         JYBLZwKbBsiRlVAnUJBoOZ7P/UhnXFZ7K1CieG6i76cjZ1C9qovZ8HYMVpjgKH/9jxBn
+         hR6idtTPvnq6/yhKSPmj9Msk7fkWbMHybNprXZJzqsdc7iNUGXBys8wUsa9YfUlAyKwZ
+         6rwnuqizzA9w0VnWUKqHEqJcEjXjMLXbzBMxuGG4eSUq2uj+qWLcyYaQOQk1Zj6m6kuo
+         pMfYWLejbKutZDxnnxmvNSClgLYdZGgYgl41HNT7PhOeZxgi1/mZO70VJjWv1xoYoui1
+         ELPw==
+X-Gm-Message-State: ANoB5pm4CFue83nq6U7T6m7L26DpvQEn78BPlwpj0WoTYBuPqHiGJlVv
+        pxON5QyPGoUij0AvJJquWBeyMk7rYbEJNHRCaSwJwQ==
+X-Google-Smtp-Source: AA0mqf6NkBSAY4uvxVSPwmaPsyhvjtFX0CdumrT/0Ae0/Afz6RGYfmyK7Nfejp1L55e1tCG1ilHwXKgSN00I+OwRtQE=
+X-Received: by 2002:a6b:6d0d:0:b0:6c4:ad4d:b23a with SMTP id
+ a13-20020a6b6d0d000000b006c4ad4db23amr2378611iod.2.1668734687862; Thu, 17 Nov
+ 2022 17:24:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <202211171422.7A7A7A9@keescook> <CANn89iLQcLNX+x_gJCMy5kD5GW3Xg8U4s0VGHtSuN8iegmhjxQ@mail.gmail.com>
+ <202211171513.28D070E@keescook> <CANn89iKgMvhLbTi=SHn41R--rBQ8As=E52Hnecch6nOhXVYGrg@mail.gmail.com>
+ <202211171624.963F44FCE@keescook>
+In-Reply-To: <202211171624.963F44FCE@keescook>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Nov 2022 17:24:36 -0800
+Message-ID: <CANn89iJ1ciQkv5nt5XgRXAXPVzEW6J=GdiUYvqrYgjUU440OtQ@mail.gmail.com>
+Subject: Re: Coverity: __sock_gen_cookie(): Error handling issues
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-spk_priv_keyinfo.h should be opened from the speakup directory. When
-building as extmod we should thus open it from the module directory
-rather than the main Linux source.
+On Thu, Nov 17, 2022 at 4:25 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Nov 17, 2022 at 03:22:22PM -0800, Eric Dumazet wrote:
+> > On Thu, Nov 17, 2022 at 3:14 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Thu, Nov 17, 2022 at 02:49:55PM -0800, Eric Dumazet wrote:
+> > > > On Thu, Nov 17, 2022 at 2:22 PM coverity-bot <keescook@chromium.org> wrote:
+> > > > >
+> > > > > Hello!
+> > > > >
+> > > > > This is an experimental semi-automated report about issues detected by
+> > > > > Coverity from a scan of next-20221117 as part of the linux-next scan project:
+> > > > > https://scan.coverity.com/projects/linux-next-weekly-scan
+> > > > >
+> > > > > You're getting this email because you were associated with the identified
+> > > > > lines of code (noted below) that were touched by commits:
+> > > > >
+> > > > >   Wed Nov 16 12:42:01 2022 +0000
+> > > > >     4ebf802cf1c6 ("net: __sock_gen_cookie() cleanup")
+> > > > >
+> > > > > Coverity reported the following:
+> > > > >
+> > > > > *** CID 1527347:  Error handling issues  (CHECKED_RETURN)
+> > > > > net/core/sock_diag.c:33 in __sock_gen_cookie()
+> > > > > 27     {
+> > > > > 28      u64 res = atomic64_read(&sk->sk_cookie);
+> > > > > 29
+> > > > > 30      if (!res) {
+> > > > > 31              u64 new = gen_cookie_next(&sock_cookie);
+> > > > > 32
+> > > > > vvv     CID 1527347:  Error handling issues  (CHECKED_RETURN)
+> > > > > vvv     Calling "atomic64_try_cmpxchg" without checking return value (as is done elsewhere 8 out of 9 times).
+> > > > > 33              atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
+> > > >
+> > > >
+> > > > Hmmm. for some reason I thought @res was always updated...
+> > > >
+> > > > A fix would be to read sk->sk_cookie, but I guess your tool will still
+> > > > complain we do not care
+> > > > of  atomic64_try_cmpxchg() return value ?
+> > > >
+> > > > diff --git a/net/core/sock_diag.c b/net/core/sock_diag.c
+> > > > index b11593cae5a09b15a10d6ba35bccc22263cb8fc8..58efb9c1c8dd4f8e5a3009a0176e1b96487daaff
+> > > > 100644
+> > > > --- a/net/core/sock_diag.c
+> > > > +++ b/net/core/sock_diag.c
+> > > > @@ -31,6 +31,10 @@ u64 __sock_gen_cookie(struct sock *sk)
+> > > >                 u64 new = gen_cookie_next(&sock_cookie);
+> > > >
+> > > >                 atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
+> > > > +               /* Another cpu/thread might have won the race,
+> > > > +                * reload the final value.
+> > > > +                */
+> > > > +               res = atomic64_read(&sk->sk_cookie);
+> > > >         }
+> > > >         return res;
+> > > >  }
+> > >
+> > > I think it's saying it was expecting an update loop -- i.e. to make sure
+> > > the value actually got swapped (the "try" part...)?
+> >
+> > The value has been updated, either by us or someone else.
+> >
+> > We do not particularly care who won the race, since the value is
+> > updated once only.
+>
+> Ah! Okay, now I understand the added comment. Thanks :)
 
-Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+I guess we could simply go back to atomic64_cmpxchg() to avoid a false positive.
 
----
- drivers/accessibility/speakup/Makefile      |    4 +++-
- drivers/accessibility/speakup/makemapdata.c |    7 +++++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+This boils to avoid the loop we had prior to 4ebf802cf1c6
 
---- a/drivers/accessibility/speakup/Makefile
-+++ b/drivers/accessibility/speakup/Makefile
-@@ -40,7 +40,9 @@ hostprogs += makemapdata
- makemapdata-objs := makemapdata.o
- 
- quiet_cmd_mkmap = MKMAP   $@
--      cmd_mkmap = TOPDIR=$(srctree) $(obj)/makemapdata > $@
-+      cmd_mkmap = TOPDIR=$(srctree) \
-+		  SPKDIR=$(if $(KBUILD_EXTMOD),$(KBUILD_EXTMOD),$(srctree)/drivers/accessibility/speakup) \
-+		  $(obj)/makemapdata > $@
- 
- $(obj)/mapdata.h: $(obj)/makemapdata
- 	$(call cmd,mkmap)
---- a/drivers/accessibility/speakup/makemapdata.c
-+++ b/drivers/accessibility/speakup/makemapdata.c
-@@ -51,12 +51,15 @@ main(int argc, char *argv[])
- {
- 	int value, i;
- 	struct st_key *this;
--	const char *dir_name;
-+	const char *dir_name, *spk_dir_name;
- 	char *cp;
- 
- 	dir_name = getenv("TOPDIR");
- 	if (!dir_name)
- 		dir_name = ".";
-+	spk_dir_name = getenv("SPKDIR");
-+	if (!spk_dir_name)
-+		spk_dir_name = "drivers/accessibility/speakup";
- 	bzero(key_table, sizeof(key_table));
- 	add_key("shift",	1, is_shift);
- 	add_key("altgr",	2, is_shift);
-@@ -83,7 +86,7 @@ main(int argc, char *argv[])
- 			add_key(def_name, value, is_input);
- 	}
- 
--	open_input(dir_name, "drivers/accessibility/speakup/spk_priv_keyinfo.h");
-+	open_input(spk_dir_name, "spk_priv_keyinfo.h");
- 	while (get_define()) {
- 		if (strlen(def_val) > 5) {
- 			//if (def_val[0] == '(')
+diff --git a/net/core/sock_diag.c b/net/core/sock_diag.c
+index b11593cae5a09b15a10d6ba35bccc22263cb8fc8..7b9e321e0f6b15f2fb7af9f53fceb874439cbd02
+100644
+--- a/net/core/sock_diag.c
++++ b/net/core/sock_diag.c
+@@ -30,7 +30,11 @@ u64 __sock_gen_cookie(struct sock *sk)
+        if (!res) {
+                u64 new = gen_cookie_next(&sock_cookie);
+
+-               atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
++               atomic64_cmpxchg(&sk->sk_cookie, res, new);
++               /* Another cpu/thread might have won the race,
++                * load the final value.
++                */
++               res = atomic64_read(&sk->sk_cookie);
+        }
+        return res;
+ }
