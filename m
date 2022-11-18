@@ -2,124 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879CB62F501
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B27BE62F4C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241787AbiKRMg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 07:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        id S241650AbiKRMbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 07:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241758AbiKRMgL (ORCPT
+        with ESMTP id S241649AbiKRMbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 07:36:11 -0500
-X-Greylist: delayed 394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 04:35:48 PST
-Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBDAB8FFA1;
-        Fri, 18 Nov 2022 04:35:47 -0800 (PST)
-Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
-        by radex-web.radex.nl (Postfix) with ESMTPS id 6E04124065;
-        Fri, 18 Nov 2022 13:29:03 +0100 (CET)
-Message-ID: <53dde473-2e88-7f51-7417-fce3a73fb8c8@gmail.com>
-Date:   Fri, 18 Nov 2022 13:29:03 +0100
+        Fri, 18 Nov 2022 07:31:17 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66A845091;
+        Fri, 18 Nov 2022 04:30:11 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id n21so12631455ejb.9;
+        Fri, 18 Nov 2022 04:30:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZylkDqipsSWVUpDnUzy17v+WnuvxbbaswTfv5O4dBs=;
+        b=eUjQ+DkdwrOamw24nWNeklKUIiMEQiQeEM567HSHskrMW8Us15k4Djy5Z9MOfHDEJA
+         leaJXxOQS+royEE5tCZ4iXf4sii3zaDalYpxMriW61uWRNQp1VKIY06yol3TqXKWDSlk
+         zIJn1Z/wnb2TCSSCAovxKTwpmmWhRdohBZv+73obigClXe2Psj9xUGAg0q5reejJYUou
+         LCB+02opStYWrwYLu0hAIGsCg/994/BBKrsjzad6976U9wbOr5dzGtrTJDIZTtWR41bX
+         1SINPUWPt9t6z1vVFFsq7YyD3HEYo75UCocoNsITgn+0BVYD9T9GA57iQyRN46MnD/0F
+         cq5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DZylkDqipsSWVUpDnUzy17v+WnuvxbbaswTfv5O4dBs=;
+        b=BxJhIZj6IOkRWTwMF3MWwsOGjI/g8ljUUpUoDKLOvdSYEdCojDNm84K2u/d9qfizFJ
+         awLkcDGseMfoaKH79HQaE6ppIwvqFgd9El8KuaiLwRTcOwd/XaVgCvfN9WrRFvMlQsZN
+         P9ApEA10o1DVb9/fzTkUUzKQNNYPRRmQKupny7BOc0gD9CGOf7nGvvS0OvM3FpjJQwnG
+         VPSRXl7/GH6a75paQwJaAjJiBLQRRuYEUA7CqQbPmOUWaWGxae9I2Uk7yuEQjk6S0RZ8
+         tcML2wJEtHZp48HSThFoar3CqgsIBSx0qunGimmiHNAAaDtgU5Y4VkSsvxIi1+xvvvv5
+         H8/Q==
+X-Gm-Message-State: ANoB5pmww3XhkvxahK26gATRBWp6dYWNefXVKSRpjnRpLcdP66dBOCeE
+        UWj6nzpNl78SpQgs2B9Bzfq378SulFjODE+la7Y=
+X-Google-Smtp-Source: AA0mqf62SAwlT3nJuz3Cdfa6K5MCGjq8wuc9X2LC0JRmw3MyXGf9MwEzDmidvSVaV+efJ1qjyE1NRSy+etHWrG6upqo=
+X-Received: by 2002:a17:906:3e41:b0:78d:bc9f:33da with SMTP id
+ t1-20020a1709063e4100b0078dbc9f33damr5761785eji.80.1668774610255; Fri, 18 Nov
+ 2022 04:30:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/2] usb: dwc3: core: defer probe on ulpi_read_id
- timeout
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Ferry Toth <ftoth@exalondelft.nl>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20221117205411.11489-1-ftoth@exalondelft.nl>
- <20221117205411.11489-3-ftoth@exalondelft.nl>
- <20221118021107.3uhixtck6sawluoy@synopsys.com>
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <20221118021107.3uhixtck6sawluoy@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20221107175305.63975-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221107175305.63975-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdV46aMfqu+kMW9E-RURugK-giOx0k-NPe5XX4nxKZJzkg@mail.gmail.com>
+In-Reply-To: <CAMuHMdV46aMfqu+kMW9E-RURugK-giOx0k-NPe5XX4nxKZJzkg@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 18 Nov 2022 12:29:43 +0000
+Message-ID: <CA+V-a8uqQ2fK1UjRT864jyHdt6Z47V=iARSJC6B2M6Gikms=Eg@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/5] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: Document RZ/G2UL SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
-On 18-11-2022 03:11, Thinh Nguyen wrote:
-> On Thu, Nov 17, 2022, Ferry Toth wrote:
->> Since commit 0f010171
-> I don't your update as noted in the v3 change (ie. Greg's suggestions).
+On Thu, Nov 17, 2022 at 10:54 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, Nov 7, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Document RZ/G2UL (R9A07G043) IRQC bindings. The RZ/G2UL IRQC block is
+> > identical to one found on the RZ/G2L SoC. No driver changes are
+> > required as generic compatible string "renesas,rzg2l-irqc" will be
+> > used as a fallback.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> > ---
+> > Note, renesas,r9a07g043u-irqc is added we have slight difference's compared to RZ/Five
+> > - G2UL IRQCHIP (hierarchical IRQ domain) -> GIC where as on RZ/Five we have PLIC (chained interrupt
+> > domain) -> RISCV INTC
+>
+> I think this difference is purely a software difference, and abstracted
+> in DTS through the interrupt hierarchy.
+> Does it have any impact on the bindings?
+>
+> > - On the RZ/Five we have additional registers for IRQC block
+>
+> Indeed, the NMI/IRQ/TINT "Interruput" Mask Control Registers, thus
+> warranting separate compatible values.
+>
+> > - On the RZ/Five we have BUS_ERR_INT which needs to be handled by IRQC
+>
+> Can you please elaborate? I may have missed something, but to me it
+> looks like that is exactly the same on RZ/G2UL and on RZ/Five.
+>
+Now that we have to update the binding doc with the BUS_ERR_INT too,
+do you think it would make sense to add interrupt-names too?
 
-Indeed. I seem to have sent in the wrong sha. Sorry about this.
+BUS_ERR_INT will have to be handled IRQC itself (i.e. IRQC will
+register a handler for it).
 
->> Dual Role support on Intel Merrifield platform broke due to rearranging
->> the call to dwc3_get_extcon().
->>
->> It appears to be caused by ulpi_read_id() masking the timeout on the first
->> test write. In the past dwc3 probe continued by calling dwc3_core_soft_reset()
->> followed by dwc3_get_extcon() which happend to return -EPROBE_DEFER.
->> On deferred probe ulpi_read_id() finally succeeded.
->>
->> As we now changed ulpi_read_id() to return -ETIMEDOUT in this case, we
->> need to handle the error by calling dwc3_core_soft_reset() and request
->> -EPROBE_DEFER. On deferred probe ulpi_read_id() is retried and succeeds.
->>
->> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
->> ---
->>   drivers/usb/dwc3/core.c | 7 ++++++-
->>   1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 648f1c570021..2779f17bffaf 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1106,8 +1106,13 @@ static int dwc3_core_init(struct dwc3 *dwc)
->>   
->>   	if (!dwc->ulpi_ready) {
->>   		ret = dwc3_core_ulpi_init(dwc);
->> -		if (ret)
->> +		if (ret) {
->> +			if (ret == -ETIMEDOUT) {
->> +				dwc3_core_soft_reset(dwc);
-> I'm not sure if you saw my previous response. I wanted to check to see
-> if we need to do soft-reset once before ulpi init as part of its
-> initialization.
-I missed it but found it now. I will try your suggestion and answer.
-> I'm just curious why Andrey Smirnov test doesn't require this change. If
-> it's a quirk for this specific configuration, then the change here is
-> fine. If it's required for all ULPI setup, then we can unconditionally
-> do that for all ULPI setup during initialization.
-
-Yes me too. I can reproduce that when I build kernel and rootfs with 
-buildroot there is no issue. But as soon as I add ftrace / bootconfig 
-the issue appears and then I can't analyze the flow. It's seems some 
-kind of timing / race.
-
-However, I have tried deferring without dwc3_core_soft_reset() (to 
-verify if it is just a matter of time) and that doesn't work. dwc3 is 
-deferred about 10x and then gives up without phy. So, it's not just the 
-time and not just a matter of retrying the test write.
-
->> +				ret = -EPROBE_DEFER;
->> +			}
->>   			goto err0;
->> +		}
->>   		dwc->ulpi_ready = true;
->>   	}
->>   
->> -- 
->> 2.37.2
->>
-> Thanks,
-> Thinh
+Cheers,
+Prabhakar
