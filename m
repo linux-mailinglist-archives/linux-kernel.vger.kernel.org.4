@@ -2,86 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D25962F697
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D23162F69D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235394AbiKRNwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S240540AbiKRNze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiKRNwp (ORCPT
+        with ESMTP id S229476AbiKRNzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:52:45 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3191BE96;
-        Fri, 18 Nov 2022 05:52:45 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668779563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XP6sK7QWwJa+DZ5im8IhUJV+NTI8HH+a7y081FK5inE=;
-        b=rz5TY2iXIURtnZN6RLG86Ut+NytnCN6JIPhOg1Z1LqN/7Rv4nAWNdf0dt84LUPml88BbPS
-        qLd6O1IQ+/3ZP6O+zcZwPlsc1gmqYZJjT7Tm79pW0t3gU3jjGidJIwT2gQR4j2bWFRReAm
-        O6Uyg9OATJAl2BJ3x1EtTUjijNIiriZgVVi5kf40qtwmN0s9rX3T9iIs/qdjivKR18kLY+
-        o0D3E1fc++XDCAPM6tm8sX6XOFHtymguJlzlt018rB4gYWZWxaoJckdjGvn6JdcB67BdNI
-        n1sm5E9UnzObOVSanbIcu/qtE0ZM76+219py+N8KkPgo8NPiTOIc6XKw14m9VQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668779563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XP6sK7QWwJa+DZ5im8IhUJV+NTI8HH+a7y081FK5inE=;
-        b=AL2wBG2eLtBOd2rbp2WH8Q/HM2N7tsBU7D5eUnGTy0EQ2haYMmh/Y2R7eVsdH+V6AY4d9h
-        +smSeKkzxLPlhYBQ==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 02/33] genirq/msi: Provide struct msi_parent_ops
-In-Reply-To: <8735ahmv2l.ffs@tglx>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135205.368911521@linutronix.de> <Y3Uynk6brtNVFUH7@nvidia.com>
- <8735ahmv2l.ffs@tglx>
-Date:   Fri, 18 Nov 2022 14:52:43 +0100
-Message-ID: <878rk8jro4.ffs@tglx>
+        Fri, 18 Nov 2022 08:55:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDE7B855;
+        Fri, 18 Nov 2022 05:55:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01B74B823F6;
+        Fri, 18 Nov 2022 13:55:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3EFC433C1;
+        Fri, 18 Nov 2022 13:55:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668779728;
+        bh=006qr9oYoYJFVvrQlwKwWJ+Nb1CztoyzU6igHLHaelE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H8E6aUojKsYXBij4/nMnweRJtJALbPUbbursOUMSkhBXOfdoOmqPqdwl02vJR6mtR
+         2/iMqI3qFBsRwd60Caph3DkqnuVWi2BgiPiPOtXyH1I1i5nMjzysnHCwLAlJQwr4dd
+         g58rk+D5uckRaLR7o3vlthEKItIOB+YPxz8r66h9m1HfFl1X15Vy1tZfo1EzC504it
+         /KAAktb2WHy6JwhSSShvoy+bbLoBxYWTeJwPRhk2qLdK95u1tsOOuf/jgQb5KlJ7EL
+         P7btic65c0NZe7a1wXMp6fFyi8b7u9YyMtKIZd0hjwHF2K4qjPGjaxslEwG5VZxtnn
+         QWx9fAa8VKLmw==
+Date:   Fri, 18 Nov 2022 13:55:24 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/11] regmap: indirect: Add indirect regmap support
+Message-ID: <Y3eOzOmTeTKBoPrd@sirena.org.uk>
+References: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
+ <20221117120515.37807-8-ilpo.jarvinen@linux.intel.com>
+ <Y3Y4vWr/CGbaH0HQ@sirena.org.uk>
+ <a089f1a0-c0f4-e1a2-d084-fd83e28e7e33@linux.intel.com>
+ <Y3ZTSSLUqHil4dfl@sirena.org.uk>
+ <a82565d-c282-7ace-e759-6514c29cca1c@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JH8OS51MHJ9k4NZm"
+Content-Disposition: inline
+In-Reply-To: <a82565d-c282-7ace-e759-6514c29cca1c@linux.intel.com>
+X-Cookie: Ego sum ens omnipotens.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17 2022 at 16:58, Thomas Gleixner wrote:
-> On Wed, Nov 16 2022 at 14:57, Jason Gunthorpe wrote:
->
->> And perhaps it would be a bit clearer to put the parent_domain inside
->> the msi_domain_info, which is basically acting as an argument bundle
->> for a future allocation call?
->
-> Maybe. Let me try.
 
-No. That's redundant storage because the domain creation stores the
-parent domain in irqdomain::parent which is what the hierarchy code
-uses. That code does not know about msi_domain_info.
+--JH8OS51MHJ9k4NZm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+On Fri, Nov 18, 2022 at 02:49:45PM +0200, Ilpo J=E4rvinen wrote:
+> On Thu, 17 Nov 2022, Mark Brown wrote:
 
-        tglx
+> > No, what I'm objecting to there is pretty much the same thing I'm
+> > saying here - this doesn't seem like it's a particularly generic
+> > implementation and I'm really not clear that there'd be anything
+> > meaningful left by the time the implementation assumptions are
+> > removed.
+
+> That's probably because it sounds to me you're trying to extend its=20
+> genericness beyond the domain where it's generic. That is, you're looking=
+=20
+> for genericness outside of IPs (that have their own driver each) in Intel=
+=20
+> FPGA domain.
+
+This just says it's adding "indirect regmap support" - there's
+nothing here saying that it's some Intel specific thing but it's
+quite specific to some IPs.  Perhaps you have some name for this
+interface?  You're only adding one user here which isn't helping
+make the case that this is something generic.
+
+> Please also keep in mind that we're talking about an FPGA device here, a=
+=20
+> device that is capable of implementing other devices that fall under=20
+> various drivers/xx/. Obviously each would have a driver of their own so
+> there is no as strong only single device/driver mapping here as you might=
+=20
+> be thinking.
+
+I can't tell what you're trying to say here.  Are you saying that
+this is somehow baked into some FPGA design so that it's memory
+mapped with only a few registers showing to the rest of the
+system rather than just having a substantial memory mapped
+window like is typically used for FPGAs, but someohow this
+register window stuff is implemented in the soft IP so people are
+just throwng vaugely similar interfaces into a random host mapped
+register layout?
+
+Whatever's going on here this clearly isn't a generic
+implementation of an indirect register map.
+
+--JH8OS51MHJ9k4NZm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN3jswACgkQJNaLcl1U
+h9Ce1QgAhK2FEMpjV/iceG4YFkCUw1Xa6K2xhzZX8Ng/xIVxFHaS1m++ql+vy4Bg
+QZgAeCo6ke27iSBphALanSkW5+GnC7p2VZxEH72UibEaLm9VKl8+w9QdAnbSuAy0
+rO5NoRyL5xHYi8O7e/H9TQ47eEOtk9uB37SJgWjlymtMxec9LiKZam8PK2oMpEqP
+lg1Cm0Vtpzc06Fkci/vfffVsyjQTrMUaj22C/RC9st0eDCbdyER9RKpMU4jhe5c+
+/6zx0OlDeADduCdTrvvrWAsUInwIUKfOp0+GVQXLqs83zQU+9VcrwwpLlDtDh+Ie
+ZX/7zUCqgOk1hbk7e418uzcIkqdtqg==
+=puhU
+-----END PGP SIGNATURE-----
+
+--JH8OS51MHJ9k4NZm--
