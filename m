@@ -2,105 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2EE62F5FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 725E162F5E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbiKRN3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S235301AbiKRNYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241877AbiKRN2q (ORCPT
+        with ESMTP id S233929AbiKRNX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:28:46 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A67B72129
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:28:43 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id cl5so9239430wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:28:42 -0800 (PST)
+        Fri, 18 Nov 2022 08:23:58 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103C267123
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:23:57 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id b9so6766255ljr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:23:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jFuAN0qalS8PXGclZBpJGpqKwSse98B1zaIXuj/qhsM=;
-        b=X/gqqsl/WLpKtb9vOD4WiP4Oi7fWHjwjntx8mX7OxhsG5wzq+ZEu37/nMAgR/K0NTa
-         w3qxyDj/5ysz05YJVpUs55kmmloX1IkC2zB1+/KzU94RHSvVV8QJIGUQUlri/5EUyK2r
-         mGh3S7znVf5hxcm2FIq10hXZNhSXHhkk0XSUejjdU6tvjBJaDulCkhJ1yHJ5qUwTLhSd
-         MoeZaDkThsztpF4G73yNPcJGkFAhdKPv1GGINAnUYMuW1RHIMFNHAh629fNId0Ygj6h4
-         QlGc8/i2b3sseFW3mxLr72CnhypCMQDx+K68Ypw8eLM56TGZBoLoX2zeC77yyHo3GfeR
-         z9tg==
+        bh=JuEdMeO6CANsw+boWiWMhDOaQuvRk2IQGLKhPeYJvSs=;
+        b=y3dX4zEpKw+plo3HKyeweFDNM/BQVaodPgXYSf9P9IxKSTCoBfBVSqH4wWygYGfTLh
+         qUMsg7fKsB7LA7RyTxHzyLoBsUhmdW2O4YxIM822rc1CMEGcIp+svkunpG5qKLW3bOST
+         R8ac+ePlHpPoR9ZSE9HAfBYsRDVxMnB6cuVDKh35iPE+1ZhJlwolGD/JcwIPjn/iTL1j
+         96p86AKK4JIzX6xjOQR6lEnK/ChwG7h/OTLW/tJdwvHdCEIQPaeYocwDw1lyq/zXnTff
+         yNKPWJwtohmPOVVJ93K1rQYS2lTz8xZLVMDu+kcbi57Q1d9cX0M6SMD1HyQsvG2+JRaM
+         k4Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=jFuAN0qalS8PXGclZBpJGpqKwSse98B1zaIXuj/qhsM=;
-        b=vFpRp5anlHwu3YCgSR4X18mvWcLLJnrpWRnxP5HFqoExAoBB3tBTs0H9Kqw/Pgl2v1
-         XYnVZbAbX+ZXKOrvuXf6m7hafJwfgRxgPcMir79buO78DL3WVBYdsp1rpuJPTax836Ix
-         HMgvjuJrI6AMj9x4ccUE/pMe8fjtQSQRVRPtJQCzMCtTY6s5Eo0IoFKvwzAVxJKfRA5D
-         +gbpF5KENMjy2aGXAQxn4hoe23tOY1WyKLiy03cC6Roi+TFmfzVRylQJ8e7XY5zmYxcs
-         rxZj6oPpwvscOEhLVWGUwq8rC4MAB42aL2LbYDDKmRZuKE5KR7+OEctdzv+cLURM7wTU
-         DgzA==
-X-Gm-Message-State: ANoB5pmC39gIZd0VokK/nTJmsH7BWcgBfKwi4NYZaFfHF2X3+4hKv4mK
-        ijbsnpNJ+p2snw5ookay7I1YEA==
-X-Google-Smtp-Source: AA0mqf6tYbIf5kiwBxBEeJpBK3Zoi0R3hbVIR4uxKZjI5EAk4XwJowCkhnyQfuyrbXxeKsj5OY9J7w==
-X-Received: by 2002:adf:aa91:0:b0:241:b2b2:a71d with SMTP id h17-20020adfaa91000000b00241b2b2a71dmr4389646wrc.326.1668778121454;
-        Fri, 18 Nov 2022 05:28:41 -0800 (PST)
-Received: from zen.linaroharston ([185.81.254.11])
-        by smtp.gmail.com with ESMTPSA id y10-20020adfe6ca000000b00236860e7e9esm3459102wrm.98.2022.11.18.05.28.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 05:28:40 -0800 (PST)
-Received: from zen (localhost [127.0.0.1])
-        by zen.linaroharston (Postfix) with ESMTP id 11C631FFB7;
-        Fri, 18 Nov 2022 13:28:40 +0000 (GMT)
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
- <87cz9o9mr8.fsf@linaro.org> <20221116031441.GA364614@chaop.bj.intel.com>
- <87mt8q90rw.fsf@linaro.org> <20221117134520.GD422408@chaop.bj.intel.com>
- <87a64p8vof.fsf@linaro.org> <20221118013201.GA456562@chaop.bj.intel.com>
-User-agent: mu4e 1.9.2; emacs 28.2.50
-From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Date:   Fri, 18 Nov 2022 13:23:51 +0000
-In-reply-to: <20221118013201.GA456562@chaop.bj.intel.com>
-Message-ID: <87o7t475o7.fsf@linaro.org>
+        bh=JuEdMeO6CANsw+boWiWMhDOaQuvRk2IQGLKhPeYJvSs=;
+        b=5nFbvW9FQyBaBq/gv1Mf8XWMK2JLRfFxAZf5DkvDUtPyyaYcOI/F1r8WEnIohYGLLB
+         ZvbzicjJj1OM1aJVIdCWPzKtYpxqPFsJKyxTXcl2xbQNEfSbakb8zG64sGyIDGeuY7z/
+         YhLTaKbVDRESt60em9v6/u4zKo3X8MRvwoCtydvI/0wCBj8jjwcLOQzy7kHDFgPCeJWa
+         4PKLgphUSqMririy1RX7gSXIekKO2GvtgLPW0J2MmvdAffAnV3XhoMxRI15D0AE6Y8Kb
+         sc49SMuNIUCTL/DD+tp92IxsLB/9at2YLuOMEq1eI07AGNUGXA9PnnzOEGLfxkkaKY1a
+         dalw==
+X-Gm-Message-State: ANoB5pkEZCD22mc9taXChKXirT2owd/abqJTPh8f/4DN0ogxix4C46a0
+        AjPAbqzSoU+M/5TzkUVAczIX+A==
+X-Google-Smtp-Source: AA0mqf7cSFDaYJdg/f6KpGZdovpl7SaYdZg3DirZ4TJpcJV4HF00rAuPAFBsLNwTUaX/eD0Nj9rYhA==
+X-Received: by 2002:a2e:bd17:0:b0:277:50a:bd5c with SMTP id n23-20020a2ebd17000000b00277050abd5cmr2513886ljq.6.1668777835390;
+        Fri, 18 Nov 2022 05:23:55 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id j23-20020ac253b7000000b004a62ff61b3dsm656792lfh.252.2022.11.18.05.23.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 05:23:55 -0800 (PST)
+Message-ID: <db5c1eb2-5b33-7e1b-5425-69df4ba870a0@linaro.org>
+Date:   Fri, 18 Nov 2022 14:23:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH 06/15] tty: serial: qcom-geni-serial: refactor
+ qcom_geni_serial_isr()
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20221118122539.384993-1-brgl@bgdev.pl>
+ <20221118122539.384993-7-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221118122539.384993-7-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -110,72 +84,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Chao Peng <chao.p.peng@linux.intel.com> writes:
 
-> On Thu, Nov 17, 2022 at 03:08:17PM +0000, Alex Benn=C3=A9e wrote:
->>=20
-<snip>
->> >> >> > +
->> >> >> > +		/* KVM_EXIT_MEMORY_FAULT */
->> >> >> > +		struct {
->> >> >> > +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
->> >> >> > +			__u32 flags;
->> >> >> > +			__u32 padding;
->> >> >> > +			__u64 gpa;
->> >> >> > +			__u64 size;
->> >> >> > +		} memory;
->> >> >> > +
->> >> >> > +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that =
-the VCPU has
->> >> >> > +encountered a memory error which is not handled by KVM kernel m=
-odule and
->> >> >> > +userspace may choose to handle it. The 'flags' field indicates =
-the memory
->> >> >> > +properties of the exit.
->> >> >> > +
->> >> >> > + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is=
- caused by
->> >> >> > +   private memory access when the bit is set. Otherwise the mem=
-ory error is
->> >> >> > +   caused by shared memory access when the bit is clear.
->> >> >>=20
->> >> >> What does a shared memory access failure entail?
->> >> >
->> >> > In the context of confidential computing usages, guest can issue a
->> >> > shared memory access while the memory is actually private from the =
-host
->> >> > point of view. This exit with bit 0 cleared gives userspace a chanc=
-e to
->> >> > convert the private memory to shared memory on host.
->> >>=20
->> >> I think this should be explicit rather than implied by the absence of
->> >> another flag. Sean suggested you might want flags for RWX failures so
->> >> maybe something like:
->> >>=20
->> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
->> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
->> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
->> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
->> >
->> > Yes, but I would not add 'SHARED' to RWX, they are not share memory
->> > specific, private memory can also set them once introduced.
->>=20
->> OK so how about:
->>=20
->>  	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
->>  	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
->>  	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
->>         KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
->>         KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
->
-> We don't actually need a new bit, the opposite side of private is
-> shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
-> 'shared'.
+On 18/11/2022 13:25, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Simplify the conditions in qcom_geni_serial_isr() and fix indentation.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-If that is always true and we never expect a 3rd type of memory that is
-fine. But given we are leaving room for expansion having an explicit bit
-allows for that as well as making cases of forgetting to set the flags
-more obvious.
-
---=20
-Alex Benn=C3=A9e
+Konrad
+>   drivers/tty/serial/qcom_geni_serial.c | 10 ++++------
+>   1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index dd1491a72deb..22c1869c60f4 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -824,20 +824,18 @@ static irqreturn_t qcom_geni_serial_isr(int isr, void *dev)
+>   
+>   	if (m_irq_status & m_irq_en & (M_TX_FIFO_WATERMARK_EN | M_CMD_DONE_EN))
+>   		qcom_geni_serial_handle_tx(uport, m_irq_status & M_CMD_DONE_EN,
+> -					geni_status & M_GENI_CMD_ACTIVE);
+> +					   geni_status & M_GENI_CMD_ACTIVE);
+>   
+> -	if (s_irq_status & S_GP_IRQ_0_EN || s_irq_status & S_GP_IRQ_1_EN) {
+> +	if (s_irq_status & (S_GP_IRQ_0_EN | S_GP_IRQ_1_EN)) {
+>   		if (s_irq_status & S_GP_IRQ_0_EN)
+>   			uport->icount.parity++;
+>   		drop_rx = true;
+> -	} else if (s_irq_status & S_GP_IRQ_2_EN ||
+> -					s_irq_status & S_GP_IRQ_3_EN) {
+> +	} else if (s_irq_status & (S_GP_IRQ_2_EN | S_GP_IRQ_3_EN)) {
+>   		uport->icount.brk++;
+>   		port->brk = true;
+>   	}
+>   
+> -	if (s_irq_status & S_RX_FIFO_WATERMARK_EN ||
+> -					s_irq_status & S_RX_FIFO_LAST_EN)
+> +	if (s_irq_status & (S_RX_FIFO_WATERMARK_EN | S_RX_FIFO_LAST_EN))
+>   		qcom_geni_serial_handle_rx(uport, drop_rx);
+>   
+>   out_unlock:
