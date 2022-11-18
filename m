@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D340262F623
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053E862F61A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbiKRNbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241745AbiKRNbX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241760AbiKRNbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 18 Nov 2022 08:31:23 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6055F96
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:31:22 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id z24so6792348ljn.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:31:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0Y+0FBJhRpRkHWP9VYNCn8CpByxrNXNKR+R5nAPAPPA=;
-        b=iCwIMGIM/IGKtrfpBP5RqDq9nSGhvOwD4m2ok5bPC0jqzKqjomWZTT6BBn7LnxMVYb
-         EtxH2B84ysBb9yqWSm+4BJmhw3laDXcoeopQLv8zgVY2oslMHJFM8lmGJEl98X9riplO
-         KjmftAsG9JLBf+2SapTO7uPdz2MaQckHC8+CR7sRqFO74p2cXDGVcGF7iADir3FsouCZ
-         6xM25iT/Do7hIIY+UUI+eiWHdH7B3pox2vyb3BgruvIfB8sW7SdBhTX5WVDXjhBYDKSA
-         6KoTZ1JMW5D2Iq2MdH34npFSCOoGeuhige/4wJb5hvS74EAhGPgIXBXB8u1ZlHtSfAdA
-         BaGQ==
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235303AbiKRNbV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 18 Nov 2022 08:31:21 -0500
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D4713F4D;
+        Fri, 18 Nov 2022 05:31:20 -0800 (PST)
+Received: by mail-ot1-f51.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so3044403otl.7;
+        Fri, 18 Nov 2022 05:31:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=0Y+0FBJhRpRkHWP9VYNCn8CpByxrNXNKR+R5nAPAPPA=;
-        b=L8uhhnL/oQjAWSrU9ivg0AnVypwB70skm/uK0HH0p7VPgxIinJIelWdZOuProX0288
-         if8vr5LrYmEyx7cF8FLO8Q+fMqj46arIHAVx2qOsTaSC8s8zc1qxQ7lKBQe12qbARWij
-         6+tZI+8em0J/lstDi/1sldhB5sWaH3fMCcb7DjfxFB3WD4ldCDLw4p4ZcKKe1JJpvx56
-         9GRyg4U1cYMM2irLkQg8sEuOEl89fda6A7c4hKvju2ObR78cPho788atP6NMCywnW1fW
-         rr/RcQaomn7Zb8jxhpwTMsU/7GZbjQa7r6OwMFtnTytQocRthyoqHuUdBhSQ1bL2Xu0V
-         j7pQ==
-X-Gm-Message-State: ANoB5plZVvtlSpT3ID6Gp/sAZQ7fYy30rHKN0s8x/zbjY5gSv2dHEkWc
-        LjBeX4hEif+NP+YShA6iHBf/EA==
-X-Google-Smtp-Source: AA0mqf4TKOWpER95/mJA5icLM4VdiEGnMGzlq/Az+3b+SMLopNdAEWWm4g+TK4bs3Nv76tNrprDiuQ==
-X-Received: by 2002:a2e:6a16:0:b0:26e:3c:733b with SMTP id f22-20020a2e6a16000000b0026e003c733bmr2521739ljc.247.1668778280575;
-        Fri, 18 Nov 2022 05:31:20 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id q8-20020a056512210800b004979db5aa5bsm659659lfr.223.2022.11.18.05.31.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        bh=Q0Mpv79OC10rvhUXLA0ACmvYs6p261vAofPBrF9lFpY=;
+        b=Tj/aorcT5ngzXxbcAtPBrDnQx5m+iH38ovyDGWjcRmYeLbCqFWLnGnXUOIU8yvOtKz
+         Wj7hjJLVB6VBBRV+X5YLY7ZWB/WFzktxO/qVlX9X8qq9GfSYm4M7F/eHKLqh8Vdxl8pY
+         CrceEUHMp+SiZr/1ndrhktzzYF6nymuMqxDwBmKhm9VmMBLwVhiUsGKspBAA8g2odYFq
+         Gp7X6KABeiwLKOdpJ5DKhcrhyXYslBjlc5w6ntUkKJovbrStGauLczvr02HjcVDc6PDs
+         2AX8ur/PtT7XwGJwXu6/lqRcAl10vno4mKyU/Vk0PMI0n+aIlx4qckycyDcJqvpUkg2n
+         56FA==
+X-Gm-Message-State: ANoB5pljhiO3Im9JNL4u/UqK3dWe8To1hQXImkZSqBuVuZU7zd+ZaqqP
+        S0O4d6D5sY0siHkI8LTCsA==
+X-Google-Smtp-Source: AA0mqf4sTJcECMo1xKL09IoTWj/i5Q4HzYzaQhgjRACHz9Us2B9+woBC7DGak4TQZHl4kO19R4t7tA==
+X-Received: by 2002:a05:6830:6407:b0:661:8fc6:2d77 with SMTP id cj7-20020a056830640700b006618fc62d77mr3756668otb.288.1668778279794;
         Fri, 18 Nov 2022 05:31:19 -0800 (PST)
-Message-ID: <767ce717-7b0c-41c9-a53d-dbcbb758117f@linaro.org>
-Date:   Fri, 18 Nov 2022 14:31:18 +0100
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x53-20020a056830247500b0066c7733be43sm1536301otr.30.2022.11.18.05.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 05:31:19 -0800 (PST)
+Received: (nullmailer pid 1482192 invoked by uid 1000);
+        Fri, 18 Nov 2022 13:31:19 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH 10/15] tty: serial: qcom-geni-serial: use of_device_id
- data
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20221118122539.384993-1-brgl@bgdev.pl>
- <20221118122539.384993-11-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221118122539.384993-11-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Elder <paul.elder@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+In-Reply-To: <20221118093931.1284465-3-paul.elder@ideasonboard.com>
+References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
+ <20221118093931.1284465-3-paul.elder@ideasonboard.com>
+Message-Id: <166877740033.1426068.13359373358036408238.robh@kernel.org>
+Subject: Re: [PATCH v3 02/14] dt-bindings: media: rkisp1: Add i.MX8MP ISP example
+Date:   Fri, 18 Nov 2022 07:31:19 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,155 +74,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 18/11/2022 13:25, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Fri, 18 Nov 2022 18:39:19 +0900, Paul Elder wrote:
+> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > 
-> Instead of checking the device compatible in probe(), assign the
-> device-specific data to struct of_device_id. We'll use it later when
-> providing SE DMA support.
+> Add an example to the rockchip-isp1 DT binding that showcases usage of
+> the parallel input of the ISP, connected to the CSI-2 receiver internal
+> to the i.MX8MP.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->   drivers/tty/serial/qcom_geni_serial.c | 46 ++++++++++++++++++++-------
->   1 file changed, 34 insertions(+), 12 deletions(-)
+>  .../bindings/media/rockchip-isp1.yaml         | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
 > 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 72d0e7b91080..6a9f3f937f29 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -95,6 +95,11 @@
->   /* We always configure 4 bytes per FIFO word */
->   #define BYTES_PER_FIFO_WORD		4
->   
-> +struct qcom_geni_device_data {
-> +	bool console;
-> +	void (*handle_rx)(struct uart_port *uport, u32 bytes, bool drop);
-> +};
-> +
->   struct qcom_geni_private_data {
->   	/* NOTE: earlycon port will have NULL here */
->   	struct uart_driver *drv;
-> @@ -114,7 +119,6 @@ struct qcom_geni_serial_port {
->   	u32 tx_fifo_width;
->   	u32 rx_fifo_depth;
->   	bool setup;
-> -	void (*handle_rx)(struct uart_port *uport, u32 bytes, bool drop);
->   	unsigned int baud;
->   	void *rx_fifo;
->   	u32 loopback;
-> @@ -126,6 +130,7 @@ struct qcom_geni_serial_port {
->   	bool cts_rts_swap;
->   
->   	struct qcom_geni_private_data private_data;
-> +	const struct qcom_geni_device_data *dev_data;
->   };
->   
->   static const struct uart_ops qcom_geni_console_pops;
-> @@ -637,7 +642,7 @@ static void qcom_geni_serial_handle_rx(struct uart_port *uport, bool drop)
->   		total_bytes += last_word_byte_cnt;
->   	else
->   		total_bytes += BYTES_PER_FIFO_WORD;
-> -	port->handle_rx(uport, total_bytes, drop);
-> +	port->dev_data->handle_rx(uport, total_bytes, drop);
->   }
->   
->   static void qcom_geni_serial_stop_rx(struct uart_port *uport)
-> @@ -1348,13 +1353,14 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->   	struct uart_port *uport;
->   	struct resource *res;
->   	int irq;
-> -	bool console = false;
->   	struct uart_driver *drv;
-> +	const struct qcom_geni_device_data *data;
->   
-> -	if (of_device_is_compatible(pdev->dev.of_node, "qcom,geni-debug-uart"))
-> -		console = true;
-> +	data = of_device_get_match_data(&pdev->dev);
-> +	if (!data)
-> +		return -EINVAL;
->   
-> -	if (console) {
-> +	if (data->console) {
->   		drv = &qcom_geni_console_driver;
->   		line = of_alias_get_id(pdev->dev.of_node, "serial");
->   	} else {
-> @@ -1364,7 +1370,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->   			line = of_alias_get_id(pdev->dev.of_node, "hsuart");
->   	}
->   
-> -	port = get_port_from_line(line, console);
-> +	port = get_port_from_line(line, data->console);
->   	if (IS_ERR(port)) {
->   		dev_err(&pdev->dev, "Invalid line %d\n", line);
->   		return PTR_ERR(port);
-> @@ -1376,6 +1382,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->   		return -ENODEV;
->   
->   	uport->dev = &pdev->dev;
-> +	port->dev_data = data;
->   	port->se.dev = &pdev->dev;
->   	port->se.wrapper = dev_get_drvdata(pdev->dev.parent);
->   	port->se.clk = devm_clk_get(&pdev->dev, "se");
-> @@ -1394,7 +1401,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->   	port->rx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
->   	port->tx_fifo_width = DEF_FIFO_WIDTH_BITS;
->   
-> -	if (!console) {
-> +	if (!data->console) {
->   		port->rx_fifo = devm_kcalloc(uport->dev,
->   			port->rx_fifo_depth, sizeof(u32), GFP_KERNEL);
->   		if (!port->rx_fifo)
-> @@ -1424,7 +1431,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->   	uport->irq = irq;
->   	uport->has_sysrq = IS_ENABLED(CONFIG_SERIAL_QCOM_GENI_CONSOLE);
->   
-> -	if (!console)
-> +	if (!data->console)
->   		port->wakeup_irq = platform_get_irq_optional(pdev, 1);
->   
->   	if (of_property_read_bool(pdev->dev.of_node, "rx-tx-swap"))
-> @@ -1446,7 +1453,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->   	port->private_data.drv = drv;
->   	uport->private_data = &port->private_data;
->   	platform_set_drvdata(pdev, port);
-> -	port->handle_rx = console ? handle_rx_console : handle_rx_uart;
->   
->   	ret = uart_add_one_port(drv, uport);
->   	if (ret)
-> @@ -1526,14 +1532,30 @@ static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
->   	return ret;
->   }
->   
-> +static const struct qcom_geni_device_data qcom_geni_console_data = {
-> +	.console = true,
-> +	.handle_rx = handle_rx_console,
-> +};
-> +
-> +static const struct qcom_geni_device_data qcom_geni_uart_data = {
-> +	.console = false,
-> +	.handle_rx = handle_rx_uart,
-> +};
-> +
->   static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
->   	SET_SYSTEM_SLEEP_PM_OPS(qcom_geni_serial_sys_suspend,
->   					qcom_geni_serial_sys_resume)
->   };
->   
->   static const struct of_device_id qcom_geni_serial_match_table[] = {
-> -	{ .compatible = "qcom,geni-debug-uart", },
-> -	{ .compatible = "qcom,geni-uart", },
-> +	{
-> +		.compatible = "qcom,geni-debug-uart",
-> +		.data = &qcom_geni_console_data,
-> +	},
-> +	{
-> +		.compatible = "qcom,geni-uart",
-> +		.data = &qcom_geni_uart_data,
-> +	},
->   	{}
->   };
->   MODULE_DEVICE_TABLE(of, qcom_geni_serial_match_table);
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/media/rockchip-isp1.example.dts:199:18: fatal error: dt-bindings/media/video-interfaces.h: No such file or directory
+  199 |         #include <dt-bindings/media/video-interfaces.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221118093931.1284465-3-paul.elder@ideasonboard.com
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command.
+
