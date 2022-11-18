@@ -2,150 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08ACF62FD5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F1062FD8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241802AbiKRS6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S242646AbiKRTBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:01:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242829AbiKRS5p (ORCPT
+        with ESMTP id S242339AbiKRTBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:57:45 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2828E0EF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 10:56:21 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id c7so4469825iof.13
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 10:56:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7S1U0eEWo1SNQpUE7svxy9h5hiNVBaOr4ewtMHk7Kbw=;
-        b=JIt9yXQlEl2sczPguhZuryLj1wMylQCPu91xzYNSgg9Sx/Qd8TRtFGlaXSnylHXc/P
-         iwgoVe//PIlogWU8YQYeYQ0qvOMBq6ahFtTUdMBksxmjPHu7KxGQ4mYIY5sudsz+FDqi
-         84WU4DrvKyZAyVfzVieKQO9C8yjSZiIXFMGTJIzPeCZjlzJvx9abue9Z9gGAB4lnJHjA
-         Qq6CXsW4J7SXMKRnXYbSRRZLu7GQNe35njE3Th307sXxjMFgPeTrT5KBtKbpesNef0AX
-         /F5nSAtiLc11dfexoejXvhwzRYxDMoqWZMzl+3q3LDme3PGhwLWIhtSr6HWuM/uUWsRc
-         MdoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7S1U0eEWo1SNQpUE7svxy9h5hiNVBaOr4ewtMHk7Kbw=;
-        b=kNauMSoBPdELR4dK0II5cv5MbA2zCqikwWQ+3EX1NxjClEfnlWPG7QrrF2qsGRBa9W
-         KyfHWPRZbxh7ePZxUGLuiNQ+9ITEEY0yktVnib3ASnHLU0RPjGvB4kMIypisa433Az+I
-         URwkgR4k88Xfq8SZrQw+DevUhB1yjbO74gAtTKhTLsyOpZqWeq0Ly2VEBgLaDZ1Odnc3
-         bkXtsDX+LoXkWQyiv7aVAhgV0rp7yCCcUtaAZtMYDlvuuOXhAiJLrrBy0MbfZM0LqGzy
-         Qgc5jsMMSN0C3qrI43sAutz6/5vgrv+oQ9esXepl+8O3xcfLG2w18Hg/zFnjdJccKaPE
-         VFOA==
-X-Gm-Message-State: ANoB5pk6loZq4RCcV3ZmFe7aJUxkjJEaz6BRDOXtnQlVUqU0syKFIKZw
-        7jIzjvBjpH/C16O4palIv9nl1K7oT/5O2JYqZyT7vQ==
-X-Google-Smtp-Source: AA0mqf73ii+hbpbNEhaucu0km694rduqSbeRBDFrkKgk5u/rka+/WbuWocAM42tF3Wje4uhSwv9FnbT5Vi+c/gBb1hM=
-X-Received: by 2002:a05:6638:e8e:b0:365:ca83:bafb with SMTP id
- p14-20020a0566380e8e00b00365ca83bafbmr3901900jas.272.1668797780942; Fri, 18
- Nov 2022 10:56:20 -0800 (PST)
+        Fri, 18 Nov 2022 14:01:08 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C826233A2;
+        Fri, 18 Nov 2022 11:01:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668798068; x=1700334068;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WvZ7SWFh8KHhZL+jsKQNukYdJbXBUPn1qpeTKkRZRVM=;
+  b=Ib0lef1dWTXH8EXl5URnBFrezCwDAZkrJqeaXRjaSTcvEHJlbuCY5JKq
+   jN9/qUkusoXO/Mc7PqS6U1BNvdD6Exl+fRSJR63Ki2EGFdt0oJ3Gaqr1g
+   mnvT9Ghqipa9Yjy+Lq3Q+UFOQpMeEaKKuSrQPbWndUY4nc+GD963gOt3l
+   xyMj2D6HEZM3kU00sChj/OjCh1DahdoxgYKMbkx7cNsTxE0IEnUQfuvYP
+   DCLIJvdg8LmGuu2J5o0wo9Uh4NVC9dL75hyM06YTrHUpU9qxFfyFD0RrJ
+   V21ddroO0wygthtzYBOzK9euXp80zg0jX3HWe+FE0ngCjcH2jCeeB+Mcl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="315028382"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="315028382"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 11:01:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="746106506"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="746106506"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Nov 2022 11:01:01 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4968910E; Fri, 18 Nov 2022 21:01:26 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>
+Subject: [PATCH v1 1/4] media: ipu3-cio2: Don't dereference fwnode handle
+Date:   Fri, 18 Nov 2022 20:56:14 +0200
+Message-Id: <20221118185617.33908-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221116121634.2901265-1-danishanwar@ti.com> <20221116121634.2901265-2-danishanwar@ti.com>
- <20221116160948.GA169555-robh@kernel.org> <20221116180949.GC61935@p14s> <dd1fbe2d-585e-8298-bd36-56b3bd4a9ae1@ti.com>
-In-Reply-To: <dd1fbe2d-585e-8298-bd36-56b3bd4a9ae1@ti.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 18 Nov 2022 11:56:09 -0700
-Message-ID: <CANLsYkwrC-kTeL0jNQ8R0dZye3w_yvD6J_umFhhmEoLvC=j29g@mail.gmail.com>
-Subject: Re: [EXTERNAL] Re: [PATCH v8 1/6] dt-bindings: remoteproc: Add PRU
- consumer bindings
-To:     Md Danish Anwar <a0501179@ti.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, nm@ti.com, vigneshr@ti.com,
-        srk@ti.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 at 22:49, Md Danish Anwar <a0501179@ti.com> wrote:
->
-> Hi Mathieu,
->
-> On 16/11/22 23:39, Mathieu Poirier wrote:
-> > On Wed, Nov 16, 2022 at 10:09:48AM -0600, Rob Herring wrote:
-> >> On Wed, Nov 16, 2022 at 05:46:29PM +0530, MD Danish Anwar wrote:
-> >>> From: Suman Anna <s-anna@ti.com>
-> >>>
-> >>> Add DT schema binding for PRU consumers. The binding includes
-> >>> all the common properties that can be used by different PRU consumer
-> >>> or application nodes and supported by the PRU remoteproc driver.
-> >>> These are used to configure the PRU hardware for specific user
-> >>> applications.
-> >>>
-> >>> The application nodes themselves should define their own bindings.
-> >>>
-> >>> Co-developed-by: Tero Kristo <t-kristo@ti.com>
-> >>> Co-developed-by: Suman Anna <s-anna@ti.com>
-> >>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >>> Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
-> >>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> >>
-> >> Run checkpatch.pl and fix the warnings with the tags.
-> >
-> > My bad - I asked Danish to remove the SoBs to lighten the changelog
-> > presentation.  Danish, do you absolutely need to list everyone that touched that
-> > patchset?  If so I suppose just listing the SoBs would be a compromise.
-> >
->
-> I started working on this patch series after version 5. In the first version of
-> this patch series below were the tags.
->
-> Co-developed-by: Tero Kristo <t-kristo@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->
-> I am not sure whom to drop and whom to keep that's why I have been keeping all
-> the tags that were present from the beginning.
->
-> In the next version I'll keep only the SoBs tags of the the people listed above.
->
-> >>
-> >> You didn't add review/ack tags either.
-> >
-> > Those are important.
-> >
-> > Please send another patchset that clears checkpatch with review/acks and I'll
-> > look at it.
-> >
->
-> I am really sorry for that, I was not aware about adding review tags as I am
-> very new to upstreaming.
->
+Use acpi_fwnode_handle() instead of dereferencing an fwnode handle directly,
+which is a better coding practice.
 
-... and that is fine - we all learn as we go.  Your new patchset is at
-the top of my queue and I will review it next week.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/media/pci/intel/ipu3/cio2-bridge.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> I will share new version after fixing checkpatch errors/warnings and adding
-> review tags.
->
-> Thanks,
-> Danish.
->
-> > Thanks,
-> > Mathieu
-> >
-> >>
-> >>> ---
-> >>>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 60 +++++++++++++++++++
-> >>>  1 file changed, 60 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+index df6c94da2f6a..18974a72e94a 100644
+--- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
++++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+@@ -263,7 +263,7 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+ 				      struct cio2_bridge *bridge,
+ 				      struct pci_dev *cio2)
+ {
+-	struct fwnode_handle *fwnode;
++	struct fwnode_handle *fwnode, *primary;
+ 	struct cio2_sensor *sensor;
+ 	struct acpi_device *adev;
+ 	acpi_status status;
+@@ -322,7 +322,9 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+ 		}
+ 
+ 		sensor->adev = acpi_dev_get(adev);
+-		adev->fwnode.secondary = fwnode;
++
++		primary = acpi_fwnode_handle(adev);
++		primary->secondary = fwnode;
+ 
+ 		cio2_bridge_instantiate_vcm_i2c_client(sensor);
+ 
+-- 
+2.35.1
+
