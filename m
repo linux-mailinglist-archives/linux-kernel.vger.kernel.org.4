@@ -2,145 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4439162ED03
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8804E62ED09
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiKRFCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 00:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
+        id S234907AbiKRFG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 00:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiKRFCx (ORCPT
+        with ESMTP id S229441AbiKRFGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 00:02:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771EF5D68D;
-        Thu, 17 Nov 2022 21:02:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Nov 2022 00:06:24 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF52C769C4;
+        Thu, 17 Nov 2022 21:06:22 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1466862324;
-        Fri, 18 Nov 2022 05:02:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34AE9C433C1;
-        Fri, 18 Nov 2022 05:02:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668747771;
-        bh=ZX8ld+jC7zyJN8RKp/NiKUjeKsrkrw250KJAa+bb4Do=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dpkGOrWvYVl4BYRMg3Fofp4yF1iki0Q8LvEYTsJyRroS4aT6ppWuq6UG7EygoGxE4
-         y73ax9bXXnQqp5wzNuWIN4F80b+ad77Jg/TFD++ST+VliFkBfGAKue600y04bUsKEI
-         oj6HDahU4tHlW1LaKfEleJ59lUXuvs8tcpGBGh9ackLQLMbagYndoMPv+BseB+KM5z
-         iPzlicMd2mR2eSa8tCuadOnOjEZVpLZfdZUC3THWSnDdcbSC7hjw1tQ32XVW4RQPe9
-         o5diBg2D/CBBWT+gqWE1sKhKI8l9f6MMQRbfS5+AusB7Gojc5/IELFZDVGacTW8vIX
-         ItA1zlbNqfeZA==
-Date:   Thu, 17 Nov 2022 21:02:49 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, Ye Bin <yebin10@huawei.com>,
-        syzbot+57b25da729eb0b88177d@syzkaller.appspotmail.com
-Subject: Re: [PATCH] ext4: fix uninit-value in 'ext4_evict_inode'
-Message-ID: <Y3cR+Rdr69eMEpjn@sol.localdomain>
-References: <20221117073603.2598882-1-yebin@huaweicloud.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4ND4WH5HKwz4xTg;
+        Fri, 18 Nov 2022 16:06:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668747981;
+        bh=T1MFAIfpM2C/YonaaB7UpbcsoXJOdQH4wk0zCh0yK3s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ESBCarbnttmvS1fXfLvUzOUB/XoNkZ1IYEt6eGYSu4A/rxvge2jLs/sE/1MIjX2zc
+         OAHaHsD04OVtRVSaWT6pZQ9Ja4xsJli3lW4CgwsYfJx351+EvwTquRGhI+mo7Z0RMN
+         NzSE1RLSbYr/SQVyGM7xB/uPIXImE+gFAxY581k6ff5c77K79lo5vG7KLYkrL+rdFW
+         mAdUDrJUUysNpRAzvR8fEyhSV361Y1e5CmYEFrT2dg3havo4ma9XiFF7RhWveE5axo
+         nRB1u1u7VTOlFKVxpDHNYCSMsuADzgJKWTYa1vJSpd5BwzgwbflEB2nuqHbM1SiVlG
+         gkPhTtGD3sDNw==
+Date:   Fri, 18 Nov 2022 16:06:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: linux-next: manual merge of the pinctrl tree with the arm-soc tree
+Message-ID: <20221118160617.5955f2ff@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117073603.2598882-1-yebin@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/WnBzte5U0Pttpkpi1ZqQup9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:36:03PM +0800, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
-> 
-> Syzbot found the following issue:
-> =====================================================
-> BUG: KMSAN: uninit-value in ext4_evict_inode+0xdd/0x26b0 fs/ext4/inode.c:180
->  ext4_evict_inode+0xdd/0x26b0 fs/ext4/inode.c:180
->  evict+0x365/0x9a0 fs/inode.c:664
->  iput_final fs/inode.c:1747 [inline]
->  iput+0x985/0xdd0 fs/inode.c:1773
->  __ext4_new_inode+0xe54/0x7ec0 fs/ext4/ialloc.c:1361
->  ext4_mknod+0x376/0x840 fs/ext4/namei.c:2844
->  vfs_mknod+0x79d/0x830 fs/namei.c:3914
->  do_mknodat+0x47d/0xaa0
->  __do_sys_mknodat fs/namei.c:3992 [inline]
->  __se_sys_mknodat fs/namei.c:3989 [inline]
->  __ia32_sys_mknodat+0xeb/0x150 fs/namei.c:3989
->  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
->  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
->  entry_SYSENTER_compat_after_hwframe+0x70/0x82
-> 
-> Uninit was created at:
->  __alloc_pages+0x9f1/0xe80 mm/page_alloc.c:5578
->  alloc_pages+0xaae/0xd80 mm/mempolicy.c:2285
->  alloc_slab_page mm/slub.c:1794 [inline]
->  allocate_slab+0x1b5/0x1010 mm/slub.c:1939
->  new_slab mm/slub.c:1992 [inline]
->  ___slab_alloc+0x10c3/0x2d60 mm/slub.c:3180
->  __slab_alloc mm/slub.c:3279 [inline]
->  slab_alloc_node mm/slub.c:3364 [inline]
->  slab_alloc mm/slub.c:3406 [inline]
->  __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
->  kmem_cache_alloc_lru+0x6f3/0xb30 mm/slub.c:3429
->  alloc_inode_sb include/linux/fs.h:3117 [inline]
->  ext4_alloc_inode+0x5f/0x860 fs/ext4/super.c:1321
->  alloc_inode+0x83/0x440 fs/inode.c:259
->  new_inode_pseudo fs/inode.c:1018 [inline]
->  new_inode+0x3b/0x430 fs/inode.c:1046
->  __ext4_new_inode+0x2a7/0x7ec0 fs/ext4/ialloc.c:959
->  ext4_mkdir+0x4d5/0x1560 fs/ext4/namei.c:2992
->  vfs_mkdir+0x62a/0x870 fs/namei.c:4035
->  do_mkdirat+0x466/0x7b0 fs/namei.c:4060
->  __do_sys_mkdirat fs/namei.c:4075 [inline]
->  __se_sys_mkdirat fs/namei.c:4073 [inline]
->  __ia32_sys_mkdirat+0xc4/0x120 fs/namei.c:4073
->  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
->  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
->  entry_SYSENTER_compat_after_hwframe+0x70/0x82
-> 
-> CPU: 1 PID: 4625 Comm: syz-executor.2 Not tainted 6.1.0-rc4-syzkaller-62821-gcb231e2f67ec #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> =====================================================
-> 
-> Now, 'ext4_alloc_inode()' didn't init 'ei->i_flags'. If new inode failed
-> before set 'ei->i_flags' in '__ext4_new_inode()', then do 'iput()'. As after
-> 6bc0d63dad7f commit will access 'ei->i_flags' in 'ext4_evict_inode()' which
-> will lead to access uninit-value.
-> To solve above issue just init 'ei->i_flags' in 'ext4_alloc_inode()'.
-> 
-> Reported-by: syzbot+57b25da729eb0b88177d@syzkaller.appspotmail.com
-> Fixes:6bc0d63dad7f("ext4: remove EA inode entry from mbcache on inode eviction")
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/ext4/super.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index ae433e1337ed..cd2590489392 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -1323,6 +1323,7 @@ static struct inode *ext4_alloc_inode(struct super_block *sb)
->  		return NULL;
->  
->  	inode_set_iversion(&ei->vfs_inode, 1);
-> +	ei->i_flags = 0;
->  	spin_lock_init(&ei->i_raw_lock);
->  	INIT_LIST_HEAD(&ei->i_prealloc_list);
->  	atomic_set(&ei->i_prealloc_active, 0);
+--Sig_/WnBzte5U0Pttpkpi1ZqQup9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Hi all,
 
-I'm seeing this when running xfstests on a kernel with KMSAN enabled, so it
-would be nice to get this fixed.
+Today's linux-next merge of the pinctrl tree got a conflict in:
 
-- Eric
+  MAINTAINERS
+
+between commit:
+
+  b82621ac8450 ("soc: loongson: add GUTS driver for loongson-2 platforms")
+
+from the arm-soc tree and commit:
+
+  457ff9fb29d7 ("dt-bindings: pinctrl: add loongson-2 pinctrl")
+
+from the pinctrl tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index ec383d27e762,f76107c24949..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -12097,13 -12013,14 +12097,21 @@@ F:	drivers/*/*loongarch
+  F:	Documentation/loongarch/
+  F:	Documentation/translations/zh_CN/loongarch/
+ =20
+ +LOONGSON-2 SOC SERIES GUTS DRIVER
+ +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+ +L:	loongarch@lists.linux.dev
+ +S:	Maintained
+ +F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
+ +F:	drivers/soc/loongson/loongson2_guts.c
+ +
++ LOONGSON-2 SOC SERIES PINCTRL DRIVER
++ M:	zhanghongchen <zhanghongchen@loongson.cn>
++ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++ L:	linux-gpio@vger.kernel.org
++ S:	Maintained
++ F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
++ F:	drivers/pinctrl/pinctrl-loongson2.c
++=20
+  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+  M:	Sathya Prakash <sathya.prakash@broadcom.com>
+  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+
+--Sig_/WnBzte5U0Pttpkpi1ZqQup9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN3EskACgkQAVBC80lX
+0GzgsQf/fyX0j3aKutQZ3zmI1rgCZEDaFraRXxpU0DudJLSoNsDJi0Wxx5vByfed
+tnWRPUO6n2uSuB7ACcCe0fUVHFIKSjJXTRnUg4dVc/AP/txlCU6GCBjo8ehfYhdB
+fsUKbl17JoVF1jGXpgC0bw6EtcKDeGeJx8+O2F3NPYvRwYZGqPKO5Q/m1+fZgJKK
+ytyoJuqa7P2zInDVCQuYunfoXAysl7erdHKGcKDVmT3i8M7hymroh31ZDehUJNTW
+STlmq/oD4UYhMUOYLW743EkCB+YQhuFNR86M6e7A/yapakXHTZT46Z0zGnsD0/IO
+dqfk503Awy91r/weSqJv7TLWC7OEOQ==
+=pUsu
+-----END PGP SIGNATURE-----
+
+--Sig_/WnBzte5U0Pttpkpi1ZqQup9--
