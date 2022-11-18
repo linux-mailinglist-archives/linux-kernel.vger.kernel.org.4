@@ -2,263 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5527D62FAE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4647562FAED
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241560AbiKRQzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S242396AbiKRQ7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242417AbiKRQz1 (ORCPT
+        with ESMTP id S242169AbiKRQ7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:55:27 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1127C02E;
-        Fri, 18 Nov 2022 08:55:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668790521; x=1700326521;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=QZkc7d2JG1BkMYXs8O0XsKIoddHIvgliMezR9LxeOow=;
-  b=lWesH2GGmpXKqG6uUq1Qj2dBhJxv7T4xSgZlbtOQo1gTR8nOfBVJ8ZFN
-   0FFv/+wXReHyWJpSlXw6CoFDov3t8wu6ejB18ITE9+lOpAZPzGTrn4iTg
-   arPKlM3uYh0DfTjfXBF+S0ttwOLFCNoKaR86lG8GoAuX+kjVuwffjfq7m
-   FixgW/UwTHE4cShXo7ndYr/emcsE6DBYyPO/If9FxiFHKaXeW4NQ0czVr
-   RJszo0HHHYoEaG1+HVkaaQ+9lZl8O9BLC4FfQXQds+dc3ekACPk1UEeaF
-   VNb5pDHUxDhUutBfDwP2Ra/7Hh4wXRFWRqEAe0vNjTQIyOsQU7ioa1k5r
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="313191650"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="313191650"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 08:55:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="782707795"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="782707795"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Nov 2022 08:55:20 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 08:55:20 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 08:55:20 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 18 Nov 2022 08:55:20 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.46) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 18 Nov 2022 08:55:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F8xLpXLPPv+s9BXaFWhj8rsrglaDgma+6eYLZl/wdR4J4IigUWqzdcsCBOHC+4Ej845m5wW+wqiR9GtYMTAAW+arQvwtTWJLR2GM972g5u0P2mIhoA8tNOjU4DIy3p8nThmSYiTc6kqCBy/IimAZBqL4km1ityiEUdIKeWH8fABxcme1nhRKd+CipUZmAEv3JKT7LTSIb96LJlMQ8vnn3GQuPFzmK+lpYcbtwgdItw34agHShBvIaAf4CDlnn9p8ivQczruPSwXxXd8Gkd3GbWZ4SSQ1XMrmQ52wog9h7+FM8rYZNcnj1ddO0UHDUU0AsF2QEe7exqrAKLv17bLeZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y8vXnHoBTUvN+uDvfVpXxYuRwbhvuobfGpuKupPB1h4=;
- b=ZnaQW9sJjDmPTOpBv52M9puc40OcFUlhfYfvZn/Td/I93oAeILK6CgCc8S/XvRFkCTAWXd5W8xKQYolog3W9MCT4GTZJDyISEcRRFqy63J5mbQI6L+Zfb7uMwT+xnuXuwwISPvf90PGTAY19itB/USJ2Dc3X4CPwN3H5moUDgr/U6PVCgZ41Q6rgWDFh4vUCooGeIVhg5b2AJb6eaSIj5IWAXBPyinNvp/ZqYdSxq9z4LI5lcXVxDsNKN1OMQYTHN5UFj+AlGZylsI12TMUJr66ktfykODF0S2oQxzK3N2yMhFi9B/2wEQtVYg/cdDP4k5I61XKAllNn8c/Fn/7b4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by MW4PR11MB6570.namprd11.prod.outlook.com
- (2603:10b6:303:1e3::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Fri, 18 Nov
- 2022 16:55:17 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::b058:673:c228:3e95]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::b058:673:c228:3e95%9]) with mapi id 15.20.5834.009; Fri, 18 Nov 2022
- 16:55:17 +0000
-Date:   Fri, 18 Nov 2022 08:55:13 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Robert Richter <rrichter@amd.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v3 5/9] cxl/pci: Only register RCDs with device 0,
- function 0 as CXL memory device
-Message-ID: <6377b8f1be5e5_12cdff2941d@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221109104059.766720-1-rrichter@amd.com>
- <20221109104059.766720-6-rrichter@amd.com>
- <63753900717c6_12cdff29439@dwillia2-xfh.jf.intel.com.notmuch>
- <Y3ZZqZ2kPS1yyOtd@rric.localdomain>
- <63766efb7ceac_12cdff294c3@dwillia2-xfh.jf.intel.com.notmuch>
- <Y3dB4quvaSzRzsT/@rric.localdomain>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y3dB4quvaSzRzsT/@rric.localdomain>
-X-ClientProxiedBy: BY3PR04CA0025.namprd04.prod.outlook.com
- (2603:10b6:a03:217::30) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Fri, 18 Nov 2022 11:59:36 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3582287A47
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:59:35 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id c14-20020a5ea80e000000b006d6e9b05e58so2910845ioa.23
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:59:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nAIdMdH6463NYNaPvuJ0GXj9BIsXOzOnZz/otTIkUpI=;
+        b=EVd+gkQ7iIuLQQi5mjOeeWZzFWuIbohZU1tDiCVPC0+sxJ4vQ87rvDjv3Ng/BIrMmU
+         c8MS+BPMY+HwwshyAfppfg/J2zuzGG33/IZfcNIWO/9omvZm+i2kdJrr1eu/aBODJJmH
+         rWaQ68BqhOVgyMGWXmugQNLLpKLaxh/SdFv0Qj5St6WtsUtg+fseSffhv096wyyG4rZJ
+         VaHrA0LhHpwPjNiZbIYRwvo4DXn1kSAYpOvFqz45IpwgYvvXHHSfBBUpMAQYk0qIPSLS
+         EQSqNm4Z4/R2uT0xQ5dgz78teHOc2knaRK8wMkQtuwaTgMiGMn1eMZ7Z5la4qXq8mvh1
+         BoRQ==
+X-Gm-Message-State: ANoB5pm7Er+vIvXlB3tkBL5l865CjI8QyOSp2Hplv0FH7xUbCXhwMrYU
+        mCXsmEio4BkxgBfu/YO3LuzyzJDmKCq+lEivg/1mIdRvUhYd
+X-Google-Smtp-Source: AA0mqf4eMGC4h077PAYfrXpiQAO7bkeIqqllFOnuyEGCosBdaZUnTPahU6GN6NI4i6l/1SOnOTRVEgt3wi0uht3EIKTHOD04/7e6
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|MW4PR11MB6570:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc3acf1e-34fd-4755-6646-08dac985ab1d
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zv3+TgEYDgCsZeQUOnQOf12gLDCW1+dGg0YXy3cCMUvdpF+t4kxNHpWBlu+Q+PIEQxFUc+67G1KWO79UaHpPtB3KpGm1y2zdPXNjYnzpgdcRYhZM2+HRUY7+JlU5RD4zMhBsAZe6+mDflxXkuD5+gQziINOZbtElIttejxnB4Y0xNSJ9RxCUJ6AFF8eUHyDvXvhOethXahnAQr8INT38UuXY9Do9IZHWAyfg5wcS7PCpLeYTuFwtnUwK1yBRb/hriXeqtlYBQ0fUHwiAK9NmAXATRHVMsrE0AwPA2WNg0ymhkeTswhVM4mv3iPiamV2aHLSqx6EPkNGwHZ9dGN9JvAX15zV+Bybon5auS7QyGi2Tw1byUh+4cIfW7dhHTOqaMOxX122qBFIocP1eEYoUPRo86Qt6yjdtZVQK5HgRuU5bsexNi2iRZaCSdFphdmE7kt1gSWR5G5w6WwX942oBTgIxxvWg2+fKhBpst3M+rrMtog57AMrb/uwFLJb8Leu7mHaKziCpd5bx58s7DhNBj+nh9disCFuX/U97cF/dG6dRL3lENK9Jbp8LukfbtMUxtzsBo2bTMivb+yIjSEMVB+FsKToKxqKN6C6k07g9vYiCpIhdrdoR9fFhWkle1xtUOMpbOQGbTy9g8MtEtM0GbA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199015)(86362001)(2906002)(8936002)(5660300002)(38100700002)(83380400001)(186003)(107886003)(82960400001)(110136005)(54906003)(316002)(478600001)(66476007)(66946007)(8676002)(4326008)(41300700001)(66556008)(6506007)(9686003)(6512007)(6666004)(6486002)(26005)(53546011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JGzHzETHG8qqfV1DDAF+6sJftypz1mT0YX3wzKvQLd/uaYwSDT++5cOZ6jOx?=
- =?us-ascii?Q?BnYsyo9/7CdEJLvX0R7kJ6n+6zIo0zAksxmZ6QCHpYrd5kDSelrKhwS9GDcU?=
- =?us-ascii?Q?gBY1Xpv2qd6pmSolo4sc6pGJ7+3jtD87kbkIJESEtCWW70/Ii8vhF2KebTYP?=
- =?us-ascii?Q?E+6WXS4AiLwsmHyiHVoLlF6hBS+0vMr331KSnWuPuOEWOpzNUvIadsowSTm2?=
- =?us-ascii?Q?n1Gf7PofeN0X6CUqqB8u4CcZqiOZ/5YayJ/V1yBkqyfmAVGZEQBGdhK2tLD8?=
- =?us-ascii?Q?83M0qtKrj9r6awCcpsMA8VI4oOr1zG2CUDhoYWle97JIQTR4Br1j1E/wtiNK?=
- =?us-ascii?Q?53TWrHioNr/ZaPF/JiqKV3tUM+2c7N2hCbG8Sx/GamOGJsTvACDs9oaKU5Tl?=
- =?us-ascii?Q?uLxAiYCdyC9o9gwgt44Ujld7QR+eg8/BDvuaTH4SszBO7tQqZiIBKnKVy7k7?=
- =?us-ascii?Q?x7Cb4NcxB2qmRBz7KA1QnKy+9uI3LSleeJtVj8V79w+S/+xTBKmxQBUKYK2U?=
- =?us-ascii?Q?JrHyvJMn12K4isiYOYm9c1mWJAi0mas+ZqMKcPpGGBHxqAKSLhHI7iOiRJ6p?=
- =?us-ascii?Q?qNuMPODfzPfoORnpSdLtkhQI4iaz1S0kVMD/TQ11KQy6KQTOPwhUaplHTVd6?=
- =?us-ascii?Q?lOtjGICtPLJMqLLpAdOSBThdi4++ck97t+0wgQcPTBD9OGyR/Z3IyMmJL8Rj?=
- =?us-ascii?Q?rtoH5Auu24+/tOXbWtkXlr7qWz54LNE0IlTE5tQP1I86sm6qymLDL4Hl6Zuy?=
- =?us-ascii?Q?lgSQd2ucWVhCGLdgIYlC6w14UzVeYyeoyrlbKiuUL00uo+qMCFR+QY9PDFT0?=
- =?us-ascii?Q?waGTBGowO3mQlP7MtwxR49Oj1qkfgVxxkyllqxcns8bZYfQhVgsae11zfxcx?=
- =?us-ascii?Q?ZgrWIBCHNcQXYFxhKOLUR58J2G8BztoTN6qCRKPVMZwzhtEYMZvWsxMOvEhn?=
- =?us-ascii?Q?/LuF1rOgOKuEQDd7MuLUR7vNubvwsn94eKIC1uSuKNbiKe7k/wm7N0VSeCFG?=
- =?us-ascii?Q?xxk6u4D81dtnfwEz2NgMAoTYTTXpgnPSz3pDPmvmP59+HQPxfYGEfwUGAm0s?=
- =?us-ascii?Q?GVIbBF5xbbZzUEXV6qQ2FaTdsnUTLXt+J2YcJINvbknomj9L/Lmx93AaHSuO?=
- =?us-ascii?Q?69+6qq4tkoDilV7ortiEC0f1y0GcpH6PKavTPCt8+sBp4EqVEtaGCl30n24e?=
- =?us-ascii?Q?zCCUnlKjtlX3GsB5I0gi5oqNVXQTfW7H40lwzIucGEavbMZuvtqLaELBE8Hi?=
- =?us-ascii?Q?RHp+A8rpwDihvDHrOzot4MK+oPsGdgERg4jycETHeyeYE/cootOZ19ygzVGZ?=
- =?us-ascii?Q?viLWCJdn9xhiKB/X7T6VAmjr0zqbHPeTplS7NHlbxHt5UFgStzRrLi5CN8Ar?=
- =?us-ascii?Q?uIFcMPX4ALGdDtGJR00rhXx0oklR0+zSOFtWCSZcve5y3eUiQNPwzMY9nrZC?=
- =?us-ascii?Q?JBrbR3Mwa6dxFcvnrq32WXFjngsebESblFsTvvB0mDGylJeyxc/0X9n2vx5W?=
- =?us-ascii?Q?efJ4M75x5D5PLGUlD24sFDKBKM/IgFMpjcGULk+Wd7kyL+3V7LVjSpxR+laz?=
- =?us-ascii?Q?KPrY8kSQaDrxPJqoOgmqq6bq4htbmfPMcKdFZrb27t2iUsiJu75nmgmpw0UH?=
- =?us-ascii?Q?PA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc3acf1e-34fd-4755-6646-08dac985ab1d
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 16:55:16.8760
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /aweTTgG0YII3NRZHhokatVWqTbQyO7pECquWs1r7dNWtovJNjTifGsGf98SJ6xr7Iw5tLhF6F2Ry7YpEx5D+oiC4ErH5JVO3WpyMOIcj+A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6570
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c6d1:0:b0:375:5b8d:e565 with SMTP id
+ r17-20020a02c6d1000000b003755b8de565mr3564635jan.121.1668790774497; Fri, 18
+ Nov 2022 08:59:34 -0800 (PST)
+Date:   Fri, 18 Nov 2022 08:59:34 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000518bf005edc1a1c2@google.com>
+Subject: [syzbot] inconsistent lock state in mark_held_locks
+From:   syzbot <syzbot+65422ff0767f378aacfb@syzkaller.appspotmail.com>
+To:     christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        gustavo@padovan.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Richter wrote:
-> On 17.11.22 09:27:23, Dan Williams wrote:
-> > Robert Richter wrote:
-> > > On 16.11.22 11:24:48, Dan Williams wrote:
-> > > > Robert Richter wrote:
-> > > > > The Device 0, Function 0 DVSEC controls the CXL functionality of the
-> > > > > entire device. Add a check to prevent registration of any other PCI
-> > > > > device on the bus as a CXL memory device.
-> > > > 
-> > > > Can you reference the specification wording that indicates that the OS
-> > > > needs to actively avoid these situations, or otherwise point to the real
-> > > > world scenario where this filtering is needed?
-> > > 
-> > > CXL 3.0
-> > > 
-> > > 8.1.3 PCIe DVSEC for CXL Device
-> > > 
-> > > """
-> > > An RCD creates a new PCIe enumeration hierarchy. As such, it spawns a new Root Bus
-> > > and can expose one or more PCIe device numbers and function numbers at this bus
-> > > number. These are exposed as Root Complex Integrated Endpoints (RCiEP). The PCIe
-> > > Configuration Space of Device 0, Function 0 shall include the CXL PCIe DVSEC as shown
-> > > in Figure 8-1.
-> > > """
-> > > 
-> > > """
-> > > In either case, the capability, status, and control fields in Device 0, Function 0 DVSEC
-> > > control the CXL functionality of the entire device.
-> > > """
-> > > 
-> > > There are some other occurrences. I think this is even true for VH
-> > > mode, as multiple CXL devices on the bus are exposed through multiple
-> > > DSPs or Root Ports.
-> > > 
-> > > Anyway, I limited this to an RCD only, esp. because its counterpart
-> > > would be missing and thus port mapping would fail otherwise. See
-> > > restricted_host_enumerate_dport() of this series.
-> > > 
-> > > > 
-> > > > > 
-> > > > > Signed-off-by: Robert Richter <rrichter@amd.com>
-> > > > > ---
-> > > > >  drivers/cxl/pci.c | 25 +++++++++++++++++++++++--
-> > > > >  1 file changed, 23 insertions(+), 2 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> > > > > index faeb5d9d7a7a..cc4f206f24b3 100644
-> > > > > --- a/drivers/cxl/pci.c
-> > > > > +++ b/drivers/cxl/pci.c
-> > > > > @@ -428,11 +428,26 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
-> > > > >  	}
-> > > > >  }
-> > > > >  
-> > > > > +static int check_restricted_device(struct pci_dev *pdev, u16 pcie_dvsec)
-> > > > > +{
-> > > > > +	if (pci_pcie_type(pdev) != PCI_EXP_TYPE_RC_END)
-> > > > > +		return 0;		/* no RCD */
-> > > > > +
-> > > > > +	if (pdev->devfn == PCI_DEVFN(0, 0) && pcie_dvsec)
-> > > > > +		return 0;		/* ok */
-> > > > > +
-> > > > > +	dev_warn(&pdev->dev, "Skipping RCD: devfn=0x%02x dvsec=%u\n",
-> > > > 
-> > > > s/0x%02x/%#02x/
-> > > > 
-> > > > > +		pdev->devfn, pcie_dvsec);
-> > > 
-> > > Ok.
-> > > 
-> > > > This looks like a dev_dbg() to me. Otherwise a warning will always fire
-> > > > on a benign condition.
-> > > 
-> > > I have chosen dev_warn() here as this is a non-compliant unexpected
-> > > behavior of the device. There are no (legal) cases this may happen. I
-> > > suppose you are worried about spamming the console here, but that
-> > > error should be reported somewhere and thus being visible.
-> > 
-> > There are so many spec illegal values and conditions that the driver
-> > could checki, but does not. The reason I am poking here is why does the
-> > driver need to be explicit about *this* illegal condition versus all the
-> > other potential conditions? What is the practical end user impact if
-> > Linux does not include this change? For example, if it is just one
-> > vendor that made this mistake that can be an explicit quirk.
-> > 
-> > A dev_warn() is not necessary for simple quirks.
-> 
-> This is not simply a cross check, the driver prevents enablement of
-> CXL mem devs other than PCI_DEVFN(0, 0). It shouldn't silently drop
-> out then. It's a device malfunction which should appropriate reported
-> and not only visible if dbg is enabled.
-> 
-> As written above, the check is necessary as the counterpart is missing
+Hello,
 
-It is only necessary if this condition happens in practice, not a
-theoretically. So I am asking, are you seeing this with an actual device
-that someone will use in production? If so, that's what pci quirks are
-for to keep those workarounds organized in a common location.
+syzbot found the following issue on:
+
+HEAD commit:    e01d50cbd6ee Merge tag 'vfio-v6.1-rc6' of https://github.c..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=145f6401880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e9039cbe1d7613aa
+dashboard link: https://syzkaller.appspot.com/bug?extid=65422ff0767f378aacfb
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/43fe73693a6c/disk-e01d50cb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/35e1240adbc1/vmlinux-e01d50cb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3b532cce5d0b/bzImage-e01d50cb.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+65422ff0767f378aacfb@syzkaller.appspotmail.com
+
+================================
+WARNING: inconsistent lock state
+6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0 Not tainted
+--------------------------------
+inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+syz-executor.4/7818 [HC0[0]:SC0[0]:HE0:SE1] takes:
+ffffffff8cb76bb8 (sync_timeline_list_lock){?...}-{2:2}, at: spin_lock_irq include/linux/spinlock.h:375 [inline]
+ffffffff8cb76bb8 (sync_timeline_list_lock){?...}-{2:2}, at: sync_info_debugfs_show+0x2d/0x200 drivers/dma-buf/sync_debug.c:147
+{IN-HARDIRQ-W} state was registered at:
+  lock_acquire kernel/locking/lockdep.c:5668 [inline]
+  lock_acquire+0x1df/0x630 kernel/locking/lockdep.c:5633
+  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+  _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+  sync_timeline_debug_remove+0x25/0x190 drivers/dma-buf/sync_debug.c:31
+  sync_timeline_free drivers/dma-buf/sw_sync.c:104 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  sync_timeline_put drivers/dma-buf/sw_sync.c:116 [inline]
+  timeline_fence_release+0x263/0x340 drivers/dma-buf/sw_sync.c:144
+  dma_fence_release+0x147/0x680 drivers/dma-buf/dma-fence.c:559
+  kref_put include/linux/kref.h:65 [inline]
+  dma_fence_put include/linux/dma-fence.h:276 [inline]
+  dma_fence_array_release+0x1f6/0x2d0 drivers/dma-buf/dma-fence-array.c:120
+  dma_fence_release+0x147/0x680 drivers/dma-buf/dma-fence.c:559
+  kref_put include/linux/kref.h:65 [inline]
+  dma_fence_put include/linux/dma-fence.h:276 [inline]
+  irq_dma_fence_array_work+0xa5/0xd0 drivers/dma-buf/dma-fence-array.c:52
+  irq_work_single+0x120/0x250 kernel/irq_work.c:211
+  irq_work_run_list kernel/irq_work.c:242 [inline]
+  irq_work_run_list+0x91/0xc0 kernel/irq_work.c:225
+  irq_work_run+0x54/0xd0 kernel/irq_work.c:251
+  __sysvec_irq_work+0xca/0x4d0 arch/x86/kernel/irq_work.c:22
+  sysvec_irq_work+0x8e/0xc0 arch/x86/kernel/irq_work.c:17
+  asm_sysvec_irq_work+0x16/0x20 arch/x86/include/asm/idtentry.h:675
+  __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:160 [inline]
+  _raw_spin_unlock_irq+0x25/0x40 kernel/locking/spinlock.c:202
+  spin_unlock_irq include/linux/spinlock.h:400 [inline]
+  sw_sync_debugfs_release+0x15e/0x230 drivers/dma-buf/sw_sync.c:321
+  __fput+0x27c/0xa90 fs/file_table.c:320
+  task_work_run+0x16b/0x270 kernel/task_work.c:179
+  exit_task_work include/linux/task_work.h:38 [inline]
+  do_exit+0xb35/0x2a20 kernel/exit.c:820
+  do_group_exit+0xd0/0x2a0 kernel/exit.c:950
+  get_signal+0x21a1/0x2430 kernel/signal.c:2858
+  arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+  exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+  exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+  syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
+  ret_from_fork+0x15/0x30 arch/x86/entry/entry_64.S:299
+irq event stamp: 288
+hardirqs last  enabled at (287): [<ffffffff81d0a451>] mod_objcg_state+0x591/0xa50 mm/memcontrol.c:3213
+hardirqs last disabled at (288): [<ffffffff89922691>] __raw_spin_lock_irq include/linux/spinlock_api_smp.h:117 [inline]
+hardirqs last disabled at (288): [<ffffffff89922691>] _raw_spin_lock_irq+0x41/0x50 kernel/locking/spinlock.c:170
+softirqs last  enabled at (0): [<ffffffff8146e349>] copy_process+0x2129/0x7190 kernel/fork.c:2198
+softirqs last disabled at (0): [<0000000000000000>] 0x0
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(sync_timeline_list_lock);
+  <Interrupt>
+    lock(sync_timeline_list_lock);
+
+ *** DEADLOCK ***
+
+3 locks held by syz-executor.4/7818:
+ #0: ffff8880412b59e8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe3/0x100 fs/file.c:1037
+ #1: ffff888017a97418 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xdf/0x1280 fs/seq_file.c:182
+ #2: ffffffff8cb76bb8 (sync_timeline_list_lock){?...}-{2:2}, at: spin_lock_irq include/linux/spinlock.h:375 [inline]
+ #2: ffffffff8cb76bb8 (sync_timeline_list_lock){?...}-{2:2}, at: sync_info_debugfs_show+0x2d/0x200 drivers/dma-buf/sync_debug.c:147
+
+stack backtrace:
+CPU: 0 PID: 7818 Comm: syz-executor.4 Not tainted 6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_usage_bug kernel/locking/lockdep.c:3963 [inline]
+ valid_state kernel/locking/lockdep.c:3975 [inline]
+ mark_lock_irq kernel/locking/lockdep.c:4178 [inline]
+ mark_lock.part.0.cold+0x18/0xd8 kernel/locking/lockdep.c:4634
+ mark_lock kernel/locking/lockdep.c:4598 [inline]
+ mark_held_locks+0x9f/0xe0 kernel/locking/lockdep.c:4236
+ __trace_hardirqs_on_caller kernel/locking/lockdep.c:4254 [inline]
+ lockdep_hardirqs_on_prepare kernel/locking/lockdep.c:4321 [inline]
+ lockdep_hardirqs_on_prepare+0x135/0x400 kernel/locking/lockdep.c:4273
+ trace_hardirqs_on+0x2d/0x160 kernel/trace/trace_preemptirq.c:49
+ __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
+ _raw_spin_unlock_irq+0x1f/0x40 kernel/locking/spinlock.c:202
+ spin_unlock_irq include/linux/spinlock.h:400 [inline]
+ sync_print_obj drivers/dma-buf/sync_debug.c:118 [inline]
+ sync_info_debugfs_show+0xeb/0x200 drivers/dma-buf/sync_debug.c:153
+ seq_read_iter+0x4f5/0x1280 fs/seq_file.c:230
+ seq_read+0x16d/0x210 fs/seq_file.c:162
+ vfs_read+0x257/0x930 fs/read_write.c:468
+ ksys_read+0x127/0x250 fs/read_write.c:613
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f8c5028b639
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f8c4f5ff168 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00007f8c503ac1f0 RCX: 00007f8c5028b639
+RDX: 0000000000002020 RSI: 0000000020001a00 RDI: 000000000000000b
+RBP: 00007f8c502e6ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f8c504cfb1f R14: 00007f8c4f5ff300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
