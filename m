@@ -2,126 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A421162FBEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 943F862FBFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242406AbiKRRrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S235270AbiKRRtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242115AbiKRRrS (ORCPT
+        with ESMTP id S241602AbiKRRsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:47:18 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B290F6035C;
-        Fri, 18 Nov 2022 09:47:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71A2123A;
-        Fri, 18 Nov 2022 09:47:23 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.34.127])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42EAB3F663;
-        Fri, 18 Nov 2022 09:47:15 -0800 (PST)
-Date:   Fri, 18 Nov 2022 17:47:05 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH V5 2/7] arm64/perf: Update struct arm_pmu for BRBE
-Message-ID: <Y3fFGQN55+LM5s5u@FVFF77S0Q05N.cambridge.arm.com>
-References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
- <20221107062514.2851047-3-anshuman.khandual@arm.com>
- <8f6d3424-2650-8e8b-61f7-1431aec4633b@arm.com>
- <4efc0ae1-564e-dd05-842a-46fb1aeb4ad8@arm.com>
+        Fri, 18 Nov 2022 12:48:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B01E5BD5B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:47:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668793676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZkJx+RgAzofek0cetBCDV8S2wNiIF1AHyooRWAe/tSY=;
+        b=Nx5mI0vSOMOsOf4SpRxKzRcOdaMvzy7RbIOl3yJ2IjsCMzydrKM36FyKXz0nml+Kb3nfwd
+        AqGV1hZgL3VeNeCV/t5NDtF3hlsWYNvZJAyq7Ejs5SxuCE4DIcLy0lEO4No2hlP+aZLtvG
+        wnWRxgAWLRFS+PUvbKOYmwf+IAAapUk=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-38-Bf7GMJ6yPF2bVF9jBItWWg-1; Fri, 18 Nov 2022 12:47:54 -0500
+X-MC-Unique: Bf7GMJ6yPF2bVF9jBItWWg-1
+Received: by mail-ej1-f70.google.com with SMTP id qw20-20020a1709066a1400b007af13652c92so3475103ejc.20
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:47:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZkJx+RgAzofek0cetBCDV8S2wNiIF1AHyooRWAe/tSY=;
+        b=45vOZNa2N2ZeR2JXSujEKYa4M3tFPgjUQ9h/Xym0qN0kjXc17G5VI0EYdkATAkZ3Lo
+         5z0E7wrk7U/Tkxnj404CSa1ST9UFZ4AqbStXcI58/VlJDNKfjYIJdLL6LViU+iMMCMHS
+         LBz4OzctQG0BvCYRBl4FCKX1z2WQza8TFnQcoFuaVbv9OkH/7lN0lC74C01KrA10s7JV
+         1H/IZuHE418NlpNAXr44BWtkcWr3ABL+K4NbMcDp3p4bgLsL8HZbqOWqxcRqVDRJKrXj
+         PciAC0jLRntEr55SKDVWEtj4niEAYiCAxU31Stq0VN0I3J2DyCltISPXnSQc8PSfekCV
+         okmg==
+X-Gm-Message-State: ANoB5pkZnmpxIQATIjNoaBbxhPTBm11QJ+GI2n4AZ/fV+ogUPlTL9kCk
+        vxZUfnaO98aeXtwQ4jhMiJMSaFWNwSPrN1Yu+3NHhnmj3LE8ST/vT8u/qXMRAJrwYpkk24pGy9R
+        khU8j7jG9rkYG5+hogc9BpuER
+X-Received: by 2002:a17:906:36d2:b0:7ae:9c7b:4d5c with SMTP id b18-20020a17090636d200b007ae9c7b4d5cmr6610694ejc.598.1668793673619;
+        Fri, 18 Nov 2022 09:47:53 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6674asXcYMlwXIeAqeZcpNWB+Ml8RoaoS1i6tRUnXdDqv9oTJdkY86khk21Rzpsob0OPciOQ==
+X-Received: by 2002:a17:906:36d2:b0:7ae:9c7b:4d5c with SMTP id b18-20020a17090636d200b007ae9c7b4d5cmr6610685ejc.598.1668793673439;
+        Fri, 18 Nov 2022 09:47:53 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b40:2ee8:642:1aff:fe31:a15c? ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id jl24-20020a17090775d800b0073cf6ec3276sm1924617ejc.207.2022.11.18.09.47.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 09:47:53 -0800 (PST)
+Message-ID: <c295e26b-283c-c643-f2ac-979466829227@redhat.com>
+Date:   Fri, 18 Nov 2022 18:47:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4efc0ae1-564e-dd05-842a-46fb1aeb4ad8@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH drm-misc-next v3 0/5] drm/arm/malidp: use drm managed
+ resources
+Content-Language: en-US
+To:     Liviu Dudau <liviu.dudau@arm.com>, daniel@ffwll.ch
+Cc:     tzimmermann@suse.de, mripard@kernel.org, brian.starkey@arm.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221026155934.125294-1-dakr@redhat.com>
+ <Y3S+ZQ9gJVf9YYra@e110455-lin.cambridge.arm.com>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <Y3S+ZQ9gJVf9YYra@e110455-lin.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Liviu, hi Daniel,
 
-Hi Anshuman,
+Thanks for submitting the patch series.
 
-Apologies for the delayi n reviewing this.
+Unfortunately, I wasn't able to finish the work to make drm_dev_unplug() 
+deal properly with non-hotunplug cases before my vacation, since I was 
+working on another series. I'll finalize and submit it once I'm back in 
+two weeks.
 
-On Fri, Nov 18, 2022 at 12:09:07PM +0530, Anshuman Khandual wrote:
-> On 11/9/22 17:00, Suzuki K Poulose wrote:
-> > On 07/11/2022 06:25, Anshuman Khandual wrote:
-> >> Although BRBE is an armv8 speciifc HW feature, abstracting out its various
-> >> function callbacks at the struct arm_pmu level is preferred, as it cleaner
-> >> , easier to follow and maintain.
-> >>
-> >> Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
-> >> might not fit seamlessly, when tried to be embedded via existing arm_pmu
-> >> helpers in the armv8 implementation.
-> >>
-> >> Updates the struct arm_pmu to include all required helpers that will drive
-> >> BRBE functionality for a given PMU implementation. These are the following.
-> >>
-> >> - brbe_filter    : Convert perf event filters into BRBE HW filters
-> >> - brbe_probe    : Probe BRBE HW and capture its attributes
-> >> - brbe_enable    : Enable BRBE HW with a given config
-> >> - brbe_disable    : Disable BRBE HW
-> >> - brbe_read    : Read BRBE buffer for captured branch records
-> >> - brbe_reset    : Reset BRBE buffer
-> >> - brbe_supported: Whether BRBE is supported or not
-> >>
-> >> A BRBE driver implementation needs to provide these functionalities.
-> > 
-> > Could these not be hidden from the generic arm_pmu and kept in the
-> > arm64 pmu backend  ? It looks like they are quite easy to simply
-> > move these to the corresponding hooks in arm64 pmu.
-> 
-> We have had this discussion multiple times in the past [1], but I still
-> believe, keeping BRBE implementation hooks at the PMU level rather than
-> embedding them with other PMU events handling, is a much better logical
-> abstraction.
-> 
-> [1] https://lore.kernel.org/all/c3804290-bdb1-d1eb-3526-9b0ce4c8e8b1@arm.com/
-> 
-> --------------------------------------------------------------------------
-> > 
-> > One thing to answer in the commit msg is why we need the hooks here.  
-> > Have we concluded that adding BRBE hooks to struct arm_pmu for what is 
-> > an armv8 specific feature is the right approach? I don't recall 
-> > reaching that conclusion.
-> 
-> Although it might be possible to have this implementation embedded in
-> the existing armv8 PMU implementation, I still believe that the BRBE
-> functionalities abstracted out at the arm_pmu level with a separate
-> config option is cleaner, easier to follow and to maintain as well.
-> 
-> Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
-> might not fit seamlessly, when tried to be embedded via existing arm_pmu
-> helpers in the armv8 implementation.
-> 
-> Nonetheless if arm_pmu based additional BRBE helpers is absolutely a no
-> go for folks here in general, will explore arm64 based implementation.
-> ----------------------------------------------------------------------------
-> 
-> I am still waiting for maintainer's take on this issue. I will be happy to
-> rework this series to move all these implementation inside arm64 callbacks
-> instead, if that is required or preferred by the maintainers. But according
-> to me, this current abstraction layout is much better.
+- Danilo
 
-To be honest, I'm not sure what's best right now; but at the moment it's not
-clear to me why this couldn't fit within the existing hooks.
-
-Above you say brbe_supported() / brbe_probe() / brbe_reset() didn't fit
-seamlessly; can you give an example of problem? I think I'm missing something
-obvious.
-
-Thanks,
-Mark.
