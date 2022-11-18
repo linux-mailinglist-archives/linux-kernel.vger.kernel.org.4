@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1C0630819
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D2E6306CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237920AbiKSAoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 19:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
+        id S237645AbiKSAO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237982AbiKSAmF (ORCPT
+        with ESMTP id S237855AbiKSAOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 19:42:05 -0500
+        Fri, 18 Nov 2022 19:14:22 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1DB11DA1E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:45:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EE7B6B07
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:34:49 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9q-0005XH-RW; Fri, 18 Nov 2022 23:48:26 +0100
+        id 1owA9n-0005XP-VF; Fri, 18 Nov 2022 23:48:24 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9k-0058u1-Jt; Fri, 18 Nov 2022 23:48:21 +0100
+        id 1owA9k-0058u8-Ng; Fri, 18 Nov 2022 23:48:21 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9k-0000W4-27; Fri, 18 Nov 2022 23:48:20 +0100
+        id 1owA9k-0000W8-7X; Fri, 18 Nov 2022 23:48:20 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Raphael-Xu <13691752556@139.com>,
-        =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+        Wolfram Sang <wsa@kernel.org>, Corey Minyard <minyard@acm.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, alsa-devel@alsa-project.org,
+        <u.kleine-koenig@pengutronix.de>,
+        openipmi-developer@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 604/606] ASoC: codecs: tas2780: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:45:38 +0100
-Message-Id: <20221118224540.619276-605-uwe@kleine-koenig.org>
+Subject: [PATCH 605/606] ipmi: ssif_bmc: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:45:39 +0100
+Message-Id: <20221118224540.619276-606-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -71,32 +66,31 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- sound/soc/codecs/tas2780.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/char/ipmi/ssif_bmc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/tas2780.c b/sound/soc/codecs/tas2780.c
-index afdf0c863aa1..09e7ada1bca4 100644
---- a/sound/soc/codecs/tas2780.c
-+++ b/sound/soc/codecs/tas2780.c
-@@ -591,8 +591,7 @@ static int tas2780_parse_dt(struct device *dev, struct tas2780_priv *tas2780)
- 	return 0;
+diff --git a/drivers/char/ipmi/ssif_bmc.c b/drivers/char/ipmi/ssif_bmc.c
+index 2d8069386398..caee848261e9 100644
+--- a/drivers/char/ipmi/ssif_bmc.c
++++ b/drivers/char/ipmi/ssif_bmc.c
+@@ -797,7 +797,7 @@ static int ssif_bmc_cb(struct i2c_client *client, enum i2c_slave_event event, u8
+ 	return ret;
  }
  
--static int tas2780_i2c_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int tas2780_i2c_probe(struct i2c_client *client)
+-static int ssif_bmc_probe(struct i2c_client *client, const struct i2c_device_id *id)
++static int ssif_bmc_probe(struct i2c_client *client)
  {
- 	struct tas2780_priv *tas2780;
- 	int result;
-@@ -646,7 +645,7 @@ static struct i2c_driver tas2780_i2c_driver = {
- 		.name   = "tas2780",
- 		.of_match_table = of_match_ptr(tas2780_of_match),
+ 	struct ssif_bmc_ctx *ssif_bmc;
+ 	int ret;
+@@ -860,7 +860,7 @@ static struct i2c_driver ssif_bmc_driver = {
+ 		.name           = DEVICE_NAME,
+ 		.of_match_table = ssif_bmc_match,
  	},
--	.probe  = tas2780_i2c_probe,
-+	.probe_new  = tas2780_i2c_probe,
- 	.id_table   = tas2780_i2c_id,
+-	.probe          = ssif_bmc_probe,
++	.probe_new      = ssif_bmc_probe,
+ 	.remove         = ssif_bmc_remove,
+ 	.id_table       = ssif_bmc_id,
  };
- module_i2c_driver(tas2780_i2c_driver);
 -- 
 2.38.1
 
