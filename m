@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7120862FE1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD7562FE1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241874AbiKRTlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 14:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
+        id S241835AbiKRTlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235577AbiKRTlD (ORCPT
+        with ESMTP id S241676AbiKRTlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 14:41:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30E68C4A7;
-        Fri, 18 Nov 2022 11:41:02 -0800 (PST)
+        Fri, 18 Nov 2022 14:41:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CA486A52;
+        Fri, 18 Nov 2022 11:41:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EC97B82505;
-        Fri, 18 Nov 2022 19:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FEAC433D6;
-        Fri, 18 Nov 2022 19:40:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFA2B62714;
+        Fri, 18 Nov 2022 19:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC758C433D6;
+        Fri, 18 Nov 2022 19:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668800460;
-        bh=RS1lv+FW9z1amfhyPMQoQGhqhEaSIsgx5sWtN3v6S1k=;
+        s=k20201202; t=1668800465;
+        bh=ZxBjBfDNN39LcAdfeJMuyPeXKjlCO7wv0AfCNAfuHfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IlN3L7EA6wJiXKJJXU6MvR46FzDtxduqXi58vaeihXy1ICE2BcaO143y+eRjDX/gE
-         YWZ6udX67LZhgefbEKVghYWUvq+wJdxxd3o1xXF0EmJ1q5uJTpO5KqsUq3bJEMZVUt
-         A58RXxzqLp9fjIEqLywD1Xi8I1gOCqfxHWsgWKTW1h0bE+9HjSxI5lhaHfpNvsovdq
-         IYfRN0ORyldJ0UEPlQw1AyfiwUgV23nPpJ4gIZszZOixkVoHLI+/oohR976NNZJsYq
-         7ED7uBGniI2d4KJfnTKWQ9ixpta2G0AHt2wd9o8cxIrlwrDTYdrRUeyHxUz3BPuu/e
-         u6H6yYCQ/DJwA==
+        b=u7X7SrKH9uswDp7VJopT1zVp1xB1OqnMQYPT91URObWVrU+EktI+OPX9d/fpSBS80
+         qcjw3eFEfNbmE4wUaxepWAN6ietCpr6+pswX0ujhAtSK0mH200U7yXv6GGTjHyZQqj
+         zBfxHPboyQ8NhqttmGRy1SlsbgiKPEK40XgnmYmiI6086TeXD/CLzGrJOjphqVIXer
+         Fy4Im27UGa+0kHcajVAr6yhYzRARF7ZfeCraVYpHR+O5wTmblUNlp7H0rV49gNzxzu
+         xtXwZAGdZwUxkFzHlipKi0eXJaX4WmF0IllfSJYn7IkUHLX2u3iNbkmPTgMiQsa/cf
+         7OZGE+TrQ1ppQ==
 From:   Will Deacon <will@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org
+To:     mark.rutland@arm.com, catalin.marinas@arm.com,
+        suzuki.poulose@arm.com, Besar Wicaksono <bwicaksono@nvidia.com>
 Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-doc@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH V3 0/2] arm64: errata: Workaround Cortex-A715 errata #2645198
-Date:   Fri, 18 Nov 2022 19:40:40 +0000
-Message-Id: <166879036104.4045194.6085821745248609037.b4-ty@kernel.org>
+        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        vsethi@nvidia.com, linux-kernel@vger.kernel.org,
+        sfr@canb.auug.org.au, treding@nvidia.com, jonathanh@nvidia.com,
+        ywan@nvidia.com
+Subject: Re: [PATCH] perf: arm_cspmu: Fix build failure on x86_64
+Date:   Fri, 18 Nov 2022 19:40:42 +0000
+Message-Id: <166877831470.3584603.8252400743799504223.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221116140915.356601-1-anshuman.khandual@arm.com>
-References: <20221116140915.356601-1-anshuman.khandual@arm.com>
+In-Reply-To: <20221116190455.55651-1-bwicaksono@nvidia.com>
+References: <20221116190455.55651-1-bwicaksono@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,22 +58,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 19:39:13 +0530, Anshuman Khandual wrote:
-> This series adds Cortex-A715 partnumber and workarounds the errata #2645198
-> which gets triggered when an userspace page mapping permission changes from
-> executable to non-executable, corrupting both ESR_EL1/FAR_EL1 registers
-> when an instruction abort is taken.
+On Wed, 16 Nov 2022 13:04:55 -0600, Besar Wicaksono wrote:
+> Building on x86_64 allmodconfig failed:
+>   | drivers/perf/arm_cspmu/arm_cspmu.c:1114:29: error: implicit
+>   |    declaration of function 'get_acpi_id_for_cpu'
 > 
-> This series applies on v6.1-rc5.
+> get_acpi_id_for_cpu is a helper function from ARM64.
+> Fix by adding ARM64 dependency.
 > 
 > [...]
 
-Applied to arm64 (for-next/errata), thanks!
+Applied to will (for-next/perf), thanks!
 
-[1/2] arm64: Add Cortex-715 CPU part definition
-      https://git.kernel.org/arm64/c/07e39e60bbf0
-[2/2] arm64: errata: Workaround possible Cortex-A715 [ESR|FAR]_ELx corruption
-      https://git.kernel.org/arm64/c/44ecda71fd8a
+[1/1] perf: arm_cspmu: Fix build failure on x86_64
+      https://git.kernel.org/will/c/e72dbf9085b5
 
 Cheers,
 -- 
