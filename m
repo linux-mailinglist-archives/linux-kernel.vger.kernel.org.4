@@ -2,163 +2,798 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E16D62FDD1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B0062FDDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241712AbiKRTQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 14:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
+        id S235536AbiKRTSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:18:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235536AbiKRTQD (ORCPT
+        with ESMTP id S233971AbiKRTSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 14:16:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F5848774;
-        Fri, 18 Nov 2022 11:16:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D3C8626B2;
-        Fri, 18 Nov 2022 19:16:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 731E8C43470;
-        Fri, 18 Nov 2022 19:16:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668798962;
-        bh=3oaypFAauEKT+WjnVA3nrmkQ0TB+gA+2N8zEi8VAFLo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cl8DePJfdv9aA0NMSkSSc/zpoCaWvkFV8xxuw4hQbl+k9Ne0G9b3f+m5FXGolow08
-         jaGGGXWSBUgjp47BgFkOYTBMIyTlNybmxEzqkK0NFG3jEG2uKoH/SL+USCqZje5uaS
-         nGz7S+L68y+igN8pP2t72D9BAUTsTdsHods01hzBBKYzxf/jsKNfvYDRQK9hZ0bh1Y
-         5Tt2RpfvLxKh3DyUMyYYyGorLWL41JUFfxhzSUajleqXPqOaimbi6KwJcyXNZMaO+9
-         6PtYQl0s792Xmji33/yLX/7dQJ4KgqExhWx7VPFOhTA9CQDhoqErtVQrXFNbAz1XXc
-         Ukav6xclsceyw==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v2 2/2] kbuild: warn objects shared among multiple modules
-Date:   Sat, 19 Nov 2022 04:15:51 +0900
-Message-Id: <20221118191551.66448-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221118191551.66448-1-masahiroy@kernel.org>
-References: <20221118191551.66448-1-masahiroy@kernel.org>
+        Fri, 18 Nov 2022 14:18:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F0649B60
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:17:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668799040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=frhHccDg+zfkvzEA1uCRGBwYY1DJhjptF8PMs1qT5P0=;
+        b=Xm2cRCAikheIC2rZnba5Yw6gRbbKJH2sg7VAi2wFMdfW37vp+7KWJBDdphYy8AjpEmHny9
+        lb1BoOkN1bDBfN66AU0mx36y04qydgvq8URtjY3c1oGZdvJRGFl7EoIUy4VlEtRgWMAcj5
+        XhSQ64JtyHr9c6LJCos3bnTygELmtYU=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-66-LkzXcmZSPvykwtFQSqXMuw-1; Fri, 18 Nov 2022 14:17:19 -0500
+X-MC-Unique: LkzXcmZSPvykwtFQSqXMuw-1
+Received: by mail-qk1-f197.google.com with SMTP id bl21-20020a05620a1a9500b006fa35db066aso7298180qkb.19
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:17:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=frhHccDg+zfkvzEA1uCRGBwYY1DJhjptF8PMs1qT5P0=;
+        b=1OzhstIPP6RvcxuGNclg+vJompX3O25LkPXw0cK7RqEmQct744kzjh3V4qbhhaLRdk
+         1Ul0sdL1ETXLMrf8jQk4utYQeWrSfpm3YszY3aBHN51V+xiCzaMxYd3KHI3LncOi4skL
+         EU/gCOgLAjvUp6DnP8x+8ci3M59vBKi6b9z6bOCSejTI/2+pxw8PxExWBFOuwsCyJxAu
+         PGY0WRB8kKflUz9Rpd/Oc23yXsTSXiT7rewcFXjfe7Mcop3HSe/Q1G2kZDFI94Yp8XnR
+         RGPdKgwXnvLtPI7WgOmE1MEaAFXio+o+eYyXkbDfMBpFDKEHK39Vhl5SlIBejwgthCyG
+         DLmg==
+X-Gm-Message-State: ANoB5pmH9xEhexuKmuGfcOqyTJa40+qUoqLt8AiZ+N9GMcS24YbuGFJP
+        bqvB5LSbjU+6HUMmx13nF1BiMIvjnckKdAFgKYrrM3IyhW5VPqCvhAadCrMBnj2E4P1Bhim3I4y
+        tLTAxg3IYIFbD1TfAO9EP9IJs
+X-Received: by 2002:a05:6214:4585:b0:4b4:51f1:7d74 with SMTP id op5-20020a056214458500b004b451f17d74mr8157349qvb.121.1668799038002;
+        Fri, 18 Nov 2022 11:17:18 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5+EAonWmc5h50OmzV0RewboHT1ubQw3JqJoS0ob9tW5tgTADkeqIvv5LHetK6Tey/hdtWIZQ==
+X-Received: by 2002:a05:6214:4585:b0:4b4:51f1:7d74 with SMTP id op5-20020a056214458500b004b451f17d74mr8157325qvb.121.1668799037659;
+        Fri, 18 Nov 2022 11:17:17 -0800 (PST)
+Received: from ?IPv6:2600:4040:5c6c:9200::feb? ([2600:4040:5c6c:9200::feb])
+        by smtp.gmail.com with ESMTPSA id bp44-20020a05620a45ac00b006fb93acc788sm2958579qkb.6.2022.11.18.11.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 11:17:16 -0800 (PST)
+Message-ID: <35e55d8040afdcb5684bec16ff710ce5ff32b202.camel@redhat.com>
+Subject: Re: [PATCH v2 1/4] drm/amdgpu/mst: Stop ignoring error codes and
+ deadlocking
+From:   Lyude Paul <lyude@redhat.com>
+To:     "Lin, Wayne" <Wayne.Lin@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+Cc:     "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
+        "Pillai, Aurabindo" <Aurabindo.Pillai@amd.com>,
+        "Li, Roman" <Roman.Li@amd.com>, "Zuo, Jerry" <Jerry.Zuo@amd.com>,
+        "Wu, Hersen" <hersenxs.wu@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
+        "Hung, Alex" <Alex.Hung@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        "Liu, Wenjing" <Wenjing.Liu@amd.com>,
+        "Francis, David" <David.Francis@amd.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Fri, 18 Nov 2022 14:17:14 -0500
+In-Reply-To: <CO6PR12MB548932515652B8D3130C66DEFC079@CO6PR12MB5489.namprd12.prod.outlook.com>
+References: <20221114221754.385090-1-lyude@redhat.com>
+         <20221114221754.385090-2-lyude@redhat.com>
+         <CO6PR12MB548932515652B8D3130C66DEFC079@CO6PR12MB5489.namprd12.prod.outlook.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an object is shared among multiple modules, amd some of them are
-configured as 'm', but the others as 'y', the shared object is built
-as modular, then linked to the modules and vmlinux. This is a potential
-issue because the expected CFLAGS are different between modules and
-builtins.
+JFYI, Coverity pointed out one more issue with this series so I'm going to
+send out a respin real quick to fix it. It's just a missing variable
+assignment (we leave ret unassigned by mistake in
+pre_compute_mst_dsc_configs()) so I will carry over your r-b on it.
 
-Commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects")
-reported that this could be even more fatal in some cases such as
-Clang LTO.
+On Wed, 2022-11-16 at 04:39 +0000, Lin, Wayne wrote:
+> [Public]
+> 
+> All the patch set looks good to me. Feel free to add:
+> Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
+> 
+> Again, thank you Lyude for helping on this!!!
+> 
+> Regards,
+> Wayne
+> > -----Original Message-----
+> > From: Lyude Paul <lyude@redhat.com>
+> > Sent: Tuesday, November 15, 2022 6:18 AM
+> > To: amd-gfx@lists.freedesktop.org
+> > Cc: Wentland, Harry <Harry.Wentland@amd.com>; stable@vger.kernel.org;
+> > Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Siqueira, Rodrigo
+> > <Rodrigo.Siqueira@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Koenig, Christian
+> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
+> > Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; Kazlauskas,
+> > Nicholas <Nicholas.Kazlauskas@amd.com>; Pillai, Aurabindo
+> > <Aurabindo.Pillai@amd.com>; Li, Roman <Roman.Li@amd.com>; Zuo, Jerry
+> > <Jerry.Zuo@amd.com>; Wu, Hersen <hersenxs.wu@amd.com>; Lin, Wayne
+> > <Wayne.Lin@amd.com>; Thomas Zimmermann <tzimmermann@suse.de>;
+> > Mahfooz, Hamza <Hamza.Mahfooz@amd.com>; Hung, Alex
+> > <Alex.Hung@amd.com>; Mikita Lipski <mikita.lipski@amd.com>; Liu,
+> > Wenjing <Wenjing.Liu@amd.com>; Francis, David
+> > <David.Francis@amd.com>; open list:DRM DRIVERS <dri-
+> > devel@lists.freedesktop.org>; open list <linux-kernel@vger.kernel.org>
+> > Subject: [PATCH v2 1/4] drm/amdgpu/mst: Stop ignoring error codes and
+> > deadlocking
+> > 
+> > It appears that amdgpu makes the mistake of completely ignoring the return
+> > values from the DP MST helpers, and instead just returns a simple true/false.
+> > In this case, it seems to have come back to bite us because as a result of
+> > simply returning false from compute_mst_dsc_configs_for_state(), amdgpu
+> > had no way of telling when a deadlock happened from these helpers. This
+> > could definitely result in some kernel splats.
+> > 
+> > V2:
+> > * Address Wayne's comments (fix another bunch of spots where we weren't
+> >   passing down return codes)
+> > 
+> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+> > Fixes: 8c20a1ed9b4f ("drm/amd/display: MST DSC compute fair share")
+> > Cc: Harry Wentland <harry.wentland@amd.com>
+> > Cc: <stable@vger.kernel.org> # v5.6+
+> > ---
+> >  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  18 +-
+> >  .../display/amdgpu_dm/amdgpu_dm_mst_types.c   | 235 ++++++++++------
+> > --
+> >  .../display/amdgpu_dm/amdgpu_dm_mst_types.h   |  12 +-
+> >  3 files changed, 147 insertions(+), 118 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > index 0db2a88cd4d7b..852a2100c6b38 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > @@ -6462,7 +6462,7 @@ static int
+> > dm_update_mst_vcpi_slots_for_dsc(struct drm_atomic_state *state,
+> >  	struct drm_connector_state *new_con_state;
+> >  	struct amdgpu_dm_connector *aconnector;
+> >  	struct dm_connector_state *dm_conn_state;
+> > -	int i, j;
+> > +	int i, j, ret;
+> >  	int vcpi, pbn_div, pbn, slot_num = 0;
+> > 
+> >  	for_each_new_connector_in_state(state, connector,
+> > new_con_state, i) { @@ -6509,8 +6509,11 @@ static int
+> > dm_update_mst_vcpi_slots_for_dsc(struct drm_atomic_state *state,
+> >  			dm_conn_state->pbn = pbn;
+> >  			dm_conn_state->vcpi_slots = slot_num;
+> > 
+> > -			drm_dp_mst_atomic_enable_dsc(state, aconnector-
+> > > port, dm_conn_state->pbn,
+> > -						     false);
+> > +			ret = drm_dp_mst_atomic_enable_dsc(state,
+> > aconnector->port,
+> > +							   dm_conn_state-
+> > > pbn, false);
+> > +			if (ret < 0)
+> > +				return ret;
+> > +
+> >  			continue;
+> >  		}
+> > 
+> > @@ -9523,10 +9526,9 @@ static int amdgpu_dm_atomic_check(struct
+> > drm_device *dev,
+> > 
+> >  #if defined(CONFIG_DRM_AMD_DC_DCN)
+> >  	if (dc_resource_is_dsc_encoding_supported(dc)) {
+> > -		if (!pre_validate_dsc(state, &dm_state, vars)) {
+> > -			ret = -EINVAL;
+> > +		ret = pre_validate_dsc(state, &dm_state, vars);
+> > +		if (ret != 0)
+> >  			goto fail;
+> > -		}
+> >  	}
+> >  #endif
+> > 
+> > @@ -9621,9 +9623,9 @@ static int amdgpu_dm_atomic_check(struct
+> > drm_device *dev,
+> >  		}
+> > 
+> >  #if defined(CONFIG_DRM_AMD_DC_DCN)
+> > -		if (!compute_mst_dsc_configs_for_state(state, dm_state-
+> > > context, vars)) {
+> > +		ret = compute_mst_dsc_configs_for_state(state, dm_state-
+> > > context, vars);
+> > +		if (ret) {
+> > 
+> > 	DRM_DEBUG_DRIVER("compute_mst_dsc_configs_for_state()
+> > failed\n");
+> > -			ret = -EINVAL;
+> >  			goto fail;
+> >  		}
+> > 
+> > diff --git
+> > a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > index 6ff96b4bdda5c..bba2e8aaa2c20 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > +++
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > @@ -703,13 +703,13 @@ static int bpp_x16_from_pbn(struct
+> > dsc_mst_fairness_params param, int pbn)
+> >  	return dsc_config.bits_per_pixel;
+> >  }
+> > 
+> > -static bool increase_dsc_bpp(struct drm_atomic_state *state,
+> > -			     struct drm_dp_mst_topology_state *mst_state,
+> > -			     struct dc_link *dc_link,
+> > -			     struct dsc_mst_fairness_params *params,
+> > -			     struct dsc_mst_fairness_vars *vars,
+> > -			     int count,
+> > -			     int k)
+> > +static int increase_dsc_bpp(struct drm_atomic_state *state,
+> > +			    struct drm_dp_mst_topology_state *mst_state,
+> > +			    struct dc_link *dc_link,
+> > +			    struct dsc_mst_fairness_params *params,
+> > +			    struct dsc_mst_fairness_vars *vars,
+> > +			    int count,
+> > +			    int k)
+> >  {
+> >  	int i;
+> >  	bool bpp_increased[MAX_PIPES];
+> > @@ -719,6 +719,7 @@ static bool increase_dsc_bpp(struct
+> > drm_atomic_state *state,
+> >  	int remaining_to_increase = 0;
+> >  	int link_timeslots_used;
+> >  	int fair_pbn_alloc;
+> > +	int ret = 0;
+> > 
+> >  	for (i = 0; i < count; i++) {
+> >  		if (vars[i + k].dsc_enabled) {
+> > @@ -757,52 +758,60 @@ static bool increase_dsc_bpp(struct
+> > drm_atomic_state *state,
+> > 
+> >  		if (initial_slack[next_index] > fair_pbn_alloc) {
+> >  			vars[next_index].pbn += fair_pbn_alloc;
+> > -			if (drm_dp_atomic_find_time_slots(state,
+> > -
+> > params[next_index].port->mgr,
+> > -
+> > params[next_index].port,
+> > -
+> > vars[next_index].pbn) < 0)
+> > -				return false;
+> > -			if (!drm_dp_mst_atomic_check(state)) {
+> > +			ret = drm_dp_atomic_find_time_slots(state,
+> > +
+> > params[next_index].port->mgr,
+> > +
+> > params[next_index].port,
+> > +
+> > vars[next_index].pbn);
+> > +			if (ret < 0)
+> > +				return ret;
+> > +
+> > +			ret = drm_dp_mst_atomic_check(state);
+> > +			if (ret == 0) {
+> >  				vars[next_index].bpp_x16 =
+> > bpp_x16_from_pbn(params[next_index], vars[next_index].pbn);
+> >  			} else {
+> >  				vars[next_index].pbn -= fair_pbn_alloc;
+> > -				if (drm_dp_atomic_find_time_slots(state,
+> > -
+> > params[next_index].port->mgr,
+> > -
+> > params[next_index].port,
+> > -
+> > vars[next_index].pbn) < 0)
+> > -					return false;
+> > +				ret = drm_dp_atomic_find_time_slots(state,
+> > +
+> > params[next_index].port->mgr,
+> > +
+> > params[next_index].port,
+> > +
+> > vars[next_index].pbn);
+> > +				if (ret < 0)
+> > +					return ret;
+> >  			}
+> >  		} else {
+> >  			vars[next_index].pbn += initial_slack[next_index];
+> > -			if (drm_dp_atomic_find_time_slots(state,
+> > -
+> > params[next_index].port->mgr,
+> > -
+> > params[next_index].port,
+> > -
+> > vars[next_index].pbn) < 0)
+> > -				return false;
+> > -			if (!drm_dp_mst_atomic_check(state)) {
+> > +			ret = drm_dp_atomic_find_time_slots(state,
+> > +
+> > params[next_index].port->mgr,
+> > +
+> > params[next_index].port,
+> > +
+> > vars[next_index].pbn);
+> > +			if (ret < 0)
+> > +				return ret;
+> > +
+> > +			ret = drm_dp_mst_atomic_check(state);
+> > +			if (ret == 0) {
+> >  				vars[next_index].bpp_x16 =
+> > params[next_index].bw_range.max_target_bpp_x16;
+> >  			} else {
+> >  				vars[next_index].pbn -=
+> > initial_slack[next_index];
+> > -				if (drm_dp_atomic_find_time_slots(state,
+> > -
+> > params[next_index].port->mgr,
+> > -
+> > params[next_index].port,
+> > -
+> > vars[next_index].pbn) < 0)
+> > -					return false;
+> > +				ret = drm_dp_atomic_find_time_slots(state,
+> > +
+> > params[next_index].port->mgr,
+> > +
+> > params[next_index].port,
+> > +
+> > vars[next_index].pbn);
+> > +				if (ret < 0)
+> > +					return ret;
+> >  			}
+> >  		}
+> > 
+> >  		bpp_increased[next_index] = true;
+> >  		remaining_to_increase--;
+> >  	}
+> > -	return true;
+> > +	return 0;
+> >  }
+> > 
+> > -static bool try_disable_dsc(struct drm_atomic_state *state,
+> > -			    struct dc_link *dc_link,
+> > -			    struct dsc_mst_fairness_params *params,
+> > -			    struct dsc_mst_fairness_vars *vars,
+> > -			    int count,
+> > -			    int k)
+> > +static int try_disable_dsc(struct drm_atomic_state *state,
+> > +			   struct dc_link *dc_link,
+> > +			   struct dsc_mst_fairness_params *params,
+> > +			   struct dsc_mst_fairness_vars *vars,
+> > +			   int count,
+> > +			   int k)
+> >  {
+> >  	int i;
+> >  	bool tried[MAX_PIPES];
+> > @@ -810,6 +819,7 @@ static bool try_disable_dsc(struct drm_atomic_state
+> > *state,
+> >  	int max_kbps_increase;
+> >  	int next_index;
+> >  	int remaining_to_try = 0;
+> > +	int ret;
+> > 
+> >  	for (i = 0; i < count; i++) {
+> >  		if (vars[i + k].dsc_enabled
+> > @@ -840,49 +850,52 @@ static bool try_disable_dsc(struct
+> > drm_atomic_state *state,
+> >  			break;
+> > 
+> >  		vars[next_index].pbn =
+> > kbps_to_peak_pbn(params[next_index].bw_range.stream_kbps);
+> > -		if (drm_dp_atomic_find_time_slots(state,
+> > -						  params[next_index].port-
+> > > mgr,
+> > -						  params[next_index].port,
+> > -						  vars[next_index].pbn) < 0)
+> > -			return false;
+> > +		ret = drm_dp_atomic_find_time_slots(state,
+> > +						    params[next_index].port-
+> > > mgr,
+> > +						    params[next_index].port,
+> > +						    vars[next_index].pbn);
+> > +		if (ret < 0)
+> > +			return ret;
+> > 
+> > -		if (!drm_dp_mst_atomic_check(state)) {
+> > +		ret = drm_dp_mst_atomic_check(state);
+> > +		if (ret == 0) {
+> >  			vars[next_index].dsc_enabled = false;
+> >  			vars[next_index].bpp_x16 = 0;
+> >  		} else {
+> >  			vars[next_index].pbn =
+> > kbps_to_peak_pbn(params[next_index].bw_range.max_kbps);
+> > -			if (drm_dp_atomic_find_time_slots(state,
+> > -
+> > params[next_index].port->mgr,
+> > -
+> > params[next_index].port,
+> > -
+> > vars[next_index].pbn) < 0)
+> > -				return false;
+> > +			ret = drm_dp_atomic_find_time_slots(state,
+> > +
+> > params[next_index].port->mgr,
+> > +
+> > params[next_index].port,
+> > +
+> > vars[next_index].pbn);
+> > +			if (ret < 0)
+> > +				return ret;
+> >  		}
+> > 
+> >  		tried[next_index] = true;
+> >  		remaining_to_try--;
+> >  	}
+> > -	return true;
+> > +	return 0;
+> >  }
+> > 
+> > -static bool compute_mst_dsc_configs_for_link(struct drm_atomic_state
+> > *state,
+> > -					     struct dc_state *dc_state,
+> > -					     struct dc_link *dc_link,
+> > -					     struct dsc_mst_fairness_vars *vars,
+> > -					     struct drm_dp_mst_topology_mgr
+> > *mgr,
+> > -					     int *link_vars_start_index)
+> > +static int compute_mst_dsc_configs_for_link(struct drm_atomic_state
+> > *state,
+> > +					    struct dc_state *dc_state,
+> > +					    struct dc_link *dc_link,
+> > +					    struct dsc_mst_fairness_vars *vars,
+> > +					    struct drm_dp_mst_topology_mgr
+> > *mgr,
+> > +					    int *link_vars_start_index)
+> >  {
+> >  	struct dc_stream_state *stream;
+> >  	struct dsc_mst_fairness_params params[MAX_PIPES];
+> >  	struct amdgpu_dm_connector *aconnector;
+> >  	struct drm_dp_mst_topology_state *mst_state =
+> > drm_atomic_get_mst_topology_state(state, mgr);
+> >  	int count = 0;
+> > -	int i, k;
+> > +	int i, k, ret;
+> >  	bool debugfs_overwrite = false;
+> > 
+> >  	memset(params, 0, sizeof(params));
+> > 
+> >  	if (IS_ERR(mst_state))
+> > -		return false;
+> > +		return PTR_ERR(mst_state);
+> > 
+> >  	mst_state->pbn_div = dm_mst_get_pbn_divider(dc_link);  #if
+> > defined(CONFIG_DRM_AMD_DC_DCN) @@ -933,7 +946,7 @@ static bool
+> > compute_mst_dsc_configs_for_link(struct drm_atomic_state *state,
+> > 
+> >  	if (count == 0) {
+> >  		ASSERT(0);
+> > -		return true;
+> > +		return 0;
+> >  	}
+> > 
+> >  	/* k is start index of vars for current phy link used by mst hub */ @@
+> > -947,13 +960,17 @@ static bool compute_mst_dsc_configs_for_link(struct
+> > drm_atomic_state *state,
+> >  		vars[i + k].pbn =
+> > kbps_to_peak_pbn(params[i].bw_range.stream_kbps);
+> >  		vars[i + k].dsc_enabled = false;
+> >  		vars[i + k].bpp_x16 = 0;
+> > -		if (drm_dp_atomic_find_time_slots(state, params[i].port-
+> > > mgr, params[i].port,
+> > -						  vars[i + k].pbn) < 0)
+> > -			return false;
+> > +		ret = drm_dp_atomic_find_time_slots(state, params[i].port-
+> > > mgr, params[i].port,
+> > +						    vars[i + k].pbn);
+> > +		if (ret < 0)
+> > +			return ret;
+> >  	}
+> > -	if (!drm_dp_mst_atomic_check(state) && !debugfs_overwrite) {
+> > +	ret = drm_dp_mst_atomic_check(state);
+> > +	if (ret == 0 && !debugfs_overwrite) {
+> >  		set_dsc_configs_from_fairness_vars(params, vars, count, k);
+> > -		return true;
+> > +		return 0;
+> > +	} else if (ret != -ENOSPC) {
+> > +		return ret;
+> >  	}
+> > 
+> >  	/* Try max compression */
+> > @@ -962,31 +979,36 @@ static bool
+> > compute_mst_dsc_configs_for_link(struct drm_atomic_state *state,
+> >  			vars[i + k].pbn =
+> > kbps_to_peak_pbn(params[i].bw_range.min_kbps);
+> >  			vars[i + k].dsc_enabled = true;
+> >  			vars[i + k].bpp_x16 =
+> > params[i].bw_range.min_target_bpp_x16;
+> > -			if (drm_dp_atomic_find_time_slots(state,
+> > params[i].port->mgr,
+> > -							  params[i].port, vars[i
+> > + k].pbn) < 0)
+> > -				return false;
+> > +			ret = drm_dp_atomic_find_time_slots(state,
+> > params[i].port->mgr,
+> > +							    params[i].port,
+> > vars[i + k].pbn);
+> > +			if (ret < 0)
+> > +				return ret;
+> >  		} else {
+> >  			vars[i + k].pbn =
+> > kbps_to_peak_pbn(params[i].bw_range.stream_kbps);
+> >  			vars[i + k].dsc_enabled = false;
+> >  			vars[i + k].bpp_x16 = 0;
+> > -			if (drm_dp_atomic_find_time_slots(state,
+> > params[i].port->mgr,
+> > -							  params[i].port, vars[i
+> > + k].pbn) < 0)
+> > -				return false;
+> > +			ret = drm_dp_atomic_find_time_slots(state,
+> > params[i].port->mgr,
+> > +							    params[i].port,
+> > vars[i + k].pbn);
+> > +			if (ret < 0)
+> > +				return ret;
+> >  		}
+> >  	}
+> > -	if (drm_dp_mst_atomic_check(state))
+> > -		return false;
+> > +	ret = drm_dp_mst_atomic_check(state);
+> > +	if (ret != 0)
+> > +		return ret;
+> > 
+> >  	/* Optimize degree of compression */
+> > -	if (!increase_dsc_bpp(state, mst_state, dc_link, params, vars, count,
+> > k))
+> > -		return false;
+> > +	ret = increase_dsc_bpp(state, mst_state, dc_link, params, vars,
+> > count, k);
+> > +	if (ret < 0)
+> > +		return ret;
+> > 
+> > -	if (!try_disable_dsc(state, dc_link, params, vars, count, k))
+> > -		return false;
+> > +	ret = try_disable_dsc(state, dc_link, params, vars, count, k);
+> > +	if (ret < 0)
+> > +		return ret;
+> > 
+> >  	set_dsc_configs_from_fairness_vars(params, vars, count, k);
+> > 
+> > -	return true;
+> > +	return 0;
+> >  }
+> > 
+> >  static bool is_dsc_need_re_compute(
+> > @@ -1087,15 +1109,16 @@ static bool is_dsc_need_re_compute(
+> >  	return is_dsc_need_re_compute;
+> >  }
+> > 
+> > -bool compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> > -				       struct dc_state *dc_state,
+> > -				       struct dsc_mst_fairness_vars *vars)
+> > +int compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> > +				      struct dc_state *dc_state,
+> > +				      struct dsc_mst_fairness_vars *vars)
+> >  {
+> >  	int i, j;
+> >  	struct dc_stream_state *stream;
+> >  	bool computed_streams[MAX_PIPES];
+> >  	struct amdgpu_dm_connector *aconnector;
+> >  	int link_vars_start_index = 0;
+> > +	int ret = 0;
+> > 
+> >  	for (i = 0; i < dc_state->stream_count; i++)
+> >  		computed_streams[i] = false;
+> > @@ -1118,17 +1141,19 @@ bool compute_mst_dsc_configs_for_state(struct
+> > drm_atomic_state *state,
+> >  			continue;
+> > 
+> >  		if (dcn20_remove_stream_from_ctx(stream->ctx->dc,
+> > dc_state, stream) != DC_OK)
+> > -			return false;
+> > +			return -EINVAL;
+> > 
+> >  		if (!is_dsc_need_re_compute(state, dc_state, stream->link))
+> >  			continue;
+> > 
+> >  		mutex_lock(&aconnector->mst_mgr.lock);
+> > -		if (!compute_mst_dsc_configs_for_link(state, dc_state,
+> > stream->link, vars,
+> > -						      &aconnector->mst_mgr,
+> > -						      &link_vars_start_index)) {
+> > +
+> > +		ret = compute_mst_dsc_configs_for_link(state, dc_state,
+> > stream->link, vars,
+> > +						       &aconnector->mst_mgr,
+> > +						       &link_vars_start_index);
+> > +		if (ret != 0) {
+> >  			mutex_unlock(&aconnector->mst_mgr.lock);
+> > -			return false;
+> > +			return ret;
+> >  		}
+> >  		mutex_unlock(&aconnector->mst_mgr.lock);
+> > 
+> > @@ -1143,22 +1168,22 @@ bool compute_mst_dsc_configs_for_state(struct
+> > drm_atomic_state *state,
+> > 
+> >  		if (stream->timing.flags.DSC == 1)
+> >  			if (dc_stream_add_dsc_to_resource(stream->ctx-
+> > > dc, dc_state, stream) != DC_OK)
+> > -				return false;
+> > +				return -EINVAL;
+> >  	}
+> > 
+> > -	return true;
+> > +	return ret;
+> >  }
+> > 
+> > -static bool
+> > -	pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state
+> > *state,
+> > -					      struct dc_state *dc_state,
+> > -					      struct dsc_mst_fairness_vars
+> > *vars)
+> > +static int pre_compute_mst_dsc_configs_for_state(struct
+> > drm_atomic_state *state,
+> > +						 struct dc_state *dc_state,
+> > +						 struct dsc_mst_fairness_vars
+> > *vars)
+> >  {
+> >  	int i, j;
+> >  	struct dc_stream_state *stream;
+> >  	bool computed_streams[MAX_PIPES];
+> >  	struct amdgpu_dm_connector *aconnector;
+> >  	int link_vars_start_index = 0;
+> > +	int ret;
+> > 
+> >  	for (i = 0; i < dc_state->stream_count; i++)
+> >  		computed_streams[i] = false;
+> > @@ -1184,11 +1209,12 @@ static bool
+> >  			continue;
+> > 
+> >  		mutex_lock(&aconnector->mst_mgr.lock);
+> > -		if (!compute_mst_dsc_configs_for_link(state, dc_state,
+> > stream->link, vars,
+> > -						      &aconnector->mst_mgr,
+> > -						      &link_vars_start_index)) {
+> > +		ret = compute_mst_dsc_configs_for_link(state, dc_state,
+> > stream->link, vars,
+> > +						       &aconnector->mst_mgr,
+> > +						       &link_vars_start_index);
+> > +		if (ret != 0) {
+> >  			mutex_unlock(&aconnector->mst_mgr.lock);
+> > -			return false;
+> > +			return ret;
+> >  		}
+> >  		mutex_unlock(&aconnector->mst_mgr.lock);
+> > 
+> > @@ -1198,7 +1224,7 @@ static bool
+> >  		}
+> >  	}
+> > 
+> > -	return true;
+> > +	return ret;
+> >  }
+> > 
+> >  static int find_crtc_index_in_state_by_stream(struct drm_atomic_state
+> > *state, @@ -1253,9 +1279,9 @@ static bool
+> > is_dsc_precompute_needed(struct drm_atomic_state *state)
+> >  	return ret;
+> >  }
+> > 
+> > -bool pre_validate_dsc(struct drm_atomic_state *state,
+> > -		      struct dm_atomic_state **dm_state_ptr,
+> > -		      struct dsc_mst_fairness_vars *vars)
+> > +int pre_validate_dsc(struct drm_atomic_state *state,
+> > +		     struct dm_atomic_state **dm_state_ptr,
+> > +		     struct dsc_mst_fairness_vars *vars)
+> >  {
+> >  	int i;
+> >  	struct dm_atomic_state *dm_state;
+> > @@ -1264,11 +1290,12 @@ bool pre_validate_dsc(struct drm_atomic_state
+> > *state,
+> > 
+> >  	if (!is_dsc_precompute_needed(state)) {
+> >  		DRM_INFO_ONCE("DSC precompute is not needed.\n");
+> > -		return true;
+> > +		return 0;
+> >  	}
+> > -	if (dm_atomic_get_state(state, dm_state_ptr)) {
+> > +	ret = dm_atomic_get_state(state, dm_state_ptr);
+> > +	if (ret != 0) {
+> >  		DRM_INFO_ONCE("dm_atomic_get_state() failed\n");
+> > -		return false;
+> > +		return ret;
+> >  	}
+> >  	dm_state = *dm_state_ptr;
+> > 
+> > @@ -1280,7 +1307,7 @@ bool pre_validate_dsc(struct drm_atomic_state
+> > *state,
+> > 
+> >  	local_dc_state = kmemdup(dm_state->context, sizeof(struct
+> > dc_state), GFP_KERNEL);
+> >  	if (!local_dc_state)
+> > -		return false;
+> > +		return -ENOMEM;
+> > 
+> >  	for (i = 0; i < local_dc_state->stream_count; i++) {
+> >  		struct dc_stream_state *stream = dm_state->context-
+> > > streams[i]; @@ -1316,9 +1343,9 @@ bool pre_validate_dsc(struct
+> > drm_atomic_state *state,
+> >  	if (ret != 0)
+> >  		goto clean_exit;
+> > 
+> > -	if (!pre_compute_mst_dsc_configs_for_state(state, local_dc_state,
+> > vars)) {
+> > +	ret = pre_compute_mst_dsc_configs_for_state(state, local_dc_state,
+> > vars);
+> > +	if (ret != 0) {
+> > 
+> > 	DRM_INFO_ONCE("pre_compute_mst_dsc_configs_for_state()
+> > failed\n");
+> > -		ret = -EINVAL;
+> >  		goto clean_exit;
+> >  	}
+> > 
+> > @@ -1349,7 +1376,7 @@ bool pre_validate_dsc(struct drm_atomic_state
+> > *state,
+> > 
+> >  	kfree(local_dc_state);
+> > 
+> > -	return (ret == 0);
+> > +	return ret;
+> >  }
+> > 
+> >  static unsigned int kbps_from_pbn(unsigned int pbn) diff --git
+> > a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
+> > index b92a7c5671aa2..97fd70df531bf 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
+> > +++
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
+> > @@ -53,15 +53,15 @@ struct dsc_mst_fairness_vars {
+> >  	struct amdgpu_dm_connector *aconnector;  };
+> > 
+> > -bool compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> > -				       struct dc_state *dc_state,
+> > -				       struct dsc_mst_fairness_vars *vars);
+> > +int compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> > +				      struct dc_state *dc_state,
+> > +				      struct dsc_mst_fairness_vars *vars);
+> > 
+> >  bool needs_dsc_aux_workaround(struct dc_link *link);
+> > 
+> > -bool pre_validate_dsc(struct drm_atomic_state *state,
+> > -		      struct dm_atomic_state **dm_state_ptr,
+> > -		      struct dsc_mst_fairness_vars *vars);
+> > +int pre_validate_dsc(struct drm_atomic_state *state,
+> > +		     struct dm_atomic_state **dm_state_ptr,
+> > +		     struct dsc_mst_fairness_vars *vars);
+> > 
+> >  enum dc_status dm_dp_mst_is_port_support_mode(
+> >  	struct amdgpu_dm_connector *aconnector,
+> > --
+> > 2.37.3
+> 
 
-That commit fixed lib/zlib/zstd_{compress,decompress}, but there are
-still more instances of breakage.
-
-This commit adds a W=1 warning for shared objects, so that the kbuild
-test robot, which provides build tests with W=1, will avoid a new
-breakage slipping in.
-
-Quick compile tests on v6.1-rc4 detected the following:
-
-scripts/Makefile.build:252: ./drivers/block/rnbd/Makefile: rnbd-common.o is added to multiple modules: rnbd-client rnbd-server
-scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: cn10k_cpt.o is added to multiple modules: rvu_cptpf rvu_cptvf
-scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: otx2_cptlf.o is added to multiple modules: rvu_cptpf rvu_cptvf
-scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: otx2_cpt_mbox_common.o is added to multiple modules: rvu_cptpf rvu_cptvf
-scripts/Makefile.build:252: ./drivers/edac/Makefile: skx_common.o is added to multiple modules: i10nm_edac skx_edac
-scripts/Makefile.build:252: ./drivers/gpu/drm/bridge/imx/Makefile: imx-ldb-helper.o is added to multiple modules: imx8qm-ldb imx8qxp-ldb
-scripts/Makefile.build:252: ./drivers/mfd/Makefile: rsmu_core.o is added to multiple modules: rsmu-i2c rsmu-spi
-scripts/Makefile.build:252: ./drivers/mtd/tests/Makefile: mtd_test.o is added to multiple modules: mtd_nandbiterrs mtd_oobtest mtd_pagetest mtd_readtest mtd_speedtest mtd_stresstest mtd_subpagetest mtd_torturetest
-scripts/Makefile.build:252: ./drivers/net/dsa/ocelot/Makefile: felix.o is added to multiple modules: mscc_felix mscc_seville
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn23xx_pf_device.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn23xx_vf_device.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn66xx_device.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn68xx_device.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: lio_core.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: lio_ethtool.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_device.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_droq.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_mailbox.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_mem_ops.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_nic.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: request_manager.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: response_manager.o is added to multiple modules: liquidio liquidio_vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/dpaa2/Makefile: dpaa2-mac.o is added to multiple modules: fsl-dpaa2-eth fsl-dpaa2-switch
-scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/dpaa2/Makefile: dpmac.o is added to multiple modules: fsl-dpaa2-eth fsl-dpaa2-switch
-scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc_cbdr.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc_ethtool.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_cmd.o is added to multiple modules: hclge hclgevf
-scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_rss.o is added to multiple modules: hclge hclgevf
-scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_tqp_stats.o is added to multiple modules: hclge hclgevf
-scripts/Makefile.build:252: ./drivers/net/ethernet/marvell/octeontx2/nic/Makefile: otx2_dcbnl.o is added to multiple modules: rvu_nicpf rvu_nicvf
-scripts/Makefile.build:252: ./drivers/net/ethernet/marvell/octeontx2/nic/Makefile: otx2_devlink.o is added to multiple modules: rvu_nicpf rvu_nicvf
-scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_ale.o is added to multiple modules: keystone_netcp keystone_netcp_ethss ti_cpsw ti_cpsw_new
-scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_ethtool.o is added to multiple modules: ti_cpsw ti_cpsw_new
-scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_priv.o is added to multiple modules: ti_cpsw ti_cpsw_new
-scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_sl.o is added to multiple modules: ti_cpsw ti_cpsw_new
-scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: davinci_cpdma.o is added to multiple modules: ti_cpsw ti_cpsw_new ti_davinci_emac
-scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile: common.o is added to multiple modules: intel_skl_int3472_discrete intel_skl_int3472_tps68470
-scripts/Makefile.build:252: ./sound/soc/codecs/Makefile: wcd-clsh-v2.o is added to multiple modules: snd-soc-wcd9335 snd-soc-wcd934x snd-soc-wcd938x
-
-Once all the warnings are fixed, it can become an error irrespective of
-W= option.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-Changes in v2:
-  - Add drivers/block/rnbd/Makefile for commit log
-
- scripts/Makefile.build | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 37cf88d076e8..799df12b53f3 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -222,6 +222,10 @@ endif
- 
- cmd_check_local_export = $(srctree)/scripts/check-local-export $@
- 
-+ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
-+cmd_warn_shared_object = $(if $(word 2, $(modname-multi)),$(warning $(kbuild-file): $*.o is added to multiple modules: $(modname-multi)))
-+endif
-+
- define rule_cc_o_c
- 	$(call cmd_and_fixdep,cc_o_c)
- 	$(call cmd,gen_ksymdeps)
-@@ -231,6 +235,7 @@ define rule_cc_o_c
- 	$(call cmd,gen_objtooldep)
- 	$(call cmd,gen_symversions_c)
- 	$(call cmd,record_mcount)
-+	$(call cmd,warn_shared_object)
- endef
- 
- define rule_as_o_S
-@@ -239,6 +244,7 @@ define rule_as_o_S
- 	$(call cmd,check_local_export)
- 	$(call cmd,gen_objtooldep)
- 	$(call cmd,gen_symversions_S)
-+	$(call cmd,warn_shared_object)
- endef
- 
- # Built-in and composite module parts
 -- 
-2.34.1
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
