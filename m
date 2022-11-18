@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7226304C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5E4630576
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236795AbiKRXqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S234725AbiKRXzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236791AbiKRXqN (ORCPT
+        with ESMTP id S237080AbiKRXxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:46:13 -0500
+        Fri, 18 Nov 2022 18:53:33 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662D6D39ED
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:25:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA3BD2DE3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:27:45 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7t-0007zW-7Q; Fri, 18 Nov 2022 23:46:25 +0100
+        id 1owA7v-00087I-8y; Fri, 18 Nov 2022 23:46:27 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7p-0058CN-3g; Fri, 18 Nov 2022 23:46:22 +0100
+        id 1owA7q-0058Cx-L1; Fri, 18 Nov 2022 23:46:23 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7o-00Hays-NK; Fri, 18 Nov 2022 23:46:20 +0100
+        id 1owA7p-00Haz0-5x; Fri, 18 Nov 2022 23:46:21 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
         Jonathan Cameron <jic23@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 063/606] iio: adc: ltc2471: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:36:37 +0100
-Message-Id: <20221118224540.619276-64-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 065/606] iio: adc: ltc2497: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:36:39 +0100
+Message-Id: <20221118224540.619276-66-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -67,34 +68,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/adc/ltc2471.c | 6 +++---
+ drivers/iio/adc/ltc2497.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/ltc2471.c b/drivers/iio/adc/ltc2471.c
-index 0e0fe881a8e6..eeb2945829eb 100644
---- a/drivers/iio/adc/ltc2471.c
-+++ b/drivers/iio/adc/ltc2471.c
-@@ -99,9 +99,9 @@ static const struct iio_info ltc2471_info = {
- 	.read_raw = ltc2471_read_raw,
- };
+diff --git a/drivers/iio/adc/ltc2497.c b/drivers/iio/adc/ltc2497.c
+index 556f10dfb502..17370c5eb6fe 100644
+--- a/drivers/iio/adc/ltc2497.c
++++ b/drivers/iio/adc/ltc2497.c
+@@ -94,9 +94,9 @@ static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+ 	return ret;
+ }
  
--static int ltc2471_i2c_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static int ltc2471_i2c_probe(struct i2c_client *client)
+-static int ltc2497_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int ltc2497_probe(struct i2c_client *client)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	const struct ltc2497_chip_info *chip_info;
  	struct iio_dev *indio_dev;
- 	struct ltc2471_data *data;
- 	int ret;
-@@ -146,7 +146,7 @@ static struct i2c_driver ltc2471_i2c_driver = {
- 	.driver = {
- 		.name = "ltc2471",
+ 	struct ltc2497_driverdata *st;
+@@ -165,7 +165,7 @@ static struct i2c_driver ltc2497_driver = {
+ 		.name = "ltc2497",
+ 		.of_match_table = ltc2497_of_match,
  	},
--	.probe    = ltc2471_i2c_probe,
-+	.probe_new = ltc2471_i2c_probe,
- 	.id_table = ltc2471_i2c_id,
+-	.probe = ltc2497_probe,
++	.probe_new = ltc2497_probe,
+ 	.remove = ltc2497_remove,
+ 	.id_table = ltc2497_id,
  };
- 
 -- 
 2.38.1
 
