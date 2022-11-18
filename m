@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C015B62F5A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6142C62F588
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241577AbiKRNNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S241936AbiKRNGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235188AbiKRNNc (ORCPT
+        with ESMTP id S235248AbiKRNGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:13:32 -0500
-X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 05:13:27 PST
-Received: from forward502o.mail.yandex.net (forward502o.mail.yandex.net [37.140.190.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE911D86;
-        Fri, 18 Nov 2022 05:13:27 -0800 (PST)
-Received: from sas1-37da021029ee.qloud-c.yandex.net (sas1-37da021029ee.qloud-c.yandex.net [IPv6:2a02:6b8:c08:1612:0:640:37da:210])
-        by forward502o.mail.yandex.net (Yandex) with ESMTP id C0A5425D50C0;
-        Fri, 18 Nov 2022 16:05:53 +0300 (MSK)
-Received: by sas1-37da021029ee.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id eOks44V6nS-5pVmNm92;
-        Fri, 18 Nov 2022 16:05:52 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=clicknet.pro; s=mail; t=1668776752;
-        bh=/wHdhb6bOR6sr6GxP7nToVvgKT4uV8iQ9aNeJQuYTyc=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=PnxOE3On7J7+RxaOegVmOD9Cjmq8zBQgeNI4H+6xOoRyil6MRagvAHjkaudPAWb7P
-         Nqeh2yBpd6j1CYWT66JdB6fGmEz23W4qwTJB9nBTn5BmGsWcEI3W1eVSMdoVYzNGRZ
-         jV/kfqMyeoywwn6lL7US2uIkqrxzWQDrodXWQ108=
-Authentication-Results: sas1-37da021029ee.qloud-c.yandex.net; dkim=pass header.i=@clicknet.pro
-Message-ID: <74337ebd-0222-2e78-9149-8fa40b0c815e@clicknet.pro>
-Date:   Fri, 18 Nov 2022 16:05:36 +0300
+        Fri, 18 Nov 2022 08:06:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B9769D3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:05:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668776754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MkbPf8lANvr8MINxjwyWmUuJ/1c5U1P0oOc0E961cnI=;
+        b=aMsLKuBJZDshLyh5PfPK2DFXRWIIZTmlHm2/kwtgon+qp2qpBF9Q5gZIlIS4fLRU9/im9b
+        +URsy7cFbLhw6H72bmjFEOiMKpckdDlHWDKoqco1h0zzNIaggVfTXNItX3SmC84i+w7u+o
+        FbhejQDEj4/LvyN9qqOAC/E/Qp0A1fQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-pvkcvqwVOpuRJvz_nLHg3w-1; Fri, 18 Nov 2022 08:05:51 -0500
+X-MC-Unique: pvkcvqwVOpuRJvz_nLHg3w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9B9385A59D;
+        Fri, 18 Nov 2022 13:05:50 +0000 (UTC)
+Received: from localhost (unknown [10.39.208.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 760CB2028CE4;
+        Fri, 18 Nov 2022 13:05:50 +0000 (UTC)
+Date:   Fri, 18 Nov 2022 14:05:46 +0100
+From:   Niels de Vos <ndevos@redhat.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
+        Marcel Lauhoff <marcel.lauhoff@suse.com>
+Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
+Message-ID: <Y3eC1tEoUGdgBP9i@ndevos-x1>
+References: <20221110141225.2308856-1-ndevos@redhat.com>
+ <Y20a/akbY8Wcy3qg@mit.edu>
+ <Y20rDl45vSmdEo3N@ndevos-x1>
+ <Y20/ynxvIqOyRbxK@mit.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: Coverity: zblock_alloc(): Memory - illegal accesses
-To:     coverity-bot <keescook@chromium.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <202211171419.FCDC8EE@keescook>
-Content-Language: en-US
-From:   Ananda Badmaev <a.badmaev@clicknet.pro>
-In-Reply-To: <202211171419.FCDC8EE@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_PDS_PRO_TLD autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y20/ynxvIqOyRbxK@mit.edu>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-18.11.2022 01:20, coverity-bot пишет:
-> Coverity reported the following:
+On Thu, Nov 10, 2022 at 01:15:38PM -0500, Theodore Ts'o wrote:
+> On Thu, Nov 10, 2022 at 05:47:10PM +0100, Niels de Vos wrote:
+> > And, there actually are options like CONFIG_EXT4_FS_POSIX_ACL and
+> > CONFIG_EXT4_FS_SECURITY. Because these exist already, I did not expect
+> > too much concerns with proposing a CONFIG_EXT4_FS_ENCRYPTION...
 > 
-> *** CID 1527352:  Memory - illegal accesses  (OVERRUN)
-> mm/zblock.c:320 in zblock_alloc()
-> 314     	}
-> 315     	list = &(pool->block_lists[block_type]);
-> 316
-> 317     check:
-> 318     	spin_lock(&list->lock);
-> 319     	/* check if there are free slots in cache */
-> vvv     CID 1527352:  Memory - illegal accesses  (OVERRUN)
-> vvv     Overrunning array of 10208 bytes at byte offset 10208 by dereferencing pointer "list".
-> 320     	block = cache_find_block(list);
-> 321     	if (block)
-> 322     		goto found;
-> 323     	spin_unlock(&list->lock);
-> 324
-> 325     	/* not found block with free slots try to allocate new empty block */
+> Actually, I was thinking of getting rid of them, as we've already
+> gotten rid of EXT4_FS_POSIX_ACL....
 > 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
+> > Thanks for adding some history about this. I understand that extra
+> > options are needed while creating/tuning the filesystems. Preventing
+> > users from setting the right options in a filesystem is not easy, even
+> > if tools from a distribution do not offer setting the options. Disks can
+> > be portable, or network-attached, and have options enabled that an other
+> > distributions kernel does not (want to) support.
 > 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1527352 ("Memory - illegal accesses")
-> Fixes: 9097e28c25c8 ("mm: add zblock - new allocator for use via zpool API")
+> Sure, but as I said, there are **tons** of file system features that
+> have not and/or still are not supported for distros, but for which we
+> don't have kernel config knobs.  This includes ext4's bigalloc and
+> inline data, btrfs's dedup and reflink support, xfs online fsck, etc.,
+> etc., etc.  Heck, ext4 is only supported up to a certain size by Red
+> Hat, and we don't have a Kernel config so that the kernel will
+> absolutely refuse to mount an ext4 file system larger than The
+> Officially Supported RHEL Capacity Limit for Ext4.  So what makes
+> fscrypt different from all of these other unsupported file system
+> features?
 > 
-> It looks like block_type is not checked to be < ARRAY_SIZE(block_desc)
-> after exiting the earlier loop, so the access through "list" may be past
-> the end of pool->block_lists.
->
+> There are plenty of times when I've had to explain to customers why,
+> sure they could build their own kernels for RHEL 4 (back in the day
+> when I worked for Big Blue and had to talk to lots of enterprise
+> customers), but if they did, Red Hat support would refuse to give them
+> the time of day if they called asking for help.  We didn't set up use
+> digitally signed kernels with trusted boot so that a IBM server would
+> refuse to boot anything other than An Officially Signed RHEL
+> Kernel...
+> 
+> What makes fscrypt different that we think we need to enforce this
+> using technical means, other than a simple, "this feature is not
+> supported"?
 
-There is no need for this check because it is guaranteed that this code 
-will be executed only if size <= PAGE_SIZE. Since slot_size for the last 
-list even exceeds PAGE_SIZE, block_type will be always valid.
+Thanks again for the added details. What you are explaining makes sense,
+and I am not sure if there is an other good reason why splitting out
+fscrypt support per filesystem would be required. I'm checking with the
+folks that suggested doing this, and see where we go from there.
 
-
-
+Niels
 
