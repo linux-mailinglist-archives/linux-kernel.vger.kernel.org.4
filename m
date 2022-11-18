@@ -2,100 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091E762F954
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A8E62F956
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241937AbiKRPdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:33:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S242308AbiKRPeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:34:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbiKRPdr (ORCPT
+        with ESMTP id S242302AbiKRPd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:33:47 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C79F5A8;
-        Fri, 18 Nov 2022 07:33:46 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIE7GJS004869;
-        Fri, 18 Nov 2022 15:33:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Kj2rDsQz5u6SIg9xdinTFiY5WiCWEqvstO8o92a7tcE=;
- b=V5TKgId/DmXyxpdMVLbxaVVu9rfVpCrtKTxeWfpZ8guSjCmeNuwJhYWnk4Fl04x4XkMO
- TRfTQeyo/RUxwP19wi/g2OOvrEskklkdhZKSW6DaQPUZnNt2tUGSWG15v6A5YdIuuj/v
- 5Oi4FVvobE3EgjyhGheJ9QDCzhP9nq++wHPclLCeVnq9sE9xvD3o+ItEtq1WDj9irgr4
- ZvCkm3S9KVOmeXlNpyFW73lrgCITGonv9zBxzxjY+tkaEuIwNYdlnCzmqqRs6PAxa8uA
- Aumv7raOAaXi+UdoGbnR0zYINQJtO9M3HQFkuWOCKXzQvRhnUij8/oN7HEC6KwqfNSb4 iA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx7sv05ka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 15:33:25 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AIFNTmd004429;
-        Fri, 18 Nov 2022 15:33:25 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx7sv05js-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 15:33:25 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AIFTvKW005500;
-        Fri, 18 Nov 2022 15:33:23 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02dal.us.ibm.com with ESMTP id 3kt34ajae0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 15:33:23 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AIFXMPw20906586
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Nov 2022 15:33:23 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 342FA5806A;
-        Fri, 18 Nov 2022 15:33:22 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4EDF85805C;
-        Fri, 18 Nov 2022 15:33:20 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.49.134])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Nov 2022 15:33:20 +0000 (GMT)
-Message-ID: <f20e7ff3c6c3aa445faa01d12800a9675a77f102.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 18 Nov 2022 10:33:19 -0500
-In-Reply-To: <2e493258-b267-b8ad-0812-53f4e9c849ae@huaweicloud.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
-         <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
-         <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
-         <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
-         <2e493258-b267-b8ad-0812-53f4e9c849ae@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fmVb6IzBeCRCZHKlOYPZxUTS0IK-ggVE
-X-Proofpoint-GUID: nbT0swbd0VVqMNRdr9wOygUn7Qqg-Kis
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-18_04,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- spamscore=0 mlxscore=0 bulkscore=0 mlxlogscore=588 phishscore=0
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211180090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        Fri, 18 Nov 2022 10:33:57 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C7527153;
+        Fri, 18 Nov 2022 07:33:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1668785634; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H99gifSUAX63SHB4wCOwUdzC9A4Qilfu6shSvTJT/Do=;
+        b=GCiLfoGCsrJV1b8eakZkdc7V+eN/S88H24/XYoaqACaFIbKl+QvmUfkTvecq+5zc1vYnHp
+        1UQJ2nBjiJRoc5sWCyiys+8cMAWuYq/IZIRPZIR8W+jGDjOfgDALYZa7TV/YO/H/EV8ve8
+        28qttYGe/6cZzWvE+o2a5FEuKSiunHc=
+Date:   Fri, 18 Nov 2022 15:33:44 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/3] net: davicom: dm9000: switch to using gpiod API
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <88VJLR.GYSEKGBPLGZC1@crapouillou.net>
+In-Reply-To: <20220906204922.3789922-1-dmitry.torokhov@gmail.com>
+References: <20220906204922.3789922-1-dmitry.torokhov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,24 +50,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-11-18 at 10:32 +0100, Roberto Sassu wrote:
-> > Smack uses multiple xattrs. All file system objects have a SMACK64
-> > attribute, which is used for access control. A program file may have
-> > a SMACK64EXEC attribute, which is the label the program will run with.
-> > A library may have a SMACK64MMAP attribute to restrict loading. A
-> > directory may have a SMACK64TRANSMUTE attribute, which modifies the
-> > new object creation behavior.
-> > 
-> > The point being that it may be more than a "nice idea" to support
-> > multiple xattrs. It's not a hypothetical situation.
-> 
-> Ok, that means that I have to change the number of xattrs reserved by 
-> Smack in patch 3.
+Hi Dmitry,
 
-Based on evm_config_default_xattrnames[], there are 4.  There's the
-original SMACK and these 3 additional ones.
+Le mar. 6 sept. 2022 =E0 13:49:20 -0700, Dmitry Torokhov=20
+<dmitry.torokhov@gmail.com> a =E9crit :
+> This patch switches the driver away from legacy gpio/of_gpio API to
+> gpiod API, and removes use of of_get_named_gpio_flags() which I want=20
+> to
+> make private to gpiolib.
+>=20
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>  drivers/net/ethernet/davicom/dm9000.c | 26 ++++++++++++++------------
+>  1 file changed, 14 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/davicom/dm9000.c=20
+> b/drivers/net/ethernet/davicom/dm9000.c
+> index 77229e53b04e..c85a6ebd79fc 100644
+> --- a/drivers/net/ethernet/davicom/dm9000.c
+> +++ b/drivers/net/ethernet/davicom/dm9000.c
+> @@ -28,8 +28,7 @@
+>  #include <linux/irq.h>
+>  #include <linux/slab.h>
+>  #include <linux/regulator/consumer.h>
+> -#include <linux/gpio.h>
+> -#include <linux/of_gpio.h>
+> +#include <linux/gpio/consumer.h>
+>=20
+>  #include <asm/delay.h>
+>  #include <asm/irq.h>
+> @@ -1421,8 +1420,7 @@ dm9000_probe(struct platform_device *pdev)
+>  	int iosize;
+>  	int i;
+>  	u32 id_val;
+> -	int reset_gpios;
+> -	enum of_gpio_flags flags;
+> +	struct gpio_desc *reset_gpio;
+>  	struct regulator *power;
+>  	bool inv_mac_addr =3D false;
+>  	u8 addr[ETH_ALEN];
+> @@ -1442,20 +1440,24 @@ dm9000_probe(struct platform_device *pdev)
+>  		dev_dbg(dev, "regulator enabled\n");
+>  	}
+>=20
+> -	reset_gpios =3D of_get_named_gpio_flags(dev->of_node, "reset-gpios",=20
+> 0,
+> -					      &flags);
+> -	if (gpio_is_valid(reset_gpios)) {
+> -		ret =3D devm_gpio_request_one(dev, reset_gpios, flags,
+> -					    "dm9000_reset");
+> +	reset_gpio =3D devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+> +	ret =3D PTR_ERR_OR_ZERO(reset_gpio);
+> +	if (ret) {
+> +		dev_err(dev, "failed to request reset gpio: %d\n", ret);
+> +		goto out_regulator_disable;
+> +	}
+> +
+> +	if (reset_gpio) {
+> +		ret =3D gpiod_set_consumer_name(reset_gpio, "dm9000_reset");
+>  		if (ret) {
+> -			dev_err(dev, "failed to request reset gpio %d: %d\n",
+> -				reset_gpios, ret);
+> +			dev_err(dev, "failed to set reset gpio name: %d\n",
+> +				ret);
+>  			goto out_regulator_disable;
+>  		}
+>=20
+>  		/* According to manual PWRST# Low Period Min 1ms */
+>  		msleep(2);
+> -		gpio_set_value(reset_gpios, 1);
+> +		gpiod_set_value_cansleep(reset_gpio, 0);
 
-Mimi
+Why is that 1 magically turned into a 0?
 
+On my CI20 board I can't get the DM9000 chip to probe correctly with=20
+this patch (it fails to read the ID).
+If I revert this patch then everything works fine.
+
+Cheers,
+-Paul
+
+>  		/* Needs 3ms to read eeprom when PWRST is deasserted */
+>  		msleep(4);
+>  	}
+> --
+> 2.37.2.789.g6183377224-goog
+>=20
 
 
