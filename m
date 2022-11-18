@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6ABE62FBBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 943D462FBBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235224AbiKRReA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S235241AbiKRReG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242302AbiKRRdR (ORCPT
+        with ESMTP id S242533AbiKRRdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:33:17 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2524C976C2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:32:30 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id 140so5510996pfz.6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:32:30 -0800 (PST)
+        Fri, 18 Nov 2022 12:33:32 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5E4976E7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:32:33 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id b21so5145453plc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:32:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6lJ5gRcc7MMYSZVBgs/lVKCNpnkRvG9H5V/gHPoXFec=;
-        b=mEVBeU/paftGIY37idqL5pt0S5LUHdqXb3s/vzcvKjn9W1d6LU9ECN2sZS3D0kL12Y
-         nHppj6K6p2gNJbo3DGq6yO0Kf4zs0Vjm7FP60eQ5In4/IC1wmhWnysqsfF5EMjjdO1Kc
-         t8mK3esr1OkuDB+hhj/xnex2u5mImr+QMEWzMsoYiUIcrt3FF5Jg7HW4ezYTevyOArs8
-         bxUf4AZI7TsJOyycRdTHvwuwdd5nx6sJxVR7SN2x919+E5fhTtY4ypPvTV0ywoHJgH/w
-         V6BILDr8nTsx1vwBpEcJw2I3vRGF3kqIUP1befh+9mNgP7DVdpThwk7xJNAjDdPQMFvL
-         nzpg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=um7o47dkwC3+Xw39j9lUuqY5O+T3nm01Mm5u8aYpugQ=;
+        b=bKlIx655pe3B+kU4aGQHe83PsarqTSNkJgq+XRCvic+rix3rZvypD7FAQbl8gYsUDD
+         2dqZGBtB6qVDypNdijaMpfpWr6w3V1lCNGGYMbnLbA65mBemShhEZCqNslu6hoBVgH9y
+         WXM4UVDYWXnn3+7o46j4i9UXJAAji3tVB8cuqQovq73rJGr0HNMVFD/aOkFvchMxaY0H
+         ORKxWsayMeW6gda+HNYq5r/Y550hpY8CvB/o/OoYOEvDY1AvF++rH0nH1tAsrxmIHGF9
+         uCTu9N9MGMeS0NwwteNRRl39+9BlK7I56LV/O1p4hh2+cWTNLA0GDcKkrGvXwDpZaMBJ
+         hMAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6lJ5gRcc7MMYSZVBgs/lVKCNpnkRvG9H5V/gHPoXFec=;
-        b=zMkpOAup8nzXuNENb3nRVZQDYXm+GphqZCKn2DHaFcTT9azKKgXENDaFhMERVridIU
-         lEZg2v7a7OcQKNUyKgkBjXcy0singf7mjelFozXqXunklyAf5GKtaR+/4cSd3vB6oLKb
-         H6SJkcNzU3hp66SZZJqJb+g/3DSlF6mgNJzA7mF8MAQc6+bKL8qGZ2En/Gqdibd0HjDF
-         LErva0Vn6kTkLoiDAJKEtsKXzerXtXP96TXFi+MDgfURMWcVXPvOcbY5MrDjjjo2naK5
-         tunr1mTVlBjMgYs8zUpH69/NPeQBoqvZnJQfl1MX/XfXd32AouMPUujntsw9SOj2t+YB
-         d+3w==
-X-Gm-Message-State: ANoB5pnVr8ZVKKCN04gizZBBC173gXCU8vvyEmf4n20oCiMeqhYYxnV3
-        KIYEF9BZiMXMrd/MEKTuy6A=
-X-Google-Smtp-Source: AA0mqf6DbhB9UmdLqEtvQbQUt5I4PhHPNfLF2iIu8ry6zdE/U1sbPKXd5jJ1JIABu32Uz9cS2WdAzw==
-X-Received: by 2002:a63:de01:0:b0:476:32a2:253 with SMTP id f1-20020a63de01000000b0047632a20253mr7809888pgg.133.1668792749585;
-        Fri, 18 Nov 2022 09:32:29 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=um7o47dkwC3+Xw39j9lUuqY5O+T3nm01Mm5u8aYpugQ=;
+        b=LkaTZFbwz5MrIS54FyK0pmfR4Vcv7FFSnrRNm58CICeXWkPd+dQSnfW44XW24Ap2E4
+         nLoB6vnlq0PDIddVKrfdbDV2QgDW7t85dqPgr0eGJmedDX71xR9rObZl7gF05yIVt95T
+         mlGiG9dv7z6uQVqXcV0eIUS5G5itJ/gb9XzmXjJ5hPyjLO1sIB7rlZsYoa4/9pMT30H+
+         N4K6ZceTGSRIC5cv1HHi9exkE1Fyt8mB8K/By2mFC5dJ2cAedQewXdgKsEznc+CGmOsW
+         b/fBgP64gwHbfWKtLITRl2ydd3IJxnoIYXc5LA22kQSucWX+5Qs9n0SThqBAp/+GQWwl
+         wKMA==
+X-Gm-Message-State: ANoB5pksatIHaWIR4Pa/Xa8BOx2ppfowE1SXo+j0tCdUndhg//fmh6vc
+        h7kK2i5agjeuylteoznrbMU=
+X-Google-Smtp-Source: AA0mqf58OB6QcS+3YK1TMkO/KdVKNF6E9CzOlYkfERJcrBVIDQJ6MLk3ufE/xMOPiz3L5aZbV96Y7w==
+X-Received: by 2002:a17:90b:3d90:b0:212:de1c:a007 with SMTP id pq16-20020a17090b3d9000b00212de1ca007mr15291940pjb.30.1668792752983;
+        Fri, 18 Nov 2022 09:32:32 -0800 (PST)
 Received: from localhost.localdomain ([112.2.231.196])
-        by smtp.gmail.com with ESMTPSA id u7-20020a656707000000b00476b6b7f339sm3037979pgf.11.2022.11.18.09.32.26
+        by smtp.gmail.com with ESMTPSA id u7-20020a656707000000b00476b6b7f339sm3037979pgf.11.2022.11.18.09.32.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 09:32:28 -0800 (PST)
+        Fri, 18 Nov 2022 09:32:32 -0800 (PST)
 From:   Song Shuai <suagrfillet@gmail.com>
 To:     guoren@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
         mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Song Shuai <suagrfillet@gmail.com>
-Subject: [PATCH v3 0/2] riscv/ftrace: make function graph use ftrace directly
-Date:   Sat, 19 Nov 2022 01:32:15 +0800
-Message-Id: <20221118173217.888077-1-suagrfillet@gmail.com>
+Subject: [PATCH v3 1/2] riscv/ftrace: add ftrace_graph_func
+Date:   Sat, 19 Nov 2022 01:32:16 +0800
+Message-Id: <20221118173217.888077-2-suagrfillet@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221118173217.888077-1-suagrfillet@gmail.com>
+References: <20221118173217.888077-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,85 +74,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In RISC-V architecture, when we enable the ftrace_graph tracer on some
-functions, the function tracings on other functions will suffer extra
-graph tracing work. In essence, graph_ops isn't limited by its func_hash
-due to the global ftrace_graph_[regs]_call label. That should be corrected.
+Here implements ftrace_graph_func as the function graph tracing function
+with FTRACE_WITH_REGS defined.
 
-What inspires me is the commit 0c0593b45c9b ("x86/ftrace: Make function
-graph use ftrace directly") that uses graph_ops::func function to install
-return_hooker and makes the function called against its func_hash.
+function_graph_func gets the point of the parent IP and the frame pointer
+from fregs and call prepare_ftrace_return for function graph tracing.
 
-This series of patches makes function graph use ftrace directly for riscv.
+If FTRACE_WITH_REGS isn't defined, the enable/disable helpers of
+ftrace_graph_[regs]_call are revised for serving only ftrace_graph_call
+in the !FTRACE_WITH_REGS version ftrace_caller.
 
-If FTRACE_WITH_REGS isn't defined, ftrace_caller keeps ftrace_graph_call
-so that it can be replaced with the calling of prepare_ftrace_return by
-the enable/disable helper.
+Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+---
+ arch/riscv/include/asm/ftrace.h | 13 +++++++++++--
+ arch/riscv/kernel/ftrace.c      | 30 +++++++++++++-----------------
+ 2 files changed, 24 insertions(+), 19 deletions(-)
 
-As for defining FTRACE_WITH_REGS, ftrace_caller is adjusted to save the
-necessary regs against the pt_regs layout, so it can reasonably call the
-graph_ops::func function - ftrace_graph_func. And ftrace_graph_[regs]_call
-and its enable/disable helper aren't needed.
-
-The tests generated by CONFIG_FTRACE_STARTUP_TEST have passed in the local
-qemu-system-riscv64 virt machine. The following is the log during startup.
-
-```
-Nov 15 03:07:13 stage4 kernel: Testing tracer function: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #1: 
-Nov 15 03:07:13 stage4 kernel: (1 0 1 0 0)  
-Nov 15 03:07:13 stage4 kernel: (1 1 2 0 0)  
-Nov 15 03:07:13 stage4 kernel: (2 1 3 0 365) 
-Nov 15 03:07:13 stage4 kernel: (2 2 4 0 399) 
-Nov 15 03:07:13 stage4 kernel: (3 2 4 0 146071) 
-Nov 15 03:07:13 stage4 kernel: (3 3 5 0 146105) PASSED
-Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #2: 
-Nov 15 03:07:13 stage4 kernel: (1 0 1 589 0)  
-Nov 15 03:07:13 stage4 kernel: (1 1 2 635 0)  
-Nov 15 03:07:13 stage4 kernel: (2 1 3 1 2)  
-Nov 15 03:07:13 stage4 kernel: (2 2 4 125 126) 
-Nov 15 03:07:13 stage4 kernel: (3 2 4 146001 146078) 
-Nov 15 03:07:13 stage4 kernel: (3 3 5 146035 146112) PASSED
-Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion safe: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing ftrace regs: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer nop: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer irqsoff: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup:
-Nov 15 03:07:13 stage4 kernel: sched: DL replenish lagged too much
-Nov 15 03:07:13 stage4 kernel: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_rt: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_dl: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer function_graph: PASSED
-```
-
-Note that the changes of mcount-dyn.S conflicts with this unmerged
-commit (riscv: entry: consolidate general regs saving/restoring).
-https://lore.kernel.org/linux-riscv/20221103075047.1634923-15-guoren@kernel.org
-
-Changes since v2:
-- line up the comments [Andrew]
-- rename SAVE_ALL as SAVE_ABI_REGS [Guo Ren]
-- consolidate the modifications of mcount-dyn.S into one patch [Guo Ren]
-- adapt this series based on [riscv: ftrace: Fixup ftrace detour code][1] [Guo Ren]
-
-[1]: https://lore.kernel.org/linux-riscv/20220921034910.3142465-1-guoren@kernel.org/
-v2 Link: https://lore.kernel.org/linux-riscv/20221116031305.286634-1-suagrfillet@gmail.com/
-
-Changes since v1:
-- fix the checkpatch warnings in patch 1
-v1 Link: https://lore.kernel.org/linux-riscv/20221115061525.112757-1-suagrfillet@gmail.com
-
-Song Shuai (2):
-  riscv/ftrace: add ftrace_graph_func
-  riscv/ftrace: make ftrace_caller call ftrace_graph_func
-
- arch/riscv/include/asm/ftrace.h |  13 ++-
- arch/riscv/kernel/ftrace.c      |  30 +++----
- arch/riscv/kernel/mcount-dyn.S  | 143 +++++++++++++++++++++++---------
- 3 files changed, 129 insertions(+), 57 deletions(-)
-
+diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+index 34b0b523865a..01bebb28eabe 100644
+--- a/arch/riscv/include/asm/ftrace.h
++++ b/arch/riscv/include/asm/ftrace.h
+@@ -107,8 +107,17 @@ do {									\
+ struct dyn_ftrace;
+ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+ #define ftrace_init_nop ftrace_init_nop
+-#endif
+ 
+-#endif
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
++struct ftrace_ops;
++struct ftrace_regs;
++void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
++		       struct ftrace_ops *op, struct ftrace_regs *fregs);
++#define ftrace_graph_func ftrace_graph_func
++#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ #endif /* _ASM_RISCV_FTRACE_H */
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index 8c77f236fc71..651ce5808b77 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -169,32 +169,28 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+ }
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
++void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
++		       struct ftrace_ops *op, struct ftrace_regs *fregs)
++{
++	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
++	unsigned long *parent = (unsigned long *)&regs->ra;
++
++	prepare_ftrace_return(parent, ip, frame_pointer(regs));
++}
++#else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+ extern void ftrace_graph_call(void);
+-extern void ftrace_graph_regs_call(void);
+ int ftrace_enable_ftrace_graph_caller(void)
+ {
+-	int ret;
+-
+-	ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+-				    (unsigned long)&prepare_ftrace_return, true, true);
+-	if (ret)
+-		return ret;
+-
+-	return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
++	return __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+ 				    (unsigned long)&prepare_ftrace_return, true, true);
+ }
+ 
+ int ftrace_disable_ftrace_graph_caller(void)
+ {
+-	int ret;
+-
+-	ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+-				    (unsigned long)&prepare_ftrace_return, false, true);
+-	if (ret)
+-		return ret;
+-
+-	return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
++	return __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+ 				    (unsigned long)&prepare_ftrace_return, false, true);
+ }
++#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
 -- 
 2.20.1
 
