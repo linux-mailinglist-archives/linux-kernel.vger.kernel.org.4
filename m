@@ -2,285 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A4E62EB45
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C8662EAC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbiKRBr1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Nov 2022 20:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S240970AbiKRBNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 20:13:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240254AbiKRBrO (ORCPT
+        with ESMTP id S240291AbiKRBMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:47:14 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC03C7A361;
-        Thu, 17 Nov 2022 17:47:12 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C30CD24E0AC;
-        Fri, 18 Nov 2022 09:11:14 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
- 2022 09:11:14 +0800
-Received: from ubuntu.localdomain (183.27.96.116) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
- 2022 09:11:14 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 5/5] pinctrl: starfive: Add StarFive JH7110 aon controller driver
-Date:   Fri, 18 Nov 2022 09:11:08 +0800
-Message-ID: <20221118011108.70715-6-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221118011108.70715-1-hal.feng@starfivetech.com>
-References: <20221118011108.70715-1-hal.feng@starfivetech.com>
+        Thu, 17 Nov 2022 20:12:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71D787A40
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:11:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668733897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xcizgw09qxh5kxz+rR5aBntzCJEVxf2HEif8HyYLI/s=;
+        b=PqdIUPDEcyT8Kjc18rxTtRuMgUDPHSkdOKrG66FljHRPfP4BkiywRvvXo05onknEZujc8T
+        gf62WEk4iFu5fX732wrSgL/tVw/gcQTjjw+YTHhGMUAusXNYolqPNNQqAJS4YeBobXSRK8
+        K184uYRl6ers5OWq+xSFhU9NG0C3Q4c=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-507-KvkebOXWOVegu8epZcviJw-1; Thu, 17 Nov 2022 20:11:36 -0500
+X-MC-Unique: KvkebOXWOVegu8epZcviJw-1
+Received: by mail-qt1-f199.google.com with SMTP id cd6-20020a05622a418600b003a54cb17ad9so3460577qtb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:11:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xcizgw09qxh5kxz+rR5aBntzCJEVxf2HEif8HyYLI/s=;
+        b=eQaz0X9ysrl6irVOdeT6K1CuPfzhdjUTwUyr4AZ1vzC18mNKp2cRgRnxSoodDyj5iZ
+         QeetZVXc0TiTB55zPiaXFkIFame5Taxgyh/iFTBu2N9DiDL/m6jl9DYVnEpmuGCNyBsH
+         NBoNp7YBYyx9Vlv7lR0uof+DgT670ayQvr8hkyNsBjeeWt5CaAr8IYwrDk6JasQbY8oo
+         LLJhF3ITtAnMm+ja81pzTTaZ8Daxv7W5TBM95htxD5y8avpEpxt4IUfmvC+Bu3rM1Zhw
+         6HP4IZTGMjNqZee0gqzVZ9g2aXkRk870CcJAUz9Xb0mCFuQGj2XBgBMwGl7VAUOQnHGy
+         roMQ==
+X-Gm-Message-State: ANoB5pnhXayYgEcQ/8ryBj7wVddjA7ptsuQLA09KRaWq+i3UjSZNsat2
+        Bh15tRSF7vvWQILdz3y33lx9PyDQ/mSvLWK2PbYebtA8tU4+2++a6vIMEl19cspR/L1FCLn8gqM
+        jdBfr6HJzMUkQbwYGQT8QRyvoxMZZguABg8ippOZonagiEPu3Ay9MtSYU27F33hdc3qnLRhY5bg
+        ==
+X-Received: by 2002:a0c:b3db:0:b0:4b3:e8bc:b06d with SMTP id b27-20020a0cb3db000000b004b3e8bcb06dmr4998984qvf.72.1668733895443;
+        Thu, 17 Nov 2022 17:11:35 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5zY9gm/9Sq/rUG10fAy37Oz9ULSDk0Pq8azqj/JTmW8KGkcU5gXTaCvi5BCEs8EdrHiJsuRQ==
+X-Received: by 2002:a0c:b3db:0:b0:4b3:e8bc:b06d with SMTP id b27-20020a0cb3db000000b004b3e8bcb06dmr4998963qvf.72.1668733895220;
+        Thu, 17 Nov 2022 17:11:35 -0800 (PST)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id i5-20020a05620a404500b006fb11eee465sm1507162qko.64.2022.11.17.17.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 17:11:34 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>, peterx@redhat.com,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        James Houghton <jthoughton@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rik van Riel <riel@surriel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: [PATCH RFC v2 11/12] mm/hugetlb: Use hugetlb walker lock in page_vma_mapped_walk()
+Date:   Thu, 17 Nov 2022 20:11:33 -0500
+Message-Id: <20221118011133.2179145-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221118011025.2178986-1-peterx@redhat.com>
+References: <20221118011025.2178986-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.96.116]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianlong Huang <jianlong.huang@starfivetech.com>
+Hugetlb walker lock makes sure the pte_t* won't go away from under us.
 
-Add pinctrl driver for StarFive JH7110 SoC aon pinctrl controller.
-
-Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- drivers/pinctrl/starfive/Makefile             |   2 +-
- drivers/pinctrl/starfive/pinctrl-jh7110-aon.c | 192 ++++++++++++++++++
- 2 files changed, 193 insertions(+), 1 deletion(-)
- create mode 100644 drivers/pinctrl/starfive/pinctrl-jh7110-aon.c
+ include/linux/rmap.h | 4 ++++
+ mm/page_vma_mapped.c | 5 ++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/starfive/Makefile b/drivers/pinctrl/starfive/Makefile
-index 404929f760e8..17cdd1b0e650 100644
---- a/drivers/pinctrl/starfive/Makefile
-+++ b/drivers/pinctrl/starfive/Makefile
-@@ -5,4 +5,4 @@ obj-$(CONFIG_PINCTRL_STARFIVE) += pinctrl-starfive.o
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index 011a7530dc76..94d25a67db2b 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -13,6 +13,7 @@
+ #include <linux/highmem.h>
+ #include <linux/pagemap.h>
+ #include <linux/memremap.h>
++#include <linux/hugetlb.h>
  
- # SoC Drivers
- obj-$(CONFIG_PINCTRL_STARFIVE_JH7100)	+= pinctrl-starfive-jh7100.o
--obj-$(CONFIG_PINCTRL_STARFIVE_JH7110)	+= pinctrl-jh7110-sys.o
-+obj-$(CONFIG_PINCTRL_STARFIVE_JH7110)	+= pinctrl-jh7110-sys.o pinctrl-jh7110-aon.o
-diff --git a/drivers/pinctrl/starfive/pinctrl-jh7110-aon.c b/drivers/pinctrl/starfive/pinctrl-jh7110-aon.c
-new file mode 100644
-index 000000000000..7929ecbc03e6
---- /dev/null
-+++ b/drivers/pinctrl/starfive/pinctrl-jh7110-aon.c
-@@ -0,0 +1,192 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Pinctrl / GPIO driver for StarFive JH7110 SoC aon controller
-+ *
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/of_irq.h>
-+#include <linux/of_platform.h>
-+#include <linux/pinctrl/pinconf.h>
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/pinctrl/pinmux.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+
-+#include <dt-bindings/pinctrl/pinctrl-starfive-jh7110.h>
-+
-+#include "../core.h"
-+#include "../pinconf.h"
-+#include "../pinmux.h"
-+#include "pinctrl-starfive.h"
-+
-+#define JH7110_AON_NGPIO		4
-+#define JH7110_AON_GC_BASE		64
-+
-+/* registers */
-+#define JH7110_AON_DOEN			0x0
-+#define JH7110_AON_DOUT			0x4
-+#define JH7110_AON_GPI			0x8
-+#define JH7110_AON_GPIOIN		0x2c
-+
-+#define JH7110_AON_GPIOEN		0xc
-+#define JH7110_AON_GPIOIS		0x10
-+#define JH7110_AON_GPIOIC		0x14
-+#define JH7110_AON_GPIOIBE		0x18
-+#define JH7110_AON_GPIOIEV		0x1c
-+#define JH7110_AON_GPIOIE		0x20
-+#define JH7110_AON_GPIORIS		0x28
-+#define JH7110_AON_GPIOMIS		0x28
-+
-+#define AON_GPO_PDA_0_5_CFG		0x30
-+
-+static const struct pinctrl_pin_desc jh7110_aon_pins[] = {
-+	PINCTRL_PIN(PAD_TESTEN,		"TESTEN"),
-+	PINCTRL_PIN(PAD_RGPIO0,		"RGPIO0"),
-+	PINCTRL_PIN(PAD_RGPIO1,		"RGPIO1"),
-+	PINCTRL_PIN(PAD_RGPIO2,		"RGPIO2"),
-+	PINCTRL_PIN(PAD_RGPIO3,		"RGPIO3"),
-+	PINCTRL_PIN(PAD_RSTN,		"RSTN"),
-+	PINCTRL_PIN(PAD_GMAC0_MDC,	"GMAC0_MDC"),
-+	PINCTRL_PIN(PAD_GMAC0_MDIO,	"GMAC0_MDIO"),
-+	PINCTRL_PIN(PAD_GMAC0_RXD0,	"GMAC0_RXD0"),
-+	PINCTRL_PIN(PAD_GMAC0_RXD1,	"GMAC0_RXD1"),
-+	PINCTRL_PIN(PAD_GMAC0_RXD2,	"GMAC0_RXD2"),
-+	PINCTRL_PIN(PAD_GMAC0_RXD3,	"GMAC0_RXD3"),
-+	PINCTRL_PIN(PAD_GMAC0_RXDV,	"GMAC0_RXDV"),
-+	PINCTRL_PIN(PAD_GMAC0_RXC,	"GMAC0_RXC"),
-+	PINCTRL_PIN(PAD_GMAC0_TXD0,	"GMAC0_TXD0"),
-+	PINCTRL_PIN(PAD_GMAC0_TXD1,	"GMAC0_TXD1"),
-+	PINCTRL_PIN(PAD_GMAC0_TXD2,	"GMAC0_TXD2"),
-+	PINCTRL_PIN(PAD_GMAC0_TXD3,	"GMAC0_TXD3"),
-+	PINCTRL_PIN(PAD_GMAC0_TXEN,	"GMAC0_TXEN"),
-+	PINCTRL_PIN(PAD_GMAC0_TXC,	"GMAC0_TXC"),
-+};
-+
-+static int jh7110_aon_set_one_pin_mux(struct starfive_pinctrl *sfp,
-+				      unsigned int pin,
-+				      unsigned int din, u32 dout,
-+				      u32 doen, u32 func)
-+{
-+	if (pin < sfp->gc.ngpio && func == 0)
-+		starfive_set_gpiomux(sfp, pin, din, dout, doen);
-+
-+	return 0;
-+}
-+
-+static int jh7110_aon_get_padcfg_base(struct starfive_pinctrl *sfp,
-+				      unsigned int pin)
-+{
-+	if (pin < PAD_GMAC0_MDC)
-+		return AON_GPO_PDA_0_5_CFG;
-+
-+	return -1;
-+}
-+
-+static void jh7110_aon_irq_handler(struct irq_desc *desc)
-+{
-+	struct starfive_pinctrl *sfp = starfive_from_irq_desc(desc);
-+	struct irq_chip *chip = irq_desc_get_chip(desc);
-+	unsigned long mis;
-+	unsigned int pin;
-+
-+	chained_irq_enter(chip, desc);
-+
-+	mis = readl_relaxed(sfp->base + JH7110_AON_GPIOMIS);
-+	for_each_set_bit(pin, &mis, JH7110_AON_NGPIO)
-+		generic_handle_domain_irq(sfp->gc.irq.domain, pin);
-+
-+	chained_irq_exit(chip, desc);
-+}
-+
-+static int jh7110_aon_init_hw(struct gpio_chip *gc)
-+{
-+	struct starfive_pinctrl *sfp = container_of(gc,
-+			struct starfive_pinctrl, gc);
-+
-+	/* mask all GPIO interrupts */
-+	writel_relaxed(0, sfp->base + JH7110_AON_GPIOIE);
-+	/* clear edge interrupt flags */
-+	writel_relaxed(0, sfp->base + JH7110_AON_GPIOIC);
-+	writel_relaxed(0x0f, sfp->base + JH7110_AON_GPIOIC);
-+	/* enable GPIO interrupts */
-+	writel_relaxed(1, sfp->base + JH7110_AON_GPIOEN);
-+	return 0;
-+}
-+
-+static const struct starfive_gpio_irq_reg jh7110_aon_irq_reg = {
-+	.is_reg_base	= JH7110_AON_GPIOIS,
-+	.ic_reg_base	= JH7110_AON_GPIOIC,
-+	.ibe_reg_base	= JH7110_AON_GPIOIBE,
-+	.iev_reg_base	= JH7110_AON_GPIOIEV,
-+	.ie_reg_base	= JH7110_AON_GPIOIE,
-+	.ris_reg_base	= JH7110_AON_GPIORIS,
-+	.mis_reg_base	= JH7110_AON_GPIOMIS,
-+};
-+
-+static const struct starfive_pinctrl_soc_info jh7110_aon_pinctrl_info = {
-+	.pins		= jh7110_aon_pins,
-+	.npins		= ARRAY_SIZE(jh7110_aon_pins),
-+	.ngpios		= JH7110_AON_NGPIO,
-+	.gc_base	= JH7110_AON_GC_BASE,
-+	.flags		= 1,
-+	.dout_reg_base	= JH7110_AON_DOUT,
-+	.dout_mask	= GENMASK(3, 0),
-+	.doen_reg_base	= JH7110_AON_DOEN,
-+	.doen_mask	= GENMASK(2, 0),
-+	.gpi_reg_base	= JH7110_AON_GPI,
-+	.gpi_mask	= GENMASK(3, 0),
-+	.gpioin_reg_base	   = JH7110_AON_GPIOIN,
-+	.irq_reg		   = &jh7110_aon_irq_reg,
-+	.starfive_set_one_pin_mux  = jh7110_aon_set_one_pin_mux,
-+	.starfive_get_padcfg_base  = jh7110_aon_get_padcfg_base,
-+	.starfive_gpio_irq_handler = jh7110_aon_irq_handler,
-+	.starfive_gpio_init_hw	   = jh7110_aon_init_hw,
-+};
-+
-+static const struct of_device_id jh7110_aon_pinctrl_of_match[] = {
-+	{
-+		.compatible = "starfive,jh7110-aon-pinctrl",
-+		.data = &jh7110_aon_pinctrl_info,
-+	},
-+	{ /* sentinel */ }
-+};
-+
-+static int jh7110_aon_pinctrl_probe(struct platform_device *pdev)
-+{
-+	const struct starfive_pinctrl_soc_info *pinctrl_info;
-+
-+	pinctrl_info = of_device_get_match_data(&pdev->dev);
-+	if (!pinctrl_info)
-+		return -ENODEV;
-+
-+	return starfive_pinctrl_probe(pdev, pinctrl_info);
-+}
-+
-+static struct platform_driver jh7110_aon_pinctrl_driver = {
-+	.driver = {
-+		.name = "starfive-jh7110-aon-pinctrl",
-+		.of_match_table = of_match_ptr(jh7110_aon_pinctrl_of_match),
-+	},
-+	.probe = jh7110_aon_pinctrl_probe,
-+};
-+
-+static int __init jh7110_aon_pinctrl_init(void)
-+{
-+	return platform_driver_register(&jh7110_aon_pinctrl_driver);
-+}
-+arch_initcall(jh7110_aon_pinctrl_init);
-+
-+MODULE_DESCRIPTION("Pinctrl driver for the StarFive JH7110 SoC aon controller");
-+MODULE_AUTHOR("Jianlong Huang <jianlong.huang@starfivetech.com>");
+ /*
+  * The anon_vma heads a list of private "related" vmas, to scan if
+@@ -408,6 +409,9 @@ static inline void page_vma_mapped_walk_done(struct page_vma_mapped_walk *pvmw)
+ 		pte_unmap(pvmw->pte);
+ 	if (pvmw->ptl)
+ 		spin_unlock(pvmw->ptl);
++	/* This needs to be after unlock of the spinlock */
++	if (is_vm_hugetlb_page(pvmw->vma))
++		hugetlb_walker_unlock();
+ }
+ 
+ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw);
+diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+index 93e13fc17d3c..5ac8a89130f6 100644
+--- a/mm/page_vma_mapped.c
++++ b/mm/page_vma_mapped.c
+@@ -169,10 +169,13 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+ 		if (pvmw->pte)
+ 			return not_found(pvmw);
+ 
++		hugetlb_walker_lock();
+ 		/* when pud is not present, pte will be NULL */
+ 		pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
+-		if (!pvmw->pte)
++		if (!pvmw->pte) {
++			hugetlb_walker_unlock();
+ 			return false;
++		}
+ 
+ 		pvmw->ptl = huge_pte_lock(hstate, mm, pvmw->pte);
+ 		if (!check_pte(pvmw))
 -- 
-2.38.1
+2.37.3
 
