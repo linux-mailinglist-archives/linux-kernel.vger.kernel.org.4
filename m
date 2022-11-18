@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6575A6300B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF716300BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbiKRWsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
+        id S233050AbiKRWsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiKRWqk (ORCPT
+        with ESMTP id S232120AbiKRWql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:46:40 -0500
+        Fri, 18 Nov 2022 17:46:41 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55056A4147
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC13B1B9E
         for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:46:31 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7l-0007g9-Ia; Fri, 18 Nov 2022 23:46:17 +0100
+        id 1owA7k-0007f1-No; Fri, 18 Nov 2022 23:46:16 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7j-0058AI-KF; Fri, 18 Nov 2022 23:46:16 +0100
+        id 1owA7i-00589x-TX; Fri, 18 Nov 2022 23:46:15 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7h-00Hawn-OF; Fri, 18 Nov 2022 23:46:13 +0100
+        id 1owA7h-00Hawq-Tm; Fri, 18 Nov 2022 23:46:13 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -44,9 +44,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         Jonas Karlman <jonas@kwiboo.se>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 029/606] drm/bridge: sii902x: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:36:03 +0100
-Message-Id: <20221118224540.619276-30-uwe@kleine-koenig.org>
+Subject: [PATCH 030/606] drm/bridge: sii9234: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:36:04 +0100
+Message-Id: <20221118224540.619276-31-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -73,32 +73,32 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/gpu/drm/bridge/sii902x.c | 5 ++---
+ drivers/gpu/drm/bridge/sii9234.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
-index 878fb7d3732b..ea590db41970 100644
---- a/drivers/gpu/drm/bridge/sii902x.c
-+++ b/drivers/gpu/drm/bridge/sii902x.c
-@@ -1066,8 +1066,7 @@ static int sii902x_init(struct sii902x *sii902x)
- 	return i2c_mux_add_adapter(sii902x->i2cmux, 0, 0, 0);
- }
+diff --git a/drivers/gpu/drm/bridge/sii9234.c b/drivers/gpu/drm/bridge/sii9234.c
+index 5b3061d4b5c3..099b510ff285 100644
+--- a/drivers/gpu/drm/bridge/sii9234.c
++++ b/drivers/gpu/drm/bridge/sii9234.c
+@@ -886,8 +886,7 @@ static const struct drm_bridge_funcs sii9234_bridge_funcs = {
+ 	.mode_valid = sii9234_mode_valid,
+ };
  
--static int sii902x_probe(struct i2c_client *client,
+-static int sii9234_probe(struct i2c_client *client,
 -			 const struct i2c_device_id *id)
-+static int sii902x_probe(struct i2c_client *client)
++static int sii9234_probe(struct i2c_client *client)
  {
- 	struct device *dev = &client->dev;
- 	struct device_node *endpoint;
-@@ -1169,7 +1168,7 @@ static const struct i2c_device_id sii902x_i2c_ids[] = {
- MODULE_DEVICE_TABLE(i2c, sii902x_i2c_ids);
- 
- static struct i2c_driver sii902x_driver = {
--	.probe = sii902x_probe,
-+	.probe_new = sii902x_probe,
- 	.remove = sii902x_remove,
- 	.driver = {
- 		.name = "sii902x",
+ 	struct i2c_adapter *adapter = client->adapter;
+ 	struct sii9234 *ctx;
+@@ -961,7 +960,7 @@ static struct i2c_driver sii9234_driver = {
+ 		.name	= "sii9234",
+ 		.of_match_table = sii9234_dt_match,
+ 	},
+-	.probe = sii9234_probe,
++	.probe_new = sii9234_probe,
+ 	.remove = sii9234_remove,
+ 	.id_table = sii9234_id,
+ };
 -- 
 2.38.1
 
