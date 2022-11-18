@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7EA630768
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EFF630327
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbiKSAfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 19:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S235637AbiKRXYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbiKSAeZ (ORCPT
+        with ESMTP id S235590AbiKRXWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 19:34:25 -0500
+        Fri, 18 Nov 2022 18:22:12 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C7D1150ED
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:42:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35422A6A05
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:13:10 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8C-0000ua-M9; Fri, 18 Nov 2022 23:46:44 +0100
+        id 1owA8C-0000vU-T2; Fri, 18 Nov 2022 23:46:44 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA88-0058Ja-53; Fri, 18 Nov 2022 23:46:41 +0100
+        id 1owA88-0058Jk-AE; Fri, 18 Nov 2022 23:46:41 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA88-00Hb4k-3T; Fri, 18 Nov 2022 23:46:40 +0100
+        id 1owA88-00Hb4o-Ab; Fri, 18 Nov 2022 23:46:40 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>
+        Jonathan Cameron <jic23@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Zheyu Ma <zheyuma97@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 153/606] iio: magnetometer: ak8974: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:07 +0100
-Message-Id: <20221118224540.619276-154-uwe@kleine-koenig.org>
+Subject: [PATCH 154/606] iio: magnetometer: ak8975: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:08 +0100
+Message-Id: <20221118224540.619276-155-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -63,36 +66,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/magnetometer/ak8974.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/iio/magnetometer/ak8975.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/magnetometer/ak8974.c b/drivers/iio/magnetometer/ak8974.c
-index 7ec9ab3beb45..45abdcce6bc0 100644
---- a/drivers/iio/magnetometer/ak8974.c
-+++ b/drivers/iio/magnetometer/ak8974.c
-@@ -814,8 +814,7 @@ static const struct regmap_config ak8974_regmap_config = {
- 	.precious_reg = ak8974_precious_reg,
- };
+diff --git a/drivers/iio/magnetometer/ak8975.c b/drivers/iio/magnetometer/ak8975.c
+index caf03a2a98a5..924b481a3034 100644
+--- a/drivers/iio/magnetometer/ak8975.c
++++ b/drivers/iio/magnetometer/ak8975.c
+@@ -876,9 +876,9 @@ static irqreturn_t ak8975_handle_trigger(int irq, void *p)
+ 	return IRQ_HANDLED;
+ }
  
--static int ak8974_probe(struct i2c_client *i2c,
+-static int ak8975_probe(struct i2c_client *client,
 -			const struct i2c_device_id *id)
-+static int ak8974_probe(struct i2c_client *i2c)
++static int ak8975_probe(struct i2c_client *client)
  {
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct ak8975_data *data;
  	struct iio_dev *indio_dev;
- 	struct ak8974 *ak8974;
-@@ -1047,7 +1046,7 @@ static struct i2c_driver ak8974_driver = {
- 		.pm = pm_ptr(&ak8974_dev_pm_ops),
- 		.of_match_table = ak8974_of_match,
+ 	struct gpio_desc *eoc_gpiod;
+@@ -1110,7 +1110,7 @@ static struct i2c_driver ak8975_driver = {
+ 		.of_match_table = ak8975_of_match,
+ 		.acpi_match_table = ak_acpi_match,
  	},
--	.probe	  = ak8974_probe,
-+	.probe_new = ak8974_probe,
- 	.remove	  = ak8974_remove,
- 	.id_table = ak8974_id,
+-	.probe		= ak8975_probe,
++	.probe_new	= ak8975_probe,
+ 	.remove		= ak8975_remove,
+ 	.id_table	= ak8975_id,
  };
 -- 
 2.38.1
