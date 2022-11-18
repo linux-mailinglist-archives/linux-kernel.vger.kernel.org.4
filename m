@@ -2,101 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180F862F942
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DBC62F929
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241890AbiKRP2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
+        id S242247AbiKRPUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241874AbiKRP2e (ORCPT
+        with ESMTP id S241919AbiKRPUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:28:34 -0500
-X-Greylist: delayed 523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 07:28:31 PST
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24C327176
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:28:28 -0800 (PST)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id A6A61348D6E;
-        Fri, 18 Nov 2022 16:19:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1668784780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3uDpepbDz6oAsPmKRPLYkr5Mx+SABgVzOUZM4/B3U8Q=;
-        b=tWKaide1exK5/CcC1vSdRgb2ES/r1jatqYzrzVo5hm+hvY2Rbap3L0lRxZ58+gbxPQg5du
-        /1Po1XrDzGv/93WQdFwuiSkqAfStM2dB50QnpNwn9DDVs6/hCsUR3YR329ot+1GI4eUW2u
-        wkHjgltOhAlt1VZj6KGy01q2rah0taUqalfP8N87XzLjmzrN2lLiQpxxlTHHkf3mBKy4Tc
-        dqXuLawWIuXCbzl2/cdRHzcuL5qpogatjRxerI8wxyEu4WzYriTtPo3lkw/dLZ978wQ04a
-        amPLfGBKD4NBxMTnV1qVAcKMRhHhDDwTG/5A8Y4Vqnq64bI2ywM1Mw2oIoT13w==
-Message-ID: <79ba65cc117db8102bd8f7e30d6d44fdbd0542f1.camel@svanheule.net>
-Subject: Re: [PATCH v3] dt-bindings: pinctrl: convert semtech,sx150xq
- bindings to dt-schema
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Fri, 18 Nov 2022 10:20:36 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18481CB08
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:20:35 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id b9so7172925ljr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:20:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mt1Oc0ujq+8ARYNZpTY4my+ocgdokMPqWBidtFrPicc=;
+        b=veZLUju0OZcLrca1Tev5vJEV7hltIl62XDCxKODQ7PQNYvXwgWv3nvesnEEirRUohl
+         WhWgbXoZbyh1Sg4IMRI9qfX9O/mVR1YpWEeC54qRL0iDTxGVXcOxlhRmOO8DbGV8BZqD
+         0KnQrkXnAQeSXMQGFYN5CW5sude1YMPaEEG9fCmSnJofMGn1ht4V//QLi5osUMWZCwWB
+         RyW6/tBlkq8AvndrloX6PNOGxsmvnKz9nUdsWcbp6NQfepPC4S7EBsNNxoJBKZpicFM1
+         Cdj4D20aEsaeKGjZrQocGO5Fq7gi2PZ1kAVK4sOPQQ/uw9/D1kgkkaalKVvoYQxpqFNQ
+         2Clw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mt1Oc0ujq+8ARYNZpTY4my+ocgdokMPqWBidtFrPicc=;
+        b=2IxyHoRCwo9fDe0kC3HUaSQgfTS5ixW2wWgDpu6WiQizOfb30tDG2lyoAht0iPNusR
+         yMb5F0VLmSb6RhUE191/TNNm0VTNpZRC+JYKDSXEQMwf6x7pkjXIWjuJT/q4jqBJubqo
+         bNBTkZR7lF4s9oYFn3D/+fb7Gp/7jhHYYdtB/X0e3cQmwa2dDYOtrdtWSLPW9knpthC+
+         M0Po2pO3Ax5Sq2/5G7iWA09JeDBFK6WqnXiXUB2ws8WaIZK0sJgaqdVpUWsJ8B0lEsMz
+         Tho4VXsskZtj0hxuVEYnxoXPimjhTlpGtK6p1rtP9TdtCVD1kjqOZmKA6qS9xZBiptGu
+         lb5g==
+X-Gm-Message-State: ANoB5pl7HtHCYdFuyjP6fLGup2CQD7eovAeWAConBfCgLhHu5EwT76nq
+        9TyPN61S0ioL+QCm703VPp6QQQ==
+X-Google-Smtp-Source: AA0mqf5hlu4uHwk4LzPNIZkF/atO8Pz4NWHiF2ank783WcL1uP9fp09juYtV0GhRLysjeUsSj3RCug==
+X-Received: by 2002:a05:651c:1250:b0:279:d87:7bc6 with SMTP id h16-20020a05651c125000b002790d877bc6mr2564785ljh.225.1668784834094;
+        Fri, 18 Nov 2022 07:20:34 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id 12-20020ac25f0c000000b004948ddb4e4dsm690597lfq.301.2022.11.18.07.20.32
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 18 Nov 2022 07:20:33 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, linux-gpio@vger.kernel.org
-Date:   Fri, 18 Nov 2022 16:19:39 +0100
-In-Reply-To: <20221005-mdm9615-sx1509q-yaml-v3-0-e8b349eb1900@linaro.org>
-References: <20221005-mdm9615-sx1509q-yaml-v3-0-e8b349eb1900@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: qcom: sm8350-sagami: Configure SLG51000 PMIC on PDX215
+Date:   Fri, 18 Nov 2022 16:20:27 +0100
+Message-Id: <20221118152028.59312-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+In-Reply-To: <20221118152028.59312-1-konrad.dybcio@linaro.org>
+References: <20221118152028.59312-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksCgpPbiBUdWUsIDIwMjItMTEtMTUgYXQgMTE6MDYgKzAxMDAsIE5laWwgQXJtc3Ryb25nIHdy
-b3RlOgo+IFRoaXMgY29udmVydHMgdGhlIFNlbXRlY2ggU1gxNTBYcSBiaW5kaW5ncyB0byBkdC1z
-Y2hlbWFzLCBhZGQgbmVjZXNzYXJ5Cj4gYmluZGluZ3MgZG9jdW1lbnRhdGlvbiB0byBjb3ZlciBh
-bGwgZGlmZmVyZW5jZXMgYmV0d2VlbiBIVyB2YXJpYW50cwo+IGFuZCBjdXJyZW50IGJpbmRpbmdz
-IHVzYWdlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IE5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9u
-Z0BsaW5hcm8ub3JnPgo+IFJldmlld2VkLWJ5OiBSb2IgSGVycmluZyA8cm9iaEBrZXJuZWwub3Jn
-Pgo+IC0tLQo+IFRvOiBMaW51cyBXYWxsZWlqIDxsaW51cy53YWxsZWlqQGxpbmFyby5vcmc+Cj4g
-VG86IFJvYiBIZXJyaW5nIDxyb2JoK2R0QGtlcm5lbC5vcmc+Cj4gVG86IEtyenlzenRvZiBLb3ps
-b3dza2kgPGtyenlzenRvZi5rb3psb3dza2krZHRAbGluYXJvLm9yZz4KPiBDYzogbGludXgtZ3Bp
-b0B2Z2VyLmtlcm5lbC5vcmcKPiBDYzogZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmcKPiBDYzog
-bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZwo+IC0tLQo+IENoYW5nZXMgaW4gdjM6Cj4gLSBS
-ZXNlbnQgd2l0aCBtaXNzaW5nIFRvOiBMaW51cyBXYWxsZWlqCj4gLSBMaW5rIHRvIHYyOiBodHRw
-czovL2xvcmUua2VybmVsLm9yZy9yLzIwMjIxMDA1LW1kbTk2MTUtc3gxNTA5cS15YW1sLXYyLTAt
-YTRhNWI4ZWVjYzdiQGxpbmFyby5vcmcKPiAKPiBDaGFuZ2VzIGluIHYyOgo+IC0gZml4ZWQgcm9i
-IGNvbW1lbnRzCj4gLSBhZGRlZCByb2IncyBSZXZpZXdlZC1ieQo+IC0gTGluayB0byB2MTogaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIyMTAwNS1tZG05NjE1LXN4MTUwOXEteWFtbC12MS0w
-LTBjMjY2NDliNjM3Y0BsaW5hcm8ub3JnCj4gLS0tCgpbc25pcF0KCj4gK8KgIC0gaWY6Cj4gK8Kg
-wqDCoMKgwqAgcHJvcGVydGllczoKPiArwqDCoMKgwqDCoMKgwqAgY29tcGF0aWJsZToKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgIGNvbnRhaW5zOgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW06
-Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC0gc2VtdGVjaCxzeDE1MDNxCj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIC0gc2VtdGVjaCxzeDE1MDZxCj4gK8KgwqDCoCB0aGVuOgo+
-ICvCoMKgwqDCoMKgIHBhdHRlcm5Qcm9wZXJ0aWVzOgo+ICvCoMKgwqDCoMKgwqDCoCAnLWNmZyQn
-Ogo+ICvCoMKgwqDCoMKgwqDCoMKgwqAgcHJvcGVydGllczoKPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBwaW5zOgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpdGVtczoKPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBhdHRlcm46ICdeZ3Bpb1swLTE1XSQnCgpbc25pcF0K
-Cj4gK8KgIC0gaWY6Cj4gK8KgwqDCoMKgwqAgcHJvcGVydGllczoKPiArwqDCoMKgwqDCoMKgwqAg
-Y29tcGF0aWJsZToKPiArwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnRhaW5zOgo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGNvbnN0OiBzZW10ZWNoLHN4MTUwOXEKPiArwqDCoMKgIHRoZW46Cj4gK8Kg
-wqDCoMKgwqAgcGF0dGVyblByb3BlcnRpZXM6Cj4gK8KgwqDCoMKgwqDCoMKgICctY2ZnJCc6Cj4g
-K8KgwqDCoMKgwqDCoMKgwqDCoCBwcm9wZXJ0aWVzOgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IHBpbnM6Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGl0ZW1zOgo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgcGF0dGVybjogJ14ob3NjaW98Z3Bpb1swLTE1XSkkJwoKU29y
-cnkgdG8gYmUgc28gbGF0ZSB0byByZXBseSwgYnV0IGRvbid0IHRoZXNlIHBhdHRlcm5zIG9ubHkg
-bWF0Y2ggImdwaW8wIiwgImdwaW8xIiwgYW5kICJncGlvNSI/CgpBIHF1aWNrIHNlYXJjaCBmb3Ig
-c29tZSBkYXRhc2hlZXRzIHR1cm5lZCB1cCB0aGUgU1gxNTAzIGFuZCBTWDE1MDlRIHdpdGggMTYg
-R1BJT3MsIHNvIEkgYXNzdW1lIHRoZQppbnRlbnRpb24gd2FzIHRvIG1hdGNoICJncGlvMCIgdG8g
-ImdwaW8xNSIuIEkgdGhpbmsgdGhpcyBzaG91bGQgYmUgIl4oZ3Bpb1swLTldfGdwaW8xWzAtNV0p
-JCIgKG9yCnNvbWV0aGluZyBlcXVpdmFsZW50KS4KCkJlc3QsClNhbmRlcgo=
+Remove the mention of this PMIC from the common DTSI, as it's not
+used on PDX214. Add the required nodes to support it on PDX215.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ .../qcom/sm8350-sony-xperia-sagami-pdx215.dts | 66 +++++++++++++++++++
+ .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   |  2 +-
+ 2 files changed, 67 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dts b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dts
+index c74c973a69d2..d4afaa393c9a 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dts
++++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dts
+@@ -12,6 +12,72 @@ / {
+ 	compatible = "sony,pdx215-generic", "qcom,sm8350";
+ };
+ 
++&i2c13 {
++	pmic@75 {
++		compatible = "dlg,slg51000";
++		reg = <0x75>;
++		dlg,cs-gpios = <&pm8350b_gpios 1 GPIO_ACTIVE_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&cam_pwr_a_cs>;
++
++		regulators {
++			slg51000_a_ldo1: ldo1 {
++				regulator-name = "slg51000_a_ldo1";
++				regulator-min-microvolt = <2400000>;
++				regulator-max-microvolt = <3300000>;
++			};
++
++			slg51000_a_ldo2: ldo2 {
++				regulator-name = "slg51000_a_ldo2";
++				regulator-min-microvolt = <2400000>;
++				regulator-max-microvolt = <3300000>;
++			};
++
++			slg51000_a_ldo3: ldo3 {
++				regulator-name = "slg51000_a_ldo3";
++				regulator-min-microvolt = <1200000>;
++				regulator-max-microvolt = <3750000>;
++			};
++
++			slg51000_a_ldo4: ldo4 {
++				regulator-name = "slg51000_a_ldo4";
++				regulator-min-microvolt = <1200000>;
++				regulator-max-microvolt = <3750000>;
++			};
++
++			slg51000_a_ldo5: ldo5 {
++				regulator-name = "slg51000_a_ldo5";
++				regulator-min-microvolt = <500000>;
++				regulator-max-microvolt = <1200000>;
++			};
++
++			slg51000_a_ldo6: ldo6 {
++				regulator-name = "slg51000_a_ldo6";
++				regulator-min-microvolt = <500000>;
++				regulator-max-microvolt = <1200000>;
++			};
++
++			slg51000_a_ldo7: ldo7 {
++				regulator-name = "slg51000_a_ldo7";
++				regulator-min-microvolt = <1200000>;
++				regulator-max-microvolt = <3750000>;
++			};
++		};
++	};
++};
++
++&pm8350b_gpios {
++	cam_pwr_a_cs: cam-pwr-a-cs-state {
++		pins = "gpio1";
++		function = "normal";
++		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
++		power-source = <1>;
++		drive-push-pull;
++		output-high;
++	};
++};
++
+ &tlmm {
+ 	gpio-line-names = "APPS_I2C_0_SDA", /* GPIO_0 */
+ 			  "APPS_I2C_0_SCL",
+diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+index 6ae700e72d1e..8f32b2799bcb 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+@@ -3,6 +3,7 @@
+  * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
+  */
+ 
++#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+ #include "sm8350.dtsi"
+ #include "pm8350.dtsi"
+@@ -506,7 +507,6 @@ &i2c13 {
+ 	clock-frequency = <100000>;
+ 
+ 	/* Qualcomm PM8008i/PM8008j (?) @ 8, 9, c, d */
+-	/* Dialog SLG51000 CMIC @ 75 */
+ };
+ 
+ &i2c15 {
+-- 
+2.38.1
 
