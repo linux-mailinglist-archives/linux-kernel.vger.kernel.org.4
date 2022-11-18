@@ -2,176 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7423762F123
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E3462F22E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241921AbiKRJ1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
+        id S241430AbiKRKJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiKRJ1U (ORCPT
+        with ESMTP id S232902AbiKRKJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:27:20 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0B2FCC4;
-        Fri, 18 Nov 2022 01:27:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1668763635; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UcXDJLu1asVyUgEijSQXJ9DHNuMXWX+q2Hr7tq2QEPg=;
-        b=a8qpL3vt4RiHX1cI7skr1iKHaLiC9Zi1RgGVDY5VDtaaUrfGM3ZniRjf/PrMWfIKibmIo7
-        X//YP2bFxvbUaaWOxLKXWJW5jkP+0l8OrWS0d+iBHhtVoMd8ljRgcoM80eiQ8M9oPm8W9C
-        eGA7dXx5LuymQ5Eep/++6UeKvA1iq0s=
-Date:   Fri, 18 Nov 2022 09:27:05 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/2] mmc: jz4740: Don't change parent clock rate for some
- SoCs
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Siarhei Volkau <lis8215@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
-Message-Id: <59EJLR.DQ7KHQEAEUSG2@crapouillou.net>
-In-Reply-To: <CAPDyKFrMqCL1-faBadVP3xB-5qiCYsyRUuOHbFZuOWfLdCXwig@mail.gmail.com>
-References: <20221108045300.2084671-1-lis8215@gmail.com>
-        <20221108045300.2084671-2-lis8215@gmail.com>
-        <CAPDyKFrMqCL1-faBadVP3xB-5qiCYsyRUuOHbFZuOWfLdCXwig@mail.gmail.com>
+        Fri, 18 Nov 2022 05:09:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2060FCD1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:09:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B100B82266
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 10:09:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C0CC433C1;
+        Fri, 18 Nov 2022 10:09:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668766170;
+        bh=mfYXSBCO5vBo5jJ93zbrEc+qduhALvWRS4JwXD0aCrw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Yt+XmIGzI3Cp8mAdHXRKZLsjhX1iWmm0u+WqAyJ3MZ/RQZ+e7fSqB4PmMwVeVu8DE
+         ULV//A/6OvJGxFl/AHRjjEgbBwH+1l3izXc7nNcP9z7aEO1KuGQJKuUL/hn22r2oON
+         hzXNJw7iXd4LGSCK2nrwXpAFX7LDPhvqoLBQK2ig=
+Date:   Fri, 18 Nov 2022 10:28:10 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Char/Misc driver fixes for 6.1-rc6
+Message-ID: <Y3dQKg/pGJZIYc3B@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-(Ingenic SoCs maintainer here)
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
-Le ven. 18 nov. 2022 =E0 09:45:48 +0100, Ulf Hansson=20
-<ulf.hansson@linaro.org> a =E9crit :
-> On Tue, 8 Nov 2022 at 05:53, Siarhei Volkau <lis8215@gmail.com> wrote:
->>=20
->>  Some SoCs have one clock divider for all MMC units, thus changing=20
->> one
->>  affects others as well. This leads to random hangs and memory
->>  corruptions, observed on the JZ4755 based device with two MMC slots
->>  used at the same time.
->=20
-> Urgh, that sounds like broken HW to me.
->=20
-> The MMC blocks could share a parent clock (that would need a fixed
-> rate for it to be applied), assuming there is a separate gate/divider
-> available per block. But there isn't'?
+are available in the Git repository at:
 
-They do share a parent clock and have separate gates, and each MMC IP=20
-block has an internal divider for the bus frequency derived from that=20
-shared clock.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.1-rc6
 
->>=20
->>  List of SoCs affected includes: JZ4725b, JZ4755, JZ4760 and JZ4760b.
->>  However, the MMC driver doesn't distinguish JZ4760 and JZ4770
->>  which shall remain its behavior. For the JZ4755 is sufficient to
->>  use JZ4725b's binding. JZ4750 is outside of the patch.
->>=20
->>  The MMC core has its own clock divisor, rather coarse but suitable=20
->> well,
->>  and it shall keep the role of tuning clock for the MMC host in that
->>  case.
->=20
-> The mmc core doesn't have a clock divisor, but it does control the bus
-> clock frequency through the ->set_ios() host ops. It needs to do that,
-> to be able to conform to the (e)MMC, SD and SDIO specifications.
->=20
-> Can you please try to elaborate on the above, so I can better
-> understand your point?
+for you to fetch changes up to 65946690ed8d972fdb91a74ee75ac0f0f0d68321:
 
-Yes, I don't really understand the patch, TBH.
+  firmware: coreboot: Register bus in module init (2022-11-10 18:47:53 +0100)
 
-The "clk_set_rate" call will only set the shared clock to the *maximum*=20
-clock frequency (host->mmc->f_max) which should be the exact same=20
-across all MMC IPs.
+----------------------------------------------------------------
+Char/Misc driver fixes for 6.1-rc6
 
-So it doesn't matter if it's set 3 times by 3 different instances of=20
-the IP, as long as they all request the same value.
+Here are some small char/misc and other driver fixes for 6.1-rc6 to
+resolve some reported problems.  Included in here are:
+	- iio driver fixes
+	- binder driver fix
+	- nvmem driver fix
+	- vme_vmci information leak fix
+	- parport fix
+	- slimbus configuration fix
+	- coreboot firmware bugfix
+	- speakup build fix and crash fix
 
-Besides, I know for a fact that the mainline driver works fine on the=20
-JZ4760(B) and JZ4725B.
+All of these have been in linux-next for a while with no reported issues
 
-Finally... even if it was correct, this change would break=20
-compatibility with old Device Tree files.
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Cheers,
--Paul
+----------------------------------------------------------------
+Alexander Potapenko (1):
+      misc/vmw_vmci: fix an infoleak in vmci_host_do_receive_datagram()
 
->>=20
->>  Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
->=20
-> Kind regards
-> Uffe
->=20
->>  ---
->>   drivers/mmc/host/jz4740_mmc.c | 10 +++++++++-
->>   1 file changed, 9 insertions(+), 1 deletion(-)
->>=20
->>  diff --git a/drivers/mmc/host/jz4740_mmc.c=20
->> b/drivers/mmc/host/jz4740_mmc.c
->>  index dc2db9c18..d390ff31d 100644
->>  --- a/drivers/mmc/host/jz4740_mmc.c
->>  +++ b/drivers/mmc/host/jz4740_mmc.c
->>  @@ -114,6 +114,7 @@ enum jz4740_mmc_version {
->>          JZ_MMC_JZ4740,
->>          JZ_MMC_JZ4725B,
->>          JZ_MMC_JZ4760,
->>  +       JZ_MMC_JZ4770,
->>          JZ_MMC_JZ4780,
->>          JZ_MMC_X1000,
->>   };
->>  @@ -887,7 +888,13 @@ static int jz4740_mmc_set_clock_rate(struct=20
->> jz4740_mmc_host *host, int rate)
->>          int real_rate;
->>=20
->>          jz4740_mmc_clock_disable(host);
->>  -       clk_set_rate(host->clk, host->mmc->f_max);
->>  +
->>  +       /*
->>  +        * Changing rate on these SoCs affects other MMC units too.
->>  +        * Make sure the rate is configured properly by the CGU=20
->> driver.
->>  +        */
->>  +       if (host->version !=3D JZ_MMC_JZ4725B && host->version !=3D=20
->> JZ_MMC_JZ4760)
->>  +               clk_set_rate(host->clk, host->mmc->f_max);
->>=20
->>          real_rate =3D clk_get_rate(host->clk);
->>=20
->>  @@ -992,6 +999,7 @@ static const struct of_device_id=20
->> jz4740_mmc_of_match[] =3D {
->>          { .compatible =3D "ingenic,jz4740-mmc", .data =3D (void *)=20
->> JZ_MMC_JZ4740 },
->>          { .compatible =3D "ingenic,jz4725b-mmc", .data =3D (void=20
->> *)JZ_MMC_JZ4725B },
->>          { .compatible =3D "ingenic,jz4760-mmc", .data =3D (void *)=20
->> JZ_MMC_JZ4760 },
->>  +       { .compatible =3D "ingenic,jz4770-mmc", .data =3D (void *)=20
->> JZ_MMC_JZ4770 },
->>          { .compatible =3D "ingenic,jz4775-mmc", .data =3D (void *)=20
->> JZ_MMC_JZ4780 },
->>          { .compatible =3D "ingenic,jz4780-mmc", .data =3D (void *)=20
->> JZ_MMC_JZ4780 },
->>          { .compatible =3D "ingenic,x1000-mmc", .data =3D (void *)=20
->> JZ_MMC_X1000 },
->>  --
->>  2.36.1
->>=20
+Brian Norris (1):
+      firmware: coreboot: Register bus in module init
 
+Carlos Llamas (1):
+      binder: validate alloc->mm in ->mmap() handler
 
+Christian Lamparter (1):
+      nvmem: u-boot-env: fix crc32_data_offset on redundant u-boot-env
+
+Claudiu Beznea (1):
+      iio: adc: at91-sama5d2_adc: get rid of 5 degrees Celsius adjustment
+
+Dan Carpenter (1):
+      iio: imu: bno055: uninitialized variable bug in bno055_trigger_handler()
+
+Greg Kroah-Hartman (1):
+      Merge tag 'iio-fixes-for-6.1b' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio into char-misc-linus
+
+Horatiu Vultur (1):
+      nvmem: lan9662-otp: Fix compatible string
+
+Jonathan Cameron (1):
+      iio: accel: bma400: Ensure VDDIO is enable defore reading the chip ID.
+
+Krzysztof Kozlowski (1):
+      slimbus: stream: correct presence rate frequencies
+
+Maciej W. Rozycki (1):
+      parport_pc: Avoid FIFO port location truncation
+
+Matti Vaittinen (1):
+      tools: iio: iio_generic_buffer: Fix read size
+
+Mitja Spes (2):
+      iio: pressure: ms5611: fixed value compensation bug
+      iio: pressure: ms5611: changed hardcoded SPI speed to value limited
+
+Mushahid Hussain (1):
+      speakup: fix a segfault caused by switching consoles
+
+Saravanan Sekar (2):
+      iio: adc: mp2629: fix wrong comparison of channel
+      iio: adc: mp2629: fix potential array out of bound access
+
+Shuah Khan (1):
+      docs: update mediator contact information in CoC doc
+
+Yang Yingliang (3):
+      iio: trigger: sysfs: fix possible memory leak in iio_sysfs_trig_init()
+      iio: adc: at91_adc: fix possible memory leak in at91_adc_allocate_trigger()
+      siox: fix possible memory leak in siox_device_add()
+
+Zheng Bin (1):
+      slimbus: qcom-ngd: Fix build error when CONFIG_SLIM_QCOM_NGD_CTRL=y && CONFIG_QCOM_RPROC_COMMON=m
+
+Đoàn Trần Công Danh (1):
+      speakup: replace utils' u_char with unsigned char
+
+ .../process/code-of-conduct-interpretation.rst     |  2 +-
+ drivers/accessibility/speakup/main.c               |  2 +-
+ drivers/accessibility/speakup/utils.h              |  2 +-
+ drivers/android/binder_alloc.c                     |  7 +++
+ drivers/firmware/google/coreboot_table.c           | 37 ++++++++++++----
+ drivers/iio/accel/bma400_core.c                    | 24 +++++-----
+ drivers/iio/adc/at91-sama5d2_adc.c                 |  6 +--
+ drivers/iio/adc/at91_adc.c                         |  4 +-
+ drivers/iio/adc/mp2629_adc.c                       |  5 ++-
+ drivers/iio/imu/bno055/bno055.c                    |  2 +-
+ drivers/iio/pressure/ms5611.h                      | 12 ++---
+ drivers/iio/pressure/ms5611_core.c                 | 51 ++++++++++++----------
+ drivers/iio/pressure/ms5611_spi.c                  |  2 +-
+ drivers/iio/trigger/iio-trig-sysfs.c               |  6 ++-
+ drivers/misc/vmw_vmci/vmci_queue_pair.c            |  2 +
+ drivers/nvmem/lan9662-otpc.c                       |  2 +-
+ drivers/nvmem/u-boot-env.c                         |  2 +-
+ drivers/parport/parport_pc.c                       |  2 +-
+ drivers/siox/siox-core.c                           |  2 +
+ drivers/slimbus/Kconfig                            |  2 +-
+ drivers/slimbus/stream.c                           |  8 ++--
+ tools/iio/iio_generic_buffer.c                     |  4 +-
+ 22 files changed, 111 insertions(+), 75 deletions(-)
