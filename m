@@ -2,136 +2,582 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F3562FBC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5AE62FBC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:40:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242340AbiKRRfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S234711AbiKRRkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:40:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235353AbiKRRej (ORCPT
+        with ESMTP id S234587AbiKRRkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:34:39 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2053.outbound.protection.outlook.com [40.107.223.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76FBB7CD;
-        Fri, 18 Nov 2022 09:33:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aDlOtwJnKg3Izz6Qhx42lE6mmaL2n8dwOt3STxeXWDKFR5QmuZggIvtbLPpWgYZC0cFxbP0Qm6K3t/MSK9D7tnx4HcUxNM7Q0zWal7ohbRw+EfTSZw22CDipNQpJpuv5gNkO5YW+NTu7pq00iXJ9EePMvqyge6W4yeQdGzGv8oeaadni7oKIDW0N4GBl1ScQBgTChJFl1GLGmeFJfVUp9NC76a58kosXoH654Zg/aUjeamqb3g3+cqTb6wexP+qQldntCBkb2yu9yEDHdqQ/Ek4yD5ZjV4U8RnmkVczCjOffRuNbLpnSM8K6UTItGh3jk2k13wuqk5G7gt9ikVgetQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=40k9e3cRmkpnM7bI6MPW3LSz74E6aRwDgMWlbdAaWbI=;
- b=mU55FeRf7251NnibnmTiLM3iGkBfPquLWg6eKsabji9o7D7eal2ClAcx4hL4UIz9WvLoS9NuhsEV/Apuv7ZdqN2idCZBKBAtgTbb+xOLFM+k6NAGYJdg0MLVGSBERS0MiXqPYLST9JKR+kO23WdMzqGEsNxxlWlB0esquHgXlzbCvzRNDYdT/ZB9VfQ3hkJU8gRZZqXxBLQEsOeFOBk6M9O/jzU4OtsOnzzkgT0oRs/Xfxx97PXDJNTdxM+kAQQ7VrRhB9kvLIbqFfj8Av8JFO9y3HegTAKCo3e61WIcMeIExddpGZjqUkk5Nku04MJlNLdA+WTgt+JC+7kqI7d3wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=40k9e3cRmkpnM7bI6MPW3LSz74E6aRwDgMWlbdAaWbI=;
- b=Z0TTAdbjNDs/P8me/Onnt/RK1H6cbBdpLfaxToy+jYehdbOgyN2rBwpZt8FaO0clf5pKuqVlYERYWFPVz33Nmya9KfJKu+6h8m9iIdSeQJ1Xycy0vas7xkhsdTpxNJ/eBNRhJHDJC+CXz43ZwseaKbkl207jMV54umRjMZsA2LG2zWNpeuBlcsVz9AYly6n3CtpE/SWwtqhL6QSOWKObMDsu6AiOnttsjNqNULqqCCL9IUmNueKt7/q5vh3gwQsNvU0T8RDRMgns+Ka87E7GYSCVoVi8UjJEPKXYc5T3a4YTqHJpgf0x0uiZyfCvwoEaReQnRxb0Nx4moKrnwGbIpw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ0PR12MB5503.namprd12.prod.outlook.com (2603:10b6:a03:37f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Fri, 18 Nov
- 2022 17:33:31 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Fri, 18 Nov 2022
- 17:33:31 +0000
-Date:   Fri, 18 Nov 2022 13:33:30 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [for-next PATCH 4/5] RDMA/rxe: refactor iova_to_vaddr
-Message-ID: <Y3fB6jhde7hpIm5/@nvidia.com>
-References: <1668141030-2-1-git-send-email-lizhijian@fujitsu.com>
- <1668141030-2-5-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1668141030-2-5-git-send-email-lizhijian@fujitsu.com>
-X-ClientProxiedBy: MN2PR05CA0064.namprd05.prod.outlook.com
- (2603:10b6:208:236::33) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 18 Nov 2022 12:40:04 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC411D67F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:40:03 -0800 (PST)
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EB9853F2FF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:40:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668793201;
+        bh=khOfblgst9enibwZtKIhuBZJXCqSZWcWc7io0Y3ec00=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=kSAxib/gRz4WFG1g0FYXmdDkLTSzlsyssi3NeuKXOkZN07bMlohH9bhBHbHp7hH18
+         GA0/rYEn3DTceu1L59OuvVe1oqxhOWQleI/ooDLC++gJ+loBW8f0zfHb19LyEibHig
+         mvoy37GXGJsJkmn1buoaaU4I/p3hFjI+3eoveDmDqbdBAra8+wECuWHzFVTb2+Qanv
+         PKLTdUn2VKrieYglboqpNlhwq4yYEoCO9WD3uJEeV5QVkHurNNyzbsyh3veijfrTcp
+         ahvWR7PT+kFfqNUdWbNavmZebRHlI8hCZu+IftmWHiGje3PsGUKEDqAedKtsR/qboU
+         sBt6mzuc7pxfQ==
+Received: by mail-yb1-f199.google.com with SMTP id f71-20020a25384a000000b006dd7876e98eso5001836yba.15
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:40:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=khOfblgst9enibwZtKIhuBZJXCqSZWcWc7io0Y3ec00=;
+        b=IVp8R2pQjuhY6EIlumrUAA2Mq3r/UUPZIg0s5U7ZKdTx6REbH1SD2ncgn75UnWb7rq
+         YfYk/x5wNTIYpYypycsBjmuhqX7XxmIyoJPcWdPlWGg4BuImcEd3GIvUY3oNocwlnwo1
+         ux8a231fwijTNVu1lxrj/0kwsgujioxnPlieW8wb3L7LIi00Fhx0dEHmfIi+m5aHpt3g
+         o0y8Og/MYPhkyxYHDUYFxrSVPbQ/QJBZ2bD6jieQ04WFjR4mSNmK5RKtiE/nTJonJHgD
+         eVjnxQpi2KshLD7JDG8WSgom5MMTS0kStW1nFnh/YMCH5xPpQ3gGNA8RchMRy/jkP9md
+         aSQQ==
+X-Gm-Message-State: ANoB5pmFMNahl6JBf4aNmkgf2ANXQcNQ3nywJ48LLanrvWbyX5RZKJ3x
+        QT5r6t0ND3ahZVy1q+ckF2wUqziyECYczO/wbl6db1gS9y5tmCy1nNIkJawj61mRNZTfDHsyCM4
+        0zsZIgNfXSc6Uu3kboRspSkqQSinbI2/aeaj47dOHMbMvXzqi4uLxIIiHtg==
+X-Received: by 2002:a81:9a0b:0:b0:370:2d3:c361 with SMTP id r11-20020a819a0b000000b0037002d3c361mr7373247ywg.251.1668793199531;
+        Fri, 18 Nov 2022 09:39:59 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5jjAsNvhdPGGqZYsergcF++LvMbbQe3AgNyo2sdT6ZeT0o7tzyhO5uVsz3J8DtAGJMuP52P9lVuRXACQqXzlk=
+X-Received: by 2002:a81:9a0b:0:b0:370:2d3:c361 with SMTP id
+ r11-20020a819a0b000000b0037002d3c361mr7373226ywg.251.1668793199261; Fri, 18
+ Nov 2022 09:39:59 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB5503:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1d56512b-e72e-41d0-7fa0-08dac98b02e6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yqCuwaTv2ThykvoCVeMZ1FHFEiCWyckjd2vyCCRYCPypczUL0E0ro7zlY7BIxnrwye2oGudSvA9fv8AO2p8luZOoXHMtJxQBHqGy+RqFJMt2MLkfdJRrFAmJIpR4wx+AJE0wKHal0UIAC10iBXwmmUf9GLyvXNLN9yJl3mmfi2vUDM+mmlFuZLIJBupAjIcOGbSrLQTEr7Ti3WxqpFJizKA6XD5pqnLGDInynmBnOxFgovgUyPduThhvsyA0VvndkBzS2UL+2+ajrF59WtzrzDxkQup4cBN1Cd8fjq8r4dyks93KAs41WcyqiWLG+P0bO1c6CmG6o+SpgCK6Woixcm5RkSEj2lzn0xv4qlUwp2FbkLLy6DPlcylpn8U1QQTj+3iqguuIhBCnzERZPbl7YKqI8KFhwGlvw5rw7aFdEAARoqktxN9dfC82D1C8hwbi51QAp6PWdWMKcNp/A1NtKPRNP0l4qryfqmwNZVHvdAxVP6twZ7PK18rekhu4WEvJHfgHlJsStBEthmeq/+/l17LHaKBrAtStToAGJO+cvndjcV2SCcR3vP1GZhj/pWp83IQtnDfg5pYXdSfCmnvw5HV9ibmjso4H8K1cycWODYRs1XAlltm92YrzXF0EB9+LHagzFQryRFYM0zgntV7awg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(39860400002)(366004)(346002)(451199015)(2906002)(26005)(54906003)(6916009)(316002)(8936002)(186003)(2616005)(36756003)(4744005)(66556008)(8676002)(66946007)(4326008)(66476007)(6512007)(5660300002)(41300700001)(38100700002)(86362001)(6486002)(478600001)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WlkXujKbSqqMOl/FceC/dzz/5U2U93hzp0rzCw7w2TP06pEMHbQrZFmlyqme?=
- =?us-ascii?Q?CjNY049zQJRdOs//o7Ofkbnf6gqgKYUSV6DcBZh2fQTRS4pGMvq2czvq5TLu?=
- =?us-ascii?Q?Wmmh3+t0tbiU5sWp1XoTrqTeAJUPJcbwF9M4sdvZ6BVWDB39e8rgSsAIey05?=
- =?us-ascii?Q?oKBFpGurcgPcp69SvX/VCXm9PUTyFA+nYxB/DhFTE17Z+5yxZGmlPU5yMjLv?=
- =?us-ascii?Q?ISnvzcvuA17DtWDpbPp+uxSfBCoExzm9NpCfoNoLUgoGnB35Qemue2iEUjTg?=
- =?us-ascii?Q?POGb1oAT40e4Byy59VW4eBWzaNPp2LTj8wI22cUa6b5av74Ah7+e+x007LMR?=
- =?us-ascii?Q?fvAVfHP9VHeXQ8j/hvYtMceLnW57tLEyGpKtrR1gVr7OwlOgtRWxW5/wA2dL?=
- =?us-ascii?Q?zssknMEYchTD4qRm/aed5d+MDAlecnbwxh/rZ3z0X9go7irEYlnrf4BACxnU?=
- =?us-ascii?Q?qR3vswKsqHChsCGYKcD8xqcl8E5nBQws89jLqjy9j9sfAcscgY58pdEm9+7R?=
- =?us-ascii?Q?X4qS7DsQsQP8u22uAfRClXhTCLtBVqR/9Gy97nbXL/zJDCvUccft7wQeS593?=
- =?us-ascii?Q?hPUhMHg8tSMo48SUI2SQyM8jhBuuJxet7gd50Enny1OPs13cCp+yn1s/MGAx?=
- =?us-ascii?Q?IWXf5osQ/BnAxlWT7qFPhlO1er3ycC1SryjhOIyL0URgNKXJNWn+qB3eGGy1?=
- =?us-ascii?Q?xf3kzPPiOCWiTmo16k9oaizotZg1ZTWvSmxpX4sJUup6J6AEc8bcUi6fdaV7?=
- =?us-ascii?Q?lhsBHWZVTkrjCHSwrje0LhuzQl8HA7FW9gNHWOkn1LOM5axb9g3miaUqs6Bu?=
- =?us-ascii?Q?ksg6egRENw5hh1eoPNkL1QbVp5LIj3ZBajqmGIEW3CTrOx0MsiOeBHs/MbXu?=
- =?us-ascii?Q?wbfRfDk4ASNN6ndLVVnHfQf6BnpcA1OEp4St4swjrqu8dIzZPkiWwNN1eZ/+?=
- =?us-ascii?Q?zjnrtPQVG0yrs89HoLtcBIUbLuzW91vWrTx8n5553OF9IQIcF0WLNOqtHgDH?=
- =?us-ascii?Q?Sn3lwR9mK0I5MvPtHyHGyRaELSrPVGAKF8tDI+Ke0gf2YLRtY/WZUjq9KAO3?=
- =?us-ascii?Q?FQJfXQ2AeHFRBibFBAdQ1RM0pnABKoTkH53qRYFJPH1A0hcuGrY7pa8+VxkE?=
- =?us-ascii?Q?2OQVUCAHPIO14OtndkfAarSeNhkJD/Ehkh0Bmdal6rtvK+a+YpiXgk/ZePsF?=
- =?us-ascii?Q?X+Z19F52FaY403iQaQOhsce5hDYlG6rx0NO1T1szj4b2EoKLuMMcgbnJjqUq?=
- =?us-ascii?Q?9WwQ6V58NKL0Yh4/wbpZl6iR/00bZ8cvUr1PROhisb4XKzaSRzVjAo39JWPd?=
- =?us-ascii?Q?OLPtHAXVyir0IuW0cThTZqnd5GivPHIVuFSdtxLuatZ8op9mmM4x5rTQFDaT?=
- =?us-ascii?Q?Wkvk59FzPc3B3tdMAXejncQ6wwx+MduaCrcxnYXkOpAPUr01vjIvqAsl8XEf?=
- =?us-ascii?Q?4v0M2FUsnBz+lkeMFk5y60sRqSnE+MvxyKvu6d8IY7/Jsct/MsCLxUVmZolJ?=
- =?us-ascii?Q?qLw0hkNoJkW9TmqpFZxhTCT3CihSzp2bjqxJTIhVqo28Eq8hu6noh35d3woH?=
- =?us-ascii?Q?TJOS9zbFx8JIHIJGZYU=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d56512b-e72e-41d0-7fa0-08dac98b02e6
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 17:33:31.4987
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7zZ0m7oj1X45KLlfHJHRgUNfSlCnypb+UNM3ushOakY9fqMe9NH0Dan6XHzqf5Xr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5503
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-7-hal.feng@starfivetech.com> <Y3d0GE7msiWGlRcd@spud>
+In-Reply-To: <Y3d0GE7msiWGlRcd@spud>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 18 Nov 2022 18:39:43 +0100
+Message-ID: <CAJM55Z_3m9w83D9J2y+MV8VLc+uU0Gwo8xpD=fnCGZSAGntu7Q@mail.gmail.com>
+Subject: Re: [PATCH v2 6/8] riscv: dts: starfive: Add initial StarFive JH7110
+ device tree
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 04:30:29AM +0000, Li Zhijian wrote:
+On Fri, 18 Nov 2022 at 13:01, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Fri, Nov 18, 2022 at 09:17:12AM +0800, Hal Feng wrote:
+> > From: Emil Renner Berthing <kernel@esmil.dk>
+> >
+> > Add initial device tree for the JH7110 RISC-V SoC by StarFive
+> > Technology Ltd.
+> >
+> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> > Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
+> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> > ---
+> >  arch/riscv/boot/dts/starfive/jh7110.dtsi | 437 +++++++++++++++++++++++
+> >  1 file changed, 437 insertions(+)
+> >  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
+> >
+> > diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> > new file mode 100644
+> > index 000000000000..c22e8f1d2640
+> > --- /dev/null
+> > +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> > @@ -0,0 +1,437 @@
+> > +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> > +/*
+> > + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> > + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
+>
+> @Emil, I feel like I have to ask given the 2022 date, but should this
+> stuff be attributed to your canonical address or is this fine?
 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.h b/drivers/infiniband/sw/rxe/rxe_verbs.h
-> index acab785ba7e2..6080a4b32f09 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_verbs.h
-> +++ b/drivers/infiniband/sw/rxe/rxe_verbs.h
-> @@ -280,7 +280,10 @@ enum rxe_mr_lookup_type {
->  #define RXE_BUF_PER_MAP		(PAGE_SIZE / sizeof(struct rxe_phys_buf))
->  
->  struct rxe_phys_buf {
-> -	u64      addr;
-> +	union {
-> +		u64 addr; /* IB_MR_TYPE_MEM_REG */
-> +		struct page *page; /* IB_MR_TYPE_USER */
-> +	};
+Yeah, this is fine. I did this on my own time before I was actually
+tasked with working on the JH7110 based boards.
 
-Everything rxe handles is a struct page, even the kernel
-registrations.
-
-Jason
+> Other than that, a cursory check /looks/ fine, other than the:
+>
+> > +       gmac0_rgmii_rxin: gmac0_rgmii_rxin {
+> > +               compatible = "fixed-clock";
+> > +               #clock-cells = <0>;
+> > +               /* This value must be overridden by the board */
+> > +               clock-frequency = <0>;
+> > +       };
+>
+> If you remove the clock-frequency = <0> bit, dtb validation will force
+> people to set the value in jh7110-board.dts which I'd prefer to rely on
+> than a comment.
+>
+> Glad to see you sorted out the clock/reset stuff too!
+>
+> Thanks,
+> Conor.
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
