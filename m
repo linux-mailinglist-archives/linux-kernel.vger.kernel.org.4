@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1061B62EFB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FF962EFB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241448AbiKRIig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 03:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
+        id S232404AbiKRIiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 03:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235225AbiKRIi2 (ORCPT
+        with ESMTP id S241311AbiKRIib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 03:38:28 -0500
+        Fri, 18 Nov 2022 03:38:31 -0500
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294EF643D;
-        Fri, 18 Nov 2022 00:38:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955FAE0F7;
+        Fri, 18 Nov 2022 00:38:29 -0800 (PST)
 Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ND97b0ZZMzqSYk;
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ND97b0wlXzqSYm;
         Fri, 18 Nov 2022 16:34:35 +0800 (CST)
 Received: from dggpeml500019.china.huawei.com (7.185.36.137) by
  dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
@@ -35,9 +35,9 @@ CC:     <chenxiang66@hisilicon.com>, <john.g.garry@oracle.com>,
         <yangxingui@huawei.com>, <prime.zeng@hisilicon.com>,
         <linuxarm@huawei.com>, <linux-scsi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH for-next 4/5] scsi: hisi_sas: Fix SATA devices missing issue during I_T nexus reset
-Date:   Fri, 18 Nov 2022 16:37:13 +0800
-Message-ID: <20221118083714.4034612-5-zhanjie9@hisilicon.com>
+Subject: [PATCH for-next 5/5] scsi: libsas: Do not export sas_ata_wait_after_reset()
+Date:   Fri, 18 Nov 2022 16:37:14 +0800
+Message-ID: <20221118083714.4034612-6-zhanjie9@hisilicon.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20221118083714.4034612-1-zhanjie9@hisilicon.com>
 References: <20221118083714.4034612-1-zhanjie9@hisilicon.com>
@@ -56,66 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SATA devices on an expander may be removed and not be found again
-when I_T nexus reset and revalidation are processed simultaneously.
+sas_ata_wait_after_reset() does not need to be exported since it is
+no longer referenced outside libsas.
 
-The issue comes from:
-
-- Revalidation can remove SATA devices in link reset, e.g. in
-  hisi_sas_clear_nexus_ha().
-
-- However, hisi_sas_debug_I_T_nexus_reset() polls the state of a SATA
-  device on an expander after sending link_reset, where it calls:
-   hisi_sas_debug_I_T_nexus_reset
-    sas_ata_wait_after_reset
-     ata_wait_after_reset
-      ata_wait_ready
-       smp_ata_check_ready
-        sas_ex_phy_discover
-         sas_ex_phy_discover_helper
-          sas_set_ex_phy
-  The ex_phy's change count is updated in sas_set_ex_phy(), so SATA devices
-  after a link reset may not be found later through revalidation.
-
-A similar issue was reported in:
-commit 0f3fce5cc77e ("[SCSI] libsas: fix ata_eh clobbering ex_phys via
-smp_ata_check_ready")
-commit 87c8331fcf72 ("[SCSI] libsas: prevent domain rediscovery competing
-with ata error handling").
-
-To address this issue, in hisi_sas_debug_I_T_nexus_reset(), we now call
-smp_ata_check_ready_type() that only polls the device type while not
-updating the ex_phy's data of libsas.
-
-Fixes: 71453bd9d1bf ("scsi: hisi_sas: Use sas_ata_wait_after_reset() in IT nexus reset")
 Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+Reviewed-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/scsi/libsas/sas_ata.c | 3 +--
+ include/scsi/sas_ata.h        | 7 -------
+ 2 files changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 62080d0fad6f..41ba22f6c7f0 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1694,13 +1694,15 @@ static int hisi_sas_debug_I_T_nexus_reset(struct domain_device *device)
- 		return rc;
- 	}
+diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+index 4b65cd79150f..f7439bf9cdc6 100644
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -383,7 +383,7 @@ static int sas_ata_printk(const char *level, const struct domain_device *ddev,
+ 	return r;
+ }
  
-+	/* Remote phy */
- 	if (rc)
- 		return rc;
+-int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline)
++static int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline)
+ {
+ 	struct sata_device *sata_dev = &dev->sata_dev;
+ 	int (*check_ready)(struct ata_link *link);
+@@ -405,7 +405,6 @@ int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline)
  
--	/* Remote phy */
- 	if (dev_is_sata(device)) {
--		rc = sas_ata_wait_after_reset(device,
--					HISI_SAS_WAIT_PHYUP_TIMEOUT);
-+		struct ata_link *link = &device->sata_dev.ap->link;
-+
-+		rc = ata_wait_after_reset(link, HISI_SAS_WAIT_PHYUP_TIMEOUT,
-+					  smp_ata_check_ready_type);
- 	} else {
- 		msleep(2000);
- 	}
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(sas_ata_wait_after_reset);
+ 
+ static int sas_ata_hard_reset(struct ata_link *link, unsigned int *class,
+ 			      unsigned long deadline)
+diff --git a/include/scsi/sas_ata.h b/include/scsi/sas_ata.h
+index e7d466df8157..9c927d46f136 100644
+--- a/include/scsi/sas_ata.h
++++ b/include/scsi/sas_ata.h
+@@ -35,7 +35,6 @@ void sas_ata_end_eh(struct ata_port *ap);
+ void sas_ata_device_link_abort(struct domain_device *dev, bool force_reset);
+ int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
+ 			int force_phy_id);
+-int sas_ata_wait_after_reset(struct domain_device *dev, unsigned long deadline);
+ int smp_ata_check_ready_type(struct ata_link *link);
+ #else
+ 
+@@ -100,12 +99,6 @@ static inline int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
+ 	return 0;
+ }
+ 
+-static inline int sas_ata_wait_after_reset(struct domain_device *dev,
+-					   unsigned long deadline)
+-{
+-	return -ETIMEDOUT;
+-}
+-
+ static inline int smp_ata_check_ready_type(struct ata_link *link)
+ {
+ 	return 0;
 -- 
 2.30.0
 
