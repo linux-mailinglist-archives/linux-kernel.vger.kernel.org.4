@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED3062ED28
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0676162ED2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240803AbiKRFUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 00:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        id S230004AbiKRFXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 00:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240580AbiKRFUT (ORCPT
+        with ESMTP id S230287AbiKRFXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 00:20:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE9E6E561;
-        Thu, 17 Nov 2022 21:20:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0C26B82293;
-        Fri, 18 Nov 2022 05:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 722FEC433D6;
-        Fri, 18 Nov 2022 05:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668748816;
-        bh=mP4/veKAzM1jDiDRDAX0XkfzBPnPYLCw1dOUugeWDpo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=D9hxhMiTpI+iOriuyaRd2KaxvFboIuSITuHxF1yFXmNRafc3Dv/ztCi2ztajLuGw5
-         HXmWw1tzBEb+n8xdtZxJxI5kl6eJmaz2not8fz0lg9yYBUfvcJ8PGiKw1B+M1CaxXW
-         NO/5lTEKe2OIuclx7KiF28DZ2VAuA2OjquGtBIsBO44293DjETrmqft6P1IRGCjH01
-         ZQZLIWqcSCY7ZOvbyGRFUCJYLSl6G//DrPoDBoQVTaYgDD+9cJYvdn6OlphH8eiYBU
-         EP48TacITqzHT+bh2/idsFZ72zlN1kjNoEzAGrz16l2f6TQWoaX8g6HdaobCDVnwdH
-         N0gLmGA3Y6Png==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D480E270D5;
-        Fri, 18 Nov 2022 05:20:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 18 Nov 2022 00:23:46 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8893420F47
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:23:45 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id z6so2532675qtv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:23:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RmZFCbhZVx+S8fWiQUfSbQ8kLLMjYeNqXadz8uFT4Hk=;
+        b=17g+Zcj4QfG+p5I0SLJ4UNDun1EQgDdsGQ2KWzOYSJCjj8nvfRnpRYalsIRmV1Jbza
+         f+ra4lkwy06GzolOcfgajV/hxnSYGA8GSs463nLeyVB0nebG6m5jUsXGJ9ftVgRtR7Ah
+         FqPDcZ0Okl1der8PXbwjPVSrWV1V+xseFipTEGIeVz64ruDZu6ElmhCYHhq8W8gMRyyU
+         h/NHqivdPO8lG0cBCPQTFmrEEP/w7CfLBPgXVk7YIy7tch8u33WCw+YrlIxWSxDUCa5h
+         ZPWuveYEDty4H/2bNE0JwlMO+YvHGHPpGeIQIu3/4oGuCpH83c2jUlcLVvP8G12Z2Z//
+         JPtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RmZFCbhZVx+S8fWiQUfSbQ8kLLMjYeNqXadz8uFT4Hk=;
+        b=KilOkOXvAWq7tFe4otlPqCeDxQrTviDU/C20ttDuC9WJX2yjP/e8rAojEwtgSDf26I
+         G6DDdCnpVQawsWeghraj6P34sLKU9VVFkw/57tPFb7fkHAWIe5QszZtEG2b2igMHZ9et
+         Ie4gCDuCN1LRUiJzAo6iiVpUcd+6HtfGKLHjqh7eY8Q5fkDv5rIZp1D5mcvHn2i0OadL
+         pzdTtwWg5fRml29DI20O8cQEiLDMmbRXhONDVsfWPkVEYWCEvW8rQm/Ww4zDW0+CofaH
+         YCFr4y2LgBhpAFvQibzGeYwIPyL5HeOsUgxVR9F23F023rzOqmu86bumS5mfZPgh26x6
+         A8qQ==
+X-Gm-Message-State: ANoB5plcNUVOPBgsjvUWYnqa11SGQqCDhhfqcoKctcLU0VtdwCbwLdEM
+        Q8n+FZue9k+gqgF33jlCTg4dZw==
+X-Google-Smtp-Source: AA0mqf6XM50x/7Fzdl9gUIpGLpZ55FMwfAe9+x2g1UYcFuRqYSdoJvP3v+dLLikTs1vfXEEJiiaepw==
+X-Received: by 2002:ac8:740f:0:b0:3a5:2fce:adcb with SMTP id p15-20020ac8740f000000b003a52fceadcbmr5482378qtq.148.1668749024761;
+        Thu, 17 Nov 2022 21:23:44 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id u12-20020a37ab0c000000b006bb29d932e1sm1746548qke.105.2022.11.17.21.23.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 21:23:44 -0800 (PST)
+Date:   Fri, 18 Nov 2022 00:24:07 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v4 5/5] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y3cW92Hb8KpEuuQk@cmpxchg.org>
+References: <20221117163839.230900-1-nphamcs@gmail.com>
+ <20221117163839.230900-6-nphamcs@gmail.com>
+ <Y3a6PGDB5ievPYgQ@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 1/5] dt-bindings: net: ipq4019-mdio: document IPQ6018
- compatible
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166874881630.4500.14407842263163608974.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Nov 2022 05:20:16 +0000
-References: <20221114194734.3287854-1-robimarko@gmail.com>
-In-Reply-To: <20221114194734.3287854-1-robimarko@gmail.com>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3a6PGDB5ievPYgQ@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 14 Nov 2022 20:47:30 +0100 you wrote:
-> Document IPQ6018 compatible that is already being used in the DTS along
-> with the fallback IPQ4019 compatible as driver itself only gets probed
-> on IPQ4019 and IPQ5018 compatibles.
+On Thu, Nov 17, 2022 at 02:48:28PM -0800, Minchan Kim wrote:
+> On Thu, Nov 17, 2022 at 08:38:39AM -0800, Nhat Pham wrote:
+> > @@ -449,6 +450,27 @@ static void zs_zpool_free(void *pool, unsigned long handle)
+> >  	zs_free(pool, handle);
+> >  }
+> > 
+> > +static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries);
+> > +
+> > +static int zs_zpool_shrink(void *pool, unsigned int pages,
 > 
-> This is also required in order to specify which platform require clock to
-> be defined and validate it in schema.
-> 
-> [...]
+>                                                        what pages?
 
-Here is the summary with links:
-  - [v2,1/5] dt-bindings: net: ipq4019-mdio: document IPQ6018 compatible
-    https://git.kernel.org/netdev/net-next/c/cbe5f7c0fbcd
-  - [v2,2/5] dt-bindings: net: ipq4019-mdio: add IPQ8074 compatible
-    https://git.kernel.org/netdev/net-next/c/05c1cbb96f3d
-  - [v2,3/5] dt-bindings: net: ipq4019-mdio: require and validate clocks
-    https://git.kernel.org/netdev/net-next/c/e50c50367d98
-  - [v2,4/5] dt-bindings: net: ipq4019-mdio: document required clock-names
-    https://git.kernel.org/netdev/net-next/c/4a8c14384fa9
-  - [v2,5/5] arm64: dts: qcom: ipq8074: add SoC specific compatible to MDIO
-    (no matching commit)
+Hm? This is the number of driver pages to clear out. The name matches
+the function signature for this callback in struct zpool_driver:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+	int (*shrink)(void *pool, unsigned int pages,
+				unsigned int *reclaimed);
 
+I agree with the rest of the feedback.
 
+Thanks for taking a look, Minchan!
