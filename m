@@ -2,117 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9A962FF32
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F6F62FF38
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiKRVMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 16:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S230236AbiKRVN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 16:13:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKRVMM (ORCPT
+        with ESMTP id S229451AbiKRVNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 16:12:12 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B049A25B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:12:11 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id z26so6037801pff.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:12:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZy40ckMJK9PstrSORSMVw9LuD5M42HuElen5aK+uEs=;
-        b=YsibLVMHY4zS47SGC2k6c12KtYewhksNOs+sYyriWf5/rkBDw8uC3HDs/f2Wj2L3Gj
-         BVm78lwkUPik7ocGkhAa3Kl4tsNM2qjas5VtByHPDLiqfCZ7H6xt+RUmd0nfLpgVFGa+
-         TGWDzas1X6ndUC9LeJnozesYDmetjh/aAn8Fg=
+        Fri, 18 Nov 2022 16:13:53 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FD912D00;
+        Fri, 18 Nov 2022 13:13:51 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id e15so3978804qts.1;
+        Fri, 18 Nov 2022 13:13:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NZy40ckMJK9PstrSORSMVw9LuD5M42HuElen5aK+uEs=;
-        b=mNVYlhVgY4ssqgRtj/rBadbtEqojmFWrdUhQZ67Io/ZcLCxtMbNhmlbu6k88uZ7hxf
-         fYNNhoCiPMyiLAY3pRHqbvpglmNLyVGVWS9SGcVnH/vMCv67eNjeuSE8r2z8JsRgNs7v
-         QRjZSED1qe0VQ3mYmU/GtpxxBpaoi1B5crJmYYyCxASUHH9c3cbHkNCidKTELFIEB6b9
-         iNSxUADlU7jrX5mBCafgMnj205S8oPKwJCe5M2UkwfG81O58Ul09kH8t3QMWNCuJbGeD
-         pQPFwG+SDBv85WKL0vUa1GyjSU+ihSCsWl+Y84UXEXBV+SPh4jX5Mqahq93K77RZeR1w
-         xx4Q==
-X-Gm-Message-State: ANoB5pnJLnFKishx8TD9/IpobrT3UkgxmlRa4rZuqyI/jVPegCUdJcWb
-        SSnADmH6H5b6gOQou7vrkjYlKg==
-X-Google-Smtp-Source: AA0mqf7K8L+3ggQrBqjW5sllCMvwU8TlFsM8+MyfYc4TYEHJRKBuT3Ac3K/jUbWeUkf/xTrdlksb6Q==
-X-Received: by 2002:a63:5c59:0:b0:440:3cc0:c062 with SMTP id n25-20020a635c59000000b004403cc0c062mr8308527pgm.10.1668805930887;
-        Fri, 18 Nov 2022 13:12:10 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b00186a437f4d7sm4218924plg.147.2022.11.18.13.12.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 13:12:10 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Ben Skeggs <bskeggs@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Gourav Samaiya <gsamaiya@nvidia.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] drm/nouveau/fb/ga102: Replace zero-length array of trailing structs with flex-array
-Date:   Fri, 18 Nov 2022 13:12:08 -0800
-Message-Id: <20221118211207.never.039-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        bh=im9Cn2bVvvKaUdjTn6G7loRSPb2+5gZ1xm+k4nkrlTg=;
+        b=g6OvNySY+MUGiXhS68lk8zHbOwpTFSn5B1GyGRkoIKogLsthr70fU7WRIcJB1Zn9m/
+         kp5FEV91fSOVuHRo9BnsEKZwL+1qznwDjpm+qJRGKEj0Wt0SpP4d8BMCkVziIHXKwNtA
+         5VO5BYmq8YMnPU4pohxkrOmWCSzJ1e/3MN05chn44NNu90xRjeFtY3w6nJpF6hZaTzYg
+         RS6axAL6HnZFtYiRTqyXfd3FiQXFKMdZThIfkzP/rVKTJ6S3IR2YSbrCdCdepg2dugzB
+         zyRhoX8rnj/17OXiONXMl68a4EHs2ONpBZ0SA2LcyKKzeH/q0jPjJDiVLCFwvxxJ0BUU
+         BUQA==
+X-Gm-Message-State: ANoB5plOkUcXa56XpfePXXHacW+G+uI1SiDXryUgZPjOgNAsxG4W9+wP
+        8ISY3uoD9UfjP5May0QfPf/cwirRzJydJ5ee2fM=
+X-Google-Smtp-Source: AA0mqf75tJmpvYnmRNNRXxLth4HQ/ihllc1egjsQV9c6i8wVwP8kU4jaOQCzebxxaBJ1TykRdBPwL1/IaKhgt/HvKV0=
+X-Received: by 2002:ac8:60d3:0:b0:3a5:4678:5b24 with SMTP id
+ i19-20020ac860d3000000b003a546785b24mr8291713qtm.411.1668806030966; Fri, 18
+ Nov 2022 13:13:50 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1422; h=from:subject:message-id; bh=X9HCxkhxMUKHNvL3i6xwv+DIq3QBR7MiLcT0RJeQqIY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjd/UoT/JDrfBTo/vcofpBixe5bpHWDrFyzZ1EdUlt Es/j9QSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3f1KAAKCRCJcvTf3G3AJhAtEA CYWhughNKE0OapwIXiefhx+jOiRBDaUC8hfzPm33xTb1ARxGJxY9kRrmeToWC8sE1VDug0m8vukcy5 QgKz72Po6nwKPbCqifUHhkVlNVW1c4PZxpf03G50RR3ly2UCPVXjBtKPilwvXblNyMMzOLM6aZ2+Uo Y7B+ZnxNP7RDoPiEk6EDqeBuXW0eFpjan4RIoURtXVRTj8cnh5GvN24iwWJiU07GKNSb7rUSMnyc+e TfTLqSbV7JrEuCQ5rtVUG5x+lbqlxzBURXXlz0P6+qZ9YbK+t2cc67oQJNi267V48nMO2KK3pT3rjz wAuqSiMoJAxtvJSd2O5qlCNiMTPE07V0aAecujkq+mm26kIvR9Enpvh5ZxDPUUy35TQeezQmq6jn/i F4CtMYWFkfD5lS40SBlR+47zlf9gvQHLkTJ9APICVfRmI2OurXDqtsz0OEoXv9hlsGEopLnYW39TWZ CYF0mAo/DMBgUMx6PnJ7SGyfsPnqjD4vhebC/RwGvx8KpDlfpfL58/PNMuO0PBe58TV97WjBDuhd7L 3pTrWdpxtaojtEUyLi+5Cya2YUt2Id8kn3VHa10utEc7F/jrEzFYHH8sgKuRR9d7Vv8Ql/Ucl3MOOP tqfaieDGKT4+2+1/nRGn5/zf4FLvKPJRW24HNWPRMJBkDXu9JgdzMkE4vLnA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAJZ5v0i3LyfMLx8cuYMdRzJagW-d0Vz3PBVEtFGpDBD6+7VZHQ@mail.gmail.com>
+ <20221118202336.GA1271811@bhelgaas>
+In-Reply-To: <20221118202336.GA1271811@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 18 Nov 2022 22:13:39 +0100
+Message-ID: <CAJZ5v0i8K4Uss4KgbzdRyocTKYu10eCCm8UZ=QtEFJ4_WZYciw@mail.gmail.com>
+Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
+ resources support D3
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated[1] and are being replaced with
-flexible array members in support of the ongoing efforts to tighten the
-FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+On Fri, Nov 18, 2022 at 9:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> Hi Rafael,
+>
+> Sorry, I'm still confused (my perpetual state :)).
 
-Replace zero-length array with flexible-array member.
+No worries, doing my best to address that.
 
-This results in no differences in binary output.
+> On Fri, Nov 18, 2022 at 02:16:17PM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Nov 17, 2022 at 11:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Thu, Nov 17, 2022 at 06:01:26PM +0100, Rafael J. Wysocki wrote:
+> > > > On Thu, Nov 17, 2022 at 12:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > On Wed, Nov 16, 2022 at 01:00:36PM +0100, Rafael J. Wysocki wrote:
+> > > > > > On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > > >
+> > > > > > > > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
+> > > > > > > > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
+> > > > > > > > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
+> > > > > > > > > > > > Firmware typically advertises that ACPI devices that represent PCIe
+> > > > > > > > > > > > devices can support D3 by a combination of the value returned by
+> > > > > > > > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
+> > > > > > > > > > > >
+> > > > > > > > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
+> > > > > > > > > > > > an assumption that if an ACPI device contains power resources the PCIe
+> > > > > > > > > > > > device it's associated with can support D3.  This was introduced
+> > > > > > > > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
+> > > > > > > > > > > > D3 if power managed by ACPI").
+> > > > > > > > > > > >
+> > > > > > > > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
+> > > > > > > > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
+> > > > > > > > > > > > port used for tunneling. The PCIe device will still be opted into
+> > > > > > > > > > > > runtime PM in the kernel [2] because of the logic within
+> > > > > > > > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
+> > > > > > > > > > > > device contains power resources.
+> > > > > > > > >
+> > > > > > > > > Wait.  Is this as simple as just recognizing that:
+> > > > > > > > >
+> > > > > > > > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
+> > > > > > > > >   mean the device can wake itself from a low-power state.  The OS has
+> > > > > > > > >   to use _S0W to learn the device's ability to wake itself.
+> > > > > > > >
+> > > > > > > > It is.
+> > > > > > >
+> > > > > > > Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
+> > > > > > > web page [1] says it identifies Root Ports capable of handling hot
+> > > > > > > plug events while in D3.  That sounds kind of related to _S0W: If _S0W
+> > > > > > > says "I can wake myself from D3hot and D3cold", how is that different
+> > > > > > > from "I can handle hotplug events in D3"?
+> > > > > >
+> > > > > > For native PME/hot-plug signaling there is no difference.  This is the
+> > > > > > same interrupt by the spec after all IIRC.
+> > > > > >
+> > > > > > For GPE-based signaling, though, there is a difference, because GPEs
+> > > > > > can only be used directly for wake signaling (this is related to
+> > > > > > _PRW).  In particular, the only provision in the ACPI spec for device
+> > > > > > hot-add are the Bus Check and Device Check notification values (0 and
+> > > > > > 1) which require AML to run and evaluate Notify() on specific AML
+> > > > > > objects.
+> > > > > >
+> > > > > > Hence, there is no spec-defined way to tell the OS that "something can
+> > > > > > be hot-added under this device while in D3 and you will get notified
+> > > > > > about that".
+> > > > >
+> > > > > So I guess acpi_pci_bridge_d3() looks for:
+> > > > >
+> > > > >   - "wake signaling while in D3" (_S0W) and
+> > > > >   - "notification of hotplug while in D3" ("HotPlugSupportInD3")
+> > > > >
+> > > > > For Root Ports with both those abilities (or bridges below such Root
+> > > > > Ports), we allow D3, and this patch doesn't change that.
+> > > > >
+> > > > > What this patch *does* change is that all bridges with _PS0 or _PR0
+> > > > > previously could use D3, but now will only be able to use D3 if they
+> > > > > are also (or are below) a Root Port that can signal wakeup
+> > > > > (wakeup.flags.valid) and can wakeup from D3hot or D3cold (_S0W).
+> > > > >
+> > > > > And this fixes the Pink Sardine because it has Root Ports that do
+> > > > > Thunderbolt tunneling, and they have _PS0 or _PR0 but their _S0W says
+> > > > > they cannot wake from D3.  Previously we put those in D3, but they
+> > > > > couldn't wake up.  Now we won't put them in D3.
+> > > > >
+> > > > > I guess there's a possibility that this could break or cause higher
+> > > > > power consumption on systems that were fixed by c6e331312ebf
+> > > > > ("PCI/ACPI: Whitelist hotplug ports for D3 if power managed by ACPI").
+> > > > > I don't know enough about that scenario.  Maybe Lukas will chime in.
+> > > >
+> > > > Well, it is possible that some of these systems will be affected.
+> > > >
+> > > > One of such cases is when the port in question has _S0W which says
+> > > > that wakeup from D3 is not supported.  In that case I think the kernel
+> > > > should honor the _S0W input, because there may be a good reason known
+> > > > to the platform integrator for it.
+> > > >
+> > > > The other case is when wakeup.flags.valid is unset for the port's ACPI
+> > > > companion which means that the port cannot signal wakeup through
+> > > > ACPI-related means at all and this may be problematic, especially in
+> > > > the system-wide suspend case in which the wakeup capability is not too
+> > > > relevant unless there is a system wakeup device under the port.
+> > > >
+> > > > I don't think that the adev->wakeup.flags.valid check has any bearing
+> > > > on the _S0W check - if there is _S0W and it says "no wakeup from D3",
+> > > > it should still be taken into account - so that check can be moved
+> > > > past the _S0W check.
+> > >
+> > > So if _S0W says it can wake from D3, but wakeup.flags is not valid,
+> > > it's still OK to use D3?
+> >
+> > No, it isn't, as per the code today and I don't think that this
+> > particular part should be changed now.
+>
+> But the current upstream code checks acpi_pci_power_manageable(dev)
+> first, so if "dev" has _PR0 or _PS0, we'll use D3 even if _S0W says it
+> can wake from D3 and wakeup.flags is not valid.
 
-[1] https://github.com/KSPP/linux/issues/78
+Yes, the current code will return 'true' if _PR0 or _PS0 is present
+for dev regardless of anything else.
 
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: Karol Herbst <kherbst@redhat.com>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Gourav Samaiya <gsamaiya@nvidia.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: dri-devel@lists.freedesktop.org
-Cc: nouveau@lists.freedesktop.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/gpu/drm/nouveau/include/nvfw/hs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The proposed change is to make that conditional on whether or not _S0W
+for the root port says that wakeup from D3 is supported (or it is not
+present or unusable).
 
-diff --git a/drivers/gpu/drm/nouveau/include/nvfw/hs.h b/drivers/gpu/drm/nouveau/include/nvfw/hs.h
-index 8c4cd08a7b5f..8b58b668fc0c 100644
---- a/drivers/gpu/drm/nouveau/include/nvfw/hs.h
-+++ b/drivers/gpu/drm/nouveau/include/nvfw/hs.h
-@@ -52,7 +52,7 @@ struct nvfw_hs_load_header_v2 {
- 	struct {
- 		u32 offset;
- 		u32 size;
--	} app[0];
-+	} app[];
- };
- 
- const struct nvfw_hs_load_header_v2 *nvfw_hs_load_header_v2(struct nvkm_subdev *, const void *);
--- 
-2.34.1
-
+I see that I've missed one point now which is when the root port
+doesn't have an ACPI companion, in which case we should go straight
+for the "dev is power manageable" check.  Let me redo the patch to
+address this.
