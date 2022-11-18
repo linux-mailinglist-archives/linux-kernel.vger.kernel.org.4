@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21A862F3AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57E162F3B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbiKRL3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S235221AbiKRLch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:32:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiKRL3Q (ORCPT
+        with ESMTP id S241875AbiKRLcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:29:16 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF3FFCDF;
-        Fri, 18 Nov 2022 03:29:15 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso8023620pjg.5;
-        Fri, 18 Nov 2022 03:29:15 -0800 (PST)
+        Fri, 18 Nov 2022 06:32:12 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3C69BA29;
+        Fri, 18 Nov 2022 03:31:54 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id a14so8848268wru.5;
+        Fri, 18 Nov 2022 03:31:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c6pa+0i/2gW0CZzxA4RT9DmS5V0eY1vqhUMm1tY+xHk=;
-        b=W4rtUd3eoC1VUscW3kwcMKIkY/VkxFLjhZVPX/KGdSZd+FgtiMNU7qkYplQPT+11Pf
-         RGdFyMXj6V5ypIkOxZPWq61sTZlPnNLl3PKu50X/+2InRbcjETZbGg0LT6dmibMpR5Qj
-         dnr7UfrJk2fTY7XmIqWyHCZYVp4kFZeW+P7oNKhzBqgwJBawzuO01O6KgGoHJMoSFF3T
-         HdOW00SLudrOrld6I0J2niFcBJDxvXVfueRIQHW3ulAJql8Uoc8FcQxTjONl83I3F7lK
-         LsG/rlisIOShHkw8P0FxxFtbY9A952iZGb5OD3pGWcif7LghFBNQGAlcyM+aBYHvTwu2
-         fy7A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u8qpOHGlOhZYR6pVYrTYVhfVUaK3uhqqUMzIDSjxxZ4=;
+        b=BwfGT3C99fgwftzC5OnNV7hU6aNSoYA1b5/aMNHdS1dLyOO/Hb2iAYzjv/+Bxbh/Hi
+         +jnX8GWvnGy5BqXAsOmrJgvTk9G0wYpTdoiP1vzf+OUs0fd5NFGhRJb71549uzCaEKFb
+         jsmQeurYWPrFWu0mGJuaBcqMv+AkmZBZhQn8PX9ohezOJvcJdBhbT605K3vvx8SluQ6g
+         deLdTlMcL1+6rYuMQkxGR9MLZzeAyO/fst50YXdBLC5gmL/cqNF3ugaeXsxPQ9skjult
+         D61AAzQfKKeWKI5wbI3OFSeC45wPjFzUatGDGJMGBFPbxJ+NWlTABFU7isdsKdEEO5Se
+         jHtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c6pa+0i/2gW0CZzxA4RT9DmS5V0eY1vqhUMm1tY+xHk=;
-        b=vxXJCHYt07/sAPb3BA7C+OV+1yZFCq5sJf9hG+PCQKiHRZBqH5F408DmGVQfjxOX39
-         d86pCrErJVEyaOZohTD7DAJP/EMLZG5bK0ivIs1CTfg0i+kvkVu1MZYFoKKA4K3uDn+C
-         CYUlotmDh6o1Ibz98YyB7TFkth5q8zVYHkbgv2kUzj0fqLszM1SvESA6w+eYMNB0yxNH
-         n63KlyiDAK/teGih0Ru8RDI08nvVFuuee9WVaTufEhb5CD+RXzgVwcMrvG5Ws0kyQIaw
-         uBzOc2c8wObL6qesx0GvRl5dY23Y/1KcQNdj7I6MahwpUFXBzM3XsTCnMbu4ad60l02F
-         ifMA==
-X-Gm-Message-State: ANoB5pkQ34DJh2NrMpOt10INdosmCDKRrBXSI7BIc2YqU4nkiVgBpk+0
-        vf6lziZSzH0odGd5m2zw/5c=
-X-Google-Smtp-Source: AA0mqf78hu8u0LtNBUUNRLEiEQqHEpYKlWC5OU0vCGq6wlyjoqxy+zKllm3Jn1VAuDnPQfKHpdhtrg==
-X-Received: by 2002:a17:90a:9e7:b0:213:68c5:5579 with SMTP id 94-20020a17090a09e700b0021368c55579mr13453872pjo.150.1668770954692;
-        Fri, 18 Nov 2022 03:29:14 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id l7-20020a170902f68700b0017f756563bcsm3475044plg.47.2022.11.18.03.29.10
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u8qpOHGlOhZYR6pVYrTYVhfVUaK3uhqqUMzIDSjxxZ4=;
+        b=NXQlLFRNsjbySbAP8cjWAMUqLjCfUzlEacyQgWqjKPUEnRAISKlZ1i6N2xVVyihcwq
+         Zuq4uvaXv+JiABBzWhmz9JNpTSyofLK/FZEx/M6VvpLVGemx5WA7HbSpl/Sv+yMHEMeK
+         V4vvFl4iyhUGSwUOz2TSAyn3egL4tO6b8owks1ZlcZayW8v5aGG7c1ELXMs6Bsr6Nnbf
+         AuNw5vzIGl9+dmcV+cuDnD8yDjNDDokJTFn2otFvai/3cA2i1akI7o8YKyvIZTrtNC0o
+         dWxEUXkcfRzAT4eP7N3eQM0pyP5zcd0xIryz3YYtndWqHZ9FVJvPYdHEaiBGb/u6Dn9A
+         KKzg==
+X-Gm-Message-State: ANoB5pnRYyWI5F9SflLPdjEfY3YkFVa2AuZV2txZtsJrLplR85cY/g2X
+        QHI8rXGyX59Ezo+Qmcbw9Lk=
+X-Google-Smtp-Source: AA0mqf78tC8zLLLrVwtpZodpwAvwC85+Ssq8kXfWKY0JubDzNVdSXmpR3zF4XZLm/lh/NF7M8xCfCw==
+X-Received: by 2002:a5d:6745:0:b0:241:b2b2:7c50 with SMTP id l5-20020a5d6745000000b00241b2b27c50mr4081224wrw.613.1668771112672;
+        Fri, 18 Nov 2022 03:31:52 -0800 (PST)
+Received: from localhost.localdomain ([95.183.227.98])
+        by smtp.gmail.com with ESMTPSA id l24-20020a05600c1d1800b003cf878c4468sm9894817wms.5.2022.11.18.03.31.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 03:29:13 -0800 (PST)
-Date:   Fri, 18 Nov 2022 20:29:08 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] slab: Clean up SLOB vs kmalloc() definition
-Message-ID: <Y3dshBYUwubvZ6le@hyeyoo>
-References: <20221118034713.gonna.754-kees@kernel.org>
- <20221118035200.1269184-1-keescook@chromium.org>
+        Fri, 18 Nov 2022 03:31:52 -0800 (PST)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/7] MediaTek pinctrl DT binding cleanup and MT6735 pinctrl support
+Date:   Fri, 18 Nov 2022 14:30:21 +0300
+Message-Id: <20221118113028.145348-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221118035200.1269184-1-keescook@chromium.org>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,73 +80,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 07:51:58PM -0800, Kees Cook wrote:
-> As already done for kmalloc_node(), clean up the #ifdef usage in the
-> definition of kmalloc() so that the SLOB-only version is an entirely
-> separate and much more readable function.
-> 
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Cc: linux-mm@kvack.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/slab.h | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 1c670c16c737..9033937c758e 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -558,15 +558,15 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node) __assume_page_align
->   *	Try really hard to succeed the allocation but fail
->   *	eventually.
->   */
-> +#ifndef CONFIG_SLOB
->  static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
->  {
->  	if (__builtin_constant_p(size)) {
-> -#ifndef CONFIG_SLOB
->  		unsigned int index;
-> -#endif
-> +
->  		if (size > KMALLOC_MAX_CACHE_SIZE)
->  			return kmalloc_large(size, flags);
-> -#ifndef CONFIG_SLOB
-> +
->  		index = kmalloc_index(size);
->  
->  		if (!index)
-> @@ -575,10 +575,18 @@ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
->  		return kmalloc_trace(
->  				kmalloc_caches[kmalloc_type(flags)][index],
->  				flags, size);
-> -#endif
->  	}
->  	return __kmalloc(size, flags);
->  }
-> +#else
-> +static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
-> +{
-> +	if (__builtin_constant_p(size) && size > KMALLOC_MAX_CACHE_SIZE)
-> +		return kmalloc_large(size, flags);
-> +
-> +	return __kmalloc(size, flags);
-> +}
-> +#endif
->  
->  #ifndef CONFIG_SLOB
->  static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
-> -- 
-> 2.34.1
+From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+This series adds a driver for the pin controller found on the MediaTek MT6735
+and MT6735M SoCs. The two differ in the last 6 physical pins, which are used
+for MSDC2 on MT6735 but don't exist on MT6735M (since MSDC2 doesn't exist on it
+to begin with). In preparation to document DT bindings for this pin controller,
+the existing documents for MT67xx SoCs are combined into one in order to
+eliminate duplicate property definitions and standardize pin configuration node
+names. Necessary cleanup is done along the way.
+
+Changes since v4:
+ - Remove patches that were applied previously.
+ - Define interrupts items for each variant (bringing back maxItems: 1 to the top
+   level definition then adding maxItems: 2 under the MT6795 condition causes a
+   dt_binding_check error for some reason)
+ - Move example changes to the patch they belong to
+ - Don't unnecessarily move the allOf block.
+ 
+Yassine Oudjana (7):
+  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Pull pinctrl node
+    changes from MT6795 document
+  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Improve pinctrl subnode
+    and property descriptions
+  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Add MT6795
+  arm64: dts: mediatek: mt6797: Make pin configuration nodes follow DT
+    bindings
+  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Document MT6765 pin
+    controller
+  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Document MT6735 pin
+    controller
+  pinctrl: mediatek: Add MT6735 pinctrl driver
+
+ .../pinctrl/mediatek,mt6779-pinctrl.yaml      |  220 +-
+ .../pinctrl/mediatek,pinctrl-mt6795.yaml      |  227 -
+ MAINTAINERS                                   |    8 +
+ arch/arm64/boot/dts/mediatek/mt6797.dtsi      |   20 +-
+ drivers/pinctrl/mediatek/Kconfig              |    6 +
+ drivers/pinctrl/mediatek/Makefile             |    1 +
+ drivers/pinctrl/mediatek/pinctrl-mt6735.c     |  584 +++
+ drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h | 3993 +++++++++++++++++
+ 8 files changed, 4800 insertions(+), 259 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+ create mode 100644 drivers/pinctrl/mediatek/pinctrl-mt6735.c
+ create mode 100644 drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h
 
 -- 
-Thanks,
-Hyeonggon
+2.38.1
+
