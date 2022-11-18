@@ -2,115 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36BF62FBF5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FA562FC00
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242336AbiKRRsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S242246AbiKRRuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235396AbiKRRsD (ORCPT
+        with ESMTP id S234447AbiKRRuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:48:03 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754C55ADD0;
-        Fri, 18 Nov 2022 09:48:02 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AIHlsK3063769;
-        Fri, 18 Nov 2022 11:47:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668793674;
-        bh=A3nwiVPbNBlR3dhAOxqZ5DKYo/hsCFbpVuyuzPtXeas=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=qxEgTIePG4rXEMarwpABpAW4ju+oQynwSWbf6ecxNSkOSMrR15yOj+GUcTKK3Pip3
-         atnVjnVpaneUNbrjTL+2KqyJoHw9kb2fu1TyOLiX3tfRYs/dIicj+BhHnvnuTu8Mi8
-         L7YP2S02k0jsXdGYIswqMLx1/xVCREwpi3S3U9c0=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AIHlsMr038405
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Nov 2022 11:47:54 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
- Nov 2022 11:47:54 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 18 Nov 2022 11:47:54 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AIHlsUr091109;
-        Fri, 18 Nov 2022 11:47:54 -0600
-Date:   Fri, 18 Nov 2022 11:47:54 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Andrew Davis <afd@ti.com>
-CC:     Apurva Nandan <a-nandan@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
+        Fri, 18 Nov 2022 12:50:17 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9313E0B3;
+        Fri, 18 Nov 2022 09:50:16 -0800 (PST)
+Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id A8D66C9C23;
+        Fri, 18 Nov 2022 17:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1668793783; bh=2LIGfJs4mzm0mQHtjJr7PZU9Cns0uXPwNA7w76fWaMQ=;
+        h=From:To:Cc:Subject:Date;
+        b=kUv+AGwFa6i9z13BljzqDSR0a3n4oxSmUSO7HNtWSb5i6gVKCOY1VnMPSp/6AG33c
+         qbSijEGz1vQTaClUQC6yeMnqBnJgV3X3TnaaXybEwuk08yw25smaJ8VVfD18XCCI+g
+         izosl1XQiJPSU9L8HCJFp2ETNk1Pn1kYC3dBKsMs=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-input@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andrew Davis <afd@ti.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, Hari Nagalla <hnagalla@ti.com>
-Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
-Message-ID: <20221118174754.y37pq77drvla2uxj@tinderbox>
-References: <20221116130428.161329-1-a-nandan@ti.com>
- <20221116130428.161329-5-a-nandan@ti.com>
- <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] dt-bindings: input: Convert ti,drv260x to DT schema
+Date:   Fri, 18 Nov 2022 18:48:29 +0100
+Message-Id: <20221118174831.69793-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11:40-20221118, Andrew Davis wrote:
-> On 11/16/22 7:04 AM, Apurva Nandan wrote:
+Convert the drv260x haptics binding to DT schema format.
 
-[...]
+The only notable change from .txt format is that vbat-supply is not
+actually required, so don't make it a required property.
 
-> > +#include <dt-bindings/net/ti-dp83867.h>
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include "k3-j784s4.dtsi"
-> > +
-> > +/ {
-> > +	compatible = "ti,j784s4-evm", "ti,j784s4";
-> > +	model = "Texas Instruments J784S4 EVM";
-> > +
-> > +	chosen {
-> > +		stdout-path = "serial2:115200n8";
-> > +	};
-> > +
-> > +	aliases {
-> > +		serial2 = &main_uart8;
-> 
-> This feels hacky. Your chosen node picks serial2 as that is usually
-> the one that is wired up on K3 boards. But on this board it is main_uart8.
-> So why not have this be serial10, then choose
-> 
-> stdout-path = "serial10:115200n8";
-> 
-> Also, I've made comments on previous version of this series, it is
-> nice to include folks who have commented before in the CC for future
-> versions, that way our filters don't hide these away and we can more
-> easily check that our comments have been addressed.
+Acked-by: Andrew Davis <afd@ti.com>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes in v4:
+* use non-deprecated enable-gpios for 'required' and example
 
-Please stick with the standard of serial2 as the linux console standard.
-We ended up with that to ease up capabilities of various distros to
-uniformly work across SoC and board variants.
+ .../devicetree/bindings/input/ti,drv260x.txt  |  50 --------
+ .../devicetree/bindings/input/ti,drv260x.yaml | 109 ++++++++++++++++++
+ 2 files changed, 109 insertions(+), 50 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.txt
+ create mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.yaml
 
-I do agree that phandle is the wrong approach here (baud etc information
-missing). "serial2:115200n8" is probably the way to do this right.
-
+diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.txt b/Documentation/devicetree/bindings/input/ti,drv260x.txt
+deleted file mode 100644
+index 4c5312eaaa85..000000000000
+--- a/Documentation/devicetree/bindings/input/ti,drv260x.txt
++++ /dev/null
+@@ -1,50 +0,0 @@
+-* Texas Instruments - drv260x Haptics driver family
+-
+-Required properties:
+-	- compatible - One of:
+-		"ti,drv2604" - DRV2604
+-		"ti,drv2605" - DRV2605
+-		"ti,drv2605l" - DRV2605L
+-	- reg -  I2C slave address
+-	- vbat-supply - Required supply regulator
+-	- mode - Power up mode of the chip (defined in include/dt-bindings/input/ti-drv260x.h)
+-		DRV260X_LRA_MODE - Linear Resonance Actuator mode (Piezoelectric)
+-		DRV260X_LRA_NO_CAL_MODE - This is a LRA Mode but there is no calibration
+-				sequence during init.  And the device is configured for real
+-				time playback mode (RTP mode).
+-		DRV260X_ERM_MODE - Eccentric Rotating Mass mode (Rotary vibrator)
+-	- library-sel - These are ROM based waveforms pre-programmed into the IC.
+-				This should be set to set the library to use at power up.
+-				(defined in include/dt-bindings/input/ti-drv260x.h)
+-		DRV260X_LIB_EMPTY - Do not use a pre-programmed library
+-		DRV260X_ERM_LIB_A - Pre-programmed Library
+-		DRV260X_ERM_LIB_B - Pre-programmed Library
+-		DRV260X_ERM_LIB_C - Pre-programmed Library
+-		DRV260X_ERM_LIB_D - Pre-programmed Library
+-		DRV260X_ERM_LIB_E - Pre-programmed Library
+-		DRV260X_ERM_LIB_F - Pre-programmed Library
+-		DRV260X_LIB_LRA - Pre-programmed LRA Library
+-
+-Optional properties:
+-	- enable-gpio - gpio pin to enable/disable the device.
+-	- vib-rated-mv - The rated voltage of the actuator in millivolts.
+-			  If this is not set then the value will be defaulted to
+-			  3.2 v.
+-	- vib-overdrive-mv - The overdrive voltage of the actuator in millivolts.
+-			  If this is not set then the value will be defaulted to
+-			  3.2 v.
+-Example:
+-
+-haptics: haptics@5a {
+-	compatible = "ti,drv2605l";
+-	reg = <0x5a>;
+-	vbat-supply = <&vbat>;
+-	enable-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+-	mode = <DRV260X_LRA_MODE>;
+-	library-sel = <DRV260X_LIB_LRA>;
+-	vib-rated-mv = <3200>;
+-	vib-overdrive-mv = <3200>;
+-}
+-
+-For more product information please see the link below:
+-http://www.ti.com/product/drv2605
+diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.yaml b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
+new file mode 100644
+index 000000000000..c6245c5b9e2e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
+@@ -0,0 +1,109 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/ti,drv260x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments - drv260x Haptics driver family
++
++maintainers:
++  - Andrew Davis <afd@ti.com>
++
++properties:
++  compatible:
++    enum:
++      - ti,drv2604
++      - ti,drv2605
++      - ti,drv2605l
++
++  reg:
++    maxItems: 1
++
++  vbat-supply:
++    description: Power supply to the haptic motor
++
++  # TODO: Deprecate 'mode' in favor of differently named property
++  mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Power up mode of the chip
++      (defined in include/dt-bindings/input/ti-drv260x.h)
++
++      DRV260X_LRA_MODE
++        Linear Resonance Actuator mode (Piezoelectric)
++
++      DRV260X_LRA_NO_CAL_MODE
++        This is a LRA Mode but there is no calibration sequence during init.
++        And the device is configured for real time playback mode (RTP mode).
++
++      DRV260X_ERM_MODE
++        Eccentric Rotating Mass mode (Rotary vibrator)
++    enum: [ 0, 1, 2 ]
++
++  library-sel:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      These are ROM based waveforms pre-programmed into the IC.
++      This should be set to set the library to use at power up.
++      (defined in include/dt-bindings/input/ti-drv260x.h)
++
++      DRV260X_LIB_EMPTY - Do not use a pre-programmed library
++      DRV260X_ERM_LIB_A - Pre-programmed Library
++      DRV260X_ERM_LIB_B - Pre-programmed Library
++      DRV260X_ERM_LIB_C - Pre-programmed Library
++      DRV260X_ERM_LIB_D - Pre-programmed Library
++      DRV260X_ERM_LIB_E - Pre-programmed Library
++      DRV260X_ERM_LIB_F - Pre-programmed Library
++      DRV260X_LIB_LRA - Pre-programmed LRA Library
++    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
++
++  enable-gpio:
++    maxItems: 1
++    deprecated: true
++
++  enable-gpios:
++    maxItems: 1
++
++  vib-rated-mv:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      The rated voltage of the actuator in millivolts.
++      If this is not set then the value will be defaulted to 3200 mV.
++    default: 3200
++
++  vib-overdrive-mv:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      The overdrive voltage of the actuator in millivolts.
++      If this is not set then the value will be defaulted to 3200 mV.
++    default: 3200
++
++required:
++  - compatible
++  - reg
++  - enable-gpios
++  - mode
++  - library-sel
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/input/ti-drv260x.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        haptics@5a {
++            compatible = "ti,drv2605l";
++            reg = <0x5a>;
++            vbat-supply = <&vbat>;
++            enable-gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
++            mode = <DRV260X_LRA_MODE>;
++            library-sel = <DRV260X_LIB_LRA>;
++            vib-rated-mv = <3200>;
++            vib-overdrive-mv = <3200>;
++        };
++    };
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.38.1
+
