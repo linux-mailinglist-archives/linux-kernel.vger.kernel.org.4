@@ -2,238 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5463662FCED
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03C362FCF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242557AbiKRSnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S242524AbiKRSpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 13:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241998AbiKRSnd (ORCPT
+        with ESMTP id S235453AbiKRSpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:43:33 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D2BDEA8;
-        Fri, 18 Nov 2022 10:43:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668797011; x=1700333011;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=AKH3QW+xdz9pfWuxnq0Yjm49R4r0gxyxPM9hCvHwiQI=;
-  b=KPGvJF45vZIBCpr2SOeCVvjEWsljoSRoMQ8ArCwQuKo50Q0ms2nkcPlc
-   j4i7U2nF6wSnGPvYujAMamZK/Yh8xUDiyeQR3QRf835rMWME0jBqi5l//
-   gqv+9XODZO3gCCXd7R9QyOWYYkvjkrgdSytpWMHrROH63S/NACl1zwRyF
-   bPCj7ex36J/G5zRhMer4OrUYcFFiwO5KuMlRMc/eSK6F5DbSddKIqLZ6u
-   wyV765IhrVZHPxNkszgT31Khj+2c5knQ7KaOq07ztQaWUVoa10HSNZOEP
-   Fzm4+HeKb3p2lpg57mZ1G9sLI4s+ZS0E2j98uvswCI2hOyuyw5IC0IZ08
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="313223211"
-X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
-   d="scan'208";a="313223211"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 10:43:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="709126509"
-X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
-   d="scan'208";a="709126509"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Nov 2022 10:43:30 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 10:43:30 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 10:43:29 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 18 Nov 2022 10:43:29 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 18 Nov 2022 10:43:29 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gbbiFj8ApfNzLaSIX0jv78n016XyuwHg51RNEgi0x3x/6WehMyiaf7QJBDESNNaQkdIsxFB+qGWdByyKKI9oeuN+npwcxemHUVV9p8vTJkpXLK/a3biQKGWpz/pu20/UwrMDBnE1YIOYx6RYpwrjTb1gtObctXIlkYIFQCpUrggjLr070mU0gVjiA2MMyvlvwPbELThRl+UlQIsG/s4XoZdauJUegCOgKYcz/7yOQAj3g80uPV+CPr6MBEcHIZgq2djabS6f6XCj6E3actY32vIPGKFVkQ9yJ4Bx5CuOktQUBeCyWcBSvvCRzYYc1ye7fgQwEvGUEVwzwLxSclLueA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YLWC3tY+A1Wiy9qTo8sfQPK9ce59lt1OWmO0SsIWm6c=;
- b=UFHw3vMI0skrdlU8aVwnIYO+8ruLj0H5ToQ6sJkfXVBuf2zMSvgO74K1TerGJP1675ILOfSH7MeiPTjNrp5v8ClJI/g2zTJ6ThOglb/ULKeARtqh6Cf/tpSOPuryXY/OeuW3cdyluGlhi8tSnFMGUBLG8q1KtCiNmyZuYsufRSbrfeCZTXpzVwvkjsufV6liar4HUo6fFFpSIQtzTom9QV+o0gbAAc/uvbnVSgJK1xSxPLon/qmvzFtcSlIrpJCBba81fLFL7z/QgWOP+2+wMz3yLfWGZl7R8xGYt+1SZ6/mRVhCyVR35tsmFLxfSI3c7HB6lhiRJS4MpYw8FrxtvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by SA1PR11MB5778.namprd11.prod.outlook.com (2603:10b6:806:23f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20; Fri, 18 Nov
- 2022 18:43:22 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::5236:c530:cc10:68f]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::5236:c530:cc10:68f%5]) with mapi id 15.20.5813.019; Fri, 18 Nov 2022
- 18:43:22 +0000
-Date:   Fri, 18 Nov 2022 10:43:17 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     David Laight <David.Laight@aculab.com>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Gregory Price <gregory.price@memverge.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2] PCI/DOE: Detect on stack work items automatically
-Message-ID: <Y3fSRbpjeC1CTPA1@iweiny-desk3>
-References: <20221118000524.1477383-1-ira.weiny@intel.com>
- <e59f83f3ca4149d098efe43b48fecd1b@AcuMS.aculab.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <e59f83f3ca4149d098efe43b48fecd1b@AcuMS.aculab.com>
-X-ClientProxiedBy: BYAPR03CA0005.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::18) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Fri, 18 Nov 2022 13:45:06 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510F28F3D4;
+        Fri, 18 Nov 2022 10:45:05 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k7so5314077pll.6;
+        Fri, 18 Nov 2022 10:45:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y3FC0XJuf4EOjB0UhVhwX8fr+UooJnsmWihJCBqUIz4=;
+        b=EDijdibNtrt0r2PUujqwuKpc5+fxdKcSgLzUrFqiJ+soe4YmUYa37QLundGOwKkeM0
+         xUzkQRVVn6tMZu0lG4qi1n5S103XuHLj5aJ7lD3G808EZnO/DjcC/xjbGO+D4wQlln2V
+         DuDcVo13EXKxw9Q3mNED8NveQfjELbJLfHd7YtDo0j1+H+wVyPrEQ6Pbb7kPmwYZIiE9
+         JoGO62XClWkVYj55WmibHFmh2LhX5NDJjrVZmKPZjQRt58742YGeCV4f3fTmGuAotBpk
+         Yg4MhSeeTizqhNrUxKTi/sHEJpnws7W7Hq0eGhqcRXXAC0+bg7o4327XkZKy4kgPFpsI
+         Nuzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y3FC0XJuf4EOjB0UhVhwX8fr+UooJnsmWihJCBqUIz4=;
+        b=VGObwPk12uKa2mitOMgr9LlUSvDsubp11KfyK2ecwamnknuGXtrRcO+54E+5mj5Y15
+         QZSagsGor86DkxW4dHfU3+b4WNLKboTXJZltnvvP4MK7rbzfkFzbe1w6WNi8Gb7MlKcC
+         Ah5incxnyNFmfSVk4UNsEI8Aene7WW0TSP+BcYVNQOcQUVErXXEOJJ7HZEgYXM+YC8sO
+         6EWNGPkteQ/KK+FMJiFeewKVjKyQwuz84RmU1S3zgR6v3lkvleGhvrv9VDOUVlpsmJ6x
+         5GjSpVOQ/uUyna08yDeZtV+fa+P+KGfZ90QEL1tawpy2Ybzo3IyAQYvZ1VuNTQMe8zx6
+         c0Sg==
+X-Gm-Message-State: ANoB5pmbtmlFUBJQSCZK/YwmNAyBOndYXzKN5yPsYMslA6csyzSVBjsc
+        YMVa2vy5LSMcmF+E/pLkHKMEp+t+9Gc=
+X-Google-Smtp-Source: AA0mqf5vyLSnR7kLaFOH8EJwldNPEbFUubg5+mavZdX+6X6xofMn3D+5Po0moviBFLyceCHDdyV0+A==
+X-Received: by 2002:a17:90b:3547:b0:212:d6ed:cdf5 with SMTP id lt7-20020a17090b354700b00212d6edcdf5mr8740636pjb.142.1668797104655;
+        Fri, 18 Nov 2022 10:45:04 -0800 (PST)
+Received: from MacBook-Pro-5.local ([2620:10d:c090:500::4:6663])
+        by smtp.gmail.com with ESMTPSA id i9-20020a17090332c900b00188a1ae94bbsm4156050plr.23.2022.11.18.10.45.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 10:45:03 -0800 (PST)
+Date:   Fri, 18 Nov 2022 10:45:00 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
+        yhs@fb.com, song@kernel.org, sdf@google.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
+        haoluo@google.com, tj@kernel.org, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 1/3] bpf: Allow trusted pointers to be passed
+ to KF_TRUSTED_ARGS kfuncs
+Message-ID: <20221118184500.yshwvcrx2a34xkmc@MacBook-Pro-5.local>
+References: <20221117032402.2356776-1-void@manifault.com>
+ <20221117032402.2356776-2-void@manifault.com>
+ <20221118022640.borhn6iy4v2fhl7g@MacBook-Pro-5.local>
+ <Y3eamIVUVb6V47LF@maniforge.lan>
+ <Y3e2sdqL1E0SKJ5/@maniforge.lan>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|SA1PR11MB5778:EE_
-X-MS-Office365-Filtering-Correlation-Id: d0989892-ecc5-4e85-e115-08dac994c51e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dNrBIPMgKPSGn3X1cjsM8a8kQRr1eGHQ2kXdwEiRLbX7QA30Tby8m64JE91LZgQVkawESW/dIPEublsHI2MDUSrPqCc2Eqm8AzbYpAaxDQ9Mz8qVJSV9VcCAxrDUoi5DeKj1VNrf5fnDa8XZRL/TkuZ3XRDxKP+LEdaHqpluDT+O/5VnpmXOc3b/f854epsEEEjVJAgfnOLXYYgVV3YvogNRW4u2X8C1nv3IwKD2zUA+u2xtTAIBCxIBGWMe507VASFeyd0Lew7QcoKx3yKKpHsmKbujjlY/k79Rsx4Wpps2ZDeVTF8Z+AIYzz7wIaA+u8ytwpxNqfacCs3lg8xaN2KNZhPI5O+phoIQbOq62KpE8Goify8gMjfxI5Afg2MYnMnRL0AGTQ+PhmYyT2u/ylQ8zRU4+RG0swBMUND1JR+KItaceVUldIGVg8qnmePlaaET1FyLuLHF0/p0ivOHoraER8n1fkXFGQynrQR5Ved4jrcyKiijYlbQKym1fOyhYixWYWImWk1f+qOZJKk2AJli9hLnnVN5eJ2+QoW5hgNlhDN2AI1T+I9sJWWGqY0UPp31jnZyl9VsnY32r/V3HxZxLCHYySi8ImMhZcJR+UjT5Gpt1B9pTJ9gU8zupeP+NJJjRThVIQ9rumBUg404uIQoQIN2zWe8x3BN7mjxN3E=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(39860400002)(346002)(396003)(136003)(376002)(451199015)(2906002)(86362001)(26005)(6666004)(33716001)(6506007)(9686003)(6512007)(44832011)(66946007)(5660300002)(66476007)(4326008)(8676002)(66556008)(8936002)(41300700001)(316002)(6916009)(82960400001)(38100700002)(478600001)(6486002)(83380400001)(966005)(54906003)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5j+Po0k5OF46Dp+UDAlfDSMGNqvb/UZtvDGBRjIYhQC05Rgr+UoiuRnYGoh/?=
- =?us-ascii?Q?l4AQuWpOTfz5HeOka32JJNSyTvA88ZddyU4jEQHvMHCSpgAzTx+0RzLGt3oE?=
- =?us-ascii?Q?sfybnuI7u3j+y8QW7X3c02UNoLG/fPTabIJj51c7zVvM3kguiipdBgp2yyKE?=
- =?us-ascii?Q?aPCtsUwbYMYkJgAJpXpG6vRrfGKxDcRRE6GQFn09iFGgrDm9h3gzCRQ+9XkV?=
- =?us-ascii?Q?d9ySkoq4l9jqqyvbs0cdRWD0oRVcf9spIvceODWip1GBOPoqIPFneO6PyKTn?=
- =?us-ascii?Q?Q/sYiiSIbe1EkOF3EB6eoWX34XjtBYya8z1CJ4/atF3nhkI773CK1hvcMC/T?=
- =?us-ascii?Q?uy2kPbgwxH1VdAbD73BV9zMmqbt15u0LcdgzDyszhZw0UKEngPbPr6WjaQtH?=
- =?us-ascii?Q?5x4V7YGIu2zCh1APR+6a103QUyZ0eGBspV2JyFVzaPQfQnT7J6iKe64bsQTi?=
- =?us-ascii?Q?P96IrQcGwHNrJC7Me+4Wz1C3jpI/fkaRP2Yjiw2HnuXHiBkgODphOz/QTsFG?=
- =?us-ascii?Q?RgHj0prqSi5h6Eds1JeNZq3sbj8FXBy3QmjYF+g8iB9I/5xzElnSMAKuHBvU?=
- =?us-ascii?Q?936xjL4oncqw7OXwom6yqPsAau+CU31qnRi1ObWRXvVkSBTamhSPepMcfJid?=
- =?us-ascii?Q?dwJ5X8UfinlNIV+O+YpiE0j+H147VlYxcyPsj1diJTC4jq9IwtHBznJaUnfv?=
- =?us-ascii?Q?1bQ8r7UyT08FAhI1KaI2rfByQZ1HXsoWTmj9mPxANmKQOq1O5PLFRhx6U3df?=
- =?us-ascii?Q?wQ4iIIPrSJkXpy8+3L2h08czrnUE0IFi8CAiy9/S1NO1mpy82dAhGvng3Ngr?=
- =?us-ascii?Q?w94a43bNWgfHeRMyttzzBtErqfF/+XR+GQLHR46fAqoOPiYgRMIoa307yoK9?=
- =?us-ascii?Q?ATVXF/8U4/kWEQV9Rx55iX8Mg7k8uhgy5Yjw5rqEPholWaSYd3J9+NIlHUNg?=
- =?us-ascii?Q?uitgLDE1CPCEE+9caHFePJuuo91/9FOH4paDnY4teG0uufCagKY+apX+4OFV?=
- =?us-ascii?Q?TUWqG5eRzJ0LtHGCxgZAo18dtR1TWutzAOpyFjIX845ALIbd4zL0QaRdXTKg?=
- =?us-ascii?Q?CUxoaV3ijbSw/BbMfUyZE+pdTERedAI38XfkLOWlqI8MPF3X0CHolVdx+je+?=
- =?us-ascii?Q?I70lIhpIFEoU1g0HZ/40yvIrqGcQG/m0wdYR8n7bCYQypmjj0dRKiGGBotlT?=
- =?us-ascii?Q?nJKMJ6ARA0hDn9ND/sJBsczQIoOGxWxVXkIyUvffdmIDWxAFnN4c+bUAciye?=
- =?us-ascii?Q?vVlQ7LQiFP8GrwPJ63j4AbSkg9MWaI2n00UydC77SAXFn3kvYJdlr/meVKiy?=
- =?us-ascii?Q?Pq+XACtAoKCgAY84BNgoQFzCUFkWlYyiZVXjCkzojzPQXyMaZax93CfSjh6Y?=
- =?us-ascii?Q?39ztGo0suNIQc8qrzZ0sm7H3Mr1DCg+dOjZ2R02zu8vun3PPdg1orZhJfMd3?=
- =?us-ascii?Q?lkHPNGxot4EGqSzzaBamn3qknSIdk64QMN1Hyx2TOGhvZq2cqjrZH7IlY+gZ?=
- =?us-ascii?Q?U0pS8s1m2zgtZYsCEi7DMbTPsDnKOflLvd/Lyv2SC70f7+/pZ+B1ZPY9egX/?=
- =?us-ascii?Q?rlDk5PGTLBeyxDZRZyB5aAvW3pX85r6hrX/TNdV9?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0989892-ecc5-4e85-e115-08dac994c51e
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 18:43:22.8011
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 84qS8s2OCS1s0MdQ7rT7KawXhP1LD3tx7cD8zl+n7g9XTE7MzYgusGPWNyuU4NtAHFG9LIxTKjX6OSPugaWNDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB5778
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3e2sdqL1E0SKJ5/@maniforge.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 09:20:38AM +0000, David Laight wrote:
-> From: ira.weiny@intel.com
-> > Sent: 18 November 2022 00:05
-> > 
-> > Work item initialization needs to be done with either
-> > INIT_WORK_ONSTACK() or INIT_WORK() depending on how the work item is
-> > allocated.
-> > 
-> > The callers of pci_doe_submit_task() allocate struct pci_doe_task on the
-> > stack and pci_doe_submit_task() incorrectly used INIT_WORK().
-> > 
-> > Jonathan suggested creating doe task allocation macros such as
-> > DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this is the work
-> > function is not known to the callers and must be initialized correctly.
-> > 
-> > A follow up suggestion was to have an internal 'pci_doe_work' item
-> > allocated by pci_doe_submit_task().[2]  This requires an allocation which
-> > could restrict the context where tasks are used.
-> > 
-> > Another idea was to have an intermediate step to initialize the task
-> > struct with a new call.[3]  This added a lot of complexity.
-> > 
-> > Lukas pointed out that object_is_on_stack() is available to detect this
-> > automatically.
-> > 
-> > Use object_is_on_stack() to determine the correct init work function to
-> > call.
+On Fri, Nov 18, 2022 at 10:45:37AM -0600, David Vernet wrote:
+> On Fri, Nov 18, 2022 at 08:45:44AM -0600, David Vernet wrote:
 > 
-> This is all a bit strange.
-> The 'onstack' flag is needed for the diagnostic check:
-> 	is_on_stack = object_is_on_stack(addr);
-> 	if (is_on_stack == onstack)
-> 		return;
-> 	pr_warn(...);
-> 	WARN_ON(1);
+> [...]
 > 
+> > > >  bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+> > > >  		    const struct bpf_prog *prog,
+> > > >  		    struct bpf_insn_access_aux *info)
+> > > > @@ -5722,6 +5727,9 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+> > > >  	}
+> > > >  
+> > > >  	info->reg_type = PTR_TO_BTF_ID;
+> > > > +	if (prog_type_args_trusted(prog->type))
+> > > > +		info->reg_type |= PTR_TRUSTED;
+> > > > +
+> > > >  	if (tgt_prog) {
+> > > >  		enum bpf_prog_type tgt_type;
+> > > >  
+> > > > @@ -6558,15 +6566,26 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> > > >  		/* These register types have special constraints wrt ref_obj_id
+> > > >  		 * and offset checks. The rest of trusted args don't.
+> > > >  		 */
+> > > > -		obj_ptr = reg->type == PTR_TO_CTX || reg->type == PTR_TO_BTF_ID ||
+> > > > +		obj_ptr = reg->type == PTR_TO_CTX ||
+> > > > +			  base_type(reg->type) == PTR_TO_BTF_ID ||
+> > > >  			  reg2btf_ids[base_type(reg->type)];
+> > > >  
+> > > >  		/* Check if argument must be a referenced pointer, args + i has
+> > > >  		 * been verified to be a pointer (after skipping modifiers).
+> > > >  		 * PTR_TO_CTX is ok without having non-zero ref_obj_id.
+> > > > +		 *
+> > > > +		 * All object pointers must be refcounted, other than:
+> > > > +		 * - PTR_TO_CTX
+> > > > +		 * - PTR_TRUSTED pointers
+> > > >  		 */
+> > > > -		if (is_kfunc && trusted_args && (obj_ptr && reg->type != PTR_TO_CTX) && !reg->ref_obj_id) {
+> > > > -			bpf_log(log, "R%d must be referenced\n", regno);
+> > > > +		if (is_kfunc &&
+> > > > +		    trusted_args &&
+> > > > +		    obj_ptr &&
+> > > > +		    base_type(reg->type) != PTR_TO_CTX &&
+> > > > +		    (!(type_flag(reg->type) & PTR_TRUSTED) ||
+> > > > +		     (type_flag(reg->type) & ~PTR_TRUSTED)) &&
+> > > > +		    !reg->ref_obj_id) {
+> > > 
+> > > This is pretty hard to read.
+> > > Is this checking:
+> > > !(reg->type == PTR_TO_BTF_ID || reg->type == (PTR_TO_BTF_ID | PTR_TRUSTED))
+> > > ?
+> > > 
+> > > Why not to use the above?
+> > 
+> > Agreed this is more readable, I'll do this for v8 (from a helper as you
+> > suggested).
+> 
+> Sorry, my initial response was incorrect. After thinking about this
+> more, I don't think this conditional would be correct here:
+> 
+> 	!(reg->type == PTR_TO_BTF_ID || reg->type == (PTR_TO_BTF_ID | PTR_TRUSTED))
+> 
+> That conditional is saying, "If it's PTR_TO_BTF_ID, and either no
+> modifiers are set, or PTR_TRUSTED is set". Or in other words, "If
+> PTR_TO_BTF_ID is set, we don't need a refcount check unless a modifier
+> other than PTR_TRUSTED is set on the register." This is incorrect, as it
+> would short-circuit out of the check before !reg->ref_obj_id for
+> reg->type == PTR_TO_BTF_ID, so we would skip the reference requirement
+> for normal, unmodified PTR_TO_BTF_ID objects. It would also cause us to
+> incorrectly _not_ skip the ref_obj_id > 0 check for when a
+> reg2btf_ids[base_type(reg->type)] register has the PTR_TRUSTED modifier.
+> 
+> What we really need is a check that encodes, "Don't require a refcount
+> if PTR_TRUSTED is present and no other type modifiers are present",
+> i.e.:
+> 
+> 	!(type_flag(reg->type) & PTR_TRUSTED) || (type_flag(reg->type) & ~PTR_TRUSTED)
+> 
+> My intention was to be conservative here and say "only trust PTR_TRUSTED
+> if no other type modifiers are set". I think this is necessary because
+> other type modifiers such as PTR_UNTRUSTED could theoretically be set on
+> the register as well. Clearly this code is pretty difficult to reason
+> about though, so I'm open to suggestions for how to simplify it.
+> 
+> I'll point out specifically that it's difficult to reason about when
+> modifiers are or are not safe to allow. For example, we definitely don't
+> want to skip the refcount check for OBJ_RELEASE | PTR_TRUSTED, because
 
-:-(
+OBJ_RELEASE cannot be part of reg flag.
+It's only in arg_type.
 
-> So setting the flag to the location of the buffer just subverts the check.
-> It that is sane there ought to be a proper way to do it.
+Anyway Kumar's refactoring was applied the code in question looks different now:
+It would fall into this part:
+case KF_ARG_PTR_TO_BTF_ID:
+        /* Only base_type is checked, further checks are done here */
+        if (reg->type != PTR_TO_BTF_ID &&
+            (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
+                verbose(env, "arg#%d expected pointer to btf or socket\n", i);
+                return -EINVAL;
+        }
+        ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i);
 
-Ok this brings me back to my previous point and suggested patch.[*]  The
-fundamental bug is that the work item is allocated in different code from
-the code which uses it.  Separating the work item from the task.
+> if it's a release arg it should always have a refcount on it.
+> PTR_UNTRUSTED | PTR_TRUSTED would also make no sense. MEM_FIXED_SIZE
+> though seems fine? In general, I thought it was prudent for us to take
+> the most conservative possible approach here, which is that PTR_TRUSTED
+> only applies when no other modifiers are present, and it applies for all
+> obj_ptr types (other than PTR_TO_CTX which does its own thing).
 
-[*] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m63c636c5135f304480370924f4d03c00357be667
-
-Bjorn would this solution be acceptable and just use GFP_KERNEL and mark the
-required context for pci_doe_submit_task()?
-
-> OTOH using an on-stack structure for INIT_WORK seems rather strange.
-> Since the kernel thread must sleep waiting for the 'work' to complete
-> why not just perform the required code there.
-
-It is not strange if some task submitters want to wait while others do not.  It
-was suggested that all submit task operations be async and the callers who
-wanted to be synchronous would wait like this.
-
-As Dan said there is a difference between submit_bio() and submit_bio_wait().
-
-We have simply left the wait part up to the users who all wait right now.
+Probably worth refining when PTR_TRUSTED is cleared.
+For example adding PTR_UNTRUSTED should definitely clear it.
+MEM_ALLOC flag is probably equivalent to PTR_TRUSTED.
+Maybe the bit:
+regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
+should set PTR_TRUSTED as well?
 
 > 
-> Also you really don't want to OOPS with anything from the stack
-> linked into global kernel data structures.
+> Note as well that this check is different from the one you pointed out
+> below, which is verifying that PTR_TRUSTED is the only modifier for both
+> reg2btf_ids[base_type(reg->type)] and base_type(reg->type) ==
+> PTR_TO_BTF_ID.  Additionally, the check is different than the check in
+> check_reg_type(), which I'll highlight below where the code is actually
+> modified.
 
-I'm not following what you mean here.  I'm not seeing anything like this in the
-current code nor any of the solutions suggested.
+I'm mainly objecting to logic:
+!(type_flag(reg->type) & PTR_TRUSTED) || (type_flag(reg->type) & ~PTR_TRUSTED)
 
-Ira
+which looks like 'catch-all'.
+Like it will error on MEM_ALLOC which probably not correct.
+In other words it's 'too conservative'. Meaning it's rejecting valid code.
 
-> While wait queues are pretty limited in scope and probably ok,
-> this looks like a big accident waiting to happen.
+> > > >  
+> > > >  found:
+> > > > -	if (reg->type == PTR_TO_BTF_ID) {
+> > > > +	if (base_type(reg->type) == PTR_TO_BTF_ID && !(type_flag(reg->type) & ~PTR_TRUSTED)) {
 > 
-> 	David
+> As mentioned above, this check is different than the one we're doing in
+> btf_ctx_access() when determining if the reg requires a ref_obj_id > 0.
+> This check is actually doing what you originally suggested above:
 > 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> if (reg->type == PTR_TO_BTF_ID || reg->type == (PTR_TO_BTF_ID | PTR_TRUSTED))
 > 
+> I think what you wrote is more readable and am happy to apply it to this
+> check in v8, but unfortunately I don't think we really have an
+> opportunity to avoid code duplication here with a helper (though a
+> helper may still improve readability).
+
+ok. forget the helper. open coding all conditions is probably cleaner,
+since they will be different in every case.
+
