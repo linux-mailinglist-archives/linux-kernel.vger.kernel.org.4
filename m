@@ -2,148 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD0262F35F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF2E62F3AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241935AbiKRLKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:10:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
+        id S241589AbiKRLc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241819AbiKRLJi (ORCPT
+        with ESMTP id S241743AbiKRLcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:09:38 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238149A5E0;
-        Fri, 18 Nov 2022 03:09:34 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NDDZJ2FGCz4f3jZ3;
-        Fri, 18 Nov 2022 19:09:28 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP1 (Coremail) with SMTP id cCh0CgBXTq3pZ3djfEnGAg--.30577S4;
-        Fri, 18 Nov 2022 19:09:31 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     ming.lei@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH RFC] scsi: core: remove unsed 'restarts' from scsi_device
-Date:   Fri, 18 Nov 2022 19:30:52 +0800
-Message-Id: <20221118113052.1324140-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 18 Nov 2022 06:32:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79969A24F;
+        Fri, 18 Nov 2022 03:31:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 545B4B8232A;
+        Fri, 18 Nov 2022 11:31:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B769BC433C1;
+        Fri, 18 Nov 2022 11:31:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668771102;
+        bh=rbpo0ScAYpQED/teVdJYvfJZ7RXLiDQyTZjVVIexQgI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bw40giz/fVxmMTSwfCPwj3e6OCDgcHPsfE3AB1/prTpcHY7B7eKMiDNFgWXklVbwY
+         ZI0oTzkvsjQ1l7gEk2myjo+ditK8V2pwqrGqeWQD5Kod5XggpD+7VK5VvlNRizCe/G
+         S8b64P8FNiy+U+bPaOGS/IPEuelGW0/BBwxLuJK5XiAjB8Pzgtiz4tbNpFnloEpAy3
+         83Km4u0SStNXtFT9N/QFcCNqNch45EdQE5LH26T1XjWxg+1HEd6dzOsGfF86kAyZ/b
+         nXrySLnxv6GFL4LOcmofgUcjQr3009tMYx0BGb5VUziS0MnUU/wk6lL0LfWFxYs7FK
+         l3ojYiEIY/I2Q==
+Date:   Fri, 18 Nov 2022 11:31:36 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] dt-bindings: riscv: Add StarFive JH7110 SoC and
+ VisionFive2 board
+Message-ID: <Y3dtGMwjqzebblDA@spud>
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-2-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgBXTq3pZ3djfEnGAg--.30577S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF1xZrW3tFykAF45WFy5XFb_yoW5ZFWfp3
-        9IqanIyrWfWr48W3s5Xr4UXF1Yg3yj9345WFWxK34rWasFkryrAw1ktr15XFy8JrWvyF1D
-        AFsrZFWkWr4qqrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUym14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-        14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118011714.70877-2-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On Fri, Nov 18, 2022 at 09:17:07AM +0800, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+> 
+> Add device tree bindings for the StarFive JH7110 RISC-V SoC [1]
+> and the VisionFive2 board [2] equipped with it.
+> 
+> [1]: https://doc-en.rvspace.org/Doc_Center/jh7110.html
+> [2]: https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
 
-During code review, I found that 'restarts' is not useful anymore after
-the following commits:
+Could you make these two into "Link:" tags please?
+Otherwise,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-1) commit ab3cee3762e5 ("blk-mq: In blk_mq_dispatch_rq_list() "no budget"
-is a reason to kick")
-2) commit d3b38596875d ("blk-mq: run queue no matter whether the request
-is the last request")
-3) commit 673235f91531 ("scsi: core: Fix race between handling STS_RESOURCE
-and completion")
-
-Now that if get budget ever failed, block layer will make sure to
-trigger new run queue for the hctx. Hence there is no need to run queue
-from scsi layer in this case.
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- drivers/scsi/scsi_lib.c    | 35 -----------------------------------
- include/scsi/scsi_device.h |  1 -
- 2 files changed, 36 deletions(-)
-
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 56f641ba1261..f6325a0f80fb 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -507,24 +507,6 @@ static void scsi_run_queue_async(struct scsi_device *sdev)
- 	if (scsi_target(sdev)->single_lun ||
- 	    !list_empty(&sdev->host->starved_list)) {
- 		kblockd_schedule_work(&sdev->requeue_work);
--	} else {
--		/*
--		 * smp_mb() present in sbitmap_queue_clear() or implied in
--		 * .end_io is for ordering writing .device_busy in
--		 * scsi_device_unbusy() and reading sdev->restarts.
--		 */
--		int old = atomic_read(&sdev->restarts);
--
--		/*
--		 * ->restarts has to be kept as non-zero if new budget
--		 *  contention occurs.
--		 *
--		 *  No need to run queue when either another re-run
--		 *  queue wins in updating ->restarts or a new budget
--		 *  contention occurs.
--		 */
--		if (old && atomic_cmpxchg(&sdev->restarts, old, 0) == old)
--			blk_mq_run_hw_queues(sdev->request_queue, true);
- 	}
- }
- 
-@@ -1666,23 +1648,6 @@ static int scsi_mq_get_budget(struct request_queue *q)
- 	if (token >= 0)
- 		return token;
- 
--	atomic_inc(&sdev->restarts);
--
--	/*
--	 * Orders atomic_inc(&sdev->restarts) and atomic_read(&sdev->device_busy).
--	 * .restarts must be incremented before .device_busy is read because the
--	 * code in scsi_run_queue_async() depends on the order of these operations.
--	 */
--	smp_mb__after_atomic();
--
--	/*
--	 * If all in-flight requests originated from this LUN are completed
--	 * before reading .device_busy, sdev->device_busy will be observed as
--	 * zero, then blk_mq_delay_run_hw_queues() will dispatch this request
--	 * soon. Otherwise, completion of one of these requests will observe
--	 * the .restarts flag, and the request queue will be run for handling
--	 * this request, see scsi_end_request().
--	 */
- 	if (unlikely(scsi_device_busy(sdev) == 0 &&
- 				!scsi_device_blocked(sdev)))
- 		blk_mq_delay_run_hw_queues(sdev->request_queue, SCSI_QUEUE_DELAY);
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 24bdbf7999ab..66345de80897 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -115,7 +115,6 @@ struct scsi_device {
- 	struct sbitmap budget_map;
- 	atomic_t device_blocked;	/* Device returned QUEUE_FULL. */
- 
--	atomic_t restarts;
- 	spinlock_t list_lock;
- 	struct list_head starved_entry;
- 	unsigned short queue_depth;	/* How deep of a queue we want */
--- 
-2.31.1
-
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/starfive.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/starfive.yaml b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> index 5b36243fd674..64008c57e31f 100644
+> --- a/Documentation/devicetree/bindings/riscv/starfive.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> @@ -22,6 +22,10 @@ properties:
+>            - const: beagle,beaglev-starlight-jh7100-r0
+>            - const: starfive,jh7100
+>  
+> +      - items:
+> +          - const: starfive,visionfive-v2
+> +          - const: starfive,jh7110
+> +
+>  additionalProperties: true
+>  
+>  ...
+> -- 
+> 2.38.1
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
