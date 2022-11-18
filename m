@@ -2,134 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8B162FE7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745C062FE86
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 21:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbiKRUDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 15:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S231455AbiKRUEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 15:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiKRUDa (ORCPT
+        with ESMTP id S229763AbiKRUEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 15:03:30 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EC513CE4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:03:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QVeNucwssZGfzY3+AZZ0zeTkjwuviNhS6BHJKZxC9kLqjsTXhsw1vq7Tv8fnLamB14+LIqodgqBRU4pemjXAzZxKSMaqnCwrdR8w+j3TLcAF53BvfrG9RRgpj3SHTu9HEKsre4cBuuS3ciTAPTbpWfjLybUfxRoaYgf2VCTXHbRlgQjMokBXptmYRj1kZd1eXUT1NBaSMushIjIvSLEomzR0ToiknT9/NylqfuFPLojIDkgFdbouAbDy4FvRKtait5l8bElWsHSSScZoAcynVuCVj8u0IVsaJ1UExHleR4Y3QQ4JSrIDzgoVwMr1m/pZwqZDbB8zdMVkO/lrSHnJqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qFJB86B9ZBYA7ZjpupTspgY4fsa6DOadxe9kGeokKPs=;
- b=WWfESxSRfcC1eBWxYnQNPu4KKa8RTnPy8K67CopDir5P0gX/Bu7/24pYA6rTiHlIVRZ8rF5oOZBW8sRrGHcy6al9y5FEz6/2hAii1UbAtJdoqXp4nIv05mJWm9YHKkRyR5T3z3C/ASfCkk/rDaEpT+7NByE3rMIiFX76lc7bK/d9pIa9W8qRtYwEsWawKhvBF6eqZL8Z3n1gtFZq07VHd9kTESxeQ7vP4cciC67txH2m19sN/e50gxPZ1BKtz7zkSVV3ScOwui3ebhCFkoZ96ceyMuUCFsK4IcL4pa+aTk+juN+nFTN9rtMYW07bFnUIbF79y6j+JO90hf71l782Sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qFJB86B9ZBYA7ZjpupTspgY4fsa6DOadxe9kGeokKPs=;
- b=rnMddoYJTBU18KeAQ1NF+cuky8EZdsig1kd1dVLvckHDBWmga4pV+GiQ2Mbfsc2F4YSOp4ae8AxMSMFpMy1THHqGZ8ugXBbESYt7p9Sda9+t5DAu1sJLdRyMnezAlLz+Oaaml9s0x40uhV4MbrntfgWp0CmjRzKKFTPzAS/j3L8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by DM4PR12MB7646.namprd12.prod.outlook.com (2603:10b6:8:106::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20; Fri, 18 Nov
- 2022 20:03:27 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::2d6a:70d0:eb90:9dca]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::2d6a:70d0:eb90:9dca%8]) with mapi id 15.20.5813.019; Fri, 18 Nov 2022
- 20:03:27 +0000
-Message-ID: <b7c8a41d-6657-2646-4f18-ed13293369b2@amd.com>
-Date:   Fri, 18 Nov 2022 15:03:22 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] drm/amdgpu/dm/mst: Fix uninitialized var in
- pre_compute_mst_dsc_configs_for_state()
-Content-Language: en-US
-To:     Lyude Paul <lyude@redhat.com>, amd-gfx@lists.freedesktop.org
-Cc:     Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        hersen wu <hersenxs.wu@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roman Li <Roman.Li@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221118195406.95779-1-lyude@redhat.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20221118195406.95779-1-lyude@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4P288CA0002.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:d4::6) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Fri, 18 Nov 2022 15:04:43 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B2C2A3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:04:41 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id p8so3418305qvn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 12:04:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SnH+UGx6+sixESVz7YWSOh6Sim/QTDifgTL6tzstjgA=;
+        b=DRWPND7gokcVicYVOXrukH04arSMoUahVZMMvUuh/RZt1CvnZFSwMWfFrl1QuagkEO
+         4IjO4oIV1BjTQCV0spRV/0O4t4cHZRBC4h6d0t77WIEXWlzt/p6E7fmbLczkx83ORg+3
+         9dx+ArTvBbihStU79hog4sLh8bQ5/lblrBt+E8qj9ExOS8QaFauZF7UeflI4msz+RuTE
+         Z7DGKxt3qghkgGm+EznYjml/czTKqLXhCS0pnS/7dNxVWEYAoXqjglKdSOoY4RME3egL
+         NbO6T82tPvXEWS+KmDaKV7mpwcfeer+q6zPQNk6ss8XwL9UaRnIdC/nkeyJA7zB8/NbP
+         85fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SnH+UGx6+sixESVz7YWSOh6Sim/QTDifgTL6tzstjgA=;
+        b=nleQ43SD9vVGKglcgDMleusxmEq7gkZs0MZMUuTeYtF9iYbygCWnNOHN8Qu8nofY24
+         Ez9iNoVDWCOS4KPV5OsWL8Xcz+S6KgjczLNqaEJIEx3BBARJ7c7Unhet5G16I/uqnDzo
+         QzdqaQ6lOqbO+8tid0sx8251oSJLWMkj2Um1sA4pEh6aWmHkqWLhR45eGQAi6d/CwJQM
+         +40l80U2e59iCwIsM25TxnPA80yQcaITRyfgxKvwXi4CoS4diI94ix7JdAYh2KeM7614
+         yq/t87yaZyAsUIgV3bb7rkU1opV1JrypryoBK1afI084Len5BReiejAuj0lPq61WggIG
+         ZEgA==
+X-Gm-Message-State: ANoB5pn3oaKHVHn1WFlZqX6czJ39ZrgPkgD82+S06GnwmXUoU9qd012z
+        jGsiWDtez0fotyqgGcRL1ePwkg==
+X-Google-Smtp-Source: AA0mqf53XtBWr5U1zPbvI6iymbL1muAxR7LyTGqpMGH2buD3DhgLQS922JiRBZu4ZwalPNGfmukrLQ==
+X-Received: by 2002:a05:6214:162e:b0:4c6:57f1:3514 with SMTP id e14-20020a056214162e00b004c657f13514mr8140454qvw.87.1668801880681;
+        Fri, 18 Nov 2022 12:04:40 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id d7-20020ac86147000000b003a5c60686b0sm2564105qtm.22.2022.11.18.12.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 12:04:40 -0800 (PST)
+Date:   Fri, 18 Nov 2022 15:05:04 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v5 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
+ zspages in LRU order
+Message-ID: <Y3flcAXNxxrvy3ZH@cmpxchg.org>
+References: <20221118182407.82548-1-nphamcs@gmail.com>
+ <20221118182407.82548-5-nphamcs@gmail.com>
+ <Y3fdsTDFgCzhcDwo@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|DM4PR12MB7646:EE_
-X-MS-Office365-Filtering-Correlation-Id: 119e1b1b-f5e7-4297-34fc-08dac99ff49e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EJAZtF5RwLoKJYyyNcMIBSqRWkTr4sKRRJcq5nHAMziusci/e2VLR7RykeH9bA6DmDN0v8hbU9TkSQq9PL68W+zvAMSyCAB1USiBV6HDm7brtypd3Q3UvJguctp5BItSmwjUOl26om3OFWBA5adnHUikA9Gt3W2OleosNA9IFwzbg/BOxjAy9C9tVtVQ7k6IMSaJZht3Eib40UnwEWSLjrW22I3PYTUj92eOWMq/P7iGY87HaQERByWn8ACATlTeOystAVNIPpIa1tdLru4kRDOdYSTvGWeLngXfWv6j5HAIfDX0vBcrytaqCYKRnxi8ehgUSy9tdtYO5nMbQxrM5+1pk2rSFk6w+oytbn1uD6Yh3WmIG952fqxCidsXQQrNZdA6OQqR0Iw2aKypAuQWuElXKXrNyqOvJIbDlYv2/G5XDHHRMLO437JXX5cZX3C1ZqHBAOMK5w5KWaitz5QUzdBLjoFcthkn2K1aXgNF8VqOksAPNomiV/mbcIBQMFG5UsScvIkfUWq2jGOT29fypuvUfzYDjikpurD481WfM+shk+FaAkdfMTiUoEox0dciyeanQ7usvRQZZutjxLbS6jCTWmtQ8W6U+FTOtZ3tDQGSbf1jBc9kQQaiZCFKqdESaPA0PdGEesLFTiDj7ApGENxcU8eZIdvxqSJ6ye/nz0FQrMKR/Pl8A7/zZ11XQBToQ8LvHkzXZZBXeYLFwGcMClAbgBxDT9fbATWY6ILSs7U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199015)(31686004)(36756003)(38100700002)(66476007)(2906002)(41300700001)(44832011)(4744005)(83380400001)(86362001)(66946007)(31696002)(6512007)(4326008)(186003)(26005)(316002)(6486002)(8676002)(54906003)(5660300002)(8936002)(66556008)(2616005)(478600001)(6506007)(53546011)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?azhzWm1KM25CeFZ1N25jMkFLSXVMZ3VWWjhRb3M1MnFzMTFobERMOTBDbS9L?=
- =?utf-8?B?ZTlmMERYelVuNjBzY2JxNEllKzh6ZTZ0MWtZOWF2Mzg3WlVkemE3SWVvUDNz?=
- =?utf-8?B?MW1aeVovRGVMTHROdy9uUUtEYWdoVzBZVTN1TnBhc3h2NzlxUFpaakt3RENq?=
- =?utf-8?B?b0dTNTFYRENHSkVuR2M4Q1d3amRSWm44UHVFNCtMNTN6dGhqUVJFd0pHRjhS?=
- =?utf-8?B?ckFWeDZia3dCT0Q2VFJGdE44VnN0QkZyVjhzWlVlUUw3SWpiZ3V1QktlNXRO?=
- =?utf-8?B?U3FSbGV2eGV3YlJPc0VTa3hIOENzMjhUZ0IrSG82N3Z4SHZWSjNSV25zM3FK?=
- =?utf-8?B?NmNZM1dmMjYwZmtEUTMzZjhXWGg1WEZiUEpMcTZNcmxBQXlRVEZidFFJNkYv?=
- =?utf-8?B?a0pWRXFWajVsTUZac2h1c2NTN01Fb0Z3QTZ2a2xoVXg5N0d6Z2RTVGZiQzBz?=
- =?utf-8?B?SEMrQkFXb0VpT0NFaGpOcnZxQ3RsSDE4Q3ZteElUNDZYSVV3OUpraFZ2VDRn?=
- =?utf-8?B?aHUrU1QycGgwdmpXbzRoYTlmMmVtUFdCc29qNXd1NzZ6VFIrKzk2NG1YNUJq?=
- =?utf-8?B?U3g5NWsrQzZiT2tJUWRSSUdVMGFYZHNnQXpFM1h3SGdqQXp2ckZYbEdWbC93?=
- =?utf-8?B?SGoySWhkRDJQVGF4RUwraFJjdG80OXBwcThydDRZQlcwOEtjd1IzcS83V1Q0?=
- =?utf-8?B?cmZMY09NeEdmaE1CS2dteTlhVHVTaDI0S2xjR3IzS0IzNzZNRkdsSk9HcXh0?=
- =?utf-8?B?Z3VXbjdWdjRnblFBR0paa3RWQ3E5NUdoY1llQnh6bUsxYTN3azNyK3R4b0J6?=
- =?utf-8?B?U0ovNXVqWmlGc1RmVWxMTExaeC9zclovRmZ3cUxTTW9MVXdNY015dlIwWFdM?=
- =?utf-8?B?VkV6UDdIUmxMWk9ENUJzK0lDRTV0OTlYWE5zSDVpRTZmRDR2bzY4U28wczg3?=
- =?utf-8?B?Z29rU1RudVlUNXV3QWkwNUxXZ0hVWDJvb1hmUndpckZtWDJQZkZKRnptWDVH?=
- =?utf-8?B?ME51by9XWXZXbEZheW0zbmZZU0wwOFJ3dHArN3RqVzRBaHI2eURtL2tjTlhj?=
- =?utf-8?B?a29INnhPeHkzL3F3VG5RL3pDWk5jTzZqY2I1cDRsbWJvWlJ3aUdKSVpKTTlI?=
- =?utf-8?B?NTg2MDlDVzNyMDVCS3VDQUNJbmVSbERnaEp1eWFYOWVBa21ObXZhamVvUGVv?=
- =?utf-8?B?N2FwVENCYkdac2tBc3JOalVlbDhRWklLMnFoUEphVzI2ZitCcUNyc3AxNkdP?=
- =?utf-8?B?Yk8zeWpNTnp5ZzdLWFFCR2l0S2JEc2xreHZ6dWlRSlF1ZTlGMFBkcEtwYld4?=
- =?utf-8?B?ejlPNVh1anF3Z2VKamtvanpvU2tqSkFxYnlrZ080UlVHYS84dTJxait5YWIz?=
- =?utf-8?B?T08yOEVvc1UrS0dQOGxFUFJCZUpwSmo0M3RvTGRtdGttbm00WXcvd0tNQVRB?=
- =?utf-8?B?bnhJODNvNkNRZHRaQzk1Nm1xOVlyZTJiQUhOclRJRkE3OUdiVm9QT2lFNTZk?=
- =?utf-8?B?amtPRmp4SU5HU2sraG5rNzdSMXphampXS0JJTlVuOVV1MWlyMTJDRG5QRnRN?=
- =?utf-8?B?ZHhkMkhLak9ONlA3UDF1UFFDTUcyeDRzSEk5eTVGc3g1UzZNVklHM0hPR1l5?=
- =?utf-8?B?RmZQUHBCWWdjdHp1U0xBemJwUHlLYXNNckxPVmpCbm9oNXF2ZHpQMlZsUDZj?=
- =?utf-8?B?cjB1UDhRZ0lXb1lPd1djU3VSd1Y1NEFBKzdpWWdNNGtTUzJFOFh0ZTkzMEpN?=
- =?utf-8?B?UXZtdEFERTlxajBKUng5aVhuUFd2TCtzbWJwdlgwa0RoY2JzTGozbnJiRG9K?=
- =?utf-8?B?YzlwTThjWUdGbWt6cUNjaWs3NHlSWDJxWm9rL3VxMDExamZUTDB2Vmk3MkFP?=
- =?utf-8?B?OUVsQjBnS0ZLVFpTUFBQRnVtUVB0Z2dDdnMvTnEvK0lubjI5OWh5bDkyYnFV?=
- =?utf-8?B?SFI1RGVxQmJjK05CVDdtalZZblhpUDFoTktXVUwrS3lLOHFNUUQ5NXBra2o2?=
- =?utf-8?B?czdpeXhNZFdKUXJyOEJYYWpOenRLbnRpQTZsNXRJRjZPUGV1bHJqNDJIVUZ5?=
- =?utf-8?B?cHJZUzFZdDRKQWJ2a2diZ00reWxYQ3hLalNFOTExQ1NZSFBCamR1N3dYTmlJ?=
- =?utf-8?Q?cTfTEo2B59iZi8958LEulI/L3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 119e1b1b-f5e7-4297-34fc-08dac99ff49e
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 20:03:26.9681
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: js73RyAuHeH7vb5kjK7+7Q9Oe7VZ5tUXvf1vOs21pAIHefiVcNWmiE9ZNGbHWfFUmCduoFlQq3GSu69tpho76w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7646
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3fdsTDFgCzhcDwo@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,30 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 14:54, Lyude Paul wrote:
-> Coverity noticed this one, so let's fix it.
+On Fri, Nov 18, 2022 at 11:32:01AM -0800, Minchan Kim wrote:
+> On Fri, Nov 18, 2022 at 10:24:05AM -0800, Nhat Pham wrote:
+> > @@ -1444,6 +1473,11 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+> > 
+> >  	/* We completely set up zspage so mark them as movable */
+> >  	SetZsPageMovable(pool, zspage);
+> > +out:
+> > +#ifdef CONFIG_ZPOOL
+> > +	/* Move the zspage to front of pool's LRU */
+> > +	move_to_front(pool, zspage);
+> > +#endif
+> >  	spin_unlock(&pool->lock);
 > 
-> Signed-off-by: Lyude Paul <lyude@redhat.com>
+> Please move the move_to_front into zs_map_object with ZS_MM_WO with
+> comment with "why we are doing only for WO case".
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+I replied to the other thread, but I disagree with this request.
 
-Harry
+The WO exception would be as zswap-specific as is the
+rotate-on-alloc. It doesn't make the resulting zsmalloc code any
+cleaner or more generic, just weird in a slightly different way.
 
-> ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> index 59648f5ffb59..6483ba266893 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> @@ -1180,7 +1180,7 @@ static int pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
->  	struct amdgpu_dm_connector *aconnector;
->  	struct drm_dp_mst_topology_mgr *mst_mgr;
->  	int link_vars_start_index = 0;
-> -	int ret;
-> +	int ret = 0;
->  
->  	for (i = 0; i < dc_state->stream_count; i++)
->  		computed_streams[i] = false;
-
+On the other hand, it makes zsmalloc deviate from the other backends
+and introduces new callchains that invalidate thousands of machine
+hours of production testing of this code.
