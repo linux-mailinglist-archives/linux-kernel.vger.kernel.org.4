@@ -2,123 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6D262F908
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D1B62FA48
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242411AbiKRPNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S235362AbiKRQaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:30:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242247AbiKRPNJ (ORCPT
+        with ESMTP id S235270AbiKRQaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:13:09 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207803C6E4;
-        Fri, 18 Nov 2022 07:13:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668784388; x=1700320388;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=5o88/se2tIugNJ6foutVgd4SrFrr/hRNWGIbanNCAN8=;
-  b=NywkP9YFt+y0u0IuMl21URk02e2bSUkRpGV9sf7Wx2iZE2v8m+7oT1+k
-   paiARjXT9ZtyFnCmKai/hGTLwtjvXVyalY46/hjcdMFm7BCYl2K6C67GL
-   k0+Ed8tks+Ixd46fceKcrB7iRzXesTjH5x8c4GjhfgzEviUSxDdl5afZ1
-   yIo3c5Z9eoi2PowHwmKXYYISuLBuG0gTbPjjsk0u8QRK/PoqMV+guKPty
-   7ZlqDded25htCQAZ5YmNkdlyPiSNxLgM3ufyon3hAs3C75PSIYIsUU1rv
-   JAwniCuTMxWFmBxErTd8W6e3e8fq21FJcvLqOplHp0ki1fUnLw4z6M7cE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="314972625"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="314972625"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 07:12:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="729256172"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="729256172"
-Received: from amulyuko-mobl1.ccr.corp.intel.com ([10.252.35.83])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 07:12:53 -0800
-Date:   Fri, 18 Nov 2022 17:12:53 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 06/15] tty: serial: qcom-geni-serial: refactor
- qcom_geni_serial_isr()
-In-Reply-To: <20221118122539.384993-7-brgl@bgdev.pl>
-Message-ID: <c08d484-f4b7-e8c1-5d66-827b4a6fb71c@linux.intel.com>
-References: <20221118122539.384993-1-brgl@bgdev.pl> <20221118122539.384993-7-brgl@bgdev.pl>
+        Fri, 18 Nov 2022 11:30:05 -0500
+X-Greylist: delayed 1797 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 08:30:04 PST
+Received: from mail.base45.de (mail.base45.de [IPv6:2001:67c:2050:320::77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCA3109A
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fe80.eu;
+        s=20190804; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
+        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=PYQLBryNBg2V98bbiL4e5M8gxG2GeWbeLo/CFoncenc=; b=Uvm3QR9uY6MNvHIwv4bkERMGk7
+        Z/DfjHBIRgLeuVa7KXDB1VwttGKa9DT8JDsvWd0lbqMEPlz7C1cgYHvKTBthnFenPvJVunBKHBB5a
+        0BZ6dGOtT9mg9k6LTNK7DrLVuD2Mb+C6/MFISaouSrhB2++qfXu9QmpvRV+a8zBUT62K/DBq852YK
+        +/C266DYZT+gIW45CsnB5b0oknfj2LxYc0PtMlfbwf9byFSZrespOc1aBLjnuWKiocfBlZ33Wjz5p
+        Xt0hxBH2BanVBi+qYak7zzj7N7QgFJ6cb6LuDMDO2V9GsBfMiDiRHEhGgqOZ7BaOoNcTzbL8aAsVp
+        0UVHdKMg==;
+Received: from [145.224.93.132] (helo=javelin)
+        by mail.base45.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lynxis@fe80.eu>)
+        id 1ow33k-001vrc-1i; Fri, 18 Nov 2022 15:13:40 +0000
+Date:   Fri, 18 Nov 2022 15:13:31 +0000
+From:   Alexander 'lynxis' Couzens <lynxis@fe80.eu>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 4/6] net: ethernet: mtk_eth_soc: implement
+ multi-queue support for per-port queues
+Message-ID: <20221118151331.4694574f@javelin>
+In-Reply-To: <20221116080734.44013-5-nbd@nbd.name>
+References: <20221116080734.44013-1-nbd@nbd.name>
+        <20221116080734.44013-5-nbd@nbd.name>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1438676183-1668784378=:3952"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Felix,
 
---8323329-1438676183-1668784378=:3952
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+On Wed, 16 Nov 2022 09:07:32 +0100
+Felix Fietkau <nbd@nbd.name> wrote:
 
-On Fri, 18 Nov 2022, Bartosz Golaszewski wrote:
-
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Simplify the conditions in qcom_geni_serial_isr() and fix indentation.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index dd1491a72deb..22c1869c60f4 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -824,20 +824,18 @@ static irqreturn_t qcom_geni_serial_isr(int isr, void *dev)
+> @@ -614,6 +618,75 @@ static void mtk_mac_link_down(struct phylink_config *config, unsigned int mode,
+>  	mtk_w32(mac->hw, mcr, MTK_MAC_MCR(mac->id));
+>  }
 >  
->  	if (m_irq_status & m_irq_en & (M_TX_FIFO_WATERMARK_EN | M_CMD_DONE_EN))
->  		qcom_geni_serial_handle_tx(uport, m_irq_status & M_CMD_DONE_EN,
-> -					geni_status & M_GENI_CMD_ACTIVE);
-> +					   geni_status & M_GENI_CMD_ACTIVE);
->  
-> -	if (s_irq_status & S_GP_IRQ_0_EN || s_irq_status & S_GP_IRQ_1_EN) {
-> +	if (s_irq_status & (S_GP_IRQ_0_EN | S_GP_IRQ_1_EN)) {
->  		if (s_irq_status & S_GP_IRQ_0_EN)
->  			uport->icount.parity++;
->  		drop_rx = true;
-> -	} else if (s_irq_status & S_GP_IRQ_2_EN ||
-> -					s_irq_status & S_GP_IRQ_3_EN) {
-> +	} else if (s_irq_status & (S_GP_IRQ_2_EN | S_GP_IRQ_3_EN)) {
->  		uport->icount.brk++;
->  		port->brk = true;
->  	}
->  
-> -	if (s_irq_status & S_RX_FIFO_WATERMARK_EN ||
-> -					s_irq_status & S_RX_FIFO_LAST_EN)
-> +	if (s_irq_status & (S_RX_FIFO_WATERMARK_EN | S_RX_FIFO_LAST_EN))
->  		qcom_geni_serial_handle_rx(uport, drop_rx);
->  
->  out_unlock:
-> 
+> +static void mtk_set_queue_speed(struct mtk_eth *eth, unsigned int idx,
+> +				int speed)
+> +{
+> +	const struct mtk_soc_data *soc = eth->soc;
+> +	u32 ofs, val;
+> +
+> +	if (!MTK_HAS_CAPS(soc->caps, MTK_QDMA))
+> +		return;
+> +
+> +	val = MTK_QTX_SCH_MIN_RATE_EN |
+> +	      /* minimum: 10 Mbps */
+> +	      FIELD_PREP(MTK_QTX_SCH_MIN_RATE_MAN, 1) |
+> +	      FIELD_PREP(MTK_QTX_SCH_MIN_RATE_EXP, 4) |
+> +	      MTK_QTX_SCH_LEAKY_BUCKET_SIZE;
+> +	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
+> +		val |= MTK_QTX_SCH_LEAKY_BUCKET_EN;
+> +
+> +	if (IS_ENABLED(CONFIG_SOC_MT7621)) {
+> +		switch (speed) {
+> +		case SPEED_10:
+> +			val |= MTK_QTX_SCH_MAX_RATE_EN |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_MAN, 103) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_EXP, 2) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_WEIGHT, 1);
+> +			break;
+> +		case SPEED_100:
+> +			val |= MTK_QTX_SCH_MAX_RATE_EN |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_MAN, 103) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_EXP, 3);
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_WEIGHT, 1);
+> +			break;
+> +		case SPEED_1000:
+> +			val |= MTK_QTX_SCH_MAX_RATE_EN |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_MAN, 105) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_EXP, 4) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_WEIGHT, 10);
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +	} else {
+> +		switch (speed) {
+> +		case SPEED_10:
+> +			val |= MTK_QTX_SCH_MAX_RATE_EN |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_MAN, 1) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_EXP, 4) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_WEIGHT, 1);
+> +			break;
+> +		case SPEED_100:
+> +			val |= MTK_QTX_SCH_MAX_RATE_EN |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_MAN, 1) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_EXP, 5);
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_WEIGHT, 1);
+> +			break;
+> +		case SPEED_1000:
+> +			val |= MTK_QTX_SCH_MAX_RATE_EN |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_MAN, 10) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_EXP, 5) |
+> +			       FIELD_PREP(MTK_QTX_SCH_MAX_RATE_WEIGHT, 10);
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +	}
+> +
+> +	ofs = MTK_QTX_OFFSET * idx;
+> +	mtk_w32(eth, val, soc->reg_map->qdma.qtx_sch + ofs);
+> +}
+> +
+>  static void mtk_mac_link_up(struct phylink_config *config,
+>  			    struct phy_device *phy,
+>  			    unsigned int mode, phy_interface_t interface,
+> @@ -639,6 +712,8 @@ static void mtk_mac_link_up(struct phylink_config *config,
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
--- 
- i.
-
---8323329-1438676183-1668784378=:3952--
+What's happening to 2.5Gbit ports (e.g. on mt7622)? Should be SPEED_2500 also in the switch/case?
+E.g. a direct connected 2.5Gbit phy to GMAC0.
+Or a mt7622 GMAC0 to mt7531 port 6 and a 2.5Gbit phy to port 5.
