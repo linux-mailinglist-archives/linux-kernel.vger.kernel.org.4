@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEAC62EDBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3925162EDBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241148AbiKRGjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
+        id S240959AbiKRGjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiKRGjV (ORCPT
+        with ESMTP id S241132AbiKRGjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 01:39:21 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A93954B1A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:19 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id v1so7712687wrt.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:19 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D244561519
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:20 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id g2so4091876wrv.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t5oiNfOvT41t6HXKynIXOeq5TbszuzB9U1lEY6iugAI=;
-        b=PBM8o/sZo2cZJdq4tjMFqGZ8h6B7Z2rtpjHe2f96qGeAhYiAmwC2LrjYyS8tVTDUu0
-         3xa2u/uQCoHNvQSgogRz/0rbUemfdbpM5RMb5Ccff5UDiMFjUOkoYnHC3aTwWaNZTm5D
-         jdjRj3yrAiuS22gTVGKWPkCMvgbnYu4MbBZsQnzTPXDW6zg8Q0PCthlBUxx54SZJXMJ/
-         BCmnfwCCxUMSdjN/vlrg39UQZEBXd/7QzopjEOseUGQ/8dxG96LqZxlBOcjjorsXKfmU
-         +ra6NJ3JyCxGzQq4P6XrC1uhXuDtBO/lyz5aJg/Si3qfhVkIo6am0U72pukg9F4MNyX8
-         6gaA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WApaZp0eQftpVOEpuPkdkP7sInE6oeCRgV8lSQQTOB0=;
+        b=iK45VugTy5cKdlstFPJtCtzg5RMhxaGL+SYt0nKGp1Bow3IDPoe9aew3J3Ou5Q6YzF
+         6hhjD3WIPzdCIKt7kYLYFnoOnwiGPyEH1J5VOR8FJA3Q6JpXGEkamThQrIliiwjfv0lO
+         2XLVXYdZbsnDK+CSX6r+bF9vvjQS5GA+NQbVd8xklKTi8E0d9e9gRIUISqgiTmPKPNd7
+         T/tRxncldq4zmBy3zxETy1saLUjQyc0+4khBQDYQMoaGJ0vu7u6IF13fnPUm80ybFQy1
+         godnAhvq+WjBbKwqb7aJa/iXlMICjT1J/AeADwP5PHmr7dnFBlnmT8sqW8fzhjrGHU5J
+         cHxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t5oiNfOvT41t6HXKynIXOeq5TbszuzB9U1lEY6iugAI=;
-        b=rShQBh0Iz4/sQc69GAnmXscVoCswVFGtX8xL21sBKaFi70BFkqZOBoIUELqfyS7LNJ
-         b1ewzadB7HXcTN4CXFo4ZQz+/fBk91MxQYPG1tmC1qJuOHSE3aEXBPvoYAQpyAD3X3/s
-         ianxCKJLcsrGKcoZWhWMM02f0pEnpdk2BO7h5wRied88ccMfXXmJHvaqmk4Hj/pL3xV9
-         yjP3LRpHizlBC4okZTwaCt4EkalX0Tyc9T3A4zX2iA8YoeFd41zkH2gZ9LeEalgJW3Pk
-         QEXoMchckNJrdYKINGaR0puxU7Owmea/NNzrjxxsyHOlrZjBIkhPPI5l/uBc+Yw7sOhI
-         itxA==
-X-Gm-Message-State: ANoB5pn21e7GwM/UXG9SikNgGvu28aXXI6AEAs8qVqJKxoge1s9U+R+m
-        dFStfxWSvZW+1xf2GXr60CYa4A==
-X-Google-Smtp-Source: AA0mqf4sxXL2uHYL7tVOtnmynropwSLEvJ73fiO1FHrThbsnDDTCWmh5QoRyKmt2uCq8z9+daNsZ5A==
-X-Received: by 2002:adf:ed86:0:b0:236:4930:2468 with SMTP id c6-20020adfed86000000b0023649302468mr3260380wro.221.1668753558092;
-        Thu, 17 Nov 2022 22:39:18 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WApaZp0eQftpVOEpuPkdkP7sInE6oeCRgV8lSQQTOB0=;
+        b=dll+ChNskGKFYS1ouCfWCvQrM5E7/Wv2yF2jhOL57s28uVXuJl0CgjIcujOLH0lNXt
+         Ks8Dnz0cV986VJzC1NImDFP9gKJKhdWu4TUHd1osub0hVrA0WOYqfSqtvZ96ASzWa+mO
+         CvhB83VJERTtv4l1iJDSSqvOqXdAtrQUBmn+qU6LMqMFMw9+MRq2AJynPv6cIwPGChQv
+         FYacP114j/iRrnNpjV5+20iMTuryRUBeKekP+H0kwrGncKNOFj6ZbN4RFw2qHQ5ZSxGt
+         DX4oYBJD0XPG46M2D1/M0KAEktVCXj6E/Xbj6pRhTMiy0nafw7EbrF7nbbML+foXwung
+         +fBw==
+X-Gm-Message-State: ANoB5pkDE467Ia4a/xGSn+AEEU1hKtV7bqlbpcgioGf0W8m4XvSQ7Aiq
+        L4fYjex7BTi/7I1RUn2Uf575pw==
+X-Google-Smtp-Source: AA0mqf4OhJOlX9Ya2XHjRFQna9lPIcu6UyMu1Ifw9d8vSFSGwCfJvOtmq/wDkRsVA1q01KNVnjJSqA==
+X-Received: by 2002:adf:e702:0:b0:236:57f5:5d8a with SMTP id c2-20020adfe702000000b0023657f55d8amr3197907wrm.460.1668753559415;
+        Thu, 17 Nov 2022 22:39:19 -0800 (PST)
 Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id n24-20020a7bcbd8000000b003b4fdbb6319sm7853861wmi.21.2022.11.17.22.39.17
+        by smtp.gmail.com with ESMTPSA id n24-20020a7bcbd8000000b003b4fdbb6319sm7853861wmi.21.2022.11.17.22.39.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:39:17 -0800 (PST)
+        Thu, 17 Nov 2022 22:39:18 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 0/4] nvmem: fixes for 6.1
-Date:   Fri, 18 Nov 2022 06:38:36 +0000
-Message-Id: <20221118063840.6357-1-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 1/4] nvmem: lan9662-otp: fix compatible name
+Date:   Fri, 18 Nov 2022 06:38:37 +0000
+Message-Id: <20221118063840.6357-2-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221118063840.6357-1-srinivas.kandagatla@linaro.org>
+References: <20221118063840.6357-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,40 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Here is a few minor fixes in u-boot-env, rmem and lan9662-otp nvmem providers.
--two lan9662 fixes are to fix the compatible string and fix a smatch
-warning.
-- rmem fixes an error handling path.
-- u-boot env has fix for data offset.
+Documentation of lan9662-otpc driver (namely Documentation/\
+devicetree/bindings/nvmem/microchip,lan9662-otpc.yaml) express that
+compatible for this driver contains "otpc" string at the end but not "otp"
+as currently present. Fix this typo.
 
-If its not too late, can you take them for 6.1.
+Fixes: 9e8f208ad522 ("nvmem: lan9662-otp: add support")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/nvmem/lan9662-otpc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Many thanks,
-Srini
-
-
-*** BLURB HERE ***
-
-Christian Lamparter (1):
-  nvmem: u-boot-env: fix crc32_data_offset on redundant u-boot-env
-
-Claudiu Beznea (1):
-  nvmem: lan9662-otp: fix compatible name
-
-Horatiu Vultur (1):
-  nvmem: lan9662-otp: Change return type of
-    lan9662_otp_wait_flag_clear()
-
-Wei Yongjun (1):
-  nvmem: rmem: Fix return value check in rmem_read()
-
- drivers/nvmem/lan9662-otpc.c | 4 ++--
- drivers/nvmem/rmem.c         | 4 ++--
- drivers/nvmem/u-boot-env.c   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/nvmem/lan9662-otpc.c b/drivers/nvmem/lan9662-otpc.c
+index f6732fd216d8..377bf34c2946 100644
+--- a/drivers/nvmem/lan9662-otpc.c
++++ b/drivers/nvmem/lan9662-otpc.c
+@@ -203,7 +203,7 @@ static int lan9662_otp_probe(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id lan9662_otp_match[] = {
+-	{ .compatible = "microchip,lan9662-otp", },
++	{ .compatible = "microchip,lan9662-otpc", },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, lan9662_otp_match);
 -- 
 2.25.1
 
