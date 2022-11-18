@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C961162F25E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF2062F25C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241556AbiKRKTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S241520AbiKRKTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241539AbiKRKTD (ORCPT
+        with ESMTP id S239887AbiKRKS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:19:03 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B148FFB0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:19:01 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id j2so5106200ybb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:19:01 -0800 (PST)
+        Fri, 18 Nov 2022 05:18:58 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6CF8FB00;
+        Fri, 18 Nov 2022 02:18:57 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id p16so3308740wmc.3;
+        Fri, 18 Nov 2022 02:18:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tBs0v/AQXyxwwfbSaQaCoIqfpGGXzeZqIxgiWimaOPA=;
-        b=bSgsQmfkDhv3OYUgw2yEhksuc1DdpqHCfr2RGBITntdaf/HMDyp9oDLyHWp1uQpJlj
-         f9rdiesdcT2IICTetNWWj/+KArVFdmTmwsSuyQdaOaxEbUCcYKnwFefs+jVAGvVFDLMH
-         FpkdgdbBylfaVDbLSILPkuJztqN36XM2RIpsSIVO53c17Uw0/Gqdz8U1+vWL+iDKraOV
-         I+xkF1/heDefTTCUbXF5odeS6rJ0bElHb23FhB12mdkPRA3YtlLzzVVozX1n/ZFhKyIT
-         cfElQT9kczvn1mhsz3MwlbD4CoVwxmf/W8GYdUh9A0AQiomZynBUbmT4Mtxft3XUZMTw
-         7M/A==
+        bh=+bs3XWb/FSMOotckh2VpyC5u8RoljJ5uQ85+dceixyc=;
+        b=A7Vwu0KE1FOX/cKsNx+Tu51CqqvMeqsvFG2qBTq5hO/sQ019xC7m8jVSTXuFhzIL7c
+         NtoDjn0FZjNYF3jzkJiS29/gwqz8aHX1gAMWoaJm+5Zod+drKy3gyjMsw4OcgUe8MIyb
+         Y0ZN90/GK6PZMcCEp7JYgHd73nj0s9d3AKMytsqkZPg/K/XduZ1R7Jvwfv6z5QYqMH5D
+         rCbwELrs7LfKIOU3v9ByWFqlTooyIf5Zby6T8pzyoJPEDPuBmmCs0+AklE2WvQt4ZTSw
+         xEDYzh6MNrdK8j15GmnCUPK+evLMhC2gYiEohH/VvcyEyWA2xoCCSSLUNwo934BKGVe8
+         I2JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tBs0v/AQXyxwwfbSaQaCoIqfpGGXzeZqIxgiWimaOPA=;
-        b=UzDi8CSgzSV2Bw25bVStnc6BUjmbD+O6IsyXWIjB0y+MkHwIcMGkVY3t1tX6OwzOug
-         PWtT+YYZLtgKeJxPqLO2OCQjaarLHgRaQpNie9PI3UdOFWfn1RUKsFvSDkHVuwBpFsDb
-         R9WcJGjzHZ96bJr7ZGaEqi9Wy/wkG8p4pTtEGxa4RnENMzIm4iYPuV0VOcIKcICrrjI3
-         tji4eOJpJk7t1y9cymfJLpRaAdTRn/Vhe6ELKGR/wu51sOn/UpwV5j+jr8iPi8anFAfA
-         Yb4NfiTHIDub+TDeCJ8MZm3HePL2kSQyKQpmTYQ2jr9w4AZBn4/NOFLi7lbksDHNYDZS
-         P8qA==
-X-Gm-Message-State: ANoB5pk2ri2Y1IHaO/KCUk5B5DaZZokgmNyHc7ozGlP6ipxKtlkDkLpl
-        fp2swZ4WRC5FDUD8ljYpb82KHfHqc/SBoqPOWkgdOw==
-X-Google-Smtp-Source: AA0mqf686eZ3z8ANHkMxehql392uJXU0Hg+WK81SK/sFgDiirmhQo7SA3f/ka+RNE7a+a59jYwoe7VGM3EJAuavBtAw=
-X-Received: by 2002:a05:6902:11cd:b0:6e7:f2ba:7c0f with SMTP id
- n13-20020a05690211cd00b006e7f2ba7c0fmr3896476ybu.55.1668766740582; Fri, 18
- Nov 2022 02:19:00 -0800 (PST)
+        bh=+bs3XWb/FSMOotckh2VpyC5u8RoljJ5uQ85+dceixyc=;
+        b=ijdkLBneU3uwlj2BsIiGGV6KdwODycTg8VmfyOyLJUw76yPPBMLgR9iRN9mgG374CC
+         /V/4QA6yjj3MtAo5znRtMrkoqY2F0n94NbVdM8pSCzz2TuiKlswq2lrp0+vKasIQal9m
+         PSe3SGVdJUF2BdapIZtoiwn37QjkgrTDGk1Sbmx7xyrgcJMb4HkA/DJ1HFN+kp//8Erk
+         rFOqJK45193vVROIE5GOr5TVH+SVTrarfeCc3ugTdYnM6xYQnzCbtclFq3o47k8d8XKz
+         D2c8cVQmXG1sbXtAGeDJZnsxIhZ0qaHMqQWUyTYCbpYb1z5Dt351K9yHZnl0nTPX/+nv
+         hlkQ==
+X-Gm-Message-State: ANoB5pke8j3w+GHli2th2tg/G5Vl6Svi+KRLC1mOfsa/n5AGG3+0fSkv
+        o6evxsBT/ThYJHHNXPVYfGo=
+X-Google-Smtp-Source: AA0mqf7OxTVeJ5FdeJ785O2O00LPnh0P3jU9/Ktp6dPi6D+TJG/j9OqeDlvH6cOBOQ7FRzr+19CEQw==
+X-Received: by 2002:a1c:6a02:0:b0:3cf:71e4:75b with SMTP id f2-20020a1c6a02000000b003cf71e4075bmr4613838wmc.114.1668766735412;
+        Fri, 18 Nov 2022 02:18:55 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id i3-20020a1c5403000000b003cfc02ab8basm8744040wmb.33.2022.11.18.02.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 02:18:54 -0800 (PST)
+Date:   Fri, 18 Nov 2022 11:18:52 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
+        digetx@gmail.com, ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        sumit.semwal@linaro.org, wsa@kernel.org,
+        Zubair Waheed <zwaheed@nvidia.com>
+Subject: Re: [PATCH] i2c: tegra: Set ACPI node as primary fwnode
+Message-ID: <Y3dcDCgC42QcMX3k@orome>
+References: <20221117100415.20457-1-akhilrajeev@nvidia.com>
+ <29db0e24-4f7c-e3dc-91ce-2decf6a253a5@nvidia.com>
 MIME-Version: 1.0
-References: <CAO4mrfdb1UdjQxr0zLH9J8b6T+8kn4UOm-sO6nZ2aKErKg7i0A@mail.gmail.com>
- <CAG_fn=UHgpEcGLjvHu8ze6jV8q_R9uSnvbeijsFFNmqchAe6OA@mail.gmail.com> <f632781defea57a3c919ae91430f42e09f268de1.camel@redhat.com>
-In-Reply-To: <f632781defea57a3c919ae91430f42e09f268de1.camel@redhat.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 18 Nov 2022 02:18:49 -0800
-Message-ID: <CANn89iKmsJvV+U+xvYgqoBS6JTdQpvAwMC+-at7DWyApuwxicA@mail.gmail.com>
-Subject: Re: KASAN: double-free in kfree
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Wei Chen <harperchen1110@gmail.com>,
-        mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com,
-        syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="FutM8JfzTk8389nd"
+Content-Disposition: inline
+In-Reply-To: <29db0e24-4f7c-e3dc-91ce-2decf6a253a5@nvidia.com>
+User-Agent: Mutt/2.2.8 (2022-11-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,87 +78,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 1:57 AM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On Fri, 2022-11-18 at 09:50 +0100, Alexander Potapenko wrote:
-> > On Fri, Nov 18, 2022 at 8:37 AM Wei Chen <harperchen1110@gmail.com> wro=
-te:
-> > >
-> > > Dear Linux Developer,
-> > >
-> > > Recently when using our tool to fuzz kernel, the following crash was =
-triggered:
-> > >
-> > > HEAD commit: 4fe89d07 Linux v6.0
-> > > git tree: upstream
-> > > compiler: clang 12.0.0
-> > > console output:
-> > > https://drive.google.com/file/d/1_CdtSwaMJZmN-4dQw1mmZT0Ijq28X8aC/vie=
-w?usp=3Dshare_link
-> > > kernel config: https://drive.google.com/file/d/1ZHRxVTXHL9mENdAPmQYS1=
-DtgbflZ9XsD/view?usp=3Dsharing
-> > >
-> > > Unfortunately, I didn't have a reproducer for this bug yet.
-> >
-> > Hint: if you don't have a reproducer for the bug, look at the process
-> > name that generated the error (syz-executor.0 in this case) and try
-> > the program from the log with that number ("executing program 0")
-> > preceding the report:
-> >
-> > r0 =3D accept4(0xffffffffffffffff, &(0x7f0000000600)=3D@in=3D{0x2, 0x0,
-> > @multicast2}, &(0x7f0000000680)=3D0x80, 0x80000)
-> > r1 =3D socket$nl_generic(0x10, 0x3, 0x10)
-> > r2 =3D syz_genetlink_get_family_id$mptcp(&(0x7f00000002c0), 0xfffffffff=
-fffffff)
-> > sendmsg$MPTCP_PM_CMD_DEL_ADDR(r1, &(0x7f0000000300)=3D{0x0, 0x0,
-> > &(0x7f0000000000)=3D{&(0x7f0000000280)=3D{0x28, r2, 0x1, 0x0, 0x0, {},
-> > [@MPTCP_PM_ATTR_ADDR=3D{0x14, 0x1, 0x0, 0x1,
-> > [@MPTCP_PM_ADDR_ATTR_ADDR4=3D{0x8, 0x3, @multicast2=3D0xac14140a},
-> > @MPTCP_PM_ADDR_ATTR_FAMILY=3D{0x6, 0x1, 0x2}]}]}, 0x28}}, 0x0)
-> > sendmsg$MPTCP_PM_CMD_FLUSH_ADDRS(r0,
-> > &(0x7f0000000780)=3D{&(0x7f00000006c0), 0xc,
-> > &(0x7f0000000740)=3D{&(0x7f0000000700)=3D{0x1c, r2, 0x4, 0x70bd28,
-> > 0x25dfdbfb, {}, [@MPTCP_PM_ATTR_SUBFLOWS=3D{0x8, 0x3, 0x8}]}, 0x1c},
-> > 0x1, 0x0, 0x0, 0x4c890}, 0x20008040)
-> > shmat(0xffffffffffffffff, &(0x7f0000ffd000/0x2000)=3Dnil, 0x1000)
-> > r3 =3D shmget$private(0x0, 0x3000, 0x40, &(0x7f0000ffd000/0x3000)=3Dnil=
-)
-> > shmat(r3, &(0x7f0000ffc000/0x2000)=3Dnil, 0x7000)
-> > syz_usb_connect$uac1(0x0, 0x8a,
-> > &(0x7f0000000340)=3DANY=3D[@ANYBLOB=3D"12010000000000206b1f010140000102=
-03010902780003010000000904000000010100000a2401000000020106061d154a00ffac190=
-b2404007f1f0000000000000004010000010200000904010101010240000824020100000000=
-09050109000000000000250100241694c11a11c200000009040200000102002009040201010=
-502000009058209000000f456c30000fd240100000000000000000076af0bc3ac1605de4480=
-cca53afa66f00807f17fb00132f9de1d1ec1d987f75530448d06a723ae111cb967ab97001d8=
-26aaf1c7eb0f9d0df07d29aa5a01e58ccbbab20f723605387ba8179874ad74d25d7dd7699a8=
-3189ba9c8b58980ea9cb58dd3a5afe7244a9d268d2397ac42994de8924d0478b17b13a564f6=
-96432da53be08aff66deb52e3f7c90c28079a9562280b9fda5f881598636375cc77499c22fe=
-673fe447ac74c25c0e2df0901d8babcdf31f59a3a15daae3f2"],
-> > 0x0)
-> > r4 =3D socket$alg(0x26, 0x5, 0x0)
-> > bind$alg(r4, &(0x7f0000002240)=3D{0x26, 'skcipher\x00', 0x0, 0x0,
-> > 'cts(cbc-twofish-3way)\x00'}, 0x58)
-> > r5 =3D accept4(r4, 0x0, 0x0, 0x0)
-> > syz_genetlink_get_family_id$nl80211(&(0x7f00000003c0), r5)
-> > sendmsg$NL80211_CMD_SET_WOWLAN(r5, &(0x7f0000000440)=3D{0x0, 0x0,
-> > &(0x7f0000000400)=3D{&(0x7f0000000480)=3DANY=3D[], 0x3e0}}, 0x0)
-> > syz_genetlink_get_family_id$team(&(0x7f0000000040), r5)
-> >
-> >
-> > > IMPORTANT: if you fix the bug, please add the following tag to the co=
-mmit:
-> > > Reported-by: Wei Chen <harperchen1110@gmail.com>
-> >
-> > @Eric, does this have something to do with "tcp: cdg: allow
-> > tcp_cdg_release() to be called multiple times" ?
->
-> The double free happens exactly in the same location and the tested
-> kernel does not contain Eric's fix. This splat is a little different -
-> it looks like the relevant chunk of memory has been re-used by some
-> other task before being double-freed - still I think this is the same
-> issue address by commit 72e560cb8c6f8 ("tcp: cdg: allow
-> tcp_cdg_release() to be called multiple times").
 
+--FutM8JfzTk8389nd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, this looks very similar to me.
+On Fri, Nov 18, 2022 at 09:38:52AM +0000, Jon Hunter wrote:
+>=20
+> On 17/11/2022 10:04, Akhil R wrote:
+> > Set ACPI node as the primary fwnode of I2C adapter to allow
+> > enumeration of child devices from the ACPI table
+> >=20
+> > Signed-off-by: Zubair Waheed <zwaheed@nvidia.com>
+> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> > ---
+> >   drivers/i2c/busses/i2c-tegra.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-te=
+gra.c
+> > index 954022c04cc4..69c9ae161bbe 100644
+> > --- a/drivers/i2c/busses/i2c-tegra.c
+> > +++ b/drivers/i2c/busses/i2c-tegra.c
+> > @@ -1826,6 +1826,7 @@ static int tegra_i2c_probe(struct platform_device=
+ *pdev)
+> >   	i2c_dev->adapter.class =3D I2C_CLASS_DEPRECATED;
+> >   	i2c_dev->adapter.algo =3D &tegra_i2c_algo;
+> >   	i2c_dev->adapter.nr =3D pdev->id;
+> > +	ACPI_COMPANION_SET(&i2c_dev->adapter.dev, ACPI_COMPANION(&pdev->dev));
+> >   	if (i2c_dev->hw->supports_bus_clear)
+> >   		i2c_dev->adapter.bus_recovery_info =3D &tegra_i2c_recovery_info;
+>=20
+>=20
+> Do we always want to set as the primary fwnode even when booting with
+> device-tree? I some other drivers do, but I also see some others ...
+>=20
+>  if (has_acpi_companion(dev))
+>         ACPI_COMPANION_SET(&i2c_dev->adapter.dev,
+>                            ACPI_COMPANION(&pdev->dev));
+>=20
+> It would be nice to know why it is OK to always do this even for device-t=
+ree
+> because it is not clear to me.
+
+ACPI_COMPANION() returns NULL if there is no ACPI companion, which will
+cause ACPI_COMPANION_SET() to set the primary fwnode to NULL. If I read
+the code for set_primary_fwnode() correctly, that's essentially a no-op
+for DT devices.
+
+I guess that the extra check might save a few cycles by not having to
+run through all the various conditionals, but it seems a rather minor
+saving.
+
+Either way is fine with me, though.
+
+Thierry
+
+--FutM8JfzTk8389nd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmN3XAkACgkQ3SOs138+
+s6GiZhAAiPts5oA6T5oXg4xKYVPjsnsJNEEkfsSwNQm0MwuFNyiZvSoHonmwB/2r
+nktVg9pG2Rf2QfQZG10BWx4kBqrvyOrT6JO4JgKEFwtOub23F/P2OeykJmbCY11g
+tP7MxQnMA/4qEsjFos2EEG5EJrgoCtM31O9QXXnfvuWH6q6Yv9uoUvXTp/huQvl2
+21knzvr0tT9nGvb+sdfSvAD5GyNu6I7C38wCsHTAQly1MCkjqF3afkkB+shDc2dN
+6t+z/nE+v8/0Wqb2g17CmlFb59SV1ESHoxpHfn6B9Z/YbeDKQCxgPHxfwkmXNORs
+sqoM6vbtpIaKTvgx6cMtxQ+dteQRZHBdace1IIEHFnztwSjKpr+S0VqV0oSJQThQ
+noDq8NC/8wfeMA/2H66nSH4xP7jFA3vkbyFbVWFLN8PR5KnMhL9/nV34aSAauZAv
+Ybjhs+ll0pQyx+JKL+nuMuEL5fWWEw2g77LR4hsL57lnSiP1nNwyPm6yI00Bivhy
+XMDFrThYUI6NH/g/GNaTrRdxKMR0E/a2DatYASm+42VUFmuEMX47uSr5RJXPe9OB
+JRA/JmTEtLcdUHxqCV9swuY/O28+AxwoiwFlYC1oLqX3WVpCxeDtHVk5kf7+0zeT
+trotAZOs0nNRufTycA8p3DpGHhhZ3c0ftKlkYDSs8UhupE5GMno=
+=rjSE
+-----END PGP SIGNATURE-----
+
+--FutM8JfzTk8389nd--
