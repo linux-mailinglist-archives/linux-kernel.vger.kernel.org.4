@@ -2,156 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF2E62F132
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:30:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B158B62F135
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241165AbiKRJax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S241167AbiKRJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241743AbiKRJau (ORCPT
+        with ESMTP id S241940AbiKRJbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:30:50 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6B0720BC;
-        Fri, 18 Nov 2022 01:30:48 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NDBDZ2npSz9v7Nd;
-        Fri, 18 Nov 2022 17:23:58 +0800 (CST)
-Received: from [10.206.134.65] (unknown [10.206.134.65])
-        by APP1 (Coremail) with SMTP id LxC2BwDHsW6mUHdjeM10AA--.22459S2;
-        Fri, 18 Nov 2022 10:30:25 +0100 (CET)
-Message-ID: <6e4da6d6-5a0c-98ba-9841-07a316f8631e@huaweicloud.com>
-Date:   Fri, 18 Nov 2022 10:30:11 +0100
+        Fri, 18 Nov 2022 04:31:07 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762D18B12E;
+        Fri, 18 Nov 2022 01:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2md2gEsUQJxoAo1XmhLV28lHM6Rqe2aE3bcYs9xczcY=; b=WBzMGtkJsPbG2thGoYTYlmkkN6
+        ZnF9i89mUYPxwjQpPLNN9/lVwb54BzkfPAzcw4mooLNVxmYt43tzkR9D8PcYAhiF+zfURFMi/BBhN
+        3sRB701nMURS7GdJWrxNfavxMlIo+YEkaQChHM+lLExa2VkOV6Qtp+RbKlpqqF8Iexw89ZA9rxeKu
+        ijNwiulFlKNahvPU1kySbap5ku0pUrdfp3lz00RksIAxM9mZsx2VDyd/micZsL+x4kkuRicFLF6JG
+        VAKvrBMwwscKhpA9t9cc8+7d08vleIEQFOdNrQpUD1d6KayrTV4DrQLOA4N21vCIU9PQa1L2lshaW
+        vBeM0iKA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovxhv-001w0a-KW; Fri, 18 Nov 2022 09:30:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 88F20300462;
+        Fri, 18 Nov 2022 10:30:45 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6A03D201AC447; Fri, 18 Nov 2022 10:30:45 +0100 (CET)
+Date:   Fri, 18 Nov 2022 10:30:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Steven Rostedt <rostedt@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 1/2] perf build: Require libtraceevent from the system
+Message-ID: <Y3dQxVNwGmQMWPP0@hirez.programming.kicks-ass.net>
+References: <20221117224952.358639-1-irogers@google.com>
+ <20221117224952.358639-2-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v4 4/5] evm: Align evm_inode_init_security() definition
- with LSM infrastructure
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
- <20221110094639.3086409-5-roberto.sassu@huaweicloud.com>
- <5ff23992ab249af4fd5ef967691f8986c5898583.camel@linux.ibm.com>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <5ff23992ab249af4fd5ef967691f8986c5898583.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwDHsW6mUHdjeM10AA--.22459S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF4xGF4kWF1Uuw13Kr4xtFb_yoW5uw15pF
-        W5Ga4jkrs5JFyjkrySyF48u3yS93yfGrW5trn8GryUAa90grn3trWIgF45ua4rWrWDC3WF
-        qr4ay3s3Z3Z8A3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4WV4QAAsF
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117224952.358639-2-irogers@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/17/2022 6:07 PM, Mimi Zohar wrote:
-> On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
->> From: Roberto Sassu <roberto.sassu@huawei.com>
->>
->> Change the evm_inode_init_security() definition to align with the LSM
->> infrastructure, in preparation for moving IMA and EVM to that
->> infrastructure.
->>
->> This requires passing only the xattr array allocated by
->> security_inode_init_security(), instead of the first LSM xattr and the
->> place where the EVM xattr should be filled.
->>
->> It also requires positioning after the last filled xattr (by checking the
->> xattr name), since the beginning of the xattr array is given.
-> 
-> Perhaps combine this sentence to the previous paragraph and start the
-> sentence with
-> "In lieu of passing the EVM xattr, ..."
+On Thu, Nov 17, 2022 at 02:49:51PM -0800, Ian Rogers wrote:
+> Unconditionally require libtraceevent to come from the system. Force
+> the determination of the libtracefs version if it is present.
 
-Ok.
+-ENOMOTIVATION
 
->> If EVM is moved to the LSM infrastructure, it will use the xattr
->> reservation mechanism too, i.e. it positions itself in the xattr array with
->> the offset given by the LSM infrastructure.
-> 
-> The LSM infrastructure will need to support EVM as the last LSM.  Is
-> there a reason for including this comment in this patch description.
+also:
 
-The idea is to first make EVM work like other LSMs, and then add 
-limitations that are EVM-specific.
+Makefile.config:1196: *** Error: libtraceevent is missing, please install libtraceevent-dev.  Stop.
 
-As a regular LSM, EVM could be placed anywhere in the list of LSMs. This 
-would mean that whenever EVM is called, it will process xattrs that are 
-set by previous LSMs, not the subsequent ones.
-
-What we would need to do EVM-specific is that EVM is the last in the 
-list of LSMs, to ensure that all xattrs are protected.
-
->> Finally, make evm_inode_init_security() return value compatible with the
->> inode_init_security hook conventions, i.e. return -EOPNOTSUPP if it is not
->> setting an xattr.
-> 
->> EVM is a bit tricky, because xattrs is both an input and an output. If it
->> was just output, EVM should have returned zero if xattrs is NULL. But,
->> since xattrs is also input, EVM is unable to do its calculations, so return
->> -EOPNOTSUPP and handle this error in security_inode_init_security().
->>
->> Don't change the return value in the inline function
->> evm_inode_init_security() in include/linux/evm.h, as the function will be
->> removed if EVM is moved to the LSM infrastructure.
->>
->> Last note, this patch does not fix a possible crash if the xattr array is
->> empty (due to calling evm_protected_xattr() with a NULL argument). It will
->> be fixed with 'evm: Support multiple LSMs providing an xattr', as it will
->> first ensure that the xattr name is not NULL before calling
->> evm_protected_xattr().
-> 
->  From my reading of the code, although there might be multiple LSM
-> xattrs, this patch only includes the first LSM xattr in the security
-> EVM calculation.  So it only checks the first xattr's name.  Support
-> for including multiple LSM xattrs in the EVM hmac calculation is added
-> in the subsequent patch.
-
-I tried to include in this patch just the function definition change and 
-keep the existing behavior.
-
-The problem is trying to access xattr->name at the beginning of 
-evm_inode_init_security().
-
-That would disappear in patch 5, where there is a loop checking 
-xattr->value first. Patch 3 disallows combination of NULL name - !NULL 
-value and !NULL name - NULL value. Not sure if the latter is correct 
-(empty xattr?). Will check what callers do.
-
-Roberto
-
-> thanks,
-> 
-> Mimi
-> 
->>
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-
+Why do I need this?
