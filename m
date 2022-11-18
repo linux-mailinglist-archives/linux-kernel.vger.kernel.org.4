@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF81D62EE27
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E95C62EE29
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiKRHRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 02:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
+        id S241056AbiKRHS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 02:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiKRHRo (ORCPT
+        with ESMTP id S229476AbiKRHS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 02:17:44 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499B36A775;
-        Thu, 17 Nov 2022 23:17:42 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7B43824E25D;
-        Fri, 18 Nov 2022 15:17:40 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
- 2022 15:17:40 +0800
-Received: from [192.168.50.235] (183.27.96.116) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
- 2022 15:17:39 +0800
-Message-ID: <4db38c2e-49b5-81fc-bfda-bef61860e411@starfivetech.com>
-Date:   Fri, 18 Nov 2022 15:17:26 +0800
+        Fri, 18 Nov 2022 02:18:56 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD84172098
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 23:18:55 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id j15so7225310wrq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 23:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KUOY4nIS+EPdm5b8Vs0He3SW90+YwQyay5PCgjl6fNQ=;
+        b=NhCBoaaFAGjIcjypiwHh6dFfOC00sazPIPE9Yb+GqeKx4XxPy4uBkiyRW84HLKh/HM
+         1LQSOKyCbYHASM1zpustxdMf3xTQ+mW6ToVAs6kRbKcXlUOAJJHqYi+pwu2jchJeUeVY
+         AndnsUFUkecvCUjCOCgap0keY70racw/SUXYHzjBO3BidmK7xtyJsGeuCQs0XW0IBkTa
+         cDJXwj1kqgjnXbhkNK0u+546hXejgAcoJIwm+w0G3D2yQBxPP5IP/KTJ7fweDlDW+b73
+         vXn03Bsvfj24kVsDeKurPTEuf5e8ldvG2xKjAdZM+mZwzO+KwZa39DMlrGoee+S3s0tI
+         43qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KUOY4nIS+EPdm5b8Vs0He3SW90+YwQyay5PCgjl6fNQ=;
+        b=IbroZI78R2ZwgJwNeh2glSF6Y71gU332kpBD8oVpdrbGQRMS6N1pPGOAxvoS/iBuwv
+         n7m1Q9ifwVMTBRIFs7/3YBMRou4iXZg+Wjzd4ThdKApt0JRQNvXJ6omRRaXJEp3rUH4m
+         DhaGZO8yDIGoOqBsO9azuVeLzakc7KxdTgo/F3+PEZwUvKV6xeYrBIzsIsNjtWGDqKsx
+         L2KDAgf+4ooDroUu9Jk7rIG5XEcqX/Jsj/jhkkJBDa644GGFIBxJ1PTrUEQzsb8PCnn/
+         k9VFFAq84uy3nSpXmuDP5/N47svdO4zxdh20LSsFYw6sADfvb2iO/MvWq9luB/oJa2L8
+         tfVg==
+X-Gm-Message-State: ANoB5pkLmq82d0UxFIvlSthpmpHs6h2xZ6b/0wokqpO7JQ4hAo4EI/JE
+        7UVnUSM3NLAEqYnwuu8pj9nKNA==
+X-Google-Smtp-Source: AA0mqf4tJJ/aCkkczRMd8JCBaBzvq8aqeQFCciORAez9qokL4gjxye7DEB5zL8xkfk/VUWMi1ygHTQ==
+X-Received: by 2002:a5d:4538:0:b0:236:5270:8f17 with SMTP id j24-20020a5d4538000000b0023652708f17mr3700494wra.358.1668755934296;
+        Thu, 17 Nov 2022 23:18:54 -0800 (PST)
+Received: from localhost.localdomain ([167.98.215.174])
+        by smtp.gmail.com with ESMTPSA id j16-20020adff010000000b002302dc43d77sm2754349wro.115.2022.11.17.23.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 23:18:53 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 0/2] ASoC: codec: lpass-va: add npl clock support
+Date:   Fri, 18 Nov 2022 07:18:47 +0000
+Message-Id: <20221118071849.25506-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 0/5] Basic pinctrl support for StarFive JH7110 RISC-V
- SoC
-Content-Language: en-US
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118011108.70715-1-hal.feng@starfivetech.com>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <20221118011108.70715-1-hal.feng@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.116]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,15 +70,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 09:11:03 +0800, Hal Feng wrote:
-> The original patch series "Basic StarFive JH7110 RISC-V SoC support" [1]
-> is split into 3 patch series. They respectively add basic clock&reset,
-> pinctrl and device tree support for StarFive JH7110 SoC. These patch
-> series are independent, but the Visionfive2 board can boot up successfully
+New versions of VA Macro has soundwire integrated, so handle the soundwire npl
+clock correctly in the codec driver and add related bindings.
 
-Note that this patch series depends on the patch series [1].
+Changes since v1:
+	- updated bindings as per Kryz comments.
+	- added error handling during npl and mclk enable.
 
-[1] https://lore.kernel.org/all/20221118010627.70576-1-hal.feng@starfivetech.com/
+Srinivas Kandagatla (2):
+  ASoC: dt-bindings: lpass-va: add npl clock for new VA macro
+  ASoC: codecs: va-macro: add npl clk
 
-> only if all these patches series applied. This one adds basic pinctrl
+ .../bindings/sound/qcom,lpass-va-macro.yaml   | 63 ++++++++++++++++---
+ sound/soc/codecs/lpass-va-macro.c             | 46 ++++++++++++++
+ 2 files changed, 101 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
 
