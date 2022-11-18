@@ -2,52 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D3462FA9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A54462FAA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242265AbiKRQod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
+        id S242221AbiKRQpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:45:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241647AbiKRQo2 (ORCPT
+        with ESMTP id S242227AbiKRQp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:44:28 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5DF14080;
-        Fri, 18 Nov 2022 08:44:25 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e767329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e767:329c:23ff:fea6:a903])
+        Fri, 18 Nov 2022 11:45:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F6A27B24;
+        Fri, 18 Nov 2022 08:45:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5DCDF1EC05DD;
-        Fri, 18 Nov 2022 17:44:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668789864;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=vXBGlFZAui3ZpQP37+GpYQWkbrvn/6/DDXXoJBl5Vyw=;
-        b=bDROuXKWw1CYUBGZIYncsZdFd2BmdxgH6bj1Ur1M7aoiPMadLEOtbPmA7aRrvdbp+TyhEa
-        UXJAPn/QPvi5s1bw4irROO49ezs+7PL3KmzLwFFeOuyJJg+xGIMx3RlY0AhCe6IOlCZr2Y
-        a3gjpdpF8P0ijvAernuQICt6qLyP17I=
-Date:   Fri, 18 Nov 2022 17:44:20 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>
-Subject: Re: [PATCH v2 11/16] x86/compressed: move startup32_load_idt() into
- .text section
-Message-ID: <Y3e2ZMh5TlfuqreF@zn.tnic>
-References: <20220921145422.437618-1-ardb@kernel.org>
- <20220921145422.437618-12-ardb@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5868162670;
+        Fri, 18 Nov 2022 16:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4CB0C43147;
+        Fri, 18 Nov 2022 16:45:21 +0000 (UTC)
+Date:   Fri, 18 Nov 2022 11:45:19 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Chris Mason <clm@meta.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Florent Revest <revest@chromium.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
+Message-ID: <20221118114519.2711d890@gandalf.local.home>
+In-Reply-To: <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
+References: <20221108220651.24492-1-revest@chromium.org>
+        <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
+        <20221117121617.4e1529d3@gandalf.local.home>
+        <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
+        <20221117174030.0170cd36@gandalf.local.home>
+        <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220921145422.437618-12-ardb@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,39 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 04:54:17PM +0200, Ard Biesheuvel wrote:
-> Convert startup32_load_idt() into an ordinary function and move it into
-> the .text section. This involves turning the rva() immediates into ones
-> derived from a local label, and preserving/restoring the %ebp and %ebx
-> as per the calling convention.
+On Fri, 18 Nov 2022 16:34:50 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
+
+> > Not alarmist, but concern as being able to modify what a kernel function can
+> > do is not something I take lightly.  
 > 
-> Also move the #ifdef to the only existing call site. This makes it clear
-> that the function call does nothing if support for memory encryption is
-> not compiled in.
+> FWIW, given that the aim here seems to be to expose all kernel internals to be
+> overridden arbitrarily, I'm also concerned that there's a huge surface area for
+> issues with maintainability, robustness/correctness, and security.
+> 
+> I really don't want to be stuck in a position where someone argues that all
+> kernel internal functions are ABI and need to stay around as-is to be hooked by
+> eBPF, and I hope that we all agree that there are no guarantees on that front.
 
-I'm not crazy about all that ifdeffery in there but this will need a
-serious look.
+My biggest concern is changing functionality of arbitrary functions by BPF.
+I would much rather limit what functions BPF could change with some
+annotation.
 
-Btw, you can drop one, diff ontop:
+int __bpf_modify foo()
+{
+	...
+}
 
----
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index bc5bd639217e..a862fd8ac0bd 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -726,9 +726,7 @@ SYM_DATA_START(boot32_idt)
- 	.quad 0
- 	.endr
- SYM_DATA_END_LABEL(boot32_idt, SYM_L_GLOBAL, boot32_idt_end)
--#endif
- 
--#ifdef CONFIG_AMD_MEM_ENCRYPT
- 	.text
- 	.code32
- /*
 
--- 
-Regards/Gruss,
-    Boris.
+That way if somethings not working, you can see directly in the code that
+the function could be modified by a BPF program, instead of getting some
+random bug report because a function returned an unexpected result that the
+code of that function could never produce.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+-- Steve
