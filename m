@@ -2,152 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C2D62ED9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9D962ED9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240260AbiKRGaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S241115AbiKRGae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235127AbiKRGa1 (ORCPT
+        with ESMTP id S232004AbiKRGa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 01:30:27 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB3697A94
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:30:25 -0800 (PST)
-X-UUID: b58a818645d144ad9fcade17229798dc-20221118
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=t0/kcTXw6jGVvgjMHZqdojaidDYLv7u6AgMEPfrEt7Y=;
-        b=TgrtK+zHQSeV11CMOq80D4ZO/inklulGUmy2rNfpEXtSwlcbXOJ9WoRQlFM6wSnNJBhpzxlhHTV3Eh69VyHMHXz/t4GohFgufTCqU7OqZsEMWG8kH4bZ/HnHcGVx7rBqgrcob0SMSFM8xvafL4miGL83bSv5bkN4zWoONzKe6yc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.13,REQID:a9d58ffe-8e08-488b-8322-b266cca03412,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.13,REQID:a9d58ffe-8e08-488b-8322-b266cca03412,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:d12e911,CLOUDID:9639242f-2938-482e-aafd-98d66723b8a9,B
-        ulkID:2211181430214OB7Q0K4,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: b58a818645d144ad9fcade17229798dc-20221118
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yongqiang.niu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1823122021; Fri, 18 Nov 2022 14:30:20 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 18 Nov 2022 14:30:20 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 18 Nov 2022 14:30:19 +0800
-From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>
-Subject: [PATCH v1] mtk-mmsys: Change mtk-mmsys & mtk-mutex to modules
-Date:   Fri, 18 Nov 2022 14:30:18 +0800
-Message-ID: <20221118063018.13520-1-yongqiang.niu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74EB97A98;
+        Thu, 17 Nov 2022 22:30:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 720276233C;
+        Fri, 18 Nov 2022 06:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B8ECAC433B5;
+        Fri, 18 Nov 2022 06:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668753024;
+        bh=D66kuk5DJuqXcsWWWvKnPBwW4ueok11OWIebIp7ZWmk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=MfFvyYmRVldKmbZlF+84SBLrxse4k1t4UzvVLdC7WzsReIaM+L3Rwsr+PdypjITHz
+         ztD0tuTP5nXBhQGrJWbJo3fBrlvqo07B1HSLN7CN8IWo6dHpwhgPs8uXgLg0myDh/Y
+         TeRH5pgn4rtNy/fQxLbEUOXVTmbNIiaXmin6cbcEVcBZStossFWMrjTBr8qmqpX0ql
+         fDNizNBfMt3a35MrJh+VwuBVtIuxfuq4dnifCBB6OmyzN7AnXdDlsfy+4fETthrWq4
+         74nh+ZVEz3sbYf/JVMZftg6CbTBzp0odTQuqjbRtUzrH73HQpFjRpnPS+oFZno/b1d
+         kIiQERzPOq4LQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9A8F3E29F46;
+        Fri, 18 Nov 2022 06:30:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net-next v3 0/5] net: ipa: change GSI firmware load
+ specification
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166875302462.3603.16365158346185465889.git-patchwork-notify@kernel.org>
+Date:   Fri, 18 Nov 2022 06:30:24 +0000
+References: <20221116073257.34010-1-elder@linaro.org>
+In-Reply-To: <20221116073257.34010-1-elder@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, andersson@kernel.org, konrad.dybcio@linaro.org,
+        agross@kernel.org, elder@kernel.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change mtk-mmsys & mtk-mutex to modules for gki
+Hello:
 
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
----
- drivers/soc/mediatek/Kconfig     |  2 +-
- drivers/soc/mediatek/mtk-mmsys.c | 18 +++++++++++++++++-
- drivers/soc/mediatek/mtk-mutex.c | 17 ++++++++++++++++-
- 3 files changed, 34 insertions(+), 3 deletions(-)
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
-index 40d0cc600cae..20c77152c282 100644
---- a/drivers/soc/mediatek/Kconfig
-+++ b/drivers/soc/mediatek/Kconfig
-@@ -68,7 +68,7 @@ config MTK_SCPSYS_PM_DOMAINS
- 	  tasks in the system.
- 
- config MTK_MMSYS
--	bool "MediaTek MMSYS Support"
-+	tristate "MediaTek MMSYS Support"
- 	default ARCH_MEDIATEK
- 	depends on HAS_IOMEM
- 	help
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index f3431448e843..82443a91d7d9 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -7,6 +7,7 @@
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/io.h>
-+#include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/reset-controller.h>
-@@ -326,4 +327,19 @@ static struct platform_driver mtk_mmsys_drv = {
- 	.probe = mtk_mmsys_probe,
- };
- 
--builtin_platform_driver(mtk_mmsys_drv);
-+static int __init mtk_mmsys_init(void)
-+{
-+	return platform_driver_register(&mtk_mmsys_drv);
-+}
-+
-+static void __exit mtk_mmsys_exit(void)
-+{
-+	platform_driver_unregister(&mtk_mmsys_drv);
-+}
-+
-+module_init(mtk_mmsys_init);
-+module_exit(mtk_mmsys_exit);
-+
-+MODULE_AUTHOR("Yongqiang Niu <yongqiang.niu@mediatek.com>");
-+MODULE_DESCRIPTION("MediaTek SoC MMSYS driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index c1a33d52038e..84cd1a858f06 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -874,4 +874,19 @@ static struct platform_driver mtk_mutex_driver = {
- 	},
- };
- 
--builtin_platform_driver(mtk_mutex_driver);
-+static int __init mtk_mutex_init(void)
-+{
-+	return platform_driver_register(&mtk_mutex_driver);
-+}
-+
-+static void __exit mtk_mutex_exit(void)
-+{
-+	platform_driver_unregister(&mtk_mutex_driver);
-+}
-+
-+module_init(mtk_mutex_init);
-+module_exit(mtk_mutex_exit);
-+
-+MODULE_AUTHOR("Yongqiang Niu <yongqiang.niu@mediatek.com>");
-+MODULE_DESCRIPTION("MediaTek SoC MUTEX driver");
-+MODULE_LICENSE("GPL");
+On Wed, 16 Nov 2022 01:32:51 -0600 you wrote:
+> Version 3 just adds reviewed-by tags for Krzysztof Kozlowski.
+> 
+> Version 2 of this series modifies the first patch only.  One section
+> in the description is reworded, and the example now consistenly
+> describes the SC7180 SoC, both as suggested by Krzysztof.
+> 
+> Currently, GSI firmware must be loaded for IPA before it can be
+> used--either by the modem, or by the AP.  New hardware supports a
+> third option, with the bootloader taking responsibility for loading
+> GSI firmware.  In that case, neither the AP nor the modem needs to
+> do that.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v3,1/5] dt-bindings: net: qcom,ipa: deprecate modem-init
+    https://git.kernel.org/netdev/net-next/c/4ca0c6474f71
+  - [net-next,v3,2/5] net: ipa: encapsulate decision about firmware load
+    https://git.kernel.org/netdev/net-next/c/50f803d4aa71
+  - [net-next,v3,3/5] net: ipa: introduce "qcom,gsi-loader" property
+    https://git.kernel.org/netdev/net-next/c/07f2f8e1b747
+  - [net-next,v3,4/5] dt-bindings: net: qcom,ipa: support skipping GSI firmware load
+    https://git.kernel.org/netdev/net-next/c/a49c3ab7d75f
+  - [net-next,v3,5/5] net: ipa: permit GSI firmware loading to be skipped
+    https://git.kernel.org/netdev/net-next/c/7569805ec26e
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
