@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BEA62F572
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314EC62F579
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241655AbiKRM7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 07:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S241875AbiKRNCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235142AbiKRM7x (ORCPT
+        with ESMTP id S241697AbiKRNCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 07:59:53 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F6740901
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:59:52 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id z24so6690279ljn.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:59:52 -0800 (PST)
+        Fri, 18 Nov 2022 08:02:35 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579C2623AA
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:02:31 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id be13so8114085lfb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:02:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AcfffeNobYumFZ5ZCIp1bfA2NEySH/JJP9I2Y02WKAg=;
-        b=DanRDUkQJA3Pp0DUuiQCTYGcEvGmUBzHyudLzr6IWwD0BRVpDgtGu5Fk05XNz0wIVA
-         ZYfSbOKePpOhIJ3Ra0UzO/oTOBmMrH/LXS8ZjzbjcYAsOoN85brjLvExCkdpGouOzIX7
-         hdqiqpunfOnR1zcLWZEk2eaqZfcZ8k6WG01nHlaa8rfk3ojTjkdxekUV5pTtYtxeTlYw
-         rROJ40TqGUITwTH0RavDV7S9qcv+lkirPjItLlUxTJEfII9FAppvKMCX9bvgX634Emmj
-         mn2lTr2JakW766v5Z/VWK6yYlPap2bWFXU75BiAaTEdRy7dN4+JhZFKB7g8crZUTBpVW
-         3pMg==
+        bh=cwwjinAwnI9JP7ipWBIl6FuQzSRiSFJbqcKk9ONdIpQ=;
+        b=obPz4JjmPLeKv2oww2oR7ZLdXYLjLv2XxsQO9UxHebHp3oh+VdB1163aABgipfa3Vh
+         X05N/8dS0AsPadRJwlMwoHwlfnOHow88Me0ghANAoPFkFUDsPAHSM+IJG0G5LEpbM3b5
+         erjJ+lPbNCVqKHnLcXbYODFo2IUJYq35ylTV1HoW56UVYLtxe68oJ+Gz1x27IvRfaohY
+         XYOTQwgZ3rS/gH9z3OJhUUH5Png5T1zWdB2pVmo4GobT+L82BnUn3q/SJjcRpktx/QYO
+         dz0fAUaOjeV9yHuNfe4sm0kqX455N+rGglD3+01u05D1XES/iUlJE3V4ps39SHFQGZL6
+         HTPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AcfffeNobYumFZ5ZCIp1bfA2NEySH/JJP9I2Y02WKAg=;
-        b=hvCQXCIoaJ7aDVRYEqZCQx/OcQ+SQYi4gFMmHHCoZ38MGJopZfPReA1xv0irYyiPQ9
-         lQnEzG1sP9lbnNUNUQ6FneoK9HLl/S5EWMmlwHsF6YshqqNC3RPkSntlfFbXyeSHPxaS
-         4UUOpgdIMtMjedoQ8X8J+69h9HtFqs9FVY/kWYhK8UGDzQM9cx/kqM/9MmRkYo1Ywndv
-         4mEG+cWjyfiDaJUrO68g98hwukA1OjzX8LV2PGGRKHt0b0uS2k0lY3uug6WsGQVh33mS
-         fGYFLcPDYfagxuBjerQ2u7/12/jBcdRpN/KN52n2FFSMCatFkI1hCcqHAj/38H0GGAum
-         YxqQ==
-X-Gm-Message-State: ANoB5pka6zcqLy4CDZw1yQSeL3aKaQBaPkeovrrsAOST0d9g/LwliTl3
-        hsIaCTElbzp3wMbNTiURo33Szg==
-X-Google-Smtp-Source: AA0mqf4tCKi7EZy6zDA12sMMRvEtUlQDmz88jJfTmxV9ptcDJhJ0Qq18Jj85xPAyp7dsM7hw1aKasw==
-X-Received: by 2002:a05:651c:160b:b0:276:4462:2d20 with SMTP id f11-20020a05651c160b00b0027644622d20mr2330611ljq.19.1668776390703;
-        Fri, 18 Nov 2022 04:59:50 -0800 (PST)
+        bh=cwwjinAwnI9JP7ipWBIl6FuQzSRiSFJbqcKk9ONdIpQ=;
+        b=p8uApm+oULlwRBKy9yl7F3xZ0QVBoHsGSaEJ4AbPDjWaPfR9BnmK/w5a0+VWr3Yb2f
+         T4Syb3EsnXOV4C5a+VbJ+3FSWHTM6Pe04xZ5N0qMXVMGP5yGe0dbyvc9KuZnaZ992RCw
+         uwpoZVPAMxYUUQ714vxxp1TojdkRiN7kcoutrcqS/fbax5XJsAO14iHwSZHNYfOhQtiR
+         SAcE0loyeuszAsE3egmJU9OYdfv9Ziu9o+KXvPoqWWdUq1VV6ItQ1Fv2znEKxFuS5Xxk
+         zQlE9JPeMp+7GJlYBQ9ywrGcJu/nXQaTDke0JL/TyeX+mI3sg+sIAW5ZPHZJ/dOXVUm/
+         8XuA==
+X-Gm-Message-State: ANoB5pmWFVTVmQtSWb/Sl/9acd6fYkixjgnmunvoQaNZw7jTfDQG30pm
+        VrKAZtcPtyaakWp0lf2Al0qkcQ==
+X-Google-Smtp-Source: AA0mqf5iRqFuX0lxx+NC9PbVCESfhII3uH8SJo25riWa6ALefKjdFE/nEDLQvFCDKiQ3DjJbBr/hlw==
+X-Received: by 2002:a05:6512:23a8:b0:4a2:4df9:4cad with SMTP id c40-20020a05651223a800b004a24df94cadmr2246808lfv.429.1668776549574;
+        Fri, 18 Nov 2022 05:02:29 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id dt27-20020a0565122a9b00b00492e3c8a986sm644905lfb.264.2022.11.18.04.59.49
+        by smtp.gmail.com with ESMTPSA id d5-20020a196b05000000b00499b1873d6dsm648454lfa.269.2022.11.18.05.02.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 04:59:50 -0800 (PST)
-Message-ID: <c55e26fe-b884-e4e8-525e-f69f408410cd@linaro.org>
-Date:   Fri, 18 Nov 2022 13:59:49 +0100
+        Fri, 18 Nov 2022 05:02:29 -0800 (PST)
+Message-ID: <feb97479-3c1b-9fd8-ffd7-f8e95151d8fe@linaro.org>
+Date:   Fri, 18 Nov 2022 14:02:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v4 1/5] dt-bindings: ti, sci: Add lpm region and
- firmware-name
+Subject: Re: [PATCH v3 01/14] dt-bindings: media: rkisp1: Add i.MX8MP ISP to
+ compatible
 Content-Language: en-US
-To:     Georgi Vlaev <g-vlaev@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
+To:     Paul Elder <paul.elder@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Vibhore Vardhan <vibhore@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>
-References: <20221116181307.198209-1-g-vlaev@ti.com>
- <20221116181307.198209-2-g-vlaev@ti.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
+ <20221118093931.1284465-2-paul.elder@ideasonboard.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116181307.198209-2-g-vlaev@ti.com>
+In-Reply-To: <20221118093931.1284465-2-paul.elder@ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/11/2022 19:13, Georgi Vlaev wrote:
-> From: Dave Gerlach <d-gerlach@ti.com>
+On 18/11/2022 10:39, Paul Elder wrote:
+> The i.MX8MP ISP is compatbile with the rkisp1 driver. Add it to the list
+> of compatible strings. While at it, expand on the description of the
+> clocks to make it clear which clock in the i.MX8MP ISP they map to,
+> based on the names from the datasheet (which are confusing).
 > 
-> Add documentation for the lpm region which tells the ti-sci driver where
-> to load the FS Stub low power mode firmware and also the firmware-name
-> which tells the driver which binary to load. Both of these are optional
-> for normal system operation but required to enabled suspend-to-mem usage
-> of Deep Sleep state.
-> 
+> Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-I think you got here Rob's tag after sending v4.
+This is a friendly reminder during the review process.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+It looks like you received a tag and forgot to add it.
+
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+If a tag was not added on purpose, please state why and what changed.
 
 Best regards,
 Krzysztof
