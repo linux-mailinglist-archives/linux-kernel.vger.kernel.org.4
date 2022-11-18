@@ -2,192 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5062A62F0CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CD362F0CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241648AbiKRJPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
+        id S241820AbiKRJPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:15:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241843AbiKRJPh (ORCPT
+        with ESMTP id S241210AbiKRJPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:15:37 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9754B3C;
-        Fri, 18 Nov 2022 01:15:36 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668762933;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0RtDA5btK0ampea0tB4KiJj2jZ4ymQLBCgNs6QX082s=;
-        b=zBl7wBItViz1JXxmDYMYuwJikf3fa2m4RWvXJfX47lxyWQxGRgK4Daji2wxZCBvaHYLD/q
-        SBNuBv74B/60sDOSa65W3rH+BLRDyliHSzLNF5ZrLfkvvp9fTWI33BmaU7hN02u1FFqs7U
-        N4aY7z7JgQnhz6IZSCF34d0au0fZjKWBrEzeMV3zTk8VwxQszkhCC2mTu1YJHW0naH/rhE
-        CNkGyPWdYyFqsoYtqse5GA2gzXdD7pakEp4MJzYWuD+ixOTRYa0Ibysf4J8dFYNA7cJDY9
-        D2FYo2bZf4mrbEnjsAfUoEaL42hOtlGaZFCqmJldvdb0Yd3FQtFHj8dxK5NSrQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668762933;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0RtDA5btK0ampea0tB4KiJj2jZ4ymQLBCgNs6QX082s=;
-        b=bDHnS/NamRxER+XFoJbT1HcWSjju0Fl0Qb1/NAadQLSuEMyZrKFHBq9OLs5LZH4wkfNcrR
-        oxE/MxsFYXc0BMCA==
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>
-Subject: Re: [patch 21/33] genirq/msi: Provide msi_domain_alloc_irq_at()
-In-Reply-To: <87k03tkrii.ffs@tglx>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.463650635@linutronix.de>
- <0cbf645b-b23a-6c85-4389-bb039a677a52@intel.com> <87k03tkrii.ffs@tglx>
-Date:   Fri, 18 Nov 2022 10:15:33 +0100
-Message-ID: <87zgcok4i2.ffs@tglx>
+        Fri, 18 Nov 2022 04:15:47 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE0B419B8;
+        Fri, 18 Nov 2022 01:15:47 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id t4so3180580wmj.5;
+        Fri, 18 Nov 2022 01:15:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3X/1S90GjlN8tePoyh8v6JfLXXtmp5QanUR4qTwUYyg=;
+        b=ivrCl7eR87WFMl7HIEh9g8KNEgNJ7CyRSqNkagy0HUc6kI78j7+z/acrsRITNfpM6p
+         RMKX7zGXAABr383aK3RMwkXgNmx8hMDQUrU3m1B6dAe3xyh3arDqB6Yqp/2gV1ZOkgw6
+         HHNQWvtMXq8J3olEVAKX4aSeSMuO6j8p3+JbXjjcWzv4HzqVNZt2iF31pAUlBgzfwqXE
+         rSDM6gYyFTALm2OvWQVXie1eP4XW5R07pOp+T/EPtiP+I+Px6PAL3+gVbtWdZ+wicO1+
+         4zcedJI+Npvysmd43guvP+0e+urmfr1+jioLF+WJywwSjF2+6FQA6OfnqDdhje7fLTIe
+         ifWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3X/1S90GjlN8tePoyh8v6JfLXXtmp5QanUR4qTwUYyg=;
+        b=cEDQbLS/q9YBaBIyOalkr35MFyfIo8Ov+WgnCLvubUo4gF+uXkh//5H3dlsB+EEZJw
+         0zN9gY9P+jD6elpMvqDE91hEWYKKzayo6D9snUMLh6W/sh17/0tTo0j1+tTJmTkBuPkt
+         5sBmG/MXuBQVSyIM8LBXFMyYo18WI4A0pPdNjbnP+aKLFjWhwG0Bn6jR+eTITQIDJm1H
+         2Ghhw86GTYvRetPEttR7vcnE8hpvQhyQnMsjibdKKeK3SR1uaTLbUcxLn8kybbGoHfLS
+         le63asJMZEqTjZX6vkUwwv6n7YcxeW7wvZzg0CbTrGdfUSdCoI7vGC58RQgIVKdAciW1
+         2oxw==
+X-Gm-Message-State: ANoB5pm5holhQJjJFuO9a/UzJRwOCTctpq3lLdU/CSj90QttPWsapLQW
+        lyf1VyTJ13EoeMg8g6zPaUo=
+X-Google-Smtp-Source: AA0mqf7F/GY8GL5t96td0LCmkzg1Y6ivleyOyKEYRj0gjjaDZLmMGYBgf27oi9om7DHMcX3fjDswJw==
+X-Received: by 2002:a05:600c:34c5:b0:3cf:39b3:16bb with SMTP id d5-20020a05600c34c500b003cf39b316bbmr4193929wmq.201.1668762945535;
+        Fri, 18 Nov 2022 01:15:45 -0800 (PST)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05600c350800b003d005aab31asm3080706wmq.40.2022.11.18.01.15.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 01:15:45 -0800 (PST)
+Date:   Fri, 18 Nov 2022 09:15:43 +0000
+From:   Martin Habets <habetsm.xilinx@gmail.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Zhang Changzhong <zhangchangzhong@huawei.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] sfc: fix potential memleak in
+ __ef100_hard_start_xmit()
+Message-ID: <Y3dNP6iEj2YyEwqJ@gmail.com>
+Mail-Followup-To: Leon Romanovsky <leon@kernel.org>,
+        Zhang Changzhong <zhangchangzhong@huawei.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1668671409-10909-1-git-send-email-zhangchangzhong@huawei.com>
+ <Y3YctdnKDDvikQcl@unreal>
+ <efedaa0e-33ce-24c6-bb9d-8f9b5c4a1c38@huawei.com>
+ <Y3YxlxPIiw43QiKE@unreal>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3YxlxPIiw43QiKE@unreal>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18 2022 at 01:58, Thomas Gleixner wrote:
-> On Thu, Nov 17 2022 at 15:33, Reinette Chatre wrote:
->> When calling pci_ims_alloc_irq(), msi_insert_desc() ends up being
->> called twice, first with index = MSI_ANY_INDEX, second with index = 0.
->> (domid = 1 both times)
->
-> How so?
->
->>>  	}
->>>  
->>>  	hwsize = msi_domain_get_hwsize(dev, domid);
->>> -	if (index >= hwsize) {
->>> -		ret = -ERANGE;
->>> -		goto fail;
->>> -	}
->>>  
->>> -	desc->msi_index = index;
->>> -	index += baseidx;
->>> -	ret = xa_insert(&md->__store, index, desc, GFP_KERNEL);
->>> -	if (ret)
->>> -		goto fail;
->>> -	return 0;
->>> +	if (index == MSI_ANY_INDEX) {
->>> +		struct xa_limit limit;
->>> +		unsigned int index;
->>> +
->>> +		limit.min = baseidx;
->>> +		limit.max = baseidx + hwsize - 1;
->>>  
->>> +		/* Let the xarray allocate a free index within the limits */
->>> +		ret = xa_alloc(&md->__store, &index, desc, limit, GFP_KERNEL);
->>> +		if (ret)
->>> +			goto fail;
->>> +
->>
->> This path (index == MSI_ANY_INDEX) is followed when msi_insert_desc()
->> is called the first time and the xa_alloc() succeeds at index 65536.
->>
->>> +		desc->msi_index = index;
->>
->> This is problematic with desc->msi_index being a u16, assigning
->> 65536 to it becomes 0.
->
-> You are partially right. I need to fix that and make it explicit as it's
-> a "works by chance or maybe not" construct right now.
->
-> But desc->msi_index is correct to be truncated because it's the index
-> within the domain space which is zero based.
+On Thu, Nov 17, 2022 at 03:05:27PM +0200, Leon Romanovsky wrote:
+> On Thu, Nov 17, 2022 at 08:41:52PM +0800, Zhang Changzhong wrote:
+> > 
+> > 
+> > On 2022/11/17 19:36, Leon Romanovsky wrote:
+> > > On Thu, Nov 17, 2022 at 03:50:09PM +0800, Zhang Changzhong wrote:
+> > >> The __ef100_hard_start_xmit() returns NETDEV_TX_OK without freeing skb
+> > >> in error handling case, add dev_kfree_skb_any() to fix it.
+> > >>
+> > >> Fixes: 51b35a454efd ("sfc: skeleton EF100 PF driver")
+> > >> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> > >> ---
+> > >>  drivers/net/ethernet/sfc/ef100_netdev.c | 1 +
+> > >>  1 file changed, 1 insertion(+)
+> > >>
+> > >> diff --git a/drivers/net/ethernet/sfc/ef100_netdev.c b/drivers/net/ethernet/sfc/ef100_netdev.c
+> > >> index 88fa295..ddcc325 100644
+> > >> --- a/drivers/net/ethernet/sfc/ef100_netdev.c
+> > >> +++ b/drivers/net/ethernet/sfc/ef100_netdev.c
+> > >> @@ -218,6 +218,7 @@ netdev_tx_t __ef100_hard_start_xmit(struct sk_buff *skb,
+> > >>  		   skb->len, skb->data_len, channel->channel);
+> > >>  	if (!efx->n_channels || !efx->n_tx_channels || !channel) {
+> > >>  		netif_stop_queue(net_dev);
+> > >> +		dev_kfree_skb_any(skb);
+> > >>  		goto err;
+> > >>  	}
+> > > 
+> > > ef100 doesn't release in __ef100_enqueue_skb() either. SKB shouldn't be
+> > > NULL or ERR at this stage.
+> > 
+> > SKB shouldn't be NULL or ERR, so it can be freed. But this code looks weird.
+> 
+> Please take a look __ef100_enqueue_skb() and see if it frees SKB on
+> error or not. If not, please fix it.
 
-It should obviously do:
+That function looks ok to me, but I appreciate the extra eyes on it.
 
-   desc->msi_index = index - baseidx;
+Martin
 
->>> +		return 0;
->>> +	} else {
->>> +		if (index >= hwsize) {
->>> +			ret = -ERANGE;
->>> +			goto fail;
->>> +		}
->>> +
->>> +		desc->msi_index = index;
->>> +		index += baseidx;
->>> +		ret = xa_insert(&md->__store, index, desc, GFP_KERNEL);
->>> +		if (ret)
->>> +			goto fail;
->>
->> This "else" path is followed when msi_insert_desc() is called the second
->> time with "index = 0". The xa_insert() above fails at index 65536
->> (baseidx = 65536) with -EBUSY, trickling up as the return code to
->> pci_ims_alloc_irq().
->
-> Why is it called with index=0 the second time?
->>> +	desc = msi_alloc_desc(dev, 1, affdesc);
->>> +	if (!desc) {
->>> +		map.index = -ENOMEM;
->>> +		goto unlock;
->>> +	}
->>> +
->>> +	if (cookie)
->>> +		desc->data.cookie = *cookie;
->>> +
->>> +	ret = msi_insert_desc(dev, desc, domid, index);
->>> +	if (ret) {
->>> +		map.index = ret;
->>> +		goto unlock;
->>> +	}
->>
->> Above is the first call to msi_insert_desc(/* index = MSI_ANY_INDEX */)
->>
->>> +
->>> +	map.index = desc->msi_index;
->>
->> msi_insert_desc() did attempt to set desc->msi_index to 65536 but map.index ends
->> up being 0.
->
-> which is kinda correct.
->
->>> +	ret = msi_domain_alloc_irqs_range_locked(dev, domid, map.index, map.index);
->>
->> Here is where the second call to msi_insert_desc() originates:
->>
->> msi_domain_alloc_irqs_range_locked() -> msi_domain_alloc_locked() -> \
->> __msi_domain_alloc_locked() -> msi_domain_alloc_simple_msi_descs() -> \
->> msi_domain_add_simple_msi_descs() -> msi_insert_desc()
->
-> but yes, that's bogus because it tries to allocate what is allocated already.
->
-> Too tired to decode this circular dependency right now. Will stare at it
-> with brain awake in the morning. Duh!
-
-Duh. I'm a moron.
-
-Of course I "tested" this by flipping default and secondary domain
-around and doing dynamic allocations from PCI/MSI-X but that won't catch
-the bug because PCI/MSI-X does not have the ALLOC_SIMPLE_DESCS flag set.
-
-Let me fix that.
-
-Thanks,
-
-        tglx
+> Thanks
+> 
+> > 
+> > > 
+> > > diff --git a/drivers/net/ethernet/sfc/ef100_tx.c b/drivers/net/ethernet/sfc/ef100_tx.c
+> > > index 29ffaf35559d..426706b91d02 100644
+> > > --- a/drivers/net/ethernet/sfc/ef100_tx.c
+> > > +++ b/drivers/net/ethernet/sfc/ef100_tx.c
+> > > @@ -497,7 +497,7 @@ int __ef100_enqueue_skb(struct efx_tx_queue *tx_queue, struct sk_buff *skb,
+> > > 
+> > >  err:
+> > >         efx_enqueue_unwind(tx_queue, old_insert_count);
+> > > -       if (!IS_ERR_OR_NULL(skb))
+> > > +       if (rc)
+> > >                 dev_kfree_skb_any(skb);
+> > > 
+> > >         /* If we're not expecting another transmit and we had something to push
+> > > 
+> > > 
+> > >>  
+> > >> -- 
+> > >> 2.9.5
+> > >>
+> > > .
+> > > 
