@@ -2,71 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC6F62FC32
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D186062FC35
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242490AbiKRSIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S242312AbiKRSLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 13:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241377AbiKRSIU (ORCPT
+        with ESMTP id S235242AbiKRSLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:08:20 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1E37A366;
-        Fri, 18 Nov 2022 10:08:18 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AII89BT082440;
-        Fri, 18 Nov 2022 12:08:09 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668794889;
-        bh=c3pepiCGHi5sR3q5cWaJ4aW11UIBytKWyekMYxdOLOs=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=CMKUFa98XMCKaueIg8aDc95Jj2VC3nJFFFSEMwy2sdBN5nkYicU2A+TU3l4vhDd0W
-         5NSUnj5ShSiiUbhpcufuJc/73XNf1vt0ZXjL6j1cB5NsDjDTjmkoJfhucoKx0i7ty5
-         sSrDHULjldhCzWicVIouvYYWwhNjVIKFw/X1/xy0=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AII898T054230
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Nov 2022 12:08:09 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
- Nov 2022 12:08:08 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 18 Nov 2022 12:08:08 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AII88Io123565;
-        Fri, 18 Nov 2022 12:08:08 -0600
-Date:   Fri, 18 Nov 2022 12:08:08 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Andrew Davis <afd@ti.com>
-CC:     Apurva Nandan <a-nandan@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, Hari Nagalla <hnagalla@ti.com>
-Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
-Message-ID: <20221118180808.wnel7d6gswsnooww@junkman>
-References: <20221116130428.161329-1-a-nandan@ti.com>
- <20221116130428.161329-5-a-nandan@ti.com>
- <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
- <20221118174754.y37pq77drvla2uxj@tinderbox>
- <8c123fa2-caab-d2dd-5eb4-688f1c6abb33@ti.com>
+        Fri, 18 Nov 2022 13:11:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E31CC5D;
+        Fri, 18 Nov 2022 10:10:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45F38B824ED;
+        Fri, 18 Nov 2022 18:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94085C433D6;
+        Fri, 18 Nov 2022 18:10:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668795056;
+        bh=v1LpnWuqqL/42ipq0d18sYX3BkbXM25l/UJTnIgBjLo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=x219XtpZSnkTaYo6hGhYNpOb+isvlAshkhQ4Y8qptbywEz3ASOp9YA9CW0H2WV9oe
+         F0y5aexepvj6GYxHa5SRdvzsqAlS4iSMmhBRI+24aymbgKLx6NVXwKOXHMrf8cJB5u
+         ytQEbrkn/OheK10VQqKHH6/m/C40y1sari1QALig=
+Date:   Fri, 18 Nov 2022 19:10:53 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 6.1-rc6
+Message-ID: <Y3fKrfyixnq55Poc@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <8c123fa2-caab-d2dd-5eb4-688f1c6abb33@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,60 +49,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11:56-20221118, Andrew Davis wrote:
-> On 11/18/22 11:47 AM, Nishanth Menon wrote:
-> > On 11:40-20221118, Andrew Davis wrote:
-> > > On 11/16/22 7:04 AM, Apurva Nandan wrote:
-> > 
-> > [...]
-> > 
-> > > > +#include <dt-bindings/net/ti-dp83867.h>
-> > > > +#include <dt-bindings/gpio/gpio.h>
-> > > > +#include "k3-j784s4.dtsi"
-> > > > +
-> > > > +/ {
-> > > > +	compatible = "ti,j784s4-evm", "ti,j784s4";
-> > > > +	model = "Texas Instruments J784S4 EVM";
-> > > > +
-> > > > +	chosen {
-> > > > +		stdout-path = "serial2:115200n8";
-> > > > +	};
-> > > > +
-> > > > +	aliases {
-> > > > +		serial2 = &main_uart8;
-> > > 
-> > > This feels hacky. Your chosen node picks serial2 as that is usually
-> > > the one that is wired up on K3 boards. But on this board it is main_uart8.
-> > > So why not have this be serial10, then choose
-> > > 
-> > > stdout-path = "serial10:115200n8";
-> > > 
-> > > Also, I've made comments on previous version of this series, it is
-> > > nice to include folks who have commented before in the CC for future
-> > > versions, that way our filters don't hide these away and we can more
-> > > easily check that our comments have been addressed.
-> > 
-> > Please stick with the standard of serial2 as the linux console standard.
-> > We ended up with that to ease up capabilities of various distros to
-> > uniformly work across SoC and board variants.
-> > 
-> 
-> The chosen "stdout-path" is for setting the kernel's default output terminal.
-> Distros and other userspaces need to use their own policy mechanisms for
-> picking what serial port to run getty on or whatever the issue may be.
-> 
-> Some look at the kernel command line, and our bootloader provides
-> that too, so still no reason to fake alias names here.
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
-We have had this conversation earlier as well.
+are available in the Git repository at:
 
-https://lore.kernel.org/linux-arm-kernel/CAK8P3a2VSBvOn1o+q1PYZaQ6LS9U4cz+DZGuDbisHkwNs2dAAw@mail.gmail.com/T/#m4ecb0dc6a78c84631f072faa1b0df0df46333d09
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc6
 
-This is also the reason why we picked serial2 as linux console as a
-standard across the boards based on the ecosystem.
+for you to fetch changes up to 59a51183be1a6aaaf6f8483aec82e2fbf2c74ab9:
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+  Merge tag 'usb-serial-6.1-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2022-11-17 22:06:28 +0100)
+
+----------------------------------------------------------------
+USB driver fixes for 6.1-rc6
+
+Here are a number of USB driver fixes and new device ids for 6.1-rc6.
+Included in here are:
+	- new usb-serial device ids
+	- dwc3 driver fixes for reported problems
+	- cdns3 driver fixes
+	- new USB device quirks
+	- typec driver fixes
+	- extcon USB typec driver fix
+
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Benoît Monin (1):
+      USB: serial: option: add Sierra Wireless EM9191
+
+Davide Tronchin (3):
+      USB: serial: option: remove old LARA-R6 PID
+      USB: serial: option: add u-blox LARA-R6 00B modem
+      USB: serial: option: add u-blox LARA-L6 modem
+
+Duoming Zhou (1):
+      usb: chipidea: fix deadlock in ci_otg_del_timer
+
+Greg Kroah-Hartman (1):
+      Merge tag 'usb-serial-6.1-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Janne Grunau (1):
+      usb: dwc3: Do not get extcon device when usb-role-switch is used
+
+Johan Hovold (1):
+      Revert "usb: dwc3: disable USB core PHY management"
+
+Li Jun (1):
+      usb: cdns3: host: fix endless superspeed hub port reset
+
+Linus Walleij (1):
+      USB: bcma: Make GPIO explicitly optional
+
+Nicolas Dumazet (1):
+      usb: add NO_LPM quirk for Realforce 87U Keyboard
+
+Rajat Khandelwal (1):
+      usb: typec: mux: Enter safe mode only when pins need to be reconfigured
+
+Reinhard Speyerer (1):
+      USB: serial: option: add Fibocom FM160 0x0111 composition
+
+Sven Peter (1):
+      usb: typec: tipd: Prevent uninitialized event{1,2} in IRQ handler
+
+Thinh Nguyen (1):
+      usb: dwc3: gadget: Return -ESHUTDOWN on ep disable
+
+Yassine Oudjana (1):
+      extcon: usbc-tusb320: Call the Type-C IRQ handler only if a port is registered
+
+ drivers/extcon/extcon-usbc-tusb320.c  |  8 ++++-
+ drivers/usb/cdns3/host.c              | 56 +++++++++++++++++------------------
+ drivers/usb/chipidea/otg_fsm.c        |  2 ++
+ drivers/usb/core/quirks.c             |  3 ++
+ drivers/usb/dwc3/core.c               | 10 +++++++
+ drivers/usb/dwc3/gadget.c             |  2 +-
+ drivers/usb/dwc3/host.c               | 10 -------
+ drivers/usb/host/bcma-hcd.c           | 10 ++++---
+ drivers/usb/serial/option.c           | 19 ++++++++++--
+ drivers/usb/typec/mux/intel_pmc_mux.c | 15 ++++++++--
+ drivers/usb/typec/tipd/core.c         |  6 ++--
+ 11 files changed, 90 insertions(+), 51 deletions(-)
