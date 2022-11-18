@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC4D62F3BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DA062F3C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241349AbiKRLcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S241749AbiKRLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:32:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241062AbiKRLcN (ORCPT
+        with ESMTP id S241185AbiKRLcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 06:32:13 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA39C7CBB0;
-        Fri, 18 Nov 2022 03:31:59 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso3811309wms.4;
-        Fri, 18 Nov 2022 03:31:59 -0800 (PST)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B35D8B10E;
+        Fri, 18 Nov 2022 03:32:02 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id g2so5143181wrv.6;
+        Fri, 18 Nov 2022 03:32:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=32Tw0VIB3bjFmOplr9SeFowbh/PeKCbbj6BvYAFnrkk=;
-        b=FuavVFY2KSnenYdp+tweCYsgI4Oogrs8UL/LxHNEuXc7/P8xIZDxr5nrAdjyR7pMB5
-         ZJiqAetUiPLcXGvkMLmizQd0bT5i5+GADcBmWEISrtRPDY5Ty86seVhRD7+fZR/z5t2S
-         CWEe6PHN0wx8/VRSlOyn8h8M0is/l1MP1de0UflJzo3+mSrx6v+fmrZ+mYPmWI2ewMpB
-         4wFKuSNTca7NFwAEINzyfzOMq8lF6Kst1AK6jy36FR8W6F81S9cfh7SDsrLk8sHVfp5+
-         K848FbnjzGed972D7OjS70PTBg9oycxk8vbKkVLFRHtF+WejTf9M92ODVtk7pM5fpPwk
-         2mZA==
+        bh=WU/IiR7cE8k8Ct2BKn6U4+LCrt9eTga1yn5tJ+jqm7I=;
+        b=XZt1krBP4I4YMmZTtsRb8PoArBkkhRzClzELdbnB5ejdZ4NA34wczquYn/Vy7w8/vt
+         m7s4uMTorTn88kQ5valu/42tKfvDAn2ifSk6rTUsKWtbOvJwRMjciFEBnMTqKefhuEhK
+         YqFj0SKjt18qtN9zzgBzC/DFiUzzJy7ippC/u4qewlHoc4COmr6RkOaI8Y2RcqY9qlCy
+         TK2MnZkY+3j6Mu/DCX7eBE5NG/nGnYp5vuotgBngn3oI18hPrEiErRv0XU+nvmBnfyyJ
+         Kj5pbLSVu/KiGi4Xx34qb/9JMie3B3akZZDitKYW3Tdri7VutjJa5CwTYT4dlupJtw85
+         5+Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=32Tw0VIB3bjFmOplr9SeFowbh/PeKCbbj6BvYAFnrkk=;
-        b=dMH2mhvBp3jSiCVCTYgEe4A2rvuI6/I2Q0kYLhCPKkgjuqU+OaIGAPJR4mUwZi7m8T
-         9AlcJDQkcarokYcDqJY13tm+joJhbMe1FJLlLEer4vDD3MptMC9SrR+720FMr/EHI2cs
-         3vPtpq/bCmo3VJAH45WXC/4FJCWrn7wWp+wCsK7hGocJPiL93k5HUWLrY32M1otQjsN1
-         7ezUsFltCADAUivU/IpLum/zftOWZ1xpLQtCc9FitQTvCDEtKqBqGxXzyqZu+i2y2v16
-         2vaeSixQUb1IWPCJaChMwhQmBjMqdBdf2Fez8ZyDa2OF7zTwFvF37MAhy4isU9v3i2aW
-         N4ug==
-X-Gm-Message-State: ANoB5pmbTq0IfEJgOZVt19JI0fuB0EBooVRYETPDJlGH4ZoArTNsdDDg
-        a9iBazErzbJ6Bk/fO+f2n+bEy1teu6k=
-X-Google-Smtp-Source: AA0mqf7NW9yZKRf3UJ98dIUGoFgOP0RBPYcC7dkMwUvCCKlP3Fg72FEyuExdEOvXuo9RFoCGsonH9w==
-X-Received: by 2002:a1c:f216:0:b0:3c6:c2ae:278b with SMTP id s22-20020a1cf216000000b003c6c2ae278bmr4547325wmc.127.1668771118235;
-        Fri, 18 Nov 2022 03:31:58 -0800 (PST)
+        bh=WU/IiR7cE8k8Ct2BKn6U4+LCrt9eTga1yn5tJ+jqm7I=;
+        b=JE4avhdzq7Mkwdh+UveS7vnHlx+cJOpTe29aFotlM4PZC6o7uFicm7fnP+yi/5WOyt
+         PJy7Lr0obwjog+sagh+5Ocb0M13/tqLIhoESetMMNheDeIJrX0wbq9RgFn5QRHSUqfe2
+         3OXi2pDyfZSuEauUdwWOgxOJWBt1BfKvhS+c0oyOx6oczYUqPWH4iyzJsi0lfUezZ36B
+         M9J9lUmi1uSnvIh/t58LCJ7rGrzNUXJS5M3QpfbD2oX+U/KPR4velN508toKOboH96uQ
+         +RXvDbgTFy1yKmuYG87udJa2ichXAkXaqZvLKJAJ02Nvez99RnVNUvyp1EhiWlAAYKyP
+         hpsA==
+X-Gm-Message-State: ANoB5pmMg9gkJmN2fq0UWqXojXY54eQFwLQZKyitSV35M307Tu0o/vZo
+        xp5Yya+iV8X9xfeLvhmuFn0=
+X-Google-Smtp-Source: AA0mqf58I23NR4/4SbZugVPX22dvJKHqj02BlJmyoF4W6patuvX4oUKC+TZI5TXiGQgbCePFhMYy4w==
+X-Received: by 2002:adf:ce04:0:b0:241:7277:95dc with SMTP id p4-20020adfce04000000b00241727795dcmr3917637wrn.620.1668771121020;
+        Fri, 18 Nov 2022 03:32:01 -0800 (PST)
 Received: from localhost.localdomain ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id l24-20020a05600c1d1800b003cf878c4468sm9894817wms.5.2022.11.18.03.31.56
+        by smtp.gmail.com with ESMTPSA id l24-20020a05600c1d1800b003cf878c4468sm9894817wms.5.2022.11.18.03.31.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 03:31:57 -0800 (PST)
+        Fri, 18 Nov 2022 03:32:00 -0800 (PST)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -65,9 +65,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/7] dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Pull pinctrl node changes from MT6795 document
-Date:   Fri, 18 Nov 2022 14:30:22 +0300
-Message-Id: <20221118113028.145348-2-y.oudjana@protonmail.com>
+Subject: [PATCH v5 2/7] dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Improve pinctrl subnode and property descriptions
+Date:   Fri, 18 Nov 2022 14:30:23 +0300
+Message-Id: <20221118113028.145348-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118113028.145348-1-y.oudjana@protonmail.com>
 References: <20221118113028.145348-1-y.oudjana@protonmail.com>
@@ -85,101 +85,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-mediatek,pinctrl-mt6795.yaml has different node name patterns which match
-bindings of other MediaTek pin controllers, ref for pinmux-node.yaml which
-has a description of the pinmux property, as well as some additional
-descriptions for some pin configuration properties. Pull those changes
-into mediatek,mt6779-pinctrl.yaml and adjust the example DTS to match in
-preparation to combine the MT6795 document into it.
+Change "subnodes" to "subnode" in subnode description for better grammatical
+accuracy, capitalize pinmux description, wrap all descriptions at 80 characters,
+and remove literal style indicators from descriptions that don't need their new
+lines preserved.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 38 ++++++++++++++-----
- 1 file changed, 28 insertions(+), 10 deletions(-)
+ .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-index a2141eb0854e..d6231d11e949 100644
+index d6231d11e949..9d481311cc6b 100644
 --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-@@ -111,19 +111,21 @@ allOf:
-         - "#interrupt-cells"
- 
- patternProperties:
--  '-[0-9]*$':
-+  '-pins$':
-     type: object
-     additionalProperties: false
- 
+@@ -118,11 +118,12 @@ patternProperties:
      patternProperties:
--      '-pins*$':
-+      '^pins':
+       '^pins':
          type: object
-         description: |
-           A pinctrl node should contain at least one subnodes representing the
+-        description: |
+-          A pinctrl node should contain at least one subnodes representing the
++        description:
++          A pinctrl node should contain at least one subnode representing the
            pinctrl groups available on the machine. Each subnode will list the
-           pins it needs, and how they should be configured, with regard to muxer
-           configuration, pullups, drive strength, input enable/disable and input schmitt.
--        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-+        allOf:
-+          - $ref: pinmux-node.yaml
-+          - $ref: pincfg-node.yaml
- 
+-          pins it needs, and how they should be configured, with regard to muxer
+-          configuration, pullups, drive strength, input enable/disable and input schmitt.
++          pins it needs, and how they should be configured, with regard to
++          muxer configuration, pullups, drive strength, input enable/disable
++          and input schmitt.
+         allOf:
+           - $ref: pinmux-node.yaml
+           - $ref: pincfg-node.yaml
+@@ -130,9 +131,9 @@ patternProperties:
          properties:
            pinmux:
-@@ -134,9 +136,25 @@ patternProperties:
+             description:
+-              integer array, represents gpio pin number and mux setting.
+-              Supported pin number and mux varies for different SoCs, and are defined
+-              as macros in boot/dts/<soc>-pinfunc.h directly.
++              Integer array, represents gpio pin number and mux setting.
++              Supported pin number and mux varies for different SoCs, and are
++              defined as macros in boot/dts/<soc>-pinfunc.h directly.
  
            bias-disable: true
  
--          bias-pull-up: true
--
--          bias-pull-down: true
-+          bias-pull-up:
-+            oneOf:
-+              - type: boolean
-+              - enum: [100, 101, 102, 103]
-+                description: Pull up PUPD/R0/R1 type define value.
-+            description: |
-+              For normal pull up type, it is not necessary to specify R1R0
-+              values; When pull up type is PUPD/R0/R1, adding R1R0 defines
-+              will set different resistance values.
-+
-+          bias-pull-down:
-+            oneOf:
-+              - type: boolean
-+              - enum: [100, 101, 102, 103]
-+                description: Pull down PUPD/R0/R1 type define value.
-+            description: |
-+              For normal pull down type, it is not necessary to specify R1R0
-+              values; When pull down type is PUPD/R0/R1, adding R1R0 defines
-+              will set different resistance values.
- 
-           input-enable: true
- 
-@@ -218,8 +236,8 @@ examples:
-             #interrupt-cells = <2>;
-             interrupts = <GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>;
- 
--            mmc0_pins_default: mmc0-0 {
--                cmd-dat-pins {
-+            mmc0_pins_default: mmc0-pins {
-+                pins-cmd-dat {
-                     pinmux = <PINMUX_GPIO168__FUNC_MSDC0_DAT0>,
-                         <PINMUX_GPIO172__FUNC_MSDC0_DAT1>,
-                         <PINMUX_GPIO169__FUNC_MSDC0_DAT2>,
-@@ -232,11 +250,11 @@ examples:
-                     input-enable;
-                     mediatek,pull-up-adv = <1>;
-                 };
--                clk-pins {
-+                pins-clk {
-                     pinmux = <PINMUX_GPIO176__FUNC_MSDC0_CLK>;
-                     mediatek,pull-down-adv = <2>;
-                 };
--                rst-pins {
-+                pins-rst {
-                     pinmux = <PINMUX_GPIO178__FUNC_MSDC0_RSTB>;
-                     mediatek,pull-up-adv = <0>;
-                 };
+@@ -141,7 +142,7 @@ patternProperties:
+               - type: boolean
+               - enum: [100, 101, 102, 103]
+                 description: Pull up PUPD/R0/R1 type define value.
+-            description: |
++            description:
+               For normal pull up type, it is not necessary to specify R1R0
+               values; When pull up type is PUPD/R0/R1, adding R1R0 defines
+               will set different resistance values.
+@@ -151,7 +152,7 @@ patternProperties:
+               - type: boolean
+               - enum: [100, 101, 102, 103]
+                 description: Pull down PUPD/R0/R1 type define value.
+-            description: |
++            description:
+               For normal pull down type, it is not necessary to specify R1R0
+               values; When pull down type is PUPD/R0/R1, adding R1R0 defines
+               will set different resistance values.
 -- 
 2.38.1
 
