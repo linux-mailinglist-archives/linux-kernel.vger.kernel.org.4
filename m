@@ -2,253 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B866262F375
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBFC62F379
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241455AbiKRLRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S241638AbiKRLRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:17:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235188AbiKRLRj (ORCPT
+        with ESMTP id S241181AbiKRLRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:17:39 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8373364555
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:17:38 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id k8so8832131wrh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:17:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CSkFHgevabuZjvANL1RYhOAj/AzunXZe9f8AOvvsIl0=;
-        b=tDg6M5k2ouCur0igY2qHHtlNsoC6a8/JwHpjs44o1wZgj5nQSlnSu7c1hM4czRUvdG
-         MA4ToWZ4O95tFc6uZzPoMrVj8LS4k1CSRt9N2fzTeYhrIIqJaa/VoU/czeXv75kmB2IU
-         YhEu2Dg2BTnERkBe8/Mr4zbfRDLDCToS90lNSx/JMKXHBAWM7ohT4CG9ifZ4acx3TQBg
-         IwKAqrokssYT4T+kB+CxLQG7mUycEmRWkgl2BmJBg0wnWX+hrZzjdy7HPlUKBxddzFsZ
-         sWpZ+7xef1yCvjCYy44JRnb8fcuZFYxs0xXqDflfonibb3PaHuRb+dcXOxMMZUplnaw2
-         Ic3w==
+        Fri, 18 Nov 2022 06:17:50 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7EE99EB9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:17:48 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id z19-20020a056e02089300b002fffe186ac4so3086288ils.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:17:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CSkFHgevabuZjvANL1RYhOAj/AzunXZe9f8AOvvsIl0=;
-        b=6gSq5c8Lf7TWA8dxieGj1usbungM/pbmlugFWatQQqb8PHK3Ddaf+mp1HCGqlgbTtn
-         bi81Xyc/304hFmAL2c+0XONOGZK7xKik+PEnB+CeVwB98GSSIPqlCMzhVai6jXFtLwv9
-         sHHR4P7eQwG4NTFw+51B0IaQBBlBPsFEfzdedmM6D4cp7sQ6PVKJ88RmlfMJPVzQXje1
-         w6macR1cneE2Qk5T/T95pDLkmTyr2/2Mg+UeYBK1fcuPrvlq2bjcguRpNJ1DmLrY7S9e
-         bX2sBiekQ3bf87cjwjLRcS+gG6RAO3sT6kwo/Sb3+RuxTaEAtWHCggInP9sU7q9Qghb1
-         khxw==
-X-Gm-Message-State: ANoB5pkjcnefCBZVUkfFMjVq9WWD5zAWr6XbzPp4ptfOxjn40kg1RcgU
-        V4g4Y1mbc1T9qlLt7NokccLBes4ontXP3g==
-X-Google-Smtp-Source: AA0mqf5DcR3zCJuQbw9WWUpiC/6yyN8KsckObgzeEKOksN0/GKLcFWgj7ov94HF72hJtSX2LXPKOWQ==
-X-Received: by 2002:adf:e844:0:b0:241:bfc9:5975 with SMTP id d4-20020adfe844000000b00241bfc95975mr1637001wrn.605.1668770256970;
-        Fri, 18 Nov 2022 03:17:36 -0800 (PST)
-Received: from [192.168.22.132] ([167.98.215.174])
-        by smtp.googlemail.com with ESMTPSA id he5-20020a05600c540500b003cfd4e6400csm4305458wmb.19.2022.11.18.03.17.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 03:17:36 -0800 (PST)
-Message-ID: <8cf8c902-571e-feb8-82a6-42e25e57caac@linaro.org>
-Date:   Fri, 18 Nov 2022 11:17:35 +0000
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=icbM6LR89x3ZTtuCKeMsNpGB89t4A+E9BcUPjncu7JM=;
+        b=vKRXyOGs5MUBZBJWu+0ishFegZqX43AHUa9t2wZZAhRd76Tx6ScSL5OJsJDNPvd7V9
+         NY3XaBkOUJ8yYswj4e3muzlm+6/7X9FpxNvLrC25a8ai9Y2Hh3YGtQ3fiV3VJYUvweVR
+         7Tpgwk22SN5PdNFklp31/tHzegz4x8gUypVCTdKyuOAq1HYKsnnPnGst3Wwe1yVlqcvd
+         vadZWjzvox4f9yCuKnbti4ZZzPVP6SqSA8wfutYuhMbbtCSenK4GWxLXUr5Wq7ISXtLD
+         pYBpfMIRy2dfYojZpKyKBFWnxuwIG79zs8jybDxLOtLeSm9xsxIA4/HOfOrG+CZgmRUy
+         vCDw==
+X-Gm-Message-State: ANoB5pkc1faAUIydYADaUMAPR6EhJ/NABrUFIqRArFCp5w2FpKZTTRwT
+        E1lthiDCbgEcfUMgQLLZqAfboYzIuo//BsS7TV7x1Xa84mFE
+X-Google-Smtp-Source: AA0mqf7drEU1YpQnGbg3G2U6EVfhnI+s3wlnztWMe7R1Nu0U4D8BzBehZa99Li6Sogfkxj244qnObNrnPcG6tnR4uCvuQTuxxqQp
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/2] soc: qcom: add MDSS DSM memory driver
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-mpss_dsm-v2-0-f7c65d6f0e55@linaro.org>
- <20221114-narmstrong-sm8550-upstream-mpss_dsm-v2-2-f7c65d6f0e55@linaro.org>
-Content-Language: en-US
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-mpss_dsm-v2-2-f7c65d6f0e55@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3f06:b0:363:aa8f:e316 with SMTP id
+ ck6-20020a0566383f0600b00363aa8fe316mr2908709jab.238.1668770267260; Fri, 18
+ Nov 2022 03:17:47 -0800 (PST)
+Date:   Fri, 18 Nov 2022 03:17:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fdedc805edbcda46@google.com>
+Subject: [syzbot] WARNING in rtnl_dellink (2)
+From:   syzbot <syzbot+d8c77f7232bfdb254e37@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        idosch@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, petrm@nvidia.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    a70385240892 Merge tag 'perf_urgent_for_v6.1_rc2' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=147717d2880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ea03ca45176080bc
+dashboard link: https://syzkaller.appspot.com/bug?extid=d8c77f7232bfdb254e37
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5e17f1e83cf3/disk-a7038524.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f8ef729877f7/vmlinux-a7038524.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d8c77f7232bfdb254e37@syzkaller.appspotmail.com
+
+bond0 (unregistering): (slave bond3): Releasing backup interface
+bond0 (unregistering): Released all slaves
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 20974 at net/core/dev.c:10871 unregister_netdevice_many+0x13ba/0x1930 net/core/dev.c:10871
+Modules linked in:
+CPU: 0 PID: 20974 Comm: syz-executor.1 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:unregister_netdevice_many+0x13ba/0x1930 net/core/dev.c:10871
+Code: 0b e9 27 f1 ff ff e8 75 08 24 fa be 04 00 00 00 4c 89 f7 e8 28 96 ab fc e9 42 fb ff ff 48 89 dd e9 1c f9 ff ff e8 56 08 24 fa <0f> 0b e9 f0 f9 ff ff e8 4a 08 24 fa 0f b6 1d dc e5 73 06 31 ff 89
+RSP: 0018:ffffc9000b4ff268 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: ffff88807627c0b0 RCX: ffffc90004743000
+RDX: 0000000000040000 RSI: ffffffff8758834a RDI: 0000000000000005
+RBP: ffff88801ecf8080 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 000000000008c07e R12: 0000000000000000
+R13: ffff88801ecf8080 R14: ffff88807627c000 R15: dffffc0000000000
+FS:  00007f42ed863700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f220e57f1b8 CR3: 0000000036be9000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000b002800
+DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ rtnl_delete_link net/core/rtnetlink.c:3123 [inline]
+ rtnl_dellink+0x354/0xa90 net/core/rtnetlink.c:3174
+ rtnetlink_rcv_msg+0x43a/0xca0 net/core/rtnetlink.c:6091
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2540
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+ __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f42ec68b5f9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f42ed863168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f42ec7abf80 RCX: 00007f42ec68b5f9
+RDX: 0000000000000000 RSI: 0000000020000140 RDI: 0000000000000003
+RBP: 00007f42ec6e67b0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f42eccdfb1f R14: 00007f42ed863300 R15: 0000000000022000
+ </TASK>
 
 
-On 18/11/2022 08:53, Neil Armstrong wrote:
-> Add a driver for the Qualcomm Modem Processing SubSystem DSM memory
-> used to assign such regions of memory with remote MPSS processors.
-> 
-> This memory zone is shared between the APPS and the MPSS subsystem,
-> and must be configured during the whole lifetime of the system.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   drivers/of/platform.c           |  1 +
->   drivers/soc/qcom/Kconfig        | 10 +++++
->   drivers/soc/qcom/Makefile       |  1 +
->   drivers/soc/qcom/mpss_dsm_mem.c | 95 +++++++++++++++++++++++++++++++++++++++++
->   4 files changed, 107 insertions(+)
-> 
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index 3507095a69f6..d4bb03292f45 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -505,6 +505,7 @@ EXPORT_SYMBOL_GPL(of_platform_default_populate);
->   
->   static const struct of_device_id reserved_mem_matches[] = {
->   	{ .compatible = "phram" },
-> +	{ .compatible = "qcom,mpss-dsm-mem" },
->   	{ .compatible = "qcom,rmtfs-mem" },
->   	{ .compatible = "qcom,cmd-db" },
->   	{ .compatible = "qcom,smem" },
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index 024e420f1bb7..7624a8af56bf 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -95,6 +95,16 @@ config QCOM_QMI_HELPERS
->   	tristate
->   	depends on NET
->   
-> +config QCOM_MPSS_DSM_MEM
-> +	tristate "Qualcomm Modem Processing SubSystem DSM memory driver"
-> +	depends on ARCH_QCOM
-> +	select QCOM_SCM
-> +	help
-> +	  The Qualcomm Modem Processing SubSystem DSM memory driver is used to
-> +	  assign regions of DSM memory with remote MPSS processors.
-> +
-> +	  Say y here if you intend to boot the modem remoteproc.
-> +
->   config QCOM_RMTFS_MEM
->   	tristate "Qualcomm Remote Filesystem memory driver"
->   	depends on ARCH_QCOM
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index d66604aff2b0..0d0e850f1a18 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -16,6 +16,7 @@ qcom_rpmh-y			+= rpmh-rsc.o
->   qcom_rpmh-y			+= rpmh.o
->   obj-$(CONFIG_QCOM_SMD_RPM)	+= smd-rpm.o
->   obj-$(CONFIG_QCOM_SMEM) +=	smem.o
-> +obj-$(CONFIG_QCOM_MPSS_DSM_MEM) += mpss_dsm_mem.o
->   obj-$(CONFIG_QCOM_SMEM_STATE) += smem_state.o
->   obj-$(CONFIG_QCOM_SMP2P)	+= smp2p.o
->   obj-$(CONFIG_QCOM_SMSM)	+= smsm.o
-> diff --git a/drivers/soc/qcom/mpss_dsm_mem.c b/drivers/soc/qcom/mpss_dsm_mem.c
-> new file mode 100644
-> index 000000000000..5584bd101aee
-> --- /dev/null
-> +++ b/drivers/soc/qcom/mpss_dsm_mem.c
-> @@ -0,0 +1,95 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022 Linaro Ltd.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/of.h>
-> +#include <linux/of_reserved_mem.h>
-> +#include <linux/slab.h>
-> +#include <linux/qcom_scm.h>
-> +
-> +struct qcom_mpss_dsm_mem {
-> +	phys_addr_t addr;
-> +	phys_addr_t size;
-> +
-> +	unsigned int perms;
-> +};
-> +
-> +static int qcom_mpss_dsm_mem_probe(struct platform_device *pdev)
-> +{
-> +	struct device_node *node = pdev->dev.of_node;
-> +	struct qcom_scm_vmperm perm;
-> +	struct reserved_mem *rmem;
-> +	struct qcom_mpss_dsm_mem *mpss_dsm_mem;
-> +	int ret;
-> +
-> +	if (!qcom_scm_is_available())
-> +		return -EPROBE_DEFER;
-> +
-> +	rmem = of_reserved_mem_lookup(node);
-> +	if (!rmem) {
-> +		dev_err(&pdev->dev, "failed to acquire memory region\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	mpss_dsm_mem = kzalloc(sizeof(*mpss_dsm_mem), GFP_KERNEL);
-> +	if (!mpss_dsm_mem)
-> +		return -ENOMEM;
-> +
-> +	mpss_dsm_mem->addr = rmem->base;
-> +	mpss_dsm_mem->size = rmem->size;
-> +
-> +	perm.vmid = QCOM_SCM_VMID_MSS_MSA;
-> +	perm.perm = QCOM_SCM_PERM_RW;
-> +
-> +	mpss_dsm_mem->perms = BIT(QCOM_SCM_VMID_HLOS);
-> +	ret = qcom_scm_assign_mem(mpss_dsm_mem->addr, mpss_dsm_mem->size,
-> +				  &mpss_dsm_mem->perms, &perm, 1);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "assign memory failed\n");
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-memory leak here?
-
-
-> +		return ret;
-> +	}
-> +
-> +	dev_set_drvdata(&pdev->dev, mpss_dsm_mem);
-> +
-> +	return 0;
-> +}
-> +
-> +static int qcom_mpss_dsm_mem_remove(struct platform_device *pdev)
-> +{
-> +	struct qcom_mpss_dsm_mem *mpss_dsm_mem = dev_get_drvdata(&pdev->dev);
-> +	struct qcom_scm_vmperm perm;
-> +
-> +	perm.vmid = QCOM_SCM_VMID_HLOS;
-> +	perm.perm = QCOM_SCM_PERM_RW;
-> +
-> +	qcom_scm_assign_mem(mpss_dsm_mem->addr, mpss_dsm_mem->size,
-> +			    &mpss_dsm_mem->perms, &perm, 1);
-> +
-
-same here.
-
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id qcom_mpss_dsm_mem_of_match[] = {
-> +	{ .compatible = "qcom,mpss-dsm-mem" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, qcom_mpss_dsm_mem_of_match);
-> +
-> +static struct platform_driver qcom_mpss_dsm_mem_driver = {
-> +	.probe = qcom_mpss_dsm_mem_probe,
-> +	.remove = qcom_mpss_dsm_mem_remove,
-> +	.driver  = {
-> +		.name  = "qcom_mpss_dsm_mem",
-> +		.of_match_table = qcom_mpss_dsm_mem_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(qcom_mpss_dsm_mem_driver);
-> +
-> +MODULE_AUTHOR("Linaro Ltd");
-> +MODULE_DESCRIPTION("Qualcomm DSM memory driver");
-> +MODULE_LICENSE("GPL");
-> 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
