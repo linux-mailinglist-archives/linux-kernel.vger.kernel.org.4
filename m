@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4474E62F2B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D1A62F2BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235302AbiKRKiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S241225AbiKRKiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235220AbiKRKh6 (ORCPT
+        with ESMTP id S241444AbiKRKio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:37:58 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ED193CC7;
-        Fri, 18 Nov 2022 02:37:56 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id i10so11991378ejg.6;
-        Fri, 18 Nov 2022 02:37:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=H/8HhcxVRT2QDi4GrGRzCn45E2AgIZ1W3KKLrrG0O/g=;
-        b=CEAFddyS6HLfs36AdGEOYidRyXU3OPvY0H46pSXnxzJRQsVG4K2zjQIr8GEKlX1PP5
-         9pNgltn15yZ+W1djxd12xAFyU0SFCbYsCHdG95UQp7Rg4G7kyw+C8po4KaMMk+cUzFVf
-         dQtm3/Pcdd9HIWGKlFc+n2ikcHBn9YPcpjpW6T6WFa8QnlG/e1wkP3O/qyWCXRS+XNSr
-         k2GIpLKqjesfsoEhd7ns4tpHviqYEQdAfmpv5jxg0XNuihCXr5Og9tQ3iHpbuBB/BgnS
-         44lmbH4wHiZpFdE4dUatTsP00YERtWX8bQEDzSZceDj0mKz/uiwslBaIgXuUGsr3YPaN
-         Mqkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H/8HhcxVRT2QDi4GrGRzCn45E2AgIZ1W3KKLrrG0O/g=;
-        b=697QN0YjTHbrH/PuJR6CAB2B9H+eHnXbxuFXb2JG4kuuYkxbAk2tcPPnKzf64cWQ7e
-         hcNX3+fRjRDPJux7vP2V5D2+5N0NT0kUk5ZDJzY8849yySzt8QIiViMIA4hAeLgkCMDB
-         8/uAvSmMNHEOkySFFvnztaHuas9Hto3fdgZEXtQ9ZF6o2wiFVLuy9B6FiCE2hP7iRSw5
-         1CYVQyp83Ysb8VZz1Ws64asslcVAQvYb/xMu7mIA1sXkIuHvbVD3p1guFTKRc6nXEBus
-         ww2eWDbLtNt/mDzIOAEa1q83Mjo3si+uh65m3OiGW4ALFGXiXxV+h24NQT4Dm6XHBtF1
-         3omQ==
-X-Gm-Message-State: ANoB5pkIpPs2rgyj0DWJC1iCmoH9O7zt+eEEfkE2XHO0qNXtvzVMBhA1
-        /gJ8lqEsma+/KuOnO5pz3RwoW8kwtblSzBnEnBg=
-X-Google-Smtp-Source: AA0mqf7fMv0Rin5bM7t7Ty1voQeLQyQ0zi2u0LRON4Ae8lTP36pxRAwKd0XkGKJEZuzOajkvxYAs655nW4AFOOGDZjY=
-X-Received: by 2002:a17:907:3ac5:b0:78d:5d4a:c12f with SMTP id
- fi5-20020a1709073ac500b0078d5d4ac12fmr5620148ejc.421.1668767875230; Fri, 18
- Nov 2022 02:37:55 -0800 (PST)
+        Fri, 18 Nov 2022 05:38:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EADC92B6F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:37:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668767863;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=f5bu2IF1InfzvQ00y6+OuZ0Xhu88JGi4I8t2yA0L/fE=;
+        b=KMVoo+0JUqn9uyXcDAt8uU2b4jlyxyXJ8RlzkcMGYTKwHseL3HVS8dsSTq1uAjrV306Xmb
+        XUCcdUlTsmpxgPLXGBZ8VV1mrWclHpzVumaOucs87WEIp4qNjk49dR2hOui5/qt3G+tQVY
+        b23ZGbh7/OcA7jvJx5Sr0hDxlt37HHw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-Bsc1Dem6OEiKHGf63FHB2A-1; Fri, 18 Nov 2022 05:37:40 -0500
+X-MC-Unique: Bsc1Dem6OEiKHGf63FHB2A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 86C4F101A54E;
+        Fri, 18 Nov 2022 10:37:39 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 79C7235429;
+        Fri, 18 Nov 2022 10:37:38 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [RFC PATCH] afs: Stop implementing ->writepage()
+From:   David Howells <dhowells@redhat.com>
+To:     linux-afs@lists.infradead.org
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>, dhowells@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 18 Nov 2022 10:37:35 +0000
+Message-ID: <166876785552.222254.4403222906022558715.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Fri, 18 Nov 2022 18:37:21 +0800
-Message-ID: <CAO4mrfcPHB5aQJO=mpqV+p8mPLNg-Fok0gw8gZ=zemAfMGTzMg@mail.gmail.com>
-Subject: general protection fault in az6027_i2c_xfer
-To:     wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,106 +66,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+We're trying to get rid of the ->writepage() hook[1].  Stop afs from using
+it by unlocking the page and calling filemap_fdatawrite_wbc() rather than
+folio_write_one().  We drop the folio lock so that writeback can include
+pages on both sides of the target page in the write without risking
+deadlock.
 
-Recently when using our tool to fuzz kernel, the following crash was
-triggered. The bug persists in the latest upstream v6.1-rc5.
+A hint flag is added to the writeback_control struct so that a filesystem
+can say that the write is triggered by write_begin seeing a conflicting
+write.  This causes do_writepages() to do a single pass of the loop only.
 
-HEAD commit: 4fe89d07 Linux v6.0
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1-hqsu5AQ5qqXwh8lZM0BTDfGPfR5ZZKQ/view?usp=share_link
-Syzlang reproducer:
-https://drive.google.com/file/d/1IsxrV9gGdgkM9sgLTy7k8ntYLDpwm7vZ/view?usp=share_link
-C reproducer: https://drive.google.com/file/d/1mS8bp9_OWNs_RS04UwzzZPU1IWwyKSSk/view?usp=share_link
-kernel config: https://drive.google.com/file/d/1ZHRxVTXHL9mENdAPmQYS1DtgbflZ9XsD/view?usp=sharing
+This requires ->migrate_folio() to be implemented, so point that at
+filemap_migrate_folio() for files and also for symlinks and directories.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
+A couple of questions:
 
-general protection fault, probably for non-canonical address
-0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-CPU: 1 PID: 14835 Comm: syz-executor.1 Not tainted 6.0.0+ #39
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:az6027_i2c_xfer+0x1b6/0x1bb0 drivers/media/usb/dvb-usb/az6027.c:978
-Code: 00 00 00 00 00 fc ff df 80 3c 08 00 74 12 48 89 df e8 7e 09 1b
-fb 48 b9 00 00 00 00 00 fc ff df 48 8b 1b 48 89 d8 48 c1 e8 03 <8a> 04
-08 84 c0 0f 85 f0 16 00 00 44 0f b6 2b 48 8b 7c 24 20 31 f6
-RSP: 0018:ffffc9000c907b20 EFLAGS: 00010202
-RAX: 0000000000000002 RBX: 0000000000000010 RCX: dffffc0000000000
-RDX: ffff88804f8ac880 RSI: 0000000000000099 RDI: 0000000000000099
-RBP: ffff88801e381060 R08: ffffffff86bcdd1c R09: fffffbfff1c8dac6
-R10: fffffbfff1c8dac6 R11: 0000000000000000 R12: ffff888021ce4400
-R13: ffff88801e381060 R14: 0000000000000000 R15: 1ffff11003c7020c
-FS:  00007fd831ffe700(0000) GS:ffff88807ec00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd834ba5818 CR3: 000000007a775000 CR4: 0000000000750ee0
-DR0: 0000000000000000 DR1: 000000000000000c DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <TASK>
- __i2c_transfer+0x77e/0x1930 drivers/i2c/i2c-core-base.c:2109
- i2c_transfer+0x1d5/0x3d0 drivers/i2c/i2c-core-base.c:2170
- i2cdev_ioctl_rdwr+0x393/0x660 drivers/i2c/i2c-dev.c:297
- i2cdev_ioctl+0x75d/0x9f0 drivers/i2c/i2c-dev.c:458
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd834a8bded
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd831ffdc58 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fd834babf80 RCX: 00007fd834a8bded
-RDX: 0000000020000300 RSI: 0000000000000707 RDI: 0000000000000003
-RBP: 00007fd834af8ce0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fd834babf80
-R13: 00007fff5701981f R14: 00007fff570199c0 R15: 00007fd831ffddc0
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:az6027_i2c_xfer+0x1b6/0x1bb0 drivers/media/usb/dvb-usb/az6027.c:978
-Code: 00 00 00 00 00 fc ff df 80 3c 08 00 74 12 48 89 df e8 7e 09 1b
-fb 48 b9 00 00 00 00 00 fc ff df 48 8b 1b 48 89 d8 48 c1 e8 03 <8a> 04
-08 84 c0 0f 85 f0 16 00 00 44 0f b6 2b 48 8b 7c 24 20 31 f6
-RSP: 0018:ffffc9000c907b20 EFLAGS: 00010202
-RAX: 0000000000000002 RBX: 0000000000000010 RCX: dffffc0000000000
-RDX: ffff88804f8ac880 RSI: 0000000000000099 RDI: 0000000000000099
-RBP: ffff88801e381060 R08: ffffffff86bcdd1c R09: fffffbfff1c8dac6
-R10: fffffbfff1c8dac6 R11: 0000000000000000 R12: ffff888021ce4400
-R13: ffff88801e381060 R14: 0000000000000000 R15: 1ffff11003c7020c
-FS:  00007fd831ffe700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa306d32000 CR3: 000000007a775000 CR4: 0000000000750ef0
-DR0: 0000000000000000 DR1: 00000000fffff0fc DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-PKRU: 55555554
-----------------
-Code disassembly (best guess), 7 bytes skipped:
-   0: df 80 3c 08 00 74    filds  0x7400083c(%rax)
-   6: 12 48 89              adc    -0x77(%rax),%cl
-   9: df e8                fucomip %st(0),%st
-   b: 7e 09                jle    0x16
-   d: 1b fb                sbb    %ebx,%edi
-   f: 48 b9 00 00 00 00 00 movabs $0xdffffc0000000000,%rcx
-  16: fc ff df
-  19: 48 8b 1b              mov    (%rbx),%rbx
-  1c: 48 89 d8              mov    %rbx,%rax
-  1f: 48 c1 e8 03          shr    $0x3,%rax
-* 23: 8a 04 08              mov    (%rax,%rcx,1),%al <-- trapping instruction
-  26: 84 c0                test   %al,%al
-  28: 0f 85 f0 16 00 00    jne    0x171e
-  2e: 44 0f b6 2b          movzbl (%rbx),%r13d
-  32: 48 8b 7c 24 20        mov    0x20(%rsp),%rdi
-  37: 31 f6                xor    %esi,%esi
+ (1) afs_write_back_from_locked_folio() could be called directly rather
+     than calling filemap_fdatawrite_wbc(), but that would avoid the
+     control group stuff that wbc_attach_and_unlock_inode() and co. seem to
+     do.  Do I actually need to do this?
+
+ (2) afs_writepages_region() has a loop in it to generate multiple writes.
+     do_writepages() also acquired a loop[2] which will also generate
+     multiple writes.  Should I remove the loop from
+     afs_writepages_region() and leave it to the caller of ->writepages()?
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: Christoph Hellwig <hch@lst.de>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: Theodore Ts'o <tytso@mit.edu>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/20221113162902.883850-1-hch@lst.de/ [1]
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=80a2ea9f85850f1cdae814be03b4a16c3d3abc00 [2]
+---
+
+ fs/afs/dir.c              |    1 +
+ fs/afs/file.c             |    3 +-
+ fs/afs/write.c            |   63 +++++++++++++++++++++++----------------------
+ include/linux/writeback.h |    1 +
+ mm/page-writeback.c       |    3 +-
+ 5 files changed, 38 insertions(+), 33 deletions(-)
+
+diff --git a/fs/afs/dir.c b/fs/afs/dir.c
+index 230c2d19116d..baed7b095087 100644
+--- a/fs/afs/dir.c
++++ b/fs/afs/dir.c
+@@ -77,6 +77,7 @@ const struct address_space_operations afs_dir_aops = {
+ 	.dirty_folio	= afs_dir_dirty_folio,
+ 	.release_folio	= afs_dir_release_folio,
+ 	.invalidate_folio = afs_dir_invalidate_folio,
++	.migrate_folio	= filemap_migrate_folio,
+ };
+ 
+ const struct dentry_operations afs_fs_dentry_operations = {
+diff --git a/fs/afs/file.c b/fs/afs/file.c
+index d1cfb235c4b9..a2325e0b9d38 100644
+--- a/fs/afs/file.c
++++ b/fs/afs/file.c
+@@ -58,14 +58,15 @@ const struct address_space_operations afs_file_aops = {
+ 	.invalidate_folio = afs_invalidate_folio,
+ 	.write_begin	= afs_write_begin,
+ 	.write_end	= afs_write_end,
+-	.writepage	= afs_writepage,
+ 	.writepages	= afs_writepages,
++	.migrate_folio	= filemap_migrate_folio,
+ };
+ 
+ const struct address_space_operations afs_symlink_aops = {
+ 	.read_folio	= afs_symlink_read_folio,
+ 	.release_folio	= afs_release_folio,
+ 	.invalidate_folio = afs_invalidate_folio,
++	.migrate_folio	= filemap_migrate_folio,
+ };
+ 
+ static const struct vm_operations_struct afs_vm_ops = {
+diff --git a/fs/afs/write.c b/fs/afs/write.c
+index 9ebdd36eaf2f..38d02ead3f38 100644
+--- a/fs/afs/write.c
++++ b/fs/afs/write.c
+@@ -38,6 +38,24 @@ static void afs_folio_start_fscache(bool caching, struct folio *folio)
+ }
+ #endif
+ 
++/*
++ * Flush out a conflicting write.  This may extend the write to the surrounding
++ * pages if also dirty and contiguous to the conflicting region..
++ */
++static int afs_flush_conflicting_write(struct address_space *mapping,
++				       struct folio *folio)
++{
++	struct writeback_control wbc = {
++		.sync_mode	= WB_SYNC_ALL,
++		.nr_to_write	= LONG_MAX,
++		.range_start	= folio_pos(folio),
++		.range_end	= LLONG_MAX,
++		.for_write_begin = true,
++	};
++
++	return filemap_fdatawrite_wbc(mapping, &wbc);
++}
++
+ /*
+  * prepare to perform part of a write to a page
+  */
+@@ -80,7 +98,8 @@ int afs_write_begin(struct file *file, struct address_space *mapping,
+ 
+ 		if (folio_test_writeback(folio)) {
+ 			trace_afs_folio_dirty(vnode, tracepoint_string("alrdy"), folio);
+-			goto flush_conflicting_write;
++			folio_unlock(folio);
++			goto wait_for_writeback;
+ 		}
+ 		/* If the file is being filled locally, allow inter-write
+ 		 * spaces to be merged into writes.  If it's not, only write
+@@ -99,8 +118,15 @@ int afs_write_begin(struct file *file, struct address_space *mapping,
+ 	 * flush the page out.
+ 	 */
+ flush_conflicting_write:
+-	_debug("flush conflict");
+-	ret = folio_write_one(folio);
++	trace_afs_folio_dirty(vnode, tracepoint_string("confl"), folio);
++	folio_unlock(folio);
++
++	ret = afs_flush_conflicting_write(mapping, folio);
++	if (ret < 0)
++		goto error;
++
++wait_for_writeback:
++	ret = folio_wait_writeback_killable(folio);
+ 	if (ret < 0)
+ 		goto error;
+ 
+@@ -663,34 +689,6 @@ static ssize_t afs_write_back_from_locked_folio(struct address_space *mapping,
+ 	return ret;
+ }
+ 
+-/*
+- * write a page back to the server
+- * - the caller locked the page for us
+- */
+-int afs_writepage(struct page *subpage, struct writeback_control *wbc)
+-{
+-	struct folio *folio = page_folio(subpage);
+-	ssize_t ret;
+-	loff_t start;
+-
+-	_enter("{%lx},", folio_index(folio));
+-
+-#ifdef CONFIG_AFS_FSCACHE
+-	folio_wait_fscache(folio);
+-#endif
+-
+-	start = folio_index(folio) * PAGE_SIZE;
+-	ret = afs_write_back_from_locked_folio(folio_mapping(folio), wbc,
+-					       folio, start, LLONG_MAX - start);
+-	if (ret < 0) {
+-		_leave(" = %zd", ret);
+-		return ret;
+-	}
+-
+-	_leave(" = 0");
+-	return 0;
+-}
+-
+ /*
+  * write a region of pages back to the server
+  */
+@@ -775,6 +773,9 @@ static int afs_writepages_region(struct address_space *mapping,
+ 
+ 		start += ret;
+ 
++		if (wbc->for_write_begin)
++			break;
++
+ 		cond_resched();
+ 	} while (wbc->nr_to_write > 0);
+ 
+diff --git a/include/linux/writeback.h b/include/linux/writeback.h
+index 06f9291b6fd5..3832ac3425c8 100644
+--- a/include/linux/writeback.h
++++ b/include/linux/writeback.h
+@@ -61,6 +61,7 @@ struct writeback_control {
+ 	unsigned range_cyclic:1;	/* range_start is cyclic */
+ 	unsigned for_sync:1;		/* sync(2) WB_SYNC_ALL writeback */
+ 	unsigned unpinned_fscache_wb:1;	/* Cleared I_PINNING_FSCACHE_WB */
++	unsigned for_write_begin:1;	/* Flush conflicting write */
+ 
+ 	/*
+ 	 * When writeback IOs are bounced through async layers, only the
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index 7e9d8d857ecc..04c65b8b4ded 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -2469,7 +2469,8 @@ int do_writepages(struct address_space *mapping, struct writeback_control *wbc)
+ 			ret = mapping->a_ops->writepages(mapping, wbc);
+ 		else
+ 			ret = generic_writepages(mapping, wbc);
+-		if ((ret != -ENOMEM) || (wbc->sync_mode != WB_SYNC_ALL))
++		if ((ret != -ENOMEM) || (wbc->sync_mode != WB_SYNC_ALL) ||
++		    wbc->for_write_begin)
+ 			break;
+ 
+ 		/*
 
 
-Best,
-Wei
