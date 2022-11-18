@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00937630382
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828506306F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbiKRX3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
+        id S237896AbiKSAVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235729AbiKRX2q (ORCPT
+        with ESMTP id S237899AbiKSAUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:28:46 -0500
+        Fri, 18 Nov 2022 19:20:55 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C637BB949D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:16:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B57100B39
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:36:54 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8L-0001XB-Ry; Fri, 18 Nov 2022 23:46:53 +0100
+        id 1owA8L-0001YG-SF; Fri, 18 Nov 2022 23:46:53 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8I-0058N1-AW; Fri, 18 Nov 2022 23:46:51 +0100
+        id 1owA8I-0058N5-HK; Fri, 18 Nov 2022 23:46:51 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8I-00Hb7N-Hq; Fri, 18 Nov 2022 23:46:50 +0100
+        id 1owA8I-00Hb7R-P9; Fri, 18 Nov 2022 23:46:50 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -37,9 +37,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 193/606] Input: adp5589-keys - Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:47 +0100
-Message-Id: <20221118224540.619276-194-uwe@kleine-koenig.org>
+Subject: [PATCH 194/606] Input: cap11xx - Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:48 +0100
+Message-Id: <20221118224540.619276-195-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,34 +66,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/input/keyboard/adp5589-keys.c | 6 +++---
+ drivers/input/keyboard/cap11xx.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/input/keyboard/adp5589-keys.c b/drivers/input/keyboard/adp5589-keys.c
-index bdd264459a97..25c9f6344bf2 100644
---- a/drivers/input/keyboard/adp5589-keys.c
-+++ b/drivers/input/keyboard/adp5589-keys.c
-@@ -942,9 +942,9 @@ static void adp5589_clear_config(void *data)
- 	adp5589_write(client, kpad->var->reg(ADP5589_GENERAL_CFG), 0);
+diff --git a/drivers/input/keyboard/cap11xx.c b/drivers/input/keyboard/cap11xx.c
+index 7c85343cd32f..79afd0386e3f 100644
+--- a/drivers/input/keyboard/cap11xx.c
++++ b/drivers/input/keyboard/cap11xx.c
+@@ -321,9 +321,9 @@ static int cap11xx_init_leds(struct device *dev,
  }
+ #endif
  
--static int adp5589_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static int adp5589_probe(struct i2c_client *client)
+-static int cap11xx_i2c_probe(struct i2c_client *i2c_client,
+-			     const struct i2c_device_id *id)
++static int cap11xx_i2c_probe(struct i2c_client *i2c_client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct adp5589_kpad *kpad;
- 	const struct adp5589_kpad_platform_data *pdata =
- 		dev_get_platdata(&client->dev);
-@@ -1054,7 +1054,7 @@ static struct i2c_driver adp5589_driver = {
- 		.name = KBUILD_MODNAME,
- 		.pm = &adp5589_dev_pm_ops,
++	const struct i2c_device_id *id = i2c_client_get_device_id(i2c_client);
+ 	struct device *dev = &i2c_client->dev;
+ 	struct cap11xx_priv *priv;
+ 	struct device_node *node;
+@@ -503,7 +503,7 @@ static struct i2c_driver cap11xx_i2c_driver = {
+ 		.of_match_table = cap11xx_dt_ids,
  	},
--	.probe = adp5589_probe,
-+	.probe_new = adp5589_probe,
- 	.id_table = adp5589_id,
+ 	.id_table	= cap11xx_i2c_ids,
+-	.probe		= cap11xx_i2c_probe,
++	.probe_new	= cap11xx_i2c_probe,
  };
  
+ module_i2c_driver(cap11xx_i2c_driver);
 -- 
 2.38.1
 
