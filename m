@@ -2,130 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3637762ED1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E63862ED1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 06:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240329AbiKRFQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 00:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S240308AbiKRFSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 00:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234063AbiKRFQE (ORCPT
+        with ESMTP id S234063AbiKRFSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 00:16:04 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE21597A94;
-        Thu, 17 Nov 2022 21:16:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hf7hCy20kN6nb4iob6A/q8dV3gi/2bcF/ec3nA0YAnqslSgk2xTdFy2/v6vZsw7sCU4+v9iQ+JSDp5zOY7LN+LRW0jk0sQLJKqlPlxKS1RWeRUtcdmtqJbjUAHyedDLC6cXW2BLakwMUJnEbpWHkvMMd8EdWAgPptx0YJMiIr5nRLOnzDyJjj4/cmsexel1tvkK3e1dbAshkhYwRJXC6GHtuvoKbIAm/oWhntxa9ldHYDZdJOUyf6iJwlVG8wH56prS8cq1r1afxJI7ivHmbSmqNDVkZpHXFnKfpL6MzrGJbT0pblCK7FBmUdBYMv4thDQf/zIVCLDGPlZEoEDwt6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3Os9Hza53Kna27NSFvmIvLbNUy5I9z9Rd4I0FmBi8tA=;
- b=IoK9068ePwkva5mDOS55jeMZdibqz3NOqWp2IdBYeiSsTPpYT1DJGCVyaZd6yXQU8pXnrUfj7evmqbhjjALajWMukTqTgHHV1zmfD1xm5XwXWsNSViFSXcprUNTgtSmB/3JgtfBvaa4rQwSwnrYqAezYR1PNbbTUhmUuKzGfLz/8yBYKiYdhdonK3ydc5PnVesfJdjcbDWDWeMl5Z5qrwoJo5dUdhfyKTxx3SYF6ivbNOs1CMY3lW2hnFngU1Ig20TE35yKmt6Kg8TXBJiUDgwzpENttTHUFvzbZqp6GCFVBRvfF2bU5Diqc4SVVp+SJD1n6fncScIxXexJJ3KZcLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Os9Hza53Kna27NSFvmIvLbNUy5I9z9Rd4I0FmBi8tA=;
- b=dpDqccaYOT7h7wnDx8PDDIj6ab+lVUJbPE7Pw9tjP6gX3uQav1x9PA9czUH3TbfeVwAFUgyyoWb99hEi1PJTmV1ov8NqArIlMuFef79UyiJqrLYhtv45TyZNc/ns3FFepkWPu/nom0h+LNZcAoo7lwVrGocfpzdiRmtHTtOAT3s=
-Received: from BN9PR03CA0796.namprd03.prod.outlook.com (2603:10b6:408:13f::21)
- by MN2PR12MB4208.namprd12.prod.outlook.com (2603:10b6:208:1d0::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Fri, 18 Nov
- 2022 05:16:01 +0000
-Received: from BN8NAM11FT099.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13f:cafe::1d) by BN9PR03CA0796.outlook.office365.com
- (2603:10b6:408:13f::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20 via Frontend
- Transport; Fri, 18 Nov 2022 05:16:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT099.mail.protection.outlook.com (10.13.177.197) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5834.8 via Frontend Transport; Fri, 18 Nov 2022 05:16:01 +0000
-Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 17 Nov
- 2022 23:15:57 -0600
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-To:     <peterz@infradead.org>
-CC:     <ravi.bangoria@amd.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <jolsa@redhat.com>, <namhyung@kernel.org>, <error27@gmail.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
-        <santosh.shukla@amd.com>
-Subject: [PATCH] perf core: Return error pointer if inherit_event() fails to find pmu_ctx
-Date:   Fri, 18 Nov 2022 10:45:39 +0530
-Message-ID: <20221118051539.820-1-ravi.bangoria@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <3f4cf4a9-55c7-2d47-19ca-cc2edadf95bb@amd.com>
-References: <3f4cf4a9-55c7-2d47-19ca-cc2edadf95bb@amd.com>
+        Fri, 18 Nov 2022 00:18:46 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A8151332
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:18:44 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id h10-20020a056e021b8a00b00302671bb5fdso2703246ili.21
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 21:18:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iLs1sxjOYBo2QST7SZBpOYOlWZyNAL1AT8/a4qqXn94=;
+        b=HCCrTv5NnSyuRb1x3yD4bav+mG9b0VkU7hp1Q3u4+7Q/6nt9B59xgTDQ4Hyd1A82Gw
+         BpBqdU2NXXNl6cAT253AFrTxmj/nbgrshzn1l+M1J9Y03qpxmyeJbqQNLt/ZUA7pj58L
+         RM+3QnRAJaYsy7Kxcw0P+144e/aRGP/YW6jRt6evAk3K0WYBVku+c6g8Npbe4V5O3Ls4
+         nSYis3cHwz5rP0Q0j5nYMdq1I3y5ie7uxdCJVuxfDs13l8o+YXw9Wyr4ai+LuGxw8qvm
+         P+ujG8uzcnfjEAlczGqZo1S5VHvcyB7DCgA7Q04krdtayh/Kx9DINUAbIpHv21TZOcpp
+         EhXw==
+X-Gm-Message-State: ANoB5pmhqf8qRLOZxaK+NSughkl8RFQjtrkhLjyM1D/3LJgaszGriu58
+        q9DRNsSnK/Opx2f83fWfO6HMTLAVK2REvqnuTL0B70WE2VBi
+X-Google-Smtp-Source: AA0mqf5KekID4vpEbdLvNd9uzzkJO+Lj0mCW4P/N/kiep5eM0wrOY36t0LoxFBQyMxAPI54sDSkYWDuaP/CqSSndZj024ML3Nwta
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT099:EE_|MN2PR12MB4208:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2805ec1-1c01-44ea-56bf-08dac923fbd3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5SojCEIecEY0zoF5EFW8xTNTR2LLlLJn5f1hyxVhHtJjWOYAM97WnZyQDKPizf/2TTSmCX2LOqoZPCALcJbTrlqhjafR7Ty0KFXvPBN8p5uX9bHo25/3ycXH5EGCl95/SLQ3CIAnD44qz3gQYhKU4a53wnzRosEyyrCqBC/LTtBt3qmcQRvp+WB8JuS16xKma45sgxuf4B4TdEhOMShij3GBGBWakCt1jfrp70nBQdh+Ho4TnzrGeHSK74/LIpxR7AfKpNhtrI7ne/QiZz5Yp5VXbJzev1ZX4fBB51zxJO6HShv06FVUQ/3Zq1qGMJCKokhBoiXm9QYpgeVpgyO5X0ebZjWjK4v3TERwLO6+Vymhvv4DN3eAkK3/QW7u8tKh1Sawxo/bNXQ80kQAw/kHpiodn5YjTj2n+r1OmwrFD78sTmcF3MygwjAm0tg8hQ4zYpUgyjx/w0E4Z2PhKMPs+lOg2FKfpKb73a1HV5JyrqbXcVMNr28FdGrHRak1mjiJg8fhLjUiSs0K5Ril3tuWPX6UQuCrxHEtd0aGdvGnQj8V/rC2mrZ/jQn8cHuQvfL5WszhnLW+RKSgc5H+RpNDca4Py71tSk1a9bxd/ip71flLDZZiL40ffQ5e9Qarzf0u0Ch4frht9EK1NIaxG7PV/4AQ0RNIhvBQ1AMKBRw/oQsu6AOVv+Liu4ikfsU75jJjvTQTQEltPXBRrMxbGDpRVOkKyYQPDIVnSF/+2HbHET1jEFgkaf2PVJFKSRgYEr3w
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199015)(40470700004)(36840700001)(46966006)(1076003)(47076005)(2616005)(36756003)(26005)(336012)(426003)(186003)(16526019)(86362001)(316002)(82740400003)(82310400005)(40480700001)(356005)(81166007)(83380400001)(6666004)(7696005)(8936002)(36860700001)(2906002)(44832011)(6916009)(4744005)(478600001)(4326008)(41300700001)(5660300002)(70206006)(54906003)(40460700003)(8676002)(70586007)(37363002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 05:16:01.1847
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2805ec1-1c01-44ea-56bf-08dac923fbd3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT099.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4208
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:aa06:0:b0:6bc:614c:63c2 with SMTP id
+ s6-20020a5eaa06000000b006bc614c63c2mr2774824ioe.21.1668748723984; Thu, 17 Nov
+ 2022 21:18:43 -0800 (PST)
+Date:   Thu, 17 Nov 2022 21:18:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e99e2705edb7d6cf@google.com>
+Subject: [syzbot] memory leak in sctp_sched_prio_set
+From:   syzbot <syzbot+29c402e56c4760763cc0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-inherit_event() returns NULL only when it finds orphaned events
-otherwise it returns either valid child_event pointer or an error
-pointer. Follow the same when it fails to find pmu_ctx.
+Hello,
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Fixes: bd2756811766 ("perf: Rewrite core context handling")
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+syzbot found the following issue on:
+
+HEAD commit:    b2d229d4ddb1 Linux 5.18-rc3
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17e439b8f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2197cd22d3971cc5
+dashboard link: https://syzkaller.appspot.com/bug?extid=29c402e56c4760763cc0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17daf0af700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ae4d5cf00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+29c402e56c4760763cc0@syzkaller.appspotmail.com
+
+executing program
+executing program
+BUG: memory leak
+unreferenced object 0xffff88810b472a00 (size 64):
+  comm "syz-executor206", pid 3601, jiffies 4294944661 (age 12.290s)
+  hex dump (first 32 bytes):
+    00 2a 47 0b 81 88 ff ff 00 2a 47 0b 81 88 ff ff  .*G......*G.....
+    10 2a 47 0b 81 88 ff ff 10 2a 47 0b 81 88 ff ff  .*G......*G.....
+  backtrace:
+    [<ffffffff83fa1634>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff83fa1634>] sctp_sched_prio_new_head net/sctp/stream_sched_prio.c:33 [inline]
+    [<ffffffff83fa1634>] sctp_sched_prio_get_head net/sctp/stream_sched_prio.c:77 [inline]
+    [<ffffffff83fa1634>] sctp_sched_prio_set+0x2c4/0x370 net/sctp/stream_sched_prio.c:159
+    [<ffffffff83f9b6a6>] sctp_stream_init_ext+0x86/0xf0 net/sctp/stream.c:176
+    [<ffffffff83f86e0e>] sctp_sendmsg_to_asoc+0xc8e/0xdb0 net/sctp/socket.c:1807
+    [<ffffffff83f8f77f>] sctp_sendmsg+0x99f/0x1030 net/sctp/socket.c:2027
+    [<ffffffff83b7a315>] inet_sendmsg+0x45/0x70 net/ipv4/af_inet.c:819
+    [<ffffffff837cb3e6>] sock_sendmsg_nosec net/socket.c:705 [inline]
+    [<ffffffff837cb3e6>] sock_sendmsg+0x56/0x80 net/socket.c:725
+    [<ffffffff837ce38c>] __sys_sendto+0x15c/0x200 net/socket.c:2040
+    [<ffffffff837ce456>] __do_sys_sendto net/socket.c:2052 [inline]
+    [<ffffffff837ce456>] __se_sys_sendto net/socket.c:2048 [inline]
+    [<ffffffff837ce456>] __x64_sys_sendto+0x26/0x30 net/socket.c:2048
+    [<ffffffff8451da45>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff8451da45>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+
+
 ---
- kernel/events/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 5f262f91cd31..ce75288cdbae 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -13175,7 +13175,7 @@ inherit_event(struct perf_event *parent_event,
- 	pmu_ctx = find_get_pmu_context(child_event->pmu, child_ctx, child_event);
- 	if (IS_ERR(pmu_ctx)) {
- 		free_event(child_event);
--		return NULL;
-+		return ERR_CAST(pmu_ctx);
- 	}
- 	child_event->pmu_ctx = pmu_ctx;
- 
--- 
-2.37.3
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
