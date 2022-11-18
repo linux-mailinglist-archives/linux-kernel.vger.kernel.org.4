@@ -2,126 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BF762FC17
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F2262FC19
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242477AbiKRR4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S241877AbiKRR5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241877AbiKRR4f (ORCPT
+        with ESMTP id S241331AbiKRR5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:56:35 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351376A693;
-        Fri, 18 Nov 2022 09:56:35 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AIHuSH9060725;
-        Fri, 18 Nov 2022 11:56:28 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668794188;
-        bh=fEXsV3TD0XyH+BXYuxbAlTRcrFjFQrVVL3bi6Q6mMIE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=VuYuIJES0iiZCYxStWKQoqQNC90VKsazhvom5/eAB3uJzlxa+jopkbDH6bjgUZhAC
-         +t8VILBvxXpk3e/Zca/YyQIcYzI4ths47fL+vP5mDh3QeuBLpkSLwJvjttvslG6lS1
-         IedEjNbQRgUSFw2mKE0LzAn7TEjHJbt6fY9gvuJU=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AIHuSt6125149
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Nov 2022 11:56:28 -0600
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
- Nov 2022 11:56:28 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 18 Nov 2022 11:56:28 -0600
-Received: from [10.250.38.44] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AIHuR7w110433;
-        Fri, 18 Nov 2022 11:56:27 -0600
-Message-ID: <8c123fa2-caab-d2dd-5eb4-688f1c6abb33@ti.com>
-Date:   Fri, 18 Nov 2022 11:56:27 -0600
+        Fri, 18 Nov 2022 12:57:38 -0500
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25116A6B3;
+        Fri, 18 Nov 2022 09:57:36 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id 8so3972237qka.1;
+        Fri, 18 Nov 2022 09:57:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WPOY8H/nva/RTm1wL2a9BnQoOcQF/xp9kAd5iElmOWk=;
+        b=5VmBCYYHMsaFwe8ZaM3zuTBteLqHoDnFia0+IV6AQu2mzXrexzX27ECuhdRH60R5Tm
+         rbOwTabFtvx7jBtvyj6gX+v44qjyezh+yzlmt69dCOoauIqcezuv/rfFtvUKCkJWmOKp
+         VqeHRb6AzItuq4FVFsRPHs9/kY33IFHn+awvu8wniUjfjX+ozfDq4W32lDQ6eLWs3VoO
+         BTLaygNRuXUhSsj8t54+e0Fv7DkWDfgnButMvVk1qcibvsUa7egfoS9uuGN0XzCXyf6t
+         T7lmeFGx5eSgz7UbddF8Dr2NBIYul0j3w7p92dSNlrNhuOAq32LxJel9byxehq21AC8l
+         lefw==
+X-Gm-Message-State: ANoB5plD54yYfWX3VljK6yf4QyMe5/J7xXgNXa7kx13G+5YAigPjlIwA
+        wzTrg0sh4tBUq+m335NWPqHr6ULXi3y8xcwGR9g=
+X-Google-Smtp-Source: AA0mqf6oILKfVzT80cNC1LRmBDysLHBtD2rfy1247zDFyUr2DVxTAyNrrpf2D9iQr4qOiEiuKYh2+PPD6Y7wo+Yc9nE=
+X-Received: by 2002:a37:b901:0:b0:6ec:2b04:5099 with SMTP id
+ j1-20020a37b901000000b006ec2b045099mr6912151qkf.501.1668794255566; Fri, 18
+ Nov 2022 09:57:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-CC:     Apurva Nandan <a-nandan@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, Hari Nagalla <hnagalla@ti.com>
-References: <20221116130428.161329-1-a-nandan@ti.com>
- <20221116130428.161329-5-a-nandan@ti.com>
- <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
- <20221118174754.y37pq77drvla2uxj@tinderbox>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20221118174754.y37pq77drvla2uxj@tinderbox>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221116025417.2590275-1-srinivas.pandruvada@linux.intel.com> <20221116025417.2590275-2-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20221116025417.2590275-2-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 18 Nov 2022 18:57:24 +0100
+Message-ID: <CAJZ5v0jrEDkfZbMzdLHzvGwa3jK61vUBBqzUUM8BaQvLLcZnhg@mail.gmail.com>
+Subject: Re: [PATCH RESEND 2/2] thermal: intel: Protect clearing of thermal
+ status bits
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 11:47 AM, Nishanth Menon wrote:
-> On 11:40-20221118, Andrew Davis wrote:
->> On 11/16/22 7:04 AM, Apurva Nandan wrote:
-> 
-> [...]
-> 
->>> +#include <dt-bindings/net/ti-dp83867.h>
->>> +#include <dt-bindings/gpio/gpio.h>
->>> +#include "k3-j784s4.dtsi"
->>> +
->>> +/ {
->>> +	compatible = "ti,j784s4-evm", "ti,j784s4";
->>> +	model = "Texas Instruments J784S4 EVM";
->>> +
->>> +	chosen {
->>> +		stdout-path = "serial2:115200n8";
->>> +	};
->>> +
->>> +	aliases {
->>> +		serial2 = &main_uart8;
->>
->> This feels hacky. Your chosen node picks serial2 as that is usually
->> the one that is wired up on K3 boards. But on this board it is main_uart8.
->> So why not have this be serial10, then choose
->>
->> stdout-path = "serial10:115200n8";
->>
->> Also, I've made comments on previous version of this series, it is
->> nice to include folks who have commented before in the CC for future
->> versions, that way our filters don't hide these away and we can more
->> easily check that our comments have been addressed.
-> 
-> Please stick with the standard of serial2 as the linux console standard.
-> We ended up with that to ease up capabilities of various distros to
-> uniformly work across SoC and board variants.
-> 
+On Wed, Nov 16, 2022 at 3:54 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> The clearing of the package thermal status is done by Read-Modify-Write
+> operation. This may result in clearing of some new status bits which are
+> being or about to be processed.
+>
+> For example, while clearing of HFI status, after read of thermal status
+> register, a new thermal status bit is set by the hardware. But during
+> write back, the newly generated status bit will be set to 0 or cleared.
+> So, it is not safe to do read-modify-write.
+>
+> Since thermal status Read-Write bits can be set to only 0 not 1, it is
+> safe to set all other bits to 1 which are not getting cleared.
+>
+> Create a common interface for clearing package thermal status bits. Use
+> this interface to replace existing code to clear thermal package status
+> bits.
+>
+> It is safe to call from different CPUs without protection as there is no
+> read-modify-write. Also wrmsrl results in just single instruction. For
+> example while CPU 0 and CPU 3 are clearing bit 1 and 3 respectively. If
+> CPU 3 wins the race, it will write 0x4000aa2, then CPU 1 will write
+> 0x4000aa8. The bits which are not part of clear are set to 1. The default
+> mask for bits, which can be written here is 0x4000aaa.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 
-The chosen "stdout-path" is for setting the kernel's default output terminal.
-Distros and other userspaces need to use their own policy mechanisms for
-picking what serial port to run getty on or whatever the issue may be.
+How urgent is this?  Would 6.2 be sufficient?
 
-Some look at the kernel command line, and our bootloader provides
-that too, so still no reason to fake alias names here.
+Also, do you want it to go into -stable?
 
-Andrew
-
-> I do agree that phandle is the wrong approach here (baud etc information
-> missing). "serial2:115200n8" is probably the way to do this right.
-> 
+> ---
+> Email address was wrong, so sending again.
+>
+>  drivers/thermal/intel/intel_hfi.c            |  8 ++-----
+>  drivers/thermal/intel/therm_throt.c          | 23 ++++++++++----------
+>  drivers/thermal/intel/thermal_interrupt.h    |  6 +++++
+>  drivers/thermal/intel/x86_pkg_temp_thermal.c |  9 ++------
+>  4 files changed, 22 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index a0640f762dc5..c9e0827c9ebe 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -42,9 +42,7 @@
+>
+>  #include "../thermal_core.h"
+>  #include "intel_hfi.h"
+> -
+> -#define THERM_STATUS_CLEAR_PKG_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | \
+> -                                    BIT(9) | BIT(11) | BIT(26))
+> +#include "thermal_interrupt.h"
+>
+>  /* Hardware Feedback Interface MSR configuration bits */
+>  #define HW_FEEDBACK_PTR_VALID_BIT              BIT(0)
+> @@ -304,9 +302,7 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+>          * Let hardware know that we are done reading the HFI table and it is
+>          * free to update it again.
+>          */
+> -       pkg_therm_status_msr_val &= THERM_STATUS_CLEAR_PKG_MASK &
+> -                                   ~PACKAGE_THERM_STATUS_HFI_UPDATED;
+> -       wrmsrl(MSR_IA32_PACKAGE_THERM_STATUS, pkg_therm_status_msr_val);
+> +       thermal_clear_package_intr_status(PACKAGE_LEVEL, PACKAGE_THERM_STATUS_HFI_UPDATED);
+>
+>         queue_delayed_work(hfi_updates_wq, &hfi_instance->update_work,
+>                            HFI_UPDATE_INTERVAL);
+> diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
+> index 9e8ab31d756e..4bb7fddaa143 100644
+> --- a/drivers/thermal/intel/therm_throt.c
+> +++ b/drivers/thermal/intel/therm_throt.c
+> @@ -190,32 +190,33 @@ static const struct attribute_group thermal_attr_group = {
+>  };
+>  #endif /* CONFIG_SYSFS */
+>
+> -#define CORE_LEVEL     0
+> -#define PACKAGE_LEVEL  1
+> -
+>  #define THERM_THROT_POLL_INTERVAL      HZ
+>  #define THERM_STATUS_PROCHOT_LOG       BIT(1)
+>
+>  #define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
+>  #define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(26))
+>
+> -static void clear_therm_status_log(int level)
+> +/*
+> + * Clear the bits in package thermal status register for bit = 1
+> + * in bitmask
+> + */
+> +void thermal_clear_package_intr_status(int level, u64 bit_mask)
+>  {
+> +       u64 msr_val;
+>         int msr;
+> -       u64 mask, msr_val;
+>
+>         if (level == CORE_LEVEL) {
+>                 msr  = MSR_IA32_THERM_STATUS;
+> -               mask = THERM_STATUS_CLEAR_CORE_MASK;
+> +               msr_val = THERM_STATUS_CLEAR_CORE_MASK;
+>         } else {
+>                 msr  = MSR_IA32_PACKAGE_THERM_STATUS;
+> -               mask = THERM_STATUS_CLEAR_PKG_MASK;
+> +               msr_val = THERM_STATUS_CLEAR_PKG_MASK;
+>         }
+>
+> -       rdmsrl(msr, msr_val);
+> -       msr_val &= mask;
+> -       wrmsrl(msr, msr_val & ~THERM_STATUS_PROCHOT_LOG);
+> +       msr_val &= ~bit_mask;
+> +       wrmsrl(msr, msr_val);
+>  }
+> +EXPORT_SYMBOL_GPL(thermal_clear_package_intr_status);
+>
+>  static void get_therm_status(int level, bool *proc_hot, u8 *temp)
+>  {
+> @@ -295,7 +296,7 @@ static void __maybe_unused throttle_active_work(struct work_struct *work)
+>         state->average = avg;
+>
+>  re_arm:
+> -       clear_therm_status_log(state->level);
+> +       thermal_clear_package_intr_status(state->level, THERM_STATUS_PROCHOT_LOG);
+>         schedule_delayed_work_on(this_cpu, &state->therm_work, THERM_THROT_POLL_INTERVAL);
+>  }
+>
+> diff --git a/drivers/thermal/intel/thermal_interrupt.h b/drivers/thermal/intel/thermal_interrupt.h
+> index 01e7bed2ffc7..01dfd4cdb5df 100644
+> --- a/drivers/thermal/intel/thermal_interrupt.h
+> +++ b/drivers/thermal/intel/thermal_interrupt.h
+> @@ -2,6 +2,9 @@
+>  #ifndef _INTEL_THERMAL_INTERRUPT_H
+>  #define _INTEL_THERMAL_INTERRUPT_H
+>
+> +#define CORE_LEVEL     0
+> +#define PACKAGE_LEVEL  1
+> +
+>  /* Interrupt Handler for package thermal thresholds */
+>  extern int (*platform_thermal_package_notify)(__u64 msr_val);
+>
+> @@ -15,4 +18,7 @@ extern bool (*platform_thermal_package_rate_control)(void);
+>  /* Handle HWP interrupt */
+>  extern void notify_hwp_interrupt(void);
+>
+> +/* Common function to clear Package thermal status register */
+> +extern void thermal_clear_package_intr_status(int level, u64 bit_mask);
+> +
+>  #endif /* _INTEL_THERMAL_INTERRUPT_H */
+> diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> index a0e234fce71a..84c3a116ed04 100644
+> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> @@ -265,7 +265,6 @@ static void pkg_temp_thermal_threshold_work_fn(struct work_struct *work)
+>         struct thermal_zone_device *tzone = NULL;
+>         int cpu = smp_processor_id();
+>         struct zone_device *zonedev;
+> -       u64 msr_val, wr_val;
+>
+>         mutex_lock(&thermal_zone_mutex);
+>         raw_spin_lock_irq(&pkg_temp_lock);
+> @@ -279,12 +278,8 @@ static void pkg_temp_thermal_threshold_work_fn(struct work_struct *work)
+>         }
+>         zonedev->work_scheduled = false;
+>
+> -       rdmsrl(MSR_IA32_PACKAGE_THERM_STATUS, msr_val);
+> -       wr_val = msr_val & ~(THERM_LOG_THRESHOLD0 | THERM_LOG_THRESHOLD1);
+> -       if (wr_val != msr_val) {
+> -               wrmsrl(MSR_IA32_PACKAGE_THERM_STATUS, wr_val);
+> -               tzone = zonedev->tzone;
+> -       }
+> +       thermal_clear_package_intr_status(PACKAGE_LEVEL, THERM_LOG_THRESHOLD0 | THERM_LOG_THRESHOLD1);
+> +       tzone = zonedev->tzone;
+>
+>         enable_pkg_thres_interrupt();
+>         raw_spin_unlock_irq(&pkg_temp_lock);
+> --
+> 2.31.1
+>
