@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6A962FACB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF4762FACA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242287AbiKRQum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S242200AbiKRQuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235463AbiKRQuh (ORCPT
+        with ESMTP id S233401AbiKRQuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 11:50:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07D793721;
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F5070A1D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:50:36 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so5563474pjl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:50:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vDeF35wdLYG1P15QPsioTjibeocs7bxGmPk/YQhsj6s=;
+        b=nEwUH22V3Px2AJ0nfhnVjJM1rBPM9FKR685a6v3VuuhfgW52O+PKMaplMTwyxfiFA8
+         nKs9/aTXQQ4zPvNHj+eAYhJdYMektFDaVSFAFfKBnKtL8Coa1PcYz3r4Giub0PhK9aJ+
+         xNxRIaTXBnko1GceMEjnoroVYL6UshpQX/9c4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDeF35wdLYG1P15QPsioTjibeocs7bxGmPk/YQhsj6s=;
+        b=POuYfvZ5oNqdx6Ghz2qhMB/WBWWFTIXx0pqeBor6RcW/PPgPK+SdXy1bai25qHBwyh
+         IA0maKPzvVUOe/SDj4G5gM4urJvc6Ufh2WnoudkcNksTr4huKDtL5h2ZbMZ+BO/SfBGd
+         18ZDD6RpB7lgRp9+V30BmnP1+ZkrhPYI022WZX7DgCCn43mJILxDB45ZSMlvfiW4+YNk
+         1JKPkLH37YIEmESmcq5ys1j0NYTIxljWjn/XJSAJBkOjBZ0ANRQ4nf7RPfYJaybwpB61
+         9AAFbRwbvSGVf+kbXdHTgSEBoVfTEV0b4LTJc73QA2ejJlWNpuxjzmQW95ZN0aFrNk/M
+         OYYg==
+X-Gm-Message-State: ANoB5pmPlitzjRq5AIZrUd7BJrQax2u+SxlWIXiTbLSvFz72/Ncdu+Tz
+        JlZrF4f2BiRxezXhmbGBdCDcNg==
+X-Google-Smtp-Source: AA0mqf5nc7sx9BVUy4AHRDyHuAxCzDSQw3UQYN4kbHosvvppGk9Ks17mBJFq8EiYAnsMiKkMdrSZ7A==
+X-Received: by 2002:a17:90a:3e47:b0:213:1a9f:8d72 with SMTP id t7-20020a17090a3e4700b002131a9f8d72mr14862628pjm.155.1668790236086;
         Fri, 18 Nov 2022 08:50:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A2C7B824BC;
-        Fri, 18 Nov 2022 16:50:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F026C433D6;
-        Fri, 18 Nov 2022 16:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668790234;
-        bh=2SvZU2ZbmXvIOHrpSjoDJyk8GuB3PC2eqavTqAih/c4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PDCyFX1t2lbX2Y+JbxJspQJxL5IivL9nB6T9T8jDuj1ADFyeQ6AhYtrm7AMXDTrR9
-         3A4jPSXrHBkSeATkubSjiphuP/ZAmTP4Bdu2u/gBp/NdFMaNEjisc9WUIy1/y74jHG
-         dOARPW4nFoH7nbO80T8fpwi4qxBngjNaKyW50XgZMmTTdqDjH6VQQnl/9qmNyK0gy5
-         Qa62UpjpBwrCiNE4cv2lHgSut3CLX3Ox4hvHWnz2gEi2Q7A/QqhMK0ytZ1NzsQbBtA
-         3d8r/tBKMo563L/+EBD+upeTVN/Xy+jXaNnw90FnSFpaTbsu6jGPV93yC25scr1K6u
-         UMyclmg+Rj8yA==
-Date:   Fri, 18 Nov 2022 16:50:26 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Ingo Molnar <mingo@redhat.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, James Clark <james.clark@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v3 0/8] perf: Arm SPEv1.2 support
-Message-ID: <20221118165025.GB4872@willie-the-truck>
-References: <20220825-arm-spe-v8-7-v3-0-87682f78caac@kernel.org>
- <CAL_Jsq+WOjoPW0FDSa=B9-aCMwXC3tc5HUqokoVkKUucKgqanQ@mail.gmail.com>
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j15-20020a170902da8f00b00176dd41320dsm3992706plx.119.2022.11.18.08.50.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 08:50:35 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Fri, 18 Nov 2022 08:50:35 -0800
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     David Airlie <airlied@gmail.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Wayne Lin <Wayne.Lin@amd.com>, stable@vger.kernel.org,
+        #v5.6+@kernel, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Roman Li <roman.li@amd.com>, amd-gfx@lists.freedesktop.org,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        hersen wu <hersenxs.wu@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        dri-devel@lists.freedesktop.org,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: pre_compute_mst_dsc_configs_for_state(): Uninitialized
+ variables
+Message-ID: <202211180850.560AD5A74@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+WOjoPW0FDSa=B9-aCMwXC3tc5HUqokoVkKUucKgqanQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,63 +85,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 08:43:17AM -0600, Rob Herring wrote:
-> On Fri, Nov 4, 2022 at 10:55 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > This series adds support for Arm SPEv1.2 which is part of the
-> > Armv8.7/Armv9.2 architecture. There's 2 new features that affect the
-> > kernel: a new event filter bit, branch 'not taken', and an inverted
-> > event filter register.
-> >
-> > Since this support adds new registers and fields, first the SPE register
-> > defines are converted to automatic generation.
-> >
-> > Note that the 'config3' addition in sysfs format files causes SPE to
-> > break. A stable fix e552b7be12ed ("perf: Skip and warn on unknown format
-> > 'configN' attrs") landed in v6.1-rc1.
-> >
-> > The perf tool side changes are available here[1].
-> >
-> > Tested on FVP.
-> >
-> > [1] https://lore.kernel.org/all/20220914-arm-perf-tool-spe1-2-v2-v4-0-83c098e6212e@kernel.org/
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> > Changes in v3:
-> > - Add some more missing SPE register fields and use Enums for some
-> >   fields
-> > - Use the new PMSIDR_EL1 register Enum defines in the SPE driver
-> > - Link to v2: https://lore.kernel.org/r/20220825-arm-spe-v8-7-v2-0-e37322d68ac0@kernel.org
-> >
-> > Changes in v2:
-> > - Convert the SPE register defines to automatic generation
-> > - Fixed access to SYS_PMSNEVFR_EL1 when not present
-> > - Rebase on v6.1-rc1
-> > - Link to v1: https://lore.kernel.org/r/20220825-arm-spe-v8-7-v1-0-c75b8d92e692@kernel.org
-> >
-> > ---
-> > Rob Herring (8):
-> >       perf: arm_spe: Use feature numbering for PMSEVFR_EL1 defines
-> >       arm64: Drop SYS_ from SPE register defines
-> >       arm64/sysreg: Convert SPE registers to automatic generation
-> >       perf: arm_spe: Drop BIT() and use FIELD_GET/PREP accessors
-> >       perf: arm_spe: Use new PMSIDR_EL1 register enums
-> >       perf: arm_spe: Support new SPEv1.2/v8.7 'not taken' event
-> >       perf: Add perf_event_attr::config3
-> >       perf: arm_spe: Add support for SPEv1.2 inverted event filtering
-> >
-> >  arch/arm64/include/asm/el2_setup.h |   6 +-
-> >  arch/arm64/include/asm/sysreg.h    |  99 +++--------------------
-> >  arch/arm64/kvm/debug.c             |   2 +-
-> >  arch/arm64/kvm/hyp/nvhe/debug-sr.c |   2 +-
-> >  arch/arm64/tools/sysreg            | 139 +++++++++++++++++++++++++++++++++
-> >  drivers/perf/arm_spe_pmu.c         | 156 ++++++++++++++++++++++++-------------
-> >  include/uapi/linux/perf_event.h    |   3 +
-> >  7 files changed, 257 insertions(+), 150 deletions(-)
-> 
-> Will, any comments on this series?
+Hello!
 
-Looks fine to me. Happy to queue it once the uapi change has been acked.
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20221118 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-Will
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
+
+  Thu Nov 17 00:18:25 2022 -0500
+    7cce4cd628be ("drm/amdgpu/mst: Stop ignoring error codes and deadlocking")
+
+Coverity reported the following:
+
+*** CID 1527373:  Uninitialized variables  (UNINIT)
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c:1227 in pre_compute_mst_dsc_configs_for_state()
+1221     		for (j = 0; j < dc_state->stream_count; j++) {
+1222     			if (dc_state->streams[j]->link == stream->link)
+1223     				computed_streams[j] = true;
+1224     		}
+1225     	}
+1226
+vvv     CID 1527373:  Uninitialized variables  (UNINIT)
+vvv     Using uninitialized value "ret".
+1227     	return ret;
+1228     }
+1229
+1230     static int find_crtc_index_in_state_by_stream(struct drm_atomic_state *state,
+1231     					      struct dc_stream_state *stream)
+1232     {
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527373 ("Uninitialized variables")
+Fixes: 7cce4cd628be ("drm/amdgpu/mst: Stop ignoring error codes and deadlocking")
+
+If dc_state->stream_count is 0, "ret" is undefined. Perhaps initialize
+it as -EINVAL?
+
+Thanks for your attention!
+
+-- 
+Coverity-bot
