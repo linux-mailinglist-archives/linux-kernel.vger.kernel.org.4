@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DA6630412
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F428630708
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiKRXew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        id S231717AbiKSAXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236074AbiKRXbn (ORCPT
+        with ESMTP id S231880AbiKSAXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:31:43 -0500
+        Fri, 18 Nov 2022 19:23:05 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D82BC2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:19:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67951BA5A6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:37:41 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9g-0005EN-0c; Fri, 18 Nov 2022 23:48:16 +0100
+        id 1owA9g-0005Er-An; Fri, 18 Nov 2022 23:48:16 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9d-0058rP-Bu; Fri, 18 Nov 2022 23:48:14 +0100
+        id 1owA9d-0058rU-Ih; Fri, 18 Nov 2022 23:48:14 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9d-0000Tr-Ha; Fri, 18 Nov 2022 23:48:13 +0100
+        id 1owA9d-0000Tu-Mq; Fri, 18 Nov 2022 23:48:13 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Machata <petrm@nvidia.com>, Peter Rosin <peda@axentia.se>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Senna Tschudin <peter.senna@gmail.com>
+        Jens Frederich <jfrederich@gmail.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 569/606] staging: most: i2c: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:45:03 +0100
-Message-Id: <20221118224540.619276-570-uwe@kleine-koenig.org>
+Subject: [PATCH 570/606] staging: olpc_dcon: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:45:04 +0100
+Message-Id: <20221118224540.619276-571-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -69,31 +68,31 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/staging/most/i2c/i2c.c | 4 ++--
+ drivers/staging/olpc_dcon/olpc_dcon.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/most/i2c/i2c.c b/drivers/staging/most/i2c/i2c.c
-index 285a071f02be..df53a4c4f850 100644
---- a/drivers/staging/most/i2c/i2c.c
-+++ b/drivers/staging/most/i2c/i2c.c
-@@ -284,7 +284,7 @@ static irqreturn_t most_irq_handler(int irq, void *_dev)
-  *
-  * Register the i2c client device as a MOST interface
-  */
--static int i2c_probe(struct i2c_client *client, const struct i2c_device_id *id)
-+static int i2c_probe(struct i2c_client *client)
+diff --git a/drivers/staging/olpc_dcon/olpc_dcon.c b/drivers/staging/olpc_dcon/olpc_dcon.c
+index 4fb9b9f10799..2fba52e0bd7b 100644
+--- a/drivers/staging/olpc_dcon/olpc_dcon.c
++++ b/drivers/staging/olpc_dcon/olpc_dcon.c
+@@ -579,7 +579,7 @@ static int dcon_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	return 0;
+ }
+ 
+-static int dcon_probe(struct i2c_client *client, const struct i2c_device_id *id)
++static int dcon_probe(struct i2c_client *client)
  {
- 	struct hdm_i2c *dev;
- 	int ret, i;
-@@ -359,7 +359,7 @@ static struct i2c_driver i2c_driver = {
- 	.driver = {
- 		.name = "hdm_i2c",
+ 	struct dcon_priv *dcon;
+ 	int rc, i, j;
+@@ -779,7 +779,7 @@ static struct i2c_driver dcon_driver = {
  	},
--	.probe = i2c_probe,
-+	.probe_new = i2c_probe,
- 	.remove = i2c_remove,
- 	.id_table = i2c_id,
- };
+ 	.class = I2C_CLASS_DDC | I2C_CLASS_HWMON,
+ 	.id_table = dcon_idtable,
+-	.probe = dcon_probe,
++	.probe_new = dcon_probe,
+ 	.remove = dcon_remove,
+ 	.detect = dcon_detect,
+ 	.address_list = normal_i2c,
 -- 
 2.38.1
 
