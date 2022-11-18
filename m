@@ -2,149 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF5162F68A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D8E62F68F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbiKRNqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        id S241523AbiKRNrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235225AbiKRNqH (ORCPT
+        with ESMTP id S242182AbiKRNrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:46:07 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B3487640;
-        Fri, 18 Nov 2022 05:46:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F45623A;
-        Fri, 18 Nov 2022 05:46:11 -0800 (PST)
-Received: from [10.0.2.87] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 91DE53F587;
-        Fri, 18 Nov 2022 05:46:01 -0800 (PST)
-Message-ID: <3bf8bbf1-c2bc-3199-2cee-99a1e3e920c7@arm.com>
-Date:   Fri, 18 Nov 2022 14:45:59 +0100
+        Fri, 18 Nov 2022 08:47:12 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB60778D7F;
+        Fri, 18 Nov 2022 05:47:09 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AIDkvpo008098;
+        Fri, 18 Nov 2022 07:46:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668779217;
+        bh=h6jRPXKyDb5AitUb2IcfDux95fXtk60H7Rt6xHqRIpE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=eDTG6s73gekI2NKZxNlXGLPu9Kf5Ac9H/WJ+N8Du2oAwciaqcfI/L8Cif8L76jpul
+         9v9YL+RXMvOCKSQ2jI6jtNAgXrNApeTwA3kqrvJZFq58TlHC4eqJHxYFSgdI+7iG74
+         iDP9zQ2C430a38eW7gLbL2GXDeNTf8giuGOTsyqQ=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AIDkveB112529
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Nov 2022 07:46:57 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
+ Nov 2022 07:46:57 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 18 Nov 2022 07:46:57 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AIDktj2040828;
+        Fri, 18 Nov 2022 07:46:56 -0600
+Date:   Fri, 18 Nov 2022 19:16:55 +0530
+From:   Manorit Chawdhry <m-chawdhry@ti.com>
+To:     Apurva Nandan <a-nandan@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, Hari Nagalla <hnagalla@ti.com>
+Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
+Message-ID: <20221118134655.svdubodeiff7m4pw@ula0497581>
+References: <20221116130428.161329-1-a-nandan@ti.com>
+ <20221116130428.161329-5-a-nandan@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] sched/topology: Remove EM_MAX_COMPLEXITY limit
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Ionela.Voinescu@arm.com, Lukasz Luba <lukasz.luba@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-doc@vger.kernel.org
-References: <20221028153032.395898-1-pierre.gondois@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20221028153032.395898-1-pierre.gondois@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221116130428.161329-5-a-nandan@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 17:30, Pierre Gondois wrote:
-> From: Pierre Gondois <Pierre.Gondois@arm.com>
+On 18:34-20221116, Apurva Nandan wrote:
+> J784S4 EVM board is designed for TI J784S4 SoC. It supports the following
+> interfaces:
+> * 32 GB DDR4 RAM
+> * x2 Gigabit Ethernet interfaces capable of working in Switch and MAC mode
+> * x1 Input Audio Jack, x1 Output Audio Jack
+> * x1 USB2.0 Hub with two Type A host and x1 USB 3.1 Type-C Port
+> * x2 4L PCIe connector
+> * x1 UHS-1 capable micro-SD card slot
+> * 512 Mbit OSPI flash, 1 Gbit Octal NAND flash, 512 Mbit QSPI flash,
+>   UFS flash.
+> * x6 UART through UART-USB bridge
+> * XDS110 for onboard JTAG debug using USB
+> * Temperature sensors, user push buttons and LEDs
+> * 40-pin User Expansion Connector
+> * x2 ENET Expansion Connector, x1 GESI expander, x2 Display connector
+> * x1 15-pin CSI header
+> * x6 MCAN instances
 > 
-> The Energy Aware Scheduler (EAS) estimates the energy consumption
-> of placing a task on different CPUs. The goal is to minimize this
-> energy consumption. Estimating the energy of different task placements
-> is increasingly complex with the size of the platform. To avoid having
-> a slow wake-up path, EAS is only enabled if this complexity is low
-> enough.
+> Add basic support for J784S4-EVM.
 > 
-> The current complexity limit was set in:
-> commit b68a4c0dba3b1 ("sched/topology: Disable EAS on inappropriate
-> platforms").
-> base on the first implementation of EAS, which was re-computing
-> the power of the whole platform for each task placement scenario, cf:
-> commit 390031e4c309 ("sched/fair: Introduce an energy estimation helper
-> function").
-> but the complexity of EAS was reduced in:
-> commit eb92692b2544d ("sched/fair: Speed-up energy-aware wake-ups")
-> and find_energy_efficient_cpu() (feec) algorithm was updated in:
-> commit 3e8c6c9aac42 ("sched/fair: Remove task_util from effective
-> utilization in feec()")
+> Schematics: https://www.ti.com/lit/zip/sprr458
 > 
-> find_energy_efficient_cpu() (feec) is now doing:
-> feec()
-> \_ for_each_pd(pd) [0]
->   // get max_spare_cap_cpu and compute_prev_delta
->   \_ for_each_cpu(pd) [1]
+> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/Makefile          |   2 +
+>  arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 197 +++++++++++++++++++++++
+>  2 files changed, 199 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
 > 
->   \_ eenv_pd_busy_time(pd) [2]
-> 	\_ for_each_cpu(pd)
+> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> index 4555a5be2257..67621b349e88 100644
+> --- a/arch/arm64/boot/dts/ti/Makefile
+> +++ b/arch/arm64/boot/dts/ti/Makefile
+> @@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
+>  
+>  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
+>  
+> +dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
+> +
+>  dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
+>  dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
+>  
+> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+> new file mode 100644
+> index 000000000000..53516fb2b346
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+> @@ -0,0 +1,196 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+> + *
+> + * EVM Board Schematics: https://www.ti.com/lit/zip/sprr458
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/net/ti-dp83867.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include "k3-j784s4.dtsi"
+> +
+> +/ {
+> +	compatible = "ti,j784s4-evm", "ti,j784s4";
+> +	model = "Texas Instruments J784S4 EVM";
+> +
+> +	chosen {
+> +		stdout-path = "serial2:115200n8";
+> +	};
+> +
+> +	aliases {
+> +		serial2 = &main_uart8;
+> +		mmc1 = &main_sdhci1;
+> +		i2c0 = &main_i2c0;
+> +	};
+> +
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		/* 32G RAM */
+> +		reg = <0x00 0x80000000 0x00 0x80000000>,
+> +		      <0x08 0x80000000 0x07 0x80000000>;
+> +	};
+> +
+> +	reserved_memory: reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		secure_ddr: optee@9e800000 {
+> +			reg = <0x00 0x9e800000 0x00 0x01800000>;
+> +			no-map;
+> +		};
+> +	};
+> +
+> +	evm_12v0: regulator-evm12v0 {
+> +		/* main supply */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "evm_12v0";
+> +		regulator-min-microvolt = <12000000>;
+> +		regulator-max-microvolt = <12000000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vsys_3v3: regulator-vsys3v3 {
+> +		/* Output of LM5140 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vsys_3v3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&evm_12v0>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vsys_5v0: regulator-vsys5v0 {
+> +		/* Output of LM5140 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vsys_5v0";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&evm_12v0>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vdd_mmc1: regulator-sd {
+> +		/* Output of TPS22918 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd_mmc1";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		enable-active-high;
+> +		vin-supply = <&vsys_3v3>;
+> +		gpio = <&exp2 2 GPIO_ACTIVE_HIGH>;
+> +	};
+> +
+> +	vdd_sd_dv: regulator-TLV71033 {
+> +		/* Output of TLV71033 */
+> +		compatible = "regulator-gpio";
+> +		regulator-name = "tlv71033";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&vdd_sd_dv_pins_default>;
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		vin-supply = <&vsys_5v0>;
+> +		gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
+> +		states = <1800000 0x0>,
+> +			 <3300000 0x1>;
+> +	};
+> +};
+> +
+> +&main_pmx0 {
+> +	main_uart8_pins_default: main-uart8-pins-default {
+> +		pinctrl-single,pins = <
+> +			J784S4_IOPAD(0x040, PIN_INPUT, 14) /* (AF37) MCASP0_AXR0.UART8_CTSn */
+> +			J784S4_IOPAD(0x044, PIN_OUTPUT, 14) /* (AG37) MCASP0_AXR1.UART8_RTSn */
+> +			J784S4_IOPAD(0x0d0, PIN_INPUT, 11) /* (AP38) SPI0_CS1.UART8_RXD */
+> +			J784S4_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AN38) SPI0_CLK.UART8_TXD */
+> +		>;
+> +	};
+> +
+> +	main_i2c0_pins_default: main-i2c0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J784S4_IOPAD(0x0e0, PIN_INPUT_PULLUP, 0) /* (AN36) I2C0_SCL */
+> +			J784S4_IOPAD(0x0e4, PIN_INPUT_PULLUP, 0) /* (AP37) I2C0_SDA */
+> +		>;
+> +	};
+> +
+> +	main_mmc1_pins_default: main-mmc1-pins-default {
+> +		pinctrl-single,pins = <
+> +			J784S4_IOPAD(0x104, PIN_INPUT, 0) /* (AB38) MMC1_CLK */
+> +			J784S4_IOPAD(0x108, PIN_INPUT, 0) /* (AB36) MMC1_CMD */
+> +			J784S4_IOPAD(0x100, PIN_INPUT, 0) /* (No Pin) MMC1_CLKLB */
+> +			J784S4_IOPAD(0x0fc, PIN_INPUT, 0) /* (AA33) MMC1_DAT0 */
+> +			J784S4_IOPAD(0x0f8, PIN_INPUT, 0) /* (AB34) MMC1_DAT1 */
+> +			J784S4_IOPAD(0x0f4, PIN_INPUT, 0) /* (AA32) MMC1_DAT2 */
+> +			J784S4_IOPAD(0x0f0, PIN_INPUT, 0) /* (AC38) MMC1_DAT3 */
+> +			J784S4_IOPAD(0x0e8, PIN_INPUT, 8) /* (AR38) TIMER_IO0.MMC1_SDCD */
+> +		>;
+> +	};
+> +
+> +	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
+> +		pinctrl-single,pins = <
+> +			J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
+> +		>;
+> +	};
+> +};
+> +
+> +&main_uart8 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_uart8_pins_default>;
+> +};
+> +
+> +&main_i2c0 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_i2c0_pins_default>;
+> +
+> +	clock-frequency = <400000>;
+> +
+> +	exp1: gpio@20 {
+> +		compatible = "ti,tca6416";
+> +		reg = <0x20>;
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		gpio-line-names = "PCIE1_2L_MODE_SEL", "PCIE1_4L_PERSTZ", "PCIE1_2L_RC_RSTZ",
+> +				  "PCIE1_2L_EP_RST_EN", "PCIE0_4L_MODE_SEL", "PCIE0_4L_PERSTZ",
+> +				  "PCIE0_4L_RC_RSTZ", "PCIE0_4L_EP_RST_EN", "PCIE1_4L_PRSNT#",
+> +				  "PCIE0_4L_PRSNT#", "CDCI1_OE1/OE4", "CDCI1_OE2/OE3",
+> +				  "AUDIO_MUX_SEL", "EXP_MUX2", "EXP_MUX3", "GESI_EXP_PHY_RSTZ";
+> +	};
+> +
+> +	exp2: gpio@22 {
+> +		compatible = "ti,tca6424";
+> +		reg = <0x22>;
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		gpio-line-names = "R_GPIO_RGMII1_RST", "ENET2_I2CMUX_SEL", "GPIO_USD_PWR_EN",
+> +				  "USBC_PWR_EN", "USBC_MODE_SEL1", "USBC_MODE_SEL0",
+> +				  "GPIO_LIN_EN", "R_CAN_STB", "CTRL_PM_I2C_OE#",
+> +				  "ENET2_EXP_PWRDN", "ENET2_EXP_SPARE2", "CDCI2_RSTZ",
+> +				  "USB2.0_MUX_SEL", "CANUART_MUX_SEL0", "CANUART_MUX2_SEL1",
+> +				  "CANUART_MUX1_SEL1", "ENET1_EXP_PWRDN", "ENET1_EXP_RESETZ",
+> +				  "ENET1_I2CMUX_SEL", "ENET1_EXP_SPARE2", "ENET2_EXP_RESETZ",
+> +				  "USER_INPUT1", "USER_LED1", "USER_LED2";
+> +	};
+> +};
+> +
+> +&main_sdhci1 {
+> +	/* SD card */
+> +	status = "okay";
+> +	pinctrl-0 = <&main_mmc1_pins_default>;
+> +	pinctrl-names = "default";
+> +	disable-wp;
+> +	vmmc-supply = <&vdd_mmc1>;
+> +	vqmmc-supply = <&vdd_sd_dv>;
+> +};
+> +
+> +&main_gpio0 {
+> +	status = "okay";
+> +};
+> -- 
+> 2.17.1
 > 
->   // compute_energy(pd) without the task
->   \_ eenv_pd_max_util(pd, -1) [3.0]
->     \_ for_each_cpu(pd)
->   \_ em_cpu_energy(pd, -1)
->     \_ for_each_ps(pd)
-> 
->   // compute_energy(pd) with the task on prev_cpu
->   \_ eenv_pd_max_util(pd, prev_cpu) [3.1]
->     \_ for_each_cpu(pd)
->   \_ em_cpu_energy(pd, prev_cpu)
->     \_ for_each_ps(pd)
-> 
->   // compute_energy(pd) with the task on max_spare_cap_cpu
->   \_ eenv_pd_max_util(pd, max_spare_cap_cpu) [3.2]
->     \_ for_each_cpu(pd)
->   \_ em_cpu_energy(pd, max_spare_cap_cpu)
->     \_ for_each_ps(pd)
-> 
-> [3.1] happens only once since prev_cpu is unique. With the same
-> definitions for nr_pd, nr_cpus and nr_ps, the complexity is of:
-> nr_pd * (2 * [nr_cpus in pd] + 2 * ([nr_cpus in pd] + [nr_ps in pd]))
-> + ([nr_cpus in pd] + [nr_ps in pd])
-> 
->  [0]  * (     [1] + [2]      +       [3.0] + [3.2]                  )
-> + [3.1]
-> 
-> = nr_pd * (4 * [nr_cpus in pd] + 2 * [nr_ps in pd])
-> + [nr_cpus in prev pd] + nr_ps
-> 
-> The complexity limit was set to 2048 in:
-> commit b68a4c0dba3b1 ("sched/topology: Disable EAS on inappropriate
-> platforms")
-> to make "EAS usable up to 16 CPUs with per-CPU DVFS and less than 8
-> performance states each". For the same platform, the complexity would
-> actually be of:
-> 16 * (4 + 2 * 7) + 1 + 7 = 296
-> 
-> Since the EAS complexity was greatly reduced, bigger platforms can
-> handle EAS. For instance, a platform with 112 CPUs with 7 performance
-> states each would not reach it:
-> 112 * (4 + 2 * 7) + 1 + 7 = 2024
-> 
-> To reflect this improvement, remove the EAS complexity check.
-> 
-> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-OK, let's remove the specific EAS EM complexity check in this case.
+Tested-by: Manorit Chawdhry <m-chawdhry@ti.com>
 
-But we should still have some info about the decission that EAS is now
-only constraint by EM's own EM_MAX_NUM_CPUS in terms of complexity.
-
-So maybe replace `6.3 - Energy Model complexity` by:
-
-EAS does not impose any complexity limit on numbers of CPUs but relies
-on EM's own EM_MAX_NUM_CPUS.
-
-And also mention this fact in the patch-header for future reference
-regarding this change.
-
-[...]
+Manorit
