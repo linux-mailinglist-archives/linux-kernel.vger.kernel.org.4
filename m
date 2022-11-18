@@ -2,144 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B1762F7F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2F762F7E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242018AbiKROlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S242439AbiKROlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241807AbiKROlW (ORCPT
+        with ESMTP id S242273AbiKROkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:41:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E67970B9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:37:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668782250;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UPk972akfZfuwBephZFAJS92+OaEvfxCgvAwmUwC+Mw=;
-        b=YUtvkGSgPPfgA7l0qfbnCJ9GvL5fr/n+069bmlGWeMryG2A2RBNICl2IdYqxE1SyuoiiQ1
-        KltbpZiq6E2tmipxCagAbNmWkTRN54N4ulxCGZfN1A5VBBxErnOwdXlQ4+NuRWZ8CTD/cH
-        z1eP+kaj+iZMeRkcfYFjv5zrmV4DWfs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-62-aYeUJXPdMTOXbb-nw9B3TQ-1; Fri, 18 Nov 2022 09:37:29 -0500
-X-MC-Unique: aYeUJXPdMTOXbb-nw9B3TQ-1
-Received: by mail-wm1-f70.google.com with SMTP id h188-20020a1c21c5000000b003cfe4cc64eeso4546826wmh.6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:37:29 -0800 (PST)
+        Fri, 18 Nov 2022 09:40:46 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF5A24958
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:38:35 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id u2so7026699ljl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:38:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bHTp8WxD0cqwio5pXFuWtKnMnq/qdJErDoBEBwvP2sk=;
+        b=puMgpYajPPIk3Ykwm+tcdadpD9lyTeJKAI8z7HlGRfY+NSsZJzna7GjQwGMfo7ijwB
+         iMiDRyWrLxnQDh2Xk/HHqZIDQpReMj8EaCSSDojD/pUFT88/vaxUopxAiCUrK1nkpf9y
+         zx1A6H8fCPSqKaAuMRXeuqc13VkN5XWPdJ+MYCiS6UTmSgtU/fp02mjEg7QqNimoAESV
+         Yemliv0VkZNZnFjH9XfCYCW5iiwYr6ZXZ5b9h8g0d87gGOS1BuX9IZ6AArhlIf/8DWf1
+         5LqY32e/5L0u4XEYhQUmVWJGRf6b6TSL8VNR+8qfrO/KOt0AVJMPu9RyBGmGWVsCEt2A
+         gkkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UPk972akfZfuwBephZFAJS92+OaEvfxCgvAwmUwC+Mw=;
-        b=eRzmbcAy1o0dbqDaTZhalQ6G6ikPwSudCIm26xVBBr90aFci28QNNnkgaHdTTgFwmF
-         J31khnKwmuISkWbTKdku4+5eiV8uVGzb14uJAGP4TR+BLYqPkk0SLto9hwBp/GDsAhAa
-         XP4zPpeJQt1OefGhp27EHHLSamZMXDEy2SAUxbxmdKDJZs2mr8OU9HbBk+qXTRvX2VB+
-         /hzMLBPyJsFc7cgvMC3MX/rChfzV5iHHRazyjDoBaPPGgAR9ngTa7jVOrOGVcWJTbrZY
-         GYeJtwBy8GlMgyMY5FBHQXXMlHj3XwmpFI5CqwS8NKtJ9W8spbKjCvLHdsSz+EhAHebs
-         ZCew==
-X-Gm-Message-State: ANoB5pnRr4YklHZJZ0kfpOSoInLPJ5HCKKgaa66t3MuwYG04w06Et3qP
-        DFToyib1RrQahSDRleffYdF1w2TkPKACkQmkdw+/eLlGHxLD3nPdSfGIKyGS6FQmYxMwCe5bgNT
-        e4YUOWUVPeWsOqEzZjYWamrLr
-X-Received: by 2002:a5d:4c8c:0:b0:241:c222:e27e with SMTP id z12-20020a5d4c8c000000b00241c222e27emr357994wrs.236.1668782248584;
-        Fri, 18 Nov 2022 06:37:28 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7PlKqWjn8KTrQXB14vUIs9jaDWsY5UxLsFjeau3btWbKZTTI09DoC0fRcoqZTqg7scz4TrfQ==
-X-Received: by 2002:a5d:4c8c:0:b0:241:c222:e27e with SMTP id z12-20020a5d4c8c000000b00241c222e27emr357982wrs.236.1668782248374;
-        Fri, 18 Nov 2022 06:37:28 -0800 (PST)
-Received: from [192.168.0.5] (ip-109-43-177-78.web.vodafone.de. [109.43.177.78])
-        by smtp.gmail.com with ESMTPSA id he5-20020a05600c540500b003cfd4e6400csm4824578wmb.19.2022.11.18.06.37.27
+        bh=bHTp8WxD0cqwio5pXFuWtKnMnq/qdJErDoBEBwvP2sk=;
+        b=TVAqtioASW+Ymms4fZjY6YvathPy/fVpKKabp7BKqD3glj44Oix9LCkwiGTSLidhxl
+         4rLjNjW20DgLkEc/exHgOdsvOR0kDx2tTW2UuxJE0QVySkfBXiQ5oStoPUsgtIoM9Qmr
+         3wh8Bn/y+jP418SOeLA/69bAqO2xtNCP/O1h9Bkk1V1i0ORSQrXdBGAb1ufQrKL+X7sr
+         ivKNcUxby0PF+T+BL5leVt35x43v7nf6f7aD8hO0fwPfElK+ybywSfRv6DEvafIV+st9
+         bvBX4rWIelmwt7/2uDlJkmePLnjYrEzcI2d352AlLLV8SFxQfelAq2qSG8389BvhLR7X
+         YJqA==
+X-Gm-Message-State: ANoB5pmMKGJM7SRZMigXINBL+kDYRxZfeCs3Z4JEmyB64V6FoI9y2/PH
+        nnj5gMyVCwROWPNt0tyGgyg/+A==
+X-Google-Smtp-Source: AA0mqf5itRuxKo/p8JLJKY1b/siNfqPJIRbSguu2UNOYtp1ZnFiPakQHISIDlIACodjd11xaVMuKbA==
+X-Received: by 2002:a05:651c:b26:b0:277:9847:286a with SMTP id b38-20020a05651c0b2600b002779847286amr2474891ljr.309.1668782314025;
+        Fri, 18 Nov 2022 06:38:34 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id t17-20020a195f11000000b004994117b0fdsm678523lfb.281.2022.11.18.06.38.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 06:37:27 -0800 (PST)
-Message-ID: <90f07edc-238f-b3d0-80d2-f4b4573f12ad@redhat.com>
-Date:   Fri, 18 Nov 2022 15:37:26 +0100
+        Fri, 18 Nov 2022 06:38:33 -0800 (PST)
+Message-ID: <c3a2316f-2956-6417-f1ea-a6a64df037c6@linaro.org>
+Date:   Fri, 18 Nov 2022 15:38:32 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 1/9] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] ASoC: dt-bindings: lpass-va: add npl clock for new
+ VA macro
 Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20221117221758.66326-1-scgl@linux.ibm.com>
- <20221117221758.66326-2-scgl@linux.ibm.com> <Y3dalbP5yb2gflA9@osiris>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <Y3dalbP5yb2gflA9@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
+References: <20221118071849.25506-1-srinivas.kandagatla@linaro.org>
+ <20221118071849.25506-2-srinivas.kandagatla@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118071849.25506-2-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 11.12, Heiko Carstens wrote:
-> On Thu, Nov 17, 2022 at 11:17:50PM +0100, Janis Schoetterl-Glausch wrote:
->> User space can use the MEM_OP ioctl to make storage key checked reads
->> and writes to the guest, however, it has no way of performing atomic,
->> key checked, accesses to the guest.
->> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
->> mode. For now, support this mode for absolute accesses only.
->>
->> This mode can be use, for example, to set the device-state-change
->> indicator and the adapter-local-summary indicator atomically.
->>
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->> ---
->>   include/uapi/linux/kvm.h |   5 ++
->>   arch/s390/kvm/gaccess.h  |   3 ++
->>   arch/s390/kvm/gaccess.c  | 101 +++++++++++++++++++++++++++++++++++++++
->>   arch/s390/kvm/kvm-s390.c |  35 +++++++++++++-
->>   4 files changed, 142 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
->> index 0d5d4419139a..1f36be5493e6 100644
->> --- a/include/uapi/linux/kvm.h
->> +++ b/include/uapi/linux/kvm.h
->> @@ -588,6 +588,8 @@ struct kvm_s390_mem_op {
->>   		struct {
->>   			__u8 ar;	/* the access register number */
->>   			__u8 key;	/* access key, ignored if flag unset */
->> +			__u8 pad1[6];	/* ignored */
->> +			__u64 old_p;	/* ignored if flag unset */
-> 
-> Just one comment: the suffix "_p" for pointer is quite unusual within
-> the kernel. This also would be the first of its kind within kvm.h.
-> Usually there is either no suffix or "_addr".
-> So for consistency reasons I would suggest to change this to one of
-> the common variants.
-> 
-> The code itself looks good from my point of view, even though for the
-> sake of simplicity I would have put the complete sign/zero extended
-> 128 bit old value into the structure, instead of having a pointer to
-> the value.
+On 18/11/2022 08:18, Srinivas Kandagatla wrote:
+> LPASS VA Macro now has soundwire master to deal with access to
+> analog mic in low power island use cases. This also means that VA macro
+> now needs to get hold of the npl clock too. Add clock bindings required
+> for this.
 
-See 
-https://lore.kernel.org/kvm/37197cfe-d109-332f-089b-266d7e8e23f8@redhat.com/ 
-... it would break the "IOW" definition of the ioctl. It can be done, but 
-that confuses tools like valgrind, as far as I know. So I think the idea 
-with the pointer is better in this case.
 
-  Thomas
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
