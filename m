@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD3162FB6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7412462FB71
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242334AbiKRRRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S234216AbiKRRR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiKRRQt (ORCPT
+        with ESMTP id S234867AbiKRRRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:16:49 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D6913D4A;
-        Fri, 18 Nov 2022 09:16:48 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id bj12so14518056ejb.13;
-        Fri, 18 Nov 2022 09:16:47 -0800 (PST)
+        Fri, 18 Nov 2022 12:17:54 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5ED13D4A
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:17:53 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso8857662pjg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:17:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f50cXlhSl5OKrL1veymKT19+b2RPjsREkRB5uQP4LcA=;
-        b=QWjssaTSe3zToxs7F5fKzajzmgz8VhcvKDm0hRrHuwiXrD1YwxCIGmQUFznFn6cWdc
-         LAWbgCMKKLIkUlcG4y4d9y6zpjXISYczomA9Srn7ihvFeBiBmHeO3rpJf9oRGLQoxDtS
-         2NSKw+j7omgw+IA6KOZpuvr3wJyKxyO5OcOyOg9yCzzrggw6hXGH3Y4jhWwd/hnviHYY
-         ppCxqMujBu5zZsAaDL2GxX2Mphe3S6m1eDvxiQdbUjwECdbParRgy+H1o5TcYa3oPZdD
-         KYxRJiES2RE3FwiD2bxPHDsLCojI6qRKiPcMqc7YzA1cwKwW8egTGq6ISxcRWlv8PlW2
-         FJ3g==
+        bh=b5nxzOpKEeCGYJhJRX5YsoAl8Hgv43ND8xd6hX2KrkY=;
+        b=CsQbyovAo5pbcqNycehXEy1eBJxNPz3NPbJ2gpnj5k/6T7qIUhvedMUaLg768/L6vf
+         zlLV6Ct2a4yu0FIamw04MHvaVe0JNzOgSKmoLx9bNs5/8K7I/oCpVFVG9V43ZBuQmjth
+         iJRK0v66H+BzKwothF2Ejj1XrpC+9pQgk98UNsEKPvPe5jQX+ENQCTiBmVXgeL75a3nd
+         dF6j3O1iPBCPcuDVSTQGlhvgAmT/u1+SVbRVTBv47f6vej54yIGYumeoqOfhr+8MSbFO
+         r0Vpzw9Xa/t4iUYesh4T+wL/k0cRHoLbd0uEWqwEPokTrj1Mx8oqYxpFdgSkdh1JXOUV
+         jLNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=f50cXlhSl5OKrL1veymKT19+b2RPjsREkRB5uQP4LcA=;
-        b=1H9qnhq976MHBJuOZU8z2pp6Ddbll9+leiF+BnEuTritrfjJ/D1mQvsfMhteaThyXK
-         4SdxBOP82IV/HzcZhvFzFVBqKlKWrtm1tQj42hUaKFAWTWEAX6/WoVp+eg/W+/Gpxfvk
-         7ASsynRLHiqlMnCxtvVrEbc+ThlzVd5/PTi5n+uuae1CW9YWb+n2bhrrl4j6gTk3Lc32
-         l074qPXiKO39kqZ9iyLDpYVSImw5WbI7mOPUM6+aCF3B/PmvAD0zl0g7xVsZuQhKOutr
-         jqLyw18QVpiRwgOiitjmQ+1SufhLow2yo9xmEFLydM/wFxF1enwzB9Rrf8Kr9i7coXeV
-         uGXQ==
-X-Gm-Message-State: ANoB5pnLMkh1tqfgl64LUWEswzVeTUfouTFEEYTxg5hcLq9c4ChYVAUV
-        PnlNYRUkMVywpzH9/u5wQmE=
-X-Google-Smtp-Source: AA0mqf55zNNnFg4E/G89nnnEUNEODkzsqNbeeOGil51xumuQsyZ9Cr4hsH00FdIYZW/GQxpu7lr2eg==
-X-Received: by 2002:a17:906:f88:b0:78d:ff14:63f9 with SMTP id q8-20020a1709060f8800b0078dff1463f9mr6677725ejj.516.1668791806361;
-        Fri, 18 Nov 2022 09:16:46 -0800 (PST)
-Received: from skbuf ([188.27.185.168])
-        by smtp.gmail.com with ESMTPSA id r9-20020a1709060d4900b007ae243c3f05sm1900342ejh.189.2022.11.18.09.16.45
+        bh=b5nxzOpKEeCGYJhJRX5YsoAl8Hgv43ND8xd6hX2KrkY=;
+        b=ZyC+QvzVlOe0g7BLn1oWjMznTaO4q+0uurS1uyNVoCcgmYxk5TGP8wJHGGasnhM9A6
+         x14H/2iRlOcl/dIm3Gki5MkOmT2y4kJhDJog78kj6OfyD933WlEbRQX/qGspnGbknwNh
+         xG9E9WBtFF0Y0n0MBzPWnbUUPaqvtAWtOjYRJENkZHyt8hnN/SooqsaFXA2BMV0QDhr1
+         HwHP9cTFzEVsAn6SOU+0F7orrBDUQjmOYIIUqowXP8TsbOiinwR4LFmng9WngW3H4lQf
+         cuwtk8llAHRPeQiGm6HSF1TSrq7B93I5aKnsoc7luJ3soMz4w4q6kv4OwfArLC272/vN
+         sSyA==
+X-Gm-Message-State: ANoB5pnUgB9Vu3fppdcLffZnorRiAo5B/cgAs+Pwmy7Pb2rYFuApAosQ
+        oXLtkA4ZZU07BSfzGAG6f24fXw==
+X-Google-Smtp-Source: AA0mqf7rDwdDj3hXsrprWP1jRxOpUOVx04vjbpzKkO5HjVV69Bfglok1pHOhxEnzbjdtfmX1UIC25g==
+X-Received: by 2002:a17:902:e0ca:b0:188:712f:dfa5 with SMTP id e10-20020a170902e0ca00b00188712fdfa5mr362168pla.140.1668791873063;
+        Fri, 18 Nov 2022 09:17:53 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id bo12-20020a17090b090c00b0021858c84c7bsm2972443pjb.50.2022.11.18.09.17.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 09:16:46 -0800 (PST)
-Date:   Fri, 18 Nov 2022 19:16:43 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH] phy: aquantia: Configure SERDES mode by default
-Message-ID: <20221118171643.vu6uxbnmog4sna65@skbuf>
-References: <20221114210740.3332937-1-sean.anderson@seco.com>
- <20221114210740.3332937-1-sean.anderson@seco.com>
- <20221115223732.ctvzjbpeaxulnm5l@skbuf>
- <3771f5be-3deb-06f9-d0a0-c3139d098bf0@seco.com>
- <20221115230207.2e77pifwruzkexbr@skbuf>
- <219dc20d-fd2b-16cc-8b96-efdec5f783c9@seco.com>
- <Y3bLlUk1wxzAqKmj@lunn.ch>
+        Fri, 18 Nov 2022 09:17:52 -0800 (PST)
+Date:   Fri, 18 Nov 2022 17:17:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jiaxi Chen <jiaxi.chen@linux.intel.com>
+Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, pbonzini@redhat.com, ndesaulniers@google.com,
+        alexandre.belloni@bootlin.com, peterz@infradead.org,
+        jpoimboe@kernel.org, chang.seok.bae@intel.com,
+        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
+        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
+        keescook@chromium.org, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] x86: KVM: Advertise AVX-VNNI-INT8 CPUID to user
+ space
+Message-ID: <Y3e+PNvvuuT3aCmb@google.com>
+References: <20221118141509.489359-1-jiaxi.chen@linux.intel.com>
+ <20221118141509.489359-5-jiaxi.chen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="NxmGoc9WWi4h5czq"
 Content-Disposition: inline
-In-Reply-To: <Y3bLlUk1wxzAqKmj@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221118141509.489359-5-jiaxi.chen@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,37 +82,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 01:02:29AM +0100, Andrew Lunn wrote:
-> > Well, part of my goal in sending out this patch is to get some feedback
-> > on the right thing to do here. As I see it, there are three ways of
-> > configuring this phy:
-> > 
-> > - Always rate adapt to whatever the initial phy interface mode is
-> > - Switch phy interfaces depending on the link speed
-> > - Do whatever the firmware sets up
-> 
-> My understanding of the aQuantia firmware is that it is split into two
-> parts. The first is the actual firmware that runs on the PHY. The
-> second is provisioning, which seems to be a bunch of instructions to
-> put value X in register Y. It seems like aQuantia, now Marvell, give
-> different provisioning to different customers.
-> 
-> What this means is, you cannot really trust any register contains what
-> you want, that your devices does the same as somebody elses' device in
-> its reset state.
-> 
-> So i would say, "Do whatever the firmware sets up" is the worst
-> choice. Assume nothing, set every register which is important to the
-> correct value.
 
-If "do whatever the firmware sets up" is the worst choice, it means you
-think it's worse than "doing whatever the firmware sets up, except a few
-fixups here and there which worked on my board". Whereas I think _that's_
-actually even worse.
+--NxmGoc9WWi4h5czq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-What might be an even bigger offence than giving different provisioning
-to different customers is giving different documentation to different
-customers. In the Aquantia Register Specification for Gen4 PHYs given
-to NXP, the SerDes mode field in register 1E.31C cannot even _take_ the
-value of 6. They're all documented only from 0 to 5. I only learned that
-6 (XFI/2) was a thing from the discussion between Sean and Tim.
+On Fri, Nov 18, 2022, Jiaxi Chen wrote:
+> AVX-VNNI-INT8 is a new set of instructions in the latest Intel platform
+> Sierra Forest, aims for the platform to have superior AI capabilities.
+> This instruction multiplies the individual bytes of two unsigned or
+> unsigned source operands, then adds and accumulates the results into the
+> destination dword element size operand.
+> 
+> The bit definition:
+> CPUID.(EAX=7,ECX=1):EDX[bit 4]
+> 
+> This CPUID is exposed to user space. Besides, there is no other VMX
+> control for this instruction.
+> 
+> Signed-off-by: Jiaxi Chen <jiaxi.chen@linux.intel.com>
+> ---
+>  arch/x86/kvm/cpuid.c         | 5 ++++-
+>  arch/x86/kvm/reverse_cpuid.h | 5 +++++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 5726afb2d14c..e2b8e5485474 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -660,6 +660,9 @@ void kvm_set_cpu_caps(void)
+>  		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) | F(AMX_FP16) |
+>  		F(AVX_IFMA));
+>  
+> +	kvm_cpu_cap_init_scattered(CPUID_7_1_EDX,
+
+Ah, this is going to be confusing and potentially error prone.  AVX_VNNI_INT8
+isn't actually scattered, i.e. kvm_cpu_cap_init_scattered() is poorly named.  And
+using SF() would be _really_ broken as boot_cpu_has() would consume garbage and
+potentially leak kernel state to userspace.
+
+To address these issue and also document how to add KVM-only features, can you
+slot in the two attached patches at the begining of this series?
+
+Thanks!
+
+> +		F(AVX_VNNI_INT8));
+
+Terminators on a separate line please.
+
+>  	kvm_cpu_cap_mask(CPUID_D_1_EAX,
+>  		F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES) | f_xfd
+>  	);
+
+--NxmGoc9WWi4h5czq
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-KVM-x86-Add-BUILD_BUG_ON-to-detect-bad-usage-of-scat.patch"
+
+From d913e35721688aca42056e57a261fa4baad0c45e Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 18 Nov 2022 08:17:55 -0800
+Subject: [PATCH 1/2] KVM: x86: Add BUILD_BUG_ON() to detect bad usage of
+ "scattered" flags
+
+Add a compile-time assert in the SF() macro to detect improper usage,
+i.e. to detect passing in an X86_FEATURE_* flag that isn't actually
+scattered by the kernel.  Upcoming feature flags will be 100% KVM-only
+and will have X86_FEATURE_* macros that point at a kvm_only_cpuid_leafs
+word, not a kernel-defined word.  Using SF() and thus boot_cpu_has() for
+such feature flags would access memory beyond x86_capability[NCAPINTS]
+and at best incorrectly hide a feature, and at worst leak kernel state to
+userspace.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/cpuid.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 6b5912578edd..ff2e9734e5c1 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -65,7 +65,13 @@ u32 xstate_required_size(u64 xstate_bv, bool compacted)
+ #define KVM_X86_FEATURE_AMD_PSFD	(13*32+28) /* Predictive Store Forwarding Disable */
+ 
+ #define F feature_bit
+-#define SF(name) (boot_cpu_has(X86_FEATURE_##name) ? F(name) : 0)
++
++/* Scattered Flag - For features that are scattered by cpufeatures.h. */
++#define SF(name)						\
++({								\
++	BUILD_BUG_ON(X86_FEATURE_##name >= MAX_CPU_FEATURES);	\
++	(boot_cpu_has(X86_FEATURE_##name) ? F(name) : 0);	\
++})
+ 
+ /*
+  * Magic value used by KVM when querying userspace-provided CPUID entries and
+
+base-commit: d663b8a285986072428a6a145e5994bc275df994
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
+
+--NxmGoc9WWi4h5czq
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0002-KVM-x86-Update-KVM-only-leaf-handling-to-allow-for-1.patch"
+
+From 565a06e1d6e1ea40daa113bc2b3d10e7b2a8a508 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 18 Nov 2022 08:52:28 -0800
+Subject: [PATCH 2/2] KVM: x86: Update KVM-only leaf handling to allow for 100%
+ KVM-only leafs
+
+Rename kvm_cpu_cap_init_scattered() to kvm_cpu_cap_init_kvm_defined() in
+anticipation of adding KVM-only CPUID leafs that aren't recognized by the
+kernel and thus not scattered, i.e. for leafs that are 100% KVM-defined.
+
+Adjust/add comments to kvm_only_cpuid_leafs and KVM_X86_FEATURE to
+document how to create new kvm_only_cpuid_leafs entries for scattered
+features as well as features that are entirely unknown to the kernel.
+
+No functional change intended.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/cpuid.c         |  8 ++++----
+ arch/x86/kvm/reverse_cpuid.h | 18 +++++++++++++++---
+ 2 files changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index ff2e9734e5c1..73c3c6dc6e7b 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -549,9 +549,9 @@ static __always_inline void __kvm_cpu_cap_mask(unsigned int leaf)
+ }
+ 
+ static __always_inline
+-void kvm_cpu_cap_init_scattered(enum kvm_only_cpuid_leafs leaf, u32 mask)
++void kvm_cpu_cap_init_kvm_defined(enum kvm_only_cpuid_leafs leaf, u32 mask)
+ {
+-	/* Use kvm_cpu_cap_mask for non-scattered leafs. */
++	/* Use kvm_cpu_cap_mask for leafs that aren't KVM-only. */
+ 	BUILD_BUG_ON(leaf < NCAPINTS);
+ 
+ 	kvm_cpu_caps[leaf] = mask;
+@@ -561,7 +561,7 @@ void kvm_cpu_cap_init_scattered(enum kvm_only_cpuid_leafs leaf, u32 mask)
+ 
+ static __always_inline void kvm_cpu_cap_mask(enum cpuid_leafs leaf, u32 mask)
+ {
+-	/* Use kvm_cpu_cap_init_scattered for scattered leafs. */
++	/* Use kvm_cpu_cap_init_kvm_defined for KVM-only leafs. */
+ 	BUILD_BUG_ON(leaf >= NCAPINTS);
+ 
+ 	kvm_cpu_caps[leaf] &= mask;
+@@ -670,7 +670,7 @@ void kvm_set_cpu_caps(void)
+ 		F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES) | f_xfd
+ 	);
+ 
+-	kvm_cpu_cap_init_scattered(CPUID_12_EAX,
++	kvm_cpu_cap_init_kvm_defined(CPUID_12_EAX,
+ 		SF(SGX1) | SF(SGX2)
+ 	);
+ 
+diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
+index a19d473d0184..443a6b3e66c0 100644
+--- a/arch/x86/kvm/reverse_cpuid.h
++++ b/arch/x86/kvm/reverse_cpuid.h
+@@ -7,9 +7,9 @@
+ #include <asm/cpufeatures.h>
+ 
+ /*
+- * Hardware-defined CPUID leafs that are scattered in the kernel, but need to
+- * be directly used by KVM.  Note, these word values conflict with the kernel's
+- * "bug" caps, but KVM doesn't use those.
++ * Hardware-defined CPUID leafs that are either scattered by the kernel or are
++ * unknown to the kernel, but need to be directly used by KVM.  Note, these
++ * word values conflict with the kernel's "bug" caps, but KVM doesn't use those.
+  */
+ enum kvm_only_cpuid_leafs {
+ 	CPUID_12_EAX	 = NCAPINTS,
+@@ -18,6 +18,18 @@ enum kvm_only_cpuid_leafs {
+ 	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
+ };
+ 
++/*
++ * Define a KVM-only feature flag.
++ *
++ * For features that are scattered by cpufeatures.h, __feature_translate() also
++ * needs to be updated to translate the kernel-defined feature into the
++ * KVM-defined feature.
++ *
++ * For features that are 100% KVM-only, i.e. not defined by cpufeatures.h,
++ * forego the intermediate KVM_X86_FEATURE and directly define X86_FEATURE_* so
++ * that X86_FEATURE_* can be used in KVM.  No __feature_translate() handling is
++ * needed in this case.
++ */
+ #define KVM_X86_FEATURE(w, f)		((w)*32 + (f))
+ 
+ /* Intel-defined SGX sub-features, CPUID level 0x12 (EAX). */
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
+
+--NxmGoc9WWi4h5czq--
