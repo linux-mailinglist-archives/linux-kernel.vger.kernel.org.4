@@ -2,132 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BD462F5EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFBE62F5EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241701AbiKRN0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S241413AbiKRN0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235247AbiKRN0q (ORCPT
+        with ESMTP id S235247AbiKRN0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:26:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A9985A31
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:25:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668777948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ypVqQDovsotVHlRyYzXKwNPuqQJ+h49uCV3eLEnwSg=;
-        b=cS89cym8ufGlVZ4FdUFabECyFtXXra/btCVLhRkbp+L0OcTbQ7G0o+vxx9c1KH5PFYLb6a
-        /TVpPm+z5oSc+minQ0H65WXjK5dYprXo9hTTe3PJqGHBcq85MJ10i/AGwsFar50axiIDrb
-        5XN2s6ms/fCJP/BVPlwTaFcJmgETYes=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-sT1BHtADPDOxk9C1G4xGzA-1; Fri, 18 Nov 2022 08:25:45 -0500
-X-MC-Unique: sT1BHtADPDOxk9C1G4xGzA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 094B7101A528;
-        Fri, 18 Nov 2022 13:25:45 +0000 (UTC)
-Received: from localhost (unknown [10.39.208.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A77374B3FCE;
-        Fri, 18 Nov 2022 13:25:44 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 14:25:41 +0100
-From:   Niels de Vos <ndevos@redhat.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        Marcel Lauhoff <marcel.lauhoff@suse.com>
-Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
-Message-ID: <Y3eH1XOGlXUKCiMZ@ndevos-x1>
-References: <20221110141225.2308856-1-ndevos@redhat.com>
- <Y3RGs5dONBt+GAxN@sol.localdomain>
+        Fri, 18 Nov 2022 08:26:38 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FE485A23
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:26:37 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id l14so9301740wrw.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:26:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=e5MiF9TMHxw5V5hyXlLxWTx5c5LNTg+L6bdroac28KQ=;
+        b=tXf7R2BbLdciR0aWHCW1fcHe8ymozuqrc0GToPKat0J6HPiGqJXpeTNjP8EZo7cAe5
+         ghQt0EqEWMd9qkLjwYOnHmFc0kbNN+kfPUxJHNCIdbdWB0uvnyEh8xkWZhiQ4DDxjT3A
+         ur1Aswxlx+ThA6gWcFoCN+/Den71gN3VX41Yrt0RgRVFE9XznpJzx0Zuvw85Mm103JzQ
+         yNUMhdt63vJif5OdEI5gsbkC6CKUjsYVWwa20xF+0WESaKVjQUiZYlJIWopmce8LAwWh
+         /YhIMyzDF2gZ4VnM9LqOgGKdRieJ+pairfYiDNYjRhkRKU8Mv4GgIY2o3egiR3sWW3g6
+         V23Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e5MiF9TMHxw5V5hyXlLxWTx5c5LNTg+L6bdroac28KQ=;
+        b=mzNHwS8PwdQ8INn2EYCAaVQDKAwHLp9fojUyx/DKwBNhzh/Y7kMKO6DNJPegTtL4Fg
+         ik95VW3Ob0Q0cytNRxUvxhL6tzXEe+lPYNM9V1BZJFZHOsUAvq6T81zjfMwnxTmG93ZQ
+         OXvJZ0MkoDHnyQq6xonCbAyFQRIbsMnhnJ1Btz6zkNbNQwZ8oWDttQFiHXBO6Oxab2vy
+         fSjIbWRdJTO5CGWMzahjZO5uTyWJRlhyUsslbuUDtTZckuIGW+K+83uGQs2mrsu1eY8W
+         5fA2ZPOxnpnwdedP1UAh04fnh/ZpvCzEHKEKQnpDgJZ/OKVzbIO6meuF98onlT5xF3yh
+         eM1Q==
+X-Gm-Message-State: ANoB5plfKUgGKAGsVEKHOt1YRrx2Q9v/C7QdTcQ+YoKmMeVgo55/Tbgn
+        kNo7PSaF3uOl66ZckavMk9QMGw==
+X-Google-Smtp-Source: AA0mqf4kDgGIKWcnXZDZaS3yoafhs9FZKkJ73tJd4mzLPQeKB2/wrtXUa5UWiLDIZJgyTQVdB0iEUQ==
+X-Received: by 2002:a5d:6b08:0:b0:236:4b06:bbb1 with SMTP id v8-20020a5d6b08000000b002364b06bbb1mr4280526wrw.303.1668777995737;
+        Fri, 18 Nov 2022 05:26:35 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:f7cc:460c:56ae:45a? ([2a01:e0a:982:cbb0:f7cc:460c:56ae:45a])
+        by smtp.gmail.com with ESMTPSA id s18-20020adfdb12000000b00241727795c4sm4356779wri.63.2022.11.18.05.26.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 05:26:35 -0800 (PST)
+Message-ID: <3cd03d3e-b521-8050-b8fa-a521310f1e5b@linaro.org>
+Date:   Fri, 18 Nov 2022 14:26:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3RGs5dONBt+GAxN@sol.localdomain>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: reserved-memory: document Qualcomm
+ MPSS DSM memory
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-mpss_dsm-v2-0-f7c65d6f0e55@linaro.org>
+ <20221114-narmstrong-sm8550-upstream-mpss_dsm-v2-1-f7c65d6f0e55@linaro.org>
+ <0e8ed125-beba-8f74-b3aa-728e9dc5a09d@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <0e8ed125-beba-8f74-b3aa-728e9dc5a09d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 06:10:59PM -0800, Eric Biggers wrote:
-> On Thu, Nov 10, 2022 at 03:12:21PM +0100, Niels de Vos wrote:
-> > While more filesystems are getting support for fscrypt, it is useful to
-> > be able to disable fscrypt for a selection of filesystems, while
-> > enabling it for others.
-> > 
-> > The new USE_FS_ENCRYPTION define gets picked up in
-> > include/linux/fscrypt.h. This allows filesystems to choose to use the
-> > empty function definitions, or the functional ones when fscrypt is to be
-> > used with the filesystem.
-> > 
-> > Using USE_FS_ENCRYPTION is a relatively clean approach, and requires
-> > minimal changes to the filesystems supporting fscrypt. This RFC is
-> > mostly for checking the acceptance of this solution, or if an other
-> > direction is preferred.
-> > 
-> > ---
-> > 
-> > Niels de Vos (4):
-> >   fscrypt: introduce USE_FS_ENCRYPTION
-> >   fs: make fscrypt support an ext4 config option
-> >   fs: make fscrypt support a f2fs config option
-> >   fs: make fscrypt support a UBIFS config option
+On 18/11/2022 11:46, Krzysztof Kozlowski wrote:
+> On 18/11/2022 09:53, Neil Armstrong wrote:
+>> Document the Qualcomm Modem Processing SubSystem DSM shared memory.
+>>
+>> This memory zone is shared between the APPS and the MPSS subsystem,
+>> and must be configured during the whole lifetime of the system.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   .../reserved-memory/qcom,mpss-dsm-mem.yaml         | 37 ++++++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml
+>> new file mode 100644
+>> index 000000000000..226d0dfc422c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,mpss-dsm-mem.yaml
+>> @@ -0,0 +1,37 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/reserved-memory/qcom,mpss-dsm-mem.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Modem Processing SubSystem DSM Memory
+>> +
 > 
-> So as others have pointed out, it doesn't seem worth the complexity to do this.
-> 
-> For a bit of historical context, before Linux v5.1, we did have per-filesystem
-> options for this: CONFIG_EXT4_ENCRYPTION, CONFIG_F2FS_FS_ENCRYPTION, and
-> CONFIG_UBIFS_FS_ENCRYPTION.  If you enabled one of these, it selected
-> CONFIG_FS_ENCRYPTION to get the code in fs/crypto/.  CONFIG_FS_ENCRYPTION was a
-> tristate, so the code in fs/crypto/ could be built as a loadable module if it
-> was only needed by filesystems that were loadable modules themselves.
-> 
-> Having fs/crypto/ possibly be a loadable module was problematic, though, because
-> it made it impossible to call into fs/crypto/ from built-in code such as
-> fs/buffer.c, fs/ioctl.c, fs/libfs.c, fs/super.c, fs/iomap/direct-io.c, etc.  So
-> that's why we made CONFIG_FS_ENCRYPTION into a bool.  At the same time, we
-> decided to simplify the kconfig options by removing the per-filesystem options
-> so that it worked like CONFIG_QUOTA, CONFIG_FS_DAX, CONFIG_FS_POSIX_ACL, etc.
-> 
-> I suppose we *could* have *just* changed CONFIG_FS_ENCRYPTION to a bool to solve
-> the first problem, and kept the per-filesystem options.  I think that wouldn't
-> have made a lot of sense, though, for the reasons that Ted has already covered.
+> Discussion in v1 is still going. Memory region is not a device.
 
-Yes, it seems that there is a move to reduce the Kconfig options and
-(re)adding per-filesystem encryption support would be counterproductive.
+Nowhere is was affirmed this was a device.
 
-> A further point, beyond what Ted has already covered, is that
-> non-filesystem-specific code can't honor filesystem-specific options.  So e.g.
-> if you had a filesystem with encryption disabled by kconfig, that then called
-> into fs/iomap/direct-io.c to process an I/O request, it could potentially still
-> call into fs/crypto/ to enable encryption on that I/O request, since
-> fs/iomap/direct-io.c would think that encryption support is enabled.
 > 
-> Granted, that *should* never actually happen, because this would only make a
-> difference on encrypted files, and the filesystem shouldn't have allowed an
-> encrypted file to be opened if it doesn't have encryption support enabled.  But
-> it does seem a bit odd, given that it would go against the goal of compiling out
-> all encryption code for a filesystem.
-
-Ah, yes, indeed! The boundaries between the options would be less clear,
-and potential changes to shared functions under fs/ could have incorrect
-assumptions about CONFIG_FS_ENCRYPTION. Even if this is not the case
-now, optimizations/enhancements in the future might be more complicated
-because of this.
-
-Thanks for the additional details! Have a good weekend,
-Niels
+> Best regards,
+> Krzysztof
+> 
 
