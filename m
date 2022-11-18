@@ -2,174 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FB862F895
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9247E62F899
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242098AbiKRO6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S235224AbiKRPAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:00:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242101AbiKRO5j (ORCPT
+        with ESMTP id S242211AbiKRO7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:57:39 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B0A93732;
-        Fri, 18 Nov 2022 06:56:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668783364; x=1700319364;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0OtRaUHayEMkGM0LZpQdloZpzT7G+P2JPi1mC2cyIyg=;
-  b=RIlc8WCCUfEX1Rj3CNuGIT7/m4bg3rZ5vuiVVbU5exbh5hhAAbCVUYsX
-   89J1BuALE+hwlrYzkS6TP3nX25DUJJ3waFzAyFPzLUcFnyHtjI/5pHzio
-   oKaQ4KTKMPvYvAGJdo6T3QSm/yWy899eYjPPEub4Le7j+2jJVa2SLwh6R
-   hGSU+JqNMrCwpu5JpqLmI0TLv7mXtXBTBqYh9vIuKrAHngEEj9dgWmJWc
-   3bietnlDki07eXtfpYv4lQ1DRtJCwnIPZ1YA1ii4PmM3YGWB2vJ5L1lN/
-   oNwwVKnED5wZvpylPdTnX98kMh+c9f35bdAewVp1feer8gqd9eVA6zo+H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="293539780"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="293539780"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 06:56:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="746028573"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="746028573"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.138])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 06:56:01 -0800
-Message-ID: <a5e2aab6-7f0e-7f3b-f34b-6d222450c97d@intel.com>
-Date:   Fri, 18 Nov 2022 16:55:55 +0200
+        Fri, 18 Nov 2022 09:59:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A60B9ACAE;
+        Fri, 18 Nov 2022 06:56:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 053D7B822F6;
+        Fri, 18 Nov 2022 14:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A0CC433C1;
+        Fri, 18 Nov 2022 14:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668783404;
+        bh=kQqNwIRTX/hMdAUkbPpnbCbz6J1Qz8mIuBGg79EWriQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YAcGcNO717vxcqR6gw7hPCPkskQj2wFxDzeuW9mROwlkdTfHvsj313IATnooRiuH7
+         tggG//xkOzUdbhHJi9RH5nUHr7JyjuEL8To04GZkGxQ+NqDdJYuK0xU8yvqQm2SnY5
+         Gv9xoQAQQwMXscRow5tS3mEG0waNLDXKKDfLUaCfkyCYxD/MDglLWUCFLE8+3Dp8iv
+         0mSr5zAFkl6F8Wv3JRf0R4kjtOsD7JHBNfgBGcKygeKngjWkZ4TPuc+YarzIdVBPqn
+         55sMg9/gLjLP2+8k17o7zmujzTy38yupQVAQHhdgtLRalXIq0dYP63UmSdSl8lUPu9
+         OZ4b8PrPzo3Mg==
+Date:   Fri, 18 Nov 2022 14:56:38 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] KVM: arm64: Allow userspace to trap SMCCC
+ sub-ranges
+Message-ID: <20221118145637.GC4624@willie-the-truck>
+References: <20221110015327.3389351-1-oliver.upton@linux.dev>
+ <20221110015327.3389351-3-oliver.upton@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: PM-runtime: supplier looses track of consumer during probe
-Content-Language: en-US
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        bjorn.andersson@kernel.org,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        quic_mkshah@quicinc.com, quic_lsrao@quicinc.com,
-        bvanassche@acm.org, Peter Wang <peter.wang@mediatek.com>
-References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
- <8c0a715a-d626-aa70-15f1-79f1e23fbc67@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <8c0a715a-d626-aa70-15f1-79f1e23fbc67@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110015327.3389351-3-oliver.upton@linux.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 11:19, Tushar Nimkar wrote:
-> Hi linux-pm/linux-scsi,
+Hey Oliver,
+
+On Thu, Nov 10, 2022 at 01:53:26AM +0000, Oliver Upton wrote:
+> As the SMCCC (and related specifications) march towards an
+> 'everything and the kitchen sink' interface for interacting with a
+> system, it is less likely that KVM will implement every supported
+> feature.
 > 
-> Gentle reminder!
+> Add a capability that allows userspace to trap hypercall ranges,
+> allowing the VMM to mix-and-match between calls handled in userspace vs.
+> KVM.
 > 
-> Can you please provide your suggestions on below race?
-> 
-> Thanks, Tushar Nimkar
-> 
-> On 10/14/2022 4:20 PM, Tushar Nimkar wrote:
->> Hi linux-pm/linux-scsi,
->>
->> We have included fix [1] but continuing to observe supplier loosing track of consumer.
->>
->> Below is trace snippet with additional logging added.
->> Here consumer is 0:0:0:0 and supplier is 0:0:0:49488. In Last three lines consumer resume is completed but supplier is put down.
->>
->>     kworker/u16:0-7     0.880014: rpm_idle:             0:0:0:0 flags-4 cnt-0  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:0-7     0.880017: bprint: pm_runtime_mark_last_busy.46700: :#205 dev_name:0:0:0:0 ktime_get_mono_fast_ns():852365364
->>     kworker/u16:0-7     0.880019: rpm_suspend:          0:0:0:0 flags-8 cnt-0  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:0-7     0.880022: bprint: pm_runtime_put_noidle.44083: pm_runtime_put_noidle: #112 dev_name:0:0:0:49488 dev usage_count:5 decremented usage count
->>     kworker/u16:0-7     0.880023: bprint: pm_runtime_put_noidle.44083: pm_runtime_put_noidle: #112 dev_name:0:0:0:49488 dev usage_count:4 decremented usage count
->>     kworker/u16:2-142   0.880024: rpm_resume:           0:0:0:0 flags-4 cnt-1  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:0-7     0.880025: bprint: __rpm_put_suppliers: __rpm_put_suppliers: #348 consumer:0:0:0:0 supplier:0:0:0:49488 usage_count:4
->>     kworker/u16:0-7     0.880061: rpm_idle:             0:0:0:49488 flags-1 cnt-4  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:0-7     0.880062: rpm_return_int: rpm_idle+0x16c:0:0:0:49488 ret=-11
->>     kworker/u16:2-142   0.880062: bprint: __pm_runtime_resume: __pm_runtime_resume: #1147 dev_name:0:0:0:49488 dev usage_count:5 incremented usage count
->>     kworker/u16:2-142   0.880063: rpm_resume:           0:0:0:49488 flags-4 cnt-5  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:2-142   0.880063: rpm_return_int: rpm_resume+0x690:0:0:0:49488 ret=1
->>     kworker/u16:0-7     0.880063: rpm_return_int: rpm_suspend+0x68:0:0:0:0 ret=0
->>     kworker/u16:2-142   0.880063: bprint: rpm_get_suppliers: rpm_get_suppliers: #300 consumer:0:0:0:0 supplier:0:0:0:49488 usage_count:5
->>     kworker/u16:0-7     0.880065: bprint: pm_runtime_put_noidle.44083: pm_runtime_put_noidle: #112 dev_name:0:0:0:49488 dev usage_count:4 decremented usage count
->>     kworker/u16:2-142   0.880065: bprint: pm_runtime_mark_last_busy.44088: :#205 dev_name:0:0:0:0 ktime_get_mono_fast_ns():852413749
->>     kworker/u16:2-142   0.880065: rpm_idle:             0:0:0:0 flags-1 cnt-1  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:2-142   0.880065: rpm_return_int: rpm_idle+0x16c:0:0:0:0 ret=-11
->>     kworker/u16:0-7     0.880066: bprint: __rpm_put_suppliers: __rpm_put_suppliers: #348 consumer:0:0:0:0 supplier:0:0:0:49488 usage_count:4
->>     kworker/u16:0-7     0.880067: rpm_return_int: rpm_idle+0x16c:0:0:0:0 ret=-16
->>     kworker/u16:2-142   0.880067: rpm_return_int: rpm_resume+0x690:0:0:0:0 ret=0
->>
->> Upon looking into this further the race looks to be in below two processes running in parallel and process-1 is putting down supplier at [C] because process-2 is setting runtime_status as resuming at [D].
->>
->> Also as per runtime PM documentation
->> In order to use autosuspend, subsystems or drivers must call
->> pm_runtime_use_autosuspend(), and thereafter they should use the various `*_autosuspend()` helper functions...
->>
->> It was also observed that *_autosuspend() API at point [A] was invoked without first invoking pm_runtime_use_autosuspend() which return expiration as zero at point [B] and proceeds ahead for immediate runtime suspend of device which seems lead to this race condition.
->>
->> Process -1
->> ufshcd_async_scan context (process 1)
->> scsi_autopm_put_device() //0:0:0:0
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
+>  arch/arm64/include/asm/kvm_host.h |  5 ++++
+>  arch/arm64/include/uapi/asm/kvm.h | 15 ++++++++++
+>  arch/arm64/kvm/arm.c              | 10 +++++++
+>  arch/arm64/kvm/hypercalls.c       | 48 +++++++++++++++++++++++++++++++
+>  include/uapi/linux/kvm.h          |  1 +
+>  5 files changed, 79 insertions(+)
 
-I am having trouble following your description.  What function is calling
-scsi_autopm_put_device() here?
+[...]
 
->> pm_runtime_put_sync()
->> __pm_runtime_idle()
->> rpm_idle() -- RPM_GET_PUT(4)
->>      __rpm_callback
->>          scsi_runtime_idle()
->>              pm_runtime_mark_last_busy()
->>              pm_runtime_autosuspend()  --[A]
->>                  rpm_suspend() -- RPM_AUTO(8)
->>                      pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
->>                          __update_runtime_status to RPM_SUSPENDING
->>                      __rpm_callback()
->>                          __rpm_put_suppliers(dev, false)
->>                      __update_runtime_status to RPM_SUSPENDED
->>                  rpm_suspend_suppliers()
->>                      rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
->>                  rpm_suspend() – END with return=0
->>          scsi_runtime_idle() END return (-EBUSY) always.
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 6f0b56e7f8c7..6e8a222fc295 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -100,6 +100,13 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		r = 0;
+>  		set_bit(KVM_ARCH_FLAG_SYSTEM_SUSPEND_ENABLED, &kvm->arch.flags);
+>  		break;
+> +	case KVM_CAP_ARM_USER_HYPERCALLS:
+> +		if (cap->args[0] & ~KVM_ARM_USER_HYPERCALL_FLAGS)
+> +			return -EINVAL;
 
-Not following here either.  Which device is EBUSY and why?
+Why not use KVM_CAP_EXIT_HYPERCALL for this? At some point during pKVM
+development, we used that to notify the VMM about memory being shared
+back from the guest but we eventually dropped it as the notification to
+userspace ended up not being needed:
 
->>       /* Do that if resume fails too.*/
->>      (dev->power.runtime_status == RPM_RESUMING && retval)))  return -EBUSY
->>          __rpm_put_suppliers(dev, false)  -- [C]
->> rpm_idle() END return -EBUSY
->>
->> Process -2
->> sd_probe context (Process 2)
->> scsi_autopm_get_device() //0:0:0:0
->> __pm_runtime_resume(RPM_GET_PUT)
->> rpm_resume() -- RPM_GET_PUT(4)
->>      __update_runtime_status to RPM_RESUMING --[D]
->>      __rpm_callback()
->>          rpm_get_suppliers()
->>              __pm_runtime_resume() - RPM_GET_PUT(4) – supplier
->>                  rpm_resume() for supplier.
->>      __update_runtime_status to RPM_ACTIVE
->>      pm_runtime_mark_last_busy ()
->> rpm_resume() END return 0
->>
->> Can you please provide your suggestions on addressing above race condition?
->>
->> This is also reported at [2].
->>
->> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
->> [2]: https://lkml.org/lkml/2022/10/12/259
->>
->> Thanks,
->> Tushar Nimkar
+https://android-kvm.googlesource.com/linux/+/dbd2861832dfc4c8a3103214b3c212ee7ace1c44%5E%21/
+https://android-kvm.googlesource.com/linux/+/2a3afc6da99c0e0cb62be1687153ee572903aa80%5E%21/
 
+I'm not saying that what we did was necessarily better, but it seems a bit
+simpler and I figured it might be useful to point you to it.
+
+Will
