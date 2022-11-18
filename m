@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A54462FAA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242AC62FAB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242221AbiKRQpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
+        id S242198AbiKRQqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242227AbiKRQp0 (ORCPT
+        with ESMTP id S242234AbiKRQpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:45:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F6A27B24;
-        Fri, 18 Nov 2022 08:45:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Nov 2022 11:45:40 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7FD13EAF;
+        Fri, 18 Nov 2022 08:45:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5868162670;
-        Fri, 18 Nov 2022 16:45:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4CB0C43147;
-        Fri, 18 Nov 2022 16:45:21 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 11:45:19 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Chris Mason <clm@meta.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
-Message-ID: <20221118114519.2711d890@gandalf.local.home>
-In-Reply-To: <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
-References: <20221108220651.24492-1-revest@chromium.org>
-        <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
-        <20221117121617.4e1529d3@gandalf.local.home>
-        <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
-        <20221117174030.0170cd36@gandalf.local.home>
-        <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B457722809;
+        Fri, 18 Nov 2022 16:45:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668789932; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gGWCBwR6W7N/T/oKVxq15JaXduGL74ybELQMLEOROjQ=;
+        b=oTTvOF9em1RBHrcDz3sPtZD55HB28JQKz0rq8O6fqbEdz69a/AXJF4jT92zC2TnMfoTP5o
+        N+/92zbPBa11XH4uj3j1PVuX4IFT5iMf+cuDaOPUiGYk17AhOFewCKsW2Vloee6rUH2cev
+        ywRRIq+dF6sPyizq6eVC4qLT8N+v1Fc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668789932;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gGWCBwR6W7N/T/oKVxq15JaXduGL74ybELQMLEOROjQ=;
+        b=w1a8SK5GtUV98VIRjCKPQTv/uTPpGl8AZCdCXalMKOScuLDWEelI6GTSk7XWYEsOviak8d
+        9ZPPVSaQ1GZLctAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2CE531345B;
+        Fri, 18 Nov 2022 16:45:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /+1SCqy2d2MoEAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 18 Nov 2022 16:45:32 +0000
+Message-ID: <f427422c-9af3-dc0a-dcc3-2a1114eb77ea@suse.cz>
+Date:   Fri, 18 Nov 2022 17:45:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH mm-unstable v1 04/20] mm: add early FAULT_FLAG_UNSHARE
+ consistency checks
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-5-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221116102659.70287-5-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 16:34:50 +0000
-Mark Rutland <mark.rutland@arm.com> wrote:
-
-> > Not alarmist, but concern as being able to modify what a kernel function can
-> > do is not something I take lightly.  
+On 11/16/22 11:26, David Hildenbrand wrote:
+> For now, FAULT_FLAG_UNSHARE only applies to anonymous pages, which
+> implies a COW mapping. Let's hide FAULT_FLAG_UNSHARE early if we're not
+> dealing with a COW mapping, such that we treat it like a read fault as
+> documented and don't have to worry about the flag throughout all fault
+> handlers.
 > 
-> FWIW, given that the aim here seems to be to expose all kernel internals to be
-> overridden arbitrarily, I'm also concerned that there's a huge surface area for
-> issues with maintainability, robustness/correctness, and security.
+> While at it, centralize the check for mutual exclusion of
+> FAULT_FLAG_UNSHARE and FAULT_FLAG_WRITE and just drop the check that
+> either flag is set in the WP handler.
 > 
-> I really don't want to be stuck in a position where someone argues that all
-> kernel internal functions are ABI and need to stay around as-is to be hooked by
-> eBPF, and I hope that we all agree that there are no guarantees on that front.
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  mm/huge_memory.c |  3 ---
+>  mm/hugetlb.c     |  5 -----
+>  mm/memory.c      | 23 ++++++++++++++++++++---
+>  3 files changed, 20 insertions(+), 11 deletions(-)
 
-My biggest concern is changing functionality of arbitrary functions by BPF.
-I would much rather limit what functions BPF could change with some
-annotation.
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-int __bpf_modify foo()
-{
-	...
-}
-
-
-That way if somethings not working, you can see directly in the code that
-the function could be modified by a BPF program, instead of getting some
-random bug report because a function returned an unexpected result that the
-code of that function could never produce.
-
--- Steve
