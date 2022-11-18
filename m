@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB7962EDC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4530C62EDC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240801AbiKRGkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:40:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S241249AbiKRGkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239518AbiKRGkP (ORCPT
+        with ESMTP id S241179AbiKRGkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 01:40:15 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D96E82BC0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:57 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o30so2977523wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:57 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7B89BA27
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:58 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id i186-20020a1c3bc3000000b003cfe29a5733so6819045wma.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rAGSEtoMjiEA8z4zpCZaH+zh+PxwDmjtLZ+/VPy/B3U=;
-        b=aRsrluM2SXV3g9vL62gj1RsXStNyAiuKd+wb+Jl3GF1e1XsaGlG2ZtvbFW/87pJomu
-         L04yPhiXj74Em1HmNCTCZU6erO4ZoXxhg78mRyFQ4UsLclRiJcmll4wcuajyMuoBs0r9
-         TVp+xewuomUTezXmuWz7bIgcHJQU+3n6fSDFVnNSsm9RmXW3la/OdI6Pel+8zgKTanyq
-         o+nXHotSrSNKFywLxx0sVvg6w/GXUkLgXiFZ2VhLQ+zeae0ORfqENxTD0czL0Y/x2rys
-         MHUofO+f1ndJCJf201cUSZlAvssiPIChJtU1B0KU6sxHowYsIZRhR6+DwEcaxDAIIXWv
-         deMQ==
+        bh=1EtHwJzeElZKUFj3RehIBV9OlxuribamMcnPQCPFmzU=;
+        b=hfFqCpMZEitSiqKOKe7NqFDiYwBODKR6MwRtrakFoJuNz8jgxsGkyF7grPJceXe2rh
+         tfGhc6wTkd5heXc8jk9rBDGS0+gra/8tUAza3oHFBcuNIYbgCDpCZUJG6D/eR+Rjcjcf
+         xpjJPrN4uv7JK1O/m84c6GrSQ+SfwskbUplwo6q9QuD3lKpRDJqscS8DnQmr3SiPkRSC
+         iAsoJlbV7tb6tf1cJnV/mtrFgUNjUrXIa7lMM4vqj3gdsPyXeY35WJ0phsStDzb7V6Vp
+         8wpBDYPWLoH/SXVUceGW6twrvtQgRYVjsmYQpxGmerveMRTKfUDdbsQGsHB9CUYpgtNA
+         L+eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rAGSEtoMjiEA8z4zpCZaH+zh+PxwDmjtLZ+/VPy/B3U=;
-        b=B4IogNG5GIij4+ogjrDVMA+/uqsmL5Mr6BItwtqeRDxauaF9Jvz3Yv5/iQuus52JeN
-         dDyQyGYTXdh4Z4+QP0EBBT8Ne+41QKqgio6TJFgUT/+8c7We9yJs0qaAljemK3UHY13H
-         L3uqvbdcGBKhYh1Txu/GmImB13h4VKFTay2U+FEhUS0iDeRDlrdh8HcUjSZzqEfHn6hj
-         bz3m9nR+Vw2c0WOcTsWUEcJAuq4JuubWPMKPRt/N3rapA+u94nsJlBAWm864TDIrBV3N
-         knNFev1BLx93LD2BhkS0qz6vMvVdP34u5T9NfE0K/7y2e4bXWf1u87McbOA95ElEyg92
-         IHSw==
-X-Gm-Message-State: ANoB5pmcio8rIHvkwh9Yocybbe5IVsoPpwtEkY1UnO7rUSVe0aDfL7fq
-        N1BrMBjzTjc+MA9oDoatd7TzeA==
-X-Google-Smtp-Source: AA0mqf6mGfskwlFBQTLbjy4/WVkZCd3yR93mTHX9YcpQpTaRb+Yj7RR8FRzObUZHpl8OZG+oCs2bVw==
-X-Received: by 2002:a05:600c:188a:b0:3cf:8e62:f769 with SMTP id x10-20020a05600c188a00b003cf8e62f769mr7524563wmp.52.1668753595820;
-        Thu, 17 Nov 2022 22:39:55 -0800 (PST)
+        bh=1EtHwJzeElZKUFj3RehIBV9OlxuribamMcnPQCPFmzU=;
+        b=XLnK60iS7lD4299gfgyKwT0mFVytZq2wYKBXl4jKSIw2Qqx86Nnq8uC4k9jyAopJ0G
+         JUdz6qLODXnYjlXYofJhzAJSW3uoPi4N8IgTzZF0yOYP57QxzVa5N6NTKJzpEkAWSN+7
+         XGvPZ+0uKzwy0vpeA9JHMZAQDeuV61Ta7/zK0DEHq7RjV3uzJA107oA3E2FKw5AgnkY/
+         3kmhBGKM4AOxRe7+v+RJ0njD5oDwsj0A+h3QI60dytM9oEhE5NZH+c9AnKOIcNFwCkyq
+         217jREEQTInDqrM161lqCdnfaec8fbqcbUkuUfL9LXHiYdmyBnlZ9f2WhrqFs+vCtxTl
+         SBrw==
+X-Gm-Message-State: ANoB5pl5RgwjCEZ72KEBlH9Y7ZqpqaY/ammdomuU1QjF2XpEFCc4dp2M
+        r54P08POUqW0jfoIqR8nVWraGQ==
+X-Google-Smtp-Source: AA0mqf6k1QKhniOZ8mISw98jIdHku3AosMNLcXBEiOTiqR43Qd+qn0dD2F/AhNPRvxNt+NJJYhXn5Q==
+X-Received: by 2002:a05:600c:31a3:b0:3cf:4757:fc3 with SMTP id s35-20020a05600c31a300b003cf47570fc3mr3903538wmp.172.1668753597029;
+        Thu, 17 Nov 2022 22:39:57 -0800 (PST)
 Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id j13-20020adff54d000000b0023655e51c33sm2785902wrp.4.2022.11.17.22.39.54
+        by smtp.gmail.com with ESMTPSA id j13-20020adff54d000000b0023655e51c33sm2785902wrp.4.2022.11.17.22.39.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:39:54 -0800 (PST)
+        Thu, 17 Nov 2022 22:39:56 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Rob Herring <robh@kernel.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 03/13] nvmem: stm32: add nvmem type attribute
-Date:   Fri, 18 Nov 2022 06:39:22 +0000
-Message-Id: <20221118063932.6418-4-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 04/13] dt-bindings: nvmem: add new stm32mp13 compatible for stm32-romem
+Date:   Fri, 18 Nov 2022 06:39:23 +0000
+Message-Id: <20221118063932.6418-5-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221118063932.6418-1-srinivas.kandagatla@linaro.org>
 References: <20221118063932.6418-1-srinivas.kandagatla@linaro.org>
@@ -74,27 +76,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Patrick Delaunay <patrick.delaunay@foss.st.com>
 
-Inform NVMEM framework of type attribute for stm32-romem as NVMEM_TYPE_OTP
-so userspace is able to know how the data is stored in BSEC.
+Add a new compatible for stm32mp13 support.
 
+Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/stm32-romem.c | 1 +
+ Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-index bb8aa72ba2f9..6de565639d5f 100644
---- a/drivers/nvmem/stm32-romem.c
-+++ b/drivers/nvmem/stm32-romem.c
-@@ -160,6 +160,7 @@ static int stm32_romem_probe(struct platform_device *pdev)
- 	priv->cfg.dev = dev;
- 	priv->cfg.priv = priv;
- 	priv->cfg.owner = THIS_MODULE;
-+	priv->cfg.type = NVMEM_TYPE_OTP;
+diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+index 448a2678dc62..16f4cad2fa55 100644
+--- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+@@ -22,6 +22,7 @@ properties:
+   compatible:
+     enum:
+       - st,stm32f4-otp
++      - st,stm32mp13-bsec
+       - st,stm32mp15-bsec
  
- 	priv->lower = 0;
- 
+   reg:
 -- 
 2.25.1
 
