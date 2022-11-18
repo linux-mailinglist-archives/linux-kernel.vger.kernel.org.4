@@ -2,172 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6E462F430
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6614762F432
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241602AbiKRMGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 07:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S241642AbiKRMJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 07:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241432AbiKRMGu (ORCPT
+        with ESMTP id S235333AbiKRMJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 07:06:50 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9136E54B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:06:49 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 259B53200BD7;
-        Fri, 18 Nov 2022 07:06:46 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 18 Nov 2022 07:06:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1668773205; x=
-        1668859605; bh=ydnYLE9kWkKbVKA7VcOBz6ftKnIEHWq5ebRsQGBa77M=; b=v
-        CXzY4V9EBhmPlwF255kCUVOdVBfGYtP6jGCEJofaskheLLC8AQcjPnzLQksZv6my
-        6prA2+iVgl8Wa52DU+GLeiTQ5VdgS8eDWuYDul7caz86h7wXAOa7RNyDCVqVs1TN
-        qvcAWercASnX7Fxc+tu0712obxhZjorL4vbHYPrYTcSbP6PKm+8tSj084nwT52B8
-        3fbOigkpcq7XTwk6zumDgN14UHY7PhyfG54ya0LpR3YSKIpcMQnDtPc7+GNq2b9Z
-        C80YuFHcaO6qtdmMUSHQvXb7qj2js6i+jDn/shGwH1sYr1WZUSgl31DeXb2GFHQC
-        hBZ+Zxrw73VvFCPJeVV/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668773205; x=1668859605; bh=ydnYLE9kWkKbVKA7VcOBz6ftKnIE
-        HWq5ebRsQGBa77M=; b=XBjbxJ6SY3MISmD6rxxEY+iF90CsE999B97YS6oIiBNs
-        s5G2aJiv2PXhi7SIQUTRPkOMsW6Lf7rCFtWHX4foagzvr+4EAAeNOPJlEREJv9O4
-        cTyFtDaOkndbQS1TA8bW9WMmGbL38aMr7+4yWXXU8qnIIh3gG46h6Ep7xgdD8CPt
-        q5nit12IflT/UIKH9704rmLgu+FIuP/iwXNZBCU83SD9PmoZY7P+VrCX1XCyhlol
-        54MKNoia5RBaK9iL1hfeocNpXPA24/6Fm/zG0KDJBtu5lI4f2cpk7+ZnP/seZIcu
-        wbxwNmsMPrel4Tr1Fb8Sw/JCwB9xx0Q+VCuZQjfAfg==
-X-ME-Sender: <xms:VXV3Y0k2NoR-c8h6kwAbDlWHv7K3OnfRyhcRNTHUaWuwlpUD54J25g>
-    <xme:VXV3Yz3PHKHfBodY3r_LmoWNDBiz9xcSuvxqYqLohU2lrspxacZWNzpLLGQXlKSmE
-    qK01um7ZE-nBA>
-X-ME-Received: <xmr:VXV3YypjEWXrnTG0wDRAf3qZoG4OXNffyxZXpZs0nMIKF3C5jt0eV6uWmF4FufAgrjiCnFNxi3hXX4mPp32qKQap8g8AA-eG5w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedtgdefhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghrvghk
-    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
-    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpefgudel
-    teefvefhfeehieetleeihfejhfeludevteetkeevtedtvdegueetfeejudenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhes
-    ihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:VXV3YwlhGsOVeZXvOtaHzDL-hJhVhk_jVH5RAV-Dhjzh3vrRUZbigQ>
-    <xmx:VXV3Yy0r-UPphK1hweQ1dd7tBcDcatOiSC5v3lm_XRcpZigzPzIIrg>
-    <xmx:VXV3Y3tsRCKzcYYdVGCiQxCOYpwpUXAjvN3b_RK0kZIbk4ucfUM5hQ>
-    <xmx:VXV3Y3zGoeK9tEdFnj7CuUJB4hypXCu0REHbDZjLMOhYOArMygNoFg>
-Feedback-ID: i1568416f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Nov 2022 07:06:44 -0500 (EST)
-Date:   Fri, 18 Nov 2022 13:06:41 +0100
-From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] xen-pciback: Consider INTx disabled when MSI/MSI-X is
- enabled
-Message-ID: <Y3d1UeCuDIMxmzTA@mail-itl>
-References: <20221118023535.1903459-1-marmarek@invisiblethingslab.com>
- <93b6385c-63c8-1b5a-13c0-838f7c03ccce@suse.com>
+        Fri, 18 Nov 2022 07:09:06 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11588FF91
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:09:05 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id h132so5136721oif.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:09:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TCzTYL6+A9+c/OQXUxxh/ho9MD1U9c5KOoJmc89sICU=;
+        b=nCutx/9t0DzmESVrNrT+RdN7oAOvcFuTJsMiOPipkb31APMfTMpKM9WRTkqwPEUdzv
+         sx/s6MKFyMn3oFZQv5dT6mRqtfYoYhNfUmzvrrJZLfLYM6P0Yzv8NkuRksBwa25wcNpR
+         lQJGgIDLc6gmvCnG6RtDvkFJU4sm7PW+Z2g2sh4YyY3UqsJQy1UNwpqtHNYTMan5xl8E
+         gXQC0Hzxp3LP+/ewzZStegQGoxDUYpl+SdLxbocGeQ/wQBLKR1tdHaW0C6Yslyj7ys3R
+         GwqkKfH8meJ8PoW+95ieyKEmlktov0qrV/7O88Hd/LHxEcAfakKV9ySL63jdfpp3AVWO
+         wRZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TCzTYL6+A9+c/OQXUxxh/ho9MD1U9c5KOoJmc89sICU=;
+        b=2uix1vtT5KI8MucDXS/d6GxPWpuAYxjgLFwLNOQ7bexmZkMOHcOHatU0jIGyYIjYDO
+         c05zPlSj/dqfY4CkuWNlWtufkGqGshzoUGXquxOtCfdtoJd3GrECJ2mRSslzIyAR84SF
+         xch5/aI1rroG7mhke+DD8zo5tPaneKPJq5Lyf/GeaHa7ga2Fz3PYEJ/YR5t3B7NBMiHC
+         iggZBjNvx0yLZ7loAGpb2Ix/keU0TjHdGOilhGDDEFTctH5dRz9bL5dZGqDvyH3Rw/DR
+         i1WXkxVd6mDZVkTPizlnuhuuQzaN//ze+7gg7v7TR98s9PRO8huFJyZ05iiREbQ1uDEX
+         OdnA==
+X-Gm-Message-State: ANoB5pkmbTnXZScjkODAnTBUC/6NGoBSWIgRnQq3AmQVtey2mlc86fqa
+        kXZjJtrmoP5JXKKPpACFiM1StcAtDxwJLov2KBU=
+X-Google-Smtp-Source: AA0mqf6cK0xqX6QZpu1HVIxlG8w2JzoenkhhdJXwngv+pP88Kcboxnm6Ie8Tb+GM8dpLEAfyNDct4qIXz+4CqdsLFXI=
+X-Received: by 2002:aca:4545:0:b0:359:f445:e03e with SMTP id
+ s66-20020aca4545000000b00359f445e03emr3302916oia.180.1668773345225; Fri, 18
+ Nov 2022 04:09:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JWeX+CTKflPH5119"
-Content-Disposition: inline
-In-Reply-To: <93b6385c-63c8-1b5a-13c0-838f7c03ccce@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114120453.3233-1-xuewen.yan@unisoc.com> <20221117170028.04fd7013@gandalf.local.home>
+In-Reply-To: <20221117170028.04fd7013@gandalf.local.home>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Fri, 18 Nov 2022 20:08:54 +0800
+Message-ID: <CAB8ipk8xXWzc_PurHwVPd9-azN4B5OD=MYQP+Oze1kmbom0avQ@mail.gmail.com>
+Subject: Re: [PATCH] sched/rt: Use cpu_active_mask to prevent
+ rto_push_irq_work's dead loop
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, peterz@infradead.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, ke.wang@unisoc.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 18, 2022 at 6:16 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Mon, 14 Nov 2022 20:04:53 +0800
+> Xuewen Yan <xuewen.yan@unisoc.com> wrote:
+>
+> > +++ b/kernel/sched/rt.c
+> > @@ -2219,6 +2219,7 @@ static int rto_next_cpu(struct root_domain *rd)
+> >  {
+> >       int next;
+> >       int cpu;
+> > +     struct cpumask tmp_cpumask;
+>
+> If you have a machine with thousands of CPUs, this will likely kill the
+> stack.
+Ha, I did not take it into account. Thanks=EF=BC=81
 
---JWeX+CTKflPH5119
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Nov 2022 13:06:41 +0100
-From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-To: Jan Beulich <jbeulich@suse.com>
-Cc: Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	"moderated list:XEN HYPERVISOR INTERFACE" <xen-devel@lists.xenproject.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] xen-pciback: Consider INTx disabled when MSI/MSI-X is
- enabled
+>
+> >
+> >       /*
+> >        * When starting the IPI RT pushing, the rto_cpu is set to -1,
+> > @@ -2238,6 +2239,11 @@ static int rto_next_cpu(struct root_domain *rd)
+> >               /* When rto_cpu is -1 this acts like cpumask_first() */
+> >               cpu =3D cpumask_next(rd->rto_cpu, rd->rto_mask);
+> >
+> > +             cpumask_and(&tmp_cpumask, rd->rto_mask, cpu_active_mask);
+> > +             if (rd->rto_cpu =3D=3D -1 && cpumask_weight(&tmp_cpumask)=
+ =3D=3D 1 &&
+> > +                 cpumask_test_cpu(smp_processor_id(), &tmp_cpumask))
+> > +                     break;
+> > +
+>
+> Kill the above.
+>
+> >               rd->rto_cpu =3D cpu;
+> >
+> >               if (cpu < nr_cpu_ids) {
+>
+> Why not just add here:
+>
+>                         if (!cpumask_test_cpu(cpu, cpu_active_mask))
+>                                 continue;
+>                         return cpu;
+>                 }
+>
+> ?
+Let's consider this scenario:
+the online_cpu_mask is 0x03(cpu0/1)=EF=BC=8Cthe active_cpu_mask is
+0x01(cpu0)=EF=BC=8Cthe rto cpu is cpu0,
+the rto_mask is 0x01, and the irq cpu is cpu0, as a result,  the first
+loop, the rto_cpu would be -1,
+but the loop < rto_loop_next, on  next loop, because of the rto_cpu is
+-1, so the next rto cpu would
+be cpu0 still, as a result, the cpu0 would push rt tasks to
+cpu1(inactive cpu) while running in the irq_work.
 
-On Fri, Nov 18, 2022 at 08:36:14AM +0100, Jan Beulich wrote:
-> On 18.11.2022 03:35, Marek Marczykowski-G=C3=B3recki wrote:
-> > Linux enables MSI-X before disabling INTx, but keeps MSI-X masked until
-> > the table is filled. Then it disables INTx just before clearing MASKALL
-> > bit. Currently this approach is rejected by xen-pciback.
-> > According to the PCIe spec, device cannot use INTx when MSI/MSI-X is
-> > enabled.
->=20
-> Similarly the spec doesn't allow using MSI and MSI-X at the same time.
-> Before your change xen_pcibk_get_interrupt_type() is consistent for all
-> three forms of interrupt delivery; imo it also wants to be consistent
-> after your change. This effectively would mean setting only one bit at
-> a time (or using an enum right away), but then the question is what
-> order you do the checks in. IOW I think the change to the function is
-> wrong.
+So we should judge whether the current cpu(the only one active cpu) is
+the next loop's cpu.
 
-IIUC the difference is that enabling MSI or MSI-X implicitly disables
-INTx, while enabling both MSI and MSI-X is UB. This means that MSI
-active and PCI_COMMAND_INTX_DISABLE bit not set means "only MSI is
-active" - which the function now properly reports.
-Both MSI and MSI-X active at the same time means a bug somewhere else
-and the current code allows only to disable one of them in such case. I
-could replace this with BUG_ON, or simply assume such bug doesn't exist
-and ignore this case, if you prefer.
+Thanks=EF=BC=81
 
-> Furthermore it looks to me as if you're making msi_msix_flags_write()
-> inconsistent with command_write() - you'd now want to also permit
-> clearing "INTx disable" when MSI or MSI-X are enabled. Which, I think,
-> would simply mean allowing the domain unconditional control of the bit
-> (as long as allow_interrupt_control is set of course).
-
-I think your are correct.
-
-> Especially with these further changes I'm afraid at least for now I
-> view this as moving in the wrong direction. My view might change in
-> particular if the description made more clear what was wrong with the
-> original change (476878e4b2be ["xen-pciback: optionally allow interrupt
-> enable flag writes"]), or perhaps the discussion having led to the form
-> which was committed in the end.
-
-I'm afraid I don't understand why you think it's the wrong direction.
-Can you clarify?=20
-
---=20
-Best Regards,
-Marek Marczykowski-G=C3=B3recki
-Invisible Things Lab
-
---JWeX+CTKflPH5119
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmN3dVEACgkQ24/THMrX
-1yyy8gf9HRwcAZpH1zguX0WqxWEGwW9uPdCzHaQ7diDesElifkVgwuOwz5hYHqm/
-j+xXskWFao2c3a5AFnAiW34jAXSEOtTZ/eciJeBZdoXZ/IeN5zKF26h2jAHTdnOw
-HWMTRMkM9VGdtVACLtdDFXCPPKK8k9xLcwz5JI6jHbcqT6r2jFbPn1RdciFzV6iu
-SygWCBxRpjUzVmNY/HZPlPSAIYhWwlf1VwwICGivvW2HKhswNEqygpZwEY3qoDgt
-13jhh794GUzq/2NDO5Nunz+maILbYRY3kfa/d1ImOEnvoIo+3nekvY2sG9CE/gJO
-diXfejb4cPwYCw+i3UZOSMSM8T6I/A==
-=xexH
------END PGP SIGNATURE-----
-
---JWeX+CTKflPH5119--
+>
+> -- Steve
