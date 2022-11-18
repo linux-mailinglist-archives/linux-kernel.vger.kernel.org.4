@@ -2,109 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3010862FC05
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8AC62FC07
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241622AbiKRRwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:52:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S242246AbiKRRw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234447AbiKRRwj (ORCPT
+        with ESMTP id S242265AbiKRRwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:52:39 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6ED3F07B;
-        Fri, 18 Nov 2022 09:52:38 -0800 (PST)
-Date:   Fri, 18 Nov 2022 17:52:33 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668793956;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=C9icFdV4kUTLB8nW3Zigy8SnuVAjyYCTdXQgDFSosuE=;
-        b=PnTT8HBztbtDO/HULmqo2sMXhWKudg+EAzgU6+rT8y4zeWMvndZ0ifCABAUyptlzrkF248
-        HxNF4Z+xfEnp2oy8IdKgbCC3XHG7siGFzGNoOGVY4MeLDPZgu076S2pKXL5ip5X+z+GoL+
-        UzWyCQWPYMqprkt88vYstx1mu71Venh35XW68eogPR06iRo87swN6rp2LdrlEkWpQs71qV
-        nQYnjsZ1Iz4KhiNqHWOBGCsXQUpEaVNpWFmKM2hxDS2ggYbl2vQe4crDF6TVyh0XXiQBG4
-        ss5S8rh800CKWK9hwi+U0wJeugGipLwZxxyCjtuV03+sNxuggmOCQIyxEKem9w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668793956;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=C9icFdV4kUTLB8nW3Zigy8SnuVAjyYCTdXQgDFSosuE=;
-        b=FdYjwZwnAFRW1h/Ubj3nzbDUZEtdjsPGWErh++oqufh8pQuuwaxuI3REjqhyaZlSbLJwwZ
-        z52rdd22A8W62QCQ==
-From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Ensure forced page table splitting
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Marco Elver <elver@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Fri, 18 Nov 2022 12:52:54 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E63764544;
+        Fri, 18 Nov 2022 09:52:53 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id k84so6497575ybk.3;
+        Fri, 18 Nov 2022 09:52:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZc60G77tnBeDaIJDUGaSbXuJtHL1CgQTVBXHXPY7LY=;
+        b=pbnVZiWl9+jQaSexHLexcAK7kR4Sl8V4f8W8Z5R6KkM+WUHVW+pkK6W0Z96tgLmaO1
+         knY0qQcQLUb86THyByi+LIGwnjx8aVyg/P41Bp7smbxx6wFD6pFzegIdZWxbfT+vaWWO
+         EFBzLzt2kw+7iClbfRguBG81YOnIYYaNM0Gn8FgEnr+SGxAyB9PHa62S3J9MV1/Incmn
+         QrUScfYQ+7kh1zVH5rNjqinIvzX7RE0ihkUJYwh6I2/rswSqgGGpkNAU2zz6DBMMd025
+         97XSQcta5PgdCkDult/4YnLsw44I64GBdlT+zmh5l31lwVGtavdOu61g5F5Mcn0F4jnz
+         kAyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DZc60G77tnBeDaIJDUGaSbXuJtHL1CgQTVBXHXPY7LY=;
+        b=NuRIrJTPhaeILbBNLQfatJ4SALb4h2t3yOxKfy36nRDdqITzHYcQXfhrLbeLzRK7Wl
+         3D+7xC6Nawf38wL9LXBWg2ISOucnkuC4isvb/RHbVXcuPV0tVMe/LVfU7ezUqnxzj3YD
+         reGyLeRpAMeMjMqYwLCExyhVBNOuSA5YypdQi1bjskXKzdsHq6YkaEHjdRBsapRr5RXZ
+         tj+truG0h4+JH2pF3Bn4dAHUIpL6mL7PwvDFJptlsKc+pL9TYzkCQHR3hBsRZIw1dXVN
+         V9aE6ppOEE8/TtOxiq+oCd1PamaUVGGc8LzvCfrmxD0orBF/qxyCqE4aheKytUFLmX4z
+         xeBA==
+X-Gm-Message-State: ANoB5pmhLgT47jyDna7Jdi95R/FbWBzOy+T+BZ874EkZ/32KomtgqOU3
+        wnPFRYxS0kk1BqHUkAX3bpcsGPV2Pf6VBuuxbJU=
+X-Google-Smtp-Source: AA0mqf6S8QgG0JBWchUvXPogxa6bRykbS9qW5lbGJTtm4oxWVETgVwzwhTfJ4O0Lg10peBOsVY+1hHTwSXYOdCqog9A=
+X-Received: by 2002:a25:44c5:0:b0:6cb:16d0:1ae1 with SMTP id
+ r188-20020a2544c5000000b006cb16d01ae1mr7218008yba.581.1668793972536; Fri, 18
+ Nov 2022 09:52:52 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <166879395396.4906.1394517398531168643.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118170942.2588412-1-carlos.bilbao@amd.com> <20221118170942.2588412-2-carlos.bilbao@amd.com>
+In-Reply-To: <20221118170942.2588412-2-carlos.bilbao@amd.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 18 Nov 2022 18:52:41 +0100
+Message-ID: <CANiq72nN7i4yXjnLftdKZ7zo8Qw8c=aM6L+D2SvzH47PVALJYQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] docs: Update maintainer of kernel-docs.rst
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     corbet@lwn.net, lukas.bulwahn@gmail.com, Dhaval.Giani@amd.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        bilbao@vt.edu, ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
+On Fri, Nov 18, 2022 at 6:09 PM Carlos Bilbao <carlos.bilbao@amd.com> wrote:
+>
+>  Index of Further Kernel Documentation
+>  =====================================
+>
+> +Current Maintainer: Carlos Bilbao <carlos.bilbao@amd.com>
+> +
+>  Initial Author: Juan-Mariano de Goyeneche (<jmseyas@dit.upm.es>;
+>  email address is defunct now.)
 
-Commit-ID:     71cfdf0c336fb20b0f2941ca9b8f6b23d8d6c86b
-Gitweb:        https://git.kernel.org/tip/71cfdf0c336fb20b0f2941ca9b8f6b23d8d6c86b
-Author:        Dave Hansen <dave.hansen@linux.intel.com>
-AuthorDate:    Fri, 18 Nov 2022 07:16:16 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Fri, 18 Nov 2022 09:46:05 -08:00
+Shouldn't this be covered via `MAINTAINERS`?
 
-x86/mm: Ensure forced page table splitting
-
-There are a few kernel users like kfence that require 4k pages to work
-correctly and do not support large mappings.  They use set_memory_4k()
-to break down those large mappings.
-
-That, in turn relies on cpa_data->force_split option to indicate to
-set_memory code that it should split page tables regardless of whether
-the need to be.
-
-But, a recent change added an optimization which would return early
-if a set_memory request came in that did not change permissions.  It
-did not consult ->force_split and would mistakenly optimize away the
-splitting that set_memory_4k() needs.  This broke kfence.
-
-Skip the same-permission optimization when ->force_split is set.
-
-Fixes: 127960a05548 ("x86/mm: Inhibit _PAGE_NX changes from cpa_process_alias()")
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Marco Elver <elver@google.com>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/all/CA+G9fYuFxZTxkeS35VTZMXwQvohu73W3xbZ5NtjebsVvH6hCuA@mail.gmail.com/
----
- arch/x86/mm/pat/set_memory.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 220361c..0db6951 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -1727,7 +1727,8 @@ static int __change_page_attr_set_clr(struct cpa_data *cpa, int primary)
- 	/*
- 	 * No changes, easy!
- 	 */
--	if (!(pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr)))
-+	if (!(pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr)) &&
-+	    !cpa->force_split)
- 		return ret;
- 
- 	while (rempages) {
+Cheers,
+Miguel
