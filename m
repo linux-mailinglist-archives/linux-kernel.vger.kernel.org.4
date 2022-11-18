@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DDD62FFFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87DF630001
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiKRWY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S230236AbiKRWYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:24:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiKRWYK (ORCPT
+        with ESMTP id S229635AbiKRWYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:24:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196926161
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:23:30 -0800 (PST)
+        Fri, 18 Nov 2022 17:24:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30003205A;
+        Fri, 18 Nov 2022 14:23:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC8226279B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 22:23:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F670C433C1;
-        Fri, 18 Nov 2022 22:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1668810209;
-        bh=/+L2NYj/ACH+jT7u7xIw5FkfzhmRB+rhl1d5bnP9ndQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WOu/knYnjG874+QGB6O6mc5DoO1bffTgpJ7knUlNeNZYm2uJpJmcH7/iJT4HSHckE
-         dirOBSs+Ct5loDn2H9J9YxTOscXrpO5Y9SUqL9liqBR6Fk9CI1076Q9tHWST71XUJw
-         VQcIV0zN+NPXlK/FhQ5Iik1CGlvDvasJGk1pfrOI=
-Date:   Fri, 18 Nov 2022 14:23:27 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
-Message-Id: <20221118142327.1744cda179ca549eeebc8629@linux-foundation.org>
-In-Reply-To: <a4a1cda4-547b-8274-8645-fa6ff274e42@google.com>
-References: <5f52de70-975-e94f-f141-543765736181@google.com>
-        <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
-        <CAHk-=whmq5gHrKmD3j=7nB=n9OmmLb5j1qmoQPHw1=VSQ-V=hg@mail.gmail.com>
-        <93fa81ae-d848-58c2-9f70-27446bf9baa8@google.com>
-        <20221118140346.b9026301b4ba03e43e15aeca@linux-foundation.org>
-        <a4a1cda4-547b-8274-8645-fa6ff274e42@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F8BD627B8;
+        Fri, 18 Nov 2022 22:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAAE5C433D6;
+        Fri, 18 Nov 2022 22:23:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668810229;
+        bh=saD4ekaR7aTv0tgNKWhed7zpzPCX3G62radVkykS1Us=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Nrr9/LDlLu0c7qtlU9AyNxbP/NzttRuFpt0JOV0n8IDqKQDrgVZIDsW94d1ys3hRZ
+         M3m0hZIBRA8X4OGed/P5VUQvNUWqYs1I2PBy95NlmAriDnLF44f1sJ6BX6eEIGgXZj
+         RmrQ3i0CBnGwoETXl2cU4pKP0cmpovPjpAbaUlOF+tWr0Pi277cVaVSbJGmJAt4x6a
+         vZ4doG6op8I6glx03SoNDGtQIqJaDw510Du6TFJmGk5DSZRK7c7h9OHkm5zqCm5Ns6
+         eLs2P7iq3udRnLyPtFd1WeGekKPPNv+KW3R+GlkAZKlmorfAoU2seVBLMi944ErsgD
+         gGRXJunwDodwA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 991EB5C0F9C; Fri, 18 Nov 2022 14:23:48 -0800 (PST)
+Date:   Fri, 18 Nov 2022 14:23:48 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
+        rostedt@goodmis.org, fweisbec@gmail.com
+Subject: Re: [PATCH v2 2/2] net: devinet: Reduce refcount before grace period
+Message-ID: <20221118222348.GQ4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221118191909.1756624-1-joel@joelfernandes.org>
+ <20221118191909.1756624-2-joel@joelfernandes.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118191909.1756624-2-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,21 +62,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 14:10:32 -0800 (PST) Hugh Dickins <hughd@google.com> wrote:
-
-> On Fri, 18 Nov 2022, Andrew Morton wrote:
-> > On Fri, 18 Nov 2022 12:51:09 -0800 (PST) Hugh Dickins <hughd@google.com> wrote:
-> > 
-> > > But the first series has not yet graduated from mm-unstable,
-> > > so if Andrew and/or Kirill also prefer to have them combined into one
-> > > bit_spin_lock-less series, that I can do.  (And the end result should be
-> > > identical, so would not complicate Johannes's lock_page_memcg() excision.)
-> > 
-> > I'd prefer that approach.
+On Fri, Nov 18, 2022 at 07:19:09PM +0000, Joel Fernandes (Google) wrote:
+> From: Eric Dumazet <edumazet@google.com>
 > 
-> I think you're saying that you prefer the other approach, to keep the
-> two series separate (second immediately after the first, or not, doesn't
-> matter), rather than combined into one bit_spin_lock-less series.
-> Please clarify! Thanks,
+> Currently, the inetdev_destroy() function waits for an RCU grace period
+> before decrementing the refcount and freeing memory. This causes a delay
+> with a new RCU configuration that tries to save power, which results in the
+> network interface disappearing later than expected. The resulting delay
+> causes test failures on ChromeOS.
+> 
+> Refactor the code such that the refcount is freed before the grace period
+> and memory is freed after. With this a ChromeOS network test passes that
+> does 'ip netns del' and polls for an interface disappearing, now passes.
+> 
+> Reported-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Signed-off-by: Eric Dumazet <edumazet@google.com>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Yes, two separate series.   Apologies for the confuddling.
+Queued and pushed, thank you both!
+
+This patch can go as-is based on Eric's Signed-off-by, but the first
+one of course needs at least an ack.
+
+							Thanx, Paul
+
+> ---
+>  net/ipv4/devinet.c | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
+> 
+> diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
+> index e8b9a9202fec..b0acf6e19aed 100644
+> --- a/net/ipv4/devinet.c
+> +++ b/net/ipv4/devinet.c
+> @@ -234,13 +234,20 @@ static void inet_free_ifa(struct in_ifaddr *ifa)
+>  	call_rcu(&ifa->rcu_head, inet_rcu_free_ifa);
+>  }
+>  
+> +static void in_dev_free_rcu(struct rcu_head *head)
+> +{
+> +	struct in_device *idev = container_of(head, struct in_device, rcu_head);
+> +
+> +	kfree(rcu_dereference_protected(idev->mc_hash, 1));
+> +	kfree(idev);
+> +}
+> +
+>  void in_dev_finish_destroy(struct in_device *idev)
+>  {
+>  	struct net_device *dev = idev->dev;
+>  
+>  	WARN_ON(idev->ifa_list);
+>  	WARN_ON(idev->mc_list);
+> -	kfree(rcu_dereference_protected(idev->mc_hash, 1));
+>  #ifdef NET_REFCNT_DEBUG
+>  	pr_debug("%s: %p=%s\n", __func__, idev, dev ? dev->name : "NIL");
+>  #endif
+> @@ -248,7 +255,7 @@ void in_dev_finish_destroy(struct in_device *idev)
+>  	if (!idev->dead)
+>  		pr_err("Freeing alive in_device %p\n", idev);
+>  	else
+> -		kfree(idev);
+> +		call_rcu(&idev->rcu_head, in_dev_free_rcu);
+>  }
+>  EXPORT_SYMBOL(in_dev_finish_destroy);
+>  
+> @@ -298,12 +305,6 @@ static struct in_device *inetdev_init(struct net_device *dev)
+>  	goto out;
+>  }
+>  
+> -static void in_dev_rcu_put(struct rcu_head *head)
+> -{
+> -	struct in_device *idev = container_of(head, struct in_device, rcu_head);
+> -	in_dev_put(idev);
+> -}
+> -
+>  static void inetdev_destroy(struct in_device *in_dev)
+>  {
+>  	struct net_device *dev;
+> @@ -328,7 +329,7 @@ static void inetdev_destroy(struct in_device *in_dev)
+>  	neigh_parms_release(&arp_tbl, in_dev->arp_parms);
+>  	arp_ifdown(dev);
+>  
+> -	call_rcu(&in_dev->rcu_head, in_dev_rcu_put);
+> +	in_dev_put(in_dev);
+>  }
+>  
+>  int inet_addr_onlink(struct in_device *in_dev, __be32 a, __be32 b)
+> -- 
+> 2.38.1.584.g0f3c55d4c2-goog
+> 
