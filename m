@@ -2,165 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5146362F11E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7423762F123
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241909AbiKRJZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S241921AbiKRJ1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiKRJZk (ORCPT
+        with ESMTP id S229620AbiKRJ1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:25:40 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011D813D28;
-        Fri, 18 Nov 2022 01:25:38 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id h24so2756776qta.9;
-        Fri, 18 Nov 2022 01:25:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zxmmB0O8kf2bCZUg8Vmzy4DjqrDLbrYKNV+9DFjGPdM=;
-        b=iGoNWXXXnis33v7inwHeg1vbF1B+aH3d3MXsz/vIMruwIp734Gt5/9jGckp7x//ZgN
-         GUZgpC4iS1d3MZLeR61ofeciNEKAujQfQZzxa6nfkxfGWUxBHeXadL9D49nz4Pt7M4aE
-         XEzvZDukjfunZ6wtdG9pertRkqFFVaQnyRP8hyqXIRbTaBjLqQdj7GUA7LO1TSfVyQmr
-         O6LIrFuZw506IRoPPlukiJta3izZliTAJr6PfuMf7hlxOUc3TY9gJuYau0H2ZLNydq6O
-         H0mDhhIWwxRRPgSSPPTZcolCz6diIIqypw9cTpD2295ixLSMeu/WOir34l7dQ/cKaF5w
-         dGUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zxmmB0O8kf2bCZUg8Vmzy4DjqrDLbrYKNV+9DFjGPdM=;
-        b=y2j89IfcUguas1CKsr19yd6W9lILcnv7J3WgKGTaSqjYvlTgxQtiDrt8GLhkouoX1e
-         P6JLDgYDtYUpiTmN6rPuLL0Lj10bB+GIt8vkHoIfJZJHrP7ezvDfbW2A7xAuejEiYFEO
-         sD5RbO+D9wRtRNpdwIfQYV8CiphFaNbahQONuroevvLAvpgA/nnBXTL6isloY0oE/pGw
-         /NYVbqfn0wmMiXTxxObXsqbNEe+VqiFvnIzwm2IyqVWU+MZk+BnhnyspEEUgj4SKXy/3
-         M/b067csFUVV+O+yqPa6/7u6WmGjzLMI5w8dyCvp+pWFzZr44AnjUUyR/u+nufIbf8DT
-         uCFg==
-X-Gm-Message-State: ANoB5pmrGylpVHETxpPfpJ5Bjdq1CB9T+tf+Xkg2fkxtoW44kz9RWTO5
-        JJdBnhU33jxLDdCmXO8lcHIc703zb34ZDpf1LlQ=
-X-Google-Smtp-Source: AA0mqf5UhFnmhEBpfKYNk2qlm9NY4I1IaPGXQ1r6HCYQEskO1OiB0JmswdszYCQwSu0bqZtvW1F8XX18ZqCNcD0NOVM=
-X-Received: by 2002:ac8:4d51:0:b0:3a5:1e6e:ad6a with SMTP id
- x17-20020ac84d51000000b003a51e6ead6amr5733386qtv.556.1668763538165; Fri, 18
- Nov 2022 01:25:38 -0800 (PST)
+        Fri, 18 Nov 2022 04:27:20 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0B2FCC4;
+        Fri, 18 Nov 2022 01:27:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1668763635; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UcXDJLu1asVyUgEijSQXJ9DHNuMXWX+q2Hr7tq2QEPg=;
+        b=a8qpL3vt4RiHX1cI7skr1iKHaLiC9Zi1RgGVDY5VDtaaUrfGM3ZniRjf/PrMWfIKibmIo7
+        X//YP2bFxvbUaaWOxLKXWJW5jkP+0l8OrWS0d+iBHhtVoMd8ljRgcoM80eiQ8M9oPm8W9C
+        eGA7dXx5LuymQ5Eep/++6UeKvA1iq0s=
+Date:   Fri, 18 Nov 2022 09:27:05 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/2] mmc: jz4740: Don't change parent clock rate for some
+ SoCs
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Siarhei Volkau <lis8215@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Message-Id: <59EJLR.DQ7KHQEAEUSG2@crapouillou.net>
+In-Reply-To: <CAPDyKFrMqCL1-faBadVP3xB-5qiCYsyRUuOHbFZuOWfLdCXwig@mail.gmail.com>
+References: <20221108045300.2084671-1-lis8215@gmail.com>
+        <20221108045300.2084671-2-lis8215@gmail.com>
+        <CAPDyKFrMqCL1-faBadVP3xB-5qiCYsyRUuOHbFZuOWfLdCXwig@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221111084214.14822-1-wenchao.chen666@gmail.com>
- <20221111084214.14822-2-wenchao.chen666@gmail.com> <59fc95ec-c0db-4011-eca3-3d101f0bc908@intel.com>
-In-Reply-To: <59fc95ec-c0db-4011-eca3-3d101f0bc908@intel.com>
-From:   Wenchao Chen <wenchao.chen666@gmail.com>
-Date:   Fri, 18 Nov 2022 17:25:27 +0800
-Message-ID: <CA+Da2qwdtUdCcv+HhNArGoriVtOmx+GGML4Avkk5QSdm8+XXTQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mmc: sdhci: Fixed too many logs being printed during tuning
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
-        lzx.stg@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 12:00 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 11/11/22 10:42, Wenchao Chen wrote:
-> > From: Wenchao Chen <wenchao.chen@unisoc.com>
-> >
-> > During the HS200 tuning process, too many tuning errors are printed in
-> > the log.
-> >
-> > Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
-> > ---
-> >  drivers/mmc/host/sdhci.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> > index fef03de85b99..a503b54305eb 100644
-> > --- a/drivers/mmc/host/sdhci.c
-> > +++ b/drivers/mmc/host/sdhci.c
-> > @@ -3401,6 +3401,10 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
-> >               if (host->pending_reset)
-> >                       return;
-> >
-> > +             command = SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND));
-> > +             if (command == MMC_SEND_TUNING_BLOCK || command == MMC_SEND_TUNING_BLOCK_HS200)
-> > +                     return;
->
-> Normally we wouldn't get here even if a request got an error because
-> then we either reset the data circuit which should stop further
-> interrupts, or set host->pending_reset.
->
-> Can you elaborate on what is going wrong?
->
-Hi  adrian
-1. In the process of tuning, not all tuning values are good, some
-tuning values may cause errors, and these errors print too many logs.
-    Of course, we reset the cmdline or dataline on error.
-2. use host->pending_reset = true
-static void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
-{
-...
-if (sdhci_needs_reset(host, mrq))
-host->pending_reset = true;
-...
-}
+Hi,
 
-But intmask = 0x00200000
-static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
-{
-...
-if (!host->data) {
-struct mmc_command *data_cmd = host->data_cmd;
+(Ingenic SoCs maintainer here)
 
-if (data_cmd && (data_cmd->flags & MMC_RSP_BUSY)) {
-if (intmask & SDHCI_INT_DATA_TIMEOUT) { //#define
-SDHCI_INT_DATA_TIMEOUT 0x00100000
-host->data_cmd = NULL;
-data_cmd->error = -ETIMEDOUT;
-sdhci_err_stats_inc(host, CMD_TIMEOUT);
-__sdhci_finish_mrq(host, data_cmd->mrq);//<=
-return;
-}
-if (intmask & SDHCI_INT_DATA_END) {    //#define  SDHCI_INT_DATA_END 0x00000002
+Le ven. 18 nov. 2022 =E0 09:45:48 +0100, Ulf Hansson=20
+<ulf.hansson@linaro.org> a =E9crit :
+> On Tue, 8 Nov 2022 at 05:53, Siarhei Volkau <lis8215@gmail.com> wrote:
+>>=20
+>>  Some SoCs have one clock divider for all MMC units, thus changing=20
+>> one
+>>  affects others as well. This leads to random hangs and memory
+>>  corruptions, observed on the JZ4755 based device with two MMC slots
+>>  used at the same time.
+>=20
+> Urgh, that sounds like broken HW to me.
+>=20
+> The MMC blocks could share a parent clock (that would need a fixed
+> rate for it to be applied), assuming there is a separate gate/divider
+> available per block. But there isn't'?
 
-host->data_cmd = NULL;
-/*
-* Some cards handle busy-end interrupt
-* before the command completed, so make
-* sure we do things in the proper order.
-*/
-if (host->cmd == data_cmd)
-return;
+They do share a parent clock and have separate gates, and each MMC IP=20
+block has an internal divider for the bus frequency derived from that=20
+shared clock.
 
-__sdhci_finish_mrq(host, data_cmd->mrq);//<=
-return;
-}
-}
-...
-if (host->pending_reset)
-return;
+>>=20
+>>  List of SoCs affected includes: JZ4725b, JZ4755, JZ4760 and JZ4760b.
+>>  However, the MMC driver doesn't distinguish JZ4760 and JZ4770
+>>  which shall remain its behavior. For the JZ4755 is sufficient to
+>>  use JZ4725b's binding. JZ4750 is outside of the patch.
+>>=20
+>>  The MMC core has its own clock divisor, rather coarse but suitable=20
+>> well,
+>>  and it shall keep the role of tuning clock for the MMC host in that
+>>  case.
+>=20
+> The mmc core doesn't have a clock divisor, but it does control the bus
+> clock frequency through the ->set_ios() host ops. It needs to do that,
+> to be able to conform to the (e)MMC, SD and SDIO specifications.
+>=20
+> Can you please try to elaborate on the above, so I can better
+> understand your point?
 
-pr_err("%s: Got data interrupt 0x%08x even though no data operation
-was in progress.\n",
-       mmc_hostname(host->mmc), (unsigned)intmask);
-sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
-sdhci_dumpregs(host);
+Yes, I don't really understand the patch, TBH.
 
-return;
-}
-...
-}
+The "clk_set_rate" call will only set the shared clock to the *maximum*=20
+clock frequency (host->mmc->f_max) which should be the exact same=20
+across all MMC IPs.
 
-> > +
-> >               pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
-> >                      mmc_hostname(host->mmc), (unsigned)intmask);
-> >               sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->
+So it doesn't matter if it's set 3 times by 3 different instances of=20
+the IP, as long as they all request the same value.
+
+Besides, I know for a fact that the mainline driver works fine on the=20
+JZ4760(B) and JZ4725B.
+
+Finally... even if it was correct, this change would break=20
+compatibility with old Device Tree files.
+
+Cheers,
+-Paul
+
+>>=20
+>>  Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+>=20
+> Kind regards
+> Uffe
+>=20
+>>  ---
+>>   drivers/mmc/host/jz4740_mmc.c | 10 +++++++++-
+>>   1 file changed, 9 insertions(+), 1 deletion(-)
+>>=20
+>>  diff --git a/drivers/mmc/host/jz4740_mmc.c=20
+>> b/drivers/mmc/host/jz4740_mmc.c
+>>  index dc2db9c18..d390ff31d 100644
+>>  --- a/drivers/mmc/host/jz4740_mmc.c
+>>  +++ b/drivers/mmc/host/jz4740_mmc.c
+>>  @@ -114,6 +114,7 @@ enum jz4740_mmc_version {
+>>          JZ_MMC_JZ4740,
+>>          JZ_MMC_JZ4725B,
+>>          JZ_MMC_JZ4760,
+>>  +       JZ_MMC_JZ4770,
+>>          JZ_MMC_JZ4780,
+>>          JZ_MMC_X1000,
+>>   };
+>>  @@ -887,7 +888,13 @@ static int jz4740_mmc_set_clock_rate(struct=20
+>> jz4740_mmc_host *host, int rate)
+>>          int real_rate;
+>>=20
+>>          jz4740_mmc_clock_disable(host);
+>>  -       clk_set_rate(host->clk, host->mmc->f_max);
+>>  +
+>>  +       /*
+>>  +        * Changing rate on these SoCs affects other MMC units too.
+>>  +        * Make sure the rate is configured properly by the CGU=20
+>> driver.
+>>  +        */
+>>  +       if (host->version !=3D JZ_MMC_JZ4725B && host->version !=3D=20
+>> JZ_MMC_JZ4760)
+>>  +               clk_set_rate(host->clk, host->mmc->f_max);
+>>=20
+>>          real_rate =3D clk_get_rate(host->clk);
+>>=20
+>>  @@ -992,6 +999,7 @@ static const struct of_device_id=20
+>> jz4740_mmc_of_match[] =3D {
+>>          { .compatible =3D "ingenic,jz4740-mmc", .data =3D (void *)=20
+>> JZ_MMC_JZ4740 },
+>>          { .compatible =3D "ingenic,jz4725b-mmc", .data =3D (void=20
+>> *)JZ_MMC_JZ4725B },
+>>          { .compatible =3D "ingenic,jz4760-mmc", .data =3D (void *)=20
+>> JZ_MMC_JZ4760 },
+>>  +       { .compatible =3D "ingenic,jz4770-mmc", .data =3D (void *)=20
+>> JZ_MMC_JZ4770 },
+>>          { .compatible =3D "ingenic,jz4775-mmc", .data =3D (void *)=20
+>> JZ_MMC_JZ4780 },
+>>          { .compatible =3D "ingenic,jz4780-mmc", .data =3D (void *)=20
+>> JZ_MMC_JZ4780 },
+>>          { .compatible =3D "ingenic,x1000-mmc", .data =3D (void *)=20
+>> JZ_MMC_X1000 },
+>>  --
+>>  2.36.1
+>>=20
+
+
