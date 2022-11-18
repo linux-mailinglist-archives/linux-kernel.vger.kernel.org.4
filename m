@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B3A62FF29
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B9062FF31
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiKRVIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 16:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S230138AbiKRVLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 16:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKRVIj (ORCPT
+        with ESMTP id S229506AbiKRVLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 16:08:39 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8741F12636;
-        Fri, 18 Nov 2022 13:08:36 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AIL8Pjs098709;
-        Fri, 18 Nov 2022 15:08:25 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668805705;
-        bh=Yr4LSYGMtRX7f6gDoB3pzPK7VDSrGB+Mip9zdhZE6vY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=pg20JjDTtULID4xVlEvXyUlUafjzZhVP48+U3vrSY7Kj8EzhZGkbUXODNcNIUpQnR
-         pTFqmHHd4D5Rk45dCVDgqmf8jNus6PXqlQUgS9EQWdHA51ZcMjgWVArO4cJ9dxUzzL
-         LEUg+foyGY8CZoHE4zSnYyQA8sG71fBn1PuI0H1k=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AIL8PhZ102998
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Nov 2022 15:08:25 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
- Nov 2022 15:08:25 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 18 Nov 2022 15:08:24 -0600
-Received: from [10.250.38.44] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AIL8Op3017735;
-        Fri, 18 Nov 2022 15:08:24 -0600
-Message-ID: <3d5e41f6-16a8-4298-ccd3-6db60f94eb47@ti.com>
-Date:   Fri, 18 Nov 2022 15:08:23 -0600
+        Fri, 18 Nov 2022 16:11:50 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129F07CBA9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:11:50 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso6196501pjc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HS164PT1thWPX3+gJIUevbDgvzJj6XIx86U2ombNC6E=;
+        b=V/10M61BAwjqfgwtW4m6+OLQQQVNW5qdkveInE2+NDix/ZB0ARQlpjaAePjf5krNjS
+         MfLKsZzwmVtauIFxprl09NW9We65OAoxeJWj7HCzZ/aVDrFkBYTHh1dkZ6nuM9dC16uU
+         ucPcJeE0B3y0t2RAv5Of1RObH4YoSyPsD1+cQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HS164PT1thWPX3+gJIUevbDgvzJj6XIx86U2ombNC6E=;
+        b=zU4trdxIvz73b6MP1QRXou/GfLTrsAHrbmEYe9D4h4wgt5ZFBXYXWu3QRMVyqH+Vw0
+         DN6/VvX6nrV9rfCEXxzwsjAjwxbHQfeuo3tWNg3PG0P5mVv1z7jrOo3wZkvq2BvViBWK
+         NL31XfIXDP1/MBd89a5mmnkFCDKeXAhvKMHGLmBXmbphUlf3uwsIyIrzCU3jnDFOeS2q
+         orasR+nq3Cc3A7i7crPa2XuLRYryGbcNpV3KtS9fTn1cpGQ2H3X3i0zqh3WNPld+bokg
+         OdEfiS7k5sv15NZq0cDnHyUBCl3inNPDln5bAHG0hs4yazQKrk7FvbF5rOxb5IarLdLR
+         FPbQ==
+X-Gm-Message-State: ANoB5pm8nBFepq5XPC9DpEytVY+pqJHk80raI5X4Fi5wKLeeY0jfnPRW
+        C2wV+xS0vrS4XCwSr+73uZyzNg==
+X-Google-Smtp-Source: AA0mqf4/MwFX1Iqiu6FlU+9aTkJHZtAuq3pA/aTFngJdcgaTXnpd6zMAORQYE38fec5SPq+7DuJKbA==
+X-Received: by 2002:a17:902:e385:b0:178:7040:9917 with SMTP id g5-20020a170902e38500b0017870409917mr1179204ple.109.1668805909571;
+        Fri, 18 Nov 2022 13:11:49 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170902d48600b001782aab6318sm4262797plg.68.2022.11.18.13.11.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 13:11:49 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Lamparter <chunkeey@googlemail.com>
+Cc:     Kees Cook <keescook@chromium.org>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] carl9170: Replace zero-length array of trailing structs with flex-array
+Date:   Fri, 18 Nov 2022 13:11:47 -0800
+Message-Id: <20221118211146.never.395-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-CC:     Apurva Nandan <a-nandan@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, Hari Nagalla <hnagalla@ti.com>
-References: <20221116130428.161329-1-a-nandan@ti.com>
- <20221116130428.161329-5-a-nandan@ti.com>
- <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
- <20221118174754.y37pq77drvla2uxj@tinderbox>
- <8c123fa2-caab-d2dd-5eb4-688f1c6abb33@ti.com>
- <20221118180808.wnel7d6gswsnooww@junkman>
- <93242211-95e7-09a0-fced-5ef2deb9fc08@ti.com>
- <20221118192744.wish2vrxgy7dg7c2@unnerving>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20221118192744.wish2vrxgy7dg7c2@unnerving>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1483; h=from:subject:message-id; bh=9oKJHA3pSUUlk2XRtoon41DyXm9EC5lRgSnJeNNG7Nk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjd/USLIkMsbwjhdEbLcOY3U5QPGKPBFNJ6YbZMJoZ 0ZDGQQyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3f1EgAKCRCJcvTf3G3AJpHOD/ wKY0GQZ2A8TAEq1UQ7FG9SLArIMDJDDT3g0EpAw5ve8vW+sMh1nv5jJPGd8MQerkzsujTsSPrh2G0c iPQbn+HlI6aQaDOuiuSEdMKJGqqOc/1WP87GGY3OOXa5shhaD6q8AQkfHE6oyrEuK33xeOmJVICKgY Av32wZ2kSTKy2HDZi+GdBlSzpoqkUFdB9AcQgajJ2V+ZbLWqvvWgQCUoU74qjujZDjsXqYuZJcBYdl CdsXdbJ7sYziQAXJB4p8ssHBg1rEfjeVaCx1066DHscGXgYa/if5SgIsCF5IE9pDxAKsUUEOGTYQPc ZsR+njBItdiDY8DYJSUCrstNR6hEmyJpA0u4cUsgH2uakYnt8hL43yIF4DTsNOpTqWDWUpoZpN14dh O4EHhbIrbHblUcz5TeFZgsg22MghgJlJMpsvW11AbpPtSH5rIwy5r7djol/fdNUeybVldBD5ZKVXCj 38UdKomgY//3Q+0O0D0SRKiTDgz3BJSRXrBAjSlu87cdhpNwXUvqoDeYsEcHi09tMwV8+46jUCZsEg SbDJFy4ZTezHATrffDLbWweDBK+LQo2UkP+WZVkah2C5E/Lj9wTIsoY1SXjbp1Bfv1U84zLoXOdpx8 fUksnNUWfZKOxTivJKSp1hVpry3W82obZcOz5rsCc6xdn67sycGb5AKyWgHw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 1:27 PM, Nishanth Menon wrote:
-> On 12:15-20221118, Andrew Davis wrote:
->> I don't see either of those addressed in that thread, only that
->> the aliases should go in the .dts files and be trimmed, nothing
-> 
-> Key is trimmed to what the system and ecosystem needs.
-> 
->> stops us from:
->>
->> chosen {
->> 	stdout-path = "serial10:115200n8";
->> };
->>
->> aliases {
->> 	serial10 = &main_uart8;
->> };
-> 
-> Do we need 10 serial aliases? There are'nt 10 serial ports exposed in
-> j782s2. ok - lets say we do this, then: [1] is needed to boot? but why
-> do we need to do that for all armv8 platforms when aliases allows us
+Zero-length arrays are deprecated[1] and are being replaced with
+flexible array members in support of the ongoing efforts to tighten the
+FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
 
-Why do we need SERIAL_8250_NR_UARTS at all, might be a better question.
-These should be dynamically allocated if the number goes over the
-default count imposed by the TTY framework. Maybe folks are still a
-bit too afraid to touch the TTY subsystem core, I don't blame them..
+Replace zero-length array with flexible-array member.
 
-> to trim it to just the 3 or 4 serial ports the platform really needs
-> That + being able to use the convention that serial2 is always linux
-> console, is'nt that a good thing? Hence recommending to just expose the
-> serialports as aliases to exactly what we need while keeping serial2 as
-> the linux console (which in this case happens to be main_uart8 - example
-> as j721s2 does).
-> 
+This results in no differences in binary output.
 
-"serial2 as the linux console" is *not* a convention, we just don't want to
-fix up our bootloader/userspace to actually reason about what serial ports to
-put logins on. Why not make ttyS10 the default, or ttyS666, it doesn't solve
-your multi-distro issue either way since they usually only start a login on
-ttyS0, console=, and/or the first virtual tty. Never on ttyS2. So you are
-hacking up DT for a solution that doesn't do what you want in the end.
+[1] https://github.com/KSPP/linux/issues/78
 
-Andrew
+Cc: Christian Lamparter <chunkeey@googlemail.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/wireless/ath/carl9170/fwcmd.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> [1] https://lore.kernel.org/lkml/3ab9addf-7938-fcf3-6147-15a998e37d2d@ti.com/
-> 
+diff --git a/drivers/net/wireless/ath/carl9170/fwcmd.h b/drivers/net/wireless/ath/carl9170/fwcmd.h
+index 4a500095555c..ff4b3b50250c 100644
+--- a/drivers/net/wireless/ath/carl9170/fwcmd.h
++++ b/drivers/net/wireless/ath/carl9170/fwcmd.h
+@@ -118,10 +118,10 @@ struct carl9170_reg_list {
+ } __packed;
+ 
+ struct carl9170_write_reg {
+-	struct {
++	DECLARE_FLEX_ARRAY(struct {
+ 		__le32		addr;
+ 		__le32		val;
+-	} regs[0] __packed;
++	} __packed, regs);
+ } __packed;
+ 
+ struct carl9170_write_reg_byte {
+-- 
+2.34.1
+
