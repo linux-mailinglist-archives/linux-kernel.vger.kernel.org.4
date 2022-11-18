@@ -2,254 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EF662FBB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6475262FB9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233821AbiKRRca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        id S235319AbiKRR3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242530AbiKRRcL (ORCPT
+        with ESMTP id S235084AbiKRR3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:32:11 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A32186EC;
-        Fri, 18 Nov 2022 09:32:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Nov 2022 12:29:10 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455FE1DDC6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:29:09 -0800 (PST)
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6253FCE221A;
-        Fri, 18 Nov 2022 17:32:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5560BC433C1;
-        Fri, 18 Nov 2022 17:32:05 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ck10xJJF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1668792724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GyKOGkofkPCvMPD0/UwJzzsEw9ZOaxhI19IJoJsqMz4=;
-        b=Ck10xJJFyJtJu2syfKbZVRObrnnQWQQl4uCW82Ixw9QTcO0pvDWSSDNrWQpF28KzVirC8E
-        94cCuokeZvQBA8UdWGqX3ec1roFifnyxFkjv+f9eQTeKIdo8EsDKQCId6MnKR5czXDdwCh
-        O2e9onhFhYQMa1O39oHan0T3zGUDSvY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 70c6e225 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 18 Nov 2022 17:32:04 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>
-Subject: [PATCH v4 3/3] x86: vdso: Wire up getrandom() vDSO implementation
-Date:   Fri, 18 Nov 2022 18:28:39 +0100
-Message-Id: <20221118172839.2653829-4-Jason@zx2c4.com>
-In-Reply-To: <20221118172839.2653829-1-Jason@zx2c4.com>
-References: <20221118172839.2653829-1-Jason@zx2c4.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5BBC43F481
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:29:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668792546;
+        bh=D0in/Z5ItBo4bdyVRZYshRBIPhbza+KDsy6dYC3xe9Y=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=gvhMagL8TblZL70Tc6THJTlXdp75lwl7v0l0TZWQW0yHIt2N8g0twTfAvS1IGXQmv
+         Mc1rAy8wnWMnOJ4sMXsvbL9EB0ObeWgPquVLwlCd5D8RY9dLNL4t9iXtlkbSGq3Hqg
+         E89+Hz/jsmYbBoNDx3r1LZhItO6OVFB0JdTFmT0sbcKC61CqLXTfrNZeP63KCpJ4zQ
+         QVsN90o7EK2xYt9psqdOvBc2pQ1aBAxWsO82z8zj0Q3WE1fhwPJv6lqpY5kjVq1cqM
+         +hRDacLcIIdJlR5qkvzCJQgvkncxH1UW9aG8ALRUor01goo+/dBAemS3hg0IzkoMAI
+         ehTeZSRnnSWTA==
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-39115d1267aso49643227b3.20
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:29:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D0in/Z5ItBo4bdyVRZYshRBIPhbza+KDsy6dYC3xe9Y=;
+        b=Kzlm54G2hym3kyREJeo/i5feoOiHN/LabVOqQplyCuPElrLsmF9b20fCik96geg/jD
+         +i0/oEzKRhnMeHR0QPiF3kUx5Cg1wCGQDGd1tGWp5QueF0VEWP4MwL8GDJbIyzE6tBoE
+         v11BImWJn6rluvr6FPe/dCUcCfYMsx1yz+e36kbpDO/2fV4CLqUbgPi7gmyneGxwTOhm
+         VVJ0uUoYiK+MMG0x89O8Z6ztCEg7/bwa6vCCgPZpgX3By+3YWSg9HPdoTZ4zfnEgcBL7
+         PYsppQhXPXUfG+wc1KGy+gQY6JzCYD6Vvh3702Mmev02hRmtpmoFLYwanRhh4a9EHD00
+         Wzsw==
+X-Gm-Message-State: ANoB5plBlbd462LZBXMmqqlA7xdHfGq8jzMw2qbpQ7W65YL2FONR3Elm
+        hXvEhiWcoA7pAkliODvZxLUUmSPcjaSVNFe4EJhSLJ64O+WZQmulidGBRAtNoepPSKnjGaq9p7H
+        AFiqIQftja+FfVy1ZNay2OEW6DwL3M8FzBeQ6i8RH+NyfKbl5pjjQJPCQJg==
+X-Received: by 2002:a81:f805:0:b0:378:5e3a:8fad with SMTP id z5-20020a81f805000000b003785e3a8fadmr7407461ywm.78.1668792544553;
+        Fri, 18 Nov 2022 09:29:04 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5xnJuotP89nNaWExJLuyVqseyLjsk+palJNHhKiqjsaZh7uoGA0lWccqFwr0budyNZij53O6Nn3CKWVR32m1M=
+X-Received: by 2002:a81:f805:0:b0:378:5e3a:8fad with SMTP id
+ z5-20020a81f805000000b003785e3a8fadmr7407449ywm.78.1668792544329; Fri, 18 Nov
+ 2022 09:29:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221118011714.70877-1-hal.feng@starfivetech.com> <20221118011714.70877-2-hal.feng@starfivetech.com>
+In-Reply-To: <20221118011714.70877-2-hal.feng@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 18 Nov 2022 18:28:48 +0100
+Message-ID: <CAJM55Z8edRB8U9tn5Ytyb37R-yD=QJ621rziqKDrtXNDppK=ow@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] dt-bindings: riscv: Add StarFive JH7110 SoC and
+ VisionFive2 board
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hook up the generic vDSO implementation to the x86 vDSO data page. Since
-the existing vDSO infrastructure is heavily based on the timekeeping
-functionality, which works over arrays of bases, a new macro is
-introduced for vvars that are not arrays.
+On Fri, 18 Nov 2022 at 02:17, Hal Feng <hal.feng@starfivetech.com> wrote:
+>
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>
+> Add device tree bindings for the StarFive JH7110 RISC-V SoC [1]
+> and the VisionFive2 board [2] equipped with it.
+>
+> [1]: https://doc-en.rvspace.org/Doc_Center/jh7110.html
+> [2]: https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
+>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/starfive.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/riscv/starfive.yaml b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> index 5b36243fd674..64008c57e31f 100644
+> --- a/Documentation/devicetree/bindings/riscv/starfive.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> @@ -22,6 +22,10 @@ properties:
+>            - const: beagle,beaglev-starlight-jh7100-r0
+>            - const: starfive,jh7100
+>
+> +      - items:
+> +          - const: starfive,visionfive-v2
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/x86/Kconfig                      |  1 +
- arch/x86/entry/vdso/Makefile          |  3 ++-
- arch/x86/entry/vdso/vdso.lds.S        |  2 ++
- arch/x86/entry/vdso/vgetrandom.c      | 16 ++++++++++++
- arch/x86/include/asm/vdso/getrandom.h | 37 +++++++++++++++++++++++++++
- arch/x86/include/asm/vdso/vsyscall.h  |  2 ++
- arch/x86/include/asm/vvar.h           | 16 ++++++++++++
- 7 files changed, 76 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/entry/vdso/vgetrandom.c
- create mode 100644 arch/x86/include/asm/vdso/getrandom.h
+I think StarFive has switched to just calling it VisionFive 2 and not
+V2. Please check up on this before committing to the compatible
+string.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 67745ceab0db..210318da7505 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -269,6 +269,7 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select HAVE_VDSO_GETRANDOM
- 	select HOTPLUG_SMT			if SMP
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 3e88b9df8c8f..adc3792dbbac 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -27,7 +27,7 @@ VDSO32-$(CONFIG_X86_32)		:= y
- VDSO32-$(CONFIG_IA32_EMULATION)	:= y
- 
- # files to link into the vdso
--vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o
-+vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o vgetrandom.o
- vobjs32-y := vdso32/note.o vdso32/system_call.o vdso32/sigreturn.o
- vobjs32-y += vdso32/vclock_gettime.o
- vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
-@@ -104,6 +104,7 @@ CFLAGS_REMOVE_vclock_gettime.o = -pg
- CFLAGS_REMOVE_vdso32/vclock_gettime.o = -pg
- CFLAGS_REMOVE_vgetcpu.o = -pg
- CFLAGS_REMOVE_vsgx.o = -pg
-+CFLAGS_REMOVE_vgetrandom.o = -pg
- 
- #
- # X32 processes use x32 vDSO to access 64bit kernel data.
-diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
-index 4bf48462fca7..1919cc39277e 100644
---- a/arch/x86/entry/vdso/vdso.lds.S
-+++ b/arch/x86/entry/vdso/vdso.lds.S
-@@ -28,6 +28,8 @@ VERSION {
- 		clock_getres;
- 		__vdso_clock_getres;
- 		__vdso_sgx_enter_enclave;
-+		getrandom;
-+		__vdso_getrandom;
- 	local: *;
- 	};
- }
-diff --git a/arch/x86/entry/vdso/vgetrandom.c b/arch/x86/entry/vdso/vgetrandom.c
-new file mode 100644
-index 000000000000..0a0c0ad93cd0
---- /dev/null
-+++ b/arch/x86/entry/vdso/vgetrandom.c
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+#include <linux/kernel.h>
-+#include <linux/types.h>
-+
-+#include "../../../../lib/vdso/getrandom.c"
-+
-+ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags, void *state)
-+{
-+	return __cvdso_getrandom(buffer, len, flags, state);
-+}
-+
-+ssize_t getrandom(void *, size_t, unsigned int, void *)
-+	__attribute__((weak, alias("__vdso_getrandom")));
-diff --git a/arch/x86/include/asm/vdso/getrandom.h b/arch/x86/include/asm/vdso/getrandom.h
-new file mode 100644
-index 000000000000..c414043e975d
---- /dev/null
-+++ b/arch/x86/include/asm/vdso/getrandom.h
-@@ -0,0 +1,37 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+#ifndef __ASM_VDSO_GETRANDOM_H
-+#define __ASM_VDSO_GETRANDOM_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <asm/unistd.h>
-+#include <asm/vvar.h>
-+
-+static __always_inline ssize_t
-+getrandom_syscall(void *buffer, size_t len, unsigned int flags)
-+{
-+	long ret;
-+
-+	asm ("syscall" : "=a" (ret) :
-+	     "0" (__NR_getrandom), "D" (buffer), "S" (len), "d" (flags) :
-+	     "rcx", "r11", "memory");
-+
-+	return ret;
-+}
-+
-+#define __vdso_rng_data (VVAR(_vdso_rng_data))
-+
-+static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
-+{
-+	if (__vdso_data->clock_mode == VDSO_CLOCKMODE_TIMENS)
-+		return (void *)&__vdso_rng_data +
-+		       ((void *)&__timens_vdso_data - (void *)&__vdso_data);
-+	return &__vdso_rng_data;
-+}
-+
-+#endif /* !__ASSEMBLY__ */
-+
-+#endif /* __ASM_VDSO_GETRANDOM_H */
-diff --git a/arch/x86/include/asm/vdso/vsyscall.h b/arch/x86/include/asm/vdso/vsyscall.h
-index be199a9b2676..71c56586a22f 100644
---- a/arch/x86/include/asm/vdso/vsyscall.h
-+++ b/arch/x86/include/asm/vdso/vsyscall.h
-@@ -11,6 +11,8 @@
- #include <asm/vvar.h>
- 
- DEFINE_VVAR(struct vdso_data, _vdso_data);
-+DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
-+
- /*
-  * Update the vDSO data page to keep in sync with kernel timekeeping.
-  */
-diff --git a/arch/x86/include/asm/vvar.h b/arch/x86/include/asm/vvar.h
-index 183e98e49ab9..9d9af37f7cab 100644
---- a/arch/x86/include/asm/vvar.h
-+++ b/arch/x86/include/asm/vvar.h
-@@ -26,6 +26,8 @@
-  */
- #define DECLARE_VVAR(offset, type, name) \
- 	EMIT_VVAR(name, offset)
-+#define DECLARE_VVAR_SINGLE(offset, type, name) \
-+	EMIT_VVAR(name, offset)
- 
- #else
- 
-@@ -37,6 +39,10 @@ extern char __vvar_page;
- 	extern type timens_ ## name[CS_BASES]				\
- 	__attribute__((visibility("hidden")));				\
- 
-+#define DECLARE_VVAR_SINGLE(offset, type, name)				\
-+	extern type vvar_ ## name					\
-+	__attribute__((visibility("hidden")));				\
-+
- #define VVAR(name) (vvar_ ## name)
- #define TIMENS(name) (timens_ ## name)
- 
-@@ -44,12 +50,22 @@ extern char __vvar_page;
- 	type name[CS_BASES]						\
- 	__attribute__((section(".vvar_" #name), aligned(16))) __visible
- 
-+#define DEFINE_VVAR_SINGLE(type, name)					\
-+	type name							\
-+	__attribute__((section(".vvar_" #name), aligned(16))) __visible
-+
- #endif
- 
- /* DECLARE_VVAR(offset, type, name) */
- 
- DECLARE_VVAR(128, struct vdso_data, _vdso_data)
- 
-+#if !defined(_SINGLE_DATA)
-+#define _SINGLE_DATA
-+DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
-+#endif
-+
- #undef DECLARE_VVAR
-+#undef DECLARE_VVAR_SINGLE
- 
- #endif
--- 
-2.38.1
+Also there are going to be different revisions of the VisionFive 2
+board, so maybe consider adding eg. starfive,visionfive-2-v1.1 and
+starfive,visionfive-2-v1,2b early.
 
+> +          - const: starfive,jh7110
+> +
+>  additionalProperties: true
+>
+>  ...
+> --
+> 2.38.1
+>
