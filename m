@@ -2,271 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4DE62EF9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3938462EFA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241581AbiKRIfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 03:35:17 -0500
+        id S241371AbiKRIf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 03:35:59 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241463AbiKRIey (ORCPT
+        with ESMTP id S241405AbiKRIff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 03:34:54 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E828EB6C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:34:13 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3704852322fso43000177b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:34:13 -0800 (PST)
+        Fri, 18 Nov 2022 03:35:35 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BF28E0B5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:35:14 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id g12so7105697lfh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:35:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyrIZGrkRGaBx3SBlr53l5QP2brkzSvBi6iVTIgs8bA=;
-        b=p/97bDSMHPSl8KJZhheAqVfFItZr4N5ToAF1sL/eRnSDT78a47IjZqZRBiAf1ZRvOg
-         StG+00tSdXWDsXeAgM1Yp4aXIAfaybTBv9cNAchnMtgmo5aXXMYFTmz0irktfNHmHGj6
-         HWDw/TPmRe0g0WB2Bn0IuhYCvVpx8PcVB34dJWrW/PoSrRDMyZ+v49sW/TslbSrrbRWe
-         IuAekW2Aa1UflkJMuh4WDsqRlRIRZieQ1tAGqw8BHbmtlDXAtkrp9FB38PUidu9Tt9Mw
-         +GTq7+MjLHDrW7xbA+tLEmVml4W+IkGZGuucNdqLMkzWITkL4uAGfzxdBda0MyxfbW0k
-         GLmw==
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0YWUFR1K0AdQwhBBk1QGoqIU48WrJ6fIhbloOFLZs/g=;
+        b=X6zxOsSK4rUUthEmp2P+Lwku13VFzCo9DyZ3QoTJZKTgpYnJQyG5+InN5mNv4AaESo
+         rnora71GL+4BGMZaY3hcR1GSGGIjdLzQwpI5aLueleXUM3bETaQicTXKVcalougjrxY8
+         fVVJPglLq7E8GAj1zrooA/eqBWhow9CdBxg7g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wyrIZGrkRGaBx3SBlr53l5QP2brkzSvBi6iVTIgs8bA=;
-        b=LvgEzHwDWGv9YKLYjXbFT6v5ejf9WTvBAQh2Vj+b7yuxhJX+tdINLEcRo76xw2dwS2
-         xF4jMVF1qB8ATyWmcmcFyYuvoihlq2F+fT4Oap/yEXpZF4pFR5wRtaMUVJYCKbP7xVpS
-         aYF8T785z373++QPDqU6/2bP/qromT10hj0shzpWdapImXOJc8Az3iJzh0IChocPYnJp
-         WLlT6Ev0krMxciliDZYFIw+vtjzKkJ3S+CuQqHe/CkenBt/bnOjXUGta8YaGBTr4UXFX
-         IFbkcm/ZoIOIUCk7oS37FsU/2q+IF5MfTJdWyAUFAmR9MeRUPJippWJ6JcUznY4Fb2Yx
-         TWHQ==
-X-Gm-Message-State: ANoB5pmPhHoENjLaM/wxPVWUTGZ+v/4yC/lWN9FgWqoYeuTvDRjX8ofV
-        04sjzR185ClCA+HX0qnM0gxkc0w1tKsKpSSWv6hLpw==
-X-Google-Smtp-Source: AA0mqf6Kvf44HlZn6iojLaECPn2leREJv9EFhtuvAZO/Mw6881fUR5KToU610B8qLHSvq9W6O51u62BW9Qbmllua0rI=
-X-Received: by 2002:a81:1717:0:b0:36f:c0f7:856f with SMTP id
- 23-20020a811717000000b0036fc0f7856fmr5472096ywx.4.1668760453041; Fri, 18 Nov
- 2022 00:34:13 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0YWUFR1K0AdQwhBBk1QGoqIU48WrJ6fIhbloOFLZs/g=;
+        b=brodU/HI0i7RwYUTAebIvCQyw4jNjl1z2jqM9Z/GmPWH8NXnYh0FEimuvha3y/elDQ
+         fb3/12+iihXA9UB3O9CZ7uQ83B3IEPhW/a4WeuK4zg1veZ7yTifd73e+GvYAD/eOhLkn
+         sgQHNvPOoXJNeMN22tb5+k3c8heJkfzqUQ30jHWc2LwnAOMxFRKv1P8x6X4FhgeTx38N
+         i+dwhF1TA7yqHQxcCoBraoN0Ud8g3iGMpPL92fkVSabggNObarwJuQg+z9ueJqYy4uLE
+         Z28KRT+Q/sloXq4g7FjNU6zjEgGvWuMeymqqM9kEJ2xbDEM/+jCcg4hAs6wLM6Q4HoVL
+         y4Nw==
+X-Gm-Message-State: ANoB5pk2dpRIsSP3n6vPlHixGrGQZwnxZrSlyb13IWTC1mxI+J8qZzZC
+        I+6xVzldHb3cr3MWtJtEuHVAkQ==
+X-Google-Smtp-Source: AA0mqf7DJq0j7pfPRdGrwhr/vqpSiF/rq95c7pCTI9lTkOFfwjGyDz06Cr8omSK46eWVUshsA9Z1Yw==
+X-Received: by 2002:a19:654e:0:b0:4a4:4e49:f2c9 with SMTP id c14-20020a19654e000000b004a44e49f2c9mr2329127lfj.194.1668760512487;
+        Fri, 18 Nov 2022 00:35:12 -0800 (PST)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id u3-20020a05651220c300b00496d3e6b131sm566779lfr.234.2022.11.18.00.33.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 00:34:36 -0800 (PST)
+Message-ID: <cd6e153b-953f-0374-364e-af649c82d8b4@rasmusvillemoes.dk>
+Date:   Fri, 18 Nov 2022 09:33:53 +0100
 MIME-Version: 1.0
-References: <20221117233838.give.484-kees@kernel.org> <20221117234328.594699-4-keescook@chromium.org>
-In-Reply-To: <20221117234328.594699-4-keescook@chromium.org>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 18 Nov 2022 09:33:36 +0100
-Message-ID: <CANpmjNN2oHP0xLhPG9TboqcXFxdvhE9Hh6qKa0xPGnyFyGDRQg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] panic: Consolidate open-coded panic_on_warn checks
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jann Horn <jannh@google.com>, Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Gow <davidgow@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] of: fdt: parse early params before adding bootloader
+ randomness
+Content-Language: en-US, da
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>
+References: <20221105014613.113503-1-Jason@zx2c4.com>
+ <CAL_JsqKA1_HV5V17mHkKn8X72c_UN2Jg=TYtJkt93YM6SSDMSg@mail.gmail.com>
+ <Y2lBj1ZIdFRf9HdR@zx2c4.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <Y2lBj1ZIdFRf9HdR@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 at 00:43, Kees Cook <keescook@chromium.org> wrote:
->
-> Several run-time checkers (KASAN, UBSAN, KFENCE, KCSAN, sched) roll
-> their own warnings, and each check "panic_on_warn". Consolidate this
-> into a single function so that future instrumentation can be added in
-> a single location.
->
-> Cc: Marco Elver <elver@google.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: David Gow <davidgow@google.com>
-> Cc: tangmeng <tangmeng@uniontech.com>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Cc: kasan-dev@googlegroups.com
-> Cc: linux-mm@kvack.org
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On 07/11/2022 18.34, Jason A. Donenfeld wrote:
+> On Mon, Nov 07, 2022 at 11:28:20AM -0600, Rob Herring wrote:
+>> On Fri, Nov 4, 2022 at 8:46 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>>>
+>>> FDT is examined so early that it's before the first incidental call to
+>>> parse_early_param(). This is similar to EFI, except EFI actually added
+>>> an explicitly call to parse_early_param(). Let's do the same here, so
+>>> that specifying `random.trust_bootloader=0` is not ignored.
+>>>
+>>> Fixes: d97c68d178fb ("random: treat bootloader trust toggle the same way as cpu trust toggle")
+>>> Cc: Rob Herring <robh@kernel.org>
+>>> Cc: Frank Rowand <frowand.list@gmail.com>
+>>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>>> ---
+>>>  drivers/of/fdt.c | 3 +++
+>>>  1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+>>> index 7b571a631639..6d959117fd4f 100644
+>>> --- a/drivers/of/fdt.c
+>>> +++ b/drivers/of/fdt.c
+>>> @@ -1195,6 +1195,9 @@ int __init early_init_dt_scan_chosen(char *cmdline)
+>>>
+>>>         rng_seed = of_get_flat_dt_prop(node, "rng-seed", &l);
+>>>         if (rng_seed && l > 0) {
+>>> +               /* Parse random.trust_bootloader if it's in command line. */
+>>> +               parse_early_param();
+>>
+>> I don't think it's good that the timing of calling this is dependent
+>> on "rng-seed" being present or not. So perhaps move it up to after the
+>> cmdline is set.
+>>
+>> Either way, the other issue is the cmdline is not necessarily fixed at
+>> this point with some architectures doing their own
+>> append/prepend/override of the cmdline. We can't seem to get common
+>> implementation there finished. I'm doubtful that corner case would
+>> actually be hit though.
+> 
+> Hm, yea. I'm actually now having second thoughts about this one too for
+> other reasons: FDT isn't the only arch that has this issue. It's also a
+> problem on x86 and m68k. Maybe the random.trust_bootloader toggle should
+> just go away, since already your bootloader can do whatever it wants to
+> the kernel it executes? Not sure; I'll think on it a bit I guess...
 
-Reviewed-by: Marco Elver <elver@google.com>
+Well, for the FDT case it least one could preserve the ability for the
+bootloader to say "hey, here's a bunch of bytes, but I have reason to
+believe they're not as random as you'd like" by setting a boolean
+"rng-seed-is-crap" [pick a better name] property alongside the rng-seed
+property. Then the kernel logic could be CONFIG_TRUST_BOOT_LOADER &&
+!of_get_bool("rng-seed-is-crap"). Currently, the only thing the
+bootloader could do in that case is to just elide the rng-seed
+completely (or set the not-actually-working cmdline flag).
 
-> ---
->  include/linux/panic.h | 1 +
->  kernel/kcsan/report.c | 3 +--
->  kernel/panic.c        | 9 +++++++--
->  kernel/sched/core.c   | 3 +--
->  lib/ubsan.c           | 3 +--
->  mm/kasan/report.c     | 4 ++--
->  mm/kfence/report.c    | 3 +--
->  7 files changed, 14 insertions(+), 12 deletions(-)
->
-> diff --git a/include/linux/panic.h b/include/linux/panic.h
-> index c7759b3f2045..979b776e3bcb 100644
-> --- a/include/linux/panic.h
-> +++ b/include/linux/panic.h
-> @@ -11,6 +11,7 @@ extern long (*panic_blink)(int state);
->  __printf(1, 2)
->  void panic(const char *fmt, ...) __noreturn __cold;
->  void nmi_panic(struct pt_regs *regs, const char *msg);
-> +void check_panic_on_warn(const char *origin);
->  extern void oops_enter(void);
->  extern void oops_exit(void);
->  extern bool oops_may_print(void);
-> diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-> index 67794404042a..e95ce7d7a76e 100644
-> --- a/kernel/kcsan/report.c
-> +++ b/kernel/kcsan/report.c
-> @@ -492,8 +492,7 @@ static void print_report(enum kcsan_value_change value_change,
->         dump_stack_print_info(KERN_DEFAULT);
->         pr_err("==================================================================\n");
->
-> -       if (panic_on_warn)
-> -               panic("panic_on_warn set ...\n");
-> +       check_panic_on_warn("KCSAN");
->  }
->
->  static void release_report(unsigned long *flags, struct other_info *other_info)
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index d843d036651e..cfa354322d5f 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -201,6 +201,12 @@ static void panic_print_sys_info(bool console_flush)
->                 ftrace_dump(DUMP_ALL);
->  }
->
-> +void check_panic_on_warn(const char *origin)
-> +{
-> +       if (panic_on_warn)
-> +               panic("%s: panic_on_warn set ...\n", origin);
-> +}
-> +
->  /**
->   *     panic - halt the system
->   *     @fmt: The text string to print
-> @@ -619,8 +625,7 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
->         if (regs)
->                 show_regs(regs);
->
-> -       if (panic_on_warn)
-> -               panic("panic_on_warn set ...\n");
-> +       check_panic_on_warn("kernel");
->
->         if (!regs)
->                 dump_stack();
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 5800b0623ff3..285ef8821b4f 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5729,8 +5729,7 @@ static noinline void __schedule_bug(struct task_struct *prev)
->                 pr_err("Preemption disabled at:");
->                 print_ip_sym(KERN_ERR, preempt_disable_ip);
->         }
-> -       if (panic_on_warn)
-> -               panic("scheduling while atomic\n");
-> +       check_panic_on_warn("scheduling while atomic");
->
->         dump_stack();
->         add_taint(TAINT_WARN, LOCKDEP_STILL_OK);
-> diff --git a/lib/ubsan.c b/lib/ubsan.c
-> index 36bd75e33426..60c7099857a0 100644
-> --- a/lib/ubsan.c
-> +++ b/lib/ubsan.c
-> @@ -154,8 +154,7 @@ static void ubsan_epilogue(void)
->
->         current->in_ubsan--;
->
-> -       if (panic_on_warn)
-> -               panic("panic_on_warn set ...\n");
-> +       check_panic_on_warn("UBSAN");
->  }
->
->  void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs)
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index df3602062bfd..cc98dfdd3ed2 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -164,8 +164,8 @@ static void end_report(unsigned long *flags, void *addr)
->                                        (unsigned long)addr);
->         pr_err("==================================================================\n");
->         spin_unlock_irqrestore(&report_lock, *flags);
-> -       if (panic_on_warn && !test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
-> -               panic("panic_on_warn set ...\n");
-> +       if (!test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
-> +               check_panic_on_warn("KASAN");
->         if (kasan_arg_fault == KASAN_ARG_FAULT_PANIC)
->                 panic("kasan.fault=panic set ...\n");
->         add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
-> diff --git a/mm/kfence/report.c b/mm/kfence/report.c
-> index 7e496856c2eb..110c27ca597d 100644
-> --- a/mm/kfence/report.c
-> +++ b/mm/kfence/report.c
-> @@ -268,8 +268,7 @@ void kfence_report_error(unsigned long address, bool is_write, struct pt_regs *r
->
->         lockdep_on();
->
-> -       if (panic_on_warn)
-> -               panic("panic_on_warn set ...\n");
-> +       check_panic_on_warn("KFENCE");
->
->         /* We encountered a memory safety error, taint the kernel! */
->         add_taint(TAINT_BAD_PAGE, LOCKDEP_STILL_OK);
-> --
-> 2.34.1
->
+I don't think it's a loss to not have a way for the bootloader to turn
+on a trust-me flag.
+
+Rasmus
+
