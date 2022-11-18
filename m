@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF2662FF9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A238D62FF9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiKRVwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 16:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
+        id S230484AbiKRVyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 16:54:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiKRVwX (ORCPT
+        with ESMTP id S229606AbiKRVye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 16:52:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00168A9972;
-        Fri, 18 Nov 2022 13:52:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9889DB8255C;
-        Fri, 18 Nov 2022 21:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6344BC433C1;
-        Fri, 18 Nov 2022 21:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668808340;
-        bh=0cxrDpCwAMLk20jFMUHD/+u3L6thMq/hKuFlsCzqPWQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f3fGrrFzwpkh+5okDDUnpw4F6fUgoDBavKgkQdikAfgCdvvbjc4DqYjVsNXNXfeJG
-         wEfxFdszGHyCeJ0mJBpjBz5DkP9GIWfBtiv1pwOaMctD/mGl5/kR6CppBKbOQkoKiN
-         zDTovMqZWT67X6sLU2lrW96HaslsX9PFxXeHEhmklPS8nIH5Vzg1+pMyBISPfYy1Bf
-         pg2Qb1osaxU+BMw5k4j3SUuHPmgHC5xQffVkgHM8ZhQ3g8AYcxzrde1zpof8JMtME2
-         NW5XmNFpTl3aKB9uh8qzXBJIkzNxq+8D1Y7PnTsjZnG4vj2T2SDvkUwyo9rjyzGwf8
-         l8vtbIBGiNvGA==
-Received: by mail-lj1-f170.google.com with SMTP id x21so8368179ljg.10;
-        Fri, 18 Nov 2022 13:52:20 -0800 (PST)
-X-Gm-Message-State: ANoB5pndDg0AQ+iE1X/gcHXiLfTmG+oI2NXxsh17+auqbtIWyb6sRcOx
-        63+cJ0eCOFCOPpUzLvRXzqb3zF51+zw0NouvXg==
-X-Google-Smtp-Source: AA0mqf4XaC3HUFYd0cpd8pfENTYkpLT+rDEu5EqRwsFJTg0pPxnLvsBb4Mty+XHF8EMEDzaHvnlaXxXsyxQJDrZYtTI=
-X-Received: by 2002:a05:651c:12ca:b0:277:a9d:9355 with SMTP id
- 10-20020a05651c12ca00b002770a9d9355mr2838505lje.102.1668808338344; Fri, 18
- Nov 2022 13:52:18 -0800 (PST)
+        Fri, 18 Nov 2022 16:54:34 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18335729BF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:54:33 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ow9JN-0001VE-Mm; Fri, 18 Nov 2022 22:54:13 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ow9JI-0057eY-6O; Fri, 18 Nov 2022 22:54:09 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ow9JI-00HaPG-6M; Fri, 18 Nov 2022 22:54:08 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        dmaengine@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] ARM: s3c: Fix a build error after the s3c24xx dma driver was removed
+Date:   Fri, 18 Nov 2022 22:54:01 +0100
+Message-Id: <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221021203329.4143397-14-arnd@kernel.org>
+References: <20221021203329.4143397-14-arnd@kernel.org>
 MIME-Version: 1.0
-References: <8b976cf546bad3aa159a6f05cd3c15d1@walle.cc> <20221118214036.1269005-1-michael@walle.cc>
-In-Reply-To: <20221118214036.1269005-1-michael@walle.cc>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 18 Nov 2022 15:52:09 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKnuycUSHfxxcZMcidELA-ttZUv5NhV5ApkpUQMsc-aQQ@mail.gmail.com>
-Message-ID: <CAL_JsqKnuycUSHfxxcZMcidELA-ttZUv5NhV5ApkpUQMsc-aQQ@mail.gmail.com>
-Subject: Re: [PATCH] of: property: special #nvmem-cell-cells handling
-To:     Michael Walle <michael@walle.cc>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=789; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=MQY1mKOHphIR2YvCjrphAII3VS7+7iYHC7fhsww+j8w=; b=owGbwMvMwMV48I9IxdpTbzgZT6slMSSX//ua9fr08cpF3wMzXx2QYMvNjLz6dYfKM7P3JcWrNxZy BM1c1clozMLAyMUgK6bIUlekJTZBYs1/u5Il3DCDWJlApjBwcQrARE5UsP+PV9M77fDWfJM8w+2Kw8 UnfiWJ7znC2f3T54qeT6laQu8n5yq9n1tdlneoO14WtnjDwrr4YamuzIS5rCsk/6XFPxXzSVHNPDy5 ved3nIHfkc6bmvYKgbaV3GfYHMwSS8qidL/rTza8GTuf9X3azfOCASYz1n9bmHa58XsKp2Rty1cGn6 D2nZEzws13pTv0KjRPXemQGxPVqDvZZldAbqnN3LN2YWZTN+/2/ZH+53Lcw9gbjmJel6ZLKekwL9jH 1P+C4/L7+v3Ft40P9Xmum72Py23dyyrNmp+1STqOcfWVBsq7L0fu7mDpY1U3rEjiy/xaW6LTqbmqSt Ti4hMZvQrtlzlsFq3Xt9XOtRIBAA==
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,53 +60,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 3:40 PM Michael Walle <michael@walle.cc> wrote:
->
-> Since recently, there is a new #nvmem-cell-cells. To be backwards
-> compatible this is optional. Therefore, we need special handling and
-> cannot use DEFINE_SIMPLE_PROP() anymore.
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> This patch will be part of the following series:
-> https://lore.kernel.org/linux-arm-kernel/20221118185118.1190044-1-michael@walle.cc/
->
->  drivers/of/property.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/of/property.c b/drivers/of/property.c
-> index 967f79b59016..93c0ea662336 100644
-> --- a/drivers/of/property.c
-> +++ b/drivers/of/property.c
-> @@ -1305,7 +1305,6 @@ DEFINE_SIMPLE_PROP(dmas, "dmas", "#dma-cells")
->  DEFINE_SIMPLE_PROP(power_domains, "power-domains", "#power-domain-cells")
->  DEFINE_SIMPLE_PROP(hwlocks, "hwlocks", "#hwlock-cells")
->  DEFINE_SIMPLE_PROP(extcon, "extcon", NULL)
-> -DEFINE_SIMPLE_PROP(nvmem_cells, "nvmem-cells", NULL)
->  DEFINE_SIMPLE_PROP(phys, "phys", "#phy-cells")
->  DEFINE_SIMPLE_PROP(wakeup_parent, "wakeup-parent", NULL)
->  DEFINE_SIMPLE_PROP(pinctrl0, "pinctrl-0", NULL)
-> @@ -1381,6 +1380,22 @@ static struct device_node *parse_interrupts(struct device_node *np,
->         return of_irq_parse_one(np, index, &sup_args) ? NULL : sup_args.np;
->  }
->
-> +static struct device_node *parse_nvmem_cells(struct device_node *np,
-> +                                            const char *prop_name, int index)
-> +{
-> +       struct of_phandle_args sup_args;
-> +
-> +       if (strcmp(prop_name, "nvmem-cells"))
-> +               return NULL;
-> +
-> +       if (of_parse_phandle_with_optional_args(np, prop_name,
-> +                                               "#nvmem-cell-cells", index,
-> +                                               &sup_args))
-> +               return NULL;
-> +
-> +       return sup_args.np;
-> +}
+The linux/platform_data/dma-s3c24xx.h header file was removed. It didn't
+declare or define any symbol needed in devs.c though, so the #include
+can just be dropped.
 
-There's a couple of other cases like that (MSI IIRC), so can we
-generalize this to work in more than 1 case?
+Fixes: cccc46ae3623 ("dmaengine: remove s3c24xx driver")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ arch/arm/mach-s3c/devs.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Rob
+diff --git a/arch/arm/mach-s3c/devs.c b/arch/arm/mach-s3c/devs.c
+index 9ac07c023adf..a31d1c3038e8 100644
+--- a/arch/arm/mach-s3c/devs.c
++++ b/arch/arm/mach-s3c/devs.c
+@@ -29,7 +29,6 @@
+ #include <linux/sizes.h>
+ #include <linux/platform_data/s3c-hsudc.h>
+ #include <linux/platform_data/s3c-hsotg.h>
+-#include <linux/platform_data/dma-s3c24xx.h>
+ 
+ #include <linux/platform_data/media/s5p_hdmi.h>
+ 
+-- 
+2.38.1
+
