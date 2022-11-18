@@ -2,86 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B76962F9AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F5462F9BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242145AbiKRPtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
+        id S234973AbiKRPww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234455AbiKRPtu (ORCPT
+        with ESMTP id S242437AbiKRPux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:49:50 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F098B100
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:49:49 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 96280320029B;
-        Fri, 18 Nov 2022 10:49:46 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 18 Nov 2022 10:49:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1668786586; x=1668872986; bh=KqQEuKxfkbRxTU5nDAZWsBYliBRDq3obTAX
-        NYs/tvIE=; b=LHwyay5CtX5MpoR1iLOr8PAfRyE37G7z4XYVAbrRIz/WZCIn+av
-        5/sb3jQ1GeRJCdrrEV+LYGsuzghXdL2mgSL4HE+w6deMaPZES3L96l7GlPN6Qa/F
-        3i2X84FaMkaqd8uJRPosVDOsmpl5Pq6scuPW3M8dRp9LujqbpbbSZYJZH6hsFrKa
-        xQzWB9gi7aUbWQppWD4f1t1zp6YFMBUtqFJ1lmJdNEIo0/HSq7O51sB62pJCxHkm
-        oZEq0TDSUN/p/NYXHJ2l2fI7c6jbmRfmqke20ho4CnaDDdrDx8OuPDJ79T8EX2vy
-        I/k4V8i7soF8+CgSZ5QzuI0PHvNCbKf2+yA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1668786586; x=1668872986; bh=KqQEuKxfkbRxT
-        U5nDAZWsBYliBRDq3obTAXNYs/tvIE=; b=lYaJGjVJkv/Wx0CHAk/JR4cjQZOi8
-        ouePFaQuyM0eTxEQjeiCLnUtNWgYs5+tzUfaWbpZwTJy/D/Z9LlaGQgpgUhqGWzP
-        c+4D5zANcspwHF1gf7yR8XN5UUWe/XlEeQUDkFseLC8XmaWBcHRYui660Xs/Ydy1
-        IE2JegSQWUOV7ZEuj+0Nf+pk8ItWH24ZVCPgPt1r5cHg/x7QAuMNbMfEq8XToY7d
-        45S9WBa06KZPxdkokEmhOizI+g3xqr+R7DXTA3kS+3gnLCCR4wOWrM78FBfbcbMY
-        YXtn+wkFDsvgUEiZrTd06LeDj4tQw78rR+OkiV1R/B/yKlKLFQ6H4lHiA==
-X-ME-Sender: <xms:mal3Y5h2s0SAIu7AYYR2Ljk8Nkk2qVK81MU6DjG8Z10MIzcLDJ38Qw>
-    <xme:mal3Y-AqDOmZq-EummTFHmZUN-j2czr8RkVS8cNCrcpRhCrcpb4cQWVGm-xMDlXdw
-    _CgxYO1JQJN-g>
-X-ME-Received: <xmr:mal3Y5HZk-bKV_aZEyMIlTTD_S4a71xmStx9L1PvfkdsJZ6epff9MDZ3DWozS2MgoyQkpPe7PjpJ54uLLx53fKTcBOAdTQCqlHUvuqFNFS1uAgUPY_U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedtgdekvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepofgrrhgvkhcu
-    ofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinhhvih
-    hsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepleekhfdu
-    leetleelleetteevfeefteffkeetteejheelgfegkeelgeehhfdthedvnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrrhhmrghrvghksehi
-    nhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
-X-ME-Proxy: <xmx:mal3Y-RU-5Yzmk9KfZNVmM49J_cfXADtNHxJixdzSpRAeymdh_OogA>
-    <xmx:mal3Y2zBu00d8jf_FVavc88jqhftd4AC3rTkakG8MuIk9iHi6w9ufQ>
-    <xmx:mal3Y07_LkErtCrLmbUa5RYlbBhM4iwoZma1vWTbegV9A16dhDc1Vw>
-    <xmx:mql3YwvkzGryKrWF4yHBO2gNhLPlf29KzNX5F4PqVEJte4XkKEcSxw>
-Feedback-ID: i1568416f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Nov 2022 10:49:44 -0500 (EST)
-From:   =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        xen-devel@lists.xenproject.org (moderated list:XEN HYPERVISOR INTERFACE)
-Subject: [PATCH v3] xen-pciback: Consider INTx disabled when MSI/MSI-X is enabled
-Date:   Fri, 18 Nov 2022 16:49:23 +0100
-Message-Id: <20221118154931.1928298-1-marmarek@invisiblethingslab.com>
-X-Mailer: git-send-email 2.37.3
+        Fri, 18 Nov 2022 10:50:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CB88B131
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:49:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668786594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f0l961mOiSvfsHXNC9b/4yL94fMPoEXmeS8Dl+sxaT8=;
+        b=cDS+gEqgTxQyXDDO4CZ+fmuJpaM/7WR1lANsy0H2+N58OlaJmwZBBQGRzvoc8hUIKvwe/1
+        EeapbLrIp5tp6sv09en8vdC3TcwEOVOm1E1G4X/Y4BwSjdkXMIe6Jq5zMrXtohRWwn8wfN
+        M3sY02iXQVnBOVvOcjxbC01CQ70dn2Y=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-102-trLBXlhbN5-D4oMcLJIDlw-1; Fri, 18 Nov 2022 10:49:52 -0500
+X-MC-Unique: trLBXlhbN5-D4oMcLJIDlw-1
+Received: by mail-wm1-f70.google.com with SMTP id o5-20020a05600c510500b003cfca1a327fso2425901wms.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:49:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f0l961mOiSvfsHXNC9b/4yL94fMPoEXmeS8Dl+sxaT8=;
+        b=xo3aU5BM7qY2v5DftPOmg2M8qJbU+hdBAp2EzGtMc4dzBuxrUtHzLgAhewBGABbtKR
+         3yvDM6hxKxLxzvH9f0/I3b8s+ZIVefkvmciQiQJfxN25Bo50OAY+WZWRj+NO2dzYIEES
+         v+O5AJ/NDrFldswMbi1QOzEwQQtY0pyqLZam4aVh7J2L+op725EJroIw5fNTQkFtif2q
+         q7pq0o2KXNZZjVkbHKLXsys8JAaaGNufeFtwSoG+Jf9MsXYmaUzLHNm3IgqjLsVQ7Iak
+         agVyvZ1h8dnjo9og2TxI7d66X8QTCFmkvB36WK6iewxQpxUrdbYflwoxm3X84JoiSMcR
+         B3Lw==
+X-Gm-Message-State: ANoB5pmUkx1Va3TK5HDaPe9cEmQAn9trJ1VEMLsMbPXKX3DFBgWtQ982
+        TJHkSm8UyLMw9i2rzhIvP5cK7iFc5rGpEEwRbcb91OjQTeMIwO6NHaArBzq0Ey7SPw+VLe20NOX
+        ASri+nGhfERIOYAy9Tu+8oVkm
+X-Received: by 2002:a5d:6746:0:b0:22e:39c9:a4a6 with SMTP id l6-20020a5d6746000000b0022e39c9a4a6mr4764198wrw.170.1668786591680;
+        Fri, 18 Nov 2022 07:49:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5jlCG7seEl6CRYzUhjn7XrAab5Jm0ioGMACGL05tz5BA2MIRJoWKGbzbVbGzrZRpznzsvaHg==
+X-Received: by 2002:a5d:6746:0:b0:22e:39c9:a4a6 with SMTP id l6-20020a5d6746000000b0022e39c9a4a6mr4764178wrw.170.1668786591405;
+        Fri, 18 Nov 2022 07:49:51 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id f16-20020a5d50d0000000b00235da296623sm3807096wrt.31.2022.11.18.07.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 07:49:50 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     James Morse <james.morse@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        James Morse <james.morse@arm.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
+        baolin.wang@linux.alibaba.com, peternewman@google.com
+Subject: Re: [PATCH 07/18] x86/resctrl: Move CLOSID/RMID matching and
+ setting to use helpers
+In-Reply-To: <20221021131204.5581-8-james.morse@arm.com>
+References: <20221021131204.5581-1-james.morse@arm.com>
+ <20221021131204.5581-8-james.morse@arm.com>
+Date:   Fri, 18 Nov 2022 15:49:47 +0000
+Message-ID: <xhsmh8rk8xnxg.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,120 +90,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux enables MSI-X before disabling INTx, but keeps MSI-X masked until
-the table is filled. Then it disables INTx just before clearing MASKALL
-bit. Currently this approach is rejected by xen-pciback.
-According to the PCIe spec, device cannot use INTx when MSI/MSI-X is
-enabled (in other words: enabling MSI/MSI-X implicitly disables INTx).
+On 21/10/22 13:11, James Morse wrote:
+> When switching tasks, the CLOSID and RMID that the new task should
+> use are stored in struct task_struct. For x86 the CLOSID known by resctrl,
+> the value in task_struct, and the value written to the CPU register are
+> all the same thing.
+>
+> MPAM's CPU interface has two different PARTID's one for data accesses
+> the other for instruction fetch. Storing resctrl's CLOSID value in
+> struct task_struct implies the arch code knows whether resctrl is using
+> CDP.
+>
+> Move the matching and setting of the struct task_struct properties
+> to use helpers. This allows arm64 to store the hardware format of
+> the register, instead of having to convert it each time.
+>
+> __rdtgroup_move_task()s use of READ_ONCE()/WRITE_ONCE() ensures torn
+> values aren't seen as another CPU may schedule the task being moved
+> while the value is being changed. MPAM has an additional corner-case
+> here as the PMG bits extend the PARTID space. If the scheduler sees a
+> new-CLOSID but old-RMID, the task will dirty an RMID that the limbo code
+> is not watching causing an inaccurate count. x86's RMID are independent
+> values, so the limbo code will still be watching the old-RMID in this
+> circumstance.
+> To avoid this, arm64 needs both the CLOSID/RMID WRITE_ONCE()d together.
+> Both values must be provided together.
+>
 
-Change the logic to consider INTx disabled if MSI/MSI-X is enabled. This
-applies to three places:
- - checking currently enabled interrupts type,
- - transition to MSI/MSI-X - where INTx would be implicitly disabled,
- - clearing INTx disable bit - which can be allowed even if MSI/MSI-X is
-   enabled, as device should consider INTx disabled anyway in that case
+I think I remember something about this... Is that about having them
+union'd and read/written as one? (just for my own curiosity)
 
-Fixes: 5e29500eba2a ("xen-pciback: Allow setting PCI_MSIX_FLAGS_MASKALL too")
-Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
----
-Changes in v3:
- - allow clearing INTx regardless of MSI/MSI-X state, to be consistent
-   with enabling MSI/MSI-X
-Changes in v2:
- - restructure the patch to consider not only MASKALL bit, but enabling
-   MSI/MSI-X generally, without explicitly disabling INTx first
----
- drivers/xen/xen-pciback/conf_space.c          | 19 +++++++++++------
- .../xen/xen-pciback/conf_space_capability.c   |  3 ++-
- drivers/xen/xen-pciback/conf_space_header.c   | 21 +++----------------
- 3 files changed, 18 insertions(+), 25 deletions(-)
+> Because MPAM's RMID values are not unique, the CLOSID must be provided
+> when matching the RMID.
+>
+> CC: Valentin Schneider <vschneid@redhat.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
 
-diff --git a/drivers/xen/xen-pciback/conf_space.c b/drivers/xen/xen-pciback/conf_space.c
-index 059de92aea7d..d47eee6c5143 100644
---- a/drivers/xen/xen-pciback/conf_space.c
-+++ b/drivers/xen/xen-pciback/conf_space.c
-@@ -288,12 +288,6 @@ int xen_pcibk_get_interrupt_type(struct pci_dev *dev)
- 	u16 val;
- 	int ret = 0;
- 
--	err = pci_read_config_word(dev, PCI_COMMAND, &val);
--	if (err)
--		return err;
--	if (!(val & PCI_COMMAND_INTX_DISABLE))
--		ret |= INTERRUPT_TYPE_INTX;
--
- 	/*
- 	 * Do not trust dev->msi(x)_enabled here, as enabling could be done
- 	 * bypassing the pci_*msi* functions, by the qemu.
-@@ -316,6 +310,19 @@ int xen_pcibk_get_interrupt_type(struct pci_dev *dev)
- 		if (val & PCI_MSIX_FLAGS_ENABLE)
- 			ret |= INTERRUPT_TYPE_MSIX;
- 	}
-+
-+	/*
-+	 * PCIe spec says device cannot use INTx if MSI/MSI-X is enabled,
-+	 * so check for INTx only when both are disabled.
-+	 */
-+	if (!ret) {
-+		err = pci_read_config_word(dev, PCI_COMMAND, &val);
-+		if (err)
-+			return err;
-+		if (!(val & PCI_COMMAND_INTX_DISABLE))
-+			ret |= INTERRUPT_TYPE_INTX;
-+	}
-+
- 	return ret ?: INTERRUPT_TYPE_NONE;
- }
- 
-diff --git a/drivers/xen/xen-pciback/conf_space_capability.c b/drivers/xen/xen-pciback/conf_space_capability.c
-index 097316a74126..eb4c1af44f5c 100644
---- a/drivers/xen/xen-pciback/conf_space_capability.c
-+++ b/drivers/xen/xen-pciback/conf_space_capability.c
-@@ -236,10 +236,11 @@ static int msi_msix_flags_write(struct pci_dev *dev, int offset, u16 new_value,
- 		return PCIBIOS_SET_FAILED;
- 
- 	if (new_value & field_config->enable_bit) {
--		/* don't allow enabling together with other interrupt types */
-+		/* don't allow enabling together with other interrupt type */
- 		int int_type = xen_pcibk_get_interrupt_type(dev);
- 
- 		if (int_type == INTERRUPT_TYPE_NONE ||
-+		    int_type == INTERRUPT_TYPE_INTX ||
- 		    int_type == field_config->int_type)
- 			goto write;
- 		return PCIBIOS_SET_FAILED;
-diff --git a/drivers/xen/xen-pciback/conf_space_header.c b/drivers/xen/xen-pciback/conf_space_header.c
-index 981435103af1..fc0332645966 100644
---- a/drivers/xen/xen-pciback/conf_space_header.c
-+++ b/drivers/xen/xen-pciback/conf_space_header.c
-@@ -104,24 +104,9 @@ static int command_write(struct pci_dev *dev, int offset, u16 value, void *data)
- 		pci_clear_mwi(dev);
- 	}
- 
--	if (dev_data && dev_data->allow_interrupt_control) {
--		if ((cmd->val ^ value) & PCI_COMMAND_INTX_DISABLE) {
--			if (value & PCI_COMMAND_INTX_DISABLE) {
--				pci_intx(dev, 0);
--			} else {
--				/* Do not allow enabling INTx together with MSI or MSI-X. */
--				switch (xen_pcibk_get_interrupt_type(dev)) {
--				case INTERRUPT_TYPE_NONE:
--					pci_intx(dev, 1);
--					break;
--				case INTERRUPT_TYPE_INTX:
--					break;
--				default:
--					return PCIBIOS_SET_FAILED;
--				}
--			}
--		}
--	}
-+	if (dev_data && dev_data->allow_interrupt_control &&
-+	    ((cmd->val ^ value) & PCI_COMMAND_INTX_DISABLE))
-+		pci_intx(dev, !(value & PCI_COMMAND_INTX_DISABLE));
- 
- 	cmd->val = value;
- 
--- 
-2.37.3
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 
