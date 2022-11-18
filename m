@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD7463032E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611C4630742
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235653AbiKRXY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S234354AbiKSAa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235602AbiKRXWM (ORCPT
+        with ESMTP id S232643AbiKSAaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:22:12 -0500
+        Fri, 18 Nov 2022 19:30:00 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9276F950FC
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:13:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14201121EF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:40:50 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8D-0000yQ-JF; Fri, 18 Nov 2022 23:46:45 +0100
+        id 1owA8E-00010g-9m; Fri, 18 Nov 2022 23:46:46 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA89-0058K0-4C; Fri, 18 Nov 2022 23:46:42 +0100
+        id 1owA89-0058KF-QA; Fri, 18 Nov 2022 23:46:42 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA89-00Hb57-9x; Fri, 18 Nov 2022 23:46:41 +0100
+        id 1owA89-00Hb5G-OK; Fri, 18 Nov 2022 23:46:41 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 158/606] iio: magnetometer: mmc35240: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:12 +0100
-Message-Id: <20221118224540.619276-159-uwe@kleine-koenig.org>
+        <u.kleine-koenig@pengutronix.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 160/606] iio: potentiometer: ad5272: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:14 +0100
+Message-Id: <20221118224540.619276-161-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -63,35 +63,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/magnetometer/mmc35240.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/iio/potentiometer/ad5272.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/magnetometer/mmc35240.c b/drivers/iio/magnetometer/mmc35240.c
-index 186edfcda0b7..756dadbad106 100644
---- a/drivers/iio/magnetometer/mmc35240.c
-+++ b/drivers/iio/magnetometer/mmc35240.c
-@@ -481,8 +481,7 @@ static const struct regmap_config mmc35240_regmap_config = {
- 	.num_reg_defaults = ARRAY_SIZE(mmc35240_reg_defaults),
- };
+diff --git a/drivers/iio/potentiometer/ad5272.c b/drivers/iio/potentiometer/ad5272.c
+index ed5fc0b50fe9..aa140d632101 100644
+--- a/drivers/iio/potentiometer/ad5272.c
++++ b/drivers/iio/potentiometer/ad5272.c
+@@ -158,9 +158,9 @@ static int ad5272_reset(struct ad5272_data *data)
+ 	return 0;
+ }
  
--static int mmc35240_probe(struct i2c_client *client,
--			  const struct i2c_device_id *id)
-+static int mmc35240_probe(struct i2c_client *client)
+-static int ad5272_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int ad5272_probe(struct i2c_client *client)
  {
- 	struct mmc35240_data *data;
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct device *dev = &client->dev;
  	struct iio_dev *indio_dev;
-@@ -576,7 +575,7 @@ static struct i2c_driver mmc35240_driver = {
- 		.pm = pm_sleep_ptr(&mmc35240_pm_ops),
- 		.acpi_match_table = ACPI_PTR(mmc35240_acpi_match),
+ 	struct ad5272_data *data;
+@@ -218,7 +218,7 @@ static struct i2c_driver ad5272_driver = {
+ 		.name	= "ad5272",
+ 		.of_match_table = ad5272_dt_ids,
  	},
--	.probe		= mmc35240_probe,
-+	.probe_new	= mmc35240_probe,
- 	.id_table	= mmc35240_id,
+-	.probe		= ad5272_probe,
++	.probe_new	= ad5272_probe,
+ 	.id_table	= ad5272_id,
  };
  
 -- 
