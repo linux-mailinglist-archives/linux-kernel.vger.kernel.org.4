@@ -2,109 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE0862FDFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F03162FE02
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235367AbiKRT2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 14:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
+        id S235144AbiKRTcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiKRT15 (ORCPT
+        with ESMTP id S234867AbiKRTcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 14:27:57 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D685725DE;
-        Fri, 18 Nov 2022 11:27:54 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AIJRiun065186;
-        Fri, 18 Nov 2022 13:27:45 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668799665;
-        bh=AZsI4uAWUVHvsk4krFq0fSTfUz9BioebFL/dStV1c5c=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=DuirtsMV4tOFemOBjsECnXLVGaAwUZIGJbD5rey7OIpFqe3plYD1AJNYvfFcPfqrG
-         0qxJEBQ+Sn+eGynErgBYoklWVMMe6shrZdbuzHR8xffCPtkGLfdPW9CI+aprGrgg76
-         26wtWuE7z8YDKZnr2YG8zfKWDCB/88PJFIVg0iRI=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AIJRi2u021547
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Nov 2022 13:27:44 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
- Nov 2022 13:27:44 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 18 Nov 2022 13:27:44 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AIJRiN8052813;
-        Fri, 18 Nov 2022 13:27:44 -0600
-Date:   Fri, 18 Nov 2022 13:27:44 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Andrew Davis <afd@ti.com>
-CC:     Apurva Nandan <a-nandan@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, Hari Nagalla <hnagalla@ti.com>
-Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
-Message-ID: <20221118192744.wish2vrxgy7dg7c2@unnerving>
-References: <20221116130428.161329-1-a-nandan@ti.com>
- <20221116130428.161329-5-a-nandan@ti.com>
- <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
- <20221118174754.y37pq77drvla2uxj@tinderbox>
- <8c123fa2-caab-d2dd-5eb4-688f1c6abb33@ti.com>
- <20221118180808.wnel7d6gswsnooww@junkman>
- <93242211-95e7-09a0-fced-5ef2deb9fc08@ti.com>
+        Fri, 18 Nov 2022 14:32:06 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661AA786F5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:32:04 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id o7so5361408pjj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:32:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YT7jh12C9b+MGVUbQC67HmN3j2iOcFYyfJpQMQ1dp4c=;
+        b=nWMaCZ3QP/mFnpvGl93qvAIEWDpEyst5izQAWsgrbNJS4E4vPHQ5vE+8QCmrxGt/mt
+         DvDFNExdjyfLVA6gHlRG2uI/7rdjPKgjJDcEx8ZNv24iSqb7jE4p/WhzrFEPwxSDhqDY
+         1KfiV7EdIOU3PTZ6CxPRLMSNgZwvSusIsIloYZu5k8rk3yhLr6pL7xoMlmVEO+aaTPiv
+         jieYjfZawyQwnaSOYnTXIgsDoFZJ94RgM8/coHMH/tKiRRROOjNklNNjUyNgS6KpAL0Q
+         GSLomCr3HmLPe2vE66d9pj2Kh3Idc8ja5ibNriP61V3PZ2AsPyj776iGOLTs81CdCDZN
+         S8iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YT7jh12C9b+MGVUbQC67HmN3j2iOcFYyfJpQMQ1dp4c=;
+        b=AAyn3SvXMbANO/fxknPOpvrqwq9KIEFXTYKKoS+YDUCAhkw88I4K6G+RHcsV4yZAvF
+         mPtkO+l0ITMo+qlKe8FHdCSsm3xo+7cnS0STAQkYnJCPBFRHVlpDhOCuT2MEZZnM6vDD
+         qktcVBdE7q46NWQA9WJJA++Ee34PjS6NJf6HhlyfbDu2Hyi0cbdtQWd8WpkXuE8A46qY
+         M15FZHWofclAqZlKy98MptQgoGlGgYo06E7uc1zpIifzsEUavdUMYTkFpgo2GQCMxiqr
+         SiXw6vpFSMkDCfgDls+U954dxZ6QgYjZN3/W+l5UoWrW432JX5Lt9uOT6/vgMB2d5/ak
+         yOMQ==
+X-Gm-Message-State: ANoB5pmC2UOiTi2eyn2fILJtDr0vRKoo6TylL32clQXFlE9Cd5B9JBts
+        YiebvYq0P5pGF4VQoEovpF8=
+X-Google-Smtp-Source: AA0mqf7HQUep/xODul/qAH2LRmvIbHpj0vO/tG3rt0ek/yMX9K71eY6mGcsX8r0Z759elpZeUn7FIw==
+X-Received: by 2002:a17:902:7881:b0:185:5537:f399 with SMTP id q1-20020a170902788100b001855537f399mr990413pll.39.1668799923782;
+        Fri, 18 Nov 2022 11:32:03 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:bba9:9f92:b2cc:16a4])
+        by smtp.gmail.com with ESMTPSA id cp17-20020a170902e79100b00186b8752a78sm4080558plb.80.2022.11.18.11.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 11:32:03 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 18 Nov 2022 11:32:01 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ngupta@vflare.org,
+        senozhatsky@chromium.org, sjenning@redhat.com, ddstreet@ieee.org,
+        vitaly.wool@konsulko.com
+Subject: Re: [PATCH v5 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
+ zspages in LRU order
+Message-ID: <Y3fdsTDFgCzhcDwo@google.com>
+References: <20221118182407.82548-1-nphamcs@gmail.com>
+ <20221118182407.82548-5-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <93242211-95e7-09a0-fced-5ef2deb9fc08@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221118182407.82548-5-nphamcs@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12:15-20221118, Andrew Davis wrote:
-> I don't see either of those addressed in that thread, only that
-> the aliases should go in the .dts files and be trimmed, nothing
-
-Key is trimmed to what the system and ecosystem needs.
-
-> stops us from:
+On Fri, Nov 18, 2022 at 10:24:05AM -0800, Nhat Pham wrote:
+> This helps determines the coldest zspages as candidates for writeback.
 > 
-> chosen {
-> 	stdout-path = "serial10:115200n8";
-> };
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+>  mm/zsmalloc.c | 45 +++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 43 insertions(+), 2 deletions(-)
 > 
-> aliases {
-> 	serial10 = &main_uart8;
-> };
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index 326faa751f0a..9e7b54324181 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -239,6 +239,11 @@ struct zs_pool {
+>  	/* Compact classes */
+>  	struct shrinker shrinker;
+> 
+> +#ifdef CONFIG_ZPOOL
+> +	/* List tracking the zspages in LRU order by most recently added object */
+> +	struct list_head lru;
+> +#endif
+> +
+>  #ifdef CONFIG_ZSMALLOC_STAT
+>  	struct dentry *stat_dentry;
+>  #endif
+> @@ -260,6 +265,12 @@ struct zspage {
+>  	unsigned int freeobj;
+>  	struct page *first_page;
+>  	struct list_head list; /* fullness list */
+> +
+> +#ifdef CONFIG_ZPOOL
+> +	/* links the zspage to the lru list in the pool */
+> +	struct list_head lru;
+> +#endif
+> +
+>  	struct zs_pool *pool;
+>  #ifdef CONFIG_COMPACTION
+>  	rwlock_t lock;
+> @@ -352,6 +363,18 @@ static void cache_free_zspage(struct zs_pool *pool, struct zspage *zspage)
+>  	kmem_cache_free(pool->zspage_cachep, zspage);
+>  }
+> 
+> +#ifdef CONFIG_ZPOOL
+> +/* Moves the zspage to the front of the zspool's LRU */
+> +static void move_to_front(struct zs_pool *pool, struct zspage *zspage)
+> +{
+> +	assert_spin_locked(&pool->lock);
+> +
+> +	if (!list_empty(&zspage->lru))
+> +		list_del(&zspage->lru);
+> +	list_add(&zspage->lru, &pool->lru);
+> +}
+> +#endif
+> +
+>  /* pool->lock(which owns the handle) synchronizes races */
+>  static void record_obj(unsigned long handle, unsigned long obj)
+>  {
+> @@ -953,6 +976,9 @@ static void free_zspage(struct zs_pool *pool, struct size_class *class,
+>  	}
+> 
+>  	remove_zspage(class, zspage, ZS_EMPTY);
+> +#ifdef CONFIG_ZPOOL
+> +	list_del(&zspage->lru);
+> +#endif
+>  	__free_zspage(pool, class, zspage);
+>  }
+> 
+> @@ -998,6 +1024,10 @@ static void init_zspage(struct size_class *class, struct zspage *zspage)
+>  		off %= PAGE_SIZE;
+>  	}
+> 
+> +#ifdef CONFIG_ZPOOL
+> +	INIT_LIST_HEAD(&zspage->lru);
+> +#endif
+> +
+>  	set_freeobj(zspage, 0);
+>  }
+> 
+> @@ -1418,9 +1448,8 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+>  		fix_fullness_group(class, zspage);
+>  		record_obj(handle, obj);
+>  		class_stat_inc(class, OBJ_USED, 1);
+> -		spin_unlock(&pool->lock);
+> 
+> -		return handle;
+> +		goto out;
+>  	}
+> 
+>  	spin_unlock(&pool->lock);
+> @@ -1444,6 +1473,11 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+> 
+>  	/* We completely set up zspage so mark them as movable */
+>  	SetZsPageMovable(pool, zspage);
+> +out:
+> +#ifdef CONFIG_ZPOOL
+> +	/* Move the zspage to front of pool's LRU */
+> +	move_to_front(pool, zspage);
+> +#endif
+>  	spin_unlock(&pool->lock);
 
-Do we need 10 serial aliases? There are'nt 10 serial ports exposed in
-j782s2. ok - lets say we do this, then: [1] is needed to boot? but why
-do we need to do that for all armv8 platforms when aliases allows us
-to trim it to just the 3 or 4 serial ports the platform really needs
-That + being able to use the convention that serial2 is always linux
-console, is'nt that a good thing? Hence recommending to just expose the
-serialports as aliases to exactly what we need while keeping serial2 as
-the linux console (which in this case happens to be main_uart8 - example
-as j721s2 does).
-
-[1] https://lore.kernel.org/lkml/3ab9addf-7938-fcf3-6147-15a998e37d2d@ti.com/
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Please move the move_to_front into zs_map_object with ZS_MM_WO with
+comment with "why we are doing only for WO case".
