@@ -2,190 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAAE62FA36
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F1862FA38
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242031AbiKRQ1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S235347AbiKRQ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:28:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241968AbiKRQ0w (ORCPT
+        with ESMTP id S241686AbiKRQ16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:26:52 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7209B922CD;
-        Fri, 18 Nov 2022 08:26:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1668788808; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eqga8JTYTp2zVjGVTJnxG4hmTKEKUsQWc87jKX+8+W4=;
-        b=dHWu9iuXvZDg25+OqM+9EVX2BdEp+pky56+F8HD1J9i6Qljl+AaCZIFWJsXNtenbehYrFC
-        kFoyGkqCsXMJsT8dkN/whlGB5BIS+oFtwSU+thKRVpLNl3LshaUlECXztG/ZUNF+8PqohC
-        LcyjXPitlqimuZT2iW2JZRGeV3NVwH4=
-Date:   Fri, 18 Nov 2022 16:26:38 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/3] net: davicom: dm9000: switch to using gpiod API
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <EOXJLR.T44BFQBJ4YLG1@crapouillou.net>
-In-Reply-To: <Y3ernUQfdWMBtO9z@google.com>
-References: <20220906204922.3789922-1-dmitry.torokhov@gmail.com>
-        <88VJLR.GYSEKGBPLGZC1@crapouillou.net> <Y3ernUQfdWMBtO9z@google.com>
+        Fri, 18 Nov 2022 11:27:58 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EE392B75;
+        Fri, 18 Nov 2022 08:27:55 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id m18so2650294vka.10;
+        Fri, 18 Nov 2022 08:27:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aP8xigMH6Cdm1FehOCVDAAEkuLsKjaAGKg6SNk11hm4=;
+        b=OTjo/3/lVabVMWDiNLgPqAXVGqRIpWx8gvTgzherYcnKTjbHY9eYeUmqjKxALgB6pv
+         d5haJ64lg6v/HMu5tYzW4aUQBG6vJka3W0/CpMw0oaumAZN/Zf4QpJkrwuSMIeM0pvdp
+         VgDCSu7Qo+KMGuRK4J2f6Bxlslls85Sh0fOjvTyquUo2EGEzcpa0rC5hyFpOTHc+ZUpC
+         W1LKg9Q2u645orMaA8H6nExHFVam0t60DF7qOXTN8raIvJI51IH3GxUhEWuxAnHbe7Tw
+         c5HGfpsJNnxkydeq/Z2TOYYSUPoq7B0tXBWGs0Ljap2EyOC1Q3L3vvS12/cYWh52codC
+         rCYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aP8xigMH6Cdm1FehOCVDAAEkuLsKjaAGKg6SNk11hm4=;
+        b=CwqqBVAZc3kG4gdXHj8JGTHkXZZjedtnJkiiGD2NTbwWwBgb51aMEydPcywnKzCTzH
+         tKE5OobEC5lJ/2cgMDJFwsnnoJwR5IaUTlBffvpvsc1fuAnCW5h+ESdddEqTkN0XJk4L
+         PjSLLYo1wvcW7q6Rx17BXUPwsZwKvFuHZ/M1Q2HVdU5KK0pBl7LtEwe91zN5wKJnbada
+         U6ASRe+bxv1FgalfRL/1pZavlG1H1hqugseAI3g7HOeuO+Z88Yw5drp0DC+8oQ99Mp/R
+         xIOcdqP45ZNhLPTiKV681FogJ0no+8nFoCiaQk2q/8Ux6HMVehly23YBkiQXkiiMDSBA
+         Cvfw==
+X-Gm-Message-State: ANoB5pnWXS5nJdLfKl+7TUR82PQyLS9mzl59qQqSjov07/Ym8EB1m8Lv
+        4iNw6Z2nKLjq5Ij9tDb1YX1PX2O60sNiHelAivGi8h/y
+X-Google-Smtp-Source: AA0mqf5knH/KwKqTKOiQd/z0yhn+IqZ67caj8iY/xM73bDp4/rQAeV2haenOZy56wBGm1B6UliEIwrur+lSZUECx51s=
+X-Received: by 2002:a1f:900f:0:b0:3ab:42ba:252 with SMTP id
+ s15-20020a1f900f000000b003ab42ba0252mr4415727vkd.8.1668788874135; Fri, 18 Nov
+ 2022 08:27:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <20221114215817.1953186-1-robertcnelson@gmail.com>
+ <20221114215817.1953186-2-robertcnelson@gmail.com> <20221115200357.qa2rvw3clbz7unzq@symptom>
+In-Reply-To: <20221115200357.qa2rvw3clbz7unzq@symptom>
+From:   Robert Nelson <robertcnelson@gmail.com>
+Date:   Fri, 18 Nov 2022 10:27:27 -0600
+Message-ID: <CAOCHtYj-6C4-yesHOz0EzDxC+YyZNLUz7f9PxYstvCn_BaiOzQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] arm64: dts: ti: add k3-j721e-beagleboneai64
+To:     Nishanth Menon <nm@ti.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Jason Kridner <jkridner@beagleboard.org>,
+        Drew Fustini <drew@beagleboard.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks Nishanth
 
+On Tue, Nov 15, 2022 at 2:04 PM Nishanth Menon <nm@ti.com> wrote:
+> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
 
-Le ven. 18 nov. 2022 =E0 07:58:21 -0800, Dmitry Torokhov=20
-<dmitry.torokhov@gmail.com> a =E9crit :
-> Hi Paul,
->=20
-> On Fri, Nov 18, 2022 at 03:33:44PM +0000, Paul Cercueil wrote:
->>  Hi Dmitry,
->>=20
->>  Le mar. 6 sept. 2022 =E0 13:49:20 -0700, Dmitry Torokhov
->>  <dmitry.torokhov@gmail.com> a =E9crit :
->>  > This patch switches the driver away from legacy gpio/of_gpio API=20
->> to
->>  > gpiod API, and removes use of of_get_named_gpio_flags() which I=20
->> want to
->>  > make private to gpiolib.
->>  >
->>  > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->>  > ---
->>  >  drivers/net/ethernet/davicom/dm9000.c | 26=20
->> ++++++++++++++------------
->>  >  1 file changed, 14 insertions(+), 12 deletions(-)
->>  >
->>  > diff --git a/drivers/net/ethernet/davicom/dm9000.c
->>  > b/drivers/net/ethernet/davicom/dm9000.c
->>  > index 77229e53b04e..c85a6ebd79fc 100644
->>  > --- a/drivers/net/ethernet/davicom/dm9000.c
->>  > +++ b/drivers/net/ethernet/davicom/dm9000.c
->>  > @@ -28,8 +28,7 @@
->>  >  #include <linux/irq.h>
->>  >  #include <linux/slab.h>
->>  >  #include <linux/regulator/consumer.h>
->>  > -#include <linux/gpio.h>
->>  > -#include <linux/of_gpio.h>
->>  > +#include <linux/gpio/consumer.h>
->>  >
->>  >  #include <asm/delay.h>
->>  >  #include <asm/irq.h>
->>  > @@ -1421,8 +1420,7 @@ dm9000_probe(struct platform_device *pdev)
->>  >  	int iosize;
->>  >  	int i;
->>  >  	u32 id_val;
->>  > -	int reset_gpios;
->>  > -	enum of_gpio_flags flags;
->>  > +	struct gpio_desc *reset_gpio;
->>  >  	struct regulator *power;
->>  >  	bool inv_mac_addr =3D false;
->>  >  	u8 addr[ETH_ALEN];
->>  > @@ -1442,20 +1440,24 @@ dm9000_probe(struct platform_device *pdev)
->>  >  		dev_dbg(dev, "regulator enabled\n");
->>  >  	}
->>  >
->>  > -	reset_gpios =3D of_get_named_gpio_flags(dev->of_node,=20
->> "reset-gpios", 0,
->>  > -					      &flags);
->>  > -	if (gpio_is_valid(reset_gpios)) {
->>  > -		ret =3D devm_gpio_request_one(dev, reset_gpios, flags,
->>  > -					    "dm9000_reset");
->>  > +	reset_gpio =3D devm_gpiod_get_optional(dev, "reset",=20
->> GPIOD_OUT_HIGH);
->>  > +	ret =3D PTR_ERR_OR_ZERO(reset_gpio);
->>  > +	if (ret) {
->>  > +		dev_err(dev, "failed to request reset gpio: %d\n", ret);
->>  > +		goto out_regulator_disable;
->>  > +	}
->>  > +
->>  > +	if (reset_gpio) {
->>  > +		ret =3D gpiod_set_consumer_name(reset_gpio, "dm9000_reset");
->>  >  		if (ret) {
->>  > -			dev_err(dev, "failed to request reset gpio %d: %d\n",
->>  > -				reset_gpios, ret);
->>  > +			dev_err(dev, "failed to set reset gpio name: %d\n",
->>  > +				ret);
->>  >  			goto out_regulator_disable;
->>  >  		}
->>  >
->>  >  		/* According to manual PWRST# Low Period Min 1ms */
->>  >  		msleep(2);
->>  > -		gpio_set_value(reset_gpios, 1);
->>  > +		gpiod_set_value_cansleep(reset_gpio, 0);
->>=20
->>  Why is that 1 magically turned into a 0?
->=20
-> Because gpiod uses logical states (think active/inactive), not=20
-> absolute
-> ones. Here we are deasserting the reset line.
->=20
->>=20
->>  On my CI20 board I can't get the DM9000 chip to probe correctly=20
->> with this
->>  patch (it fails to read the ID).
->>  If I revert this patch then everything works fine.
->=20
-> Sorry, it is my fault of course: I missed that board has incorrect
-> annotation for the reset line. I will send out the patch below
-> (formatted properly of course):
+> > +
+> > +             led-4 {
+> > +                     gpios = <&main_gpio0 109 GPIO_ACTIVE_HIGH>;
+> > +                     linux,default-trigger = "phy0tx";
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/leds/common.yaml#n82
+>
+> we'd be Violating the oneOf conditions here.
 
-So in *theory* you wouldn't fix it like that, because the driver should=20
-work with old Device Tree files, even if it had a broken property, as=20
-long as it used to work in the past.
+Removed..
 
-The ci20.dts file however is always built into the kernel and I'm not=20
-aware of anybody doing things differently. As long as you make that=20
-explicit in your commit message I think Rob won't mind.
+> > +
+> > +     vdd_mmc1: regulator-3 {
+> > +             compatible = "regulator-fixed";
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&sd_pwr_en_pins_default>;
+> > +             regulator-name = "vdd_mmc1";
+> > +             regulator-min-microvolt = <3300000>;
+> > +             regulator-max-microvolt = <3300000>;
+> > +             regulator-boot-on;
+> > +             enable-active-high;
+> > +             vin-supply = <&vsys_3v3>;
+> > +             gpios = <&main_gpio0 82 GPIO_ACTIVE_HIGH>;
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+>
+> s/gpios/gpio ?
 
-If he does, or if more boards are affected, an alternative is to switch=20
-the polarity of the GPIO in the driver, like so:
+cleaned up these old gpios -> gpio references...
 
-if (of_machine_is_compatible("mips,ci20") &&
-    gpiod_is_active_low(reset_gpio)) {
-	gpiod_toggle_active_low(reset_gpio);
-}
+> > +&main_gpio0 {
+> > +     gpio-line-names = "", "P9_11", "P9_13", "P8_17", "P8_18", /* 0-4 */
+> > +             "P8_22", "P8_24", "P8_34", "P8_36", "P8_38A", /* 5-9 */
+> > +             "P9_23", "P8_37B", "P9_26B", "P9_24B", "P8_08", /* 10-14 */
+> > +             "P8_07", "P8_10", "P8_09", "P9_42B", "", /* 15-19 */
+> > +             "P8_03", "TYPEC_PWR_ST", "M2_RSTz", "M2_I2C_ALERT#", "P8_35A", /* 20-24 */
+> > +             "P8_33A", "P8_32A", "", "P9_17A", "", /* 25-29 */
+> > +             "P8_21", "P8_23", "P8_31A", "P8_05", "P8_06", /* 30-34 */
+> > +             "P8_25", "M2_W_DISABLE1#", "M2_W_DISABLE2#", "P9_22A (BOOTMODE1)", "P9_21A", /* 35-39 */
+> > +             "P9_18A", "DSI_I2C_SCL", "DSI_I2C_SDA", "P9_28B", "P9_30B", /* 40-44 */
+> > +             "P9_12", "P9_27A", "P9_15", "P8_04 (BOOTMODE2)", "VCC_DP_EN", /* 45-49 */
+> > +             "P9_33B", "P8_26", "P9_31B", "P9_29B", "P9_39B", /* 50-54 */
+> > +             "P9_35B", "P9_36B", "P9_37B", "P9_38B", "P8_12", /* 55-59 */
+> > +             "P8_11 (BOOTMODE7)", "P8_15", "P8_16", "", "", /* 60-64 */
+> > +             "P8_43", "P8_44", "P8_41", "P8_42 (BOOTMODE6)", "P8_39", /* 65-69 */
+> > +             "P8_40", "P8_27", "P8_28", "P8_29", "P8_30", /* 70-74 */
+> > +             "P8_14", "P8_20", "P9_20B", "P9_19B", "P8_45", /* 75-79 */
+> > +             "P8_46 (BOOTMODE3)", "P9_40B", "VDD_SD_EN", "CSI_I2C_SCL", "CSI_I2C_SDA", /* 80-84 */
+> > +             "M2_I2S_SCK", "M2_I2S_WS", "M2_I2S_IN", "P8_19", "P8_13", /* 85-89 */
+> > +             "P9_21B", "P9_22B", "M2_I2S_OUT", "P9_14", "P9_16", /* 90-94 */
+> > +             "USR1", "USR0", "USR2", "DSI_GPIO1", "FAN_PWM", /* 95-99 */
+> > +             "FAN_TACH", "CSI1_GPIO1", "CSI0_GPIO2", "CSI0_GPIO1", "P9_25B", /* 100-104 */
+> > +             "P8_38B", "P8_37A", "CSI1_GPIO2", "DSI_GPIO2", "USR4", /* 105-109 */
+> > +             "USR3", "P8_33B", "DP_HPD", "M2_UART_CTSn", "M2_UART_RTSn", /* 110-114 */
+> > +             "P9_17B", "P8_35B", "VDD_SD_SEL", "P9_26A", "P9_24A", /* 115-119 */
+> > +             "P9_18B", "CONSOLE_RX", "CONSOLE_TX", "P9_42A", "P9_27B", /* 120-124 */
+> > +             "M2_UART_RX", "M2_UART_TX", "P9_25A"; /* 125-127 */
+>
+> Can we drop the gpio-line-names description for now?
+> gpio-line-names: maxItems: 32 in
+> Documentation/devicetree/bindings/gpio/ti,omap-gpio.yaml - that probably
+> should be fixed prior to this else we get the dtbs_check warning around
+> this. The max count actually depends on ti,ngpio - So, I think the
+> schema is probably not accurate here.
 
-Cheers,
--Paul
+Removed for now, till we are ready..
 
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts=20
-> b/arch/mips/boot/dts/ingenic/ci20.dts
-> index 37c46720c719..f38c39572a9e 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -438,7 +438,7 @@ dm9000@6 {
->  		ingenic,nemc-tAW =3D <50>;
->  		ingenic,nemc-tSTRV =3D <100>;
->=20
-> -		reset-gpios =3D <&gpf 12 GPIO_ACTIVE_HIGH>;
-> +		reset-gpios =3D <&gpf 12 GPIO_ACTIVE_LOW>;
->  		vcc-supply =3D <&eth0_power>;
->=20
->  		interrupt-parent =3D <&gpe>;
->=20
->=20
-> Thanks.
->=20
-> --
-> Dmitry
+Regards,
 
-
+-- 
+Robert Nelson
+https://rcn-ee.com/
