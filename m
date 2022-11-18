@@ -2,133 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF4762FACA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DDA62FACF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242200AbiKRQuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
+        id S242334AbiKRQvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiKRQuh (ORCPT
+        with ESMTP id S242265AbiKRQvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:50:37 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F5070A1D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:50:36 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so5563474pjl.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:50:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vDeF35wdLYG1P15QPsioTjibeocs7bxGmPk/YQhsj6s=;
-        b=nEwUH22V3Px2AJ0nfhnVjJM1rBPM9FKR685a6v3VuuhfgW52O+PKMaplMTwyxfiFA8
-         nKs9/aTXQQ4zPvNHj+eAYhJdYMektFDaVSFAFfKBnKtL8Coa1PcYz3r4Giub0PhK9aJ+
-         xNxRIaTXBnko1GceMEjnoroVYL6UshpQX/9c4=
+        Fri, 18 Nov 2022 11:51:04 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C618CFC8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:51:03 -0800 (PST)
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 923553F1C3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668790261;
+        bh=D7JhrXwjD/BBBqSqzrNVCIT+3QaOVEAS69GN8n0gs5k=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=KN1o1xTAuztXEnjQNPJ2mCB+HAzH8uR5GdcIix7DhP9zg/LJwIpA+fEi72Qn4ezDh
+         L7oUYb65nQWr1X4EM3KXgMs7qp0RPYTenRQI+VigEip+QKFoG1mwfdvIEVPqLJASed
+         19zcilTy3MUOPYvIlJ28S0RE18tTq8oY+6EmUBRISlJq6KdmJLugh+gLpoob/HtmQO
+         oWPBuPKCGTbxh5xa0C83FP0Yb9Ha61Pjoi2eZMrEQyYB1+9dmHfG8HqTpE+PxKEzNQ
+         ueTteRT+Wxho/c6E2tDVfU1kX5JnhmYn9W7J9oimo3kvrxfinHUmbppgIuHBURNeTf
+         /MZT4dEan1V+w==
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-352e29ff8c2so54550197b3.21
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:51:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vDeF35wdLYG1P15QPsioTjibeocs7bxGmPk/YQhsj6s=;
-        b=POuYfvZ5oNqdx6Ghz2qhMB/WBWWFTIXx0pqeBor6RcW/PPgPK+SdXy1bai25qHBwyh
-         IA0maKPzvVUOe/SDj4G5gM4urJvc6Ufh2WnoudkcNksTr4huKDtL5h2ZbMZ+BO/SfBGd
-         18ZDD6RpB7lgRp9+V30BmnP1+ZkrhPYI022WZX7DgCCn43mJILxDB45ZSMlvfiW4+YNk
-         1JKPkLH37YIEmESmcq5ys1j0NYTIxljWjn/XJSAJBkOjBZ0ANRQ4nf7RPfYJaybwpB61
-         9AAFbRwbvSGVf+kbXdHTgSEBoVfTEV0b4LTJc73QA2ejJlWNpuxjzmQW95ZN0aFrNk/M
-         OYYg==
-X-Gm-Message-State: ANoB5pmPlitzjRq5AIZrUd7BJrQax2u+SxlWIXiTbLSvFz72/Ncdu+Tz
-        JlZrF4f2BiRxezXhmbGBdCDcNg==
-X-Google-Smtp-Source: AA0mqf5nc7sx9BVUy4AHRDyHuAxCzDSQw3UQYN4kbHosvvppGk9Ks17mBJFq8EiYAnsMiKkMdrSZ7A==
-X-Received: by 2002:a17:90a:3e47:b0:213:1a9f:8d72 with SMTP id t7-20020a17090a3e4700b002131a9f8d72mr14862628pjm.155.1668790236086;
-        Fri, 18 Nov 2022 08:50:36 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j15-20020a170902da8f00b00176dd41320dsm3992706plx.119.2022.11.18.08.50.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 08:50:35 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 18 Nov 2022 08:50:35 -0800
-To:     Lyude Paul <lyude@redhat.com>
-Cc:     David Airlie <airlied@gmail.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Wayne Lin <Wayne.Lin@amd.com>, stable@vger.kernel.org,
-        #v5.6+@kernel, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Roman Li <roman.li@amd.com>, amd-gfx@lists.freedesktop.org,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        hersen wu <hersenxs.wu@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        dri-devel@lists.freedesktop.org,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: pre_compute_mst_dsc_configs_for_state(): Uninitialized
- variables
-Message-ID: <202211180850.560AD5A74@keescook>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D7JhrXwjD/BBBqSqzrNVCIT+3QaOVEAS69GN8n0gs5k=;
+        b=yHLUytjJfDL+qQBZ0sVnD8uXULXD6rGX+USezYtCQkRoARa51QPJQAkFCdbF/8Gw6E
+         JoAMyrYbU2/Gg8/nDXrrHupUvUoe+8rHxrc2UFAeqY3Q6gj9sypilFAAjh+jzOWoo2vy
+         Xum1SX5125BeLPKAKmZZ8owWWqk8aNtDEh3o2E2d+yZE6JIJlkEi8LHFBy3/RsCA5Lz7
+         puu7lgevwkIGFxDNa9ECOeIrFjM1y2bs9Srl3DMb/+iTYFMJsC9qukV6ph2p5xFyqmSb
+         GlVqbZfY6NGNXmUs8svRLK90mz+03cg5U1wqcC2Zl0A7jl7WqhFVVwio2zJzlyGzMtGE
+         CXMg==
+X-Gm-Message-State: ANoB5pnhX2PmUnpUM8peLhrfigp+bOHnqNQvKPr+8+jwe83ru53Sl2Go
+        zcOo1qv3qxKJ2U+ua78LgMa6NeUai3GpEsFhvOQeA/2V2J3OfWQiv46dZsz62IITAL6WIifeQtS
+        DX/K1lwmayixFhamk80EkFRnR7+J1eoNToYOvPR57ml0rH9HhA2DCmANzxg==
+X-Received: by 2002:a0d:cad3:0:b0:36f:d611:a5fe with SMTP id m202-20020a0dcad3000000b0036fd611a5femr7231976ywd.230.1668790257887;
+        Fri, 18 Nov 2022 08:50:57 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4tElp8nJoQLvE/hqWEoMn1u151CU6SJLh+Fi0lqoLGYR8AyP+OgUb500asOPg169mEZCCEMqafDTTt4wcsAHo=
+X-Received: by 2002:a0d:cad3:0:b0:36f:d611:a5fe with SMTP id
+ m202-20020a0dcad3000000b0036fd611a5femr7231956ywd.230.1668790257679; Fri, 18
+ Nov 2022 08:50:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118010627.70576-1-hal.feng@starfivetech.com> <20221118010627.70576-10-hal.feng@starfivetech.com>
+In-Reply-To: <20221118010627.70576-10-hal.feng@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 18 Nov 2022 17:50:41 +0100
+Message-ID: <CAJM55Z_Gq22NiVYHawvjsehL8j3agvp_b2RCgabdTki+ovWa8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 09/14] dt-bindings: clock: Add StarFive JH7110 system
+ clock and reset generator
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
+>
+> From: Emil Renner Berthing <kernel@esmil.dk>
+>
+> Add bindings for the system clock and reset generator (SYSCRG) on the
+> JH7110 RISC-V SoC by StarFive Ltd.
+>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  .../clock/starfive,jh7110-syscrg.yaml         | 80 +++++++++++++++++++
+>  MAINTAINERS                                   |  2 +-
+>  2 files changed, 81 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+> new file mode 100644
+> index 000000000000..a8cafbc0afe2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-syscrg.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive JH7110 System Clock and Reset Generator
+> +
+> +maintainers:
+> +  - Emil Renner Berthing <kernel@esmil.dk>
+> +
+> +properties:
+> +  compatible:
+> +    const: starfive,jh7110-syscrg
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Main Oscillator (24 MHz)
+> +      - description: RMII reference clock
+> +      - description: RGMII RX clock
+> +      - description: I2S TX bit clock
+> +      - description: I2S TX left/right clock
+> +      - description: I2S RX bit clock
+> +      - description: I2S RX left/right clock
+> +      - description: TDM
+> +      - description: mclk
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221118 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+Maybe you could ask your colleagues for a better description of these clocks.
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
-
-  Thu Nov 17 00:18:25 2022 -0500
-    7cce4cd628be ("drm/amdgpu/mst: Stop ignoring error codes and deadlocking")
-
-Coverity reported the following:
-
-*** CID 1527373:  Uninitialized variables  (UNINIT)
-drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c:1227 in pre_compute_mst_dsc_configs_for_state()
-1221     		for (j = 0; j < dc_state->stream_count; j++) {
-1222     			if (dc_state->streams[j]->link == stream->link)
-1223     				computed_streams[j] = true;
-1224     		}
-1225     	}
-1226
-vvv     CID 1527373:  Uninitialized variables  (UNINIT)
-vvv     Using uninitialized value "ret".
-1227     	return ret;
-1228     }
-1229
-1230     static int find_crtc_index_in_state_by_stream(struct drm_atomic_state *state,
-1231     					      struct dc_stream_state *stream)
-1232     {
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527373 ("Uninitialized variables")
-Fixes: 7cce4cd628be ("drm/amdgpu/mst: Stop ignoring error codes and deadlocking")
-
-If dc_state->stream_count is 0, "ret" is undefined. Perhaps initialize
-it as -EINVAL?
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+> +
+> +  clock-names:
+> +    items:
+> +      - const: osc
+> +      - const: gmac1_rmii_refin
+> +      - const: gmac1_rgmii_rxin
+> +      - const: i2stx_bclk_ext
+> +      - const: i2stx_lrck_ext
+> +      - const: i2srx_bclk_ext
+> +      - const: i2srx_lrck_ext
+> +      - const: tdm_ext
+> +      - const: mclk_ext
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +    description:
+> +      See <dt-bindings/clock/starfive-jh7110.h> for valid indices.
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +    description:
+> +      See <dt-bindings/reset/starfive-jh7110.h> for valid indices.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +  - '#reset-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    clock-controller@13020000 {
+> +        compatible = "starfive,jh7110-syscrg";
+> +        reg = <0x13020000 0x10000>;
+> +        clocks = <&osc>, <&gmac1_rmii_refin>,
+> +                 <&gmac1_rgmii_rxin>,
+> +                 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
+> +                 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
+> +                 <&tdm_ext>, <&mclk_ext>;
+> +        clock-names = "osc", "gmac1_rmii_refin",
+> +                      "gmac1_rgmii_rxin",
+> +                      "i2stx_bclk_ext", "i2stx_lrck_ext",
+> +                      "i2srx_bclk_ext", "i2srx_lrck_ext",
+> +                      "tdm_ext", "mclk_ext";
+> +        #clock-cells = <1>;
+> +        #reset-cells = <1>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index eeab26f5597c..ec6647e2772f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19602,7 +19602,7 @@ STARFIVE CLOCK DRIVERS
+>  M:     Emil Renner Berthing <kernel@esmil.dk>
+>  M:     Hal Feng <hal.feng@starfivetech.com>
+>  S:     Maintained
+> -F:     Documentation/devicetree/bindings/clock/starfive,jh7100-*.yaml
+> +F:     Documentation/devicetree/bindings/clock/starfive*
+>  F:     drivers/clk/starfive/
+>  F:     include/dt-bindings/clock/starfive*
+>
+> --
+> 2.38.1
+>
