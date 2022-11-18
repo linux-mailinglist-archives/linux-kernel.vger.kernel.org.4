@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1E162FFFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DDD62FFFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbiKRWXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
+        id S230490AbiKRWY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbiKRWXC (ORCPT
+        with ESMTP id S231878AbiKRWYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:23:02 -0500
+        Fri, 18 Nov 2022 17:24:10 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8000B483B;
-        Fri, 18 Nov 2022 14:22:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196926161
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:23:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 573EC627AB;
-        Fri, 18 Nov 2022 22:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99D0C433D7;
-        Fri, 18 Nov 2022 22:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668810154;
-        bh=a3Nl+YrArqrTu2MTpdS0izGKQlH4Fq++iKt1qyZa3+Y=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=gp2/kZJpsVukVoT67G8faL/czaxkOfRGsVmGCzE0ikD3icNUwtJER8U7RaZEIQhHN
-         2I+caJbL8GbpnMvvwYZI49bu4DdPoW9zj3VsSaSUv7f9ar5OAbBg/uungjiqUSYNpa
-         wlkrnW6AxwPZ2mRjtv0ovM/YWM7w4LC67KB7vdifNuArXjR85kbcaWabe5DLz903Jz
-         OHYqxkmHJRnxlnB7Vu4+wv6nHorbDGro/580kZF3atWQ3jwsSdwFetkiK+xp0N+hWR
-         7T4zNAFoGdvkjeepfvMUwgbOMB654sfGBy0Sy/jVhrzd7o6QZaXlGwevBmMHbO8Mkq
-         g876Gu9uKtMeQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4BD435C0F9C; Fri, 18 Nov 2022 14:22:34 -0800 (PST)
-Date:   Fri, 18 Nov 2022 14:22:34 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, rcu@vger.kernel.org,
-        rostedt@goodmis.org, fweisbec@gmail.com
-Subject: Re: [PATCH v2 1/2] net: Use call_rcu_flush() for dst_destroy_rcu
-Message-ID: <20221118222234.GP4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221118191909.1756624-1-joel@joelfernandes.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221118191909.1756624-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC8226279B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 22:23:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F670C433C1;
+        Fri, 18 Nov 2022 22:23:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1668810209;
+        bh=/+L2NYj/ACH+jT7u7xIw5FkfzhmRB+rhl1d5bnP9ndQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WOu/knYnjG874+QGB6O6mc5DoO1bffTgpJ7knUlNeNZYm2uJpJmcH7/iJT4HSHckE
+         dirOBSs+Ct5loDn2H9J9YxTOscXrpO5Y9SUqL9liqBR6Fk9CI1076Q9tHWST71XUJw
+         VQcIV0zN+NPXlK/FhQ5Iik1CGlvDvasJGk1pfrOI=
+Date:   Fri, 18 Nov 2022 14:23:27 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
+Message-Id: <20221118142327.1744cda179ca549eeebc8629@linux-foundation.org>
+In-Reply-To: <a4a1cda4-547b-8274-8645-fa6ff274e42@google.com>
+References: <5f52de70-975-e94f-f141-543765736181@google.com>
+        <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
+        <CAHk-=whmq5gHrKmD3j=7nB=n9OmmLb5j1qmoQPHw1=VSQ-V=hg@mail.gmail.com>
+        <93fa81ae-d848-58c2-9f70-27446bf9baa8@google.com>
+        <20221118140346.b9026301b4ba03e43e15aeca@linux-foundation.org>
+        <a4a1cda4-547b-8274-8645-fa6ff274e42@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,100 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 07:19:08PM +0000, Joel Fernandes (Google) wrote:
-> In a networking test on ChromeOS, we find that using the new
-> CONFIG_RCU_LAZY causes a networking test to fail in the teardown phase.
+On Fri, 18 Nov 2022 14:10:32 -0800 (PST) Hugh Dickins <hughd@google.com> wrote:
+
+> On Fri, 18 Nov 2022, Andrew Morton wrote:
+> > On Fri, 18 Nov 2022 12:51:09 -0800 (PST) Hugh Dickins <hughd@google.com> wrote:
+> > 
+> > > But the first series has not yet graduated from mm-unstable,
+> > > so if Andrew and/or Kirill also prefer to have them combined into one
+> > > bit_spin_lock-less series, that I can do.  (And the end result should be
+> > > identical, so would not complicate Johannes's lock_page_memcg() excision.)
+> > 
+> > I'd prefer that approach.
 > 
-> The failure happens during: ip netns del <name>
-> 
-> Using ftrace, I found the callbacks it was queuing which this series fixes.
-> Use call_rcu_flush() to revert to the old behavior. With that, the test
-> passes.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> I think you're saying that you prefer the other approach, to keep the
+> two series separate (second immediately after the first, or not, doesn't
+> matter), rather than combined into one bit_spin_lock-less series.
+> Please clarify! Thanks,
 
-Queued and pushed, wordsmithed as shown below, thank you!
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit dee2cd7a0d6f3274bdcfe902cf7914b9553355b3
-Author: Joel Fernandes (Google) <joel@joelfernandes.org>
-Date:   Fri Nov 18 19:19:08 2022 +0000
-
-    net: Use call_rcu_flush() for dst_release()
-    
-    In a networking test on ChromeOS, kernels built with the new
-    CONFIG_RCU_LAZY=y Kconfig option fail a networking test in the teardown
-    phase.
-    
-    This failure may be reproduced as follows: ip netns del <name>
-    
-    The CONFIG_RCU_LAZY=y Kconfig option was introduced by earlier commits
-    in this series for the benefit of certain battery-powered systems.
-    This Kconfig option causes call_rcu() to delay its callbacks in order
-    to batch them.  This means that a given RCU grace period covers more
-    callbacks, thus reducing the number of grace periods, in turn reducing
-    the amount of energy consumed, which increases battery lifetime which
-    can be a very good thing.  This is not a subtle effect: In some important
-    use cases, the battery lifetime is increased by more than 10%.
-    
-    This CONFIG_RCU_LAZY=y option is available only for CPUs that offload
-    callbacks, for example, CPUs mentioned in the rcu_nocbs kernel boot
-    parameter passed to kernels built with CONFIG_RCU_NOCB_CPU=y.
-    
-    Delaying callbacks is normally not a problem because most callbacks do
-    nothing but free memory.  If the system is short on memory, a shrinker
-    will kick all currently queued lazy callbacks out of their laziness,
-    thus freeing their memory in short order.  Similarly, the rcu_barrier()
-    function, which blocks until all currently queued callbacks are invoked,
-    will also kick lazy callbacks, thus enabling rcu_barrier() to complete
-    in a timely manner.
-    
-    However, there are some cases where laziness is not a good option.
-    For example, synchronize_rcu() invokes call_rcu(), and blocks until
-    the newly queued callback is invoked.  It would not be a good for
-    synchronize_rcu() to block for ten seconds, even on an idle system.
-    Therefore, synchronize_rcu() invokes call_rcu_flush() instead of
-    call_rcu().  The arrival of a non-lazy call_rcu_flush() callback on a
-    given CPU kicks any lazy callbacks that might be already queued on that
-    CPU.  After all, if there is going to be a grace period, all callbacks
-    might as well get full benefit from it.
-    
-    Yes, this could be done the other way around by creating a
-    call_rcu_lazy(), but earlier experience with this approach and
-    feedback at the 2022 Linux Plumbers Conference shifted the approach
-    to call_rcu() being lazy with call_rcu_flush() for the few places
-    where laziness is inappropriate.
-    
-    Returning to the test failure, use of ftrace showed that this failure
-    cause caused by the aadded delays due to this new lazy behavior of
-    call_rcu() in kernels built with CONFIG_RCU_LAZY=y.
-    
-    Therefore, make dst_release() use call_rcu_flush() in order to revert
-    to the old test-failure-free behavior.
-    
-    Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-    Cc: David Ahern <dsahern@kernel.org>
-    Cc: "David S. Miller" <davem@davemloft.net>
-    Cc: Eric Dumazet <edumazet@google.com>
-    Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-    Cc: Jakub Kicinski <kuba@kernel.org>
-    Cc: Paolo Abeni <pabeni@redhat.com>
-    Cc: <netdev@vger.kernel.org>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/net/core/dst.c b/net/core/dst.c
-index bc9c9be4e0801..15b16322703f4 100644
---- a/net/core/dst.c
-+++ b/net/core/dst.c
-@@ -174,7 +174,7 @@ void dst_release(struct dst_entry *dst)
- 			net_warn_ratelimited("%s: dst:%p refcnt:%d\n",
- 					     __func__, dst, newrefcnt);
- 		if (!newrefcnt)
--			call_rcu(&dst->rcu_head, dst_destroy_rcu);
-+			call_rcu_flush(&dst->rcu_head, dst_destroy_rcu);
- 	}
- }
- EXPORT_SYMBOL(dst_release);
+Yes, two separate series.   Apologies for the confuddling.
