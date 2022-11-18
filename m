@@ -2,187 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A0462EC4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 04:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C5362EC5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 04:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235140AbiKRDJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 22:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
+        id S240683AbiKRDbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 22:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbiKRDJn (ORCPT
+        with ESMTP id S234758AbiKRDbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 22:09:43 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735BB8D499
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:09:38 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id b21so3417083plc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 19:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=microgate-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QvQYYn6CnSvHRnlZDbLhcsyyvXrpp3K5Tbix7T4+wJw=;
-        b=qitBcLdK1p9dZoDC6VQxVcnthRbkU4g+rdNME9oYF656ZCpfJuP4Ly+bpERRSUKcZU
-         UEsr9wRFrRkUCbLuN7VyS0D3uRNWI/M7XUBgmxY0ybV3WqKDDYEK4b6doMYbucy6guKN
-         xMM9ypC00v9fm8eM1OcZReXihHVuXYzeG6fhvlXQAdvl1pWWjaPKimXjtITKwmFcUlwk
-         TOmbpDHCb4ITeCvbU63+mis8ZytOYqELLJm9BIdd2gWcFWjAMnGCkVaC/OipsGdE4olq
-         Hu5bFXqguoBdwVXuisAOdqEVc0u58VexzRvSdMUMhry7VBYtHEkyAu7bcVu4OZ37PKqC
-         s+wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QvQYYn6CnSvHRnlZDbLhcsyyvXrpp3K5Tbix7T4+wJw=;
-        b=f+o7vMduqmBs9gzxZN2XS7xZGl3O35BONzFUJTnF8bwW4BrvDqaQNO19V8EB7j1C5+
-         gV4VGvaZ439Pe9xWVuQICCcUwEXKRH4cG9535imA4HKUfOfPDYTwqiVjr/uQYesQL+vI
-         pZNtZCirb2DKqx0cJR7QD9QwZrnoo6XQw4nn01KUgN9kLB0BE5+jFfLPoUKyTFIkgMi/
-         A4nSmxfB3gbCebD8xuIt1VeAWqGD/n6x+8ffknXsLMiODQqtWsNsFVAifRx07b9mfFnV
-         z6PPvB0viBFqp6fB0ymzwEcD3cyNwjdzUCvtAO+8z7vNfDezvv07tgkbptfeFhyZqeZa
-         GI9A==
-X-Gm-Message-State: ANoB5pk6Rpi7Ji07cs/AK8KkHBBvtRbISVTqljPAp3D3HLdpuYP0T0tU
-        yqJvhy8cYF23uAWoe/t3LZU4dw==
-X-Google-Smtp-Source: AA0mqf53Gj6BQCHQVg/+19JpxIJvV0fRIq7Bm1eiQnv/Vmo/8Nuiqa7unOQJuW+91FUl5tYMTySOqQ==
-X-Received: by 2002:a17:903:3304:b0:187:2dc3:27c with SMTP id jk4-20020a170903330400b001872dc3027cmr5436943plb.148.1668740977955;
-        Thu, 17 Nov 2022 19:09:37 -0800 (PST)
-Received: from [192.168.1.86] (c-208-53-111-167.customer.broadstripe.net. [208.53.111.167])
-        by smtp.gmail.com with ESMTPSA id ix9-20020a170902f80900b001782a0d3eeasm2190688plb.115.2022.11.17.19.09.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 19:09:37 -0800 (PST)
-Message-ID: <dc4d3cba-0562-8a94-12f0-5c110bf6b10b@microgate.com>
-Date:   Thu, 17 Nov 2022 19:09:36 -0800
+        Thu, 17 Nov 2022 22:31:42 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D07B5132F;
+        Thu, 17 Nov 2022 19:31:40 -0800 (PST)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ND2PP6fV7zHvtg;
+        Fri, 18 Nov 2022 11:31:05 +0800 (CST)
+Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 18 Nov
+ 2022 11:31:37 +0800
+From:   ruanjinjie <ruanjinjie@huawei.com>
+To:     <kwankhede@nvidia.com>, <alex.williamson@redhat.com>,
+        <kraxel@redhat.com>, <cjia@nvidia.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH] vfio/mdev: fix possible memory leak in module init funcs
+Date:   Fri, 18 Nov 2022 11:28:27 +0800
+Message-ID: <20221118032827.3725190-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: [PATCH v2] tty:synclink_gt unwind actions in error path
-Content-Language: en-US
-To:     Zhengchao Shao <shaozhengchao@huawei.com>,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     akpm@linux-foundation.org, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-References: <20221114010734.314910-1-shaozhengchao@huawei.com>
-From:   Paul Fulghum <paulkf@microgate.com>
-In-Reply-To: <20221114010734.314910-1-shaozhengchao@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.83]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Inject fault while probing module, if device_register() fails,
+but the refcount of kobject is not decreased to 0, the name
+allocated in dev_set_name() is leaked. Fix this by calling
+put_device(), so that name can be freed in callback function
+kobject_cleanup().
 
-synclink_gt.c:hdlcdev_open() does not properly
-unwind actions in error path.
+unreferenced object 0xffff88807d687008 (size 8):
+  comm "modprobe", pid 8280, jiffies 4294807686 (age 12.378s)
+  hex dump (first 8 bytes):
+    6d 64 70 79 00 6b 6b a5                          mdpy.kk.
+  backtrace:
+    [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+    [<ffffffff81731d53>] kstrdup+0x33/0x60
+    [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
+    [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
+    [<ffffffffa0260105>] 0xffffffffa0260105
+    [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+    [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+    [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+    [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+    [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
+    [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-Unwound action 1: try_module_get(THIS_MODULE)
+unreferenced object 0xffff888101ccbcf8 (size 8):
+  comm "modprobe", pid 15662, jiffies 4295164481 (age 13.282s)
+  hex dump (first 8 bytes):
+    6d 74 74 79 00 6b 6b a5                          mtty.kk.
+  backtrace:
+    [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+    [<ffffffff81731d53>] kstrdup+0x33/0x60
+    [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
+    [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
+    [<ffffffffa0248134>] 0xffffffffa0248134
+    [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+    [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+    [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+    [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+    [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
+    [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-Change d4c63b7c7450 added try_module_get()/module_put()
-to stop WARN_ON if modprobe -r removes synclink_gt while net
-device is open. This is same as drivers/wan/farsync.c.
-Other generic HDLC hardware drivers do not do this.
-On unload, synclink_gt calls
-drivers/wan/hdlc.c:unregister_hdlc_device()
-which calls down to
-net/sched/sch_generic.c:dev_shutdown() triggering
-WARN_ON(timer_pending(&dev->watchdog_timer));
-if net device is open.
+unreferenced object 0xffff88810177c6c8 (size 8):
+  comm "modprobe", pid 23657, jiffies 4295314656 (age 13.227s)
+  hex dump (first 8 bytes):
+    6d 62 6f 63 68 73 00 a5                          mbochs..
+  backtrace:
+    [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+    [<ffffffff81731d53>] kstrdup+0x33/0x60
+    [<ffffffff83aa1421>] kobject_set_name_vargs+0x41/0x110
+    [<ffffffff82d91abb>] dev_set_name+0xab/0xe0
+    [<ffffffffa0248124>] 0xffffffffa0248124
+    [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+    [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+    [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+    [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+    [<ffffffff83c944a5>] do_syscall_64+0x35/0x80
+    [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-try_module_get/module_put, a disfavored pattern, is replaced
-by a call to dev_close() for open net device
-before calling unregister_hdlc_device() when driver unloads.
-This pevents WARN_ON.
-
-Unwound action 2: drivers/wan/hdlc.c:hdlc_open()
-
-This is moved to after driver level init/checks with proper
-rollback of previous actions. This is a more sensible
-ordering as the most common error paths are at the driver level
-and the driver level rollbacks require less processing than
-hdlc_open()/hdlc_close().
-
-Fixes: d4c63b7c7450 ("synclink_gt fix module reference")
-Fixes: 705b6c7b34f2 ("[PATCH] new driver synclink_gt")
-Suggested-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Tested-by: Paul Fulghum <paulkf@microgate.com>
-Signed-off-by: Paul Fulghum <paulkf@microgate.com>
+Fixes: d61fc96f47fd ("sample: vfio mdev display - host device")
+Fixes: 9d1a546c53b4 ("docs: Sample driver to demonstrate how to use Mediated device framework.")
+Fixes: a5e6e6505f38 ("sample: vfio bochs vbe display (host device for bochs-drm)")
+Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
 ---
-V1 -> V2: improve description, add dev_close call
+ samples/vfio-mdev/mbochs.c | 4 +++-
+ samples/vfio-mdev/mdpy.c   | 4 +++-
+ samples/vfio-mdev/mtty.c   | 4 +++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
- drivers/tty/synclink_gt.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-index 25e9befdda3a..5921703f7228 100644
---- a/drivers/tty/synclink_gt.c
-+++ b/drivers/tty/synclink_gt.c
-@@ -70,6 +70,7 @@
- #include <linux/bitops.h>
- #include <linux/workqueue.h>
- #include <linux/hdlc.h>
-+#include <linux/inetdevice.h>
- #include <linux/synclink.h>
+diff --git a/samples/vfio-mdev/mbochs.c b/samples/vfio-mdev/mbochs.c
+index 117a8d799f71..1c47672be815 100644
+--- a/samples/vfio-mdev/mbochs.c
++++ b/samples/vfio-mdev/mbochs.c
+@@ -1430,8 +1430,10 @@ static int __init mbochs_dev_init(void)
+ 	dev_set_name(&mbochs_dev, "%s", MBOCHS_NAME);
  
- #include <asm/io.h>
-@@ -1433,16 +1434,8 @@ static int hdlcdev_open(struct net_device *dev)
- 	int rc;
- 	unsigned long flags;
- 
--	if (!try_module_get(THIS_MODULE))
--		return -EBUSY;
--
- 	DBGINFO(("%s hdlcdev_open\n", dev->name));
- 
--	/* generic HDLC layer open processing */
--	rc = hdlc_open(dev);
--	if (rc)
--		return rc;
--
- 	/* arbitrate between network and tty opens */
- 	spin_lock_irqsave(&info->netlock, flags);
- 	if (info->port.count != 0 || info->netcount != 0) {
-@@ -1461,6 +1454,16 @@ static int hdlcdev_open(struct net_device *dev)
- 		return rc;
- 	}
- 
-+	/* generic HDLC layer open processing */
-+	rc = hdlc_open(dev);
-+	if (rc) {
-+		shutdown(info);
-+		spin_lock_irqsave(&info->netlock, flags);
-+		info->netcount = 0;
-+		spin_unlock_irqrestore(&info->netlock, flags);
-+		return rc;
+ 	ret = device_register(&mbochs_dev);
+-	if (ret)
++	if (ret) {
++		put_device(&mbochs_dev);
+ 		goto err_class;
 +	}
-+
- 	/* assert RTS and DTR, apply hardware settings */
- 	info->signals |= SerialSignal_RTS | SerialSignal_DTR;
- 	program_hw(info);
-@@ -1506,7 +1509,6 @@ static int hdlcdev_close(struct net_device *dev)
- 	info->netcount=0;
- 	spin_unlock_irqrestore(&info->netlock, flags);
  
--	module_put(THIS_MODULE);
- 	return 0;
- }
+ 	ret = mdev_register_parent(&mbochs_parent, &mbochs_dev, &mbochs_driver,
+ 				   mbochs_mdev_types,
+diff --git a/samples/vfio-mdev/mdpy.c b/samples/vfio-mdev/mdpy.c
+index 946e8cfde6fd..bfb93eaf535b 100644
+--- a/samples/vfio-mdev/mdpy.c
++++ b/samples/vfio-mdev/mdpy.c
+@@ -717,8 +717,10 @@ static int __init mdpy_dev_init(void)
+ 	dev_set_name(&mdpy_dev, "%s", MDPY_NAME);
  
-@@ -1742,6 +1744,11 @@ static void hdlcdev_exit(struct slgt_info *info)
- {
- 	if (!info->netdev)
- 		return;
-+	if (info->netcount) {
-+		rtnl_lock();
-+		dev_close(info->netdev);
-+		rtnl_unlock();
+ 	ret = device_register(&mdpy_dev);
+-	if (ret)
++	if (ret) {
++		put_device(&mdpy_dev);
+ 		goto err_class;
 +	}
- 	unregister_hdlc_device(info->netdev);
- 	free_netdev(info->netdev);
- 	info->netdev = NULL;
+ 
+ 	ret = mdev_register_parent(&mdpy_parent, &mdpy_dev, &mdpy_driver,
+ 				   mdpy_mdev_types,
+diff --git a/samples/vfio-mdev/mtty.c b/samples/vfio-mdev/mtty.c
+index e72085fc1376..dddb0619846c 100644
+--- a/samples/vfio-mdev/mtty.c
++++ b/samples/vfio-mdev/mtty.c
+@@ -1330,8 +1330,10 @@ static int __init mtty_dev_init(void)
+ 	dev_set_name(&mtty_dev.dev, "%s", MTTY_NAME);
+ 
+ 	ret = device_register(&mtty_dev.dev);
+-	if (ret)
++	if (ret) {
++		put_device(&mtty_dev.dev);
+ 		goto err_class;
++	}
+ 
+ 	ret = mdev_register_parent(&mtty_dev.parent, &mtty_dev.dev,
+ 				   &mtty_driver, mtty_mdev_types,
 -- 
-2.34.1
+2.25.1
 
