@@ -2,96 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76B463022D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3093263003E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235199AbiKRW4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S229774AbiKRWjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:39:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235045AbiKRWzw (ORCPT
+        with ESMTP id S229720AbiKRWjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:55:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D5B8E280
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:48:38 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA8N-0001cI-1u; Fri, 18 Nov 2022 23:46:55 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA8J-0058NO-Nh; Fri, 18 Nov 2022 23:46:52 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA8J-00Hb7j-Tp; Fri, 18 Nov 2022 23:46:51 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 198/606] Input: max7359_keypad - Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:52 +0100
-Message-Id: <20221118224540.619276-199-uwe@kleine-koenig.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        Fri, 18 Nov 2022 17:39:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEAED112;
+        Fri, 18 Nov 2022 14:39:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 24BB0CE224D;
+        Fri, 18 Nov 2022 22:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F4AC433D6;
+        Fri, 18 Nov 2022 22:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668811145;
+        bh=7G8ECLw1ELEqxR6Z8QunxLZvnkLl+Xk4JcotDxWZGTU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MqNvnouuMLsZXAjO0uvS7Uenbre81ICnQjgiFWQrB1S4P4QV5UroFyWsFOR9omKaU
+         FfoR3j0xrx0dXV432YtcMzMicjMJ+QMLDygQqlkFgXa5etVWZUhb3Sshx9uyHyDxan
+         qVti8010/ZiFLOu5kV6rH98JcPZHh+XicKWuEbZdpK349/257mTO/mMH01LaVvWtHR
+         4oE/WZ5fd00M4qjPRfRCjKBifoKM1v5VcfyUuAIvkmrz4LLw3NfRiNO7f7BsiyGIUv
+         9w1R0Hb5afE94Nj8iEUWt5kai2gIS4mbuqs3+9ut6MblR3c2XMNauYsemh9kcpFL2g
+         YQcZJsXBui2AA==
+Date:   Fri, 18 Nov 2022 16:38:52 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Gourav Samaiya <gsamaiya@nvidia.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] drm/nouveau/fb/ga102: Replace zero-length array of
+ trailing structs with flex-array
+Message-ID: <Y3gJfLIGUTTdajY4@work>
+References: <20221118211207.never.039-kees@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118211207.never.039-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Fri, Nov 18, 2022 at 01:12:08PM -0800, Kees Cook wrote:
+> Zero-length arrays are deprecated[1] and are being replaced with
+> flexible array members in support of the ongoing efforts to tighten the
+> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+> 
+> Replace zero-length array with flexible-array member.
+> 
+> This results in no differences in binary output.
+> 
+> [1] https://github.com/KSPP/linux/issues/78
+> 
+> Cc: Ben Skeggs <bskeggs@redhat.com>
+> Cc: Karol Herbst <kherbst@redhat.com>
+> Cc: Lyude Paul <lyude@redhat.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Gourav Samaiya <gsamaiya@nvidia.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: nouveau@lists.freedesktop.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/input/keyboard/max7359_keypad.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Thanks!
+--
+Gustavo
 
-diff --git a/drivers/input/keyboard/max7359_keypad.c b/drivers/input/keyboard/max7359_keypad.c
-index 62ce93462955..1bba11ed4132 100644
---- a/drivers/input/keyboard/max7359_keypad.c
-+++ b/drivers/input/keyboard/max7359_keypad.c
-@@ -155,8 +155,7 @@ static void max7359_initialize(struct i2c_client *client)
- 	max7359_fall_deepsleep(client);
- }
- 
--static int max7359_probe(struct i2c_client *client,
--					const struct i2c_device_id *id)
-+static int max7359_probe(struct i2c_client *client)
- {
- 	const struct matrix_keymap_data *keymap_data =
- 			dev_get_platdata(&client->dev);
-@@ -283,7 +282,7 @@ static struct i2c_driver max7359_i2c_driver = {
- 		.name = "max7359",
- 		.pm   = &max7359_pm,
- 	},
--	.probe		= max7359_probe,
-+	.probe_new	= max7359_probe,
- 	.id_table	= max7359_ids,
- };
- 
--- 
-2.38.1
-
+> ---
+>  drivers/gpu/drm/nouveau/include/nvfw/hs.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/include/nvfw/hs.h b/drivers/gpu/drm/nouveau/include/nvfw/hs.h
+> index 8c4cd08a7b5f..8b58b668fc0c 100644
+> --- a/drivers/gpu/drm/nouveau/include/nvfw/hs.h
+> +++ b/drivers/gpu/drm/nouveau/include/nvfw/hs.h
+> @@ -52,7 +52,7 @@ struct nvfw_hs_load_header_v2 {
+>  	struct {
+>  		u32 offset;
+>  		u32 size;
+> -	} app[0];
+> +	} app[];
+>  };
+>  
+>  const struct nvfw_hs_load_header_v2 *nvfw_hs_load_header_v2(struct nvkm_subdev *, const void *);
+> -- 
+> 2.34.1
+> 
