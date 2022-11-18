@@ -2,91 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C310C62FF94
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C81D62FF95
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbiKRVqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 16:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S231189AbiKRVrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 16:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiKRVql (ORCPT
+        with ESMTP id S231259AbiKRVrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 16:46:41 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992DE85165
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:46:40 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 8CDB332008FF;
-        Fri, 18 Nov 2022 16:46:39 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 18 Nov 2022 16:46:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1668807999; x=
-        1668894399; bh=m0qim5xloUqSWCBLe4PKp9y/XJvQoCDrt2G9AYpaGa8=; b=p
-        vQtOjvp0f4uVWQ650FLODz+Gchx4RTWFrmCorFUs3dg/qF1gR1GReNAOvbbDfj05
-        RLwzicAWmcn8mGNWcF3IAvcG5gW9LYpPqHENDYbnMbklMCg9hXlPB07IShrVMIcX
-        qC7s5++ppkM7TXGOiLqX+KV6BvmK/Hroty8SKb28aiPCpVOyDl74w9mW7ewvdd2r
-        Vw10DJMI23PS/hxi6FugyCWCt9ME9jVw7uMof2mx28V7jH+WEiiBxHs9XjCkga6J
-        o6rGfCN2BHTJFe9ipcfRsR4FGQJ1cMEn4hw7F28f3jzxL/DJmycnDxOMjoBGrH22
-        bIG3ymvM9l7kaTbHKlQPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668807999; x=1668894399; bh=m0qim5xloUqSWCBLe4PKp9y/XJvQ
-        oCDrt2G9AYpaGa8=; b=L2OjdpMEGbpYn5RluyOLgAEawWRJnDxcYx09A1H0V3vG
-        UVaNQojhYS6LC/+PuhmaXch59rbf6FjYJ7jVNQAPA74IHXP2nPD7qB7RzQCUrS+C
-        d70ucOla/rdJ+hz/SB5uxohfTGMD4vuHfWC01frMuTFsu2/GUEU5qr4gtTK88Lzf
-        qiPwZ1G95xVVAqey4X+ZkaKSWS8q/Iex2YywB1s3SOFs0pD9pTBADlx/e/Rxngfh
-        FUqpuRvwHBH5PlTTGjbS/2vGFKQjdllSlRS1ezGpImRXeOwDoQRT4nuMKks1MdYn
-        zHA/rcTIbE3Lhps863FnqszHU8wSv2PZ5X99AMS7FA==
-X-ME-Sender: <xms:Pv13Y2BSVW7FH2Dd-O5P3KMtPxNXHCirpVY40CKB6SZ-elgpiIGK-A>
-    <xme:Pv13YwhvzBrq5W8pQRmdzoa9L7YI9va2F3vECYPbCPCk66ZGpyioE6NMAQN8GjuJ2
-    WwiHjJOmVdNiw>
-X-ME-Received: <xmr:Pv13Y5nOjFdBd47nFs7geRsHUOEqE51wnLKmaFXWAuA7WK4gB6NJ-syQWb_m_-2Ejf9eaTwoUmj5Bu-b8mQ487PKMwH9oql_EQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedtgdduheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrrhgv
-    khcuofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinh
-    hvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepueek
-    teetgefggfekudehteegieeljeejieeihfejgeevhfetgffgteeuteetueetnecuffhomh
-    grihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgsh
-    hlrggsrdgtohhm
-X-ME-Proxy: <xmx:Pv13Y0zZgDAzIvV9kP25qNbzIqAIVD4P3LHbtRde5xkUSs1_uTldAg>
-    <xmx:Pv13Y7SRauCLnSXdbtmWYVm1VNplMzubcAINVCqgDI538NasB2RmhA>
-    <xmx:Pv13Y_ZdHjesRLy7pFixTt52MxbmjRRQG64zyRA5yBaRUYgfRQ6hYA>
-    <xmx:P_13Y5NKSqvqRzVCNTa0n6wrQSqWVltzkWQ_EwuIQ1QVOrBZeRbnIQ>
-Feedback-ID: i1568416f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Nov 2022 16:46:37 -0500 (EST)
-Date:   Fri, 18 Nov 2022 22:46:34 +0100
-From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH v3] xen-pciback: Consider INTx disabled when MSI/MSI-X is
- enabled
-Message-ID: <Y3f9O0S8kVXZ+py+@mail-itl>
-References: <20221118154931.1928298-1-marmarek@invisiblethingslab.com>
- <CAKf6xpuCxftyQ+PKN_ffJ0onsSxcT8kVSwkM7Z10pfjqf0XFgA@mail.gmail.com>
+        Fri, 18 Nov 2022 16:47:00 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3066A7C3F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:46:59 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id s206so6787149oie.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:46:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8SwupCC3PnJevqOfbcgELwBkhH/r0fIRZTWdXdXVm8=;
+        b=JoS4FQ3jGIbrUWEiixI+pP/r8BqqyWqF3njCsjlrZGI8kDN2EZjoUz/7J5Mn9sYp2+
+         sjM8pDV9oQ1dwrGSiLHdmbvXWVsYJJw8lv41nwf4uNTMBFTbx6kgbbqz3DIUYkZQbN1b
+         2IPNv7n/8TLBom4VhAwJv0DcAeOp/KELU2IMiz9odN2YgsCPM7qiBZaS9F1x3zGk6hp3
+         XkM+jxZmOXa7PKV73AUS2ZHCO9/IwD3IOgBRBCKvV8ImSzrvBwCwp1Z7XyYG6A09xWby
+         OTfZrI6NDYWRfW5P8LrwlyOajkOTGwM9ppKRYAtYNzDVtU5ajVQsk0DAmIooRwOl61sv
+         dn2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8SwupCC3PnJevqOfbcgELwBkhH/r0fIRZTWdXdXVm8=;
+        b=xUheGE8eFLCxV6RNNx7yu5BCbjAtbawpg7j2jTvnyNAj46VaYf4e99KTUs+xOnfvX4
+         uX2Lxh28uxd464cdq3vKM1xEXusOMT6S7kTDzyOBW/U+vaOaYzoEUNuc9r5i9CUiTmgx
+         IILPuhcN8MdlzQqtcIYO3UhZeOB68Iv3H+c5z1QoB4+vJ8WI5idtfepuzOcUlngmsRzr
+         Arh4PoMTSFSUP+eBGRDp6qp1UnUicWqkzvHy5b9UMkabvNPFsBqPV7hNRC86vFzr3Pl5
+         1wO5H2tAohtVeZ4DR7j5w+TsD6soz1waIMeaFdseRvuGxtuiTYSzJrvwmjaGhILaZHKU
+         C+zA==
+X-Gm-Message-State: ANoB5pm5wnVum7M+LbpFd5FhUVdJ+PhmzVewDBQ93vY8/YjYxzVQ6UDb
+        cW2PPUruk++5pXODL4sMCaaZ/Mo+P6BmbXqBwmNbwA==
+X-Google-Smtp-Source: AA0mqf6cv9dRAqebAhbfTEwCDiEZ4myphsALErZIJDcguXct6tC+6AHPYPCuvs5ID42pEGBlG/jMfh++srMz5k/Wz+o=
+X-Received: by 2002:a05:6808:f09:b0:354:8922:4a1a with SMTP id
+ m9-20020a0568080f0900b0035489224a1amr4378524oiw.181.1668808018993; Fri, 18
+ Nov 2022 13:46:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qQdthczOYgb16K95"
-Content-Disposition: inline
-In-Reply-To: <CAKf6xpuCxftyQ+PKN_ffJ0onsSxcT8kVSwkM7Z10pfjqf0XFgA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <20221118183409.give.387-kees@kernel.org>
+In-Reply-To: <20221118183409.give.387-kees@kernel.org>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Fri, 18 Nov 2022 13:46:48 -0800
+Message-ID: <CAKH8qBskaeP6BqkNKjZQ0Bvj+48t+yLxYbXcLxCyyEOXQCuJyw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3] bpf/verifier: Use kmalloc_size_roundup() to
+ match ksize() usage
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,124 +76,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 18, 2022 at 10:34 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Most allocation sites in the kernel want an explicitly sized allocation
+> (and not "more"), and that dynamic runtime analysis tools (e.g. KASAN,
+> UBSAN_BOUNDS, FORTIFY_SOURCE, etc) are looking for precise bounds checking
+> (i.e. not something that is rounded up). A tiny handful of allocations
+> were doing an implicit alloc/realloc loop that actually depended on
+> ksize(), and didn't actually always call realloc. This has created a
+> long series of bugs and problems over many years related to the runtime
+> bounds checking, so these callers are finally being adjusted to _not_
+> depend on the ksize() side-effect, by doing one of several things:
+>
+> - tracking the allocation size precisely and just never calling ksize()
+>   at all[1].
+>
+> - always calling realloc and not using ksize() at all. (This solution
+>   ends up actually be a subset of the next solution.)
+>
+> - using kmalloc_size_roundup() to explicitly round up the desired
+>   allocation size immediately[2].
+>
+> The bpf/verifier case is this another of this latter case, and is the
+> last outstanding case to be fixed in the kernel.
+>
+> Because some of the dynamic bounds checking depends on the size being an
+> _argument_ to an allocator function (i.e. see the __alloc_size attribute),
+> the ksize() users are rare, and it could waste local variables, it
+> was been deemed better to explicitly separate the rounding up from the
+> allocation itself[3].
+>
+> Round up allocations with kmalloc_size_roundup() so that the verifier's
+> use of ksize() is always accurate.
+>
+> [1] e.g.:
+>     https://git.kernel.org/linus/712f210a457d
+>     https://git.kernel.org/linus/72c08d9f4c72
+>
+> [2] e.g.:
+>     https://git.kernel.org/netdev/net-next/c/12d6c1d3a2ad
+>     https://git.kernel.org/netdev/net-next/c/ab3f7828c979
+>     https://git.kernel.org/netdev/net-next/c/d6dd508080a3
+>
+> [3] https://lore.kernel.org/lkml/0ea1fc165a6c6117f982f4f135093e69cb884930.camel@redhat.com/
+>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
 
---qQdthczOYgb16K95
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Nov 2022 22:46:34 +0100
-From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-To: Jason Andryuk <jandryuk@gmail.com>
-Cc: linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Jan Beulich <jbeulich@suse.com>,
-	"moderated list:XEN HYPERVISOR INTERFACE" <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH v3] xen-pciback: Consider INTx disabled when MSI/MSI-X is
- enabled
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
-On Fri, Nov 18, 2022 at 03:46:47PM -0500, Jason Andryuk wrote:
-> On Fri, Nov 18, 2022 at 10:50 AM Marek Marczykowski-G=C3=B3recki
-> <marmarek@invisiblethingslab.com> wrote:
-> >
-> > Linux enables MSI-X before disabling INTx, but keeps MSI-X masked until
-> > the table is filled. Then it disables INTx just before clearing MASKALL
-> > bit. Currently this approach is rejected by xen-pciback.
-> > According to the PCIe spec, device cannot use INTx when MSI/MSI-X is
-> > enabled (in other words: enabling MSI/MSI-X implicitly disables INTx).
-> >
-> > Change the logic to consider INTx disabled if MSI/MSI-X is enabled. This
-> > applies to three places:
-> >  - checking currently enabled interrupts type,
-> >  - transition to MSI/MSI-X - where INTx would be implicitly disabled,
-> >  - clearing INTx disable bit - which can be allowed even if MSI/MSI-X is
-> >    enabled, as device should consider INTx disabled anyway in that case
-> >
-> > Fixes: 5e29500eba2a ("xen-pciback: Allow setting PCI_MSIX_FLAGS_MASKALL=
- too")
-> > Signed-off-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblething=
-slab.com>
-> > ---
-> > Changes in v3:
-> >  - allow clearing INTx regardless of MSI/MSI-X state, to be consistent
-> >    with enabling MSI/MSI-X
-> > Changes in v2:
-> >  - restructure the patch to consider not only MASKALL bit, but enabling
-> >    MSI/MSI-X generally, without explicitly disabling INTx first
-> > ---
->=20
-> I was trying to test your xen-pciback v3 patch, and I am having
-> assignment fail consistently now.  It is actually failing to
-> quarantine to domIO in the first place, which matches the failure from
-> the other day (when I more carefully read through the logs).  It now
-> consistently fails to quarantine on every boot unlike the other day
-> where it happened once.
-
-Does this include the very first assignment too, or only after domain
-reboot? If the latter, maybe some cleanup missed clearing MASKALL?
-
-FWIW, the patch applied to Qubes
-(https://github.com/QubesOS/qubes-linux-kernel/pull/680) seems to work
-fine (the full test run is still in progress, but I see some green marks
-already).
-
-> I added some printks and it 's getting -EBUSY from pdev_msix_assign()
-> which means pci_reset_msix_state() is failing:
->     if ( pci_conf_read16(pdev->sbdf, msix_control_reg(pos)) &
->          PCI_MSIX_FLAGS_MASKALL )
->         return -EBUSY;
->=20
-> # lspci -vv -s 14.3
-> ...
->     Capabilities: [80] MSI-X: Enable- Count=3D16 Masked+
->         Vector table: BAR=3D0 offset=3D00002000
->         PBA: BAR=3D0 offset=3D00003000
->=20
-> So it looks like MASKALL is set and prevents assignment.
->=20
-> setpci -s 00:14.3 82.W=3Df
-> cleared that out for me and I could assign the device.
->=20
-> My dom0 boots, it runs flask-label-pci for a set of PCI devices
-> (including iwlwifi), then xl pci-assignable-add for all PCI devices
-> which will be passed through, then a little later it boots the
-> associated domains.  Dom0 does not have a driver for iwlwifi.
->=20
-> I'll have to investigate more to see how MASKALL is getting set.  This
-> had not been an issue before your recent patches.
-
-I guess before the patches nothing set anything in MSI-X capability,
-because it was hidden...
-
-Anyway, to support my cleanup hypothesis, I tried to destroy a
-PCI-having domain, and it left MSI-X enabled (at least according to the
-config space). MASKALL was _not_ set, but I haven't checked masking of
-individual vectors. TBH, I'm not sure what should be responsible for the
-MSI-X cleanup after guest destroy. Should it be Xen? Qemu? Pciback?
-Pciback calls PHYSDEVOP_{prepare,release}_msix only when
-binding/unbinding from the device (so - xl pci-assignable-{add,remove}),
-so this isn't the right place.
-Should that be in Xen, in deassign_device() (part of
-DOMCTL_deassign_device)?
-
---=20
-Best Regards,
-Marek Marczykowski-G=C3=B3recki
-Invisible Things Lab
-
---qQdthczOYgb16K95
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmN3/TsACgkQ24/THMrX
-1ywkSQf/aTohVS7nA2ExCmuvEVfy/hGZ6deH7uoh3uApGTOhNEmD+ImNzRDDwDW9
-vK7MAeJnE9zBQq4zklTd/DiktxefRu6X8HGTklrI8sZ8qjq92NYZF4Vul/g7/+l6
-4XGi6dNdvN5P7e7TUTHI49rtBrvfA51DCuW9SLJTvI5RAXXRbLan8luGij51/TWH
-TsxfNPJ+fX0pWr/G9ynnSeBUJzw+BcBAwj4FaMPkWaOvl0wDK98lspRTrXIJ7Usw
-nzbgnNqwkAbQ+E/s1eSDnw1BQxDXcFxM6orO6fP/ntFSIpIbHmLesV3erYumLYLf
-/O8lcstVWu7jFOXtQMBMoc2sYJh92A==
-=m44E
------END PGP SIGNATURE-----
-
---qQdthczOYgb16K95--
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: bpf@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v3:
+> - memory leak already taken into -next (daniel)
+> - improve commit log (daniel)
+> - drop optimization patch for now (sdf)
+> v2: https://lore.kernel.org/lkml/20221029024444.gonna.633-kees@kernel.org/
+> v1: https://lore.kernel.org/lkml/20221018090550.never.834-kees@kernel.org/
+> ---
+>  kernel/bpf/verifier.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index beed7e03addc..c596c7c75d25 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -1010,9 +1010,9 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+>         if (unlikely(check_mul_overflow(n, size, &bytes)))
+>                 return NULL;
+>
+> -       if (ksize(dst) < bytes) {
+> +       if (ksize(dst) < ksize(src)) {
+>                 kfree(dst);
+> -               dst = kmalloc_track_caller(bytes, flags);
+> +               dst = kmalloc_track_caller(kmalloc_size_roundup(bytes), flags);
+>                 if (!dst)
+>                         return NULL;
+>         }
+> @@ -1029,12 +1029,14 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+>   */
+>  static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
+>  {
+> +       size_t alloc_size;
+>         void *new_arr;
+>
+>         if (!new_n || old_n == new_n)
+>                 goto out;
+>
+> -       new_arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
+> +       alloc_size = kmalloc_size_roundup(size_mul(new_n, size));
+> +       new_arr = krealloc(arr, alloc_size, GFP_KERNEL);
+>         if (!new_arr) {
+>                 kfree(arr);
+>                 return NULL;
+> @@ -2506,9 +2508,11 @@ static int push_jmp_history(struct bpf_verifier_env *env,
+>  {
+>         u32 cnt = cur->jmp_history_cnt;
+>         struct bpf_idx_pair *p;
+> +       size_t alloc_size;
+>
+>         cnt++;
+> -       p = krealloc(cur->jmp_history, cnt * sizeof(*p), GFP_USER);
+> +       alloc_size = kmalloc_size_roundup(size_mul(cnt, sizeof(*p)));
+> +       p = krealloc(cur->jmp_history, alloc_size, GFP_USER);
+>         if (!p)
+>                 return -ENOMEM;
+>         p[cnt - 1].idx = env->insn_idx;
+> --
+> 2.34.1
+>
