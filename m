@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C1862F429
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6E962F42D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 13:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241565AbiKRMBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 07:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
+        id S241432AbiKRMEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 07:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbiKRMBg (ORCPT
+        with ESMTP id S235107AbiKRMEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 07:01:36 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D91694A55
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:01:35 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id f23-20020a6b5117000000b006dbd4e6a5abso2483011iob.17
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 04:01:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=io3/kjZxYz+EP12Gdr6kUmvSfwYCU8Dd09Zf0yeW8XY=;
-        b=6JHYim1hNGHYepnbG8plknpMKe39yE2IZN7fu5uEVmqNB2ZIrgjik6HPEvl0pDgf0w
-         VStLcYhoMGOERx0hSL+l6Va9szBexaNCE3KRuJ5XDuHEPCYApg2ODsF7IMkUJrtCcrN7
-         m9x72GhmZaKI2RDgDoSNBUJv8oH1wnzvoXdKfcj9HUxhiHpXFOWl8dEIAMRYBi30TwDs
-         CHF3nIywUR6oydQf/a4Uf1tS4QPKUqFqeB7JEBwhVYFMDywhPyMKEpQ0UieraKGxgVkf
-         x+XS9cK3WXRi1D4GBrlZUqZBug6CYs8Gq5SUg0xH2tj7ls2eblu6BrrgooTcbnNG9DZE
-         GfUg==
-X-Gm-Message-State: ANoB5plSoPu7U10g+zXs2Q5SrY4Zq/z1V45AUTnxJpGokE4/rfjKBBcE
-        niDjmbSihUKX8iVoCoYQjJ/zXCOxfpSkqExkyitSb4yOcdw3
-X-Google-Smtp-Source: AA0mqf6MG6V6KHPdVZDEwYenAr6v+B4rh+K1Qwq64Fti4lZsYVQJRVRrY75GzREfEIri1kUHddMysl8QCv7snICt6lDKu6ZlKQgo
+        Fri, 18 Nov 2022 07:04:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8C1264A5;
+        Fri, 18 Nov 2022 04:04:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0705D624BA;
+        Fri, 18 Nov 2022 12:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E643BC433C1;
+        Fri, 18 Nov 2022 12:04:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668773050;
+        bh=16/eZrNzuo6DfZkPEAFwMOchB87kodvzPf3XhDp0Vgw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S6ZAgd/uro5BfypVAdiqv7UtMzbw0VlsnIMF5F+91W+F+e75VGz/U/ORYFwuPBYRr
+         OLWCQQwUW+9R4MgwH6B/WoE6qgRf9rbCZGAHWq15r9K+6FpbfSG6iSFhzbOXzTPani
+         bXKoZHiA7cryOSx3dJlJlJRP0dY2ftGHwNP/Y9b7nR9yO5GjGxCu4O1ckeX9XjWQVc
+         rBoamjnG5gkvNseRhmSm2Vjud4KL0f9MWtzIUvdgQojop/oh2lXXcHsDkYBH/h8AWt
+         n/UXWgnoyLNUUma/2Nj8SZpyMtW1yP0MRWovLw5qV/pjHOR/y8grusi4JwORATYOLK
+         KIcTPDPIAlf3Q==
+Date:   Fri, 18 Nov 2022 12:04:04 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>, palmer@dabbelt.com
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 8/8] RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
+Message-ID: <Y3d0tL6UoAbdhHKE@spud>
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-9-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:218b:b0:2ff:1ff9:1d81 with SMTP id
- j11-20020a056e02218b00b002ff1ff91d81mr3323210ila.33.1668772894643; Fri, 18
- Nov 2022 04:01:34 -0800 (PST)
-Date:   Fri, 18 Nov 2022 04:01:34 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000098a3e005edbd7776@google.com>
-Subject: [syzbot] KMSAN: uninit-value in __hw_addr_add_ex
-From:   syzbot <syzbot+cec7816c907e0923fdcc@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, glider@google.com, gnaaman@drivenets.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org, luwei32@huawei.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        wangxiongfeng2@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118011714.70877-9-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hey Palmer,
 
-syzbot found the following issue on:
+Can you take this patch for v6.2 please, as it kinda just equalises
+things for the existing jh7100 stuff? Everyone else can boot defconfig
+other than the visionfive v1/beagle v.
 
-HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=153cd3c7b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
-dashboard link: https://syzkaller.appspot.com/bug?extid=cec7816c907e0923fdcc
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+Thanks,
+Conor.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cec7816c907e0923fdcc@syzkaller.appspotmail.com
-
-IPv6: ADDRCONF(NETDEV_CHANGE): hsr_slave_0: link becomes ready
-=====================================================
-BUG: KMSAN: uninit-value in memcmp+0x23e/0x290 lib/string.c:789
- memcmp+0x23e/0x290 lib/string.c:789
- __hw_addr_add_ex+0x2f9/0x1020 net/core/dev_addr_lists.c:62
- __hw_addr_sync_one net/core/dev_addr_lists.c:210 [inline]
- __hw_addr_sync_multiple+0x35f/0xa40 net/core/dev_addr_lists.c:250
- dev_mc_sync_multiple+0x195/0x2b0 net/core/dev_addr_lists.c:959
- team_set_rx_mode+0x143/0x230 drivers/net/team/team.c:1780
- __dev_set_rx_mode+0x3b0/0x440 net/core/dev.c:8717
- __dev_mc_add net/core/dev_addr_lists.c:836 [inline]
- dev_mc_add+0x180/0x1d0 net/core/dev_addr_lists.c:850
- igmp6_group_added+0x320/0x830 net/ipv6/mcast.c:680
- __ipv6_dev_mc_inc+0x11e9/0x1620 net/ipv6/mcast.c:949
- ipv6_dev_mc_inc+0x70/0x80 net/ipv6/mcast.c:957
- addrconf_join_solict net/ipv6/addrconf.c:2179 [inline]
- addrconf_dad_begin net/ipv6/addrconf.c:3958 [inline]
- addrconf_dad_work+0x736/0x2210 net/ipv6/addrconf.c:4085
- process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
- worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
- kthread+0x721/0x850 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
-
-Uninit was stored to memory at:
- __hw_addr_create net/core/dev_addr_lists.c:32 [inline]
- __hw_addr_add_ex+0x718/0x1020 net/core/dev_addr_lists.c:93
- __dev_mc_add net/core/dev_addr_lists.c:832 [inline]
- dev_mc_add+0x10a/0x1d0 net/core/dev_addr_lists.c:850
- igmp6_group_added+0x320/0x830 net/ipv6/mcast.c:680
- __ipv6_dev_mc_inc+0x11e9/0x1620 net/ipv6/mcast.c:949
- ipv6_dev_mc_inc+0x70/0x80 net/ipv6/mcast.c:957
- addrconf_join_solict net/ipv6/addrconf.c:2179 [inline]
- addrconf_dad_begin net/ipv6/addrconf.c:3958 [inline]
- addrconf_dad_work+0x736/0x2210 net/ipv6/addrconf.c:4085
- process_one_work+0xdb9/0x1820 kernel/workqueue.c:2298
- worker_thread+0x10bc/0x21f0 kernel/workqueue.c:2445
- kthread+0x721/0x850 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
-
-Local variable buf created at:
- igmp6_group_added+0x9b/0x830 net/ipv6/mcast.c:671
- __ipv6_dev_mc_inc+0x11e9/0x1620 net/ipv6/mcast.c:949
-
-CPU: 1 PID: 25 Comm: kworker/1:1 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: ipv6_addrconf addrconf_dad_work
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+On Fri, Nov 18, 2022 at 09:17:14AM +0800, Hal Feng wrote:
+> Add CONFIG_SERIAL_8250_DW=y, which is a necessary option for
+> StarFive JH7110 and JH7100 SoCs to boot with serial ports.
+> 
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  arch/riscv/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> index 05fd5fcf24f9..a23d022974ad 100644
+> --- a/arch/riscv/configs/defconfig
+> +++ b/arch/riscv/configs/defconfig
+> @@ -122,6 +122,7 @@ CONFIG_MICROSEMI_PHY=y
+>  CONFIG_INPUT_MOUSEDEV=y
+>  CONFIG_SERIAL_8250=y
+>  CONFIG_SERIAL_8250_CONSOLE=y
+> +CONFIG_SERIAL_8250_DW=y
+>  CONFIG_SERIAL_OF_PLATFORM=y
+>  CONFIG_VIRTIO_CONSOLE=y
+>  CONFIG_HW_RANDOM=y
+> -- 
+> 2.38.1
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
