@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC0562EA23
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4086762EA2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbiKRAUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 19:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
+        id S240461AbiKRAYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 19:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiKRAUc (ORCPT
+        with ESMTP id S240618AbiKRAYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 19:20:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F66065E76;
-        Thu, 17 Nov 2022 16:20:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EA4B622BE;
-        Fri, 18 Nov 2022 00:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBFA8C433B5;
-        Fri, 18 Nov 2022 00:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668730830;
-        bh=QlpqTpq7N0MYY13FewCvFUnEVoJEbfjmNFTb/NEl4h0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cU+7Y5VgYjYb6B7Xl0xp9I9AhBSME7yRIEvUKA02pb0o7gjZe3/XiYgOKJJ5epEbo
-         Wu+w07epYhswdo4aLmku0pRw7KmYsL4tKX88KBOiiv/jVHv+rYEt4eDpfC1LL8NxWX
-         tV1zIaUiceM8R5fQ5j2Cgykhvo0Vn1OqIPMpvb7mcl5pIN5TuCE3045N7v1pUky/sS
-         a0WGikUXxt7zv1qI263NlxavwQOxVKEq9p7eeKjfqB4y+zogt4OLTGhAi0gHKlNc+0
-         n1OoRSJ2BvA+pwMCGNYkUHij/eHFTjKB0Vv+9tqBKgnS7Wi+e7Abf01JZoiO5lKHzW
-         cQKhdr+y6GILg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9981EE21EFA;
-        Fri, 18 Nov 2022 00:20:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 17 Nov 2022 19:24:17 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0354C70A1E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:24:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=hgtyWgrVOpmdmBa6/UWlG/v6XpfBN1v67jaf5tLg9qg=; b=SED0Ys76AN59Hhjl7xEtkgFU77
+        W8zDTGxY/zNGqf6rFnlu+XLYHRVgv8Uk/q2UXS04NipZJCa/S1omiuOrS3cQMiVZYNSJudypVHnov
+        0Xzvj0UGZUDIfifRlTzQC3SS1oKPOgDo/n3YROybZdFhsari44CexGBzR/BdKUUZ0xdo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ovpAO-002kGK-91; Fri, 18 Nov 2022 01:23:36 +0100
+Date:   Fri, 18 Nov 2022 01:23:36 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, Dan Carpenter <error27@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH 2/3] vc04_services: mmal-vchiq: Use bool for
+ vchiq_mmal_component.in_use
+Message-ID: <Y3bQiDw11t4pRokP@lunn.ch>
+References: <20221117160015.344528-1-umang.jain@ideasonboard.com>
+ <20221117160015.344528-3-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Networking for 6.1-rc6
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166873083062.21663.9245391934733865539.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Nov 2022 00:20:30 +0000
-References: <20221117120017.26184-1-pabeni@redhat.com>
-In-Reply-To: <20221117120017.26184-1-pabeni@redhat.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117160015.344528-3-umang.jain@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+>  struct vchiq_mmal_component {
+> -	u32 in_use:1;
+> +	bool in_use:1;
+>  	bool enabled:1;
 
-This pull request was applied to netdev/net.git (master)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+The patch you referenced says:
 
-On Thu, 17 Nov 2022 13:00:17 +0100 you wrote:
-> Hi Linus!
-> 
-> This is mostly NIC drivers related, with a notable tcp change that
-> introduces a new int config knob. It asks for the user input at
-> config-time but it's guarded by EXPERT, so I hope it's ok.
-> 
-> No new known outstanding regressions.
-> 
-> [...]
++If a structure has many true/false values, consider consolidating them into a
++bitfield with 1 bit members, or using an appropriate fixed width type, such as
++u8.
 
-Here is the summary with links:
-  - [GIT,PULL] Networking for 6.1-rc6
-    https://git.kernel.org/netdev/net/c/847ccab8fdcf
+The code did exactly this, using two bits fields, in one u32. A bool
+probably takes up 4 bytes, maybe 8 bytes, so this change probably
+doubles the storage size for these two fields. Are these fields on the
+hot path, where an extra AND instruction would make a difference?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+    Andrew
