@@ -2,143 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A7E62EA44
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A66762EA68
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240571AbiKRA3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 19:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S233266AbiKRAhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 19:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240496AbiKRA2v (ORCPT
+        with ESMTP id S234942AbiKRAhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 19:28:51 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C263B70A1E;
-        Thu, 17 Nov 2022 16:28:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668731327; x=1700267327;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GmWPbqaX/RKcrEpQEce2Uo62AEQ/ECmJrcr2BAPP4A8=;
-  b=iVV7oBaGYvAam04asypzkbV9TfS4KzilAvKhSlCR5HYMHFFamYfoq0b4
-   6XHU65iJtxNM4zmWXgX4CJ2C44guf6u7QsBvY8K+N4e+ShK7zMVmGVJ9P
-   d1aryDNWJG1dmCb1m0IaLGqr3d1fkJs4iiqu+seyaDUOQmgJM3sXo+Im2
-   Iwk+Z4K+7lsjfA20K9ox0IG0hUdeSA14h2q7LlwfrJUfWh7Y5a6w9Jx07
-   PWMLAde+ZLq5MH2RJcc2nqwpgmtn/nUcOaT/3sgYSLXHSnqCJK8ltOUzb
-   719mkgK35+/bWkPGqJPKZ7HmhQ0zOH0BSILxNCvQwvN5gXSMnsWA/Zsdd
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="311716973"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="311716973"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 16:28:47 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="703539952"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="703539952"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 16:28:45 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, akpm@linux-foundation.org,
-        thunder.leizhen@huawei.com, frederic@kernel.org,
-        joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] mm: Make vmalloc_dump_obj() call in clean context
-Date:   Fri, 18 Nov 2022 08:34:41 +0800
-Message-Id: <20221118003441.3980437-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 17 Nov 2022 19:37:20 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBCE7EBE5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:37:20 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id n17so3600699pgh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:37:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kEdI6Pefgjdm+EKzofsS1dkV8ASnDhMDZc0vg3AoaOk=;
+        b=mpgCnkF+5w2+/AujiObw8Mqy6X7d1iuTYnxLCp6HL6YfGduKPhj42N7MHYAkG8qwb2
+         mLlB81pCP/nyVIfWWWM/nTIY2EqAjoqRextyWToJy4O9KP7z7/U5OR3cCqT5fEk+jzhV
+         HRVM3212zxnk7hU8uMpho9eL+/bTkhSkXYEQaMNCIcqHp6yJcsBJkHaQMCbFREv6+WIR
+         QLNVGXqwsIwWsxN0FfMq6n1R+Byak77CKre5n7N3eWYEDiFVqx06189l0ybO7ju3qwxX
+         wf1iYunf2IAwpwnumyGQV7IHqNtpAEF/vIuDkC5ZuBbhhiBdVURP29I+B4ahY7Cj5aia
+         132A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kEdI6Pefgjdm+EKzofsS1dkV8ASnDhMDZc0vg3AoaOk=;
+        b=0OhpdDBRJ0GwnlcWkwm9kw1Ix0WyUWx9aNUuBvzpqZWxY03k6hitOC3jsfoGjwzbyY
+         AQVNwDcNAlEWYX8PsbfNSa6ymsD705k+NPNkSok25jA4VV59ft/w6UBK1jB/Hyamsk6F
+         L2XTlQtjD2uMueTT12z9aCFPMvzd6sGfMlyXLnuZ6oLeu0VH99/IKm5a/tGrvq+Pta/M
+         K4b9Q/OAq1USW+wxEE2IuN+75BtIwqjctkb1ZaJEjxod5gRaivDLNPdAKXOF7gyrx1f7
+         v1Nu1PCgrSySxeCdXbH6Z+q8ZiYq31lKfA8v2Nv6bNdnMB4IfVKCRaccc0Bmrr6+CZsb
+         tofQ==
+X-Gm-Message-State: ANoB5pn+S3pVsvwJBj+bahRkbZvUVJc/BdMDnO62H1PLB4bCFMO98RnJ
+        aUpWeu52VtIueyIHQ/pnJbx8oyOKfZdbng==
+X-Google-Smtp-Source: AA0mqf45/scTNkT3/7wF/3cL82iaVbqBOprfXBPSjDQhA5Vf1PJDWzW1ny9LGtDqJPp51v/zIeJ2Tw==
+X-Received: by 2002:a05:6a00:2444:b0:558:991a:6671 with SMTP id d4-20020a056a00244400b00558991a6671mr5432059pfj.58.1668731839598;
+        Thu, 17 Nov 2022 16:37:19 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c65-20020a621c44000000b0056bcd7e1e04sm1760270pfc.124.2022.11.17.16.37.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 16:37:18 -0800 (PST)
+Date:   Fri, 18 Nov 2022 00:37:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+Subject: Re: [PATCH] KVM: x86: avoid memslot check in NX hugepage recovery if
+ it cannot be true
+Message-ID: <Y3bTu4/nUfpX+Enm@google.com>
+References: <20221117173109.3126912-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117173109.3126912-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the mem_dump_obj() is invoked in call_rcu(), the
-call_rcu() is maybe invoked in non-preemptive code segment,
-for object allocated from vmalloc(), the following scenarios
-may occur:
+On Thu, Nov 17, 2022, Paolo Bonzini wrote:
+> +		if (atomic_read(&kvm->nr_logpage_memslots)) {
 
-        CPU 0
-tasks context
-   spin_lock(&vmap_area_lock)
-       Interrupt context
-           call_rcu()
-             mem_dump_obj
-               vmalloc_dump_obj
-                 spin_lock(&vmap_area_lock) <--deadlock
+Can we use something like nr_dirty_logged_memslots?  logpage doesn't precisely
+capture the "dirty log" aspect, e.g. for a (very brief) second I though this was
+log(nr_memslot_pages).
 
-and for PREEMPT-RT kernel, the spinlock will convert to sleepable
-lock, so the vmap_area_lock spinlock not allowed to get in non-preemptive
-code segment. therefore, this commit make the vmalloc_dump_obj() call in
-a clean context.
+> +			slot = gfn_to_memslot(kvm, sp->gfn);
+> +			WARN_ON_ONCE(!slot);
+> +		}
+> +
+>  		if (slot && kvm_slot_dirty_track_enabled(slot))
+>  			unaccount_nx_huge_page(kvm, sp);
+>  		else if (is_tdp_mmu_page(sp))
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index e6e66c5e56f2..b3c2b975e737 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -722,6 +722,11 @@ struct kvm {
+>  	/* The current active memslot set for each address space */
+>  	struct kvm_memslots __rcu *memslots[KVM_ADDRESS_SPACE_NUM];
+>  	struct xarray vcpu_array;
+> +	/*
+> +	 * Protected by slots_lock, but can be read outside if an
+> +	 * incorrect answer is acceptable.
+> +	 */
+> +	atomic_t nr_logpage_memslots;
+>  
+>  	/* Used to wait for completion of MMU notifiers.  */
+>  	spinlock_t mn_invalidate_lock;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 43bbe4fde078..7670ebd29bcf 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1627,6 +1627,11 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- v1->v2:
- add IS_ENABLED(CONFIG_PREEMPT_RT) check.
- v2->v3:
- change commit message and add some comment.
+This needs to be done in the commit stage, e.g. if kvm_arch_prepare_memory_region()
+fails the count will be all kinds of wrong.  Even better, since this seems to be
+x86-centric, put it in kvm_mmu_slot_apply_flags() under the
 
- mm/util.c    |  4 +++-
- mm/vmalloc.c | 25 +++++++++++++++++++++++++
- 2 files changed, 28 insertions(+), 1 deletion(-)
+	if ((old_flags ^ new_flags) & KVM_MEM_LOG_DIRTY_PAGES)
 
-diff --git a/mm/util.c b/mm/util.c
-index 12984e76767e..2b0222a728cc 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -1128,7 +1128,9 @@ void mem_dump_obj(void *object)
- 		return;
- 
- 	if (virt_addr_valid(object))
--		type = "non-slab/vmalloc memory";
-+		type = "non-slab memory";
-+	else if (is_vmalloc_addr(object))
-+		type = "vmalloc memory";
- 	else if (object == NULL)
- 		type = "NULL pointer";
- 	else if (object == ZERO_SIZE_PTR)
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index ccaa461998f3..4351eafbe7ab 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -4034,6 +4034,31 @@ bool vmalloc_dump_obj(void *object)
- 	struct vm_struct *vm;
- 	void *objp = (void *)PAGE_ALIGN((unsigned long)object);
- 
-+	/* for non-vmalloc addr, return directly */
-+	if (!is_vmalloc_addr(objp))
-+		return false;
-+
-+	/**
-+	 * for non-Preempt-RT kernel, return directly. otherwise not
-+	 * only needs to determine whether it is in the interrupt context
-+	 * (in_interrupt())to avoid deadlock, but also to avoid acquire
-+	 * vmap_area_lock spinlock in disables interrupts or preempts
-+	 * critical sections, because the vmap_area_lock spinlock convert
-+	 * to sleepable lock
-+	 */
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
-+		return false;
-+
-+	/**
-+	 * get here, for Preempt-RT kernel, it means that we are in
-+	 * preemptible context(preemptible() is true), it also means
-+	 * that the in_interrupt() will return false.
-+	 * for non-Preempt-RT kernel, only needs to determine whether
-+	 * it is in the interrupt context(in_interrupt()) to avoid deadlock
-+	 */
-+	if (in_interrupt())
-+		return false;
-+
- 	vm = find_vm_area(objp);
- 	if (!vm)
- 		return false;
--- 
-2.25.1
+to avoid atomic operations if dirty logging isn't being toggled.  That would also
+deal with the NULL pointer issues David pointed out.
 
+>  		}
+>  	}
+>  
+> +	atomic_set(&kvm->nr_logpage_memslots,
+> +		   atomic_read(&kvm->nr_logpage_memslots)
+> +		   + !!(new->flags & KVM_MEM_LOG_DIRTY_PAGES)
+> +		   - !!(old->flags & KVM_MEM_LOG_DIRTY_PAGES));
+
+I belive this can be:
+
+	atomic_add(+ !!(new_flags & KVM_MEM_LOG_DIRTY_PAGES)
+		   - !!(old_flags & KVM_MEM_LOG_DIRTY_PAGES), ...);
+
+or less weirdly...
+
+	if ((old_flags ^ new_flags) & KVM_MEM_LOG_DIRTY_PAGES) {
+		...
+
+		if (new_flags & KVM_MEM_LOG_DIRTY_PAGES)
+			atomic_inc(...);
+		else
+			atomic_dec(...);
+	}
