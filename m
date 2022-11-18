@@ -2,120 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F11662F0EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F9862F0F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241858AbiKRJT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
+        id S241256AbiKRJUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241891AbiKRJTd (ORCPT
+        with ESMTP id S241857AbiKRJU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:19:33 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AEB167CE
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:19:32 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id g12so8274738wrs.10
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:19:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ywmGO6HZoPeDk5pta/Zgi0l/H8NSLfPp6KexyZfvyDg=;
-        b=XPRDdbxSOzJuW1tJt8/WHHpRnL8IMglbnT7xSVVogruEXcIywo6nDWDMXJnhsh0Til
-         +nQRhwutmq5nZmv8aI9NOzyY7aB/KemObkTtxVM8iPd54uYQwHa5VhbuNEG9JdA0/SrL
-         FtFdJhWtJBOqEGSYQiJHuSZPgdwXaf49DGFIzFP7h9d3Ht6cLtqQsnN0EvnpT/jWWLOp
-         U53ZDhnVotci6ISnopHFOrEe3RpHuPBKHfX+fFnHH/H4x4eDlURpDi2FoNBvgeFugSCo
-         2VU81DsEDzHP38mJ3akPjnbGRTBIKdmpcIKti0fFUr6f6iilXuI6bF572+m+jUp+zKMY
-         eMYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ywmGO6HZoPeDk5pta/Zgi0l/H8NSLfPp6KexyZfvyDg=;
-        b=eWvg4txfLPzlPPRj4/jeUVdj4+ho774G+fXnOjuvs7rIWJbSzdumT7F3oXMSdA4f/2
-         wyNFm1TM1wn03RM+B2GNAWTpMdWpgq/oxCIK1YsAm9WCpT6c7a+hu3Cj5OYV8v8L4sLx
-         hjXvOsdlIUSKEYrgnxZ6ZTqkJtaP/0IrCetSfxR2JmjZqk/iX+HoVchM1OXHHd57KDO8
-         garPrgccPtE32/bQ7jod6VZzPPyrIIyJTiBQS8ZLCIgj4jEK0LoyqZyAJifLXMxUxAWU
-         mgT0ftvhBFOe9AkQHZVmVvHfv44kn1HUZYVqyIUhVZbaGBm9RHxSc1kRlbKwSugip8YD
-         u/nA==
-X-Gm-Message-State: ANoB5pnmsJjKSFJ+QwpESFyzztPNceM8S7xZdkUBmbqOmppY5oQVgBtj
-        Vf3NThrBBVkwL4sB+O09CXIW3w==
-X-Google-Smtp-Source: AA0mqf4IvIt8ecYfLqqdpfe2Ie8mTRQ05q6WdL2M9MInxr9ONrK62RPNSh4FwljtDFBhkb48MVrNJQ==
-X-Received: by 2002:a5d:53cd:0:b0:231:355b:211c with SMTP id a13-20020a5d53cd000000b00231355b211cmr3562614wrw.509.1668763170487;
-        Fri, 18 Nov 2022 01:19:30 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:9c:201:4799:a943:410e:976])
-        by smtp.gmail.com with ESMTPSA id l8-20020adfa388000000b002417f35767asm3200743wrb.40.2022.11.18.01.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 01:19:29 -0800 (PST)
-Date:   Fri, 18 Nov 2022 10:19:24 +0100
-From:   Marco Elver <elver@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        kasan-dev <kasan-dev@googlegroups.com>, X86 ML <x86@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>
-Subject: Re: WARNING: CPU: 0 PID: 0 at arch/x86/include/asm/kfence.h:46
- kfence_protect
-Message-ID: <Y3dOHNh82NQboctR@elver.google.com>
-References: <CA+G9fYuFxZTxkeS35VTZMXwQvohu73W3xbZ5NtjebsVvH6hCuA@mail.gmail.com>
- <Y3Y+DQsWa79bNuKj@elver.google.com>
- <4208866d-338f-4781-7ff9-023f016c5b07@intel.com>
- <Y3bCV6VckVUEF7Pq@elver.google.com>
- <41ac24c4-6c95-d946-2679-c1be2cb20536@intel.com>
+        Fri, 18 Nov 2022 04:20:27 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB08AE58;
+        Fri, 18 Nov 2022 01:20:25 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 523F45C0513;
+        Fri, 18 Nov 2022 04:20:23 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 18 Nov 2022 04:20:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1668763223; x=1668849623; bh=4n4DR4UwM1
+        0Hw+UX/vwcqMHSZCvbtAN5htQFeot9k0s=; b=LYNeULVFAebnqpXOJpHXpNjDeY
+        XS0flPyOKrAZxKsh4iQc0ZI5EJvqg/vL6nqEYs2k4HELn5ioOaZASWxsOBDZz8Nk
+        U05AvRz/anebMho0GIoFAUzeWR1Q6yHnU5KvMD1nZOe9dV2tCagLqZhi0JH3vmc1
+        LtG7PYqX4CR6zcupd+XfXf2RZZ7wky/8sxvaKpgnawNa9PBoZU0XWNLEBuTHrV+i
+        Dt9H/w54YuWeBAsGdv+QQNxbSMV265i4e6LiwviudQHCQc9zv90hT1Vw/cIQoosB
+        PtT0UHFH6679yAOFMWv+pSsE8UAUuA6b3otS69gmmKEp0Hw2aMEydArXGhHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668763223; x=1668849623; bh=4n4DR4UwM10Hw+UX/vwcqMHSZCvb
+        tAN5htQFeot9k0s=; b=dYtPEl3UgKwY4kyD4AclEMrQ2EtGmLPlA68TpselZHFF
+        9u8LIdlGK0KAGUzTewj5FC9HO3MG39VuhRI9zm+ur9hWzfEkDlRNbeU9sL2qLVmh
+        l6v/t6vop4T3uI8/LivxEaQyaJWmgtH9aYewlRAVb8j7ag0mz4E2v7cI7LOh6voh
+        /brht4rf2zmC395EH+IGCIHNyyZpNURecjznZ6jIAtZY+V15ds2359kF8IrdJwYr
+        zHvtZDwHd6wq7ElS1IfwH7Sjao5l6JXsJ8P2Sy4Soqpn0N1m+w5WBYvMwhs8l3kn
+        cOdGElnKuyTbwsdFDvebzfpfudJciGUooy4nSwbV2w==
+X-ME-Sender: <xms:Vk53Y-mYyWluu8ptma9_HbxzN6V0WEpT_zpG02A8sZ0p4Td9uapCrw>
+    <xme:Vk53Y12N-XZjh3vrK1cA6dPEI_PelFPLODYnhhJEBfbWIzdJieuCywjCJIfyyG9mX
+    2VuecYVem3sERPMWKc>
+X-ME-Received: <xmr:Vk53Y8oWX8yXhLN6ibFL6-YdpceVsXUpxT1bIWXFHrJ2u2si28bNZ-uOdYrR9x4V3rXXjRoq3c5mHX3uzb1vPUDmQtq3o5DOQaedOjnVGNt49w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedtgddtvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:Vk53YymcEeZCWCnz6mZOA7HIRDHqvrJ3RJhYNSBbdApXSrbN5jJdLQ>
+    <xmx:Vk53Y80X3IftNfwIwF5-yOrZ4Hj2t-qhk6Nplx_5Me_yOEJ2DXcITw>
+    <xmx:Vk53Y5vs-s38Diftjkj7piocKdDWJO3Q2-Af4vCMmlWqcY_7cI1Emw>
+    <xmx:V053Y1HYD8gWp49Ur4aXLMO6qjTii50h3ivR-O1mqw55YOZ9nRnksQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Nov 2022 04:20:22 -0500 (EST)
+Date:   Fri, 18 Nov 2022 10:20:20 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        llvm@lists.linux.dev
+Subject: Re: linux-next: manual merge of the drm-misc tree with the origin
+ tree
+Message-ID: <20221118092020.nhvjomvwwryb7j3n@houat>
+References: <20221116105702.746ce3cf@canb.auug.org.au>
+ <Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
+ <20221118090636.00bfc293@canb.auug.org.au>
+ <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="utkgyjtezkaepsh6"
 Content-Disposition: inline
-In-Reply-To: <41ac24c4-6c95-d946-2679-c1be2cb20536@intel.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:54PM -0800, Dave Hansen wrote:
-> On 11/17/22 15:23, Marco Elver wrote:
-> > Yes - it's the 'level != PG_LEVEL_4K'.
-> 
-> That plus the bisect made it pretty easy to find, thanks for the effort!
-> 
-> Could you double-check that the attached patch fixes it?  It seemed to
-> for me.
 
-Yes, that works - thanks!
+--utkgyjtezkaepsh6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The issue was that the new "No changes, easy!" check in the suspect
-> commit didn't check the cpa->force_split option.  It didn't split down
-> to 4k and then all hell broke loose.
-> 
-> Oh, and I totally misread the kfence ability to tolerate partial TLB
-> flushes.  Sorry for the noise there!
+On Thu, Nov 17, 2022 at 05:01:08PM -0700, Nathan Chancellor wrote:
+> On Fri, Nov 18, 2022 at 09:06:36AM +1100, Stephen Rothwell wrote:
+> > Hi Nathan,
+> >=20
+> > On Thu, 17 Nov 2022 10:29:33 -0700 Nathan Chancellor <nathan@kernel.org=
+> wrote:
+> > >
+> > > This resolution is not quite right, as pointed out by clang:
+> > >=20
+> > >     drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: error: variable 'vc4_hdmi'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+> > >             mutex_lock(&vc4_hdmi->mutex);
+> > >                         ^~~~~~~~
+> > >     ./include/linux/mutex.h:187:44: note: expanded from macro 'mutex_=
+lock'
+> > >     #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+> > >                                                ^~~~
+> > >     drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the varia=
+ble 'vc4_hdmi' to silence this warning
+> > >             struct vc4_hdmi *vc4_hdmi;
+> > >                                      ^
+> > >                                       =3D NULL
+> > >     1 error generated.
+> > >=20
+> > > Obviously, the assignment of vc4_hdmi should be before mutex_lock().
+> >=20
+> > Thanks for pointing that out (silly me :-) ).  I have fixed up the
+> > resolution for today.
+>=20
+> Great, thank you so much! One less warning to worry about :)
 
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 220361ceb997..9b4e2ad957f6 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -1727,7 +1727,8 @@ static int __change_page_attr_set_clr(struct cpa_data *cpa, int primary)
->  	/*
->  	 * No changes, easy!
->  	 */
-> -	if (!(pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr)))
-> +	if (!(pgprot_val(cpa->mask_set) | pgprot_val(cpa->mask_clr))
-> +	    && !cpa->force_split)
->  		return ret;
->  
->  	while (rempages) {
+I actually did the same conflict resolution in drm-tip. I've fixed it up
+too, thanks for your report :)
 
-Tested-by: Marco Elver <elver@google.com>
+Maxime
+
+--utkgyjtezkaepsh6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3dOVAAKCRDj7w1vZxhR
+xa2fAQD933QJY5E3XRwJGvMvYIALowd4qIYtQyxBCrk/Zo2bTQEAiLYk8Ij68h6E
+CzpNCMHNSYp+43IPN7VzU0UqzQpvawk=
+=GyeM
+-----END PGP SIGNATURE-----
+
+--utkgyjtezkaepsh6--
