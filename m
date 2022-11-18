@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280E762FC2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E3A62FC2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 19:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242267AbiKRSGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 13:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S242312AbiKRSHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 13:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbiKRSGP (ORCPT
+        with ESMTP id S235350AbiKRSHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 13:06:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6166679E2F;
-        Fri, 18 Nov 2022 10:06:14 -0800 (PST)
+        Fri, 18 Nov 2022 13:07:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD557A34E;
+        Fri, 18 Nov 2022 10:07:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15140B824EB;
-        Fri, 18 Nov 2022 18:06:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDEBC433D6;
-        Fri, 18 Nov 2022 18:06:09 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 13:06:08 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chris Mason <clm@meta.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
-Message-ID: <20221118130608.5ba89bd8@gandalf.local.home>
-In-Reply-To: <43d5d1f5-c01d-c0db-b421-386331c2b8c1@meta.com>
-References: <20221108220651.24492-1-revest@chromium.org>
-        <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
-        <20221117121617.4e1529d3@gandalf.local.home>
-        <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
-        <20221117174030.0170cd36@gandalf.local.home>
-        <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
-        <20221118114519.2711d890@gandalf.local.home>
-        <43d5d1f5-c01d-c0db-b421-386331c2b8c1@meta.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78525B824E8;
+        Fri, 18 Nov 2022 18:07:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED03DC433C1;
+        Fri, 18 Nov 2022 18:07:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668794830;
+        bh=JRgQbEpZ0RMwp2uvvwWa6pDC/KPMoVxtfGmsL0D4kqw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=E27fsi49wTCfdVZwbEGB1YdksFqgHCF6a7kDMML0Ct+fjdR1Gp51qEDSdadJLrR5K
+         DBfA0svoOx/IrdnvRAIvQPUl6om9hJzQuBjgC81y8J63k4pamBZLD1d1cFHJHO26PZ
+         NOMeBh4TetcaUhdkyY3PnXLBXHAlJJak3L4FrkDM=
+Date:   Fri, 18 Nov 2022 19:07:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [GIT PULL] TTY/Serial driver fixes for 6.1-rc6
+Message-ID: <Y3fJy1m1WHFAO05t@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 12:44:00 -0500
-Chris Mason <clm@meta.com> wrote:
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-> > My biggest concern is changing functionality of arbitrary functions by BPF.
-> > I would much rather limit what functions BPF could change with some
-> > annotation.
-> > 
-> > int __bpf_modify foo()
-> > {
-> > 	...
-> > }
-> > 
-> > 
-> > That way if somethings not working, you can see directly in the code that
-> > the function could be modified by a BPF program, instead of getting some
-> > random bug report because a function returned an unexpected result that the
-> > code of that function could never produce.
-> >  
-> 
-> The good news is that BPF generally confines the function replacement
-> through struct ops interfaces.
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
-What struct ops interfaces?
+are available in the Git repository at:
 
->  There are also explicit allow lists to
-> limit functions where you can do return value overrides etc, so I think
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.1-rc6
 
-Where are these lists.
+for you to fetch changes up to 3ec17cb325ac731c2211e13f7eaa4b812694e218:
 
-> it's fair to say these concerns are already baked in.  I'm sure they can
+  docs/driver-api/miscellaneous: Remove kernel-doc of serial_core.c (2022-11-09 14:56:05 +0100)
 
-How do I know that a function return was modified by BPF? If I'm debugging
-something, is it obvious to the developer that is debugging an issue
-(perhaps unaware of what BPF programs are loaded on the users machine),
-that the return of a function was tweaked by BPF and that could be the
-source of the bug?
+----------------------------------------------------------------
+TTY/Serial driver fixes for 6.1-rc6
 
-> be improved over the long term, but I don't think that's related to this
-> set of functionality on ARM.
+Here are a number of small tty and serial driver fixes for 6.1-rc6.
+They all resolve reported problems:
+	- kernel doc build problems with the -rc1 serial driver
+	  documentation update
+	- n_gsm reported problems
+	- imx serial driver missing callback
+	- lots of tiny 8250 driver fixes for reported issues.
 
-I disagree. These issues may have been added to x86, but perhaps we should
-take a deeper look at them again before extending them to other
-architectures.
+All of these have been in linux-next for over a week with no reported
+problems.
 
--- Steve
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+----------------------------------------------------------------
+Akira Yokosawa (1):
+      docs/driver-api/miscellaneous: Remove kernel-doc of serial_core.c
+
+Duoming Zhou (1):
+      tty: n_gsm: fix sleep-in-atomic-context bug in gsm_control_send
+
+Fedor Pchelkin (2):
+      Revert "tty: n_gsm: avoid call of sleeping functions from atomic context"
+      Revert "tty: n_gsm: replace kicktimer with delayed_work"
+
+Ilpo Järvinen (4):
+      serial: 8250: Fall back to non-DMA Rx if IIR_RDI occurs
+      serial: 8250_lpss: Configure DMA also w/o DMA filter
+      serial: 8250_lpss: Use 16B DMA burst with Elkhart Lake
+      serial: 8250: Flush DMA Rx on RLSI
+
+Lukas Wunner (1):
+      serial: 8250: 8250_omap: Avoid RS485 RTS glitch on ->set_termios()
+
+Matthias Schiffer (1):
+      serial: 8250_omap: remove wait loop from Errata i202 workaround
+
+Shawn Guo (1):
+      serial: imx: Add missing .thaw_noirq hook
+
+Sherry Sun (1):
+      tty: serial: fsl_lpuart: don't break the on-going transfer when global reset
+
+Tony Lindgren (3):
+      serial: 8250: omap: Fix missing PM runtime calls for omap8250_set_mctrl()
+      serial: 8250: omap: Fix unpaired pm_runtime_put_sync() in omap8250_remove()
+      serial: 8250: omap: Flush PM QOS work on remove
+
+ Documentation/driver-api/miscellaneous.rst |  5 +-
+ drivers/tty/n_gsm.c                        | 71 +++++++++++++++-------------
+ drivers/tty/serial/8250/8250_lpss.c        | 17 +++++--
+ drivers/tty/serial/8250/8250_omap.c        | 52 +++++++++++---------
+ drivers/tty/serial/8250/8250_port.c        |  7 ++-
+ drivers/tty/serial/fsl_lpuart.c            | 76 +++++++++++++++++++-----------
+ drivers/tty/serial/imx.c                   |  1 +
+ 7 files changed, 138 insertions(+), 91 deletions(-)
