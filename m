@@ -2,129 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F5462F9BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601D262F9AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234973AbiKRPww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
+        id S242439AbiKRPuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242437AbiKRPux (ORCPT
+        with ESMTP id S242350AbiKRPuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:50:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CB88B131
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:49:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668786594;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f0l961mOiSvfsHXNC9b/4yL94fMPoEXmeS8Dl+sxaT8=;
-        b=cDS+gEqgTxQyXDDO4CZ+fmuJpaM/7WR1lANsy0H2+N58OlaJmwZBBQGRzvoc8hUIKvwe/1
-        EeapbLrIp5tp6sv09en8vdC3TcwEOVOm1E1G4X/Y4BwSjdkXMIe6Jq5zMrXtohRWwn8wfN
-        M3sY02iXQVnBOVvOcjxbC01CQ70dn2Y=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-102-trLBXlhbN5-D4oMcLJIDlw-1; Fri, 18 Nov 2022 10:49:52 -0500
-X-MC-Unique: trLBXlhbN5-D4oMcLJIDlw-1
-Received: by mail-wm1-f70.google.com with SMTP id o5-20020a05600c510500b003cfca1a327fso2425901wms.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:49:52 -0800 (PST)
+        Fri, 18 Nov 2022 10:50:15 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8588C48E
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:50:08 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id y16so9822029wrt.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:50:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=CmTL+mg18Z4AepnU6eZyDbtFVjUFILiYsH5hlR5uEro=;
+        b=OKMKBVZQLGFbwj7QynAdCsT1VPXH4Rioy1t2pjuIIwxWZix6jBtDy7618JyJPVVbKc
+         9cyV2lgYpSqGprBK/Zo5n0gBEwNItE5wk5Gn9gntUX2rkuu0ze1qAwFs2OWCJn+nFkcl
+         JAqCvez9iMlY31ZS4LunN34VGNDFXbZ3vWTgbY1e/y+4E+EpNgB7JTLS3KsHPGVn8q3D
+         unjpp+2+9+3F+IeR0mpzwPO5FSgMd1PgXO5xo8ymNxjTuTysCfEcwqT0Z6UAln26Rlcv
+         7+h/5k5SFS9tYojx/tMVyRFw2tCzjRc3rsQ6wEoArQ40uBTijfLSQD+45DjsTzDCm51g
+         ZFHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f0l961mOiSvfsHXNC9b/4yL94fMPoEXmeS8Dl+sxaT8=;
-        b=xo3aU5BM7qY2v5DftPOmg2M8qJbU+hdBAp2EzGtMc4dzBuxrUtHzLgAhewBGABbtKR
-         3yvDM6hxKxLxzvH9f0/I3b8s+ZIVefkvmciQiQJfxN25Bo50OAY+WZWRj+NO2dzYIEES
-         v+O5AJ/NDrFldswMbi1QOzEwQQtY0pyqLZam4aVh7J2L+op725EJroIw5fNTQkFtif2q
-         q7pq0o2KXNZZjVkbHKLXsys8JAaaGNufeFtwSoG+Jf9MsXYmaUzLHNm3IgqjLsVQ7Iak
-         agVyvZ1h8dnjo9og2TxI7d66X8QTCFmkvB36WK6iewxQpxUrdbYflwoxm3X84JoiSMcR
-         B3Lw==
-X-Gm-Message-State: ANoB5pmUkx1Va3TK5HDaPe9cEmQAn9trJ1VEMLsMbPXKX3DFBgWtQ982
-        TJHkSm8UyLMw9i2rzhIvP5cK7iFc5rGpEEwRbcb91OjQTeMIwO6NHaArBzq0Ey7SPw+VLe20NOX
-        ASri+nGhfERIOYAy9Tu+8oVkm
-X-Received: by 2002:a5d:6746:0:b0:22e:39c9:a4a6 with SMTP id l6-20020a5d6746000000b0022e39c9a4a6mr4764198wrw.170.1668786591680;
-        Fri, 18 Nov 2022 07:49:51 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5jlCG7seEl6CRYzUhjn7XrAab5Jm0ioGMACGL05tz5BA2MIRJoWKGbzbVbGzrZRpznzsvaHg==
-X-Received: by 2002:a5d:6746:0:b0:22e:39c9:a4a6 with SMTP id l6-20020a5d6746000000b0022e39c9a4a6mr4764178wrw.170.1668786591405;
-        Fri, 18 Nov 2022 07:49:51 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id f16-20020a5d50d0000000b00235da296623sm3807096wrt.31.2022.11.18.07.49.48
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CmTL+mg18Z4AepnU6eZyDbtFVjUFILiYsH5hlR5uEro=;
+        b=pmwqDw0MNtCOl7rqZVBydaXkfoJcClKb6Qu5glp8/TQAISurE1VH/f9kT6DJJyR375
+         Y8y5AeA9D1mU1cI90bLxTw9UxkbRGkbfbHFFfOMuL3a+JIUlTc2fqJCEBlW2hywNmhfc
+         gfKQtODc3g1pSXeU+CcVPdxCkXKtcaWaGcUx+kUokydgMwPLyGT2IhEpYMo/N0cuSV7P
+         CAyy3h9HZB8W0B56Us7oMkWsoKNAJGGVUaxtUdKAhWaaJZAif9+eNzBL7ohCAYR8E6Kt
+         h75F+aeT4d9BWFkjCRJcToBhyhU+Ux0G65ffadtu0oWbId2vz2F7DPfvnuxt8o/8Vt59
+         fUgw==
+X-Gm-Message-State: ANoB5pnODPmAdztBtwun6iEPcU9UoFMW1Dp3D3P39Q03ibiqbN2tFVq4
+        tRQdFaAtVSh0+n1bUe2dtb1YMg==
+X-Google-Smtp-Source: AA0mqf4VUH/lC1IDoaI1Aq0Zpxjp4JBMofLzpxPK1c2Yw11pg5JIQHZmyxkopn1qIikCQ7p5Weaomw==
+X-Received: by 2002:adf:e78e:0:b0:22e:32ab:c37 with SMTP id n14-20020adfe78e000000b0022e32ab0c37mr4831201wrm.317.1668786606917;
+        Fri, 18 Nov 2022 07:50:06 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id a13-20020a5d53cd000000b002383edcde09sm3812465wrw.59.2022.11.18.07.50.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 07:49:50 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     James Morse <james.morse@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        James Morse <james.morse@arm.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
-        baolin.wang@linux.alibaba.com, peternewman@google.com
-Subject: Re: [PATCH 07/18] x86/resctrl: Move CLOSID/RMID matching and
- setting to use helpers
-In-Reply-To: <20221021131204.5581-8-james.morse@arm.com>
-References: <20221021131204.5581-1-james.morse@arm.com>
- <20221021131204.5581-8-james.morse@arm.com>
-Date:   Fri, 18 Nov 2022 15:49:47 +0000
-Message-ID: <xhsmh8rk8xnxg.mognet@vschneid.remote.csb>
+        Fri, 18 Nov 2022 07:50:06 -0800 (PST)
+Subject: [PATCH v2 0/2] arm64: amlogic: add initial Odroid Go Ultra DTS
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAKypd2MC/42NQQrDMAwEv1J0rkrsxKH01H+UHuRYJAJjgZwESsjfa/qCnpbZw8wBlU24wuNygP
+ EuVbQ08NcLTAuVmVFSY/Cd967rHcYBNZlKwllxy6sRSpFVKGPgMUyJA/ueoAkiVcZoVKalKcqWczsX
+ qava5xfcXZvXX+7dYYeD5z5FpvuYwjNLIdOb2gzv8zy/1JQWNcoAAAA=
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Fri, 18 Nov 2022 16:50:04 +0100
+Message-Id: <20221031-b4-odroid-go-ultra-initial-v2-0-a3df1e09b0af@linaro.org>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/22 13:11, James Morse wrote:
-> When switching tasks, the CLOSID and RMID that the new task should
-> use are stored in struct task_struct. For x86 the CLOSID known by resctrl,
-> the value in task_struct, and the value written to the CPU register are
-> all the same thing.
->
-> MPAM's CPU interface has two different PARTID's one for data accesses
-> the other for instruction fetch. Storing resctrl's CLOSID value in
-> struct task_struct implies the arch code knows whether resctrl is using
-> CDP.
->
-> Move the matching and setting of the struct task_struct properties
-> to use helpers. This allows arm64 to store the hardware format of
-> the register, instead of having to convert it each time.
->
-> __rdtgroup_move_task()s use of READ_ONCE()/WRITE_ONCE() ensures torn
-> values aren't seen as another CPU may schedule the task being moved
-> while the value is being changed. MPAM has an additional corner-case
-> here as the PMG bits extend the PARTID space. If the scheduler sees a
-> new-CLOSID but old-RMID, the task will dirty an RMID that the limbo code
-> is not watching causing an inaccurate count. x86's RMID are independent
-> values, so the limbo code will still be watching the old-RMID in this
-> circumstance.
-> To avoid this, arm64 needs both the CLOSID/RMID WRITE_ONCE()d together.
-> Both values must be provided together.
->
+This adds initial support for the Hardkernel Odroid Go Ultra.
 
-I think I remember something about this... Is that about having them
-union'd and read/written as one? (just for my own curiosity)
+The Odroid Go Ultra is a portable gaming device with the following
+characteristics:
+- Amlogic S922X SoC
+- RK817 & RK818 PMICs
+- 2GiB LPDDR4
+- On board 16GiB eMMC
+- Micro SD Card slot
+- 5inch 854×480 MIPI-DSI TFT LCD
+- Earphone stereo jack, 0.5Watt 8Ω Mono speaker
+- Li-Polymer 3.7V/4000mAh Battery
+- USB-A 2.0 Host Connector
+- x16 GPIO Input Buttons
+- 2x ADC Analog Joysticks
+- USB-C Port for USB2 Device and Charging
 
-> Because MPAM's RMID values are not unique, the CLOSID must be provided
-> when matching the RMID.
->
-> CC: Valentin Schneider <vschneid@redhat.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
+The following are not yet handled:
+- Battery RK818 Gauge and Charging
+- Earphone stereo jack detect
+- 5inch 854×480 MIPI-DSI TFT LCD
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+This adds:
+- Device bindings
+- Initial device DT
 
+This serie depends on:
+- https://lore.kernel.org/all/20221025-rk808-multi-v2-0-d292d51ada81@linaro.org/
+
+To: Sebastian Reichel <sre@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Kevin Hilman <khilman@baylibre.com>
+To: Jerome Brunet <jbrunet@baylibre.com>
+To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-amlogic@lists.infradead.org
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+---
+Changes in v2:
+- Dropped power off driver/bindings, will move to another patchset
+- Fixed DT comments from Krzysztof
+- Dropped poweroff node
+- Add Acked-by from Rob to bindings change
+- Link to v1: https://lore.kernel.org/r/20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org
+
+---
+Neil Armstrong (2):
+      dt-bindings: amlogic: document Odroid Go Ultra compatible
+      arm64: dts: amlogic: add initial Odroid Go Ultra DTS
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     | 722 +++++++++++++++++++++
+ 3 files changed, 724 insertions(+)
+---
+base-commit: 2c3c398ddfabf48b7a0b66b5f01052ba43c36337
+change-id: 20221031-b4-odroid-go-ultra-initial-5e65cde5e23a
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
