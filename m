@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7995562EF08
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7A262EF09
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241047AbiKRIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 03:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S241214AbiKRIQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 03:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240766AbiKRIP6 (ORCPT
+        with ESMTP id S234976AbiKRIQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 03:15:58 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486D585172
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:15:57 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id j16so6980818lfe.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:15:57 -0800 (PST)
+        Fri, 18 Nov 2022 03:16:28 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0E06455B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:16:27 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id g12so7038161lfh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:16:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oQCH/Sp176vbPRXqpJPGAQyRVR8G2dlYjS15CYSHZ+Y=;
-        b=kEqJjuyusNzd4++TgyrS8RNq2Ilzx7GR9H5D91NisqLDvTCqy92gnovfPYdjGFgQpO
-         EbkqADOiNmdhH9u30mp5BCBtskG39bfePFbLl/+20UfKg8DJ+OXm+TIo64q5h9hnuH0m
-         NMduGQ48uCQGOTq22ZpQoNQMENAIg4Y6ONwbztwN03PDEYhOy7HM6cFavgs3eVLa4JXZ
-         giMPOAdoXJe+DDDbEdxlsZLsed+C9tTWAdLI5u5Yo4i2eySArzx6x0f5XGBEBHuCfaUG
-         kfKS44/dbyjf4nWfjNBYFBFOh7RmFBXKkNhEE73n5fUKFN2DQgA741yucT/rG1t6BnEM
-         hfpA==
+        bh=grZJ4NICXdF2G/wQCy1rfpvzfnXZMazCRtlS3FxP9/A=;
+        b=EiPsSo7100XsJMn/i35fEOUPjM57DMGuvZ3ztM6Hx+B95MV3Desk1upPCrJh06+uO/
+         4vXRoIlxpDh1GjmCN3F8fMN/HwSA6OOFuTSfNGXntqSEUl9JplrO6uYrCuwLSqJyWZkE
+         CPHjkOHCbt3ym5bfsxgJKzCIZ/JvQ/C6cYCGNYiCIhud2Knn1RqBwV+Wch1AiNHCjssU
+         5GgsvzSXnFsCHKpm3wuU3FBfeZrMYN4O/8gr2wCpupytPffOuzXIqRK/tLkthm55Qinr
+         s1BPMSBuYW8mhOIMlijIpKAFRnL0eVLdiEuIuUa6JFzrvW3PxvZ1YymosFw9OrTCGP82
+         44Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQCH/Sp176vbPRXqpJPGAQyRVR8G2dlYjS15CYSHZ+Y=;
-        b=NrtMo1xKsgPrpgMPKnsZXTX1y1hbtTwnwzpcGoxuXJwr2hsMUK/B4ysy9T2M+WWtK8
-         12lQTAXZXJHFWy5O0EMNWxb9BEHBybhdaAlxtb96plS+bnJBvq1xCWg04EaKxDBuZhbx
-         LMarSPomQ+z4K6k0YNnGDimH5z4sc6TNsHhkmIfBM04LORHywgWhKMRyRrkpeOeewweK
-         A7wrJZh+QJU6H6YIlL25JfZsMhFCOIAb40cRLCTkJeIWcyPPKw6tzPmjF3qH5FJ0Nlij
-         JkrHEf4wqe58Le2OBVLXMfPIRYCL71qagoNqruBXl0zOzGg5tb/L3+4APgj0tF1GItOD
-         TKdw==
-X-Gm-Message-State: ANoB5pl6wYJH+A0MQBtclDEhWs+wTIEm0gVmeuflAXA9qHKR4HCpN6eV
-        tpw4ubUkRZWV4rJKdIXB96tEYQ==
-X-Google-Smtp-Source: AA0mqf6r+spSfA5uDVZqKrli1/yAsMTUjo7NgEJOEEtln0/O302Tz+lT5MvAPAeXznogLjyKObJtmg==
-X-Received: by 2002:ac2:43d8:0:b0:4a2:45ce:a169 with SMTP id u24-20020ac243d8000000b004a245cea169mr2189309lfl.51.1668759355586;
-        Fri, 18 Nov 2022 00:15:55 -0800 (PST)
+        bh=grZJ4NICXdF2G/wQCy1rfpvzfnXZMazCRtlS3FxP9/A=;
+        b=v/ooAmF4FKBy2ZbmguxlNyinSdj4IoRqgMCj9X1rFKvdjDtGYWHZE1wjVbSbOq8ghv
+         N60G4qnfgk5ljuaYsZvrGOSjdEP/LNQP55Zw5IImQql6EmQ+7PB2nnbKN9kT8J35W4AK
+         qZzT71W/b/eS4B6ocXxFNKCLpFPplmD5GRjL013I2eduROEmZauCepQb3fDuuNwcDaNt
+         xkAY9NZnhjXJNhJ2bRMLa0VF/vk/Q/ZspK8o43hdCgUADBO4mMzRuMuXQPj58zohE/5P
+         DU0U13GJ5BNR6wdYQT+k1angb+zbOsHt4DQwvPjUHfxWKUelitrqp0izyswH8W/PbB+T
+         yeAA==
+X-Gm-Message-State: ANoB5plRae3sxayD99pUUqdoc3Ju89gqkGdReVjJYi1bl5lAEa/5UkAQ
+        h9AKBmQj24DSOfayWkH777tTgQ==
+X-Google-Smtp-Source: AA0mqf6/sVDu+xO/1Gr2MEKrR0lfheX0m1lS07JqLuTzmvLJ/Unpd1ycv0YbyaOSR9XYI/g4LuYgiQ==
+X-Received: by 2002:a19:4f15:0:b0:4b2:af4:65b2 with SMTP id d21-20020a194f15000000b004b20af465b2mr1913266lfb.189.1668759386499;
+        Fri, 18 Nov 2022 00:16:26 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05651205c600b0049478cc4eb9sm559358lfo.230.2022.11.18.00.15.54
+        by smtp.gmail.com with ESMTPSA id p8-20020a19f008000000b004ac980a1ba1sm566372lfc.24.2022.11.18.00.16.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 00:15:55 -0800 (PST)
-Message-ID: <898329c5-5ad6-bbf6-34db-a58ba4244882@linaro.org>
-Date:   Fri, 18 Nov 2022 09:15:53 +0100
+        Fri, 18 Nov 2022 00:16:25 -0800 (PST)
+Message-ID: <128a0b84-0ae2-5c79-ba2c-bfe26712a4a5@linaro.org>
+Date:   Fri, 18 Nov 2022 09:16:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/7] dt-bindings: arm64: dts: mediatek: Add mt8365-evk
- board
+Subject: Re: [PATCH v3 2/7] dt-bindings: irq: mtk, sysirq: add support for
+ mt8365
 Content-Language: en-US
 To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
         linux-mediatek@lists.infradead.org
@@ -65,9 +65,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         angelogiocchino.delregno@collabora.com
 References: <20221117210356.3178578-1-bero@baylibre.com>
- <20221117210356.3178578-2-bero@baylibre.com>
+ <20221117210356.3178578-3-bero@baylibre.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117210356.3178578-2-bero@baylibre.com>
+In-Reply-To: <20221117210356.3178578-3-bero@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,27 +80,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 17/11/2022 22:03, Bernhard Rosenkränzer wrote:
-> Add bindings for the Mediatek mt8365-evk board.
+> Add binding documentation of mediatek,sysirq for mt8365 SoC.
 > 
 > Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
 > ---
->  Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> index 7642f9350d2c0..a9c18fc7905c0 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> @@ -243,6 +243,10 @@ properties:
->            - enum:
->                - mediatek,mt8183-pumpkin
->            - const: mediatek,mt8183
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8365-evk
-> +          - const: mediatek, mt8365
 
-Still wrong compatible.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
