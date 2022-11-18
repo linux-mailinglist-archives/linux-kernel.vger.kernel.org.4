@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394BD6305DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F65A630651
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237176AbiKRX7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
+        id S231202AbiKSAJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbiKRX4i (ORCPT
+        with ESMTP id S237499AbiKSAJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:56:38 -0500
+        Fri, 18 Nov 2022 19:09:34 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5DB114C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:28:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49789B7FD
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:32:47 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9E-0003z7-HG; Fri, 18 Nov 2022 23:47:48 +0100
+        id 1owA9D-0003zZ-Q1; Fri, 18 Nov 2022 23:47:47 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9B-0058fg-85; Fri, 18 Nov 2022 23:47:46 +0100
+        id 1owA9B-0058fu-JJ; Fri, 18 Nov 2022 23:47:46 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9A-0000KH-Br; Fri, 18 Nov 2022 23:47:44 +0100
+        id 1owA9A-0000KL-Ij; Fri, 18 Nov 2022 23:47:44 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>
+        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH 422/606] mfd: axp20x-i2c: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:42:36 +0100
-Message-Id: <20221118224540.619276-423-uwe@kleine-koenig.org>
+Subject: [PATCH 423/606] mfd: bcm590xx: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:42:37 +0100
+Message-Id: <20221118224540.619276-424-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -51,7 +50,7 @@ X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to f
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,32 +64,32 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/mfd/axp20x-i2c.c | 5 ++---
+ drivers/mfd/bcm590xx.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
-index 8fd6727dc30a..f49fbd307958 100644
---- a/drivers/mfd/axp20x-i2c.c
-+++ b/drivers/mfd/axp20x-i2c.c
-@@ -22,8 +22,7 @@
- #include <linux/regmap.h>
- #include <linux/slab.h>
- 
--static int axp20x_i2c_probe(struct i2c_client *i2c,
--			    const struct i2c_device_id *id)
-+static int axp20x_i2c_probe(struct i2c_client *i2c)
- {
- 	struct axp20x_dev *axp20x;
- 	int ret;
-@@ -100,7 +99,7 @@ static struct i2c_driver axp20x_i2c_driver = {
- 		.of_match_table	= of_match_ptr(axp20x_i2c_of_match),
- 		.acpi_match_table = ACPI_PTR(axp20x_i2c_acpi_match),
- 	},
--	.probe		= axp20x_i2c_probe,
-+	.probe_new	= axp20x_i2c_probe,
- 	.remove		= axp20x_i2c_remove,
- 	.id_table	= axp20x_i2c_id,
+diff --git a/drivers/mfd/bcm590xx.c b/drivers/mfd/bcm590xx.c
+index 6ca337cde84c..251d515478d5 100644
+--- a/drivers/mfd/bcm590xx.c
++++ b/drivers/mfd/bcm590xx.c
+@@ -38,8 +38,7 @@ static const struct regmap_config bcm590xx_regmap_config_sec = {
+ 	.cache_type	= REGCACHE_RBTREE,
  };
+ 
+-static int bcm590xx_i2c_probe(struct i2c_client *i2c_pri,
+-			      const struct i2c_device_id *id)
++static int bcm590xx_i2c_probe(struct i2c_client *i2c_pri)
+ {
+ 	struct bcm590xx *bcm590xx;
+ 	int ret;
+@@ -109,7 +108,7 @@ static struct i2c_driver bcm590xx_i2c_driver = {
+ 		   .name = "bcm590xx",
+ 		   .of_match_table = bcm590xx_of_match,
+ 	},
+-	.probe = bcm590xx_i2c_probe,
++	.probe_new = bcm590xx_i2c_probe,
+ 	.id_table = bcm590xx_i2c_id,
+ };
+ module_i2c_driver(bcm590xx_i2c_driver);
 -- 
 2.38.1
 
