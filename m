@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A09E62FA93
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7890062FA88
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242223AbiKRQnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S242197AbiKRQnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242215AbiKRQnm (ORCPT
+        with ESMTP id S242089AbiKRQn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:43:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D7A8CFDB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668789760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iCeupirs0oRwfAYdrtKDNR33oxtw0kRHF9WhmcxURbs=;
-        b=is4sSZobXPguOsrAJb7JAyhMO5SpS8UcYWAE+R5d34fjCAKvqtZg6QBIcFoLw5h6mr3RCt
-        5EPAB+vTGhKztvDccZH+7yoUS2r4oeOVsIgMWRoR4f+xF1kMvXGjusdUOr+rokCcXgyAxz
-        YUK1G/bzc2+QiGQxJI9KYRjL7cpX4AI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-157-5-mcFXNHO2ir9PqTc0NyFg-1; Fri, 18 Nov 2022 11:42:38 -0500
-X-MC-Unique: 5-mcFXNHO2ir9PqTc0NyFg-1
-Received: by mail-ed1-f69.google.com with SMTP id e15-20020a056402190f00b00461b0576620so3250184edz.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:42:38 -0800 (PST)
+        Fri, 18 Nov 2022 11:43:29 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEA4B9D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:43:24 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so8829873pji.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 08:43:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bFpydVEsN0sToFVtM7jELuhoofQy9t2jPUFLTcIXRx8=;
+        b=PHxZLY8Iha2TaDny05JWQTVe0OvBw0y5kIlu1jrIxQ+y043xEur9SKJwSXJGZdYF/C
+         zq1dqTPaNBWrbbSY2FkMBWe5upYYu4TBKzmWhWP/uY+H7Mu+CtEdN3peJYoo9fHOgNqT
+         R5v38A+RV3qaU4RRHUv5Htt/vmgr5kCH78AXk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iCeupirs0oRwfAYdrtKDNR33oxtw0kRHF9WhmcxURbs=;
-        b=DTd2EtbGWXouMjLKlCXiN5qLJl7NFX4OclKjjdK8F9FGfM07yXZhvkkq+pqVdyadxR
-         k/PzfkCNihmtw8SpLIwkYDMQ4XWMdxfD8SC/RBoKhKdSd1ZMRSne2j+4hnrFJPvd4GDE
-         HENLMH42eBx/5UrUFP0uIONAkp7GYVNknlDs5LgLW3zBOsCnLKzc/0xNwcIeyUZJKA28
-         QrCKgiUzso7P6p7X6xSpqMFzdH7Jsp82lfcrnOeE+PJWFn6WwBBYQ4mbmNfguFy1Wn5W
-         e0KSfk3kppUANtDvRsPPMocKh5z2IF1j9CVNlALjIGWDVt8Ey8PdudABQ9k4UlDpEOIm
-         ODZA==
-X-Gm-Message-State: ANoB5pmFBnQRJU132rxNA/4BXYT7Ts3G388OTzZPSo23CzgPebtSQSej
-        0nEUqaGcJ4U9QJzI/xtSonVV1Ryt3ndEoihwlrJnaCsu1w2NacWNleCF0qJ6gISotChwHcT05sS
-        2MHC0+Yqm2b5ydMPAetSJTc3G
-X-Received: by 2002:aa7:d4cf:0:b0:461:a9ce:5408 with SMTP id t15-20020aa7d4cf000000b00461a9ce5408mr6997424edr.201.1668789757507;
-        Fri, 18 Nov 2022 08:42:37 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5TaV9WywAgyEkJUjIKk83rbFXBQR8khfDHnlKNNSiUU8k8aohx0CjQn5lly7hEq5+W3BWrVw==
-X-Received: by 2002:aa7:d4cf:0:b0:461:a9ce:5408 with SMTP id t15-20020aa7d4cf000000b00461a9ce5408mr6997376edr.201.1668789757207;
-        Fri, 18 Nov 2022 08:42:37 -0800 (PST)
-Received: from [192.168.0.46] (host-95-248-159-81.retail.telecomitalia.it. [95.248.159.81])
-        by smtp.gmail.com with ESMTPSA id b10-20020a1709063caa00b0073d83f80b05sm1912134ejh.94.2022.11.18.08.42.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 08:42:36 -0800 (PST)
-Message-ID: <1ab5082c-bec5-53f2-501b-f15f7e8edbd9@redhat.com>
-Date:   Fri, 18 Nov 2022 17:42:34 +0100
+        bh=bFpydVEsN0sToFVtM7jELuhoofQy9t2jPUFLTcIXRx8=;
+        b=oRsRieC8H2vIFPzY3vCLNycGEj77RqFaRtMcBX7kE3Erf0CXy3Iuv2O+6K/j42h0UL
+         RUcC40u/V6yGml+tefHVZjJrMwWc6TPkTltIgDlzlIVfxTfiiYEzljIDBc0RorJFi/0s
+         v1mkS+Ke7Uk2eYPWJ45w2yka1LBD6Nhe/Tu2EPTAVneO/sETaYrvHfXx6wGwtIEFoOUl
+         EnPPV2P7CnT6EZIMWtO9acW9ibC5LxhTfMhsVF72fruecpfWCJEuFw6oreDkE8JVzsVI
+         KXktd+GKVxg/gA9FGTk3kdMbJ28vTDo41S5RgPUQuUzEHjDgCc9dTwmQYMUdCy3KbneA
+         afGg==
+X-Gm-Message-State: ANoB5pmTjAKxv4916taQzPLXM+N05n3Q4OmanLWraTtgLKFJZalqhnvD
+        ienFx8/0e0lCyn8Lc31XgLPNSQ==
+X-Google-Smtp-Source: AA0mqf40QW2uM/mdUZtAUwUfmrT0ybXaxtav/kplbk3xWLYOjhj55pBX/fcy0ASDVHC8fxxYw0QVxA==
+X-Received: by 2002:a17:902:7242:b0:17c:4ae7:cf23 with SMTP id c2-20020a170902724200b0017c4ae7cf23mr448359pll.2.1668789804136;
+        Fri, 18 Nov 2022 08:43:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b0017f59ebafe7sm3928259plh.212.2022.11.18.08.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 08:43:20 -0800 (PST)
+Date:   Fri, 18 Nov 2022 08:43:19 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Ananda Badmaev <a.badmaev@clicknet.pro>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: zblock_alloc(): Memory - illegal accesses
+Message-ID: <202211180841.39558B5E5@keescook>
+References: <202211171419.FCDC8EE@keescook>
+ <74337ebd-0222-2e78-9149-8fa40b0c815e@clicknet.pro>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [RFC PATCH v2 8/8] sched, smp: Trace smp callback causing an IPI
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20221102182949.3119584-1-vschneid@redhat.com>
- <20221102183336.3120536-7-vschneid@redhat.com>
- <Y3ZBUMteJysc1/lA@hirez.programming.kicks-ass.net>
- <xhsmhfsehy706.mognet@vschneid.remote.csb>
- <Y3dMiyFn6TG1s5g3@hirez.programming.kicks-ass.net>
-Content-Language: en-US
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-In-Reply-To: <Y3dMiyFn6TG1s5g3@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <74337ebd-0222-2e78-9149-8fa40b0c815e@clicknet.pro>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 10:12, Peter Zijlstra wrote:
-> On Thu, Nov 17, 2022 at 02:45:29PM +0000, Valentin Schneider wrote:
+On Fri, Nov 18, 2022 at 04:05:36PM +0300, Ananda Badmaev wrote:
+> 18.11.2022 01:20, coverity-bot пишет:
+> > Coverity reported the following:
+> > 
+> > *** CID 1527352:  Memory - illegal accesses  (OVERRUN)
+> > mm/zblock.c:320 in zblock_alloc()
+> > 314     	}
+> > 315     	list = &(pool->block_lists[block_type]);
+> > 316
+> > 317     check:
+> > 318     	spin_lock(&list->lock);
+> > 319     	/* check if there are free slots in cache */
+> > vvv     CID 1527352:  Memory - illegal accesses  (OVERRUN)
+> > vvv     Overrunning array of 10208 bytes at byte offset 10208 by dereferencing pointer "list".
+> > 320     	block = cache_find_block(list);
+> > 321     	if (block)
+> > 322     		goto found;
+> > 323     	spin_unlock(&list->lock);
+> > 324
+> > 325     	/* not found block with free slots try to allocate new empty block */
+> > 
+> > If this is a false positive, please let us know so we can mark it as
+> > such, or teach the Coverity rules to be smarter. If not, please make
+> > sure fixes get into linux-next. :) For patches fixing this, please
+> > include these lines (but double-check the "Fixes" first):
+> > 
+> > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> > Addresses-Coverity-ID: 1527352 ("Memory - illegal accesses")
+> > Fixes: 9097e28c25c8 ("mm: add zblock - new allocator for use via zpool API")
+> > 
+> > It looks like block_type is not checked to be < ARRAY_SIZE(block_desc)
+> > after exiting the earlier loop, so the access through "list" may be past
+> > the end of pool->block_lists.
+> > 
 > 
->>> +	if (trace_ipi_send_cpumask_enabled()) {
->>> +		call_single_data_t *csd;
->>> +		smp_call_func_t func;
->>> +
->>> +		csd = container_of(node, call_single_data_t, node.llist);
->>> +
->>> +		func = sched_ttwu_pending;
->>> +		if (CSD_TYPE(csd) != CSD_TYPE_TTWU)
->>> +			func = csd->func;
->>> +
->>> +		if (raw_smp_call_single_queue(cpu, node))
->>> +			trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
->> So I went with the tracepoint being placed *before* the actual IPI gets
->> sent to have a somewhat sane ordering between trace_ipi_send_cpumask() and
->> e.g. trace_call_function_single_entry().
->>
->> Packaging the call_single_queue logic makes the code less horrible, but it
->> does mix up the event ordering...
-> Keeps em sharp ;-)
-> 
+> There is no need for this check because it is guaranteed that this code will
+> be executed only if size <= PAGE_SIZE. Since slot_size for the last list
+> even exceeds PAGE_SIZE, block_type will be always valid.
 
-Having the trace before the IPI avoids the (non ideal) case where the trace stops because of
-an IPI execution before we have trace about who sent it... :-(.
+Ah-ha, understood. Well, if you do want to catch it if there is ever a
+typo in the block_desc values (which are not obviously >4096 without
+sitting down and calculating them), perhaps add:
 
--- Daniel
+        if (WARN_ON(block_type >= ARRAY_SIZE(block_desc))
+                return -ENOSPC;
 
+
+-- 
+Kees Cook
