@@ -2,70 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616A662F1F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3674162F1FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241522AbiKRJ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S241158AbiKRJ6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240941AbiKRJ4h (ORCPT
+        with ESMTP id S241383AbiKRJ6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:56:37 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A328E0AB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:56:37 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id AC7421F890;
-        Fri, 18 Nov 2022 09:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668765395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 18 Nov 2022 04:58:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D36C8E0BB
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:57:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668765424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Kud7mfeH8RG+IcVKl8+pSvf6qxfV24ZEx3nJXPuHURU=;
-        b=CthgIbNMUjZt/rCXkW5gwpJ7EQa9oLr+Ppg77dlicvGgLoR2xuDqRPdbKdmFE5opvVSWnY
-        P8sx5CdwhZvs9F2IgVfyNNNFkRhBs9TR7DDMmX6cejHiGhW74PpRO54pqjA4Gg6JFjzytg
-        pw7i4sIs0R0rIGCKlMhNWDVfa6YaQdA=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6637E2C141;
-        Fri, 18 Nov 2022 09:56:35 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 10:56:32 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v5 05/40] printk: move @seq initialization to
- helper
-Message-ID: <Y3dW0GBQHIysnK2M@alley>
-References: <20221116162152.193147-1-john.ogness@linutronix.de>
- <20221116162152.193147-6-john.ogness@linutronix.de>
+        bh=ZFWIcbwdUkbTl5Asr+COpxfctyOv67ZGwR5/fHyh/4Y=;
+        b=Dj8ZLF6dhRm11CXwo+A40G3rPnT8IhlbX+k2cEDcAdbnC8Z2q2kdEH8ZrNlOUwFKxU2aRG
+        U+Y28fSHT7RH09fGJMcEWkBn95W7JyxGn+OCWBqzYN0PJfgx8/WuteKD3ZE9W4rHosk/XQ
+        KtcLgWI0RDFu1QKcLW5VwkhCq8k1/Tg=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-513-1CMMDRTSMp6mdItYxuKgmg-1; Fri, 18 Nov 2022 04:57:01 -0500
+X-MC-Unique: 1CMMDRTSMp6mdItYxuKgmg-1
+Received: by mail-qk1-f197.google.com with SMTP id i17-20020a05620a249100b006fa2e10a2ecso5503321qkn.16
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:57:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZFWIcbwdUkbTl5Asr+COpxfctyOv67ZGwR5/fHyh/4Y=;
+        b=fGx68NCHVCqn1WjnF2cCF1wDuo63hLjFTDXSbfPkenJiBVdjV9pykR4+mrG/T09d18
+         7B0Zzgv7nbyt3A+uhh2hG3hAqCHz/yEHrX8GQij1E8BGppMaiCs6GaxrXfbPtaqM3GPR
+         wIfdq+3dytuCIc6lXFSUFOS5Kcc2dh0g3XqIMAE/BZehd+aAMwnfpndA0ii7Wit3vTya
+         SBv76pZIEwRdDupGFHCW3d6/Jx1ilqTv6q/WAzsjJtEmHpJJtFVhKXqo+juxNzL0Barq
+         yb5SJD60w8zpUL4P6z9DvKKINtAs7kiPoF9DrCnTw9px215/abAbwokAMEQ2mdY9AQLg
+         uG6Q==
+X-Gm-Message-State: ANoB5pmjKwdZkCrn2gdmls8CK8IyFErjeSFIErPGsq/Nj23vILPYSMuW
+        gQJoIYIXRcjqQx+tKMMSDNcG7lCsQ3iIj5VSbF8xYSQb9Wb5fgfnPXVw7DcALbxtwO/SxbP54aa
+        b7VUELxeRE+wzzeVPyPo34fcr
+X-Received: by 2002:ae9:ee1a:0:b0:6fa:8de1:16cb with SMTP id i26-20020ae9ee1a000000b006fa8de116cbmr5047651qkg.552.1668765419593;
+        Fri, 18 Nov 2022 01:56:59 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf51jHSo6HSzyaOji0wHVfiUA5qLZwpEIGs/bjYus4rwguDiknSqjN/AOVNXLzG8o/u4J79RwA==
+X-Received: by 2002:ae9:ee1a:0:b0:6fa:8de1:16cb with SMTP id i26-20020ae9ee1a000000b006fa8de116cbmr5047634qkg.552.1668765419275;
+        Fri, 18 Nov 2022 01:56:59 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
+        by smtp.gmail.com with ESMTPSA id u20-20020a05620a0c5400b006cf8fc6e922sm2105288qki.119.2022.11.18.01.56.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 01:56:58 -0800 (PST)
+Message-ID: <f632781defea57a3c919ae91430f42e09f268de1.camel@redhat.com>
+Subject: Re: KASAN: double-free in kfree
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Alexander Potapenko <glider@google.com>,
+        Wei Chen <harperchen1110@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com,
+        syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com
+Date:   Fri, 18 Nov 2022 10:56:54 +0100
+In-Reply-To: <CAG_fn=UHgpEcGLjvHu8ze6jV8q_R9uSnvbeijsFFNmqchAe6OA@mail.gmail.com>
+References: <CAO4mrfdb1UdjQxr0zLH9J8b6T+8kn4UOm-sO6nZ2aKErKg7i0A@mail.gmail.com>
+         <CAG_fn=UHgpEcGLjvHu8ze6jV8q_R9uSnvbeijsFFNmqchAe6OA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116162152.193147-6-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-11-16 17:27:17, John Ogness wrote:
-> The code to initialize @seq for a new console needs to consider
-> more factors when choosing an initial value. Move the code into
-> a helper function console_init_seq() "as is" so this code can
-> be expanded without causing register_console() to become too
-> long. A later commit will implement the additional code.
+On Fri, 2022-11-18 at 09:50 +0100, Alexander Potapenko wrote:
+> On Fri, Nov 18, 2022 at 8:37 AM Wei Chen <harperchen1110@gmail.com> wrote:
+> > 
+> > Dear Linux Developer,
+> > 
+> > Recently when using our tool to fuzz kernel, the following crash was triggered:
+> > 
+> > HEAD commit: 4fe89d07 Linux v6.0
+> > git tree: upstream
+> > compiler: clang 12.0.0
+> > console output:
+> > https://drive.google.com/file/d/1_CdtSwaMJZmN-4dQw1mmZT0Ijq28X8aC/view?usp=share_link
+> > kernel config: https://drive.google.com/file/d/1ZHRxVTXHL9mENdAPmQYS1DtgbflZ9XsD/view?usp=sharing
+> > 
+> > Unfortunately, I didn't have a reproducer for this bug yet.
 > 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Hint: if you don't have a reproducer for the bug, look at the process
+> name that generated the error (syz-executor.0 in this case) and try
+> the program from the log with that number ("executing program 0")
+> preceding the report:
+> 
+> r0 = accept4(0xffffffffffffffff, &(0x7f0000000600)=@in={0x2, 0x0,
+> @multicast2}, &(0x7f0000000680)=0x80, 0x80000)
+> r1 = socket$nl_generic(0x10, 0x3, 0x10)
+> r2 = syz_genetlink_get_family_id$mptcp(&(0x7f00000002c0), 0xffffffffffffffff)
+> sendmsg$MPTCP_PM_CMD_DEL_ADDR(r1, &(0x7f0000000300)={0x0, 0x0,
+> &(0x7f0000000000)={&(0x7f0000000280)={0x28, r2, 0x1, 0x0, 0x0, {},
+> [@MPTCP_PM_ATTR_ADDR={0x14, 0x1, 0x0, 0x1,
+> [@MPTCP_PM_ADDR_ATTR_ADDR4={0x8, 0x3, @multicast2=0xac14140a},
+> @MPTCP_PM_ADDR_ATTR_FAMILY={0x6, 0x1, 0x2}]}]}, 0x28}}, 0x0)
+> sendmsg$MPTCP_PM_CMD_FLUSH_ADDRS(r0,
+> &(0x7f0000000780)={&(0x7f00000006c0), 0xc,
+> &(0x7f0000000740)={&(0x7f0000000700)={0x1c, r2, 0x4, 0x70bd28,
+> 0x25dfdbfb, {}, [@MPTCP_PM_ATTR_SUBFLOWS={0x8, 0x3, 0x8}]}, 0x1c},
+> 0x1, 0x0, 0x0, 0x4c890}, 0x20008040)
+> shmat(0xffffffffffffffff, &(0x7f0000ffd000/0x2000)=nil, 0x1000)
+> r3 = shmget$private(0x0, 0x3000, 0x40, &(0x7f0000ffd000/0x3000)=nil)
+> shmat(r3, &(0x7f0000ffc000/0x2000)=nil, 0x7000)
+> syz_usb_connect$uac1(0x0, 0x8a,
+> &(0x7f0000000340)=ANY=[@ANYBLOB="12010000000000206b1f01014000010203010902780003010000000904000000010100000a2401000000020106061d154a00ffac190b2404007f1f000000000000000401000001020000090401010101024000082402010000000009050109000000000000250100241694c11a11c200000009040200000102002009040201010502000009058209000000f456c30000fd240100000000000000000076af0bc3ac1605de4480cca53afa66f00807f17fb00132f9de1d1ec1d987f75530448d06a723ae111cb967ab97001d826aaf1c7eb0f9d0df07d29aa5a01e58ccbbab20f723605387ba8179874ad74d25d7dd7699a83189ba9c8b58980ea9cb58dd3a5afe7244a9d268d2397ac42994de8924d0478b17b13a564f696432da53be08aff66deb52e3f7c90c28079a9562280b9fda5f881598636375cc77499c22fe673fe447ac74c25c0e2df0901d8babcdf31f59a3a15daae3f2"],
+> 0x0)
+> r4 = socket$alg(0x26, 0x5, 0x0)
+> bind$alg(r4, &(0x7f0000002240)={0x26, 'skcipher\x00', 0x0, 0x0,
+> 'cts(cbc-twofish-3way)\x00'}, 0x58)
+> r5 = accept4(r4, 0x0, 0x0, 0x0)
+> syz_genetlink_get_family_id$nl80211(&(0x7f00000003c0), r5)
+> sendmsg$NL80211_CMD_SET_WOWLAN(r5, &(0x7f0000000440)={0x0, 0x0,
+> &(0x7f0000000400)={&(0x7f0000000480)=ANY=[], 0x3e0}}, 0x0)
+> syz_genetlink_get_family_id$team(&(0x7f0000000040), r5)
+> 
+> 
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: Wei Chen <harperchen1110@gmail.com>
+> 
+> @Eric, does this have something to do with "tcp: cdg: allow
+> tcp_cdg_release() to be called multiple times" ?
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+The double free happens exactly in the same location and the tested
+kernel does not contain Eric's fix. This splat is a little different -
+it looks like the relevant chunk of memory has been re-used by some
+other task before being double-freed - still I think this is the same
+issue address by commit 72e560cb8c6f8 ("tcp: cdg: allow
+tcp_cdg_release() to be called multiple times").
 
-Best Regards,
-Petr
+Cheers,
+
+Paolo
+
