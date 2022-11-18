@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6AB630721
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45264630481
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbiKSAZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 19:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        id S236735AbiKRXkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236919AbiKSAZP (ORCPT
+        with ESMTP id S236794AbiKRXhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 19:25:15 -0500
+        Fri, 18 Nov 2022 18:37:55 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11664A051
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:38:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E072D950F5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:22:40 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9V-0004nI-Nw; Fri, 18 Nov 2022 23:48:05 +0100
+        id 1owA9W-0004oT-4d; Fri, 18 Nov 2022 23:48:06 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9T-0058nI-27; Fri, 18 Nov 2022 23:48:04 +0100
+        id 1owA9T-0058nQ-Ga; Fri, 18 Nov 2022 23:48:04 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA9T-0000QU-Cf; Fri, 18 Nov 2022 23:48:03 +0100
+        id 1owA9T-0000QY-IR; Fri, 18 Nov 2022 23:48:03 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -37,9 +37,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 518/606] power: supply: bq2515x: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:44:12 +0100
-Message-Id: <20221118224540.619276-519-uwe@kleine-koenig.org>
+Subject: [PATCH 519/606] power: supply: bq256xx: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:44:13 +0100
+Message-Id: <20221118224540.619276-520-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -66,34 +66,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/power/supply/bq2515x_charger.c | 6 +++---
+ drivers/power/supply/bq256xx_charger.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/bq2515x_charger.c b/drivers/power/supply/bq2515x_charger.c
-index 4f76ad9c2f18..da224ae8dc61 100644
---- a/drivers/power/supply/bq2515x_charger.c
-+++ b/drivers/power/supply/bq2515x_charger.c
-@@ -1078,9 +1078,9 @@ static const struct regmap_config bq25155_regmap_config = {
- 	.volatile_reg		= bq2515x_volatile_register,
- };
+diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
+index 01ad84fd147c..db13e288e439 100644
+--- a/drivers/power/supply/bq256xx_charger.c
++++ b/drivers/power/supply/bq256xx_charger.c
+@@ -1619,9 +1619,9 @@ static int bq256xx_parse_dt(struct bq256xx_device *bq,
+ 	return 0;
+ }
  
--static int bq2515x_probe(struct i2c_client *client,
+-static int bq256xx_probe(struct i2c_client *client,
 -			 const struct i2c_device_id *id)
-+static int bq2515x_probe(struct i2c_client *client)
++static int bq256xx_probe(struct i2c_client *client)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
  	struct device *dev = &client->dev;
- 	struct bq2515x_device *bq2515x;
- 	struct power_supply_config charger_cfg = {};
-@@ -1158,7 +1158,7 @@ static struct i2c_driver bq2515x_driver = {
- 		.name = "bq2515x-charger",
- 		.of_match_table = bq2515x_of_match,
+ 	struct bq256xx_device *bq;
+ 	struct power_supply_config psy_cfg = { };
+@@ -1744,7 +1744,7 @@ static struct i2c_driver bq256xx_driver = {
+ 		.of_match_table = bq256xx_of_match,
+ 		.acpi_match_table = bq256xx_acpi_match,
  	},
--	.probe = bq2515x_probe,
-+	.probe_new = bq2515x_probe,
- 	.id_table = bq2515x_i2c_ids,
+-	.probe = bq256xx_probe,
++	.probe_new = bq256xx_probe,
+ 	.id_table = bq256xx_i2c_ids,
  };
- module_i2c_driver(bq2515x_driver);
+ module_i2c_driver(bq256xx_driver);
 -- 
 2.38.1
 
