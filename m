@@ -2,187 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D788D62F8E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74E562F8F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241934AbiKRPIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S235319AbiKRPKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241628AbiKRPIR (ORCPT
+        with ESMTP id S235306AbiKRPKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:08:17 -0500
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561A1140EF;
-        Fri, 18 Nov 2022 07:08:16 -0800 (PST)
-Received: by mail-qk1-f175.google.com with SMTP id z17so3551002qki.11;
-        Fri, 18 Nov 2022 07:08:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vchearp9WS1QYhrT0ExBOsKGzWpettAVm8UGsd0BETI=;
-        b=Ff3h4ArePwDYN1xRuKlThjZBJO+/FYWTbRmsPc0Vpw+XAa0h79DlBpSJhg3Sfx08eh
-         PE6nq7Eucup8e1aebvKu4d/ijGYBMRPrshZFkGCIykriQK+KZpnWH3Eu8i8ZpHpApm+D
-         rugDbofIPOX1feN46Ft8heenpbQqEf4fH3S4PClOHv4L7WOBxKXwT3NvZfa7037MO45G
-         52oxv5sE1/j+PAcRzvtUjm4C5YG8ZFM4bhBVPhaxu7yVLjHjMBZ3cRaDxrADyQELPqTB
-         oWeR7zlvh4ZB30PFm8cxdtPOEHNkcg1M2uwMNsOhCEaBiPjP5kGLLUPZ/JcuNuq+3xYN
-         6sVg==
-X-Gm-Message-State: ANoB5pkT8FQBXPLRjZDyjMJ52zjg/MfaFYRogh0Fo4VsZq7NkP1FCv5N
-        EASxiisEhFMLHVTFUY5m7Cw=
-X-Google-Smtp-Source: AA0mqf4dnWpW0TRHSAnW2PBBFLo5pcg7LY4zqqDppwpcN25sekLxKlgL6ETMgD+oYSz+IJqtdFwe7w==
-X-Received: by 2002:a37:9a0e:0:b0:6fa:b56e:38b2 with SMTP id c14-20020a379a0e000000b006fab56e38b2mr6233053qke.521.1668784095114;
-        Fri, 18 Nov 2022 07:08:15 -0800 (PST)
-Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05620a401200b006fa2b1c3c1esm2557495qko.58.2022.11.18.07.08.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 07:08:14 -0800 (PST)
-Date:   Fri, 18 Nov 2022 09:08:12 -0600
-From:   David Vernet <void@manifault.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
-        yhs@fb.com, song@kernel.org, sdf@google.com, kpsingh@kernel.org,
-        jolsa@kernel.org, haoluo@google.com, tj@kernel.org,
-        kernel-team@fb.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 0/3] Support storing struct task_struct
- objects as kptrs
-Message-ID: <Y3ef3Mlzd96iANLm@maniforge.lan>
-References: <20221117032402.2356776-1-void@manifault.com>
- <6376a1b12bb4d_4101208d@john.notmuch>
- <Y3atifGs0DM9to8z@maniforge.lan>
- <6376b7822f4df_8c7a208f7@john.notmuch>
- <Y3biwxIq8B5oYdOS@maniforge.lan>
- <6377206bed37e_2063d20878@john.notmuch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6377206bed37e_2063d20878@john.notmuch>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 18 Nov 2022 10:10:42 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E1313CF1;
+        Fri, 18 Nov 2022 07:10:41 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIE81CI028260;
+        Fri, 18 Nov 2022 15:10:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Y2UvQmjEHBmBO9sNhKQBGwJHhJnDxOWzhbaj8DgVzWw=;
+ b=nZRkLhWL+tNLuHdi1AtjFYR7UbvP8nnPXuv9JxAhmDbRRe6pqEFFb1Ou4J6hUD4KZ/Et
+ Bvowt7EgaMvEnGCCDQ+I8MRdGNIgrcsodwdZj/136UfH2Kp74s9gm0hedfhspRzMOLDS
+ 7+y+joXnS52fQ2KSN04oK/jJPNnuMG69hGPxmvW8pvMsKnFO5Le80no1gh80zLAC4pVR
+ p6ntQtu4RrQQUyWsWyQzPdaXI2UxpcWIxQUxggygr6GrGO8DPbcKx23Evx/uSOQaNa0I
+ kaixdBbC6FcwXAUCAXDj8tUJGXssvUMaqOUwh1Rnp3km9tLMi6Bu4yZXulaO0UBbk/f9 ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx8w0wybt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 15:10:20 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AIEFia3026902;
+        Fri, 18 Nov 2022 15:10:19 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx8w0wyb7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 15:10:19 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AIF6w3t003613;
+        Fri, 18 Nov 2022 15:10:18 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma03wdc.us.ibm.com with ESMTP id 3kt34ar68j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 15:10:18 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AIFAH5h9110112
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Nov 2022 15:10:18 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5781358054;
+        Fri, 18 Nov 2022 15:10:17 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7559F58079;
+        Fri, 18 Nov 2022 15:10:15 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.49.134])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 18 Nov 2022 15:10:15 +0000 (GMT)
+Message-ID: <3ffb9bb4ab203b5e0459c3892ded4ae0cd80458b.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 18 Nov 2022 10:10:14 -0500
+In-Reply-To: <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
+         <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
+         <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UmGSvL3BqOwuSE5BIR2oIjtaeV8PYXZV
+X-Proofpoint-GUID: pZ7kfLtNG94rZC55DpQEurav732-1LDM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-18_02,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ clxscore=1015 lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211180084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 10:04:27PM -0800, John Fastabend wrote:
-
-[...]
-
-> > > And last thing I was checking is because KF_SLEEPABLE is not set
-> > > this should be blocked from running on sleepable progs which would
-> > > break the call_rcu in the destructor. Maybe small nit, not sure
-> > > its worth it but might be nice to annotate the helper description
-> > > with a note, "will not work on sleepable progs" or something to
-> > > that effect.
+On Fri, 2022-11-18 at 10:14 +0100, Roberto Sassu wrote:
+> >> +static int security_check_compact_xattrs(struct xattr *xattrs,
+> >> +                                     int num_xattrs, int *checked_xattrs)
 > > 
-> > KF_SLEEPABLE is used to indicate whether the kfunc _itself_ may sleep,
-> > not whether the calling program can be sleepable. call_rcu() doesn't
-> > block, so no need to mark the kfunc as KF_SLEEPABLE. The key is that if
-> > a kfunc is sleepable, non-sleepable programs are not able to call it
-> > (and this is enforced in the verifier).
+> > Perhaps the variable naming is off, making it difficult to read.   So
+> > although this is a static function, which normally doesn't require a
+> > comment, it's definitely needs one.
 > 
-> OK but should these helpers be allowed in sleepable progs? I think
-> not. What stops this, (using your helpers):
+> Ok, will improve it.
 > 
->   cpu0                                       cpu1
->   ----
->   v = insert_lookup_task(task)
->   kptr = bpf_kptr_xchg(&v->task, NULL);
->   if (!kptr)
->     return 0;
->                                             map_delete_elem()
->                                                put_task()
->                                                  rcu_call
->   do_something_might_sleep()
->                                                     put_task_struct
->                                                       ... free  
->   kptr->[free'd memory]
->  
-> the insert_lookup_task will bump the refcnt on the acquire on map
-> insert. But the lookup doesn't do anything to the refcnt and the
-> map_delete_elem will delete it. We have a check for spin_lock
-> types to stop them from being in sleepable progs. Did I miss a
-> similar check for these?
+> >> +{
+> >> +    int i;
+> >> +
+> >> +    for (i = *checked_xattrs; i < num_xattrs; i++) {
+> > 
+> > If the number of "checked" xattrs was kept up to date, removing the
+> > empty xattr gaps wouldn't require a loop.  Is the purpose of this loop
+> > to support multiple per LSM xattrs?
+> 
+> An LSM might reserve one or more xattrs, but not set it/them (for 
+> example because it is not initialized). In this case, removing the gaps 
+> is needed for all subsequent LSMs.
 
-So, in your example above, bpf_kptr_xchg(&v->task, NULL) will atomically
-xchg the kptr from the map, and so the map_delete_elem() call would fail
-with (something like) -ENOENT. In general, the semantics are similar to
-std::unique_ptr::swap() in C++.
+Including this sort of info in the function description or as a comment
+in the code would definitely simplify review.
 
-FWIW, I think KF_KPTR_GET kfuncs are the more complex / racy kfuncs to
-reason about. The reason is that we're passing a pointer to the map
-value containing a kptr directly to the kfunc (with the attempt of
-acquiring an additional reference if a kptr was already present in the
-map) rather than doing an xchg which atomically gets us the unique
-pointer if nobody else xchgs it in first. So with KF_KPTR_GET, someone
-else could come along and delete the kptr from the map while the kfunc
-is trying to acquire that additional reference. The race looks something
-like this:
+security_check_compact_xattrs() is called in the loop after getting
+each LSM's xattr(s).  Only the current LSMs xattrs need to be
+compressed, yet the loop goes to the maximum number of xattrs each
+time. Just wondering if there is a way of improving it.
 
-   cpu0                                       cpu1
-   ----
-   v = insert_lookup_task(task)
-   kptr = bpf_task_kptr_get(&v->task);
-                                             map_delete_elem()
-                                                put_task()
-                                                  rcu_call
-                                                     put_task_struct
-                                                       ... free  
-   if (!kptr)
-     /* In this race example, this path will be taken. */
-     return 0;
+-- 
+thanks,
 
-The difference is that here, we're not doing an atomic xchg of the kptr
-out of the map. Instead, we're passing a pointer to the map value
-containing the kptr directly to bpf_task_kptr_get(), which itself tries
-to acquire an additional reference on the task to return to the program
-as a kptr. This is still safe, however, as bpf_task_kptr_get() uses RCU
-and refcount_inc_not_zero() in the bpf_task_kptr_get() kfunc to ensure
-that it can't hit a UAF, and that it won't return a dying task to the
-caller:
+Mimi
 
-/**
- * bpf_task_kptr_get - Acquire a reference on a struct task_struct kptr. A task
- * kptr acquired by this kfunc which is not subsequently stored in a map, must
- * be released by calling bpf_task_release().
- * @pp: A pointer to a task kptr on which a reference is being acquired.
- */
-__used noinline
-struct task_struct *bpf_task_kptr_get(struct task_struct **pp)
-{
-        struct task_struct *p;
-
-        rcu_read_lock();
-        p = READ_ONCE(*pp);
-
-	/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	 * cpu1 could remove the element from the map here, and invoke
-	 * put_task_struct_rcu_user(). We're in an RCU read region
-	 * though, so the task won't be freed until at the very
-	 * earliest, the rcu_read_unlock() below.
-	 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	 */
-
-        if (p && !refcount_inc_not_zero(&p->rcu_users))
-		/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		 * refcount_inc_not_zero() will return false, as cpu1
-		 * deleted the element from the map and dropped its last
-		 * refcount. So we just return NULL as the task will be
-		 * deleted once an RCU gp has elapsed.
-		 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		 */
-                p = NULL;
-        rcu_read_unlock();
-
-        return p;
-}
-
-Let me know if that makes sense. This stuff is tricky, and I plan to
-clearly / thoroughly add it to that kptr docs page once this patch set
-lands.
