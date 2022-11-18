@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931AA62FA07
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6475362FA09
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 17:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241589AbiKRQSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 11:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S241981AbiKRQTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 11:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiKRQSk (ORCPT
+        with ESMTP id S235414AbiKRQTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 11:18:40 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9711CFCD3;
-        Fri, 18 Nov 2022 08:18:37 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEF2C23A;
-        Fri, 18 Nov 2022 08:18:43 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F3EC63F663;
-        Fri, 18 Nov 2022 08:18:34 -0800 (PST)
-Date:   Fri, 18 Nov 2022 16:18:32 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Chris Mason <clm@meta.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
-Message-ID: <Y3ewWJITWH2b4ihI@FVFF77S0Q05N.cambridge.arm.com>
-References: <20221108220651.24492-1-revest@chromium.org>
- <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
- <20221117121617.4e1529d3@gandalf.local.home>
- <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
+        Fri, 18 Nov 2022 11:19:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1183261772;
+        Fri, 18 Nov 2022 08:19:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A01AE625F2;
+        Fri, 18 Nov 2022 16:19:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E04C433C1;
+        Fri, 18 Nov 2022 16:19:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668788348;
+        bh=kB9TuL6/LlQULZYXATksegAy1GgdZD16NhQ1mIwxfrY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LQyhq+EyzCEp2r3JW5wEyYbn0KX06RmU7BQtp3QlSUd8c39dmuutcak3xErZx5Ilh
+         V1Yw/c+tdCRf/R7s6aWhQPWlq8lRMFQdsn2f3UyXs2MLsWkcpxu+ODWlyiRwklMlVJ
+         oYZ01yNpDJJmPtoMv+UsRv8/5U8PRd8KHPKvdFAcspIj/eIDHE369TyMT0ghSbLvQS
+         lmVCHnXqkXZFQymEYZdMtKkS9Ka56axWkl2XbJms9sfCe20i8Ybv9ZznGaqLBuCWZ8
+         ra+0OUM/Y0NGKGSfFZcCGplt7q43oVZSWYrcyWrphWP6uNGWoa1EGV+Mk+qSeWzuqU
+         vegCgvhmTCdcQ==
+Date:   Fri, 18 Nov 2022 08:19:06 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jamie Bainbridge <jamie.bainbridge@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chris Down <chris@chrisdown.name>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] tcp: Fix tcp_syn_flood_action() if
+ CONFIG_IPV6=n
+Message-ID: <20221118081906.053d5231@kernel.org>
+In-Reply-To: <CAMuHMdVQdax10pAgNBbAVDXgVVTAQC93GR1f_4DuKfdAXngNMA@mail.gmail.com>
+References: <d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be>
+        <20221116123115.6b49e1b8@kernel.org>
+        <CAAvyFNhbsks96=yyWHDCi-u+A1vaEy845_+pytghAscoG0rrTQ@mail.gmail.com>
+        <20221116141519.0ef42fa2@kernel.org>
+        <CAAvyFNjHp8-iq_A08O_H2VwEBLZRQe+=LzBm45ekgOZ4afnWqA@mail.gmail.com>
+        <CAMuHMdVQdax10pAgNBbAVDXgVVTAQC93GR1f_4DuKfdAXngNMA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 04:55:12PM -0500, Chris Mason wrote:
-> On 11/17/22 12:16 PM, Steven Rostedt wrote:
-> > On Wed, 16 Nov 2022 18:41:26 -0800
-> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> > 
-> > > Even with all optimization the performance overhead is not acceptable.
-> > > It feels to me that folks are still thinking about bpf trampoline
-> > > as a tracing facility.
-> > > It's a lot more than that. It needs to run 24/7 with zero overhead.
-> > 
-> > It obviously doesn't have zero overhead.
-> > 
-> > And correctness and maintainability trumps micro-optimizations.
+On Fri, 18 Nov 2022 09:29:13 +0100 Geert Uytterhoeven wrote:
+> IMHO this is worse, as the #ifdef/#endif is spread across the two branches
+> of an if-conditional.
 > 
-> During the bpf office hours today Mark Rutland and Florent had some
-> great ideas about how to wire things up.  I'm sure Mark will need some
-> time to write it all down but it was a fun call.
+> Hence this is usually written as:
+> 
+>             if (cond1) {
+>                     expensive_call1();
+>             }
+>     #ifdef cond2_enabled
+>            else {
+>                     expensive_call1();
+>             }
+>     #endif
 
-I'd hoped to write that up today, but I haven't had enough time yet, so I'll
-try to write up that proposal next week.
-
-The rough idea was to *somehow* rejig the per-callsite ftrace_ops code I've
-been working on to permit (but not require) the use of custom trampolines. As
-mentioned during the call I want to ensure that this doesn't adversely affect
-regular ftrace usage, and I'd also like to ensure that the regular ftrace code
-is able to gain form those changes (without the need for trampolines). AFAICT,
-that's likely to require some rework to the way direct functions are managed.
-
-The WIP code for per-callsite ftrace_ops is at:
-
- https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
-
-To be clear, my comments were purely about the *mechanism* we end up
-implementing. I do have concerns w.r.t. overriding arbitrary parts of the
-kernel.
-
-Thanks,
-Mark.
+Alright, good enough for me.
