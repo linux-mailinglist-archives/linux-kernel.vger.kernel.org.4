@@ -2,79 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CE962F5A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1257962F59E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241835AbiKRNMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        id S241312AbiKRNMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241299AbiKRNMQ (ORCPT
+        with ESMTP id S241299AbiKRNLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:12:16 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890338B13C;
-        Fri, 18 Nov 2022 05:12:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=4Aeu8UwIWgXvC6uSW82BD1GlVbqZxuA9k7NKVXlvkIc=; b=fi6O3mFvI7PWujd16InhbX4q0g
-        OqJCOxeSjTFaJdYdanioee16QbVe7lOlfsyEwIMZg7bqsHhyAuwcHyt0WK7T5I37CekR1LYmgit3E
-        ZXWanr36/Z8VVHi9m2KvzZRLdytQabOIRqzu3bZEQZh4h9CyUkmy4oi/sfFBGsQt6KNo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ow19f-002nPj-PO; Fri, 18 Nov 2022 14:11:39 +0100
-Date:   Fri, 18 Nov 2022 14:11:39 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 0/3] add dt configuration for dp83867 led modes
-Message-ID: <Y3eEiyUn6DDeUZmg@lunn.ch>
-References: <20221118001548.635752-1-tharvey@gateworks.com>
- <Y3bRX1N0Rp7EDJkS@lunn.ch>
- <CAJ+vNU3P-t3Q1XZrNG=czvFBU7UsCOA_Ap47k9Ein_3VQy_tGw@mail.gmail.com>
+        Fri, 18 Nov 2022 08:11:51 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DB28C084
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:11:50 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id u2so6730848ljl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gWNSpfNgmKIkoqMVV5tmWYlIFYhEHax9TrvGPimvErs=;
+        b=v4nFmk80qIBizuw3D1YMYQGM+vnSIvdnLk9TyHIG0in5TwlQhnPkUxZ9S2wEGIO7+5
+         NloDoVXNp29Tv+V2Ab46XHQlVhufLDrh990FfdE+BCoIabs2Kjsu5+aPGZVZoHtgLY4E
+         Asv3aahR7nX4q3ptImiN2N8+/PiZfDlpXIUl1AV2LXskiukPE0YGDHopQfy42JWo9qrt
+         RjcBxuxPFUEZJvL+xxHGOm3mC4odbJeVAynBHG5r5Luy+JASyjK9R5dMYXHe5TtcRUSw
+         Bjx+cNlKFLPOsmFRX4yckjQy25Tw2A/rEuh0/jCHDai5aJj3brf0FiV2KlBCDADvWndd
+         BnKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gWNSpfNgmKIkoqMVV5tmWYlIFYhEHax9TrvGPimvErs=;
+        b=BTwNOUZw+/ZdbRJuCuL2r/SWczoXJkEMKyfqxWkg41u9528QUuPTuH8eCpndc3XaTH
+         vU+dz2mkxP3aktj7zFSDY5KAeZ/8OuM3tp7ctTZGUAIB08GPqB4LktvWd8G2kJ+/rx0S
+         qYVkebXkNlc1HzIkZ313SrdGtaHceNW85ID++xffL49OsTm6xTcoFiEd2QlOVMMZmcvx
+         w4BvNpdAP9nBSRTZ6gG2j2p/HtlY3K2ONlAKISeXyeaTYLJ8vM+DIoy6Q6RUeYcfJYQS
+         iuy+KGczRcEqzHisj4MPQh6IR5SsnwVoJzEHKY97xh3tAJPPgflsBnrpMukT1sxqofHD
+         YlOA==
+X-Gm-Message-State: ANoB5pkwwvWO/ii7OCgUgDX7PoFPiWyQXj3w053I3zxAWGmkowGNFTbD
+        +x92FoCSycjr2JCRqMHxe8t3qQ==
+X-Google-Smtp-Source: AA0mqf5PKOpsepLXZQM4MZvGilr6TDpkzUoFgDlnpUqKg2bm3LymDyhlqEiF6bM8W2n4RIlehziIUw==
+X-Received: by 2002:a05:651c:178d:b0:278:a59c:390c with SMTP id bn13-20020a05651c178d00b00278a59c390cmr2455317ljb.512.1668777108719;
+        Fri, 18 Nov 2022 05:11:48 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id n4-20020a195504000000b00492ce573726sm661503lfe.47.2022.11.18.05.11.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 05:11:48 -0800 (PST)
+Message-ID: <5292cc1b-c951-c5c5-b2ef-c154baf6d7fd@linaro.org>
+Date:   Fri, 18 Nov 2022 14:11:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ+vNU3P-t3Q1XZrNG=czvFBU7UsCOA_Ap47k9Ein_3VQy_tGw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 01/23] dt-bindings: display: tegra: add bindings for
+ Tegra20 VIP
+Content-Language: en-US
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
+ <20221109141852.729246-2-luca.ceresoli@bootlin.com>
+ <ca5f3b54-25bd-4dd5-799f-c7bda08cdef6@linaro.org>
+ <20221118100800.4950aec0@booty>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118100800.4950aec0@booty>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Andrew,
+On 18/11/2022 10:08, Luca Ceresoli wrote:
+>   description: parallel video capture interface for the VI
 > 
-> I completely agree with you but I haven't seen how that can be done
-> yet. What support exists for a PHY driver to expose their LED
-> configuration to be used that way? Can you point me to an example?
+>>> +    type: object  
+>>
+>> Do you expect it to grow to more channels?
+> 
+> Not on Tegra20, it has one input only, but for other SoCs it's likely.
+> Definitely some (including Tegra20 itself) have multiple CSI-2 inputs,
+> and it's reasonable that this can apply to parallel input too.
+> 
+> Is this enough motivation to make room for more channels, or should I
+> remove it since I have no plans to introduce support for other Tegra
+> chips?
 
-Nobody has actually worked on this long enough to get code merged. e.g.
-https://lore.kernel.org/netdev/20201004095852.GB1104@bug/T/
-https://lists.archive.carbon60.com/linux/kernel/3396223
+The best would be to add some more Tegra SoCs here, so that this @0
+makes sense.
 
-This is probably the last attempt, which was not too far away from getting merged:
-https://patches.linaro.org/project/linux-leds/cover/20220503151633.18760-1-ansuelsmth@gmail.com/
+But I guess the block can be re-used in future, so it could also stay
+like this.
 
-I seem to NACK a patch like yours every couple of months. If all that
-wasted time was actually spent on a common framework, this would of
-been solved years ago.
+> 
+>>> +
+>>> +    properties:
+>>> +      reg: true  
+>>
+>> const: 0
+>>
+>>> +
+>>> +      ports:
+>>> +        $ref: /schemas/graph.yaml#/properties/ports
+>>> +
+>>> +        properties:
+>>> +          port@0:
+>>> +            $ref: /schemas/graph.yaml#/properties/port
+>>> +            description:
+>>> +              Port receiving the video stream from the sensor
+>>> +
+>>> +          port@1:
+>>> +            $ref: /schemas/graph.yaml#/properties/port
+>>> +            description:
+>>> +              Port sending the video stream to the VI
+>>> +
+>>> +        required:
+>>> +          - port@0
+>>> +          - port@1
+>>> +
+>>> +    additionalProperties: false
+>>> +
+>>> +    required:
+>>> +      - reg
+>>> +      - ports
+>>> +
+>>> +unevaluatedProperties: false
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - "#address-cells"
+>>> +  - "#size-cells"
+>>> +  - channel@0
+>>> +
+>>> +# see nvidia,tegra20-vi.yaml for an example  
+>>
+>> That file does not have this compatible. At least not on next-20221109.
+> 
+> It's added in patch 2. It's a chicken-egg problem, should I add a third
+> patch that adds this line only?
+> 
+> ACK for all other comments you wrote.
 
-How important is it to you to control these LEDs? Enough to finish
-this code and get it merged?
+It's ok.
 
-     Andrew
+Best regards,
+Krzysztof
+
