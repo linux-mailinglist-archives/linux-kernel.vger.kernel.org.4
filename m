@@ -2,164 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF4A62F3A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AB162F3AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241564AbiKRLYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S235212AbiKRL0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241272AbiKRLYC (ORCPT
+        with ESMTP id S230004AbiKRL0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:24:02 -0500
+        Fri, 18 Nov 2022 06:26:20 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317B025C4;
-        Fri, 18 Nov 2022 03:23:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E364A1100;
+        Fri, 18 Nov 2022 03:26:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668770609; x=1700306609;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=CPRqb+N9sWSwuA8doPF+bdmmjaG5kfr5h+4RR2E29Mo=;
-  b=cWhfrQEzrzwBuABYHj/S+MUYdVRVSo8p1g3sqIrgUCQ9LUuQstb2OaGc
-   SrwDngu0INf0zVWZcsalm7ck6cRt/9gOPgP3Lfv3LnwX4r1p5Qajx8K31
-   ANYuRAcN4lUf3DT9zFBfxuWwEXdAPMtLxT1hHiqnuWebIjAz2IsP8BZoI
-   InvJ1PqWPxc3EmsLEBj63s7PrIWLUz4isDuSV0StHlN7OXh3nGIW9Bopc
-   byNlQu5J/gNIF56s4KwtJhof+50jdStWo1WN0b+/B/hdUiqN/3yuYIkpj
-   y6AK2Qi/b/Ui2K2KXOQV42fCs5H+NI11bUO44+YsYbL5CGxPrtMbFjtBh
+  t=1668770780; x=1700306780;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=l57k8EFLzzzCOgsedkHMQdqgrBUn6tk+oHcf6jB45mk=;
+  b=QnVbEPuztlvh+Cx7xS+M61tv0js/VpF8Prm9y8tOfFuPpZaO3wWhgvAe
+   togYGag8QsIUqv1GOEA6QBQFk3yWRN89R0Dum6k6B/n7WbkDtfJIu8Cga
+   GuqLF7w61RpQeJC/itWuVaPWfrpG85DdX2h1pkYCR97N8ntOJ9chA4Ivq
+   x+Iz3xiUofl9VnF4l7Nk/u8IEorQVo/MoEPStgmhUuxmuNibnN8XDzRX0
+   llZMEpe3S2t7VenODAG0WxpxCAavILHnthPWzzHDZIJRJhONr/82B2bp4
+   naO/yCZhrYf9rey4eNnheRu9uXaB77A/IDCjOHVtLMCJ1ngzWzQFNAmpb
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="314933887"
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="314934160"
 X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="314933887"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 03:23:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="642485162"
+   d="scan'208";a="314934160"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 03:26:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="617986964"
 X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="642485162"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Nov 2022 03:23:24 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 03:23:23 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 03:23:23 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 18 Nov 2022 03:23:23 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.46) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 18 Nov 2022 03:23:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ROwXnvCzIgpuFN3qMc2LVtwhDeaJkcymkb8MmTaqQSLyD3xC+Wq4BvS0sQpkD01NmCRxil70oyhvMX4o/lj2/pMeECKMCnFaS61A9WMQhFV9pARv6ZR0H76BGfXFRKA/QxqCIAlUtJ1mLAbGJIVgFXiKgD97E8HQycR0ZFUtFo1Ot4m/ndOTXL3FcIq5Prxc85L9cpDXJnaINBi3Z22kqS81rQsLiFJR19azBuB/UTXKjC+F9yMfNplJIy3aqSl0wQvSlzkV7S/GbnY2i9iZtaHIvhTr+/E+gCR1oHD2Ut3dQqnnVIDUtBwH5Bzct72GajljOWDZvk8/ju3Ju5XKzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rRSz/iOrwKzAG9uAG4srK3KQJb6LN0RgmvTlm9nvq1g=;
- b=JjcT3amrj1W3au3gDn5IvsULo1ykkmGwabg72JQ7OrXsbhvaBw5m1vXTU1D2afu+4QOgb2V+L6i6ivmZAq+kGespaQQ2vYdHDCE/RSbh4+9tNPRxdbHE7DN9/ZWrWhx2/dyG9bp/5KOYlIjMTM3zazgnW9jMSp7RmaU8JwIMp3t2oVR43htcCpa958WzIeckkD29wFGo1EF+OIarmoLTKBNPvTQqnfzFo2jsuZ6DUPhYvpymo2VkNpsnhiipnyLU5jHgDZsGc3STD6/y9TrP0O03NzE9YJ5Q5y2F1vGInhh5KrJRc+T+dK74ukIzwuFLUpOO5Ww/lEYPPxP4ZoguaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
- by SJ0PR11MB4829.namprd11.prod.outlook.com (2603:10b6:a03:2d3::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Fri, 18 Nov
- 2022 11:23:16 +0000
-Received: from MN0PR11MB6206.namprd11.prod.outlook.com
- ([fe80::3849:238:f7bb:f1d1]) by MN0PR11MB6206.namprd11.prod.outlook.com
- ([fe80::3849:238:f7bb:f1d1%7]) with mapi id 15.20.5791.027; Fri, 18 Nov 2022
- 11:23:16 +0000
-Date:   Fri, 18 Nov 2022 19:23:02 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
-CC:     <rafael.j.wysocki@intel.com>, <rafael@kernel.org>,
-        <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-        <guohanjun@huawei.com>, <liwei391@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <rui.zhang@intel.com>
-Subject: Re: [PATCH 2/2] ACPI: pfr_update: use ACPI_FREE() to free acpi_object
-Message-ID: <Y3drFvDUME3vYIFD@chenyu5-mobl1>
-References: <20221118063219.2612473-1-bobo.shaobowang@huawei.com>
- <20221118063219.2612473-3-bobo.shaobowang@huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221118063219.2612473-3-bobo.shaobowang@huawei.com>
-X-ClientProxiedBy: SG2PR02CA0002.apcprd02.prod.outlook.com
- (2603:1096:3:17::14) To MN0PR11MB6206.namprd11.prod.outlook.com
- (2603:10b6:208:3c6::8)
+   d="scan'208";a="617986964"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.138])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 03:26:14 -0800
+Message-ID: <4c1826b3-90b0-7f82-fd0d-3167a6a074c6@intel.com>
+Date:   Fri, 18 Nov 2022 13:26:09 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|SJ0PR11MB4829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 502151ad-4250-4b4a-8e36-08dac95749dc
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LfRD7KS1hVMGEdukS8rir3jdsBs6gmipvt1K0hAZ5CATgRfZ9RfAYIugwhmfO8gbdL1nf1EA7YEPdSPxw89MMx0E7ZqAva+xw6liKnV6O9YplB5svdPYZOx4zZpIeRvY8mxyuSwTk8pm+78wRjbPJHxlRsZBHGVvkKKnWgvGQitkarh5Nn6aRBCdlw8mDnhClkMzMj7oFcDcvUsqsj+qhmcTE+/9PCeq9CZfedvx60qcJezvCYbFfdS2gQfg6Xok8zN+XLxQnRWe5QUXnXPqOVlO47xNZDo3UuQHltGB5mhczS4MsPry7pSkTWup1j+sQ7iIIfvRIILk9Uko0zMbLBSYI+TxJkaOITjhNXkI2KVGjgC1qbGDkyCfaM7+1VC2PzzBtsqFi4LO7PNh/Zk9oR+YaIYmWkCmS68is8bpe1v/B0RxpCn44bgTw7cLXXnBHEyhvymautJd33c6lxuYgz9ZG93PIWgD3bxO+tUknSjEz5O5esVBm0bTvJHMg+FHTmozUY0uX8TK7r0vBaU6CsERmD00+E4xy3NYCHqAHMw0HmUigpc55Wy+1Zo9Ul66ANzu3ZpH+l3ouuiK6BGuiWbWCu4C39wGj6ytsdcMQ4KjTkTrnro5T8r4mbnxngvLTpzpc77ANmTCX5nFLqy+zw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(39860400002)(366004)(396003)(136003)(376002)(451199015)(26005)(6512007)(6666004)(53546011)(33716001)(107886003)(2906002)(8676002)(5660300002)(82960400001)(6486002)(186003)(6506007)(66476007)(83380400001)(66556008)(66946007)(4326008)(4744005)(4001150100001)(316002)(41300700001)(8936002)(9686003)(6916009)(478600001)(86362001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JC6qhOa6HBpgaCY8KXGie8T63qOetY5JPAIgknUIkAD13IG9N3D70puXG2a8?=
- =?us-ascii?Q?B34vZggqVVKD7Rr6Po109WOKo+9b5/KF9HGzVJxA3S4ynCBpiUcQQkVFJPYp?=
- =?us-ascii?Q?ogC18X5oV1kQW9IKoQjcRsU3hksjyXwMMPYycrNcutftbjq3GNOWm8vl9pdW?=
- =?us-ascii?Q?ZOHkucJcHoVJIF1RGzf5+JKvlfvUj7NhTlkeLYMRPxCWgQSLobsRbIR1hN3W?=
- =?us-ascii?Q?Qhf4MXzXMA8J6WgkbShx1fft2LGfoUSOk+K5dGsJayHOqpTixPeRII76sFZx?=
- =?us-ascii?Q?H8TtVRwEbT9nmN64HkjvuKvtWtWcuqxvCG7DV7m6zfBZa+Rtro9zBmGbii+R?=
- =?us-ascii?Q?lyFCu9aV+e441FmYu1retXBtSYu2FDW8V3A9bjfLZf/MMbjR2vAvVtlXKmmq?=
- =?us-ascii?Q?BdS6l/aQvEaVxig9bhHCy+lLYwse/Wh4ZGhC7jtv0UsC0jDMBCsGidDOCnM8?=
- =?us-ascii?Q?ayf/jl8+W57hMbfaqSyv5NOocmqM3neu1SRL0Rf6VjaBkXPsIT/U8+8Wl6fI?=
- =?us-ascii?Q?rJKhZ4+brVX7a4JYs276ZNj1YXzTTPZHDgA4c+2VwtW/6mhhZH+Dc2qBzEEC?=
- =?us-ascii?Q?cjkqxs2kvtg6+yIrbXNkrUWZW+pFvZmDWCr6t/ApKqIisK4PmO3WTI7m+Q0p?=
- =?us-ascii?Q?Gr1tbAISo+mboJgLDrafQpa+cfv49R4ylvq4ztba+LeVqQWoge/2FyveQt5L?=
- =?us-ascii?Q?c6FoE5SWF9Wpc4xQfgmA5ezJhp31oiAsgP/0FNBGL3JLzR+fTRkp6T97EmP4?=
- =?us-ascii?Q?NpZ/J7xgsqCIvTsDyvj1LfNmBPxnTIO6M0sg3YkB+0G0abntrK3JnaKDrhb7?=
- =?us-ascii?Q?FchC6cplOuNXIkfO/9oJChPaGD8NtEHb3OPGoADybQ8dI/UwAm4G6ooWyRQx?=
- =?us-ascii?Q?4j6aFxFuUzwhzBgMWMBY9Quid3tgwHGyFcxw/wg+bxbN4lExv3u8AffQQLmi?=
- =?us-ascii?Q?MiijLAWCjRld7eeO91RXGjE92O5P8U0/RVVS4Q3sp0ttI/ovOETgvJJo0yO5?=
- =?us-ascii?Q?TArE7KVQaf879beX4guUh0mqKXXS+5uvIF34QkJgre4XXYxuxBqsmgAIJz2C?=
- =?us-ascii?Q?s/Kt8PFx6PBcG6HrE6XpULMyVTjjh9nC/PvCGMgspamLQyDbYcNIN+f1JZOJ?=
- =?us-ascii?Q?gJLWPGGrAVIe9VEdRfPWMSCTbxcWy1F7jkzgm4Lfc70iAJeKbSdyUboMfBL9?=
- =?us-ascii?Q?lueUKfmUv6ZJxTHcgJiOccmFUUKP+UcbTSfW+isAOuRRuX+Qw6LtJ3WCVIWZ?=
- =?us-ascii?Q?iMZsY5PNhLx8glx4j8HShQ00D9gMTLVRi3frwBZd2oL9of2eVifVg1BHfWeR?=
- =?us-ascii?Q?TRUD9N3JvHCM50idU//cGJ541K9n/QV2c/zR6U2nVWP3n0q0flEDPMjYoy/G?=
- =?us-ascii?Q?+2/HHAif1HLtv5JTQE+G/Rp/SKg4tZBGhjz2sgEwY326x+VjGPfJH0OuYrPe?=
- =?us-ascii?Q?1Qvi0V+l7gIXh11yIfeDurmlL6nNDG3iAJM6NkkFcVUqL151xqmFjn9JMj7B?=
- =?us-ascii?Q?bZfwksiSieYaWXKWrffEvMmWqen9Erd0bkPn4IjedwOSDfQS+VpawxhOzxVJ?=
- =?us-ascii?Q?L+gVjQonXmxud6c7fRZMVsX6sLBSAXDkf+uvGClW?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 502151ad-4250-4b4a-8e36-08dac95749dc
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 11:23:16.6295
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dMtJBp69h2082hIoheAN7cwpNJ9NnIxNMeACbjY9bNg896fZw5e6+jmAXuE47h6Ui9Mjl6S8E57nafGd6TuuVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4829
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.0
+Subject: Re: [PATCH V2 0/2] mmc: block: Support Host to control FUA
+Content-Language: en-US
+To:     Wenchao Chen <wenchao.chen666@gmail.com>
+Cc:     ulf.hansson@linaro.org, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        axboe@kernel.dk, avri.altman@wdc.com, kch@nvidia.com,
+        CLoehle@hyperstone.com, vincent.whitchurch@axis.com,
+        bigeasy@linutronix.de, s.shtylyov@omp.ru,
+        michael@allwinnertech.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
+        lzx.stg@gmail.com
+References: <20221021073025.18831-1-wenchao.chen666@gmail.com>
+ <22499ab9-340d-7059-b3ff-45342b0810cf@intel.com>
+ <CA+Da2qyx7McYStMysPdK-DV9qiOnb9rvXYqqugxsbVgqqX59VQ@mail.gmail.com>
+ <e0381607-d4ba-5a75-3710-8811a0776b91@intel.com>
+ <CA+Da2qyh14b2DrOpi4iW4AyuxT68ULh-q-g3TcHWPEv2fyBKoQ@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CA+Da2qyh14b2DrOpi4iW4AyuxT68ULh-q-g3TcHWPEv2fyBKoQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-18 at 14:32:19 +0800, Wang ShaoBo wrote:
-> acpi_evaluate_dsm_typed()/acpi_evaluate_dsm() should be coupled with
-> ACPI_FREE() to free the ACPI memory, because we need to track the
-> allocation of acpi_object when ACPI_DBG_TRACK_ALLOCATIONS enabled,
-> so use ACPI_FREE() instead of kfree().
+On 18/11/22 12:54, Wenchao Chen wrote:
+> On Fri, Nov 18, 2022 at 6:12 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 11/11/22 09:58, Wenchao Chen wrote:
+>>> Hi Hunter
+>>> Thank you for your review!
+>>> I'm sorry to reply you so late because I've been too busy lately.
+>>>
+>>> On Fri, Oct 21, 2022 at 11:50 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>
+>>>> On 21/10/22 10:30, Wenchao Chen wrote:
+>>>>> From: Wenchao Chen <wenchao.chen@unisoc.com>
+>>>>>
+>>>>> Summary
+>>>>> =======
+>>>>> These patches[1] supports the host to turn off FUA.
+>>>>>
+>>>>> About FUA, roughly deal with the following two parts:
+>>>>> 1) FUA(Forced Unit Access):
+>>>>> - The REQ_FUA flag can be OR ed into the r/w flags of a bio submitted from the
+>>>>>   filesystem and will make sure that I/O completion for this request is only
+>>>>>   signaled after the data has been committed to non-volatile storage.
+>>>>>
+>>>>> 2) In emmc, FUA is represented as Reliable write. code show as below:
+>>>>> static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
+>>>>>               int recovery_mode, bool *do_rel_wr_p, bool *do_data_tag_p)
+>>>>> {
+>>>>>       ...
+>>>>>       /*
+>>>>>        * Reliable writes are used to implement Forced Unit Access and
+>>>>>        * are supported only on MMCs.
+>>>>>        */
+>>>>>       do_rel_wr = (req->cmd_flags & REQ_FUA) &&
+>>>>>                       rq_data_dir(req) == WRITE &&
+>>>>>                       (md->flags & MMC_BLK_REL_WR);
+>>>>>       ...
+>>>>> }
+>>>>>
+>>>>> Patch structure
+>>>>> ===============
+>>>>> patch#1:  for block
+>>>>> patch#2:  for sdhci-sprd
+>>>>>
+>>>>> Tests
+>>>>> =====
+>>>>> Ran 'AndroBench' to evaluate the performance:
+>>>>
+>>>> It would be good to have more details e.g.
+>>>> What file system? What block size?  What journal size?
+>>>> What file size? What record size?
+>>>>
+>>>
+>>> What file system?
+>>> F2FS
+>>> What block size?
+>>> Sequential: 32768KB, Random: 4KB
+>>> What file size?
+>>> 64MB
+>>>
+>>>>> 1. fua_disable = 1
+>>>>> /sys/block/mmcblk0/queue # cat fua 0
+>>>>> I tested 5 times for each case and output a average speed.
+>>>>>
+>>>>> 1) Sequential read:
+>>>>> Speed: 266.8MiB/s, 265.1MiB/s, 262.9MiB/s, 268.7MiB/s, 265.2MiB/s
+>>>>> Average speed: 265.74MiB/s
+>>>>>
+>>>>> 2) Random read:
+>>>>> Speed: 98.75MiB/s, 98.7MiB/s, 98.5MiB/s, 99.4MiB/s, 98.7MiB/s
+>>>>> Average speed: 98.81MiB/s
+>>>>>
+>>>>> 3) Sequential write:
+>>>>> Speed: 199.94MiB/s, 199.1MiB/s, 205.5MiB/s, 206.5MiB/s, 191.5MiB/s
+>>>>> Average speed: 200.5MiB/s
+>>>>>
+>>>>> 4) Random write:
+>>>>> Speed: 68.6MiB/s, 71.8MiB/s, 77.1MiB/s, 64.8MiB/s, 69.3MiB/s
+>>>>> Average speed: 70.32MiB/s
+>>>>>
+>>>>> 2. fua_disable = 0 (default 0)
+>>>>> /sys/block/mmcblk0/queue # cat fua 1
+>>>>> I tested 5 times for each case and output a average speed.
+>>>>>
+>>>>> 1) Sequential read:
+>>>>> Speed: 259.3MiB/s, 258.8MiB/s, 258.2MiB/s, 259.5MiB/s, 253.5MiB/s
+>>>>> Average speed: 257.86MiB/s
+>>>>>
+>>>>> 2) Random read:
+>>>>> Speed: 98.9MiB/s, 101MiB/s, 101MiB/s, 99MiB/s, 101.1MiB/s
+>>>>> Average speed: 100.2MiB/s
+>>>>>
+>>>>> 3) Sequential write:
+>>>>> Speed: 153.7MiB/s, 146.2MiB/s, 151.2MiB/s, 148.8MiB/s, 147.5MiB/s
+>>>>> Average speed: 149.48MiB/s
+>>>>>
+>>>>> 4) Random write:
+>>>>> Speed: 12.9MiB/s, 12.3MiB/s, 12.6MiB/s, 12.8MiB/s, 12.8MiB/s
+>>>>> Average speed: 12.68MiB/s
+>>>>
+>>>> Is every write being sync'ed of just sync at the end?
+>>>>
+>>>
+>>> /*
+>>> * Reliable writes are used to implement Forced Unit Access and
+>>> * are supported only on MMCs.
+>>> */
+>>> do_rel_wr = (req->cmd_flags & REQ_FUA) &&
+>>>     rq_data_dir(req) == WRITE &&
+>>>     (md->flags & MMC_BLK_REL_WR);
+>>>
+>>> A Reliable Write access shall force the data to be written to the
+>>> nonvolatile storage。
+>>> It will consume more time.
+>>
+>> Reliable write is slow because it guarantees not to tear the write.
+>> The issue is torn writes, not just FUA.
+>>
 > 
-> Fixes: 0db89fa243e5 ("ACPI: Introduce Platform Firmware Runtime Update device driver")
-> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
-Reviewed-by: Chen Yu <yu.c.chen@intel.com>
+> If you'd like, could you introduce Reliable write that doesn't tear writes?
 
-thanks,
-Chenyu
+Not following you.  Reliable Write doesn't tear writes, that is why it is used.
+
+> 
+>>>
+>>>>>
+>>>>> According to the above data, disable FUA (fua_disable = 1) improves the
+>>>>> performance:
+>>>>> 1)Sequential read improved by 3%.
+>>>>> 2)Random read were down 1%.
+>>>>
+>>>> FUA should not affect reads.  If it is, you may want to investigate how.
+>>>>
+>>>>> 3)Sequential write improved by 34%.
+>>>>> 4)Random write improved by 454%.
+>>>>> Therefore, it is recommended to support the host to control FUA.
+>>>>>
+>>>>> Reference
+>>>>> =========
+>>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/block/writeback_cache_control.rst
+>>>>> [2] Embedded Multi-Media Card (e•MMC) Electrical Standard (5.1)''
+>>>>
+>>>> You do not seem to have considered data integrity.
+>>>>
+>>>> Regular disks are assumed to provide atomic sector writes.  That is, a sector has either the old data or the new data, but not some corrupt mixture.
+>>>>
+>>>> mmc does not have that assumption, which is presumably why Reliable Write has been used instead.  Although that idea appears to have been thrown away for devices with no cache by commit 08ebf903af57 ("mmc: core: Fixup support for writeback-cache for eMMC and SD").
+>>>>
+>>>> File systems can use FUA to mark a successful journal flush.  Whether or not getting a torn sector at that point will corrupt the file system recovery is presumably file system specific, and maybe specific to file system options e.g. the use of checksums.
+>>>>
+>>>> It may well be that a file system can survive a torn sector at that point, or that user space would prefer to take the risk in order to get better performance.  In either of those cases, it is not really a decision for the host controller driver.
+>>>>
+>>>
+>>> Considering the data integrity, we did a random power-down test, and
+>>> the experimental results were good.
+>>>
+>>> FUA can only reduce data loss under abnormal conditions, but cannot
+>>> prevent data loss under abnormal conditions.
+>>>
+>>> I think there should be a balance between FUA and NO FUA, but
+>>> filesystems seem to favor FUA.
+>>>
+>>> FUA brings a drop in random write performance. If enough tests are
+>>> done, NO FUA is acceptable.
+>>>
+>>> I found a discussion about FUA:
+>>> https://lore.kernel.org/linux-f2fs-devel/20220528051238.GX1098723@dread.disaster.area/
+>>>
+>>> UFS reference:
+>>> https://lore.kernel.org/linux-scsi/20220531201053.3300018-1-jaegeuk@kernel.org/
+>>>
+>>
+>> You really need buy-in from more people, especially file system
+>> developers.  I suggest you try F2FS people to start with.
+>> Please be clear though: Reliable Write protects against torn
+>> writes.  If enough stakeholders agree that file systems can
+>> handle the torn writes anyway, then we could presumably drop
+>> using Reliable Write for FUA.
+>>
+>>>>>
+>>>>> Wenchao Chen (2):
+>>>>>   mmc: block: Support Host to control FUA
+>>>>>   mmc: sdhci-sprd: enable fua_disable for SPRDSDHCI
+>>>>>
+>>>>>  drivers/mmc/core/block.c      | 3 ++-
+>>>>>  drivers/mmc/host/sdhci-sprd.c | 2 ++
+>>>>>  include/linux/mmc/host.h      | 3 +++
+>>>>>  3 files changed, 7 insertions(+), 1 deletion(-)
+>>>>>
+>>>>
+>>
+
