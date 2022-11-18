@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E175E62FB8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3ED62FB9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241968AbiKRR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S241998AbiKRR1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:27:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235347AbiKRR0J (ORCPT
+        with ESMTP id S235254AbiKRR1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:26:09 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077829150C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:26:09 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ud5so14695389ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:26:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NV08U6xHPyg0UaSVwP6PfcZOSsUP/5GZvrfcRdYDLS0=;
-        b=lBa8PRc7BGxEmXsVGVuHecMAlZ41oysW90dh3ZlB7//RXOu2DJs4spnom3Xm3vTprH
-         bYzodfr5s3w/II3G1U+jgtsT9sijkICX0s8eRo7+PUzUUMdC52ZhqGW3AiqLGpLwal/l
-         DVyEiHmt4YVmhV3FGR0RtDgyHlUDCMVLnNZO0Db61ToiIhnnncZv1YizGPRs3OUjOP/D
-         Sc+0zuRhA8ODeCMcN8IMEw+y3E6railg7P6pOLsLBcAJsAFGxtgPsmtOlVablo09Vc5G
-         psBaR7DdyISjAXlScHRJsu321ygf7zPq3n3VI7Xmls0Wq0xylE3y0RlwLW3qmrl9QHX5
-         Q+hw==
+        Fri, 18 Nov 2022 12:27:20 -0500
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54B5DF8B;
+        Fri, 18 Nov 2022 09:27:16 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id 4so5179911pli.0;
+        Fri, 18 Nov 2022 09:27:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NV08U6xHPyg0UaSVwP6PfcZOSsUP/5GZvrfcRdYDLS0=;
-        b=5DNUE22AUGTB+0BJOzIcbV2PzYxqsSwj/r0wRb6+3qbClmDCyK2eAvsIpqZNrWsWlK
-         TeBq4hPvkWrJRN9ICOXcRT9PMYRayljcpR76/KIuxL7/fxOO3x5CTdJffo0Tkw1DGUuF
-         SmpG44VSW84t5SAL/C9LRNjwJoHEyIeNv+VCG0tJuP/60/zsHEZD51Lt/x2gLPhEDOev
-         rRfymS0tdYq8kGhdnk4ErrrHWUvb8iNa3wlHgEcJ5A0q3UegDZjqbGtQsRCtftElH5ud
-         fiorl0SjEfM0aB/lHjTHXT79eLyPPNSa68cAszMizLSi5aWQXhfAGreTbBW+9DP2dhVV
-         NYPA==
-X-Gm-Message-State: ANoB5pmlV1Lb1K9K/eeomzXvmc0AgO+uZhqZxGQymMUJgT+B3bDVbf3n
-        UrSzxMVDy0e2uFhLPz2JRrYfsi1zw67d9Vwu9QWHgw==
-X-Google-Smtp-Source: AA0mqf5aD7hFWVL+UyV9oM42wn1EyVwXowkgyqanrBYNAi9JFhTpJCrA59g3ARNLkMBmxP9WaaQK+1JuwEpkydtHdZ4=
-X-Received: by 2002:a17:907:378:b0:7ad:db82:d071 with SMTP id
- rs24-20020a170907037800b007addb82d071mr7124611ejb.200.1668792367597; Fri, 18
- Nov 2022 09:26:07 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JSuXoCSwNdmGNsrLkM16f100zMEsciiCUvb+fP2+8Zo=;
+        b=cPawLvqXPC8cgWmN4KX9KxRu94EJIvO2dV/L78M/j4Vk7fAKxjlI/918HZCqToKKE5
+         RtmlLF1MkTfNFdYQVrxcGP0fWpRlL3unrHDcT/fY2KgQjO+O26d+MoUPLbdbwNUZWudA
+         oXH5J1YFGQvl9NofnJM9Y6yhxXzByb5lwTrw54sHOuIBXqjhvpVSqTKGGmufnPrOiFej
+         BiD45hKw0XtcpWKMRMNZ+YIpgvWWfIyGL3mnvxdbVuxLx0qmEXcuSzNeSny7frzqr0gW
+         dde/PFWwEHBhv/dCSogKS68TpDOx6ycFSM+beUl14JsHsT02lBP3nlPnCULOp8agpkAf
+         TOCA==
+X-Gm-Message-State: ANoB5pmWZuRa5F240n6zPzMbcw12DRXlrg6j0UsZ2m0rzGQuG0p4U7Lw
+        OHFiuppM7G+2Rjw20/odmIM=
+X-Google-Smtp-Source: AA0mqf5ld9uUcm0BwXCXF/PhDgLbpxrFnPF34jlEiWKP2fqKrPMG4CMgkRh5sVdmyM/XgB/03ZXnQg==
+X-Received: by 2002:a17:902:ec01:b0:186:878e:3b0d with SMTP id l1-20020a170902ec0100b00186878e3b0dmr357399pld.149.1668792436174;
+        Fri, 18 Nov 2022 09:27:16 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:5392:f94c:13ff:af1a? ([2620:15c:211:201:5392:f94c:13ff:af1a])
+        by smtp.gmail.com with ESMTPSA id h2-20020a63c002000000b0046b1dabf9a8sm3049437pgg.70.2022.11.18.09.27.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 09:27:15 -0800 (PST)
+Message-ID: <d1a1340a-f5f8-6953-e066-b8c6095d63fd@acm.org>
+Date:   Fri, 18 Nov 2022 09:27:13 -0800
 MIME-Version: 1.0
-References: <20221117160015.344528-1-umang.jain@ideasonboard.com> <dd05ca8a-c60c-a56f-66e6-9892cb933315@i2se.com>
-In-Reply-To: <dd05ca8a-c60c-a56f-66e6-9892cb933315@i2se.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Fri, 18 Nov 2022 17:25:52 +0000
-Message-ID: <CAPY8ntBDkme2nuYMAsMtkycbjnQ8CR2CU70EWPiS_R4KyoQySw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] vc04_services: Promote bool usage
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     kieran.bingham@ideasonboard.com,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 0/3] mmc: Improve block layer requeueing behavior
+Content-Language: en-US
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Avri Altman <Avri.Altman@wdc.com>,
+        "vincent.whitchurch@axis.com" <vincent.whitchurch@axis.com>
+References: <f30ec7fe7d834c1d8e116508500110cf@hyperstone.com>
+ <c1e1281e-0977-cbf7-041e-db911ee722a7@intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <c1e1281e-0977-cbf7-041e-db911ee722a7@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan
+On 11/18/22 02:47, Adrian Hunter wrote:
+> On 26/10/22 10:30, Christian Löhle wrote:
+>> Mmcblk relies on block layer requeueing to fulfill some requests under
+>> certain conditions. Improve the handling to get nicely ordered requests.
+>>
+>> Using the terms a bit loosely to get a point across:
+>> Current behavior for 512 blksz and max_blk_count = 1 the scenario would
+>> be as follows:
+>>
+>> - request for page 0 lba 0 to 7
+>> - request for page 1 lba 8 to 15
+>> - request for page 2 lba 16 to 23
+>> - request for page 3 lba 24 to 31
+>>
+>> mmcblk modifies data->blocks = 1 for each and requeues,
+>> this leads to:
+>>
+>> Access lba 0
+>> Access lba 8
+>> Access lba 16
+>> Access lba 24
+>> Access lba 1 (1. Requeue for page 0)
+>> Access lba 9 (1. Requeue for page 1)
+>> Access lba 17 (1. Requeue for page 2)
+>> Access lba 25 (1. Requeue for page 3)
+>> Access lba 2 (2. Requeue for page 0)
+>> ...
+>>
+>> Of course we would rather have lbas consecutive.
+> 
+> Does anyone know why the block layer does not support
+> (max_hw_sectors << 9) < PAGE_SIZE ?
 
-On Thu, 17 Nov 2022 at 18:11, Stefan Wahren <stefan.wahren@i2se.com> wrote:
->
-> Hi Dave,
->
-> Am 17.11.22 um 17:00 schrieb Umang Jain:
-> > In commit 7967656ffbfa ("coding-style: Clarify the expectations around
-> > bool") the check to dis-allow bool structure members was removed from
-> > checkpatch.pl. It promotes bool structure members to store boolean
-> > values. This enhances code readability.
-> >
-> > Umang Jain (3):
-> >    Revert "staging: mmal-vchiq: Avoid use of bool in structures"
-> >    vc04_services: mmal-vchiq: Use bool for vchiq_mmal_component.in_use
-> >    vc04_services: bcm2835-camera: Use bool values for
-> >      mmal_fmt.remove_padding
-> >
-> >   .../bcm2835-camera/bcm2835-camera.c           | 30 +++++++++----------
-> >   .../vc04_services/vchiq-mmal/mmal-vchiq.c     | 18 +++++------
-> >   .../vc04_services/vchiq-mmal/mmal-vchiq.h     |  6 ++--
-> could you please check these changes to be safe? I'm not sure that the
-> affected declarations are really internal. I'm afraid this might affect
-> firmware or userspace.
+Hi Adrian,
 
-No problem. These are totally safe.
-As I've commented on the v2 patch, if it were in the mmal-msg*.h files
-then I'd be more concerned as those are matching the firmware
-structures, but these are just internal state.
+Does this mean that the following patch series would not only be
+useful for UFS but also for MMC? "[PATCH 00/10] Support DMA segments
+smaller than the page size"
+(https://lore.kernel.org/linux-block/20221019222324.362705-1-bvanassche@acm.org/).
 
-  Dave
+Thanks,
 
-> >   3 files changed, 27 insertions(+), 27 deletions(-)
-> >
+Bart.
+
+
