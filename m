@@ -2,655 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6BF62FDE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C0B62FDED
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 20:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbiKRTXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 14:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
+        id S235503AbiKRTYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 14:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbiKRTXG (ORCPT
+        with ESMTP id S235270AbiKRTYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 14:23:06 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0794965855;
-        Fri, 18 Nov 2022 11:23:03 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIJGGbm025998;
-        Fri, 18 Nov 2022 19:22:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=8tMwp+5QQ52R4yJrsU8rC5HtcJvGpm5eMMHAETMy6Xo=;
- b=JtM+5ik2i6H4gplIOZGNpJDYnzCuoqkOkJwBLhqx/FM+yfSIUb7KKjHTmPGydptlHP/Q
- ijk593lSQ5G7Qmg0LnB/Hux6wxUTVEADwOUfe7zXfNEiaEpsgub+IMlaMsG3M/A3smin
- PdCdFiCN2LennLNPuCEYMMPTf8/tKXfjVAz3KplIvveSGOA0AjK/YRQFT4/+D1v05RXr
- ckEPOTqC76u/nw7uecBr4G3erFy1Tc1alx/8+0of4pjpQGdR6odqBuwwezRAUzQt/roy
- TmKN1MOiLsCQCrw1kBClbWoqELuC0dee0otR8alYvErRjBmdRbo+FD6I7wGUrJOhx3as sQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kx0xrhyrd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 19:22:59 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AIJMwX4008561
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 19:22:58 GMT
-Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 18 Nov 2022 11:22:58 -0800
-From:   Melody Olvera <quic_molvera@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>
-Subject: [PATCH v4 2/2] arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
-Date:   Fri, 18 Nov 2022 11:22:41 -0800
-Message-ID: <20221118192241.29384-3-quic_molvera@quicinc.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221118192241.29384-1-quic_molvera@quicinc.com>
-References: <20221118192241.29384-1-quic_molvera@quicinc.com>
+        Fri, 18 Nov 2022 14:24:17 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2B4F0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:24:16 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id d192so5827440pfd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 11:24:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mdCngp0163ZOC7R4UmapaO07RFseynPajyc/BjnA5YY=;
+        b=XT4lmqMuxy3rDFluUzTnDbQxEYFF7FbgM07BgL4VhzVaTzKKmVo+PDV4EcTmnRINYR
+         +8rq5TxSXwBSGjnXmKzBBJFRBya0zSS9UvA5nCbTNaqLWHGtVs+uJ+6KtmORseROIUGQ
+         B1gpDbr/ozmrjJ7JdrAVKRqVAtOJKN2vGeRVi2i/HiReNlTDdnW4JwmczynZam6iFkvS
+         l5GG+QS27WCGItZ9NeeHqCB7Yw6A4UzklWHdUQKLaSqgqWCUwrAs0FnffHL5GB3zdTfl
+         1zxnswIisIkryuQXC22qcvESiu35fkIu+iOMlU3HkZj3FyIjfURti8HhaUA1aC8IjvJ1
+         cuyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mdCngp0163ZOC7R4UmapaO07RFseynPajyc/BjnA5YY=;
+        b=hSjCVFTnwwJcFeG05LDfg1SlTqFQHe9E9jr0UHbgEvCiENFrCWT4Nsb1kntFCM3KB0
+         tA5d15POlXeLoQwhLhk0crmTLDDGApsCumCr5FZSqxEKe+t/3hrDMcWf8uahjoBasK0v
+         +vak/+mByRrUVBIsx22PybfRVLgbi5FA8xFeWQf3WI068J7hDCiQxcj2Kgx+oHm8f9OE
+         7OWFbYywHqdHq+amj48jMSIhHFhkrhe9HSYkAzOkg4uHHfSYm7M5+XlBi3KqGMBgC4Fp
+         WJyGqVQOrVbpxrv7oM0Ka1TC2T4D1lJpQlw55SZPGWzdpPT99hZwJ0KK6T9scwFlB7ot
+         IBAg==
+X-Gm-Message-State: ANoB5plTnjJc7AtyGpqWOsJil6VdbCLoEpCtN1ScTOZyj+4QiRJyYN6u
+        TnbLXJGnwUkLD8lzwb5Pmrs=
+X-Google-Smtp-Source: AA0mqf4YXL5oNrj/5Fz4qpcvyXB/rghSqMveqidcZO95YJiKisNyQ7OZ8TV2mAFd2ngWGl1wdhDLtg==
+X-Received: by 2002:a05:6a00:2908:b0:56b:d738:9b with SMTP id cg8-20020a056a00290800b0056bd738009bmr9214469pfb.61.1668799455580;
+        Fri, 18 Nov 2022 11:24:15 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:bba9:9f92:b2cc:16a4])
+        by smtp.gmail.com with ESMTPSA id p1-20020a170902e74100b00186b280a441sm4108482plf.239.2022.11.18.11.24.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 11:24:15 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 18 Nov 2022 11:24:13 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v4 3/5] zsmalloc: Add a LRU to zs_pool to keep track of
+ zspages in LRU order
+Message-ID: <Y3fb3X7qRN10lCAN@google.com>
+References: <20221117163839.230900-1-nphamcs@gmail.com>
+ <20221117163839.230900-4-nphamcs@gmail.com>
+ <Y3ayb4kx/m3oDsSN@google.com>
+ <Y3cKUxgXs23XFVVo@cmpxchg.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lVEpqsNutxeTc2c0lB5JyfRJUNFQ6EbS
-X-Proofpoint-ORIG-GUID: lVEpqsNutxeTc2c0lB5JyfRJUNFQ6EbS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-18_06,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- adultscore=0 clxscore=1015 phishscore=0 priorityscore=1501 mlxscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211180115
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3cKUxgXs23XFVVo@cmpxchg.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DTs for Qualcomm IDP platforms using the QDU1000 and QRU1000
-SoCs.
+On Thu, Nov 17, 2022 at 11:30:11PM -0500, Johannes Weiner wrote:
+> On Thu, Nov 17, 2022 at 02:15:11PM -0800, Minchan Kim wrote:
+> > On Thu, Nov 17, 2022 at 08:38:37AM -0800, Nhat Pham wrote:
+> > > This helps determines the coldest zspages as candidates for writeback.
+> > > 
+> > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> > > ---
+> > >  mm/zsmalloc.c | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 46 insertions(+)
+> > > 
+> > > diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> > > index 326faa751f0a..2557b55ec767 100644
+> > > --- a/mm/zsmalloc.c
+> > > +++ b/mm/zsmalloc.c
+> > > @@ -239,6 +239,11 @@ struct zs_pool {
+> > >  	/* Compact classes */
+> > >  	struct shrinker shrinker;
+> > > 
+> > > +#ifdef CONFIG_ZPOOL
+> > > +	/* List tracking the zspages in LRU order by most recently added object */
+> > > +	struct list_head lru;
+> > > +#endif
+> > > +
+> > >  #ifdef CONFIG_ZSMALLOC_STAT
+> > >  	struct dentry *stat_dentry;
+> > >  #endif
+> > > @@ -260,6 +265,12 @@ struct zspage {
+> > >  	unsigned int freeobj;
+> > >  	struct page *first_page;
+> > >  	struct list_head list; /* fullness list */
+> > > +
+> > > +#ifdef CONFIG_ZPOOL
+> > > +	/* links the zspage to the lru list in the pool */
+> > > +	struct list_head lru;
+> > > +#endif
+> > > +
+> > >  	struct zs_pool *pool;
+> > >  #ifdef CONFIG_COMPACTION
+> > >  	rwlock_t lock;
+> > > @@ -352,6 +363,18 @@ static void cache_free_zspage(struct zs_pool *pool, struct zspage *zspage)
+> > >  	kmem_cache_free(pool->zspage_cachep, zspage);
+> > >  }
+> > > 
+> > > +#ifdef CONFIG_ZPOOL
+> > > +/* Moves the zspage to the front of the zspool's LRU */
+> > > +static void move_to_front(struct zs_pool *pool, struct zspage *zspage)
+> > > +{
+> > > +	assert_spin_locked(&pool->lock);
+> > > +
+> > > +	if (!list_empty(&zspage->lru))
+> > > +		list_del(&zspage->lru);
+> > > +	list_add(&zspage->lru, &pool->lru);
+> > > +}
+> > > +#endif
+> > > +
+> > >  /* pool->lock(which owns the handle) synchronizes races */
+> > >  static void record_obj(unsigned long handle, unsigned long obj)
+> > >  {
+> > > @@ -953,6 +976,9 @@ static void free_zspage(struct zs_pool *pool, struct size_class *class,
+> > >  	}
+> > > 
+> > >  	remove_zspage(class, zspage, ZS_EMPTY);
+> > > +#ifdef CONFIG_ZPOOL
+> > > +	list_del(&zspage->lru);
+> > > +#endif
+> > >  	__free_zspage(pool, class, zspage);
+> > >  }
+> > > 
+> > > @@ -998,6 +1024,10 @@ static void init_zspage(struct size_class *class, struct zspage *zspage)
+> > >  		off %= PAGE_SIZE;
+> > >  	}
+> > > 
+> > > +#ifdef CONFIG_ZPOOL
+> > > +	INIT_LIST_HEAD(&zspage->lru);
+> > > +#endif
+> > > +
+> > >  	set_freeobj(zspage, 0);
+> > >  }
+> > > 
+> > > @@ -1418,6 +1448,11 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+> > >  		fix_fullness_group(class, zspage);
+> > >  		record_obj(handle, obj);
+> > >  		class_stat_inc(class, OBJ_USED, 1);
+> > > +
+> > > +#ifdef CONFIG_ZPOOL
+> > > +		/* Move the zspage to front of pool's LRU */
+> > > +		move_to_front(pool, zspage);
+> > > +#endif
+> > >  		spin_unlock(&pool->lock);
+> > > 
+> > >  		return handle;
+> > > @@ -1444,6 +1479,10 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
+> > > 
+> > >  	/* We completely set up zspage so mark them as movable */
+> > >  	SetZsPageMovable(pool, zspage);
+> > > +#ifdef CONFIG_ZPOOL
+> > > +	/* Move the zspage to front of pool's LRU */
+> > > +	move_to_front(pool, zspage);
+> > > +#endif
+> > >  	spin_unlock(&pool->lock);
+> > 
+> > Why do we move the zspage in the alloc instead of accessor?
+> > 
+> > Isn't zs_map_object better place since it's clear semantic
+> > that user start to access the object?
+> 
+> Remember that this is used for swap, and these entries aren't accessed
+> on an ongoing basis while in the pool. An access means swapin. So
+> functionally this is fine.
+> 
+> On cleaner choices, I would actually agree with you that map would be
+> more appropriate. But all I can do is repeat replies from previous
+> questions: We're not reinventing the wheel here. zbud and z3fold do it
+> this way, and this follows their precedent. We've talked about wanting
+> to generalize the LRU, and that's a heck of a lot easier if we have
+> copies of *one* implementation that we can deduplicate - instead of
+> having to merge multiple implementations with arbitrary differences.
 
-Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
----
- arch/arm64/boot/dts/qcom/Makefile        |   2 +
- arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 266 +++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/qru1000-idp.dts | 266 +++++++++++++++++++++++
- 3 files changed, 534 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
- create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
+It's already very weird to add the LRU logic into allocator but since
+you have talked that you are working general LRU concept what I
+preferred and this temporal work would be beneficial to get all the
+requirements for the work, I wanted to help this as interim solution
+since I know the general LRU is bigger work than this. However, 
+If you also agree the suggestion(adding LRU into mapping function
+rather than allocation) and it doesn't change any behavior, why not?
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index afe496a93f94..da66d4a0a884 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -53,7 +53,9 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-maple.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-poplar.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= qdu1000-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= qru1000-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
-diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-new file mode 100644
-index 000000000000..5aed483201fa
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-@@ -0,0 +1,266 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include "qdu1000.dtsi"
-+#include "pm8150.dtsi"
-+
-+/ {
-+	model = "Qualcomm Technologies, Inc. QDU1000 IDP";
-+	compatible = "qcom,qdu1000-idp", "qcom,qdu1000";
-+
-+	aliases {
-+		serial0 = &uart7;
-+	};
-+
-+	clocks {
-+		xo_board: xo-board {
-+			compatible = "fixed-clock";
-+			clock-frequency = <19200000>;
-+			clock-output-names = "xo_board";
-+			#clock-cells = <0>;
-+		};
-+
-+		sleep_clk: sleep-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <32000>;
-+			#clock-cells = <0>;
-+		};
-+
-+		pcie_0_pipe_clk: pcie-0-pipe-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <1000>;
-+			clock-output-names = "pcie_0_pipe_clk";
-+			#clock-cells = <0>;
-+		};
-+
-+		pcie_0_phy_aux_clk: pcie-0-phy-aux-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <1000>;
-+			clock-output-names = "pcie_0_phy_aux_clk";
-+			#clock-cells = <0>;
-+		};
-+
-+		usb3_phy_wrapper_pipe_clk: usb3-phy-wrapper-pipe-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <1000>;
-+			clock-output-names = "usb3_phy_wrapper_pipe_clk";
-+			#clock-cells = <0>;
-+		};
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	ppvar_sys: ppvar-sys-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ppvar_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+
-+		regulator-always-on;
-+		regulator-boot-on;
-+
-+		vin-supply = <&ppvar_sys>;
-+	};
-+};
-+
-+&apps_rsc {
-+	regulators {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "a";
-+
-+		vdd-s1-supply = <&vph_pwr>;
-+		vdd-s2-supply = <&vph_pwr>;
-+		vdd-s3-supply = <&vph_pwr>;
-+		vdd-s4-supply = <&vph_pwr>;
-+		vdd-s5-supply = <&vph_pwr>;
-+		vdd-s6-supply = <&vph_pwr>;
-+		vdd-s7-supply = <&vph_pwr>;
-+		vdd-s8-supply = <&vph_pwr>;
-+		vdd-s9-supply = <&vph_pwr>;
-+		vdd-s10-supply = <&vph_pwr>;
-+
-+		vdd-l1-l8-l11-supply = <&vreg_s6a_0p9>;
-+		vdd-l2-l10-supply = <&vph_pwr>;
-+		vdd-l3-l4-l5-l18-supply = <&vreg_s5a_2p0>;
-+		vdd-l6-l9-supply = <&vreg_s6a_0p9>;
-+		vdd-l7-l12-l14-l15-supply = <&vreg_s4a_1p8>;
-+		vdd-l13-l16-l17-supply = <&vph_pwr>;
-+
-+		vreg_s2a_0p5: smps2 {
-+			regulator-name = "vreg_s2a_0p5";
-+			regulator-min-microvolt = <320000>;
-+			regulator-max-microvolt = <570000>;
-+		};
-+
-+		vreg_s3a_1p05: smps3 {
-+			regulator-name = "vreg_s3a_1p05";
-+			regulator-min-microvolt = <950000>;
-+			regulator-max-microvolt = <1170000>;
-+		};
-+
-+		vreg_s4a_1p8: smps4 {
-+			regulator-name = "vreg_s4a_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		vreg_s5a_2p0: smps5 {
-+			regulator-name = "vreg_s5a_2p0";
-+			regulator-min-microvolt = <1904000>;
-+			regulator-max-microvolt = <2000000>;
-+		};
-+
-+		vreg_s6a_0p9: smps6 {
-+			regulator-name = "vreg_s6a_0p9";
-+			regulator-min-microvolt = <920000>;
-+			regulator-max-microvolt = <1128000>;
-+		};
-+
-+		vreg_s7a_1p2: smps7 {
-+			regulator-name = "vreg_s7a_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		vreg_s8a_1p3: smps8 {
-+			regulator-name = "vreg_s8a_1p3";
-+			regulator-min-microvolt = <1352000>;
-+			regulator-max-microvolt = <1352000>;
-+		};
-+
-+		vreg_l1a_0p91: ldo1 {
-+			regulator-name = "vreg_l1a_0p91";
-+			regulator-min-microvolt = <312000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l2a_2p3: ldo2 {
-+			regulator-name = "vreg_l2a_2p3";
-+			regulator-min-microvolt = <2970000>;
-+			regulator-max-microvolt = <3300000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l3a_1p2: ldo3 {
-+			regulator-name = "vreg_l3a_1p2";
-+			regulator-min-microvolt = <920000>;
-+			regulator-max-microvolt = <1260000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l5a_0p8: ldo5 {
-+			regulator-name = "vreg_l5a_0p8";
-+			regulator-min-microvolt = <312000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l6a_0p91: ldo6 {
-+			regulator-name = "vreg_l6a_0p91";
-+			regulator-min-microvolt = <880000>;
-+			regulator-max-microvolt = <950000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l7a_1p8: ldo7 {
-+			regulator-name = "vreg_l7a_1p8";
-+			regulator-min-microvolt = <1650000>;
-+			regulator-max-microvolt = <2000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+
-+		};
-+
-+		vreg_l8a_0p91: ldo8 {
-+			regulator-name = "vreg_l8a_0p91";
-+			regulator-min-microvolt = <888000>;
-+			regulator-max-microvolt = <925000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l9a_0p91: ldo9 {
-+			regulator-name = "vreg_l8a_0p91";
-+			regulator-min-microvolt = <312000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l10a_2p95: ldo10 {
-+			regulator-name = "vreg_l10a_2p95";
-+			regulator-min-microvolt = <2700000>;
-+			regulator-max-microvolt = <3544000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l11a_0p91: ldo11 {
-+			regulator-name = "vreg_l11a_0p91";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <1000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l12a_1p8: ldo12 {
-+			regulator-name = "vreg_l12a_1p8";
-+			regulator-min-microvolt = <1504000>;
-+			regulator-max-microvolt = <1504000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l14a_1p8: ldo14 {
-+			regulator-name = "vreg_l14a_1p8";
-+			regulator-min-microvolt = <1650000>;
-+			regulator-max-microvolt = <1950000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l15a_1p8: ldo15 {
-+			regulator-name = "vreg_l15a_1p8";
-+			regulator-min-microvolt = <1504000>;
-+			regulator-max-microvolt = <2000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l16a_1p8: ldo16 {
-+			regulator-name = "vreg_l16a_1p8";
-+			regulator-min-microvolt = <1710000>;
-+			regulator-max-microvolt = <1890000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l17a_3p3: ldo17 {
-+			regulator-name = "vreg_l17a_3p3";
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3544000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l18a_1p2: ldo18 {
-+			regulator-name = "vreg_l18a_1p2";
-+			regulator-min-microvolt = <312000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+	};
-+};
-+
-+&qupv3_id_0 {
-+	status = "okay";
-+};
-+
-+&uart7 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/qru1000-idp.dts b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-new file mode 100644
-index 000000000000..42eb0c33e7ba
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-@@ -0,0 +1,266 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include "qru1000.dtsi"
-+#include "pm8150.dtsi"
-+
-+/ {
-+	model = "Qualcomm Technologies, Inc. QRU1000 IDP";
-+	compatible = "qcom,qru1000-idp", "qcom,qru1000";
-+
-+	aliases {
-+		serial0 = &uart7;
-+	};
-+
-+	clocks {
-+		xo_board: xo-board {
-+			compatible = "fixed-clock";
-+			clock-frequency = <19200000>;
-+			clock-output-names = "xo_board";
-+			#clock-cells = <0>;
-+		};
-+
-+		sleep_clk: sleep-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <32000>;
-+			#clock-cells = <0>;
-+		};
-+
-+		pcie_0_pipe_clk: pcie-0-pipe-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <1000>;
-+			clock-output-names = "pcie_0_pipe_clk";
-+			#clock-cells = <0>;
-+		};
-+
-+		pcie_0_phy_aux_clk: pcie-0-phy-aux-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <1000>;
-+			clock-output-names = "pcie_0_phy_aux_clk";
-+			#clock-cells = <0>;
-+		};
-+
-+		usb3_phy_wrapper_pipe_clk: usb3-phy-wrapper-pipe-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <1000>;
-+			clock-output-names = "usb3_phy_wrapper_pipe_clk";
-+			#clock-cells = <0>;
-+		};
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	ppvar_sys: ppvar-sys-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ppvar_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+
-+		regulator-always-on;
-+		regulator-boot-on;
-+
-+		vin-supply = <&ppvar_sys>;
-+	};
-+};
-+
-+&apps_rsc {
-+	regulators {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "a";
-+
-+		vdd-s1-supply = <&vph_pwr>;
-+		vdd-s2-supply = <&vph_pwr>;
-+		vdd-s3-supply = <&vph_pwr>;
-+		vdd-s4-supply = <&vph_pwr>;
-+		vdd-s5-supply = <&vph_pwr>;
-+		vdd-s6-supply = <&vph_pwr>;
-+		vdd-s7-supply = <&vph_pwr>;
-+		vdd-s8-supply = <&vph_pwr>;
-+		vdd-s9-supply = <&vph_pwr>;
-+		vdd-s10-supply = <&vph_pwr>;
-+
-+		vdd-l1-l8-l11-supply = <&vreg_s6a_0p9>;
-+		vdd-l2-l10-supply = <&vph_pwr>;
-+		vdd-l3-l4-l5-l18-supply = <&vreg_s5a_2p0>;
-+		vdd-l6-l9-supply = <&vreg_s6a_0p9>;
-+		vdd-l7-l12-l14-l15-supply = <&vreg_s4a_1p8>;
-+		vdd-l13-l16-l17-supply = <&vph_pwr>;
-+
-+		vreg_s2a_0p5: smps2 {
-+			regulator-name = "vreg_s2a_0p5";
-+			regulator-min-microvolt = <320000>;
-+			regulator-max-microvolt = <570000>;
-+		};
-+
-+		vreg_s3a_1p05: smps3 {
-+			regulator-name = "vreg_s3a_1p05";
-+			regulator-min-microvolt = <950000>;
-+			regulator-max-microvolt = <1170000>;
-+		};
-+
-+		vreg_s4a_1p8: smps4 {
-+			regulator-name = "vreg_s4a_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		vreg_s5a_2p0: smps5 {
-+			regulator-name = "vreg_s5a_2p0";
-+			regulator-min-microvolt = <1904000>;
-+			regulator-max-microvolt = <2000000>;
-+		};
-+
-+		vreg_s6a_0p9: smps6 {
-+			regulator-name = "vreg_s6a_0p9";
-+			regulator-min-microvolt = <920000>;
-+			regulator-max-microvolt = <1128000>;
-+		};
-+
-+		vreg_s7a_1p2: smps7 {
-+			regulator-name = "vreg_s7a_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		vreg_s8a_1p3: smps8 {
-+			regulator-name = "vreg_s8a_1p3";
-+			regulator-min-microvolt = <1352000>;
-+			regulator-max-microvolt = <1352000>;
-+		};
-+
-+		vreg_l1a_0p91: ldo1 {
-+			regulator-name = "vreg_l1a_0p91";
-+			regulator-min-microvolt = <312000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l2a_2p3: ldo2 {
-+			regulator-name = "vreg_l2a_2p3";
-+			regulator-min-microvolt = <2970000>;
-+			regulator-max-microvolt = <3300000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l3a_1p2: ldo3 {
-+			regulator-name = "vreg_l3a_1p2";
-+			regulator-min-microvolt = <920000>;
-+			regulator-max-microvolt = <1260000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l5a_0p8: ldo5 {
-+			regulator-name = "vreg_l5a_0p8";
-+			regulator-min-microvolt = <312000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l6a_0p91: ldo6 {
-+			regulator-name = "vreg_l6a_0p91";
-+			regulator-min-microvolt = <880000>;
-+			regulator-max-microvolt = <950000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l7a_1p8: ldo7 {
-+			regulator-name = "vreg_l7a_1p8";
-+			regulator-min-microvolt = <1650000>;
-+			regulator-max-microvolt = <2000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+
-+		};
-+
-+		vreg_l8a_0p91: ldo8 {
-+			regulator-name = "vreg_l8a_0p91";
-+			regulator-min-microvolt = <888000>;
-+			regulator-max-microvolt = <925000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l9a_0p91: ldo9 {
-+			regulator-name = "vreg_l8a_0p91";
-+			regulator-min-microvolt = <312000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l10a_2p95: ldo10 {
-+			regulator-name = "vreg_l10a_2p95";
-+			regulator-min-microvolt = <2700000>;
-+			regulator-max-microvolt = <3544000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l11a_0p91: ldo11 {
-+			regulator-name = "vreg_l11a_0p91";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <1000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l12a_1p8: ldo12 {
-+			regulator-name = "vreg_l12a_1p8";
-+			regulator-min-microvolt = <1504000>;
-+			regulator-max-microvolt = <1504000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l14a_1p8: ldo14 {
-+			regulator-name = "vreg_l14a_1p8";
-+			regulator-min-microvolt = <1650000>;
-+			regulator-max-microvolt = <1950000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l15a_1p8: ldo15 {
-+			regulator-name = "vreg_l15a_1p8";
-+			regulator-min-microvolt = <1504000>;
-+			regulator-max-microvolt = <2000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l16a_1p8: ldo16 {
-+			regulator-name = "vreg_l16a_1p8";
-+			regulator-min-microvolt = <1710000>;
-+			regulator-max-microvolt = <1890000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l17a_3p3: ldo17 {
-+			regulator-name = "vreg_l17a_3p3";
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3544000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+
-+		vreg_l18a_1p2: ldo18 {
-+			regulator-name = "vreg_l18a_1p2";
-+			regulator-min-microvolt = <312000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-+		};
-+	};
-+};
-+
-+&qupv3_id_0 {
-+	status = "okay";
-+};
-+
-+&uart7 {
-+	status = "okay";
-+};
--- 
-2.38.1
+If the divergence would make harder for your upcoming LRU work, I
+totally agree with you but I don't see such one line change makes your
+duduplication work harder. At the same time, I am trying to make
+zsmalloc *reasonable* rather than "Yeah, I am fine to take something
+smelly code since others are already doing it" stance.
 
+> 
+> So as you review these patches, please compare what they do to zbud
+> and z3fold. Those existing zpool implementations have been a common
+> answer in response to review questions.
+
+I did and thought it's weird and the correction is trivial.
