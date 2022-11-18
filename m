@@ -2,192 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1113762F759
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CC862F75A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242021AbiKROa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S241904AbiKRObJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:31:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242377AbiKROaV (ORCPT
+        with ESMTP id S241326AbiKRObC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:30:21 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB4C23154;
-        Fri, 18 Nov 2022 06:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668781820; x=1700317820;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=pWaMMlXuz5fP2ZoBJcXFxbvy5ntANJ8RsM8x308UVC4=;
-  b=HjT+wYjMyVVSx9Ko6uMsO73nUEcAtbTSsZxE7XuDZWxnQ2VOj/VfBWS0
-   m9dFPa3JVZrjbaIfTFb13rA3dWmaJQtQkQHzC4QSagjynwKYyMXxp4cIB
-   F0q/vedewOb8vfmV0YJVe57lXqqOPsG0/z0f2ky5AFOvbsuPLKhdmrEmn
-   UauIfKdw6LXFs36eQ+9tmHDJHz3YTnwiI0qfpinU0GlRRA6XqfC/c8/11
-   Pdt+Lw5H/xqfk+mlo56q41mMf8a38C34kJrVL/+xUwHdUq7Yy3/lN1/9q
-   TSH8vrHWjBm34HTN/Hrlj+oFS/4pIkB4MiFr80ExoQRJrs3rUukjMOJeq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="339984867"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="339984867"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 06:30:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="618026604"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="618026604"
-Received: from amulyuko-mobl1.ccr.corp.intel.com ([10.252.35.83])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 06:30:16 -0800
-Date:   Fri, 18 Nov 2022 16:30:15 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kgugala@antmicro.com,
-        mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        geert@linux-m68k.org
-Subject: Re: [PATCH v4 12/14] serial: liteuart: add IRQ support for the RX
- path
-In-Reply-To: <Y3eWJNbcGJOMl7K1@errol.ini.cmu.edu>
-Message-ID: <26f43d54-7ee6-d05e-5c1c-4bc37f06077@linux.intel.com>
-References: <20221116144908.234154-1-gsomlo@gmail.com> <20221116144908.234154-13-gsomlo@gmail.com> <6629539b-c5a7-4edc-7ab1-5c977f7319@linux.intel.com> <Y3eWJNbcGJOMl7K1@errol.ini.cmu.edu>
+        Fri, 18 Nov 2022 09:31:02 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C60627FE
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:31:00 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CD3EE21EFB;
+        Fri, 18 Nov 2022 14:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668781858; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p5HxxiDG0eqNrAIBu00sqo6F9PU57FyKSnnHnLC7aD0=;
+        b=3ESN/ayvAFKjCC0eKwke3jc86KDQhE/9CpOZUbBwdp9d4slLrRVVcVTEzc39pur0yKzA0M
+        zxv3Bo5W25gSbArpRoNoZUvzYr7sIHD+MLLJ7WqL02aTv5VS/l/5xmJXSFP0c094s6BJs0
+        Xp4AUtZl0zd/4zqgG6Yos9W6y/AYLzI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668781858;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p5HxxiDG0eqNrAIBu00sqo6F9PU57FyKSnnHnLC7aD0=;
+        b=PwOfhWXHL6M0JBTPpJRBePeMZbXNd3el1wW0PmGotABPLxnsn9RgI5yFxRsagxcYKvXlJB
+        gILyfu4NdcWzMXBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B50461345B;
+        Fri, 18 Nov 2022 14:30:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I4wRKyGXd2OjSgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 18 Nov 2022 14:30:57 +0000
+Message-ID: <f9acd363-bf53-c582-78ec-347fd7ec5c37@suse.cz>
+Date:   Fri, 18 Nov 2022 15:30:57 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1000769402-1668781820=:3952"
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] mm/page_alloc: Leave IRQs enabled for per-cpu page
+ allocations
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20221118101714.19590-1-mgorman@techsingularity.net>
+ <20221118101714.19590-3-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221118101714.19590-3-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1000769402-1668781820=:3952
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Fri, 18 Nov 2022, Gabriel L. Somlo wrote:
-
-> On Fri, Nov 18, 2022 at 03:58:47PM +0200, Ilpo Järvinen wrote:
-> > On Wed, 16 Nov 2022, Gabriel Somlo wrote:
-> > 
-> > > Add support for IRQ-driven RX. Support for the TX path will be added
-> > > in a separate commit.
-> > > 
-> > > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> > > ---
-> > > 
-> > > Changes from v3:
-> > >   - add shadow irq register to support polling mode and avoid reading
-> > >     hardware mmio irq register to learn which irq flags are enabled
-> > >     - this also simplifies both liteuart_interrupt() and liteuart_startup()
-> > > 
-> > >  drivers/tty/serial/liteuart.c | 76 +++++++++++++++++++++++++++++++----
-> > >  1 file changed, 69 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> > > index 8a6e176be08e..fad778578986 100644
-> > > --- a/drivers/tty/serial/liteuart.c
-> > > +++ b/drivers/tty/serial/liteuart.c
-> > > @@ -7,6 +7,7 @@
-> > >  
-> > >  #include <linux/bits.h>
-> > >  #include <linux/console.h>
-> > > +#include <linux/interrupt.h>
-> > >  #include <linux/litex.h>
-> > >  #include <linux/module.h>
-> > >  #include <linux/of.h>
-> > > @@ -46,6 +47,7 @@ struct liteuart_port {
-> > >  	struct uart_port port;
-> > >  	struct timer_list timer;
-> > >  	u32 id;
-> > > +	u8 irq_reg;
-> > >  };
-> > >  
-> > >  #define to_liteuart_port(port)	container_of(port, struct liteuart_port, port)
-> > > @@ -76,6 +78,19 @@ static void liteuart_putchar(struct uart_port *port, unsigned char ch)
-> > >  	litex_write8(port->membase + OFF_RXTX, ch);
-> > >  }
-> > >  
-> > > +static void liteuart_update_irq_reg(struct uart_port *port, bool set, u8 mask)
-> > > +{
-> > > +	struct liteuart_port *uart = to_liteuart_port(port);
-> > > +
-> > > +	if (set)
-> > > +		uart->irq_reg |= mask;
-> > > +	else
-> > > +		uart->irq_reg &= ~mask;
-> > > +
-> > > +	if (port->irq)
-> > > +		litex_write8(port->membase + OFF_EV_ENABLE, uart->irq_reg);
-> > > +}
-> > > +
-> > >  static void liteuart_stop_tx(struct uart_port *port)
-> > >  {
-> > >  }
-> > > @@ -129,13 +144,27 @@ static void liteuart_rx_chars(struct uart_port *port)
-> > >  	tty_flip_buffer_push(&port->state->port);
-> > >  }
-> > >  
-> > > +static irqreturn_t liteuart_interrupt(int irq, void *data)
-> > > +{
-> > > +	struct liteuart_port *uart = data;
-> > > +	struct uart_port *port = &uart->port;
-> > > +	u8 isr;
-> > > +
-> > > +	spin_lock(&port->lock);
-> > > +	isr = litex_read8(port->membase + OFF_EV_PENDING) & uart->irq_reg;
-> > > +	if (isr & EV_RX)
-> > > +		liteuart_rx_chars(port);
-> > > +	spin_unlock(&port->lock);
-> > > +
-> > > +	return IRQ_RETVAL(isr);
-> > > +}
-> > > +
-> > >  static void liteuart_timer(struct timer_list *t)
-> > >  {
-> > >  	struct liteuart_port *uart = from_timer(uart, t, timer);
-> > >  	struct uart_port *port = &uart->port;
-> > >  
-> > > -	liteuart_rx_chars(port);
-> > > -
-> > > +	liteuart_interrupt(0, port);
-> > >  	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
-> > >  }
-> > >  
-> > > @@ -161,19 +190,45 @@ static unsigned int liteuart_get_mctrl(struct uart_port *port)
-> > >  static int liteuart_startup(struct uart_port *port)
-> > >  {
-> > >  	struct liteuart_port *uart = to_liteuart_port(port);
-> > > +	unsigned long flags;
-> > > +	int ret;
-> > >  
-> > > -	/* disable events */
-> > > -	litex_write8(port->membase + OFF_EV_ENABLE, 0);
-> > > +	if (port->irq) {
-> > > +		ret = request_irq(port->irq, liteuart_interrupt, 0,
-> > > +				  KBUILD_MODNAME, uart);
-> > > +		if (ret) {
-> > > +			pr_err(pr_fmt("line %d irq %d failed: using polling\n"),
-> > > +				port->line, port->irq);
-> > 
-> > dev_err() seems more appropriate here.
+On 11/18/22 11:17, Mel Gorman wrote:
+> The pcp_spin_lock_irqsave protecting the PCP lists is IRQ-safe as a task
+> allocating from the PCP must not re-enter the allocator from IRQ context.
+> In each instance where IRQ-reentrancy is possible, the lock is acquired
+> using pcp_spin_trylock_irqsave() even though IRQs are disabled and
+> re-entrancy is impossible.
 > 
-> Makes sense, good thing `struct uart_port` has a `dev` field :)
-> I've made the change, and lined it up for the upcoming v5 of the
-> series.
+> Demote the lock to pcp_spin_lock avoids an IRQ disable/enable in the common
+> case at the cost of some IRQ allocations taking a slower path. If the PCP
+> lists need to be refilled, the zone lock still needs to disable IRQs but
+> that will only happen on PCP refill and drain. If an IRQ is raised when
+> a PCP allocation is in progress, the trylock will fail and fallback to
+> using the buddy lists directly. Note that this may not be a universal win
+> if an interrupt-intensive workload also allocates heavily from interrupt
+> context and contends heavily on the zone->lock as a result.
+> 
+> [yuzhao@google.com: Reported lockdep issue on IO completion from softirq]
+> [hughd@google.com: Fix list corruption, lock improvements, micro-optimsations]
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-Also that pr_fmt() should be dropped (in case you didn't already). It was 
-in my mind ealier but should have stated it explicitly.
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
+Some nits below:
 
--- 
- i.
+> @@ -3516,10 +3485,10 @@ void free_unref_page(struct page *page, unsigned int order)
+>   */
+>  void free_unref_page_list(struct list_head *list)
+>  {
+> +	unsigned long __maybe_unused UP_flags;
+>  	struct page *page, *next;
+>  	struct per_cpu_pages *pcp = NULL;
+>  	struct zone *locked_zone = NULL;
+> -	unsigned long flags;
+>  	int batch_count = 0;
+>  	int migratetype;
+>  
+> @@ -3550,11 +3519,26 @@ void free_unref_page_list(struct list_head *list)
+>  
+>  		/* Different zone, different pcp lock. */
+>  		if (zone != locked_zone) {
+> -			if (pcp)
+> -				pcp_spin_unlock_irqrestore(pcp, flags);
+> +			if (pcp) {
+> +				pcp_spin_unlock(pcp);
+> +				pcp_trylock_finish(UP_flags);
+> +			}
+>  
+> +			/*
+> +			 * trylock is necessary as pages may be getting freed
+> +			 * from IRQ or SoftIRQ context after an IO completion.
+> +			 */
+> +			pcp_trylock_prepare(UP_flags);
+> +			pcp = pcp_spin_trylock(zone->per_cpu_pageset);
+> +			if (!pcp) {
 
---8323329-1000769402-1668781820=:3952--
+Perhaps use unlikely() here?
+
+> +				pcp_trylock_finish(UP_flags);
+> +				free_one_page(zone, page, page_to_pfn(page),
+> +					      0, migratetype, FPI_NONE);
+
+Not critical for correctness, but the migratepage here might be stale and we
+should do get_pcppage_migratetype(page);
+
+> +				locked_zone = NULL;
+> +				continue;
+> +			}
+>  			locked_zone = zone;
+> -			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
+> +			batch_count = 0;
+>  		}
+>  
+>  		/*
+> @@ -3569,18 +3553,23 @@ void free_unref_page_list(struct list_head *list)
+>  		free_unref_page_commit(zone, pcp, page, migratetype, 0);
+>  
+>  		/*
+> -		 * Guard against excessive IRQ disabled times when we get
+> -		 * a large list of pages to free.
+> +		 * Guard against excessive lock hold times when freeing
+> +		 * a large list of pages. Lock will be reacquired if
+> +		 * necessary on the next iteration.
+>  		 */
+>  		if (++batch_count == SWAP_CLUSTER_MAX) {
+> -			pcp_spin_unlock_irqrestore(pcp, flags);
+> +			pcp_spin_unlock(pcp);
+> +			pcp_trylock_finish(UP_flags);
+>  			batch_count = 0;
+> -			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
+> +			pcp = NULL;
+> +			locked_zone = NULL;
+
+AFAICS if this block was just "locked_zone = NULL;" then the existing code
+would do the right thing.
+Or maybe to have simpler code, just do batch_count++ here and
+make the relocking check do
+if (zone != locked_zone || batch_count == SWAP_CLUSTER_MAX)
+
+>  		}
+>  	}
+>  
+> -	if (pcp)
+> -		pcp_spin_unlock_irqrestore(pcp, flags);
+> +	if (pcp) {
+> +		pcp_spin_unlock(pcp);
+> +		pcp_trylock_finish(UP_flags);
+> +	}
+>  }
+>  
+>  /*
+
