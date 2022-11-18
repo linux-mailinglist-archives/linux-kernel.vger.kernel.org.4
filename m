@@ -2,73 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8047962F3EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B29E562F3ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241450AbiKRLln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:41:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S241337AbiKRLnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241100AbiKRLlk (ORCPT
+        with ESMTP id S230042AbiKRLnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:41:40 -0500
-Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5E717430;
-        Fri, 18 Nov 2022 03:41:39 -0800 (PST)
-From:   Denis Arefev <arefev@swemel.ru>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-        t=1668771697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SSD/8D3oxjxNO6XFSWDffwRmka85Uk/caIyP96y7PQk=;
-        b=cl/J/kReOmnmtGqxIEY9x/uDHsYTje/wJhEd5YDc6K8CwBGEj6LD9pzQZbOjoQCGEsGRWi
-        f7IiCj8XHMiEEILyZt+68o7mpukiEW3cdmLUUyrAGKQ+J0spkkstvwBxUXB1ayhgGbXcWd
-        wJKEmJcdgQMEgL1iCzw6hT+PZh41Gd4=
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
-Subject: [PATCH v2] namespace: Added pointer check in copy_mnt_ns()
-Date:   Fri, 18 Nov 2022 14:41:37 +0300
-Message-Id: <20221118114137.128088-1-arefev@swemel.ru>
+        Fri, 18 Nov 2022 06:43:33 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5495FE0AE;
+        Fri, 18 Nov 2022 03:43:31 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id z1so3179954qkl.9;
+        Fri, 18 Nov 2022 03:43:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LOs6c2XvVXH4tKQVpWmV3h9lepfF7gd7N53CvD43urw=;
+        b=aF6yTISiPZ7mFI2UMQPIrAovTFoJjKRj35H0n9cNYhAzaufhgyr+GG8wdFvOL8iXl9
+         kMYU0yoGGmhQUyeUYvsyn/nYq4G4y6IeD90J2UpGk0an0azWtrJ0Jx8uM1wIu+S8QPbN
+         lK4c1Q87GHXf20siW/YkVmKb/Y3e4FTWYdd+VRQjOooWzyST/QEC5uj/Yl7w2XAqOBBS
+         +H0R3x+SlP1Mu3w0amYDyvrSiZhSSyfX+Y7JUwN2EHQ7V5MmgTZ3XsYOmj/WemNP39wd
+         /PCC5iLZPsLwvFf34i+Oe61tNRO//8Ii7GNBVVIjcfqzyiQGVXKy3/oiAoHXNrbimqwS
+         Y3Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LOs6c2XvVXH4tKQVpWmV3h9lepfF7gd7N53CvD43urw=;
+        b=2Hv1tSg54dfroxyigbNfASNcus7XLwrSBLlFktcRohS3LYtjJFF7PBMV+v/rl/pj6D
+         G1xVMYEs3Z+IbeclCF6xdWrfoN7vkDK+Jj5zyHbBSzRUWxknDS6m+VXt5DvbPjBaitvW
+         PhR9PDP0cSUcpJVsW3DmYZdwpE1mmyUKBdKvhnHIYGwE7x2xOptSWKcVy+JA5uEyOv6A
+         7smTlFuZDJHVJHZqFtkTxwwdantklSSoVw7+GA2Ckr6qSTGyCBnmEn4q6uaolpyxv8S5
+         29757urfmZxJZfaSg8A+uJIZEmd2vdF1CgQEV5sRQyqokYJl/bFdSQd6zPM827Y7b+lR
+         kilg==
+X-Gm-Message-State: ANoB5pkxo3FBD067W/iBY95f0onIz42o9UtbsOJ9j58zi+nX+Yo8nypi
+        osALuZNtQGe7y+jnTRYzHEIQGHfLgHW+G+hfg/pg+gWB3iNAAQ==
+X-Google-Smtp-Source: AA0mqf7FjHrgIMdUcXE6kcC899Kjubf5qPHlke+OY+gw2XNyNhSsO0D5/gZBxU8cDCh93iBHxeaiVKBX27r6gotrPDA=
+X-Received: by 2002:a05:620a:268a:b0:6fa:2c8d:d6c7 with SMTP id
+ c10-20020a05620a268a00b006fa2c8dd6c7mr5213234qkp.441.1668771810431; Fri, 18
+ Nov 2022 03:43:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118054725.80414-1-michael@allwinnertech.com>
+In-Reply-To: <20221118054725.80414-1-michael@allwinnertech.com>
+From:   Wenchao Chen <wenchao.chen666@gmail.com>
+Date:   Fri, 18 Nov 2022 19:43:19 +0800
+Message-ID: <CA+Da2qxP2gvUc2=n5xW7_YEcgevGpDhqbcVFWVbF0c6DqXDXHA@mail.gmail.com>
+Subject: Re: [PATCH] mmc:mmc-hsq:use fifo to dispatch mmc_request
+To:     Michael Wu <michael@allwinnertech.com>
+Cc:     ulf.hansson@linaro.org, wenchao.chen@unisoc.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return value of a function 'next_mnt' is dereferenced at
-namespace.c:3377 without checking for null,
-but it is usually checked for this function
+On Fri, Nov 18, 2022 at 1:52 PM Michael Wu <michael@allwinnertech.com> wrote:
+>
+> Current next_tag selection will cause a large delay in some requests and
+> destroy the scheduling results of the block scheduling layer. Because the
+> issued mrq tags cannot ensure that each time is sequential, especially when
+> the IO load is heavy. In the fio performance test, we found that 4k random
+> read data was sent to mmc_hsq to start calling request_atomic It takes
+> nearly 200ms to process the request, while mmc_hsq has processed thousands
+> of other requests. So we use fifo here to ensure the first in, first out
+> feature of the request and avoid adding additional delay to the request.
+>
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Hi Michael
+Is the test device an eMMC?
+Could you share the fio test command if you want?
+Can you provide more logs?
 
-Signed-off-by: Denis Arefev <arefev@swemel.ru>
----
- fs/namespace.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/namespace.c b/fs/namespace.c
-index cebaa3e81794..06472a110257 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -3348,9 +3348,9 @@ struct mnt_namespace *copy_mnt_ns(unsigned long flags, struct mnt_namespace *ns,
- 		}
- 		p = next_mnt(p, old);
- 		q = next_mnt(q, new);
--		if (!q)
-+		if (!q || !p)
- 			break;
--		while (p->mnt.mnt_root != q->mnt.mnt_root)
-+		while (p && (p->mnt.mnt_root != q->mnt.mnt_root))
- 			p = next_mnt(p, old);
- 	}
- 	namespace_unlock();
--- 
-2.25.1
-
+> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> ---
+>  drivers/mmc/host/mmc_hsq.c | 40 ++++++++++++++------------------------
+>  drivers/mmc/host/mmc_hsq.h |  5 +++++
+>  2 files changed, 20 insertions(+), 25 deletions(-)
+>
+> diff --git a/drivers/mmc/host/mmc_hsq.c b/drivers/mmc/host/mmc_hsq.c
+> index 9d35453e7371..d2a1a96ed5bd 100644
+> --- a/drivers/mmc/host/mmc_hsq.c
+> +++ b/drivers/mmc/host/mmc_hsq.c
+> @@ -13,9 +13,6 @@
+>
+>  #include "mmc_hsq.h"
+>
+> -#define HSQ_NUM_SLOTS  64
+> -#define HSQ_INVALID_TAG        HSQ_NUM_SLOTS
+> -
+>  static void mmc_hsq_retry_handler(struct work_struct *work)
+>  {
+>         struct mmc_hsq *hsq = container_of(work, struct mmc_hsq, retry_work);
+> @@ -73,7 +70,6 @@ static void mmc_hsq_pump_requests(struct mmc_hsq *hsq)
+>
+>  static void mmc_hsq_update_next_tag(struct mmc_hsq *hsq, int remains)
+>  {
+> -       struct hsq_slot *slot;
+>         int tag;
+>
+>         /*
+> @@ -82,29 +78,12 @@ static void mmc_hsq_update_next_tag(struct mmc_hsq *hsq, int remains)
+>          */
+>         if (!remains) {
+>                 hsq->next_tag = HSQ_INVALID_TAG;
+> +               hsq->tag_tail = HSQ_INVALID_TAG;
+>                 return;
+>         }
+>
+> -       /*
+> -        * Increasing the next tag and check if the corresponding request is
+> -        * available, if yes, then we found a candidate request.
+> -        */
+> -       if (++hsq->next_tag != HSQ_INVALID_TAG) {
+> -               slot = &hsq->slot[hsq->next_tag];
+> -               if (slot->mrq)
+> -                       return;
+> -       }
+> -
+> -       /* Othersie we should iterate all slots to find a available tag. */
+> -       for (tag = 0; tag < HSQ_NUM_SLOTS; tag++) {
+> -               slot = &hsq->slot[tag];
+> -               if (slot->mrq)
+> -                       break;
+> -       }
+> -
+> -       if (tag == HSQ_NUM_SLOTS)
+> -               tag = HSQ_INVALID_TAG;
+> -
+> +       tag = hsq->tag_slot[hsq->next_tag];
+> +       hsq->tag_slot[hsq->next_tag] = HSQ_INVALID_TAG;
+>         hsq->next_tag = tag;
+>  }
+>
+> @@ -233,8 +212,14 @@ static int mmc_hsq_request(struct mmc_host *mmc, struct mmc_request *mrq)
+>          * Set the next tag as current request tag if no available
+>          * next tag.
+>          */
+> -       if (hsq->next_tag == HSQ_INVALID_TAG)
+> +       if (hsq->next_tag == HSQ_INVALID_TAG) {
+>                 hsq->next_tag = tag;
+> +               hsq->tag_tail = tag;
+> +               hsq->tag_slot[hsq->tag_tail] = HSQ_INVALID_TAG;
+> +       } else {
+> +               hsq->tag_slot[hsq->tag_tail] = tag;
+> +               hsq->tag_tail = tag;
+> +       }
+>
+>         hsq->qcnt++;
+>
+> @@ -339,8 +324,10 @@ static const struct mmc_cqe_ops mmc_hsq_ops = {
+>
+>  int mmc_hsq_init(struct mmc_hsq *hsq, struct mmc_host *mmc)
+>  {
+> +       int i;
+>         hsq->num_slots = HSQ_NUM_SLOTS;
+>         hsq->next_tag = HSQ_INVALID_TAG;
+> +       hsq->tag_tail = HSQ_INVALID_TAG;
+>
+>         hsq->slot = devm_kcalloc(mmc_dev(mmc), hsq->num_slots,
+>                                  sizeof(struct hsq_slot), GFP_KERNEL);
+> @@ -351,6 +338,9 @@ int mmc_hsq_init(struct mmc_hsq *hsq, struct mmc_host *mmc)
+>         hsq->mmc->cqe_private = hsq;
+>         mmc->cqe_ops = &mmc_hsq_ops;
+>
+> +       for (i = 0; i < HSQ_NUM_SLOTS; i++)
+> +               hsq->tag_slot[i] = HSQ_INVALID_TAG;
+> +
+>         INIT_WORK(&hsq->retry_work, mmc_hsq_retry_handler);
+>         spin_lock_init(&hsq->lock);
+>         init_waitqueue_head(&hsq->wait_queue);
+> diff --git a/drivers/mmc/host/mmc_hsq.h b/drivers/mmc/host/mmc_hsq.h
+> index ffdd9cd172c3..a783366285a9 100644
+> --- a/drivers/mmc/host/mmc_hsq.h
+> +++ b/drivers/mmc/host/mmc_hsq.h
+> @@ -2,6 +2,9 @@
+>  #ifndef LINUX_MMC_HSQ_H
+>  #define LINUX_MMC_HSQ_H
+>
+> +#define HSQ_NUM_SLOTS  64
+> +#define HSQ_INVALID_TAG        HSQ_NUM_SLOTS
+> +
+>  struct hsq_slot {
+>         struct mmc_request *mrq;
+>  };
+> @@ -17,6 +20,8 @@ struct mmc_hsq {
+>         int next_tag;
+>         int num_slots;
+>         int qcnt;
+> +       int tag_tail;
+> +       int tag_slot[HSQ_NUM_SLOTS];
+>
+>         bool enabled;
+>         bool waiting_for_idle;
+> --
+> 2.29.0
+>
