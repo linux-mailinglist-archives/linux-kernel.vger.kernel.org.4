@@ -2,255 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2021F62F7CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E8F62F7CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242507AbiKROgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S241173AbiKROhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242504AbiKROfH (ORCPT
+        with ESMTP id S241936AbiKROgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:35:07 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70A790390
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:33:48 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id bs21so9519287wrb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:33:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4SvRgFTn6+Gybi1+j9eb6DiJcXSsUC9wg7dcCoAYlxo=;
-        b=rNdR543njIXd/vTYoC3ISLSjkRryowY2q1V07GqmJUyFH4lwy6TTyxgMjsP8O4AKdA
-         CYLwLsgpri/smVj6DDW62FZNw93QkK3gqpHq2HQk379M1DV3NrFNIwncfoYKjJVi6+6E
-         XVZ28lFTylYIhRpbfkpcf1cFDgj8AhxK3mbcTrqXN5bB6aJhMjaM/XZ9G5HSewQfRdRp
-         UFEMd90M0jfE54YuwnblNTl6tI2fn3oHsoKZxXEXOOPnqozVO3GHjDFwnsp/uG/HGse1
-         N+lyHJbxaUEA7S4WxaHcA7nZPgRoXhiwU22v+tCG2qO21jjs1yb9dLbV1ygsljh87xjA
-         0o+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4SvRgFTn6+Gybi1+j9eb6DiJcXSsUC9wg7dcCoAYlxo=;
-        b=lv0tSlhFP5bMHQOCu8EcHt9zikdutjC5wuEHBIy20gnHWoZvjoBzy3KV2+3Q/Ai3ak
-         vEwrMvV8CSUFkFfOBhrGtiEv6NDkjQ1bcxe7dDuZMVZqY/Uci0knP0ZgeoDWaUGF+qZ+
-         mWVCUIh9pG9ko4sRO4bHDy8GrXd5SamMKqR+EQJsyzodYktXOcQLFe5obS/vhKPamuDI
-         x5lTIaTVkEdt94bJM8PNYueDbJ8YT+YweXhCnyYTeE+dt8DQ07tGBn3oiM7/66mUm5wv
-         qr74ARM8bFdTN52migTz2zzDjYLVyyDl80wCX4YabjCnw1R21bPjtVN0CCEJtNn6ku/D
-         Teag==
-X-Gm-Message-State: ANoB5pn6cPmbWbIadABDuKmNYF7MQbdIliwpRzYn0zkdSjQhPVciceFy
-        haqVDjCl0eEVNQ9zxUJayofjkw==
-X-Google-Smtp-Source: AA0mqf6QQq479fIUCOCgvip5Pl5AI82bEkY7FqOFZ5rXBu8KR0A3F1ydYiGUSPadA491uLfZ1bpajw==
-X-Received: by 2002:a5d:452d:0:b0:241:c5ec:d0d with SMTP id j13-20020a5d452d000000b00241c5ec0d0dmr804402wra.441.1668782028313;
-        Fri, 18 Nov 2022 06:33:48 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id j21-20020a05600c1c1500b003cfb7c02542sm5436726wms.11.2022.11.18.06.33.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 06:33:47 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 18 Nov 2022 15:33:38 +0100
-Subject: [PATCH 12/12] dt-bindings: net: convert mdio-mux-meson-g12a.txt to
- dt-schema
+        Fri, 18 Nov 2022 09:36:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9795972139
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:34:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A8EFB822DD
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:34:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1317EC433D6;
+        Fri, 18 Nov 2022 14:34:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668782060;
+        bh=K/AFbeBpdMfnp1povWUlJ9sQPjoS5eIQmxf+P/B/N1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=le9JjmAa0kcJx7BscMomAw4cw3D4hq6Q51kMllQiDc/0yOf61J2DmItFSN+ictE34
+         TAh5Au1P0QsqAt4oWG0qyDQghsula2HaEFsoKO3HUcxe+oqzYHAuUUYU8oPNcH2Qhv
+         rGzBOx9MSHOYMQIQpxxUPruyfVi7RhESIupN0o+P672t4EP6Sc+XTjNyIbA1nGsx62
+         fVYBsUCE8lxGNmCX1odb7vErCe8cVialYCvM3hkNmGpRqPv56DQnV0Lc19rnNHqWuv
+         zS5IgA/LiZi7f8N+JN1gbV45y1JinPim9oW6OwVkEX73ZhN9T/ARI5cqQAAHTqkVxS
+         WszpMv+z39D2Q==
+Date:   Fri, 18 Nov 2022 14:34:15 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Denys Vlasenko <dvlasenk@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] arm64/mm: fix incorrect file_map_count for
+ invalid pmd/pud
+Message-ID: <20221118143414.GG4046@willie-the-truck>
+References: <20221117075602.2904324-1-liushixin2@huawei.com>
+ <20221117075602.2904324-3-liushixin2@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221117-b4-amlogic-bindings-convert-v1-12-3f025599b968@linaro.org>
-References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Eric Dumazet <edumazet@google.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117075602.2904324-3-liushixin2@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert MDIO bus multiplexer/glue of Amlogic G12a SoC family bindings
-to dt-schema.
+On Thu, Nov 17, 2022 at 03:56:02PM +0800, Liu Shixin wrote:
+> The page table check trigger BUG_ON() unexpectedly when split hugepage:
+> 
+>  ------------[ cut here ]------------
+>  kernel BUG at mm/page_table_check.c:119!
+>  Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+>  Dumping ftrace buffer:
+>     (ftrace buffer empty)
+>  Modules linked in:
+>  CPU: 7 PID: 210 Comm: transhuge-stres Not tainted 6.1.0-rc3+ #748
+>  Hardware name: linux,dummy-virt (DT)
+>  pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>  pc : page_table_check_set.isra.0+0x398/0x468
+>  lr : page_table_check_set.isra.0+0x1c0/0x468
+> [...]
+>  Call trace:
+>   page_table_check_set.isra.0+0x398/0x468
+>   __page_table_check_pte_set+0x160/0x1c0
+>   __split_huge_pmd_locked+0x900/0x1648
+>   __split_huge_pmd+0x28c/0x3b8
+>   unmap_page_range+0x428/0x858
+>   unmap_single_vma+0xf4/0x1c8
+>   zap_page_range+0x2b0/0x410
+>   madvise_vma_behavior+0xc44/0xe78
+>   do_madvise+0x280/0x698
+>   __arm64_sys_madvise+0x90/0xe8
+>   invoke_syscall.constprop.0+0xdc/0x1d8
+>   do_el0_svc+0xf4/0x3f8
+>   el0_svc+0x58/0x120
+>   el0t_64_sync_handler+0xb8/0xc0
+>   el0t_64_sync+0x19c/0x1a0
+> [...]
+> 
+> On arm64, pmd_leaf() will return true even if the pmd is invalid due to
+> pmd_present_invalid() check. So in pmdp_invalidate() the file_map_count
+> will not only decrease once but also increase once. Then in set_pte_at(),
+> the file_map_count increase again, and so trigger BUG_ON() unexpectedly.
+> 
+> Fix this problem by adding pmd_valid() in pmd_user_accessible_page().
+> Moreover, add pud_valid() for pud_user_accessible_page() too.
+> 
+> Fixes: 42b2547137f5 ("arm64/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
+> Reported-by: Denys Vlasenko <dvlasenk@redhat.com>
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>  arch/arm64/include/asm/pgtable.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index edf6625ce965..3bc64199aa2e 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -863,12 +863,12 @@ static inline bool pte_user_accessible_page(pte_t pte)
+>  
+>  static inline bool pmd_user_accessible_page(pmd_t pmd)
+>  {
+> -	return pmd_leaf(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
+> +	return pmd_valid(pmd) && pmd_leaf(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- .../bindings/net/amlogic,g12a-mdio-mux.yaml        | 80 ++++++++++++++++++++++
- .../bindings/net/mdio-mux-meson-g12a.txt           | 48 -------------
- 2 files changed, 80 insertions(+), 48 deletions(-)
+Hmm, doesn't this have a funny interaction with PROT_NONE where the pmd is
+invalid but present? If you don't care about PROT_NONE, then you could just
+do:
 
-diff --git a/Documentation/devicetree/bindings/net/amlogic,g12a-mdio-mux.yaml b/Documentation/devicetree/bindings/net/amlogic,g12a-mdio-mux.yaml
-new file mode 100644
-index 000000000000..ec5c038ce6a0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/amlogic,g12a-mdio-mux.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/amlogic,g12a-mdio-mux.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MDIO bus multiplexer/glue of Amlogic G12a SoC family
-+
-+description:
-+  This is a special case of a MDIO bus multiplexer. It allows to choose between
-+  the internal mdio bus leading to the embedded 10/100 PHY or the external
-+  MDIO bus.
-+
-+maintainers:
-+  - Neil Armstrong <neil.armstrong@linaro.org>
-+
-+allOf:
-+  - $ref: mdio-mux.yaml#
-+
-+properties:
-+  compatible:
-+    const: amlogic,g12a-mdio-mux
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: peripheral clock
-+      - description: platform crytal
-+      - description: SoC 50MHz MPLL
-+
-+  clock-names:
-+    items:
-+      - const: pclk
-+      - const: clkin0
-+      - const: clkin1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    mdio-multiplexer@4c000 {
-+        compatible = "amlogic,g12a-mdio-mux";
-+        reg = <0x4c000 0xa4>;
-+        clocks = <&clkc_eth_phy>, <&xtal>, <&clkc_mpll>;
-+        clock-names = "pclk", "clkin0", "clkin1";
-+        mdio-parent-bus = <&mdio0>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        mdio@0 {
-+            reg = <0>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+        };
-+
-+        mdio@1 {
-+            reg = <1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            ethernet-phy@8 {
-+                compatible = "ethernet-phy-id0180.3301",
-+                             "ethernet-phy-ieee802.3-c22";
-+                interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+                reg = <8>;
-+                max-speed = <100>;
-+            };
-+        };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/net/mdio-mux-meson-g12a.txt b/Documentation/devicetree/bindings/net/mdio-mux-meson-g12a.txt
-deleted file mode 100644
-index 3a96cbed9294..000000000000
---- a/Documentation/devicetree/bindings/net/mdio-mux-meson-g12a.txt
-+++ /dev/null
-@@ -1,48 +0,0 @@
--Properties for the MDIO bus multiplexer/glue of Amlogic G12a SoC family.
--
--This is a special case of a MDIO bus multiplexer. It allows to choose between
--the internal mdio bus leading to the embedded 10/100 PHY or the external
--MDIO bus.
--
--Required properties in addition to the generic multiplexer properties:
--- compatible : amlogic,g12a-mdio-mux
--- reg: physical address and length of the multiplexer/glue registers
--- clocks: list of clock phandle, one for each entry clock-names.
--- clock-names: should contain the following:
--  * "pclk"   : peripheral clock.
--  * "clkin0" : platform crytal
--  * "clkin1" : SoC 50MHz MPLL
--
--Example :
--
--mdio_mux: mdio-multiplexer@4c000 {
--	compatible = "amlogic,g12a-mdio-mux";
--	reg = <0x0 0x4c000 0x0 0xa4>;
--	clocks = <&clkc CLKID_ETH_PHY>,
--		 <&xtal>,
--		 <&clkc CLKID_MPLL_5OM>;
--	clock-names = "pclk", "clkin0", "clkin1";
--	mdio-parent-bus = <&mdio0>;
--	#address-cells = <1>;
--	#size-cells = <0>;
--
--	ext_mdio: mdio@0 {
--		reg = <0>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--	};
--
--	int_mdio: mdio@1 {
--		reg = <1>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		internal_ephy: ethernet-phy@8 {
--			compatible = "ethernet-phy-id0180.3301",
--				     "ethernet-phy-ieee802.3-c22";
--			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
--			reg = <8>;
--			max-speed = <100>;
--		};
--	};
--};
+  pmd_valid(pmd) && !pmd_table(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd))
 
--- 
-b4 0.10.1
+but if you do care then you could do:
+
+  pmd_leaf(pmd) && !pmd_present_invalid(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd))
+
+>  static inline bool pud_user_accessible_page(pud_t pud)
+>  {
+> -	return pud_leaf(pud) && pud_user(pud);
+> +	return pud_valid(pud) && pud_leaf(pud) && pud_user(pud);
+
+Not caused by this patch, but why don't we have something like a
+pud_user_exec() check here like we do for the pte and pmd levels?
+
+Will
