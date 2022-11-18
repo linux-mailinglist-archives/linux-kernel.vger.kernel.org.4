@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C2662EDF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A408D62EDF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241341AbiKRGxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S241339AbiKRGx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241306AbiKRGxG (ORCPT
+        with ESMTP id S241293AbiKRGxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Nov 2022 01:53:06 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3D382BDF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:53:00 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id d9so7775390wrm.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:53:00 -0800 (PST)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3339720BFE
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:53:02 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v1so7753051wrt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:53:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iFIEMBB2IjM7eCCTHeoI+k1SkTzePnhabISYzYNjNeE=;
-        b=ubplKZ3jFHFJNp+2i+zQRxzIlK5HZ8tbmWrLfmUpFZgwx4JFwbQZgeQ77mzxf7yMWq
-         eG+aIr3Uy+0Qa/fxn0VJ7rofKMKsw/tBHPQDYU9EERnnpf+LVeNCS1TzZ1Ko9uFe9r2S
-         864zTSgBQTPXvcRlmHwhgoFgxsF94tJK0eaXWjxyqyaZA6ObbiZbGbW3TclD5pQJAp2e
-         jX0TlkVCbZ4vV/vdB5Qjiqje3RactWpxOr+rz9Bd1oWDhx6HZpmKmM1z2jfOZqnjApQ/
-         RL9MljqJ8tH4dQHpDA77BpjRfK0O/UdMBAGssyg9Jr9rtnzfjx9mGU2UjOs9+DUIM5k5
-         sVVg==
+        bh=Odkf8d759zAm2S3kf+yGGkjhpuHSduq3rr4jcrJwJ2g=;
+        b=brqjbNMhx/SjMyPuvrG9Vu2y6fKP5ogOjLJ0h8NLtuXXzp689AEwXb3I1b0M6wIfr6
+         ra40wLbBgDTtulD2gSu62yEDfghJFFRW0r8eiJlhXJv2bo+6bTQ2sgD0V5zQ+o1Z928p
+         DBFki4aIIPI1qtvP8CM0MfICI0E0Oky42+XILgNa66RPJaNoAWb8D0L2l23ulifzaE0p
+         uZMMAAJeAoinA5K5aTlD4W2xpVUmEsnQmQ9+hNX1CPRFbRvVd1SJcM2lAiLzt6H8iKbl
+         NR7fWWQEhg/vk1mDW+e+cw4X1UjEfJOAwofRG3+SAnyT+S2a+PUYUbhgZk8yHOtEzKxZ
+         ODRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iFIEMBB2IjM7eCCTHeoI+k1SkTzePnhabISYzYNjNeE=;
-        b=LWv9W5c6EOHoNrODMYEz/8cWT+e97QNbTN2kzfICPPybWTI4EIG4uNhNBHkIQw5Dvh
-         PomBtdQs+e3exLMjBN5J7dRnpEssAAGDIe0agzQcIReEr0CxUGZRZU5e/65cluck8rCz
-         wieOXzP5gezWg7IRKrWsngON8HGzumcB4jWFRNCMrOM0Rb/PUUgabXjVrfbK3/0KAwCx
-         RbaVz0la3i/pgOTYfEbTvrgwygG+ogoG3FTWmLrou9XI1gHKH8O4uY1kUx/OnX3qJgTn
-         BhcLUOxValpYJftCT5cJhRBL1lb33Kgj9bQLZ3ISdEFstycGpzJcSHjAoSIUV9KVHLH7
-         k+wA==
-X-Gm-Message-State: ANoB5pnzlEtrzSkByIPVX0DSQ4xlj6xSDaCKEg7eTnTynkmXP1xuZdRY
-        qm0/QafXzmNW0dvXuNhiW6NHOqxWQB/UKQ==
-X-Google-Smtp-Source: AA0mqf6GSQlZ4WXxryzz020UbeSfeki6RjaUPnSYS65B3BbFVrzk4n85v79MWS6gVhgPsnrIpXYULg==
-X-Received: by 2002:a05:6000:10c3:b0:241:bee0:c56e with SMTP id b3-20020a05600010c300b00241bee0c56emr1589306wrx.534.1668754379258;
-        Thu, 17 Nov 2022 22:52:59 -0800 (PST)
+        bh=Odkf8d759zAm2S3kf+yGGkjhpuHSduq3rr4jcrJwJ2g=;
+        b=p1Atbx2Jf7MBL0Hppy8zOKnFG12n/qSPMe04hvQcacSZsnfxo6sNbXoKqy2+wLNmkQ
+         fCx5fIMODjeagNm980GyNWEEHUJy5HS3R4FjDII32cnNhE8c7fOvPd9mU6JtTzhDn3PR
+         F/J7MPDLP5HypLmE87oGZG13CN//dE5K01kqO4P4i0VSCwuNAZnSlwohr6T0GxMkqfPD
+         Wiw90rThfZ6cGi6AhQhaT9qx+1hn1Z3f4c9z+pxPNyAN7kArgWnHoXnQeEA5ooxHEfeu
+         jRfhNzxOQwziLVPb9LD7IgwCPJqnQxHYVw8LTICNfO4cAHraXjaqKvS2lUH2683RYr0q
+         Cuqg==
+X-Gm-Message-State: ANoB5pnjJ1ex0C4uGApUxtqkTiBpV0w8MGgqfqdLTuQzpOd34e2O4y0C
+        j1ssjQOA3NL03lkMPRP8YBdRr8jNfCSHEw==
+X-Google-Smtp-Source: AA0mqf7x5q5L80ZNww6Wg0mGWRtH6jmdE16QFiMDzBv2zVqGhoPTsXsYziLPep9cN/QLt+veTJ3epw==
+X-Received: by 2002:a5d:628e:0:b0:236:5ea4:68c8 with SMTP id k14-20020a5d628e000000b002365ea468c8mr3431594wru.132.1668754380771;
+        Thu, 17 Nov 2022 22:53:00 -0800 (PST)
 Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id 23-20020a05600c229700b003cf75213bb9sm7648100wmf.8.2022.11.17.22.52.58
+        by smtp.gmail.com with ESMTPSA id 23-20020a05600c229700b003cf75213bb9sm7648100wmf.8.2022.11.17.22.52.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:52:58 -0800 (PST)
+        Thu, 17 Nov 2022 22:52:59 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Prudhvi Yarlagadda <pyarlaga@codeaurora.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 04/12] slimbus: qcom-ngd-ctrl: add support for 44.1 Khz frequency
-Date:   Fri, 18 Nov 2022 06:52:38 +0000
-Message-Id: <20221118065246.6835-5-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 05/12] slimbus: stream: add checks for invalid unprepare/disable usage
+Date:   Fri, 18 Nov 2022 06:52:39 +0000
+Message-Id: <20221118065246.6835-6-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221118065246.6835-1-srinivas.kandagatla@linaro.org>
 References: <20221118065246.6835-1-srinivas.kandagatla@linaro.org>
@@ -75,104 +74,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Add support for 44.1Khz frequency by dynamically calculating the slimbus
-parameters instead of statically defining them.
+slim_disable_stream() and slim_stream_unprepare() are exported, so add
+sanity checks preventing unmatched/invalid calls.
 
-Co-developed-by: Prudhvi Yarlagadda <pyarlaga@codeaurora.org>
-Signed-off-by: Prudhvi Yarlagadda <pyarlaga@codeaurora.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/slimbus/qcom-ngd-ctrl.c | 64 ++++++++++++++++++++++++++++++---
- 1 file changed, 59 insertions(+), 5 deletions(-)
+ drivers/slimbus/stream.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-index d48e58ca5d58..22720ad4c22d 100644
---- a/drivers/slimbus/qcom-ngd-ctrl.c
-+++ b/drivers/slimbus/qcom-ngd-ctrl.c
-@@ -944,6 +944,54 @@ static int qcom_slim_ngd_xfer_msg_sync(struct slim_controller *ctrl,
- 	return ret;
- }
+diff --git a/drivers/slimbus/stream.c b/drivers/slimbus/stream.c
+index 7e9c818e66c1..1d6b38657917 100644
+--- a/drivers/slimbus/stream.c
++++ b/drivers/slimbus/stream.c
+@@ -414,6 +414,9 @@ int slim_stream_disable(struct slim_stream_runtime *stream)
+ 	struct slim_controller *ctrl = stream->dev->ctrl;
+ 	int ret, i;
  
-+static int qcom_slim_calc_coef(struct slim_stream_runtime *rt, int *exp)
-+{
-+	struct slim_controller *ctrl = rt->dev->ctrl;
-+	int coef;
++	if (!stream->ports || !stream->num_ports)
++		return -EINVAL;
 +
-+	if (rt->ratem * ctrl->a_framer->superfreq < rt->rate)
-+		rt->ratem++;
-+
-+	coef = rt->ratem;
-+	*exp = 0;
-+
-+	/*
-+	 * CRM = Cx(2^E) is the formula we are using.
-+	 * Here C is the coffecient and E is the exponent.
-+	 * CRM is the Channel Rate Multiplier.
-+	 * Coefficeint should be either 1 or 3 and exponenet
-+	 * should be an integer between 0 to 9, inclusive.
-+	 */
-+	while (1) {
-+		while ((coef & 0x1) != 0x1) {
-+			coef >>= 1;
-+			*exp = *exp + 1;
-+		}
-+
-+		if (coef <= 3)
-+			break;
-+
-+		coef++;
-+	}
-+
-+	/*
-+	 * we rely on the coef value (1 or 3) to set a bit
-+	 * in the slimbus message packet. This bit is
-+	 * BIT(5) which is the segment rate coefficient.
-+	 */
-+	if (coef == 1) {
-+		if (*exp > 9)
-+			return -EIO;
-+		coef = 0;
-+	} else {
-+		if (*exp > 8)
-+			return -EIO;
-+		coef = 1;
-+	}
-+
-+	return coef;
-+}
-+
- static int qcom_slim_ngd_enable_stream(struct slim_stream_runtime *rt)
+ 	if (ctrl->disable_stream)
+ 		ctrl->disable_stream(stream);
+ 
+@@ -445,6 +448,9 @@ int slim_stream_unprepare(struct slim_stream_runtime *stream)
  {
- 	struct slim_device *sdev = rt->dev;
-@@ -967,16 +1015,22 @@ static int qcom_slim_ngd_enable_stream(struct slim_stream_runtime *rt)
- 		struct slim_port *port = &rt->ports[i];
+ 	int i;
  
- 		if (txn.msg->num_bytes == 0) {
--			int seg_interval = SLIM_SLOTS_PER_SUPERFRAME/rt->ratem;
--			int exp;
-+			int exp = 0, coef = 0;
- 
- 			wbuf[txn.msg->num_bytes++] = sdev->laddr;
- 			wbuf[txn.msg->num_bytes] = rt->bps >> 2 |
- 						   (port->ch.aux_fmt << 6);
- 
--			/* Data channel segment interval not multiple of 3 */
--			exp = seg_interval % 3;
--			if (exp)
-+			/* calculate coef dynamically */
-+			coef = qcom_slim_calc_coef(rt, &exp);
-+			if (coef < 0) {
-+				dev_err(&sdev->dev,
-+				"%s: error calculating coef %d\n", __func__,
-+									coef);
-+				return -EIO;
-+			}
++	if (!stream->ports || !stream->num_ports)
++		return -EINVAL;
 +
-+			if (coef)
- 				wbuf[txn.msg->num_bytes] |= BIT(5);
+ 	for (i = 0; i < stream->num_ports; i++)
+ 		slim_disconnect_port(stream, &stream->ports[i]);
  
- 			txn.msg->num_bytes++;
 -- 
 2.25.1
 
