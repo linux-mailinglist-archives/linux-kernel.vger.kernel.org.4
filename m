@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2196362EDD1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC33762EDD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241227AbiKRGlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S241148AbiKRGna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:43:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241232AbiKRGkW (ORCPT
+        with ESMTP id S241205AbiKRGmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 01:40:22 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24EE9B3A6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:40:09 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id i186-20020a1c3bc3000000b003cfe29a5733so6819313wma.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:40:09 -0800 (PST)
+        Fri, 18 Nov 2022 01:42:53 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978818CF31
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:41:23 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id a14so7805347wru.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:41:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bj0RYfTA9vPDpy3KmDK11XXmVUXWJHQPReToyWDFygo=;
-        b=de8GdCUwkA8s4uu+/K0FIEh27UTpRIvYKXMzz3TzGX79tBSPeTsxhSX4HQ+OOPXF8a
-         IZW+lCbgmDktjP6ljFP+OHB14DLqrXJjYYJy0omWX4XAz7QZ9mQcxQwccE8+u43Z0W1m
-         vf9siDzhh52qPQG89HpAe33UCpMIC18n4zN8H7cE84b3bqgNI/IR8J4CRplPI5D1l6fZ
-         umun//DdS+huTNnqMVHGT1pNKRbbFPekRu5Rc+LMOLB+so3y1KGYKJMUWU4wNuvBgKB7
-         Le5c32D3F+sGDiuD9p+NuOA9LKjvpBh1bqsjRi3wQY/byI41dYopQjdfantNgekttDOg
-         sT0Q==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FvKOgk3tDLWwb1NWyXvWAnYN0/RQ3NdysbGyQyA74cI=;
+        b=oRbo7GGhWbJy2l8Rp7U1zQwZT6/x3xPfk/o5CkW3c8VNo4reSbqCG8/TCGHEesG5q7
+         DDh2Ktjw+wy/gcb4aoTuTXgByV27VgTT8fC7JvOTWwcSndMkN3MCHzYGx687pJKdIUPn
+         B4TbhU1quOtj4jCTQr96QRTcM00sN8Ixkifas=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bj0RYfTA9vPDpy3KmDK11XXmVUXWJHQPReToyWDFygo=;
-        b=yfgOF8tkgA9JP8Mj/KdVHJwZkYKkT02FLrBBenlrslFPWRNuH+htVBa7BoraToL/J+
-         Ggfkc5oA0yKTFJoG3k23Ib0I5Qcl/nlnYidwgdB2EsrQ/OT2HAYBcQnSto2FO18LNv7o
-         K5o8hgomayH9LVRfKjO6NFCuggR8v0zEO9bIf2JaP7SjOVWseSrnV8vk4crWDR5sdPqI
-         dS0eGVp/vHop3hO8gZuQ/GHEeGyo2ajGCpJBeRw0F32a+JyYmY8GOGKAIkg2/kyn52tL
-         Q3KfR8mCKfTIWjRZpjyHq7ArpUkDKxPweH3QHiOuEl9wDeuTbQX3/O8Zb5pdvG+ExqOM
-         HDJg==
-X-Gm-Message-State: ANoB5pmt9vaUH/LizgAYkLlo++BP+DclrpsZcR4Kz71QykVyr/TgDmnY
-        K90d8KNhRYRQO5J4IqJc3EHAsA==
-X-Google-Smtp-Source: AA0mqf48z4Q4+VhZr/KS5wzWok/SYFjpD0h46qcj0RYUJA3BsNqcYeAEkuij9EFtlGD/SGCEwAhhlg==
-X-Received: by 2002:a7b:c3c9:0:b0:3cf:5442:bbe with SMTP id t9-20020a7bc3c9000000b003cf54420bbemr7562440wmj.2.1668753609224;
-        Thu, 17 Nov 2022 22:40:09 -0800 (PST)
-Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id j13-20020adff54d000000b0023655e51c33sm2785902wrp.4.2022.11.17.22.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 22:40:08 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 13/13] dt-bindings: nvmem: add YAML schema for the ONIE tlv layout
-Date:   Fri, 18 Nov 2022 06:39:32 +0000
-Message-Id: <20221118063932.6418-14-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221118063932.6418-1-srinivas.kandagatla@linaro.org>
-References: <20221118063932.6418-1-srinivas.kandagatla@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FvKOgk3tDLWwb1NWyXvWAnYN0/RQ3NdysbGyQyA74cI=;
+        b=jOvHQOxt2siUw991DXOEgrE5kZGzLqguhuFYdb7QTBr7+31fu7DJ1KnjjC6UieEbXm
+         SA3PddsolaoSXDLrALHaTrKpgd/nOR97KS3SB/WjZSk9RGtG4/Iv5tsjYRZ07tvK/9Rz
+         gocFAN9BWAX+1t7RGO8ILc6V0AT3pIMfleAM8z9g9JNty4bqjB1WVfzIA8Jm7ssLqC8y
+         qFZS1RyJ/qWM0KEqlnWCXskE06QIX7GlrRE9AKjMRx2ll3JKP5eQC4cg5YHhIEAlZNib
+         /BPRaMoDS7tWnXKtr1x6nM7891QCLHzKe8UNO0TWowUh7VFfh6dIsWSBTGcH0euT0hL2
+         vFxg==
+X-Gm-Message-State: ANoB5pmMWavzOmLfNnpT5+XWr/3vnAzpYlhW1fqZ6t/n9mcw5iS1NAc0
+        otD8wony4Ot8o9ufaCa4TIkSFEsvfO1Ej+DIEDMq7w==
+X-Google-Smtp-Source: AA0mqf6h3mCbrB9fesYTUW/Zh1uZgkTjjRfkkWD8QVK+210QpaWdfoKKF4ZKM2dDciAWSdEY40yuLUPeWnMYjyb04EM=
+X-Received: by 2002:a5d:6a85:0:b0:241:bd77:f243 with SMTP id
+ s5-20020a5d6a85000000b00241bd77f243mr1744786wru.393.1668753677438; Thu, 17
+ Nov 2022 22:41:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20210804213139.4139492-1-gwendal@chromium.org>
+ <20210804213139.4139492-2-gwendal@chromium.org> <CAPUE2usQX_uQewpCYOs3SRUo7vDDMfg=n7idNvCgThDHMqTf7w@mail.gmail.com>
+ <CAPUE2uuj1qde16QWHb=0+yMW3ERhXzV7ehGcViWCfij7ADeyWg@mail.gmail.com> <Y3bnYT6TXGXhkh/T@google.com>
+In-Reply-To: <Y3bnYT6TXGXhkh/T@google.com>
+From:   Gwendal Grignou <gwendal@chromium.org>
+Date:   Thu, 17 Nov 2022 22:41:06 -0800
+Message-ID: <CAPUE2uuUn33yRMz77+XxZvK9bDzAA8u3SLBx=iDfAJc6WrUEEQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] platform/chrome: Poke kb_wake_angle attribute
+ visibility when needed
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     dtor@chromium.org, jwerner@chromium.org, bleung@chromium.org,
+        enric.balletbo@collabora.com, groeck@chromium.org,
+        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,188 +67,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+On Thu, Nov 17, 2022 at 6:01 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> On Wed, Nov 16, 2022 at 10:23:38AM -0800, Gwendal Grignou wrote:
+> > [+chrome-platform@lists.linux.dev]
+>
+> Please also Cc to the mailing list if the patch gets chance to have
+> next version.
+>
+> > On Mon, Nov 14, 2022 at 8:10 PM Gwendal Grignou <gwendal@chromium.org> wrote:
+> [...]
+> > > > Expose the attribute group to alter to close a potiential race between
+> > > > cros-ec-sensorhub and cros-ec-sysfs (that creates the attribute group
+> > > > on behalf of the class driver).
+>
+> I failed to realize the potential race.  Could you explain it a bit?
+The decision to show or not an attribute is done at the attribute file
+creation time, once. If the module cros_ec_sysfs is loaded before
+cros_ec_sensorhub, the attribute kb_wake_angle will never be shown. If
+it is loaded after, and there are 2 accelerometers, the is_visible()
+function will return true and the attribute is shown.
 
-Add a schema for the ONIE tlv NVMEM layout that can be found on any ONIE
-compatible networking device.
+This patch ensures the attribute is_visible() is run again after the
+sensorhub driver is loaded.
 
-Describe all the possible NVMEM cells that can be produced by this
-layout parser.
-
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- .../bindings/nvmem/layouts/nvmem-layout.yaml  |   1 +
- .../nvmem/layouts/onie,tlv-layout.yaml        | 147 ++++++++++++++++++
- 2 files changed, 148 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
-
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-index f64ea2fa362d..8512ee538c4c 100644
---- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-@@ -19,6 +19,7 @@ description: |
- 
- oneOf:
-   - $ref: kontron,sl28-vpd.yaml
-+  - $ref: onie,tlv-layout.yaml
- 
- properties:
-   compatible: true
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
-new file mode 100644
-index 000000000000..5a0e7671aa3f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
-@@ -0,0 +1,147 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/layouts/onie,tlv-layout.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NVMEM layout of the ONIE tlv table
-+
-+maintainers:
-+  - Miquel Raynal <miquel.raynal@bootlin.com>
-+
-+description:
-+  Modern networking hardware implementing the Open Compute Project ONIE
-+  infrastructure shall provide a non-volatile memory with a table whose the
-+  content is well specified and gives many information about the manufacturer
-+  (name, country of manufacture, etc) as well as device caracteristics (serial
-+  number, hardware version, mac addresses, etc). The underlaying device type
-+  (flash, EEPROM,...) is not specified. The exact location of each value is also
-+  dynamic and should be discovered at run time because it depends on the
-+  parameters the manufacturer decided to embed.
-+
-+select: false
-+
-+properties:
-+  compatible:
-+    const: onie,tlv-layout
-+
-+  product-name:
-+    type: object
-+    additionalProperties: false
-+
-+  part-number:
-+    type: object
-+    additionalProperties: false
-+
-+  serial-number:
-+    type: object
-+    additionalProperties: false
-+
-+  mac-address:
-+    type: object
-+    description:
-+      Base MAC address for all on-module network interfaces. The first
-+      argument of the phandle will be treated as an offset.
-+
-+    properties:
-+      "#nvmem-cell-cells":
-+        const: 1
-+
-+    additionalProperties: false
-+
-+  manufacture-date:
-+    type: object
-+    additionalProperties: false
-+
-+  device-version:
-+    type: object
-+    additionalProperties: false
-+
-+  label-revision:
-+    type: object
-+    additionalProperties: false
-+
-+  platforn-name:
-+    type: object
-+    additionalProperties: false
-+
-+  onie-version:
-+    type: object
-+    additionalProperties: false
-+
-+  num-macs:
-+    type: object
-+    additionalProperties: false
-+
-+  manufacturer:
-+    type: object
-+    additionalProperties: false
-+
-+  country-code:
-+    type: object
-+    additionalProperties: false
-+
-+  vendor:
-+    type: object
-+    additionalProperties: false
-+
-+  diag-version:
-+    type: object
-+    additionalProperties: false
-+
-+  service-tag:
-+    type: object
-+    additionalProperties: false
-+
-+  vendor-extension:
-+    type: object
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        eeprom@56 {
-+            compatible = "atmel,24c64";
-+            read-only;
-+            reg = <0x56>;
-+
-+            nvmem-layout {
-+                compatible = "onie,tlv-layout";
-+
-+                serial-number {
-+                };
-+            };
-+        };
-+    };
-+
-+  - |
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        flash@0 {
-+            compatible = "m25p80", "jedec,spi-nor";
-+            reg = <0>;
-+
-+            otp {
-+                compatible = "user-otp";
-+
-+                nvmem-layout {
-+                    compatible = "onie,tlv-layout";
-+
-+                    mac-address {
-+                        #nvmem-cell-cells = <1>;
-+                    };
-+                };
-+            };
-+        };
-+    };
-+...
--- 
-2.25.1
-
+Gwendal.
+>
+> > > > diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+> > > > index 02599687770c5..c6dca260bbd5d 100644
+> > > > --- a/include/linux/platform_data/cros_ec_proto.h
+> > > > +++ b/include/linux/platform_data/cros_ec_proto.h
+> > > > @@ -191,6 +191,7 @@ struct cros_ec_platform {
+> > > >  /**
+> > > >   * struct cros_ec_dev - ChromeOS EC device entry point.
+> > > >   * @class_dev: Device structure used in sysfs.
+> > > > + * @groups: sysfs attributes groups for this EC.
+>
+> The field name has extra "s".
