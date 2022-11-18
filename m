@@ -2,114 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DB562F264
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0496762F277
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 11:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241630AbiKRKVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 05:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S241766AbiKRKYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 05:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241596AbiKRKVR (ORCPT
+        with ESMTP id S241685AbiKRKYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 05:21:17 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E7F91522
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 02:21:16 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NDCV11VNQzHvrW;
-        Fri, 18 Nov 2022 18:20:41 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 18:21:13 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 18:21:13 +0800
-Subject: Re: [PATCH] tracing: Fix infinite loop in tracing_read_pipe on
- overflowed print_trace_line
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221114022946.66255-1-yangjihong1@huawei.com>
- <20221117164003.6e655615@gandalf.local.home>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <188a48b7-f426-6348-086e-22e56bb07206@huawei.com>
-Date:   Fri, 18 Nov 2022 18:21:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Fri, 18 Nov 2022 05:24:07 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B78A82BF9;
+        Fri, 18 Nov 2022 02:24:02 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 79BA9240012;
+        Fri, 18 Nov 2022 10:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668767041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gAcx7QAUPrBgKxdDsMkzSjOogdyVGhpWAUFHST1vmNg=;
+        b=if+/MVMSSjiNWlYdIqPhPPvdvL3j3E+LU3MfyW/y2pI2vFZO80VfbWNzZAbvYzFLTIDjDV
+        NPmMGGKojW5nGz+AIQz/gSYLZgnLoTsBmRwvZH2oBPhJAm5zCSTJmkoZ8o6o+TAZDWiypp
+        DBtObKz5Min24uivAmZIRVl3bGmpJjzG6iacNZVhTlZotFvsyMEuOcv8cLRyxPXh+ptA+x
+        kGRafjawWQ00oZCQ+/rnEewwpxMFpQmZmHYUkKwFbSpHfrecZxFbgB+krRglPrkNyYJL+q
+        aKeHPrQVs9pjro+ghTQ07JW+5IYGA9gFPWQQi3migO/faekywO39QVkvKETh2w==
+Date:   Fri, 18 Nov 2022 11:23:49 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl:
+ Add h2mode property
+Message-ID: <20221118112349.7f09eefb@bootlin.com>
+In-Reply-To: <20221115150417.513955a7@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+        <20221114111513.1436165-3-herve.codina@bootlin.com>
+        <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+        <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
+        <20221115150417.513955a7@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20221117164003.6e655615@gandalf.local.home>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Krzysztof, Geert,
 
-On 2022/11/18 5:40, Steven Rostedt wrote:
-> On Mon, 14 Nov 2022 10:29:46 +0800
-> Yang Jihong <yangjihong1@huawei.com> wrote:
-> 
->> print_trace_line may overflow seq_file buffer. If the event is not
->> consumed, the while loop keeps peeking this event, causing a infinite loop.
->>
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->> ---
->>   kernel/trace/trace.c | 13 +++++++++++++
->>   1 file changed, 13 insertions(+)
->>
->> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
->> index 47a44b055a1d..2a8d5c68c29b 100644
->> --- a/kernel/trace/trace.c
->> +++ b/kernel/trace/trace.c
->> @@ -6788,6 +6788,19 @@ tracing_read_pipe(struct file *filp, char __user *ubuf,
->>   		if (ret == TRACE_TYPE_PARTIAL_LINE) {
->>   			/* don't print partial lines */
->>   			iter->seq.seq.len = save_len;
->> +
->> +			/*
->> +			 * If one trace_line of the tracer overflows seq_file
->> +			 * buffer, trace_seq_to_user returns -EBUSY because
->> +			 * nothing in the sequence (iter->seq.seq.len = \
->> +			 * iter->seq.seq.readpos = 0).
->> +			 * In this case, we need to consume, otherwise,
->> +			 * "while" will peek this event next time, resulting
->> +			 * in an infinite loop.
->> +			 */
->> +			if (trace_seq_has_overflowed(&iter->seq))
->> +				trace_consume(iter);
-> 
-> Instead of consuming it, I think the right solution is to print the partial
-> line. Something like:
-> 
-> 			if (trace_seq_has_overflowed(&iter->seq)) {
-> 				char dots[] = "...";
-> 
-> 				iter->seq.seq.len -= sizeof(dots) + 1;
-> 				iter->seq.seq.full = 0;
-> 				trace_seq_puts(&iter->seq, dots);
-> 				trace_consume(iter);
-> 				break;
-> 			}
-> 
-> 			iter->seq.seq.len = save_len;
-> 			break;
-> 
-> That way we can see the broken trace event and not just silently drop it.
-> 
-Ok, will change in next version.(Because iter->seq.seq.len may be 
-smaller than strlen(dots), direct subtraction here may not be appropriate.)
+On Tue, 15 Nov 2022 15:04:17 +0100
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-Thanks,
-Yang
+> Hi Krzysztof,
+>=20
+> On Tue, 15 Nov 2022 14:07:52 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>=20
+> > On 15/11/2022 14:05, Krzysztof Kozlowski wrote: =20
+> > > On 14/11/2022 12:15, Herve Codina wrote:   =20
+> > >> Add the h2mode property to force the USBs mode ie:
+> > >>  - 2 hosts
+> > >> or
+> > >>  - 1 host and 1 device
+> > >>
+> > >> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > >> ---
+> > >>  .../bindings/clock/renesas,r9a06g032-sysctrl.yaml      | 10 +++++++=
++++
+> > >>  1 file changed, 10 insertions(+)
+> > >>
+> > >> diff --git a/Documentation/devicetree/bindings/clock/renesas,r9a06g0=
+32-sysctrl.yaml b/Documentation/devicetree/bindings/clock/renesas,r9a06g032=
+-sysctrl.yaml
+> > >> index 95bf485c6cec..f9e0a58aa4fb 100644
+> > >> --- a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysc=
+trl.yaml
+> > >> +++ b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysc=
+trl.yaml
+> > >> @@ -39,6 +39,16 @@ properties:
+> > >>    '#power-domain-cells':
+> > >>      const: 0
+> > >> =20
+> > >> +  renesas,h2mode:
+> > >> +    description: |
+> > >> +      Configure the USBs mode.
+> > >> +        - <0> : the USBs are in 1 host and 1 device mode.
+> > >> +        - <1> : the USBs are in 2 host mode.
+> > >> +      If the property is not present, the value used is the one alr=
+eady present
+> > >> +      in the CFG_USB register (from reset or set by the bootloader).
+> > >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> > >> +    enum: [0, 1]   =20
+> > >=20
+> > > 0/1 are quite cryptic. Why not making it a string which is easy to re=
+ad
+> > > and understand? Can be something like "two-hosts" and "one-host". Or
+> > > anything you find more readable...   =20
+> >=20
+> > ...but actually you should rather make it a property of your USB
+> > controller, not clock controller. You have two controllers and we have a
+> > generic property for them - dr_mode.
+> >=20
+> > Best regards,
+> > Krzysztof
+> >  =20
+>=20
+> IMHO, this property in the USB controllers does not make sense.
+> Indeed each controller cannot have a different 'mode'.
+> Some controllers are USB host only (EHCI and OHCI) and the USBF
+> controller I worked on is device only.
+> 'h2mode' allows to choose between host or device on one of the USB
+> but not at the USB controller level.
+>=20
+> This property should be handle outside the USB controller nodes.
+>=20
+> Currently, this node (declared as a clock node) is in fact a sysctrl
+> node and can do some configuration not related to clocks.
+>=20
+> I agree with you something related to choosing USB Host/Device in
+> a clock node seems strange.
+>=20
+> Some discussion were already opened related to this property and how
+> to handle it:
+>   https://lore.kernel.org/all/20221107182642.05a09f2f@bootlin.com/
+>   https://lore.kernel.org/all/20221107173614.474707d7@bootlin.com/
+>=20
+
+We advanced on this topic.
+
+First, even if 'renesas,r9a06g032-sysctrl.yaml' is present in
+the devicetree/bindings/clock/ directory, this node is really
+a 'system controller' node:
+- title: Renesas RZ/N1D (R9A06G032) System Controller
+- compatible: renesas,r9a06g032-sysctrl
+
+It handles clocks, power domains, some DMA routing, ...
+
+Now, the property 'h2mode' allows to choose between:
+  - 2 USB hosts
+or
+  - 1 USB host and 1 USB device.
+
+This switching is system wide and has no reason to be done in
+one specific USB controller. It can impact multiple devices and
+PLL settings.
+
+The 'renesas,r9a06g032-sysctrl' node, as the system control
+node of our system, is the best candidate to handle the property.
+
+In order to be less cryptic in the property value, what do you
+think about:
+  renesas,h2mode:
+    - one-dev : the USBs are in 1 host and 1 device mode.
+    - only-hosts : the USBs are in 2 hosts mode.
+
+With these details and change on the property value,
+Is it ok for you to have the 'renesas,h2mode' property
+in the 'renesas,r9a06g032-sysctrl' node ?
+
+
+Regards,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
