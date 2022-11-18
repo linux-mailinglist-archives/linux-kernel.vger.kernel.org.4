@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7085363054A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB14630743
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbiKRXxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S235732AbiKSAab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236862AbiKRXvo (ORCPT
+        with ESMTP id S235440AbiKSAaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:51:44 -0500
+        Fri, 18 Nov 2022 19:30:02 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58858B9635
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:27:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A061122C3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:40:53 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8m-0002r2-WE; Fri, 18 Nov 2022 23:47:21 +0100
+        id 1owA8m-0002qs-U2; Fri, 18 Nov 2022 23:47:20 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8k-0058WU-I9; Fri, 18 Nov 2022 23:47:19 +0100
+        id 1owA8k-0058WR-GI; Fri, 18 Nov 2022 23:47:19 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8k-0000Bk-Es; Fri, 18 Nov 2022 23:47:18 +0100
+        id 1owA8k-0000Bo-MP; Fri, 18 Nov 2022 23:47:18 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
+        Wolfram Sang <wsa@kernel.org>, Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 309/606] media: dvb-frontends/mn88443x: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:40:43 +0100
-Message-Id: <20221118224540.619276-310-uwe@kleine-koenig.org>
+Subject: [PATCH 310/606] media: dvb-frontends/mn88472: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:40:44 +0100
+Message-Id: <20221118224540.619276-311-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -65,38 +61,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/dvb-frontends/mn88443x.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/dvb-frontends/mn88472.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/mn88443x.c b/drivers/media/dvb-frontends/mn88443x.c
-index 452571b380b7..1f1753f2ab1a 100644
---- a/drivers/media/dvb-frontends/mn88443x.c
-+++ b/drivers/media/dvb-frontends/mn88443x.c
-@@ -673,9 +673,9 @@ static const struct regmap_config regmap_config = {
- 	.cache_type = REGCACHE_NONE,
- };
+diff --git a/drivers/media/dvb-frontends/mn88472.c b/drivers/media/dvb-frontends/mn88472.c
+index 2b01cc678f7e..4a71f1c6371a 100644
+--- a/drivers/media/dvb-frontends/mn88472.c
++++ b/drivers/media/dvb-frontends/mn88472.c
+@@ -572,8 +572,7 @@ static struct dvb_frontend *mn88472_get_dvb_frontend(struct i2c_client *client)
+ 	return &dev->fe;
+ }
  
--static int mn88443x_probe(struct i2c_client *client,
--			  const struct i2c_device_id *id)
-+static int mn88443x_probe(struct i2c_client *client)
+-static int mn88472_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int mn88472_probe(struct i2c_client *client)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct mn88443x_config *conf = client->dev.platform_data;
- 	struct mn88443x_priv *chip;
- 	struct device *dev = &client->dev;
-@@ -800,7 +800,7 @@ static struct i2c_driver mn88443x_driver = {
- 		.name = "mn88443x",
- 		.of_match_table = of_match_ptr(mn88443x_of_match),
+ 	struct mn88472_config *pdata = client->dev.platform_data;
+ 	struct mn88472_dev *dev;
+@@ -719,7 +718,7 @@ static struct i2c_driver mn88472_driver = {
+ 		.name = "mn88472",
+ 		.suppress_bind_attrs = true,
  	},
--	.probe    = mn88443x_probe,
-+	.probe_new = mn88443x_probe,
- 	.remove   = mn88443x_remove,
- 	.id_table = mn88443x_i2c_id,
+-	.probe    = mn88472_probe,
++	.probe_new = mn88472_probe,
+ 	.remove   = mn88472_remove,
+ 	.id_table = mn88472_id_table,
  };
 -- 
 2.38.1
