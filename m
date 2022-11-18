@@ -2,114 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E3962F62B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB0E62F656
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234664AbiKRNcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
+        id S242215AbiKRNgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242064AbiKRNcL (ORCPT
+        with ESMTP id S242244AbiKRNgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:32:11 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4F08EB4A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:31:56 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id a15so6774344ljb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B8FY88gPwALYD33m6JUThwNzG/UMY8VcHLNAEQsYy/g=;
-        b=vcfyEQQ9KtiVVsvm8Q1+i8HI5RzNo91thvAvlL5R+/I0TaSgqVJjdoWVLZrbgBEIru
-         yZjNuSsp6USKzq94j0/c5ykSWxMyLnJbiQlGdPh9YNlHzl8ms4cT5g26qf/WVWkgJJ2V
-         7wBJaKLsG+KBlbk8K2rcJwm28HaX5vploo8kZUGvzvOpTnZiVIc66/zKU4OdJ3E2sdXo
-         Ea/2eQ2a6rTZ2bGyDEL7+NtJKYMyuiK4RI/mFb+v3az8QZFipjuxRUXXX6JdpizNYGZJ
-         uUD8xatAwMgEMQEMEba5CM16AeNk1Cmj8zWQ9Wr6ab24c3XSzDzHwRkDXn79fJkIAPgJ
-         2l4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=B8FY88gPwALYD33m6JUThwNzG/UMY8VcHLNAEQsYy/g=;
-        b=YkhmtskO8xkjzHnJb30m+M18KPf/lAXEyUHhjRqGDzfKOzClJdBHJSxD0ESgHxBOxX
-         l5mv6RBZbfswcH+dWzW4o2v2nezsmoJQlgyqb6ySJYmuE7bj6H7N6ORNOliTzELY7Bjy
-         ZhIUbtPENtsHCjj4SLmNAiD8zJQKG4RPQInXPU2GWF/d0uZWcSP1XNvproyZ9NQbFiQi
-         m5oBLmmwx7VUO8ZKATB/vzlxQydy26JzqEa+Yj2nOvUkFqJ2/Ppc5NaNDeMmyF+gWF1E
-         JsEzMYCz2ZnRsZik3SRa9BC0Cj3Dn/Io8kz7v8X0ARkkMYq9E+cQle6xk/J+DBPENol0
-         XJdg==
-X-Gm-Message-State: ANoB5plZADSSFHrYyVZnAE9geRT3LUo48hSepk/tFe5Yc9fJF/PYDtX3
-        S3mzRBsDjrUKXfAMC4eTCYfFfw==
-X-Google-Smtp-Source: AA0mqf7ve3KIF1vM/6XJ5J4l8FtgRNpQ5LKI1R4fwJD37X4+/lqzl3nSwbur6KowSiWz6PfeOysjUA==
-X-Received: by 2002:a2e:a889:0:b0:26d:cf5f:6a22 with SMTP id m9-20020a2ea889000000b0026dcf5f6a22mr2383342ljq.508.1668778315129;
-        Fri, 18 Nov 2022 05:31:55 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id s15-20020a056512214f00b004a8b9c68735sm659057lfr.102.2022.11.18.05.31.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 05:31:54 -0800 (PST)
-Message-ID: <208a663b-c2b2-d5a8-9eec-62f9a692c6c7@linaro.org>
-Date:   Fri, 18 Nov 2022 14:31:53 +0100
+        Fri, 18 Nov 2022 08:36:16 -0500
+X-Greylist: delayed 108 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 05:34:18 PST
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB1F942DE;
+        Fri, 18 Nov 2022 05:34:18 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B29BB24DECD;
+        Fri, 18 Nov 2022 21:32:27 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
+ 2022 21:32:27 +0800
+Received: from localhost.localdomain (183.27.96.116) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
+ 2022 21:32:26 +0800
+From:   Walker Chen <walker.chen@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 0/4] JH7110 Power Domain Support
+Date:   Fri, 18 Nov 2022 21:32:12 +0800
+Message-ID: <20221118133216.17037-1-walker.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH 11/15] tty: serial: qcom-geni-serial: stop operations in
- progress at shutdown
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20221118122539.384993-1-brgl@bgdev.pl>
- <20221118122539.384993-12-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221118122539.384993-12-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.96.116]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset adds power domain controller driver for the StarFive JH7110 SoC.
+The series has been tested on the VisionFive 2 board.
+
+This patchset should be applied after the patchset [1], [2], [3]:
+[1] https://lore.kernel.org/all/20221118010627.70576-1-hal.feng@starfivetech.com/
+[2] https://lore.kernel.org/all/20221118011108.70715-1-hal.feng@starfivetech.com/
+[3] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
+
+Walker Chen (4):
+  dt-bindings: power: Add StarFive JH7110 power domain definitions
+  dt-bindings: power: Add starfive,jh71xx-power bindings
+  soc: starfive: Add StarFive JH71XX pmu driver
+  riscv: dts: starfive: add power controller node
+
+ .../bindings/power/starfive,jh71xx-power.yaml |  46 +++
+ MAINTAINERS                                   |   8 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |   7 +
+ drivers/soc/Kconfig                           |   1 +
+ drivers/soc/Makefile                          |   1 +
+ drivers/soc/starfive/Kconfig                  |   9 +
+ drivers/soc/starfive/Makefile                 |   3 +
+ drivers/soc/starfive/jh71xx_pmu.c             | 380 ++++++++++++++++++
+ include/dt-bindings/power/jh7110-power.h      |  18 +
+ include/soc/starfive/pm_domains.h             |  15 +
+ 10 files changed, 488 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
+ create mode 100644 drivers/soc/starfive/Kconfig
+ create mode 100644 drivers/soc/starfive/Makefile
+ create mode 100644 drivers/soc/starfive/jh71xx_pmu.c
+ create mode 100644 include/dt-bindings/power/jh7110-power.h
+ create mode 100644 include/soc/starfive/pm_domains.h
 
 
-On 18/11/2022 13:25, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> We don't stop transmissions in progress at shutdown. This is fine with
-> FIFO SE mode but with DMA it causes trouble so fix it now.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+prerequisite-patch-id: 8ebfffa09b478904bf7c516f76e2d824ddb60140
+prerequisite-patch-id: e8dd8258a4c4062eee2cf07c4607d52baea71f3a
+prerequisite-patch-id: d050d884d7b091ff30508a70f5ce5164bb3b72e5
+prerequisite-patch-id: 0e41f8cfd4861fcbf6f2e6a2559ce28f0450299e
+prerequisite-patch-id: 6e1652501859b85f101ff3b15ced585d43c71c1b
+prerequisite-patch-id: 587628a67adad5c655e5f998bf6c4a368ec07d3c
+prerequisite-patch-id: 596490c0e397df6c0249c1306fbb1d5bf00b5b83
+prerequisite-patch-id: dc873317826b50364344b25ac5cd74e811403f3d
+prerequisite-patch-id: a50150f41d8e874553023187e22eb24dffae8d16
+prerequisite-patch-id: 735e62255c75801bdc4c0b4107850bce821ff7f5
+prerequisite-patch-id: 9d2e83a2dd43e193f534283fab73e90b4f435043
+prerequisite-patch-id: 7a43e0849a9afa3c6f83547fd16d9271b07619e5
+prerequisite-patch-id: e7aa6fb05314bad6d94c465f3f59969871bf3d2e
+prerequisite-patch-id: 6276b2a23818c65ff2ad3d65b562615690cffee9
+prerequisite-patch-id: d834ece14ffb525b8c3e661e78736692f33fca9b
+prerequisite-patch-id: 4c17a3ce4dae9b788795d915bf775630f5c43c53
+prerequisite-patch-id: dabb913fd478e97593e45c23fee4be9fd807f851
+prerequisite-patch-id: ba61df106fbe2ada21e8f22c3d2cfaf7809c84b6
+prerequisite-patch-id: 287572fb64f83f5d931034f7c75674907584a087
+prerequisite-patch-id: 536114f0732646095ef5302a165672b3290d4c75
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: e09e995700a814a763aa304ad3881a7222acf556
+prerequisite-patch-id: 841cd71b556b480d6a5a5e332eeca70d6a76ec3f
+prerequisite-patch-id: d074c7ffa2917a9f754d5801e3f67bc980f9de4c
+prerequisite-patch-id: 5f59bc7cbbf1230e5ff4761fa7c1116d4e6e5d71
+prerequisite-patch-id: d5da3475c6a3588e11a1678feb565bdd459b548e
+-- 
+2.17.1
 
-Konrad
->   drivers/tty/serial/qcom_geni_serial.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 6a9f3f937f29..091b8f277a04 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -868,6 +868,9 @@ static void get_tx_fifo_size(struct qcom_geni_serial_port *port)
->   
->   static void qcom_geni_serial_shutdown(struct uart_port *uport)
->   {
-> +	qcom_geni_serial_stop_tx(uport);
-> +	qcom_geni_serial_stop_rx(uport);
-> +
->   	disable_irq(uport->irq);
->   }
->   
