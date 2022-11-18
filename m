@@ -2,116 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CA362FF5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D161F62FF62
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 22:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiKRV1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 16:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S230074AbiKRVb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 16:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiKRV1n (ORCPT
+        with ESMTP id S229483AbiKRVb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 16:27:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFC4A28A7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 13:27:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Nov 2022 16:31:58 -0500
+X-Greylist: delayed 9630 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Nov 2022 13:31:57 PST
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508D877222;
+        Fri, 18 Nov 2022 13:31:57 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A21E625DE
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 21:27:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29640C433D6;
-        Fri, 18 Nov 2022 21:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1668806862;
-        bh=RKeUbLAWkAqKAQpRa/aMhHUQToW5rk/wNnEtKf8AAVs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AHI++KLcg8f1oKeTyVJj9GgaijJqkIhGCizaWFzcfqfKY2Na6sQIY8Rv/9j6Dlnp2
-         PCy1lMm98PDg76enX/+l1cj3fSgb4vf1ZSWgQaiGwTESXq2ViX5/xhK05feuKPEMcb
-         0zs/sY66agmdTG8jixrCs7AyIZFi7lqGyH6tqnso=
-Date:   Fri, 18 Nov 2022 13:27:41 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Chen Wandun <chenwandun@huawei.com>
-Cc:     <hugh@veritas.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <wangkefeng.wang@huawei.com>,
-        <sunnanyong@huawei.com>, <xialonglong1@huawei.com>,
-        Huang Ying <ying.huang@intel.com>
-Subject: Re: [RFC PATCH] swapfile: fix soft lockup in scan_swap_map_slots
-Message-Id: <20221118132741.aaf6f9081b5a1018cc9a5402@linux-foundation.org>
-In-Reply-To: <20221118133850.3360369-1-chenwandun@huawei.com>
-References: <20221118133850.3360369-1-chenwandun@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by mail.3ffe.de (Postfix) with ESMTPSA id AB6681382;
+        Fri, 18 Nov 2022 22:31:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1668807115;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jhsoQZGuusQB+cmhOr0OjTamtUUcvXLkhCvJFGQv/dM=;
+        b=dyqmJDrhlD49WDtt67kx3e41wuqADtomYJdL3P9JWqaY9HodYZSEwm66ELysqQdEuRFCGm
+        d4gR1HQJnixVwcD8QqsnKVeQz4wJ1usztknklJQEZiFpqBbBOLrtVlhoB/SOhHIdu4KQex
+        /dhB5zAMYT2ch4k5OQWd261mx0G15jDeUkm0hWn6hZ0DFgZNwNS19KS9VuztfAw6hIrHf+
+        NocsD8ySWtxr72mPW+uWo5Y4KHVihNz66+5MD+z+3lwI40i5guJCIoKng3ni67NSQeXdG5
+        ppwKu3g5rV8hu9RKpiINMWfGsseo3Hy+TO6oCRTGHcWlxMQ8yvOwOoij2W1OIg==
+MIME-Version: 1.0
+Date:   Fri, 18 Nov 2022 22:31:55 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 02/18] of: base: add
+ of_parse_phandle_with_optional_args()
+In-Reply-To: <20221118185118.1190044-3-michael@walle.cc>
+References: <20221118185118.1190044-1-michael@walle.cc>
+ <20221118185118.1190044-3-michael@walle.cc>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <8b976cf546bad3aa159a6f05cd3c15d1@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 21:38:50 +0800 Chen Wandun <chenwandun@huawei.com> wrote:
-
-> A soft lockup occur in scan free swap slot by constructing
-> huge memory pressure.
-> The test scenario is: 64 CPU cores, 64GB memory, and 28
-> zram devices, the disksize of each zram device is 50MB.
+Am 2022-11-18 19:51, schrieb Michael Walle:
+> Add a new variant of the of_parse_phandle_with_args() which treats the
+> cells name as optional. If it's missing, it is assumed that the phandle
+> has no arguments.
 > 
-> LATENCY_LIMIT is used to prevent soft lockup in function
-> scan_swap_map_slots, but the real loop number would more
-> than LATENCY_LIMIT because of "goto checks and goto scan"
-> repeatly without decrease of latency limit.
-> 
-> In order to fix it, move decrease latency_ration code in advance.
-> 
-> There is also a suspicious place that will cause soft lockup in
-> function get_swap_pages, in this function, the "goto start_over"
-> may result in continuous scanning of swap partition, if there is
-> no cond_sched in scan_swap_map_slots, it would cause soft lockup
-> (I am not sure about this).
-> 
-> ...
->
+> Up until now, a nvmem node didn't have any arguments, so all the device
+> trees haven't any '#*-cells' property. But there is a need for an
+> additional argument for the phandle, for which we need a '#*-cells'
+> property. Therefore, we need to support nvmem nodes with and without
+> this property.
 
-Looks sensible.
+I've just noticed that this isn't enough. We also need to fix the 
+parsing
+in drivers/of/property.c, otherwise spurious device links will be 
+created
+because the phandle argument is treated as a phandle itself.
 
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -972,23 +972,23 @@ static int scan_swap_map_slots(struct swap_info_struct *si,
->  scan:
->  	spin_unlock(&si->lock);
->  	while (++offset <= READ_ONCE(si->highest_bit)) {
-> -		if (swap_offset_available_and_locked(si, offset))
-> -			goto checks;
->  		if (unlikely(--latency_ration < 0)) {
->  			cond_resched();
->  			latency_ration = LATENCY_LIMIT;
->  			scanned_many = true;
->  		}
-> +		if (swap_offset_available_and_locked(si, offset))
-> +			goto checks;
->  	}
->  	offset = si->lowest_bit;
->  	while (offset < scan_base) {
-> -		if (swap_offset_available_and_locked(si, offset))
-> -			goto checks;
->  		if (unlikely(--latency_ration < 0)) {
->  			cond_resched();
->  			latency_ration = LATENCY_LIMIT;
->  			scanned_many = true;
->  		}
-> +		if (swap_offset_available_and_locked(si, offset))
-> +			goto checks;
->  		offset++;
->  	}
->  	spin_lock(&si->lock);
-
-But this does somewhat alter the `scanned_many' logic.  We'll now set
-'scanned_many` earlier.  What are the effects of this?
-
-The ed43af10975eef7e changelog outlines tests which could be performed
-to ensure we aren't regressing from this.
+-michael
 
