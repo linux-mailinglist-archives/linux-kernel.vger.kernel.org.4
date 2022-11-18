@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018106303A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCDD630585
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236028AbiKRXbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
+        id S236979AbiKRXzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235872AbiKRX3j (ORCPT
+        with ESMTP id S237095AbiKRXyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:29:39 -0500
+        Fri, 18 Nov 2022 18:54:14 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6A56DFE8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:17:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93EFBE240
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:27:52 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7x-0008M4-Ee; Fri, 18 Nov 2022 23:46:29 +0100
+        id 1owA7y-0008O2-2k; Fri, 18 Nov 2022 23:46:30 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7t-0058Dn-Gm; Fri, 18 Nov 2022 23:46:26 +0100
+        id 1owA7t-0058Dw-V5; Fri, 18 Nov 2022 23:46:26 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA7s-00Hb06-Tp; Fri, 18 Nov 2022 23:46:24 +0100
+        id 1owA7t-00Hb09-4Y; Fri, 18 Nov 2022 23:46:25 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -39,9 +39,9 @@ Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 082/606] iio: dac: ad5064: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:36:56 +0100
-Message-Id: <20221118224540.619276-83-uwe@kleine-koenig.org>
+Subject: [PATCH 083/606] iio: dac: ad5380: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:36:57 +0100
+Message-Id: <20221118224540.619276-84-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -68,34 +68,34 @@ that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/iio/dac/ad5064.c | 6 +++---
+ drivers/iio/dac/ad5380.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/dac/ad5064.c b/drivers/iio/dac/ad5064.c
-index 4447b8811827..f01249c1ba93 100644
---- a/drivers/iio/dac/ad5064.c
-+++ b/drivers/iio/dac/ad5064.c
-@@ -993,9 +993,9 @@ static int ad5064_i2c_write(struct ad5064_state *st, unsigned int cmd,
- 	return 0;
- }
+diff --git a/drivers/iio/dac/ad5380.c b/drivers/iio/dac/ad5380.c
+index a81bfa47a221..64b4519f8f5e 100644
+--- a/drivers/iio/dac/ad5380.c
++++ b/drivers/iio/dac/ad5380.c
+@@ -546,9 +546,9 @@ static inline void ad5380_spi_unregister_driver(void)
  
--static int ad5064_i2c_probe(struct i2c_client *i2c,
--	const struct i2c_device_id *id)
-+static int ad5064_i2c_probe(struct i2c_client *i2c)
+ #if IS_ENABLED(CONFIG_I2C)
+ 
+-static int ad5380_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static int ad5380_i2c_probe(struct i2c_client *i2c)
  {
 +	const struct i2c_device_id *id = i2c_client_get_device_id(i2c);
- 	return ad5064_probe(&i2c->dev, id->driver_data, id->name,
- 						ad5064_i2c_write);
- }
-@@ -1056,7 +1056,7 @@ static struct i2c_driver ad5064_i2c_driver = {
- 	.driver = {
- 		   .name = "ad5064",
- 	},
--	.probe = ad5064_i2c_probe,
-+	.probe_new = ad5064_i2c_probe,
- 	.id_table = ad5064_i2c_ids,
- };
+ 	struct regmap *regmap;
  
+ 	regmap = devm_regmap_init_i2c(i2c, &ad5380_regmap_config);
+@@ -589,7 +589,7 @@ static struct i2c_driver ad5380_i2c_driver = {
+ 	.driver = {
+ 		   .name = "ad5380",
+ 	},
+-	.probe = ad5380_i2c_probe,
++	.probe_new = ad5380_i2c_probe,
+ 	.remove = ad5380_i2c_remove,
+ 	.id_table = ad5380_i2c_ids,
+ };
 -- 
 2.38.1
 
