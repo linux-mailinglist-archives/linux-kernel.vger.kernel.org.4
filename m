@@ -2,172 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6672F62EAC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A17C962EB3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240951AbiKRBM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 20:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
+        id S241020AbiKRBq3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Nov 2022 20:46:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240986AbiKRBMY (ORCPT
+        with ESMTP id S240834AbiKRBqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 20:12:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A06987545
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:10:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668733847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xhz/Ckbg8bcdF0GpIUPbn4oL7x6YrFJTnL8UpEBPxx4=;
-        b=PkuZEJ3dctm5sHPy0w3qwC0AzBlz0/AQ9WX3wc93hLJEG5SCXOGffUq1Ha3UeEMmECWGuu
-        2VCWYFqs5VN+nqQzMmsKJrPXt7ZRQpgoTN/6hldrqld9TzgRbIlCoEbb4OCJXm15wQ3VIj
-        xH3e9cLr1Tpc7aqCXWlSWONPCCUZG70=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-121-MEt2zR_RNp-orh1tA5HS4w-1; Thu, 17 Nov 2022 20:10:46 -0500
-X-MC-Unique: MEt2zR_RNp-orh1tA5HS4w-1
-Received: by mail-qv1-f70.google.com with SMTP id nn2-20020a056214358200b004bb7bc3dfdcso3241055qvb.23
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 17:10:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xhz/Ckbg8bcdF0GpIUPbn4oL7x6YrFJTnL8UpEBPxx4=;
-        b=mw5PXbiGBZ4tiD2RruQ229XIWXuDm8NCHB6Qh/LDUMjXB9quLoCp1bZ46jJk/i3hQi
-         MRgOrCTNCIozAc16uoIHEgLsFs6EvStCJGcdl1UY/TZ+LalLrW6Osy8pBhH5nKOolF95
-         KWcQp4fXUd54wbOTnZGGlYJlSJJQWoTqlUtJvz3pp4BT42GuRrRX0bRhfBz2skDEgyit
-         13AZHJ8h66ty66ZcXYnrbs6VlBG+4XbV0V7c4XJxf5PGOOpxbvIbwQRZ09iSnPRMxmjB
-         GFCUg4M8JtpNQW1IT38jw1PiH12FdF944i2KqZ5KDiSnakU4ccqqbbf8LxVICpaeSxQ4
-         Q5eg==
-X-Gm-Message-State: ANoB5pmQQyz3F3AKVBofLsm9ebhEZK6swmNSx3F0psnVFkVhDhApIzQv
-        KtThKgjWEBD7raK6eJPJajUxLFR84Jvne6gtS/Bbmy7uJqzhkIxD+szgDs9+dig3FCad8yOVXf0
-        KkeRLRAKTOoPPTlhQXUp+xMiy
-X-Received: by 2002:a05:620a:a10:b0:6fb:a7e6:96e with SMTP id i16-20020a05620a0a1000b006fba7e6096emr3968828qka.675.1668733844054;
-        Thu, 17 Nov 2022 17:10:44 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7dJcHqBiR7Zv4m+XJwPOWgqJH93kZp3F2AOeTKPKZTLrUWczK3rZnxkV5Lt7km6veLvhXYzg==
-X-Received: by 2002:a05:620a:a10:b0:6fb:a7e6:96e with SMTP id i16-20020a05620a0a1000b006fba7e6096emr3968816qka.675.1668733843810;
-        Thu, 17 Nov 2022 17:10:43 -0800 (PST)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05620a430700b006eed75805a2sm1491342qko.126.2022.11.17.17.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 17:10:43 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Rik van Riel <riel@surriel.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
-        James Houghton <jthoughton@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH RFC v2 10/12] mm/hugetlb: Use hugetlb walker lock in walk_hugetlb_range()
-Date:   Thu, 17 Nov 2022 20:10:23 -0500
-Message-Id: <20221118011025.2178986-11-peterx@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221118011025.2178986-1-peterx@redhat.com>
-References: <20221118011025.2178986-1-peterx@redhat.com>
+        Thu, 17 Nov 2022 20:46:24 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619B0742E1;
+        Thu, 17 Nov 2022 17:46:22 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 5301224E1D3;
+        Fri, 18 Nov 2022 09:11:11 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
+ 2022 09:11:11 +0800
+Received: from ubuntu.localdomain (183.27.96.116) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
+ 2022 09:11:10 +0800
+From:   Hal Feng <hal.feng@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/5] Basic pinctrl support for StarFive JH7110 RISC-V SoC
+Date:   Fri, 18 Nov 2022 09:11:03 +0800
+Message-ID: <20221118011108.70715-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.96.116]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hugetlb walker lock makes sure the pte_t* won't go away from under us.  One
-thing to mention is there're two hugetlb_entry() users that can yield the
-thread within hugetlb_entry(), that'll need to add unlock/lock pair around
-the yield, meanwhile document hugetlb_entry() explaining the lock for
-sleepable hugetlb_entry()s.
+The original patch series "Basic StarFive JH7110 RISC-V SoC support" [1]
+is split into 3 patch series. They respectively add basic clock&reset,
+pinctrl and device tree support for StarFive JH7110 SoC. These patch
+series are independent, but the Visionfive2 board can boot up successfully
+only if all these patches series applied. This one adds basic pinctrl
+support. This patch series is pulled out from the patch 22~26 of v1 [1].
+You can simply get or review the patches at the link [2].
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- arch/s390/mm/gmap.c      | 2 ++
- fs/proc/task_mmu.c       | 2 ++
- include/linux/pagewalk.h | 9 ++++++++-
- mm/pagewalk.c            | 2 ++
- 4 files changed, 14 insertions(+), 1 deletion(-)
+[1]: https://lore.kernel.org/all/20220929143225.17907-1-hal.feng@linux.starfivetech.com/
+[2]: https://github.com/hal-feng/linux/commits/visionfive2-minimal
 
-diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-index 02d15c8dc92e..fb2938e8d1c7 100644
---- a/arch/s390/mm/gmap.c
-+++ b/arch/s390/mm/gmap.c
-@@ -2644,7 +2644,9 @@ static int __s390_enable_skey_hugetlb(pte_t *pte, unsigned long addr,
- 	end = start + HPAGE_SIZE - 1;
- 	__storage_key_init_range(start, end);
- 	set_bit(PG_arch_1, &page->flags);
-+	hugetlb_walker_unlock();
- 	cond_resched();
-+	hugetlb_walker_lock();
- 	return 0;
- }
- 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 89338950afd3..ed750a52e60b 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1612,7 +1612,9 @@ static int pagemap_hugetlb_range(pte_t *ptep, unsigned long hmask,
- 			frame++;
- 	}
- 
-+	hugetlb_walker_unlock();
- 	cond_resched();
-+	hugetlb_walker_lock();
- 
- 	return err;
- }
-diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
-index 959f52e5867d..7fa3724c6eb5 100644
---- a/include/linux/pagewalk.h
-+++ b/include/linux/pagewalk.h
-@@ -21,7 +21,14 @@ struct mm_walk;
-  *			depth is -1 if not known, 0:PGD, 1:P4D, 2:PUD, 3:PMD.
-  *			Any folded depths (where PTRS_PER_P?D is equal to 1)
-  *			are skipped.
-- * @hugetlb_entry:	if set, called for each hugetlb entry
-+ * @hugetlb_entry:	if set, called for each hugetlb entry.  Note that
-+ *			each pte_t* is protected by hugetlb_walker_lock(),
-+ *			and the lock does not allow sleep.  If explicit
-+ *			sleep in the entry fn needed, the caller needs to
-+ *			release the lock (hugetlb_walker_unlock()), then
-+ *			relock it (hugetlb_walker_lock()) before return.
-+ *			After the unlock, the pte_t* may become invalid
-+ *			anytime so cannot be accessed anymore.
-  * @test_walk:		caller specific callback function to determine whether
-  *			we walk over the current vma or not. Returning 0 means
-  *			"do page table walk over the current vma", returning
-diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index 7f1c9b274906..abf310011ab1 100644
---- a/mm/pagewalk.c
-+++ b/mm/pagewalk.c
-@@ -302,6 +302,7 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
- 	const struct mm_walk_ops *ops = walk->ops;
- 	int err = 0;
- 
-+	hugetlb_walker_lock();
- 	do {
- 		next = hugetlb_entry_end(h, addr, end);
- 		pte = huge_pte_offset(walk->mm, addr & hmask, sz);
-@@ -314,6 +315,7 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
- 		if (err)
- 			break;
- 	} while (addr = next, addr != end);
-+	hugetlb_walker_unlock();
- 
- 	return err;
- }
+Changes since v1:
+- Rebased on tag v6.1-rc5.
+- Dropped patch 22 and 23 since they were merged in v6.1-rc1.
+- Removed some unused macros and register values which do not belong to
+  bindings. Simplified pinctrl definitions in patch 24. (by Krzysztof)
+- Split the bindings into sys pinctrl bindings and aon pinctrl bindings,
+  and split patch 25 into two patches.
+- Made the bindings follow generic pinctrl bindings. (by Krzysztof)
+- Fixed some wrong indentation in bindings, and checked it with
+  `make dt_binding_check`.
+- Split the patch 26 into two patches which added sys and aon pinctrl
+  driver respectively.
+- Restructured the pinctrl drivers so made them follow generic pinctrl
+  bindings. Rewrote `dt_node_to_map` and extracted the public code to make
+  it clearer.
+
+  v1: https://lore.kernel.org/all/20220929143225.17907-1-hal.feng@linux.starfivetech.com/
+
+Jianlong Huang (5):
+  dt-bindings: pinctrl: Add StarFive JH7110 pinctrl definitions
+  dt-bindings: pinctrl: Add StarFive JH7110 sys pinctrl
+  dt-bindings: pinctrl: Add StarFive JH7110 aon pinctrl
+  pinctrl: starfive: Add StarFive JH7110 sys controller driver
+  pinctrl: starfive: Add StarFive JH7110 aon controller driver
+
+ .../pinctrl/starfive,jh7110-aon-pinctrl.yaml  | 134 +++
+ .../pinctrl/starfive,jh7110-sys-pinctrl.yaml  | 165 +++
+ MAINTAINERS                                   |   7 +-
+ drivers/pinctrl/starfive/Kconfig              |  21 +
+ drivers/pinctrl/starfive/Makefile             |   5 +
+ drivers/pinctrl/starfive/pinctrl-jh7110-aon.c | 192 ++++
+ drivers/pinctrl/starfive/pinctrl-jh7110-sys.c | 464 +++++++++
+ drivers/pinctrl/starfive/pinctrl-starfive.c   | 972 ++++++++++++++++++
+ drivers/pinctrl/starfive/pinctrl-starfive.h   |  72 ++
+ .../pinctrl/pinctrl-starfive-jh7110.h         | 427 ++++++++
+ 10 files changed, 2456 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-aon-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-jh7110-aon.c
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-jh7110-sys.c
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive.c
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive.h
+ create mode 100644 include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
+
+
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+prerequisite-patch-id: 6b1b43a55b9773bec61ab6c1bbaa54dccbac0837
+prerequisite-patch-id: 09c98554df52d17ba5fd604125f8cdd62cbe80d1
+prerequisite-patch-id: 29fe0b0c19b6f0cd31114ee9fe17fe9732047f33
+prerequisite-patch-id: c59d9908de90e09ba2b9a81aadbf9fb9f00c8f04
+prerequisite-patch-id: 94ac03d518993921bcfc9cc9f58d7da0c3528b51
+prerequisite-patch-id: 694f7400375f5b85581fc1821e427334507826f2
+prerequisite-patch-id: 699d49c4439dadb4b7cf900857f027d050cd6093
+prerequisite-patch-id: 40d773f5a19912f731ee5fd4739ed2e3c2157b07
+prerequisite-patch-id: 2bc3fd6df5dda116efe882045863d6c88aa81b3a
+prerequisite-patch-id: 735e62255c75801bdc4c0b4107850bce821ff7f5
+prerequisite-patch-id: b2a923b922e661fa6085185f33c1f1e733db9110
+prerequisite-patch-id: b2bbc28354075432f059344eba5a127a653475cf
+prerequisite-patch-id: 70eab7b7eee728afcd90e40f6743d1356f6d81ab
+prerequisite-patch-id: 6276b2a23818c65ff2ad3d65b562615690cffee9
 -- 
-2.37.3
+2.38.1
 
