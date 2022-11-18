@@ -2,172 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDEF62EA2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD9A62EA33
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 01:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbiKRAYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Nov 2022 19:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        id S234786AbiKRAZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Nov 2022 19:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240604AbiKRAYh (ORCPT
+        with ESMTP id S234747AbiKRAZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Nov 2022 19:24:37 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6C56B3B5;
-        Thu, 17 Nov 2022 16:24:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668731075; x=1700267075;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9c5T7Id5N/dIrGsW19u1DxMTz5rLx41JpV24RUmXqUA=;
-  b=DGIfVz3VD6Mkv3jSR822pa7OlYpA0H0BbJ4LLqGFg392Esb0hcD6GVLx
-   bP6xEotf5qKVvyZ0340cnKTJbCDt4Djhel53KXD/5/dtxb+PNCwIJ2i8i
-   g94FiLrYvuiiqlZEeWYS1jk5Swrjrv0IQZU3e2sQDHKihySg98u7uGjcn
-   l0Usbtx0ltMNyrFgYTysqiKHKoqqG/9ZLQ2N+4veN0cVmbOgC7I8civeu
-   QZJlsZFhwqzMu/D6OfA2cgQTl2xdQL/IzCwy0pPuJ6mwkb8O/+Kh9ubRW
-   Tzb5Lh32+/20S1zDXNh4v0Dya4Ox/SRWHdvVaaY0ui3TZ+BF7mdI2VTcC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="314831141"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="314831141"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 16:24:34 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="708834634"
-X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
-   d="scan'208";a="708834634"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.84.12])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 16:24:33 -0800
-Date:   Thu, 17 Nov 2022 16:24:31 -0800
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-cxl@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] cxl/region: Add trigger_poison_list sysfs
- attribute
-Message-ID: <Y3bQvywgOxBJUtbm@aschofie-mobl2>
-References: <cover.1668115235.git.alison.schofield@intel.com>
- <a696d91e34fc845673345a6b024545df849a8fef.1668115235.git.alison.schofield@intel.com>
- <20221116125038.00006273@Huawei.com>
+        Thu, 17 Nov 2022 19:25:32 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A6D6B3BE
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:25:31 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id v28so3351082pfi.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 16:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W25mprsVAGFYx1b8fr8tlqYACFsmAXWC018XR5v0SyQ=;
+        b=XgVP9ahbj6EU5vSIAnUUS1ZmD8OtEcB/doWcaMRGDvy0kCsATAovnYDAFIryGlxpSh
+         BjxXnEkc4++35Ihn95RQ6EMsvQgfMvwIZWxKDq5QOlnuP3LN9W/41z+o1A/qrq6ygJzS
+         9D1QCl/mw4vifIZw8zDQnA+7imicunjdy+ddo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W25mprsVAGFYx1b8fr8tlqYACFsmAXWC018XR5v0SyQ=;
+        b=VO8ETtGWj98EoO0JK8AN3k7itkOi5nPoegw5W9swL1XMiaeadJ/21esSRmwfC3skam
+         +p5sWLImNOuvsbp7KLSLzrxtcLlysm5tJ4+AzuU5EHcjj4+9iit7F/KpGCqrxgUw3scb
+         u4QAzeRpuH2u6LQ8uLvVqcgzTu8WFTUzVZZlTrp5s7AdQxfyyS3+WFVGA4KzQO/hmtrX
+         F6+UDQiU8mB+0Wce4VR2u53pjAFL1dyLfYLDzFAMEdImU7fLmwfqh4XfWIqjVr4n1tte
+         hmDSQU2xMYoLCP75BaMNaAUQwrSrmpcfPTv41+B5swPeTFZLh/19szqbAT0p+qZeSMcI
+         6mnw==
+X-Gm-Message-State: ANoB5pm3cwmgtUB2yFV79W7bZXaU3y4RalUYQgKh4Vs7C9Qj6MwSOjyI
+        vKRZ3cLPPI5ps5xvaplTMB6VVQ==
+X-Google-Smtp-Source: AA0mqf4ob29gEgyEODGGWMVDgi7AUFesJo4C/tw8/C3dixpP4x6E/ENTXYQIKisRNKdSrfPXyIj5OA==
+X-Received: by 2002:a63:b54:0:b0:434:911a:301 with SMTP id a20-20020a630b54000000b00434911a0301mr4569707pgl.50.1668731130811;
+        Thu, 17 Nov 2022 16:25:30 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id mt15-20020a17090b230f00b00212d9a06edcsm870576pjb.42.2022.11.17.16.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 16:25:30 -0800 (PST)
+Date:   Thu, 17 Nov 2022 16:25:29 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: Coverity: __sock_gen_cookie(): Error handling issues
+Message-ID: <202211171624.963F44FCE@keescook>
+References: <202211171422.7A7A7A9@keescook>
+ <CANn89iLQcLNX+x_gJCMy5kD5GW3Xg8U4s0VGHtSuN8iegmhjxQ@mail.gmail.com>
+ <202211171513.28D070E@keescook>
+ <CANn89iKgMvhLbTi=SHn41R--rBQ8As=E52Hnecch6nOhXVYGrg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221116125038.00006273@Huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANn89iKgMvhLbTi=SHn41R--rBQ8As=E52Hnecch6nOhXVYGrg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 12:50:38PM +0000, Jonathan Cameron wrote:
-> On Thu, 10 Nov 2022 19:12:42 -0800
-> alison.schofield@intel.com wrote:
+On Thu, Nov 17, 2022 at 03:22:22PM -0800, Eric Dumazet wrote:
+> On Thu, Nov 17, 2022 at 3:14 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Thu, Nov 17, 2022 at 02:49:55PM -0800, Eric Dumazet wrote:
+> > > On Thu, Nov 17, 2022 at 2:22 PM coverity-bot <keescook@chromium.org> wrote:
+> > > >
+> > > > Hello!
+> > > >
+> > > > This is an experimental semi-automated report about issues detected by
+> > > > Coverity from a scan of next-20221117 as part of the linux-next scan project:
+> > > > https://scan.coverity.com/projects/linux-next-weekly-scan
+> > > >
+> > > > You're getting this email because you were associated with the identified
+> > > > lines of code (noted below) that were touched by commits:
+> > > >
+> > > >   Wed Nov 16 12:42:01 2022 +0000
+> > > >     4ebf802cf1c6 ("net: __sock_gen_cookie() cleanup")
+> > > >
+> > > > Coverity reported the following:
+> > > >
+> > > > *** CID 1527347:  Error handling issues  (CHECKED_RETURN)
+> > > > net/core/sock_diag.c:33 in __sock_gen_cookie()
+> > > > 27     {
+> > > > 28      u64 res = atomic64_read(&sk->sk_cookie);
+> > > > 29
+> > > > 30      if (!res) {
+> > > > 31              u64 new = gen_cookie_next(&sock_cookie);
+> > > > 32
+> > > > vvv     CID 1527347:  Error handling issues  (CHECKED_RETURN)
+> > > > vvv     Calling "atomic64_try_cmpxchg" without checking return value (as is done elsewhere 8 out of 9 times).
+> > > > 33              atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
+> > >
+> > >
+> > > Hmmm. for some reason I thought @res was always updated...
+> > >
+> > > A fix would be to read sk->sk_cookie, but I guess your tool will still
+> > > complain we do not care
+> > > of  atomic64_try_cmpxchg() return value ?
+> > >
+> > > diff --git a/net/core/sock_diag.c b/net/core/sock_diag.c
+> > > index b11593cae5a09b15a10d6ba35bccc22263cb8fc8..58efb9c1c8dd4f8e5a3009a0176e1b96487daaff
+> > > 100644
+> > > --- a/net/core/sock_diag.c
+> > > +++ b/net/core/sock_diag.c
+> > > @@ -31,6 +31,10 @@ u64 __sock_gen_cookie(struct sock *sk)
+> > >                 u64 new = gen_cookie_next(&sock_cookie);
+> > >
+> > >                 atomic64_try_cmpxchg(&sk->sk_cookie, &res, new);
+> > > +               /* Another cpu/thread might have won the race,
+> > > +                * reload the final value.
+> > > +                */
+> > > +               res = atomic64_read(&sk->sk_cookie);
+> > >         }
+> > >         return res;
+> > >  }
+> >
+> > I think it's saying it was expecting an update loop -- i.e. to make sure
+> > the value actually got swapped (the "try" part...)?
 > 
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > When a boolean 'true' is written to this attribute the region driver
-> > retrieves the poison list for the capacity each device contributes
-> > to this region. The list includes addresses that are poisoned, or
-> > would result in poison if accessed, and the source of the poison.
-> > The retrieved errors are logged as kernel trace events with the
-> > label 'cxl_poison'.
-> > 
-> > Devices not supporting the poison list capability are ignored.
-> > 
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> Trivial comment inline you might want to consider.
+> The value has been updated, either by us or someone else.
+> 
+> We do not particularly care who won the race, since the value is
+> updated once only.
 
-Thanks, got it!  I will 'include' your tag going forward.
-> 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> > ---
-> >  Documentation/ABI/testing/sysfs-bus-cxl | 14 +++++++++++
-> >  drivers/cxl/core/region.c               | 33 +++++++++++++++++++++++++
-> >  2 files changed, 47 insertions(+)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
-> > index 1c5f4a853ba2..54fad3bdcb2b 100644
-> > --- a/Documentation/ABI/testing/sysfs-bus-cxl
-> > +++ b/Documentation/ABI/testing/sysfs-bus-cxl
-> > @@ -402,3 +402,17 @@ Description:
-> >  		attribute is only visible for devices supporting the
-> >  		capability. The retrieved errors are logged as kernel
-> >  		trace events with the label 'cxl_poison'.
-> > +
-> > +
-> > +What:		/sys/bus/cxl/devices/regionZ/trigger_poison_list
-> > +Date:		November, 2022
-> > +KernelVersion:	v6.2
-> > +Contact:	linux-cxl@vger.kernel.org
-> > +Description:
-> > +		(WO) When a boolean 'true' is written to this attribute the
-> > +		region driver retrieves the poison list for the capacity
-> > +		each device contributes to this region. The list includes
-> Trivial: Same as in previous patch. "includes" is too vague.
-> 
-> > +		addresses that are poisoned, or would result in poison if
-> > +		accessed, and the source of the poison. The retrieved
-> > +		errors are logged as kernel trace events with the label
-> > +		'cxl_poison'.
-> > diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> > index f9ae5ad284ff..68821238491e 100644
-> > --- a/drivers/cxl/core/region.c
-> > +++ b/drivers/cxl/core/region.c
-> > @@ -72,6 +72,38 @@ static int is_dup(struct device *match, void *data)
-> >  	return 0;
-> >  }
-> >  
-> > +static ssize_t trigger_poison_list_store(struct device *dev,
-> > +					 struct device_attribute *attr,
-> > +					 const char *buf, size_t len)
-> > +{
-> > +	struct cxl_region *cxlr = to_cxl_region(dev);
-> > +	struct cxl_region_params *p = &cxlr->params;
-> > +	struct cxl_endpoint_decoder *cxled;
-> > +	struct cxl_memdev *cxlmd;
-> > +	u64 offset, length;
-> > +	int rc, i;
-> > +	bool tmp;
-> > +
-> > +	if (kstrtobool(buf, &tmp))
-> > +		return -EINVAL;
-> > +
-> > +	for (i = 0; i <  p->nr_targets; i++) {
-> > +		cxled = p->targets[i];
-> > +		cxlmd = cxled_to_memdev(cxled);
-> > +		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
-> > +			      cxlmd->cxlds->enabled_cmds))
-> > +			continue;
-> > +
-> > +		offset = cxl_dpa_resource_start(cxled);
-> > +		length = cxl_dpa_size(cxled);
-> > +		rc = cxl_mem_get_poison(cxlmd, offset, length, cxlr);
-> > +		if (rc)
-> > +			return rc;
-> > +	}
-> > +	return len;
-> > +}
-> > +static DEVICE_ATTR_WO(trigger_poison_list);
-> > +
-> >  static ssize_t uuid_store(struct device *dev, struct device_attribute *attr,
-> >  			  const char *buf, size_t len)
-> >  {
-> > @@ -570,6 +602,7 @@ static struct attribute *cxl_region_attrs[] = {
-> >  	&dev_attr_interleave_granularity.attr,
-> >  	&dev_attr_resource.attr,
-> >  	&dev_attr_size.attr,
-> > +	&dev_attr_trigger_poison_list.attr,
-> >  	NULL,
-> >  };
-> >  
-> 
+Ah! Okay, now I understand the added comment. Thanks :)
+
+-- 
+Kees Cook
