@@ -2,109 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D7C62EDC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97C162EDBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 07:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241185AbiKRGjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 01:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S241071AbiKRGjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 01:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239518AbiKRGjZ (ORCPT
+        with ESMTP id S230287AbiKRGjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 01:39:25 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B316B9A5F5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:24 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so6838554wmb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Nov 2022 22:39:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h6CxYHRM9Zn+3KcDKgeunTZ9HLvRKum2ivGbFC1vvMM=;
-        b=wVDfywP+wfkvyvPtAy0+5GJ2Cxi5HyktVpg0OkJUNO3u3TMRv0okjrAWDf7YU5foNB
-         0cCWQlcmIf9nqQjN5YyLmuExQdlCNxSHWWLXMYjkBQSDSE8KYb62LdNlVG2ETYD7XpXH
-         GrLSb5YQkrmtyaodNSeW6nMD2/8424vLWm50pjZAqsu74SQTsyxHYmFoLdbx4D7Itx4F
-         3/98567ellps41N4ECLKsveASgtSyxzTWq3lhZUpGWBlaCHf54mTUGjAWYPe440P9pMP
-         8oVL0y8Bb4yudnvwrBdrEssbUc2IlDU3gNm1LW5vNQb8KlNgXSSD3t//SiCnux+AfbrR
-         sSfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h6CxYHRM9Zn+3KcDKgeunTZ9HLvRKum2ivGbFC1vvMM=;
-        b=eIlBKmfcF/SL0fhLIYX3L1oSOlmMfMNwNvs8+2IAhnUj+QjWDUPHZjUahTLzt8ndxH
-         MPiqzfxL2aCfn0ZrajAxhAf90d6J7d8Tudfv/3htKrBgOxImfah6OW6ULhII7uyXCPd3
-         G/HQBy+dGiDkcEURV3LrF6QzAmNYtboVUxrHhrJdzEPS14xr+G+MrUqMfg5dazYErS4b
-         K8FwHmKyNPmS/JsPi82ij5dfEWSdFjMO3S2TFXGQTOCH+ICDK+t1V2iIIVYZHmqiAFN5
-         7IwizrmAaQkuOM5ZKihjE86ezebrVVulLbAwaQfcLYnvrn8RE0mSnRcibhDJUm9QleWY
-         JXkw==
-X-Gm-Message-State: ANoB5plXzS2gdaGA7HXJhqWN600zJ1wOm/K1/I3Hsd3tW83Sug+luffe
-        3Fdgc2sVoUqJ9pi7vbnEd2BYfA==
-X-Google-Smtp-Source: AA0mqf6w+7ANgTGzcxjBRkdTfyYeB+65uofOtoagSpK1Orhrxl0MjoyDE7Ser07YytKKkuM24MtYRA==
-X-Received: by 2002:a7b:ce8c:0:b0:3cf:8b2d:8cbc with SMTP id q12-20020a7bce8c000000b003cf8b2d8cbcmr3954223wmj.89.1668753563239;
-        Thu, 17 Nov 2022 22:39:23 -0800 (PST)
-Received: from localhost.localdomain ([167.98.215.174])
-        by smtp.gmail.com with ESMTPSA id n24-20020a7bcbd8000000b003b4fdbb6319sm7853861wmi.21.2022.11.17.22.39.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 01:39:18 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65B505C769;
+        Thu, 17 Nov 2022 22:39:16 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BF3923A;
         Thu, 17 Nov 2022 22:39:22 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 4/4] nvmem: lan9662-otp: Change return type of lan9662_otp_wait_flag_clear()
-Date:   Fri, 18 Nov 2022 06:38:40 +0000
-Message-Id: <20221118063840.6357-5-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221118063840.6357-1-srinivas.kandagatla@linaro.org>
-References: <20221118063840.6357-1-srinivas.kandagatla@linaro.org>
+Received: from [10.162.41.7] (unknown [10.162.41.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 174033F73B;
+        Thu, 17 Nov 2022 22:39:10 -0800 (PST)
+Message-ID: <4efc0ae1-564e-dd05-842a-46fb1aeb4ad8@arm.com>
+Date:   Fri, 18 Nov 2022 12:09:07 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V5 2/7] arm64/perf: Update struct arm_pmu for BRBE
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+Cc:     Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+ <20221107062514.2851047-3-anshuman.khandual@arm.com>
+ <8f6d3424-2650-8e8b-61f7-1431aec4633b@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <8f6d3424-2650-8e8b-61f7-1431aec4633b@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-The blamed commit introduced the following smatch warning in the
-function lan9662_otp_wait_flag_clear:
-drivers/nvmem/lan9662-otpc.c:43 lan9662_otp_wait_flag_clear() warn: signedness bug returning '(-110)'
 
-Fix this by changing the return type of the function
-lan9662_otp_wait_flag_clear() to be int instead of bool.
+On 11/9/22 17:00, Suzuki K Poulose wrote:
+> On 07/11/2022 06:25, Anshuman Khandual wrote:
+>> Although BRBE is an armv8 speciifc HW feature, abstracting out its various
+>> function callbacks at the struct arm_pmu level is preferred, as it cleaner
+>> , easier to follow and maintain.
+>>
+>> Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
+>> might not fit seamlessly, when tried to be embedded via existing arm_pmu
+>> helpers in the armv8 implementation.
+>>
+>> Updates the struct arm_pmu to include all required helpers that will drive
+>> BRBE functionality for a given PMU implementation. These are the following.
+>>
+>> - brbe_filter    : Convert perf event filters into BRBE HW filters
+>> - brbe_probe    : Probe BRBE HW and capture its attributes
+>> - brbe_enable    : Enable BRBE HW with a given config
+>> - brbe_disable    : Disable BRBE HW
+>> - brbe_read    : Read BRBE buffer for captured branch records
+>> - brbe_reset    : Reset BRBE buffer
+>> - brbe_supported: Whether BRBE is supported or not
+>>
+>> A BRBE driver implementation needs to provide these functionalities.
+> 
+> Could these not be hidden from the generic arm_pmu and kept in the
+> arm64 pmu backend  ? It looks like they are quite easy to simply
+> move these to the corresponding hooks in arm64 pmu.
 
-Fixes: 9e8f208ad5229d ("nvmem: lan9662-otp: add support")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/nvmem/lan9662-otpc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We have had this discussion multiple times in the past [1], but I still
+believe, keeping BRBE implementation hooks at the PMU level rather than
+embedding them with other PMU events handling, is a much better logical
+abstraction.
 
-diff --git a/drivers/nvmem/lan9662-otpc.c b/drivers/nvmem/lan9662-otpc.c
-index 377bf34c2946..56fc19f092a7 100644
---- a/drivers/nvmem/lan9662-otpc.c
-+++ b/drivers/nvmem/lan9662-otpc.c
-@@ -36,7 +36,7 @@ struct lan9662_otp {
- 	void __iomem *base;
- };
- 
--static bool lan9662_otp_wait_flag_clear(void __iomem *reg, u32 flag)
-+static int lan9662_otp_wait_flag_clear(void __iomem *reg, u32 flag)
- {
- 	u32 val;
- 
--- 
-2.25.1
+[1] https://lore.kernel.org/all/c3804290-bdb1-d1eb-3526-9b0ce4c8e8b1@arm.com/
 
+--------------------------------------------------------------------------
+> 
+> One thing to answer in the commit msg is why we need the hooks here.  
+> Have we concluded that adding BRBE hooks to struct arm_pmu for what is 
+> an armv8 specific feature is the right approach? I don't recall 
+> reaching that conclusion.
+
+Although it might be possible to have this implementation embedded in
+the existing armv8 PMU implementation, I still believe that the BRBE
+functionalities abstracted out at the arm_pmu level with a separate
+config option is cleaner, easier to follow and to maintain as well.
+
+Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
+might not fit seamlessly, when tried to be embedded via existing arm_pmu
+helpers in the armv8 implementation.
+
+Nonetheless if arm_pmu based additional BRBE helpers is absolutely a no
+go for folks here in general, will explore arm64 based implementation.
+----------------------------------------------------------------------------
+
+I am still waiting for maintainer's take on this issue. I will be happy to
+rework this series to move all these implementation inside arm64 callbacks
+instead, if that is required or preferred by the maintainers. But according
+to me, this current abstraction layout is much better.
+
+- Anshuman
