@@ -2,156 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CA062F320
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6A462F323
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbiKRLB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:01:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42570 "EHLO
+        id S241276AbiKRLCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234995AbiKRLBX (ORCPT
+        with ESMTP id S241764AbiKRLBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:01:23 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773D291C30
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:01:22 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-36cbcda2157so45896867b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 03:01:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ovobe2fmhyuPYDoklkU2etCcFH2NxQp5RSdNIJe8b60=;
-        b=raJdBwpGpiE+WuVHI+SLApMrpyXB/zkijj4DZV+Yc4lCCvMmxDhF19eVHQR+Jt9Abj
-         nFtdPjd4HPDBIPoHN/QHaZ7g70gPEyrL9OjoVW7nJBPtAQF0/05idVala0tCsDvZtwq6
-         mn9wn5TApuPWvDNAc3qb4xx6t5fFWt7QCO8UqOvP3z/hvTRJVJe2RfpQIc4IdOrtCKk1
-         NpBz0t55cfja3K6wcUpDI87MW9Jhsz8kU7dboIWfGmoZmAndw3cuOajSKy4+hRm9nrGm
-         0fIzjHB0nbzG0nSx9fI4VdbSKuzVNA98fsWidV3gLpMDYdPhikkbbo/7OTXQ6sL5p3jk
-         Y+TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ovobe2fmhyuPYDoklkU2etCcFH2NxQp5RSdNIJe8b60=;
-        b=sqh99nhV+xUqj/avdTEWHVOGwA80QgJto3RkIJ42tI8RLKCTtwfj5CNK/dgSIc/sY2
-         ocylcBqugpAx6YsGYSPtQVCnztGJ54hyQFyNzR7B+MGUXyoZNmdPZExe4tY94D10lWjH
-         fqe2R8XqHUmCyfcBkfFcYuVeRZLwaL8XEkMMKkwlAZ35UR64X8+QLUNwt2FP8/cmH8c3
-         mKeAFv8CDz7EdhfpEoJfFg1n4wZCXIoi8WRxYEaVcKac4ni+PwfufC82HrTwWUolSruI
-         3Z0e4sPcmxi1DrwuHBF8NQ25Y+cw1ol5CdIFSz3Jce1fxK+/wxs+EC1FmfBEZoCy9Cna
-         vXBA==
-X-Gm-Message-State: ANoB5pkWM13+jhfbvg7BUettsTu83G5tJz0toTuck5UBQM+ba2oE27SR
-        nLnxo6Tkha6ZW/ooxU4A6dwy0mmW0sN4xcK2cf2Qvg==
-X-Google-Smtp-Source: AA0mqf5JTyZRxJWSp9nZNeFD4B5joGQXfKxY0vIOKubrYnUYC6PwJW0ADwQKqfVPCvXfPacDmoHvfB03MLfTPf0+K8k=
-X-Received: by 2002:a0d:f846:0:b0:37b:e3ae:decc with SMTP id
- i67-20020a0df846000000b0037be3aedeccmr6063826ywf.418.1668769281590; Fri, 18
- Nov 2022 03:01:21 -0800 (PST)
+        Fri, 18 Nov 2022 06:01:53 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AAF99E8A;
+        Fri, 18 Nov 2022 03:01:38 -0800 (PST)
+X-UUID: ccac951579684566863168889488ab0d-20221118
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=gEw4Gu5Gnt8zOHhIWW+1I9wzg2APCr+opeqeiUE5TEE=;
+        b=MCAj3A8P+cjwi6PaRieaXBLrJdn5Lhzqtz6BE/1aqNKlR8CAJVQJuW16N5JYBIpIb3hatk7oNAuRf+/8t8QkdJovjJ8xDwAg1jNqHwFosNY2PDM49h3wc1BmofdiFbMnItGGgRt+18P55FwTDJKFNmVsTFotIjHVELOPkad4XF4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:221a4b70-40e0-44a0-a59a-b0f2fc2dbdfc,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.12,REQID:221a4b70-40e0-44a0-a59a-b0f2fc2dbdfc,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:62cd327,CLOUDID:e3f7a8f8-3a34-4838-abcf-dfedf9dd068e,B
+        ulkID:2211181901279D2G2TU4,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
+        Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: ccac951579684566863168889488ab0d-20221118
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1124821661; Fri, 18 Nov 2022 19:01:26 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 18 Nov 2022 19:01:25 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 18 Nov 2022 19:01:24 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Eddie Hung" <eddie.hung@mediatek.com>
+Subject: [PATCH] usb: host: xhci-mtk: omit shared hcd if either root hub has no ports
+Date:   Fri, 18 Nov 2022 19:01:16 +0800
+Message-ID: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1668725369-6331-1-git-send-email-quic_khsieh@quicinc.com> <1668725369-6331-2-git-send-email-quic_khsieh@quicinc.com>
-In-Reply-To: <1668725369-6331-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 18 Nov 2022 13:01:10 +0200
-Message-ID: <CAA8EJppjMK=SNbnir4QGgVJ5we1UGjrrvG6KJFgcSfRVZZm8sw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] arm64: dts: qcom: add data-lanes and
- link-freuencies into dp_out endpoint
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 at 00:50, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
-> Add both data-lanes and link-frequencies property to dp_out endpoint.
+There is error log when add a usb3 root hub without ports:
+"hub 4-0:1.0: config failed, hub doesn't have any ports! (err -19)"
 
-Bindings update?
-Deprecate the old data-lanes property?
+so omit the shared hcd if either of the root hubs has no ports, but
+usually there is no usb3 port.
 
-> Also set link-frequencies to 810000 khz at herobrine platform to have
-> max link rate limited at 810000 khz (HBR3).
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/usb/host/xhci-mtk.c | 72 +++++++++++++++++++++++--------------
+ 1 file changed, 46 insertions(+), 26 deletions(-)
 
-No. As  I stated before, the link-frequencies should list all
-supported frequencies (min/max in case the frequencies are
-continuous).
-Stating just maximum is against the property description.
-
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi   |  9 ++++++++-
->  arch/arm64/boot/dts/qcom/sc7180.dtsi           |  5 -----
->  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 10 +++++++++-
->  arch/arm64/boot/dts/qcom/sc7280.dtsi           |  5 -----
->  4 files changed, 17 insertions(+), 12 deletions(-)
->
-
-[skipped the sc7180 here. All comments noted against sc7280 apply to
-sc7180 too].
-
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> index 93e39fc..e8fca18 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> @@ -440,7 +440,15 @@ ap_i2c_tpm: &i2c14 {
->         status = "okay";
->         pinctrl-names = "default";
->         pinctrl-0 = <&dp_hot_plug_det>;
-> -       data-lanes = <0 1>;
-> +       ports {
-> +               port@1 {
-> +                       reg = <1>;
-> +                       dp_out: endpoint {
-> +                               data-lanes = <0 1>;
-> +                               link-frequencies=<810000>;
-
-Following the existing examples is nice. Not following them is frowned upon.
-
-> +                       };
-> +               };
-> +       };
-
-Just:
-
-&dp_out {
-    data-lanes = <0  1>;
-    link-frequencies = /bits/ 64 <160000000 270000000 540000000 810000000>;
-};
-
->  };
->
->  &mdss_mdp {
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index a646405..4afe53b 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -3899,11 +3899,6 @@
->                                                         remote-endpoint = <&dpu_intf0_out>;
->                                                 };
->                                         };
-> -
-> -                                       port@1 {
-> -                                               reg = <1>;
-> -                                               dp_out: endpoint { };
-> -                                       };
-
-Please leave it here. It is a part of the SoC, so it should be in SoC dtsi.
-
->                                 };
->
->                                 dp_opp_table: opp-table {
-
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index 01705e559c42..cff3c4aea036 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -485,6 +485,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 	const struct hc_driver *driver;
+ 	struct xhci_hcd *xhci;
+ 	struct resource *res;
++	struct usb_hcd *usb3_hcd;
+ 	struct usb_hcd *hcd;
+ 	int ret = -ENODEV;
+ 	int wakeup_irq;
+@@ -593,6 +594,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 
+ 	xhci = hcd_to_xhci(hcd);
+ 	xhci->main_hcd = hcd;
++	xhci->allow_single_roothub = 1;
+ 
+ 	/*
+ 	 * imod_interval is the interrupt moderation value in nanoseconds.
+@@ -602,24 +604,29 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 	xhci->imod_interval = 5000;
+ 	device_property_read_u32(dev, "imod-interval-ns", &xhci->imod_interval);
+ 
+-	xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
+-			dev_name(dev), hcd);
+-	if (!xhci->shared_hcd) {
+-		ret = -ENOMEM;
+-		goto disable_device_wakeup;
+-	}
+-
+ 	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
+ 	if (ret)
+-		goto put_usb3_hcd;
++		goto disable_device_wakeup;
+ 
+-	if (HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
++	if (!xhci_has_one_roothub(xhci)) {
++		xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
++							 dev_name(dev), hcd);
++		if (!xhci->shared_hcd) {
++			ret = -ENOMEM;
++			goto dealloc_usb2_hcd;
++		}
++	}
++
++	usb3_hcd = xhci_get_usb3_hcd(xhci);
++	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
+ 	    !(xhci->quirks & XHCI_BROKEN_STREAMS))
+-		xhci->shared_hcd->can_do_streams = 1;
++		usb3_hcd->can_do_streams = 1;
+ 
+-	ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
+-	if (ret)
+-		goto dealloc_usb2_hcd;
++	if (xhci->shared_hcd) {
++		ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
++		if (ret)
++			goto put_usb3_hcd;
++	}
+ 
+ 	if (wakeup_irq > 0) {
+ 		ret = dev_pm_set_dedicated_wake_irq_reverse(dev, wakeup_irq);
+@@ -641,13 +648,13 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 	usb_remove_hcd(xhci->shared_hcd);
+ 	xhci->shared_hcd = NULL;
+ 
+-dealloc_usb2_hcd:
+-	usb_remove_hcd(hcd);
+-
+ put_usb3_hcd:
+-	xhci_mtk_sch_exit(mtk);
+ 	usb_put_hcd(xhci->shared_hcd);
+ 
++dealloc_usb2_hcd:
++	xhci_mtk_sch_exit(mtk);
++	usb_remove_hcd(hcd);
++
+ disable_device_wakeup:
+ 	device_init_wakeup(dev, false);
+ 
+@@ -679,10 +686,15 @@ static int xhci_mtk_remove(struct platform_device *pdev)
+ 	dev_pm_clear_wake_irq(dev);
+ 	device_init_wakeup(dev, false);
+ 
+-	usb_remove_hcd(shared_hcd);
+-	xhci->shared_hcd = NULL;
++	if (shared_hcd) {
++		usb_remove_hcd(shared_hcd);
++		xhci->shared_hcd = NULL;
++	}
+ 	usb_remove_hcd(hcd);
+-	usb_put_hcd(shared_hcd);
++
++	if (shared_hcd)
++		usb_put_hcd(shared_hcd);
++
+ 	usb_put_hcd(hcd);
+ 	xhci_mtk_sch_exit(mtk);
+ 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
+@@ -700,13 +712,16 @@ static int __maybe_unused xhci_mtk_suspend(struct device *dev)
+ 	struct xhci_hcd_mtk *mtk = dev_get_drvdata(dev);
+ 	struct usb_hcd *hcd = mtk->hcd;
+ 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
++	struct usb_hcd *shared_hcd = xhci->shared_hcd;
+ 	int ret;
+ 
+ 	xhci_dbg(xhci, "%s: stop port polling\n", __func__);
+ 	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
+ 	del_timer_sync(&hcd->rh_timer);
+-	clear_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
+-	del_timer_sync(&xhci->shared_hcd->rh_timer);
++	if (shared_hcd) {
++		clear_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
++		del_timer_sync(&shared_hcd->rh_timer);
++	}
+ 
+ 	ret = xhci_mtk_host_disable(mtk);
+ 	if (ret)
+@@ -718,8 +733,10 @@ static int __maybe_unused xhci_mtk_suspend(struct device *dev)
+ 
+ restart_poll_rh:
+ 	xhci_dbg(xhci, "%s: restart port polling\n", __func__);
+-	set_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
+-	usb_hcd_poll_rh_status(xhci->shared_hcd);
++	if (shared_hcd) {
++		set_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
++		usb_hcd_poll_rh_status(shared_hcd);
++	}
+ 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
+ 	usb_hcd_poll_rh_status(hcd);
+ 	return ret;
+@@ -730,6 +747,7 @@ static int __maybe_unused xhci_mtk_resume(struct device *dev)
+ 	struct xhci_hcd_mtk *mtk = dev_get_drvdata(dev);
+ 	struct usb_hcd *hcd = mtk->hcd;
+ 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
++	struct usb_hcd *shared_hcd = xhci->shared_hcd;
+ 	int ret;
+ 
+ 	usb_wakeup_set(mtk, false);
+@@ -742,8 +760,10 @@ static int __maybe_unused xhci_mtk_resume(struct device *dev)
+ 		goto disable_clks;
+ 
+ 	xhci_dbg(xhci, "%s: restart port polling\n", __func__);
+-	set_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
+-	usb_hcd_poll_rh_status(xhci->shared_hcd);
++	if (shared_hcd) {
++		set_bit(HCD_FLAG_POLL_RH, &shared_hcd->flags);
++		usb_hcd_poll_rh_status(shared_hcd);
++	}
+ 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
+ 	usb_hcd_poll_rh_status(hcd);
+ 	return 0;
 -- 
-With best wishes
-Dmitry
+2.18.0
+
