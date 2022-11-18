@@ -2,98 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F190162F5B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9B362F5AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242027AbiKRNPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
+        id S242018AbiKRNOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241473AbiKRNPM (ORCPT
+        with ESMTP id S241312AbiKRNOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:15:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2E05801D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:14:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668777248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Fri, 18 Nov 2022 08:14:41 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE66D48774;
+        Fri, 18 Nov 2022 05:14:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1668777279; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DwgnOjsBwuRm3KvaCsNzS6B7/KxJyL7ZVpx0OHwNOwA=;
-        b=R4lvEJUwYZibNnazRzwH66GuBgnzt97h+bYWQtRMJ2i3zS232kwfZRp1U7Hf6Wtlchdqya
-        E132DDLTNl2zW3WE7b+1GMDlZ99NnwuBAySagLU3ZwBcy8D92+rg0fFxpmYYJOzX6v3dcK
-        2Rv+CzmuHMxJxyAvghYXVXF+EYJZRpE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-gGjGeDE0NEeha0WFuDPt1Q-1; Fri, 18 Nov 2022 08:14:02 -0500
-X-MC-Unique: gGjGeDE0NEeha0WFuDPt1Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD4F1811E75;
-        Fri, 18 Nov 2022 13:14:01 +0000 (UTC)
-Received: from localhost (unknown [10.39.208.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 65BF640C83EC;
-        Fri, 18 Nov 2022 13:14:01 +0000 (UTC)
-Date:   Fri, 18 Nov 2022 14:13:58 +0100
-From:   Niels de Vos <ndevos@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>, linux-fscrypt@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo Li <xiubli@redhat.com>,
-        Marcel Lauhoff <marcel.lauhoff@suse.com>
-Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
-Message-ID: <Y3eFFrhT3b0yoti9@ndevos-x1>
-References: <20221110141225.2308856-1-ndevos@redhat.com>
- <Y20a/akbY8Wcy3qg@mit.edu>
- <Y20rDl45vSmdEo3N@ndevos-x1>
- <Y3HZ/To8z76vBqYo@infradead.org>
+        bh=M1AzedYug7GwDfLpFsnro4myCbhaA1IR7C6ixaVaUME=;
+        b=GmSDzTT9zO9F5+ArV4OBentb2p3TFLkWEBcwzyPGr840UuzLLKZVF0FMtneV/g8mJ1TdUV
+        MZr2jcUqtvvZtAIyOkkcirRb447kMDrKabwVOnenabd0QB0C3uMx7sJsP1gJ/z0Qu8ode7
+        U/hA0c9LAFAHCA4WPUocmNom+o5R36Y=
+Date:   Fri, 18 Nov 2022 13:14:29 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/2] mmc: jz4740: Don't change parent clock rate for some
+ SoCs
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Message-Id: <5SOJLR.8XBYHE5WSC681@crapouillou.net>
+In-Reply-To: <IBOJLR.I7JEODTRBACJ1@crapouillou.net>
+References: <20221108045300.2084671-1-lis8215@gmail.com>
+        <20221108045300.2084671-2-lis8215@gmail.com>
+        <CAPDyKFrMqCL1-faBadVP3xB-5qiCYsyRUuOHbFZuOWfLdCXwig@mail.gmail.com>
+        <59EJLR.DQ7KHQEAEUSG2@crapouillou.net>
+        <CAKNVLfYpmJjQYFOy__PkmqcftQcQUYEKJ2V2K90MfG-1MBC_uA@mail.gmail.com>
+        <IBOJLR.I7JEODTRBACJ1@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3HZ/To8z76vBqYo@infradead.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 10:02:37PM -0800, Christoph Hellwig wrote:
-> On Thu, Nov 10, 2022 at 05:47:10PM +0100, Niels de Vos wrote:
-> > And, there actually are options like CONFIG_EXT4_FS_POSIX_ACL and
-> > CONFIG_EXT4_FS_SECURITY. Because these exist already, I did not expect
-> > too much concerns with proposing a CONFIG_EXT4_FS_ENCRYPTION...
-> 
-> ext4 is a little weird there as most file systems don't do that.
-> So I think these should go away for ext4 as well.
 
-Yeah, I understand that there is a preference for reducing the number of
-Kconfig options for filesystems. That indeed would make it a little
-easier for users, so I am supportive of that as well.
 
-> > Note that even with the additional options, enabling only
-> > CONFIG_FS_ENCRYPTION causes all the filesystems that support fscrypt to
-> > have it enabled. For users there is no change, except that they now have
-> > an option to disable fscrypt support per filesystem.
-> 
-> But why would you do that anyay?
+Le ven. 18 nov. 2022 =C3=A0 13:04:30 +0000, Paul Cercueil=20
+<paul@crapouillou.net> a =C3=A9crit :
+> Hi Siarhei,
+>=20
+> Le ven. 18 nov. 2022 =C3=A0 12:51:54 +0300, Siarhei Volkau=20
+> <lis8215@gmail.com> a =C3=A9crit :
+>> =D0=BF=D1=82, 18 =D0=BD=D0=BE=D1=8F=D0=B1. 2022 =D0=B3. =D0=B2 12:27, Pa=
+ul Cercueil=20
+>> =7F<paul@crapouillou.net>:
+>>>=20
+>>>  Hi,
+>>>=20
+>>>  (Ingenic SoCs maintainer here)
+>>>=20
+>>>  Le ven. 18 nov. 2022 =C3=A0 09:45:48 +0100, Ulf Hansson
+>>>  <ulf.hansson@linaro.org> a =C3=A9crit :
+>>>  > On Tue, 8 Nov 2022 at 05:53, Siarhei Volkau <lis8215@gmail.com>=20
+>>> =7F=7Fwrote:
+>>>  >>
+>>>  >>  Some SoCs have one clock divider for all MMC units, thus=20
+>>> =7F=7Fchanging
+>>>  >> one
+>>>  >>  affects others as well. This leads to random hangs and memory
+>>>  >>  corruptions, observed on the JZ4755 based device with two MMC=20
+>>> =7F=7Fslots
+>>>  >>  used at the same time.
+>>>  >
+>>>  > Urgh, that sounds like broken HW to me.
+>>>  >
+>>>  > The MMC blocks could share a parent clock (that would need a=20
+>>> fixed
+>>>  > rate for it to be applied), assuming there is a separate=20
+>>> =7F=7Fgate/divider
+>>>  > available per block. But there isn't'?
+>>>=20
+>>>  They do share a parent clock and have separate gates, and each MMC=20
+>>> =7F=7FIP
+>>>  block has an internal divider for the bus frequency derived from=20
+>>> =7F=7Fthat
+>>>  shared clock.
+>>>=20
+>>>  >>
+>>>  >>  List of SoCs affected includes: JZ4725b, JZ4755, JZ4760 and=20
+>>> =7F=7FJZ4760b.
+>>>  >>  However, the MMC driver doesn't distinguish JZ4760 and JZ4770
+>>>  >>  which shall remain its behavior. For the JZ4755 is sufficient=20
+>>> to
+>>>  >>  use JZ4725b's binding. JZ4750 is outside of the patch.
+>>>  >>
+>>>  >>  The MMC core has its own clock divisor, rather coarse but=20
+>>> =7F=7Fsuitable
+>>>  >> well,
+>>>  >>  and it shall keep the role of tuning clock for the MMC host in=20
+>>> =7F=7Fthat
+>>>  >>  case.
+>>>  >
+>>>  > The mmc core doesn't have a clock divisor, but it does control=20
+>>> =7F=7Fthe bus
+>>>  > clock frequency through the ->set_ios() host ops. It needs to do=20
+>>> =7F=7Fthat,
+>>>  > to be able to conform to the (e)MMC, SD and SDIO specifications.
+>>>  >
+>>>  > Can you please try to elaborate on the above, so I can better
+>>>  > understand your point?
+>>>=20
+>>>  Yes, I don't really understand the patch, TBH.
+>>>=20
+>>>  The "clk_set_rate" call will only set the shared clock to the=20
+>>> =7F=7F*maximum*
+>>>  clock frequency (host->mmc->f_max) which should be the exact same
+>>>  across all MMC IPs.
+>>=20
+>> That's the case I need different "f_max" for my HW, for some reason
+>> internal slot can't do a full rate (48MHz) but the external can, the=20
+>> =7Fsame
+>> card used for checking. So I want to set 24M for mmc0, and 48M for=20
+>> =7Fmmc1
+>> with respect to hardware limitation.
+>=20
+> The JZ4760B programming manual states that the controller is "fully=20
+> compatible with the SD Memory Card Specification 2.0". In that=20
+> specification, the bus speed is max. 25 MHz.
+>=20
+> The programming manual also says: "In data transfer mode, the MSC=20
+> controller can operate card with clock rate fpp (0 ~ 25Mhz)."
+>=20
+> So the max-frequency really should be 25 MHz.
 
-An other mail in this thread contains a description about that. It is
-more about being able to provide a kernel build that is fully tested,
-and enabling more options (or being unable to disable features)
-increases the testing efforts that are needed.
+Nevermind. I read wrong, at least the SD spec. (the quote of the=20
+programming manual is still concerning though).
 
-However, as Ted pointed out, there are other features that can not be
-disabled or limited per filesystem, so there will always be a gap in
-what can practically be tested.
+It's rated for 25 MB/s, so 50 MHz on 4 lanes.
 
-Thanks,
-Niels
+Cheers,
+-Paul
+
+>=20
+>>>=20
+>>>  So it doesn't matter if it's set 3 times by 3 different instances=20
+>>> of
+>>>  the IP, as long as they all request the same value.
+>>>=20
+>>>  Besides, I know for a fact that the mainline driver works fine on=20
+>>> =7F=7Fthe
+>>>  JZ4760(B) and JZ4725B.
+>>>=20
+>>>  Finally... even if it was correct, this change would break
+>>>  compatibility with old Device Tree files.
+>>>=20
+>>>  Cheers,
+>>>  -Paul
+>>>=20
+>>>  >>
+>>>  >>  Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+>>>  >
+>>>  > Kind regards
+>>>  > Uffe
+>>>  >
+>>>  >>  ---
+>>>  >>   drivers/mmc/host/jz4740_mmc.c | 10 +++++++++-
+>>>  >>   1 file changed, 9 insertions(+), 1 deletion(-)
+>>>  >>
+>>>  >>  diff --git a/drivers/mmc/host/jz4740_mmc.c
+>>>  >> b/drivers/mmc/host/jz4740_mmc.c
+>>>  >>  index dc2db9c18..d390ff31d 100644
+>>>  >>  --- a/drivers/mmc/host/jz4740_mmc.c
+>>>  >>  +++ b/drivers/mmc/host/jz4740_mmc.c
+>>>  >>  @@ -114,6 +114,7 @@ enum jz4740_mmc_version {
+>>>  >>          JZ_MMC_JZ4740,
+>>>  >>          JZ_MMC_JZ4725B,
+>>>  >>          JZ_MMC_JZ4760,
+>>>  >>  +       JZ_MMC_JZ4770,
+>>>  >>          JZ_MMC_JZ4780,
+>>>  >>          JZ_MMC_X1000,
+>>>  >>   };
+>>>  >>  @@ -887,7 +888,13 @@ static int=20
+>>> jz4740_mmc_set_clock_rate(struct
+>>>  >> jz4740_mmc_host *host, int rate)
+>>>  >>          int real_rate;
+>>>  >>
+>>>  >>          jz4740_mmc_clock_disable(host);
+>>>  >>  -       clk_set_rate(host->clk, host->mmc->f_max);
+>>>  >>  +
+>>>  >>  +       /*
+>>>  >>  +        * Changing rate on these SoCs affects other MMC units=20
+>>> =7F=7Ftoo.
+>>>  >>  +        * Make sure the rate is configured properly by the CGU
+>>>  >> driver.
+>>>  >>  +        */
+>>>  >>  +       if (host->version !=3D JZ_MMC_JZ4725B && host->version !=
+=3D
+>>>  >> JZ_MMC_JZ4760)
+>>>  >>  +               clk_set_rate(host->clk, host->mmc->f_max);
+>>>  >>
+>>>  >>          real_rate =3D clk_get_rate(host->clk);
+>>>  >>
+>>>  >>  @@ -992,6 +999,7 @@ static const struct of_device_id
+>>>  >> jz4740_mmc_of_match[] =3D {
+>>>  >>          { .compatible =3D "ingenic,jz4740-mmc", .data =3D (void *)
+>>>  >> JZ_MMC_JZ4740 },
+>>>  >>          { .compatible =3D "ingenic,jz4725b-mmc", .data =3D (void
+>>>  >> *)JZ_MMC_JZ4725B },
+>>>  >>          { .compatible =3D "ingenic,jz4760-mmc", .data =3D (void *)
+>>>  >> JZ_MMC_JZ4760 },
+>>>  >>  +       { .compatible =3D "ingenic,jz4770-mmc", .data =3D (void *)
+>>>  >> JZ_MMC_JZ4770 },
+>>>  >>          { .compatible =3D "ingenic,jz4775-mmc", .data =3D (void *)
+>>>  >> JZ_MMC_JZ4780 },
+>>>  >>          { .compatible =3D "ingenic,jz4780-mmc", .data =3D (void *)
+>>>  >> JZ_MMC_JZ4780 },
+>>>  >>          { .compatible =3D "ingenic,x1000-mmc", .data =3D (void *)
+>>>  >> JZ_MMC_X1000 },
+>>>  >>  --
+>>>  >>  2.36.1
+>>>  >>
+>>>=20
+>>>=20
+>=20
+
 
