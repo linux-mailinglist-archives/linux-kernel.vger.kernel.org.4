@@ -2,118 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441A062F15A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D26FE62F162
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241963AbiKRJih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S241975AbiKRJi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241455AbiKRJif (ORCPT
+        with ESMTP id S241984AbiKRJip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:38:35 -0500
-Received: from out203-205-251-60.mail.qq.com (out203-205-251-60.mail.qq.com [203.205.251.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1FF18B1E;
-        Fri, 18 Nov 2022 01:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1668764310;
-        bh=L9lq49fnBMKkQ6EuS4f8o+JJ8V25XS/8kzp+eL7tIWE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=vomaaK8om7aXuHPG/6QLlnTsOhG2LOfp1MyQo7vXmVCjQEf5+uK677n15LkBFLJ86
-         JFrohXsDRiOD9dIir6LNznuYWhBnFsqnFEzRw4PBylXhPogt8xmrLFBv8ES6NZ+9T5
-         8eEvVtyJulJFq6NiUGgmv1iEV/UnCayVqIDEruUw=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
-        id 99998261; Fri, 18 Nov 2022 17:38:25 +0800
-X-QQ-mid: xmsmtpt1668764305t267nbr74
-Message-ID: <tencent_4C0B445E0305A18FACA04B4A959B57835107@qq.com>
-X-QQ-XMAILINFO: NkHKfw09D6j8PsoUArMVLcQjYBngMKSICsRNPPynwW4aNwXDhozF5Xfxfozh+U
-         7JZcwTINU7QfSW9nR0uSp2nGEKT2hNFqCSzHVwHeBST3deqAH7PoGgkalzNmjPQ4meuiXLXymvIf
-         EvDNGmMtQs+S7Lxl2CIMK6eKf9QJmjYA0e1kq7x9wiI+Ke/2ZqLMSuJIfOqzXysWMQYG4qp07FHZ
-         V4djqscvuk0rw9UKlIFtUYEDZ4TIDmHXGcOjPhq+soHIQJOrViOEtdWylmVy7WC89SF32WFkBolI
-         B5gDwVFUjydKu/MPb7b01hQkjDuTF05FqvyI+sh5LFw+9TDsgGpmH1NKl+MR1hy2s/0+2maNrWx8
-         JpkBuSdLDZVeAZK3MatCkdkm71xMnqhzPv3e4ogGIhvP2mlIC9/3q6G8/pis/RPfm5oe+DlJf6A7
-         tOQWQ8f/dtraLFXfsFIkKt/nNKB9VemQwTvVqhDm3bTjn0Y/JYtb0gDz0mnzEI7pu0fNG+uIPa5t
-         +4cJGZch4Vs6l2QQE/qQUL3QjlIXyUusSSnvJ8etFcjBOBr6ujiKH1GGTuOEHZCJMrYDsy9bR+l/
-         +T+gPSYQb507fRXMR6JG2cKnjRg4u35FSDlxcpxfbILnvoSO3LQQK3wD/3sVW5gFn/we5ekG749N
-         2frzeyJapq1tb2Jwf1bGwRMw4DP7VVehzmYZ3m2LywiGO1HJLcfymIYNQYkJANDLTUx1GWhQjmdL
-         /HkIehXHA6eMX9irFPaq/GsBG2DRLZfHTcnm6H3ZSoKlZhDC6PCgibe8fvXaDUo+hFzlgZGaxzKm
-         rNsrOKf3HefdZOHE6n7fNrKrglfEsKRKp9/qvEyeYDPuj8m/APIGz6KkN5rS4U2LumP20OvNqbrj
-         HB/IaRCUYYnkOqX6pbKPADXfdPikMzyDx/CNDb4TcNxKOzf1Hx0n2SpBV8OMvQdLsgA5lm9B9g4k
-         Iiy+DPVCK07hGVwcV711u9opps53Cd7d0YhgT9ZECH+oMIGP6N+kAI5efpHC2xnrmyXj3+Kc4=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     andrii.nakryiko@gmail.com, sdf@google.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, dxu@dxuuu.xyz, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        lkp@intel.com, lorenzo@kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, mykolal@fb.com, rongtao@cestc.cn,
-        rtoax@foxmail.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
-Subject: [PATCH bpf-next v2] selftests/bpf: Fix error: undeclared identifier 'NF_NAT_MANIP_SRC'
-Date:   Fri, 18 Nov 2022 17:38:24 +0800
-X-OQ-MSGID: <20221118093824.108797-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <CAEf4BzZE5=OOp6OesB=P8PE=Ps62fkecDSZ9MzwHCD68=+oN0g@mail.gmail.com>
-References: <CAEf4BzZE5=OOp6OesB=P8PE=Ps62fkecDSZ9MzwHCD68=+oN0g@mail.gmail.com>
+        Fri, 18 Nov 2022 04:38:45 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B2E18B31
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:38:43 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j4so7387655lfk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MUs/U8UWXwIGlb1bQsandtxXOXMS30Tnukg59tTXU5Q=;
+        b=ZdhOkn3L3kPE7CBaKjCupDBlfZMCp9a0Lvp4vsOZtcrklNAo1Md6k+iTqPlz0qDATS
+         MbAp1PuUGUhmExf8y40RpSvPb1LFrP0ahEQWrXSR1xr2AFHhZj6XmD4n+l1aesVFhDFq
+         tBwTUNnzTCAu5KDxsRHV9Y/mAbwizoBO3T5/zknHrdFlLGPjC8kJLFVhzd53EMVQeyUV
+         ZEnBKASMDqG6iytbDYyHWj3K/Frk0GtaltIlWC9Mm1VM68O5fhe/XyGMXTieiU3Jh+lC
+         nBQS8pGgY/oTaptTn8RVOjJVbN8ktSAGA6IQS1TqgKEKYMEG+6cIcdGH6Gu7BG7LB095
+         icOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MUs/U8UWXwIGlb1bQsandtxXOXMS30Tnukg59tTXU5Q=;
+        b=BLxabdGUwoIeF9Z/yK3gF1jLLIu8/RIrxqLknJaZL0d9fC07v1rx4rrd/V7ldu8oCp
+         vABzgiihYYdDWCot3mBCZSsi0vO1DSF9sIu4cUE7SBkpk8O8LK1M5eTKF8Nq8jwfMj28
+         4nanQwU+n4tCPr0HaTOIdCxA0GEetA5Oz2rp5TMkVk0cysX12eu2MDXXaIu+9hB8wHrj
+         CS2SPfbJ5NeX4FNx6xYmrBLHef3irYUp/XReaB5Rb5gTqLL47coZgjMLePpKX1P5MvEC
+         YR9RUDjvOgIHd79bD+iOIVxekddVE7j22/jD3P8vA+2Mnwv/3LcE9CtLEbBhqDV2cau+
+         w+Vw==
+X-Gm-Message-State: ANoB5pmCl13DDXb6DqRgv7PgF5aJNlwXO0YEdQMq0xiKmpFCDgsyXlTI
+        hr3DhMwX1fn/qVJrge+qTrPUHg==
+X-Google-Smtp-Source: AA0mqf6HjyGvjYUtFqHO189lE4mjHUGDPygUNLppsV/Hq5lAX2L4dUwtZscsa9UntInpsDWxmwVyaw==
+X-Received: by 2002:a05:6512:1594:b0:4ac:a453:7cc with SMTP id bp20-20020a056512159400b004aca45307ccmr2102606lfb.226.1668764321661;
+        Fri, 18 Nov 2022 01:38:41 -0800 (PST)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id bf8-20020a056512258800b00492b0d23d24sm591329lfb.247.2022.11.18.01.38.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 01:38:40 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC fixes for v6.1-rc6
+Date:   Fri, 18 Nov 2022 10:38:39 +0100
+Message-Id: <20221118093839.6361-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hi Linus,
 
-commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
-introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
-and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
-kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c.
+Here's a PR with a couple of MMC fixes intended for v6.1-rc6. Details about the
+highlights are as usual found in the signed tag.
 
-In bpf kself-test config (tools/testing/selftests/bpf/config) nf_nat
-is compiled as built-in, this issue occurs just if it is compiled as
-module. we just hardcode 1/0 here.
+Please pull this in!
 
-How to reproduce the error:
+Kind regards
+Ulf Hansson
 
-   $ make -C tools/testing/selftests/bpf/
-   ...
-      CLNG-BPF [test_maps] test_bpf_nf.bpf.o
-      error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
-            bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-                                                         ^
-      error: use of undeclared identifier 'NF_NAT_MANIP_DST'
-            bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-                                                         ^
-   2 errors generated.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/progs/test_bpf_nf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
 
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 227e85e85dda..075cd9b31d76 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -157,10 +157,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 
- 		/* snat */
- 		saddr.ip = bpf_get_prandom_u32();
--		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-+		bpf_ct_set_nat_info(ct, &saddr, sport, 0 /*NF_NAT_MANIP_SRC*/);
- 		/* dnat */
- 		daddr.ip = bpf_get_prandom_u32();
--		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-+		bpf_ct_set_nat_info(ct, &daddr, dport, 1 /*NF_NAT_MANIP_DST*/);
- 
- 		ct_ins = bpf_ct_insert_entry(ct);
- 		if (ct_ins) {
--- 
-2.31.1
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.1-rc5
+
+for you to fetch changes up to 222cfa0118aa68687ace74aab8fdf77ce8fbd7e6:
+
+  mmc: sdhci-pci: Fix possible memory leak caused by missing pci_dev_put() (2022-11-16 17:00:39 +0100)
+
+----------------------------------------------------------------
+MMC core:
+ - Fixup VDD/VMMC voltage-range negotiation
+
+MMC host:
+ - sdhci-pci: Fix memory leak by adding a missing pci_dev_put()
+ - sdhci-pci-o2micro: Fix card detect by tuning the debounce timeout
+
+----------------------------------------------------------------
+Chevron Li (1):
+      mmc: sdhci-pci-o2micro: fix card detect fail issue caused by CD# debounce timeout
+
+Xiongfeng Wang (1):
+      mmc: sdhci-pci: Fix possible memory leak caused by missing pci_dev_put()
+
+Yann Gautier (1):
+      mmc: core: properly select voltage range without power cycle
+
+ drivers/mmc/core/core.c              | 8 +++++++-
+ drivers/mmc/host/sdhci-pci-core.c    | 2 ++
+ drivers/mmc/host/sdhci-pci-o2micro.c | 7 +++++++
+ 3 files changed, 16 insertions(+), 1 deletion(-)
