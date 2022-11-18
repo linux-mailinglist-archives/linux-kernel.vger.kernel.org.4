@@ -2,97 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9FA62F604
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C6A62F60B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 14:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241815AbiKRN36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 08:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        id S241464AbiKRNaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 08:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241597AbiKRN32 (ORCPT
+        with ESMTP id S241789AbiKRN36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 08:29:28 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D883D532E6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:29:26 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id j16so8179653lfe.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:29:26 -0800 (PST)
+        Fri, 18 Nov 2022 08:29:58 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E324A5F96
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:29:56 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso4058679wmo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 05:29:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=q/TyOqr73oo6gB6yR08kHAfoWVVQLDrClTo0sJTWwhc=;
-        b=CmrWBXFllKIQAsoSTeOMuz2gdKXRU9BA6YQPz6GcNHw8gIIb2PyFCYmnzOn5Wm0OK0
-         jUN07r6dzLtojBMomFaxN6WRPZ0nhvGH0A1AN2owJjGfUN+3lRO6NYdKktYQipEkTfOb
-         DrJeCsufw8b69Yp+fQqqj8pVaHYkchrK2ibwo=
+        bh=HN8LVu2tBOU+OG4LnFinIFanAXLqtN8dB9g7K9KkfjU=;
+        b=OG2Ckv2ZO0fmf4LFpZ1ezKwfBJtCEtj08HMol4o7P/Y/9Ta89WhfUr3KKSF/viNvCS
+         Y2ZI5LjDOEBbGfVDg1BNP7WAozSBVCRJSPz0ubyYaaAeOrSEqRPWIv4HqA6hIhXRbyCs
+         z3Q6LA5CQYLLyPVszidp2Cv0N6FhlbL9Am8OjFiludhX67cUsXWwjDY01oFyhvbFj9CT
+         8qZGqZOOphmvobWLK2G61e5D/yCVnvjcEJKLmXM0HYkY3LOX2g0cjeFwC9R6BUgKV6Qf
+         1v9OwBYOVyWeKLa1Mquh74I6yx3SLyhX9aN0PzZsw8wSUrtQxzhVIoWyoh86XMxaYAMu
+         Gzsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q/TyOqr73oo6gB6yR08kHAfoWVVQLDrClTo0sJTWwhc=;
-        b=hG0YfbDLtssfM5qKQE0ku68S5rPIyMXldkW9FLdehyQFoGKxmKfBYk6dvji5VfAEpS
-         SHCLzOkcH5OSZDdy9Fmfq4S9IUJEaDlxGG3ms35mgvW6sKCP+TPYrcPsLVbddEve8KQm
-         Krsy9oYNMakrMcCkHGRGTefcsvBJVZuBul02typZC5if3HuPDWAkzPbfz+C/XI6lzVZg
-         P2hiR24/JwffrYRgoxvFQ4PxkB6b3gedMqWHHImq5bd5XAiUKpnSHCL+v21jH/BOYqXr
-         3cbJafnpZLbT3jdLzp11mSP8bCb+wp4S+ZPKpH5dyMmji7wiFl2hoKbpfNEJjrQqsmUX
-         0IuA==
-X-Gm-Message-State: ANoB5pm3CQBeGqRNm/3K0puJhHvlrQmMAAT5pmBgGnMbcgTkYbAt08zv
-        0O4IJBNppOfNbvwUucyAGnS/iA==
-X-Google-Smtp-Source: AA0mqf7PW78FYCP+kjvydfHU5oMH2AIMPUs7xKcByPxInuLc8lVC/femYfseh7ZMaBgKL53nRyPDPA==
-X-Received: by 2002:a05:6512:34c7:b0:4a2:2b23:f17f with SMTP id w7-20020a05651234c700b004a22b23f17fmr2285963lfr.688.1668778165188;
-        Fri, 18 Nov 2022 05:29:25 -0800 (PST)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id 13-20020a2e164d000000b00277078d4504sm656431ljw.13.2022.11.18.05.29.24
+        bh=HN8LVu2tBOU+OG4LnFinIFanAXLqtN8dB9g7K9KkfjU=;
+        b=tbmEmJ1E5y4IHAUONFJKsA5D9DuJc3g+f1zLsh3RA3rSOUAQSdMXPOiYM0FoaAw/9k
+         iRzFdyZYCrPwmIBAm/bXfNuQ3XDoJb+bMXgWsrkBMsN9zNagd6VoW9yba+mclGpXMGj/
+         3edOXAKUhXKGGUN783oe4DQe1scHCuZ6WxARprteLIW92KdGUf3l25qngDpm+Lz2VDxs
+         CFEO0fIOcx5jc26HFRBJpuwUH0hVNoqML7VgZVd47lIZ1QMxbLN+hnCTwizusaqyojjd
+         8pJ+QsC++cOtnOa3NDg6JykQ1vpanbsgAis0sr1ZBevK/MQWV5w0hPJuf6IVv3EDtsjr
+         F2Xg==
+X-Gm-Message-State: ANoB5pmA/CZz/ThyY40hhu/dJoG+vY/drT8VTiXI/ypAVBEWdJf0K91C
+        7lrVj//1E+6bPrFodntes0izUQ==
+X-Google-Smtp-Source: AA0mqf7i8dywQOhFfIFUfTreejp7KFR0nIu101KikdsXbMRrFt1RKBxdvI3qgRZVHoWm4mbMT54yiQ==
+X-Received: by 2002:a05:600c:ac1:b0:3c6:d18b:304b with SMTP id c1-20020a05600c0ac100b003c6d18b304bmr8044158wmr.142.1668778195318;
+        Fri, 18 Nov 2022 05:29:55 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id r13-20020a056000014d00b0024165454262sm3607708wrx.11.2022.11.18.05.29.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 05:29:24 -0800 (PST)
-Message-ID: <b81d2ffe-efc3-8e2d-de7b-ed2bfa2449d0@rasmusvillemoes.dk>
-Date:   Fri, 18 Nov 2022 14:29:23 +0100
+        Fri, 18 Nov 2022 05:29:54 -0800 (PST)
+Message-ID: <0993d2bd-c0f2-8139-8f02-84abe6b8ad8b@linaro.org>
+Date:   Fri, 18 Nov 2022 13:29:52 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] iio: addac: ad74413r: fix integer promotion bug in
- ad74413_get_input_current_offset()
-Content-Language: en-US, da
-To:     "Sa, Nuno" <Nuno.Sa@analog.com>,
-        "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221118123209.1658420-1-linux@rasmusvillemoes.dk>
- <SJ0PR03MB6778D6C0682294002296E54C99099@SJ0PR03MB6778.namprd03.prod.outlook.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <SJ0PR03MB6778D6C0682294002296E54C99099@SJ0PR03MB6778.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 07/18] dt-bindings: msm: dsi-controller-main: Add
+ compatible strings for every current SoC
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        quic_mkrishn@quicinc.com, linux-arm-msm@vger.kernel.org
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>
+References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org>
+ <20221107235654.1769462-8-bryan.odonoghue@linaro.org>
+ <aeb59d3c-34d0-f00a-bfc3-524cd03acb71@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <aeb59d3c-34d0-f00a-bfc3-524cd03acb71@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 14.17, Sa, Nuno wrote:
-
->> Casting to int avoids that promotion and results in the correct -32767
->> output.
+On 08/11/2022 12:46, Dmitry Baryshkov wrote:
+> On 08/11/2022 02:56, Bryan O'Donoghue wrote:
+>> Currently we do not differentiate between the various users of the
+>> qcom,mdss-dsi-ctrl. The driver is flexible enough to operate from one
+>> compatible string but, the hardware does have some significant 
+>> differences
+>> in the number of clocks.
 >>
->> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->> ---
+>> To facilitate documenting the clocks add the following compatible strings
+>>
+>> - qcom,mdss-dsi-ctrl-apq8064
 > 
-> After adding proper Fixes: tag,
+> Generic comment: I think we'd better follow the arm/qcom-soc.yaml and 
+> use qcom,soc-something as compat string. This would leave us with 
+> qcom,apq8064-dsi-ctrl
 > 
-> Reviewed-by: Nuno Sá <nuno.sa@analog.com>
+> I'm not sure if we want to follow the qcm2290 approach and encode the 
+> DSI ctrl revision here (6g vs v2).
 
-That would be
+For qcm2290 I'm thinking qcm2290-dsi-ctrl - without the 6g piece.
 
-Fixes: fea251b6a5db (iio: addac: add AD74413R driver)
+a) Nobody is using the compat at the moment
+b) I'm not sure what - if any real information the silicon version
+    number conveys here.
 
-Thanks,
-Rasmus
++ Loic, Shawn
+
+---
+bod
 
