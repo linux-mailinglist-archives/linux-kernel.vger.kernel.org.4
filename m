@@ -2,141 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EBE62EF72
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0FC62EF6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 09:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241275AbiKRIan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 03:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S241473AbiKRIaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 03:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241520AbiKRI35 (ORCPT
+        with ESMTP id S241514AbiKRI34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 03:29:57 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502AB45EED;
-        Fri, 18 Nov 2022 00:29:27 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id l15so2718399qtv.4;
-        Fri, 18 Nov 2022 00:29:27 -0800 (PST)
+        Fri, 18 Nov 2022 03:29:56 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10C1EED0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:29:25 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so3499805wmi.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 00:29:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MehYhB6F0Q5eHfYcAMk4Q22mdZNFopk2+xLRwUYYDiU=;
+        b=Tc9K7qBbu2jDZJ/r2Eoy+5Uf3qf770e9f+doGH/fjoM30oPsXj2/NidmK5eE09oGzJ
+         +vgJ+4cHDqBbm8HnmUN9MigS6qOjnUnZ28FL8T9i3a3uISZAk9lo3brKybaTF60x/AHz
+         PhULHjqc72htt980FOaq740ETBTbpv+XH20U/atQ+rpsHr08z+HrOC8ImM0dXyEdIjC7
+         WaKd9QDOw7We6YKsO4QRBelPw/0jfOeP+Wtbj9nHeoHD3+D9LcSj0DLBnC9d0OBlsAo2
+         FdPdEao0qROC7JuLuXahe5xk1hTmkvh+CA10NttYBUexvp7GzSWxcJidEWs1eVc+mSOJ
+         CL+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oW1s8w8JVv/wucuGCYQ/JynUk15BPhcJ2fHJb+VHmyA=;
-        b=zXEj0l/2GiditxAoWDgaZJVsDvbhX90bMMH8+iEqSeUBtL0qzHLLzDVVFndcu/rbib
-         w3NVomJF81XdgKi68RqRFf85CDZN2jaJDOX/kFn+fYCGU/ONqIXS534d/8XTCjI1nAFO
-         yMaTAvz+FtxOsb50bYkyStypVtEkl6F3ZUdIR88bmvtno4OGGNS9Te/AYSs6uJtkTkUY
-         alMVDeYWvGVfudDott7mXltmGpVoELpo18LUTrX+epspTAIdoLrC6pZ244cDDEzMXvRT
-         ydQHoOsrzemgBKm0P2lmN/jsbA84+xfmeRLFd36+7lGKvZdT7CpppNUL0uVsJqMrzM6a
-         MCVw==
-X-Gm-Message-State: ANoB5pnBBimaMAf0sP31w3kkFFCXI29aQp5dpxvp2IOsPz3ixgNInGun
-        Zs7W6zLewLuzc0rIXXL1FzFkM1Bg2fcUVQ==
-X-Google-Smtp-Source: AA0mqf5pFJSnCQNCzgktDIe9BOZ+YJg6Bjp/RENK9j8HJLEgxDkMYtneY5zTAQJQ21KCMQiSf36DUg==
-X-Received: by 2002:a05:622a:429a:b0:3a1:e533:23a7 with SMTP id cr26-20020a05622a429a00b003a1e53323a7mr5533205qtb.197.1668760166111;
-        Fri, 18 Nov 2022 00:29:26 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id dt54-20020a05620a47b600b006fbc0da4b0csm2040195qkb.48.2022.11.18.00.29.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 00:29:25 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3938dc90ab0so23796727b3.4;
-        Fri, 18 Nov 2022 00:29:25 -0800 (PST)
-X-Received: by 2002:a05:690c:b81:b0:37e:6806:a5f9 with SMTP id
- ck1-20020a05690c0b8100b0037e6806a5f9mr5549359ywb.47.1668760164716; Fri, 18
- Nov 2022 00:29:24 -0800 (PST)
+        bh=MehYhB6F0Q5eHfYcAMk4Q22mdZNFopk2+xLRwUYYDiU=;
+        b=Lc2qG1NPbfUOUIXQAFa8Kj+zQd+y4zMp+fMy8hInV1V7Njp0BVzuDR0LnV4NHIfTtP
+         Yp/4evRxysNB5Tyz1CF+A5Fwb0igDnAvDpZcEohjaU5BZn/j/8QbgPaw7+SwE/l5DJ57
+         3nRyyfmV/7cn5CecHuwJltrdPRWKAunRm3nS7Y/lVZdhEBYyEft8HLrrgzW5vl3kIg4O
+         0ewmMhpAH0yT2tIlYGXskcwEk4hQlDQ/gtrGoiPBCSD7rG7Kmeya4ZGhjL5h7hEHW3R0
+         g8/7lhZUDgGH3fBx3AxMUJUEbutBo8sTKqgTKiZnd1vXBoIyzeRJd8Z9eDF85Fb2i1dO
+         NicQ==
+X-Gm-Message-State: ANoB5plAyv5aqfCHDPY3icxE/E0GDxStgnCVjQ99P7ZivokzxWVukP1V
+        QH10yWSrMiiTvoR1mjCK6D5ybg==
+X-Google-Smtp-Source: AA0mqf59fUADY3sUukFZnRP7lC2MzZfO/bqTdIj1/GDrGS++AzdDdwEmzyyMRBDBohKIXJizSXbk5Q==
+X-Received: by 2002:a1c:e917:0:b0:3cf:681a:43e1 with SMTP id q23-20020a1ce917000000b003cf681a43e1mr3914195wmc.126.1668760164367;
+        Fri, 18 Nov 2022 00:29:24 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id p18-20020adfe612000000b002366a624bd4sm869268wrm.28.2022.11.18.00.29.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 00:29:24 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Fri, 18 Nov 2022 09:29:21 +0100
+Subject: [PATCH v2] dt-bindings: interconnect: qcom-bwmon: document SM8550
+ compatibles
 MIME-Version: 1.0
-References: <d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be>
- <20221116123115.6b49e1b8@kernel.org> <CAAvyFNhbsks96=yyWHDCi-u+A1vaEy845_+pytghAscoG0rrTQ@mail.gmail.com>
- <20221116141519.0ef42fa2@kernel.org> <CAAvyFNjHp8-iq_A08O_H2VwEBLZRQe+=LzBm45ekgOZ4afnWqA@mail.gmail.com>
-In-Reply-To: <CAAvyFNjHp8-iq_A08O_H2VwEBLZRQe+=LzBm45ekgOZ4afnWqA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 18 Nov 2022 09:29:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVQdax10pAgNBbAVDXgVVTAQC93GR1f_4DuKfdAXngNMA@mail.gmail.com>
-Message-ID: <CAMuHMdVQdax10pAgNBbAVDXgVVTAQC93GR1f_4DuKfdAXngNMA@mail.gmail.com>
-Subject: Re: [PATCH net-next] tcp: Fix tcp_syn_flood_action() if CONFIG_IPV6=n
-To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chris Down <chris@chrisdown.name>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20221114-narmstrong-sm8550-upstream-bwmon-v2-0-20c555e3ba5d@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jamie,
+Document the compatibles used to describe the Bandwidth Monitors
+present on the SM8550 platform.
 
-On Fri, Nov 18, 2022 at 2:50 AM Jamie Bainbridge
-<jamie.bainbridge@gmail.com> wrote:
-> On Thu, 17 Nov 2022 at 08:15, Jakub Kicinski <kuba@kernel.org> wrote:
-> > On Thu, 17 Nov 2022 08:39:43 +1100 Jamie Bainbridge wrote:
-> > > >         if (v6) {
-> > > > #ifdef v6
-> > > >                 expensive_call6();
-> > > > #endif
-> > > >         } else {
-> > > >                 expensive_call6();
-> > > >         }
-> > >
-> > > These should work, but I expect they cause a comparison which can't be
-> > > optimised out at compile time. This is probably why the first style
-> > > exists.
-> > >
-> > > In this SYN flood codepath optimisation doesn't matter because we're
-> > > doing ratelimited logging anyway. But if we're breaking with existing
-> > > style, then wouldn't the others also have to change to this style? I
-> > > haven't reviewed all the other usage to tell if they're in an oft-used
-> > > fastpath where such a thing might matter.
-> >
-> > I think the word style already implies subjectivity.
->
-> You are right. Looking further, there are many other ways
-> IF_ENABLED(CONFIG_IPV6) is used, including similar to the ways you
-> have suggested.
->
-> I don't mind Geert's original patch, but if you want a different
-> style, I like your suggestion with v4 first:
->
->         if (v4) {
->                 expensive_call4();
-> #ifdef v6
->         } else {
->                 expensive_call6();
-> #endif
->         }
+A BWMON v4 IP monitors the CPU bandwidth, and a v5 does the LLCC
+bandwidth monitoring.
 
-IMHO this is worse, as the #ifdef/#endif is spread across the two branches
-of an if-conditional.
+This is described by adding "llcc" and "cpu" into the compatible
+strings to differentiate the BWMON IPs.
 
-Hence this is usually written as:
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Georgi Djakov <djakov@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v2:
+- Reworded commit message
+- Added Reviewed-by from Krzysztof
+- Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-bwmon-v1-0-b6dd08927f35@linaro.org
+---
+ .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml         | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-            if (cond1) {
-                    expensive_call1();
-            }
-    #ifdef cond2_enabled
-           else {
-                    expensive_call1();
-            }
-    #endif
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+index be29e0b80995..00b635662697 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+@@ -26,8 +26,13 @@ properties:
+           - enum:
+               - qcom,sc7280-cpu-bwmon
+               - qcom,sdm845-bwmon
++              - qcom,sm8550-cpu-bwmon
+           - const: qcom,msm8998-bwmon
+       - const: qcom,msm8998-bwmon       # BWMON v4
++      - items:
++          - enum:
++              - qcom,sm8550-llcc-bwmon
++          - const: qcom,sc7280-llcc-bwmon
+       - const: qcom,sc7280-llcc-bwmon   # BWMON v5
+       - const: qcom,sdm845-llcc-bwmon   # BWMON v5
+ 
 
-Gr{oetje,eeting}s,
+---
+base-commit: 3aec1f3082a7f388d04a1fa1a351aa25fd6335f0
+change-id: 20221114-narmstrong-sm8550-upstream-bwmon-a7c6227fab6d
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
