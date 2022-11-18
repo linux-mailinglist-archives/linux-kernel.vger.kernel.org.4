@@ -2,139 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD5C62FBED
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A421162FBEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242273AbiKRRrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        id S242406AbiKRRrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235251AbiKRRrK (ORCPT
+        with ESMTP id S242115AbiKRRrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:47:10 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FB85ADD0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:47:09 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 130so5541914pfu.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:47:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LYgVHTNdhuKGn3HeoDWlYgXT5XNzGFpkTsd1oGMfmNE=;
-        b=iRN9OeMwK3TDCq7O7YVnHMhkzEM0ss9fAbaDSWX0HrSO89FWSOIjB+hwcZf5kpa26K
-         3DRVmtHoq70imca9Mb0jA4cNe+HtkzFIB7OeYjldM0oJdK0asuSDHVGvAULOiv4s3jH4
-         xe/thrb0x+iPhhJg30xmvLwVzTs0+kN1uzhi7bttsH2yC2XT8E/U/R8ZXIQJnDAgjSXN
-         rHWzBOsJ4Rfs0t6RY2PVL14Eg+6e4nZgzNctyw0Co2qRhfUsugKvxesJgszthD7ugsL7
-         eQ5r1icpoLwiIC0JW3O9havGk/ESHxxHXGmQEshpHiJS/SaipKKi506o///6/VivBGgl
-         5A3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LYgVHTNdhuKGn3HeoDWlYgXT5XNzGFpkTsd1oGMfmNE=;
-        b=GH7V/KBh97Imyxek63comhiJsJH7GX0HIolrwaQSSLQ3NdUfY2BEU3dFuf/Sog6IXi
-         f++Aac9PgjEZS4u0htWs1tByoIu3CnB4kmzKt8P9P3F2aWDAlUPuStGcwDKnuQk0rGK+
-         WNr/bwikWWgrs3U0CObB9QVNwBU5Yx/LTSaXRatHgHHnPL0KopMy/hhcTBjFtVUurjiS
-         qEu+8+R2sRs3lsoG/kGH07ExJ+J8r8wp9GE3LFjsCjRR03cW8jLm26Y88K6pQIIFwFbt
-         eF/EoklzOG+1zsUwwH2Cew+i4MajcVoKyAS8rTxqb24WQwQbM1gzdyThWELSC2jIg/uI
-         Ge0Q==
-X-Gm-Message-State: ANoB5pmAAYF4jkdlz+uao2wAA3eUBVQ65CDsOr5AhcLL7CRgwfNRPfXi
-        OxPOuT90/tsjuPa8tVgfp8j7b0v8jcsGNfqcAzro9Q==
-X-Google-Smtp-Source: AA0mqf6IHtrzcOhp8Q/72YsEOMVAsv9PHtoWXfZX+/1Mu6eYsMTDT7cLSNTqeYZsDPN1995RAIYGx06VPrvwPZS75sA=
-X-Received: by 2002:a63:224c:0:b0:46b:8e9:747 with SMTP id t12-20020a63224c000000b0046b08e90747mr7529166pgm.365.1668793628705;
- Fri, 18 Nov 2022 09:47:08 -0800 (PST)
+        Fri, 18 Nov 2022 12:47:18 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B290F6035C;
+        Fri, 18 Nov 2022 09:47:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71A2123A;
+        Fri, 18 Nov 2022 09:47:23 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.34.127])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42EAB3F663;
+        Fri, 18 Nov 2022 09:47:15 -0800 (PST)
+Date:   Fri, 18 Nov 2022 17:47:05 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH V5 2/7] arm64/perf: Update struct arm_pmu for BRBE
+Message-ID: <Y3fFGQN55+LM5s5u@FVFF77S0Q05N.cambridge.arm.com>
+References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
+ <20221107062514.2851047-3-anshuman.khandual@arm.com>
+ <8f6d3424-2650-8e8b-61f7-1431aec4633b@arm.com>
+ <4efc0ae1-564e-dd05-842a-46fb1aeb4ad8@arm.com>
 MIME-Version: 1.0
-References: <20221117220339.341290-1-irogers@google.com>
-In-Reply-To: <20221117220339.341290-1-irogers@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 18 Nov 2022 09:46:57 -0800
-Message-ID: <CAKwvOdnc28gwv619=efnp2XYBFgv6fkSa8Z4t6M4XygPR+uC8A@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] objtool build improvements
-To:     Ian Rogers <irogers@google.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4efc0ae1-564e-dd05-842a-46fb1aeb4ad8@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 2:03 PM Ian Rogers <irogers@google.com> wrote:
->
-> Install libsubcmd and then get headers from there, this avoids
-> inadvertent dependencies on things in tools/lib. Fix V=1
-> support. Clean up how HOSTCC is used to override CC to avoid CFLAGS
-> being set for say gcc, and then CC being overridden to clang. Support
-> HOSTCFLAGS as a make option.
 
-Hi Ian,
-Thanks for the patch set! I'm particularly interested in fixing the
-plumbing of HOSTCFLAGS into objtool properly.
+Hi Anshuman,
 
-Does this patch series depend on recent work you were doing to perf
-and libsubcmd? When I apply it to mainline (84368d882b96) or
-linux-next (20221118), I observe build failures with it.
+Apologies for the delayi n reviewing this.
 
-```
-/bin/sh: line 1: cd:
-/android0/kernel-all/tools/objtool/libsubcmd/tools/objtool/: No such
-file or directory
-../../scripts/Makefile.include:17: *** output directory
-"/android0/kernel-all/tools/objtool/libsubcmd/tools/objtool/" does not
-exist.  Stop.
-make[3]: *** [Makefile:82:
-/android0/kernel-all/tools/objtool/libsubcmd/libsubcmd.a] Error 2
-make[3]: *** Waiting for unfinished jobs....
-builtin-check.c:6:10: fatal error: 'subcmd/parse-options.h' file not found
-#include <subcmd/parse-options.h>
-         ^~~~~~~~~~~~~~~~~~~~~~~~
-```
-Which I also observe when just doing a regular kernel build and not
-just tools/objtool/.
+On Fri, Nov 18, 2022 at 12:09:07PM +0530, Anshuman Khandual wrote:
+> On 11/9/22 17:00, Suzuki K Poulose wrote:
+> > On 07/11/2022 06:25, Anshuman Khandual wrote:
+> >> Although BRBE is an armv8 speciifc HW feature, abstracting out its various
+> >> function callbacks at the struct arm_pmu level is preferred, as it cleaner
+> >> , easier to follow and maintain.
+> >>
+> >> Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
+> >> might not fit seamlessly, when tried to be embedded via existing arm_pmu
+> >> helpers in the armv8 implementation.
+> >>
+> >> Updates the struct arm_pmu to include all required helpers that will drive
+> >> BRBE functionality for a given PMU implementation. These are the following.
+> >>
+> >> - brbe_filter    : Convert perf event filters into BRBE HW filters
+> >> - brbe_probe    : Probe BRBE HW and capture its attributes
+> >> - brbe_enable    : Enable BRBE HW with a given config
+> >> - brbe_disable    : Disable BRBE HW
+> >> - brbe_read    : Read BRBE buffer for captured branch records
+> >> - brbe_reset    : Reset BRBE buffer
+> >> - brbe_supported: Whether BRBE is supported or not
+> >>
+> >> A BRBE driver implementation needs to provide these functionalities.
+> > 
+> > Could these not be hidden from the generic arm_pmu and kept in the
+> > arm64 pmu backend  ? It looks like they are quite easy to simply
+> > move these to the corresponding hooks in arm64 pmu.
+> 
+> We have had this discussion multiple times in the past [1], but I still
+> believe, keeping BRBE implementation hooks at the PMU level rather than
+> embedding them with other PMU events handling, is a much better logical
+> abstraction.
+> 
+> [1] https://lore.kernel.org/all/c3804290-bdb1-d1eb-3526-9b0ce4c8e8b1@arm.com/
+> 
+> --------------------------------------------------------------------------
+> > 
+> > One thing to answer in the commit msg is why we need the hooks here.  
+> > Have we concluded that adding BRBE hooks to struct arm_pmu for what is 
+> > an armv8 specific feature is the right approach? I don't recall 
+> > reaching that conclusion.
+> 
+> Although it might be possible to have this implementation embedded in
+> the existing armv8 PMU implementation, I still believe that the BRBE
+> functionalities abstracted out at the arm_pmu level with a separate
+> config option is cleaner, easier to follow and to maintain as well.
+> 
+> Besides some helpers i.e brbe_supported(), brbe_probe() and brbe_reset()
+> might not fit seamlessly, when tried to be embedded via existing arm_pmu
+> helpers in the armv8 implementation.
+> 
+> Nonetheless if arm_pmu based additional BRBE helpers is absolutely a no
+> go for folks here in general, will explore arm64 based implementation.
+> ----------------------------------------------------------------------------
+> 
+> I am still waiting for maintainer's take on this issue. I will be happy to
+> rework this series to move all these implementation inside arm64 callbacks
+> instead, if that is required or preferred by the maintainers. But according
+> to me, this current abstraction layout is much better.
 
-I tried to apply other recent series first, like
-https://lore.kernel.org/lkml/20221109184914.1357295-1-irogers@google.com/
-https://lore.kernel.org/linux-perf-users/20221116072211.2837834-2-irogers@google.com/
-but wasn't quite able to get the result to build.
+To be honest, I'm not sure what's best right now; but at the moment it's not
+clear to me why this couldn't fit within the existing hooks.
 
-My plan to validate HOSTCFLAGS is:
-$ make LLVM=1 -j128 mrproper defconfig tools/objtool HOSTCFLAGS=-Os
-V=1 1> before.txt
-$ <apply patch series>
-$ make LLVM=1 -j128 mrproper defconfig tools/objtool HOSTCFLAGS=-Os
-V=1 1> after.txt
-$ meld before.txt after.txt
+Above you say brbe_supported() / brbe_probe() / brbe_reset() didn't fit
+seamlessly; can you give an example of problem? I think I'm missing something
+obvious.
 
->
-> Ian Rogers (3):
->   objtool: Install libsubcmd in build
->   objtool: Properly support make V=1
->   objtool: Alter how HOSTCC is forced
->
->  tools/objtool/Build    |  2 --
->  tools/objtool/Makefile | 68 +++++++++++++++++++++++++++++-------------
->  2 files changed, 48 insertions(+), 22 deletions(-)
->
-> --
-> 2.38.1.584.g0f3c55d4c2-goog
->
-
-
--- 
 Thanks,
-~Nick Desaulniers
+Mark.
