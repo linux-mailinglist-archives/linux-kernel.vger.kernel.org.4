@@ -2,129 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA95562F8B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0296A62F8B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241538AbiKRPCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S242181AbiKRPCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242235AbiKRPBs (ORCPT
+        with ESMTP id S242264AbiKRPBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:01:48 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE4CAE57
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:58:27 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id x21so7045637ljg.10
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:58:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gibrX75NV0o1Er7DAwf8HIM5v6cqoDdd2wUHdxJchhE=;
-        b=xlP2/zPO44yPgOZyJLVvU2O64clebhkb2vmGo5gBNeig3Ow/Ikz9yC2MGIXKRCdvt0
-         lgs97gHMJWxLzQeEWAWd4TUPsXItwsIf33R+z474tFpECaZSQxXSRD6nyNHMX84hbFpl
-         qOa7JUfbLDERx1AP423afzv+JxxpmRbbuYMBS9sWqWe2PZtbeMfDS7x8nHBfJuKmHUxg
-         kakz50WXbg0TKrdI7JcO6MbfKES672Ahu7rdE34KR75q5Ao4y9vUAEZc3V/1XQBycVcI
-         +pVtG0Sy08uigqxmUV+gjtdpxRxna5Zpc+pLemPTUQsG29Ar43U8KQBsGmagHGetsxPX
-         KQmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gibrX75NV0o1Er7DAwf8HIM5v6cqoDdd2wUHdxJchhE=;
-        b=TmzwO74wO6w7boS8LgVyfbeu/LGxNRgq3YDTZxpvjEmihUkDyC4pGMZdEVaYHgkD0w
-         9DwjCTpTgbqgKKJS8wZ5Xw7VnMyiQmNn4T5FOsLTyX9rFC5n56AR8C/6TTFitMrU7PmE
-         cY/f1J+VKS6Wn2L0qhdb5FWIEabHQnGkRc55oRcOyvS9T8GJ8UPk6qq+EvVNYYP4Tkbo
-         prZtI/aJZRpi7R/FKOGDwonaIBT4NcSzs3kWi8be4R2iQr3hcjK/ntYeDo+TJ9B19BsM
-         o6KGlccNOTquW/T7VTypJGTny4+DcEeRAPkqrUQmAhkQcwGSP3NZhDpf3RQM2PA+OcoD
-         PBbw==
-X-Gm-Message-State: ANoB5pn/wDerT3tdUIhNV1+FsoagRdMSRh+gcwepJZrcKB1ptZVSrUex
-        FgqVRkxuo3oEOe2/p+nyN+UqOw==
-X-Google-Smtp-Source: AA0mqf4GsDcErhuHhrxTsrc1he+Ga3A4CdIcSPLSlvDmnQTf+lXOnPMqUgqrM17z2dntyeUlAKEDoA==
-X-Received: by 2002:a05:651c:301:b0:278:e996:d2b0 with SMTP id a1-20020a05651c030100b00278e996d2b0mr2640287ljp.50.1668783506295;
-        Fri, 18 Nov 2022 06:58:26 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s30-20020a05651c201e00b0027758f0619fsm681677ljo.132.2022.11.18.06.58.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 06:58:25 -0800 (PST)
-Message-ID: <35c07fc0-574c-817a-93ed-4575659e767b@linaro.org>
-Date:   Fri, 18 Nov 2022 15:58:23 +0100
+        Fri, 18 Nov 2022 10:01:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696CBB7FE;
+        Fri, 18 Nov 2022 06:58:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05AB6625CA;
+        Fri, 18 Nov 2022 14:58:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348CCC433C1;
+        Fri, 18 Nov 2022 14:58:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668783512;
+        bh=MxONr46/i6WXoLQg4MqO6UDR/wZefwbgPz9h1nRnFGk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=enJq6+eVNZWHUOqikPhIRCFI+9ZLFVobOyuh5w0Kx5yQxnzBAyA/VuGMxbqPNUJ1e
+         ey9L5IFtjY4s6DTIl0Bh/WSOOtXRNQPlJzCBAd5oHfGsEgF5pbk0j4Iv/HyEcbmXAd
+         jvpoyYQxgM3X//3JuxqguABy91MJeU4G0NY/EcK8CUVMTY4zKbuzByuF6GbjHsBVCu
+         pRdr9eEFsPhcfQXH+bZ4E4hLT3s+lkaFQxZYguUULy/3Bh7e1LQu2CAbeks+EfT/5u
+         fP4MYeuRi9Iueu2x29Cs4JHvtF+QRP38JDbRelCnqAxBB3/mfVoFHjNiH+mm6NAWAT
+         2Z/xvKPvSxvNw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A035B4034E; Fri, 18 Nov 2022 11:58:29 -0300 (-03)
+Date:   Fri, 18 Nov 2022 11:58:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        German Gomez <german.gomez@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Subject: Re: [PATCH 05/12] perf test: Add 'leafloop' test workload
+Message-ID: <Y3edlSkfuRffwMnk@kernel.org>
+References: <20221116233854.1596378-1-namhyung@kernel.org>
+ <20221116233854.1596378-6-namhyung@kernel.org>
+ <Y3Zb+JChHoq+89yM@kernel.org>
+ <Y3ZeOuNnk0xclY2x@kernel.org>
+ <CAP-5=fVh0cQDeqSgVkLHbuiZKoFAp628oggQKwN6KxfUusA01Q@mail.gmail.com>
+ <Y3ZuW2IxVWp9yoaD@kernel.org>
+ <CAP-5=fWYi2ASE=v0UgrqbBDA2+jC0qmNX2_4r0wbFLV3Dw2nYw@mail.gmail.com>
+ <CAM9d7cioaqjPgp+-UyUwzg7J3OQRC8DNMP0T1h5ro=yNgr128w@mail.gmail.com>
+ <13f1a15c-b14f-b4cd-a523-2ec6df168224@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 07/12] dt-bindings: power: remove deprecated
- amlogic,meson-gx-pwrc.txt bindings
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Jakub Kicinski <kuba@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Eric Dumazet <edumazet@google.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v1-7-3f025599b968@linaro.org>
- <15840da8-bae2-3bb2-af0c-0af563fdc27d@linaro.org>
- <95abd39d-b084-68e5-f012-6a1149bdb8a3@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <95abd39d-b084-68e5-f012-6a1149bdb8a3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13f1a15c-b14f-b4cd-a523-2ec6df168224@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 15:55, Neil Armstrong wrote:
-> On 18/11/2022 15:52, Krzysztof Kozlowski wrote:
->> On 18/11/2022 15:33, Neil Armstrong wrote:
->>> Remove the deprecated amlogic,meson-gx-pwrc.txt bindings, which was
->>> replaced by the amlogic,meson-ee-pwrc.yaml bindings.
->>>
->>> The amlogic,meson-gx-pwrc-vpu compatible isn't used anymore since [1]
->>> was merged in v5.8-rc1 and amlogic,meson-g12a-pwrc-vpu either since [2]
->>> was merged in v5.3-rc1.
->>>
->>> [1] commit 5273d6cacc06 ("arm64: dts: meson-gx: Switch to the meson-ee-pwrc bindings")
->>> [2] commit f4f1c8d9ace7 ("arm64: dts: meson-g12: add Everything-Else power domain controller")
->>
->> As of next-20221109 I see both compatibles used, so something here is
->> not accurate.
+Em Fri, Nov 18, 2022 at 11:32:43AM +0000, James Clark escreveu:
 > 
-> Yes driver still exists, was left for compatibility with older DTs during the migration.
+> 
+> On 17/11/2022 18:11, Namhyung Kim wrote:
+> > Hi,
+> > 
+> > On Thu, Nov 17, 2022 at 9:42 AM Ian Rogers <irogers@google.com> wrote:
+> >>
+> >> On Thu, Nov 17, 2022 at 9:24 AM Arnaldo Carvalho de Melo
+> >> <acme@kernel.org> wrote:
+> >>>
+> >>> Em Thu, Nov 17, 2022 at 09:16:58AM -0800, Ian Rogers escreveu:
+> >>>> On Thu, Nov 17, 2022 at 8:15 AM Arnaldo Carvalho de Melo
+> >>>> <acme@kernel.org> wrote:
+> >>>>>
+> >>>>> Em Thu, Nov 17, 2022 at 01:06:16PM -0300, Arnaldo Carvalho de Melo escreveu:
+> >>>>>> Em Wed, Nov 16, 2022 at 03:38:47PM -0800, Namhyung Kim escreveu:
+> >>>>>>> The leafloop workload is to run an infinite loop in the test_leaf
+> >>>>>>> function.  This is needed for the ARM fp callgraph test to verify if it
+> >>>>>>> gets the correct callchains.
+> >>>>>>>
+> >>>>>>>   $ perf test -w leafloop
+> >>>>>>
+> >>>>>> On fedora:36
+> >>>>>>
+> >>>>>> In file included from /usr/include/bits/libc-header-start.h:33,
+> >>>>>>                  from /usr/include/stdlib.h:26,
+> >>>>>>                  from tests/workloads/leafloop.c:2:
+> >>>>>> /usr/include/features.h:412:4: error: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror=cpp]
+> >>>>>>   412 | #  warning _FORTIFY_SOURCE requires compiling with optimization (-O)
+> >>>>>>       |    ^~~~~~~
+> >>>>>> cc1: all warnings being treated as errors
+> >>>>>> make[5]: *** [/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/tests/workloads/leafloop.o] Error 1
+> >>>>>> make[5]: *** Waiting for unfinished jobs....
+> >>>>>>
+> >>>>>> I'll try removing the _FORTIFY_SOURCE
+> >>>>>
+> >>>>> Works after I added this to datasym.c, leafloop.c and brstack.c:
+> >>>>
+> >>>> Is there a reason we are compiling without -O ? Perhaps we can filter
+> >>>
+> >>> I assumed so as Namhyung added it, perhaps he is just carrying it from
+> >>> the pre-existing shell tests?
+> > 
+> > Exactly :)
+> > 
+> >>>
+> >>> I wonder its to have a predictable binary output that the test expects
+> >>> when doing things like hardware tracing? As it come from the coresight
+> >>> tests, IIRC.
+> > 
+> > I think it just checks frame-pointer based callstacks on ARM to have the
+> > precise results for leaves and their parents.
+> > 
+> > 
+> >>
+> >> Would the following in the Build be better:
+> >>
+> >> ```
+> >> # Undefine _FORTIFY_SOURCE as it doesn't work with -O0
+> >> CFLAGS_leafloop.o         = -g -O0 -fno-inline -fno-omit-frame-pointer
+> >> -U_FORTIFY_SOURCE
+> >> ```
+> >>
+> >> We could also use make's `filter-out`. If we are disabling inlining
+> >> then there is also `-fno-optimize-sibling-calls` otherwise we can
+> >> still lose stack frames.
+> > 
+> > I wonder if it's enough to use -O0 as it's enabled from -O2.
+> > Maybe we can get rid of -fno-inline as well.
+> > 
+> > German, did you have any concerns for those options?
+> > 
+> 
+> Is it possible to go with the -U_FORTIFY_SOURCE option? From looking at
+> the disassembly, changing -O and the other -f options makes quite a bit
+> of difference.
 
-Then the bindings should stay. You can add "deprecated" to its title.
+I thought about doing it as a -U_FORTIFY_SOURCE but ended up doing it in
+each test as I thought that way to be more robust, i.e. the way the
+makefiles get that per-object CFLAGS and add to the global one could
+flip and then this would break again.
 
-Best regards,
-Krzysztof
+But if people prefer it in the per-object file Build rule, np.
 
+- Arnaldo
+ 
+> It's fairly important to that test because it's testing that the
+> combination of both frame pointer unwinding and dwarf unwinding result
+> in the complete stack.
+> 
+> If we change the options I'd have to go back and double check with
+> different compiler versions that it's still doing the right thing. For
+> example if a frame pointer is included for the last frame, then the
+> dwarf bit doesn't get tested.
+> 
+> 
+> > Thanks,
+> > Namhyung
