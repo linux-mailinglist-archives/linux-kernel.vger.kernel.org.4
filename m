@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC3662F76D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB0662F778
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 15:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241802AbiKROdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 09:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
+        id S242089AbiKROdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 09:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242021AbiKROde (ORCPT
+        with ESMTP id S242392AbiKROdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:33:34 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683E1286CA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:33:32 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id j15so8859889wrq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:33:32 -0800 (PST)
+        Fri, 18 Nov 2022 09:33:36 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE52840441
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:33:33 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id a14so9553187wru.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 06:33:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=r1O9HZ8MX1IL7UJAa5JH+dfK6/alNEcaVbgB3wjs4gs=;
-        b=F/nX0fPsj2tPLUnIyGh9FdlQJm505Li4kv12GOJg/laM/BN4t1o7cDArjx/hBkOv/s
-         lgxBXsILzg3UqegTRvrMY/g/ferTWZJj8KFHeAe6h//THsif+i74kXuNhfuaPJqK8exE
-         9y6milsbhIokCYIrHGbaz1nj1kyh0MSZgbsSDAEFr5MZOCvT/UJv6yeq/5nn+Ix5zjsK
-         a1LXXpOF9E3Xn45knkRZG/88aQnBk+cXFXtEpf5IWdAnEFI8wisDqHs7j02Ijs0/N+F1
-         DIXH3nibBE4L2EWIZdFpN/w3XfzgOEkxsFitChKg+FNLGWp5Y6rSv4iWCqDKToriVsqN
-         75qA==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y27Dxuej0JJOzYqREuZ7buGqEQSIRreRsNAzFXY30l0=;
+        b=or9xiwYvnOBoUw+/IBUWQko0HRB0n/YeH7CUxy44N4SxiFrHZnEJKIE2DPEbYWoUXk
+         ZZmCWNBh5KbAvGw90Y4UgrJcZc+UlXC2CPjxHgm0FkkqNmtWFEDa7u6qtTGVTpTnPfA9
+         ubG0wkELzgV2gRQCCool5kNX4GooCiy4HVWdtyXmtdcVUeXyXNYeQxIwiSIsIhxJRk9i
+         KZKoHyK25p+bVfA4TvjcWIxqNg3os2kNiaLU6I6sE27++JX5UWb7yU/HnZLEaJrP3a1w
+         I22lUfa6AUCe5UEAzemXMt83a7n/HSnGusArdBOYRU5BluvmOoDBpuBG4wiU2n3oF11M
+         RGFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r1O9HZ8MX1IL7UJAa5JH+dfK6/alNEcaVbgB3wjs4gs=;
-        b=WuNpDBIJkq/E7Xu8MhkzTbQrsInxGUB3s8YTjosxA5KQzvu6hyRKICU0GRyimZFoa6
-         84/gacgcjRIR9mbeRo1/IhBXXG91WCR50owHSKWOqfJBkVoRgYBOn0AV7JmpCCrWiiEk
-         +Yk56PjYoZ3hkSFJcKyMU5ErrA6RgBoVZIn8lnXS6j91Ej9xeWz/DLg3bMESp2lWNuoN
-         fJB/KpISuORW1/w7YZNDRB9QzH0sGWu1GplOTR6bT+P3gv+sjlHxSVrnkmw/LcxyQ9bi
-         8DeZvDtsJp1Qmq4C54h/Ima+UOB6Vl06D0byJWf44B+a722sFJNIZ+C7N00rfjixSQZD
-         Ftxg==
-X-Gm-Message-State: ANoB5pm7Bpjp9cVRm2ho9H1Ts2PIsiOkQuxw3CwErm4FUHJ8VwHtttm1
-        7xNmTuWJNrLhgkoX9HiHvrYnYQ==
-X-Google-Smtp-Source: AA0mqf6XKcHEDCl9rShqtBbR8Bxs5ZkAhKbK7DnnG5j7Xa9ZYop8ey+c8nEMBxbXJS6hVwShM9KRqA==
-X-Received: by 2002:a05:6000:18f:b0:241:a046:91ff with SMTP id p15-20020a056000018f00b00241a04691ffmr4433055wrx.23.1668782010856;
-        Fri, 18 Nov 2022 06:33:30 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y27Dxuej0JJOzYqREuZ7buGqEQSIRreRsNAzFXY30l0=;
+        b=5poDVRPiTEaKrrXct9zYubFX8Nv6moinVNtE8K8S6PQlgl8gZ3nAQw4GZXd8/CXDWS
+         v9EmuXA75AMm+zKUoKWwqU/SSRT7KaG5HbCCRNlmZwSEoa40ZMNwGK1+XVjQEzIMAsNC
+         rpFLGST+3oRbqH7CXDhdZjHhNowQaBvJhsq3MsEQzXfC0nhPvmePDi74Jdc5spheNZV9
+         dDB3pI20juRkYzQOlHDHjkc23girhbN5kCshiIxuuolAfOKCBrKaqhwvOXDLTxGaHXUD
+         uKLPxU5YC1i3Axwg9XWDdOxH9KtTJpPGOEIKk1d7f4cgvDkjsIUL8lFZsWa4BxC0HRHG
+         52XA==
+X-Gm-Message-State: ANoB5pnh7mbr9u9TKMY4kSf6KabwbqjMSLA66q2gmaZH4dtFQZmW72jn
+        YOOoU+XKoULqPfLEVRB03++Lmg==
+X-Google-Smtp-Source: AA0mqf7812T75JmU1RK3dUswEj+nSB6pF/2V/PIu/zIN4QQtJ/ZBP39Rfn1JU4+7LgOWa59FP8nB0w==
+X-Received: by 2002:a5d:56c2:0:b0:241:94bc:2796 with SMTP id m2-20020a5d56c2000000b0024194bc2796mr4281152wrw.184.1668782012260;
+        Fri, 18 Nov 2022 06:33:32 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id j21-20020a05600c1c1500b003cfb7c02542sm5436726wms.11.2022.11.18.06.33.29
+        by smtp.gmail.com with ESMTPSA id j21-20020a05600c1c1500b003cfb7c02542sm5436726wms.11.2022.11.18.06.33.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 06:33:30 -0800 (PST)
-Subject: [PATCH 00/12] dt-bindings: first batch of dt-schema conversions for Amlogic Meson bindings
+        Fri, 18 Nov 2022 06:33:31 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Fri, 18 Nov 2022 15:33:27 +0100
+Subject: [PATCH 01/12] dt-bindings: firmware: convert meson_sm.txt to dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIALaXd2MC/w3MwQqDMAwA0F+RnBcwxenY37RNVgNdCs3mRfx3e3yXd4JLV3F4Tyd0OdS12QA9Js
- h7tCKoPAxhDoGINkwLxm9tRTMmNVYrjrnZIf2HL/kQb09ewsowhhRdMPVoeR+H/Wu9rhu2AOmCcgAA AA==
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 18 Nov 2022 15:33:26 +0100
-Message-Id: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
+Message-Id: <20221117-b4-amlogic-bindings-convert-v1-1-3f025599b968@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
 To:     Jakub Kicinski <kuba@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -100,124 +101,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Batch conversion of the following bindings:
-- meson_sm.txt
-- amlogic-efuse.txt
-- amlogic-meson-mx-efuse.txt
-- meson-wdt.txt
-- meson-ir.txt
-- rtc-meson.txt
-- amlogic,meson6-timer.txt
-- meson-gxl-usb2-phy.txt
-- amlogic,meson-gx.txt
-- amlogic,meson-pcie.txt
-- mdio-mux-meson-g12a.txt
+Convert the Amlogic Secure Monitor bindings to dt-schema.
 
-The amlogic,meson-gx-pwrc.txt is removed since deprecated and unused 
-for a few releases now.
-
-Martin Blumenstingl was also added as bindings maintainer for Meson6/8/8b
-related bindings.
-
-Remaining conversions:
-- meson,pinctrl.txt
-- pwm-meson.txt
-- amlogic,meson-gpio-intc.txt
-- amlogic,meson-mx-sdio.txt
-- rtc-meson-vrtc.txt
-- amlogic,axg-sound-card.txt
-- amlogic,axg-fifo.txt
-- amlogic,axg-pdm.txt
-- amlogic,axg-spdifout.txt
-- amlogic,axg-tdm-formatters.txt
-- amlogic,axg-spdifin.txt
-- amlogic,axg-tdm-iface.txt
-- amlogic,g12a-tohdmitx.txt
-- amlogic,axg-audio-clkc.txt
-- amlogic,gxbb-clkc.txt
-- amlogic,gxbb-aoclkc.txt
-- amlogic,meson8b-clkc.txt
-
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-To: Kevin Hilman <khilman@baylibre.com>
-To: Jerome Brunet <jbrunet@baylibre.com>
-To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Guenter Roeck <linux@roeck-us.net>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-To: Alessandro Zummo <a.zummo@towertech.it>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Thomas Gleixner <tglx@linutronix.de>
-To: Vinod Koul <vkoul@kernel.org>
-To: Kishon Vijay Abraham I <kishon@kernel.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-To: Bjorn Helgaas <bhelgaas@google.com>
-To: "David S. Miller" <davem@davemloft.net>
-To: Eric Dumazet <edumazet@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Andrew Lunn <andrew@lunn.ch>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-To: Russell King <linux@armlinux.org.uk>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-amlogic@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-watchdog@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-phy@lists.infradead.org
-Cc: linux-mmc@vger.kernel.org
-Cc: linux-pci@vger.kernel.org
-Cc: netdev@vger.kernel.org
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-
 ---
-Neil Armstrong (12):
-      dt-bindings: firmware: convert meson_sm.txt to dt-schema
-      dt-bindings: nvmem: convert amlogic-efuse.txt to dt-schema
-      dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt to dt-schema
-      dt-bindings: watchdog: convert meson-wdt.txt to dt-schema
-      dt-bindings: media: convert meson-ir.txt to dt-schema
-      dt-bindings: rtc: convert rtc-meson.txt to dt-schema
-      dt-bindings: power: remove deprecated amlogic,meson-gx-pwrc.txt bindings
-      dt-bindings: timer: convert timer/amlogic,meson7-timer.txt to dt-schema
-      dt-bindings: phy: convert meson-gxl-usb2-phy.txt to dt-schema
-      dt-bindings: mmc: convert amlogic,meson-gx.txt to dt-schema
-      dt-bindings: pcie: convert amlogic,meson-pcie.txt to dt-schema
-      dt-bindings: net: convert mdio-mux-meson-g12a.txt to dt-schema
+ .../bindings/firmware/amlogic,meson-gxbb-sm.yaml   | 36 ++++++++++++++++++++++
+ .../bindings/firmware/meson/meson_sm.txt           | 15 ---------
+ 2 files changed, 36 insertions(+), 15 deletions(-)
 
- .../bindings/firmware/amlogic,meson-gxbb-sm.yaml   |  36 ++++++
- .../bindings/firmware/meson/meson_sm.txt           |  15 ---
- .../bindings/media/amlogic,meson6-ir.yaml          |  43 +++++++
- .../devicetree/bindings/media/meson-ir.txt         |  20 ----
- .../bindings/mmc/amlogic,meson-gx-mmc.yaml         |  78 +++++++++++++
- .../devicetree/bindings/mmc/amlogic,meson-gx.txt   |  39 -------
- .../bindings/net/amlogic,g12a-mdio-mux.yaml        |  80 +++++++++++++
- .../bindings/net/mdio-mux-meson-g12a.txt           |  48 --------
- .../bindings/nvmem/amlogic,meson-gxbb-efuse.yaml   |  52 +++++++++
- .../bindings/nvmem/amlogic,meson6-efuse.yaml       |  64 ++++++++++
- .../devicetree/bindings/nvmem/amlogic-efuse.txt    |  48 --------
- .../bindings/nvmem/amlogic-meson-mx-efuse.txt      |  22 ----
- .../devicetree/bindings/pci/amlogic,axg-pcie.yaml  | 129 +++++++++++++++++++++
- .../devicetree/bindings/pci/amlogic,meson-pcie.txt |  70 -----------
- .../bindings/phy/amlogic,meson-gxl-usb2-phy.yaml   |  56 +++++++++
- .../devicetree/bindings/phy/meson-gxl-usb2-phy.txt |  21 ----
- .../bindings/power/amlogic,meson-gx-pwrc.txt       |  63 ----------
- .../bindings/rtc/amlogic,meson6-rtc.yaml           |  62 ++++++++++
- .../devicetree/bindings/rtc/rtc-meson.txt          |  35 ------
- .../bindings/timer/amlogic,meson6-timer.txt        |  22 ----
- .../bindings/timer/amlogic,meson6-timer.yaml       |  53 +++++++++
- .../bindings/watchdog/amlogic,meson6-wdt.yaml      |  39 +++++++
- .../devicetree/bindings/watchdog/meson-wdt.txt     |  21 ----
- 23 files changed, 692 insertions(+), 424 deletions(-)
----
-base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
-change-id: 20221117-b4-amlogic-bindings-convert-8ef1d75d426d
+diff --git a/Documentation/devicetree/bindings/firmware/amlogic,meson-gxbb-sm.yaml b/Documentation/devicetree/bindings/firmware/amlogic,meson-gxbb-sm.yaml
+new file mode 100644
+index 000000000000..33d1408610cf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/firmware/amlogic,meson-gxbb-sm.yaml
+@@ -0,0 +1,36 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/firmware/amlogic,meson-gxbb-sm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic Secure Monitor (SM)
++
++description:
++  In the Amlogic SoCs the Secure Monitor code is used to provide access to the
++  NVMEM, enable JTAG, set USB boot, etc...
++
++maintainers:
++  - Neil Armstrong <neil.armstrong@linaro.org>
++
++properties:
++  compatible:
++    const: amlogic,meson-gxbb-sm
++
++patternProperties:
++  "power-controller":
++    type: object
++    $ref: /schemas/power/amlogic,meson-sec-pwrc.yaml#
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    firmware {
++        secure-monitor {
++            compatible = "amlogic,meson-gxbb-sm";
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/firmware/meson/meson_sm.txt b/Documentation/devicetree/bindings/firmware/meson/meson_sm.txt
+deleted file mode 100644
+index c248cd44f727..000000000000
+--- a/Documentation/devicetree/bindings/firmware/meson/meson_sm.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-* Amlogic Secure Monitor
+-
+-In the Amlogic SoCs the Secure Monitor code is used to provide access to the
+-NVMEM, enable JTAG, set USB boot, etc...
+-
+-Required properties for the secure monitor node:
+-- compatible: Should be "amlogic,meson-gxbb-sm"
+-
+-Example:
+-
+-	firmware {
+-		sm: secure-monitor {
+-			compatible = "amlogic,meson-gxbb-sm";
+-		};
+-	};
 
-Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+b4 0.10.1
