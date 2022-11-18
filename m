@@ -2,202 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BFC62F398
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAD862F39B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 12:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241506AbiKRLXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 06:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S241788AbiKRLXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 06:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241427AbiKRLW0 (ORCPT
+        with ESMTP id S241595AbiKRLXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 06:22:26 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D08E8C482;
-        Fri, 18 Nov 2022 03:21:38 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BBBAC1F8D7;
-        Fri, 18 Nov 2022 11:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668770494; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L3euMKBmPhMy8xs+0Iz9hve6/klsRgyszk94snpweik=;
-        b=wYAotX1b18h44sn2hYO2syv7V4WJnWy4DjyZ6FSE11VpBhJ6yYSPC72B5hOMgiWUFUnLGn
-        aA0AJagr8b1nfmGWgRxRGojh13kAfzPrNJDESaJimUQ6GrPQ02EqoScNQp7P1gG1t9FBL+
-        7PLuEl+nznaW0NTHwL/IzQ9rpFTFanA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668770494;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L3euMKBmPhMy8xs+0Iz9hve6/klsRgyszk94snpweik=;
-        b=+wzYH9HXa+M0Ptzkq7AV2wFHscud2W2D1O0r2WSm1IZk7OHfagWckSJPILwt5IzoGOnNWc
-        XzQMc1kGGl3CkTAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8CC8A13A66;
-        Fri, 18 Nov 2022 11:21:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id AFSGIb5qd2MpYwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 18 Nov 2022 11:21:34 +0000
-Message-ID: <b4681075-ea53-637f-0df5-3cc5891a102e@suse.de>
-Date:   Fri, 18 Nov 2022 12:21:33 +0100
+        Fri, 18 Nov 2022 06:23:22 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5845F8C79D;
+        Fri, 18 Nov 2022 03:22:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668770538; x=1700306538;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=WPB/SBATvGA5bOrIJvv/7uIW5hNUi4HZzvX1SmmezDM=;
+  b=ZahuDmDU4XkdH5rij05wlquQS1R9qJtwavBB1uTm2IMxXoD4UjhkH6Uo
+   9V989YySDjoINqCh7m65K+9PdLUiBTv+iUeg0hEDrOC2sVw2EsSDG4/7d
+   HDnkluMSnsCniUtygmOkPLel1TINnGc5zpqM+4RHALhSAqWmgl/FRvkdJ
+   GwIpCjYllDrJcrJONEra4DQDZM7AQvp8dVMmNGu2TomSrxVd7I3ZQC3XA
+   jz6ZyUWR7IFBd3IKoPAfVJM9dnjT2pOrPNys8VCKXD8iIBU749Kmw1bR7
+   8pp5F4tw0wfVVOOleHXOlmu37Ud5e+y45hk8jwuDA7QJtLmQxxIg5RgyD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="310746149"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="310746149"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 03:22:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="642484753"
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="642484753"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Nov 2022 03:22:15 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 18 Nov 2022 03:22:14 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Fri, 18 Nov 2022 03:22:14 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Fri, 18 Nov 2022 03:22:14 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g1RCpJR9ShvVC+XRp3IMZONLJ1AkKU1pcpcpkJbYH6gF88HDxoxCgqKb09Qscp2pBBQTs2cAsEHIEqkrLtMfOz/uYfbNnHqddJjHGpN7rym7XkOtoKi9E2rkDGykCrg37U5dNTmIuG+xmrvLMdeAOqcopY0lkXcGVpuyL+FN1yEPiLdf+k4Eb0ENx78L3cHdVbN6yAca3q3qyJYFh4la3+a2KozOvK2xn71XP4CpnzDdNr8mruZBnveqmdZxLoqvFmEaUY9PpoC83HyzXLXS8LKNgXbA+eFhY6j0ROKhQ1L/FRjz6kth4KwJNNrs6FL09MMk5sSWPEofhXHwLmZtUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NSQC3Z11LWmr3tyOZioC1ICHtpfElSVg2l0oJ8NTQuc=;
+ b=NvtcaeprzDIRpIUx/Je4buzTXGt8ODSJoPoJn9tVaz/HXlFwKaOQQHDyGzXDL7BL5nuXNeoxnJy4ggcBwm6LBbIyeF7SvTVjd/GXBYFoFGQlRBedHVNdOD72sTjSCZ4mm0ABAzJHrvG7g4QYfwkbVHeUywpa2cqaTGL83oAunmkjFGD0wb6t3nuk/zEq0NVRLevswCPBNKVvgCh/TtWNM/v3Xrbeu8DVdtFXbeBqeJ0rCS5pAe7G5vWFeNdoRp3DqGLQ7/ofzvDZaXYGjajhcgiaCmCIEXRAickH473XpyffIjmJEKWDwCHe5NTZrWlhi1dP8uzDsv5jFGT/EqhWhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by CY5PR11MB6510.namprd11.prod.outlook.com (2603:10b6:930:42::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20; Fri, 18 Nov
+ 2022 11:22:08 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::3849:238:f7bb:f1d1]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::3849:238:f7bb:f1d1%7]) with mapi id 15.20.5791.027; Fri, 18 Nov 2022
+ 11:22:08 +0000
+Date:   Fri, 18 Nov 2022 19:21:54 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
+CC:     <rafael.j.wysocki@intel.com>, <rafael@kernel.org>,
+        <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+        <guohanjun@huawei.com>, <liwei391@huawei.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] ACPI: pfr_telemetry: use ACPI_FREE() to free
+ acpi_object
+Message-ID: <Y3dq0oxTbsQs6SJR@chenyu5-mobl1>
+References: <20221118063219.2612473-1-bobo.shaobowang@huawei.com>
+ <20221118063219.2612473-2-bobo.shaobowang@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221118063219.2612473-2-bobo.shaobowang@huawei.com>
+X-ClientProxiedBy: SI2PR01CA0049.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::13) To MN0PR11MB6206.namprd11.prod.outlook.com
+ (2603:10b6:208:3c6::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] drm/gem-shmem: When drm_gem_object_init failed, should
- release object
-To:     Chunyou Tang <tangchunyou@163.com>
-Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@gmail.com, daniel@ffwll.ch, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20221111033817.366-1-tangchunyou@163.com>
- <2b4e38d8-d0ea-e85c-88f1-bb6a714ee0eb@suse.de>
- <20221118183232.00007638@163.com>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221118183232.00007638@163.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------XgM8ETXUekg0EOJsfaSYemnJ"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|CY5PR11MB6510:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2af4cba2-524a-41c6-9939-08dac9572100
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fap8MQm660nOpzMhLLE1l1u4kA5CCvO0t8M8hxMEPr50fkiO6ZFLgMzG6Ma0rqi18TstqgofiSJM+uN1oWpTDTzxyB0VPE7nydsdRDx6tk1NB1QOmGtbF7j8HD/H/zdkCx4UqRxrPIRTZc78DF0hUWufmGlnPfib31q9TyFSz6K+pY/52rca9uLyZFaYpJP/pUtGUiwGFW2e7FHFNuZGiZJysxDN9YEB1/vaAdpB0JWCwg7P15h2Mu+la2wDSTg6wwwNsb1ORRJk05+G9AUe8vToikf36sOs/wDQLGpSjBvg4DwEyhkW+TNo8STwCx9PDO1vxHXcchot6zBE9Hk2GDR5fBV9uWGJEFuV/vfLqnlclYoigKkf1ATyXZ10XHXI/R2BCBN9+VPQV5/qsAC/xwFfTcZm1PTAYkkFR6of9Hu9HiGWkXjcb+lHzxKMuzOJrZR/UsgHlM8a+DmbRQhwYJGMZhpkBRxSRSKimdbqOIJDfoqL1825NSY/oUT/zUwUA4hN+sIWmL2piltuuVVD4uhyM8i3P6FfTrdJtuU6AdTpCRE0k1HUaKR4BwdCAN2HQ55WEk8JYRuS8vy6nkRAqccKD/ZXbxO+G6nOgVTh52J/xCTQBL7v6HyObdasFKzA/XlfTk2O/L/BEZnaKsMK7Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(39860400002)(396003)(136003)(346002)(376002)(451199015)(86362001)(83380400001)(66946007)(38100700002)(82960400001)(8936002)(4001150100001)(4744005)(2906002)(4326008)(41300700001)(33716001)(6916009)(66476007)(26005)(66556008)(53546011)(9686003)(6506007)(6666004)(6512007)(186003)(8676002)(316002)(478600001)(5660300002)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3SPCZejO2cxAV9Rgd8flbLFicJKBEF5JWH/RbZOqMdB/FmkPY0M2D+/6d7dK?=
+ =?us-ascii?Q?ZxsyZxr9guUQEeZg80EoEZ4OCEeR70Vzqw2Moet5WSBjSbCrRFpFmSTQmF8P?=
+ =?us-ascii?Q?s4MbW/VkDDu/HE/dtq+3yllGHoqAc2oRGqLocEIaZT0+J3SrFvt39SQopfUR?=
+ =?us-ascii?Q?7cS1VDRjt1uRXXMFon6JM17pbVX0lazfZdYckCDtvzQ/QTsC7ycekRnYp6uB?=
+ =?us-ascii?Q?4ksGGQDIt0lIESlwlA6zr+3Q/QkBQ5vCiCKUBana9Y+ngafNxAvMYVDyohrv?=
+ =?us-ascii?Q?i/vqIFgSQDTx4zd6HrSD+7z+RCpxs1II6KgEPJJ1a2J3t90Caz5N4FZYG43c?=
+ =?us-ascii?Q?k5Nki5LQpP13BblPuxsUmgewhxfQfvjtj6HmAhJoXxXEX98XyHNG3Y14duRq?=
+ =?us-ascii?Q?8QcjEd0EjF3e33ta49nh8k3qo/S55uydGBSBL02ZbzWx80ThfvCGp0Y8egGi?=
+ =?us-ascii?Q?YRGUhHdpIiuXb5HOWCCmVSJF1C9jFcoZK4wKLtry/C6+x6DhRp2Hz/IrdK9W?=
+ =?us-ascii?Q?F+muGzssSdoCw/RZqyjW3P5Itki31bkuf99LonAWOVlqv4sG1SEL08b0MwU1?=
+ =?us-ascii?Q?9VlSAmE9NEKbYMhRDBRcBNmPOZ/akCmNNDCNq750wkoqQtDTztCNLwUBpeNF?=
+ =?us-ascii?Q?Sl/+tbo1pozzfyxkUX3W1U6v4C1Dc12PbkMUCNDVJRrI55ZNoY0Yh/0GP4xM?=
+ =?us-ascii?Q?x47KsQqbJ6oc7kF3CQmdiwiOz48mh4JA9IFF2yOr31b7zkwqFoflNgt4Vvyn?=
+ =?us-ascii?Q?AUZwQ/sk3TjFEkAoUo3Ei7asyWMw32vwayzJz2OILKCZr8Ir4Pk1BHPruSuq?=
+ =?us-ascii?Q?OUkHEK7vdn2nYUe927jjyUr2muE71gnMwaJvpCPDwg4bbjeHqsSEbLzru32G?=
+ =?us-ascii?Q?lS1nW0MwrjoItomWU/W0+WnyQrbW09DvewklV07/D4zrGnCH5gNDGf9qUEHb?=
+ =?us-ascii?Q?6G5faNTP+RlwvH3vb2TPTDDhsz441d1bgpskBp9guj+JqLExgkR/RYIlRO5d?=
+ =?us-ascii?Q?+8DWkObH1+pbJ1rWgtsxGF1hLeVGhIQZLWLU3KnQrZsgiEA7y6EqcZ8peaK8?=
+ =?us-ascii?Q?ZwLElk+ga1eJl76rAmEGpUINzJJuhit4v/hSpwOhtJG7u59IDjwLrSAduDUg?=
+ =?us-ascii?Q?m5pjgNQ8jes0FAxmZBhBX08UL280fvknYnwT1UJGdyTc3WOnn42piHlmDRhh?=
+ =?us-ascii?Q?HZuSloElC1X6RY5tTuLf0RjMByWgq4Gb1eYspMC2raKF1XVQocmkkhNwsQaL?=
+ =?us-ascii?Q?c9bT9O89B80rqK0K9C2zfkZwDozSWBAaG/OSFtQQTr9jGlPN/Jxc5P7ksfGr?=
+ =?us-ascii?Q?EEuMzGv9YCVEGRbQBhzapr/ynhOAgT8MztZYS5t1HTab3XfzOVY2I6bBa+SY?=
+ =?us-ascii?Q?cEl2Q7NNbaft7GdIYv0cvNjIKuW2gKbeqEwl16TU2ql/v6+QC2av0lE/bci1?=
+ =?us-ascii?Q?M6pBWEFC2py25luHZPQzvbtNMeo5iLC7wYrwpxR6BxWfoc65ZqGyB9uRViGt?=
+ =?us-ascii?Q?cRWajKDG9+fZoaRMKFqQV4WHhmqafV32k7bQ9z2D7I7Rz5dy7H2mYuGuQY9A?=
+ =?us-ascii?Q?tGHltCwet4TJIc9o7xjDcpUmuBdYvWKSAj+BB7ST?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2af4cba2-524a-41c6-9939-08dac9572100
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2022 11:22:08.0939
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PzeK1XTqBvK6Ik/cFfTAUfI05Etys8TNEFQXiCqlJzD1ryF7kX5e7hJVCmnvvcligZkjPwMl8Vy8qsKwAA43VA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6510
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------XgM8ETXUekg0EOJsfaSYemnJ
-Content-Type: multipart/mixed; boundary="------------C0QJjKI0qwoGRcl2Yt0IOPHd";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Chunyou Tang <tangchunyou@163.com>
-Cc: maarten.lankhorst@linux.intel.com, mripard@kernel.org, airlied@gmail.com,
- daniel@ffwll.ch, sumit.semwal@linaro.org, christian.koenig@amd.com,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Message-ID: <b4681075-ea53-637f-0df5-3cc5891a102e@suse.de>
-Subject: Re: [PATCH v2] drm/gem-shmem: When drm_gem_object_init failed, should
- release object
-References: <20221111033817.366-1-tangchunyou@163.com>
- <2b4e38d8-d0ea-e85c-88f1-bb6a714ee0eb@suse.de>
- <20221118183232.00007638@163.com>
-In-Reply-To: <20221118183232.00007638@163.com>
+On 2022-11-18 at 14:32:18 +0800, Wang ShaoBo wrote:
+> acpi_evaluate_dsm_typed()/acpi_evaluate_dsm() should be coupled
+> with ACPI_FREE() to free the ACPI memory, because we need to
+> track the allocation of acpi_object when ACPI_DBG_TRACK_ALLOCATIONS
+> enabled, so use ACPI_FREE() instead of kfree().
+> 
+> Fixes: b0013e037a8b ("ACPI: Introduce Platform Firmware Runtime Telemetry driver")
+> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+Reviewed-by: Chen Yu <yu.c.chen@intel.com>
 
---------------C0QJjKI0qwoGRcl2Yt0IOPHd
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-SGkNCg0KQW0gMTguMTEuMjIgdW0gMTE6MzIgc2NocmllYiBDaHVueW91IFRhbmc6DQo+IEhp
-IFRob21hcywNCj4gICAgIENhbiBJIGRpc2NhcmQgdGhlIGZpcnN0IHR3byBwYXRjaHMsIGFu
-ZCBwdWxsIHRoZSBuZXcgY29kZSwgdGhlbg0KPiAgICAgbW9kaWZ5IGFuZCBnaXQgc2VuZC1l
-bWFpbCB0aGlzIHBhdGNoPw0KDQpZZXMsIG9mIGNvdXJzZS4gSnVzdCBtYWtlIHN1cmUgdGhh
-dCB0aGUgbmV4dCB2ZXJzaW9uIGlzIG1hcmtlZCBhcyB2Mywgc28gDQppdCdzIG9idmlvdXMg
-d2hhdCBpdCBiZWxvbmdzIHRvLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAN
-Cj4g5LqOIFRodSwgMTcgTm92IDIwMjIgMTQ6NDI6MzYgKzAxMDANCj4gVGhvbWFzIFppbW1l
-cm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+IOWGmemBkzoNCj4gDQo+PiBIaQ0KPj4NCj4+
-IEFtIDExLjExLjIyIHVtIDA0OjM4IHNjaHJpZWIgQ2h1bnlvdVRhbmc6DQo+Pj4gd2hlbiBn
-b3RvIGVycl9mcmVlLCB0aGUgb2JqZWN0IGhhZCBpbml0LCBzbyBpdCBzaG91bGQgYmUgcmVs
-ZWFzZQ0KPj4+IHdoZW4gZmFpbC4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IENodW55b3VU
-YW5nIDx0YW5nY2h1bnlvdUAxNjMuY29tPg0KPj4+IC0tLQ0KPj4+ICAgIGRyaXZlcnMvZ3B1
-L2RybS9kcm1fZ2VtLmMgICAgICAgICAgICAgIHwgMTkgKysrKysrKysrKysrKysrKy0tLQ0K
-Pj4+ICAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jIHwgIDQgKysr
-LQ0KPj4+ICAgIGluY2x1ZGUvZHJtL2RybV9nZW0uaCAgICAgICAgICAgICAgICAgIHwgIDEg
-Kw0KPj4+ICAgIDMgZmlsZXMgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlv
-bnMoLSkNCj4+Pg0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5j
-IGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW0uYw0KPj4+IGluZGV4IDhiNjhhM2MxZTZhYi4u
-Y2JhMzJjNDZiYjA1IDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2Vt
-LmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5jDQo+Pj4gQEAgLTE2OSw2
-ICsxNjksMjEgQEAgdm9pZCBkcm1fZ2VtX3ByaXZhdGVfb2JqZWN0X2luaXQoc3RydWN0DQo+
-Pj4gZHJtX2RldmljZSAqZGV2LCB9DQo+Pj4gICAgRVhQT1JUX1NZTUJPTChkcm1fZ2VtX3By
-aXZhdGVfb2JqZWN0X2luaXQpOw0KPj4+ICAgIA0KPj4+ICsvKioNCj4+PiArICogZHJtX2dl
-bV9wcml2YXRlX29iamVjdF9maW5pIC0gRmluYWxpemUgYSBmYWlsZWQgZHJtX2dlbV9vYmpl
-Y3QNCj4+PiArICogQG9iajogZHJtX2dlbV9vYmplY3QNCj4+PiArICoNCj4+PiArICogVW5p
-bml0aWFsaXplIGFuIGFscmVhZHkgYWxsb2NhdGVkIEdFTSBvYmplY3Qgd2hlbiBpdA0KPj4+
-IGluaXRpYWxpemVkIGZhaWxlZA0KPj4+ICsgKi8NCj4+PiArdm9pZCBkcm1fZ2VtX3ByaXZh
-dGVfb2JqZWN0X2Zpbmkoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopDQo+Pj4gK3sNCj4+
-PiArCVdBUk5fT04ob2JqLT5kbWFfYnVmKTsNCj4+DQo+PiBSYXRoZXIgbGVhc2UgdGhpcyBp
-biBpdHMgb3JpZ2luYWwgcGxhY2UuDQo+Pg0KPj4+ICsNCj4+PiArCWRtYV9yZXN2X2Zpbmko
-Jm9iai0+X3Jlc3YpOw0KPj4+ICsJZHJtX2dlbV9scnVfcmVtb3ZlKG9iaik7DQo+Pg0KPj4g
-QUZBSUNUIGRybV9nZW1fbHJ1X3JlbW92ZSgpIGRvZXNuJ3QgYmVsb25nIGludG8gdGhpcyBm
-dW5jdGlvbi4NCj4+DQo+Pj4gK30NCj4+PiArRVhQT1JUX1NZTUJPTChkcm1fZ2VtX3ByaXZh
-dGVfb2JqZWN0X2ZpbmkpOw0KPj4+ICsNCj4+PiAgICAvKioNCj4+PiAgICAgKiBkcm1fZ2Vt
-X29iamVjdF9oYW5kbGVfZnJlZSAtIHJlbGVhc2UgcmVzb3VyY2VzIGJvdW5kIHRvDQo+Pj4g
-dXNlcnNwYWNlIGhhbmRsZXMNCj4+PiAgICAgKiBAb2JqOiBHRU0gb2JqZWN0IHRvIGNsZWFu
-IHVwLg0KPj4+IEBAIC05MzAsMTQgKzk0NSwxMiBAQCBkcm1fZ2VtX3JlbGVhc2Uoc3RydWN0
-IGRybV9kZXZpY2UgKmRldiwNCj4+PiBzdHJ1Y3QgZHJtX2ZpbGUgKmZpbGVfcHJpdmF0ZSkg
-dm9pZA0KPj4+ICAgIGRybV9nZW1fb2JqZWN0X3JlbGVhc2Uoc3RydWN0IGRybV9nZW1fb2Jq
-ZWN0ICpvYmopDQo+Pj4gICAgew0KPj4+IC0JV0FSTl9PTihvYmotPmRtYV9idWYpOw0KPj4+
-ICsJZHJtX2dlbV9wcml2YXRlX29iamVjdF9maW5pKG9iaik7DQo+Pj4gICAgDQo+Pj4gICAg
-CWlmIChvYmotPmZpbHApDQo+Pj4gICAgCQlmcHV0KG9iai0+ZmlscCk7DQo+Pj4gICAgDQo+
-Pj4gLQlkbWFfcmVzdl9maW5pKCZvYmotPl9yZXN2KTsNCj4+DQo+PiBQbGVhc2UgY2FsbCBk
-cm1fZ2VtX3ByaXZhdGVfb2JqZWN0X2ZpbmkoKSBoZXJlLg0KPj4NCj4+PiAgICAJZHJtX2dl
-bV9mcmVlX21tYXBfb2Zmc2V0KG9iaik7DQo+Pj4gLQlkcm1fZ2VtX2xydV9yZW1vdmUob2Jq
-KTsNCj4+DQo+PiBQbGVhc2Uga2VlcCB0aGlzIGxpbmUgaGVyZS4NCj4+DQo+PiBCZXN0IHJl
-Z2FyZHMNCj4+IFRob21hcw0KPj4NCj4+PiAgICB9DQo+Pj4gICAgRVhQT1JUX1NZTUJPTChk
-cm1fZ2VtX29iamVjdF9yZWxlYXNlKTsNCj4+PiAgICANCj4+PiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9ncHUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmMNCj4+PiBiL2RyaXZlcnMvZ3B1
-L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jIGluZGV4DQo+Pj4gMzUxMzhmOGEzNzVjLi44
-NDVlM2Q1ZDcxZWIgMTAwNjQ0IC0tLQ0KPj4+IGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1f
-c2htZW1faGVscGVyLmMgKysrDQo+Pj4gYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1l
-bV9oZWxwZXIuYyBAQCAtNzksOCArNzksMTAgQEANCj4+PiBfX2RybV9nZW1fc2htZW1fY3Jl
-YXRlKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsIHNpemVfdCBzaXplLCBib29sDQo+Pj4gcHJp
-dmF0ZSkgfSBlbHNlIHsgcmV0ID0gZHJtX2dlbV9vYmplY3RfaW5pdChkZXYsIG9iaiwgc2l6
-ZSk7DQo+Pj4gICAgCX0NCj4+PiAtCWlmIChyZXQpDQo+Pj4gKwlpZiAocmV0KSB7DQo+Pj4g
-KwkJZHJtX2dlbV9wcml2YXRlX29iamVjdF9maW5pKG9iaikNCj4+PiAgICAJCWdvdG8gZXJy
-X2ZyZWU7DQo+Pj4gKwl9DQo+Pj4gICAgDQo+Pj4gICAgCXJldCA9IGRybV9nZW1fY3JlYXRl
-X21tYXBfb2Zmc2V0KG9iaik7DQo+Pj4gICAgCWlmIChyZXQpDQo+Pj4gZGlmZiAtLWdpdCBh
-L2luY2x1ZGUvZHJtL2RybV9nZW0uaCBiL2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPj4+IGlu
-ZGV4IGJkNDJmMjVlNDQ5Yy4uOWIxZmViMDMwNjlkIDEwMDY0NA0KPj4+IC0tLSBhL2luY2x1
-ZGUvZHJtL2RybV9nZW0uaA0KPj4+ICsrKyBiL2luY2x1ZGUvZHJtL2RybV9nZW0uaA0KPj4+
-IEBAIC00MDUsNiArNDA1LDcgQEAgaW50IGRybV9nZW1fb2JqZWN0X2luaXQoc3RydWN0IGRy
-bV9kZXZpY2UgKmRldiwNCj4+PiAgICAJCQlzdHJ1Y3QgZHJtX2dlbV9vYmplY3QgKm9iaiwg
-c2l6ZV90IHNpemUpOw0KPj4+ICAgIHZvaWQgZHJtX2dlbV9wcml2YXRlX29iamVjdF9pbml0
-KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsDQo+Pj4gICAgCQkJCSBzdHJ1Y3QgZHJtX2dlbV9v
-YmplY3QgKm9iaiwNCj4+PiBzaXplX3Qgc2l6ZSk7ICt2b2lkIGRybV9nZW1fcHJpdmF0ZV9v
-YmplY3RfZmluaShzdHJ1Y3QNCj4+PiBkcm1fZ2VtX29iamVjdCAqb2JqKTsgdm9pZCBkcm1f
-Z2VtX3ZtX29wZW4oc3RydWN0IHZtX2FyZWFfc3RydWN0DQo+Pj4gKnZtYSk7IHZvaWQgZHJt
-X2dlbV92bV9jbG9zZShzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSk7DQo+Pj4gICAgaW50
-IGRybV9nZW1fbW1hcF9vYmooc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmosIHVuc2lnbmVk
-IGxvbmcNCj4+PiBvYmpfc2l6ZSwNCj4+DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5u
-DQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBH
-ZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0K
-KEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rl
-dg0K
-
---------------C0QJjKI0qwoGRcl2Yt0IOPHd--
-
---------------XgM8ETXUekg0EOJsfaSYemnJ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmN3ar0FAwAAAAAACgkQlh/E3EQov+AQ
-cxAAj0bf/fYJ3JvbpYSlat9Qo5WZ+4xZ1ypD0on92QLSIWGejH5cUbRoQLhuql2LEWLHThXyM0CG
-P4QMnK2vS8mVyGqVScRQ47LljkmJN9Qd+TomGP5vvMUoHtovhyKDd/yDWZmkGjHw16yJtEon0SBH
-m5vODEgxtB9aK5xex+6MiDJkZg22Div6Pewr1MGTYx4Smu7pxs1SjC7Qzwwf7bDzPhgIVmPsJFVB
-VatoAVlpx9pOFxL79TLR2+6wBCssNK/f+e4BDdObFxnK/zO31oHZ/uf17Ibmxxyak1i0LybQpLvX
-T3Vmh/yvOGDPRuTuTLiASANnJTGR9l1i23rtldVLPAenl9jG3RX4CWmaO7PJCNEBPQbE+rjPLz+U
-/xU/vQoZe3VdX3L44FdS6gMTh4ddqZYgRB+xu9ml9rs6uXiSqRT5dXNwq7/2FppblKqme8FmjKJR
-ts4jfPiS36QkCp8vnsLW+AJ5kzwZU+/giXRUiZVGEIFA//SUB8LHVn1jddfuBLlZHy5Ul0zz4H+G
-Uqmyd24JbbVzm9Nq6ZzXF3ODBln9r351bsY2vjDXaj46JL2kI+rIt9tH2IQi9OWRsilJ9taWafGY
-dngwZ1p7uDmsbBXjslP2wVRGFVxd0n13eA9Sd252mueqomLVtiuvvw+WCK+83XAkbNIkiv2NMaNr
-9ew=
-=SGdM
------END PGP SIGNATURE-----
-
---------------XgM8ETXUekg0EOJsfaSYemnJ--
+thanks,
+Chenyu
