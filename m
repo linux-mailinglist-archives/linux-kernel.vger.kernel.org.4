@@ -2,108 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173B162FB81
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9136362FB85
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242130AbiKRRVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S241968AbiKRRWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242518AbiKRRVJ (ORCPT
+        with ESMTP id S234973AbiKRRWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:21:09 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3C28E08E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:21:08 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 130so5545507pgc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:21:08 -0800 (PST)
+        Fri, 18 Nov 2022 12:22:30 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9842F03B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:22:29 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id kt23so14628359ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:22:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/1Oryu9eYijvMsGzuGNY+4ss+EsPW5oP6Dg+KrpYPu4=;
-        b=l+5HxQ2ht/FVlVHXqkeng5hmVoDGkwPWuSkXfmfsMsOVA7VnHUub/lW3gO9fCA+9KW
-         V9KIruuX4PNmzFtrrWW/oefPgSQBCeqBS+/NosWa3v14bN3M0abQ1dJ5NZhMFVxc0ocG
-         2CzsM3Htxaeg9bBZ7zqwSaviIEFiK9Ec8AkHIB45yABYeoDR72r5CRGNpgXRotcDNQjh
-         V0TKWUCdDRP5/sLRsS5oK+/eMZfisdCrgXQBVmqhLO26xZNJbO6j1XhJ4LVJwljkKnyG
-         UypUciCWay0hFVGN740aadBIZKDzUN5X96FHPLPDk1KQ/LeP8p3+fxvKs4XGTzL75SF6
-         rBfg==
+        d=raspberrypi.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tGlHMVAixSLQ2/vSJKtVJw1fS47SH8DBN8tgE+O+1Dw=;
+        b=OjlT+FkV3ubQznoPIsACkVupwz5M/BwNXgn9nTXGpJQCMt858j95Bbt5uaocOT6zFt
+         18FjSBC/7LGXjKqU37PeyaBP9NipzTpWgsr41BiQfe9ZyGXXRyBSHqgyYsSt1UU+7aWg
+         HqR+3cay+O13G9V+9VbC+9DNlTn3vMb90kT+QHVobVy2PLUjD17zi5uyZdNGFMP48Y9B
+         qMTqGh9BPsEmeWB3pG+MoVMwFq4wK7M6gTbpU7CKznn87Lnta2WnpAL4A0/8UdnZ+u2T
+         ooxthkH0fMlCsUozhubGVi1WCF9tF6z6+T+sAZ572CXMThA0V70d2P7JerZNUPCHFf0T
+         r0NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/1Oryu9eYijvMsGzuGNY+4ss+EsPW5oP6Dg+KrpYPu4=;
-        b=3gG+Q6fQLimhVXVrOT4einUQBdYO2y/+zGvwz2/6C/Sw9zClOmsQPXzaBlmudb6SVm
-         HnSy6SWZ1/jknOPdMrH47g/qvy9W8ctHaY+ZmJFn6qHwxmpxTcLhwaQbwCH6dkRJyNpT
-         dkQrL8M+F2sAFkDJylha2zwS9RIt42LDJluSPULj3YSkVuA6+t9jAMcwAhVGu5vquxr5
-         YE5/wlJOpkAzQdEjIueaYL+da9dCRSLaGiZBS2ImKFmnoyRBGtSvS0ELo579ZSbyPu1Z
-         +Lqzl4RqTdbpgWE2bTpJv/j5z07CQcn5tF7OKPZejbJlfcskjgAV3E9FYtFd5Damv46Z
-         0nTA==
-X-Gm-Message-State: ANoB5pkngiwAeDx0DLR0tkJq3Akt2xGUK6BkIWr14lCCRm5/ScVxZC56
-        0VqGmMf/u672sifrZBP+0XiE5It64YY0Vg==
-X-Google-Smtp-Source: AA0mqf4VrDF4hTVbqKTc72aoAVl5y5PhlUgwY9/90TF0BZPJ2zdVI9/WYRYH2+ph7XWz/zvH50nyXA==
-X-Received: by 2002:a63:ff17:0:b0:470:8f8d:eb51 with SMTP id k23-20020a63ff17000000b004708f8deb51mr7340377pgi.69.1668792067748;
-        Fri, 18 Nov 2022 09:21:07 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e22-20020a635456000000b00477078686a9sm3045206pgm.42.2022.11.18.09.21.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 09:21:07 -0800 (PST)
-Date:   Fri, 18 Nov 2022 17:21:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-Subject: Re: [PATCH v2] KVM: x86: avoid memslot check in NX hugepage recovery
- if it cannot succeed
-Message-ID: <Y3e+/r0MFzJxsX3m@google.com>
-References: <20221118162447.3185950-1-pbonzini@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tGlHMVAixSLQ2/vSJKtVJw1fS47SH8DBN8tgE+O+1Dw=;
+        b=Caft3MFLOkFfXSmPNArfOwye4Z9ZyEL1H2DnTNyl+A7YHoSWkn+KWGwWpjNdm84Ycf
+         WFgqrYOHv8vRaX/INHz+a3xAxcBE5wRq4YD6aNq21xxk9hkWpcBecjl8wmCXMTWdpJzC
+         kubJ6VpkGQPEFJxHKe49FxyfZLaQvmboDWf/lthZ6GjAqsPZT3ZvTsq63/oXPV2lOScc
+         vfXkQPwcRrie7XjXz81vSUcUyODUFuPGbkLeHb1zyg8MYboi13tilSMm35P+JtcVOwPt
+         aWQ0EtazWBozAqPYpG8ofQSKONhTcopLhOwNGuRduGeEkgT/sdgTO2PZSSntPCjgFHlN
+         3/5Q==
+X-Gm-Message-State: ANoB5pm/oNUBr3G7UfyPXOAuKL/Who49vpn1y9iv9k7PEZUXbL0HTbfw
+        4eScCrYIimt0LVXIl6LiAp8vTMJJycIaS6OEhfoK5g==
+X-Google-Smtp-Source: AA0mqf5RTDYL95yJLINf+DHoUvPAbKBKfzSUkMLfE676P01sHCik4FCCjPl1FZtbx4cSowoLTeqPlB3L+yyX8On2pds=
+X-Received: by 2002:a17:906:9246:b0:7af:da0:aebe with SMTP id
+ c6-20020a170906924600b007af0da0aebemr6761187ejx.723.1668792147755; Fri, 18
+ Nov 2022 09:22:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221118162447.3185950-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221118084244.199909-1-umang.jain@ideasonboard.com>
+ <20221118084244.199909-3-umang.jain@ideasonboard.com> <166876741790.50677.17305359640652054680@Monstersaurus>
+In-Reply-To: <166876741790.50677.17305359640652054680@Monstersaurus>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Fri, 18 Nov 2022 17:22:12 +0000
+Message-ID: <CAPY8ntDMM-0S_gz5A+4rWQ7M2gmUMeOYRW__cr8v=afo5fM_sA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] vc04_services: mmal-vchiq: Use bool for vchiq_mmal_component.in_use
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Umang Jain <umang.jain@ideasonboard.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-staging@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022, Paolo Bonzini wrote:
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 43bbe4fde078..5d85f1a61793 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1603,6 +1603,8 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
->  				     struct kvm_memory_slot *new,
->  				     enum kvm_mr_change change)
->  {
-> +	int old_flags = old ? old->flags : 0;
-> +	int new_flags = new ? new->flags : 0;
->  	int r;
->  
->  	/*
-> @@ -1627,6 +1629,11 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
->  		}
->  	}
->  
-> +	if ((old_flags ^ new_flags) & KVM_MEM_LOG_DIRTY_PAGES) {
-> +		int change = (new_flags & KVM_MEM_LOG_DIRTY_PAGES) ? 1 : -1;
-> +		atomic_set(&kvm->nr_memslots_dirty_logging,
-> +			   atomic_read(&kvm->nr_memslots_dirty_logging) + change);
+Hi Umang & Kieran
 
-Again, this needs to be done in the "commit" stage, and IMO should be x86-only.
+On Fri, 18 Nov 2022 at 10:30, Kieran Bingham
+<kieran.bingham@ideasonboard.com> wrote:
+>
+> Quoting Umang Jain (2022-11-18 08:42:43)
+> > In commit 7967656ffbfa ("coding-style: Clarify the expectations around
+> > bool") the check to dis-allow bool structure members was removed from
+> > checkpatch.pl. It promotes bool structure members to store boolean
+> > values. This enhances code readability.
+>
+> This only talks about 7967656ffbfa as I can interpret it.  A sentence
+> here describing what we're going to do about it in /this/ patch would be
+> clearer as a second paragraph:
+>
+> """
+> Convert the remaining bit-field storage for 'in-use' to a bool and use
+> it accordingly.
+> """
+>
+> But that's trivial and not worth a v3 specifically. (unless anyone
+> applying this wants to add it).
 
-https://lore.kernel.org/all/Y3bTu4%2FnUfpX+Enm@google.com
+Totally agree.
 
-> +	}
->  	r = kvm_arch_prepare_memory_region(kvm, old, new, change);
->  
->  	/* Free the bitmap on failure if it was allocated above. */
-> -- 
-> 2.31.1
-> 
+> Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+
+> >
+> > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> > ---
+> >  drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 6 +++---
+> >  drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h | 2 +-
+> >  2 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+> > index 4abb6178cb9f..294b184d4a49 100644
+> > --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+> > +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+> > @@ -1648,7 +1648,7 @@ int vchiq_mmal_component_init(struct vchiq_mmal_instance *instance,
+> >         for (idx = 0; idx < VCHIQ_MMAL_MAX_COMPONENTS; idx++) {
+> >                 if (!instance->component[idx].in_use) {
+> >                         component = &instance->component[idx];
+> > -                       component->in_use = 1;
+> > +                       component->in_use = true;
+> >                         break;
+> >                 }
+> >         }
+> > @@ -1724,7 +1724,7 @@ int vchiq_mmal_component_init(struct vchiq_mmal_instance *instance,
+> >         destroy_component(instance, component);
+> >  unlock:
+> >         if (component)
+> > -               component->in_use = 0;
+> > +               component->in_use = false;
+> >         mutex_unlock(&instance->vchiq_mutex);
+> >
+> >         return ret;
+> > @@ -1747,7 +1747,7 @@ int vchiq_mmal_component_finalise(struct vchiq_mmal_instance *instance,
+> >
+> >         ret = destroy_component(instance, component);
+> >
+> > -       component->in_use = 0;
+> > +       component->in_use = false;
+> >
+> >         mutex_unlock(&instance->vchiq_mutex);
+> >
+> > diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+> > index 6d984cf5a83a..09f030919d4e 100644
+> > --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+> > +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
+> > @@ -82,7 +82,7 @@ struct vchiq_mmal_port {
+> >  };
+> >
+> >  struct vchiq_mmal_component {
+> > -       u32 in_use:1;
+> > +       bool in_use;
+> >         bool enabled;
+> >         u32 handle;  /* VideoCore handle for component */
+> >         u32 inputs;  /* Number of input ports */
+> > --
+> > 2.38.1
+> >
