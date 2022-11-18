@@ -2,86 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BBF62F139
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0348262F13E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241952AbiKRJb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S241434AbiKRJcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240803AbiKRJbx (ORCPT
+        with ESMTP id S233863AbiKRJcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:31:53 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD0217A9D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:31:51 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id k8so8423996wrh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:31:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fetCAE25qHzCxsfAEy/LSksZCYfUo1dgBC8JMthSJPw=;
-        b=ILv/fUUE4o7JlmKvA5+N32XO6eYFm0iBtxdTyrL34D9ZI5gCqmn6DE97g6mWV7EtFG
-         UcdJNssdQuxr3v9d9UsoPyFFSUgpYzN2KobUbXE0SXgj01H11UTURTXNm+72Ivq8H4uz
-         z8OkqUsIst6nB+UHNlDEU5J/46IwZb4+0sVVvPShe7Jzfs4Fq1drLnMxVwdZ5Ox36BEP
-         MV8s6fcWLq2vExgWwwrKOyblDydaa6QtOIQ1R36cKvlPUdA4RO3jRSdjDTiu148SAHWV
-         jnaz5EI0axZWwCKmUGxxgmZhEhdydY/hKoF8LrtsXMwuoaHDAHNBs+Ui1so3IY2Oo5Rr
-         /YcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fetCAE25qHzCxsfAEy/LSksZCYfUo1dgBC8JMthSJPw=;
-        b=1Sa1dmonPlMizUDDz3Nqs9AMSk7Nx4cuuKvVOPaZjFoRClrum2IelFxKHYnw8KucbZ
-         Jym8pKqjfQdXXrfVh2kzB7F6hpYPDyqM3A0HGIS/jBNcV3t+K/0oOY6ePhlq8laVrZdq
-         GmDezKmxfDmYozN6KocdypKTongN5NIe/QKd4JOiWjoZ52A5NErNl3Y4YjopZxAJ9sxH
-         OZYGKvcgWAkWrVW53hXcD1AkwVFnDhdJi1BQYYBXrz1VchBC5O/RzNxDbNcwAW1q6tlK
-         6ZWD9Kh5NXoUxubk2eEDtou06gD7N+csuadaUQjZ5zRt+QBRCzfC8gxfaGzumCkcsZ1x
-         /7Bg==
-X-Gm-Message-State: ANoB5plQqSsfXW/KRLJLpvyjyZAtSM7uF7dEpOtazdQBPwTl8yHNYA6Y
-        ZkYi5SQwS+QfeC0p7jrm0qU5aC8d2rxlqowjJLb7IWct4dc=
-X-Google-Smtp-Source: AA0mqf7Rk7wCtA4/f82Bf4yD7jYLnoZVouyQ4A4+/ghML5Pw/n71edY9C7UBJw5yfA+Tboj7x+97Ige+myLGjQJF3kM=
-X-Received: by 2002:a5d:6807:0:b0:241:a2a6:d205 with SMTP id
- w7-20020a5d6807000000b00241a2a6d205mr3731314wru.46.1668763910273; Fri, 18 Nov
- 2022 01:31:50 -0800 (PST)
+        Fri, 18 Nov 2022 04:32:52 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF5617A9D;
+        Fri, 18 Nov 2022 01:32:51 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NDBHg1NzNz9v7Nl;
+        Fri, 18 Nov 2022 17:26:39 +0800 (CST)
+Received: from [10.206.134.65] (unknown [10.206.134.65])
+        by APP2 (Coremail) with SMTP id GxC2BwCHu_chUXdj9_NzAA--.22300S2;
+        Fri, 18 Nov 2022 10:32:27 +0100 (CET)
+Message-ID: <2e493258-b267-b8ad-0812-53f4e9c849ae@huaweicloud.com>
+Date:   Fri, 18 Nov 2022 10:32:15 +0100
 MIME-Version: 1.0
-From:   =?UTF-8?B?6LW15aSP?= <zhaoxiahust@gmail.com>
-Date:   Fri, 18 Nov 2022 17:31:38 +0800
-Message-ID: <CAO0Zsh+OT_JNZC8OV_cG7LKn2y2ZYM2hm=SAapW5FEub-qa_BA@mail.gmail.com>
-Subject: A bug or a feature of CONFIG_HZ on a low clock frequency FPGA
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+ <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
+ <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
+ <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwCHu_chUXdj9_NzAA--.22300S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFyUJF45CrWDXF1rJF48Crg_yoW8Ww45pF
+        Wrta4UCrsYqF1UCFZxta18Wa43KrZ5GF4UJas5JryUAF4DXF1SqryFkF15ua48KrZ3J34q
+        qrWqg343Z3s8Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        xUo0eHDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABF1jj4GV8QAAsS
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi guys,
+On 11/17/2022 6:18 PM, Casey Schaufler wrote:
+> On 11/17/2022 8:05 AM, Mimi Zohar wrote:
+>> hOn Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>
+>>> Currently, security_inode_init_security() supports only one LSM providing
+>>> an xattr and EVM calculating the HMAC on that xattr, plus other inode
+>>> metadata.
+>>>
+>>> Allow all LSMs to provide one or multiple xattrs, by extending the security
+>>> blob reservation mechanism. Introduce the new lbs_xattr field of the
+>>> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
+>>> needs, and the LSM infrastructure knows how many xattr slots it should
+>>> allocate.
+>> Perhaps supporting per LSM multiple xattrs is a nice idea, but EVM
+>> doesn't currently support it.  The LSM xattrs are hard coded in
+>> evm_config_default_xattrnames[],  based on whether the LSM is
+>> configured.  Additional security xattrs may be included in the
+>> security.evm calculation, by extending the list via
+>> security/integrity/evm/evm_xattrs.
+> 
+> Smack uses multiple xattrs. All file system objects have a SMACK64
+> attribute, which is used for access control. A program file may have
+> a SMACK64EXEC attribute, which is the label the program will run with.
+> A library may have a SMACK64MMAP attribute to restrict loading. A
+> directory may have a SMACK64TRANSMUTE attribute, which modifies the
+> new object creation behavior.
+> 
+> The point being that it may be more than a "nice idea" to support
+> multiple xattrs. It's not a hypothetical situation.
 
-  We are running the linux kernel on a FPGA board with 20MHz clock
-frequency. If we configure the CONFIG_HZ as 12, the kernel executes
-perfectly. However, after configuring the CONFIG_HZ to 250 as a test,
-the kernel boot stucks after printing "rcu: Hierarchical SRCU
-implementation".
-
-  We added one printk sentence in the timer_interrupt function to
-check the next instruction pc stored in regs. It keeps printing the pc
-of the replay_soft_interrupts function.
-
-  We guess this is because the timer interrupt happens again when the
-kernel is still processing the previous timer interrupt. Thus, the
-kernel jmps into timer_interrupt again and again.
-
-  If we are right, are there any guidelines to configure the CONFIG_HZ
-based on the hardware platform clock frequency? If we are wrong, how
-do we explain the stucking case that we met?
-
+Ok, that means that I have to change the number of xattrs reserved by 
+Smack in patch 3.
 
 Thanks
-Xia
+
+Roberto
+
