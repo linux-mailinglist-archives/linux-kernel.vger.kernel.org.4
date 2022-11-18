@@ -2,177 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC5C62FB26
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CCB62FB24
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 18:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242458AbiKRRGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 12:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S234867AbiKRRGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 12:06:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbiKRRGs (ORCPT
+        with ESMTP id S242432AbiKRRGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:06:48 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E8F28736;
-        Fri, 18 Nov 2022 09:06:46 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIC9udW020529;
-        Fri, 18 Nov 2022 18:06:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=selector1;
- bh=GEsgskyYzb0RHzR+1jCrcUioio0/GVuMkcP/vFdV+os=;
- b=wiHjAhLR1klYjxzFm5LtzYeDN+ijnuhwKr7z9wQyF407U0ntZFc735hkGdT/T5HUhICT
- Y/bbF3F0Rf6KW5alWcqzrb7e2TGtq9H/9fw5sG5mXjuvosMgEaUY7Si6434lB7SlI1WG
- nGAYbx8qKuyh7gzYxamT18acO9nMnwmPRG76ftTWJ0pWddjYF7hpe12GQDvklakNcP9h
- vECAXCjGjYCnOCFDhLkT3BpnBOrbGeREdfi/Hu0g0qySLkbkN8dX3Oc70uaFW4CKaacf
- TAxbeFEr5ETLPBz1sHh5GZnyaKMN7RsnSHv16PcdxyIjqA6KyB8RBZ4gDj/eTvXwKnRb uA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kx0m9d8rt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 18:06:30 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3599610002A;
-        Fri, 18 Nov 2022 18:06:24 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 70E93252241;
-        Fri, 18 Nov 2022 18:06:24 +0100 (CET)
-Received: from localhost (10.201.20.168) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Fri, 18 Nov
- 2022 18:06:24 +0100
-From:   Valentin Caron <valentin.caron@foss.st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Valentin Caron <valentin.caron@foss.st.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Erwan Le Ray <erwan.leray@foss.st.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, <linux-serial@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] serial: stm32: move dma_request_chan() before clk_prepare_enable()
-Date:   Fri, 18 Nov 2022 18:06:02 +0100
-Message-ID: <20221118170602.1057863-1-valentin.caron@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 18 Nov 2022 12:06:35 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312262528F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:06:32 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 6so5505592pgm.6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 09:06:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AGuGWp5XCDdHJkP/ZVzcY0JNFnAf0r/m3zS2HVfgluM=;
+        b=EF20HVvgV91jn4cZ3X3NrdTFvw1O1FGOatUDshSJu6yJPlh+xkrX/7AsdG9iutTwh3
+         D2kSGxbYUBU3Nh7zBm54rQsCM21o1p1wb4g3y5FQ1cE6jG8zwnQ7sCpAp65yXz/8dAOJ
+         DgZXfwYSGezpi9JmZc+1nFbRmCINaF3Upd3UA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AGuGWp5XCDdHJkP/ZVzcY0JNFnAf0r/m3zS2HVfgluM=;
+        b=2IFIj5Iy5q4KlOi5a+Z4FYEbuBP48HKJT0U6Xvnmf/6mwH4Q0N7zfT0aU4GHxKtuTY
+         FiuyFnwc/Lx3dd3r/nCOiGETQRCUlcdm5uoi0kdGJbgEbWYvMEpLifk4J3zI4DdG0SW5
+         n8o+vODKKrMEUqtQZY4t7t0+FsfYTjDkJhQf1twXwoXD81hpWTbqNwWU/T0loKoPeUA1
+         7pCdpnFVo9uXBjzyUyp99ETgXnEQu1HTSV1k1WrYdjcdiZoLW3AlRiNTZrNm4y5HjrpS
+         0XzkTHQR60ljI7iHkneMzoqgEbmkKuxhTZ86/+JvJbZsLp71uKtE6a4bN9cWywMXAD5u
+         aEDQ==
+X-Gm-Message-State: ANoB5plK06YZ1hNDLkaI7z6gEodR3oJ15ac4gPuHAhxMsJ1O4qPtIXiF
+        OD3b2AMgZkLDkxiOtpt4qf1sTw==
+X-Google-Smtp-Source: AA0mqf66Th+JaUaR6SALYWcOu+b5KEs15JPlRbwXz1ZO7OP5vyoVUmI5BCievEOVALjrQFn4+48xbw==
+X-Received: by 2002:a63:3d8:0:b0:476:eee6:d394 with SMTP id 207-20020a6303d8000000b00476eee6d394mr7387317pgd.228.1668791191672;
+        Fri, 18 Nov 2022 09:06:31 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 19-20020a621513000000b0056c0b98617esm3435797pfv.0.2022.11.18.09.06.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 09:06:31 -0800 (PST)
+Date:   Fri, 18 Nov 2022 09:06:30 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] slab: Remove special-casing of const 0 size
+ allocations
+Message-ID: <202211180906.3030FDDB4@keescook>
+References: <20221118034713.gonna.754-kees@kernel.org>
+ <20221118035200.1269184-2-keescook@chromium.org>
+ <f008f8a2-8d5e-88ab-8d23-a2043ea5abe7@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.20.168]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-18_04,2022-11-18_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f008f8a2-8d5e-88ab-8d23-a2043ea5abe7@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If dma_request_chan() returns a PROBE_DEFER error, clk_disable_unprepare()
-will be called and USART clock will be disabled. But early console can be
-still active on the same USART.
+On Fri, Nov 18, 2022 at 12:34:01PM +0100, Vlastimil Babka wrote:
+> On 11/18/22 04:51, Kees Cook wrote:
+> > Passing a constant-0 size allocation into kmalloc() or kmalloc_node()
+> > does not need to be a fast-path operation, so the static return value
+> > can be removed entirely. This is in preparation for making sure that
+> > all paths through the inlines result in a full extern function call,
+> 
+> So with the kmalloc_trace() already solved, we could now say it's not "in
+> preparation", but simply "makes sure", right? I can correct that while
+> picking this patch.
 
-While moving dma_request_chan() before clk_prepare_enable(), the clock
-won't be taken in case of a DMA PROBE_DEFER error, and so it doesn't need
-to be disabled. Then USART is still clocked for early console.
+Yeah, good point. I missed this when updating the commit logs. Thanks!
 
-Fixes: a7770a4bfcf4 ("serial: stm32: defer probe for dma devices")
-Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
----
- drivers/tty/serial/stm32-usart.c | 47 ++++++++++++++++----------------
- 1 file changed, 23 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 24def72b2565..a1490033aa16 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -1680,22 +1680,10 @@ static int stm32_usart_serial_probe(struct platform_device *pdev)
- 	if (!stm32port->info)
- 		return -EINVAL;
- 
--	ret = stm32_usart_init_port(stm32port, pdev);
--	if (ret)
--		return ret;
--
--	if (stm32port->wakeup_src) {
--		device_set_wakeup_capable(&pdev->dev, true);
--		ret = dev_pm_set_wake_irq(&pdev->dev, stm32port->port.irq);
--		if (ret)
--			goto err_deinit_port;
--	}
--
- 	stm32port->rx_ch = dma_request_chan(&pdev->dev, "rx");
--	if (PTR_ERR(stm32port->rx_ch) == -EPROBE_DEFER) {
--		ret = -EPROBE_DEFER;
--		goto err_wakeirq;
--	}
-+	if (PTR_ERR(stm32port->rx_ch) == -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-+
- 	/* Fall back in interrupt mode for any non-deferral error */
- 	if (IS_ERR(stm32port->rx_ch))
- 		stm32port->rx_ch = NULL;
-@@ -1709,6 +1697,17 @@ static int stm32_usart_serial_probe(struct platform_device *pdev)
- 	if (IS_ERR(stm32port->tx_ch))
- 		stm32port->tx_ch = NULL;
- 
-+	ret = stm32_usart_init_port(stm32port, pdev);
-+	if (ret)
-+		goto err_dma_tx;
-+
-+	if (stm32port->wakeup_src) {
-+		device_set_wakeup_capable(&pdev->dev, true);
-+		ret = dev_pm_set_wake_irq(&pdev->dev, stm32port->port.irq);
-+		if (ret)
-+			goto err_deinit_port;
-+	}
-+
- 	if (stm32port->rx_ch && stm32_usart_of_dma_rx_probe(stm32port, pdev)) {
- 		/* Fall back in interrupt mode */
- 		dma_release_channel(stm32port->rx_ch);
-@@ -1745,19 +1744,11 @@ static int stm32_usart_serial_probe(struct platform_device *pdev)
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_put_noidle(&pdev->dev);
- 
--	if (stm32port->tx_ch) {
-+	if (stm32port->tx_ch)
- 		stm32_usart_of_dma_tx_remove(stm32port, pdev);
--		dma_release_channel(stm32port->tx_ch);
--	}
--
- 	if (stm32port->rx_ch)
- 		stm32_usart_of_dma_rx_remove(stm32port, pdev);
- 
--err_dma_rx:
--	if (stm32port->rx_ch)
--		dma_release_channel(stm32port->rx_ch);
--
--err_wakeirq:
- 	if (stm32port->wakeup_src)
- 		dev_pm_clear_wake_irq(&pdev->dev);
- 
-@@ -1767,6 +1758,14 @@ static int stm32_usart_serial_probe(struct platform_device *pdev)
- 
- 	stm32_usart_deinit_port(stm32port);
- 
-+err_dma_tx:
-+	if (stm32port->tx_ch)
-+		dma_release_channel(stm32port->tx_ch);
-+
-+err_dma_rx:
-+	if (stm32port->rx_ch)
-+		dma_release_channel(stm32port->rx_ch);
-+
- 	return ret;
- }
- 
 -- 
-2.25.1
-
+Kees Cook
