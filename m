@@ -2,183 +2,663 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321B462EEBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC8362EEBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiKRH5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 02:57:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        id S241279AbiKRH5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 02:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241143AbiKRH5H (ORCPT
+        with ESMTP id S241275AbiKRH5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 02:57:07 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2918C093;
-        Thu, 17 Nov 2022 23:57:05 -0800 (PST)
+        Fri, 18 Nov 2022 02:57:19 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D144C8CF0C;
+        Thu, 17 Nov 2022 23:57:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668758225; x=1700294225;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=XlHQ8RKdVwvnay2vkhZRysBN3z6GoTUK7XpKFbf9RDo=;
-  b=XzRB5liiGGUu16gTTGOdFJBqs2qAQLIc3wvzMc2RIHPoqCeg8+dtQnyv
-   2iNwzwA02e22dtlXlaRvPnm0z+pQX1ZRrB8RxXJqqBP3cq/PwWas5IA52
-   0gc+Z01zhMdlJ5E/giW1uP7nGZAXDE7YBddwZBcMXCgofEv13s3xjgkZR
-   9kjENvBx7jS4+MHYPsnVmzIcFhjxz/0ni5Qge6I6aIWqauNTcDTkB15yA
-   vdMGppRFOAfKdibjLfB8A76co88KydrBfmfm88TG6nCLAFGxVQfi3FjWH
-   0WEoTyBdxkiL0OuHVaVwMaMeN92WOPJuLAo64DuE7jBoOQumbWwSC67fp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="339917786"
+  t=1668758230; x=1700294230;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=erV3pviKt+5Zge093Piu8VKAMeUgcNkTaRImcJe7uqQ=;
+  b=fl1NEhIIdehX1erK62P/6TC6dquwTIhsvLpbTIh7/TcOOaCoIknrFz5P
+   TUM5QdBHIloRlq+LD0ziYmJZ87ooPM/VzL0UKkqH6ViqQjeSQd7J/ebl3
+   2lCkB3H10YztHCSQd6l9TAQ9vIZaArtarQgBd1kDpdsU8MUjpJ0rmSCbD
+   3cXtioxrSHoS0LClSv8co4vRUU5XMjz6vN0IhY88urkBPbdYUk6hl7YsO
+   cszTxpdamoMUA5TitabymMAKWkycLDw72Su2iJKnOqayW7fQ8WzkPH9Xq
+   u55Fj12Or42agU6LFYtbLpyR+g8cL1xQuAr+Hn2crCwv0pQz5GrFuha3z
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="311784406"
 X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
-   d="scan'208";a="339917786"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 23:57:04 -0800
+   d="scan'208";a="311784406"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 23:57:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="642420578"
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="634348335"
 X-IronPort-AV: E=Sophos;i="5.96,173,1665471600"; 
-   d="scan'208";a="642420578"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga007.fm.intel.com with ESMTP; 17 Nov 2022 23:57:04 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 17 Nov 2022 23:57:04 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 17 Nov 2022 23:57:04 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.40) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 17 Nov 2022 23:57:04 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FqW1mZRXgN34dgDloOnVHXLrltarnadYo83VZdzxVDscP++fO/lnkEJx5nL+pNcDEzoh1xrvc52DVKKvLC7zjpqaSihZ0DcotccPQN8vDvU9lFRT90z50evSNgX+swb93OtdMqBwlvPlBU1QTKUz6FrnWLWxgh7GqGchHB+ShUKNFgzOkhzkZwEiwEpqCeBtE9I59x7MqjWrZXrlEx9iJ318UaaHw8H0xoVz6L927iInSqNBw2AIjTYJiNvgHtrWux3xC5ewt9L+I005Ib5uolcF4afDPKC5+230BxEuub63qgnyPFx2YWjrmGUxR7KIHvuYFmnUDwB55lKtHP2grA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XlHQ8RKdVwvnay2vkhZRysBN3z6GoTUK7XpKFbf9RDo=;
- b=jShSacQn6Y9OFCVK2J7tzLFXgbEzkzQxlyz9E/TJDoyxlU4ClwGVCLIzr9L8FVDV7nssEU/kjBXY5IbhWD6gDbnmNhhaGw7L7S6meypIsWf1xVD3KMXjeDj/QX1QKtCgJAij2yRWSZh2d9Hphq1pXfkq3fm6qIapThClHAdV56595T1kXD5K5JzEUGJ/laQJ92hT4yal9hWAFSROcbjxqiGco++dDZSo91ZvhfVGZcWyoyHI5lADaqVh53QIiGa+f0FdM6R4FxKnLFQwowZngQG0Kxa1M4Sdqdh328eBPtMHnZx8pCG0ceXpk8fqQLVO7KHVnAovb5qzLofd+asu7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DS0PR11MB7359.namprd11.prod.outlook.com (2603:10b6:8:134::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Fri, 18 Nov
- 2022 07:57:02 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::9929:858c:3d20:9489]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::9929:858c:3d20:9489%4]) with mapi id 15.20.5813.019; Fri, 18 Nov 2022
- 07:57:02 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>
-Subject: RE: [patch 08/20] genirq/msi: Make MSI descriptor iterators device
- domain aware
-Thread-Topic: [patch 08/20] genirq/msi: Make MSI descriptor iterators device
- domain aware
-Thread-Index: AQHY9dV5ADECb6EyFUiooShPAdm6u65EWfKw
-Date:   Fri, 18 Nov 2022 07:57:01 +0000
-Message-ID: <BN9PR11MB5276F39FAC20C32E273B7FB48C099@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20221111131813.914374272@linutronix.de>
- <20221111132706.500733944@linutronix.de>
-In-Reply-To: <20221111132706.500733944@linutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DS0PR11MB7359:EE_
-x-ms-office365-filtering-correlation-id: 97dcb499-0842-4205-3dac-08dac93a7a1a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CofZC97LmGxYop0aUbgTCNcsStq6gBvMhCQ7mXHEa38D5c8CN9TyVhdN3CK3ejCrrNKTKlT+uzHa1y7QgUdZ6M1PXQdQejKFoDfxX88DoGr1gmn2p541XQ6y8B9aMUg/IeNWhhpKQrEVyVk1WKDWbBhh9unvsLJvESNldqHu1uEi4e4Ik2MW40493VBKz8F5KSr2jrN+x57YQEVGGCMKB8ddZj9+HBWlhSrqnRY41e2odmXQBQiKkV1mFL3c+Z3xH2ev75rre8IY1Mh69M3mBzagq/qvbikO/R3/G63mAX0nDpWZY9SFxUzRpxpiwEleS+Akw224U3Em9QVq1fQ/Ukcsog//Ni2GTSk0/2q+s1/l1+h0+nzF/fANsE3F/EHyjwpt3wl4AUIwULnHu6UooAI7ntesoOTNpo7IMSWdDA4t+61UMiAcq1CnH7kKP2ezjPudgVC8tqz3NAoczITozIs580oXMoSGGRXFFW63RfOsCv6t4sMylRX3RROWkxX6NO+ROMOZX0s7DGUxfa0Ucq59/AZYZxLUhk+Y4vOVoar2yr3GW7c5b5DmLSTxemYi+iIi99GRUber1Khhf96kEbSs2kbZ44M//rNSNFBg1EIz8he+iusYc3afDX931RVIZp6NYKc1LE9gNBMuBH8VePJCyVPsOMitX5yZ6n5ej8PPS+uWM0U196pLJkpoZTfyRVZgWf4gGEm9OBV3y30oRg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(376002)(396003)(346002)(366004)(451199015)(4744005)(478600001)(71200400001)(107886003)(7696005)(8676002)(4326008)(33656002)(38070700005)(54906003)(66476007)(66946007)(66556008)(64756008)(66446008)(76116006)(6506007)(55016003)(82960400001)(186003)(38100700002)(122000001)(110136005)(86362001)(26005)(9686003)(316002)(52536014)(8936002)(7416002)(5660300002)(2906002)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?a0d6dGIrUkE2SDUvY3E1NEVoNUFCMVR6NXRLK21RNVNkdTVEZXhGZ0VvN1RH?=
- =?utf-8?B?bU00R3lERERXWWM4M0l6STk1ZDhHQ1UvN0swZW1DbkVoVmN1YTZHUHFBY2Vr?=
- =?utf-8?B?YXc4OEplMGRSUGxrY2tLZUNzN2N3RkRVb2M0ODFGaWZ4THFScXllZTVKVHgx?=
- =?utf-8?B?emlBb25kZUEwS3YxM3FlL1lwQktLZHdjZ0ZNbmxJTFBqUmZDTHE5Vjd6ckxa?=
- =?utf-8?B?amFNVVNTMWVNSHBDeC85ZWppL0Q3ZzBxdk9DMU9VMS9OTFFvdDRZb1U2MVc0?=
- =?utf-8?B?aVlHU1V6WVo3S1IwNU5JQzJBVk5WRjhRdjVONkk4M2o3UWhITmMvQy9DZXd1?=
- =?utf-8?B?YVRGc3V1dzZUV1dIcEl0dW43WUVFM1o2WDh3NEUvekNmNVBKQ1hMTm5wWTlt?=
- =?utf-8?B?Q1dBMnh4cHJTbi8zZlhZRHVMOXpseE9DRHd6L0drYkRGNzZ2YjFkMFQzNFI2?=
- =?utf-8?B?bDlkeWJRYUF0VHZDMDhmYmZ1MzhUdlFaQlhJVE1oSTRaTC9WaVBhdmlZMVkw?=
- =?utf-8?B?empaMUk5RVhhL3c4ZnJQVWNoZytZb2lMU0poVUljditYWTNwOTBDbUY2bEt5?=
- =?utf-8?B?MEhqTldpWG4wMzdRc0FIRE1iVS92L2NuTjdvdUxuRE5nNXZGR1h6Q1VmMFA1?=
- =?utf-8?B?eEhmQmxRYm9qR3RwQ1lYZmlFTlJxWVNya1ZZdDkrdzlLY1FWOFRYOFc1cGE2?=
- =?utf-8?B?V0xncDVPajJINjh4bU9PTEwvcVllUkdUaW42N0hYWmJBQmhSckJ2UTJOb3ha?=
- =?utf-8?B?U1EwWnhKUlhlSnIxRFZxZk5tNmtXZzUvNHlaN3VIS1A5b1lNY2lodVhPcGht?=
- =?utf-8?B?SDVhSjhvK01xNE5PNlpoTWVOOUdsR3RIc3hlR2pKU2NnejdDSTRzUUk4N3JY?=
- =?utf-8?B?S0gyVjUzdzV5Y2xrYmsweUtOY3QyMjR2MDlnZ0QxRmFYU3AxRWxIR2FOLy9j?=
- =?utf-8?B?MUl4OWRpSUZ1UnpQbTB6Q3JRZFY5M3NPK002dk5iblNDT2crZTFNYWViYnZQ?=
- =?utf-8?B?eXdRM3pyN3hqMFE4SXc3dWVjcDFwREJjNUsvVnNiSGlSZkczeDR3eHByQ1k2?=
- =?utf-8?B?SDFWZlF3U2xGa3o0YUYrMm9WTnRrYjYrRE92MkkrTGQzS2hOTkxlVGhob1JZ?=
- =?utf-8?B?VlJqM05TYjVkaFBCVGVsT3VwYW5IUFB1Nk5zTzJ4aFNGTE5QWHMrSWVsblJm?=
- =?utf-8?B?VTMzL0c1MStMSWV4aklYUEtTQTdrTDk2a0c3NFZVZFJxODdXSXNwNmRNdjNM?=
- =?utf-8?B?UDcwb2oyV2lKOUtoWlJNZHZkejFLRjVUYVVkS1BCVlhwbkFrSnhMRk15ZVQ1?=
- =?utf-8?B?U2Urclh3bTg3SUwxMGtrdDJ6SC9RMnFhYUdwUWJFcTQvK0JKNlNoYU8zNC9u?=
- =?utf-8?B?UGQ4YkZLRkNoYkZyYXJDVU1kQzFSVDA5QzlFUnVPa0JacXRKeUhDc2VkeFlZ?=
- =?utf-8?B?N1dYRUVpM1NabHloM0hLR0IveWlweXhYVndJRVBsR3MwRkVKSzNmMTZzaDBs?=
- =?utf-8?B?ZlZ2cVVwWDcwaE9NRzZTT1hxTGdnMEtJcEFhOTRuTjY2ci8wWmxzUWxMMW9I?=
- =?utf-8?B?dnVWekg5UGJqSVFuZXJGV0s3Y2R5NW9JVHpIcDIxdEx4WDMzTUpqYmNFTDZq?=
- =?utf-8?B?WlpXMms0bmY1ck1jTHZ4Y2xiWjhyRWhrRVVOK3dzYjJzSCtnLzZBR3IvYVpx?=
- =?utf-8?B?N3ZVSnFnS2ZFV0FYRlZjTFZtNFdBKzkrYjJLN25MckNsMjIrdHNHVkhaOWJ3?=
- =?utf-8?B?bk42NjJVTDVQWStSNmtNUlQ0L25NSTNXZEg3blN6UVJ3cnQ4ajJQcHYrZnl2?=
- =?utf-8?B?eHpUWWxyUVVEYXFFTzZuQVlydEZPYmo3bStJcXpKbFV1RWx3TFYxQkt5UGZl?=
- =?utf-8?B?a2pNcmF3bG1IenI0b0ZnOHJ1V05yWk04bkoyekRxam5INHAwcllZT2N3Tldo?=
- =?utf-8?B?TVBUdDJaQnRiZlUzQ0habUtZZEZJditKS2lZbytreExyb3dZV3AxVjVjaW5L?=
- =?utf-8?B?ZVg0MHlZT3dvZVk4VGZyQ3ZDNkxSY3BLbTBaK2tRcTFkaWNRVDZUTHJrOHdp?=
- =?utf-8?B?MUVLclIydG5adWZFYTBwMFVkdGNlZU8vMFhMaTBDZFcvTjNGalhUZ1k0Q2lC?=
- =?utf-8?Q?uLKOw4afU1bG7+xyrWkkLgEyb?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="634348335"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by orsmga007.jf.intel.com with ESMTP; 17 Nov 2022 23:57:06 -0800
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
+        zhengjun.xing@linux.intel.com
+Subject: [PATCH 4/5] perf vendor events intel: Add metrics for Alderlake-N
+Date:   Fri, 18 Nov 2022 15:57:01 +0800
+Message-Id: <20221118075702.40689-4-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221118075702.40689-1-zhengjun.xing@linux.intel.com>
+References: <20221118075702.40689-1-zhengjun.xing@linux.intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97dcb499-0842-4205-3dac-08dac93a7a1a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2022 07:57:01.9547
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ITjEHd6DSElIuyiuG2t8ukrgbCg93WqIIEjJj9qYkXQNIkVpARbHYqhxoNoJsboAENoZbxxMuac1ixRliNBnsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7359
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBUaG9tYXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4NCj4gU2VudDogRnJp
-ZGF5LCBOb3ZlbWJlciAxMSwgMjAyMiA5OjU3IFBNDQo+IA0KPiArLyogSW52YWxpZCBYQSBpbmRl
-eCB3aGljaCBpcyBvdXRzaWRlIG9mIGFueSBzZWFyY2hhYmxlIHJhbmdlICovDQo+ICsjZGVmaW5l
-IE1TSV9YQV9NQVhfSU5ERVgJKFVMT05HX01BWCAtIDEpDQo+ICsjZGVmaW5lIE1TSV9YQV9ET01B
-SU5fU0laRQkoTVNJX01BWF9JTkRFWCArIDEpDQo+ICsNCg0KT3V0IG9mIGN1cmlvc2l0eS4gT3Ro
-ZXIgcGxhY2VzIHRyZWF0IE1TSV9NQVhfSU5ERVggLSAxIGFzIHRoZSB1cHBlcg0KYm91bmQgb2Yg
-YSB2YWxpZCByYW5nZS4gVGhpcyBzaXplIGRlZmluaXRpb24gaGVyZSBpbXBsaWVzIHRoYXQgdGhl
-IGxhc3QgSUQNCmlzIHdhc3RlZCBmb3IgZXZlcnkgZG9tYWluLiBJcyBpdCBpbnRlbmRlZD8NCg==
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+
+Add JSON metrics for Alderlake-N to perf.
+
+It only included E-core metrics.
+
+E-core metrics based on E-core TMA v2.2 (E-core_TMA_Metrics.csv)
+
+It is downloaded from:
+  https://github.com/intel/perfmon/
+
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ .../arch/x86/alderlaken/adln-metrics.json     | 573 ++++++++++++++++++
+ 1 file changed, 573 insertions(+)
+ create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
+
+diff --git a/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json b/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
+new file mode 100644
+index 000000000000..acafdc7cef2d
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
+@@ -0,0 +1,573 @@
++[
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to frontend stalls.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.ALL / SLOTS",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_frontend_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to frontend bandwidth restrictions due to decode, predecode, cisc, and other limitations.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.FRONTEND_LATENCY / SLOTS",
++        "MetricGroup": "TopdownL2;tma_frontend_bound_group",
++        "MetricName": "tma_frontend_latency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to instruction cache misses.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.ICACHE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_latency_group",
++        "MetricName": "tma_icache",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to Instruction Table Lookaside Buffer (ITLB) misses.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.ITLB / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_latency_group",
++        "MetricName": "tma_itlb",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to BACLEARS, which occurs when the Branch Target Buffer (BTB) prediction or lack thereof, was corrected by a later branch predictor in the frontend",
++        "MetricExpr": "TOPDOWN_FE_BOUND.BRANCH_DETECT / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_latency_group",
++        "MetricName": "tma_branch_detect",
++        "PublicDescription": "Counts the number of issue slots  that were not delivered by the frontend due to BACLEARS, which occurs when the Branch Target Buffer (BTB) prediction or lack thereof, was corrected by a later branch predictor in the frontend. Includes BACLEARS due to all branch types including conditional and unconditional jumps, returns, and indirect branches.",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to BTCLEARS, which occurs when the Branch Target Buffer (BTB) predicts a taken branch.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.BRANCH_RESTEER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_latency_group",
++        "MetricName": "tma_branch_resteer",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to frontend bandwidth restrictions due to decode, predecode, cisc, and other limitations.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.FRONTEND_BANDWIDTH / SLOTS",
++        "MetricGroup": "TopdownL2;tma_frontend_bound_group",
++        "MetricName": "tma_frontend_bandwidth",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to the microcode sequencer (MS).",
++        "MetricExpr": "TOPDOWN_FE_BOUND.CISC / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_bandwidth_group",
++        "MetricName": "tma_cisc",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to decode stalls.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.DECODE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_bandwidth_group",
++        "MetricName": "tma_decode",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to wrong predecodes.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.PREDECODE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_bandwidth_group",
++        "MetricName": "tma_predecode",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to other common frontend stalls not categorized.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.OTHER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_bandwidth_group",
++        "MetricName": "tma_other_fb",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the total number of issue slots that were not consumed by the backend because allocation is stalled due to a mispredicted jump or a machine clear",
++        "MetricExpr": "(SLOTS - (TOPDOWN_FE_BOUND.ALL + TOPDOWN_BE_BOUND.ALL + TOPDOWN_RETIRING.ALL)) / SLOTS",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_bad_speculation",
++        "PublicDescription": "Counts the total number of issue slots that were not consumed by the backend because allocation is stalled due to a mispredicted jump or a machine clear. Only issue slots wasted due to fast nukes such as memory ordering nukes are counted. Other nukes are not accounted for. Counts all issue slots blocked during this recovery window including relevant microcode flows and while uops are not yet available in the instruction queue (IQ). Also includes the issue slots that were consumed by the backend but were thrown away because they were younger than the mispredict or machine clear.",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to branch mispredicts.",
++        "MetricExpr": "TOPDOWN_BAD_SPECULATION.MISPREDICT / SLOTS",
++        "MetricGroup": "TopdownL2;tma_bad_speculation_group",
++        "MetricName": "tma_branch_mispredicts",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the total number of issue slots that were not consumed by the backend because allocation is stalled due to a machine clear (nuke) of any kind including memory ordering and memory disambiguation.",
++        "MetricExpr": "TOPDOWN_BAD_SPECULATION.MACHINE_CLEARS / SLOTS",
++        "MetricGroup": "TopdownL2;tma_bad_speculation_group",
++        "MetricName": "tma_machine_clears",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to a machine clear (slow nuke).",
++        "MetricExpr": "TOPDOWN_BAD_SPECULATION.NUKE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_machine_clears_group",
++        "MetricName": "tma_nuke",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to SMC. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.SMC / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_smc",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to memory ordering. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.MEMORY_ORDERING / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_memory_ordering",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to FP assists. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.FP_ASSIST / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_fp_assist",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to memory disambiguation. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.DISAMBIGUATION / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_disambiguation",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to page faults. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.PAGE_FAULT / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_page_fault",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to a machine clear classified as a fast nuke due to memory ordering, memory disambiguation and memory renaming.",
++        "MetricExpr": "TOPDOWN_BAD_SPECULATION.FASTNUKE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_machine_clears_group",
++        "MetricName": "tma_fast_nuke",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls",
++        "MetricExpr": "TOPDOWN_BE_BOUND.ALL / SLOTS",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_backend_bound",
++        "PublicDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls.  Note that uops must be available for consumption in order for this event to count.  If a uop is not available (IQ is empty), this event will not count.   The rest of these subevents count backend stalls, in cycles, due to an outstanding request which is memory bound vs core bound.   The subevents are not slot based events and therefore can not be precisely added or subtracted from the Backend_Bound_Aux subevents which are slot based.",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles due to backend bound stalls that are core execution bound and not attributed to outstanding demand load or store stalls. ",
++        "MetricExpr": "max(0, tma_backend_bound - tma_load_store_bound)",
++        "MetricGroup": "TopdownL2;tma_backend_bound_group",
++        "MetricName": "tma_core_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles the core is stalled due to stores or loads. ",
++        "MetricExpr": "min((TOPDOWN_BE_BOUND.ALL / SLOTS), (LD_HEAD.ANY_AT_RET / CLKS) + tma_store_bound)",
++        "MetricGroup": "TopdownL2;tma_backend_bound_group",
++        "MetricName": "tma_load_store_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles the core is stalled due to store buffer full.",
++        "MetricExpr": "tma_mem_scheduler * (MEM_SCHEDULER_BLOCK.ST_BUF / MEM_SCHEDULER_BLOCK.ALL)",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_store_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a load block.",
++        "MetricExpr": "LD_HEAD.L1_BOUND_AT_RET / CLKS",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_l1_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a store forward block.",
++        "MetricExpr": "LD_HEAD.ST_ADDR_AT_RET / CLKS",
++        "MetricGroup": "TopdownL4;tma_l1_bound_group",
++        "MetricName": "tma_store_fwd",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a first level TLB miss.",
++        "MetricExpr": "LD_HEAD.DTLB_MISS_AT_RET / CLKS",
++        "MetricGroup": "TopdownL4;tma_l1_bound_group",
++        "MetricName": "tma_stlb_hit",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a second level TLB miss requiring a page walk.",
++        "MetricExpr": "LD_HEAD.PGWALK_AT_RET / CLKS",
++        "MetricGroup": "TopdownL4;tma_l1_bound_group",
++        "MetricName": "tma_stlb_miss",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a number of other load blocks.",
++        "MetricExpr": "LD_HEAD.OTHER_AT_RET / CLKS",
++        "MetricGroup": "TopdownL4;tma_l1_bound_group",
++        "MetricName": "tma_other_l1",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles a core is stalled due to a demand load which hit in the L2 Cache.",
++        "MetricExpr": "(MEM_BOUND_STALLS.LOAD_L2_HIT / CLKS) - (MEM_BOUND_STALLS_AT_RET_CORRECTION * MEM_BOUND_STALLS.LOAD_L2_HIT / MEM_BOUND_STALLS.LOAD)",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_l2_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles a core is stalled due to a demand load which hit in the Last Level Cache (LLC) or other core with HITE/F/M.",
++        "MetricExpr": "(MEM_BOUND_STALLS.LOAD_LLC_HIT / CLKS) - (MEM_BOUND_STALLS_AT_RET_CORRECTION * MEM_BOUND_STALLS.LOAD_LLC_HIT / MEM_BOUND_STALLS.LOAD)",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_l3_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles the core is stalled due to a demand load miss which hit in DRAM or MMIO (Non-DRAM).",
++        "MetricExpr": "(MEM_BOUND_STALLS.LOAD_DRAM_HIT / CLKS) - (MEM_BOUND_STALLS_AT_RET_CORRECTION * MEM_BOUND_STALLS.LOAD_DRAM_HIT / MEM_BOUND_STALLS.LOAD)",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_dram_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles the core is stalled due to a demand load miss which hits in the L2, LLC, DRAM or MMIO (Non-DRAM) but could not be correctly attributed or cycles in which the load miss is waiting on a request buffer.",
++        "MetricExpr": "max(0, tma_load_store_bound - (tma_store_bound + tma_l1_bound + tma_l2_bound + tma_l3_bound + tma_dram_bound))",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_other_load_store",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls",
++        "MetricExpr": "tma_backend_bound",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_backend_bound_aux",
++        "PublicDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls.  Note that UOPS must be available for consumption in order for this event to count.  If a uop is not available (IQ is empty), this event will not count.  All of these subevents count backend stalls, in slots, due to a resource limitation.   These are not cycle based events and therefore can not be precisely added or subtracted from the Backend_Bound subevents which are cycle based.  These subevents are supplementary to Backend_Bound and can be used to analyze results from a resource perspective at allocation.  ",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls",
++        "MetricExpr": "tma_backend_bound",
++        "MetricGroup": "TopdownL2;tma_backend_bound_aux_group",
++        "MetricName": "tma_resource_bound",
++        "PublicDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls.  Note that uops must be available for consumption in order for this event to count.  If a uop is not available (IQ is empty), this event will not count. ",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to memory reservation stalls in which a scheduler is not able to accept uops.",
++        "MetricExpr": "TOPDOWN_BE_BOUND.MEM_SCHEDULER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_mem_scheduler",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles, relative to the number of mem_scheduler slots, in which uops are blocked due to store buffer full",
++        "MetricExpr": "tma_mem_scheduler * (MEM_SCHEDULER_BLOCK.ST_BUF / MEM_SCHEDULER_BLOCK.ALL)",
++        "MetricGroup": "TopdownL4;tma_mem_scheduler_group",
++        "MetricName": "tma_st_buffer",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles, relative to the number of mem_scheduler slots, in which uops are blocked due to load buffer full",
++        "MetricExpr": "tma_mem_scheduler * MEM_SCHEDULER_BLOCK.LD_BUF / MEM_SCHEDULER_BLOCK.ALL",
++        "MetricGroup": "TopdownL4;tma_mem_scheduler_group",
++        "MetricName": "tma_ld_buffer",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles, relative to the number of mem_scheduler slots, in which uops are blocked due to RSV full relative ",
++        "MetricExpr": "tma_mem_scheduler * MEM_SCHEDULER_BLOCK.RSV / MEM_SCHEDULER_BLOCK.ALL",
++        "MetricGroup": "TopdownL4;tma_mem_scheduler_group",
++        "MetricName": "tma_rsv",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to IEC or FPC RAT stalls, which can be due to FIQ or IEC reservation stalls in which the integer, floating point or SIMD scheduler is not able to accept uops.",
++        "MetricExpr": "TOPDOWN_BE_BOUND.NON_MEM_SCHEDULER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_non_mem_scheduler",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to the physical register file unable to accept an entry (marble stalls).",
++        "MetricExpr": "TOPDOWN_BE_BOUND.REGISTER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_register",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to the reorder buffer being full (ROB stalls).",
++        "MetricExpr": "TOPDOWN_BE_BOUND.REORDER_BUFFER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_reorder_buffer",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to certain allocation restrictions.",
++        "MetricExpr": "TOPDOWN_BE_BOUND.ALLOC_RESTRICTIONS / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_alloc_restriction",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to scoreboards from the instruction queue (IQ), jump execution unit (JEU), or microcode sequencer (MS).",
++        "MetricExpr": "TOPDOWN_BE_BOUND.SERIALIZATION / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_serialization",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the numer of issue slots  that result in retirement slots. ",
++        "MetricExpr": "TOPDOWN_RETIRING.ALL / SLOTS",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_retiring",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of uops that are not from the microsequencer. ",
++        "MetricExpr": "(TOPDOWN_RETIRING.ALL - UOPS_RETIRED.MS) / SLOTS",
++        "MetricGroup": "TopdownL2;tma_retiring_group",
++        "MetricName": "tma_base",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of floating point operations per uop with all default weighting.",
++        "MetricExpr": "UOPS_RETIRED.FPDIV / SLOTS",
++        "MetricGroup": "TopdownL3;tma_base_group",
++        "MetricName": "tma_fp_uops",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of uops retired excluding ms and fp div uops.",
++        "MetricExpr": "(TOPDOWN_RETIRING.ALL - UOPS_RETIRED.MS - UOPS_RETIRED.FPDIV) / SLOTS",
++        "MetricGroup": "TopdownL3;tma_base_group",
++        "MetricName": "tma_other_ret",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of uops that are from the complex flows issued by the micro-sequencer (MS)",
++        "MetricExpr": "UOPS_RETIRED.MS / SLOTS",
++        "MetricGroup": "TopdownL2;tma_retiring_group",
++        "MetricName": "tma_ms_uops",
++        "PublicDescription": "Counts the number of uops that are from the complex flows issued by the micro-sequencer (MS).  This includes uops from flows due to complex instructions, faults, assists, and inserted flows.",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "",
++        "MetricExpr": "CPU_CLK_UNHALTED.CORE",
++        "MetricName": "CLKS"
++    },
++    {
++        "BriefDescription": "",
++        "MetricExpr": "CPU_CLK_UNHALTED.CORE_P",
++        "MetricName": "CLKS_P"
++    },
++    {
++        "BriefDescription": "",
++        "MetricExpr": "5 * CLKS",
++        "MetricName": "SLOTS"
++    },
++    {
++        "BriefDescription": "Instructions Per Cycle",
++        "MetricExpr": "INST_RETIRED.ANY / CLKS",
++        "MetricName": "IPC"
++    },
++    {
++        "BriefDescription": "Cycles Per Instruction",
++        "MetricExpr": "CLKS / INST_RETIRED.ANY",
++        "MetricName": "CPI"
++    },
++    {
++        "BriefDescription": "Uops Per Instruction",
++        "MetricExpr": "UOPS_RETIRED.ALL / INST_RETIRED.ANY",
++        "MetricName": "UPI"
++    },
++    {
++        "BriefDescription": "Percentage of total non-speculative loads with a store forward or unknown store address block",
++        "MetricExpr": "100 * LD_BLOCKS.DATA_UNKNOWN / MEM_UOPS_RETIRED.ALL_LOADS",
++        "MetricName": "Store_Fwd_Blocks"
++    },
++    {
++        "BriefDescription": "Percentage of total non-speculative loads with a address aliasing block",
++        "MetricExpr": "100 * LD_BLOCKS.4K_ALIAS / MEM_UOPS_RETIRED.ALL_LOADS",
++        "MetricName": "Address_Alias_Blocks"
++    },
++    {
++        "BriefDescription": "Percentage of total non-speculative loads that are splits",
++        "MetricExpr": "100 * MEM_UOPS_RETIRED.SPLIT_LOADS / MEM_UOPS_RETIRED.ALL_LOADS",
++        "MetricName": "Load_Splits"
++    },
++    {
++        "BriefDescription": "Instructions per Branch (lower number means higher occurrence rate)",
++        "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.ALL_BRANCHES",
++        "MetricName": "IpBranch"
++    },
++    {
++        "BriefDescription": "Instruction per (near) call (lower number means higher occurrence rate)",
++        "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.CALL",
++        "MetricName": "IpCall"
++    },
++    {
++        "BriefDescription": "Instructions per Load",
++        "MetricExpr": "INST_RETIRED.ANY / MEM_UOPS_RETIRED.ALL_LOADS",
++        "MetricName": "IpLoad"
++    },
++    {
++        "BriefDescription": "Instructions per Store",
++        "MetricExpr": "INST_RETIRED.ANY / MEM_UOPS_RETIRED.ALL_STORES",
++        "MetricName": "IpStore"
++    },
++    {
++        "BriefDescription": "Number of Instructions per non-speculative Branch Misprediction",
++        "MetricExpr": "INST_RETIRED.ANY / BR_MISP_RETIRED.ALL_BRANCHES",
++        "MetricName": "IpMispredict"
++    },
++    {
++        "BriefDescription": "Instructions per Far Branch",
++        "MetricExpr": "INST_RETIRED.ANY / (BR_INST_RETIRED.FAR_BRANCH / 2)",
++        "MetricName": "IpFarBranch"
++    },
++    {
++        "BriefDescription": "Ratio of all branches which mispredict",
++        "MetricExpr": "BR_MISP_RETIRED.ALL_BRANCHES / BR_INST_RETIRED.ALL_BRANCHES",
++        "MetricName": "Branch_Mispredict_Ratio"
++    },
++    {
++        "BriefDescription": "Ratio between Mispredicted branches and unknown branches",
++        "MetricExpr": "BR_MISP_RETIRED.ALL_BRANCHES / BACLEARS.ANY",
++        "MetricName": "Branch_Mispredict_to_Unknown_Branch_Ratio"
++    },
++    {
++        "BriefDescription": "Percentage of all uops which are ucode ops",
++        "MetricExpr": "100 * UOPS_RETIRED.MS / UOPS_RETIRED.ALL",
++        "MetricName": "Microcode_Uop_Ratio"
++    },
++    {
++        "BriefDescription": "Percentage of all uops which are FPDiv uops",
++        "MetricExpr": "100 * UOPS_RETIRED.FPDIV / UOPS_RETIRED.ALL",
++        "MetricName": "FPDiv_Uop_Ratio"
++    },
++    {
++        "BriefDescription": "Percentage of all uops which are IDiv uops",
++        "MetricExpr": "100 * UOPS_RETIRED.IDIV / UOPS_RETIRED.ALL",
++        "MetricName": "IDiv_Uop_Ratio"
++    },
++    {
++        "BriefDescription": "Percentage of all uops which are x87 uops",
++        "MetricExpr": "100 * UOPS_RETIRED.X87 / UOPS_RETIRED.ALL",
++        "MetricName": "X87_Uop_Ratio"
++    },
++    {
++        "BriefDescription": "Average Frequency Utilization relative nominal frequency",
++        "MetricExpr": "CLKS / CPU_CLK_UNHALTED.REF_TSC",
++        "MetricName": "Turbo_Utilization"
++    },
++    {
++        "BriefDescription": "Fraction of cycles spent in Kernel mode",
++        "MetricExpr": "cpu@CPU_CLK_UNHALTED.CORE@k / CPU_CLK_UNHALTED.CORE",
++        "MetricName": "Kernel_Utilization"
++    },
++    {
++        "BriefDescription": "Average CPU Utilization",
++        "MetricExpr": "CPU_CLK_UNHALTED.REF_TSC / msr@tsc@",
++        "MetricName": "CPU_Utilization"
++    },
++    {
++        "BriefDescription": "Cycle cost per L2 hit",
++        "MetricExpr": "MEM_BOUND_STALLS.LOAD_L2_HIT / MEM_LOAD_UOPS_RETIRED.L2_HIT",
++        "MetricName": "Cycles_per_Demand_Load_L2_Hit"
++    },
++    {
++        "BriefDescription": "Cycle cost per LLC hit",
++        "MetricExpr": "MEM_BOUND_STALLS.LOAD_LLC_HIT / MEM_LOAD_UOPS_RETIRED.L3_HIT",
++        "MetricName": "Cycles_per_Demand_Load_L3_Hit"
++    },
++    {
++        "BriefDescription": "Cycle cost per DRAM hit",
++        "MetricExpr": "MEM_BOUND_STALLS.LOAD_DRAM_HIT / MEM_LOAD_UOPS_RETIRED.DRAM_HIT",
++        "MetricName": "Cycles_per_Demand_Load_DRAM_Hit"
++    },
++    {
++        "BriefDescription": "Percent of instruction miss cost that hit in the L2",
++        "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_L2_HIT / (MEM_BOUND_STALLS.IFETCH)",
++        "MetricName": "Inst_Miss_Cost_L2Hit_Percent"
++    },
++    {
++        "BriefDescription": "Percent of instruction miss cost that hit in the L3",
++        "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_LLC_HIT / (MEM_BOUND_STALLS.IFETCH)",
++        "MetricName": "Inst_Miss_Cost_L3Hit_Percent"
++    },
++    {
++        "BriefDescription": "Percent of instruction miss cost that hit in DRAM",
++        "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_DRAM_HIT / (MEM_BOUND_STALLS.IFETCH)",
++        "MetricName": "Inst_Miss_Cost_DRAMHit_Percent"
++    },
++    {
++        "BriefDescription": "load ops retired per 1000 instruction",
++        "MetricExpr": "1000 * MEM_UOPS_RETIRED.ALL_LOADS / INST_RETIRED.ANY",
++        "MetricName": "MemLoadPKI"
++    },
++    {
++        "BriefDescription": "C1 residency percent per core",
++        "MetricExpr": "(cstate_core@c1\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C1_Core_Residency"
++    },
++    {
++        "BriefDescription": "C6 residency percent per core",
++        "MetricExpr": "(cstate_core@c6\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C6_Core_Residency"
++    },
++    {
++        "BriefDescription": "C7 residency percent per core",
++        "MetricExpr": "(cstate_core@c7\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C7_Core_Residency"
++    },
++    {
++        "BriefDescription": "C2 residency percent per package",
++        "MetricExpr": "(cstate_pkg@c2\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C2_Pkg_Residency"
++    },
++    {
++        "BriefDescription": "C3 residency percent per package",
++        "MetricExpr": "(cstate_pkg@c3\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C3_Pkg_Residency"
++    },
++    {
++        "BriefDescription": "C6 residency percent per package",
++        "MetricExpr": "(cstate_pkg@c6\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C6_Pkg_Residency"
++    },
++    {
++        "BriefDescription": "C7 residency percent per package",
++        "MetricExpr": "(cstate_pkg@c7\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C7_Pkg_Residency"
++    },
++    {
++        "BriefDescription": "C8 residency percent per package",
++        "MetricExpr": "(cstate_pkg@c8\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C8_Pkg_Residency"
++    },
++    {
++        "BriefDescription": "C9 residency percent per package",
++        "MetricExpr": "(cstate_pkg@c9\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C9_Pkg_Residency"
++    },
++    {
++        "BriefDescription": "C10 residency percent per package",
++        "MetricExpr": "(cstate_pkg@c10\\-residency@ / msr@tsc@) * 100",
++        "MetricGroup": "Power",
++        "MetricName": "C10_Pkg_Residency"
++    }
++]
+-- 
+2.25.1
+
