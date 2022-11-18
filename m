@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE56462EB40
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA0D62EB3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 02:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiKRBqf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Nov 2022 20:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
+        id S240999AbiKRBq1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Nov 2022 20:46:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240801AbiKRBqY (ORCPT
+        with ESMTP id S239229AbiKRBqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Nov 2022 20:46:24 -0500
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9C0742D5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565BE742CC;
         Thu, 17 Nov 2022 17:46:22 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 84EFA24E1F5;
-        Fri, 18 Nov 2022 09:11:12 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
- 2022 09:11:12 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7678F24E1F8;
+        Fri, 18 Nov 2022 09:11:13 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
+ 2022 09:11:13 +0800
 Received: from ubuntu.localdomain (183.27.96.116) by EXMBX072.cuchost.com
  (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 18 Nov
- 2022 09:11:11 +0800
+ 2022 09:11:12 +0800
 From:   Hal Feng <hal.feng@starfivetech.com>
 To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
         <linux-gpio@vger.kernel.org>
@@ -38,9 +38,9 @@ CC:     Conor Dooley <conor@kernel.org>,
         Hal Feng <hal.feng@starfivetech.com>,
         Jianlong Huang <jianlong.huang@starfivetech.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/5] dt-bindings: pinctrl: Add StarFive JH7110 sys pinctrl
-Date:   Fri, 18 Nov 2022 09:11:05 +0800
-Message-ID: <20221118011108.70715-3-hal.feng@starfivetech.com>
+Subject: [PATCH v2 3/5] dt-bindings: pinctrl: Add StarFive JH7110 aon pinctrl
+Date:   Fri, 18 Nov 2022 09:11:06 +0800
+Message-ID: <20221118011108.70715-4-hal.feng@starfivetech.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118011108.70715-1-hal.feng@starfivetech.com>
 References: <20221118011108.70715-1-hal.feng@starfivetech.com>
@@ -61,46 +61,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jianlong Huang <jianlong.huang@starfivetech.com>
 
-Add pinctrl bindings for StarFive JH7110 SoC sys pinctrl controller.
+Add pinctrl bindings for StarFive JH7110 SoC aon pinctrl controller.
 
 Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
 Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 ---
- .../pinctrl/starfive,jh7110-sys-pinctrl.yaml  | 165 ++++++++++++++++++
- 1 file changed, 165 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
+ .../pinctrl/starfive,jh7110-aon-pinctrl.yaml  | 134 ++++++++++++++++++
+ 1 file changed, 134 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-aon-pinctrl.yaml
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
+diff --git a/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-aon-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-aon-pinctrl.yaml
 new file mode 100644
-index 000000000000..79623f884a9c
+index 000000000000..1dd000e1f614
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
-@@ -0,0 +1,165 @@
++++ b/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-aon-pinctrl.yaml
+@@ -0,0 +1,134 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/pinctrl/starfive,jh7110-sys-pinctrl.yaml#
++$id: http://devicetree.org/schemas/pinctrl/starfive,jh7110-aon-pinctrl.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: StarFive JH7110 Sys Pin Controller
++title: StarFive JH7110 Aon Pin Controller
 +
 +description: |
 +  Bindings for the JH7110 RISC-V SoC from StarFive Technology Ltd.
 +
-+  Out of the SoC's many pins only the ones named PAD_GPIO0 to PAD_GPIO63
++  Out of the SoC's many pins only the ones named PAD_GPIO0 to PAD_GPIO4
 +  can be multiplexed and have configurable bias, drive strength,
 +  schmitt trigger etc.
-+  Some peripherals have their I/O go through the 64 "GPIOs". This also
-+  includes a number of other UARTs, I2Cs, SPIs, PWMs etc.
-+  All these peripherals are connected to all 64 GPIOs such that
-+  any GPIO can be set up to be controlled by any of the peripherals.
++  Some peripherals have their I/O go through the 4 "GPIOs". This also
++  includes PWM.
 +
 +maintainers:
 +  - Jianlong Huang <jianlong.huang@starfivetech.com>
 +
 +properties:
 +  compatible:
-+    const: starfive,jh7110-sys-pinctrl
++    const: starfive,jh7110-aon-pinctrl
 +
 +  reg:
 +    maxItems: 1
@@ -133,7 +131,6 @@ index 000000000000..79623f884a9c
 +  - compatible
 +  - reg
 +  - reg-names
-+  - clocks
 +  - gpio-controller
 +  - "#gpio-cells"
 +  - interrupts
@@ -199,44 +196,16 @@ index 000000000000..79623f884a9c
 +                #address-cells = <2>;
 +                #size-cells = <2>;
 +
-+                gpio: gpio@13040000 {
-+                        compatible = "starfive,jh7110-sys-pinctrl";
-+                        reg = <0x0 0x13040000 0x0 0x10000>;
++                gpioa: gpio@17020000 {
++                        compatible = "starfive,jh7110-aon-pinctrl";
++                        reg = <0x0 0x17020000 0x0 0x10000>;
 +                        reg-names = "control";
-+                        clocks = <&syscrg_clk JH7110_SYSCLK_IOMUX>;
-+                        resets = <&syscrg_rst JH7110_SYSRST_IOMUX>;
-+                        interrupts = <86>;
++                        resets = <&aoncrg_rst JH7110_AONRST_AON_IOMUX>;
++                        interrupts = <85>;
 +                        interrupt-controller;
 +                        #interrupt-cells = <2>;
 +                        #gpio-cells = <2>;
 +                        gpio-controller;
-+                        status = "okay";
-+
-+                        uart0_pins: uart0-0 {
-+                                tx-pins {
-+                                        pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
-+                                        bias-disable;
-+                                        drive-strength = <12>;
-+                                        input-disable;
-+                                        input-schmitt-disable;
-+                                        slew-rate = <0>;
-+                                };
-+
-+                                rx-pins {
-+                                        pinmux = <GPIOMUX(6, GPOUT_LOW, GPOEN_DISABLE, GPI_SYS_UART0_RX)>;
-+                                        bias-pull-up;
-+                                        drive-strength = <2>;
-+                                        input-enable;
-+                                        input-schmitt-enable;
-+                                        slew-rate = <0>;
-+                                };
-+                        };
-+                };
-+
-+                uart0 {
-+                        pinctrl-names = "default";
-+                        pinctrl-0 = <&uart0_pins>;
-+                        status = "okay";
 +                };
 +        };
 +
