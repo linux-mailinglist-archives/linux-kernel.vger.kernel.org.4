@@ -2,853 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF86A62F9B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9285462F9A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 16:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242212AbiKRPu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 10:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S242225AbiKRPpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 10:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242371AbiKRPuQ (ORCPT
+        with ESMTP id S241407AbiKRPp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 10:50:16 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A7F8C49F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:50:10 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id k8so9929860wrh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 07:50:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hFycxYZ41zzcSWXUMUqzeyTTOR1oiuIa3bzxOOEAhro=;
-        b=eVzNuSgRg514rS+txbNGXcGwWVbdC6ROZJ4JT/ejN3xvH620v4olmru+a+m2smMhMC
-         6bUy/1u8YF74HtkpMJFubA7a+sHAz3styxufs9V3MeKcgsZ2k0750azpEI6Z44hbFbqq
-         H1HFGE9mUGXkUHCx/B2at4/lSM24MM4hBwYrG/sZ9Yqgq2iSmTrmEywA/fEQ43J7J4RV
-         F3qzVyOEOzl++M3ilrQJ0dc/jtDamdHEznJCShuboszs1CLbGJ74oS2c/k1M7W+2ds03
-         X0Q2XziZsTKOhDtkyVtOe4NkIQEj/ok9iRl1G4KixT8QycXO+mTKvGj/zRFFfnd+nozO
-         oTOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hFycxYZ41zzcSWXUMUqzeyTTOR1oiuIa3bzxOOEAhro=;
-        b=3RAwu7NjgQYLqm5Y/H0Z2arWdfTCEquSzDXh36YDHTAD3lp7g3ADr+AzYVVq3FASdM
-         tA+O8Q+2kwECu3Gc2tMsmdwYP9Dl/s7UEyu9ZKSqJXHCKWM2Ggb++0+djvyhfdAs0zJO
-         2UrUZQmp4cVw87VknDsu3CVMYybazP7ijQO9KEFqL41889iagGFirfXUerJeJPVdr2Pv
-         UQAzcCXcLfxg6Ck+646SP++9acO8ANbF71o3eRbgeFjld3OGatTt+nCkrKFgezZj3qRc
-         WstbvAlMz4+4kt2/yTTsIuEWCrLhMzeXK4GgsvWId64QSWfgoNO91gvaoP6aiKQSFHPd
-         HTPw==
-X-Gm-Message-State: ANoB5pkFtuPMDu+7uk6qPyynxmazY+TVPenVltD2GzKqookgQBWKaqHO
-        xAv7GAhoiFXEIdtirteCg7dnpg==
-X-Google-Smtp-Source: AA0mqf7xrmBPJz+XJ7Zx1BH0271wcnLp4SWSEtQ2a2MLSQLprzUhfC7B8KFANOVZQvkmVFpU2JlJTQ==
-X-Received: by 2002:a5d:56d2:0:b0:236:cdf8:1e3f with SMTP id m18-20020a5d56d2000000b00236cdf81e3fmr4515770wrw.80.1668786608720;
-        Fri, 18 Nov 2022 07:50:08 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id a13-20020a5d53cd000000b002383edcde09sm3812465wrw.59.2022.11.18.07.50.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 07:50:08 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 18 Nov 2022 16:50:06 +0100
-Subject: [PATCH v2 2/2] arm64: dts: amlogic: add initial Odroid Go Ultra DTS
+        Fri, 18 Nov 2022 10:45:28 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14BA7CBA4;
+        Fri, 18 Nov 2022 07:45:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668786325; x=1700322325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QnYDsjDsDb4h9i3C9BaDBaDNlmHvoV9jV+GgiCQ7Q+A=;
+  b=oY7MI3zRGbx1fp7mzpPwQ7nFry+hg4UcoN/X96vkxJuej9B71hLpgFy4
+   KVRxNOlYaoKezLQNmwnJdM5OUH0tUR42DhhWTOvaK5pem0p2LjT6UdEDu
+   TAh3IPWrorvOyHlJpaO1pZW51rXdN8EpeH5E3xpMwRHvpbEFwEBsVie4Z
+   wAyAcEamb1F2XygPE4vBzhZzQZJVu6ZEkNXDksBN1tcEar2+xy7iWjsHf
+   CrZc+EVBvaurC41YCyBBsqy0bHLen2LwBfcFKHU8bB1Hcwj9UR1TjDoCp
+   ytxeoSqtSx/ttTEmHOR4TSnHRtxkcM5/MiuSTNX6pdRgxRRlVMBh6cMgZ
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="124098261"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Nov 2022 08:45:23 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 18 Nov 2022 08:45:19 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 18 Nov 2022 08:45:19 -0700
+Date:   Fri, 18 Nov 2022 16:50:08 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH net-next v2 4/5] net: lan966x: Add support for XDP_TX
+Message-ID: <20221118155008.illvc66lrlm4orrx@soft-dev3-1>
+References: <20221115214456.1456856-1-horatiu.vultur@microchip.com>
+ <20221115214456.1456856-5-horatiu.vultur@microchip.com>
+ <20221116153418.3389630-1-alexandr.lobakin@intel.com>
+ <20221116205557.2syftn3jqx357myg@soft-dev3-1>
+ <20221117153116.3447130-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20221031-b4-odroid-go-ultra-initial-v2-2-a3df1e09b0af@linaro.org>
-References: <20221031-b4-odroid-go-ultra-initial-v2-0-a3df1e09b0af@linaro.org>
-In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v2-0-a3df1e09b0af@linaro.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20221117153116.3447130-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds initial support for the Hardkernel Odroid Go Ultra.
+The 11/17/2022 16:31, Alexander Lobakin wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Date: Wed, 16 Nov 2022 21:55:57 +0100
+> 
+> > The 11/16/2022 16:34, Alexander Lobakin wrote:
+> > >
+> > > From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > > Date: Tue, 15 Nov 2022 22:44:55 +0100
+> >
+> > Hi Olek,
+> 
+> Hi!
+> 
+> > > For %XDP_REDIRECT, as you don't know the source of the XDP frame,
+> >
+> > Why I don't know the source?
+> > Will it not be from an RX page that is allocated by Page Pool?
+> 
+> Imagine some NIC which does not use Page Pool, for example, it does
+> its own page allocation / splitting / recycling techniques, gets
+> %XDP_REDIRECT when running XDP prog on Rx. devmap says it must
+> redirect the frame to your NIC.
+> Then, your ::ndo_xdp_xmit() will be run on a frame/page not
+> belonging to any Page Pool.
+> The example can be any of Intel drivers (there are plans to switch
+> at least i40e and ice to Page Pool, but they're always deeply in
+> the backlogs (clownface)).
 
-The Odroid Go Ultra is a portable gaming device with the following
-characteristics:
-- Amlogic S922X SoC
-- RK817 & RK818 PMICs
-- 2GiB LPDDR4
-- On board 16GiB eMMC
-- Micro SD Card slot
-- 5inch 854×480 MIPI-DSI TFT LCD
-- Earphone stereo jack, 0.5Watt 8Ω Mono speaker
-- Li-Polymer 3.7V/4000mAh Battery
-- USB-A 2.0 Host Connector
-- x16 GPIO Input Buttons
-- 2x ADC Analog Joysticks
-- USB-C Port for USB2 Device and Charging
+Silly me, I was always thinking and trying only from one port of lan966x
+to another port of lan966x. Of course it can come from other NICs.
 
-The following are not yet handled:
-- Battery RK818 Gauge and Charging
-- Earphone stereo jack detect
-- 5inch 854×480 MIPI-DSI TFT LCD
+> 
+> >
+> > > you need to unmap it (as it was previously mapped in
+> > > ::ndo_xdp_xmit()), plus call xdp_return_frame{,_bulk} to free the
+> > > XDP frame. Note that _rx_napi() variant is not applicable here.
+> > >
+> > > That description might be confusing, so you can take a look at the
+> > > already existing code[0] to get the idea. I think this piece shows
+> > > the expected logics rather well.
+> >
+> > I think you forgot to write the link to the code.
+> > I looked also at different drivers but I didn't figure it out why the
+> > frame needed to be mapped and where is happening that.
+> 
+> Ooof, really. Pls look at the end of this reply :D
+> On ::ndo_xdp_xmit(), as I explained above, you can receive a frame
+> from any driver or BPF core code (such as cpumap), and BPF prog
+> there could be run on buffer of any kind: Page Pool page, just a
+> page, a kmalloc() chunk and so on.
+> 
+> So, in the code[0], you can see the following set of operations:
+> 
+> * DMA unmap in all cases excluding frame coming from %XDP_TX (then
+>   it was only synced);
+> * updating statistics and freeing skb for skb cases;
+> * xdp_return_frame_rx_napi() for %XDP_TX cases;
+> * xdp_return_frame_bulk() for ::ndo_xdp_xmit() cases.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/amlogic/Makefile               |   1 +
- .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     | 722 +++++++++++++++++++++
- 2 files changed, 723 insertions(+)
+Thanks for a detail explanation and for the link :D
+I will update all this in the next version.
 
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index e213aeebb774..97b42e2100e0 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -12,6 +12,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gsking-x.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-go-ultra.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2-plus.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts
-new file mode 100644
-index 000000000000..1e40709610c5
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts
-@@ -0,0 +1,722 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2022 Neil Armstrong <neil.armstrong@linaro.org>
-+ */
-+
-+/dts-v1/;
-+
-+#include "meson-g12b-s922x.dtsi"
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/gpio/meson-g12a-gpio.h>
-+#include <dt-bindings/sound/meson-g12a-toacodec.h>
-+#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-+
-+/ {
-+	compatible = "hardkernel,odroid-go-ultra", "amlogic,s922x", "amlogic,g12b";
-+	model = "Hardkernel ODROID-GO-Ultra";
-+
-+	aliases {
-+		serial0 = &uart_AO;
-+		rtc0 = &vrtc;
-+	};
-+
-+	adc-joystick-left {
-+		compatible = "adc-joystick";
-+		io-channels = <&saradc 2>, <&saradc 3>;
-+		poll-interval = <10>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		axis@0 {
-+			reg = <0>;
-+			linux,code = <ABS_Y>;
-+			abs-range = <3150 950>;
-+			abs-fuzz = <32>;
-+			abs-flat = <64>;
-+		};
-+		axis@1 {
-+			reg = <1>;
-+			linux,code = <ABS_X>;
-+			abs-range = <700 2900>;
-+			abs-fuzz = <32>;
-+			abs-flat = <64>;
-+		};
-+	};
-+
-+	adc-joystick-right {
-+		compatible = "adc-joystick";
-+		io-channels = <&saradc 0>, <&saradc 1>;
-+		poll-interval = <10>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		axis@0 {
-+			reg = <0>;
-+			linux,code = <ABS_RY>;
-+			abs-range = <3150 950>;
-+			abs-fuzz = <32>;
-+			abs-flat = <64>;
-+		};
-+		axis@1 {
-+			reg = <1>;
-+			linux,code = <ABS_RX>;
-+			abs-range = <800 3000>;
-+			abs-fuzz = <32>;
-+			abs-flat = <64>;
-+		};
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	codec_clk: codec-clk {
-+		compatible = "fixed-clock";
-+		clock-frequency = <12288000>;
-+		clock-output-names = "codec_clk";
-+		#clock-cells = <0>;
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys-polled";
-+		poll-interval = <10>;
-+		pinctrl-0 = <&keypad_gpio_pins>;
-+		pinctrl-names = "default";
-+
-+		volume-up-button {
-+			label = "VOLUME-UP";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&gpio GPIOX_8 GPIO_ACTIVE_LOW>;
-+		};
-+		volume-down-button {
-+			label = "VOLUME-DOWN";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			gpios = <&gpio GPIOX_9 GPIO_ACTIVE_LOW>;
-+		};
-+		dpad-up-button {
-+			label = "DPAD-UP";
-+			linux,code = <BTN_DPAD_UP>;
-+			gpios = <&gpio GPIOX_0 GPIO_ACTIVE_LOW>;
-+		};
-+		dpad-down-button {
-+			label = "DPAD-DOWN";
-+			linux,code = <BTN_DPAD_DOWN>;
-+			gpios = <&gpio GPIOX_1 GPIO_ACTIVE_LOW>;
-+		};
-+		dpad-left-button {
-+			label = "DPAD-LEFT";
-+			linux,code = <BTN_DPAD_LEFT>;
-+			gpios = <&gpio GPIOX_2 GPIO_ACTIVE_LOW>;
-+		};
-+		dpad-right-button {
-+			label = "DPAD-RIGHT";
-+			linux,code = <BTN_DPAD_RIGHT>;
-+			gpios = <&gpio GPIOX_3 GPIO_ACTIVE_LOW>;
-+		};
-+		a-button {
-+			label = "A";
-+			linux,code = <BTN_EAST>;
-+			gpios = <&gpio GPIOX_4 GPIO_ACTIVE_LOW>;
-+		};
-+		b-button {
-+			label = "B";
-+			linux,code = <BTN_SOUTH>;
-+			gpios = <&gpio GPIOX_5 GPIO_ACTIVE_LOW>;
-+		};
-+		y-button {
-+			label = "Y";
-+			linux,code = <BTN_WEST>;
-+			gpios = <&gpio GPIOX_6 GPIO_ACTIVE_LOW>;
-+		};
-+		x-button {
-+			label = "X";
-+			linux,code = <BTN_NORTH>;
-+			gpios = <&gpio GPIOX_7 GPIO_ACTIVE_LOW>;
-+		};
-+		f1-button {
-+			label = "F1";
-+			linux,code = <BTN_TRIGGER_HAPPY1>;
-+			gpios = <&gpio GPIOX_17 GPIO_ACTIVE_LOW>;
-+		};
-+		f2-button {
-+			label = "F2";
-+			linux,code = <BTN_TRIGGER_HAPPY2>;
-+			gpios = <&gpio GPIOX_10 GPIO_ACTIVE_LOW>;
-+		};
-+		f3-button {
-+			label = "F3";
-+			linux,code = <BTN_TRIGGER_HAPPY3>;
-+			gpios = <&gpio GPIOX_11 GPIO_ACTIVE_LOW>;
-+		};
-+		f4-button {
-+			label = "F4";
-+			linux,code = <BTN_TRIGGER_HAPPY4>;
-+			gpios = <&gpio GPIOX_12 GPIO_ACTIVE_LOW>;
-+		};
-+		f5-button {
-+			label = "F5";
-+			linux,code = <BTN_TRIGGER_HAPPY5>;
-+			gpios = <&gpio GPIOX_13 GPIO_ACTIVE_LOW>;
-+		};
-+		f6-button {
-+			label = "F6";
-+			linux,code = <BTN_TRIGGER_HAPPY6>;
-+			gpios = <&gpio GPIOX_16 GPIO_ACTIVE_LOW>;
-+		};
-+		top-left-button {
-+			label = "TOP Left";
-+			linux,code = <BTN_TL>;
-+			gpios = <&gpio GPIOX_14 GPIO_ACTIVE_LOW>;
-+		};
-+		top-left2-button {
-+			label = "TOP Left 2";
-+			linux,code = <BTN_TL2>;
-+			gpios = <&gpio GPIOX_19 GPIO_ACTIVE_LOW>;
-+		};
-+		top-right-button {
-+			label = "TOP Right";
-+			linux,code = <BTN_TR>;
-+			gpios = <&gpio GPIOX_15 GPIO_ACTIVE_LOW>;
-+		};
-+		top-right2-button {
-+			label = "TOP Right 2";
-+			linux,code = <BTN_TR2>;
-+			gpios = <&gpio GPIOX_18 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x40000000>;
-+	};
-+
-+	emmc_pwrseq: emmc-pwrseq {
-+		compatible = "mmc-pwrseq-emmc";
-+		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-blue {
-+			color = <LED_COLOR_ID_BLUE>;
-+			gpios = <&gpio_ao GPIOAO_11 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+	vdd_sys: regulator-vdd-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDD_SYS";
-+		regulator-min-microvolt = <3800000>;
-+		regulator-max-microvolt = <3800000>;
-+		regulator-always-on;
-+	};
-+
-+	sound {
-+		compatible = "amlogic,axg-sound-card";
-+		model = "Odroid GO Ultra";
-+		audio-widgets = "Microphone", "Mic Jack",
-+				"Headphone", "Headphones",
-+				"Speaker", "Internal Speakers";
-+		audio-aux-devs = <&tdmout_b>, <&tdmin_b>, <&speaker_amp>;
-+		audio-routing =	"TDMOUT_B IN 0", "FRDDR_A OUT 1",
-+				"TDM_B Playback", "TDMOUT_B OUT",
-+				"TDMIN_B IN 1", "TDM_B Capture",
-+				"TDMIN_B IN 4", "TDM_B Loopback",
-+				"TODDR_A IN 1", "TDMIN_B OUT",
-+				"MICL", "Mic Jack",
-+				"Headphones", "HPOL",
-+				"Headphones", "HPOR",
-+				"Speaker Amplifier INL", "HPOL",
-+				"Speaker Amplifier INR", "HPOR",
-+				"Internal Speakers", "Speaker Amplifier OUTL",
-+				"Internal Speakers", "Speaker Amplifier OUTR";
-+
-+		assigned-clocks = <&clkc CLKID_MPLL2>,
-+				  <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
-+
-+		dai-link-0 {
-+			sound-dai = <&frddr_a>;
-+		};
-+
-+		dai-link-1 {
-+			sound-dai = <&toddr_a>;
-+		};
-+
-+		dai-link-2 {
-+			sound-dai = <&tdmif_b>;
-+			dai-format = "i2s";
-+			dai-tdm-slot-tx-mask-0 = <1 1>;
-+			mclk-fs = <256>;
-+
-+			codec-0 {
-+				sound-dai = <&rk817>;
-+			};
-+		};
-+	};
-+
-+	speaker_amp: speaker-amplifier {
-+		compatible = "simple-audio-amplifier";
-+		sound-name-prefix = "Speaker Amplifier";
-+		VCC-supply = <&hp_5v>;
-+	};
-+};
-+
-+&arb {
-+	status = "okay";
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu1 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu100 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu101 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu102 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu103 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+/* RK817 only supports 12.5mV steps, round up the values */
-+&cpu_opp_table_0 {
-+	opp-1000000000 {
-+		opp-microvolt = <737500>;
-+	};
-+	opp-1200000000 {
-+		opp-microvolt = <737500>;
-+	};
-+	opp-1398000000 {
-+		opp-microvolt = <762500>;
-+	};
-+	opp-1512000000 {
-+		opp-microvolt = <800000>;
-+	};
-+	opp-1608000000 {
-+		opp-microvolt = <837500>;
-+	};
-+	opp-1704000000 {
-+		opp-microvolt = <862500>;
-+	};
-+	opp-1896000000 {
-+		opp-microvolt = <987500>;
-+	};
-+	opp-1992000000 {
-+		opp-microvolt = <1012500>;
-+	};
-+};
-+
-+/* RK818 only supports 12.5mV steps, round up the values */
-+&cpub_opp_table_1 {
-+	opp-1000000000 {
-+		opp-microvolt = <775000>;
-+	};
-+	opp-1200000000 {
-+		opp-microvolt = <775000>;
-+	};
-+	opp-1398000000 {
-+		opp-microvolt = <800000>;
-+	};
-+	opp-1512000000 {
-+		opp-microvolt = <825000>;
-+	};
-+	opp-1608000000 {
-+		opp-microvolt = <862500>;
-+	};
-+	opp-1704000000 {
-+		opp-microvolt = <900000>;
-+	};
-+	opp-1800000000 {
-+		opp-microvolt = <987500>;
-+	};
-+	opp-1908000000 {
-+		opp-microvolt = <1025000>;
-+	};
-+};
-+
-+&i2c_AO {
-+	status = "okay";
-+	pinctrl-0 = <&i2c_ao_sck_pins>, <&i2c_ao_sda_pins>;
-+	pinctrl-names = "default";
-+
-+	rk818: pmic@1c {
-+		compatible = "rockchip,rk818";
-+		reg = <0x1c>;
-+		interrupt-parent = <&gpio_intc>;
-+		interrupts = <7 IRQ_TYPE_LEVEL_LOW>; /* GPIOAO_7 */
-+
-+		vcc1-supply = <&vdd_sys>;
-+		vcc2-supply = <&vdd_sys>;
-+		vcc3-supply = <&vdd_sys>;
-+		vcc4-supply = <&vdd_sys>;
-+		vcc6-supply = <&vdd_sys>;
-+		vcc7-supply = <&vcc_2v3>;
-+		vcc8-supply = <&vcc_2v3>;
-+		vcc9-supply = <&vddao_3v3>;
-+		boost-supply = <&vdd_sys>;
-+		switch-supply = <&vdd_sys>;
-+
-+		regulators {
-+			vddcpu_a: DCDC_REG1 {
-+				regulator-name = "vddcpu_a";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <775000>;
-+				regulator-max-microvolt = <1025000>;
-+				regulator-ramp-delay = <6001>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <775000>;
-+				};
-+			};
-+
-+			vdd_ee: DCDC_REG2 {
-+				regulator-name = "vdd_ee";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <875000>;
-+				regulator-max-microvolt = <1250000>;
-+				regulator-ramp-delay = <6001>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <875000>;
-+				};
-+			};
-+
-+			vddq_1v1: DCDC_REG3 {
-+				regulator-name = "vddq_1v1";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+				};
-+			};
-+
-+			vddao_3v3: DCDC_REG4 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vddao_3v3";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <3300000>;
-+				};
-+			};
-+
-+			hp_5v: DCDC_BOOST {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-name = "hp_5v";
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5000000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vddio_ao1v8: LDO_REG5 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-name = "vddio_ao1v8";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1800000>;
-+				};
-+			};
-+
-+			vddq_1v8: LDO_REG7 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-name = "vddq_1v8";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1800000>;
-+				};
-+			};
-+
-+			vddio_c: LDO_REG9 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vddio_c";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <3300000>;
-+				};
-+			};
-+
-+			vcc_sd: SWITCH_REG {
-+				regulator-name = "vcc_sd";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+				};
-+			};
-+
-+			OTG_SWITCH {
-+				regulator-name = "otg_switch";
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+	pinctrl-0 = <&i2c3_sda_a_pins>, <&i2c3_sck_a_pins>;
-+	pinctrl-names = "default";
-+
-+	rk817: pmic@20 {
-+		compatible = "rockchip,rk817";
-+		reg = <0x20>;
-+		interrupt-parent = <&gpio_intc>;
-+
-+		interrupts = <5 IRQ_TYPE_LEVEL_LOW>; /* GPIOAO_5 */
-+
-+		vcc1-supply = <&vdd_sys>;
-+		vcc2-supply = <&vdd_sys>;
-+		vcc3-supply = <&vdd_sys>;
-+		vcc4-supply = <&vdd_sys>;
-+		vcc5-supply = <&vdd_sys>;
-+		vcc6-supply = <&vdd_sys>;
-+		vcc7-supply = <&vdd_sys>;
-+		vcc8-supply = <&vdd_sys>;
-+		vcc9-supply = <&rk817_boost>;
-+
-+		#sound-dai-cells = <0>;
-+		clocks = <&codec_clk>;
-+		clock-names = "mclk";
-+
-+		#clock-cells = <1>;
-+
-+		regulators {
-+			vddcpu_b: DCDC_REG2 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <737500>;
-+				regulator-max-microvolt = <1012500>;
-+				regulator-ramp-delay = <6001>;
-+				regulator-initial-mode = <0x2>;
-+				regulator-name = "vddcpu_b";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1000000>;
-+				};
-+			};
-+
-+			vcc_2v3: DCDC_REG3 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <2300000>;
-+				regulator-max-microvolt = <2400000>;
-+				regulator-initial-mode = <0x2>;
-+				regulator-name = "vcc_2v3";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+				};
-+			};
-+
-+			LDO_REG4 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vdd_codec";
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vcc_lcd: LDO_REG8 {
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vcc_lcd";
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			rk817_boost: BOOST {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5400000>;
-+				regulator-name = "rk817_boost";
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			usb_host: OTG_SWITCH {
-+				regulator-name = "usb_host";
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5000000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&clkc_audio {
-+	status = "okay";
-+};
-+
-+&eth_phy {
-+	status = "disabled";
-+};
-+
-+&frddr_a {
-+	status = "okay";
-+};
-+
-+&periphs_pinctrl {
-+	keypad_gpio_pins: keypad-gpio {
-+		mux {
-+			groups = "GPIOX_0", "GPIOX_1", "GPIOX_2", "GPIOX_3",
-+			         "GPIOX_4", "GPIOX_5", "GPIOX_6", "GPIOX_7",
-+				 "GPIOX_8", "GPIOX_9", "GPIOX_10", "GPIOX_11",
-+				 "GPIOX_12", "GPIOX_13", "GPIOX_14",  "GPIOX_15",
-+				 "GPIOX_16", "GPIOX_17", "GPIOX_18",  "GPIOX_19";
-+			function = "gpio_periphs";
-+			bias-pull-up;
-+			output-disable;
-+		};
-+	};
-+};
-+
-+&saradc {
-+	status = "okay";
-+	vref-supply = <&vddio_ao1v8>;
-+};
-+
-+/* SD card */
-+&sd_emmc_b {
-+	status = "okay";
-+	pinctrl-0 = <&sdcard_c_pins>;
-+	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	max-frequency = <50000000>;
-+	disable-wp;
-+
-+	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&vcc_sd>;
-+	vqmmc-supply = <&vddio_c>;
-+
-+};
-+
-+/* eMMC */
-+&sd_emmc_c {
-+	status = "okay";
-+	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-+	pinctrl-1 = <&emmc_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	max-frequency = <200000000>;
-+	disable-wp;
-+
-+	mmc-pwrseq = <&emmc_pwrseq>;
-+	vmmc-supply = <&vcc_sd>;
-+	vqmmc-supply = <&vddio_ao1v8>;
-+};
-+
-+
-+&tdmif_b {
-+	pinctrl-0 = <&tdm_b_dout0_pins>, <&tdm_b_fs_pins>, <&tdm_b_sclk_pins>, <&tdm_b_din1_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	assigned-clocks = <&clkc_audio AUD_CLKID_TDM_SCLK_PAD1>,
-+			  <&clkc_audio AUD_CLKID_TDM_LRCLK_PAD1>;
-+	assigned-clock-parents = <&clkc_audio AUD_CLKID_MST_B_SCLK>,
-+				 <&clkc_audio AUD_CLKID_MST_B_LRCLK>;
-+	assigned-clock-rates = <0>, <0>;
-+};
-+
-+&tdmin_b {
-+	status = "okay";
-+};
-+
-+&tdmout_b {
-+	status = "okay";
-+};
-+
-+&toddr_a {
-+	status = "okay";
-+};
-+
-+&uart_AO {
-+	status = "okay";
-+	pinctrl-0 = <&uart_ao_a_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&usb {
-+	status = "okay";
-+	dr_mode = "peripheral";
-+};
-+
-+&usb2_phy0 {
-+	status = "okay";
-+};
-+
-+&usb2_phy1 {
-+	status = "okay";
-+	phy-supply = <&usb_host>;
-+};
+> 
+> > > +       ifh = page_address(page) + XDP_PACKET_HEADROOM;
+> > > +       memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
+> > > +       lan966x_ifh_set_bypass(ifh, 1);
+> > > +       lan966x_ifh_set_port(ifh, BIT_ULL(port->chip_port));
+> > > +
+> > > +       dma_addr = page_pool_get_dma_addr(page);
+> > > +       dma_sync_single_for_device(lan966x->dev, dma_addr + XDP_PACKET_HEADROOM,
+> > > +                                  xdpf->len + IFH_LEN_BYTES,
+> > > +                                  DMA_TO_DEVICE);
+> > >
+> > > Also not correct. This page was mapped with %DMA_FROM_DEVICE in the
+> > > Rx code, now you sync it for the opposite.
+> > > Most drivers in case of XDP enabled create Page Pools with ::dma_dir
+> > > set to %DMA_BIDIRECTIONAL. Now you would need only to sync it here
+> > > with the same direction (bidir) and that's it.
+> >
+> > That is a really good catch!
+> > I was wondering why the things were working when I tested this. Because
+> > definitely, I can see the right behaviour.
+> 
+> The reasons can be:
+> 
+> 1) your platform might have a DMA coherence engine, so that all
+>    those DMA sync calls are no-ops;
+> 2) on your platform, DMA writeback (TO_DEVICE) and DMA invalidate
+>    (FROM_DEVICE) invoke the same operation/instruction. Some
+>    hardware is designed that way, that any DMA sync is in fact a
+>    bidir synchronization;
+> 3) if there were no frame modification from the kernel, e.g. you
+>    received it and immediately sent, cache was not polluted with
+>    some pending modifications, so there was no work for writeback;
+> 4) probably something else I might've missed.
+> 
+> >
+> > >
+> > > +
+> > > +       /* Setup next dcb */
+> > > +       lan966x_fdma_tx_setup_dcb(tx, next_to_use, xdpf->len + IFH_LEN_BYTES,
+> > > +                                 dma_addr + XDP_PACKET_HEADROOM);
+> > > +
+> > > +       /* Fill up the buffer */
+> > > +       next_dcb_buf = &tx->dcbs_buf[next_to_use];
+> > > +       next_dcb_buf->skb = NULL;
+> > > +       next_dcb_buf->page = page;
+> > > +       next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
+> > > +       next_dcb_buf->dma_addr = dma_addr;
+> > > +       next_dcb_buf->used = true;
+> > > +       next_dcb_buf->ptp = false;
+> > > +       next_dcb_buf->dev = port->dev;
+> > > +
+> > > +       /* Start the transmission */
+> > > +       lan966x_fdma_tx_start(tx, next_to_use);
+> > > +
+> > > +out:
+> > > +       spin_unlock(&lan966x->tx_lock);
+> > > +
+> > > +       return ret;
+> > > +}
+> > > +
+> > >  int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+> > >  {
+> > >         struct lan966x_port *port = netdev_priv(dev);
+> > > @@ -709,6 +776,7 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+> > >         /* Fill up the buffer */
+> > >         next_dcb_buf = &tx->dcbs_buf[next_to_use];
+> > >         next_dcb_buf->skb = skb;
+> > > +       next_dcb_buf->page = NULL;
+> > >         next_dcb_buf->len = skb->len;
+> > >         next_dcb_buf->dma_addr = dma_addr;
+> > >         next_dcb_buf->used = true;
+> > >
+> > > [...]
+> > >
+> > > --
+> > > 2.38.0
+> > >
+> > > Thanks,
+> > > Olek
+> >
+> > --
+> > /Horatiu
+> 
+> [0] https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/net/ethernet/marvell/mvneta.c#L1882
+> 
+> Thanks,
+> Olek
 
 -- 
-b4 0.10.1
+/Horatiu
