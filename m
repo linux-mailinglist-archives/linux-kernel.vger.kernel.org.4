@@ -2,85 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CD362F0CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D81562F0D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241820AbiKRJPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S241622AbiKRJQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241210AbiKRJPr (ORCPT
+        with ESMTP id S241886AbiKRJQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:15:47 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE0B419B8;
-        Fri, 18 Nov 2022 01:15:47 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id t4so3180580wmj.5;
-        Fri, 18 Nov 2022 01:15:46 -0800 (PST)
+        Fri, 18 Nov 2022 04:16:25 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C183490B1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:16:24 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id d8so2983766qki.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:16:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3X/1S90GjlN8tePoyh8v6JfLXXtmp5QanUR4qTwUYyg=;
-        b=ivrCl7eR87WFMl7HIEh9g8KNEgNJ7CyRSqNkagy0HUc6kI78j7+z/acrsRITNfpM6p
-         RMKX7zGXAABr383aK3RMwkXgNmx8hMDQUrU3m1B6dAe3xyh3arDqB6Yqp/2gV1ZOkgw6
-         HHNQWvtMXq8J3olEVAKX4aSeSMuO6j8p3+JbXjjcWzv4HzqVNZt2iF31pAUlBgzfwqXE
-         rSDM6gYyFTALm2OvWQVXie1eP4XW5R07pOp+T/EPtiP+I+Px6PAL3+gVbtWdZ+wicO1+
-         4zcedJI+Npvysmd43guvP+0e+urmfr1+jioLF+WJywwSjF2+6FQA6OfnqDdhje7fLTIe
-         ifWA==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3l1Y5HSD6/V1oMjNmRLOOT3WB8p/T/AI0RfUdUHqvkM=;
+        b=jqFHAvcXPb8pPqSgsQoBpVV2smoWYv0AsTkrJ+kQJiaRB6AMS+3EqMCC/cEs362x4u
+         /+p301ynz83gOJciwL/+JhWXLwlzDXQtAVxI0pJDDB9GKFE/gP/ZecyBXVb0vVwGcrua
+         B2vrLedGOjYteL855XQk1CA0/49+fnprzI25uu1e5Bx/oqPl9AG+803KHDKtnT/PLG+k
+         Un9d7IN9ioEtrMxSurRiCVuroEOut7A/yFcb7dN8ho/9Rkdo002NkBdMT4cXDl7VmAKN
+         uEfp7YDyLrXETMesR0xnhm5rSncI0B+2YFfyWAA1DTtmX6CIW2s8s/afyp7n0DlEMUch
+         nA+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3X/1S90GjlN8tePoyh8v6JfLXXtmp5QanUR4qTwUYyg=;
-        b=cEDQbLS/q9YBaBIyOalkr35MFyfIo8Ov+WgnCLvubUo4gF+uXkh//5H3dlsB+EEZJw
-         0zN9gY9P+jD6elpMvqDE91hEWYKKzayo6D9snUMLh6W/sh17/0tTo0j1+tTJmTkBuPkt
-         5sBmG/MXuBQVSyIM8LBXFMyYo18WI4A0pPdNjbnP+aKLFjWhwG0Bn6jR+eTITQIDJm1H
-         2Ghhw86GTYvRetPEttR7vcnE8hpvQhyQnMsjibdKKeK3SR1uaTLbUcxLn8kybbGoHfLS
-         le63asJMZEqTjZX6vkUwwv6n7YcxeW7wvZzg0CbTrGdfUSdCoI7vGC58RQgIVKdAciW1
-         2oxw==
-X-Gm-Message-State: ANoB5pm5holhQJjJFuO9a/UzJRwOCTctpq3lLdU/CSj90QttPWsapLQW
-        lyf1VyTJ13EoeMg8g6zPaUo=
-X-Google-Smtp-Source: AA0mqf7F/GY8GL5t96td0LCmkzg1Y6ivleyOyKEYRj0gjjaDZLmMGYBgf27oi9om7DHMcX3fjDswJw==
-X-Received: by 2002:a05:600c:34c5:b0:3cf:39b3:16bb with SMTP id d5-20020a05600c34c500b003cf39b316bbmr4193929wmq.201.1668762945535;
-        Fri, 18 Nov 2022 01:15:45 -0800 (PST)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id h8-20020a05600c350800b003d005aab31asm3080706wmq.40.2022.11.18.01.15.44
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3l1Y5HSD6/V1oMjNmRLOOT3WB8p/T/AI0RfUdUHqvkM=;
+        b=NWwOcIuMQeEDAA55zo5SXJCi8Qkg/L6zT7znB9M4qkO53LpLMdYCNkeKAFrJYAxcGw
+         6jhYDicUAc5AvQ5nGrQ78UdCmG+RdWO5TRH55oQ/s9jNh9zrjWl0CS5VM14NG8MBekA/
+         XIW5buOjtt6JhfiR4vQNEy4x+ZybR934QekysYlO5rXUbOs1phbK9jg3l2EKXSmomiFW
+         rxs4KTx/RKhgnoVHCVHVQ5X7wSNaBUpvBjKcEFtIJ1IdFQz4QRGB6EornQm7dr5tO8uo
+         /ZvhkhWPFMJ81AErhx4K0VaTAjSS8yQ4a8fxX0kyLt0FShwwKK1aS4AaE/IjY7q+O9Pa
+         /fUA==
+X-Gm-Message-State: ANoB5pllEk2ez37DIGeWOZCBTCNm+lS9v8F7k8tOyOvo1QWP4P9717+V
+        YrYWsrVESXsaTb7OcAV5HznTDA==
+X-Google-Smtp-Source: AA0mqf64Gro9oee+mIQaltmjl0aWGdxSPUg7f+VNTF3pGS8eJ15VWOe1XhqGaEeBSf5jYOQDXt97hQ==
+X-Received: by 2002:a37:6554:0:b0:6f9:f236:1b2b with SMTP id z81-20020a376554000000b006f9f2361b2bmr4845776qkb.299.1668762983133;
+        Fri, 18 Nov 2022 01:16:23 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id az20-20020a05620a171400b006ec771d8f89sm2086377qkb.112.2022.11.18.01.16.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 01:15:45 -0800 (PST)
-Date:   Fri, 18 Nov 2022 09:15:43 +0000
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] sfc: fix potential memleak in
- __ef100_hard_start_xmit()
-Message-ID: <Y3dNP6iEj2YyEwqJ@gmail.com>
-Mail-Followup-To: Leon Romanovsky <leon@kernel.org>,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1668671409-10909-1-git-send-email-zhangchangzhong@huawei.com>
- <Y3YctdnKDDvikQcl@unreal>
- <efedaa0e-33ce-24c6-bb9d-8f9b5c4a1c38@huawei.com>
- <Y3YxlxPIiw43QiKE@unreal>
+        Fri, 18 Nov 2022 01:16:22 -0800 (PST)
+Date:   Fri, 18 Nov 2022 01:16:20 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 3/3] mm,thp,rmap: clean up the end of
+ __split_huge_pmd_locked()
+In-Reply-To: <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
+Message-ID: <2f4afe60-40d2-706c-af21-914fbbbd164@google.com>
+References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3YxlxPIiw43QiKE@unreal>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,67 +87,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:05:27PM +0200, Leon Romanovsky wrote:
-> On Thu, Nov 17, 2022 at 08:41:52PM +0800, Zhang Changzhong wrote:
-> > 
-> > 
-> > On 2022/11/17 19:36, Leon Romanovsky wrote:
-> > > On Thu, Nov 17, 2022 at 03:50:09PM +0800, Zhang Changzhong wrote:
-> > >> The __ef100_hard_start_xmit() returns NETDEV_TX_OK without freeing skb
-> > >> in error handling case, add dev_kfree_skb_any() to fix it.
-> > >>
-> > >> Fixes: 51b35a454efd ("sfc: skeleton EF100 PF driver")
-> > >> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-> > >> ---
-> > >>  drivers/net/ethernet/sfc/ef100_netdev.c | 1 +
-> > >>  1 file changed, 1 insertion(+)
-> > >>
-> > >> diff --git a/drivers/net/ethernet/sfc/ef100_netdev.c b/drivers/net/ethernet/sfc/ef100_netdev.c
-> > >> index 88fa295..ddcc325 100644
-> > >> --- a/drivers/net/ethernet/sfc/ef100_netdev.c
-> > >> +++ b/drivers/net/ethernet/sfc/ef100_netdev.c
-> > >> @@ -218,6 +218,7 @@ netdev_tx_t __ef100_hard_start_xmit(struct sk_buff *skb,
-> > >>  		   skb->len, skb->data_len, channel->channel);
-> > >>  	if (!efx->n_channels || !efx->n_tx_channels || !channel) {
-> > >>  		netif_stop_queue(net_dev);
-> > >> +		dev_kfree_skb_any(skb);
-> > >>  		goto err;
-> > >>  	}
-> > > 
-> > > ef100 doesn't release in __ef100_enqueue_skb() either. SKB shouldn't be
-> > > NULL or ERR at this stage.
-> > 
-> > SKB shouldn't be NULL or ERR, so it can be freed. But this code looks weird.
-> 
-> Please take a look __ef100_enqueue_skb() and see if it frees SKB on
-> error or not. If not, please fix it.
+It's hard to add a page_add_anon_rmap() into __split_huge_pmd_locked()'s
+HPAGE_PMD_NR set_pte_at() loop, without wincing at the "freeze" case's
+HPAGE_PMD_NR page_remove_rmap() loop below it.
 
-That function looks ok to me, but I appreciate the extra eyes on it.
+It's just a mistake to add rmaps in the "freeze" (insert migration entries
+prior to splitting huge page) case: the pmd_migration case already avoids
+doing that, so just follow its lead.  page_add_ref() versus put_page()
+likewise.  But why is one more put_page() needed in the "freeze" case?
+Because it's removing the pmd rmap, already removed when pmd_migration
+(and freeze and pmd_migration are mutually exclusive cases).
 
-Martin
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ mm/huge_memory.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-> Thanks
-> 
-> > 
-> > > 
-> > > diff --git a/drivers/net/ethernet/sfc/ef100_tx.c b/drivers/net/ethernet/sfc/ef100_tx.c
-> > > index 29ffaf35559d..426706b91d02 100644
-> > > --- a/drivers/net/ethernet/sfc/ef100_tx.c
-> > > +++ b/drivers/net/ethernet/sfc/ef100_tx.c
-> > > @@ -497,7 +497,7 @@ int __ef100_enqueue_skb(struct efx_tx_queue *tx_queue, struct sk_buff *skb,
-> > > 
-> > >  err:
-> > >         efx_enqueue_unwind(tx_queue, old_insert_count);
-> > > -       if (!IS_ERR_OR_NULL(skb))
-> > > +       if (rc)
-> > >                 dev_kfree_skb_any(skb);
-> > > 
-> > >         /* If we're not expecting another transmit and we had something to push
-> > > 
-> > > 
-> > >>  
-> > >> -- 
-> > >> 2.9.5
-> > >>
-> > > .
-> > > 
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 3dee8665c585..ab5ab1a013e1 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2135,7 +2135,6 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 		uffd_wp = pmd_uffd_wp(old_pmd);
+ 
+ 		VM_BUG_ON_PAGE(!page_count(page), page);
+-		page_ref_add(page, HPAGE_PMD_NR - 1);
+ 
+ 		/*
+ 		 * Without "freeze", we'll simply split the PMD, propagating the
+@@ -2155,6 +2154,8 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 		anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+ 		if (freeze && anon_exclusive && page_try_share_anon_rmap(page))
+ 			freeze = false;
++		if (!freeze)
++			page_ref_add(page, HPAGE_PMD_NR - 1);
+ 	}
+ 
+ 	/*
+@@ -2210,27 +2211,21 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 				entry = pte_mksoft_dirty(entry);
+ 			if (uffd_wp)
+ 				entry = pte_mkuffd_wp(entry);
++			page_add_anon_rmap(page + i, vma, addr, false);
+ 		}
+ 		pte = pte_offset_map(&_pmd, addr);
+ 		BUG_ON(!pte_none(*pte));
+ 		set_pte_at(mm, addr, pte, entry);
+-		if (!pmd_migration)
+-			page_add_anon_rmap(page + i, vma, addr, false);
+ 		pte_unmap(pte);
+ 	}
+ 
+ 	if (!pmd_migration)
+ 		page_remove_rmap(page, vma, true);
++	if (freeze)
++		put_page(page);
+ 
+ 	smp_wmb(); /* make pte visible before pmd */
+ 	pmd_populate(mm, pmd, pgtable);
+-
+-	if (freeze) {
+-		for (i = 0; i < HPAGE_PMD_NR; i++) {
+-			page_remove_rmap(page + i, vma, false);
+-			put_page(page + i);
+-		}
+-	}
+ }
+ 
+ void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
+-- 
+2.35.3
+
