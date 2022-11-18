@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D513D630439
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8686305EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236456AbiKRXgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S237040AbiKSAAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 19:00:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbiKRXc7 (ORCPT
+        with ESMTP id S237298AbiKRX5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:32:59 -0500
+        Fri, 18 Nov 2022 18:57:24 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF2A83EB9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:20:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6622C050D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:29:01 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8O-0001hF-6M; Fri, 18 Nov 2022 23:46:56 +0100
+        id 1owA8O-0001iY-EY; Fri, 18 Nov 2022 23:46:56 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8K-0058Nm-Qt; Fri, 18 Nov 2022 23:46:53 +0100
+        id 1owA8L-0058Nu-3s; Fri, 18 Nov 2022 23:46:54 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8K-00Hb7z-Ss; Fri, 18 Nov 2022 23:46:52 +0100
+        id 1owA8L-00Hb82-6D; Fri, 18 Nov 2022 23:46:53 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Petr Machata <petrm@nvidia.com>,
         =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 202/606] Input: qt2160 - Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:56 +0100
-Message-Id: <20221118224540.619276-203-uwe@kleine-koenig.org>
+Subject: [PATCH 203/606] Input: tca6416-keypad - Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:57 +0100
+Message-Id: <20221118224540.619276-204-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -65,37 +65,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The probe function doesn't make use of the i2c_device_id * parameter so it
-can be trivially converted.
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/input/keyboard/qt2160.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/input/keyboard/tca6416-keypad.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/input/keyboard/qt2160.c b/drivers/input/keyboard/qt2160.c
-index 382b1519218c..04d2ee6ff577 100644
---- a/drivers/input/keyboard/qt2160.c
-+++ b/drivers/input/keyboard/qt2160.c
-@@ -338,8 +338,7 @@ static bool qt2160_identify(struct i2c_client *client)
- 	return true;
+diff --git a/drivers/input/keyboard/tca6416-keypad.c b/drivers/input/keyboard/tca6416-keypad.c
+index afcdfbb002ff..281d9ec163cc 100644
+--- a/drivers/input/keyboard/tca6416-keypad.c
++++ b/drivers/input/keyboard/tca6416-keypad.c
+@@ -194,9 +194,9 @@ static int tca6416_setup_registers(struct tca6416_keypad_chip *chip)
+ 	return 0;
  }
  
--static int qt2160_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int qt2160_probe(struct i2c_client *client)
+-static int tca6416_keypad_probe(struct i2c_client *client,
+-				   const struct i2c_device_id *id)
++static int tca6416_keypad_probe(struct i2c_client *client)
  {
- 	struct qt2160_data *qt2160;
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct tca6416_keys_platform_data *pdata;
+ 	struct tca6416_keypad_chip *chip;
  	struct input_dev *input;
-@@ -461,7 +460,7 @@ static struct i2c_driver qt2160_driver = {
+@@ -352,7 +352,7 @@ static struct i2c_driver tca6416_keypad_driver = {
+ 		.name	= "tca6416-keypad",
+ 		.pm	= &tca6416_keypad_dev_pm_ops,
  	},
- 
- 	.id_table	= qt2160_idtable,
--	.probe		= qt2160_probe,
-+	.probe_new	= qt2160_probe,
- 	.remove		= qt2160_remove,
+-	.probe		= tca6416_keypad_probe,
++	.probe_new	= tca6416_keypad_probe,
+ 	.remove		= tca6416_keypad_remove,
+ 	.id_table	= tca6416_id,
  };
- 
 -- 
 2.38.1
 
