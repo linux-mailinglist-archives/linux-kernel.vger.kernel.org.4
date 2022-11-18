@@ -2,164 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4A862EE6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB55062EE5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 08:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241253AbiKRHbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 02:31:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S240889AbiKRHbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 02:31:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241089AbiKRHbK (ORCPT
+        with ESMTP id S234976AbiKRHa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 02:31:10 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A23C7EC90;
-        Thu, 17 Nov 2022 23:31:06 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AI4hxTm019229;
-        Fri, 18 Nov 2022 07:31:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=k/q75UzrGFjIZAukfAPHyXsyPAGqWWGzVpeqOlV5SII=;
- b=RDx6Ie0B7clYzg3NYq/QHU+C/yMOAAhcCWhFrUqlRYW//r2wPK/qdZhmda1W0wrVXUw0
- ptKIhjGR2pJq2GkW8j0vlt3uIABelAE2l6GJHirPrud3S7Ye+TIS7tT+NnUZak/NZvZc
- Brd0uCYTpNc6Aqqk6nTbbJedZRVyea5CFefC3kAk+H5Zkzr5ZeIUYc5KRQaRTNmA80KI
- /JGDVJI1lFq+jYMgzk/VRsmUkz5LIPVyQUSyYN/IVgfsUolAJLa8Gj4yrMjeXA5ICRkT
- tPT2K5Osf+iAhTLT3B08h9iTSDu9lzFDuqEFHr4W36muFPwWnn7NEhgfv43L5ec42mWQ gw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kx0u7rpyg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 07:31:00 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AI7Ux4R019266
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 07:30:59 GMT
-Received: from blr-ubuntu-173.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 17 Nov 2022 23:30:55 -0800
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <konrad.dybcio@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dianders@chromium.org>,
-        <mka@chromium.org>, Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: [PATCH 2/2] arm64: dts: qcom: sc7280: Add a new herobrine Pro SKU
-Date:   Fri, 18 Nov 2022 13:00:17 +0530
-Message-ID: <20221118073017.26128-2-quic_rjendra@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221118073017.26128-1-quic_rjendra@quicinc.com>
-References: <20221118073017.26128-1-quic_rjendra@quicinc.com>
+        Fri, 18 Nov 2022 02:30:59 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64560205EF;
+        Thu, 17 Nov 2022 23:30:59 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so4282313pjl.3;
+        Thu, 17 Nov 2022 23:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wtwS94zRRJyqTUvKtV8JHHAty8kXLov0sVlZCky11iI=;
+        b=mvtdnCOo5EVJMRpl2n3mwZdHhT3J/8zAsxYxERhNghlOn9ojFKpKWI1nhf2RdT6WVx
+         kwHNzOCrOADIuK28R7LCGLO++fAC3hTokxwFmthmscnPZS06qIqKk3jAaxEimDq8sPPb
+         ONxKXwnaMQo4L46CWUiAaNODqPmazm96vgMHPxbBFSPzjFcjcxX0WpHqnSno5Qjl1TmZ
+         HJHY6PIZRpuHauJReCRvbrbJdlfjBCrFJLf3206T8JI34fJjnj78wComVWR6vzSk/ZOd
+         DD0mcGJ1wTmTJzvkotZbkgH2XTeFB2pZNfkozux4TAjo5MD2jaKGMmv3odz6UMnnhoYa
+         ZzmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wtwS94zRRJyqTUvKtV8JHHAty8kXLov0sVlZCky11iI=;
+        b=qOfT+/eGSVRQTw7iJdLCFhHX7Zd2SOKHnSRbqWXqomIZuxrA+80vyNeXY91VS6rwfL
+         N4z1lH+Her8w2+FCaeLkDZs75H1RC0ObRQ1Lok+Fn8d1Gca3xZtAuwAa/S3eb5PbJZeT
+         T9SGveWt0SaTwn5rftK3ik4ynsHM4V7ltXoxJPa/t5qHZvIqjXrgynpyUaTaPil+R6Sw
+         EgFAjlYJyHoJ3JfUfMEL9RY9YFVAjDtP6kpQut6kohJXpLRC4iBWpX4Mp+P9jB/CHvMT
+         J9HAkaMlFtG+naS2q1twUncZxiZUkdFvd6a1RSyH+BNqPXo7UEdkCXFdSljRY8RBcBzO
+         Y/gw==
+X-Gm-Message-State: ANoB5pmk7jSBP9kxdpRjdCI311Ivn65h0uMy6Jo3WzNsuzKxmVQjjV/6
+        GDfLVMN0WqPfGwYiet1McMg=
+X-Google-Smtp-Source: AA0mqf6eIoxfujWd5r39sBNB2JOJS6JTM5mgw21co0QA2sasxQsUBxlqwBDsbb98FAm/PTJrvzn4Zw==
+X-Received: by 2002:a17:902:c385:b0:17f:cdd1:7ab1 with SMTP id g5-20020a170902c38500b0017fcdd17ab1mr6397755plg.86.1668756658748;
+        Thu, 17 Nov 2022 23:30:58 -0800 (PST)
+Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::2c6b])
+        by smtp.googlemail.com with ESMTPSA id f7-20020a625107000000b0056b818142a2sm2424325pfb.109.2022.11.17.23.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 23:30:58 -0800 (PST)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, akpm@linux-foundation.org,
+        willy@infradead.org, naoya.horiguchi@nec.com, tytso@mit.edu,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: [PATCH v3 0/4] Removing the try_to_release_page() wrapper
+Date:   Thu, 17 Nov 2022 23:30:51 -0800
+Message-Id: <20221118073055.55694-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: W3toO81nt22qUyYkq-gwtLBrLqrrAI4W
-X-Proofpoint-ORIG-GUID: W3toO81nt22qUyYkq-gwtLBrLqrrAI4W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=647
- malwarescore=0 bulkscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
- spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211180050
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the qualcomm qcard based herobrine devices can come with
-a Pro variant of the chipset with some qcard level changes like
-the smps9 from pm8350c which is ganged up with smps7 and smps8,
-so we just end up removing smps9 from the herobrine pro sku dtsi.
-We then use it to create a new dts for the Pro variant of the
-herobrine CRD.
+This patchset replaces the remaining calls of try_to_release_page() with
+the folio equivalent: filemap_release_folio(). This allows us to remove
+the wrapper.
 
-Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+The set passes fstests on ext4 and xfs.
+
 ---
- arch/arm64/boot/dts/qcom/Makefile             |  1 +
- .../dts/qcom/sc7280-herobrine-crd-pro.dts     | 35 +++++++++++++++++++
- .../dts/qcom/sc7280-herobrine-pro-sku.dtsi    |  8 +++++
- 3 files changed, 44 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
+v3:
+  Fixed a mistake with a VM_BUG_ON_FOLIO check
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index afe496a93f94..c5ac51c3a383 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -108,6 +108,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd-pro.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
-new file mode 100644
-index 000000000000..fe6b228e9e4b
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * sc7280 CRD 3+ Pro board device tree source
-+ *
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include "sc7280-herobrine-crd.dts"
-+#include "sc7280-herobrine-pro-sku.dtsi"
-+
-+/ {
-+	model = "Qualcomm Technologies, Inc. sc7280 CRD Pro platform (rev5+)";
-+	compatible = "google,hoglin-sku1536", "qcom,sc7280";
-+
-+	/* FIXED REGULATORS */
-+
-+	/*
-+	 * On most herobrine boards PPVAR_SYS directly provides VREG_EDP_BL.
-+	 * However, on CRD there's an extra regulator in the way. Since this
-+	 * is expected to be uncommon, we'll leave the "vreg_edp_bl" label
-+	 * in the baseboard herobrine.dtsi point at "ppvar_sys" and then
-+	 * make a "_crd" specific version here.
-+	 */
-+	vreg_edp_bl_crd: vreg-edp-bl-crd-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vreg_edp_bl_crd";
-+
-+		gpio = <&pm8350c_gpios 6 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&edp_bl_reg_en>;
-+
-+		vin-supply = <&ppvar_sys>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
-new file mode 100644
-index 000000000000..fb4bbe8aeda0
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Google Herobrine dts fragment for PRO SKUs
-+ *
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/delete-node/ &vreg_s9c_0p676;
+v2:
+  Added VM_BUG_ON_FOLIO to ext4 for catching future data corruption
+
+Vishal Moola (Oracle) (4):
+  ext4: Convert move_extent_per_page() to use folios
+  khugepage: Replace try_to_release_page() with filemap_release_folio()
+  memory-failure: Convert truncate_error_page() to use folio
+  folio-compat: Remove try_to_release_page()
+
+ fs/ext4/move_extent.c   | 52 ++++++++++++++++++++++++-----------------
+ include/linux/pagemap.h |  1 -
+ mm/folio-compat.c       |  6 -----
+ mm/khugepaged.c         | 23 +++++++++---------
+ mm/memory-failure.c     |  5 ++--
+ 5 files changed, 46 insertions(+), 41 deletions(-)
+
 -- 
-2.17.1
+2.38.1
 
