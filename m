@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFDA6307D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 01:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEDB63041A
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiKSAko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 19:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S236323AbiKRXfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234504AbiKSAjW (ORCPT
+        with ESMTP id S236116AbiKRXcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 19:39:22 -0500
+        Fri, 18 Nov 2022 18:32:01 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5702C80D7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:44:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A8697ECA
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:19:37 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8b-0002OE-I3; Fri, 18 Nov 2022 23:47:09 +0100
+        id 1owA8b-0002Oe-Kt; Fri, 18 Nov 2022 23:47:09 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8Y-0058ST-Mg; Fri, 18 Nov 2022 23:47:07 +0100
+        id 1owA8Y-0058Sb-RW; Fri, 18 Nov 2022 23:47:07 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8Y-00008Z-On; Fri, 18 Nov 2022 23:47:06 +0100
+        id 1owA8Z-00008f-08; Fri, 18 Nov 2022 23:47:07 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Grant Likely <grant.likely@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Maximilian Luz <luzmaximilian@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 261/606] Input: sx8654 - Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:39:55 +0100
-Message-Id: <20221118224540.619276-262-uwe@kleine-koenig.org>
+Subject: [PATCH 262/606] Input: tsc2004 - Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:39:56 +0100
+Message-Id: <20221118224540.619276-263-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -61,39 +64,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/input/touchscreen/sx8654.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/input/touchscreen/tsc2004.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/input/touchscreen/sx8654.c b/drivers/input/touchscreen/sx8654.c
-index de85e57b2486..52ae73035830 100644
---- a/drivers/input/touchscreen/sx8654.c
-+++ b/drivers/input/touchscreen/sx8654.c
-@@ -306,9 +306,9 @@ static void sx8654_close(struct input_dev *dev)
- 	}
+diff --git a/drivers/input/touchscreen/tsc2004.c b/drivers/input/touchscreen/tsc2004.c
+index a9565353ee98..575768b587bb 100644
+--- a/drivers/input/touchscreen/tsc2004.c
++++ b/drivers/input/touchscreen/tsc2004.c
+@@ -34,8 +34,7 @@ static int tsc2004_cmd(struct device *dev, u8 cmd)
+ 	return 0;
  }
  
--static int sx8654_probe(struct i2c_client *client,
--			const struct i2c_device_id *id)
-+static int sx8654_probe(struct i2c_client *client)
- {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct sx8654 *sx8654;
- 	struct input_dev *input;
- 	int error;
-@@ -470,7 +470,7 @@ static struct i2c_driver sx8654_driver = {
- 		.of_match_table = of_match_ptr(sx8654_of_match),
- 	},
- 	.id_table = sx8654_id_table,
--	.probe = sx8654_probe,
-+	.probe_new = sx8654_probe,
- };
- module_i2c_driver(sx8654_driver);
+-static int tsc2004_probe(struct i2c_client *i2c,
+-			 const struct i2c_device_id *id)
++static int tsc2004_probe(struct i2c_client *i2c)
  
+ {
+ 	return tsc200x_probe(&i2c->dev, i2c->irq, &tsc2004_input_id,
+@@ -69,7 +68,7 @@ static struct i2c_driver tsc2004_driver = {
+ 		.pm     = &tsc200x_pm_ops,
+ 	},
+ 	.id_table       = tsc2004_idtable,
+-	.probe          = tsc2004_probe,
++	.probe_new      = tsc2004_probe,
+ 	.remove         = tsc2004_remove,
+ };
+ module_i2c_driver(tsc2004_driver);
 -- 
 2.38.1
 
