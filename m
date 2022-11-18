@@ -2,148 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB9762F1A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593B062F1AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 10:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241288AbiKRJpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 04:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
+        id S241629AbiKRJp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 04:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241141AbiKRJpN (ORCPT
+        with ESMTP id S241979AbiKRJpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:45:13 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA079CF6E;
-        Fri, 18 Nov 2022 01:42:48 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x102so6444441ede.0;
-        Fri, 18 Nov 2022 01:42:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RWwTJqBdRkGxMpUsXkj7kS4LoBFLsxAyq8V52F2ktYA=;
-        b=ozV32jxunKudpT0TF9+m0W4jAgSzBwZzSOICFLkkKE+F+y7iFgFOXwHYqx97pFp6yD
-         kl1JvtDkvY4HV9Ty5PsuN4BZYIXP/KQ8FdrTc2eD+HyjOCRISkvaJ1Q7hi/XowrxcumP
-         RxmovPRETWrFf+XTgN+kismameBs4PGRyu91z7GDURMC6N5oi8OTy9+Sx9v6IVNvzAs2
-         ACoBX5jqLfvi3SN7MADZ8ooN1yUgwahn9Lnv6aZYC+6cNkJPtw9am+CfrTiMZ6Whf113
-         tFLK82SlhDxr3m5FWYwI8D4G8Pi/ee+lFXAcC7401V/gkhjlcswixL4kTMYySHVjrXlp
-         iLvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RWwTJqBdRkGxMpUsXkj7kS4LoBFLsxAyq8V52F2ktYA=;
-        b=lrY0twMIYbXaZY8K2dBRfxf8zJQQ32now+FLgruvKMPWZOoVdKYQsvDZO9C0FghAPe
-         XE3pmUTBKaInrxNdgYpotk7VAa0RUs1K5ErS1Rh0ClMa/iOD72GQlgck+HelpCKT4jB+
-         1Ilt6Nx5xooa6q0e2fIz1kFZs9NMBoJkowr5RC0iCJTuC3nSs/EiHcyZ/fkb38+GBx6X
-         A8haDnrysZjr9aC8crEoIiEZ1MvDOYnJu/6rK//kIBYdEsPlpopwkjlmAbr7sjqQatJn
-         bHDioM7vjFScR5JUYty6eY7QxunM3uapG/nSi4IuY8PhZMDBt4/16DEhKG/hAIyXriNs
-         46og==
-X-Gm-Message-State: ANoB5plW37AaI0OYTn88batwYCZK0QBAl3iLBPZ3ywtieBoLL+MTH99R
-        iJvSvoqRQGNLBGM0K2XROSyBLEt7qOZ3hw==
-X-Google-Smtp-Source: AA0mqf7lt9bhkwouPKDyaPPGRqg+cJhOC2I/phTI9ASYuSDfCXzmI05hDjjgWqpX7tCK872W/b86Tg==
-X-Received: by 2002:a05:6402:2217:b0:468:fd95:eb4 with SMTP id cq23-20020a056402221700b00468fd950eb4mr3319804edb.230.1668764566276;
-        Fri, 18 Nov 2022 01:42:46 -0800 (PST)
-Received: from thinkpad-p72 (user-5-173-65-115.play-internet.pl. [5.173.65.115])
-        by smtp.gmail.com with ESMTPSA id o6-20020a056402444600b0046383354bf9sm1569307edb.40.2022.11.18.01.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 01:42:45 -0800 (PST)
-From:   Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
-X-Google-Original-From: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
-Date:   Fri, 18 Nov 2022 10:42:42 +0100
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] udmabuf: add vmap and vunmap methods to udmabuf_ops
-Message-ID: <20221118094242.GA89173@thinkpad-p72>
-References: <20221117045842.27161-1-lukasz.wiecaszek@gmail.com>
- <970e798d-ea26-5e1e-ace8-7915a866f7c7@collabora.com>
- <20221117170838.GA74987@thinkpad-p72>
- <cd382f43-1995-12a6-840b-32450e62f9f4@collabora.com>
- <6ecae1e3-16cb-f5fb-05ce-a98fcf145069@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Fri, 18 Nov 2022 04:45:35 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146E48FF93
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 01:43:14 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A9E2D1F45E;
+        Fri, 18 Nov 2022 09:43:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668764592; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=D5ofXCQXmXRaZ3C8WTwABFcVs7NEmIj/xbsMun3ooXA=;
+        b=LLcf/HB5yGfzZhiQTJ4x+H8uulxjSbJL7IXIqB1vGbLyuG2w4HO+GjAIHfYXNhO7jziiIO
+        /Nfr9cmDWL1MS14NqONFyYjOrdpgiXXEU5zUOkT3NukLU1ZD6QACooBO63uRcS8MqSQF2B
+        gGAqseg3M1pspXi1MurpkaARkHdQ3eQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668764592;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=D5ofXCQXmXRaZ3C8WTwABFcVs7NEmIj/xbsMun3ooXA=;
+        b=U1zgNnmdeiKI6Yz98ikVJ9Q2aDgbkvbvTIRPw2Uj6GMbsk5JJda9qchxVm+McUYFGfoL5i
+        WvE+v1TyKESDqeCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8E0041345B;
+        Fri, 18 Nov 2022 09:43:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I8oFIrBTd2OrHgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 18 Nov 2022 09:43:12 +0000
+Date:   Fri, 18 Nov 2022 10:43:12 +0100
+Message-ID: <874juwzjgv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.1-rc6
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-2
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6ecae1e3-16cb-f5fb-05ce-a98fcf145069@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 07:01:05PM +0100, Christian König wrote:
-> Am 17.11.22 um 18:32 schrieb Dmitry Osipenko:
-> > On 11/17/22 20:08, Lukasz Wiecaszek wrote:
-> > > On Thu, Nov 17, 2022 at 12:04:35PM +0300, Dmitry Osipenko wrote:
-> > > > Hi,
-> > > > 
-> > > > On 11/17/22 07:58, Lukasz Wiecaszek wrote:
-> > > > > The reason behind that patch is associated with videobuf2 subsystem
-> > > > > (or more genrally with v4l2 framework) and user created
-> > > > > dma buffers (udmabuf). In some circumstances
-> > > > > when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
-> > > > > wants to use dma_buf_vmap() method on the attached dma buffer.
-> > > > > As udmabuf does not have .vmap operation implemented,
-> > > > > such dma_buf_vmap() natually fails.
-> > > > > 
-> > > > > videobuf2_common: __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
-> > > > > videobuf2_common: __prepare_dmabuf: buffer for plane 0 changed
-> > > > > videobuf2_common: __prepare_dmabuf: failed to map dmabuf for plane 0
-> > > > > videobuf2_common: __buf_prepare: buffer preparation failed: -14
-> > > > > 
-> > > > > The patch itself seems to be strighforward.
-> > > > > It adds implementation of .vmap and .vunmap methods
-> > > > > to 'struct dma_buf_ops udmabuf_ops'.
-> > > > > .vmap method itself uses vm_map_ram() to map pages linearly
-> > > > > into the kernel virtual address space.
-> > > > > .vunmap removes mapping created earlier by .vmap.
-> > > > > All locking and 'vmapping counting' is done in dma_buf.c
-> > > > > so it seems to be redundant/unnecessary in .vmap/.vunmap.
-> > > > > 
-> > > > > Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
-> > > > If new patch version doesn't contain significant changes and you got
-> > > > acks/reviews for the previous version, then you should add the given
-> > > > acked-by and reviewed-by tags to the commit message by yourself.
-> > > > 
-> > > > -- 
-> > > > Best regards,
-> > > > Dmitry
-> > > > 
-> > > I would like to thank you all for your patience and on the same time say
-> > > sorry that I still cannot follow the process (although I have read
-> > > 'submitting patches' chapter).
-> > If you'll continue to contribute actively, you'll find things that
-> > aren't documented at all. Don't worry about it, usually somebody will
-> > tell you about what's missing. Just apply the new knowledge next time ;)
-> 
-> Yeah, it's more learning by doing. Especially I suspect you don't have
-> commit rights to drm-misc-next (or do you want to upstream it through some
-> other branch?), so as soon as nobody has any more objections ping Dmitry or
-> me to push this.
-> 
-> Cheers,
-> Christian
-> 
-> PS: The Signed-of-by, Reviewed-by, Acked-by etc... lines are usually added
-> in chronological order, e.g. your Signed-of-by line should always come
-> first.
-> 
->
-Thanks one more time. Funny thing, but at the very beginning I had
-Signed-of-by as the first line. Then I looked at 'git log' and spoted
-different order, so I change mine as well. Ahhh. But this chronological
-order of course make sense. So if you feel ok with this 'out of order'
-issue, please push/merge this commit. If not, please let me know. I
-already submitted version 5 of that work. So if change is required, I
-will prepare version 6.
+Linus,
+
+please pull sound fixes for v6.1-rc6 from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.1-rc6
+
+The topmost commit is 1abfd71ee8f3ed99c5d0df5d9843a360541d6808
+
+----------------------------------------------------------------
+
+sound fixes for 6.1-rc6
+
+A fair amount of commits at this time due to ASoC PR merge, but all
+look small and easy, mostly device-specific fixes spanned in various
+drivers.  Hopefully this should be the last big chunk for 6.1.
+
+----------------------------------------------------------------
+
+Brent Mendelsohn (1):
+      ASoC: amd: yc: Add Alienware m17 R5 AMD into DMI table
+
+Chen Zhongjin (2):
+      ASoC: core: Fix use-after-free in snd_soc_exit()
+      ASoC: soc-utils: Remove __exit for snd_soc_util_exit()
+
+Emil Flink (1):
+      ALSA: hda/realtek: fix speakers for Samsung Galaxy Book Pro
+
+Hans de Goede (1):
+      ASoC: Intel: bytcht_es8316: Add quirk for the Nanote UMPC-01
+
+Jason Montleon (2):
+      ASoC: rt5514: fix legacy dai naming
+      ASoC: rt5677: fix legacy dai naming
+
+Kai Vehmanen (1):
+      ASoC: SOF: ipc3-topology: use old pipeline teardown flow with SOF2.1 and older
+
+Maarten Zanders (1):
+      ASoC: fsl_asrc fsl_esai fsl_sai: allow CONFIG_PM=N
+
+Martin Povi¹er (3):
+      ASoC: tas2770: Fix set_tdm_slot in case of single slot
+      ASoC: tas2764: Fix set_tdm_slot in case of single slot
+      ASoC: tas2780: Fix set_tdm_slot in case of single slot
+
+Olivier Moysan (1):
+      ASoC: stm32: dfsdm: manage cb buffers cleanup
+
+Paul Cercueil (1):
+      ASoC: dapm: Don't use prefix for regulator name
+
+Peter Ujfalusi (1):
+      ASoC: SOF: topology: No need to assign core ID if token parsing failed
+
+Pierre-Louis Bossart (2):
+      ASoC: Intel: soc-acpi: add ES83x6 support to IceLake
+      ASoC: hda: intel-dsp-config: add ES83x6 quirk for IceLake
+
+Takashi Iwai (2):
+      ALSA: usb-audio: Drop snd_BUG_ON() from snd_usbmidi_output_open()
+      ALSA: hda/realtek: Fix the speaker output on Samsung Galaxy Book Pro 360
+
+Tzung-Bi Shih (1):
+      MAINTAINERS: update Tzung-Bi's email address
+
+Zhu Ning (1):
+      ASoC: sof_es8336: reduce pop noise on speaker
+
+---
+ .mailmap                                           |  1 +
+ .../bindings/sound/google,cros-ec-codec.yaml       |  2 +-
+ .../devicetree/bindings/sound/realtek,rt1015p.yaml |  2 +-
+ MAINTAINERS                                        |  2 +-
+ include/sound/sof/info.h                           |  4 ++
+ sound/hda/intel-dsp-config.c                       |  5 ++
+ sound/pci/hda/patch_realtek.c                      |  2 +
+ sound/soc/amd/yc/acp6x-mach.c                      |  7 +++
+ sound/soc/codecs/rt5514-spi.c                      | 15 +++---
+ sound/soc/codecs/rt5677-spi.c                      | 19 +++----
+ sound/soc/codecs/tas2764.c                         | 19 +++----
+ sound/soc/codecs/tas2770.c                         | 20 +++-----
+ sound/soc/codecs/tas2780.c                         | 19 +++----
+ sound/soc/fsl/fsl_asrc.c                           |  2 +-
+ sound/soc/fsl/fsl_esai.c                           |  2 +-
+ sound/soc/fsl/fsl_sai.c                            |  2 +-
+ sound/soc/intel/boards/bytcht_es8316.c             |  7 +++
+ sound/soc/intel/boards/sof_es8336.c                | 60 +++++++++++++++++-----
+ sound/soc/intel/common/soc-acpi-intel-icl-match.c  | 13 +++++
+ sound/soc/soc-core.c                               | 17 +++++-
+ sound/soc/soc-dapm.c                               |  2 +-
+ sound/soc/soc-utils.c                              |  2 +-
+ sound/soc/sof/ipc3-topology.c                      | 15 ++++--
+ sound/soc/sof/topology.c                           | 20 ++++----
+ sound/soc/stm/stm32_adfsdm.c                       | 11 ++++
+ sound/usb/midi.c                                   |  4 +-
+ 26 files changed, 176 insertions(+), 98 deletions(-)
+
