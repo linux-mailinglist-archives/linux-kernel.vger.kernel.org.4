@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9966304E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D513D630439
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 00:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236869AbiKRXtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 18:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S236456AbiKRXgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 18:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237317AbiKRXr6 (ORCPT
+        with ESMTP id S236432AbiKRXc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 18:47:58 -0500
+        Fri, 18 Nov 2022 18:32:59 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB03E675C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:26:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF2A83EB9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 15:20:50 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8N-0001g1-Tt; Fri, 18 Nov 2022 23:46:55 +0100
+        id 1owA8O-0001hF-6M; Fri, 18 Nov 2022 23:46:56 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8K-0058Ni-J8; Fri, 18 Nov 2022 23:46:53 +0100
+        id 1owA8K-0058Nm-Qt; Fri, 18 Nov 2022 23:46:53 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1owA8K-00Hb7t-LM; Fri, 18 Nov 2022 23:46:52 +0100
+        id 1owA8K-00Hb7z-Ss; Fri, 18 Nov 2022 23:46:52 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -34,16 +34,16 @@ To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Wolfram Sang <wsa@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Miguel Ojeda <ojeda@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Petr Machata <petrm@nvidia.com>
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Petr Machata <petrm@nvidia.com>,
+        =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 201/606] Input: qt1070 - Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:55 +0100
-Message-Id: <20221118224540.619276-202-uwe@kleine-koenig.org>
+Subject: [PATCH 202/606] Input: qt2160 - Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:38:56 +0100
+Message-Id: <20221118224540.619276-203-uwe@kleine-koenig.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
@@ -70,30 +70,30 @@ can be trivially converted.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/input/keyboard/qt1070.c | 5 ++---
+ drivers/input/keyboard/qt2160.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/input/keyboard/qt1070.c b/drivers/input/keyboard/qt1070.c
-index 9fcce18b1d65..533bb0375223 100644
---- a/drivers/input/keyboard/qt1070.c
-+++ b/drivers/input/keyboard/qt1070.c
-@@ -126,8 +126,7 @@ static irqreturn_t qt1070_interrupt(int irq, void *dev_id)
- 	return IRQ_HANDLED;
+diff --git a/drivers/input/keyboard/qt2160.c b/drivers/input/keyboard/qt2160.c
+index 382b1519218c..04d2ee6ff577 100644
+--- a/drivers/input/keyboard/qt2160.c
++++ b/drivers/input/keyboard/qt2160.c
+@@ -338,8 +338,7 @@ static bool qt2160_identify(struct i2c_client *client)
+ 	return true;
  }
  
--static int qt1070_probe(struct i2c_client *client,
--				const struct i2c_device_id *id)
-+static int qt1070_probe(struct i2c_client *client)
+-static int qt2160_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int qt2160_probe(struct i2c_client *client)
  {
- 	struct qt1070_data *data;
+ 	struct qt2160_data *qt2160;
  	struct input_dev *input;
-@@ -274,7 +273,7 @@ static struct i2c_driver qt1070_driver = {
- 		.pm	= &qt1070_pm_ops,
+@@ -461,7 +460,7 @@ static struct i2c_driver qt2160_driver = {
  	},
- 	.id_table	= qt1070_id,
--	.probe		= qt1070_probe,
-+	.probe_new	= qt1070_probe,
- 	.remove		= qt1070_remove,
+ 
+ 	.id_table	= qt2160_idtable,
+-	.probe		= qt2160_probe,
++	.probe_new	= qt2160_probe,
+ 	.remove		= qt2160_remove,
  };
  
 -- 
