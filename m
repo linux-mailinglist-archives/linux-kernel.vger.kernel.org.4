@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48012630229
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6617163003D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Nov 2022 23:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiKRW4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 17:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S231308AbiKRWiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 17:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235149AbiKRWza (ORCPT
+        with ESMTP id S231490AbiKRWii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:55:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335D8267C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:48:32 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA8H-0001Fy-U6; Fri, 18 Nov 2022 23:46:49 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA8D-0058Lh-Va; Fri, 18 Nov 2022 23:46:46 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA8E-00Hb6N-8x; Fri, 18 Nov 2022 23:46:46 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 177/606] iio: pressure: t5403: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:38:31 +0100
-Message-Id: <20221118224540.619276-178-uwe@kleine-koenig.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        Fri, 18 Nov 2022 17:38:38 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F31F32B8B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:38:34 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id p21so5780435plr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 14:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HS7sEulacmj3f+9ywrtjJQQzrLADk3rwjiT5beC2f0A=;
+        b=ilPjNnL61iiMSRQcVrqjQNVK2HQ0z98UghwmpFG6kKdemCWTQ3omDqFLckmIRrC3LX
+         ukyfT6CrliV4ZXQtptfuUUAubD0pmzcgt2wUrAYIK1L7hpCa9z6Uz2N8G7Aprst0wkW1
+         +2ZHNxKq0/UdfKfAEFjzIsIwwHkQFzH+c7IAwwXhx6IEfI+Gj0t71+p3ZaJEbLPp27H+
+         tSR86vL8/rWWVNY0EMw7xI6aZjfzV1cJlpp+x++D7+Oyqan5pbYnuezjZpGPhOOjp0X7
+         GhoCZNNHv5rEGHN+ZbQ+/cASHKP519nxabD47EXTjTRk4PXXG3Ahp57mBE98lniEOXD9
+         j94Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HS7sEulacmj3f+9ywrtjJQQzrLADk3rwjiT5beC2f0A=;
+        b=NGgR8o9JoR2L3y2xJ81vzFNuQpekZbtzdTAnryvD0YqftEMWK4kIH+7o130p2rJk04
+         +2yAzpacUcAG6p34gi5q9X7ueceUghK41e9NM+HpDJNZeYn1XcwXkS4rMprxqbNKhP3g
+         v1g9uBUuaDPkw6emep2cgL/nFzyf3g5Dy6tDucVEE7Jro76IbzGq75zS73nZLTeCXmiw
+         L7G9z2rVG9CAJ9KwNSDJYpzWLQjrr2DaThgs12la985ZU/FXdE5ZSx2Kpa8wrtC8/Fmm
+         vD8M3w/vO0wQk97SzTfKoqP4syDIvf03CTXSFGDJydSo7hXGD8eprTiDuZpC/IWUqhyE
+         ugKQ==
+X-Gm-Message-State: ANoB5pkxfptcuMe5cHxaThxG/+sAQNoskDTdTDZF+F+QrvgY+ENAaVgR
+        uM3/MG/lVl6qvSOwRfT3U3k=
+X-Google-Smtp-Source: AA0mqf5UNNKxewq5WGgPNmPe78Ytew11k0tjQAADMAM9wB6Qoot7fw+MqwX2ndiEAp2QV8Kig2NtBw==
+X-Received: by 2002:a17:90b:a15:b0:212:8f7:acf with SMTP id gg21-20020a17090b0a1500b0021208f70acfmr9570913pjb.13.1668811113557;
+        Fri, 18 Nov 2022 14:38:33 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:bba9:9f92:b2cc:16a4])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170903120c00b0016be834d54asm4218422plh.306.2022.11.18.14.38.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 14:38:33 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 18 Nov 2022 14:38:31 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ngupta@vflare.org,
+        senozhatsky@chromium.org, akpm@linux-foundation.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v5 6/6] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y3gJZxm3OlXmlTVj@google.com>
+References: <Y3fyon7v00ABtU6M@google.com>
+ <20221118220808.1194168-1-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118220808.1194168-1-nphamcs@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Fri, Nov 18, 2022 at 02:08:08PM -0800, Nhat Pham wrote:
+> Thanks a lot for the suggestions so far and for the review, Minchan!
+> Quick question about your last comment:
+> 
+> >> +#ifdef CONFIG_ZPOOL
+> >
+> > Let's remove the ifdef machinery here.
+> >
+> >> +     /* Free all deferred handles from zs_free */
+> >> +     free_handles(pool, zspage);
+> >> +#endif
+> 
+> free_handles() here is for the deferred handle freeing, which is also
+> under CONFIG_ZPOOL now, so I don't think we should remove the #ifdef
+> CONFIG_ZPOOL here, no? Let me know if I'm misunderstanding your
+> suggestion, or if you have any further comments regarding this patch.
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/iio/pressure/t5403.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+What I meant is
 
-diff --git a/drivers/iio/pressure/t5403.c b/drivers/iio/pressure/t5403.c
-index 685fcf65334f..2fbf14aff033 100644
---- a/drivers/iio/pressure/t5403.c
-+++ b/drivers/iio/pressure/t5403.c
-@@ -208,9 +208,9 @@ static const struct iio_info t5403_info = {
- 	.attrs = &t5403_attribute_group,
- };
- 
--static int t5403_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static int t5403_probe(struct i2c_client *client)
- {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct t5403_data *data;
- 	struct iio_dev *indio_dev;
- 	int ret;
-@@ -260,7 +260,7 @@ static struct i2c_driver t5403_driver = {
- 	.driver = {
- 		.name	= "t5403",
- 	},
--	.probe = t5403_probe,
-+	.probe_new = t5403_probe,
- 	.id_table = t5403_id,
- };
- module_i2c_driver(t5403_driver);
--- 
-2.38.1
+#ifdef CONFIG_ZPOOL
+/*
+ * Free all the deferred handles whose objects are freed in zs_free.
+ */
+static void free_handles(struct zs_pool *pool, struct zspage *zspage)
+{
+       unsigned long handle = (unsigned long)zspage->deferred_handles;
 
+       while (handle) {
+               unsigned long nxt_handle = handle_to_obj(handle);
+
+               cache_free_handle(pool, handle);
+               handle = nxt_handle;
+       }
+}
+#else
+static inline void free_handles(struct zs_pool *pool, struct zspage *zspage) {}
+#endif
+
+
+And then we could do
+
+__free_zspage
+     free_handles(pool, zspage);
+
+
+So without CONFIG_ZPOOL, the free_nandles function will be void.
