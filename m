@@ -2,177 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC8D630BF2
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFB7630BFB
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbiKSEz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 23:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S231566AbiKSFCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 00:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiKSEzW (ORCPT
+        with ESMTP id S229824AbiKSFCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 23:55:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3222BA593
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 20:55:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3317760A0B
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 04:55:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880B5C4347C
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 04:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668833720;
-        bh=FWTQg1pMn1zoXjBhI3Oc+0x9wI/eH+gfle52gN1Vz08=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Lzt/x88aEOVDhrXosD7AQZ6LyUoIMvReP0aHrpOdk6BDSRbO+PxeVaYSUNK2Sa8Ah
-         geq16iBW2jzgpd3rdBISjuKG6TAjHf8kgKvSYd5nflh1/ak8d9e8ZsYXH3V8WesZjE
-         v+5CKVtLD/LBIW0cPr0TnSlDK/SisMP4wxtWUL0fiID7j6vP545KJMzEfaUD5Nynbt
-         oqYlUAUfyNMHwV/oObssNVKeCSQPYhxBp0xbM/zs6koJ0Tm+/cA0kqUjyDHcWFgbOx
-         PkxvO432xiStDZ6kaOpl/grbtWX6q7YptiMqlIqi9rkOIBEQl5owbc+nORjRLyYqNd
-         GQIjzIVldSf8w==
-Received: by mail-ed1-f53.google.com with SMTP id v17so9722516edc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 20:55:20 -0800 (PST)
-X-Gm-Message-State: ANoB5pn4YebeW+C3/2eeRu4aK70V5YBVqP+uJ4rNbWkqlA/5+twJ1v2k
-        LWjNvWFLgN9HuAtz/AmvWShENcRdARXjW7+B9yc=
-X-Google-Smtp-Source: AA0mqf6vESNiZK1hg9EvtRH5CNItebjZaMvWg4meVQ/Uu1xL3UdAOY5rd1r11JIbrI3+TW4wHj1dNo//J06bD0qKNv4=
-X-Received: by 2002:a05:6402:5003:b0:462:a25f:f0f2 with SMTP id
- p3-20020a056402500300b00462a25ff0f2mr8632014eda.156.1668833718733; Fri, 18
- Nov 2022 20:55:18 -0800 (PST)
+        Sat, 19 Nov 2022 00:02:37 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2B2BB9D7;
+        Fri, 18 Nov 2022 21:02:35 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id b9so9143590ljr.5;
+        Fri, 18 Nov 2022 21:02:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4k/covGSr73zkI5EsrvQHDY4drFpR3B+fDbIpB2isnA=;
+        b=KLbl2SKLS+8CVnKIPH3BjgJgzh0Btscbfj1XTMramCSQwmU4BxujUDD34FG4rwmVAd
+         IY2RDCCfhwEZPEFxsmaAI6KvLNQt8ajsCMtkZZOpOYOzT+3vX2ZS5Y23bpGrvnrPt0kP
+         YvcMZjGf95XqPSaGDMZ82eDGAgtfK/csvNijs82LwsX5RyDRJ5ZaN+XHiL2O4A6TyZqM
+         74KPAcD8kwAV6n+34CczzWsov0RaSDch93BYgfLBCJ1U/pnDd2QprBQj5sk28fXoX6nz
+         gyuG/CdDJQH4xSrqVAh1V29Rt336EL69LjzwWuYH1c+15l9pz4XRN0gQsrEYm3i8bbp1
+         3fnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4k/covGSr73zkI5EsrvQHDY4drFpR3B+fDbIpB2isnA=;
+        b=3xL55Pd7fK0IEcQW5R9niiufPb/TmlHnihSofiAY63WLOE8eQ/sHkwms4rGQbsgdPo
+         i3XO3ZDoeTBwuEkxzVWh7QqAYj17wcsOAxiQlJTCB3syvSHyzzmLAr2MZN10JrR66/SS
+         /DgIhVtCHiqeyEYjLtEe1OzMSSwR/EQ+JB1CXt8iKYyOIhd7nk6Ww5BCVYNHax1yRSnR
+         LT/Le44HV5rLeewzfo+r2TDr3vnajBiQcYVBYmZjcmaI5BUX6uPTn+vJd/fCf3r5ctUe
+         sgtpnoi9S+soELEWI/0IWejr26ieVZYhmRL8IXZ3p6YWK4n+KM0CQgNTYLoprDIvlczD
+         +tJw==
+X-Gm-Message-State: ANoB5pm6h2b71/KIxXzxz7TO//tG+80VsHO/NxjxilVlHgP4O7sDZbXO
+        Tro6ceLDjP9boZNdiI2QDjZQDrRXazizEtKuGnc5oNVM6uOUmg==
+X-Google-Smtp-Source: AA0mqf4gIEemOFeslu8LSLayzhkbUiB6rQuAyIsbfMIgu7p/r8SG6fMhbIKgmjkkczvH2WZ4h8AmxGSTyPKO3jd3KXE=
+X-Received: by 2002:a05:651c:894:b0:277:3e1:297c with SMTP id
+ d20-20020a05651c089400b0027703e1297cmr58848ljq.109.1668834153851; Fri, 18 Nov
+ 2022 21:02:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20221116082338.5145-1-zhangqing@loongson.cn>
-In-Reply-To: <20221116082338.5145-1-zhangqing@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 19 Nov 2022 12:55:07 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4qOW_qw3wD0bdO9P8sCYAoLUHcPS1rpVfMsS36RSX_ZQ@mail.gmail.com>
-Message-ID: <CAAhV-H4qOW_qw3wD0bdO9P8sCYAoLUHcPS1rpVfMsS36RSX_ZQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v8 0/9] LoongArch: Add ftrace support
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 18 Nov 2022 23:02:22 -0600
+Message-ID: <CAH2r5mvp4qcfELt+W9khm=LH3TjyPDY7fhhMSA06cJdQfEQ23Q@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Qing,
+Please pull the following changes since commit
+f0c4d9fc9cc9462659728d168387191387e903cc:
 
-I have applied this series to
-https://github.com/loongson/linux/commits/loongarch-next with some
-slight modifications, please test that branch to see if everything is
-correct.
+  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
 
-Huacai
+are available in the Git repository at:
 
-On Wed, Nov 16, 2022 at 4:23 PM Qing Zhang <zhangqing@loongson.cn> wrote:
->
-> This patch series to support basic and dynamic ftrace.
->
-> 1) -pg
-> Use `-pg` makes stub like a child function `void _mcount(void *ra)`.
-> Thus, it can be seen store RA and open stack before `call _mcount`.
-> Find `open stack` at first, and then find `store RA`.
->
-> 2) -fpatchable-function-entry=2
-> The compiler has inserted 2 NOPs before the regular function prologue.
-> T series registers are available and safe because of LoongArch psABI.
->
-> At runtime, replace nop with bl to enable ftrace call and replace bl with
-> nop to disable ftrace call. The bl requires us to save the original RA value,
-> so here it saves RA at t0.
-> details are:
->
-> | Compiled   |       Disabled         |        Enabled         |
-> +------------+------------------------+------------------------+
-> | nop        | move     t0, ra        | move     t0, ra        |
-> | nop        | nop                    | bl      ftrace_caller  |
-> | func_body  | func_body              | func_body              |
->
-> The RA value will be recovered by ftrace_regs_entry, and restored into RA
-> before returning to the regular function prologue. When a function is not
-> being traced, the move t0, ra is not harmful.
->
-> performs a series of startup tests on ftrace and The test cases in selftests
-> has passed on LoongArch.
->
-> Changes in v2:
->  - Remove patch "LoongArch: ftrace: Add CALLER_ADDRx macros" there are other
->    better ways
->  Suggested by Steve:
->  - Add HAVE_DYNAMIC_FTRACE_WITH_ARGS support (6/10)
->  Suggested by Jinyang:
->  - Change addu16id to lu12iw and Adjust module_finalize return value (7/10)
->  - Use the "jr" pseudo-instruction where applicable (1/10)
->  - Use the "la.pcrel" instead of "la" (3/10)
->
-> Changes in v3:
->  Reported by Jeff:
->  - Fix unwind state when option func_stack_trace (10/10)
->
-> Changes in v4:
->  - No comments. Just resend the series.
->  - Rebased onto v6.0.0-rc4.
->
-> Changes in v5:
->  - Modify the indentation of Kconfig and small changes
->
-> Changes in v6:
->  Suggested by Huacai:
->  - Adjusting the patch Sequence
->  - renamed mcount-dyn.S for consistency
->
-> Changes in v7:
->  - delete redefinition
->
-> Changes in v8:
->  - remove useless macro judgment and modify the return location
->  - move some code to Patch-3
->
-> Qing Zhang (9):
->   LoongArch/ftrace: Add basic support
->   LoongArch/ftrace: Add recordmcount support
->   LoongArch/ftrace: Add dynamic function tracer support
->   LoongArch/ftrace: Add dynamic function graph tracer support
->   LoongArch/ftrace: Add HAVE_DYNAMIC_FTRACE_WITH_REGS support
->   LoongArch/ftrace: Add HAVE_DYNAMIC_FTRACE_WITH_ARGS support
->   LoongArch/ftrace: Add HAVE_FUNCTION_GRAPH_RET_ADDR_PTR support
->   LoongArch: modules/ftrace: Initialize PLT at load time
->   LoongArch: Enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS
->
->  arch/loongarch/Kconfig                     |   7 +
->  arch/loongarch/Makefile                    |   5 +
->  arch/loongarch/configs/loongson3_defconfig |   2 +
->  arch/loongarch/include/asm/ftrace.h        |  59 +++++
->  arch/loongarch/include/asm/inst.h          |  15 ++
->  arch/loongarch/include/asm/module.h        |   5 +-
->  arch/loongarch/include/asm/module.lds.h    |   1 +
->  arch/loongarch/include/asm/unwind.h        |   3 +-
->  arch/loongarch/kernel/Makefile             |  13 +
->  arch/loongarch/kernel/ftrace.c             |  74 ++++++
->  arch/loongarch/kernel/ftrace_dyn.c         | 264 +++++++++++++++++++++
->  arch/loongarch/kernel/inst.c               | 127 ++++++++++
->  arch/loongarch/kernel/mcount.S             |  94 ++++++++
->  arch/loongarch/kernel/mcount_dyn.S         | 154 ++++++++++++
->  arch/loongarch/kernel/module-sections.c    |  11 +
->  arch/loongarch/kernel/module.c             |  21 ++
->  arch/loongarch/kernel/unwind_guess.c       |   4 +-
->  arch/loongarch/kernel/unwind_prologue.c    |  46 +++-
->  scripts/recordmcount.c                     |  23 ++
->  19 files changed, 918 insertions(+), 10 deletions(-)
->  create mode 100644 arch/loongarch/include/asm/ftrace.h
->  create mode 100644 arch/loongarch/kernel/ftrace.c
->  create mode 100644 arch/loongarch/kernel/ftrace_dyn.c
->  create mode 100644 arch/loongarch/kernel/mcount.S
->  create mode 100644 arch/loongarch/kernel/mcount_dyn.S
->
-> --
-> 2.36.0
->
->
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc5-smb3-fixes
+
+for you to fetch changes up to a51e5d293dd1c2e7bf6f7be788466cd9b5d280fb:
+
+  cifs: add check for returning value of SMB2_set_info_init
+(2022-11-16 12:24:26 -0600)
+
+----------------------------------------------------------------
+4 small cifs/smb3 client fixes:
+- two missing and one incorrect return value checks
+- fix leak on tlink mount failure
+
+----------------------------------------------------------------
+Anastasia Belova (2):
+      cifs: add check for returning value of SMB2_close_init
+      cifs: add check for returning value of SMB2_set_info_init
+
+Zhang Xiaoxu (2):
+      cifs: Fix connections leak when tlink setup failed
+      cifs: Fix wrong return value checking when GETFLAGS
+
+ fs/cifs/connect.c | 14 +++++++++++---
+ fs/cifs/ioctl.c   |  4 ++--
+ fs/cifs/smb2ops.c |  4 ++++
+ 3 files changed, 17 insertions(+), 5 deletions(-)
+
+-- 
+Thanks,
+
+Steve
