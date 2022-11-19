@@ -2,89 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC64630FA1
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 18:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22529630FA5
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 18:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiKSROn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 12:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S233825AbiKSRO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 12:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKSROi (ORCPT
+        with ESMTP id S234581AbiKSROu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 12:14:38 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590ED13F7B;
-        Sat, 19 Nov 2022 09:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=JU2+ZJVbVVTJbcrbiBUSe/4vYflalSTNI21pEuGrk90=; b=ld2+Dckvp8CiCxIb1CeyVk23LY
-        lB1/XVpSTk02qTQp1SnXknuggoZYxIpX/oV5QvO1hmYkwLcd578AJUA3UppXIlqLpmXYGq1KdONQm
-        zDPfkbNmG1bs+Llv5BEM0kzvy7PI1hnwNYuTZ8FelZxKJkPP5dfdHd+A/Wwq7Jo7Tg2aMg2PCCcOv
-        xGHPgikY67I+X+igS29qk+ChynMdRPdDx0u0CESzTTnMPG0O8jFotMEgBpUexikyDtzyTQEXyvIDQ
-        RDpw5g1aGgZNzsWYVpXAwNLBVkX1CFgYHTk4pAzHRTztHR75WzdoDnbU+f+zN5wcTxu/QNnp2T/+M
-        kEE4jr+A==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1owRQ1-00FUxZ-S8; Sat, 19 Nov 2022 17:14:17 +0000
-Message-ID: <bce610de-60a5-2c00-0231-e5891c480ccf@infradead.org>
-Date:   Sat, 19 Nov 2022 09:14:15 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] octeontx2-pf: Remove duplicate MACSEC setting
-Content-Language: en-US
-To:     Zheng Bin <zhengbin13@huawei.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zhangqilong3@huawei.com
-References: <20221119133616.3583538-1-zhengbin13@huawei.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20221119133616.3583538-1-zhengbin13@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Nov 2022 12:14:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0E613F85;
+        Sat, 19 Nov 2022 09:14:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CB77B8015B;
+        Sat, 19 Nov 2022 17:14:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0DEACC433D6;
+        Sat, 19 Nov 2022 17:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668878087;
+        bh=+J5uSA1BQyg8DsHHZNZzlEGqj7HfFYbE8y5JsatxasU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jn1dOnLQJI0BaBgwHAhxM9Cq4feESYbx2J15NZLPtUE1fDp4O3a521WjQ95LC9+j8
+         Dnq2IL2CpDiliNlrjtN0jAXYlandXrArzvy49xQET+RjmHCZ2fCVkEjqP8G7BZdD0s
+         gFBhbOYI5plL40tUSRMH3b6EUqhkdnpcBlBDElkD4RmCJ1btGK5LBTKIjAZSd3cwVn
+         G18HStuzC66w0FLqG71L9rzoyWqMDsAElKNSB4azr/gbVKY+gAyRD6AsvTzkFW/dIu
+         sovEHZT0gEw8lv6qP0MED7H6OcvTVZzJte5AGJA3R7Y+scpLFTLO3HZCUQbEuD1LkF
+         oDd+9eVG8CHdQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8B7FC395F6;
+        Sat, 19 Nov 2022 17:14:46 +0000 (UTC)
+Subject: Re: [GIT PULL] Kbuild fixes for v6.1-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAK7LNAR3ESoUBQ5HM3FCLT2LC8JPWstTO6aypnm09ayCFjknYA@mail.gmail.com>
+References: <CAK7LNAR3ESoUBQ5HM3FCLT2LC8JPWstTO6aypnm09ayCFjknYA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kbuild.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAK7LNAR3ESoUBQ5HM3FCLT2LC8JPWstTO6aypnm09ayCFjknYA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-fixes-v6.1-3
+X-PR-Tracked-Commit-Id: 5db8face97f81c9342458c052572e19ac6bd8e52
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8c67d863a9d60f8e2d563477ba2fd664122e0aae
+Message-Id: <166887808694.22538.5890182436848871741.pr-tracker-bot@kernel.org>
+Date:   Sat, 19 Nov 2022 17:14:46 +0000
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Sun, 20 Nov 2022 00:26:40 +0900:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git tags/kbuild-fixes-v6.1-3
 
-On 11/19/22 05:36, Zheng Bin wrote:
-> Commit 4581dd480c9e ("net: octeontx2-pf: mcs: consider MACSEC setting")
-> has already added "depends on MACSEC || !MACSEC", so remove it.
-> 
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8c67d863a9d60f8e2d563477ba2fd664122e0aae
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-
-> ---
->  drivers/net/ethernet/marvell/octeontx2/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/Kconfig b/drivers/net/ethernet/marvell/octeontx2/Kconfig
-> index 6b4f640163f7..993ac180a5db 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/Kconfig
-> +++ b/drivers/net/ethernet/marvell/octeontx2/Kconfig
-> @@ -32,7 +32,6 @@ config OCTEONTX2_PF
->  	tristate "Marvell OcteonTX2 NIC Physical Function driver"
->  	select OCTEONTX2_MBOX
->  	select NET_DEVLINK
-> -	depends on MACSEC || !MACSEC
->  	depends on (64BIT && COMPILE_TEST) || ARM64
->  	select DIMLIB
->  	depends on PCI
-> --
-> 2.31.1
-> 
+Thank you!
 
 -- 
-~Randy
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
