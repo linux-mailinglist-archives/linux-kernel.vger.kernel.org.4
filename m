@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79316630C22
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E480630C24
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiKSF27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 00:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S229515AbiKSF3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 00:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiKSF24 (ORCPT
+        with ESMTP id S229500AbiKSF3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 00:28:56 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C71450A2;
-        Fri, 18 Nov 2022 21:28:55 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NDhyN1cZszmV7c;
-        Sat, 19 Nov 2022 13:28:28 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 19 Nov 2022 13:28:54 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 19 Nov
- 2022 13:28:53 +0800
-Message-ID: <55553de4-04c3-09f3-b075-f0112d2298cb@huawei.com>
-Date:   Sat, 19 Nov 2022 13:28:53 +0800
+        Sat, 19 Nov 2022 00:29:41 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C204AF31;
+        Fri, 18 Nov 2022 21:29:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yRfhb+NrhMCpwQojHAdu4kSKTfkVB70x/cknHkdRPP8=; b=pf87u4oTQjYpt5Kue2sttXTfdD
+        gYe+9YPbM438h4uJ8GHSprDo8rJFusGWG1D7MOnAbza7Zh+mfoIB3Y8Lsi4i12zopiOa+YVy75gCN
+        JuxtOh8IXowqco7em0GWWWFLdl5ge/wecZugF/4GVcGK2scKI2VgO8lD7FAj9yJmO94kuWjMkLmMA
+        ggmMH0Y0X83DwdjRPQ2wTRSuJDrakuAlkwsZkF/yEEuKT4adIYC+FFYGletRX4kqjswewR9CmmCBi
+        hE9eZDaH2thJa+B6RhrG3ry2LdG4TNmDu+6gRr66CxjImNAV/CvWK44oPBy8hV+OzbMPjtmNjbNBS
+        4BmzBRSA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1owGPq-004zW4-20;
+        Sat, 19 Nov 2022 05:29:22 +0000
+Date:   Sat, 19 Nov 2022 05:29:22 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] binfmt_misc: fix shift-out-of-bounds in
+ check_special_flags
+Message-ID: <Y3hpslPymEBPmZCS@ZenIV>
+References: <20221102025123.1117184-1-liushixin2@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment
- usage as dirty
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     <linux-nilfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <konishi.ryusuke@gmail.com>
-References: <20221118063304.140187-1-chenzhongjin@huawei.com>
- <20221118141138.c091445bdda36b78f6277c1f@linux-foundation.org>
- <0e693d41-0bb5-b4a9-19b7-1c71e90e06bf@huawei.com>
-In-Reply-To: <0e693d41-0bb5-b4a9-19b7-1c71e90e06bf@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102025123.1117184-1-liushixin2@huawei.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,79 +53,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 02, 2022 at 10:51:23AM +0800, Liu Shixin wrote:
+> UBSAN reported a shift-out-of-bounds warning:
+> 
+>  left shift of 1 by 31 places cannot be represented in type 'int'
+>  Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0x8d/0xcf lib/dump_stack.c:106
+>   ubsan_epilogue+0xa/0x44 lib/ubsan.c:151
+>   __ubsan_handle_shift_out_of_bounds+0x1e7/0x208 lib/ubsan.c:322
+>   check_special_flags fs/binfmt_misc.c:241 [inline]
+>   create_entry fs/binfmt_misc.c:456 [inline]
+>   bm_register_write+0x9d3/0xa20 fs/binfmt_misc.c:654
+>   vfs_write+0x11e/0x580 fs/read_write.c:582
+>   ksys_write+0xcf/0x120 fs/read_write.c:637
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x34/0x80 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  RIP: 0033:0x4194e1
+> 
+> Since the type of Node's flags is unsigned long, we should define these
+> macros with same type too.
 
-On 2022/11/19 13:24, Chen Zhongjin wrote:
-> On 2022/11/19 6:11, Andrew Morton wrote:
->> On Fri, 18 Nov 2022 14:33:04 +0800 Chen Zhongjin 
->> <chenzhongjin@huawei.com> wrote:
->>
->>> In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
->>> nilfs_segment_usage is not set dirty, which makes it can be found by
->>> nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
->>>
->>> This will cause the problem reported by syzkaller:
->>> https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24 
->>>
->>>
->>> It's because the case starts with segbuf1.segnum = 3, nextnum = 4, and
->>> nilfs_sufile_alloc() not called to allocate a new segment.
->>>
->>> The first time nilfs_segctor_extend_segments() allocated segment
->>> segbuf2.segnum = segbuf1.nextnum = 4, then nilfs_sufile_alloc() found
->>> nextnextnum = 4 segment because its su is not set dirty.
->>> So segbuf2.nextnum = 4, which causes next segbuf3.segnum = 4.
->>>
->>> sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
->>> added to both buffer lists of two segbuf.
->>> It makes the list head of second list linked to the first one. When
->>> iterating the first one, it will access and deref the head of second,
->>> which causes NULL pointer dereference.
->>>
->>> Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
->> Merged in 2009!
->
-> Yes, seems it is introduced at the beginning of this file and the 
-> function called nilfs_touch_segusage().
->
-> Wired that this problem is not discovered utill now. So I'm wondering 
-> that whether this is a real-world
-> problem or just a use case constructed maliciously by syzkaller. But 
-> according to the result of syzkaller bisection,
-> this problem should have a history.
->>> --- a/fs/nilfs2/sufile.c
->>> +++ b/fs/nilfs2/sufile.c
->>> @@ -495,12 +495,18 @@ void nilfs_sufile_do_free(struct inode 
->>> *sufile, __u64 segnum,
->>>   int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
->>>   {
->>>       struct buffer_head *bh;
->>> +    void *kaddr;
->>> +    struct nilfs_segment_usage *su;
->>>       int ret;
->>>         ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 
->>> 0, &bh);
->>>       if (!ret) {
->>>           mark_buffer_dirty(bh);
->>>           nilfs_mdt_mark_dirty(sufile);
->>> +        kaddr = kmap_atomic(bh->b_page);
->>> +        su = nilfs_sufile_block_get_segment_usage(sufile, segnum, 
->>> bh, kaddr);
->>> +        nilfs_segment_usage_set_dirty(su);
->>> +        kunmap_atomic(kaddr);
->>>           brelse(bh);
->>>       }
->>>       return ret;
->> Do we feel that this fix should be backported into -stable kernels?
-> Sorry that I'm not familiar with the specific use scenarios of nilfs2. 
-> So I can't offer a better advice. I think if it
-> is a problem that not happen easily in normal situations there's no 
-> necessary to backport it to stable.
-
-I just noticed Ryusuke's mail so let's do it as his advice.
-
-Thanks for your time!
-
-Best,
-
-Chen
-
+We are limited to 32 bits anyway.  More interesting question here is what's
+the point of having those bits that high anyway?
