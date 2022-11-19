@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD81630C48
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1171630C59
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiKSFvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 00:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S232052AbiKSF6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 00:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiKSFva (ORCPT
+        with ESMTP id S229506AbiKSF6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 00:51:30 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF8A903B8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 21:51:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=5JckQtjLFKaJhNfVuiFkZN/oxJZBwctXTxGO8rRRZjA=; b=ir8REqR3W9lZQ472FC+xBvYPoe
-        tIwzBaRkUNflMPbcxr8YugGkVZ/H3hkTgpMqR0PcT6Jcds9HIDwuW7M2ay+74zkadmTLLPQNnBBHp
-        J3pi9dbJimeaUb9tKxTDXmRv6xtQo8dWyv5Gr6Vcf4TcUvOtgALYCOHidWkuh1q693pH3zf/BD/yA
-        PqkKtu/0eXWWEo1CHvTKXIsGS0gvereK54Aytp+HYPrHuZGievNRNO1L8Bz1CpOFAbPFLCENJLnGE
-        XJUmPOCC2NxEIi+FoWwidAzp8MjxtplNwLe6EKFOoJgjFPBlJHiUNBC6ndOR4qruZhP2LbnPwpg/Y
-        vCf4WHrw==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1owGlE-0030wo-Le; Sat, 19 Nov 2022 05:51:29 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        kernel test robot <lkp@intel.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Subject: [PATCH] maple_tree: allow TEST_MAPLE_TREE only when DEBUG_KERNEL is set
-Date:   Fri, 18 Nov 2022 21:51:17 -0800
-Message-Id: <20221119055117.14094-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.38.1
+        Sat, 19 Nov 2022 00:58:36 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8035523160;
+        Fri, 18 Nov 2022 21:58:32 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NDjcW482yzmVw7;
+        Sat, 19 Nov 2022 13:58:03 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 19 Nov 2022 13:58:29 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.30) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 19 Nov 2022 13:58:28 +0800
+From:   Hui Tang <tanghui20@huawei.com>
+To:     <robdclark@gmail.com>, <quic_abhinavk@quicinc.com>,
+        <dmitry.baryshkov@linaro.org>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>
+CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <yusongping@huawei.com>
+Subject: [PATCH] drm/msm/dpu: check for null return of devm_kzalloc() in dpu_writeback_init()
+Date:   Sat, 19 Nov 2022 13:55:18 +0800
+Message-ID: <20221119055518.179937-1-tanghui20@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.30]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent a kconfig warning that is caused by TEST_MAPLE_TREE by adding a
-"depends on" clause for TEST_MAPLE_TREE since 'select' does not follow
-any kconfig dependencies.
+Because of the possilble failure of devm_kzalloc(), dpu_wb_conn might
+be NULL and will cause null pointer derefrence later.
 
-WARNING: unmet direct dependencies detected for DEBUG_MAPLE_TREE
-  Depends on [n]: DEBUG_KERNEL [=n]
-  Selected by [y]:
-  - TEST_MAPLE_TREE [=y] && RUNTIME_TESTING_MENU [=y]
+Therefore, it might be better to check it and directly return -ENOMEM.
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 120b116208a0 ("maple_tree: reorganize testing to restore module testing")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Liam Howlett <liam.howlett@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
+Fixes: 77b001acdcfe ("drm/msm/dpu: add the writeback connector layer")
+Signed-off-by: Hui Tang <tanghui20@huawei.com>
 ---
- lib/Kconfig.debug |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff -- a/lib/Kconfig.debug b/lib/Kconfig.debug
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2259,6 +2259,7 @@ config TEST_XARRAY
- 	tristate "Test the XArray code at runtime"
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c
+index 088ec990a2f2..2a5a68366582 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c
+@@ -70,6 +70,8 @@ int dpu_writeback_init(struct drm_device *dev, struct drm_encoder *enc,
+ 	int rc = 0;
  
- config TEST_MAPLE_TREE
-+	depends on DEBUG_KERNEL
- 	select DEBUG_MAPLE_TREE
- 	tristate "Test the Maple Tree code at runtime"
+ 	dpu_wb_conn = devm_kzalloc(dev->dev, sizeof(*dpu_wb_conn), GFP_KERNEL);
++	if (!dpu_wb_conn)
++		return -ENOMEM;
  
+ 	drm_connector_helper_add(&dpu_wb_conn->base.base, &dpu_wb_conn_helper_funcs);
+ 
+-- 
+2.17.1
+
