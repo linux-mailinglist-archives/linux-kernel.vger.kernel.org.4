@@ -2,93 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E22630C90
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DADC6630C97
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbiKSGlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 01:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
+        id S232128AbiKSGn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 01:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiKSGlJ (ORCPT
+        with ESMTP id S230371AbiKSGnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 01:41:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE6BA13CA;
-        Fri, 18 Nov 2022 22:41:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55EBA60A73;
-        Sat, 19 Nov 2022 06:41:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACF8C433D6;
-        Sat, 19 Nov 2022 06:41:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668840066;
-        bh=ZeqWS3qlxBPkQlLxIdswf7hLuV3mbyIpTRc3e2a1flE=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=PVN7pS/StHDC8nqh91wKoPK4gJL2fVkFtwNv/G2XVFvKaVCGVmI3gC+PgkUcIo/Fm
-         MU7LL0eL51JvmxhLy/KTMyF+Fvi9WYCNJyql22Bp+KmCI77upsvWri+TTlhxSoIKBp
-         DJIhOGjszVvFO9Lc/LlPwgJsg/pMvUJtBo2cuNUBKjS4xavooRBPxQ2LuTOd+J8GeM
-         RQkovpx6aX/psuZq8emOysPjFClkKfTbK0qZz9fijAy8Dp7mt+/1REP9P+JO7Ki0p5
-         iK3Oc865hrybBYcfzFBHc8eg3FCgwuVY6ZDVMV6MTYzuaInP12Or3Ogj8qONtQpodt
-         hUZOIq6U2pkmQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Lamparter <chunkeey@googlemail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] p54: Replace zero-length array of trailing structs with flex-array
-References: <20221118234240.gonna.369-kees@kernel.org>
-Date:   Sat, 19 Nov 2022 08:41:02 +0200
-In-Reply-To: <20221118234240.gonna.369-kees@kernel.org> (Kees Cook's message
-        of "Fri, 18 Nov 2022 15:42:44 -0800")
-Message-ID: <87zgcnphtt.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Sat, 19 Nov 2022 01:43:23 -0500
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E502EB54F7;
+        Fri, 18 Nov 2022 22:43:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1llmR
+        ePQ0BZkXZUv/+5vLDGTpWNhrfaeQNFoxHbpgsY=; b=p4H3AS+Navz5n8UOrxv47
+        HDqS0tzL1tbO4F7bic2ERCq2J34uNKbgD5N38WJB4Ftmhei/DL32NAuNZ1F7EhsU
+        SeR3a42MGdWWvY6UPTkoE8r24C6lILK+h2Mr5e0Zc6m2tj4ZyzHg/AMX3w1tlSCD
+        //QfwVLrejUS8cqIDmyBqk=
+Received: from localhost.localdomain (unknown [114.221.197.177])
+        by smtp7 (Coremail) with SMTP id C8CowAAnBxCmenhjaHotSg--.7350S2;
+        Sat, 19 Nov 2022 14:41:47 +0800 (CST)
+From:   ChunyouTang <tangchunyou@163.com>
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        sumit.semwal@linaro.org, christian.koenig@amd.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        ChunyouTang <tangchunyou@163.com>
+Subject: [PATCH v2 3/3] drm/gem-shmem: When drm_gem_object_init failed, should release object
+Date:   Sat, 19 Nov 2022 14:41:31 +0800
+Message-Id: <20221119064131.364-1-tangchunyou@163.com>
+X-Mailer: git-send-email 2.30.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8CowAAnBxCmenhjaHotSg--.7350S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCr1UJr1xCF1kCw4UJrWrKrg_yoW5XFy5pa
+        nxAry7KrW8KFZ2grZ7XF4kCa43Gw40gF4xWa4Sq3yakw10yF1DXFn8Cr1DAFW3Jr47Xr1a
+        qwnFkFySyrWjyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pNhF7UUUUUU=
+X-Originating-IP: [114.221.197.177]
+X-CM-SenderInfo: 5wdqwu5kxq50rx6rljoofrz/1tbiVgu+UVqzvFdXQwAAsk
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+when goto err_free, the object had init, so it should be release when fail.
 
-> Zero-length arrays are deprecated[1] and are being replaced with
-> flexible array members in support of the ongoing efforts to tighten the
-> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
->
-> Replace zero-length array with flexible-array member.
->
-> This results in no differences in binary output (most especially because
-> struct pda_antenna_gain is unused). The struct is kept for future
-> reference.
->
-> [1] https://github.com/KSPP/linux/issues/78
->
-> Cc: Christian Lamparter <chunkeey@googlemail.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: ChunyouTang <tangchunyou@163.com>
+---
+ drivers/gpu/drm/drm_gem.c              | 19 ++++++++++++++++---
+ drivers/gpu/drm/drm_gem_shmem_helper.c |  4 +++-
+ include/drm/drm_gem.h                  |  1 +
+ 3 files changed, 20 insertions(+), 4 deletions(-)
 
-I'll add "wifi:".
-
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index 8b68a3c1e6ab..3e2e660717c3 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -169,6 +169,20 @@ void drm_gem_private_object_init(struct drm_device *dev,
+ }
+ EXPORT_SYMBOL(drm_gem_private_object_init);
+ 
++/**
++ * drm_gem_private_object_fini - Finalize a failed drm_gem_object
++ * @obj: drm_gem_object
++ *
++ * Uninitialize an already allocated GEM object when it initialized failed
++ */
++void drm_gem_private_object_fini(struct drm_gem_object *obj)
++{
++	WARN_ON(obj->dma_buf);
++
++	dma_resv_fini(&obj->_resv);
++}
++EXPORT_SYMBOL(drm_gem_private_object_fini);
++
+ /**
+  * drm_gem_object_handle_free - release resources bound to userspace handles
+  * @obj: GEM object to clean up.
+@@ -930,12 +944,11 @@ drm_gem_release(struct drm_device *dev, struct drm_file *file_private)
+ void
+ drm_gem_object_release(struct drm_gem_object *obj)
+ {
+-	WARN_ON(obj->dma_buf);
+-
+ 	if (obj->filp)
+ 		fput(obj->filp);
+ 
+-	dma_resv_fini(&obj->_resv);
++	drm_gem_private_object_fini(obj);
++
+ 	drm_gem_free_mmap_offset(obj);
+ 	drm_gem_lru_remove(obj);
+ }
+diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+index 35138f8a375c..db73234edcbe 100644
+--- a/drivers/gpu/drm/drm_gem_shmem_helper.c
++++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+@@ -79,8 +79,10 @@ __drm_gem_shmem_create(struct drm_device *dev, size_t size, bool private)
+ 	} else {
+ 		ret = drm_gem_object_init(dev, obj, size);
+ 	}
+-	if (ret)
++	if (ret) {
++		drm_gem_private_object_fini(obj);
+ 		goto err_free;
++	}
+ 
+ 	ret = drm_gem_create_mmap_offset(obj);
+ 	if (ret)
+diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+index bd42f25e449c..9b1feb03069d 100644
+--- a/include/drm/drm_gem.h
++++ b/include/drm/drm_gem.h
+@@ -405,6 +405,7 @@ int drm_gem_object_init(struct drm_device *dev,
+ 			struct drm_gem_object *obj, size_t size);
+ void drm_gem_private_object_init(struct drm_device *dev,
+ 				 struct drm_gem_object *obj, size_t size);
++void drm_gem_private_object_fini(struct drm_gem_object *obj);
+ void drm_gem_vm_open(struct vm_area_struct *vma);
+ void drm_gem_vm_close(struct vm_area_struct *vma);
+ int drm_gem_mmap_obj(struct drm_gem_object *obj, unsigned long obj_size,
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.25.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
