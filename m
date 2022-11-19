@@ -2,88 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC224630916
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A1D630918
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiKSCGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 21:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        id S229639AbiKSCGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 21:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbiKSCF4 (ORCPT
+        with ESMTP id S230448AbiKSCGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 21:05:56 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183B225F5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 18:05:20 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NDcRG5DyfzHvx0;
-        Sat, 19 Nov 2022 10:04:42 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 19 Nov 2022 10:05:15 +0800
-Subject: Re: [PATCH] hugetlb: Fix __prep_compound_gigantic_page page flag
- setting
-To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Vlastimil Babka <vbabka@kernel.org>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221118195249.178319-1-mike.kravetz@oracle.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5877406c-62bb-8330-e8dc-a5d78c6ab15a@huawei.com>
-Date:   Sat, 19 Nov 2022 10:05:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 18 Nov 2022 21:06:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8059E102E;
+        Fri, 18 Nov 2022 18:06:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CF0E6279E;
+        Sat, 19 Nov 2022 02:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E1C2C433C1;
+        Sat, 19 Nov 2022 02:06:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668823565;
+        bh=PYHzkPK6EeFAw8e5v+EFg4avol5sP5cCH88qO5yYu2A=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=uCaRoAnBBJStiZda/IzSFKvMRYrUP7XKrvC7I24jFmNkf+Sop74EbH5ONE7GC3XUv
+         VtCQ9nJIAWlFnh6x2eaNLMUhdDm2YVNDQC9XkTM1uj8oCsNQ7JV3VRNegyWjOFTrRE
+         T74wOg1F3+o51AJqlDbIjFUXnh+nstntQrpeeExuep3XjA/og+fvcjEa8Vr4aUxSlH
+         qxkMvbxJgTkSzCUFkDfVpzc7z9kZROmEcrPqAlLKlr3wQhcgONJFNVDwwUP7UR4Mmd
+         qkjilYzJ7c/zOqid2FZCb+7u8LOOCILP5YHDyQQGew57PZ96z/EPIemej+m7MCXd/e
+         gSMtJgPdjef3A==
+Message-ID: <9a521db6342b977805d7161406f86d44fea7ba55.camel@kernel.org>
+Subject: Re: [PATCH] Add process name to locks warning
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     chuck.lever@oracle.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 18 Nov 2022 21:06:03 -0500
+In-Reply-To: <20221118234357.243926-1-ak@linux.intel.com>
+References: <20221118234357.243926-1-ak@linux.intel.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
 MIME-Version: 1.0
-In-Reply-To: <20221118195249.178319-1-mike.kravetz@oracle.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/19 3:52, Mike Kravetz wrote:
-> Commit 2b21624fc232 ("hugetlb: freeze allocated pages before creating
-> hugetlb pages") changed the order page flags were cleared and set in the
-> head page.  It moved the __ClearPageReserved after __SetPageHead.
-> However, there is a check to make sure __ClearPageReserved is never
-> done on a head page.  If CONFIG_DEBUG_VM_PGFLAGS is enabled, the
-> following BUG will be hit when creating a hugetlb gigantic page:
-> 
->     page dumped because: VM_BUG_ON_PAGE(1 && PageCompound(page))
->     ------------[ cut here ]------------
->     kernel BUG at include/linux/page-flags.h:500!
->     Call Trace will differ depending on whether hugetlb page is created
->     at boot time or run time.
-> 
-> Make sure to __ClearPageReserved BEFORE __SetPageHead.
-> 
-> Reported-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> Fixes: 2b21624fc232 ("hugetlb: freeze allocated pages before creating hugetlb pages")
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+On Fri, 2022-11-18 at 15:43 -0800, Andi Kleen wrote:
+> It's fairly useless to complain about using an obsolete feature without
+> telling the user which process used it. My Fedora desktop randomly drops
+> this message, but I would really need this patch to figure out what
+> triggers is.
+>=20
 
-Yes, PG_reserved is PF_NO_COMPOUND policy. Thanks for fixing this.
+Interesting. The only program I know of that tried to use these was
+samba, but we patched that out a few years ago (about the time this
+patch went in). Are you running an older version of samba?
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+> Signed-off-by: Andi Kleen <ak@linux.intel.com>
+> ---
+>  fs/locks.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/fs/locks.c b/fs/locks.c
+> index 607f94a0e789..2e45232dbeb1 100644
+> --- a/fs/locks.c
+> +++ b/fs/locks.c
+> @@ -2096,7 +2096,7 @@ SYSCALL_DEFINE2(flock, unsigned int, fd, unsigned i=
+nt, cmd)
+>  	 * throw a warning to let people know that they don't actually work.
+>  	 */
+>  	if (cmd & LOCK_MAND) {
+> -		pr_warn_once("Attempt to set a LOCK_MAND lock via flock(2). This suppo=
+rt has been removed and the request ignored.\n");
+> +		pr_warn_once("%s: Attempt to set a LOCK_MAND lock via flock(2). This s=
+upport has been removed and the request ignored.\n", current->comm);
+>  		return 0;
+>  	}
+> =20
 
-Thanks,
-Miaohe Lin
-
+Looks reasonable. Would it help to print the pid or tgid as well?=20
+--=20
+Jeff Layton <jlayton@kernel.org>
