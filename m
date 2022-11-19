@@ -2,159 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19244630E0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4992630E13
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbiKSKQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 05:16:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
+        id S232544AbiKSKXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 05:23:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiKSKQd (ORCPT
+        with ESMTP id S229470AbiKSKX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 05:16:33 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A0351302
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:16:32 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owKtQ-00089M-Nr; Sat, 19 Nov 2022 11:16:12 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owKtG-005EhI-Oa; Sat, 19 Nov 2022 11:16:03 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owKtG-0006ZF-Ax; Sat, 19 Nov 2022 11:16:02 +0100
-Date:   Sat, 19 Nov 2022 11:16:02 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH 289/606] macintosh: ams/ams-i2c: Convert to i2c's
- .probe_new()
-Message-ID: <20221119101602.kfreiw4mdbjf7prj@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-290-uwe@kleine-koenig.org>
- <1d2ae1bb-d4ba-35cf-63b6-f23a0187a223@csgroup.eu>
+        Sat, 19 Nov 2022 05:23:29 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2191CD
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:23:24 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id i12-20020a5d840c000000b006de8b8c5746so3203247ion.22
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:23:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DyOghY5lNB2rYGB9Hs+GFF/LBDyG9uVvf7JSRHz6Lq0=;
+        b=yAEzFfxXI3EsvfjdbKYKU3Eo5AwpyhmtbHnvBj84dYhi+4bw4Tw/PaodZGJQ4dVQhj
+         Dgfwq0N+QUVPBophtgiSP4MW0Pe0QemaP1H51a5m/RDobJfD1ofIkGdnK3Mz7nySu4RM
+         5KqGlvOJLjK1gu2cXfQLIfOVhDBgwcCOpXR39LPuEVDmYoBWj7mqvlteZpj994WzV6WX
+         bRBJ0i/k2KcL3Kgxdb3s8qW4pImL/X3oKpIqRdE/pOc+dnVr7J6Zif/w3QWUQNo5LEtu
+         r0/L24zItCxa3SsAWuMuOqRkKDiER8+K6G742HMSKdNy6/cTYF1uh5o3l/0ftU6lMrZ1
+         Eoiw==
+X-Gm-Message-State: ANoB5plO7hmZaSuEpKFUYEtaQGBRMkXYIdEQvHBNRKeOjsz+HtOY7TdI
+        2p/HIbmrHim1W8hHj/TjqDdX0bPu9ralrpMEX2VrCfcjW8tB
+X-Google-Smtp-Source: AA0mqf6O10vR/p9xaXsbpVXWTMHKrkW8amuyK9eDdfCaqPFCKZcPZfqyibgEEVEET5JZGVbmQ2fbzAGOmUjraknqnmE2/tZIw68o
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fhfkp732a2k6imuh"
-Content-Disposition: inline
-In-Reply-To: <1d2ae1bb-d4ba-35cf-63b6-f23a0187a223@csgroup.eu>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c950:0:b0:300:de97:7a7c with SMTP id
+ i16-20020a92c950000000b00300de977a7cmr440666ilq.307.1668853403585; Sat, 19
+ Nov 2022 02:23:23 -0800 (PST)
+Date:   Sat, 19 Nov 2022 02:23:23 -0800
+In-Reply-To: <20221119094445.4509-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004d959d05edd036ed@google.com>
+Subject: Re: [syzbot] possible deadlock in __jbd2_log_wait_for_space
+From:   syzbot <syzbot+fa1bbda326271b8808c9@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---fhfkp732a2k6imuh
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Hello Christophe,
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5776 } 2683 jiffies s: 2765 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-On Sat, Nov 19, 2022 at 07:38:58AM +0000, Christophe Leroy wrote:
-> Le 18/11/2022 =E0 23:40, Uwe Kleine-K=F6nig a =E9crit=A0:
-> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > The probe function doesn't make use of the i2c_device_id * parameter so=
- it
-> > can be trivially converted.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> The patch itself and the others seems ok. But can you group all=20
-> macintosh changes into a single patch instead of the 9 patches you sent ?
->=20
-> See the process about submitting patches,=20
-> https://docs.kernel.org/process/submitting-patches.html and especially=20
-> the "NO!!!! No more huge patch bombs to linux-kernel@vger.kernel.org=20
-> people!" and the associated reference=20
-> https://lore.kernel.org/all/20050711.125305.08322243.davem@davemloft.net/=
- :
->=20
-> 	If you feel the need to send, say, more than 15 patches at once,=20
-> reconsider.
 
-Thanks for your feedback.
+Tested on:
 
-Let me point out in response to the request to squash patches together
-that this wish doesn't seem to be the universal right thing to do.
+commit:         15f3bff1 Add linux-next specific files for 20221116
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=130bea4e880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ec2a1d4f50866178
+dashboard link: https://syzkaller.appspot.com/bug?extid=fa1bbda326271b8808c9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15922a21880000
 
-Last time I did a conversion grouped by subsystem, one of the replies
-was:
-
-	Reviewed-by: ...
-	if you split on per driver basis.
-
-(https://lore.kernel.org/linux-iio/20220808085526.280066-1-u.kleine-koenig@=
-pengutronix.de)
-
-The obvious upside of a split per driver is that the individual bits are
-easier to review, an Ack can be limited to a certain set of drivers, and
-(probably most important): If a driver later gets a commit that needs
-backporting, a patch that only touches this single driver can more
-easily be backported as a dependency.
-
-Also the request to not send everything at once but keep back some
-patches has an obvious downside. I.e. I have to restart yet more often
-to rebase + test to get all patches applied in the end. And you could
-argue that the sum of the work load on the mail servers doesn't get
-smaller in sum if the 600 patches are sent over (say) 2 months.
-(To prevent a flame war here: Yeah, I agree there are downsides of a
-single big series, too.)
-
-All in all my personal opinion is that the advantages of a split per
-driver slightly outweight the disadvantages. But obviously that's
-subjective.
-
-I will wait a while before sending updates to this series, so don't
-expect a new patch very soon. (This has the nice effect that it gives
-you some time to reconsider your argument and maybe apply the patches as
-they are now, preventing another mail to the lists with the cumulated
-macintosh changes ;-)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---fhfkp732a2k6imuh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN4rN8ACgkQwfwUeK3K
-7Al6Vgf8CS2jQ6ydt/mU5uUF2/1EdeFIaEgWWYM8GEO/WO3ITiDMmhcPxvxIiMZ0
-3oK9RQOVW5svEcjiGpenqG2JzVC3qN1g86tlnFlbVnr2fNllDVn+UX4yqQIV/MHM
-uOROopD1mejOWEeuyKGWSFaOJa+ZnQa94AW9NCnTqz9ZCbbtg1/da8nw7okMtupm
-kXwMuuZee0TCK02/9mKYs3H0hWHoTt/2deYHVLrtfNurq5hKPZlqfXSokz1EH19v
-rPmnAsQvxBubGj+6uKtx6bzmG+aNwqJe/3j5UbHGe7eIp1i7q4kXjzpi6ioxZ9ef
-1lRlkwcKHui3hUwv5kuzN6BIi+ZrAQ==
-=vViA
------END PGP SIGNATURE-----
-
---fhfkp732a2k6imuh--
