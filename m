@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B18763090B
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5488A630915
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:06:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbiKSCDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 21:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
+        id S231891AbiKSCGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 21:06:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233442AbiKSCDJ (ORCPT
+        with ESMTP id S231925AbiKSCFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 21:03:09 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95217C7211
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:55:31 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8CxLLdtN3hjPcgIAA--.13291S3;
-        Sat, 19 Nov 2022 09:54:53 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_eFsN3hjCcAWAA--.59330S3;
-        Sat, 19 Nov 2022 09:54:52 +0800 (CST)
-Subject: Re: [PATCH] lib/vdso: use "grep -E" instead of "egrep"
-To:     Greg KH <gregkh@linuxfoundation.org>
-References: <ad42d19d-959c-61b4-8581-02ce0990c23f@arm.com>
- <788b5155-fef5-0e44-721a-f9183e145ae5@loongson.cn>
- <Y3dMgfPXNMm/vaG2@kroah.com>
-Cc:     vincenzo.frascino@arm.com, linux-kernel@vger.kernel.org,
-        luto@kernel.org, tglx@linutronix.de,
-        Andrew Morton <akpm@linux-foundation.org>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <337a9a23-436e-7f58-bfc5-600452779472@loongson.cn>
-Date:   Sat, 19 Nov 2022 09:54:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <Y3dMgfPXNMm/vaG2@kroah.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Dx_eFsN3hjCcAWAA--.59330S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrtr1DXF1UAr1fKrW3ur1kGrg_yoWxKwc_uw
-        4rWFWrC34kXF4jya17tr4Yvws5AFy8AF93XrWxK34xurZxA39Ivan3GFW5u3WDXw1kWFZ5
-        AF1Yy3s7ZryIvjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        J7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7
-        xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAaw2AF
-        wI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE
-        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
-        AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
-        14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
-        4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnI
-        WIevJa73UjIFyTuYvjxUc0eHDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 18 Nov 2022 21:05:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511D712F;
+        Fri, 18 Nov 2022 18:04:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3BC362762;
+        Sat, 19 Nov 2022 02:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 52E27C433D6;
+        Sat, 19 Nov 2022 02:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668823490;
+        bh=LOnZjTnTkOE5q87hJ6EM3N5CHtVVoQvcOlcsiZH4VTU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=lFwBRVxPE+WtL4ML4BdVeAvoVqt8YtYMGPxuYeUwcB34wRvz5dmodSiGmhK3UbYVY
+         k1Zk2J71elLKptddn4HmGVg0kaX+YYhk28dMO8TxgTXUSmLHJoJIwg02N1+dTorehH
+         pqsgNLoZQWJXAIz2hIHgJYjunMH9pT3D3FmaigcD1R74uEW+QbJ5BlodWofc9324f4
+         oRvQma8SM+yCE3M/GyA7nmVx2r1eEcIE26e6vgcA0gnmbZJC5KYyyw+KJdy3g5htoh
+         fwGkzhaKbgsL5XdyEz4pvow4JrWcWMJDEQ3XF+433XemYKvZu2gEM7T4ssp8MrP/pa
+         p5ftIEYveTvZw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40A19E270F6;
+        Sat, 19 Nov 2022 02:04:50 +0000 (UTC)
+Subject: Re: [git pull] Input updates for v6.1-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y3gwySzRvhCwdSgW@google.com>
+References: <Y3gwySzRvhCwdSgW@google.com>
+X-PR-Tracked-List-Id: <linux-input.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y3gwySzRvhCwdSgW@google.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.1-rc5
+X-PR-Tracked-Commit-Id: 81cd7e8489278d28794e7b272950c3e00c344e44
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: fe24a97cf2543e8832e7a2124802e5c32aac05aa
+Message-Id: <166882349025.5277.9788348641672149029.pr-tracker-bot@kernel.org>
+Date:   Sat, 19 Nov 2022 02:04:50 +0000
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc Andrew Morton <akpm@linux-foundation.org>
+The pull request you sent on Fri, 18 Nov 2022 17:26:33 -0800:
 
-On 11/18/2022 05:12 PM, Greg KH wrote:
-> On Fri, Nov 18, 2022 at 04:44:50PM +0800, Tiezhu Yang wrote:
->> Hi,
->>
->> This patch can not be found in the torvalds/linux.git or
->> next/linux-next.git tree, please take a look, thank you.
->
-> That is because no one has applied it to their trees :(
->
+> git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.1-rc5
 
-Maybe Andrew can pick the following two patches sent by Greg.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/fe24a97cf2543e8832e7a2124802e5c32aac05aa
 
-[PATCH] lib/vdso: use "grep -E" instead of "egrep"
-https://lore.kernel.org/lkml/20220920170633.3133829-1-gregkh@linuxfoundation.org/
+Thank you!
 
-[PATCH] scripts: coccicheck: use "grep -E" instead of "egrep"
-https://lore.kernel.org/lkml/20220921091341.217365-1-gregkh@linuxfoundation.org/
-
-Thanks,
-Tiezhu
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
