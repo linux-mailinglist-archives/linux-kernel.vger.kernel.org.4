@@ -2,96 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10D2630D68
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0946C630D4F
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiKSIpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 03:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S232804AbiKSIcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 03:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbiKSIpG (ORCPT
+        with ESMTP id S231598AbiKSIcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:45:06 -0500
-X-Greylist: delayed 1018 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Nov 2022 00:45:04 PST
-Received: from server.eikelenboom.it (server.eikelenboom.it [91.121.65.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD04193E9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:45:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=eikelenboom.it; s=20180706; h=Content-Transfer-Encoding:Content-Type:
-        Subject:From:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DJreaUMvt4zA0FCli4gW45voLTfYum2Sr88dejDCL4o=; b=Bgk45hLnCBxrR7FghkDkLpbkG/
-        kVkd17OfU2UZVIKRFbrCpf9wfzuVPRPSQGwjUpFPEq4YFkrHe+Hv4dRsbw1FMNDcjPe6Ix8vZpkW9
-        WvMHqOKM8OAt5trzx149PgwazaUWtB5TnfemqDokgn9NGn9xKFmwufMpIOuldh41CrGE=;
-Received: from 131-195-250-62.ftth.glasoperator.nl ([62.250.195.131]:46996 helo=[172.16.1.212])
-        by server.eikelenboom.it with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <linux@eikelenboom.it>)
-        id 1owJDZ-0001cM-Jm; Sat, 19 Nov 2022 09:28:53 +0100
-Message-ID: <42579618-f8e2-9fd2-0b6c-f2c87f7c57a6@eikelenboom.it>
-Date:   Sat, 19 Nov 2022 09:28:01 +0100
+        Sat, 19 Nov 2022 03:32:17 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F1FB1BAD
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:32:15 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id a36so2472437uax.9
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:32:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O1L9EQwnh4mDP+cXHSglyamvt66mQXj7RFFlBY9BjZY=;
+        b=R6WUDgn4LSPljIMFgvE/1Oq3qOdLQBSEK+sN0U0VR5PiLiOSEVzjvSrrK+TldJC8iC
+         zLf+q2vVfialRzIspEb1knDVpxT2uF+1LAhpC+hTUUJcT64tjG8fS1vVjb1NuKUWfjvd
+         ZFoDMwBZXzyjG37RhndYXiqDNWe8pZOYOjc6bXNbMKDpGInBJGU3xzI2FV2iPLGXZYTK
+         pYOrh7/kEdJG1mp/qVV+Q8LtRmue8dbZ8kv0GuOtBDBRSSE/5ZcCbqOcjtArUnmiMsJv
+         6y+9rIAmBkWOv+OeGiDU2ThvYnzjORTYEZr1KHfg7WepP9fKyTrfrSGo66DZ6ZclLHnC
+         qj4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O1L9EQwnh4mDP+cXHSglyamvt66mQXj7RFFlBY9BjZY=;
+        b=5VC1zqo+MP3QGO70MBF1g3GOrp0P90nz+17Wc5f0M4sEc8+l1iYO1p8Q8MiUjJ5gga
+         PTCe0+4aNHk0Y3sPutdyydE/bxecFxAE6MgA5Y51XJwb6kBFa+la9waeMuMSAcEopW1t
+         rWUKfUN4MBpj6j4+wdDC53d5qlP3Nw885BjNp0FMayqJBl/VABffAWjaqsIQX+IteCR4
+         2x4TQjDBl/b7uTbE06T1tWi4VqyVyAI3WJB5dvfguuW1GZOmY4BR/YoAdfx5Y6PKMCEI
+         cTvEl7QSeMzM2+OQtZ7u64mErOO57gMFYDRj5T5v2Da929nLyzHhV9l8jzJGhxXEvBmS
+         uvwA==
+X-Gm-Message-State: ANoB5pnSg7QdKd4KSwAkjg822YGiQGuWEl93gB8ZNLiQCM2HLXY/mH49
+        qlZj3vE70uOasqCagUxzWkUlTTzlhkTTO6nSnNCfPA==
+X-Google-Smtp-Source: AA0mqf4to+L5gnkUZClqyxSvKxQsE6HDZJBr2+90z8ErkvAaSScaQ/oODtb/Ufn/8ZwhbHBoNorVhqgLoAKnFQKYO9g=
+X-Received: by 2002:ab0:238f:0:b0:411:968:212 with SMTP id b15-20020ab0238f000000b0041109680212mr6176340uan.107.1668846734518;
+ Sat, 19 Nov 2022 00:32:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: nl-NL, en-US
-To:     Juergen Gross <jgross@suse.com>, Yu Zhao <yuzhao@google.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Xen-devel <xen-devel@lists.xen.org>
-From:   Sander Eikelenboom <linux@eikelenboom.it>
-Subject: Xen-unstable Linux-6.1.0-rc5 BUG: unable to handle page fault for
- address: ffff8880083374d0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221111031855.592333-1-dlatypov@google.com>
+In-Reply-To: <20221111031855.592333-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 19 Nov 2022 16:32:03 +0800
+Message-ID: <CABVgOSn6CaPfr_ceOzu3RUJ46TajLe7icLYsi-psnJt_knCh0g@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: tweak error message when no KTAP found
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000d0d56205edcea865"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yu / Juergen,
+--000000000000d0d56205edcea865
+Content-Type: text/plain; charset="UTF-8"
 
-This night I got a dom0 kernel crash on my new Ryzen box running Xen-unstable and a Linux-6.1.0-rc5 kernel.
-I did enable the new and shiny MGLRU, could this be related ?
+On Fri, Nov 11, 2022 at 11:19 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> We currently tell people we "couldn't find any KTAP output" with no
+> indication as to what this might mean.
+>
+> After this patch, we get:
+>
+> $ ./tools/testing/kunit/kunit.py parse /dev/null
+> ============================================================
+> [ERROR] Test: <missing>: Could not find any KTAP output. Did any KUnit tests run?
+> ============================================================
+> Testing complete. Ran 0 tests: errors: 1
+>
+> Note: we could try and generate a more verbose message like
+> > Please check .kunit/test.log to see the raw kernel output.
+> or the like, but we'd need to know what the build dir was to know where
+> test.log actually lives.
+>
+> This patch tries to make a more minimal improvement.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
---
-Sander
+I agree that this is clearer.
 
+One minor nitpick is that we still have the (useless) 'Test:
+<missing>:' prefix, which also makes the error much longer than the
+'===' dividers. I think the error would be more aesthetically pleasing
+if we could fix that.
 
-Nov 19 06:30:11 serveerstertje kernel: [68959.647371] BUG: unable to handle page fault for address: ffff8880083374d0
-Nov 19 06:30:11 serveerstertje kernel: [68959.663555] #PF: supervisor write access in kernel mode
-Nov 19 06:30:11 serveerstertje kernel: [68959.677542] #PF: error_code(0x0003) - permissions violation
-Nov 19 06:30:11 serveerstertje kernel: [68959.691181] PGD 3026067 P4D 3026067 PUD 3027067 PMD 7fee5067 PTE 8010000008337065
-Nov 19 06:30:11 serveerstertje kernel: [68959.705084] Oops: 0003 [#1] PREEMPT SMP NOPTI
-Nov 19 06:30:11 serveerstertje kernel: [68959.718710] CPU: 7 PID: 158 Comm: kswapd0 Not tainted 6.1.0-rc5-20221118-doflr-mac80211debug+ #1
-Nov 19 06:30:11 serveerstertje kernel: [68959.732457] Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./B450 Pro4 R2.0, BIOS P5.60 10/20/2022
-Nov 19 06:30:11 serveerstertje kernel: [68959.746391] RIP: e030:pmdp_test_and_clear_young+0x25/0x40
-Nov 19 06:30:11 serveerstertje kernel: [68959.760294] Code: 00 00 00 66 90 48 b9 ff ff 1f 00 00 00 f0 ff 48 8b 02 48 be ff 0f 00 00 00 00 f0 ff a8 80 48 0f 44 ce 48 21 c8 83 e0 20 74 0c <f0> 48 0f ba 32 05 0f 92 c0 0f b6 c0 c3 cc cc c
-Nov 19 06:30:11 serveerstertje kernel: [68959.787908] RSP: e02b:ffffc9000161f940 EFLAGS: 00010202
-Nov 19 06:30:11 serveerstertje kernel: [68959.801637] RAX: 0000000000000020 RBX: 0000000000000000 RCX: fff0000000000fff
-Nov 19 06:30:11 serveerstertje kernel: [68959.815243] RDX: ffff8880083374d0 RSI: fff0000000000fff RDI: ffff888010f41000
-Nov 19 06:30:11 serveerstertje kernel: [68959.828683] RBP: ffffc9000161fa70 R08: 000ffffffffff000 R09: 00005654134b5000
-Nov 19 06:30:11 serveerstertje kernel: [68959.842026] R10: 000000000000689e R11: 0000000000000000 R12: ffff8880083374d0
-Nov 19 06:30:11 serveerstertje kernel: [68959.855214] R13: ffff88807fc1a000 R14: ffff8880083374d0 R15: 0000000000000000
-Nov 19 06:30:11 serveerstertje kernel: [68959.868118] FS:  0000000000000000(0000) GS:ffff8880801c0000(0000) knlGS:0000000000000000
-Nov 19 06:30:11 serveerstertje kernel: [68959.880689] CS:  e030 DS: 0000 ES: 0000 CR0: 0000000080050033
-Nov 19 06:30:11 serveerstertje kernel: [68959.893457] CR2: ffff8880083374d0 CR3: 000000000f33c000 CR4: 0000000000050660
-Nov 19 06:30:11 serveerstertje kernel: [68959.906377] Call Trace:
-Nov 19 06:30:11 serveerstertje kernel: [68959.919219]  <TASK>
-Nov 19 06:30:11 serveerstertje kernel: [68959.931844]  walk_pmd_range_locked.isra.87+0x2e9/0x4e0
-Nov 19 06:30:11 serveerstertje kernel: [68959.944840]  walk_pud_range+0x69c/0x980
-Nov 19 06:30:11 serveerstertje kernel: [68959.957562]  walk_pgd_range+0xe9/0x810
-Nov 19 06:30:11 serveerstertje kernel: [68959.970161]  ? mt_find+0x1f8/0x3c0
-Nov 19 06:30:11 serveerstertje kernel: [68959.982808]  __walk_page_range+0x17b/0x180
-Nov 19 06:30:11 serveerstertje kernel: [68959.995440]  walk_page_range+0x106/0x170
-Nov 19 06:30:11 serveerstertje kernel: [68960.008014]  try_to_inc_max_seq+0x40a/0x9e0
-Nov 19 06:30:11 serveerstertje kernel: [68960.020262]  lru_gen_age_node+0x1d3/0x280
-Nov 19 06:30:11 serveerstertje kernel: [68960.032222]  ? shrink_node+0x294/0x710
-Nov 19 06:30:11 serveerstertje kernel: [68960.044129]  balance_pgdat+0x1c3/0x650
-Nov 19 06:30:11 serveerstertje kernel: [68960.055995]  ? prepare_to_wait_event+0x110/0x110
-Nov 19 06:30:11 serveerstertje kernel: [68960.068022]  kswapd+0x1f0/0x3a0
-Nov 19 06:30:11 serveerstertje kernel: [68960.079997]  ? prepare_to_
+That's a very minor point, though, so regardless:
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  tools/testing/kunit/kunit_parser.py    | 2 +-
+>  tools/testing/kunit/kunit_tool_test.py | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index a56c75a973b5..d0ed5dd5cfc4 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -782,7 +782,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
+>         test = Test()
+>         if not lines:
+>                 test.name = '<missing>'
+> -               test.add_error('could not find any KTAP output!')
+> +               test.add_error('Could not find any KTAP output. Did any KUnit tests run?')
+>                 test.status = TestStatus.FAILURE_TO_PARSE_TESTS
+>         else:
+>                 test = parse_test(lines, 0, [])
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 90c65b072be9..84a08cf07242 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -207,7 +207,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 with open(crash_log) as file:
+>                         result = kunit_parser.parse_run_tests(
+>                                 kunit_parser.extract_tap_lines(file.readlines()))
+> -               print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
+> +               print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
+>                 print_mock.stop()
+>                 self.assertEqual(0, len(result.subtests))
+>                 self.assertEqual(result.counts.errors, 1)
+> @@ -588,7 +588,7 @@ class KUnitMainTest(unittest.TestCase):
+>                 self.assertEqual(e.exception.code, 1)
+>                 self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+>                 self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+> -               self.print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
+> +               self.print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
+>
+>         def test_exec_no_tests(self):
+>                 self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
+>
+> base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
+> --
+> 2.38.1.431.g37b22c650d-goog
+>
+
+--000000000000d0d56205edcea865
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAZ
+h9J0IXeqtlsoMuEDIIlnTTv58OemGp3sTuIyUXVUnzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODMyMTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAoldagdXLHnSiCai5PFnk
+BdYTnmWVNeSDsR5xGwjUfyWZlRlTICYQOGA8xuV+JlzcJQToJ7ZQ7eyFpb0uaDHryVF7turIkgDz
+yLjbAhPrq+jtEfxTz34wImqgF/35jP8zr/2/lABB3sfG+4Bn4wUndkRDY1fGsZIMcbNovQ98dcd7
+Ic5RkowIs3bjGPYUNpL91jtSLyMsD/Ckk0vVzfdlvFULSw3Krf/bz+SBf/319hIslnyToJ9ofHrS
+fEc3N+niiOPYJgkOL9P2bAla3M/f7z40jFoCdCpmrD8iJCuQ2K9Pj9Mhwh2a6STcvzWiDtHdfhEa
+TvTXRph/FviLBHDEFw==
+--000000000000d0d56205edcea865--
