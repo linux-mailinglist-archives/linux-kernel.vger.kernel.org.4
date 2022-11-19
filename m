@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1F6630868
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF80563086B
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbiKSBXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 20:23:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S231947AbiKSBYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 20:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbiKSBW4 (ORCPT
+        with ESMTP id S233053AbiKSBWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 20:22:56 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8845216F;
-        Fri, 18 Nov 2022 16:23:53 -0800 (PST)
+        Fri, 18 Nov 2022 20:22:55 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA3232B82;
+        Fri, 18 Nov 2022 16:23:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668817434; x=1700353434;
+  t=1668817431; x=1700353431;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=p3Ad8CrMISyEI6hYcYQIG7mpTw7IAYSnxttSXGW5Yaw=;
-  b=GqngL5tORLH6720ZUjpJUY7t59zZhKqc3lWMGBOzTsT0fhMBjNZaaHEZ
-   fHQmbv5zG4CJM72TBVFel5iq6RhKRpkySyW/d5PA49PSomLiXSHLz4vUT
-   VLNQ4JjFlSi98M8yKyYolSvqguUmUbgzOBml0Jp0zCdYrrt7GlobrkU3a
-   0DwP+8qC+y4MGW49khu7yEDTAqAE8HJSYa2g2FLkfXKEq6Jz/kiPgcUjK
-   4XioViI18HCahLuK3qr3jR/TOnDBPZDHAn+QVTSMAp6BT2u916Nyj3kPY
-   kBRjQnGSgKIc6XjCba9yyfuFUgdElvyQlEwSE99JiMu5PPwLgPRSO6b2o
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="377533829"
+  bh=kG3nCP9dnjVyAb0rhxfcQS0XfXKR+QBYZvRjPdhXez0=;
+  b=ZlvQD5LAiE5dqkBxDSWQ5XXgNmhCR8+KYFPKnBpCp2xG0LtmtdkALozS
+   OXpHqJhlH9f6kE02XUQ40a/B21fGk4+P4AGeSkNmHRP82+0qtPUS4Dke2
+   4IyB8RGZBFymMY8zZnGaVNOrOSWTTn6DNVlWmFwC0ucM33iC8p7qc+qIO
+   sOPY+GrrqOLTJeVEszXnR0C4lg2BWyneJGn/KVXOB2l/FIwfM4/Dp9wx+
+   UP/FgXHbFhxyjRaw2j/j8lAFQvw88NqFQb5ltUq42qYaEqUpaiYyPQIyj
+   xc8W72luu+JJMHZ/lRI3p9KuOlflOeDS7AKRqNn6Tx0123GLzJstXWysH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="293656147"
 X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
-   d="scan'208";a="377533829"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 16:23:45 -0800
+   d="scan'208";a="293656147"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 16:23:46 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="591194491"
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="618202703"
 X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
-   d="scan'208";a="591194491"
+   d="scan'208";a="618202703"
 Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 18 Nov 2022 16:23:45 -0800
+  by orsmga006.jf.intel.com with ESMTP; 18 Nov 2022 16:23:45 -0800
 Received: from debox1-desk4.lan (unknown [10.252.138.169])
-        by linux.intel.com (Postfix) with ESMTP id 7FE97580DFA;
+        by linux.intel.com (Postfix) with ESMTP id B43B9580A6C;
         Fri, 18 Nov 2022 16:23:45 -0800 (PST)
 From:   "David E. Box" <david.e.box@linux.intel.com>
 To:     david.e.box@linux.intel.com, hdegoede@redhat.com,
         markgross@kernel.org, andriy.shevchenko@linux.intel.com
 Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 1/9] platform/x86/intel/sdsi: Add Intel On Demand text
-Date:   Fri, 18 Nov 2022 16:23:35 -0800
-Message-Id: <20221119002343.1281885-2-david.e.box@linux.intel.com>
+Subject: [PATCH V2 2/9] platform/x86/intel/sdsi: Hide attributes if hardware doesn't support
+Date:   Fri, 18 Nov 2022 16:23:36 -0800
+Message-Id: <20221119002343.1281885-3-david.e.box@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221119002343.1281885-1-david.e.box@linux.intel.com>
 References: <20221119002343.1281885-1-david.e.box@linux.intel.com>
@@ -63,9 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel Software Defined Silicon (SDSi) is now officially known as Intel
-On Demand. Add On Demand to the description in the kconfig, documentation,
-and driver source.
+Provisioning capabilities are enabled by a bit set by BIOS. Read this bit
+and hide the provisioning attributes if the On Demand feature is not
+enabled.
+
+Also, remove the sdsi_enabled boolean from private and instead add a
+features register since this will be used for future features.
 
 Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
@@ -73,124 +76,102 @@ Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
 V2 - No change
 
- .../ABI/testing/sysfs-driver-intel_sdsi       | 37 ++++++++++---------
- drivers/platform/x86/intel/Kconfig            |  8 ++--
- drivers/platform/x86/intel/sdsi.c             |  4 +-
- 3 files changed, 25 insertions(+), 24 deletions(-)
+ drivers/platform/x86/intel/sdsi.c | 33 ++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-intel_sdsi b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
-index 96b92c105ec4..9d77f30d9b9a 100644
---- a/Documentation/ABI/testing/sysfs-driver-intel_sdsi
-+++ b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
-@@ -4,21 +4,21 @@ KernelVersion:	5.18
- Contact:	"David E. Box" <david.e.box@linux.intel.com>
- Description:
- 		This directory contains interface files for accessing Intel
--		Software Defined Silicon (SDSi) features on a CPU. X
--		represents the socket instance (though not the socket ID).
--		The socket ID is determined by reading the registers file
--		and decoding it per the specification.
-+		On Demand (formerly Software Defined Silicon or SDSi) features
-+		on a CPU. X represents the socket instance (though not the
-+		socket ID). The socket ID is determined by reading the
-+		registers file and decoding it per the specification.
- 
--		Some files communicate with SDSi hardware through a mailbox.
--		Should the operation fail, one of the following error codes
--		may be returned:
-+		Some files communicate with On Demand hardware through a
-+		mailbox. Should the operation fail, one of the following error
-+		codes may be returned:
- 
- 		==========	=====
- 		Error Code	Cause
- 		==========	=====
- 		EIO		General mailbox failure. Log may indicate cause.
- 		EBUSY		Mailbox is owned by another agent.
--		EPERM		SDSI capability is not enabled in hardware.
-+		EPERM		On Demand capability is not enabled in hardware.
- 		EPROTO		Failure in mailbox protocol detected by driver.
- 				See log for details.
- 		EOVERFLOW	For provision commands, the size of the data
-@@ -54,8 +54,8 @@ KernelVersion:	5.18
- Contact:	"David E. Box" <david.e.box@linux.intel.com>
- Description:
- 		(WO) Used to write an Authentication Key Certificate (AKC) to
--		the SDSi NVRAM for the CPU. The AKC is used to authenticate a
--		Capability Activation Payload. Mailbox command.
-+		the On Demand NVRAM for the CPU. The AKC is used to authenticate
-+		a Capability Activation Payload. Mailbox command.
- 
- What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/provision_cap
- Date:		Feb 2022
-@@ -63,17 +63,18 @@ KernelVersion:	5.18
- Contact:	"David E. Box" <david.e.box@linux.intel.com>
- Description:
- 		(WO) Used to write a Capability Activation Payload (CAP) to the
--		SDSi NVRAM for the CPU. CAPs are used to activate a given CPU
--		feature. A CAP is validated by SDSi hardware using a previously
--		provisioned AKC file. Upon successful authentication, the CPU
--		configuration is updated. A cold reboot is required to fully
--		activate the feature. Mailbox command.
-+		On Demand NVRAM for the CPU. CAPs are used to activate a given
-+		CPU feature. A CAP is validated by On Demand hardware using a
-+		previously provisioned AKC file. Upon successful authentication,
-+		the CPU configuration is updated. A cold reboot is required to
-+		fully activate the feature. Mailbox command.
- 
- What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/state_certificate
- Date:		Feb 2022
- KernelVersion:	5.18
- Contact:	"David E. Box" <david.e.box@linux.intel.com>
- Description:
--		(RO) Used to read back the current State Certificate for the CPU
--		from SDSi hardware. The State Certificate contains information
--		about the current licenses on the CPU. Mailbox command.
-+		(RO) Used to read back the current state certificate for the CPU
-+		from On Demand hardware. The state certificate contains
-+		information about the current licenses on the CPU. Mailbox
-+		command.
-diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
-index 794968bda115..d5a33473e838 100644
---- a/drivers/platform/x86/intel/Kconfig
-+++ b/drivers/platform/x86/intel/Kconfig
-@@ -157,13 +157,13 @@ config INTEL_RST
- 	  as usual.
- 
- config INTEL_SDSI
--	tristate "Intel Software Defined Silicon Driver"
-+	tristate "Intel On Demand (Software Defined Silicon) Driver"
- 	depends on INTEL_VSEC
- 	depends on X86_64
- 	help
--	  This driver enables access to the Intel Software Defined Silicon
--	  interface used to provision silicon features with an authentication
--	  certificate and capability license.
-+	  This driver enables access to the Intel On Demand (formerly Software
-+	  Defined Silicon) interface used to provision silicon features with an
-+	  authentication certificate and capability license.
- 
- 	  To compile this driver as a module, choose M here: the module will
- 	  be called intel_sdsi.
 diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/intel/sdsi.c
-index c830e98dfa38..32793919473d 100644
+index 32793919473d..bca05b4dd983 100644
 --- a/drivers/platform/x86/intel/sdsi.c
 +++ b/drivers/platform/x86/intel/sdsi.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Intel Software Defined Silicon driver
-+ * Intel On Demand (Software Defined Silicon) driver
-  *
-  * Copyright (c) 2022, Intel Corporation.
-  * All Rights Reserved.
-@@ -586,5 +586,5 @@ static struct auxiliary_driver sdsi_aux_driver = {
- module_auxiliary_driver(sdsi_aux_driver);
+@@ -41,7 +41,8 @@
+ #define SDSI_SIZE_READ_MSG		(SDSI_SIZE_MAILBOX * 4)
  
- MODULE_AUTHOR("David E. Box <david.e.box@linux.intel.com>");
--MODULE_DESCRIPTION("Intel Software Defined Silicon driver");
-+MODULE_DESCRIPTION("Intel On Demand (SDSi) driver");
- MODULE_LICENSE("GPL");
+ #define SDSI_ENABLED_FEATURES_OFFSET	16
+-#define SDSI_ENABLED			BIT(3)
++#define SDSI_FEATURE_SDSI		BIT(3)
++
+ #define SDSI_SOCKET_ID_OFFSET		64
+ #define SDSI_SOCKET_ID			GENMASK(3, 0)
+ 
+@@ -100,7 +101,7 @@ struct sdsi_priv {
+ 	void __iomem		*mbox_addr;
+ 	void __iomem		*regs_addr;
+ 	u32			guid;
+-	bool			sdsi_enabled;
++	u32			features;
+ };
+ 
+ /* SDSi mailbox operations must be performed using 64bit mov instructions */
+@@ -332,9 +333,6 @@ static ssize_t sdsi_provision(struct sdsi_priv *priv, char *buf, size_t count,
+ 	struct sdsi_mbox_info info;
+ 	int ret;
+ 
+-	if (!priv->sdsi_enabled)
+-		return -EPERM;
+-
+ 	if (count > (SDSI_SIZE_WRITE_MSG - SDSI_SIZE_CMD))
+ 		return -EOVERFLOW;
+ 
+@@ -405,9 +403,6 @@ static long state_certificate_read(struct file *filp, struct kobject *kobj,
+ 	size_t size;
+ 	int ret;
+ 
+-	if (!priv->sdsi_enabled)
+-		return -EPERM;
+-
+ 	if (off)
+ 		return 0;
+ 
+@@ -464,6 +459,23 @@ static struct bin_attribute *sdsi_bin_attrs[] = {
+ 	NULL
+ };
+ 
++static umode_t
++sdsi_battr_is_visible(struct kobject *kobj, struct bin_attribute *attr, int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct sdsi_priv *priv = dev_get_drvdata(dev);
++
++	/* Registers file is always readable if the device is present */
++	if (attr == &bin_attr_registers)
++		return attr->attr.mode;
++
++	/* All other attributes not visible if BIOS has not enabled On Demand */
++	if (!(priv->features & SDSI_FEATURE_SDSI))
++		return 0;
++
++	return attr->attr.mode;
++}
++
+ static ssize_t guid_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+ 	struct sdsi_priv *priv = dev_get_drvdata(dev);
+@@ -480,6 +492,7 @@ static struct attribute *sdsi_attrs[] = {
+ static const struct attribute_group sdsi_group = {
+ 	.attrs = sdsi_attrs,
+ 	.bin_attrs = sdsi_bin_attrs,
++	.is_bin_visible = sdsi_battr_is_visible,
+ };
+ __ATTRIBUTE_GROUPS(sdsi);
+ 
+@@ -490,7 +503,6 @@ static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev *paren
+ 	u32 size = FIELD_GET(DT_SIZE, disc_table->access_info);
+ 	u32 tbir = FIELD_GET(DT_TBIR, disc_table->offset);
+ 	u32 offset = DT_OFFSET(disc_table->offset);
+-	u32 features_offset;
+ 	struct resource res = {};
+ 
+ 	/* Starting location of SDSi MMIO region based on access type */
+@@ -528,8 +540,7 @@ static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev *paren
+ 	priv->mbox_addr = priv->control_addr + SDSI_SIZE_CONTROL;
+ 	priv->regs_addr = priv->mbox_addr + SDSI_SIZE_MAILBOX;
+ 
+-	features_offset = readq(priv->regs_addr + SDSI_ENABLED_FEATURES_OFFSET);
+-	priv->sdsi_enabled = !!(features_offset & SDSI_ENABLED);
++	priv->features = readq(priv->regs_addr + SDSI_ENABLED_FEATURES_OFFSET);
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 
