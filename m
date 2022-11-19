@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E998630D0A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 08:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D737630D19
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 08:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233092AbiKSHv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 02:51:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
+        id S231717AbiKSH5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 02:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiKSHv6 (ORCPT
+        with ESMTP id S229515AbiKSH5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 02:51:58 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44ABA317D;
-        Fri, 18 Nov 2022 23:51:56 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id a6so6820812vsc.5;
-        Fri, 18 Nov 2022 23:51:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A6vdOEVAcD2AZ27aVOd1nSfHkg1RH4opt/DvlE3Mfq4=;
-        b=iIZHwweMUcLVO5AndwXT/ROt80RSWCgUcj9w2CjXhnIRwMf5Gt8QtzbQ1aJnBxqlUG
-         Zz+7gUq5XYUJIjHwyy5ebQ98mtlQr2p7zacU85h8TQwMLx+ZYL/BZirh9s8+S3L/kZlr
-         v6qNE6tKQnmUwCDv+SNkUCRfaAAHLcY7gHPr4HaLUJP6mDGDxz4sNg4or18wR0kbBf9E
-         Nz6zRDYUZ0EG7uv69sWchDASNClFrxShEi1ockIArfAyvMxk/O6qIPgpuZWF+ROZEnRU
-         rSUVa+6Td2b/UpxqKQwWuwrJ5sdBCRZabWqRl222Bj1bSQUtmCgYKG3fIbrCXm7MGKfA
-         Qxug==
+        Sat, 19 Nov 2022 02:57:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533DA4F18C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 23:56:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668844584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oop6ZAvV1b5arBaLgtXt5J9GRGtip/WQKXGjVoxJr6g=;
+        b=ONKlmeY8hrrsr38eSndupvX6WLNiX4GUJInGGdPzFLlSUNBtiyv1FsH6pIkKx7/VhS0JjB
+        j5ku1DWfZLs019ENV42BY+ozA1KrlUinM833Xp4yt5NdBJvV4peMC9ET11+9nDRfYsYqlQ
+        jKBsI6Nmt37FxSFz3PWZo4P7CYQtod0=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-39-aq0uwJOyPDGhTUOJljfgAQ-1; Sat, 19 Nov 2022 02:56:22 -0500
+X-MC-Unique: aq0uwJOyPDGhTUOJljfgAQ-1
+Received: by mail-pg1-f199.google.com with SMTP id j21-20020a63fc15000000b00476d6932baeso4302742pgi.23
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 23:56:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=A6vdOEVAcD2AZ27aVOd1nSfHkg1RH4opt/DvlE3Mfq4=;
-        b=1PWBIQUU/E+P+AZWh+YrRQxJYG6RZeNpZ0PAftKkJ9qSIPuwUvBra1E9BGiqr76W8Y
-         OtZAM64/Rr8ZEwG3UQwW2+2JyFkgclHi7pI039VRb9g0TEaquii3RAXxQDrooGPrWbBp
-         Se2TH79jIJD0hR5OlfXS/b3tf65brLbDqs/vpn2O+XdjNRoUf9MOyFzQJ4g02+N7FzMp
-         th7AFgstqtOT3f0MMg27fC5m2t6FIjBcR2iNsi9/Sd4QwePS7BOo0bOZHwf27s/TyELI
-         WWtVV/3OQsuB84UxHsFGH2eWObcg0vmwKF5/mMTX4cuE6GT3xSbfjo9tAy0AOQxWreVQ
-         yIRg==
-X-Gm-Message-State: ANoB5pmsFScjhDhg5RzISntwuQgja//D5++gUbCS4eDEbWwqeXooIywx
-        w3yzdUmG6chWtjatTyU793kyTcroslqDt3g01BzgmyXNyqE=
-X-Google-Smtp-Source: AA0mqf4ypRAYhlRK0VTmnA2RAqqAbSSKp7OsH7IVigNzZZ+x/TEOxnB1+59/XS7DEXU6JiKMw4xI+qzrF4fDEd5/T3c=
-X-Received: by 2002:a67:1006:0:b0:3aa:5e8:3a19 with SMTP id
- 6-20020a671006000000b003aa05e83a19mr5351809vsq.37.1668844315837; Fri, 18 Nov
- 2022 23:51:55 -0800 (PST)
+        bh=oop6ZAvV1b5arBaLgtXt5J9GRGtip/WQKXGjVoxJr6g=;
+        b=M4alzXH3KyR7OMfw+/lb+g0cViA+fHJ6qC9xFO+7tfprTzahxiCW8dGm/PEWKLxS6n
+         ZTqbbuOFeSLAXkZucmx6Kjm5+H7Nr9oRUxLy/Nm94f5nzeHxZWnicPPGV/JHvEPOAL1t
+         ZWnWLI76xR1xUA0dWK2TkIWt/C/Mu57eFwY8/VQ5bCxEYBGK/tuujUQLe1AxY1zW5J+V
+         UVM+j3zjO5zYA8bQBg/WfpM6/Tl/VZm7qOzMrMbC2APORA2J93xpFgfRgs0WRoh0LbIc
+         CF2LuQpx6tLwkxOzOdBWp/YYbCU2N6yKIMVsIKlxH0UFMT2Rwa6AyGAYHXOZMi1h8Wd1
+         1TLw==
+X-Gm-Message-State: ANoB5pmp1FrROM+5AlmH14GG3J9fITENuRrz7/yrQsEPz0yX8NEo82X5
+        GKxRN+USHTzRDmPxdoC1B+QjgGFvhPhoGg2ERbiR4Lzw9yEmf42ywyG65hlnYMlGMao0ftXxgxa
+        898UGmFUJ0HkFnffB78JiGsim
+X-Received: by 2002:a17:902:bc4b:b0:188:5340:4a38 with SMTP id t11-20020a170902bc4b00b0018853404a38mr2998913plz.34.1668844581893;
+        Fri, 18 Nov 2022 23:56:21 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6I3O1lJMkDsmUe9INoKisifhBf5DDeds8aWr40Qqj/QpOwA3nfKp4JZBlwS22zOYYpjoU3OQ==
+X-Received: by 2002:a17:902:bc4b:b0:188:5340:4a38 with SMTP id t11-20020a170902bc4b00b0018853404a38mr2998894plz.34.1668844581641;
+        Fri, 18 Nov 2022 23:56:21 -0800 (PST)
+Received: from ryzen.. ([240d:1a:c0d:9f00:fc9c:8ee9:e32c:2d9])
+        by smtp.gmail.com with ESMTPSA id qe1-20020a17090b4f8100b00210039560c0sm6636821pjb.49.2022.11.18.23.56.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 23:56:21 -0800 (PST)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Shigeru Yoshida <syoshida@redhat.com>
+Subject: [PATCH] net: tun: Fix use-after-free in tun_detach()
+Date:   Sat, 19 Nov 2022 16:56:15 +0900
+Message-Id: <20221119075615.723290-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221118063304.140187-1-chenzhongjin@huawei.com>
- <20221118141138.c091445bdda36b78f6277c1f@linux-foundation.org>
- <0e693d41-0bb5-b4a9-19b7-1c71e90e06bf@huawei.com> <55553de4-04c3-09f3-b075-f0112d2298cb@huawei.com>
- <CAKFNMom=vjGrXJoc02ut8GocQ6hMmHrkcdReEvk-ykcE4p0b-w@mail.gmail.com>
-In-Reply-To: <CAKFNMom=vjGrXJoc02ut8GocQ6hMmHrkcdReEvk-ykcE4p0b-w@mail.gmail.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Sat, 19 Nov 2022 16:51:39 +0900
-Message-ID: <CAKFNMon7TSEgTBHJ9YA26X2eqf39qG9h_ANYjyQ6s1EQs8B76Q@mail.gmail.com>
-Subject: Re: [PATCH] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment
- usage as dirty
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,115 +77,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 4:17 PM Ryusuke Konishi wrote:
->
-> Hi Chen Zhongjin,
->
-> On Sat, Nov 19, 2022 at 2:29 PM Chen Zhongjin wrote:
-> >
-> >
-> > On 2022/11/19 13:24, Chen Zhongjin wrote:
-> > > On 2022/11/19 6:11, Andrew Morton wrote:
-> > >> On Fri, 18 Nov 2022 14:33:04 +0800 Chen Zhongjin
-> > >> <chenzhongjin@huawei.com> wrote:
-> > >>
-> > >>> In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
-> > >>> nilfs_segment_usage is not set dirty, which makes it can be found by
-> > >>> nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
-> > >>>
-> > >>> This will cause the problem reported by syzkaller:
-> > >>> https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
-> > >>>
-> > >>>
-> > >>> It's because the case starts with segbuf1.segnum = 3, nextnum = 4, and
-> > >>> nilfs_sufile_alloc() not called to allocate a new segment.
-> > >>>
-> > >>> The first time nilfs_segctor_extend_segments() allocated segment
-> > >>> segbuf2.segnum = segbuf1.nextnum = 4, then nilfs_sufile_alloc() found
-> > >>> nextnextnum = 4 segment because its su is not set dirty.
-> > >>> So segbuf2.nextnum = 4, which causes next segbuf3.segnum = 4.
-> > >>>
-> > >>> sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
-> > >>> added to both buffer lists of two segbuf.
-> > >>> It makes the list head of second list linked to the first one. When
-> > >>> iterating the first one, it will access and deref the head of second,
-> > >>> which causes NULL pointer dereference.
-> > >>>
-> > >>> Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
-> > >> Merged in 2009!
-> > >
-> > > Yes, seems it is introduced at the beginning of this file and the
-> > > function called nilfs_touch_segusage().
-> > >
->
-> Could you please resubmit the patch reflecting the following comments ?
->
-> After I replied to Andrew, I noticed them.
-> Also, When reposting, it would be helpful if you could add all the
-> tags I asked for Andrew in advance.
->
-> Comments:
-> 1) Please change nilfs_sufile_mark_dirty() so that it protects the
-> segusage modification
-> with &NILFS_MDT(sufile)->mi_sem:
->
-> > --- a/fs/nilfs2/sufile.c
-> > +++ b/fs/nilfs2/sufile.c
-> > @@ -495,12 +495,18 @@ void nilfs_sufile_do_free(struct inode *sufile, __u64 segnum,
-> >  int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
-> >  {
-> >       struct buffer_head *bh;
-> > +     void *kaddr;
-> > +     struct nilfs_segment_usage *su;
-> >       int ret;
-> >
+syzbot reported use-after-free in tun_detach() [1].  This causes call
+trace like below:
 
-> >       ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
->
-> +       down_write(&NILFS_MDT(sufile)->mi_sem);
+==================================================================
+BUG: KASAN: use-after-free in notifier_call_chain+0x1da/0x1e0
+...
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x100/0x178
+ print_report+0x167/0x470
+ ? __virt_addr_valid+0x5e/0x2d0
+ ? __phys_addr+0xc6/0x140
+ ? notifier_call_chain+0x1da/0x1e0
+ ? notifier_call_chain+0x1da/0x1e0
+ kasan_report+0xbf/0x1e0
+ ? notifier_call_chain+0x1da/0x1e0
+ notifier_call_chain+0x1da/0x1e0
+ call_netdevice_notifiers_info+0x83/0x130
+ netdev_run_todo+0xc33/0x11b0
+ ? generic_xdp_install+0x490/0x490
+ ? __tun_detach+0x1500/0x1500
+ tun_chr_close+0xe2/0x190
+ __fput+0x26a/0xa40
+ task_work_run+0x14d/0x240
+ ? task_work_cancel+0x30/0x30
+ do_exit+0xb31/0x2a40
+ ? reacquire_held_locks+0x4a0/0x4a0
+ ? do_raw_spin_lock+0x12e/0x2b0
+ ? mm_update_next_owner+0x7c0/0x7c0
+ ? rwlock_bug.part.0+0x90/0x90
+ ? lockdep_hardirqs_on_prepare+0x17f/0x410
+ do_group_exit+0xd4/0x2a0
+ __x64_sys_exit_group+0x3e/0x50
+ do_syscall_64+0x38/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Sorry, the location of this down_write() was wrong in this email.
-In my tested change, I put it before
-nilfs_sufile_get_segment_usage_block() like others.
+The cause of the issue is that sock_put() from __tun_detach() drops
+last reference count for struct net, and then notifier_call_chain()
+from netdev_state_change() accesses that struct net.
 
-> +       down_write(&NILFS_MDT(sufile)->mi_sem);
-> >       ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
-> >       if (!ret) {
-> >               mark_buffer_dirty(bh);
-> >               nilfs_mdt_mark_dirty(sufile);
-> > +             kaddr = kmap_atomic(bh->b_page);
-> > +             su = nilfs_sufile_block_get_segment_usage(sufile, segnum, bh, kaddr);
-> > +             nilfs_segment_usage_set_dirty(su);
-> > +             kunmap_atomic(kaddr);
-> >               brelse(bh);
-> >       }
-> +       up_write(&NILFS_MDT(sufile)->mi_sem);
-> >       return ret;
->
-> All functions that modify metadata on the sufile need protection with
-> this R/W semaphore.
-> You may not see this protection for some sufile functions as is, but
-> in that case, the wrapper function that uses them acquires this R/W
-> semaphore instead.
+This patch fixes the issue by calling sock_put() from tun_detach()
+after all necessary accesses for the struct net has done.
 
+Link: https://syzkaller.appspot.com/bug?id=96eb7f1ce75ef933697f24eeab928c4a716edefe [1]
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+ drivers/net/tun.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Regards,
-Ryusuke Konishi
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 7a3ab3427369..ce9fcf4c8ef4 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -686,7 +686,6 @@ static void __tun_detach(struct tun_file *tfile, bool clean)
+ 		if (tun)
+ 			xdp_rxq_info_unreg(&tfile->xdp_rxq);
+ 		ptr_ring_cleanup(&tfile->tx_ring, tun_ptr_free);
+-		sock_put(&tfile->sk);
+ 	}
+ }
+ 
+@@ -702,6 +701,11 @@ static void tun_detach(struct tun_file *tfile, bool clean)
+ 	if (dev)
+ 		netdev_state_change(dev);
+ 	rtnl_unlock();
++
++	if (clean) {
++		synchronize_rcu();
++		sock_put(&tfile->sk);
++	}
+ }
+ 
+ static void tun_detach_all(struct net_device *dev)
+-- 
+2.38.1
 
-
->
-> Since I retested for this change as well, you don't have to drop my
-> "Tested-by" tag.
->
-> 2) Please use the following complete email address for the
-> "Reported-by" tag of syzbot.
->
-> Reported-by: syzbot+77e4f005cb899d4268d1@syzkaller.appspotmail.com
->
-> Your tag is partially abbreviated.  I don't know that abbreviation is
-> valid, but there are very few examples of such.
-> And even if it's valid for syzbot, I don't think that omission is
-> desirable as some tools may not support it.
->
-> Thanks,
-> Ryusuke Konishi
