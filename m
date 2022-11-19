@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F11630B9F
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 04:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A817630BA8
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiKSD5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 22:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S229802AbiKSEAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 23:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbiKSD4q (ORCPT
+        with ESMTP id S229742AbiKSEA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 22:56:46 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469D9C604B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 19:51:47 -0800 (PST)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NDfn263YyzHvTV;
-        Sat, 19 Nov 2022 11:50:14 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 19 Nov
- 2022 11:50:47 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <mcgrof@kernel.org>, <russell.h.weight@intel.com>,
-        <tianfei.zhang@intel.com>, <error27@gmail.com>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <shaozhengchao@huawei.com>
-Subject: [PATCH] test_firmware: fix memory leak in test_firmware_init()
-Date:   Sat, 19 Nov 2022 11:57:21 +0800
-Message-ID: <20221119035721.18268-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 18 Nov 2022 23:00:29 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CADFE084;
+        Fri, 18 Nov 2022 20:00:25 -0800 (PST)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NDg0F5NfVz15Mcv;
+        Sat, 19 Nov 2022 11:59:57 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 19 Nov 2022 12:00:22 +0800
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 19 Nov 2022 12:00:22 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <paulmck@kernel.org>, <frederic@kernel.org>,
+        <quic_neeraju@quicinc.com>, <josh@joshtriplett.org>,
+        <rostedt@goodmis.org>, <mathieu.desnoyers@efficios.com>,
+        <jiangshanlai@gmail.com>, <joel@joelfernandes.org>,
+        <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <zhengyejian1@huawei.com>
+Subject: [PATCH] rcu: Fix kernel stack overflow caused by kprobe on rcu_irq_enter_check_tick()
+Date:   Sat, 19 Nov 2022 12:00:49 +0800
+Message-ID: <20221119040049.795065-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500026.china.huawei.com (7.185.36.106)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,44 +52,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When misc_register() failed in test_firmware_init(), the memory pointed
-by test_fw_config->name is not released. The memory leak information is
-as follows:
-unreferenced object 0xffff88810a34cb00 (size 32):
-  comm "insmod", pid 7952, jiffies 4294948236 (age 49.060s)
-  hex dump (first 32 bytes):
-    74 65 73 74 2d 66 69 72 6d 77 61 72 65 2e 62 69  test-firmware.bi
-    6e 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  n...............
-  backtrace:
-    [<ffffffff81b21fcb>] __kmalloc_node_track_caller+0x4b/0xc0
-    [<ffffffff81affb96>] kstrndup+0x46/0xc0
-    [<ffffffffa0403a49>] __test_firmware_config_init+0x29/0x380 [test_firmware]
-    [<ffffffffa040f068>] 0xffffffffa040f068
-    [<ffffffff81002c41>] do_one_initcall+0x141/0x780
-    [<ffffffff816a72c3>] do_init_module+0x1c3/0x630
-    [<ffffffff816adb9e>] load_module+0x623e/0x76a0
-    [<ffffffff816af471>] __do_sys_finit_module+0x181/0x240
-    [<ffffffff89978f99>] do_syscall_64+0x39/0xb0
-    [<ffffffff89a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Register kprobe on __rcu_irq_enter_check_tick() can cause kernel stack
+overflow [1]. This issue is first found in v5.10 and can be reproduced
+by enabling CONFIG_NO_HZ_FULL and doing like:
+  # cd /sys/kernel/debug/tracing/
+  # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
+  # echo 1 > events/kprobes/enable
 
-Fixes: c92316bf8e94 ("test_firmware: add batched firmware tests")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+So __rcu_irq_enter_check_tick() should not be kprobed, mark it as noinstr.
+
+[1]
+Insufficient stack space to handle exception!
+Insufficient stack space to handle exception!
+[...]
+Kernel panic - not syncing: kernel stack overflow
+CPU: 3 PID: 34 Comm: migration/3 Not tainted
+6.1.0-rc5-00884-g84368d882b96 #2
+Hardware name: linux,dummy-virt (DT)
+Stopper: multi_cpu_stop+0x0/0x228 <- __stop_cpus.constprop.0+0xa4/0x100
+Call trace:
+ dump_backtrace+0xf8/0x108
+ show_stack+0x20/0x48
+ dump_stack_lvl+0x68/0x84
+ dump_stack+0x1c/0x38
+ panic+0x214/0x404
+ add_taint+0x0/0xf0
+ panic_bad_stack+0x144/0x160
+ handle_bad_stack+0x38/0x58
+ __bad_stack+0x78/0x7c
+ el1h_64_sync_handler+0x4/0xe8
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ arm64_enter_el1_dbg.isra.0+0x14/0x20
+ el1_dbg+0x2c/0x90
+ el1h_64_sync_handler+0xcc/0xe8
+ el1h_64_sync+0x64/0x68
+ __rcu_irq_enter_check_tick+0x0/0x1b8
+ [...]
+
+Cc: stable@vger.kernel.org
+Fixes: aaf2bc50df1f ("rcu: Abstract out rcu_irq_enter_check_tick() from rcu_nmi_enter()")
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 ---
- lib/test_firmware.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/rcu/tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index c82b65947ce6..1c5a2adb16ef 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -1491,6 +1491,7 @@ static int __init test_firmware_init(void)
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 93416afebd59..68230f02cfb7 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -631,7 +631,7 @@ void rcu_irq_exit_check_preempt(void)
+  * controlled environments, this function allows RCU to get what it
+  * needs without creating otherwise useless interruptions.
+  */
+-void __rcu_irq_enter_check_tick(void)
++noinstr void __rcu_irq_enter_check_tick(void)
+ {
+ 	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
  
- 	rc = misc_register(&test_fw_misc_device);
- 	if (rc) {
-+		__test_firmware_config_free();
- 		kfree(test_fw_config);
- 		pr_err("could not register misc device: %d\n", rc);
- 		return rc;
 -- 
-2.17.1
+2.25.1
 
