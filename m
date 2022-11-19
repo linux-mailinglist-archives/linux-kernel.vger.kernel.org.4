@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D096310B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629616310B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbiKSU2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 15:28:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S234247AbiKSU2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 15:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbiKSU2D (ORCPT
+        with ESMTP id S234146AbiKSU2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 15:28:03 -0500
-Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6F111C3F;
-        Sat, 19 Nov 2022 12:28:00 -0800 (PST)
-Date:   Sat, 19 Nov 2022 20:27:49 +0000
+        Sat, 19 Nov 2022 15:28:07 -0500
+Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FBE1A398;
+        Sat, 19 Nov 2022 12:28:05 -0800 (PST)
+Date:   Sat, 19 Nov 2022 20:27:59 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1668889679; x=1669148879;
-        bh=uR60VGFonjZ2PAlG5YE8jC3dYPRJhZgB4wAVz8J7utU=;
+        s=protonmail3; t=1668889684; x=1669148884;
+        bh=v0KmbPR3PfBW4/Zhi3DR1i6itkdlJYgYRsbDeUPdxGM=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=HFUaSs7YsyvgLT59EYnRbr4ooh3L6TlIUm9mHUXl6jA9rsWzPrLtIcLino9ZE68Dg
-         zK2Osi8lJVl52DK9lma/Qu92p97rY0D2296KilPJQaD/F5P4DABZXihvCZloHJagOc
-         jy2YPT7Pj/6/3AbhM37x/K9m75CkuYw55m9QqFZ3vvJZfFkrndTKIv9dwkMAnaGNGk
-         afqWnuLgFCz2kcX3ZLV0n1+JlvpXIlxp1tWAtF0F1NjWlsbPEgtxAQcXPMiJw1WzzG
-         G27RapfTlpIKjFAvf2ZTh8B4z642x9NSNw8fExb3WbUUCks0lUFETI+pRqQHCsU0KU
-         hvgvd72wZY+mw==
+        b=dIFoNkdVjKH06DklH2uqB8fKkjHAoz7S/LUrJ9Ts45Fc5uwBU40I+NvMGkaap9aEI
+         4NYcW6rA3xJobWbJAYHxsxkeMJLnlZtXAeZKrCBZsf4ibmsTCs7KRk4b6wxGV/x7od
+         YBm86M3BRdcJK4hm/HPbRZPjc7oZiY6JvZSvjwvqA96MhqSvoO9xowpKeRs73X+8Af
+         72qJKxfC50S6BVEA4msUH9OWdUXB93MpoiLYv60DZhMV4eH6PUGM1xYiuRwaDaBDvZ
+         62W0tmVbORXlyulAT5LdpGfdaVG06foRd4yxJ01lhWYz7MXuYO2xQyQGQZY883Gzo6
+         BjM+azRcGd73Q==
 To:     linux-kernel@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -42,8 +42,8 @@ Cc:     Andy Gross <agross@kernel.org>,
         Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH 3/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add initial device tree
-Message-ID: <20221119202639.93559-1-linmengbo0689@protonmail.com>
+Subject: [PATCH 4/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add touchscreen
+Message-ID: <20221119202649.93613-1-linmengbo0689@protonmail.com>
 In-Reply-To: <20221119202316.93142-1-linmengbo0689@protonmail.com>
 References: <20221119202316.93142-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
@@ -60,285 +60,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPLUS FL8005A is a tablet using the MSM8916 SoC released in 2015.
-
-Add a device tree for with initial support for:
-
-- GPIO keys
-- GPIO LEDs
-- pm8916-vibrator
-- SDHCI (internal and external storage)
-- USB Device Mode
-- UART
-- WCNSS (WiFi/BT)
-- Regulators
+FL8005A uses a Focaltech FT5402 touchscreen that is connected to
+blsp_i2c5. Add it to the device tree.
 
 Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 ---
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 239 ++++++++++++++++++
- 2 files changed, 240 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
+ .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/M=
-akefile
-index afe496a93f94..5a2dcf726159 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -9,6 +9,7 @@ dtb-$(CONFIG_ARCH_QCOM)=09+=3D ipq8074-hk10-c1.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D ipq8074-hk10-c2.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-alcatel-idol347.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-asus-z00l.dtb
-+dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-gplus-fl8005a.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-huawei-g7.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-longcheer-l8150.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-longcheer-l8910.dtb
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm6=
 4/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-new file mode 100644
-index 000000000000..bed1fe984287
---- /dev/null
+index bed1fe984287..cc81880f7c42 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-@@ -0,0 +1,239 @@
-+// SPDX-License-Identifier: GPL-2.0-only
+@@ -65,6 +65,32 @@ usb_id: usb-id {
+ =09};
+ };
+=20
++&blsp_i2c5 {
++=09status =3D "okay";
 +
-+/dts-v1/;
++=09touchscreen@38 {
++=09=09/* Actually ft5402 */
++=09=09compatible =3D "edt,edt-ft5406";
++=09=09reg =3D <0x38>;
 +
-+#include "msm8916-pm8916.dtsi"
++=09=09interrupt-parent =3D <&msmgpio>;
++=09=09interrupts =3D <13 IRQ_TYPE_EDGE_FALLING>;
 +
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
++=09=09reset-gpios =3D <&msmgpio 12 GPIO_ACTIVE_LOW>;
 +
-+/ {
-+=09model =3D "GPLUS FL8005A";
-+=09compatible =3D "gplus,fl8005a", "qcom,msm8916";
-+=09chassis-type =3D "tablet";
++=09=09vcc-supply =3D <&pm8916_l17>;
++=09=09iovcc-supply =3D <&pm8916_l6>;
 +
-+=09aliases {
-+=09=09serial0 =3D &blsp1_uart2;
-+=09};
-+
-+=09chosen {
-+=09=09stdout-path =3D "serial0";
-+=09};
-+
-+=09gpio-keys {
-+=09=09compatible =3D "gpio-keys";
++=09=09touchscreen-size-x =3D <800>;
++=09=09touchscreen-size-y =3D <500>;
++=09=09touchscreen-inverted-x;
++=09=09touchscreen-swapped-x-y;
 +
 +=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&gpio_keys_default>;
++=09=09pinctrl-0 =3D <&touchscreen_default>;
++=09};
++};
 +
-+=09=09label =3D "GPIO Buttons";
+ &blsp1_uart2 {
+ =09status =3D "okay";
+ };
+@@ -229,6 +255,24 @@ gpio_leds_default: gpio-led-default-state {
+ =09=09bias-disable;
+ =09};
+=20
++=09touchscreen_default: touchscreen-default-state {
++=09=09touchscreen-pins {
++=09=09=09pins =3D "gpio13";
++=09=09=09function =3D "gpio";
 +
-+=09=09button-volume-up {
-+=09=09=09label =3D "Volume Up";
-+=09=09=09gpios =3D <&msmgpio 107 GPIO_ACTIVE_LOW>;
-+=09=09=09linux,code =3D <KEY_VOLUMEUP>;
++=09=09=09drive-strength =3D <2>;
++=09=09=09bias-pull-up;
++=09=09};
++
++=09=09reset-pins {
++=09=09=09pins =3D "gpio12";
++=09=09=09function =3D "gpio";
++
++=09=09=09drive-strength =3D <2>;
++=09=09=09bias-disable;
 +=09=09};
 +=09};
 +
-+=09gpio-leds {
-+=09=09compatible =3D "gpio-leds";
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&gpio_leds_default>;
-+
-+=09=09led-red {
-+=09=09=09function =3D LED_FUNCTION_CHARGING;
-+=09=09=09color =3D <LED_COLOR_ID_RED>;
-+=09=09=09gpios =3D <&msmgpio 117 GPIO_ACTIVE_HIGH>;
-+=09=09=09retain-state-suspended;
-+=09=09};
-+
-+=09=09led-green {
-+=09=09=09function =3D LED_FUNCTION_CHARGING;
-+=09=09=09color =3D <LED_COLOR_ID_GREEN>;
-+=09=09=09gpios =3D <&msmgpio 118 GPIO_ACTIVE_HIGH>;
-+=09=09=09retain-state-suspended;
-+=09=09};
-+=09};
-+
-+=09usb_id: usb-id {
-+=09=09compatible =3D "linux,extcon-usb-gpio";
-+=09=09id-gpio =3D <&msmgpio 110 GPIO_ACTIVE_HIGH>;
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&usb_id_default>;
-+=09};
-+};
-+
-+&blsp1_uart2 {
-+=09status =3D "okay";
-+};
-+
-+&pm8916_resin {
-+=09status =3D "okay";
-+=09linux,code =3D <KEY_VOLUMEDOWN>;
-+};
-+
-+&pm8916_vib {
-+=09status =3D "okay";
-+};
-+
-+&pronto {
-+=09status =3D "okay";
-+};
-+
-+&sdhc_1 {
-+=09status =3D "okay";
-+
-+=09pinctrl-names =3D "default", "sleep";
-+=09pinctrl-0 =3D <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
-+=09pinctrl-1 =3D <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
-+};
-+
-+&sdhc_2 {
-+=09status =3D "okay";
-+
-+=09pinctrl-names =3D "default", "sleep";
-+=09pinctrl-0 =3D <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
-+=09pinctrl-1 =3D <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
-+
-+=09cd-gpios =3D <&msmgpio 38 GPIO_ACTIVE_LOW>;
-+};
-+
-+&usb {
-+=09status =3D "okay";
-+=09extcon =3D <&usb_id>, <&usb_id>;
-+};
-+
-+&usb_hs_phy {
-+=09extcon =3D <&usb_id>;
-+};
-+
-+&smd_rpm_regulators {
-+=09vdd_l1_l2_l3-supply =3D <&pm8916_s3>;
-+=09vdd_l4_l5_l6-supply =3D <&pm8916_s4>;
-+=09vdd_l7-supply =3D <&pm8916_s4>;
-+
-+=09s3 {
-+=09=09regulator-min-microvolt =3D <1200000>;
-+=09=09regulator-max-microvolt =3D <1300000>;
-+=09};
-+
-+=09s4 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <2100000>;
-+=09};
-+
-+=09l1 {
-+=09=09regulator-min-microvolt =3D <1225000>;
-+=09=09regulator-max-microvolt =3D <1225000>;
-+=09};
-+
-+=09l2 {
-+=09=09regulator-min-microvolt =3D <1200000>;
-+=09=09regulator-max-microvolt =3D <1200000>;
-+=09};
-+
-+=09l4 {
-+=09=09regulator-min-microvolt =3D <2050000>;
-+=09=09regulator-max-microvolt =3D <2050000>;
-+=09};
-+
-+=09l5 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <1800000>;
-+=09};
-+
-+=09l6 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <1800000>;
-+=09};
-+
-+=09l7 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <1800000>;
-+=09};
-+
-+=09l8 {
-+=09=09regulator-min-microvolt =3D <2850000>;
-+=09=09regulator-max-microvolt =3D <2900000>;
-+=09};
-+
-+=09l9 {
-+=09=09regulator-min-microvolt =3D <3300000>;
-+=09=09regulator-max-microvolt =3D <3300000>;
-+=09};
-+
-+=09l10 {
-+=09=09regulator-min-microvolt =3D <2700000>;
-+=09=09regulator-max-microvolt =3D <2800000>;
-+=09};
-+
-+=09l11 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <2950000>;
-+=09=09regulator-allow-set-load;
-+=09=09regulator-system-load =3D <200000>;
-+=09};
-+
-+=09l12 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <2950000>;
-+=09};
-+
-+=09l13 {
-+=09=09regulator-min-microvolt =3D <3075000>;
-+=09=09regulator-max-microvolt =3D <3075000>;
-+=09};
-+
-+=09l14 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <3300000>;
-+=09};
-+
-+=09l15 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <3300000>;
-+=09};
-+
-+=09l16 {
-+=09=09regulator-min-microvolt =3D <1800000>;
-+=09=09regulator-max-microvolt =3D <3300000>;
-+=09};
-+
-+=09l17 {
-+=09=09regulator-min-microvolt =3D <2850000>;
-+=09=09regulator-max-microvolt =3D <2850000>;
-+=09};
-+
-+=09l18 {
-+=09=09regulator-min-microvolt =3D <2700000>;
-+=09=09regulator-max-microvolt =3D <2700000>;
-+=09};
-+};
-+
-+&msmgpio {
-+=09gpio_keys_default: gpio-keys-default-state {
-+=09=09pins =3D "gpio107";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-pull-up;
-+=09};
-+
-+=09gpio_leds_default: gpio-led-default-state {
-+=09=09pins =3D "gpio117", "gpio118";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
-+
-+=09usb_id_default: usb-id-default-state {
-+=09=09pins =3D "gpio110";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <8>;
-+=09=09bias-pull-up;
-+=09};
-+};
+ =09usb_id_default: usb-id-default-state {
+ =09=09pins =3D "gpio110";
+ =09=09function =3D "gpio";
 --=20
 2.30.2
 
