@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DED630CD8
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 08:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC76630CDC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 08:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbiKSHI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 02:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
+        id S232643AbiKSHJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 02:09:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbiKSHIq (ORCPT
+        with ESMTP id S232369AbiKSHJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 02:08:46 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0352CE3C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 23:08:38 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id d192so6948642pfd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 23:08:38 -0800 (PST)
+        Sat, 19 Nov 2022 02:09:29 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB9D950CF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 23:09:29 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p21so6418178plr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 23:09:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JAomBLzMWpxG+jKkSWv7aeDaZwvbB6/vO10KmU8WTn4=;
-        b=XFZNNwUBtpky5AvtQ3KG/OOizK7sfxo4Mc0+CYLH8LZtO5cS0vhuXi3Gc7+bsucxAT
-         UOekSiNbjEW0FF2soQCYEc6CErOmClQUcIbE2T4NAZzFN+cmXTDEMfqLxz5aAgLDaA4m
-         /xyBsm1XxzNoQwCmToyZTVqhs/GTOBG67Z6sc=
+        bh=3ACiJTbXNJeqE/gxlmjEP49H2c4SghNGRkjD+ba2fsY=;
+        b=X+H4O1YxrB7WboZ+TpnIVWrX5yqtIjQX5Bgu41ubRJotRsZa2e7rzFXUbtMnVyP8MK
+         a6uxX4rQy+sJFGMuKW5X+d6EP1MKXJC0k3ccQfFy1HnD5zkD0jKI53LZSk4pI/lqE5sZ
+         tVwDkAiDVtodv4Riox1/pue3VHY5ZA+WN4N8U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JAomBLzMWpxG+jKkSWv7aeDaZwvbB6/vO10KmU8WTn4=;
-        b=DWTmGu/bXnNM1AmbGLJofiPln8JuWYfqfH8MP70Zo4iQMzGDfUi+1pKXKOPnfvjjJL
-         Qimm3cOaP/YEUVHJcooEZfiGjFem+e2ySKXFsWR8UnRsbLZjmOSVXWieAC2p54nuS9m9
-         LwvSicp4gDA5EqfgF/s9ps4if5XL4RA5jr5aZlY3Fy1IOs1OdVAFG2qk5adGswQVENw7
-         COOp/+jY7Cj/ZxVgWEj6M56cdc0e3f8+GIMn5KYAlchqrkTwpytVW7DVhH3Q6y/2n8VE
-         +ilQAfHMFntEaupbMLaCPoIGiQD0F1kB9zj9YLDx9PDvV+Id7Kg0SjY4ax42dNjBlwzx
-         bbkQ==
-X-Gm-Message-State: ANoB5plL6YSaDP4oDkCAz0+Z+ihzsYsoV8NvFFpNWWvPbuz8ot20ogGf
-        gv0WQmT1MAiX6+vPoA1x8+qCvg==
-X-Google-Smtp-Source: AA0mqf5yxrtOD/a/N7wAQgsex//ZjQfa+t4D7cq4uMpYXby9xwV1i8aqA0ejg5jd+aWdvhTIN3h4tw==
-X-Received: by 2002:a63:e802:0:b0:46f:ed3a:f36c with SMTP id s2-20020a63e802000000b0046fed3af36cmr9800450pgh.372.1668841718412;
-        Fri, 18 Nov 2022 23:08:38 -0800 (PST)
+        bh=3ACiJTbXNJeqE/gxlmjEP49H2c4SghNGRkjD+ba2fsY=;
+        b=JE2jXkO1CnQvQ0a+K1Y02bhh5ZtU2q8OjnIVzmhibop1yp+HiJhanwSYpJgdtzBsrx
+         r0piOSyMK0cbRNVMYLz5vahkXyG1uiJBx99OAXrHJ7mRgeC8DZZeOoF+fG93cGT8bdqr
+         6b3JO5GlgowhP8MiXVhhZO4v/xLqsDOY7WKUawmMj6qy9ihHMPr/SkBOcDSKjOUmi8sg
+         qB6ogY43Jqc7UE09BpwbYkPeIHao8yjbT8eqKHjypcO005l8Rfl4l/ypfiWVawlYieCm
+         ttVIyQ8D4yfKDej8uO+35VbAl8vJj6N3ncSu58M6m/dHU9f+weryvArXwzTePO6QE9zK
+         OvIg==
+X-Gm-Message-State: ANoB5pkZDUbr2cgp2/qGPRguVcpnx3AY4bQ2Q50fGxbFphnopD2n5+M8
+        snRgv6sv4LAJmouJP+Fa9K1PkQ==
+X-Google-Smtp-Source: AA0mqf5zwvmnUs0B49pK5yJ7yPu5BHkdCfLczJZ3lPalcKIdye1gPv2FogDayRYZhRw0bf6P1zAnQQ==
+X-Received: by 2002:a17:902:70c9:b0:176:a0cc:5eff with SMTP id l9-20020a17090270c900b00176a0cc5effmr2887849plt.128.1668841768770;
+        Fri, 18 Nov 2022 23:09:28 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n62-20020a622741000000b0056b88187374sm4308162pfn.85.2022.11.18.23.08.37
+        by smtp.gmail.com with ESMTPSA id g9-20020a17090a4b0900b001efa9e83927sm6455386pjh.51.2022.11.18.23.09.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 23:08:37 -0800 (PST)
-Date:   Fri, 18 Nov 2022 23:08:36 -0800
+        Fri, 18 Nov 2022 23:09:28 -0800 (PST)
+Date:   Fri, 18 Nov 2022 23:09:27 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Christian Lamparter <chunkeey@googlemail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] carl9170: Replace zero-length array of trailing structs
- with flex-array
-Message-ID: <202211182307.3EF1218@keescook>
-References: <20221118211146.never.395-kees@kernel.org>
- <877czrqwhc.fsf@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Nilesh Javali <njavali@marvell.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/2][next] scsi: qla2xxx: Replace one-element array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <202211182309.E0127C6A0@keescook>
+References: <cover.1668814746.git.gustavoars@kernel.org>
+ <faa40e6b31ecc9387ad1644bb1957aa53d7c682f.1668814746.git.gustavoars@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877czrqwhc.fsf@kernel.org>
+In-Reply-To: <faa40e6b31ecc9387ad1644bb1957aa53d7c682f.1668814746.git.gustavoars@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 08:39:11AM +0200, Kalle Valo wrote:
-> Kees Cook <keescook@chromium.org> writes:
+On Fri, Nov 18, 2022 at 05:47:13PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays as fake flex arrays are deprecated and we are moving
+> towards adopting C99 flexible-array members, instead. So, replace
+> one-element array declaration in struct ct_sns_gpnft_rsp, which is
+> ultimately being used inside a union:
 > 
-> > Zero-length arrays are deprecated[1] and are being replaced with
-> > flexible array members in support of the ongoing efforts to tighten the
-> > FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-> > with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
-> >
-> > Replace zero-length array with flexible-array member.
-> >
-> > This results in no differences in binary output.
-> >
-> > [1] https://github.com/KSPP/linux/issues/78
-> >
-> > Cc: Christian Lamparter <chunkeey@googlemail.com>
-> > Cc: Kalle Valo <kvalo@kernel.org>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: linux-wireless@vger.kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> drivers/scsi/qla2xxx/qla_def.h:
+> 3240 struct ct_sns_gpnft_pkt {
+> 3241         union {
+> 3242                 struct ct_sns_req req;
+> 3243                 struct ct_sns_gpnft_rsp rsp;
+> 3244         } p;
+> 3245 };
 > 
-> Nowadays we include "wifi:" in the subject, but I can add that. But
-> please use this in the future for all wireless patches.
+> Important to mention is that doing a build before/after this patch results
+> in no binary differences.
+> 
+> This help us make progress towards globally enabling
+> -fstrict-flex-arrays=3 [1].
+> 
+> Link: https://github.com/KSPP/linux/issues/245
+> Link: https://github.com/KSPP/linux/issues/193
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Okay, thanks! I use a recency/frequency prefix guesser, but I've updated
-it to include "wifi: " if "linux-wireless@vger.kernel.org" is in CC. :)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
