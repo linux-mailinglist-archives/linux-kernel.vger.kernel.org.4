@@ -2,65 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD14630F56
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 17:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A35630F58
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 17:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbiKSQIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 11:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S233462AbiKSQNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 11:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKSQIx (ORCPT
+        with ESMTP id S229635AbiKSQNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 11:08:53 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C174B1839D
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 08:08:51 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owQOJ-0006jh-VP; Sat, 19 Nov 2022 17:08:28 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owQOE-005I6I-10; Sat, 19 Nov 2022 17:08:22 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owQOE-000B3I-39; Sat, 19 Nov 2022 17:08:22 +0100
-Date:   Sat, 19 Nov 2022 17:08:18 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        wangjianli <wangjianli@cdjrlc.com>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>, kernel@pengutronix.de,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Grant Likely <grant.likely@linaro.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 054/606] iio: accel: kxcjk-1013: Convert to i2c's
- .probe_new()
-Message-ID: <20221119160818.zft3xhuwz3gm6oeg@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-55-uwe@kleine-koenig.org>
- <Y3jGHufAJVxZp1f0@smile.fi.intel.com>
+        Sat, 19 Nov 2022 11:13:15 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C2E92C66A
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 08:13:14 -0800 (PST)
+Received: from 8bytes.org (p5b00664c.dip0.t-ipconnect.de [91.0.102.76])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id C51512A029B;
+        Sat, 19 Nov 2022 17:13:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1668874393;
+        bh=pKZSOrFJ0a9jKmN1CuPpLnJ+pFpga/JV8WusiyY0ZG4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OdDddaqTizQN6ByY/OGzcqozhLZHehAgZblXoSs/3vbEsx2bB2Pa4NuX5tRswAI7n
+         R1IUDkxmHf5Vvpuuo+nDwAq9wo5aWTTTSkcKLtcJdS5togtwF9JqiVOV+KAW9rdtk9
+         sx/IjjjfM3dPEB8uqBHj7FUWz76Rn89zdAOHZFbvp/qo3ZS3YQJg+L8xxF7xBKvP3R
+         5MRU7dgcdMNHZkta1rM4q2ywmCcwm+09XzhWtq56ZnVohtZMMAO9JkLpQH7XqVLP3D
+         aWBPwyTNGj5AM7FS2crJgSPdMqHQWCbi/KMF9l4M+LeLf/W5nruB182faWl9Mg3J+o
+         kukseuJ4a++jQ==
+Date:   Sat, 19 Nov 2022 17:13:11 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: [git pull] IOMMU Fixes for Linux v6.1-rc5
+Message-ID: <Y3kAl1vpndkuviqt@8bytes.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fzajp72vidmhqheg"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zSTt2Xp8a783qA4a"
 Content-Disposition: inline
-In-Reply-To: <Y3jGHufAJVxZp1f0@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,58 +52,69 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---fzajp72vidmhqheg
-Content-Type: text/plain; charset=iso-8859-1
+--zSTt2Xp8a783qA4a
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello Andy,
+Hi Linus,
 
-On Sat, Nov 19, 2022 at 02:03:42PM +0200, Andy Shevchenko wrote:
-> On Fri, Nov 18, 2022 at 11:36:28PM +0100, Uwe Kleine-K=F6nig wrote:
-> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> > that explicitly in the probe function.
->=20
-> Since there is no split on per subsystem basis (I mean, as a series targe=
-ting
-> only, let's say, IIO subsystem with cover letter), I'm answering here tha=
-t all
-> IIO patches are good to me, thanks, Uwe!
->=20
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
 
-Thanks!
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
 
-Does this include the three patches:
+are available in the Git repository at:
 
-	staging: iio: adt7316: Convert to i2c's .probe_new()
-	staging: iio: ad5933: Convert to i2c's .probe_new()
-	staging: iio: ade7854: Convert to i2c's .probe_new()
+  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v6.1-rc5
 
-?
+for you to fetch changes up to 7fc961cf7ffcb130c4e93ee9a5628134f9de700a:
 
-Best regards
-Uwe
+  iommu/vt-d: Set SRE bit only when hardware has SRS cap (2022-11-19 10:46:52 +0100)
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+----------------------------------------------------------------
+IOMMU Fixes for Linux v6.1-rc5
 
---fzajp72vidmhqheg
+Including:
+
+	- Fix presetting accessed bits in Intel VT-d page-directory
+	  entries to avoid hardware error
+
+	- Set supervisor bit only when Intel IOMMU has the SRS
+	  capability
+
+----------------------------------------------------------------
+Tina Zhang (2):
+      iommu/vt-d: Preset Access bit for IOVA in FL non-leaf paging entries
+      iommu/vt-d: Set SRE bit only when hardware has SRS cap
+
+ drivers/iommu/intel/iommu.c | 8 +++-----
+ drivers/iommu/intel/pasid.c | 5 +++--
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+Please pull.
+
+Thanks,
+
+	Joerg
+
+--zSTt2Xp8a783qA4a
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN4/3AACgkQwfwUeK3K
-7AlBbgf/VdCmGxE5p4WJBUVZ+DQrgE1H86TeDTZ2w+zWM3wA9/kHjrtrEuoEtnfD
-EgU2wlCKpII2vBUFBQCOH23CyUAiFMN//1kCD98poRXowoV1brNdxcLE6hR4ORsW
-PFBSI068CVRecB54XASUxIUN1MzGTyBpXpfAUdIVpyUSS0D1fQEpLucKfTo8rDsF
-9034bo8xvDA3g4qDztC6/Lj9pmma5c8UmB2mBn3P/jPEhUeg+3Jz5c0ZkJ636YNQ
-BwgI7vXDnKXp4nzrKOWBf5snc++Eb7KugMwcTUwPBPwkMewlTAIpXX+GDQRfYaME
-yZN+2yr31DTQntFeff080hjXeXsGlQ==
-=8K2+
+iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmN5AJcACgkQK/BELZcB
+GuPtBQ/+Kxv2obtuPUS79X+4hxloB0znNhTBEkcD4k67lOEiH/8zMUI6Ykc16KQu
+SIIB0WCc4i2GTCKs8xJc3U7F1QMZSsPl1/89GrTvQgZJ6NBW4t6xlvCLQhyU16LM
+0onnlx+UOwg0l8na2FR15urj67Mc3PQOZeKEgwF5eIbNfDhgJgdz8Mh/TEmKxDxE
+59H8HanwWE9Q2JwpAvQpymS6XGPW7obhuPeQRD+7N5FNkC78TIIboNmiZ8S7r7e2
+CZ45iv3i4u60T2OiWSxp4F19O35AuL6J50ZmOTYI/Xq5qLreCtcqq4EYb50qpGgv
+rVXC4D4nY4+YJMyBWS9mh8QX8cJXxMbhsE4I2CV50u5WPs+bORf5T9ds/o+glr2I
+IAzrWeeA02QBfD9FQKLUH/cV0QrDPxDJfIy6bq57ws8nRl3z1+m87NmXWFTn/Ht2
+fcOktVKFxE45fOiQv98cv2Jf1tv4gnS/ggntaDNuA1zdxlkJyZHrc+mdSJ8QyQ3O
+afkeQTStzat6SiaDW9SMEG0LybnJWC0St1gQH5Wkd8oexNkiGtko2wDu6NCZB8SB
+C4Q4LZLj/qVU3/pL2938QhwMIQtJkrHohtcpt0FErd7Ltaj8TOZFpxpNQ4tNjYho
+Lo6pPm2vmz+MKSRnv43N669Zehj1lUIA6TBI+aSysn/V67sdeN4=
+=9988
 -----END PGP SIGNATURE-----
 
---fzajp72vidmhqheg--
+--zSTt2Xp8a783qA4a--
