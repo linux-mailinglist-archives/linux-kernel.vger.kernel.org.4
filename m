@@ -2,51 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75BF630E0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19244630E0D
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbiKSKPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 05:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S232544AbiKSKQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 05:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiKSKPt (ORCPT
+        with ESMTP id S229500AbiKSKQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 05:15:49 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F874B987;
-        Sat, 19 Nov 2022 02:15:47 -0800 (PST)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NDqKP3glBzRpDn;
-        Sat, 19 Nov 2022 18:15:21 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 19 Nov 2022 18:15:45 +0800
-Message-ID: <d1e86166-b2b0-a235-fe9e-be9ee4d93290@huawei.com>
-Date:   Sat, 19 Nov 2022 18:15:44 +0800
+        Sat, 19 Nov 2022 05:16:33 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A0351302
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:16:32 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owKtQ-00089M-Nr; Sat, 19 Nov 2022 11:16:12 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owKtG-005EhI-Oa; Sat, 19 Nov 2022 11:16:03 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owKtG-0006ZF-Ax; Sat, 19 Nov 2022 11:16:02 +0100
+Date:   Sat, 19 Nov 2022 11:16:02 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH 289/606] macintosh: ams/ams-i2c: Convert to i2c's
+ .probe_new()
+Message-ID: <20221119101602.kfreiw4mdbjf7prj@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-290-uwe@kleine-koenig.org>
+ <1d2ae1bb-d4ba-35cf-63b6-f23a0187a223@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [rft, PATCH v5 1/1] gpiolib: fix memory leak in
- gpiochip_setup_dev()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liwei391@huawei.com>
-References: <20221118194508.50686-1-andriy.shevchenko@linux.intel.com>
-From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <20221118194508.50686-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fhfkp732a2k6imuh"
+Content-Disposition: inline
+In-Reply-To: <1d2ae1bb-d4ba-35cf-63b6-f23a0187a223@csgroup.eu>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,197 +67,94 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/11/19 3:45, Andy Shevchenko wrote:
-> From: Zeng Heng <zengheng4@huawei.com>
->
-> Here is a backtrace report about memory leak detected in
-> gpiochip_setup_dev():
->
-> unreferenced object 0xffff88810b406400 (size 512):
->    comm "python3", pid 1682, jiffies 4295346908 (age 24.090s)
->    backtrace:
->      kmalloc_trace
->      device_add		device_private_init at drivers/base/core.c:3361
-> 			(inlined by) device_add at drivers/base/core.c:3411
->      cdev_device_add
->      gpiolib_cdev_register
->      gpiochip_setup_dev
->      gpiochip_add_data_with_key
->
-> gcdev_register() & gcdev_unregister() would call device_add() &
-> device_del() (no matter CONFIG_GPIO_CDEV is enabled or not) to
-> register/unregister device.
->
-> However, if device_add() succeeds, some resource (like
-> struct device_private allocated by device_private_init())
-> is not released by device_del().
->
-> Therefore, after device_add() succeeds by gcdev_register(), it
-> needs to call put_device() to release resource in the error handle
-> path.
->
-> Here we move forward the register of release function, and let it
-> release every piece of resource by put_device() instead of kfree().
->
-> While at it, fix another subtle issue, i.e. when gc->ngpio is equal
-> to 0, we still call kcalloc() and, in case of further error, kfree()
-> on the ZERO_PTR pointer, which is not NULL. It's not a bug per se,
-> but rather waste of the resources and potentially wrong expectation
-> about contents of the gdev->descs variable.
->
-> Fixes: 159f3cd92f17 ("gpiolib: Defer gpio device setup until after gpiolib initialization")
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> changes in v5 (done by Andy):
->    - refactored to avoid double checks on the same conditionals
->    - moved kcalloc() after validating its parameter
->    - compiled tested only by me (Andy)
+--fhfkp732a2k6imuh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have applied the patch on local environment, and it works fine after 
-rough test
+Hello Christophe,
 
-(which is based on QEMU simulated).
+On Sat, Nov 19, 2022 at 07:38:58AM +0000, Christophe Leroy wrote:
+> Le 18/11/2022 =E0 23:40, Uwe Kleine-K=F6nig a =E9crit=A0:
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > The probe function doesn't make use of the i2c_device_id * parameter so=
+ it
+> > can be trivially converted.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> The patch itself and the others seems ok. But can you group all=20
+> macintosh changes into a single patch instead of the 9 patches you sent ?
+>=20
+> See the process about submitting patches,=20
+> https://docs.kernel.org/process/submitting-patches.html and especially=20
+> the "NO!!!! No more huge patch bombs to linux-kernel@vger.kernel.org=20
+> people!" and the associated reference=20
+> https://lore.kernel.org/all/20050711.125305.08322243.davem@davemloft.net/=
+ :
+>=20
+> 	If you feel the need to send, say, more than 15 patches at once,=20
+> reconsider.
 
-Best regards,
+Thanks for your feedback.
 
-Zeng Heng
+Let me point out in response to the request to squash patches together
+that this wish doesn't seem to be the universal right thing to do.
 
-> changes in v4:
->    - add gpiochip_print_register_fail()
-> changes in v3:
->    - use put_device() instead of kfree() explicitly
-> changes in v2:
->    - correct fixes tag
->
->   drivers/gpio/gpiolib.c | 42 ++++++++++++++++++++++++++----------------
->   1 file changed, 26 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index caa747fdcb72..119c9c3a2a50 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -580,12 +580,13 @@ static int gpiochip_setup_dev(struct gpio_device *gdev)
->   	if (ret)
->   		return ret;
->   
-> +	/* From this point, the .release() function cleans up gpio_device */
-> +	gdev->dev.release = gpiodevice_release;
-> +
->   	ret = gpiochip_sysfs_register(gdev);
->   	if (ret)
->   		goto err_remove_device;
->   
-> -	/* From this point, the .release() function cleans up gpio_device */
-> -	gdev->dev.release = gpiodevice_release;
->   	dev_dbg(&gdev->dev, "registered GPIOs %d to %d on %s\n", gdev->base,
->   		gdev->base + gdev->ngpio - 1, gdev->chip->label ? : "generic");
->   
-> @@ -651,10 +652,10 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->   	struct fwnode_handle *fwnode = NULL;
->   	struct gpio_device *gdev;
->   	unsigned long flags;
-> -	int base = gc->base;
->   	unsigned int i;
-> +	u32 ngpios = 0;
-> +	int base = 0;
->   	int ret = 0;
-> -	u32 ngpios;
->   
->   	/* If the calling driver did not initialize firmware node, do it here */
->   	if (gc->fwnode)
-> @@ -696,17 +697,12 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->   	else
->   		gdev->owner = THIS_MODULE;
->   
-> -	gdev->descs = kcalloc(gc->ngpio, sizeof(gdev->descs[0]), GFP_KERNEL);
-> -	if (!gdev->descs) {
-> -		ret = -ENOMEM;
-> -		goto err_free_dev_name;
-> -	}
-> -
->   	/*
->   	 * Try the device properties if the driver didn't supply the number
->   	 * of GPIO lines.
->   	 */
-> -	if (gc->ngpio == 0) {
-> +	ngpios = gc->ngpio;
-> +	if (ngpios == 0) {
->   		ret = device_property_read_u32(&gdev->dev, "ngpios", &ngpios);
->   		if (ret == -ENODATA)
->   			/*
-> @@ -717,7 +713,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->   			 */
->   			ngpios = 0;
->   		else if (ret)
-> -			goto err_free_descs;
-> +			goto err_free_dev_name;
->   
->   		gc->ngpio = ngpios;
->   	}
-> @@ -725,13 +721,19 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->   	if (gc->ngpio == 0) {
->   		chip_err(gc, "tried to insert a GPIO chip with zero lines\n");
->   		ret = -EINVAL;
-> -		goto err_free_descs;
-> +		goto err_free_dev_name;
->   	}
->   
->   	if (gc->ngpio > FASTPATH_NGPIO)
->   		chip_warn(gc, "line cnt %u is greater than fast path cnt %u\n",
->   			  gc->ngpio, FASTPATH_NGPIO);
->   
-> +	gdev->descs = kcalloc(gc->ngpio, sizeof(*gdev->descs), GFP_KERNEL);
-> +	if (!gdev->descs) {
-> +		ret = -ENOMEM;
-> +		goto err_free_dev_name;
-> +	}
-> +
->   	gdev->label = kstrdup_const(gc->label ?: "unknown", GFP_KERNEL);
->   	if (!gdev->label) {
->   		ret = -ENOMEM;
-> @@ -750,11 +752,13 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->   	 * it may be a pipe dream. It will not happen before we get rid
->   	 * of the sysfs interface anyways.
->   	 */
-> +	base = gc->base;
->   	if (base < 0) {
->   		base = gpiochip_find_base(gc->ngpio);
->   		if (base < 0) {
-> -			ret = base;
->   			spin_unlock_irqrestore(&gpio_lock, flags);
-> +			ret = base;
-> +			base = 0;
->   			goto err_free_label;
->   		}
->   		/*
-> @@ -868,6 +872,11 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->   err_free_gpiochip_mask:
->   	gpiochip_remove_pin_ranges(gc);
->   	gpiochip_free_valid_mask(gc);
-> +	if (gdev->dev.release) {
-> +		/* release() has been registered by gpiochip_setup_dev() */
-> +		put_device(&gdev->dev);
-> +		goto err_print_message;
-> +	}
->   err_remove_from_list:
->   	spin_lock_irqsave(&gpio_lock, flags);
->   	list_del(&gdev->list);
-> @@ -881,13 +890,14 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->   err_free_ida:
->   	ida_free(&gpio_ida, gdev->id);
->   err_free_gdev:
-> +	kfree(gdev);
-> +err_print_message:
->   	/* failures here can mean systems won't boot... */
->   	if (ret != -EPROBE_DEFER) {
->   		pr_err("%s: GPIOs %d..%d (%s) failed to register, %d\n", __func__,
-> -		       gdev->base, gdev->base + gdev->ngpio - 1,
-> +		       base, base + (int)ngpios - 1,
->   		       gc->label ? : "generic", ret);
->   	}
-> -	kfree(gdev);
->   	return ret;
->   }
->   EXPORT_SYMBOL_GPL(gpiochip_add_data_with_key);
+Last time I did a conversion grouped by subsystem, one of the replies
+was:
+
+	Reviewed-by: ...
+	if you split on per driver basis.
+
+(https://lore.kernel.org/linux-iio/20220808085526.280066-1-u.kleine-koenig@=
+pengutronix.de)
+
+The obvious upside of a split per driver is that the individual bits are
+easier to review, an Ack can be limited to a certain set of drivers, and
+(probably most important): If a driver later gets a commit that needs
+backporting, a patch that only touches this single driver can more
+easily be backported as a dependency.
+
+Also the request to not send everything at once but keep back some
+patches has an obvious downside. I.e. I have to restart yet more often
+to rebase + test to get all patches applied in the end. And you could
+argue that the sum of the work load on the mail servers doesn't get
+smaller in sum if the 600 patches are sent over (say) 2 months.
+(To prevent a flame war here: Yeah, I agree there are downsides of a
+single big series, too.)
+
+All in all my personal opinion is that the advantages of a split per
+driver slightly outweight the disadvantages. But obviously that's
+subjective.
+
+I will wait a while before sending updates to this series, so don't
+expect a new patch very soon. (This has the nice effect that it gives
+you some time to reconsider your argument and maybe apply the patches as
+they are now, preventing another mail to the lists with the cumulated
+macintosh changes ;-)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--fhfkp732a2k6imuh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN4rN8ACgkQwfwUeK3K
+7Al6Vgf8CS2jQ6ydt/mU5uUF2/1EdeFIaEgWWYM8GEO/WO3ITiDMmhcPxvxIiMZ0
+3oK9RQOVW5svEcjiGpenqG2JzVC3qN1g86tlnFlbVnr2fNllDVn+UX4yqQIV/MHM
+uOROopD1mejOWEeuyKGWSFaOJa+ZnQa94AW9NCnTqz9ZCbbtg1/da8nw7okMtupm
+kXwMuuZee0TCK02/9mKYs3H0hWHoTt/2deYHVLrtfNurq5hKPZlqfXSokz1EH19v
+rPmnAsQvxBubGj+6uKtx6bzmG+aNwqJe/3j5UbHGe7eIp1i7q4kXjzpi6ioxZ9ef
+1lRlkwcKHui3hUwv5kuzN6BIi+ZrAQ==
+=vViA
+-----END PGP SIGNATURE-----
+
+--fhfkp732a2k6imuh--
