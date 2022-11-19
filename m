@@ -2,115 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E29630C86
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D647630C89
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbiKSGiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 01:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S231830AbiKSGjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 01:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKSGh6 (ORCPT
+        with ESMTP id S229470AbiKSGjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 01:37:58 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F560B4F1C;
-        Fri, 18 Nov 2022 22:37:56 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-142612a5454so7803925fac.2;
-        Fri, 18 Nov 2022 22:37:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cLYrlsSUJ/3iV70MlNgEm3O6sI1BB8dOzm7Fo6KqsgM=;
-        b=cNFOo+VqMgo+mnOiJFXxMwMeFQLoitwcWJzIOOFWlhDZn66wiP2M4eBUI7NktrM1uC
-         yaoxkbPYDfgg1iDxd9fZ4xi9O867toY85OU0FO1wgrIcYtErgNqSkIaDFS1yLEWy06Ze
-         Nw1/AIkSKmJKMc018JElW0dxYRL+GkqGyoV263phPIjoXOrycZ0f4UAzEZVysgHM2sCC
-         u3DTAZg7k0XUYqkROhzjmjl20OPHdLpF2N4VWXL/gTSjK7lRgBotEJdsiOLa4wIH6cX7
-         RdwHdpMT7MwsU0JqQ6wxuSX6BvrKyH1TcIs0CmWyKM61aIq78ZXPr1jlmFDGDcT3Hvct
-         8DkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cLYrlsSUJ/3iV70MlNgEm3O6sI1BB8dOzm7Fo6KqsgM=;
-        b=JNHys+KzBdTEcO+lu28uAqacEaqwIcH0i2GzKSxcghntUK/4R7o/SeDGb1I0oPJaSv
-         NzPtsfL3SkUm8js6oLcoQs1/j97FJjIET5w0pWacBv44whuB3KozQQdDdXKFYhKMiVO/
-         0VB1nKwlNgZLdRrAb/AQUHKEZIAUE7WyCpEj7/3NkDMDGktUBB535ET3umx2HWa346YC
-         brAwTW67rpiC0RKIgsQLVgnGDh5AoApOXhNO5yKx1Idmh3TbE8g4SoaZJoxzLKcmI6tb
-         rQ3S/vh84woLhkahSqJbZilb9S/j/RoYzgpV1U1/gHmqjMbI+NfIKvnCRMvzisGcEyjc
-         91MA==
-X-Gm-Message-State: ANoB5pkTMheAmDzaX7Zo7GdTJ5Px/iv+4+rRAv5RbpNS0zwCEuYcw1vj
-        AA+t9Qr68koZ7h6vo1/JFzP7w4KsyilzC19Vfxw=
-X-Google-Smtp-Source: AA0mqf4YHBgpQyRnlsR8IJwpaWfoiK6RVHKjHFNz8PNwpwXg9+N4cVuAs+273DwuP7yKjh9Nyq4wN2dl85vztU/s7dM=
-X-Received: by 2002:a05:6870:9591:b0:13a:eee0:b499 with SMTP id
- k17-20020a056870959100b0013aeee0b499mr378364oao.83.1668839875548; Fri, 18 Nov
- 2022 22:37:55 -0800 (PST)
+        Sat, 19 Nov 2022 01:39:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3691B31EF8;
+        Fri, 18 Nov 2022 22:39:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9FCB60A6E;
+        Sat, 19 Nov 2022 06:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19EF3C433C1;
+        Sat, 19 Nov 2022 06:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668839957;
+        bh=0ZYQtq1F3G/XBZWSJnxz7MelVEcYtwYDFTPJ7e6klDk=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=b2ewwj12u+8qQ9la7a3VkF3YX9TT/oaO1OzVym4OxAOctVF9H92uNbnTz/pC5N7NO
+         32nan4aq2ko3K4ND6uy23SWIMiGyZ6KLI5TIRfK2OIKAYSYqup4ya3HpdPtEzEnZuo
+         VDFloO/Ol/kOo8IQ7hjvdfQFVi7cxHuuDjwiSgPqHMSctEpoSNA9Vn16dgdewcg+0I
+         86YugInfEqONPevJZgh3wV3N3em8/En8girb8Wl9vRsvUtHRkCYSY0Izv7YeHC5b7A
+         tFqqRLuIeqTm3GaM8jemhAWSBAvqh+nX9hPxBrAGqXqAMjRNEmN4JXT9+hVgFsE3jt
+         aoUXPhyxfiE3A==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Christian Lamparter <chunkeey@googlemail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] carl9170: Replace zero-length array of trailing structs with flex-array
+References: <20221118211146.never.395-kees@kernel.org>
+Date:   Sat, 19 Nov 2022 08:39:11 +0200
+In-Reply-To: <20221118211146.never.395-kees@kernel.org> (Kees Cook's message
+        of "Fri, 18 Nov 2022 13:11:47 -0800")
+Message-ID: <877czrqwhc.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20221118223728.1721589-1-robh@kernel.org>
-In-Reply-To: <20221118223728.1721589-1-robh@kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Sat, 19 Nov 2022 07:37:43 +0100
-Message-ID: <CAMhs-H99X9aV7cdotCPar6g50KXL+qNS+jM16Tveq9nxfUY4Rg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Add missing start and/or end of line regex anchors
-To:     Rob Herring <robh@kernel.org>
-Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yangtao Li <tiny.windzz@gmail.com>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Daniel Mack <zonque@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:38 PM Rob Herring <robh@kernel.org> wrote:
->
-> json-schema patterns by default will match anywhere in a string, so
-> typically we want at least the start or end anchored. Fix the obvious
-> cases where the anchors were forgotten.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/pci/mediatek,mt7621-pcie.yaml         | 2 +-
+Kees Cook <keescook@chromium.org> writes:
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> Zero-length arrays are deprecated[1] and are being replaced with
+> flexible array members in support of the ongoing efforts to tighten the
+> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+>
+> Replace zero-length array with flexible-array member.
+>
+> This results in no differences in binary output.
+>
+> [1] https://github.com/KSPP/linux/issues/78
+>
+> Cc: Christian Lamparter <chunkeey@googlemail.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Thanks,
-    Sergio Paracuellos
+Nowadays we include "wifi:" in the subject, but I can add that. But
+please use this in the future for all wireless patches.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
