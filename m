@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4236309BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C922B6309CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbiKSCRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 21:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
+        id S235491AbiKSCTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 21:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235349AbiKSCQz (ORCPT
+        with ESMTP id S235147AbiKSCSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 21:16:55 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C906D2DE;
-        Fri, 18 Nov 2022 18:13:29 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dx_7fHO3hj1cgIAA--.23153S3;
-        Sat, 19 Nov 2022 10:13:27 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxPuLEO3hjLsEWAA--.59786S2;
-        Sat, 19 Nov 2022 10:13:24 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tools/memory-model: Use "grep -E" instead of "egrep"
-Date:   Sat, 19 Nov 2022 10:13:18 +0800
-Message-Id: <1668823998-28548-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8DxPuLEO3hjLsEWAA--.59786S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uFWUCFy3Kw4Dtw1DWw4kWFg_yoW8CFyUpF
-        Z8A345KwsIvFyUXF40kF4rZFnrKan3JFyxGrZIyan8XrnxGF4ayrySqF45AFnFqFWDXw4r
-        CFWqvFy7Ww45CaDanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
-        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
-        AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
-        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 18 Nov 2022 21:18:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E068C0523;
+        Fri, 18 Nov 2022 18:14:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2055CB82672;
+        Sat, 19 Nov 2022 02:13:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99FFAC433C1;
+        Sat, 19 Nov 2022 02:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668824035;
+        bh=EOEbAUBC9oY0+jjwQpj5atG/TX43ekcl7mzK0U0e+H0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P7V+5W+XY6zPzgbSIQOc6ZM10Xln8okOGKPDLm0Gy8hnbwfApe3OWjf5e4Wbo2Md4
+         tXEQBmF/PDnkQynxYmiU/gb6/UbT0FVau3E9rqMZxCJOK9CvfKZIJrtMVBLGJ6u+fw
+         moZ3DUonpjt2DPoPdKHpFHzWBm/npMpEnb35hqNpWaU6cZu2M6RGT6SnVQPUfN9h+1
+         nTenARpFL7lH6MiOiuSQ4UGSDCEFu0oY1EXdULbdtDzXGZIAknaf1XUN8HM2PVryoo
+         bVOPX9g03nAGe3JN3SsQ/crWI9eKjzHtluyodUwA8FcbM/FcBxB36UIdgI+F9WHZI4
+         W/j6CLDVFLgow==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     taozhang <taozhang@bestechnic.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, johannes@sipsolutions.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 01/27] wifi: mac80211: fix memory free error when registering wiphy fail
+Date:   Fri, 18 Nov 2022 21:13:26 -0500
+Message-Id: <20221119021352.1774592-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The latest version of grep claims the egrep is now obsolete so the build
-now contains warnings that look like:
-	egrep: warning: egrep is obsolescent; using grep -E
-fix this up by moving the related file to use "grep -E" instead.
+From: taozhang <taozhang@bestechnic.com>
 
-  sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/memory-model`
+[ Upstream commit 50b2e8711462409cd368c41067405aa446dfa2af ]
 
-Here are the steps to install the latest grep:
+ieee80211_register_hw free the allocated cipher suites when
+registering wiphy fail, and ieee80211_free_hw will re-free it.
 
-  wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
-  tar xf grep-3.8.tar.gz
-  cd grep-3.8 && ./configure && make
-  sudo make install
-  export PATH=/usr/local/bin:$PATH
+set wiphy_ciphers_allocated to false after freeing allocated
+cipher suites.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: taozhang <taozhang@bestechnic.com>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/memory-model/scripts/checkghlitmus.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/mac80211/main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/memory-model/scripts/checkghlitmus.sh b/tools/memory-model/scripts/checkghlitmus.sh
-index 6589fbb..f72816a 100755
---- a/tools/memory-model/scripts/checkghlitmus.sh
-+++ b/tools/memory-model/scripts/checkghlitmus.sh
-@@ -35,13 +35,13 @@ fi
- # Create a list of the C-language litmus tests previously run.
- ( cd $LKMM_DESTDIR; find litmus -name '*.litmus.out' -print ) |
- 	sed -e 's/\.out$//' |
--	xargs -r egrep -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' |
-+	xargs -r grep -E -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' |
- 	xargs -r grep -L "^P${LKMM_PROCS}"> $T/list-C-already
+diff --git a/net/mac80211/main.c b/net/mac80211/main.c
+index 5311c3cd3050..9617ff8e2714 100644
+--- a/net/mac80211/main.c
++++ b/net/mac80211/main.c
+@@ -1357,8 +1357,10 @@ int ieee80211_register_hw(struct ieee80211_hw *hw)
+ 	ieee80211_led_exit(local);
+ 	destroy_workqueue(local->workqueue);
+  fail_workqueue:
+-	if (local->wiphy_ciphers_allocated)
++	if (local->wiphy_ciphers_allocated) {
+ 		kfree(local->hw.wiphy->cipher_suites);
++		local->wiphy_ciphers_allocated = false;
++	}
+ 	kfree(local->int_scan_req);
+ 	return result;
+ }
+@@ -1426,8 +1428,10 @@ void ieee80211_free_hw(struct ieee80211_hw *hw)
+ 	mutex_destroy(&local->iflist_mtx);
+ 	mutex_destroy(&local->mtx);
  
- # Create a list of C-language litmus tests with "Result:" commands and
- # no more than the specified number of processes.
- find litmus -name '*.litmus' -exec grep -l -m 1 "^C " {} \; > $T/list-C
--xargs < $T/list-C -r egrep -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' > $T/list-C-result
-+xargs < $T/list-C -r grep -E -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' > $T/list-C-result
- xargs < $T/list-C-result -r grep -L "^P${LKMM_PROCS}" > $T/list-C-result-short
+-	if (local->wiphy_ciphers_allocated)
++	if (local->wiphy_ciphers_allocated) {
+ 		kfree(local->hw.wiphy->cipher_suites);
++		local->wiphy_ciphers_allocated = false;
++	}
  
- # Form list of tests without corresponding .litmus.out files
+ 	idr_for_each(&local->ack_status_frames,
+ 		     ieee80211_free_ack_frame, NULL);
 -- 
-2.1.0
+2.35.1
 
