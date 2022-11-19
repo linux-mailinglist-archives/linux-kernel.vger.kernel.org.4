@@ -2,64 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841526308C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87A46308CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233538AbiKSBve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 20:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S233794AbiKSBw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 20:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233478AbiKSBvK (ORCPT
+        with ESMTP id S233553AbiKSBwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 20:51:10 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BBABF588;
-        Fri, 18 Nov 2022 17:26:38 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id v3so6441149pgh.4;
-        Fri, 18 Nov 2022 17:26:38 -0800 (PST)
+        Fri, 18 Nov 2022 20:52:41 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C475AA44F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:34:54 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id b2-20020a170902d50200b001871a3c51afso4965051plg.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:34:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b13YnJSN+Dro2FOesT9TTNasbIlBrkbmQwEz7zWWNSg=;
-        b=UJDfM/MjB6gKPirL+rTWVIwRJvkomxu0q7M3eFzwCMhDXKZnNJFCh9UJyjyQzTGsew
-         SNY3hFPNUMEvMrhUQf73So7TC/bHvQVV1hH8q8Uytg+EWPsodWo4CVT8W3q/anAizaKa
-         s1V8tI3hy1vRN9JJQM9modnDZ5Nf7Oej49G9bhN1Fcdvci9Hl23N8tttJuBP29XN/FIG
-         QYvKQWNyusE40UjEVh4ZuMjdjVKoirQi4EXr91KwSKopUCrbt0DadnLf3xkEYivUrFkO
-         dtfjRH0UAzi+7clf0LMvXg5TTTVTRiPRek16bBgzze2GZ/BkJo+SiwVe/L3MtZw7poWw
-         aEaA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CjK5nD/uvnQk7qUQi9oIboYcWNk4lZcV0pG+jDjHbYw=;
+        b=sO/BixX+Fxa6IYPQU8TkdF+XFQ44C4ZySQ2iwNGf4nj3I51S8QIRUibkPiKNqU6bw1
+         j4PlnepiO1Ad8v/zZSnMeIBI68hxaFqyJGMZebX4cy3Jv14uXBvY/oT0aik++6OQL6oN
+         DbLgAWDsPzUK72v+4dKMHKRTS+Pj0wR02zmTyQNbwMmm5J9cue1G73b6Acb3Oy+6Rqq7
+         SFCX3tIjVDK5Bkgwj3xiOgKx932eMjN+X5AA0/Lbv6Dl4c1cRTcxk/wdcfGn/cUpN1uD
+         EJ0BOyIS/RA9GP99cIy1ORxMCIBlL+dVVmi0pQd37KDIkkhww3/YCplg0uN9lfWxW1qn
+         tETw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b13YnJSN+Dro2FOesT9TTNasbIlBrkbmQwEz7zWWNSg=;
-        b=AP15r5O6Xq/mP1IEpYzsO7CMNB7KL7+UF+c7qYUAJTW9o3Tuh2ImZcAeb/9NkKaNxQ
-         nqcfm3O0sIJkzWFPU4uxZ8z/4Op+iiVHUr0YOxPuTDd+rpULz+2ZIAjDcsO7uKQ1vLaK
-         X4MQS2RGfhKr2m3UCo5W3vnzDT2inxNE7tOewksPvvNJXsfmJKOLVYoC5vuxqfz1JIoh
-         TFTAe18/0/y1g02wLEBTsx4mvxeB+N+U3btRgSRbDpmB1wWCAwEESHJkiyl8NjW0SFfl
-         GVpVojuxufpAwdmhnr4iNLhDOQqB7FOp3pREoqjxCerTj5LlUNqhdZcblvxdybc50ir1
-         w8iQ==
-X-Gm-Message-State: ANoB5pnDHx7MUC+JTyoL+EFk+0mr15adEk7NTTZ+zWtm9E03pg1tU38j
-        tikBrwAkSq4IUp88a30+K5XcHfUS40U=
-X-Google-Smtp-Source: AA0mqf5CO2z6QTJdSBKwQNlvXhefGikS98CFDAqX9AzWHh7QA4reJFqNablT7JpxWsxczEvVSr/Wtg==
-X-Received: by 2002:a63:64b:0:b0:43c:2e57:9636 with SMTP id 72-20020a63064b000000b0043c2e579636mr8933800pgg.81.1668821197595;
-        Fri, 18 Nov 2022 17:26:37 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:6aac:8482:2371:80a3])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b001745662d568sm4288018plk.278.2022.11.18.17.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 17:26:36 -0800 (PST)
-Date:   Fri, 18 Nov 2022 17:26:33 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [git pull] Input updates for v6.1-rc5
-Message-ID: <Y3gwySzRvhCwdSgW@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        bh=CjK5nD/uvnQk7qUQi9oIboYcWNk4lZcV0pG+jDjHbYw=;
+        b=ckPZYC0qkM476GBKmZY8tyaVX9veRJ/HANTSG08dQ9gmbKSU+38CdTFCcTkItLUy4W
+         QL7VJ54Ztre7UeSuRariyrp3XCkME7EFMbwdIpqO42Qi5e9VV+dKcFHpdVJM3YjazEn6
+         Jr69CeIq9DIj8P9bIKytlhva5ZmI+9zlbE1OZFpTHaCLvrmNNJbuPyURlgOqft7GvPOn
+         jIM2hV0V2Ay0poDOzDxWJcaE1ahDUcahtNDHT6R6DI88kyzdqx8+Saycwpf2/I2mYZCc
+         L4ZfCQkHiI7+WW59U/Ka7ewpe08iRznpqnBoyrIBgm+hjSpE/W49JOiMwVjqAjVWtq3+
+         bN+Q==
+X-Gm-Message-State: ANoB5pl21/M6IAuzNvUD0GmGD7jU6vlenEsJHBMtNb/UHLSnH/dv0Doh
+        tyL7SY0b3V5feVzTZegkHZf5UmvsYAE=
+X-Google-Smtp-Source: AA0mqf40VxY3bniB1w/5m0fnfOQyqSksKugX3b7aeyvG44COkqlBU1UDui2GOB4g4JxSgT+nQap4mhTD/UM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a62:31c4:0:b0:56e:989d:7410 with SMTP id
+ x187-20020a6231c4000000b0056e989d7410mr10648162pfx.1.1668821693609; Fri, 18
+ Nov 2022 17:34:53 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Sat, 19 Nov 2022 01:34:41 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221119013450.2643007-1-seanjc@google.com>
+Subject: [PATCH 0/9] tools: Make {clear,set}_bit() atomic for reals
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,60 +84,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+For obvious reasons I'd like to route the this through Paolo's tree.
+In theory, taking just patch 5 through tip would work, but creating a
+topic branch seems like the way to go, though maybe I'm being overly
+paranoid.  The current tip/perf/core doesn't have any conflicts, nor does
+it have new set_bit() or clear_bit() users.
 
-Please pull from:
+ 
+Code sitting in kvm/queue for 6.2 adds functionality that relies on
+clear_bit() being an atomic operation.  Unfortunately, despite being
+implemented in atomic.h (among other strong hits that they should be
+atomic), clear_bit() and set_bit() aren't actually atomic (and of course
+I realized this _just_ after everything got queued up).
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.1-rc5
+Move current tools/ users of clear_bit() and set_bit() to the
+double-underscore versions (which tools/ already provides and documents
+as being non-atomic), and then implement clear_bit() and set_bit() as
+actual atomics to fix the KVM selftests bug.
 
-to receive updates for the input subsystem. You will get:
+Perf and KVM are the only affected users.  NVDIMM also has test code
+in tools/, but that builds against the kernel proper.  The KVM code is
+well tested and fully audited.  The perf code is lightly tested; if I
+understand the build system, it's probably not even fully compile tested.
 
-- a fix for 8042 to stop leaking platform device on unload
-- a fix for Goodix touchscreens on devices like Nanote UMPC-01 where we
-  need to reset controller to load config from firmware
-- a workaround for Acer Switch to avoid interrupt storm from home and
-  power buttons
-- a workaround for more ASUS ZenBook models to detect keyboard cnotroller
-- a fix for iforce driver to properly handle communication errors
-- touchpad on HP Laptop 15-da3001TU switched to RMI mode
+Patches 1 and 2 are completely unrelated and are fixes for patches
+sitting in kvm/queue.  Paolo, they can be squashed if you want to rewrite
+history.
 
-Changelog:
----------
+Patch 3 fixes a hilarious collision in a KVM ARM selftest that will arise
+when clear_bit() is converted to an atomic.
 
-Aman Dhoot (1):
-      Input: synaptics - switch touchpad on HP Laptop 15-da3001TU to RMI mode
+Patch 4 changes clear_bit() and set_bit() to take an "unsigned long"
+instead of an "int" so that patches 5-6 aren't accompanied by functional
+changes.  I.e. if something in perf is somehow relying on "bit" being a
+signed int, failures will bisect to patch 4 and not to the
+supposed-to-be-a-nop conversion to __clear_bit() and __set_bit().
 
-Chen Jun (1):
-      Input: i8042 - fix leaking of platform device on module removal
+Patch 5-9 switch perf+KVM and complete the conversion.
 
-Hans de Goede (3):
-      Input: goodix - try resetting the controller when no config is set
-      Input: soc_button_array - add use_low_level_irq module parameter
-      Input: soc_button_array - add Acer Switch V 10 to dmi_use_low_level_irq[]
+Applies on:
+  
+  git://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
 
-Sheng-Liang Pan (1):
-      dt-bindings: input: touchscreen: Add compatible for Goodix GT7986U chip
+Sean Christopherson (9):
+  KVM: selftests: Add rdmsr_from_l2() implementation in Hyper-V eVMCS
+    test
+  KVM: selftests: Remove unused "vcpu" param to fix build error
+  KVM: arm64: selftests: Enable single-step without a "full" ucall()
+  tools: Take @bit as an "unsigned long" in {clear,set}_bit() helpers
+  perf tools: Use dedicated non-atomic clear/set bit helpers
+  KVM: selftests: Use non-atomic clear/set bit helpers in KVM tests
+  tools: Drop conflicting non-atomic test_and_{clear,set}_bit() helpers
+  tools: Drop "atomic_" prefix from atomic test_and_set_bit()
+  tools: KVM: selftests: Convert clear/set_bit() to actual atomics
 
-Takashi Iwai (1):
-      Input: i8042 - apply probe defer to more ASUS ZenBook models
+ tools/arch/x86/include/asm/atomic.h           |  6 +++-
+ tools/include/asm-generic/atomic-gcc.h        | 13 ++++++-
+ tools/include/asm-generic/bitops/atomic.h     | 15 ++++----
+ tools/include/linux/bitmap.h                  | 34 -------------------
+ tools/perf/bench/find-bit-bench.c             |  2 +-
+ tools/perf/builtin-c2c.c                      |  6 ++--
+ tools/perf/builtin-kwork.c                    |  6 ++--
+ tools/perf/builtin-record.c                   |  6 ++--
+ tools/perf/builtin-sched.c                    |  2 +-
+ tools/perf/tests/bitmap.c                     |  2 +-
+ tools/perf/tests/mem2node.c                   |  2 +-
+ tools/perf/util/affinity.c                    |  4 +--
+ tools/perf/util/header.c                      |  8 ++---
+ tools/perf/util/mmap.c                        |  6 ++--
+ tools/perf/util/pmu.c                         |  2 +-
+ .../util/scripting-engines/trace-event-perl.c |  2 +-
+ .../scripting-engines/trace-event-python.c    |  2 +-
+ tools/perf/util/session.c                     |  2 +-
+ tools/perf/util/svghelper.c                   |  2 +-
+ .../selftests/kvm/aarch64/arch_timer.c        |  2 +-
+ .../selftests/kvm/aarch64/debug-exceptions.c  | 21 ++++++------
+ tools/testing/selftests/kvm/dirty_log_test.c  | 34 +++++++++----------
+ .../selftests/kvm/include/ucall_common.h      |  8 +++++
+ .../testing/selftests/kvm/lib/ucall_common.c  |  2 +-
+ .../selftests/kvm/x86_64/hyperv_evmcs.c       | 13 +++++--
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  4 +--
+ .../selftests/kvm/x86_64/hyperv_tlb_flush.c   |  2 +-
+ 27 files changed, 102 insertions(+), 106 deletions(-)
 
-Tetsuo Handa (1):
-      Input: iforce - invert valid length check when fetching device IDs
 
-Diffstat:
---------
-
- .../devicetree/bindings/input/goodix,gt7375p.yaml          |  5 ++++-
- drivers/input/joystick/iforce/iforce-main.c                |  8 ++++----
- drivers/input/misc/soc_button_array.c                      | 14 +++++++++++++-
- drivers/input/mouse/synaptics.c                            |  1 +
- drivers/input/serio/i8042-acpipnpio.h                      |  8 ++++----
- drivers/input/serio/i8042.c                                |  4 ----
- drivers/input/touchscreen/goodix.c                         | 11 +++++++++++
- 7 files changed, 37 insertions(+), 14 deletions(-)
-
-Thanks.
-
-
+base-commit: 3321eef4acb51c303f0598d8a8493ca58528a054
 -- 
-Dmitry
+2.38.1.584.g0f3c55d4c2-goog
+
