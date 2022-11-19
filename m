@@ -2,86 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5631630F92
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 17:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D843630F94
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 17:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbiKSQpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 11:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+        id S234467AbiKSQp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 11:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbiKSQpE (ORCPT
+        with ESMTP id S234463AbiKSQpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 11:45:04 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50AEB3C
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 08:44:58 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id h24so4989761qta.9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 08:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kVxXHX6sEP5LL4WpQCH617uW+GSWgkHDMGXayppXj7A=;
-        b=I6Uo+hNYe6FxwUutv2OvMJmmfljPzhufle+JcxlyzcR+jRz6t8ZbziihAkj9aKcGEI
-         j5C/YIzMP/E7sPB9LN1kf0P1WBGQaFT5W1zDR1S5CN4/OXnipT0xcmgz2d9ZfHzyvtNE
-         jT+RjdcPOpm4I0H/rmdFFtcS1fMImEv1DMh+Q6pLNWiNRU90OuIL/wBoxU39ULQvisfw
-         Xgq9+sNXazseBsbcFQMdsfYyPTZe9ZSfwXdYQoE7APW3TCMJYFJdvAeNlLUaenAtPQJk
-         42s0NGEsOnsTjF2BpBuvWJd8vMtcCOZbtoq6jD3VGZtcnmyUNDhEDNC2okhzcKFShjbS
-         AFWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kVxXHX6sEP5LL4WpQCH617uW+GSWgkHDMGXayppXj7A=;
-        b=eT02CklG1OfJbR4dzoPD0YctH5/nV7+vX3XBKxsP+3AUi2TI6FpgV1vYGF6tPP5gh/
-         8IH3n39Ro4IMTb09jTB86ObSgtbP3J2EFQPm0Ml97kwc80czHVCF/Sc0fGiSCvn73ZaU
-         fLTkFImkXgCgLe0VTYvnnu14L7DTOWrgPAW4+kvYeVw6oQyLrtlV1FGZVmjcMXpSHZVV
-         4cuYW4MazsXlm/wVMaqserK9niDvlvGffTMCuNHMmdMX3udM2ITAUEa8oQUK1JhRRhoX
-         8+9uDO3SG+34dXMjkbirlbrih8ObD2ammFx5Xa7fnUjplTqcmNDGKpxPxBCZE7HZV2IE
-         vZNA==
-X-Gm-Message-State: ANoB5pnWR235oK6ReEWgurkbCwSKh+WgOsxnTIurxXulZb3UASY8h2c5
-        YAMMCytpTt7zxEvQ1nuFgvMXzw==
-X-Google-Smtp-Source: AA0mqf7ST/JZ64atnlAaGs5/EFIKEXRjD9YUT1i0q67CmAZtX7u/tZbIOconBx42BJKZGkmvMk6Fqg==
-X-Received: by 2002:ac8:67d0:0:b0:399:acab:ed6d with SMTP id r16-20020ac867d0000000b00399acabed6dmr11491133qtp.101.1668876297752;
-        Sat, 19 Nov 2022 08:44:57 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:bc4])
-        by smtp.gmail.com with ESMTPSA id bs10-20020ac86f0a000000b003992448029esm3974015qtb.19.2022.11.19.08.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Nov 2022 08:44:57 -0800 (PST)
-Date:   Sat, 19 Nov 2022 11:45:21 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
- zsmalloc
-Message-ID: <Y3kIIRKt8ORaYFRf@cmpxchg.org>
-References: <20221119001536.2086599-1-nphamcs@gmail.com>
- <20221119001536.2086599-7-nphamcs@gmail.com>
+        Sat, 19 Nov 2022 11:45:52 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFEC8F;
+        Sat, 19 Nov 2022 08:45:51 -0800 (PST)
+Date:   Sat, 19 Nov 2022 16:45:48 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668876350;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=plrm+xmykYAoNg4a8w8hWmbbNHyol+PQH2YoAgui7nk=;
+        b=uWZ6azFF/+JU7kz1vdz4gQXkCeOKj/tJulY2q2Ee8WArXfLu5LwGH3kdfm1lMtbl/nE6wJ
+        oxLpoIbmukCyT0HaYcRTB31Sr1mkyOZsGjzy0nVGm58dLTAlKtSJkWRLUjWugg2mhpJHUF
+        gN8vhg3SEUkZcW4q/aq5t7xr3kcxNwV2dMbHtwHGI7PfqlL84q0FAjx1nYCUikk2n0I0Td
+        SB9OOjDizonRjBxXQUfJOwQubGuPfaS6An7YdjEiLbywyFe3q5aAvqpefYC0iL2S5TLrsL
+        VH/H/J8hUXSysAon1rf1HP6dWyh7RjA0hXQ6PN0VAx5oKwj5VA/XFz/xkvtE5g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668876350;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=plrm+xmykYAoNg4a8w8hWmbbNHyol+PQH2YoAgui7nk=;
+        b=dI3IO8rXU+lpkblq0oTd1IelvE/rM5qTRCCQGnORjqXSU3k2uQkIWx/qtLInHsf3WQikN6
+        CsfSHpP9hNKofTCw==
+From:   "tip-bot2 for Jiapeng Chong" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/kaslr: Fix process_mem_region()'s return value
+Cc:     Abaci Robot <abaci@linux.alibaba.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220421202556.129799-1-jiapeng.chong@linux.alibaba.com>
+References: <20220421202556.129799-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119001536.2086599-7-nphamcs@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <166887634865.4906.2868849268609528843.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 04:15:36PM -0800, Nhat Pham wrote:
-> This commit adds the writeback mechanism for zsmalloc, analogous to the
-> zbud allocator. Zsmalloc will attempt to determine the coldest zspage
-> (i.e least recently used) in the pool, and attempt to write back all the
-> stored compressed objects via the pool's evict handler.
-> 
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Commit-ID:     ee92fa03918d114d3ac9c36a8bf2c032ede75a3b
+Gitweb:        https://git.kernel.org/tip/ee92fa03918d114d3ac9c36a8bf2c032ede75a3b
+Author:        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+AuthorDate:    Fri, 22 Apr 2022 04:25:56 +08:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Sat, 19 Nov 2022 17:35:10 +01:00
 
-Excellent!
+x86/kaslr: Fix process_mem_region()'s return value
+
+Fix the following coccicheck warning:
+
+  ./arch/x86/boot/compressed/kaslr.c:670:8-9: WARNING: return of 0/1 in
+  function 'process_mem_region' with return type bool.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220421202556.129799-1-jiapeng.chong@linux.alibaba.com
+---
+ arch/x86/boot/compressed/kaslr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+index e476bcb..454757f 100644
+--- a/arch/x86/boot/compressed/kaslr.c
++++ b/arch/x86/boot/compressed/kaslr.c
+@@ -668,7 +668,7 @@ static bool process_mem_region(struct mem_vector *region,
+ 		}
+ 	}
+ #endif
+-	return 0;
++	return false;
+ }
+ 
+ #ifdef CONFIG_EFI
