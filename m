@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DF8630E58
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 12:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51E7630E5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 12:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiKSLVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 06:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S231598AbiKSLZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 06:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbiKSLUz (ORCPT
+        with ESMTP id S231959AbiKSLZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 06:20:55 -0500
-Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BB72B189
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 03:20:54 -0800 (PST)
+        Sat, 19 Nov 2022 06:25:16 -0500
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BEE7FC32
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 03:25:12 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id wLtyoAfds1SdMwLtyoEjpE; Sat, 19 Nov 2022 12:20:52 +0100
+        id wLy8o8HMFb9QWwLy8oM3lt; Sat, 19 Nov 2022 12:25:10 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 19 Nov 2022 12:20:52 +0100
+X-ME-Date: Sat, 19 Nov 2022 12:25:10 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Nilesh Javali <njavali@marvell.com>,
@@ -30,9 +30,9 @@ To:     Nilesh Javali <njavali@marvell.com>,
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: qla2xxx: No need to clear memory after a dma_alloc_coherent() call
-Date:   Sat, 19 Nov 2022 12:20:49 +0100
-Message-Id: <57d6a4c0c44b9a33087d3f17a9cc245d1943d881.1668856835.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] scsi: qla2xxx: Remove a useless variable in qla24xx_async_gnnft_done()
+Date:   Sat, 19 Nov 2022 12:25:07 +0100
+Message-Id: <0a98ea98784299393042e9e7b2cd03ab17b13f94.1668857101.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -45,72 +45,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_alloc_coherent() already clear the allocated memory, there is no need
-to explicitly call memset().
+'dup' is useless. It is only 1 if 'dup_cnt' is 1 or more.
+It is as easy to test 'dup_cnt' directly and remove 'dup'.
+
+This slightly simplify the code.
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-Compile tested only
----
- drivers/scsi/qla2xxx/qla_gs.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/scsi/qla2xxx/qla_gs.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index 64ab070b8716..0afd6cee7113 100644
+index 0afd6cee7113..8caa6c6ed479 100644
 --- a/drivers/scsi/qla2xxx/qla_gs.c
 +++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -622,8 +622,7 @@ static int qla_async_rftid(scsi_qla_host_t *vha, port_id_t *d_id)
- 		    __func__);
- 		goto done_free_sp;
- 	}
--	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.rsp;
--	memset(ct_sns, 0, sizeof(*ct_sns));
-+
- 	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.req;
+@@ -3467,7 +3467,7 @@ void qla24xx_async_gnnft_done(scsi_qla_host_t *vha, srb_t *sp)
+ 	struct fab_scan_rp *rp, *trp;
+ 	unsigned long flags;
+ 	u8 recheck = 0;
+-	u16 dup = 0, dup_cnt = 0;
++	u16 dup_cnt = 0;
  
- 	/* Prepare CT request */
-@@ -718,8 +717,7 @@ static int qla_async_rffid(scsi_qla_host_t *vha, port_id_t *d_id,
- 		    __func__);
- 		goto done_free_sp;
- 	}
--	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.rsp;
--	memset(ct_sns, 0, sizeof(*ct_sns));
-+
- 	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.req;
- 
- 	/* Prepare CT request */
-@@ -810,8 +808,7 @@ static int qla_async_rnnid(scsi_qla_host_t *vha, port_id_t *d_id,
- 		    __func__);
- 		goto done_free_sp;
- 	}
--	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.rsp;
--	memset(ct_sns, 0, sizeof(*ct_sns));
-+
- 	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.req;
- 
- 	/* Prepare CT request */
-@@ -917,8 +914,7 @@ static int qla_async_rsnn_nn(scsi_qla_host_t *vha)
- 		    __func__);
- 		goto done_free_sp;
- 	}
--	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.rsp;
--	memset(ct_sns, 0, sizeof(*ct_sns));
-+
- 	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.req;
- 
- 	/* Prepare CT request */
-@@ -3228,10 +3224,8 @@ int qla24xx_async_gpnid(scsi_qla_host_t *vha, port_id_t *id)
- 		goto done_free_sp;
+ 	ql_dbg(ql_dbg_disc + ql_dbg_verbose, vha, 0xffff,
+ 	    "%s enter\n", __func__);
+@@ -3526,7 +3526,6 @@ void qla24xx_async_gnnft_done(scsi_qla_host_t *vha, srb_t *sp)
+ 		for (k = i + 1; k < vha->hw->max_fibre_devices; k++) {
+ 			trp = &vha->scan.l[k];
+ 			if (rp->id.b24 == trp->id.b24) {
+-				dup = 1;
+ 				dup_cnt++;
+ 				ql_dbg(ql_dbg_disc + ql_dbg_verbose,
+ 				    vha, 0xffff,
+@@ -3588,7 +3587,7 @@ void qla24xx_async_gnnft_done(scsi_qla_host_t *vha, srb_t *sp)
+ 		}
  	}
  
--	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.rsp;
--	memset(ct_sns, 0, sizeof(*ct_sns));
--
- 	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.req;
-+
- 	/* CT_IU preamble  */
- 	ct_req = qla2x00_prep_ct_req(ct_sns, GPN_ID_CMD, GPN_ID_RSP_SIZE);
- 
+-	if (dup) {
++	if (dup_cnt) {
+ 		ql_log(ql_log_warn, vha, 0xffff,
+ 		    "Detected %d duplicate NPORT ID(s) from switch data base\n",
+ 		    dup_cnt);
 -- 
 2.34.1
 
