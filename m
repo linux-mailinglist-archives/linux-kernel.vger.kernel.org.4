@@ -2,42 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7D8630E77
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 12:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD2D630E81
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 12:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiKSLc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 06:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S231683AbiKSLnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 06:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbiKSLc1 (ORCPT
+        with ESMTP id S230073AbiKSLnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 06:32:27 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F75C976D0;
-        Sat, 19 Nov 2022 03:32:25 -0800 (PST)
-Received: (Authenticated sender: ash@heyquark.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B1936FF803;
-        Sat, 19 Nov 2022 11:32:16 +0000 (UTC)
-From:   Ash Logan <ash@heyquark.com>
-To:     krzysztof.kozlowski+dt@linaro.org, paulus@samba.org,
-        mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
-        robh+dt@kernel.org, benh@kernel.crashing.org,
-        segher@kernel.crashing.org, pali@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        j.ne@posteo.net, linkmauve@linkmauve.fr,
-        rw-r-r-0644@protonmail.com, devicetree@vger.kernel.org,
-        joel@jms.id.au
-Subject: [PATCH v4 11/11] powerpc: wiiu: add minimal default config
-Date:   Sat, 19 Nov 2022 22:30:41 +1100
-Message-Id: <20221119113041.284419-12-ash@heyquark.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221119113041.284419-1-ash@heyquark.com>
-References: <20220628133144.142185-1-ash@heyquark.com>
- <20221119113041.284419-1-ash@heyquark.com>
+        Sat, 19 Nov 2022 06:43:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6926A1BEBD;
+        Sat, 19 Nov 2022 03:43:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7FC0B80A08;
+        Sat, 19 Nov 2022 11:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E45EC433D6;
+        Sat, 19 Nov 2022 11:43:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="k7SCL6Gy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668858214;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qzzqXgp+p3EZG/kh8YK4KXXSpuAY4zVujZgM6owSO+I=;
+        b=k7SCL6GyueUEerP1U7nBsJrRPk19foGVb4qZgKW3xnDVvtjssBuKWHlQPerkCDuxFRwCye
+        qHNthRO35gfBi3cFbsQkL0EdjCnyEAsOx/cXsqm03YPVk5UVQ1wey7J9mAFRFL1UBPj74W
+        /i1L9i+lsfzpcd7BMAr+oLRR0qivaMk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 811bb0d6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 19 Nov 2022 11:43:34 +0000 (UTC)
+Date:   Sat, 19 Nov 2022 12:43:31 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>
+Subject: Re: [PATCH v4 2/3] random: introduce generic vDSO getrandom()
+ implementation
+Message-ID: <Y3jBY4p2hEKDaUm+@zx2c4.com>
+References: <20221118172839.2653829-1-Jason@zx2c4.com>
+ <20221118172839.2653829-3-Jason@zx2c4.com>
+ <ecfd265b-49e7-79b2-1818-e08a2c652db0@csgroup.eu>
+ <Y3gbVorxZyb4SBJa@zx2c4.com>
+ <Y3gdkxq4FjXcmAwA@zx2c4.com>
+ <2571f72a-3420-977f-7b08-8f6216bba6a8@csgroup.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <2571f72a-3420-977f-7b08-8f6216bba6a8@csgroup.eu>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,28 +71,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds a bare-minimum config to get a kernel compiled. Will need some more
-interesting options once a storage device to boot from is added.
+On Sat, Nov 19, 2022 at 07:51:21AM +0000, Christophe Leroy wrote:
+> 
+> 
+> Le 19/11/2022 à 01:04, Jason A. Donenfeld a écrit :
+> > On Sat, Nov 19, 2022 at 12:55:02AM +0100, Jason A. Donenfeld wrote:
+> >> Sorry if I'm a bit slow here to grok what's up.
+> 
+> Maybe I should also have mentionned commit ce7d8056e38b ("powerpc/vdso: 
+> Prepare for switching VDSO to generic C implementation.") for you to 
+> have a complete picture.
+> 
+> > 
+> > Okay, I think I see it now. That's a complicated patch for a simple idea
+> > because gettime is more complicated than getrandom. I suspect what you
+> > want is something like the below, correct? Seems easy enough.
+> 
+> Yes it is exactly that, powerpc will then call __cvdso_getrandom_data() 
+> directly and pass rng_info pointer.
 
-Signed-off-by: Ash Logan <ash@heyquark.com>
----
- arch/powerpc/configs/wiiu_defconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
- create mode 100644 arch/powerpc/configs/wiiu_defconfig
+Okay, I'll do that and send out a v+1.
 
-diff --git a/arch/powerpc/configs/wiiu_defconfig b/arch/powerpc/configs/wiiu_defconfig
-new file mode 100644
-index 000000000000..a761ebcdd9f2
---- /dev/null
-+++ b/arch/powerpc/configs/wiiu_defconfig
-@@ -0,0 +1,7 @@
-+# CONFIG_PPC_CHRP is not set
-+# CONFIG_PPC_PMAC is not set
-+CONFIG_WIIU=y
-+# CONFIG_PPC_OF_BOOT_TRAMPOLINE is not set
-+CONFIG_HIGHMEM=y
-+CONFIG_STRICT_KERNEL_RWX=y
-+CONFIG_PPC_EARLY_DEBUG=y
--- 
-2.38.1
-
+Jason
