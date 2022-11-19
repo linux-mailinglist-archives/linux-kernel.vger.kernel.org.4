@@ -2,95 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E534D630BAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE33630BB9
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiKSEID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 23:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
+        id S232348AbiKSEKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 23:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKSEH7 (ORCPT
+        with ESMTP id S231308AbiKSEJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 23:07:59 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D3F8FB10;
-        Fri, 18 Nov 2022 20:07:58 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id z24so9075373ljn.4;
-        Fri, 18 Nov 2022 20:07:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dtRW27/VFkKfRExNy2R07fG81X6WC5yaz70q9JRBAiU=;
-        b=TtXIVPnDZ2ShtyoirzVFHNKPh8oO5RxHmR1Jln/WpZ2R0mz/omA64Nc4xWIcdeB5KS
-         EG/6ZdqTJ6+dzZnj4B1/ba0XEB+3LnlGUarb0AProNgXWuIkINRtF1oKz2sd/XUTZ2wf
-         WSXRATcVyhcRzZ0Zy7r7KwlOfrdcCG3GHRylR1qxE9M3m6nq+s0ypORbYGRxhGHP8ktz
-         kcqToSSYSeBQ3fgd+yysQis00CStwh08l95BpK7x3sbSIdAixGyMcdDiDcfNCNJG4qLF
-         jwXBF+9GTdUV6bTVsYdfcloCX9DEHY+i3LkH2jF6IOcbDAccSmg3q9WQXn7wdKR0NbYM
-         GTYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dtRW27/VFkKfRExNy2R07fG81X6WC5yaz70q9JRBAiU=;
-        b=29Vo+NKzMhMEu3uy8flqd3KicER8SonayyJpoV9XG8U+DW7LXqbeVaw6rwnbgPgTXQ
-         vzTRsHSIpldch7V4oyig+RCrH8heFax3bxiXRaIG9y+H305bhqjkLXDwMhwL+wWsRRG0
-         h5HzrAKsSBR0c8m99Rmx4hTKZY+8i82rULfTcuOGYjJbH4MSis8rr71FuDzS31n+ig0X
-         X7pds3HPIPDwJQTcNmWsZRz+AaOjuoDsh/PJiPscv0gQjSrgcDyEwXeJ9JZXTuzJqw4o
-         VVXg+v6oPb3EzPbk+IMX7rp3CRCmx4TcWLM6yPHI/ZSE8Ljd7GpNgJcIE4Pxq82/7ZDH
-         /2iQ==
-X-Gm-Message-State: ANoB5pn97QtlLu5fYuD6sH+oMr1Zv46mr0Njo+4avoXS1TcORILguuXD
-        WsMT+Hk2f1AMLofgjTfWupiDbXlkXuA9dAYHCs0=
-X-Google-Smtp-Source: AA0mqf6TtkhSfRQWsSRKkFVrN1K2vpE+3E7DbjrBZGD1HMn4Be7sA4L0VCgEG63L5y4r/HHwk2Mwiv1G7ZioFSoo96Q=
-X-Received: by 2002:a05:651c:198f:b0:277:6a5:109b with SMTP id
- bx15-20020a05651c198f00b0027706a5109bmr3472454ljb.42.1668830876279; Fri, 18
- Nov 2022 20:07:56 -0800 (PST)
+        Fri, 18 Nov 2022 23:09:41 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1A77343B;
+        Fri, 18 Nov 2022 20:09:40 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AJ49ARp042790;
+        Fri, 18 Nov 2022 22:09:10 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668830950;
+        bh=Z8xRJ/qJAgGwaqcbsQEUnh9fo1oZl8ZZMTwIII+I9yw=;
+        h=From:To:CC:Subject:Date;
+        b=jCqS0xXATHFN429IALwBVutJpVG6pvZrZhrkn1Xwrw/sutNQIEcuJ4JwMfaN+Cegf
+         excvjaD2gThZ5QmZ66aSaOKMqxMjyH19rbVnkLrTt9HhyrnatP+ocDTG8pnLddvqgD
+         pJ9M2h8V/gcWLYjSaINV3fmuyuTnDyerJeUeRBjw=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AJ49ApP002047
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Nov 2022 22:09:10 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
+ Nov 2022 22:09:10 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 18 Nov 2022 22:09:10 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AJ497Po118516;
+        Fri, 18 Nov 2022 22:09:09 -0600
+From:   Matt Ranostay <mranostay@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-vadapalli@ti.com>, <r-gunasekaran@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6 0/8] J721S2: Add support for additional IPs
+Date:   Fri, 18 Nov 2022 20:08:58 -0800
+Message-ID: <20221119040906.9495-1-mranostay@ti.com>
+X-Mailer: git-send-email 2.38.GIT
 MIME-Version: 1.0
-From:   Jorropo <jorropo.pgm@gmail.com>
-Date:   Sat, 19 Nov 2022 05:07:45 +0100
-Message-ID: <CAHWihb_EYWKXOqdN0iDBDygk+EGbhaxWHTKVRhtpm_TihbCjtw@mail.gmail.com>
-Subject: [REGRESSION] XArray commit prevents booting with 6.0-rc1 or later
-To:     willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nborisov@suse.com,
-        regressions@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#regzbot introduced v5.19-rc6..1dd685c414a7b9fdb3d23aca3aedae84f0b998ae
+The following series of patches add support for the following
+on J721S2 common processor board,
 
-Hi, I recently tried to upgrade to linux v6.0.x but when trying to
-boot it fails with "error: out of memory" when or after loading
-initramfs (which then kpanics because the vfs root is missing).
-The latest releases I tested are v6.0.9 and v6.1-rc5 and it's broken there too.
+- USB
+- SerDes
+- OSPI
+- PCIe
 
-I bisected the error to this patch:
-1dd685c414a7b9fdb3d23aca3aedae84f0b998ae "XArray: Add calls to
-might_alloc()" is the first bad commit.
-I've confirmed this is not a side effect of a poor bitsect because
-1dd685c414a7b9fdb3d23aca3aedae84f0b998ae~1 (v5.19-rc6) works.
-I've tried reverting the failing commit on top of v6.0.9 and it didn't fixed it.
+Changes from v1:
+* Resolve issues with dt schema reporting
+* Minor changes related to consistency on node naming and value
 
-My system is:
-CPU: Ryzen 3600
-Motherboard: B550 AORUS ELITE V2
-Ram: 48GB (16+32) of unmatched DDR4
-GPU: AMD rx580
-Various ssds, hdds and network cards plugged with various buses.
+Changes from v2:
+* Added PCIe RC + EP enablement patchsets
+* Added device-id for j722s2 PCIe host in dt documentation
+* Reworked SERDES + WIZ enablement patchset to use properies for clocks
+  defines versus entire devicetree nodes. Results in cleaner code that
+  doesn't break dt-schema or the driver functionality.
 
-You can find a folder with my .config, bisect logs and screenshots of
-the error messages there:
-https://jorropo.net/ipfs/QmaWH84UPEen4E9n69KZiLjPDaTi2aJvizv3JYiL7Gfmnr/
-https://ipfs.io/ipfs/QmaWH84UPEen4E9n69KZiLjPDaTi2aJvizv3JYiL7Gfmnr/
+Changes from v3:
+* Rebased changes on top of '[PATCH 00/12] TI J7x Disable Incomplete DT Nodes'
+* Removed "dt-bindings: PCI: Add host mode device-id for j721s2 platform" patch and
+  send it own series to avoid a dependency that would hold up other patches in this
+  series
 
-I'll be happy to assist you if you need help reproducing this issue
-and or testing fixes.
+Changes from v4:
+* Add my Signed-off-by lines to all patchsets
 
-Thx, Jorropo
+Changes from v5:
+* Removed Cc from commit messages to reduce clutter
+* Squashed changes for device tree nodes that get modified latter in the patchset
+  series
+
+Aswath Govindraju (7):
+  arm64: dts: ti: k3-j721s2-main: Add support for USB
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support of OSPI
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add USB support
+  arm64: dts: ti: k3-j721s2: Add support for OSPI Flashes
+  arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
+
+Matt Ranostay (1):
+  arm64: dts: ti: k3-j721s2-main: Add SERDES and WIZ device tree node
+
+ .../dts/ti/k3-j721s2-common-proc-board.dts    |  92 ++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 157 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  40 +++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  42 +++++
+ 4 files changed, 331 insertions(+)
+
+-- 
+2.38.GIT
+
