@@ -2,176 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBE5630B34
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 04:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DFE630B39
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 04:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiKSDak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 22:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S229824AbiKSDh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 22:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiKSDah (ORCPT
+        with ESMTP id S229451AbiKSDhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 22:30:37 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23690A6589;
-        Fri, 18 Nov 2022 19:30:35 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R931e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VV7ZO4r_1668828630;
-Received: from 192.168.0.105(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VV7ZO4r_1668828630)
-          by smtp.aliyun-inc.com;
-          Sat, 19 Nov 2022 11:30:32 +0800
-Message-ID: <ae446c02-d5d7-4631-72b7-243b6ef52708@linux.alibaba.com>
-Date:   Sat, 19 Nov 2022 11:30:29 +0800
+        Fri, 18 Nov 2022 22:37:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E69BBDF6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 19:37:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD63262835
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 03:37:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22546C4314B
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 03:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668829073;
+        bh=jdtEd1yJuImh5kI6vRvy1ZCkO2ErZlB1ed7aIMIbf3c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pSW/aJ1EU21gpHZec0YPncXqSCPnAX4jgNloFfLtj9tOavGrHuYtOUMZDzrEHrl92
+         1c+3V556KQ8GguTIzpWmc6VpHOyk2BhxjuCl/dg+NIYfywczmwc6rHQ0Bs0WzgN8Ub
+         4ckHd793ZnBu/EUA1+jyXqQCao33O8q6/ylkT7iouCJ4GX09cZx7C0+BH4GmswJpJu
+         oEV1Ra08t1E2wMI353Fwj8PXZYy4EUZT5qJ9tvHWQqtwu67FdWKkidtnegRRQT34zi
+         Dy+DkFh2WgnWKW10QeVwyxLi0dxPCRM5D0+ZtoOW6nMj6L1lnDxA+q+gPSEORkLZcQ
+         Yd4y0LNhb6Z5Q==
+Received: by mail-ej1-f43.google.com with SMTP id vv4so8085618ejc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 19:37:53 -0800 (PST)
+X-Gm-Message-State: ANoB5plVxCHGoXA1m2Lms8z1wP7/Dpy+WnJ7zhLmtceUp0lj695VyJBC
+        BXJREYzXYkrCrAbKgJB9atPp+TiHBnisKqCEsW0=
+X-Google-Smtp-Source: AA0mqf6/nFnovDVdY+ezojw/XN96ryAKiLKFYZme8d3Jy1z86DjgSZwwmF8tpmL1GF38JbkynkwXxPj57zeHvWTxbmI=
+X-Received: by 2002:a17:907:9856:b0:780:8144:a41f with SMTP id
+ jj22-20020a170907985600b007808144a41fmr8499669ejc.189.1668829071133; Fri, 18
+ Nov 2022 19:37:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH RFC 0/6] Add metrics for neoverse-n2
-To:     James Clark <james.clark@arm.com>,
-        nick Forrington <Nick.Forrington@arm.com>,
-        Jumana MP <Jumana.MP@arm.com>,
-        John Garry <john.garry@huawei.com>
-Cc:     Will Deacon <will@kernel.org>, Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
- <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221111075902.798571-1-guoren@kernel.org> <Y3fxsWPLPlKGfMBj@curiosity>
+In-Reply-To: <Y3fxsWPLPlKGfMBj@curiosity>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 19 Nov 2022 11:37:39 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRQgqRwjOYKB9Z6OdYoogsHWWVTw5anwNqoQjhmK_A41g@mail.gmail.com>
+Message-ID: <CAJF2gTRQgqRwjOYKB9Z6OdYoogsHWWVTw5anwNqoQjhmK_A41g@mail.gmail.com>
+Subject: Re: [PATCH V3] riscv: asid: Fixup stale TLB entry cause application crash
+To:     Sergey Matyukevich <geomatsi@gmail.com>
+Cc:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de,
+        philipp.tomsich@vrull.eu, alex@ghiti.fr, hch@lst.de,
+        ajones@ventanamicro.com, gary@garyguo.net, jszhang@kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Nov 19, 2022 at 4:57 AM Sergey Matyukevich <geomatsi@gmail.com> wrote:
+>
+> Hi Guo Ren,
+>
+>
+> > After use_asid_allocator is enabled, the userspace application will
+> > crash by stale TLB entries. Because only using cpumask_clear_cpu without
+> > local_flush_tlb_all couldn't guarantee CPU's TLB entries were fresh.
+> > Then set_mm_asid would cause the user space application to get a stale
+> > value by stale TLB entry, but set_mm_noasid is okay.
+>
+> ... [snip]
+>
+> > +     /*
+> > +      * The mm_cpumask indicates which harts' TLBs contain the virtual
+> > +      * address mapping of the mm. Compared to noasid, using asid
+> > +      * can't guarantee that stale TLB entries are invalidated because
+> > +      * the asid mechanism wouldn't flush TLB for every switch_mm for
+> > +      * performance. So when using asid, keep all CPUs footmarks in
+> > +      * cpumask() until mm reset.
+> > +      */
+> > +     cpumask_set_cpu(cpu, mm_cpumask(next));
+> > +     if (static_branch_unlikely(&use_asid_allocator)) {
+> > +             set_mm_asid(next, cpu);
+> > +     } else {
+> > +             cpumask_clear_cpu(cpu, mm_cpumask(prev));
+> > +             set_mm_noasid(next);
+> > +     }
+> >  }
+>
+> I observe similar user-space crashes on my SMP systems with enabled ASID.
+> My attempt to fix the issue was a bit different, see the following patch:
+>
+> https://lore.kernel.org/linux-riscv/20220829205219.283543-1-geomatsi@gmail.com/
+>
+> In brief, the idea was borrowed from flush_icache_mm handling:
+> - keep track of CPUs not running the task
+> - perform per-ASID TLB flush on such CPUs only if the task is switched there
+>
+> Your patch also works fine in my tests fixing those crashes. I have a
+> question though, regarding removed cpumask_clear_cpu. How CPUs no more
+> running the task are removed from its mm_cpumask ? If they are not
+> removed, then flush_tlb_mm/flush_tlb_page will broadcast unnecessary
+> TLB flushes to those CPUs when ASID is enabled.
+A task would be migrated to any CPU by the scheduler. So keeping TLB
+contents synced with cpumask_set/clear needs additional tlb_flush just
+like noasid, and your patch still follows that style. The worth of
+ASID is avoiding tlb_flush during the context switch. Yes, my patch
+would increase some tlb_flush IPI costs. But when mapping is stable,
+no tlb_flush is needed during the switch_mm (Hackbench would be
+beneficiary because no more TLB flush is needed at his hot point
+path). Here are my points:
+ - We copied the arm64 globally unique asid mechanism into riscv,
+which depends on hardware broadcast TLB flush. My fixup patch is
+closer to the original principle design, proven in the arm64 world.
+ - If riscv continues local TLB flush hw design in ISA spec, please
+try x86's per-CPU array of ASID. But that is a significant change;
+let's fix the current issue with the smallest patch first.
 
-
-在 2022/11/16 下午7:19, James Clark 写道:
-> 
-> 
-> On 31/10/2022 11:11, Jing Zhang wrote:
->> This series add six metricgroups for neoverse-n2, among which, the
->> formula of topdown L1 is from the document:
->> https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
->>
->> Since neoverse-n2 does not yet support topdown L2, metricgroups such
->> as Cache, TLB, Branch, InstructionsMix, and PEutilization are added to
->> help further analysis of performance bottlenecks.
->>
-> 
-> Hi Jing,
-> 
-> Thanks for working on this, these metrics look ok to me in general,
-> although we're currently working on publishing standardised metrics
-> across all new cores as part of a new project in Arm. This will include
-> N2, and our ones are very similar (or almost identical) to yours,
-> barring slightly different group names, metric names, and differences in
-> things like outputting topdown metrics as percentages.
-> 
-> We plan to publish our standard metrics some time in the next 2 months.
-> Would you consider holding off on merging this change so that we have
-> consistant group names and units going forward? Otherwise N2 would be
-> the odd one out. I will send you the metrics when they are ready, and we
-> will have a script to generate perf jsons from them, so you can review.
-> 
-> We also have a slightly different forumula for one of the top down
-> metrics which I think would be slightly more accurate. We don't have
-> anything for your "PE utilization" metrics, which I can raise
-> internally. It could always be added to perf on top of the standardised
-> ones if we don't add it to our standard ones.
-> 
-> Thanks
-> James
-> 
-
-Hi James,
-
-Regarding the arm n2 standard metrics last time, is my understanding correct,
-and does it meet your meaning? If so, may I ask when you will send me the
-standards you formulate so that I can align with you in time over my patchset.
-Please communicate this matter so that we can understand each other's schedule.
-
-Thanks,
-Jing
-
-
->> with this series on neoverse-n2:
->>
->> $./perf list metricgroup
->>
->> List of pre-defined events (to be used in -e):
->>
->>
->> Metric Groups:
->>
->> Branch
->> Cache
->> InstructionMix
->> PEutilization
->> TLB
->> TopDownL1
->>
->>
->> $./perf list
->>
->> ...
->> Metric Groups:
->>
->> Branch:
->>   branch_miss_pred_rate
->>        [The rate of branches mis-predited to the overall branches]
->>   branch_mpki
->>        [The rate of branches mis-predicted per kilo instructions]
->>   branch_pki
->>        [The rate of branches retired per kilo instructions]
->> Cache:
->>   l1d_cache_miss_rate
->>        [The rate of L1 D-Cache misses to the overall L1 D-Cache]
->>   l1d_cache_mpki
->>        [The rate of L1 D-Cache misses per kilo instructions]
->> ...
->>
->>
->> $sudo ./perf stat -a -M TLB sleep 1
->>
->>  Performance counter stats for 'system wide':
->>
->>         35,861,936      L1I_TLB                          #     0.00 itlb_walk_rate           (74.91%)
->>              5,661      ITLB_WALK                                                            (74.91%)
->>         97,279,240      INST_RETIRED                     #     0.07 itlb_mpki                (74.91%)
->>              6,851      ITLB_WALK                                                            (74.91%)
->>             26,391      DTLB_WALK                        #     0.00 dtlb_walk_rate           (75.07%)
->>         35,585,545      L1D_TLB                                                              (75.07%)
->>         85,923,244      INST_RETIRED                     #     0.35 dtlb_mpki                (75.11%)
->>             29,992      DTLB_WALK                                                            (75.11%)
->>
->>        1.003450755 seconds time elapsed
->>        
->>
->> Jing Zhang (6):
->>   perf vendor events arm64: Add topdown L1 metrics for neoverse-n2
->>   perf vendor events arm64: Add TLB metrics for neoverse-n2
->>   perf vendor events arm64: Add cache metrics for neoverse-n2
->>   perf vendor events arm64: Add branch metrics for neoverse-n2
->>   perf vendor events arm64: Add PE utilization metrics for neoverse-n2
->>   perf vendor events arm64: Add instruction mix metrics for neoverse-n2
->>
->>  .../arch/arm64/arm/neoverse-n2/metrics.json        | 247 +++++++++++++++++++++
->>  1 file changed, 247 insertions(+)
->>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
->>
+In the end, thx your review and test.
+--
+Best Regards
+ Guo Ren
