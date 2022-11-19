@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD23630B37
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 04:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E534D630BAC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiKSDfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 22:35:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
+        id S231189AbiKSEID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 23:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiKSDf3 (ORCPT
+        with ESMTP id S229470AbiKSEH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 22:35:29 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6367BBB9C2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 19:35:27 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NDfMV5dLkzqSQk;
-        Sat, 19 Nov 2022 11:31:34 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 19 Nov 2022 11:35:25 +0800
-Received: from octopus.huawei.com (10.67.174.191) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 19 Nov 2022 11:35:25 +0800
-From:   Wang Weiyang <wangweiyang2@huawei.com>
-To:     <mporter@kernel.crashing.org>, <alex.bou9@gmail.com>,
-        <akpm@linux-foundation.org>, <yangyingliang@huawei.com>,
-        <jakobkoschel@gmail.com>, <jhubbard@nvidia.com>,
-        <error27@gmail.com>, <wangweiyang2@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] rapidio: fix possible UAF when kfifo_alloc() fails
-Date:   Sat, 19 Nov 2022 12:03:35 +0800
-Message-ID: <20221119040335.46794-1-wangweiyang2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 18 Nov 2022 23:07:59 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D3F8FB10;
+        Fri, 18 Nov 2022 20:07:58 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id z24so9075373ljn.4;
+        Fri, 18 Nov 2022 20:07:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dtRW27/VFkKfRExNy2R07fG81X6WC5yaz70q9JRBAiU=;
+        b=TtXIVPnDZ2ShtyoirzVFHNKPh8oO5RxHmR1Jln/WpZ2R0mz/omA64Nc4xWIcdeB5KS
+         EG/6ZdqTJ6+dzZnj4B1/ba0XEB+3LnlGUarb0AProNgXWuIkINRtF1oKz2sd/XUTZ2wf
+         WSXRATcVyhcRzZ0Zy7r7KwlOfrdcCG3GHRylR1qxE9M3m6nq+s0ypORbYGRxhGHP8ktz
+         kcqToSSYSeBQ3fgd+yysQis00CStwh08l95BpK7x3sbSIdAixGyMcdDiDcfNCNJG4qLF
+         jwXBF+9GTdUV6bTVsYdfcloCX9DEHY+i3LkH2jF6IOcbDAccSmg3q9WQXn7wdKR0NbYM
+         GTYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dtRW27/VFkKfRExNy2R07fG81X6WC5yaz70q9JRBAiU=;
+        b=29Vo+NKzMhMEu3uy8flqd3KicER8SonayyJpoV9XG8U+DW7LXqbeVaw6rwnbgPgTXQ
+         vzTRsHSIpldch7V4oyig+RCrH8heFax3bxiXRaIG9y+H305bhqjkLXDwMhwL+wWsRRG0
+         h5HzrAKsSBR0c8m99Rmx4hTKZY+8i82rULfTcuOGYjJbH4MSis8rr71FuDzS31n+ig0X
+         X7pds3HPIPDwJQTcNmWsZRz+AaOjuoDsh/PJiPscv0gQjSrgcDyEwXeJ9JZXTuzJqw4o
+         VVXg+v6oPb3EzPbk+IMX7rp3CRCmx4TcWLM6yPHI/ZSE8Ljd7GpNgJcIE4Pxq82/7ZDH
+         /2iQ==
+X-Gm-Message-State: ANoB5pn97QtlLu5fYuD6sH+oMr1Zv46mr0Njo+4avoXS1TcORILguuXD
+        WsMT+Hk2f1AMLofgjTfWupiDbXlkXuA9dAYHCs0=
+X-Google-Smtp-Source: AA0mqf6TtkhSfRQWsSRKkFVrN1K2vpE+3E7DbjrBZGD1HMn4Be7sA4L0VCgEG63L5y4r/HHwk2Mwiv1G7ZioFSoo96Q=
+X-Received: by 2002:a05:651c:198f:b0:277:6a5:109b with SMTP id
+ bx15-20020a05651c198f00b0027706a5109bmr3472454ljb.42.1668830876279; Fri, 18
+ Nov 2022 20:07:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.191]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Jorropo <jorropo.pgm@gmail.com>
+Date:   Sat, 19 Nov 2022 05:07:45 +0100
+Message-ID: <CAHWihb_EYWKXOqdN0iDBDygk+EGbhaxWHTKVRhtpm_TihbCjtw@mail.gmail.com>
+Subject: [REGRESSION] XArray commit prevents booting with 6.0-rc1 or later
+To:     willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nborisov@suse.com,
+        regressions@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If kfifo_alloc() fails in mport_cdev_open(), goto err_fifo and just free
-priv. But priv is still in the chdev->file_list, then list traversal
-may cause UAF. This fixes the following smatch warning:
+#regzbot introduced v5.19-rc6..1dd685c414a7b9fdb3d23aca3aedae84f0b998ae
 
-drivers/rapidio/devices/rio_mport_cdev.c:1930 mport_cdev_open() warn: '&priv->list' not removed from list
+Hi, I recently tried to upgrade to linux v6.0.x but when trying to
+boot it fails with "error: out of memory" when or after loading
+initramfs (which then kpanics because the vfs root is missing).
+The latest releases I tested are v6.0.9 and v6.1-rc5 and it's broken there too.
 
-Fixes: e8de370188d0 ("rapidio: add mport char device driver")
-Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
----
-Changes in v2:
-- Avoid adding the new instance onto the list until the new instance
-  has been fully initialized.
+I bisected the error to this patch:
+1dd685c414a7b9fdb3d23aca3aedae84f0b998ae "XArray: Add calls to
+might_alloc()" is the first bad commit.
+I've confirmed this is not a side effect of a poor bitsect because
+1dd685c414a7b9fdb3d23aca3aedae84f0b998ae~1 (v5.19-rc6) works.
+I've tried reverting the failing commit on top of v6.0.9 and it didn't fixed it.
 
- drivers/rapidio/devices/rio_mport_cdev.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+My system is:
+CPU: Ryzen 3600
+Motherboard: B550 AORUS ELITE V2
+Ram: 48GB (16+32) of unmatched DDR4
+GPU: AMD rx580
+Various ssds, hdds and network cards plugged with various buses.
 
-diff --git a/drivers/rapidio/devices/rio_mport_cdev.c b/drivers/rapidio/devices/rio_mport_cdev.c
-index 3cc83997a1f8..86b28c4cd906 100644
---- a/drivers/rapidio/devices/rio_mport_cdev.c
-+++ b/drivers/rapidio/devices/rio_mport_cdev.c
-@@ -1904,10 +1904,6 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
- 
- 	priv->md = chdev;
- 
--	mutex_lock(&chdev->file_mutex);
--	list_add_tail(&priv->list, &chdev->file_list);
--	mutex_unlock(&chdev->file_mutex);
--
- 	INIT_LIST_HEAD(&priv->db_filters);
- 	INIT_LIST_HEAD(&priv->pw_filters);
- 	spin_lock_init(&priv->fifo_lock);
-@@ -1920,6 +1916,9 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
- 		ret = -ENOMEM;
- 		goto err_fifo;
- 	}
-+	mutex_lock(&chdev->file_mutex);
-+	list_add_tail(&priv->list, &chdev->file_list);
-+	mutex_unlock(&chdev->file_mutex);
- 
- #ifdef CONFIG_RAPIDIO_DMA_ENGINE
- 	INIT_LIST_HEAD(&priv->async_list);
--- 
-2.17.1
+You can find a folder with my .config, bisect logs and screenshots of
+the error messages there:
+https://jorropo.net/ipfs/QmaWH84UPEen4E9n69KZiLjPDaTi2aJvizv3JYiL7Gfmnr/
+https://ipfs.io/ipfs/QmaWH84UPEen4E9n69KZiLjPDaTi2aJvizv3JYiL7Gfmnr/
 
+I'll be happy to assist you if you need help reproducing this issue
+and or testing fixes.
+
+Thx, Jorropo
