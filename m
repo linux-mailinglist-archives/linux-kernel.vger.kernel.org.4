@@ -2,74 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E8A630E24
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA39E630E27
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiKSKuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 05:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        id S230269AbiKSKzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 05:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKSKuS (ORCPT
+        with ESMTP id S229470AbiKSKzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 05:50:18 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11E578B11
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:50:17 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id w9-20020a056e021c8900b0030247910269so4870941ill.4
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:50:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vzB/fWeSs8vqh90QDvUL1B2Fa5XtRgr5XG49IFMwCAA=;
-        b=h6QGlZgccZ4ZYJHBUIYcO0uMOErq4sJJ4eewc7QG2oFAWvUHExQtKjUycX/FHJ9hkB
-         wezWEQ0jmE0ucKjxZ0kWBt/NXpIx8fC0EG+MFqrz4yA17eqjxSnX4TfalzqfkFxNQrkm
-         AIecxlJsPibFBJ0hF+8mrVGCR2v1rzJgAZqxX3vLFtSwOKtklF5lMRegL+OIMX20Lzko
-         by7EJDJEZb/9nkpLl6uYxKS7e4oXdfDid9yK0Bw8jY8iE002pbOzMW+fm8igC1XCx7T8
-         pDs7oKnUGFNpsEtQS45jhpxaJIdp+nLkqujXdIrlYqESRZV3UKxbzrqWwHLWSr7OICEl
-         DSPQ==
-X-Gm-Message-State: ANoB5plMN3j8VM6o1YaqheRC0k1+Z/T08nwJer0PjcosDcmtGSfgHfcK
-        8/zi7wxHPxVaIsZVOSGrjM/9nN/5hZMTYmizYYzsu5UMZg3+
-X-Google-Smtp-Source: AA0mqf7PKruePwrlERr9cDsT/phLUA028nUgZoOTU2DOjbOZjXFevSWr0qSdQ24MZzngRM6kskFYEswUAD9MMlmgphVpItEUC+1T
+        Sat, 19 Nov 2022 05:55:21 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A934920B2;
+        Sat, 19 Nov 2022 02:55:20 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1ED415C0112;
+        Sat, 19 Nov 2022 05:55:18 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 19 Nov 2022 05:55:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1668855318; x=1668941718; bh=CIwr77lYrj
+        EiDjN+lfmJBa8qTpOY2sqozIVlYRnXdhU=; b=Hmk/n8p3OvZWDV2jFpZZq2IZbG
+        uVhTVcq1s+BL0vWBjOBJ9SoJ+74Xq2YeZAR4wGmsYj+UOSnFisapOunmqqYUIH7G
+        k7EWWJDtLZWT66MaGKcTeVRvKZXBGc+s/ORIyn60H2ksXqBIfT81yHud0KtC7LcI
+        tJzerUVlEoNx76CKuOvehncGS7gPDuO/L5ozWtJjNtnfi6MpSGFxOpKhYV2RqKVX
+        mKaw6qipy7aCNSpEkPb6l0DNpye7QTcmA3mSoTS8yugKAGpLCqQI/RSDntOy/sMM
+        x95HxmIi/D7b6MTtPloNvBh5NpxJWi2GiDJwxq36/9o+Jsyg9jlfBgwpNmRw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668855318; x=1668941718; bh=CIwr77lYrjEiDjN+lfmJBa8qTpOY
+        2sqozIVlYRnXdhU=; b=lNwUjvTWpmRNUVzK2Y2i31Wapj29V0azTxZPkj3TH3Xj
+        IeNLDBlOhvo6AHPaLoWMuzMvo0qPuAurb2ieg0AdXbTIfGnOMKZDthY6utk12jEO
+        Oz4m+gkvLTQ3OY+64JJUK0ZD6TJEAhauSK8yYb3JwI2iopARxKQ8RhwOB96rwUhR
+        PUueNyRQmva5OmAIFnPqUVEWeIRV4IObYqBbw3bNs7wPtngTi5Kr+3M8UxSNZW9o
+        sGoz7zalfjBudGyDfVm/zuxlD/X44DpA/bWxp4Bg8dUO1S2DfLFW78dT1Cr/B7SJ
+        Dlf+xdxHQw58iq+ITrPpqzAToJ3XgeWImi0kL6YtgA==
+X-ME-Sender: <xms:FbZ4Y579I-XB7wSjbSt-U0qwvOR5XkO9w3kiOhTh04el7yL3MHpjlA>
+    <xme:FbZ4Y24Mzf_TWOZh72i8-J_pjUAJnSS908O8v1APKsJSLgR6soKzh9iw1OGGbaU7N
+    Q3EfD60yJtc6Bh181M>
+X-ME-Received: <xmr:FbZ4Ywd3QfTbjriFPRI6AC7lgneacQjr1AcTQIrNPq4mPKA3hjbnug>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedvgddvvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpeffrghfnhgr
+    ucfjihhrshgthhhfvghlugcuoegurghfnhgrsehfrghsthhmrghilhdrtghomheqnecugg
+    ftrfgrthhtvghrnhepvdehtdeludekgeevleefuedvudejieetheekvdfhteekffdujefh
+    fedtudehvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepuggrfhhnrgesfhgrshhtmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:FbZ4YyJkJ-KjVecGPdMMxNYNtg9ogFvUjwh1ioLPQCSGPmYOlkvuAQ>
+    <xmx:FbZ4Y9LyV7aUYOGKTJj1iT4g4QNpc1r6TNvHFIHzN6rxeCdNOhGi3w>
+    <xmx:FbZ4Y7yrGR6YfkyYdphJHOT79cgKXmHfnC4kdjsXej4AoodGZceYLA>
+    <xmx:FrZ4Y18GJE1wkYTEPgztTjgA3yeFt_OEcORBYvcRqJR04bfgJU4iOA>
+Feedback-ID: i0e894699:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 19 Nov 2022 05:55:15 -0500 (EST)
+Date:   Sat, 19 Nov 2022 12:55:10 +0200
+From:   Dafna Hirschfeld <dafna@fastmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: rkisp1: make const arrays ae_wnd_num and
+ hist_wnd_num static
+Message-ID: <20221119105510.26n7jk6tc4anu3f3@guri>
+References: <20221102155117.144570-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:26b:b0:375:af9e:ca61 with SMTP id
- x11-20020a056638026b00b00375af9eca61mr4901032jaq.203.1668855017057; Sat, 19
- Nov 2022 02:50:17 -0800 (PST)
-Date:   Sat, 19 Nov 2022 02:50:17 -0800
-In-Reply-To: <20221119095108.4564-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000793ce105edd0969e@google.com>
-Subject: Re: [syzbot] inconsistent lock state in sync_info_debugfs_show
-From:   syzbot <syzbot+007bfe0f3330f6e1e7d1@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221102155117.144570-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 02.11.2022 15:51, Colin Ian King wrote:
+>Don't populate the const arrays on the stack, instead make them
+>static. Also makes the object code smaller.
+>
+>Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4107 } 2631 jiffies s: 2805 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
-
-
-Tested on:
-
-commit:         84368d88 Merge tag 'soc-fixes-6.1-3' of git://git.kern..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=146d20fd880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6f4e5e9899396248
-dashboard link: https://syzkaller.appspot.com/bug?extid=007bfe0f3330f6e1e7d1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=120fe909880000
-
+>---
+> drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 4 ++--
+> 1 file changed, 2 insertions(+), 2 deletions(-)
+>
+>diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+>index d8731ebbf479..3482f7d707b7 100644
+>--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+>+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+>@@ -715,7 +715,7 @@ static void rkisp1_aec_config_v12(struct rkisp1_params *params,
+> 	u32 exp_ctrl;
+> 	u32 block_hsize, block_vsize;
+> 	u32 wnd_num_idx = 1;
+>-	const u32 ae_wnd_num[] = { 5, 9, 15, 15 };
+>+	static const u32 ae_wnd_num[] = { 5, 9, 15, 15 };
+>
+> 	/* avoid to override the old enable value */
+> 	exp_ctrl = rkisp1_read(params->rkisp1, RKISP1_CIF_ISP_EXP_CTRL);
+>@@ -822,7 +822,7 @@ static void rkisp1_hst_config_v12(struct rkisp1_params *params,
+> 	u32 block_hsize, block_vsize;
+> 	u32 wnd_num_idx, hist_weight_num, hist_ctrl, value;
+> 	u8 weight15x15[RKISP1_CIF_ISP_HIST_WEIGHT_REG_SIZE_V12];
+>-	const u32 hist_wnd_num[] = { 5, 9, 15, 15 };
+>+	static const u32 hist_wnd_num[] = { 5, 9, 15, 15 };
+>
+> 	/* now we just support 9x9 window */
+> 	wnd_num_idx = 1;
+>-- 
+>2.37.3
+>
