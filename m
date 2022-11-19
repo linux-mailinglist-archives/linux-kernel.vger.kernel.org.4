@@ -2,239 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993946311D9
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 00:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C351B6311DF
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 00:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbiKSXK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 18:10:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S235450AbiKSXLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 18:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235061AbiKSXKT (ORCPT
+        with ESMTP id S234216AbiKSXKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 18:10:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B130193D0;
-        Sat, 19 Nov 2022 15:10:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5C76B8074D;
-        Sat, 19 Nov 2022 23:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53913C433D6;
-        Sat, 19 Nov 2022 23:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668899414;
-        bh=bkuSRBFDHyTrfGrC4KmbCSPIuhtzJ5efV2cTzCfWd9k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OSH3LlbuG/YLsIbXArD7xopOxfCB/p10MBAvvDlJclp2WosnSoj9W2OIX2FEJN87F
-         wpXb/JiKYvJX5aiZ4QQXRU2gS3Vvt5b5EddUgjrltztyUcDwWP5GPXWQWctEvdHQNG
-         Te+W8qJHw3rSRmVjVHBe2VAI7KAJ9wzdXOvKf7+KySR44+zO8MA5u5Ri9JRXntrBwH
-         pGmHUsBcC/gbeQRQ6BwHYUkwURkji5c/UQUKLuWnS341GazeyTrKUJP7GyB7lZ7gkE
-         +DSbLSWigU0ppFimo8uBMckgDyfwOwtzIjxIRxliciJaw6t+USuwjwdIHltl5Lr69P
-         rwAarfNWAofDA==
-Date:   Sat, 19 Nov 2022 15:10:12 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>
-Subject: Re: [PATCH v5 2/3] random: introduce generic vDSO getrandom()
- implementation
-Message-ID: <Y3liVEdYByF2gZZU@sol.localdomain>
-References: <20221119120929.2963813-1-Jason@zx2c4.com>
- <20221119120929.2963813-3-Jason@zx2c4.com>
+        Sat, 19 Nov 2022 18:10:50 -0500
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552451A237;
+        Sat, 19 Nov 2022 15:10:47 -0800 (PST)
+Date:   Sat, 19 Nov 2022 23:10:32 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail3; t=1668899445; x=1669158645;
+        bh=lZ7Rs/ZnddACw1jvzs/PqLsltYLTGpkimYjbYKt//JU=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=MwkzEn1Z43pI6k3ysRRUAd78NdgilKCbiURPSU97ud6PlYDuD3r4wX6kynsud2BDV
+         FTgz0dIEhO0vqk69Q9ajklQkuUJTQUtv5Kfke1xyFpEpF9rgACfyhr4daSrfsx3B1J
+         NwVytXSux8c4DY7dTJbFnBZ/5qoUCO+b5JS9y9tdhpIdlnUzDdVB481RrUoLPXyFop
+         7beDz4m4lmYWIDUYmcAC+eEZKejYBokFJWi6hPnMt+kecxCZ+rwCuKqGUI83jvEfX6
+         Np0bActEFWr2aY6rHGeA31YLT/OZPm6Ym/XQ2GGyRphcbaJSkCAUykj1kUORpfvI1G
+         tMIri4Tqm44TQ==
+To:     linux-kbuild@vger.kernel.org
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 17/18] net: octeontx2: fix mixed module-builtin object
+Message-ID: <20221119225650.1044591-18-alobakin@pm.me>
+In-Reply-To: <20221119225650.1044591-1-alobakin@pm.me>
+References: <20221119225650.1044591-1-alobakin@pm.me>
+Feedback-ID: 22809121:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119120929.2963813-3-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 01:09:28PM +0100, Jason A. Donenfeld wrote:
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index ab6e02efa432..7dfdbf424c92 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -61,6 +61,7 @@
->  #include <asm/irq.h>
->  #include <asm/irq_regs.h>
->  #include <asm/io.h>
-> +#include <vdso/datapage.h>
->  #include "../../lib/vdso/getrandom.h"
->  
->  /*********************************************************************
-> @@ -307,6 +308,8 @@ static void crng_reseed(struct work_struct *work)
->  	if (next_gen == ULONG_MAX)
->  		++next_gen;
->  	WRITE_ONCE(base_crng.generation, next_gen);
-> +	if (IS_ENABLED(CONFIG_HAVE_VDSO_GETRANDOM))
-> +		smp_store_release(&_vdso_rng_data.generation, next_gen + 1);
+With CONFIG_OCTEONTX2_PF=3Dy and CONFIG_OCTEONTX2_VF=3Dm, several object
+files  are linked to a module and also to vmlinux even though the
+expected CFLAGS are different between builtins and modules.
+This is the same situation as fixed by
+commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
+There's also no need to duplicate relatively big piece of object
+code into two modules.
 
-Is the purpose of the smp_store_release() here to order the writes of
-base_crng.generation and _vdso_rng_data.generation?  It could use a comment.
+Introduce the new module, rvu_niccommon, to provide the common
+functions to both rvu_nicpf and rvu_nicvf. Also, otx2_ptp.o was not
+shared, but built as a standalone module (it was fixed already a year
+ago the same way this commit does due to link issues). As it's used
+by both PF and VF modules in the same way, just link it into that new
+common one.
 
->  	if (!static_branch_likely(&crng_is_ready))
->  		crng_init = CRNG_READY;
->  	spin_unlock_irqrestore(&base_crng.lock, flags);
-> @@ -756,6 +759,8 @@ static void __cold _credit_init_bits(size_t bits)
->  		crng_reseed(NULL); /* Sets crng_init to CRNG_READY under base_crng.lock. */
->  		if (static_key_initialized)
->  			execute_in_process_context(crng_set_ready, &set_ready);
-> +		if (IS_ENABLED(CONFIG_HAVE_VDSO_GETRANDOM))
-> +			smp_store_release(&_vdso_rng_data.is_ready, true);
+Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entr=
+y count")
+Fixes: 8e67558177f8 ("octeontx2-pf: PFC config support with DCBx")
+Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ drivers/net/ethernet/marvell/octeontx2/Kconfig     |  5 +++++
+ .../net/ethernet/marvell/octeontx2/nic/Makefile    | 14 +++++++-------
+ .../ethernet/marvell/octeontx2/nic/otx2_common.h   |  1 -
+ .../ethernet/marvell/octeontx2/nic/otx2_dcbnl.c    |  8 +++++++-
+ .../ethernet/marvell/octeontx2/nic/otx2_devlink.c  |  2 ++
+ .../net/ethernet/marvell/octeontx2/nic/otx2_pf.c   |  2 ++
+ .../net/ethernet/marvell/octeontx2/nic/otx2_ptp.c  |  2 +-
+ .../net/ethernet/marvell/octeontx2/nic/otx2_vf.c   |  2 ++
+ 8 files changed, 26 insertions(+), 10 deletions(-)
 
-Similarly, is the purpose of this smp_store_release() to order the writes to the
-the generation counters and is_ready?  It could use a comment.
+diff --git a/drivers/net/ethernet/marvell/octeontx2/Kconfig b/drivers/net/e=
+thernet/marvell/octeontx2/Kconfig
+index 6b4f640163f7..eb03bdcaf606 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/Kconfig
++++ b/drivers/net/ethernet/marvell/octeontx2/Kconfig
+@@ -28,8 +28,12 @@ config NDC_DIS_DYNAMIC_CACHING
+ =09  , NPA stack pages etc in NDC. Also locks down NIX SQ/CQ/RQ/RSS and
+ =09  NPA Aura/Pool contexts.
 
-> diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-> new file mode 100644
-> index 000000000000..8bef1e92a79d
-> --- /dev/null
-> +++ b/lib/vdso/getrandom.c
-> @@ -0,0 +1,115 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/atomic.h>
-> +#include <linux/fs.h>
-> +#include <vdso/datapage.h>
-> +#include <asm/vdso/getrandom.h>
-> +#include <asm/vdso/vsyscall.h>
-> +#include "getrandom.h"
-> +
-> +#undef memcpy
-> +#define memcpy(d,s,l) __builtin_memcpy(d,s,l)
-> +#undef memset
-> +#define memset(d,c,l) __builtin_memset(d,c,l)
-> +
-> +#define CHACHA_FOR_VDSO_INCLUDE
-> +#include "../crypto/chacha.c"
-> +
-> +static void memcpy_and_zero(void *dst, void *src, size_t len)
-> +{
-> +#define CASCADE(type) \
-> +	while (len >= sizeof(type)) { \
-> +		*(type *)dst = *(type *)src; \
-> +		*(type *)src = 0; \
-> +		dst += sizeof(type); \
-> +		src += sizeof(type); \
-> +		len -= sizeof(type); \
-> +	}
-> +#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-> +#if BITS_PER_LONG == 64
-> +	CASCADE(u64);
-> +#endif
-> +	CASCADE(u32);
-> +	CASCADE(u16);
-> +#endif
-> +	CASCADE(u8);
-> +#undef CASCADE
-> +}
++config OCTEONTX2_NIC_COMMON
++=09tristate
++
+ config OCTEONTX2_PF
+ =09tristate "Marvell OcteonTX2 NIC Physical Function driver"
++=09select OCTEONTX2_NIC_COMMON
+ =09select OCTEONTX2_MBOX
+ =09select NET_DEVLINK
+ =09depends on MACSEC || !MACSEC
+@@ -44,5 +48,6 @@ config OCTEONTX2_PF
+ config OCTEONTX2_VF
+ =09tristate "Marvell OcteonTX2 NIC Virtual Function driver"
+ =09depends on OCTEONTX2_PF
++=09select OCTEONTX2_NIC_COMMON
+ =09help
+ =09  This driver supports Marvell's OcteonTX2 NIC virtual function.
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/Makefile b/drivers/=
+net/ethernet/marvell/octeontx2/nic/Makefile
+index 73fdb8798614..040c841645bd 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/Makefile
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/Makefile
+@@ -3,16 +3,16 @@
+ # Makefile for Marvell's RVU Ethernet device drivers
+ #
 
-CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS doesn't mean that dereferencing
-misaligned pointers is okay.  You still need to use get_unaligned() and
-put_unaligned().  Take a look at crypto_xor(), for example.
+-obj-$(CONFIG_OCTEONTX2_PF) +=3D rvu_nicpf.o otx2_ptp.o
+-obj-$(CONFIG_OCTEONTX2_VF) +=3D rvu_nicvf.o otx2_ptp.o
++obj-$(CONFIG_OCTEONTX2_NIC_COMMON) +=3D rvu_niccommon.o
++obj-$(CONFIG_OCTEONTX2_PF) +=3D rvu_nicpf.o
++obj-$(CONFIG_OCTEONTX2_VF) +=3D rvu_nicvf.o
 
-> +static __always_inline ssize_t
-> +__cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_t len,
-> +		       unsigned int flags, void *opaque_state)
-> +{
-> +	ssize_t ret = min_t(size_t, MAX_RW_COUNT, len);
-> +	struct vgetrandom_state *state = opaque_state;
-> +	u32 chacha_state[CHACHA_STATE_WORDS];
-> +	unsigned long current_generation;
-> +	size_t batch_len;
-> +
-> +	if (unlikely(!rng_info->is_ready))
-> +		return getrandom_syscall(buffer, len, flags);
-> +
-> +	if (unlikely(!len))
-> +		return 0;
-> +
-> +retry_generation:
-> +	current_generation = READ_ONCE(rng_info->generation);
-> +	if (unlikely(state->generation != current_generation)) {
-> +		if (getrandom_syscall(state->key, sizeof(state->key), 0) != sizeof(state->key))
-> +			return getrandom_syscall(buffer, len, flags);
-> +		WRITE_ONCE(state->generation, current_generation);
-> +		state->pos = sizeof(state->batch);
-> +	}
-> +
-> +	len = ret;
-> +more_batch:
-> +	batch_len = min_t(size_t, sizeof(state->batch) - state->pos, len);
-> +	if (batch_len) {
-> +		memcpy_and_zero(buffer, state->batch + state->pos, batch_len);
-> +		state->pos += batch_len;
-> +		buffer += batch_len;
-> +		len -= batch_len;
-> +	}
-> +	if (!len) {
-> +		/*
-> +		 * Since rng_info->generation will never be 0, we re-read state->generation,
-> +		 * rather than using the local current_generation variable, to learn whether
-> +		 * we forked.
-> +		 */
-> +		if (unlikely(READ_ONCE(state->generation) != READ_ONCE(rng_info->generation))) {
-> +			buffer -= ret;
-> +			goto retry_generation;
-> +		}
-> +		return ret;
-> +	}
-> +
-> +	chacha_init_consts(chacha_state);
-> +	memcpy(&chacha_state[4], state->key, CHACHA_KEY_SIZE);
-> +	memset(&chacha_state[12], 0, sizeof(u32) * 4);
-> +
-> +	while (len >= CHACHA_BLOCK_SIZE) {
-> +		chacha20_block(chacha_state, buffer);
-> +		if (unlikely(chacha_state[12] == 0))
-> +			++chacha_state[13];
-> +		buffer += CHACHA_BLOCK_SIZE;
-> +		len -= CHACHA_BLOCK_SIZE;
-> +	}
-> +
-> +	chacha20_block(chacha_state, state->key_batch);
-> +	if (unlikely(chacha_state[12] == 0))
-> +		++chacha_state[13];
-> +	chacha20_block(chacha_state, state->key_batch + CHACHA_BLOCK_SIZE);
-> +	state->pos = 0;
-> +	memzero_explicit(chacha_state, sizeof(chacha_state));
-> +	goto more_batch;
-> +}
++rvu_niccommon-y :=3D otx2_devlink.o otx2_ptp.o
+ rvu_nicpf-y :=3D otx2_pf.o otx2_common.o otx2_txrx.o otx2_ethtool.o \
+-               otx2_flows.o otx2_tc.o cn10k.o otx2_dmac_flt.o \
+-               otx2_devlink.o
+-rvu_nicvf-y :=3D otx2_vf.o otx2_devlink.o
++               otx2_flows.o otx2_tc.o cn10k.o otx2_dmac_flt.o
++rvu_nicvf-y :=3D otx2_vf.o
 
-There's a lot of subtle stuff going on here.  Adding some more comments would be
-helpful.  Maybe bring in some of the explanation that's currently only in the
-commit message.
+-rvu_nicpf-$(CONFIG_DCB) +=3D otx2_dcbnl.o
+-rvu_nicvf-$(CONFIG_DCB) +=3D otx2_dcbnl.o
++rvu_niccommon-$(CONFIG_DCB) +=3D otx2_dcbnl.o
+ rvu_nicpf-$(CONFIG_MACSEC) +=3D cn10k_macsec.o
 
-One question I have is about forking.  So, when a thread calls fork(), in the
-child the kernel automatically replaces all vgetrandom_state pages with zeroed
-pages (due to MADV_WIPEONFORK).  If the child calls __cvdso_getrandom_data()
-afterwards, it sees the zeroed state.  But that's indistinguishable from the
-state at the very beginning, after sys_vgetrandom_alloc() was just called,
-right?  So as long as this code handles initializing the state at the beginning,
-then I'd think it would naturally handle fork() as well.
+ ccflags-y +=3D -I$(srctree)/drivers/net/ethernet/marvell/octeontx2/af
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/dri=
+vers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index 282db6fe3b08..06307000cfd1 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -1018,7 +1018,6 @@ int otx2_dcbnl_set_ops(struct net_device *dev);
+ /* PFC support */
+ int otx2_pfc_txschq_config(struct otx2_nic *pfvf);
+ int otx2_pfc_txschq_alloc(struct otx2_nic *pfvf);
+-int otx2_pfc_txschq_update(struct otx2_nic *pfvf);
+ int otx2_pfc_txschq_stop(struct otx2_nic *pfvf);
+ #endif
 
-However, it seems you have something a bit more subtle in mind, where the thread
-calls fork() *while* it's in the middle of __cvdso_getrandom_data().  I guess
-you are thinking of the case where a signal is sent to the thread while it's
-executing __cvdso_getrandom_data(), and then the signal handler calls fork()?
-Note that it doesn't matter if a different thread in the *process* calls fork().
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c b/driv=
+ers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c
+index ccaf97bb1ce0..8e862785325d 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_dcbnl.c
+@@ -54,6 +54,7 @@ int otx2_pfc_txschq_config(struct otx2_nic *pfvf)
 
-If it's possible for the thread to fork() (and hence for the vgetrandom_state to
-be zeroed) at absolutely any time, it probably would be a good idea to mark that
-whole struct as volatile.
+ =09return 0;
+ }
++EXPORT_SYMBOL_NS_GPL(otx2_pfc_txschq_config, OCTEONTX2_NIC_COMMON);
 
-- Eric
+ static int otx2_pfc_txschq_alloc_one(struct otx2_nic *pfvf, u8 prio)
+ {
+@@ -122,6 +123,7 @@ int otx2_pfc_txschq_alloc(struct otx2_nic *pfvf)
+
+ =09return 0;
+ }
++EXPORT_SYMBOL_NS_GPL(otx2_pfc_txschq_alloc, OCTEONTX2_NIC_COMMON);
+
+ static int otx2_pfc_txschq_stop_one(struct otx2_nic *pfvf, u8 prio)
+ {
+@@ -201,7 +203,7 @@ static int otx2_pfc_update_sq_smq_mapping(struct otx2_n=
+ic *pfvf, int prio)
+ =09return 0;
+ }
+
+-int otx2_pfc_txschq_update(struct otx2_nic *pfvf)
++static int otx2_pfc_txschq_update(struct otx2_nic *pfvf)
+ {
+ =09bool if_up =3D netif_running(pfvf->netdev);
+ =09u8 pfc_en =3D pfvf->pfc_en, pfc_bit_set;
+@@ -289,6 +291,7 @@ int otx2_pfc_txschq_stop(struct otx2_nic *pfvf)
+
+ =09return 0;
+ }
++EXPORT_SYMBOL_NS_GPL(otx2_pfc_txschq_stop, OCTEONTX2_NIC_COMMON);
+
+ int otx2_config_priority_flow_ctrl(struct otx2_nic *pfvf)
+ {
+@@ -328,6 +331,7 @@ int otx2_config_priority_flow_ctrl(struct otx2_nic *pfv=
+f)
+ =09mutex_unlock(&pfvf->mbox.lock);
+ =09return err;
+ }
++EXPORT_SYMBOL_NS_GPL(otx2_config_priority_flow_ctrl, OCTEONTX2_NIC_COMMON)=
+;
+
+ void otx2_update_bpid_in_rqctx(struct otx2_nic *pfvf, int vlan_prio, int q=
+idx,
+ =09=09=09       bool pfc_enable)
+@@ -392,6 +396,7 @@ void otx2_update_bpid_in_rqctx(struct otx2_nic *pfvf, i=
+nt vlan_prio, int qidx,
+ =09=09=09 "Updating BPIDs in CQ and Aura contexts of RQ%d failed with err =
+%d\n",
+ =09=09=09 qidx, err);
+ }
++EXPORT_SYMBOL_NS_GPL(otx2_update_bpid_in_rqctx, OCTEONTX2_NIC_COMMON);
+
+ static int otx2_dcbnl_ieee_getpfc(struct net_device *dev, struct ieee_pfc =
+*pfc)
+ {
+@@ -468,3 +473,4 @@ int otx2_dcbnl_set_ops(struct net_device *dev)
+
+ =09return 0;
+ }
++EXPORT_SYMBOL_NS_GPL(otx2_dcbnl_set_ops, OCTEONTX2_NIC_COMMON);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c b/dr=
+ivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
+index 777a27047c8e..73cbedb861f3 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
+@@ -128,6 +128,7 @@ int otx2_register_dl(struct otx2_nic *pfvf)
+ =09devlink_free(dl);
+ =09return err;
+ }
++EXPORT_SYMBOL_NS_GPL(otx2_register_dl, OCTEONTX2_NIC_COMMON);
+
+ void otx2_unregister_dl(struct otx2_nic *pfvf)
+ {
+@@ -139,3 +140,4 @@ void otx2_unregister_dl(struct otx2_nic *pfvf)
+ =09=09=09=09  ARRAY_SIZE(otx2_dl_params));
+ =09devlink_free(dl);
+ }
++EXPORT_SYMBOL_NS_GPL(otx2_unregister_dl, OCTEONTX2_NIC_COMMON);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers=
+/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+index 303930499a4c..11e3ccee61c1 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+@@ -34,6 +34,8 @@ static const struct pci_device_id otx2_pf_id_table[] =3D =
+{
+ =09{ 0, }  /* end of table */
+ };
+
++MODULE_IMPORT_NS(OCTEONTX2_NIC_COMMON);
++
+ MODULE_AUTHOR("Sunil Goutham <sgoutham@marvell.com>");
+ MODULE_DESCRIPTION(DRV_STRING);
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c b/driver=
+s/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
+index 896b2f9bac34..ef48f50d3771 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
+@@ -394,5 +394,5 @@ int otx2_ptp_tstamp2time(struct otx2_nic *pfvf, u64 tst=
+amp, u64 *tsns)
+ EXPORT_SYMBOL_GPL(otx2_ptp_tstamp2time);
+
+ MODULE_AUTHOR("Sunil Goutham <sgoutham@marvell.com>");
+-MODULE_DESCRIPTION("Marvell RVU NIC PTP Driver");
++MODULE_DESCRIPTION("Marvell RVU NIC Common Module");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers=
+/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+index 86653bb8e403..59ec45e16637 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+@@ -24,6 +24,8 @@ static const struct pci_device_id otx2_vf_id_table[] =3D =
+{
+ =09{ }
+ };
+
++MODULE_IMPORT_NS(OCTEONTX2_NIC_COMMON);
++
+ MODULE_AUTHOR("Sunil Goutham <sgoutham@marvell.com>");
+ MODULE_DESCRIPTION(DRV_STRING);
+ MODULE_LICENSE("GPL v2");
+--
+2.38.1
+
+
