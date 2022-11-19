@@ -2,112 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A83630E1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E8A630E24
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiKSKnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 05:43:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
+        id S229824AbiKSKuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 05:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKSKnN (ORCPT
+        with ESMTP id S229470AbiKSKuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 05:43:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5081484824;
-        Sat, 19 Nov 2022 02:43:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D73C560959;
-        Sat, 19 Nov 2022 10:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3B3C433C1;
-        Sat, 19 Nov 2022 10:43:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668854591;
-        bh=/+iRDvo5pjoK/3d+uFgmlFaUxqq5N45gM/Zxq/W3Tx4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CG/RU7Ua81xKFWKG+czQ5Up/u88hGSTpEFf58HsFm8vLhhdQoX5CH1Oa72ZPfo7zI
-         HqxL5pMi8jh/j2iu0aJftZ92NsL3tyCeYLUpRSaj5EEOOPC53JaRaxVK+lxNtvCJ5y
-         ruZpj20hvwbi5OxiBR7S2At6nPJqnyZ0hUu5XcmCU5SbYAwlgN+1sMsWAAwuHA+4FX
-         7ZMS/E0xsoOmkYGurwLtppLUNR3qb+YYa0pllt0r0mDz4YDRx4yE7QenBdGOEJq+Pc
-         8/fWrS9DoMoZnjLYCrOEXIf9S2ftIaFluWjGQye+fXGKhVC/CamnocqI+n7ckXXrXt
-         5bb91z8TzpwCQ==
-Date:   Sat, 19 Nov 2022 10:43:06 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hui Tang <tanghui20@huawei.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yusongping@huawei.com, claudiu.beznea@microchip.com,
-        conor.dooley@microchip.com
-Subject: Re: [PATCH] clk: microchip: check for null return of devm_kzalloc()
-Message-ID: <Y3izOuF56/NywpOR@spud>
-References: <20221119054858.178629-1-tanghui20@huawei.com>
+        Sat, 19 Nov 2022 05:50:18 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11E578B11
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:50:17 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id w9-20020a056e021c8900b0030247910269so4870941ill.4
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:50:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vzB/fWeSs8vqh90QDvUL1B2Fa5XtRgr5XG49IFMwCAA=;
+        b=h6QGlZgccZ4ZYJHBUIYcO0uMOErq4sJJ4eewc7QG2oFAWvUHExQtKjUycX/FHJ9hkB
+         wezWEQ0jmE0ucKjxZ0kWBt/NXpIx8fC0EG+MFqrz4yA17eqjxSnX4TfalzqfkFxNQrkm
+         AIecxlJsPibFBJ0hF+8mrVGCR2v1rzJgAZqxX3vLFtSwOKtklF5lMRegL+OIMX20Lzko
+         by7EJDJEZb/9nkpLl6uYxKS7e4oXdfDid9yK0Bw8jY8iE002pbOzMW+fm8igC1XCx7T8
+         pDs7oKnUGFNpsEtQS45jhpxaJIdp+nLkqujXdIrlYqESRZV3UKxbzrqWwHLWSr7OICEl
+         DSPQ==
+X-Gm-Message-State: ANoB5plMN3j8VM6o1YaqheRC0k1+Z/T08nwJer0PjcosDcmtGSfgHfcK
+        8/zi7wxHPxVaIsZVOSGrjM/9nN/5hZMTYmizYYzsu5UMZg3+
+X-Google-Smtp-Source: AA0mqf7PKruePwrlERr9cDsT/phLUA028nUgZoOTU2DOjbOZjXFevSWr0qSdQ24MZzngRM6kskFYEswUAD9MMlmgphVpItEUC+1T
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119054858.178629-1-tanghui20@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:26b:b0:375:af9e:ca61 with SMTP id
+ x11-20020a056638026b00b00375af9eca61mr4901032jaq.203.1668855017057; Sat, 19
+ Nov 2022 02:50:17 -0800 (PST)
+Date:   Sat, 19 Nov 2022 02:50:17 -0800
+In-Reply-To: <20221119095108.4564-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000793ce105edd0969e@google.com>
+Subject: Re: [syzbot] inconsistent lock state in sync_info_debugfs_show
+From:   syzbot <syzbot+007bfe0f3330f6e1e7d1@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 01:48:58PM +0800, Hui Tang wrote:
-> Because of the possilble failure of devm_kzalloc(), name might be NULL and
-> will cause null pointer derefrence later.
+Hello,
 
-In theory, yeah?
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-(note to self, s/refrence/reference/, s/possilble/possible)
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4107 } 2631 jiffies s: 2805 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-> Therefore, it might be better to check it and directly return -ENOMEM.
 
-I agree with your use of might here. If the allocations do fail, we
-likely aren't getting the system off the ground anyway - but there is
-no harm in checking.
+Tested on:
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+commit:         84368d88 Merge tag 'soc-fixes-6.1-3' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=146d20fd880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6f4e5e9899396248
+dashboard link: https://syzkaller.appspot.com/bug?extid=007bfe0f3330f6e1e7d1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=120fe909880000
 
-@Claudiu, supposedly I can push to the at91 repo now so I will try to do
-that.
-
-Thanks,
-Conor.
-
-> 
-> Fixes: d39fb172760e ("clk: microchip: add PolarFire SoC fabric clock support")
-> Signed-off-by: Hui Tang <tanghui20@huawei.com>
-> ---
->  drivers/clk/microchip/clk-mpfs-ccc.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/clk/microchip/clk-mpfs-ccc.c b/drivers/clk/microchip/clk-mpfs-ccc.c
-> index 7be028dced63..32aae880a14f 100644
-> --- a/drivers/clk/microchip/clk-mpfs-ccc.c
-> +++ b/drivers/clk/microchip/clk-mpfs-ccc.c
-> @@ -166,6 +166,9 @@ static int mpfs_ccc_register_outputs(struct device *dev, struct mpfs_ccc_out_hw_
->  		struct mpfs_ccc_out_hw_clock *out_hw = &out_hws[i];
->  		char *name = devm_kzalloc(dev, 23, GFP_KERNEL);
->  
-> +		if (!name)
-> +			return -ENOMEM;
-> +
->  		snprintf(name, 23, "%s_out%u", parent->name, i);
->  		out_hw->divider.hw.init = CLK_HW_INIT_HW(name, &parent->hw, &clk_divider_ops, 0);
->  		out_hw->divider.reg = data->pll_base[i / MPFS_CCC_OUTPUTS_PER_PLL] +
-> @@ -200,6 +203,9 @@ static int mpfs_ccc_register_plls(struct device *dev, struct mpfs_ccc_pll_hw_clo
->  		struct mpfs_ccc_pll_hw_clock *pll_hw = &pll_hws[i];
->  		char *name = devm_kzalloc(dev, 18, GFP_KERNEL);
->  
-> +		if (!name)
-> +			return -ENOMEM;
-> +
->  		pll_hw->base = data->pll_base[i];
->  		snprintf(name, 18, "ccc%s_pll%u", strchrnul(dev->of_node->full_name, '@'), i);
->  		pll_hw->name = (const char *)name;
-> -- 
-> 2.17.1
-> 
