@@ -2,123 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3126630CD5
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 08:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DED630CD8
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 08:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbiKSHAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 02:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S232527AbiKSHI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 02:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKSHAr (ORCPT
+        with ESMTP id S232369AbiKSHIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 02:00:47 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE35286FC1;
-        Fri, 18 Nov 2022 23:00:46 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id jn7so4551764plb.13;
-        Fri, 18 Nov 2022 23:00:46 -0800 (PST)
+        Sat, 19 Nov 2022 02:08:46 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0352CE3C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 23:08:38 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id d192so6948642pfd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 23:08:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cRAOmB00k/DF2MsO6e47n76D2kqQ2kdAKBcmpCqoE/A=;
-        b=ItHJ0hF5INKVX1wbyfxzd6eZsrbkVtn9MdvDO00uLjHHAy6eHZVNpr8FqzhkewcCPI
-         d59lwl5WJ4F9q4q7fGdgToswmbaX2E+ABxJtCCEqds4V3VnMSc61Q5OksLvl/fw2DGJ2
-         d1+H1lOt9jtyRNKogekkcSUwximJrtllZyz0HDkUDKy3UteGz/pcxM8oUpQtUjaHyIfB
-         oox18B6XDh9nnt6MTBcdErHzcvxDNFx7NFg9VVniHVLNLk73YN83fhzU04bbCVOR7sPL
-         StDPaKoTA1RzsgD6aJ3xGsGFjwP9xIeuP2TUFdG5pmwW6F4fOScdlvUWh2l5anDJI9g5
-         qNUg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JAomBLzMWpxG+jKkSWv7aeDaZwvbB6/vO10KmU8WTn4=;
+        b=XFZNNwUBtpky5AvtQ3KG/OOizK7sfxo4Mc0+CYLH8LZtO5cS0vhuXi3Gc7+bsucxAT
+         UOekSiNbjEW0FF2soQCYEc6CErOmClQUcIbE2T4NAZzFN+cmXTDEMfqLxz5aAgLDaA4m
+         /xyBsm1XxzNoQwCmToyZTVqhs/GTOBG67Z6sc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cRAOmB00k/DF2MsO6e47n76D2kqQ2kdAKBcmpCqoE/A=;
-        b=8LhhTcHCBDDthCSUmfv+zes5QCzyvSU79fIYeL1zg7z6HXCLrnUpzFFJODW2ksnXzB
-         GnaN6degAom7XCeqIRrZtV7fAc+cNtPasQtc66CIUWwoBJ8Cw58fI4OASh7eouojsvJU
-         qC7oKoa7yfoJmc6K7W+LHUR175c/Sg31UuNBJKM5n8UhDQg7vMJycQ7mTjwjf2IwmTBZ
-         J8CI8s1zEWw/CTKUOK1TPIufAgkfLHWG97A9C1EM4sPQVu2UeZ9ByzsZFVtulUlO8rGe
-         7TaKfN7zoPQ/Fb9rBaGHAnrSNgpzgNbsU0wwCGpuUc1XO7/BcIchFyXqZId5rrH/7H5g
-         5RIA==
-X-Gm-Message-State: ANoB5pkQZq3D3zoxeAUzilfTpIf5D/fvHZsj4wbPAA2FsQRrXnx4n/aY
-        kYFQQet2v4iNK7ynyVXp2nQRC9dqTbYhbw392lQ=
-X-Google-Smtp-Source: AA0mqf74+P394tK/lKQ1jhKFS1h29vSidwP1M8qGvlToHowCnmZe/ElYjmabO9KLj99rcxucZs1/RdsKF5HX6Emgzlc=
-X-Received: by 2002:a17:90a:fa46:b0:200:1df3:a7a9 with SMTP id
- dt6-20020a17090afa4600b002001df3a7a9mr16855744pjb.202.1668841246325; Fri, 18
- Nov 2022 23:00:46 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JAomBLzMWpxG+jKkSWv7aeDaZwvbB6/vO10KmU8WTn4=;
+        b=DWTmGu/bXnNM1AmbGLJofiPln8JuWYfqfH8MP70Zo4iQMzGDfUi+1pKXKOPnfvjjJL
+         Qimm3cOaP/YEUVHJcooEZfiGjFem+e2ySKXFsWR8UnRsbLZjmOSVXWieAC2p54nuS9m9
+         LwvSicp4gDA5EqfgF/s9ps4if5XL4RA5jr5aZlY3Fy1IOs1OdVAFG2qk5adGswQVENw7
+         COOp/+jY7Cj/ZxVgWEj6M56cdc0e3f8+GIMn5KYAlchqrkTwpytVW7DVhH3Q6y/2n8VE
+         +ilQAfHMFntEaupbMLaCPoIGiQD0F1kB9zj9YLDx9PDvV+Id7Kg0SjY4ax42dNjBlwzx
+         bbkQ==
+X-Gm-Message-State: ANoB5plL6YSaDP4oDkCAz0+Z+ihzsYsoV8NvFFpNWWvPbuz8ot20ogGf
+        gv0WQmT1MAiX6+vPoA1x8+qCvg==
+X-Google-Smtp-Source: AA0mqf5yxrtOD/a/N7wAQgsex//ZjQfa+t4D7cq4uMpYXby9xwV1i8aqA0ejg5jd+aWdvhTIN3h4tw==
+X-Received: by 2002:a63:e802:0:b0:46f:ed3a:f36c with SMTP id s2-20020a63e802000000b0046fed3af36cmr9800450pgh.372.1668841718412;
+        Fri, 18 Nov 2022 23:08:38 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n62-20020a622741000000b0056b88187374sm4308162pfn.85.2022.11.18.23.08.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 23:08:37 -0800 (PST)
+Date:   Fri, 18 Nov 2022 23:08:36 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Christian Lamparter <chunkeey@googlemail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] carl9170: Replace zero-length array of trailing structs
+ with flex-array
+Message-ID: <202211182307.3EF1218@keescook>
+References: <20221118211146.never.395-kees@kernel.org>
+ <877czrqwhc.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-359-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-359-uwe@kleine-koenig.org>
-From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Date:   Sat, 19 Nov 2022 08:00:34 +0100
-Message-ID: <CAGfqbt6HG88psov6CE2PqNn1YOdrc=TfYXHw8BgqrLbUc1MJRA@mail.gmail.com>
-Subject: Re: [PATCH 358/606] media: i2c/ov6650: Convert to i2c's .probe_new()
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877czrqwhc.fsf@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dnia pi=C4=85tek, 18 listopada 2022 23:41:32 CET Uwe Kleine-K=C3=B6nig pisz=
-e:
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->
-> The probe function doesn't make use of the i2c_device_id * parameter so i=
-t
-> can be trivially converted.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+On Sat, Nov 19, 2022 at 08:39:11AM +0200, Kalle Valo wrote:
+> Kees Cook <keescook@chromium.org> writes:
+> 
+> > Zero-length arrays are deprecated[1] and are being replaced with
+> > flexible array members in support of the ongoing efforts to tighten the
+> > FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+> > with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+> >
+> > Replace zero-length array with flexible-array member.
+> >
+> > This results in no differences in binary output.
+> >
+> > [1] https://github.com/KSPP/linux/issues/78
+> >
+> > Cc: Christian Lamparter <chunkeey@googlemail.com>
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> Nowadays we include "wifi:" in the subject, but I can add that. But
+> please use this in the future for all wireless patches.
 
-LGTM
+Okay, thanks! I use a recency/frequency prefix guesser, but I've updated
+it to include "wifi: " if "linux-wireless@vger.kernel.org" is in CC. :)
 
-Acked-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-
-
-> ---
->  drivers/media/i2c/ov6650.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-> index 18f041e985b7..4c0ea2ae671b 100644
-> --- a/drivers/media/i2c/ov6650.c
-> +++ b/drivers/media/i2c/ov6650.c
-> @@ -1025,8 +1025,7 @@ static const struct v4l2_subdev_internal_ops ov6650=
-_internal_ops =3D {
->  /*
->   * i2c_driver function
->   */
-> -static int ov6650_probe(struct i2c_client *client,
-> -                     const struct i2c_device_id *did)
-> +static int ov6650_probe(struct i2c_client *client)
->  {
->       struct ov6650 *priv;
->       int ret;
-> @@ -1114,7 +1113,7 @@ static struct i2c_driver ov6650_i2c_driver =3D {
->       .driver =3D {
->               .name =3D "ov6650",
->       },
-> -     .probe    =3D ov6650_probe,
-> +     .probe_new =3D ov6650_probe,
->       .remove   =3D ov6650_remove,
->       .id_table =3D ov6650_id,
->  };
->
+-- 
+Kees Cook
