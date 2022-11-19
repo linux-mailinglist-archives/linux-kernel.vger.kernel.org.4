@@ -2,167 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F2E630FAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 18:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B294F63103E
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 19:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiKSRTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 12:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
+        id S234305AbiKSSVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 13:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiKSRTR (ORCPT
+        with ESMTP id S233670AbiKSSVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 12:19:17 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEF911C27;
-        Sat, 19 Nov 2022 09:19:16 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8CFC5749;
-        Sat, 19 Nov 2022 18:19:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668878352;
-        bh=VrJTKizOe2YunSUmQn/OwL6ElVv/m3nvCVjBO+OezFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=v2XqIaTDLORxdfkirAQmgwNu3eFhcy073+DUCHQCbo6hPH64HpNewH4QuhDOEzDcS
-         kkLEehQF6NYqwWmf3wowryQ1sW/mUMXCPmOakwieLXzn7xzxyIz7HlsuKR3WcxVsG/
-         5bgczrpafW8shlOMOLxa5AK/nVNHoMUl3GiH6R/Y=
-Date:   Sat, 19 Nov 2022 19:18:56 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dafna Hirschfeld <dafna@fastmail.com>
-Cc:     Paul Elder <paul.elder@ideasonboard.com>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Helen Koike <helen.koike@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: Re: [PATCH v3 03/14] media: rkisp1: Add and use rkisp1_has_feature()
- macro
-Message-ID: <Y3kQAC0g+9Tz/2tc@pendragon.ideasonboard.com>
-References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
- <20221118093931.1284465-4-paul.elder@ideasonboard.com>
- <20221119110322.4drj7qqtp46vjcnn@guri>
+        Sat, 19 Nov 2022 13:21:22 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4680D13D43;
+        Sat, 19 Nov 2022 10:21:19 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4NF2650XQDz9sZd;
+        Sat, 19 Nov 2022 19:21:17 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9dP50iU9p0hz; Sat, 19 Nov 2022 19:21:16 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4NF26460kRz9sZY;
+        Sat, 19 Nov 2022 19:21:16 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AE2AD8B76C;
+        Sat, 19 Nov 2022 19:21:16 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ZSS9eVuynq4e; Sat, 19 Nov 2022 19:21:16 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.4.152])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5A5D48B763;
+        Sat, 19 Nov 2022 19:21:16 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2AJHJgAl2482924
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 19 Nov 2022 18:19:42 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2AJHJe3a2482922;
+        Sat, 19 Nov 2022 18:19:40 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] powerpc/bpf/32: Fix Oops on tail call tests
+Date:   Sat, 19 Nov 2022 18:19:35 +0100
+Message-Id: <8a0b9f7e4fe208a8b518c0c4310472f99d9fdb55.1668876211.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221119110322.4drj7qqtp46vjcnn@guri>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1668878372; l=6038; s=20211009; h=from:subject:message-id; bh=yCeqy7mTPVbgcrSwBiCurTBvvyery5JpUQSfv916m3k=; b=5WQZbI9f+2gy/zQTO6eMU+RJE/pGup2cXIDkBb5INfBfxelfMRDe5qL5ixybklkhLpOa4D4VBlmw cbraNIixAUs5Nx580UioNSwkJxCM+JbWlo3vN5aHiJ5hWSbqRr1E
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dafna,
+test_bpf tail call tests end up as:
 
-On Sat, Nov 19, 2022 at 01:03:22PM +0200, Dafna Hirschfeld wrote:
-> On 18.11.2022 18:39, Paul Elder wrote:
-> > From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > 
-> > Simplify feature tests with a macro that shortens lines.
-> > 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
-> > Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-> > ---
-> >  .../media/platform/rockchip/rkisp1/rkisp1-common.h |  3 +++
-> >  .../media/platform/rockchip/rkisp1/rkisp1-dev.c    | 14 +++++++-------
-> >  2 files changed, 10 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> > index a1293c45aae1..fc33c185b99f 100644
-> > --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> > +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> > @@ -111,6 +111,9 @@ enum rkisp1_feature {
-> >  	RKISP1_FEATURE_MIPI_CSI2 = BIT(0),
-> >  };
-> > 
-> > +#define rkisp1_has_feature(rkisp1, feature) \
-> > +	((rkisp1)->info->features & RKISP1_FEATURE_##feature)
-> 
-> maybe instead of that string concatination you can remove the
-> 'RKISP1_FEATURE' prefix from the enum
+  test_bpf: #0 Tail call leaf jited:1 85 PASS
+  test_bpf: #1 Tail call 2 jited:1 111 PASS
+  test_bpf: #2 Tail call 3 jited:1 145 PASS
+  test_bpf: #3 Tail call 4 jited:1 170 PASS
+  test_bpf: #4 Tail call load/store leaf jited:1 190 PASS
+  test_bpf: #5 Tail call load/store jited:1
+  BUG: Unable to handle kernel data access on write at 0xf1b4e000
+  Faulting instruction address: 0xbe86b710
+  Oops: Kernel access of bad area, sig: 11 [#1]
+  BE PAGE_SIZE=4K MMU=Hash PowerMac
+  Modules linked in: test_bpf(+)
+  CPU: 0 PID: 97 Comm: insmod Not tainted 6.1.0-rc4+ #195
+  Hardware name: PowerMac3,1 750CL 0x87210 PowerMac
+  NIP:  be86b710 LR: be857e88 CTR: be86b704
+  REGS: f1b4df20 TRAP: 0300   Not tainted  (6.1.0-rc4+)
+  MSR:  00009032 <EE,ME,IR,DR,RI>  CR: 28008242  XER: 00000000
+  DAR: f1b4e000 DSISR: 42000000
+  GPR00: 00000001 f1b4dfe0 c11d2280 00000000 00000000 00000000 00000002 00000000
+  GPR08: f1b4e000 be86b704 f1b4e000 00000000 00000000 100d816a f2440000 fe73baa8
+  GPR16: f2458000 00000000 c1941ae4 f1fe2248 00000045 c0de0000 f2458030 00000000
+  GPR24: 000003e8 0000000f f2458000 f1b4dc90 3e584b46 00000000 f24466a0 c1941a00
+  NIP [be86b710] 0xbe86b710
+  LR [be857e88] __run_one+0xec/0x264 [test_bpf]
+  Call Trace:
+  [f1b4dfe0] [00000002] 0x2 (unreliable)
+  Instruction dump:
+  XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+  XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+  ---[ end trace 0000000000000000 ]---
 
-We could, but I'm worried this would create short names subject to
-namespace clashes (such as "MIPI_CSI2" for instance).
+This is a tentative to write above the stack. The problem is encoutered
+with tests added by commit 38608ee7b690 ("bpf, tests: Add load store
+test case for tail call")
 
-> > +
-> >  /*
-> >   * struct rkisp1_info - Model-specific ISP Information
-> >   *
-> > diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> > index f2475c6235ea..e348d8c86861 100644
-> > --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> > +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> > @@ -206,7 +206,7 @@ static int rkisp1_subdev_notifier_register(struct rkisp1_device *rkisp1)
-> >  		switch (reg) {
-> >  		case 0:
-> >  			/* MIPI CSI-2 port */
-> > -			if (!(rkisp1->info->features & RKISP1_FEATURE_MIPI_CSI2)) {
-> > +			if (!rkisp1_has_feature(rkisp1, MIPI_CSI2)) {
-> >  				dev_err(rkisp1->dev,
-> >  					"internal CSI must be available for port 0\n");
-> >  				ret = -EINVAL;
-> > @@ -338,7 +338,7 @@ static int rkisp1_create_links(struct rkisp1_device *rkisp1)
-> >  	unsigned int i;
-> >  	int ret;
-> > 
-> > -	if (rkisp1->info->features & RKISP1_FEATURE_MIPI_CSI2) {
-> > +	if (rkisp1_has_feature(rkisp1, MIPI_CSI2)) {
-> >  		/* Link the CSI receiver to the ISP. */
-> >  		ret = media_create_pad_link(&rkisp1->csi.sd.entity,
-> >  					    RKISP1_CSI_PAD_SRC,
-> > @@ -390,7 +390,7 @@ static int rkisp1_create_links(struct rkisp1_device *rkisp1)
-> > 
-> >  static void rkisp1_entities_unregister(struct rkisp1_device *rkisp1)
-> >  {
-> > -	if (rkisp1->info->features & RKISP1_FEATURE_MIPI_CSI2)
-> > +	if (rkisp1_has_feature(rkisp1, MIPI_CSI2))
-> >  		rkisp1_csi_unregister(rkisp1);
-> >  	rkisp1_params_unregister(rkisp1);
-> >  	rkisp1_stats_unregister(rkisp1);
-> > @@ -423,7 +423,7 @@ static int rkisp1_entities_register(struct rkisp1_device *rkisp1)
-> >  	if (ret)
-> >  		goto error;
-> > 
-> > -	if (rkisp1->info->features & RKISP1_FEATURE_MIPI_CSI2) {
-> > +	if (rkisp1_has_feature(rkisp1, MIPI_CSI2)) {
-> >  		ret = rkisp1_csi_register(rkisp1);
-> >  		if (ret)
-> >  			goto error;
-> > @@ -590,7 +590,7 @@ static int rkisp1_probe(struct platform_device *pdev)
-> >  		goto err_unreg_v4l2_dev;
-> >  	}
-> > 
-> > -	if (rkisp1->info->features & RKISP1_FEATURE_MIPI_CSI2) {
-> > +	if (rkisp1_has_feature(rkisp1, MIPI_CSI2)) {
-> >  		ret = rkisp1_csi_init(rkisp1);
-> >  		if (ret)
-> >  			goto err_unreg_media_dev;
-> > @@ -611,7 +611,7 @@ static int rkisp1_probe(struct platform_device *pdev)
-> >  err_unreg_entities:
-> >  	rkisp1_entities_unregister(rkisp1);
-> >  err_cleanup_csi:
-> > -	if (rkisp1->info->features & RKISP1_FEATURE_MIPI_CSI2)
-> > +	if (rkisp1_has_feature(rkisp1, MIPI_CSI2))
-> >  		rkisp1_csi_cleanup(rkisp1);
-> >  err_unreg_media_dev:
-> >  	media_device_unregister(&rkisp1->media_dev);
-> > @@ -630,7 +630,7 @@ static int rkisp1_remove(struct platform_device *pdev)
-> >  	v4l2_async_nf_cleanup(&rkisp1->notifier);
-> > 
-> >  	rkisp1_entities_unregister(rkisp1);
-> > -	if (rkisp1->info->features & RKISP1_FEATURE_MIPI_CSI2)
-> > +	if (rkisp1_has_feature(rkisp1, MIPI_CSI2))
-> >  		rkisp1_csi_cleanup(rkisp1);
-> >  	rkisp1_debug_cleanup(rkisp1);
-> > 
+This happens because tail call is done to a BPF prog with a different
+stack_depth. At the time being, the stack is kept as is when the caller
+tail calls its callee. But at exit, the callee restores the stack based
+on its own properties. Therefore here, at each run, r1 is erroneously
+increased by 32 - 16 = 16 bytes.
 
+This was done that way in order to pass the tail call count from caller
+to callee through the stack. As powerpc32 doesn't have a red zone in
+the stack, it was necessary the maintain the stack as is for the tail
+call. But it was not anticipated that the BPF frame size could be
+different.
+
+Let's take a new approach. Use register r0 to carry the tail call count
+during the tail call, and save it into the stack at function entry if
+required. That's a deviation from the ppc32 ABI, but after all the way
+tail calls are implemented is already not in accordance with the ABI.
+
+With the fix, tail call tests are now successfull:
+
+  test_bpf: #0 Tail call leaf jited:1 53 PASS
+  test_bpf: #1 Tail call 2 jited:1 115 PASS
+  test_bpf: #2 Tail call 3 jited:1 154 PASS
+  test_bpf: #3 Tail call 4 jited:1 165 PASS
+  test_bpf: #4 Tail call load/store leaf jited:1 101 PASS
+  test_bpf: #5 Tail call load/store jited:1 141 PASS
+  test_bpf: #6 Tail call error path, max count reached jited:1 994 PASS
+  test_bpf: #7 Tail call count preserved across function calls jited:1 140975 PASS
+  test_bpf: #8 Tail call error path, NULL target jited:1 110 PASS
+  test_bpf: #9 Tail call error path, index out of range jited:1 69 PASS
+  test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+
+Fixes: 51c66ad849a7 ("powerpc/bpf: Implement extended BPF on PPC32")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/net/bpf_jit_comp32.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
+
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index 43f1c76d48ce..97e75b8181ca 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -115,21 +115,19 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 
+ 	/* First arg comes in as a 32 bits pointer. */
+ 	EMIT(PPC_RAW_MR(bpf_to_ppc(BPF_REG_1), _R3));
+-	EMIT(PPC_RAW_LI(bpf_to_ppc(BPF_REG_1) - 1, 0));
++	EMIT(PPC_RAW_LI(_R0, 0));
++
++#define BPF_TAILCALL_PROLOGUE_SIZE	8
++
+ 	EMIT(PPC_RAW_STWU(_R1, _R1, -BPF_PPC_STACKFRAME(ctx)));
+ 
+ 	/*
+-	 * Initialize tail_call_cnt in stack frame if we do tail calls.
+-	 * Otherwise, put in NOPs so that it can be skipped when we are
+-	 * invoked through a tail call.
++	 * Save tail_call_cnt in stack frame if we do tail calls.
+ 	 */
+ 	if (ctx->seen & SEEN_TAILCALL)
+-		EMIT(PPC_RAW_STW(bpf_to_ppc(BPF_REG_1) - 1, _R1,
+-				 bpf_jit_stack_offsetof(ctx, BPF_PPC_TC)));
+-	else
+-		EMIT(PPC_RAW_NOP());
++		EMIT(PPC_RAW_STW(_R0, _R1, bpf_jit_stack_offsetof(ctx, BPF_PPC_TC)));
+ 
+-#define BPF_TAILCALL_PROLOGUE_SIZE	16
++	EMIT(PPC_RAW_LI(bpf_to_ppc(BPF_REG_1) - 1, 0));
+ 
+ 	/*
+ 	 * We need a stack frame, but we don't necessarily need to
+@@ -244,7 +242,6 @@ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 o
+ 	EMIT(PPC_RAW_RLWINM(_R3, b2p_index, 2, 0, 29));
+ 	EMIT(PPC_RAW_ADD(_R3, _R3, b2p_bpf_array));
+ 	EMIT(PPC_RAW_LWZ(_R3, _R3, offsetof(struct bpf_array, ptrs)));
+-	EMIT(PPC_RAW_STW(_R0, _R1, bpf_jit_stack_offsetof(ctx, BPF_PPC_TC)));
+ 
+ 	/*
+ 	 * if (prog == NULL)
+@@ -257,20 +254,20 @@ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 o
+ 	EMIT(PPC_RAW_LWZ(_R3, _R3, offsetof(struct bpf_prog, bpf_func)));
+ 
+ 	if (ctx->seen & SEEN_FUNC)
+-		EMIT(PPC_RAW_LWZ(_R0, _R1, BPF_PPC_STACKFRAME(ctx) + PPC_LR_STKOFF));
++		EMIT(PPC_RAW_LWZ(_R5, _R1, BPF_PPC_STACKFRAME(ctx) + PPC_LR_STKOFF));
+ 
+ 	EMIT(PPC_RAW_ADDIC(_R3, _R3, BPF_TAILCALL_PROLOGUE_SIZE));
+ 
+ 	if (ctx->seen & SEEN_FUNC)
+-		EMIT(PPC_RAW_MTLR(_R0));
++		EMIT(PPC_RAW_MTLR(_R5));
+ 
+ 	EMIT(PPC_RAW_MTCTR(_R3));
+ 
+-	EMIT(PPC_RAW_MR(_R3, bpf_to_ppc(BPF_REG_1)));
+-
+ 	/* tear restore NVRs, ... */
+ 	bpf_jit_emit_common_epilogue(image, ctx);
+ 
++	EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME(ctx)));
++
+ 	EMIT(PPC_RAW_BCTR());
+ 
+ 	/* out: */
 -- 
-Regards,
+2.38.1
 
-Laurent Pinchart
