@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F6B630D1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D96D630D27
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbiKSIFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 03:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S229935AbiKSING (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 03:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbiKSIFh (ORCPT
+        with ESMTP id S229836AbiKSIND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:05:37 -0500
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750DB6DFC8
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:05:34 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id wIquoyL42zQOKwIquoElgP; Sat, 19 Nov 2022 09:05:32 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 19 Nov 2022 09:05:32 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <ef3c1a62-029e-ffae-8a37-fde35a8235d5@wanadoo.fr>
-Date:   Sat, 19 Nov 2022 09:05:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] rtc: msc313: Fix function prototype mismatch in
- msc313_rtc_probe()
-Content-Language: fr, en-GB
-To:     Kees Cook <keescook@chromium.org>, Daniel Palmer <daniel@thingy.jp>
-Cc:     kernel test robot <lkp@intel.com>,
-        Romain Perier <romain.perier@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20221118233101.never.215-kees@kernel.org>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221118233101.never.215-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Nov 2022 03:13:03 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED0F7DED2
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:13:00 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-391842a55d6so61368837b3.0
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:13:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mxlxAlM6/dget+xcMGAu2YOt8fNlUAK4C29Oqcd00C8=;
+        b=IcwXafexRAl664jaBoJyAa5mMQYLIYMkPXwqAvZb6o4ue+mpDnBlE0xs0UzTUu6YrL
+         J/64TUXc9QJcwIpZb9Yj/DCH6Dwppd6ZMkmAPNMO9NLSQpa+UGz749sgxZn2x0YkNUIf
+         LXPeai2EGngQkB7CfGiliNP7pMyGOorEuwIKH7/iimSqlhTNe9/StKThGkjm1J478yQT
+         FjE1xZ26fMXjtNwEj/vs994FgwWwhpqoI2BaovX8NQreDY9YAYWcG+493mAuAS7O7+Dr
+         a5zzfXgoWCsjb0963b6N3+kOMQOwst8wLhiAngZj5t5raxaGfEX5swv2inf1I1yUiP9c
+         uOiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mxlxAlM6/dget+xcMGAu2YOt8fNlUAK4C29Oqcd00C8=;
+        b=XR1Pdv0rNX6e03bLDDZYxe5tSrGWLUZUeaH5MDiJ7PHDaMqQBgbUCorM3tzU/ataNK
+         6rfbzqdl/Eek15LtZzpM83kERTFAkHlns6vxVEmYzg+xKfeVcd2MbU8YQzyjGQM8IMSK
+         YRaNiwzmmKxof5HH0QPkS4YQr3RO7bPYyOyFAD1rnS23leH8KHLLXX3VoFTk4sVBMwZ6
+         5AUAF8cYB3t8zZ0jp2XL07iTEV6Etm3puZaa/eh9JoMozWppEYY7gTXmAf6GqKu7kKbX
+         T+/RlhB1H5qo6rmpXV7zZitnjcz+DndHt51NBMLaLv+dWcN0iLQN0PfRst98arKGZPez
+         cDEg==
+X-Gm-Message-State: ANoB5pnZhw7yVZIe2aBYzYOd0viQUSGXfH9eIe/tK8911ozHiwn0gVv2
+        SeKrorNoStkYHvT8kcmZE8t8iZzK9VOuGw==
+X-Google-Smtp-Source: AA0mqf67B7vUfx2Z0il/dhl9vKO2jAAok4f+bf6diQKTxBlXzTpb7pEn7mFBK76m9TQGjgkDGqNWmpmh5ibXWQ==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:e807:0:b0:6ca:21b3:42ec with SMTP id
+ k7-20020a25e807000000b006ca21b342ecmr9916189ybd.398.1668845579853; Sat, 19
+ Nov 2022 00:12:59 -0800 (PST)
+Date:   Sat, 19 Nov 2022 16:12:50 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221119081252.3864249-1-davidgow@google.com>
+Subject: [PATCH v3 1/3] kunit: Provide a static key to check if KUnit is
+ actively running tests
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 19/11/2022 à 00:31, Kees Cook a écrit :
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed.
-> 
-> msc313_rtc_probe() was passing clk_disable_unprepare() directly, which
-> did not have matching prototypes for devm_add_action_or_reset()'s callback
-> argument. Add a wrapper and remove the cast.
-> 
-> This was found as a result of Clang's new -Wcast-function-type-strict
-> flag, which is more sensitive than the simpler -Wcast-function-type,
-> which only checks for type width mismatches.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
-> Cc: Daniel Palmer <daniel@thingy.jp>
-> Cc: Romain Perier <romain.perier@gmail.com>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/rtc/rtc-msc313.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
-> index f3fde013c4b8..36e3e77f303e 100644
-> --- a/drivers/rtc/rtc-msc313.c
-> +++ b/drivers/rtc/rtc-msc313.c
-> @@ -177,6 +177,13 @@ static irqreturn_t msc313_rtc_interrupt(s32 irq, void *dev_id)
->   	return IRQ_HANDLED;
->   }
->   
-> +static void msc313_clk_disable_unprepare(void *data)
-> +{
-> +	struct clk *clk = data;
-> +
-> +	clk_disable_unprepare(clk);
-> +}
-> +
->   static int msc313_rtc_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> @@ -224,7 +231,7 @@ static int msc313_rtc_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> -	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, clk);
-> +	ret = devm_add_action_or_reset(dev, msc313_clk_disable_unprepare, clk);
->   	if (ret)
->   		return ret;
->   
+KUnit does a few expensive things when enabled. This hasn't been a
+problem because KUnit was only enabled on test kernels, but with a few
+people enabling (but not _using_) KUnit on production systems, we need a
+runtime way of handling this.
 
-Hi,
+Provide a 'kunit_running' static key (defaulting to false), which allows
+us to hide any KUnit code behind a static branch. This should reduce the
+performance impact (on other code) of having KUnit enabled to a single
+NOP when no tests are running.
 
-another way to fix it, is to use devm_clk_get_enabled().
+Note that, while it looks unintuitive, tests always run entirely within
+__kunit_test_suites_init(), so it's safe to decrement the static key at
+the end of this function, rather than in __kunit_test_suites_exit(),
+which is only there to clean up results in debugfs.
 
-It removes some LoC instead of introducing some new ones and saves a few 
-bytes of memory.
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-CJ
+This should be a no-op (other than a possible performance improvement)
+functionality-wise, and lays the groundwork for a more optimised static
+stub implementation.
+
+The remaining patches in the series add a kunit_get_current_test()
+function which is a more friendly and performant wrapper around
+current->kunit_test, and use this in the slub test. They also improve
+the documentation a bit.
+
+If there are no objections, we'll take the whole series via the KUnit
+tree.
+
+No changes since v2:
+https://lore.kernel.org/all/20221025071907.1251820-1-davidgow@google.com/
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/
+- No changes in this patch.
+- Patch 2/3 is reworked, patch 3/3 is new.
+
+---
+ include/kunit/test.h | 4 ++++
+ lib/kunit/test.c     | 6 ++++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index d7f60e8aab30..b948c32a7b6b 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -16,6 +16,7 @@
+ #include <linux/container_of.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
++#include <linux/jump_label.h>
+ #include <linux/kconfig.h>
+ #include <linux/kref.h>
+ #include <linux/list.h>
+@@ -27,6 +28,9 @@
+ 
+ #include <asm/rwonce.h>
+ 
++/* Static key: true if any KUnit tests are currently running */
++extern struct static_key_false kunit_running;
++
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 90640a43cf62..314717b63080 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -20,6 +20,8 @@
+ #include "string-stream.h"
+ #include "try-catch-impl.h"
+ 
++DEFINE_STATIC_KEY_FALSE(kunit_running);
++
+ #if IS_BUILTIN(CONFIG_KUNIT)
+ /*
+  * Fail the current test and print an error message to the log.
+@@ -612,10 +614,14 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+ 		return 0;
+ 	}
+ 
++	static_branch_inc(&kunit_running);
++
+ 	for (i = 0; i < num_suites; i++) {
+ 		kunit_init_suite(suites[i]);
+ 		kunit_run_tests(suites[i]);
+ 	}
++
++	static_branch_dec(&kunit_running);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
+-- 
+2.38.1.584.g0f3c55d4c2-goog
 
