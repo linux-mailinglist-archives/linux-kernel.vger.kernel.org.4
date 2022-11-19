@@ -2,133 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D8A630D48
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10D2630D68
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbiKSI0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 03:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
+        id S229802AbiKSIpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 03:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiKSI0F (ORCPT
+        with ESMTP id S233069AbiKSIpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:26:05 -0500
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB3EACEA8;
-        Sat, 19 Nov 2022 00:26:03 -0800 (PST)
-Message-ID: <c806a812-4ecd-226f-109e-84642357fbcb@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1668846361;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gfn1N8MLZTcJX22BXGXP9eTQh7aXYUOkE4nO8D9F2+U=;
-        b=w701wdjyKQhkOLcG8+obDqjtM+rgbf9kPAXpkBOfaqJ5NYt12Bo81idGEOa9ykQuYnyWUD
-        5kewtMlfuAkScbD2CMHuQiY3Hh65ukbR+x/RNsxuxaQsWV/d/fyqFhTEVUcFlsuJI10Pxe
-        TY2z91jGIiruYG31ow23QeEmYlKRq14=
-Date:   Sat, 19 Nov 2022 16:25:47 +0800
+        Sat, 19 Nov 2022 03:45:06 -0500
+X-Greylist: delayed 1018 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Nov 2022 00:45:04 PST
+Received: from server.eikelenboom.it (server.eikelenboom.it [91.121.65.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD04193E9
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:45:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=eikelenboom.it; s=20180706; h=Content-Transfer-Encoding:Content-Type:
+        Subject:From:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=DJreaUMvt4zA0FCli4gW45voLTfYum2Sr88dejDCL4o=; b=Bgk45hLnCBxrR7FghkDkLpbkG/
+        kVkd17OfU2UZVIKRFbrCpf9wfzuVPRPSQGwjUpFPEq4YFkrHe+Hv4dRsbw1FMNDcjPe6Ix8vZpkW9
+        WvMHqOKM8OAt5trzx149PgwazaUWtB5TnfemqDokgn9NGn9xKFmwufMpIOuldh41CrGE=;
+Received: from 131-195-250-62.ftth.glasoperator.nl ([62.250.195.131]:46996 helo=[172.16.1.212])
+        by server.eikelenboom.it with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <linux@eikelenboom.it>)
+        id 1owJDZ-0001cM-Jm; Sat, 19 Nov 2022 09:28:53 +0100
+Message-ID: <42579618-f8e2-9fd2-0b6c-f2c87f7c57a6@eikelenboom.it>
+Date:   Sat, 19 Nov 2022 09:28:01 +0100
 MIME-Version: 1.0
-Subject: Re: [PATCH for-next v2] RDMA/rxe: Fix mr->map double free
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Li Zhijian <lizhijian@fujitsu.com>
-Cc:     zyjzyj2000@gmail.com, leon@kernel.org, linux-rdma@vger.kernel.org,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <1667099073-2-1-git-send-email-lizhijian@fujitsu.com>
- <Y3ggL8RJw6mDaWxT@nvidia.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Yanjun Zhu <yanjun.zhu@linux.dev>
-In-Reply-To: <Y3ggL8RJw6mDaWxT@nvidia.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: nl-NL, en-US
+To:     Juergen Gross <jgross@suse.com>, Yu Zhao <yuzhao@google.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Xen-devel <xen-devel@lists.xen.org>
+From:   Sander Eikelenboom <linux@eikelenboom.it>
+Subject: Xen-unstable Linux-6.1.0-rc5 BUG: unable to handle page fault for
+ address: ffff8880083374d0
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/11/19 8:15, Jason Gunthorpe 写道:
-> On Sun, Oct 30, 2022 at 03:04:33AM +0000, Li Zhijian wrote:
->> rxe_mr_cleanup() which tries to free mr->map again will be called
->> when rxe_mr_init_user() fails.
->>
->> [43895.939883] CPU: 0 PID: 4917 Comm: rdma_flush_serv Kdump: loaded Not tainted 6.1.0-rc1-roce-flush+ #25
->> [43895.942341] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
->> [43895.945208] Call Trace:
->> [43895.946130]  <TASK>
->> [43895.946931]  dump_stack_lvl+0x45/0x5d
->> [43895.948049]  panic+0x19e/0x349
->> [43895.949010]  ? panic_print_sys_info.part.0+0x77/0x77
->> [43895.950356]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
->> [43895.952589]  ? preempt_count_sub+0x14/0xc0
->> [43895.953809]  end_report.part.0+0x54/0x7c
->> [43895.954993]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
->> [43895.956406]  kasan_report.cold+0xa/0xf
->> [43895.957668]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
->> [43895.959090]  rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
->> [43895.960502]  __rxe_cleanup+0x10a/0x1e0 [rdma_rxe]
->> [43895.961983]  rxe_reg_user_mr+0xb7/0xd0 [rdma_rxe]
->> [43895.963456]  ib_uverbs_reg_mr+0x26a/0x480 [ib_uverbs]
->> [43895.964921]  ? __lock_acquire+0x876/0x31e0
->> [43895.966182]  ? ib_uverbs_ex_create_wq+0x630/0x630 [ib_uverbs]
->> [43895.967739]  ? uverbs_fill_udata+0x1c6/0x330 [ib_uverbs]
->> [43895.969204]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x1a2/0x250 [ib_uverbs]
->> [43895.971126]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
->> [43895.973094]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
->> [43895.975096]  ? uverbs_fill_udata+0x25f/0x330 [ib_uverbs]
->> [43895.976466]  ib_uverbs_cmd_verbs+0x1397/0x15a0 [ib_uverbs]
->> [43895.977930]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
->> [43895.979937]  ? uverbs_fill_udata+0x330/0x330 [ib_uverbs]
-> 
-> Please dont include timestamps in commit messages
-> 
->> @@ -163,9 +163,8 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
->>   				pr_warn("%s: Unable to get virtual address\n",
->>   						__func__);
->>   				err = -ENOMEM;
->> -				goto err_cleanup_map;
->> +				goto err_release_umem;
->>   			}
->> -
-> 
-> page_address() fails if this is a highmem system and the page hasn't
-> been kmap'd yet. So the right thing to do is to use kmap..
+Hi Yu / Juergen,
 
-Sure.
+This night I got a dom0 kernel crash on my new Ryzen box running Xen-unstable and a Linux-6.1.0-rc5 kernel.
+I did enable the new and shiny MGLRU, could this be related ?
 
-sgt_append.sgt is allocated in this function ib_umem_get. And the 
-function sg_alloc_append_table_from_pages is called to allocate memory.
+--
+Sander
 
-147 struct ib_umem *ib_umem_get(struct ib_device *device, unsigned long 
-addr,
-148                             size_t size, int access)
-149 {
-...
-230                 ret = sg_alloc_append_table_from_pages(
-231                         &umem->sgt_append, page_list, pinned, 0,
-232                         pinned << PAGE_SHIFT, 
-ib_dma_max_seg_size(device),
-233                         npages, GFP_KERNEL);
-...
 
-And it seems that it is not highmem.
-
-So page_address will not be NULL?
-
-As such, it is not necessary to test the return vaue of page_address?
-
-If so, can we add a new commit to avoid testing of the return value of 
-page_address?
-
-Zhu Yanjun
-
-> 
-> But this looks right, so applied to for-next
-> 
-> Thanks,
-> Jason
-
+Nov 19 06:30:11 serveerstertje kernel: [68959.647371] BUG: unable to handle page fault for address: ffff8880083374d0
+Nov 19 06:30:11 serveerstertje kernel: [68959.663555] #PF: supervisor write access in kernel mode
+Nov 19 06:30:11 serveerstertje kernel: [68959.677542] #PF: error_code(0x0003) - permissions violation
+Nov 19 06:30:11 serveerstertje kernel: [68959.691181] PGD 3026067 P4D 3026067 PUD 3027067 PMD 7fee5067 PTE 8010000008337065
+Nov 19 06:30:11 serveerstertje kernel: [68959.705084] Oops: 0003 [#1] PREEMPT SMP NOPTI
+Nov 19 06:30:11 serveerstertje kernel: [68959.718710] CPU: 7 PID: 158 Comm: kswapd0 Not tainted 6.1.0-rc5-20221118-doflr-mac80211debug+ #1
+Nov 19 06:30:11 serveerstertje kernel: [68959.732457] Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./B450 Pro4 R2.0, BIOS P5.60 10/20/2022
+Nov 19 06:30:11 serveerstertje kernel: [68959.746391] RIP: e030:pmdp_test_and_clear_young+0x25/0x40
+Nov 19 06:30:11 serveerstertje kernel: [68959.760294] Code: 00 00 00 66 90 48 b9 ff ff 1f 00 00 00 f0 ff 48 8b 02 48 be ff 0f 00 00 00 00 f0 ff a8 80 48 0f 44 ce 48 21 c8 83 e0 20 74 0c <f0> 48 0f ba 32 05 0f 92 c0 0f b6 c0 c3 cc cc c
+Nov 19 06:30:11 serveerstertje kernel: [68959.787908] RSP: e02b:ffffc9000161f940 EFLAGS: 00010202
+Nov 19 06:30:11 serveerstertje kernel: [68959.801637] RAX: 0000000000000020 RBX: 0000000000000000 RCX: fff0000000000fff
+Nov 19 06:30:11 serveerstertje kernel: [68959.815243] RDX: ffff8880083374d0 RSI: fff0000000000fff RDI: ffff888010f41000
+Nov 19 06:30:11 serveerstertje kernel: [68959.828683] RBP: ffffc9000161fa70 R08: 000ffffffffff000 R09: 00005654134b5000
+Nov 19 06:30:11 serveerstertje kernel: [68959.842026] R10: 000000000000689e R11: 0000000000000000 R12: ffff8880083374d0
+Nov 19 06:30:11 serveerstertje kernel: [68959.855214] R13: ffff88807fc1a000 R14: ffff8880083374d0 R15: 0000000000000000
+Nov 19 06:30:11 serveerstertje kernel: [68959.868118] FS:  0000000000000000(0000) GS:ffff8880801c0000(0000) knlGS:0000000000000000
+Nov 19 06:30:11 serveerstertje kernel: [68959.880689] CS:  e030 DS: 0000 ES: 0000 CR0: 0000000080050033
+Nov 19 06:30:11 serveerstertje kernel: [68959.893457] CR2: ffff8880083374d0 CR3: 000000000f33c000 CR4: 0000000000050660
+Nov 19 06:30:11 serveerstertje kernel: [68959.906377] Call Trace:
+Nov 19 06:30:11 serveerstertje kernel: [68959.919219]  <TASK>
+Nov 19 06:30:11 serveerstertje kernel: [68959.931844]  walk_pmd_range_locked.isra.87+0x2e9/0x4e0
+Nov 19 06:30:11 serveerstertje kernel: [68959.944840]  walk_pud_range+0x69c/0x980
+Nov 19 06:30:11 serveerstertje kernel: [68959.957562]  walk_pgd_range+0xe9/0x810
+Nov 19 06:30:11 serveerstertje kernel: [68959.970161]  ? mt_find+0x1f8/0x3c0
+Nov 19 06:30:11 serveerstertje kernel: [68959.982808]  __walk_page_range+0x17b/0x180
+Nov 19 06:30:11 serveerstertje kernel: [68959.995440]  walk_page_range+0x106/0x170
+Nov 19 06:30:11 serveerstertje kernel: [68960.008014]  try_to_inc_max_seq+0x40a/0x9e0
+Nov 19 06:30:11 serveerstertje kernel: [68960.020262]  lru_gen_age_node+0x1d3/0x280
+Nov 19 06:30:11 serveerstertje kernel: [68960.032222]  ? shrink_node+0x294/0x710
+Nov 19 06:30:11 serveerstertje kernel: [68960.044129]  balance_pgdat+0x1c3/0x650
+Nov 19 06:30:11 serveerstertje kernel: [68960.055995]  ? prepare_to_wait_event+0x110/0x110
+Nov 19 06:30:11 serveerstertje kernel: [68960.068022]  kswapd+0x1f0/0x3a0
+Nov 19 06:30:11 serveerstertje kernel: [68960.079997]  ? prepare_to_
