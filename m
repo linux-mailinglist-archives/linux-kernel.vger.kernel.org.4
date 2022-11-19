@@ -2,131 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFEC630E9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 13:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D74E630E9C
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 13:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbiKSMD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 07:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S231949AbiKSMF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 07:05:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbiKSMDu (ORCPT
+        with ESMTP id S230398AbiKSMF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 07:03:50 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611581D337;
-        Sat, 19 Nov 2022 04:03:49 -0800 (PST)
+        Sat, 19 Nov 2022 07:05:26 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B4633C;
+        Sat, 19 Nov 2022 04:05:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668859429; x=1700395429;
+  t=1668859525; x=1700395525;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=yW4nfdgNhTgrlVD9CZ4AM85k+btTwwC+nY12lvuGCB0=;
-  b=DKXBQYpZgafrq2W6Qicms+/2pZnq1kPNd/soXeA79vhwlMeoh9zQO49w
-   Y7m2D39nleYYNEh0oWRe7GRlHCskqYjL7eWCiwiyA6AK30AvRGJcOs/f2
-   6bl+QYVyVG1qq6GrsKshcX7yLX5eX8IHUwc5JMVwvBsqezTrGBdeQSrvO
-   I9qh5LSQAISMSAzkn6iPl5ud8M8vMmhkenxrLMIFEwKOi6qRH5kz0nIdk
-   Qpcjp6PfYaixrapAklGxXWBp0VDhgfY7hEdDHYDm3OAffS1IkW4HHMBYq
-   noJTUzMlwwUNaQCs8+GwjlIZDdHpR3iphx3VLUTxH9r5uj5GqM3VrW5q6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="300852242"
+   mime-version:in-reply-to;
+  bh=0ap6fgQbCs+mHikafYbBi+Rw0G7AkI7HJ7FsfJMI09M=;
+  b=dZCinf/JvZ8sOaCTkoStO1aWqOdDCj2FwhFVsyHgJhy23PmUOWLdOgDI
+   coJjL8UKvYLy5fBEeV9HvrWdzoS2QnaZJrCNKbO7/XfTiNNIV26PGH7L4
+   gL8FE+hJPzcr+qnjEK8YU1SecBohXd/XjlbVy6mTP7PtpkHmkCQVGJE3m
+   KcNnXJPuKyfLaDBgdemqLYUFRDIUBrHUTbwVyrBuFBqnbcF85WEsvNHoc
+   p3aTq1OZuZjWXj+HSi0yDKarEZKJG/l2a/yRbgITRobxF0kG7D1Lpev3A
+   myGm4seec+ca1KActJOCJlIWCW/agTlnyX7KjFHlfW30Z1m2+oQUFUNui
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="377576220"
 X-IronPort-AV: E=Sophos;i="5.96,176,1665471600"; 
-   d="scan'208";a="300852242"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2022 04:03:48 -0800
+   d="scan'208";a="377576220"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2022 04:05:25 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="885606693"
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="640518529"
 X-IronPort-AV: E=Sophos;i="5.96,176,1665471600"; 
-   d="scan'208";a="885606693"
+   d="scan'208";a="640518529"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Nov 2022 04:03:44 -0800
+  by orsmga002.jf.intel.com with ESMTP; 19 Nov 2022 04:05:19 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1owMZS-00ERTC-2A;
-        Sat, 19 Nov 2022 14:03:42 +0200
-Date:   Sat, 19 Nov 2022 14:03:42 +0200
+        id 1owMay-00ERUl-2i;
+        Sat, 19 Nov 2022 14:05:16 +0200
+Date:   Sat, 19 Nov 2022 14:05:16 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        wangjianli <wangjianli@cdjrlc.com>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 054/606] iio: accel: kxcjk-1013: Convert to i2c's
- .probe_new()
-Message-ID: <Y3jGHufAJVxZp1f0@smile.fi.intel.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-55-uwe@kleine-koenig.org>
+To:     Tharunkumar.Pasumarthi@microchip.com
+Cc:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
+        macro@orcam.me.uk, jay.dolan@accesio.com, cang1@live.co.uk,
+        u.kleine-koenig@pengutronix.de, wander@redhat.com,
+        etremblay@distech-controls.com, jk@ozlabs.org,
+        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
+        phil.edworthy@renesas.com, lukas@wunner.de,
+        UNGLinuxDriver@microchip.com, colin.i.king@gmail.com
+Subject: Re: [PATCH v5 tty-next 2/4] 8250: microchip: pci1xxxx: Add
+ serial8250_pci_setup_port definition in 8250_pcilib.c
+Message-ID: <Y3jGfO5wboXe66KB@smile.fi.intel.com>
+References: <20221117050126.2966714-1-kumaravel.thiagarajan@microchip.com>
+ <20221117050126.2966714-3-kumaravel.thiagarajan@microchip.com>
+ <Y3Xa9fRP3GGygiVj@smile.fi.intel.com>
+ <PH7PR11MB59582CE57CE17F20A041157F9B099@PH7PR11MB5958.namprd11.prod.outlook.com>
+ <Y3dh4UlWKP2FzTpq@smile.fi.intel.com>
+ <PH7PR11MB595845BBDBD65FB114018C339B089@PH7PR11MB5958.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-55-uwe@kleine-koenig.org>
+In-Reply-To: <PH7PR11MB595845BBDBD65FB114018C339B089@PH7PR11MB5958.namprd11.prod.outlook.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:36:28PM +0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
+On Sat, Nov 19, 2022 at 03:50:02AM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Sent: Friday, November 18, 2022 4:14 PM
+> > To: Tharunkumar Pasumarthi - I67821 <Tharunkumar.Pasumarthi@microchip.com>
 
-Since there is no split on per subsystem basis (I mean, as a series targeting
-only, let's say, IIO subsystem with cover letter), I'm answering here that all
-IIO patches are good to me, thanks, Uwe!
+...
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > Don't you have a dependency issue here?
+> > >
+> > > Okay, I will explain the need for the changes done in commit description.
+> > 
+> > What I meant is that the 8250_pci patch should be _prerequisite_ to your
+> > stuff and not otherwise.
+> 
+> Hi Andy,
+> So, do you suggest having these changes done as first patch of the patchset prior to patches
+> specific for our driver?
 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/iio/accel/kxcjk-1013.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/iio/accel/kxcjk-1013.c b/drivers/iio/accel/kxcjk-1013.c
-> index e626b6fa8a36..98da4bda22df 100644
-> --- a/drivers/iio/accel/kxcjk-1013.c
-> +++ b/drivers/iio/accel/kxcjk-1013.c
-> @@ -1424,9 +1424,9 @@ static const char *kxcjk1013_match_acpi_device(struct device *dev,
->  	return dev_name(dev);
->  }
->  
-> -static int kxcjk1013_probe(struct i2c_client *client,
-> -			   const struct i2c_device_id *id)
-> +static int kxcjk1013_probe(struct i2c_client *client)
->  {
-> +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
->  	static const char * const regulator_names[] = { "vdd", "vddio" };
->  	struct kxcjk1013_data *data;
->  	struct iio_dev *indio_dev;
-> @@ -1732,7 +1732,7 @@ static struct i2c_driver kxcjk1013_driver = {
->  		.of_match_table = kxcjk1013_of_match,
->  		.pm	= &kxcjk1013_pm_ops,
->  	},
-> -	.probe		= kxcjk1013_probe,
-> +	.probe_new	= kxcjk1013_probe,
->  	.remove		= kxcjk1013_remove,
->  	.id_table	= kxcjk1013_id,
->  };
-> -- 
-> 2.38.1
-> 
+Yes.
 
 -- 
 With Best Regards,
