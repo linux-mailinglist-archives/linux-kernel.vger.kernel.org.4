@@ -2,62 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855EA630BC5
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2BB630BDC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234353AbiKSEMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 23:12:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S234444AbiKSEPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 23:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbiKSEMK (ORCPT
+        with ESMTP id S232530AbiKSEO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 23:12:10 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76C883EAE;
-        Fri, 18 Nov 2022 20:11:22 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id 128so6544936vsz.12;
-        Fri, 18 Nov 2022 20:11:22 -0800 (PST)
+        Fri, 18 Nov 2022 23:14:56 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262944F18F;
+        Fri, 18 Nov 2022 20:13:42 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z26so6687806pff.1;
+        Fri, 18 Nov 2022 20:13:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uFTErpkyzUkKz4ZMbc5fuZ/BIhGwsKOPVm98ZEN6Gw0=;
-        b=dwc1huwFF6jYZdqDS9arWDVXnvg6wO3C13GYEqmpH9hPak4zNhpMGPlUPgcJx7J//u
-         HEiPB5L1L5ixQEy6PW5eyc9NbNSBzlsmANoEDd+iARirivsjs4zBBUZciJzwqsdM8ARK
-         knqo3wS7+kIPT+U5EYi0PDAld+vb9GyLqcQf75PY9tMk6F035cIj2kNjp8eVUFrHlBY9
-         p0Of/4Y9+xd20KvYuMnQeAx/XMnKSspnk19Dgg8T25Kh1X9bfhbparyLGKiuXQiP0XPk
-         gnT3fjVzYvqih9oKVVBpOAtNyBw9yxhuX5UbOr7NbtJFtAVNKzBeYIEfMaNIcGYu7Bfy
-         3FWA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/KJvN+0p0Gw8A8+C0QSPGunSxZ6TW24ALLcT6/3nqn0=;
+        b=bjxoS4AoFUeUdk/e1owgRIRzA3ovXkU8DVexFtsoEMcVQIHlWAL8BpvJJxOwdRqt4u
+         U9LhFWCImLjOT0dcJp/cdHF7QCuQb1Jm/Pxz19LDROWLdwMLdhRLsg4QZDYbJnCJzL26
+         CQe4idUaat9CQ8HQ5vZH04pTQAXJjwlHBmys7gY4gLMt+0L0ytXTtd5r2734YyA27aAv
+         TFmld30nJk54stFD0IjBu516jA0EJ1aOUbgJPM0qVperNg3UGG7EFbfmuHhbzTTw2hTM
+         9IqCIIY8WTQeFw0b9+ctNhSoTrgqiTvIiZcQnDFarKB9wjhUrhwJUxU8EPsF/WjmUFZM
+         9A7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uFTErpkyzUkKz4ZMbc5fuZ/BIhGwsKOPVm98ZEN6Gw0=;
-        b=MbZCCTxDe4hglIMf2UxRyjDTV6pjBe4raNwdJVBrAACCU6J/acutzj0bgKAff0Vy8u
-         zjwZurMqhTLzwfWVldc1DHwk418bO1UpAkMqu4/1fJOXJz5iVwN+QsibQk+X3H3/+BK1
-         572iHJT51BlWp5fiUjPpbveXq+jtTpN5+s59cXcdp2W8qNrT58qNDdobQ0GCS0kcEJVt
-         o+U36/81HY98D6fMMemONtkPLwOTW4+HPkIhtOaY+Df7Ga3s8iJq4KSmoxLs9QbGP+so
-         MP0EKJFYeg58rhaBKTjE9EriJhIVfUK/cN8Be0dUPH9MTS0OoepbNWh+N6n3fPZTN2X5
-         F4bQ==
-X-Gm-Message-State: ANoB5pnt6Cgd3OMeiE3HFSEKNUVboEfPUhV3D2VbThyuK9ErakWMmi3n
-        IasPgx9otDhIyKr9k2LE2rir92jfdjFNZ8V5iRWqXlprzpk=
-X-Google-Smtp-Source: AA0mqf7Q+wT5O9gYE4BGZUDzzTDnTAdkgtVf1kWKDrow0EwM3qB5U/1/9HytXgOk6SZUGBNQMaS9MD4naEqsa7Y2LO0=
-X-Received: by 2002:a05:6102:2cf:b0:3aa:2f91:5230 with SMTP id
- h15-20020a05610202cf00b003aa2f915230mr5915vsh.68.1668831081845; Fri, 18 Nov
- 2022 20:11:21 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/KJvN+0p0Gw8A8+C0QSPGunSxZ6TW24ALLcT6/3nqn0=;
+        b=Yu68A4/TL2tvUpjZRjHH1sX2uo1DD5eHzkXelTn6uzlQbbKQBx8WPXqEkDQj3EWNAa
+         vzwvqTpYGKLSgdsaL/ZaHcejJ9FuITtEfuBIgDz9GRwmTJcZEM9zCDEJWkyiTPrpFfDN
+         Gg9FPGdrw+xkFlvb79+g7tZV9G9IbSZkDWV1RySOItdTL3/7vy2K/Yq8NogF1oz9SSJv
+         NYzPeY5lwsuAHER3v6mTI4wqn8lHoRayUSYv73EX5NEvnvJ9lbGikTDj8um8twQZhJgS
+         QriYNIps90Yfgr2lRjpPtC+242Ix/181Qu8VPiRw04Og3UhecinBEGSJjlX3um6/x6kl
+         LunQ==
+X-Gm-Message-State: ANoB5pnyU20Dw934E+2q9RN+GJPg7LsPXwhT5qRhndSlpCqLDQQ26reu
+        m9sBYwsy1ArzpUf2wTvQfKk=
+X-Google-Smtp-Source: AA0mqf7tZLWZ+PuTbPRdHAQLfnsEKSRTCb/ELElrB/XM0q5vxwSybwY7fU9lkPcgO3p/VZpZsv7EEA==
+X-Received: by 2002:a63:5422:0:b0:46e:be03:d9b2 with SMTP id i34-20020a635422000000b0046ebe03d9b2mr9243403pgb.406.1668831221442;
+        Fri, 18 Nov 2022 20:13:41 -0800 (PST)
+Received: from macbook-pro-5.dhcp.thefacebook.com ([2620:10d:c090:400::5:7165])
+        by smtp.gmail.com with ESMTPSA id f8-20020a170902684800b00186e34524e3sm4538540pln.136.2022.11.18.20.13.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 20:13:40 -0800 (PST)
+Date:   Fri, 18 Nov 2022 20:13:37 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
+        yhs@fb.com, song@kernel.org, sdf@google.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
+        haoluo@google.com, tj@kernel.org, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 1/3] bpf: Allow trusted pointers to be passed
+ to KF_TRUSTED_ARGS kfuncs
+Message-ID: <20221119041337.eejp2dfe6w5xqplo@macbook-pro-5.dhcp.thefacebook.com>
+References: <20221117032402.2356776-1-void@manifault.com>
+ <20221117032402.2356776-2-void@manifault.com>
+ <20221118022640.borhn6iy4v2fhl7g@MacBook-Pro-5.local>
+ <Y3eamIVUVb6V47LF@maniforge.lan>
+ <Y3e2sdqL1E0SKJ5/@maniforge.lan>
+ <20221118184500.yshwvcrx2a34xkmc@MacBook-Pro-5.local>
+ <Y3f8yqhRRBIzrDvH@maniforge.lan>
 MIME-Version: 1.0
-References: <20221118063304.140187-1-chenzhongjin@huawei.com> <20221118141138.c091445bdda36b78f6277c1f@linux-foundation.org>
-In-Reply-To: <20221118141138.c091445bdda36b78f6277c1f@linux-foundation.org>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Sat, 19 Nov 2022 13:11:05 +0900
-Message-ID: <CAKFNMonaKuOrCt0dKxN5t3gPKOq--z=Q+LZ8iczqN30kQEdhkQ@mail.gmail.com>
-Subject: Re: [PATCH] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment
- usage as dirty
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3f8yqhRRBIzrDvH@maniforge.lan>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,90 +82,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On Fri, Nov 18, 2022 at 03:44:42PM -0600, David Vernet wrote:
+> > > if it's a release arg it should always have a refcount on it.
+> > > PTR_UNTRUSTED | PTR_TRUSTED would also make no sense. MEM_FIXED_SIZE
+> > > though seems fine? In general, I thought it was prudent for us to take
+> > > the most conservative possible approach here, which is that PTR_TRUSTED
+> > > only applies when no other modifiers are present, and it applies for all
+> > > obj_ptr types (other than PTR_TO_CTX which does its own thing).
+> > 
+> > Probably worth refining when PTR_TRUSTED is cleared.
+> > For example adding PTR_UNTRUSTED should definitely clear it.
+> 
+> That makes sense for PTR_UNTRUSTED, what about the other type modifiers
+> like PTR_MAYBE_NULL? We set and unset if a ptr is NULL throughout a
+> function, so we'd have to record if it was previously trusted in order
+> to properly re-OR after a NULL check.
 
-On Sat, Nov 19, 2022 at 7:11 AM Andrew Morton wrote:
->
-> On Fri, 18 Nov 2022 14:33:04 +0800 Chen Zhongjin wrote:
->
-> > In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
-> > nilfs_segment_usage is not set dirty, which makes it can be found by
-> > nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
-> >
-> > This will cause the problem reported by syzkaller:
-> > https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
-> >
-> > It's because the case starts with segbuf1.segnum = 3, nextnum = 4, and
-> > nilfs_sufile_alloc() not called to allocate a new segment.
-> >
-> > The first time nilfs_segctor_extend_segments() allocated segment
-> > segbuf2.segnum = segbuf1.nextnum = 4, then nilfs_sufile_alloc() found
-> > nextnextnum = 4 segment because its su is not set dirty.
-> > So segbuf2.nextnum = 4, which causes next segbuf3.segnum = 4.
-> >
-> > sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
-> > added to both buffer lists of two segbuf.
-> > It makes the list head of second list linked to the first one. When
-> > iterating the first one, it will access and deref the head of second,
-> > which causes NULL pointer dereference.
+PTR_MAYBE_NULL is another bit and I don't think it conflicts with PTR_TRUSTED.
+PTR_TO_BTF_ID | PTR_TRUSTED is a valid pointer.
+PTR_TO_BTF_ID | PTR_TRUSTED | PTR_MAYBE_NULL is a valid pointer or NULL.
 
-Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+PTR_TO_BTF_ID | PTR_MAYBE_NULL is a legacy "valid pointer" or NULL.
+That legacy pointer cannot be passed to KF_TRUSTED_ARGS kfuncs.
 
-This is a simple and side-effect-free nice patch for this problem,
-even though the functionality of nilfs_sufile_mark_dirty() has changed
-from what it is supposed to do.
+KF_TRUSTED_ARGS kfuncs should not accept PTR_TO_BTF_ID | PTR_TRUSTED | PTR_MAYBE_NULL.
+It's a job of the prog to do != NULL check.
+Otherwise all such != NULL checks would need to move inside kfuncs which is not good.
 
-Making the segment usage dirty was the responsibility of another
-function, nilfs_sufile_alloc().
-However, it turns out that the current implementation is insufficient
-for corrupted disk images like those created by syzbot. This patch
-complements that.
+> > MEM_ALLOC flag is probably equivalent to PTR_TRUSTED.
+> > Maybe the bit:
+> > regs[BPF_REG_0].type = PTR_TO_BTF_ID | MEM_ALLOC;
+> > should set PTR_TRUSTED as well?
+> 
+> We could, but that changes the meaning of PTR_TRUSTED and IMO makes it
+> harder to reason about. Before it was just "the kernel passed this arg
+> to the program and promises the program that it was trusted when it was
+> first passed". Now it's that plus it could mean that it points to an
+> allocated object from bpf_obj_new()". IMO we should keep all of these
+> modifiers separate so that the presence of a modifier has a well-defined
+> meaning that we can interpret in each context as needed.  In this case,
+> we can make trust opt-in, so a KF_TRUSTED_ARGS BTF pointer either of the
+> following:
+> 
+> 1. reg->ref_obj_id > 0
+> 2. Either one of PTR_TRUSTED | MEM_ALLOC type modifiers are set, and no
+>    others.
 
-If you don't mind, please add the following tag as well:
+I don't think MEM_ALLOC conflicts with PTR_TRUSTED.
+MEM_ALLOC flags means that it came from bpf_obj_new() and that's what
+bpf_spin_lock and bpf_obj_drop() want to see.
 
-Reported-by: Liu Shixin <liushixin2@huawei.com>
+Adding PTR_TRUSTED to MEM_ALLOC looks necessary to me.
+It doesn't have to be done right now, but eventually feels right.
 
-He initially tried to fix this issue [1]:
+I've been thinking whether reg->ref_obj_id > 0 condition should be converted
+to PTR_TRUSTED too...
+On one side it will simplify the check for KF_TRUSTED_ARGS.
+The only thing check_kfunc_args() would need to do is:
+is_kfunc_trusted_args(meta)
+&& type_flag(reg->type) & PTR_TRUSTED
+&& !(type_flag(reg->type) & PTR_MAYBE_NULL)
 
-[1] https://lkml.kernel.org/r/20221108022928.497746-1-liushixin2@huawei.com
+On the other side fixing all places where we set ref_obj_id
+and adding |= PTR_TRUSTED may be too cumbersome ?
 
-> >
-> > Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
->
-> Merged in 2009!
+Right now we're saying PTR_TO_CTX is implicitly trusted, but we can OR
+PTR_TO_CTX with PTR_TRUSTED to make it explicit and truly generalize the check.
 
-This is not wrong.  Sorry for the long term bug.
-Because mkfs.nilfs2 and the nilfs2 module don't create broken metadata
-that would require this patch, so we never encountered this bug until
-syzbot reported it.
+> Agreed that after the rebase this would no longer be correct. I think we
+> should make it opt-in, though. PTR_TRUSTED | MEM_ALLOC is fine.
+> PTR_TRUSTED | MEM_ALLOC | PTR_MAYBE_NULL would not be.
 
->
-> > --- a/fs/nilfs2/sufile.c
-> > +++ b/fs/nilfs2/sufile.c
-> > @@ -495,12 +495,18 @@ void nilfs_sufile_do_free(struct inode *sufile, __u64 segnum,
-> >  int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
-> >  {
-> >       struct buffer_head *bh;
-> > +     void *kaddr;
-> > +     struct nilfs_segment_usage *su;
-> >       int ret;
-> >
-> >       ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
-> >       if (!ret) {
-> >               mark_buffer_dirty(bh);
-> >               nilfs_mdt_mark_dirty(sufile);
-> > +             kaddr = kmap_atomic(bh->b_page);
-> > +             su = nilfs_sufile_block_get_segment_usage(sufile, segnum, bh, kaddr);
-> > +             nilfs_segment_usage_set_dirty(su);
-> > +             kunmap_atomic(kaddr);
-> >               brelse(bh);
-> >       }
-> >       return ret;
->
-> Do we feel that this fix should be backported into -stable kernels?
+to pass into KF_TRUSTED_ARGS kfunc? Agree.
+I guess we can tighten the check a bit:
+is_kfunc_trusted_args(meta)
+&& type_flag(reg->type) & PTR_TRUSTED
+&& !(type_flag(reg->type) & ~(PTR_TRUSTED | MEM_ALLOC))
 
-Yes, it should be. Please do so.
-
-Thanks,
-Ryusuke Konishi
+In english: the pointer should have PTR_TRUSTED flag and
+no other flags other than PTR_TRUSTED and MEM_ALLOC should be set.
