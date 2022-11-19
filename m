@@ -2,71 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5FE630DF7
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D477630DFA
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiKSKBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 05:01:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
+        id S234146AbiKSKDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 05:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbiKSKBB (ORCPT
+        with ESMTP id S232923AbiKSKDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 05:01:01 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A89882BD7
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:00:59 -0800 (PST)
-Received: from 8bytes.org (p200300c27724780086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7724:7800:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id F20992A00CB;
-        Sat, 19 Nov 2022 11:00:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1668852059;
-        bh=sG3j6AU8MT7jufEihjOKuYx6KM3TpI7FmwnE0kt4DPQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wHI+bN/Y6atuiEw7CN4iZYxkoJGEz5uowLzy1V+chdLZlwgBnDWOPjBb0RLl5IKtj
-         n9jXzKIlquZoFNlGrpfI2gr17/ny4K1sdcfDx0Hl4kgYUBtF53PBL24JW09oakM9qF
-         qVWkvkFSrV8g3hZ1RFj0jlNGwkHrSndUBOPxOhkiEfKa/bOR4lzaotzWTWTPGjlXTn
-         sL2KmF8eDsRiUkN0k+RdUPzeH5Y90vBwOeBgL1YmzZfb8+FzB0wEhzIPlTl4Vm7TRN
-         15e6TLrVaNx6o56bX0lMpbAlg8JBp7dZpq+gFTd/BQK83illa5l/y5h4BVslmQzzAW
-         UwKx9vOyDrMKA==
-Date:   Sat, 19 Nov 2022 11:00:57 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Denis Arefev <arefev@swemel.ru>
-Cc:     Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        trufanov@swemel.ru, vfh@swemel.ru
-Subject: Re: [PATCH] iommu: amd: Added value check
-Message-ID: <Y3ipWTntw24G5XNE@8bytes.org>
-References: <20221118104252.122809-1-arefev@swemel.ru>
+        Sat, 19 Nov 2022 05:03:00 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734E782227
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:02:59 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owKgX-0006qO-42; Sat, 19 Nov 2022 11:02:53 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owKgU-005EHk-4x; Sat, 19 Nov 2022 11:02:51 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owKgU-00069v-D0; Sat, 19 Nov 2022 11:02:50 +0100
+Date:   Sat, 19 Nov 2022 11:02:50 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Crt Mori <cmo@melexis.com>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH 186/606] iio: temperature: mlx90632: Convert to i2c's
+ .probe_new()
+Message-ID: <20221119100250.iw757ovgwjbwr2ho@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-187-uwe@kleine-koenig.org>
+ <CAKv63uvVsLhbt9y0fWxPWp005rnWzCn6Vm0UmOnW08B87fkCzw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hp5mb2d6k7mrzljq"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118104252.122809-1-arefev@swemel.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAKv63uvVsLhbt9y0fWxPWp005rnWzCn6Vm0UmOnW08B87fkCzw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 01:42:52PM +0300, Denis Arefev wrote:
-> Аdded a return value check for the function
-> mmu_notifier_register.
-> 
-> Return value of a function 'mmu_notifier_register'
-> called at iommu_v2.c:642 is not checked,
->  but it is usually checked for this function
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Denis Arefev <arefev@swemel.ru>
-> ---
->  drivers/iommu/amd/iommu_v2.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Applied, thanks.
+--hp5mb2d6k7mrzljq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Sat, Nov 19, 2022 at 12:04:41AM +0100, Crt Mori wrote:
+> On Fri, 18 Nov 2022 at 23:46, Uwe Kleine-K=F6nig <uwe@kleine-koenig.org> =
+wrote:
+> >
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >
+> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > that explicitly in the probe function.
+> >
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >  drivers/iio/temperature/mlx90632.c | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperatu=
+re/mlx90632.c
+> > index f1f5ebc145b1..19e30cfca8a7 100644
+> > --- a/drivers/iio/temperature/mlx90632.c
+> > +++ b/drivers/iio/temperature/mlx90632.c
+> > @@ -1168,9 +1168,9 @@ static int mlx90632_enable_regulator(struct mlx90=
+632_data *data)
+> >         return ret;
+> >  }
+> >
+> > -static int mlx90632_probe(struct i2c_client *client,
+> > -                         const struct i2c_device_id *id)
+> > +static int mlx90632_probe(struct i2c_client *client)
+> >  {
+> > +       const struct i2c_device_id *id =3D i2c_client_get_device_id(cli=
+ent);
+> >         struct mlx90632_data *mlx90632;
+> >         struct iio_dev *indio_dev;
+> >         struct regmap *regmap;
+> > @@ -1337,7 +1337,15 @@ static struct i2c_driver mlx90632_driver =3D {
+> >                 .of_match_table =3D mlx90632_of_match,
+> >                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
+> >         },
+> > +<<<<<<< ours
+>=20
+> Maybe some of the merge artifacts left (also below)?
+
+*groan*, ok, thanks for pointing out the obvious. Fixed in my tree. Ftr,
+the fixup is:
+
+diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/m=
+lx90632.c
+index 19e30cfca8a7..753b7a4ccfdd 100644
+--- a/drivers/iio/temperature/mlx90632.c
++++ b/drivers/iio/temperature/mlx90632.c
+@@ -1337,15 +1337,7 @@ static struct i2c_driver mlx90632_driver =3D {
+ 		.of_match_table =3D mlx90632_of_match,
+ 		.pm	=3D pm_ptr(&mlx90632_pm_ops),
+ 	},
+-<<<<<<< ours
+-	.probe =3D mlx90632_probe,
+-||||||| base
+-	.probe =3D mlx90632_probe,
+-	.remove =3D mlx90632_remove,
+-=3D=3D=3D=3D=3D=3D=3D
+ 	.probe_new =3D mlx90632_probe,
+-	.remove =3D mlx90632_remove,
+->>>>>>> theirs
+ 	.id_table =3D mlx90632_id,
+ };
+ module_i2c_driver(mlx90632_driver);
+
+When (and if) I'll resend the series, the fixed version will be
+included. (Unless someone picks up the broken patch with the above
+fixup of course :-)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--hp5mb2d6k7mrzljq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN4qccACgkQwfwUeK3K
+7AlCtQf8CxtG6vuDNnXN8vBGpjT/PQQsixyChegKXC+2lHfz6/xOl3dekciIonD1
+MN6LBdeVd2qHQgWW4gKxPxvxOPscWj5MF++LvxdSd8EjUgVGdvLB2nC+n6HVATuq
+GMOwkO1X64M7eqvXM+XKCehWVYAx4dKgGYceEeKSWIxLbHr39+Q1mRVvOXyuKobM
+K4c7TCcZXHhwjtMKIqnG9DIpclJ0fTxT0xkgjn2rj3u4oUpQexjaSdIWE2oRzmvA
+lzA2HzdZDEeeNk6bgBnNiCUfVeOcExMkx7LgUOPntH5sj1tPTFYaG0jUGEA42xK2
+afoznodF/Zt4fW1nbJkWJs3tWfyVIw==
+=wkQl
+-----END PGP SIGNATURE-----
+
+--hp5mb2d6k7mrzljq--
