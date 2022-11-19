@@ -2,219 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A44630877
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E1C630876
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbiKSBcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 20:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        id S231939AbiKSBcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 20:32:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232326AbiKSBcc (ORCPT
+        with ESMTP id S231534AbiKSBcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 20:32:32 -0500
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7F01165B5;
-        Fri, 18 Nov 2022 16:37:27 -0800 (PST)
-Received: by mail-io1-f50.google.com with SMTP id c7so5026217iof.13;
-        Fri, 18 Nov 2022 16:37:27 -0800 (PST)
+        Fri, 18 Nov 2022 20:32:20 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087F3116592
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:37:23 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id k2so3283100qvo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:37:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dyEPY+SojRhqXF/AvB0DrGy+gEBy7oa95tVCQD643p0=;
+        b=no0Tfx19bBOZUAeRN3mzYn4qcd7kLI8jUwU9vN5lbhqXXNIoo1QCS2A9e6LG4U0Or7
+         QY2bB2l5Z3pUGj2gA9Aw/njcKYwjrfj/oKHgw2oEwiMqbIA8R9sEtQ8zlmC3WWdzdmNd
+         G4sNIs8QA/OoRGYnozf7yuka7VeDzAz+HGgy8wS6MENGIVT/XVNPQS96wwktYfdNVP7u
+         K85AkTOjPQO/E7XCXBLuON5090rAPuzDsAEF8Gk6j8SKh0VQfJigAOHRFV/IeZ0Rkm/b
+         FHPSt5HAkVZa+wj/or5IYfzxpf0C44y8QoXeTYMHrgvDBRp2t1fj4bLYw2HK9ShEsuBM
+         GpmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ad8ss5RArgJrnDOHAbd/xNyjFS/cmNN++MlpW3Otizs=;
-        b=7psNjB2s1KkgYyAIO9wTHYEYwbs/Ey1udOKj1qWdf61TANw6vqLQVsbOThtrEPyuXb
-         yyDvec79M2HgrQIptIa9qnJ7HJ7w7ags796GyLV31iusvxbmC1IPHCuBm0zT3iLG7DoC
-         BVhFfgngOa5P6dSlHIKyeFOyRYXMGwhRW4wPvS/uOhWEJj7qL5DEO0XbR9uMuS8xbhv0
-         6Lje8X82/OhZdvqU0oQO1z/peI2GwAmOKnphuo26thIddT/Q5Ww6TIF7BQegFJCmU35/
-         sx1KNjvoZR+wECcDcW7XfKI1/2OUtNrUoAK/Hf7tSnajwWjXOh28yfaaPzc3UGE5f6Nh
-         moFA==
-X-Gm-Message-State: ANoB5pkvPE7bE+ttF8RXWG1csogfNfD8CdHfDfPf18D/ce7+jGYfAsR1
-        t2yutYqP59M6xCY8GRSd5bDKPo6RwAaCqoKVM1c=
-X-Google-Smtp-Source: AA0mqf6NDIA+DsMokyUak4hcn7R7kTEFghM/Vszq+LniGklSHw86Y0jfBlmP2jBUoFPfa74XxhdB/Y+RX02/NylH0lA=
-X-Received: by 2002:a02:a399:0:b0:363:a2f8:5223 with SMTP id
- y25-20020a02a399000000b00363a2f85223mr4001619jak.282.1668818246166; Fri, 18
- Nov 2022 16:37:26 -0800 (PST)
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dyEPY+SojRhqXF/AvB0DrGy+gEBy7oa95tVCQD643p0=;
+        b=vsStgd5qN3eWHPyKpdiTEKYVqJJ5bButWi4aJDxhsnH8n8D/1EBZcMgIf2EVmj1v3i
+         4IZDtGM7bMzKwk0GoENylhWrAWjwBjy4AnxSrFp0/TXzwDEyy4VEWenR6h0Nk1HlmTI5
+         AN/CJfJn3yvAVOyvY20MhBVigTRE0XtP3/PZM/U5NYZbvIFJc/HGPTubY5G68AM3yOOu
+         kGY334HJqUkxHScn9oyg8wS3w8HFCAPNaI9+WZlVu/6b3yQzAwpv5Vv3KEfOD7LdoBeD
+         e3excixqSaFOXGxhiGhGr4kadaNrI98hgjc7pzXuqKS/dAXukHITKCKp2dQiT/vr076V
+         bgiw==
+X-Gm-Message-State: ANoB5pkRVWgoZM1kvcRk+quMkbUyo/IweZGlGF9y2z8TdHVjVRA2hRp4
+        dZqjMblAqlK0M4/1L8bmY3b1Aw==
+X-Google-Smtp-Source: AA0mqf6fsjaaxYUp3xx21CcJ8zpCHmptZyty/Ag71ufur/HJeNekLLxWkxwOOWjGfITrpe30FuE7mA==
+X-Received: by 2002:a0c:9c43:0:b0:4c6:62af:5e17 with SMTP id w3-20020a0c9c43000000b004c662af5e17mr8967454qve.95.1668818242976;
+        Fri, 18 Nov 2022 16:37:22 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id ay20-20020a05620a179400b006faa88ba2b5sm3461329qkb.7.2022.11.18.16.37.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 16:37:21 -0800 (PST)
+Date:   Fri, 18 Nov 2022 16:37:12 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Yu Zhao <yuzhao@google.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/3] mm,thp,rmap: subpages_mapcount of PTE-mapped
+ subpages
+In-Reply-To: <CAOUHufYf9Ns6vPpDeSOnUBaQm3Th+N6WbLiT7F=191LNpsatNQ@mail.gmail.com>
+Message-ID: <759077a6-a08-5bb0-a0b6-53be2fe8b56a@google.com>
+References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <78fa518-85b5-32c0-ee92-537fa46131f6@google.com> <CAOUHufYf9Ns6vPpDeSOnUBaQm3Th+N6WbLiT7F=191LNpsatNQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221117224952.358639-1-irogers@google.com> <20221117224952.358639-2-irogers@google.com>
- <Y3dQxVNwGmQMWPP0@hirez.programming.kicks-ass.net> <Y3eejjLjChlGC96I@kernel.org>
- <20221118103302.7ea12016@gandalf.local.home> <Y3ez+y/k1dIip5hH@kernel.org>
-In-Reply-To: <Y3ez+y/k1dIip5hH@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 18 Nov 2022 16:37:12 -0800
-Message-ID: <CAM9d7chHHuULqNS-YWj=LU=Q0E10zjMe5=HTnBREa4=YmQGPpA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] perf build: Require libtraceevent from the system
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Steven Rostedt <rostedt@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 18 Nov 2022, Yu Zhao wrote:
+> On Fri, Nov 18, 2022 at 2:12 AM Hugh Dickins <hughd@google.com> wrote:
+> 
+> ...
+> 
+> > @@ -1308,31 +1285,29 @@ void page_add_anon_rmap(struct page *page,
+...
+> >
+> >         VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
+> 
+> Hi Hugh, I got the following warning from the removed "else" branch.
+> Is it legit? Thanks.
+> 
+> mm/rmap.c:1236:13: warning: variable 'first' is used uninitialized
+> whenever 'if' condition is false [-Wsometimes-uninitialized]
+>         } else if (PageTransHuge(page)) {
+>                    ^~~~~~~~~~~~~~~~~~~
+> mm/rmap.c:1248:18: note: uninitialized use occurs here
+>         VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
+>                         ^~~~~
 
-On Fri, Nov 18, 2022 at 8:34 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Nov 18, 2022 at 10:33:02AM -0500, Steven Rostedt escreveu:
-> > On Fri, 18 Nov 2022 12:02:38 -0300 Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->
-> > > yeah, this probably should work like with other libraries, don't stop
-> > > the build, just don't build features that depend on libtraceevent,
-> > > warning the user that features foo, bar and baz won't be available.
->
-> > > For people working with just hardware, software, cache events, no
-> > > problem.
->
-> > How are software events parsed?
->
-> Not parsed, fixed:
+Thanks a lot for that.  From the compiler's point of view, it is
+certainly a legit warning.  From our point of view, it's unimportant,
+because we know that page_add_anon_rmap() should only ever be called
+with compound true when PageTransHuge(page) (and should never be
+called with compound true when TRANSPARENT_HUGEPAGE is disabled):
+so it's a "system error" if first is uninitialized there.
 
-I believe Steve meant tracepoints :)
+But none of us want a compiler warning: I'll follow up with a fix
+patch, when I've decided whether it's better initialized to true
+or to false in the impossible case...
 
->
-> root@roc-rk3399-pc:~# perf list sw
->
-> List of pre-defined events (to be used in -e or -M):
->
->   alignment-faults                                   [Software event]
->   bpf-output                                         [Software event]
->   cgroup-switches                                    [Software event]
->   context-switches OR cs                             [Software event]
->   cpu-clock                                          [Software event]
->   cpu-migrations OR migrations                       [Software event]
->   dummy                                              [Software event]
->   emulation-faults                                   [Software event]
->   major-faults                                       [Software event]
->   minor-faults                                       [Software event]
->   page-faults OR faults                              [Software event]
->   task-clock                                         [Software event]
->
->   duration_time                                      [Tool event]
->   user_time                                          [Tool event]
->   system_time                                        [Tool event]
->
-> root@roc-rk3399-pc:~#
->
->
-> In addition to:
->
-> root@roc-rk3399-pc:~# perf list hw
->
-> List of pre-defined events (to be used in -e or -M):
->
->   branch-instructions OR branches                    [Hardware event]
->   branch-misses                                      [Hardware event]
->   bus-cycles                                         [Hardware event]
->   cache-misses                                       [Hardware event]
->   cache-references                                   [Hardware event]
->   cpu-cycles OR cycles                               [Hardware event]
->   instructions                                       [Hardware event]
->
-> root@roc-rk3399-pc:~#
->
-> And:
->
-> root@roc-rk3399-pc:~# perf list cache
->
-> List of pre-defined events (to be used in -e or -M):
->
->   L1-dcache-load-misses                              [Hardware cache event]
->   L1-dcache-loads                                    [Hardware cache event]
->   L1-dcache-prefetch-misses                          [Hardware cache event]
->   L1-dcache-store-misses                             [Hardware cache event]
->   L1-dcache-stores                                   [Hardware cache event]
->   L1-icache-load-misses                              [Hardware cache event]
->   L1-icache-loads                                    [Hardware cache event]
->   branch-load-misses                                 [Hardware cache event]
->   branch-loads                                       [Hardware cache event]
->   dTLB-load-misses                                   [Hardware cache event]
->   dTLB-store-misses                                  [Hardware cache event]
->   iTLB-load-misses                                   [Hardware cache event]
->   node-loads                                         [Hardware cache event]
->   node-stores                                        [Hardware cache event]
->
-> root@roc-rk3399-pc:~#
->
-> Without something like libtraceevent 'perf probe', 'perf trace' wouldn't
-> work as of now, as it currently use libtraceevent to parse whats in
-> tracefs.
+Although the same pattern is used in other functions, this is the
+only one of them which goes on to use "first" or "last" afterwards.
 
-Right, many other tools would be impacted like 'perf lock', 'perf sched', ...
-
->
-> So for some people, just interested in profiling the above hw, sw and
-> cache events, libtraceevent isn't strictly required and may even be
-> desirable to reduce the number of library dependencies.
->
-> So its a valid feature to allow perf to be built without libtraceevent,
-> i.e. not something needed for the above scenarios.
-
-Right, we could remove unsupported commands from the build or
-refuse to run them with a warning.
-
-Thanks,
-Namhyung
-
->
-> With libbpf and BTF tracefs isn't also strictly needed, as we already
-> have to link with it and things like 'perf trace' want to use libbpf's
-> btf pretty printing stuff, we can use BTF to enumerate events, iterate
-> thru its fields, offsets, types, etc:
->
-> root@roc-rk3399-pc:~# pahole --sizes | grep trace_event_raw_sched
-> trace_event_raw_sched_kthread_stop      28      0
-> trace_event_raw_sched_kthread_stop_ret  12      0
-> trace_event_raw_sched_kthread_work_queue_work   32      0
-> trace_event_raw_sched_kthread_work_execute_start        24      0
-> trace_event_raw_sched_kthread_work_execute_end  24      0
-> trace_event_raw_sched_wakeup_template   36      0
-> trace_event_raw_sched_switch    64      0
-> trace_event_raw_sched_migrate_task      40      0
-> trace_event_raw_sched_process_template  32      0
-> trace_event_raw_sched_process_wait      32      0
-> trace_event_raw_sched_process_fork      48      0
-> trace_event_raw_sched_process_exec      20      0
-> trace_event_raw_sched_stat_runtime      48      1
-> trace_event_raw_sched_pi_setprio        36      0
-> trace_event_raw_sched_move_numa 36      0
-> trace_event_raw_sched_numa_pair_template        48      0
-> trace_event_raw_sched_wake_idle_without_ipi     12      0
-> root@roc-rk3399-pc:~#
->
-> root@roc-rk3399-pc:~# pahole trace_event_raw_sched_switch
-> struct trace_event_raw_sched_switch {
->         struct trace_entry         ent;                  /*     0     8 */
->         char                       prev_comm[16];        /*     8    16 */
->         pid_t                      prev_pid;             /*    24     4 */
->         int                        prev_prio;            /*    28     4 */
->         long int                   prev_state;           /*    32     8 */
->         char                       next_comm[16];        /*    40    16 */
->         pid_t                      next_pid;             /*    56     4 */
->         int                        next_prio;            /*    60     4 */
->         /* --- cacheline 1 boundary (64 bytes) --- */
->         char                       __data[];             /*    64     0 */
->
->         /* size: 64, cachelines: 1, members: 9 */
-> };
-> root@roc-rk3399-pc:~#
->
-> - Arnaldo
+Hugh
