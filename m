@@ -2,165 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192E663084D
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5BF630851
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbiKSBTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 20:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S229803AbiKSBUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 20:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiKSBSR (ORCPT
+        with ESMTP id S231609AbiKSBTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 20:18:17 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2059.outbound.protection.outlook.com [40.107.92.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692C8F609B;
-        Fri, 18 Nov 2022 16:15:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XSSDZCaecXsWoNfmywONQnOE7QbSsOXgjtTlsJRtSE2FoSvbqAH9CrL3SymioTDo2/lVcDAedqV+0V7rde9AKxM8CJubdZzcAK5OqIVKB+drBiNFn4K+JN0rI9j666x1k6yMQBpb7AC5hT4AfqbXTN2oWu0O5kMQfgvj3f9MbmOdZ8RBo33a5+zjZZC0KrYnkqb3x5tfjkQ+HWiREazM9KR+9seDDZoAnejo9wytvtm+7XSGF3U99JHP/fBkt4e2SD9zQFiunlksNZ5meUzZ9dGB+U7BsN/d5DAlcLMlXSvebP6jghAuoutwNvTDBYqkqWS5DLMp2qBCWzBkoPQAWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+WxMHIsGK3Vazr79CiLT8AgFYH95KleYUaval098P3k=;
- b=FreYWLVntSskYyGcDcZxz4X0tGKgPCX4fuDXzwW/nzFFxosxLDmCJ7Pz+dHMXLf+RMQO1dpLMvIVreTQBd3INjlmB77I5I4cEmDDx4r+OiNsg3l6vzOZA43KAa0Lu/71oZ3hla5OIBsxx/Yd+PtPO7Tv7pGU7zDmp9Y/rXxJ8zNl438zdpgAtJL5ppDngzlsQZyWNTcWThXl9fXGqy9L/9z39YkWoTblFigBqxbcx36+kuH6pF6PfQQNMEn/m4Q+x+46z3GRP5HQPwFRtOEnasvPEQjZChXPnV2S9MDKYiJK3u+ByDb7ok0KDPLqpBndQhcFIhh5i0jLjXMMRq8BPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+WxMHIsGK3Vazr79CiLT8AgFYH95KleYUaval098P3k=;
- b=Y1A7Dw7YI0hnOKCMq1bThR7rWUtaWkvf/dzQrNlPtE/AtljXJzrYRo45/bKYITZF96GB9GhR6PiiNXk/ZbTLQHrY5MHMxcymIAcF3Ff6cMynR3sTDa/mW0mOA5GhxtoM8sNVk57AQzTc5y3NUYg7O7eRK65a86Cugmhe27LcTPlzyeMiD/8MnpbdsdFT+nRflB8NolSGnBaacb+eyFfaR3RM5WW5buEZi6yQ1NXkG+6M2pLkvaj8TCNYSALpqt20LMU+mPqRdRDqVbuIlFBlFLM5AFQ7WhQLPSo1UypsVBdjbjjszSfqr2OCCic2VpjK4R5Z6YOSAt2Te7wEgqw7zg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH0PR12MB5316.namprd12.prod.outlook.com (2603:10b6:610:d7::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20; Sat, 19 Nov
- 2022 00:15:45 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Sat, 19 Nov 2022
- 00:15:45 +0000
-Date:   Fri, 18 Nov 2022 20:15:43 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     zyjzyj2000@gmail.com, leon@kernel.org, linux-rdma@vger.kernel.org,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for-next v2] RDMA/rxe: Fix mr->map double free
-Message-ID: <Y3ggL8RJw6mDaWxT@nvidia.com>
-References: <1667099073-2-1-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1667099073-2-1-git-send-email-lizhijian@fujitsu.com>
-X-ClientProxiedBy: MN2PR15CA0009.namprd15.prod.outlook.com
- (2603:10b6:208:1b4::22) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 18 Nov 2022 20:19:54 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB56CB7035;
+        Fri, 18 Nov 2022 16:17:56 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id 8so4609944qka.1;
+        Fri, 18 Nov 2022 16:17:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ya/HZho/hYNS3aLaSnNK+OWu7yXKQvRmTWMTtCIGZCs=;
+        b=F8XLLukwWdeSfpJFx5dfa4W8KDFebDhg3tPacc8OuiBvRe1fKVh0t9XveWdsqxUm42
+         TKWCYUBtrP1ZLwU5EYR6bmjolzEVs11VCfg49bOLLV/kZbyQFYb9mtsEqRBEFPb+6Kfa
+         a2tzsmyZkg6QBD0XKoMfEKrBHgICpi7UBsSVA4wvcku4fYLn1Ca1mO4Q0c8yKDhM1Y55
+         7btDhYaMJ1ycnUCD1mAcRAwmpPgguDDvU6KtnNBNBknq5RFQDMNWfORXN46KnySrtHgG
+         0FgACME+IZ+o9TDsFN3KgUDFmTFazdgIzdhiKdZGOtL68rQLvmAlykcGNhzD2szdXnh/
+         DNiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ya/HZho/hYNS3aLaSnNK+OWu7yXKQvRmTWMTtCIGZCs=;
+        b=r6MnErTEHeB2l2CnUr5iQ2EtiNk7uNYU/xZkEtv4xLbdHgQdRTF7tdfsD++heaslNc
+         4LOh3iQqaFQ777Jj4NuNlJqjjFJO0d2W0cyG+GtgzR8+gcbcmfQ1j6t5YgY5h1OyHB0L
+         o0zVzUWlMYf5AxwRrJnTnAu73WksACH/7ubv86ao/0v0XZ08XaFyJWLzXMFi6iKSdHqH
+         5cE0NAju+g0yVVQSZXgFqqYP49/knXvVCJQaCITIs5MUm6fQZT/AUBs3yoYYcFyDUCam
+         w7djMJ600HNpooiE7qTORHxwtPQduY8eD1BS+gXlCKbT/2WHKKWGSLs9vx4qk1vObcrI
+         rnJw==
+X-Gm-Message-State: ANoB5plU9VJQdfSwV6TNLyYvevZDWvmxm4gzaV6EhpgALNGbTDD2F469
+        E77lvI+P2Usf2Bd91Wfldg==
+X-Google-Smtp-Source: AA0mqf51LuhTtLwDUfXEMujj1VMD27U6ac1gRcZdNryNCTAlMjCIfYXlall2BYxNC+PE66PmPBY4Gg==
+X-Received: by 2002:a37:b746:0:b0:6fa:1d5c:ba00 with SMTP id h67-20020a37b746000000b006fa1d5cba00mr7766196qkf.202.1668817075926;
+        Fri, 18 Nov 2022 16:17:55 -0800 (PST)
+Received: from bytedance.attlocal.net ([130.44.212.155])
+        by smtp.gmail.com with ESMTPSA id bs10-20020ac86f0a000000b003992448029esm2835719qtb.19.2022.11.18.16.17.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 16:17:55 -0800 (PST)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH v2 RESEND] coredump: Use vmsplice_to_pipe() for pipes in dump_emit_page()
+Date:   Fri, 18 Nov 2022 16:17:40 -0800
+Message-Id: <20221119001740.2642-1-yepeilin.cs@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221031210349.3346-1-yepeilin.cs@gmail.com>
+References: <20221031210349.3346-1-yepeilin.cs@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH0PR12MB5316:EE_
-X-MS-Office365-Filtering-Correlation-Id: c713d7f4-67dd-4752-8cf9-08dac9c33397
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZJOGSItixlYUukx6RYYNF0rwZdVASrki6ujCCN1IxB0HnmYalc61xc026DJhXqzToro1K7amcV8bH8a5ti++Zeqc4UjZjOOrWLsGNW9dQZ+Ppi0uaTvbhncGbfaOdvWe79ico3BVnNRs/wXQaeXgr+0BBZraQeK459gBLnU5uUzcbm/uf/HqZXC7EPZkRKCffgwpYJ7gkcs8TYvLxp79gvq6E57SVng9eR7eSbYj8htrTZcC/WvUgFu/+hFkfhztrppAKtE0dVadfpJlTvP+y1JtZpcBtFL9e0oQzbyWq/T26DML2lEslRbriUQ/M+gqLslRVQoOeWoqxjqDOsg7XtWS3ubV+pGLN6WLGMeTFbL5pC+XRC2GwQ76OPA0tCfSuAd9huOQCtoKXt29n3GpLP/QevWdefhhFLmJcVe4QH5Bcc2sc52P+R4TkcMTVMXFtX0KZbqRuAanu7qwpBfw2yt0bDQsnw1hcctiJzjoM0c2rbksTe4WvHtebEMKTXYjx4Sp9Df5vdg1yHK85bz0jw3ZQ6PFRLjcM2lkyycfJixKWjdtGp7ir3A+1o1JYyvBjWfhhv8mbMKSgvktkf3tpcrA4bMT1jhzhwxGp1pUWTpWeanEPNbl6QxPIf+bRfb8SE7opRML6Fm6Ntbl9xoiUA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199015)(2906002)(83380400001)(36756003)(2616005)(41300700001)(66946007)(186003)(86362001)(6506007)(6512007)(6916009)(38100700002)(26005)(4326008)(5660300002)(8936002)(66476007)(66556008)(8676002)(6486002)(316002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Khcnn/iUhtCWQy4v7Ah2wDqcHZSrgeob0C+bnEoV0RQUL7mQEzQCJ3p2WUc9?=
- =?us-ascii?Q?OncHWKX5JcOgGFUBAqLqAplLcH6XlQtT4pxecfSMrZ61fLZFw6RvbGnhw2dg?=
- =?us-ascii?Q?Vpkzz6D9sIC65TOgJfi3UiN6mFNhAityFy5CTlH/6LLT/wqUm2L9I4hO9Hik?=
- =?us-ascii?Q?IpdfqFPAaLkGWMvFzgAQFHZ3E7DIrU1HHo6On8to8rCBF9iyLAmni1j1gaPh?=
- =?us-ascii?Q?8u6DWuiJc7VBS09rsy8a0MfZOmj8RJeYchDZi9c/9PMx/aT7WX/Z+GVM/l78?=
- =?us-ascii?Q?Kj6jHGSgGqnEfKHIIGEh5K0HdaoVLtP6rQIdGYVVkcakmLnfeIAep4RO8hcA?=
- =?us-ascii?Q?9o6lijPWLb/VWHWLT9gcmZVkJoM/+dUJ71XD5FIyEyJEw/LBu2hHdveKcEF0?=
- =?us-ascii?Q?/jeE48MwYAhdrXmGhchGje909yidGEatlY/hbtPiXBAoiDai9HJszecZnekS?=
- =?us-ascii?Q?MFH1EiDvze7vBjRd55gZg6vJLgMCzjJzwkm2oJfTvDynn35LpgdS6CCD8P5x?=
- =?us-ascii?Q?MPKJF4dLl+58h62JCac9pKpk9ppbEQbPs6gO4oKMyb/xymrRyqV+A9Ee53CI?=
- =?us-ascii?Q?xFS2uIOPB/zlCHmb4WaVbzJVvLBudk5PoinCSmRN3zKiHcjANzYOb3naByIJ?=
- =?us-ascii?Q?qzVpdKw4lS9K9x+O0SqEZOyN/kZ+oOIRyOp4IcI+PgrY8Rhsq3DzpKibyp+T?=
- =?us-ascii?Q?8xlF67Go+Ckx+3+gW4Uoic3nIi8C7e58qslU2leZu2IGEnrAOJUHvBkGRtzZ?=
- =?us-ascii?Q?sbNw7VwhDiLBkECtaeiuNzVP16efjzr9pTjYVNCo+F7M1Lr1rRwbLXhq9e93?=
- =?us-ascii?Q?tccr2bEriR63tnilPyl02HFQgIwXxjaRDbbIWKeqm30imNbmqKzvvxcHYKm/?=
- =?us-ascii?Q?MifOwS45TX95vgUea5esC6uSIYzxF+Ayk8OBdgSDcFi+dxIfgJAJje0sTePo?=
- =?us-ascii?Q?u2FbT3fr3utFgVh/UoCqro1+DGDpsWIov36hzwamHkL7ZhtFJrYLugMatV30?=
- =?us-ascii?Q?b4i/BdwV95/JgZXglmRBd9auBybBsPQjNER4IZRBbTazsYFPKwIpBpiyr1f2?=
- =?us-ascii?Q?ZLgxTiFUX9IXwgpYrTNZD6NU1YhLXxH+Cf0lPqoH83sNHYmWmcnlcsIrgp9j?=
- =?us-ascii?Q?jA3W9gB2dMyRyoEirbAw/Um/VZd5TjWmfidxCOcluFo1wRUEKHIcIiCtZ7uw?=
- =?us-ascii?Q?ZVfJdA/vmeggLt683s3KrDlBQg8mYi9xU6TgFUEIUX1YycWRRgxC/5JOuDcH?=
- =?us-ascii?Q?HnVm7b+5mLYyLselNBsppZLxdC6+vcg2tiCNIbKaP9ZMjXou7PYboRFQ5xmr?=
- =?us-ascii?Q?eyG2jzcwLQWAFNpAziFKOJ5Q/QU54VKhsWOtnR6HOOg0XqksMYz7sLfdEqc6?=
- =?us-ascii?Q?ixPa0QrZWXjEM3SHW9Z6NnfZxOr4bcX17C3UP5GnzFQcmJXnyJ3RHUAp3Q1+?=
- =?us-ascii?Q?+2WK5INGKTaq2LlCPZnzYsEZ3Oeub6Edp7T3iWmmU3ys4euxgcrjkMxPOyvd?=
- =?us-ascii?Q?VA4eCguR+4Zu59Mtv2n65CeEjiiDpKKrueuE5xx4qlJn2nWRCaucl89cQlMm?=
- =?us-ascii?Q?uh2jMeWvtQwaiTdwxGQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c713d7f4-67dd-4752-8cf9-08dac9c33397
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2022 00:15:44.9440
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UTmbaKVJoIql6s1UzU11LRafitaghqyVR2OecqEeu3Tt8m2Z8wPQLiWDtARZYykn
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5316
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 03:04:33AM +0000, Li Zhijian wrote:
-> rxe_mr_cleanup() which tries to free mr->map again will be called
-> when rxe_mr_init_user() fails.
-> 
-> [43895.939883] CPU: 0 PID: 4917 Comm: rdma_flush_serv Kdump: loaded Not tainted 6.1.0-rc1-roce-flush+ #25
-> [43895.942341] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> [43895.945208] Call Trace:
-> [43895.946130]  <TASK>
-> [43895.946931]  dump_stack_lvl+0x45/0x5d
-> [43895.948049]  panic+0x19e/0x349
-> [43895.949010]  ? panic_print_sys_info.part.0+0x77/0x77
-> [43895.950356]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
-> [43895.952589]  ? preempt_count_sub+0x14/0xc0
-> [43895.953809]  end_report.part.0+0x54/0x7c
-> [43895.954993]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
-> [43895.956406]  kasan_report.cold+0xa/0xf
-> [43895.957668]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
-> [43895.959090]  rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
-> [43895.960502]  __rxe_cleanup+0x10a/0x1e0 [rdma_rxe]
-> [43895.961983]  rxe_reg_user_mr+0xb7/0xd0 [rdma_rxe]
-> [43895.963456]  ib_uverbs_reg_mr+0x26a/0x480 [ib_uverbs]
-> [43895.964921]  ? __lock_acquire+0x876/0x31e0
-> [43895.966182]  ? ib_uverbs_ex_create_wq+0x630/0x630 [ib_uverbs]
-> [43895.967739]  ? uverbs_fill_udata+0x1c6/0x330 [ib_uverbs]
-> [43895.969204]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x1a2/0x250 [ib_uverbs]
-> [43895.971126]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
-> [43895.973094]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
-> [43895.975096]  ? uverbs_fill_udata+0x25f/0x330 [ib_uverbs]
-> [43895.976466]  ib_uverbs_cmd_verbs+0x1397/0x15a0 [ib_uverbs]
-> [43895.977930]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
-> [43895.979937]  ? uverbs_fill_udata+0x330/0x330 [ib_uverbs]
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-Please dont include timestamps in commit messages
+Currently, there is a copy for each page when dumping VMAs to pipe
+handlers using dump_emit_page().  For example:
 
-> @@ -163,9 +163,8 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
->  				pr_warn("%s: Unable to get virtual address\n",
->  						__func__);
->  				err = -ENOMEM;
-> -				goto err_cleanup_map;
-> +				goto err_release_umem;
->  			}
-> -
+  fs/binfmt_elf.c:elf_core_dump()
+      fs/coredump.c:dump_user_range()
+                     :dump_emit_page()
+        fs/read_write.c:__kernel_write_iter()
+                fs/pipe.c:pipe_write()
+             lib/iov_iter.c:copy_page_from_iter()
 
-page_address() fails if this is a highmem system and the page hasn't
-been kmap'd yet. So the right thing to do is to use kmap..
+Use vmsplice_to_pipe() instead of __kernel_write_iter() to avoid this
+copy for pipe handlers.
 
-But this looks right, so applied to for-next
+Tested by dumping a 40-GByte core into a simple handler that splice()s
+from stdin to disk in a loop, PIPE_DEF_BUFFERS (16) pages at a time.
 
-Thanks,
-Jason
+                              Before           After   Improved by
+  Time to Completion   52.04 seconds   46.30 seconds        11.03%
+  CPU Usage                   89.43%          84.90%         5.07%
+
+Suggested-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+Hi all,
+
+Resending this after 2+ weeks.  Any suggestions, testing would be much
+appreciated, thanks!
+
+change in v2:
+  - fix warning in net/tls/tls_sw.c (kernel test robot)
+
+Peilin Ye
+
+ fs/coredump.c          | 7 ++++++-
+ fs/splice.c            | 4 ++--
+ include/linux/splice.h | 3 +++
+ 3 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/fs/coredump.c b/fs/coredump.c
+index da0e9525c4e8..c0a8713d9971 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -42,6 +42,7 @@
+ #include <linux/timekeeping.h>
+ #include <linux/sysctl.h>
+ #include <linux/elf.h>
++#include <linux/splice.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/mmu_context.h>
+@@ -862,7 +863,11 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ 		return 0;
+ 	pos = file->f_pos;
+ 	iov_iter_bvec(&iter, WRITE, &bvec, 1, PAGE_SIZE);
+-	n = __kernel_write_iter(cprm->file, &iter, &pos);
++
++	n = vmsplice_to_pipe(file, &iter, 0);
++	if (n == -EBADF)
++		n = __kernel_write_iter(cprm->file, &iter, &pos);
++
+ 	if (n != PAGE_SIZE)
+ 		return 0;
+ 	file->f_pos = pos;
+diff --git a/fs/splice.c b/fs/splice.c
+index 0878b852b355..2051700cda79 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -1234,8 +1234,8 @@ static long vmsplice_to_user(struct file *file, struct iov_iter *iter,
+  * as splice-from-memory, where the regular splice is splice-from-file (or
+  * to file). In both cases the output is a pipe, naturally.
+  */
+-static long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
+-			     unsigned int flags)
++long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
++		      unsigned int flags)
+ {
+ 	struct pipe_inode_info *pipe;
+ 	long ret = 0;
+diff --git a/include/linux/splice.h b/include/linux/splice.h
+index a55179fd60fc..38b3560a318b 100644
+--- a/include/linux/splice.h
++++ b/include/linux/splice.h
+@@ -10,6 +10,7 @@
+ #define SPLICE_H
+ 
+ #include <linux/pipe_fs_i.h>
++#include <linux/uio.h>
+ 
+ /*
+  * Flags passed in from splice/tee/vmsplice
+@@ -81,6 +82,8 @@ extern ssize_t splice_direct_to_actor(struct file *, struct splice_desc *,
+ extern long do_splice(struct file *in, loff_t *off_in,
+ 		      struct file *out, loff_t *off_out,
+ 		      size_t len, unsigned int flags);
++extern long vmsplice_to_pipe(struct file *file, struct iov_iter *iter,
++			     unsigned int flags);
+ 
+ extern long do_tee(struct file *in, struct file *out, size_t len,
+ 		   unsigned int flags);
+-- 
+2.20.1
+
