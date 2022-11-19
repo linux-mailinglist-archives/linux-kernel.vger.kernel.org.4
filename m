@@ -2,231 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481E463105B
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 20:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB0263105E
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 20:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbiKSTA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 14:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S230471AbiKSTDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 14:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiKSTA1 (ORCPT
+        with ESMTP id S230398AbiKSTD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 14:00:27 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11501A818
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 11:00:26 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AJIO6hQ022059;
-        Sat, 19 Nov 2022 19:00:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=pwoWkD8s+KiO6sLchTJXK5HK/l+sY8UQR3J4SaztgOk=;
- b=UZ/0NrlDNdrJL2v9cU/YX0fmJ9H9Km42f2dnXUVJaGzyYNjOcjirbb5S59KslSdZ4T8t
- dKx80NPQFPEQTdJxY2XznG8tY8J8XyB62zDUrz4A4BkFjPN0OE4yVm2ArnGsyOdUqRm1
- jALpB+hvsSZxP+HmjozkKo3bkRGvTqhisC4LLrdCt53njSb5WdPp8OinFoVDH2GZTQDW
- zpoXv2zNNllbqkAzZqJxeUVp0a5hCMBhPM0xafyPqbdcRk+RJZ3x8ubO5kX1RhuzCfDt
- NBEbUgMiOJoIPa2tRyZatDXk/Xx+e+mz93j9t86tZtMTg5JbXC4f1/dbJlIsoPHELGQ4 nQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kxs2hj48e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 19 Nov 2022 19:00:02 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AJJ02FK009066;
-        Sat, 19 Nov 2022 19:00:02 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kxs2hj47a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 19 Nov 2022 19:00:02 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AJIpBHK015304;
-        Sat, 19 Nov 2022 18:59:59 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3kxps8gfd3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 19 Nov 2022 18:59:59 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AJIxvFr3670664
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 19 Nov 2022 18:59:57 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 430A7A405B;
-        Sat, 19 Nov 2022 18:59:57 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BFC59A4054;
-        Sat, 19 Nov 2022 18:59:53 +0000 (GMT)
-Received: from tarunpc (unknown [9.43.35.39])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat, 19 Nov 2022 18:59:53 +0000 (GMT)
-Date:   Sun, 20 Nov 2022 00:29:50 +0530
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, willy@infradead.org,
-        almasrymina@google.com, linmiaohe@huawei.com, hughd@google.com
-Subject: Re: [PATCH mm-unstable v3 06/10] mm/hugetlb: convert
- add_hugetlb_page() to folios and add hugetlb_cma_folio()
-Message-ID: <20221119185950.nko3aki3gvh4zu64@tarunpc>
-References: <20221117211501.17150-1-sidhartha.kumar@oracle.com>
- <20221117211501.17150-7-sidhartha.kumar@oracle.com>
+        Sat, 19 Nov 2022 14:03:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5083B113;
+        Sat, 19 Nov 2022 11:03:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 081E760BA2;
+        Sat, 19 Nov 2022 19:03:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB4FC433D6;
+        Sat, 19 Nov 2022 19:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668884603;
+        bh=aNHue5Wks1Ur1BATdAg3/nEnI63voyNMC4Y9A23H1Oo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tTWdY+c5bfkFu8/g3/lh19X3fHG2JkOxNUp1oezlDX4Rkn3ERGgm+ZY6fQfbM2ldR
+         9tGC2q4kbcihjPgt736JzE+XKwS3R7LpKdjWs11DmYsJsF2rakNOwhJubr0yujKN7G
+         yiznwvM7oPN/wGcPv+nf/AoOhkDXXVL1DXBr0Vt9pqZhmsZ+lV3weGTGNXg5H6d2pK
+         iRFNSehi5YMWrADgPPWfgDBk9Q5CyRUkKtWHIeRGLYDDNmGYU+4ChNQ7M8wwE31uVd
+         fOumbwuglDXjHm3VL/C0nhrze5twnQT9SrhWXQJLEbeN0k17Kb+RfswudQfM7Ga6oF
+         Td7TWeK8fHx6Q==
+Date:   Sat, 19 Nov 2022 13:03:10 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Nilesh Javali <njavali@marvell.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/2][next] scsi: qla2xxx: Replace one-element array with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <Y3koblO7KIyteDFm@work>
+References: <cover.1668814746.git.gustavoars@kernel.org>
+ <faa40e6b31ecc9387ad1644bb1957aa53d7c682f.1668814746.git.gustavoars@kernel.org>
+ <ef2881de-7843-97b5-8e0e-64c23ee168d8@wanadoo.fr>
+ <Y3iaLCY68E6Stgrp@work>
+ <629bac45-32c2-9eac-6fed-f2f9e39d2740@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221117211501.17150-7-sidhartha.kumar@oracle.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5cgfyLRlbfQwKp2uabYZdrcGLgUPTKrN
-X-Proofpoint-GUID: NjJ8oITLL_qlSfywWCokd_f_1wq1q-i7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-18_08,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 clxscore=1015 impostorscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211190143
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <629bac45-32c2-9eac-6fed-f2f9e39d2740@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-Though it is already merged, it is just comment thing.
+> Yes, I do agree, that the code is equivalent. I was surprised that a
+> compiler was smart enough to generate the same binary code.
 
-On Nov 17 2022, Sidhartha Kumar wrote:
-> Convert add_hugetlb_page() to take in a folio, also convert
-> hugetlb_cma_page() to take in a folio.
-> 
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> ---
->  mm/hugetlb.c | 40 ++++++++++++++++++++--------------------
->  1 file changed, 20 insertions(+), 20 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 80301fab56d8..bf36aa8e6072 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -54,13 +54,13 @@ struct hstate hstates[HUGE_MAX_HSTATE];
->  #ifdef CONFIG_CMA
->  static struct cma *hugetlb_cma[MAX_NUMNODES];
->  static unsigned long hugetlb_cma_size_in_node[MAX_NUMNODES] __initdata;
-> -static bool hugetlb_cma_page(struct page *page, unsigned int order)
-> +static bool hugetlb_cma_folio(struct folio *folio, unsigned int order)
->  {
-> -	return cma_pages_valid(hugetlb_cma[page_to_nid(page)], page,
-> +	return cma_pages_valid(hugetlb_cma[folio_nid(folio)], &folio->page,
->  				1 << order);
->  }
->  #else
-> -static bool hugetlb_cma_page(struct page *page, unsigned int order)
-> +static bool hugetlb_cma_folio(struct folio *folio, unsigned int order)
->  {
->  	return false;
->  }
-> @@ -1506,17 +1506,17 @@ static void remove_hugetlb_folio_for_demote(struct hstate *h, struct folio *foli
->  	__remove_hugetlb_folio(h, folio, adjust_surplus, true);
->  }
->  
-> -static void add_hugetlb_page(struct hstate *h, struct page *page,
-> +static void add_hugetlb_folio(struct hstate *h, struct folio *folio,
->  			     bool adjust_surplus)
->  {
->  	int zeroed;
-> -	int nid = page_to_nid(page);
-> +	int nid = folio_nid(folio);
->  
-> -	VM_BUG_ON_PAGE(!HPageVmemmapOptimized(page), page);
-> +	VM_BUG_ON_FOLIO(!folio_test_hugetlb_vmemmap_optimized(folio), folio);
->  
->  	lockdep_assert_held(&hugetlb_lock);
->  
-> -	INIT_LIST_HEAD(&page->lru);
-> +	INIT_LIST_HEAD(&folio->lru);
->  	h->nr_huge_pages++;
->  	h->nr_huge_pages_node[nid]++;
->  
-> @@ -1525,21 +1525,21 @@ static void add_hugetlb_page(struct hstate *h, struct page *page,
->  		h->surplus_huge_pages_node[nid]++;
->  	}
->  
-> -	set_compound_page_dtor(page, HUGETLB_PAGE_DTOR);
-> -	set_page_private(page, 0);
-> +	folio_set_compound_dtor(folio, HUGETLB_PAGE_DTOR);
-> +	folio_change_private(folio, 0);
->  	/*
->  	 * We have to set HPageVmemmapOptimized again as above
-                           ^
-This can be changed to folio version of itself.
+We discard the tiny changes that don't affect the logic or the control
+flow of the program.
 
-> -	 * set_page_private(page, 0) cleared it.
-> +	 * folio_change_private(folio, 0) cleared it.
->  	 */
-> -	SetHPageVmemmapOptimized(page);
-> +	folio_set_hugetlb_vmemmap_optimized(folio);
->  
->  	/*
-> -	 * This page is about to be managed by the hugetlb allocator and
-> +	 * This folio is about to be managed by the hugetlb allocator and
->  	 * should have no users.  Drop our reference, and check for others
->  	 * just in case.
->  	 */
-> -	zeroed = put_page_testzero(page);
-> -	if (!zeroed)
-> +	zeroed = folio_put_testzero(folio);
-> +	if (unlikely(!zeroed))
->  		/*
->  		 * It is VERY unlikely soneone else has taken a ref on
->  		 * the page.  In this case, we simply return as the
-> @@ -1548,8 +1548,8 @@ static void add_hugetlb_page(struct hstate *h, struct page *page,
->  		 */
->  		return;
->  
-> -	arch_clear_hugepage_flags(page);
-> -	enqueue_huge_page(h, page);
-> +	arch_clear_hugepage_flags(&folio->page);
-> +	enqueue_huge_page(h, &folio->page);
->  }
->  
->  static void __update_and_free_page(struct hstate *h, struct page *page)
-> @@ -1575,7 +1575,7 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
->  		 * page and put the page back on the hugetlb free list and treat
->  		 * as a surplus page.
->  		 */
-> -		add_hugetlb_page(h, page, true);
-> +		add_hugetlb_folio(h, page_folio(page), true);
->  		spin_unlock_irq(&hugetlb_lock);
->  		return;
->  	}
-> @@ -1600,7 +1600,7 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
->  	 * need to be given back to CMA in free_gigantic_page.
->  	 */
->  	if (hstate_is_gigantic(h) ||
-> -	    hugetlb_cma_page(page, huge_page_order(h))) {
-> +	    hugetlb_cma_folio(folio, huge_page_order(h))) {
->  		destroy_compound_gigantic_folio(folio, huge_page_order(h));
->  		free_gigantic_page(page, huge_page_order(h));
->  	} else {
-> @@ -2184,7 +2184,7 @@ int dissolve_free_huge_page(struct page *page)
->  			update_and_free_hugetlb_folio(h, folio, false);
->  		} else {
->  			spin_lock_irq(&hugetlb_lock);
-> -			add_hugetlb_page(h, &folio->page, false);
-> +			add_hugetlb_folio(h, folio, false);
->  			h->max_huge_pages++;
->  			spin_unlock_irq(&hugetlb_lock);
->  		}
-> @@ -3451,7 +3451,7 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
->  		/* Allocation of vmemmmap failed, we can not demote page */
->  		spin_lock_irq(&hugetlb_lock);
->  		set_page_refcounted(page);
-> -		add_hugetlb_page(h, page, false);
-> +		add_hugetlb_folio(h, page_folio(page), false);
->  		return rc;
->  	}
->  
-> -- 
-> 2.38.1
-> 
+--
+Gustavo
