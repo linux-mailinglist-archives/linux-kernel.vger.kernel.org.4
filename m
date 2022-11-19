@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5488A630915
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC224630916
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbiKSCGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 21:06:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
+        id S232320AbiKSCGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 21:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231925AbiKSCFw (ORCPT
+        with ESMTP id S232536AbiKSCF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 21:05:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511D712F;
-        Fri, 18 Nov 2022 18:04:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3BC362762;
-        Sat, 19 Nov 2022 02:04:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 52E27C433D6;
-        Sat, 19 Nov 2022 02:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668823490;
-        bh=LOnZjTnTkOE5q87hJ6EM3N5CHtVVoQvcOlcsiZH4VTU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lFwBRVxPE+WtL4ML4BdVeAvoVqt8YtYMGPxuYeUwcB34wRvz5dmodSiGmhK3UbYVY
-         k1Zk2J71elLKptddn4HmGVg0kaX+YYhk28dMO8TxgTXUSmLHJoJIwg02N1+dTorehH
-         pqsgNLoZQWJXAIz2hIHgJYjunMH9pT3D3FmaigcD1R74uEW+QbJ5BlodWofc9324f4
-         oRvQma8SM+yCE3M/GyA7nmVx2r1eEcIE26e6vgcA0gnmbZJC5KYyyw+KJdy3g5htoh
-         fwGkzhaKbgsL5XdyEz4pvow4JrWcWMJDEQ3XF+433XemYKvZu2gEM7T4ssp8MrP/pa
-         p5ftIEYveTvZw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40A19E270F6;
-        Sat, 19 Nov 2022 02:04:50 +0000 (UTC)
-Subject: Re: [git pull] Input updates for v6.1-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y3gwySzRvhCwdSgW@google.com>
-References: <Y3gwySzRvhCwdSgW@google.com>
-X-PR-Tracked-List-Id: <linux-input.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y3gwySzRvhCwdSgW@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.1-rc5
-X-PR-Tracked-Commit-Id: 81cd7e8489278d28794e7b272950c3e00c344e44
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fe24a97cf2543e8832e7a2124802e5c32aac05aa
-Message-Id: <166882349025.5277.9788348641672149029.pr-tracker-bot@kernel.org>
-Date:   Sat, 19 Nov 2022 02:04:50 +0000
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 18 Nov 2022 21:05:56 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183B225F5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 18:05:20 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NDcRG5DyfzHvx0;
+        Sat, 19 Nov 2022 10:04:42 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 19 Nov 2022 10:05:15 +0800
+Subject: Re: [PATCH] hugetlb: Fix __prep_compound_gigantic_page page flag
+ setting
+To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Vlastimil Babka <vbabka@kernel.org>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20221118195249.178319-1-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5877406c-62bb-8330-e8dc-a5d78c6ab15a@huawei.com>
+Date:   Sat, 19 Nov 2022 10:05:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20221118195249.178319-1-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 18 Nov 2022 17:26:33 -0800:
+On 2022/11/19 3:52, Mike Kravetz wrote:
+> Commit 2b21624fc232 ("hugetlb: freeze allocated pages before creating
+> hugetlb pages") changed the order page flags were cleared and set in the
+> head page.  It moved the __ClearPageReserved after __SetPageHead.
+> However, there is a check to make sure __ClearPageReserved is never
+> done on a head page.  If CONFIG_DEBUG_VM_PGFLAGS is enabled, the
+> following BUG will be hit when creating a hugetlb gigantic page:
+> 
+>     page dumped because: VM_BUG_ON_PAGE(1 && PageCompound(page))
+>     ------------[ cut here ]------------
+>     kernel BUG at include/linux/page-flags.h:500!
+>     Call Trace will differ depending on whether hugetlb page is created
+>     at boot time or run time.
+> 
+> Make sure to __ClearPageReserved BEFORE __SetPageHead.
+> 
+> Reported-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Fixes: 2b21624fc232 ("hugetlb: freeze allocated pages before creating hugetlb pages")
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.1-rc5
+Yes, PG_reserved is PF_NO_COMPOUND policy. Thanks for fixing this.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fe24a97cf2543e8832e7a2124802e5c32aac05aa
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Thank you!
+Thanks,
+Miaohe Lin
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
