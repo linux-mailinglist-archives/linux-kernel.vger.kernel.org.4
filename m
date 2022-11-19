@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3E6630F76
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 17:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE61F630F77
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 17:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234606AbiKSQY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 11:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        id S234632AbiKSQZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 11:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234091AbiKSQYQ (ORCPT
+        with ESMTP id S234165AbiKSQYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 11:24:16 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD7D53ECB;
+        Sat, 19 Nov 2022 11:24:17 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C4932BAF;
         Sat, 19 Nov 2022 08:24:13 -0800 (PST)
-Date:   Sat, 19 Nov 2022 16:24:10 -0000
+Date:   Sat, 19 Nov 2022 16:24:11 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668875051;
+        s=2020; t=1668875052;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=y85SXMqNVywsopsLacss/swAPpJRL4GCyhCe1FMYkxg=;
-        b=V961SuXfZEiXXCb6RE8iiSS0Z0B6U7lboAB8Ftmo3KnkQWCGRxjR1YzfJMm4mdZcuyb/+W
-        TqpI43iR5rTFjLjvX9ZJbVfoHS5gGpJR/kMza/QzDhCA0nqHX6ceet1ZyuOP5meouSpW43
-        tnq8dbfKUhEcm41ODo4otGqVrUSxzF480UjWNhQJkpGTdFxyEoOqkAhBq0wSLnwdQgg4jK
-        8XfwiNTkrm8gdBMVr74zp3zRTxcW2incbcCUNvWsbgxWGkNw/Bce+lHSlLrvxtgXaaekmG
-        +uInwjIsrPSmx5gXihLlokY2vKJphzhEnuMlRH9UQgNLF4ZeHWL9t35mQROrvg==
+        bh=fyJnikY9GMKYnBFCmK3CDnvZiMjmWFeWcWrEGXaklhw=;
+        b=WvtkmNpsutEn8mfcjPiL+KRXvv0jMgJsQo97GQPozaDaixdSJ1Q+JS/CULCO0cDH0SGBk2
+        BEVWAAnt14PZRjCZxrRb73fQTuqJKxEq3iDYj98EfIADecXIno9ZzO03pXcQU6wHXb/B2T
+        MWxTMCluRoN5rhaWLVzuVj+c5CRa+ouN0lVarX1dxv3BdkdHAMQGeHTyYoLGLqyp1l2F1X
+        lT0B8sz+RPbEmMcHQ5z5RkLR1hOzsd91mBiZyBZQPnzSh2QY7JZsWeGfOTXp2YT2ULDVz1
+        vX72InJfUTA6dNSEqx25ZJRmrGSe79u5rtHquREBj7EzBbGMf4821wvUrA3HIw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668875051;
+        s=2020e; t=1668875052;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=y85SXMqNVywsopsLacss/swAPpJRL4GCyhCe1FMYkxg=;
-        b=NZca6g8T2d8sKb6scuna2T6rmPdcxi3tir8UWCunMcHVKWRRo/EDM2RjrkJ5IWyibYkdt5
-        mukpf21m/JaDH8CA==
+        bh=fyJnikY9GMKYnBFCmK3CDnvZiMjmWFeWcWrEGXaklhw=;
+        b=P6O340c5c7YIZGuVSQm5q6NFQ9v1sHmhPXzXCDvwVQMoopFFpimVoKCHQHgoqA2mV8QFfs
+        aky6jAp2uM/cgiDg==
 From:   "tip-bot2 for Jithu Joseph" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode/intel: Reuse find_matching_signature()
-Cc:     Jithu Joseph <jithu.joseph@intel.com>,
+Subject: [tip: x86/microcode] platform/x86/intel/ifs: Remove memory allocation
+ from load path
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Jithu Joseph <jithu.joseph@intel.com>,
         Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221117035935.4136738-6-jithu.joseph@intel.com>
-References: <20221117035935.4136738-6-jithu.joseph@intel.com>
+In-Reply-To: <20221117195957.28225-1-jithu.joseph@intel.com>
+References: <20221117195957.28225-1-jithu.joseph@intel.com>
 MIME-Version: 1.0
-Message-ID: <166887505019.4906.12287352480309171663.tip-bot2@tip-bot2>
+Message-ID: <166887505130.4906.4649425997130682985.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,175 +69,162 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/microcode branch of tip:
 
-Commit-ID:     716f380275866350ee44447b3c7c999f39c3178d
-Gitweb:        https://git.kernel.org/tip/716f380275866350ee44447b3c7c999f39c3178d
+Commit-ID:     cb5eceee816bf05667089869d822b9cbc919465a
+Gitweb:        https://git.kernel.org/tip/cb5eceee816bf05667089869d822b9cbc919465a
 Author:        Jithu Joseph <jithu.joseph@intel.com>
-AuthorDate:    Wed, 16 Nov 2022 19:59:24 -08:00
+AuthorDate:    Thu, 17 Nov 2022 11:59:57 -08:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 18 Nov 2022 21:50:01 +01:00
+CommitterDate: Fri, 18 Nov 2022 21:43:18 +01:00
 
-x86/microcode/intel: Reuse find_matching_signature()
+platform/x86/intel/ifs: Remove memory allocation from load path
 
-IFS uses test images provided by Intel that can be regarded as firmware.
-An IFS test image carries microcode header with an extended signature
-table.
+IFS requires tests to be authenticated once for each CPU socket on a
+system.
 
-Reuse find_matching_signature() for verifying if the test image header
-or the extended signature table indicate whether that image is fit to
-run on a system.
+scan_chunks_sanity_check() was dynamically allocating memory to store
+the state of whether tests have been authenticated on each socket for
+every load operation.
 
-No functional changes.
+Move the memory allocation to init path and store the pointer in
+ifs_data struct.
 
+Also rearrange the adjacent error checking in init for a more simplified
+and natural flow.
+
+Suggested-by: Borislav Petkov <bp@alien8.de>
 Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Ashok Raj <ashok.raj@intel.com>
-Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
-Link: https://lore.kernel.org/r/20221117035935.4136738-6-jithu.joseph@intel.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20221117195957.28225-1-jithu.joseph@intel.com
 ---
- arch/x86/include/asm/cpu.h            |  1 +-
- arch/x86/kernel/cpu/intel.c           | 29 +++++++++++++++++-
- arch/x86/kernel/cpu/microcode/intel.c | 44 ++++----------------------
- 3 files changed, 38 insertions(+), 36 deletions(-)
+ drivers/platform/x86/intel/ifs/core.c | 20 ++++++++++++++++----
+ drivers/platform/x86/intel/ifs/ifs.h  |  2 ++
+ drivers/platform/x86/intel/ifs/load.c | 14 ++++----------
+ 3 files changed, 22 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index b472ef7..e853440 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -95,5 +95,6 @@ static inline bool intel_cpu_signatures_match(unsigned int s1, unsigned int p1,
- }
+diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
+index 5fb7f65..943eb2a 100644
+--- a/drivers/platform/x86/intel/ifs/core.c
++++ b/drivers/platform/x86/intel/ifs/core.c
+@@ -4,6 +4,7 @@
+ #include <linux/module.h>
+ #include <linux/kdev_t.h>
+ #include <linux/semaphore.h>
++#include <linux/slab.h>
  
- extern u64 x86_read_arch_cap_msr(void);
-+int intel_find_matching_signature(void *mc, unsigned int csig, int cpf);
+ #include <asm/cpu_device_id.h>
  
- #endif /* _ASM_X86_CPU_H */
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index beb8ca5..c7331ec 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -215,6 +215,35 @@ int intel_cpu_collect_info(struct ucode_cpu_info *uci)
- }
- EXPORT_SYMBOL_GPL(intel_cpu_collect_info);
- 
-+/*
-+ * Returns 1 if update has been found, 0 otherwise.
-+ */
-+int intel_find_matching_signature(void *mc, unsigned int csig, int cpf)
-+{
-+	struct microcode_header_intel *mc_hdr = mc;
-+	struct extended_sigtable *ext_hdr;
-+	struct extended_signature *ext_sig;
-+	int i;
-+
-+	if (intel_cpu_signatures_match(csig, cpf, mc_hdr->sig, mc_hdr->pf))
-+		return 1;
-+
-+	/* Look for ext. headers: */
-+	if (get_totalsize(mc_hdr) <= get_datasize(mc_hdr) + MC_HEADER_SIZE)
-+		return 0;
-+
-+	ext_hdr = mc + get_datasize(mc_hdr) + MC_HEADER_SIZE;
-+	ext_sig = (void *)ext_hdr + EXT_HEADER_SIZE;
-+
-+	for (i = 0; i < ext_hdr->count; i++) {
-+		if (intel_cpu_signatures_match(csig, cpf, ext_sig->sig, ext_sig->pf))
-+			return 1;
-+		ext_sig++;
-+	}
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(intel_find_matching_signature);
-+
- static void early_init_intel(struct cpuinfo_x86 *c)
+@@ -34,6 +35,7 @@ static int __init ifs_init(void)
  {
- 	u64 misc_enable;
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 8c35c70..c77ec1b 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -48,34 +48,6 @@ static int llc_size_per_core;
- /*
-  * Returns 1 if update has been found, 0 otherwise.
-  */
--static int find_matching_signature(void *mc, unsigned int csig, int cpf)
--{
--	struct microcode_header_intel *mc_hdr = mc;
--	struct extended_sigtable *ext_hdr;
--	struct extended_signature *ext_sig;
--	int i;
--
--	if (intel_cpu_signatures_match(csig, cpf, mc_hdr->sig, mc_hdr->pf))
--		return 1;
--
--	/* Look for ext. headers: */
--	if (get_totalsize(mc_hdr) <= get_datasize(mc_hdr) + MC_HEADER_SIZE)
+ 	const struct x86_cpu_id *m;
+ 	u64 msrval;
++	int ret;
+ 
+ 	m = x86_match_cpu(ifs_cpu_ids);
+ 	if (!m)
+@@ -50,16 +52,26 @@ static int __init ifs_init(void)
+ 
+ 	ifs_device.misc.groups = ifs_get_groups();
+ 
+-	if ((msrval & BIT(ifs_device.data.integrity_cap_bit)) &&
+-	    !misc_register(&ifs_device.misc))
 -		return 0;
--
--	ext_hdr = mc + get_datasize(mc_hdr) + MC_HEADER_SIZE;
--	ext_sig = (void *)ext_hdr + EXT_HEADER_SIZE;
--
--	for (i = 0; i < ext_hdr->count; i++) {
--		if (intel_cpu_signatures_match(csig, cpf, ext_sig->sig, ext_sig->pf))
--			return 1;
--		ext_sig++;
--	}
--	return 0;
--}
--
--/*
-- * Returns 1 if update has been found, 0 otherwise.
-- */
- static int has_newer_microcode(void *mc, unsigned int csig, int cpf, int new_rev)
- {
- 	struct microcode_header_intel *mc_hdr = mc;
-@@ -83,7 +55,7 @@ static int has_newer_microcode(void *mc, unsigned int csig, int cpf, int new_rev
- 	if (mc_hdr->rev <= new_rev)
- 		return 0;
++	if (!(msrval & BIT(ifs_device.data.integrity_cap_bit)))
++		return -ENODEV;
++
++	ifs_device.data.pkg_auth = kmalloc_array(topology_max_packages(), sizeof(bool), GFP_KERNEL);
++	if (!ifs_device.data.pkg_auth)
++		return -ENOMEM;
++
++	ret = misc_register(&ifs_device.misc);
++	if (ret) {
++		kfree(ifs_device.data.pkg_auth);
++		return ret;
++	}
  
--	return find_matching_signature(mc, csig, cpf);
-+	return intel_find_matching_signature(mc, csig, cpf);
+-	return -ENODEV;
++	return 0;
  }
  
- static struct ucode_patch *memdup_patch(void *data, unsigned int size)
-@@ -117,7 +89,7 @@ static void save_microcode_patch(struct ucode_cpu_info *uci, void *data, unsigne
- 		sig	     = mc_saved_hdr->sig;
- 		pf	     = mc_saved_hdr->pf;
+ static void __exit ifs_exit(void)
+ {
+ 	misc_deregister(&ifs_device.misc);
++	kfree(ifs_device.data.pkg_auth);
+ }
  
--		if (find_matching_signature(data, sig, pf)) {
-+		if (intel_find_matching_signature(data, sig, pf)) {
- 			prev_found = true;
+ module_init(ifs_init);
+diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
+index 3ff1d9a..8de1952 100644
+--- a/drivers/platform/x86/intel/ifs/ifs.h
++++ b/drivers/platform/x86/intel/ifs/ifs.h
+@@ -191,6 +191,7 @@ union ifs_status {
+  * struct ifs_data - attributes related to intel IFS driver
+  * @integrity_cap_bit: MSR_INTEGRITY_CAPS bit enumerating this test
+  * @loaded_version: stores the currently loaded ifs image version.
++ * @pkg_auth: array of bool storing per package auth status
+  * @loaded: If a valid test binary has been loaded into the memory
+  * @loading_error: Error occurred on another CPU while loading image
+  * @valid_chunks: number of chunks which could be validated.
+@@ -199,6 +200,7 @@ union ifs_status {
+  */
+ struct ifs_data {
+ 	int	integrity_cap_bit;
++	bool	*pkg_auth;
+ 	int	loaded_version;
+ 	bool	loaded;
+ 	bool	loading_error;
+diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
+index 89ce265..8423c48 100644
+--- a/drivers/platform/x86/intel/ifs/load.c
++++ b/drivers/platform/x86/intel/ifs/load.c
+@@ -3,7 +3,6 @@
  
- 			if (mc_hdr->rev <= mc_saved_hdr->rev)
-@@ -149,7 +121,7 @@ static void save_microcode_patch(struct ucode_cpu_info *uci, void *data, unsigne
- 	if (!p)
- 		return;
+ #include <linux/firmware.h>
+ #include <asm/cpu.h>
+-#include <linux/slab.h>
+ #include <asm/microcode_intel.h>
  
--	if (!find_matching_signature(p->data, uci->cpu_sig.sig, uci->cpu_sig.pf))
-+	if (!intel_find_matching_signature(p->data, uci->cpu_sig.sig, uci->cpu_sig.pf))
- 		return;
+ #include "ifs.h"
+@@ -118,16 +117,12 @@ done:
+  */
+ static int scan_chunks_sanity_check(struct device *dev)
+ {
+-	int metadata_size, curr_pkg, cpu, ret = -ENOMEM;
++	int metadata_size, curr_pkg, cpu, ret;
+ 	struct ifs_data *ifsd = ifs_get_data(dev);
+-	bool *package_authenticated;
+ 	struct ifs_work local_work;
+ 	char *test_ptr;
  
- 	/*
-@@ -286,8 +258,8 @@ scan_microcode(void *data, size_t size, struct ucode_cpu_info *uci, bool save)
+-	package_authenticated = kcalloc(topology_max_packages(), sizeof(bool), GFP_KERNEL);
+-	if (!package_authenticated)
+-		return ret;
+-
++	memset(ifsd->pkg_auth, 0, (topology_max_packages() * sizeof(bool)));
+ 	metadata_size = ifs_header_ptr->metadata_size;
  
- 		size -= mc_size;
- 
--		if (!find_matching_signature(data, uci->cpu_sig.sig,
--					     uci->cpu_sig.pf)) {
-+		if (!intel_find_matching_signature(data, uci->cpu_sig.sig,
-+						   uci->cpu_sig.pf)) {
- 			data += mc_size;
+ 	/* Spec says that if the Meta Data Size = 0 then it should be treated as 2000 */
+@@ -150,7 +145,7 @@ static int scan_chunks_sanity_check(struct device *dev)
+ 	cpus_read_lock();
+ 	for_each_online_cpu(cpu) {
+ 		curr_pkg = topology_physical_package_id(cpu);
+-		if (package_authenticated[curr_pkg])
++		if (ifsd->pkg_auth[curr_pkg])
  			continue;
+ 		reinit_completion(&ifs_done);
+ 		local_work.dev = dev;
+@@ -161,12 +156,11 @@ static int scan_chunks_sanity_check(struct device *dev)
+ 			ret = -EIO;
+ 			goto out;
  		}
-@@ -652,9 +624,9 @@ static struct microcode_intel *find_patch(struct ucode_cpu_info *uci)
- 		if (phdr->rev <= uci->cpu_sig.rev)
- 			continue;
+-		package_authenticated[curr_pkg] = 1;
++		ifsd->pkg_auth[curr_pkg] = 1;
+ 	}
+ 	ret = 0;
+ out:
+ 	cpus_read_unlock();
+-	kfree(package_authenticated);
  
--		if (!find_matching_signature(phdr,
--					     uci->cpu_sig.sig,
--					     uci->cpu_sig.pf))
-+		if (!intel_find_matching_signature(phdr,
-+						   uci->cpu_sig.sig,
-+						   uci->cpu_sig.pf))
- 			continue;
- 
- 		return iter->data;
+ 	return ret;
+ }
