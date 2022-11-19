@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABB9630D87
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB52630D89
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiKSItU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 03:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S233191AbiKSItl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 03:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKSItQ (ORCPT
+        with ESMTP id S233423AbiKSIte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:49:16 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90CB65867;
-        Sat, 19 Nov 2022 00:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0TKN0dlGfGdFwo0dwprmBXt8F8zozs1lggU4kgtJGsE=; b=ADa12tjmGzsxLncfyrWy0a5a0r
-        w084JLxMODd12t/5V2nbkiin9AdRZWntJk/SJq6zqMOZKJLDSMuLUtKgR4lLPiciZa74Sktkmcy0j
-        Z7LP45wtH15ucIwu5tLJKgXVVycrcyI5/AG7QlNJ00LuhFb5IBhJq4ip74Dp0+dXXGpnAwlaSvLup
-        7VtfQF/z2da/GGs8ZC18zUxEMJQsia7RDerMAvB95iO70RzBIELFwpEZP3ZsUvH9WAxxiYwynB2v6
-        kUiF2UNsxiG6jV0ncs1IhE956RvrKELtml7GT6o/NEBLhlMbefvYJW2gx336rs32nwT5XT1J5JlzG
-        TOhpyLZQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1owJWO-0051Q8-21;
-        Sat, 19 Nov 2022 08:48:20 +0000
-Date:   Sat, 19 Nov 2022 08:48:20 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Scott Mayhew <smayhew@redhat.com>,
-        Paul Moore <paul@paul-moore.com>, linux-nfs@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] vfs, security: Fix automount superblock LSM init
- problem, preventing NFS sb sharing
-Message-ID: <Y3iYVFT40L0+/MzO@ZenIV>
-References: <166807856758.2972602.14175912201162072721.stgit@warthog.procyon.org.uk>
+        Sat, 19 Nov 2022 03:49:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4736B9ED
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:49:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EBB56009E
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 08:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AEB3C433D6;
+        Sat, 19 Nov 2022 08:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668847766;
+        bh=UVCfR3anyQssNbga8oJ+NA2adZ5isywkxGYwWPbPgQQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VAhl2tmZTRkke5JgfIumxAtjUqC4brzImyR2zWapBhnFUD+AfsLFdwJezVqzgywH0
+         jVZaijSnnFy2DviiqoXsGm5WIUb/2HyglBB9gwXz8lY7v1sUlsq94mRzmEoQ8ORDyN
+         CB4H70m8XpOMk8oYxu1yFqECTlSVYU56bLX2LYz0=
+Date:   Sat, 19 Nov 2022 09:49:24 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [RFC] Add a new generic system call which has better
+ performance, to get /proc data, than existing mechanisms
+Message-ID: <Y3iYlLmxvIqn/ETF@kroah.com>
+References: <20221118191202.2357801-1-anjali.k.kulkarni@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <166807856758.2972602.14175912201162072721.stgit@warthog.procyon.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221118191202.2357801-1-anjali.k.kulkarni@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 11:09:27AM +0000, David Howells wrote:
-> When NFS superblocks are created by automounting, their LSM parameters
-> aren't set in the fs_context struct prior to sget_fc() being called,
-> leading to failure to match existing superblocks.
-> 
-> Fix this by adding a new LSM hook to load fc->security for submount
-> creation when alloc_fs_context() is creating the fs_context for it.
+On Fri, Nov 18, 2022 at 11:12:02AM -0800, Anjali Kulkarni wrote:
+> Hi Greg,
+> I was looking up your readfile() system call and this seems something
+> useful to us - is this something expected to go into mainline any time
+> soon?
 
-FWIW, it feels like security_sb_mnt_opts_compat() would be a saner place
-for that.  It would need to get struct dentry *reference passed to it,
-but that should be it...
+Can you test it to see if it actually helps your workload?  All of the
+ones I played with were just very minor improvements or lots in the
+noise.
+
+Also, look into using io_uring as that can probably do the same thing,
+right?
+
+thanks,
+
+greg k-h
