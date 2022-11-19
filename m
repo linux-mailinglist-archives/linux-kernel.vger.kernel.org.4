@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812A3630F42
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 16:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2034630F47
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 16:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiKSPZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 10:25:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        id S231666AbiKSP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 10:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiKSPZP (ORCPT
+        with ESMTP id S231843AbiKSP1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 10:25:15 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9799C7DEC9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 07:25:13 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AJFOuGK024296;
-        Sat, 19 Nov 2022 09:24:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668871496;
-        bh=vNwBTL7uiaXFHQ1HqY76JMrEJuOG439YiuYKnkAC5ls=;
-        h=From:To:CC:Subject:Date;
-        b=Wo4GbgRoLOyaFbkoK6ut/AC4eiDhyJQVA/YPNGKVjH0rQ0vOiwsM5nvaA20ifSYEK
-         3MqLrsaZJXIs7yo4EgN94DnlM7pbmqh0tsxL/E5kUGLDL2Bfa/i4V2w0gnVPZE6TTd
-         dV8zyWaV/rDFqshvy751x7heG2v4ELdZK1fmulVU=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AJFOuFL030674
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 19 Nov 2022 09:24:56 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sat, 19
- Nov 2022 09:24:56 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sat, 19 Nov 2022 09:24:56 -0600
-Received: from ula0132425.ent.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AJFOre3086622;
-        Sat, 19 Nov 2022 09:24:54 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Bryan Brattlof <bb@ti.com>
-Subject: [PATCH] soc: ti: k3-socinfo: Add AM62Ax JTAG ID
-Date:   Sat, 19 Nov 2022 20:54:47 +0530
-Message-ID: <20221119152447.241166-1-vigneshr@ti.com>
-X-Mailer: git-send-email 2.38.1
+        Sat, 19 Nov 2022 10:27:33 -0500
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0BD82BEA;
+        Sat, 19 Nov 2022 07:27:29 -0800 (PST)
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 2AJFRG91032593;
+        Sun, 20 Nov 2022 00:27:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2AJFRG91032593
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1668871637;
+        bh=+9gghvxDrSZNU0RdOy3O4PxLU5pgUh7eBIfBXs4/VEk=;
+        h=From:Date:Subject:To:Cc:From;
+        b=KKVcoutomqyXbOLca4DTgtnRW231ee6O2g3yxFp5alweKcKjJYGILVGKsOh9o33iu
+         /W3dj1cx3Mo7it4fbqOrML0CQNYhVwsjcCSctyE+F6ceHiBiLPkIZZ3Ajjif5Te8KQ
+         mbPu4zVkSvC5Tii3UA012yEI9Kj2NXt/3p9NF/hJ3Myg/VL1TnXNjecVb99KBxIi66
+         ppvBL1qsB1FDMjVS7xfuP6OM8AfI7Z2Ylz+gMz1OmNxKkWgwnd57BHS1e5WtSwTSZI
+         iFtFq/qIn0j6LuPXPo/McwkwdwZxf4jTvqC1t4i7zUkA2JfhBB0QCMlfaI9txdzp61
+         GqdrXKGHM0jvg==
+X-Nifty-SrcIP: [209.85.167.172]
+Received: by mail-oi1-f172.google.com with SMTP id q186so8416913oia.9;
+        Sat, 19 Nov 2022 07:27:17 -0800 (PST)
+X-Gm-Message-State: ANoB5pnbHKW4STXL6+Z3rKJL3uui++ABSI9vwiv/5PtiBbnh58CmhHRz
+        PXWBpDYd3EK2P2vRWAfKnhwbWn+Y10Mpezqv8R0=
+X-Google-Smtp-Source: AA0mqf6u346SGBnD3cJq8+ZXsCOSCnBP/y4aMSHbaLHdzoBozW147yKbXc29cmWjrX7n8jf7+kZxFlBEFBwch3nzXAA=
+X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
+ ay9-20020a056808300900b0035494a6a721mr8537084oib.194.1668871636287; Sat, 19
+ Nov 2022 07:27:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 20 Nov 2022 00:26:40 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR3ESoUBQ5HM3FCLT2LC8JPWstTO6aypnm09ayCFjknYA@mail.gmail.com>
+Message-ID: <CAK7LNAR3ESoUBQ5HM3FCLT2LC8JPWstTO6aypnm09ayCFjknYA@mail.gmail.com>
+Subject: [GIT PULL] Kbuild fixes for v6.1-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add JTAG ID entry to help identify AM62Ax SoC in kernel.
+Hello Linus,
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- drivers/soc/ti/k3-socinfo.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
-index 91f441ee6175..d15764e19d96 100644
---- a/drivers/soc/ti/k3-socinfo.c
-+++ b/drivers/soc/ti/k3-socinfo.c
-@@ -43,6 +43,7 @@ static const struct k3_soc_id {
- 	{ 0xBB38, "AM64X" },
- 	{ 0xBB75, "J721S2"},
- 	{ 0xBB7E, "AM62X" },
-+	{ 0xBB8D, "AM62AX" },
- };
- 
- static int
--- 
-2.38.1
+Please pull Kbuild fixes.
+Thanks.
 
+
+
+
+
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
+
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+tags/kbuild-fixes-v6.1-3
+
+for you to fetch changes up to 5db8face97f81c9342458c052572e19ac6bd8e52:
+
+  kbuild: Restore .version auto-increment behaviour for Debian
+packages (2022-11-17 17:51:45 +0900)
+
+----------------------------------------------------------------
+Kbuild fixes for v6.1 (3rd)
+
+ - Update MAINTAINERS with Nathan and Nicolas as new Kbuild reviewers.
+
+ - Increment the debian revision for deb-pkg builds
+
+----------------------------------------------------------------
+Marc Zyngier (1):
+      kbuild: Restore .version auto-increment behaviour for Debian packages
+
+Nicolas Schier (3):
+      MAINTAINERS: Add Nathan and Nicolas to Kbuild reviewers
+      MAINTAINERS: Remove Michal Marek from Kbuild maintainers
+      MAINTAINERS: Add linux-kbuild's patchwork
+
+ CREDITS                  | 4 ++++
+ MAINTAINERS              | 5 ++++-
+ scripts/package/mkdebian | 2 +-
+ 3 files changed, 9 insertions(+), 2 deletions(-)
