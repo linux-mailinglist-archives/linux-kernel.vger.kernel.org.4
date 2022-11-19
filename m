@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDF0630F9E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 18:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC64630FA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 18:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiKSRLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 12:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S229689AbiKSROn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 12:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKSRLb (ORCPT
+        with ESMTP id S229635AbiKSROi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 12:11:31 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471E9E85
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 09:11:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1668877882; bh=FKEbaY7IyPQFMpBoG5mhguHiFjbHZh8X2ncstYTLPn0=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=TYkmpQm6NGtu87aycupjCmDXfNZKu64JDeqvj2c0vFicANOkhB6byigpTRtd3X/Gr
-         HzUMa+UQyGnMB4XxSLI3V/qyaF6/HQOe6dZyKcuI96ZMoHROBAupfrqTi+ST7JgQKL
-         hzGkKTpmqf0IjSgArjgYvkmgrZ771UfHGfNSyq8Y=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 19 Nov 2022 18:11:22 +0100 (CET)
-X-EA-Auth: ni8jdc27RGu78A+owJy87OHmQyFyTnn+3qZB4CS5snT62QN7iRjoo7WeH1t5COwJD/1OxtourPBt3HBrZTRIJeF5UApw/Mpc
-Date:   Sat, 19 Nov 2022 22:41:17 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     drv@mailo.com
-Subject: [PATCH] staging: pi433: call set_lan_gain for receiver config
-Message-ID: <Y3kONX7KhQ1GX9QW@qemulion>
+        Sat, 19 Nov 2022 12:14:38 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590ED13F7B;
+        Sat, 19 Nov 2022 09:14:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=JU2+ZJVbVVTJbcrbiBUSe/4vYflalSTNI21pEuGrk90=; b=ld2+Dckvp8CiCxIb1CeyVk23LY
+        lB1/XVpSTk02qTQp1SnXknuggoZYxIpX/oV5QvO1hmYkwLcd578AJUA3UppXIlqLpmXYGq1KdONQm
+        zDPfkbNmG1bs+Llv5BEM0kzvy7PI1hnwNYuTZ8FelZxKJkPP5dfdHd+A/Wwq7Jo7Tg2aMg2PCCcOv
+        xGHPgikY67I+X+igS29qk+ChynMdRPdDx0u0CESzTTnMPG0O8jFotMEgBpUexikyDtzyTQEXyvIDQ
+        RDpw5g1aGgZNzsWYVpXAwNLBVkX1CFgYHTk4pAzHRTztHR75WzdoDnbU+f+zN5wcTxu/QNnp2T/+M
+        kEE4jr+A==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1owRQ1-00FUxZ-S8; Sat, 19 Nov 2022 17:14:17 +0000
+Message-ID: <bce610de-60a5-2c00-0231-e5891c480ccf@infradead.org>
+Date:   Sat, 19 Nov 2022 09:14:15 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] octeontx2-pf: Remove duplicate MACSEC setting
+Content-Language: en-US
+To:     Zheng Bin <zhengbin13@huawei.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     zhangqilong3@huawei.com
+References: <20221119133616.3583538-1-zhengbin13@huawei.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221119133616.3583538-1-zhengbin13@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Value for the LNA gain is captured from the user as part of the struct
-pi433_rx_cfg, however, the corresponding function rf69_set_lna_gain() is
-never called to set it. Include a call to this function as part of
-setting up the rx configurations.
-
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/staging/pi433/pi433_if.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index d4e06a3929f3..e588a98d7f33 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -176,6 +176,9 @@ rf69_set_rx_cfg(struct pi433_device *dev, struct pi433_rx_cfg *rx_cfg)
- 	if (ret < 0)
- 		return ret;
- 	ret = rf69_set_antenna_impedance(dev->spi, rx_cfg->antenna_impedance);
-+	if (ret < 0)
-+		return ret;
-+	ret = rf69_set_lna_gain(dev->spi, rx_cfg->lna_gain);
- 	if (ret < 0)
- 		return ret;
- 	ret = rf69_set_rssi_threshold(dev->spi, rx_cfg->rssi_threshold);
---
-2.34.1
 
 
+On 11/19/22 05:36, Zheng Bin wrote:
+> Commit 4581dd480c9e ("net: octeontx2-pf: mcs: consider MACSEC setting")
+> has already added "depends on MACSEC || !MACSEC", so remove it.
+> 
+> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
 
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+
+> ---
+>  drivers/net/ethernet/marvell/octeontx2/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/Kconfig b/drivers/net/ethernet/marvell/octeontx2/Kconfig
+> index 6b4f640163f7..993ac180a5db 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/Kconfig
+> +++ b/drivers/net/ethernet/marvell/octeontx2/Kconfig
+> @@ -32,7 +32,6 @@ config OCTEONTX2_PF
+>  	tristate "Marvell OcteonTX2 NIC Physical Function driver"
+>  	select OCTEONTX2_MBOX
+>  	select NET_DEVLINK
+> -	depends on MACSEC || !MACSEC
+>  	depends on (64BIT && COMPILE_TEST) || ARM64
+>  	select DIMLIB
+>  	depends on PCI
+> --
+> 2.31.1
+> 
+
+-- 
+~Randy
