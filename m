@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF114630BBD
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCFA630BC0
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 05:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbiKSEKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 23:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S234148AbiKSEKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 23:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbiKSEJt (ORCPT
+        with ESMTP id S233147AbiKSEKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 23:09:49 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7E174A99;
-        Fri, 18 Nov 2022 20:09:48 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AJ49hCi028783;
-        Fri, 18 Nov 2022 22:09:43 -0600
+        Fri, 18 Nov 2022 23:10:16 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D924375DBA;
+        Fri, 18 Nov 2022 20:09:57 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AJ49m2n042861;
+        Fri, 18 Nov 2022 22:09:48 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668830983;
-        bh=BYL/GMzjP6vuyqmTQ9/yPWf3BAncE5bqZIl7zP3juDM=;
+        s=ti-com-17Q1; t=1668830988;
+        bh=OgYEQP4J8SMqbD3u6qzX6mSIQHDLRx28RzMQI7u5ykA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=LULT6bBytXQOm59etv+OmG2/CZ5+iA+W9IUAaOMCrO2kb1hXi0K+d37ogjsUzUNoN
-         6YmW304Q9ajqVFEVECQibwJUC7eaHnrCcz7gg9/RbAdCwa8YZ9XXWC011gQ5TZWenB
-         89ZevVJkjNUIdzRQH5jOIalfcIbzfsqMgJNaaq7M=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AJ49h3Z067740
+        b=aZcQ5S5sNnDOIIdo1jVRG4CYK+E++08IY0Y6wATHf8HzUkq9QNZP4T4JIX4+5k/Lo
+         9TkJq8ygF7i+1OWIgUyL2ooceLEfhGRdbvjq8o35kFAJiaY44yhCN9qn2eHFypYGe6
+         hgLvvWVL4Z1UcNxWHGXx1nKP9zP+4Wax0K7EYqD4=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AJ49mpw001176
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Nov 2022 22:09:43 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 18 Nov 2022 22:09:48 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 18
- Nov 2022 22:09:43 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ Nov 2022 22:09:48 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 18 Nov 2022 22:09:43 -0600
+ Frontend Transport; Fri, 18 Nov 2022 22:09:48 -0600
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AJ49eBg118853;
-        Fri, 18 Nov 2022 22:09:42 -0600
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AJ49jj0085647;
+        Fri, 18 Nov 2022 22:09:47 -0600
 From:   Matt Ranostay <mranostay@ti.com>
 To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <s-vadapalli@ti.com>, <r-gunasekaran@ti.com>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 7/8] arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
-Date:   Fri, 18 Nov 2022 20:09:05 -0800
-Message-ID: <20221119040906.9495-8-mranostay@ti.com>
+Subject: [PATCH v6 8/8] arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
+Date:   Fri, 18 Nov 2022 20:09:06 -0800
+Message-ID: <20221119040906.9495-9-mranostay@ti.com>
 X-Mailer: git-send-email 2.38.GIT
 In-Reply-To: <20221119040906.9495-1-mranostay@ti.com>
 References: <20221119040906.9495-1-mranostay@ti.com>
@@ -67,89 +67,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Aswath Govindraju <a-govindraju@ti.com>
 
-Add PCIe device tree node (both RC and EP) for the single PCIe
-instance present in j721s2.
+x1 lane PCIe slot in the common processor board is enabled and connected to
+J721S2 SOM. Add PCIe DT node in common processor board to reflect the
+same.
 
 Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 Signed-off-by: Matt Ranostay <mranostay@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ .../boot/dts/ti/k3-j721s2-common-proc-board.dts    | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-index adbb172658b9..04294e25d587 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-@@ -841,6 +841,67 @@ serdes0: serdes@5060000 {
- 		};
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+index 0503e690cfaf..862611784ab3 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+@@ -374,6 +374,20 @@ flash@0{
  	};
+ };
  
-+	pcie1_rc: pcie@2910000 {
-+		compatible = "ti,j7200-pcie-host", "ti,j721e-pcie-host";
-+		reg = <0x00 0x02910000 0x00 0x1000>,
-+		      <0x00 0x02917000 0x00 0x400>,
-+		      <0x00 0x0d800000 0x00 0x00800000>,
-+		      <0x00 0x18000000 0x00 0x00001000>;
-+		reg-names = "intd_cfg", "user_cfg", "reg", "cfg";
-+		interrupt-names = "link_state";
-+		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
-+		device_type = "pci";
-+		ti,syscon-pcie-ctrl = <&scm_conf 0x074>;
-+		max-link-speed = <3>;
-+		num-lanes = <4>;
-+		power-domains = <&k3_pds 276 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 276 41>;
-+		clock-names = "fck";
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		bus-range = <0x0 0xff>;
-+		vendor-id = <0x104c>;
-+		device-id = <0xb013>;
-+		msi-map = <0x0 &gic_its 0x0 0x10000>;
-+		dma-coherent;
-+		ranges = <0x01000000 0x0 0x18001000  0x00 0x18001000  0x0 0x0010000>,
-+			 <0x02000000 0x0 0x18011000  0x00 0x18011000  0x0 0x7fef000>;
-+		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
-+		#interrupt-cells = <1>;
-+		interrupt-map-mask = <0 0 0 7>;
-+		interrupt-map = <0 0 0 1 &pcie1_intc 0>, /* INT A */
-+				<0 0 0 2 &pcie1_intc 0>, /* INT B */
-+				<0 0 0 3 &pcie1_intc 0>, /* INT C */
-+				<0 0 0 4 &pcie1_intc 0>; /* INT D */
++&pcie1_rc {
++	reset-gpios = <&exp1 2 GPIO_ACTIVE_HIGH>;
++	phys = <&serdes0_pcie_link>;
++	phy-names = "pcie-phy";
++	num-lanes = <1>;
++};
 +
-+		pcie1_intc: interrupt-controller {
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+			interrupt-parent = <&gic500>;
-+			interrupts = <GIC_SPI 324 IRQ_TYPE_EDGE_RISING>;
-+		};
-+	};
++&pcie1_ep {
++	phys = <&serdes0_pcie_link>;
++	phy-names = "pcie-phy";
++	num-lanes = <1>;
++	status = "disabled";
++};
 +
-+	pcie1_ep: pcie-ep@2910000 {
-+		compatible = "ti,j7200-pcie-ep", "ti,j721e-pcie-ep";
-+		reg = <0x00 0x02910000 0x00 0x1000>,
-+		      <0x00 0x02917000 0x00 0x400>,
-+		      <0x00 0x0d800000 0x00 0x00800000>,
-+		      <0x00 0x18000000 0x00 0x08000000>;
-+		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
-+		interrupt-names = "link_state";
-+		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
-+		ti,syscon-pcie-ctrl = <&scm_conf 0x074>;
-+		max-link-speed = <3>;
-+		num-lanes = <4>;
-+		power-domains = <&k3_pds 276 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 276 41>;
-+		clock-names = "fck";
-+		max-functions = /bits/ 8 <6>;
-+		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
-+		dma-coherent;
-+	};
-+
- 	main_mcan0: can@2701000 {
- 		compatible = "bosch,m_can";
- 		reg = <0x00 0x02701000 0x00 0x200>,
+ &mcu_mcan0 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
 -- 
 2.38.GIT
 
