@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19061630EAE
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 13:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFAF630EB7
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 13:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbiKSM2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 07:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S232544AbiKSMcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 07:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiKSM23 (ORCPT
+        with ESMTP id S231959AbiKSMcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 07:28:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B05C1A
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 04:28:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF49260B68
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 12:28:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDB2C433D6;
-        Sat, 19 Nov 2022 12:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668860905;
-        bh=wE5OEvsthhALiWj82z3FTGHoJwibmtNBVW6RpZKEPTI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e8xb/bFoMKPcdDTdUndazLOIPlFWtx82eSSFaOWsk2jxglhOiQ0bV4wTd02jhQrv1
-         7MsN5LHIlMISHv57/P5gA6qYR8GtX/9MNTfEkqCEsM0mBpsxowaBESy0BLEDDsm2Zh
-         /zh7a+sUa1lA8OKKdW3h7a46NXA4vx6vGx1zC2iU5G/1uxxr0BeHxLddqTtE24Lms4
-         RsXTtVa3QOBRGhKBB0Ltv9QJW+WsBYubq5f21Dv9F+zfOdSAAZqNJMvIKMeXso0wng
-         PRnBm+TUTt7y443jzg4e0beRHkm8T7ItN7on+hlw6mh/YVktT7kf56PhmFzizoPYG8
-         8ZGSyzU60Trxg==
-Date:   Sat, 19 Nov 2022 12:28:21 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     aou@eecs.berkeley.edu, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH] riscv: defconfig: add SERIAL_8250_DW
-Message-ID: <Y3jL5QAI3c/joB3o@spud>
-References: <20221119121953.3897171-1-clabbe@baylibre.com>
+        Sat, 19 Nov 2022 07:32:08 -0500
+Received: from mail.rnplus.nl (mail.rnplus.nl [178.251.25.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CED8B103
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 04:32:08 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.rnplus.nl (Postfix) with ESMTP id E9AC6378664
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 12:37:04 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at rnplus.nl
+Received: from mail.rnplus.nl ([127.0.0.1])
+        by localhost (mail.rnplus.nl [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oTq_foI5nZAB for <linux-kernel@vger.kernel.org>;
+        Sat, 19 Nov 2022 13:37:04 +0100 (CET)
+Received: from werkpc.localnet (87-101-2-254.dsl.cambrium.nl [87.101.2.254])
+        by mail.rnplus.nl (Postfix) with ESMTPSA id 3D73A36029F;
+        Sat, 19 Nov 2022 13:36:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=rnplus.nl; s=dkim;
+        t=1668861417; bh=rnG8sjo/N3gTRU0atyYSvZpaMO5aKRCHC8hx6dCfNsE=;
+        h=From:To:Cc:Subject:Date;
+        b=fpxK4KgjWViOlXnlBjEEy2YEb2hZuAUnNLl3toymLyva58BxU+zYL3SuWWrQUshOt
+         JSPeVNrgtK3BoV/gLVvgzXB7Cu3sPtYprICV25y1GU/xMxZYZoA5+xXkQ9LT/k/u3E
+         TiUxjDRC0lBXDSPPikIl7rBNnI0/JEX9dlie14/4=
+From:   Renze Nicolai <renze@rnplus.nl>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Conley Lee <conleylee@foxmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, krzysztof.kozlowski@linaro.org
+Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: arm: sunxi: add binding for SOPINE on Pine64 Clusterboard
+Date:   Sat, 19 Nov 2022 13:31:57 +0100
+Message-ID: <3007229.e9J7NaK4W3@werkpc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119121953.3897171-1-clabbe@baylibre.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 12:19:53PM +0000, Corentin Labbe wrote:
-> jh7100-starfive-visionfive-v1 DTB was recently added, but all my try to
-> boot it in kernelCI failed.
-> This is due to a missing serial driver in defconfig.
-> So let's add CONFIG_SERIAL_8250_DW which is needed.
-> 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+The Pine64 SOPINE Clusterboard is a mini-ITX sized board capable
+of hosting up-to 7 SOPINE modules. It is largely compatible
+with the SOPINE baseboard but it omits most of the in- and
+output interfaces. Also The Clusterboard needs a tx delay
+of 500ps for ethernet to work.
 
-See here also, StarFive guys posted the same patch:
-https://lore.kernel.org/linux-riscv/Y3d0tL6UoAbdhHKE@spud/
+Add a binding for SOPINE on the Pine64 Clusterboard.
 
-I'll try to harangue Palmer into picking up one for v6.2 & if it
-happens to be this one:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Renze Nicolai <renze@rnplus.nl>
+---
+ Documentation/devicetree/bindings/arm/sunxi.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thanks,
-Conor.
+diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/
+devicetree/bindings/arm/sunxi.yaml
+index 3ad1cd50e3fe..00bb4cdfa77f 100644
+--- a/Documentation/devicetree/bindings/arm/sunxi.yaml
++++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+@@ -736,6 +736,12 @@ properties:
+           - const: pine64,sopine
+           - const: allwinner,sun50i-a64
+ 
++      - description: Pine64 SOPINE Clusterboard
++        items:
++          - const: pine64,sopine-clusterboard
++          - const: pine64,sopine
++          - const: allwinner,sun50i-a64
++
+       - description: PineRiver Mini X-Plus
+         items:
+           - const: pineriver,mini-xplus
+-- 
+2.38.1
 
-> ---
->  arch/riscv/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-> index f7f32448f160..9a35ff88bec2 100644
-> --- a/arch/riscv/configs/defconfig
-> +++ b/arch/riscv/configs/defconfig
-> @@ -123,6 +123,7 @@ CONFIG_MICROSEMI_PHY=y
->  CONFIG_INPUT_MOUSEDEV=y
->  CONFIG_SERIAL_8250=y
->  CONFIG_SERIAL_8250_CONSOLE=y
-> +CONFIG_SERIAL_8250_DW=y
->  CONFIG_SERIAL_OF_PLATFORM=y
->  CONFIG_SERIAL_SH_SCI=y
->  CONFIG_VIRTIO_CONSOLE=y
-> -- 
-> 2.37.4
-> 
+
+
