@@ -2,159 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A624C630A35
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AEB6309F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 03:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbiKSCYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 21:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S235587AbiKSCVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 21:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235906AbiKSCWY (ORCPT
+        with ESMTP id S234785AbiKSCUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 21:22:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00D6C6D17;
-        Fri, 18 Nov 2022 18:15:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D43B62832;
-        Sat, 19 Nov 2022 02:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E554C433D7;
-        Sat, 19 Nov 2022 02:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668824098;
-        bh=akzyXA6taxIIlj4f4t66EKRkG+JncKRTxevLEUPUAs0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nKXhTwgy60LnPekilNJqXmwj8fqnC52jK/2yfSZ8ywX8Zeg/t1qDO+dlSykpjNiX2
-         cSzXLwym68ItTzymrK2aIMTap8VGdDZz+zIPXdSFXXsbxMzrRV8cnlVlu9qr7AhtxQ
-         IKw3wzHV8O3aP5PbIfDoQMfBSl8PD+LYxN9GKchKpxlkdzukTy7lxGu6XNAS2Y/DWa
-         PIQo7ngnrABMuBSHI8cC9f5cQRZGjbNa4+sgbYXNzzQCo8wtDZRxDKeOhb+20iXs57
-         bzcQdiMiBSq696gRqM/CychkyMBBIvNOzGaJEqI2AbWCu9MFMdGKZPOKJeAnQ3JOiV
-         ErDJG9IvvgOYg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, yangtiezhu@loongson.cn,
-        wsa+renesas@sang-engineering.com, windhl@126.com,
-        linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 27/27] MIPS: pic32: treat port as signed integer
-Date:   Fri, 18 Nov 2022 21:13:52 -0500
-Message-Id: <20221119021352.1774592-27-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221119021352.1774592-1-sashal@kernel.org>
-References: <20221119021352.1774592-1-sashal@kernel.org>
+        Fri, 18 Nov 2022 21:20:15 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416DBBFF75;
+        Fri, 18 Nov 2022 18:14:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668824074; x=1700360074;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FPwCs4xHcQTXiVXND4z/V3aCDgSreh+hoUAN8m3BBv8=;
+  b=GZbVq49r0zfpeKWivs0r1G59+H31p2Qw6y5fWLOU93ECPwKLvnS+eNHz
+   C/SaWPbV2vMd5el6o9fDhPpCg9LI151s+7IiohSXown6OTlJRt9BlDsXI
+   LJ3hn5D49CzKBmZc+9L3VCsVLAgU3O2qIF1DFkjdV4TOuPNttXcyi4Qyi
+   tdNquZyEYk6RlbR03xS05gqmaKjeIqjKakoRU3Vh4+9PRcoSnSBRl1zkS
+   K0KbcD/DBcRehKSXHpZ+XXoFmnCkCcZUylsh3Chsgk4Cuq/FGjJ4DiM+y
+   dHyTI9EhL79AwaAxQw8Jm2wBeQfDf5Eky54pdweOjDilW57Getdn2RlIj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="314431166"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="314431166"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 18:14:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="640427290"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="640427290"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 18 Nov 2022 18:14:11 -0800
+Received: from debox1-desk4.lan (unknown [10.252.138.169])
+        by linux.intel.com (Postfix) with ESMTP id 7DADE580A6C;
+        Fri, 18 Nov 2022 18:14:11 -0800 (PST)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, david.e.box@linux.intel.com,
+        michael.a.bottini@intel.com, rafael@kernel.org, me@adhityamohan.in
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V8 RESEND 0/4] PCI: vmd: Enable PCIe ASPM and LTR on select
+Date:   Fri, 18 Nov 2022 18:14:07 -0800
+Message-Id: <20221119021411.1383248-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+This series adds a work around for enabling PCIe ASPM and for setting PCIe
+LTR values on VMD reserved root ports on select platforms. While
+configuration of these capabilities is usually done by BIOS, on these
+platforms these capabilities will not be configured because the ports are
+not visible to BIOS. This was part of an initial design that expected the
+driver to completely handle the ports, including power management. However
+on Linux those ports are still managed by the PCIe core, which has the
+expectation that they adhere to device standards including BIOS
+configuration, leading to this problem.
 
-[ Upstream commit 648060902aa302331b5d6e4f26d8ee0761d239ab ]
+The target platforms are Tiger Lake, Alder Lake, and Raptor Lake though the
+latter has already implemented support for configuring the LTR values.
+Meteor Lake is expected add BIOS ASPM support, eliminating the future need
+for this work around.
 
-get_port_from_cmdline() returns an int, yet is assigned to a char, which
-is wrong in its own right, but also, with char becoming unsigned, this
-poses problems, because -1 is used as an error value. Further
-complicating things, fw_init_early_console() is only ever called with a
--1 argument. Fix this up by removing the unused argument from
-fw_init_early_console() and treating port as a proper signed integer.
+Note, the driver programs the LTRs because BIOS would also normally do this
+for devices that do not set them by default. Without this, SoC power
+management would be blocked on those platform. This SoC specific value is
+the maximum latency required to allow the SoC to enter the deepest power
+state.
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/include/asm/fw/fw.h             |  2 +-
- arch/mips/pic32/pic32mzda/early_console.c | 13 ++++++-------
- arch/mips/pic32/pic32mzda/init.c          |  2 +-
- 3 files changed, 8 insertions(+), 9 deletions(-)
+This patch addresses the following open bugzillas on VMD enabled laptops
+that cannot enter low power states.
 
-diff --git a/arch/mips/include/asm/fw/fw.h b/arch/mips/include/asm/fw/fw.h
-index d0ef8b4892bb..d0494ce4b337 100644
---- a/arch/mips/include/asm/fw/fw.h
-+++ b/arch/mips/include/asm/fw/fw.h
-@@ -26,6 +26,6 @@ extern char *fw_getcmdline(void);
- extern void fw_meminit(void);
- extern char *fw_getenv(char *name);
- extern unsigned long fw_getenvl(char *name);
--extern void fw_init_early_console(char port);
-+extern void fw_init_early_console(void);
- 
- #endif /* __ASM_FW_H_ */
-diff --git a/arch/mips/pic32/pic32mzda/early_console.c b/arch/mips/pic32/pic32mzda/early_console.c
-index 25372e62783b..3cd1b408fa1c 100644
---- a/arch/mips/pic32/pic32mzda/early_console.c
-+++ b/arch/mips/pic32/pic32mzda/early_console.c
-@@ -27,7 +27,7 @@
- #define U_BRG(x)	(UART_BASE(x) + 0x40)
- 
- static void __iomem *uart_base;
--static char console_port = -1;
-+static int console_port = -1;
- 
- static int __init configure_uart_pins(int port)
- {
-@@ -47,7 +47,7 @@ static int __init configure_uart_pins(int port)
- 	return 0;
- }
- 
--static void __init configure_uart(char port, int baud)
-+static void __init configure_uart(int port, int baud)
- {
- 	u32 pbclk;
- 
-@@ -60,7 +60,7 @@ static void __init configure_uart(char port, int baud)
- 		     uart_base + PIC32_SET(U_STA(port)));
- }
- 
--static void __init setup_early_console(char port, int baud)
-+static void __init setup_early_console(int port, int baud)
- {
- 	if (configure_uart_pins(port))
- 		return;
-@@ -130,16 +130,15 @@ static int __init get_baud_from_cmdline(char *arch_cmdline)
- 	return baud;
- }
- 
--void __init fw_init_early_console(char port)
-+void __init fw_init_early_console(void)
- {
- 	char *arch_cmdline = pic32_getcmdline();
--	int baud = -1;
-+	int baud, port;
- 
- 	uart_base = ioremap(PIC32_BASE_UART, 0xc00);
- 
- 	baud = get_baud_from_cmdline(arch_cmdline);
--	if (port == -1)
--		port = get_port_from_cmdline(arch_cmdline);
-+	port = get_port_from_cmdline(arch_cmdline);
- 
- 	if (port == -1)
- 		port = EARLY_CONSOLE_PORT;
-diff --git a/arch/mips/pic32/pic32mzda/init.c b/arch/mips/pic32/pic32mzda/init.c
-index 764f2d022fae..429830afff54 100644
---- a/arch/mips/pic32/pic32mzda/init.c
-+++ b/arch/mips/pic32/pic32mzda/init.c
-@@ -47,7 +47,7 @@ void __init plat_mem_setup(void)
- 		strlcpy(arcs_cmdline, boot_command_line, COMMAND_LINE_SIZE);
- 
- #ifdef CONFIG_EARLY_PRINTK
--	fw_init_early_console(-1);
-+	fw_init_early_console();
- #endif
- 	pic32_config_init();
- }
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=212355
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215063
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=213717
+
+David E. Box (3):
+  PCI: vmd: Use PCI_VDEVICE in device list
+  PCI: vmd: Create feature grouping for client products
+  PCI: vmd: Add quirk to configure PCIe ASPM and LTR
+
+Michael Bottini (1):
+  PCI/ASPM: Add pci_enable_link_state()
+
+ drivers/pci/controller/vmd.c | 96 ++++++++++++++++++++++++++----------
+ drivers/pci/pcie/aspm.c      | 54 ++++++++++++++++++++
+ include/linux/pci.h          |  7 +++
+ 3 files changed, 131 insertions(+), 26 deletions(-)
+
+
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
 -- 
-2.35.1
+2.34.1
 
