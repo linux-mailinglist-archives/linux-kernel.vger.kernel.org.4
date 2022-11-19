@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035F0630C40
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC609630C41
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiKSFre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 00:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S231990AbiKSFri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 00:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKSFra (ORCPT
+        with ESMTP id S231830AbiKSFrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 00:47:30 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B118386FF3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 21:47:29 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id x18so4876780qki.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 21:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZZOXhgkj3BopNzHd9HsbJwnz5C6DaHXuD1+BUUU30d0=;
-        b=VyQfX5pAcud5ba/28F0SzDxhF7cb02KWv+OU80Mj5NQyQRhPMOTEYkjas2OtlFXlSW
-         IjkptHLmG7RwqyX06+OmZ5G2a/B3Mz156vrmXlwPFVfT6lSjgDybR/T8V5YGt2DAa0T+
-         xzGvOLMHPjXU1C3JdSOWs0Lvytm9RJDPtDWsY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZZOXhgkj3BopNzHd9HsbJwnz5C6DaHXuD1+BUUU30d0=;
-        b=ThHEQiMn7ix4C8HbkilkOcUrX6xlhirWIvi//Durmbw1A+Os+gOFruw3qfT6W9AmlZ
-         sT0lAC1OLgdaqlgk0ypzlHt6vwNZ/1t/AXIaEGlbtWz2ehlVE+CymJ2CG9m2a8SXDaDq
-         yQg1wchWwLQMkMHK1VJDERHWWQbd3aXirYy2Wpdp8PEVfQmmCD8ZjYJ9fx8qL7YqlXdX
-         ZZyfxTiw816N6PXuQGd/85gz9N68cih2o1Y0TvJoyTcOVIRn+xGn2kZVhkMdV1PkPHc6
-         LYiYnziKoxmHkSVi+KDqr5Ck+g85NL80/a2RStaPlCN+P76r69XWGjUUxruzCuWOJxO4
-         NZUg==
-X-Gm-Message-State: ANoB5pkfy7rSdmLe7+ERehMcadxnJWJaBB+H5WKpS7EkCWIE3S9eOYWO
-        Ftd7CNSdvp7vVSLhaC4eiXnbZf+QgsQHOvObPttS1g==
-X-Google-Smtp-Source: AA0mqf61Jw3oVURSobA8PIqKUHyViovO3OTBuBgHFmFoKe8IEwgWeJJXCRhckxcj91YaBcoDZc6THxy9ow+YD5jQwyg=
-X-Received: by 2002:a05:620a:3d9:b0:6fa:5091:7ac8 with SMTP id
- r25-20020a05620a03d900b006fa50917ac8mr8592215qkm.372.1668836848820; Fri, 18
- Nov 2022 21:47:28 -0800 (PST)
+        Sat, 19 Nov 2022 00:47:31 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CD186FFC;
+        Fri, 18 Nov 2022 21:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668836849; x=1700372849;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kUZ4ZpWSa5gxjteKneIYtC+SJvGoLa4/s6wBAZos9mU=;
+  b=SgxJMs7ns5woJ3u/Vt0n7usU2Eo6I3DEARimSB4uN/h0wlnpf832dI/3
+   uku+0/nDhsLO6lhO8K3saoztihnxckN6NHpzznnvI7bN3J4RVUq0tA3h9
+   1vx5UldBSrELETa8UAvxP2dYrwN79mSX1WEYk0YhsCfm7DxNdpunrMMsv
+   cnhuQeIQbsIafgDRmgctyHyn6QhqJYOuyUtSoeCgG3duk9XEbteloir0v
+   jNkPePRBg+b8Rl9RV1Lb8njGk64uMT7h7RGcAArcgvbKIJ6qLtmMVz0cU
+   L6WeROBsXgheVe87hC3VR1hAQz2r25Pcru6Ks9TsH/iwSPVawu+tUajA9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="375440251"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="375440251"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 21:47:29 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="673439851"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="673439851"
+Received: from alsoller-mobl1.amr.corp.intel.com (HELO [10.212.166.83]) ([10.212.166.83])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 21:47:29 -0800
+Message-ID: <a4671c99-4d7f-ca80-e3fd-2042de4fed62@linux.intel.com>
+Date:   Fri, 18 Nov 2022 21:47:28 -0800
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-118-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-118-uwe@kleine-koenig.org>
-From:   Matt Ranostay <matt.ranostay@konsulko.com>
-Date:   Sat, 19 Nov 2022 13:47:17 +0800
-Message-ID: <CAJCx=g=WS=GeEMZ6U_Yk+JAnjYQ95mYk3rk9tB_dskoPxGNq0A@mail.gmail.com>
-Subject: Re: [PATCH 117/606] iio: light: apds9960: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        =?UTF-8?Q?Alejandro_Concepci=C3=B3n_Rodr=C3=ADguez?= 
-        <asconcepcion@acoro.eu>, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH V8 RESEND 3/4] PCI: vmd: Create feature grouping for
+ client products
+Content-Language: en-US
+To:     "David E. Box" <david.e.box@linux.intel.com>,
+        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221119021411.1383248-1-david.e.box@linux.intel.com>
+ <20221119021411.1383248-4-david.e.box@linux.intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20221119021411.1383248-4-david.e.box@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 6:46 AM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.or=
-g> wrote:
->
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->
-> The probe function doesn't make use of the i2c_device_id * parameter so i=
-t
-> can be trivially converted.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+
+
+On 11/18/22 6:14 PM, David E. Box wrote:
+> Simplify the device ID list by creating a grouping of features shared by
+> client products.
+> 
+> Suggested-by: Jon Derrick <jonathan.derrick@linux.dev>
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> ---
+> 
 
 Looks good to me.
 
-Acked-by: Matt Ranostay <matt.ranostay@konsulko.com>
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-> ---
->  drivers/iio/light/apds9960.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/iio/light/apds9960.c b/drivers/iio/light/apds9960.c
-> index a585ce0c122f..cc5974a95bd3 100644
-> --- a/drivers/iio/light/apds9960.c
-> +++ b/drivers/iio/light/apds9960.c
-> @@ -988,8 +988,7 @@ static int apds9960_chip_init(struct apds9960_data *d=
-ata)
->         return apds9960_set_powermode(data, 1);
->  }
->
-> -static int apds9960_probe(struct i2c_client *client,
-> -                         const struct i2c_device_id *id)
-> +static int apds9960_probe(struct i2c_client *client)
->  {
->         struct apds9960_data *data;
->         struct iio_dev *indio_dev;
-> @@ -1132,7 +1131,7 @@ static struct i2c_driver apds9960_driver =3D {
->                 .pm     =3D &apds9960_pm_ops,
->                 .acpi_match_table =3D apds9960_acpi_match,
->         },
-> -       .probe          =3D apds9960_probe,
-> +       .probe_new      =3D apds9960_probe,
->         .remove         =3D apds9960_remove,
->         .id_table       =3D apds9960_id,
+>  V8 - New patch.
+> 
+>  drivers/pci/controller/vmd.c | 28 ++++++++++------------------
+>  1 file changed, 10 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index 9dedca714c18..86f3085db014 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -68,6 +68,10 @@ enum vmd_features {
+>  	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
 >  };
-> --
-> 2.38.1
->
+>  
+> +#define VMD_FEATS_CLIENT	(VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |	\
+> +				 VMD_FEAT_HAS_BUS_RESTRICTIONS |	\
+> +				 VMD_FEAT_OFFSET_FIRST_VECTOR)
+> +
+>  static DEFINE_IDA(vmd_instance_ida);
+>  
+>  /*
+> @@ -1001,29 +1005,17 @@ static const struct pci_device_id vmd_ids[] = {
+>  				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+>  				VMD_FEAT_CAN_BYPASS_MSI_REMAP,},
+>  	{PCI_VDEVICE(INTEL, 0x467f),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> +		.driver_data = VMD_FEATS_CLIENT,},
+>  	{PCI_VDEVICE(INTEL, 0x4c3d),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> +		.driver_data = VMD_FEATS_CLIENT,},
+>  	{PCI_VDEVICE(INTEL, 0xa77f),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> +		.driver_data = VMD_FEATS_CLIENT,},
+>  	{PCI_VDEVICE(INTEL, 0x7d0b),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> +		.driver_data = VMD_FEATS_CLIENT,},
+>  	{PCI_VDEVICE(INTEL, 0xad0b),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> +		.driver_data = VMD_FEATS_CLIENT,},
+>  	{PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+> -		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> +		.driver_data = VMD_FEATS_CLIENT,},
+>  	{0,}
+>  };
+>  MODULE_DEVICE_TABLE(pci, vmd_ids);
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
