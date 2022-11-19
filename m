@@ -2,214 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28734630C3A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 035F0630C40
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 06:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiKSFnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 00:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S230171AbiKSFre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 00:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKSFnL (ORCPT
+        with ESMTP id S229502AbiKSFra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 00:43:11 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562185C764;
-        Fri, 18 Nov 2022 21:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668836590; x=1700372590;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4k8sQ9Fp7rD6N9E/icj5VsqrbjoraU9g9lfwOjsVdjA=;
-  b=DMtUEsB0V8fU0vaD1BKzcBQTcRpUpzSlgd4HQSWYtBTw9FJRw3ULvufJ
-   Zl5x0ZuG4ef/31eI5Vfez+IRHS2g7mRR5CeZyhL56UsO5KEfG/cshfZOX
-   U3DLEvGxeW4Kdv6iP3BS4+hA2loZF7g4D4n98VI9g7lSOzdYgQc4AhyGt
-   j5IbOUCQrTbbklchNdi7+Ek+Zpb4EOfu9DOOldHm9d9iTD1oln6eu2HmU
-   55vnulIKM788KFNrnyRSLpZAooK03rhA/Xl98O9wMErkOg8QxwNDUmqwt
-   0RPXR0ad/ukx1UgMGCQZalp4sKEn4gBUCHB1JLzvbFfLUMNhS6TVpzQdp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="293004204"
-X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
-   d="scan'208";a="293004204"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 21:43:10 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="746260095"
-X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
-   d="scan'208";a="746260095"
-Received: from alsoller-mobl1.amr.corp.intel.com (HELO [10.212.166.83]) ([10.212.166.83])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 21:43:09 -0800
-Message-ID: <050bfe55-2b18-6df1-d6ba-14e41ac740fb@linux.intel.com>
-Date:   Fri, 18 Nov 2022 21:43:09 -0800
+        Sat, 19 Nov 2022 00:47:30 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B118386FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 21:47:29 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id x18so4876780qki.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 21:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZZOXhgkj3BopNzHd9HsbJwnz5C6DaHXuD1+BUUU30d0=;
+        b=VyQfX5pAcud5ba/28F0SzDxhF7cb02KWv+OU80Mj5NQyQRhPMOTEYkjas2OtlFXlSW
+         IjkptHLmG7RwqyX06+OmZ5G2a/B3Mz156vrmXlwPFVfT6lSjgDybR/T8V5YGt2DAa0T+
+         xzGvOLMHPjXU1C3JdSOWs0Lvytm9RJDPtDWsY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZZOXhgkj3BopNzHd9HsbJwnz5C6DaHXuD1+BUUU30d0=;
+        b=ThHEQiMn7ix4C8HbkilkOcUrX6xlhirWIvi//Durmbw1A+Os+gOFruw3qfT6W9AmlZ
+         sT0lAC1OLgdaqlgk0ypzlHt6vwNZ/1t/AXIaEGlbtWz2ehlVE+CymJ2CG9m2a8SXDaDq
+         yQg1wchWwLQMkMHK1VJDERHWWQbd3aXirYy2Wpdp8PEVfQmmCD8ZjYJ9fx8qL7YqlXdX
+         ZZyfxTiw816N6PXuQGd/85gz9N68cih2o1Y0TvJoyTcOVIRn+xGn2kZVhkMdV1PkPHc6
+         LYiYnziKoxmHkSVi+KDqr5Ck+g85NL80/a2RStaPlCN+P76r69XWGjUUxruzCuWOJxO4
+         NZUg==
+X-Gm-Message-State: ANoB5pkfy7rSdmLe7+ERehMcadxnJWJaBB+H5WKpS7EkCWIE3S9eOYWO
+        Ftd7CNSdvp7vVSLhaC4eiXnbZf+QgsQHOvObPttS1g==
+X-Google-Smtp-Source: AA0mqf61Jw3oVURSobA8PIqKUHyViovO3OTBuBgHFmFoKe8IEwgWeJJXCRhckxcj91YaBcoDZc6THxy9ow+YD5jQwyg=
+X-Received: by 2002:a05:620a:3d9:b0:6fa:5091:7ac8 with SMTP id
+ r25-20020a05620a03d900b006fa50917ac8mr8592215qkm.372.1668836848820; Fri, 18
+ Nov 2022 21:47:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH V8 RESEND 1/4] PCI/ASPM: Add pci_enable_link_state()
-Content-Language: en-US
-To:     "David E. Box" <david.e.box@linux.intel.com>,
-        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org, me@adhityamohan.in
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221119021411.1383248-1-david.e.box@linux.intel.com>
- <20221119021411.1383248-2-david.e.box@linux.intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20221119021411.1383248-2-david.e.box@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-118-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-118-uwe@kleine-koenig.org>
+From:   Matt Ranostay <matt.ranostay@konsulko.com>
+Date:   Sat, 19 Nov 2022 13:47:17 +0800
+Message-ID: <CAJCx=g=WS=GeEMZ6U_Yk+JAnjYQ95mYk3rk9tB_dskoPxGNq0A@mail.gmail.com>
+Subject: Re: [PATCH 117/606] iio: light: apds9960: Convert to i2c's .probe_new()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        =?UTF-8?Q?Alejandro_Concepci=C3=B3n_Rodr=C3=ADguez?= 
+        <asconcepcion@acoro.eu>, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Nov 19, 2022 at 6:46 AM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.or=
+g> wrote:
+>
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>
+> The probe function doesn't make use of the i2c_device_id * parameter so i=
+t
+> can be trivially converted.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-On 11/18/22 6:14 PM, David E. Box wrote:
-> From: Michael Bottini <michael.a.bottini@linux.intel.com>
-> 
-> Add pci_enable_link_state() to allow devices to change the default BIOS
-> configured states. Clears the BIOS default settings then sets the new
-> states and reconfigures the link under the semaphore. Also add
-> PCIE_LINK_STATE_ALL macro for convenience for callers that want to enable
-> all link states.
-> 
-> Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Looks good to me.
+
+Acked-by: Matt Ranostay <matt.ranostay@konsulko.com>
+
 > ---
->  V8
->   - No change
-> 
->  V7
->   - Fix description as suggested by Bjorn
->   - Rename function to pci_enable_link_state
-> 
->  V6
->   - No change
->  V5
->   - Rename to pci_enable_default_link_state and model after
->     pci_disable_link_state() as suggested by Bjorn.
->   - Add helper PCIE_LINK_STATE_ALL which sets bits for all links states and
->     clock pm.
->   - Clarify commit language to indicate the function changes the default
->     link states (not ASPM policy).
->  V4
->   - Refactor vmd_enable_apsm() to exit early, making the lines shorter
->     and more readable. Suggested by Christoph.
->  V3
->   - No changes
->  V2
->   - Use return status to print pci_info message if ASPM cannot be enabled.
->   - Add missing static declaration, caught by lkp@intel.com
-> 
->  drivers/pci/pcie/aspm.c | 54 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/pci.h     |  7 ++++++
->  2 files changed, 61 insertions(+)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 53a1fa306e1e..339c686a5094 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -1181,6 +1181,60 @@ int pci_disable_link_state(struct pci_dev *pdev, int state)
+>  drivers/iio/light/apds9960.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/iio/light/apds9960.c b/drivers/iio/light/apds9960.c
+> index a585ce0c122f..cc5974a95bd3 100644
+> --- a/drivers/iio/light/apds9960.c
+> +++ b/drivers/iio/light/apds9960.c
+> @@ -988,8 +988,7 @@ static int apds9960_chip_init(struct apds9960_data *d=
+ata)
+>         return apds9960_set_powermode(data, 1);
 >  }
->  EXPORT_SYMBOL(pci_disable_link_state);
->  
-> +/**
-> + * pci_enable_link_state - Clear and set the default device link state so that
-> + * the link may be allowed to enter the specified states. Note that if the
-> + * BIOS didn't grant ASPM control to the OS, this does nothing because we can't
-> + * touch the LNKCTL register. Also note that this does not enable states
-> + * disabled by pci_disable_link_state(). Return 0 or a negative errno.
-> + *
-> + * @pdev: PCI device
-> + * @state: Mask of ASPM link states to enable
-> + */
-> +int pci_enable_link_state(struct pci_dev *pdev, int state)
-> +{
-> +	struct pcie_link_state *link = pcie_aspm_get_link(pdev);
-> +
-> +	if (!link)
-> +		return -EINVAL;
-> +	/*
-> +	 * A driver requested that ASPM be enabled on this device, but
-> +	 * if we don't have permission to manage ASPM (e.g., on ACPI
-> +	 * systems we have to observe the FADT ACPI_FADT_NO_ASPM bit and
-> +	 * the _OSC method), we can't honor that request.
-> +	 */
-> +	if (aspm_disabled) {
-> +		pci_warn(pdev, "can't override BIOS ASPM; OS doesn't have ASPM control\n");
-> +		return -EPERM;
-> +	}
-> +
-> +	down_read(&pci_bus_sem);
-> +	mutex_lock(&aspm_lock);
-> +	link->aspm_default = 0;
-> +	if (state & PCIE_LINK_STATE_L0S)
-> +		link->aspm_default |= ASPM_STATE_L0S;
-> +	if (state & PCIE_LINK_STATE_L1)
-> +		/* L1 PM substates require L1 */
-> +		link->aspm_default |= ASPM_STATE_L1 | ASPM_STATE_L1SS;
-> +	if (state & PCIE_LINK_STATE_L1_1)
-> +		link->aspm_default |= ASPM_STATE_L1_1;
-> +	if (state & PCIE_LINK_STATE_L1_2)
-> +		link->aspm_default |= ASPM_STATE_L1_2;
-> +	if (state & PCIE_LINK_STATE_L1_1_PCIPM)
-> +		link->aspm_default |= ASPM_STATE_L1_1_PCIPM;
-> +	if (state & PCIE_LINK_STATE_L1_2_PCIPM)
-> +		link->aspm_default |= ASPM_STATE_L1_2_PCIPM;
-> +	pcie_config_aspm_link(link, policy_to_aspm_state(link));
-> +
-> +	link->clkpm_default = (state & PCIE_LINK_STATE_CLKPM) ? 1 : 0;
-> +	pcie_set_clkpm(link, policy_to_clkpm_state(link));
-> +	mutex_unlock(&aspm_lock);
-> +	up_read(&pci_bus_sem);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(pci_enable_link_state);
-
-I see that this function and __pci_disable_link_state() are very similar. Can
-this be merged? something like __pci_config_link_state(enable or disable)?
-
-> +
->  static int pcie_aspm_set_policy(const char *val,
->  				const struct kernel_param *kp)
+>
+> -static int apds9960_probe(struct i2c_client *client,
+> -                         const struct i2c_device_id *id)
+> +static int apds9960_probe(struct i2c_client *client)
 >  {
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 2bda4a4e47e8..8c35f15e6012 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -1651,10 +1651,15 @@ extern bool pcie_ports_native;
->  #define PCIE_LINK_STATE_L1_2		BIT(4)
->  #define PCIE_LINK_STATE_L1_1_PCIPM	BIT(5)
->  #define PCIE_LINK_STATE_L1_2_PCIPM	BIT(6)
-> +#define PCIE_LINK_STATE_ALL		(PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1 |\
-> +					 PCIE_LINK_STATE_CLKPM | PCIE_LINK_STATE_L1_1 |\
-> +					 PCIE_LINK_STATE_L1_2 | PCIE_LINK_STATE_L1_1_PCIPM |\
-> +					 PCIE_LINK_STATE_L1_2_PCIPM)
->  
->  #ifdef CONFIG_PCIEASPM
->  int pci_disable_link_state(struct pci_dev *pdev, int state);
->  int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
-> +int pci_enable_link_state(struct pci_dev *pdev, int state);
->  void pcie_no_aspm(void);
->  bool pcie_aspm_support_enabled(void);
->  bool pcie_aspm_enabled(struct pci_dev *pdev);
-> @@ -1663,6 +1668,8 @@ static inline int pci_disable_link_state(struct pci_dev *pdev, int state)
->  { return 0; }
->  static inline int pci_disable_link_state_locked(struct pci_dev *pdev, int state)
->  { return 0; }
-> +static inline int pci_enable_link_state(struct pci_dev *pdev, int state)
-> +{ return 0; }
->  static inline void pcie_no_aspm(void) { }
->  static inline bool pcie_aspm_support_enabled(void) { return false; }
->  static inline bool pcie_aspm_enabled(struct pci_dev *pdev) { return false; }
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+>         struct apds9960_data *data;
+>         struct iio_dev *indio_dev;
+> @@ -1132,7 +1131,7 @@ static struct i2c_driver apds9960_driver =3D {
+>                 .pm     =3D &apds9960_pm_ops,
+>                 .acpi_match_table =3D apds9960_acpi_match,
+>         },
+> -       .probe          =3D apds9960_probe,
+> +       .probe_new      =3D apds9960_probe,
+>         .remove         =3D apds9960_remove,
+>         .id_table       =3D apds9960_id,
+>  };
+> --
+> 2.38.1
+>
