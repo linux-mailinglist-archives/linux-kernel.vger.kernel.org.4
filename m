@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8139630DA8
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 10:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB52630DAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 10:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbiKSJCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 04:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
+        id S232445AbiKSJMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 04:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiKSJCe (ORCPT
+        with ESMTP id S229470AbiKSJL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 04:02:34 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692619A5DD
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 01:02:33 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NDnhk1qhNzHvsQ;
-        Sat, 19 Nov 2022 17:01:58 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 19 Nov 2022 17:02:31 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <jgross@suse.com>, <boris.ostrovsky@oracle.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <jeremy@goop.org>
-CC:     <x86@kernel.org>, <xen-devel@lists.xenproject.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] x86/xen: Fix memory leak in xen_init_lock_cpu()
-Date:   Sat, 19 Nov 2022 16:59:23 +0800
-Message-ID: <20221119085923.114889-3-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221119085923.114889-1-xiujianfeng@huawei.com>
-References: <20221119085923.114889-1-xiujianfeng@huawei.com>
+        Sat, 19 Nov 2022 04:11:57 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4E7E1DA6B;
+        Sat, 19 Nov 2022 01:11:56 -0800 (PST)
+Received: from 8bytes.org (p200300c27724780086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7724:7800:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id C49A62A02E2;
+        Sat, 19 Nov 2022 10:11:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1668849116;
+        bh=Mnj+XKy1eq+cpp4M1nNQ/BJ5gwNgtt/9NmvCYlk98lM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TkWUk44EuE6Qzf35kclftWpLfCtg5ilCYc4uaPR850QcfeUrf1tp1Xm1Ey8URAcvp
+         KPyU/rgiN1ln6vSNBM325IHlDDXjPBHs0iRmodqDjuzaL0p3qOU0jV6SjJOmUGXy32
+         aZCZXRxrcB3MT4F88H565tRMhKpsaqIv/5Iu9xz2zYZh4FZtMcZJGNcoekVl8hpuD6
+         q+2xw5rkrkBCeqXuPxDrwFq4N3LAGWW/kFPJHKks3Z+8eA6drLrbp/T4p/aQQ/WV6k
+         2f07Coc9oEeoftLXAwMzfR04vHUrJaWJYUqa4xmZkeRSNkDOGSIR6xRVYz9lNp8aSb
+         7XISudJwIVM+w==
+Date:   Sat, 19 Nov 2022 10:11:54 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>, Yong Wu <yong.wu@mediatek.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-mediatek@lists.infradead.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 0/3] iommu/mediatek: Add mt8365 iommu support
+Message-ID: <Y3id2iJdLxdr6L5o@8bytes.org>
+References: <20221001-iommu-support-v6-0-be4fe8da254b@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221001-iommu-support-v6-0-be4fe8da254b@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In xen_init_lock_cpu(), the @name has allocated new string by kasprintf(),
-if bind_ipi_to_irqhandler() fails, it should be freed, otherwise may lead
-to a memory leak issue, fix it.
+On Wed, Nov 02, 2022 at 04:18:06PM +0100, Alexandre Mergnat wrote:
+> Fabien Parent (3):
+>       dt-bindings: iommu: mediatek: add binding documentation for MT8365 SoC
+>       iommu/mediatek: add support for 6-bit encoded port IDs
+>       iommu/mediatek: add support for MT8365 SoC
 
-Fixes: 2d9e1e2f58b5 ("xen: implement Xen-specific spinlocks")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- arch/x86/xen/spinlock.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/xen/spinlock.c b/arch/x86/xen/spinlock.c
-index 043c73dfd2c9..156d3e04c9ef 100644
---- a/arch/x86/xen/spinlock.c
-+++ b/arch/x86/xen/spinlock.c
-@@ -86,7 +86,8 @@ void xen_init_lock_cpu(int cpu)
- 		disable_irq(irq); /* make sure it's never delivered */
- 		per_cpu(lock_kicker_irq, cpu) = irq;
- 		per_cpu(irq_name, cpu) = name;
--	}
-+	} else
-+		kfree(name);
- 
- 	printk("cpu %d spinlock event irq %d\n", cpu, irq);
- }
--- 
-2.17.1
-
+Applied, thanks.
