@@ -2,188 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4A3630F53
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 17:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD14630F56
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 17:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbiKSQGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 11:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S232895AbiKSQIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 11:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKSQGB (ORCPT
+        with ESMTP id S229635AbiKSQIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 11:06:01 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7967DCA7;
-        Sat, 19 Nov 2022 08:06:00 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id t85so3801445vkb.7;
-        Sat, 19 Nov 2022 08:06:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GWPkDw+hBBRp3rjO9oe2TksMIp/JW3/H2HSRK6dyKIM=;
-        b=SVQB/mCGGYALj1YQJ10ao7Wzmt5ehbGQ4xI2v36EENVSsxeopuhp/Yc6OrIqsYCS1i
-         PY+CAdBnW80Bql13cG6Y8RPlfRlu1HmwtnMBmV086iWM9lK9xbM5eGSd8LUI7AVdGA/D
-         TC7u+vWV2Wf6bUSw9UlZ6Tj8BSnn08ApfdKs2ECEuHw4FP+QZLJJxNArg3o6iSDtJzaT
-         n3PKfUGM4nxXec5Ye5uZWc23de2CETCkDO1B1oxCr7MO9WwXkUmSUpcf/8vmjX5J0AB2
-         +8nM8/VZZf54CuXdx0aCSn7pvoyiJwPSt5oE+UWeE+WLVi6U7vhmqUW47NqGZFoMdVI/
-         mSrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GWPkDw+hBBRp3rjO9oe2TksMIp/JW3/H2HSRK6dyKIM=;
-        b=TlTYI5LE2BNBJS+Qih7MjRxGtPFLeFOdhvAqYnKrA9QKeWu5gqIv+0/OCFqFXNkVzW
-         aOi0EjtSJ8t5xcGTJ8c5k8gGuFUcH6Y7AW5MN+i7jquZoHnOY9DkcWyCmCrTpSXtIuoc
-         E4FZC/zHqlrc5moLyAR8K0ZUhJmbhfL3lP38e6oWwusUxWfEmttHrZob9niAqVXWzmyE
-         Aj24XqUo1dLXp9b7yMkMVowmuiEUBXkbg+vPNiB2sUxbcHb2klK295dSBSkSLq1ctwaX
-         xiwHQxbIkHvVv/yO8Gof2evIJyTeucqevOKA1mNXwGSlyU6SPqskr0Ne5KzwLN2iifym
-         3vfQ==
-X-Gm-Message-State: ANoB5plMZ85kTxTT+QKCj7E1bk6SPbl9L+WWDFS4u95LdQVxcsgZDj3m
-        5ai8mxRTQ1h/uZsnhNJlghN+FH0kWyH8Ojkz39eNdB1MmsmnRe9Z
-X-Google-Smtp-Source: AA0mqf4m+RsMguRNAJ0q/NrRtt5cFBlw6tkewY/D1gPrM8dGZkegzclrpmbEumXydDm+Ht7Yvdt2HuJj682yY37VTk4=
-X-Received: by 2002:a1f:21c8:0:b0:3b7:6a89:4530 with SMTP id
- h191-20020a1f21c8000000b003b76a894530mr816857vkh.37.1668873959512; Sat, 19
- Nov 2022 08:05:59 -0800 (PST)
+        Sat, 19 Nov 2022 11:08:53 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C174B1839D
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 08:08:51 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owQOJ-0006jh-VP; Sat, 19 Nov 2022 17:08:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owQOE-005I6I-10; Sat, 19 Nov 2022 17:08:22 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owQOE-000B3I-39; Sat, 19 Nov 2022 17:08:22 +0100
+Date:   Sat, 19 Nov 2022 17:08:18 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>,
+        wangjianli <wangjianli@cdjrlc.com>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>, kernel@pengutronix.de,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Grant Likely <grant.likely@linaro.org>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 054/606] iio: accel: kxcjk-1013: Convert to i2c's
+ .probe_new()
+Message-ID: <20221119160818.zft3xhuwz3gm6oeg@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-55-uwe@kleine-koenig.org>
+ <Y3jGHufAJVxZp1f0@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20221116064631.16224-1-tegongkang@gmail.com> <CAEf4BzbqKRTzTdhD1Vt-j8NXaqnyqXCRjNgMe9_h56rbt4a9YA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbqKRTzTdhD1Vt-j8NXaqnyqXCRjNgMe9_h56rbt4a9YA@mail.gmail.com>
-From:   Kang Minchul <tegongkang@gmail.com>
-Date:   Sun, 20 Nov 2022 01:05:48 +0900
-Message-ID: <CA+uqrQD58fJj_h1D6kEQKYPF8mRizgf0R7KTfa5YWNTLcu9xqw@mail.gmail.com>
-Subject: Re: [PATCH] samples, bpf: Add duration option D for sampleip
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fzajp72vidmhqheg"
+Content-Disposition: inline
+In-Reply-To: <Y3jGHufAJVxZp1f0@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your reply.
 
-2022=EB=85=84 11=EC=9B=94 18=EC=9D=BC (=EA=B8=88) =EC=98=A4=EC=A0=84 8:26, =
-Andrii Nakryiko <andrii.nakryiko@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=
-=84=B1:
->
-> On Tue, Nov 15, 2022 at 10:46 PM Kang Minchul <tegongkang@gmail.com> wrot=
-e:
-> >
-> > Although sampleip program can handle three options,
-> > (-F for frequency, duration, and -h for help)
-> > currently there is no independent option for duration.
->
-> Because it's positional argument, which is very clearly documented by
-> usage(). What's wrong with that and why do you want to change this?
-Yes, but I'm not sure why only 'duration' should be a positional argument.
+--fzajp72vidmhqheg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I don't think it is 'wrong', but I think it's better to treat
-'duration' just as same as 'frequency' because
- frequency and duration are two independent things in this case.
-(duration is not dependent on frequency)
+Hello Andy,
 
-So I thought making an option for duration like below
+On Sat, Nov 19, 2022 at 02:03:42PM +0200, Andy Shevchenko wrote:
+> On Fri, Nov 18, 2022 at 11:36:28PM +0100, Uwe Kleine-K=F6nig wrote:
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > that explicitly in the probe function.
+>=20
+> Since there is no split on per subsystem basis (I mean, as a series targe=
+ting
+> only, let's say, IIO subsystem with cover letter), I'm answering here tha=
+t all
+> IIO patches are good to me, thanks, Uwe!
+>=20
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-$ sudo ./samples/bpf/sampleip -F <Frequecny> -D <Duration>
+Thanks!
 
-is better than below.
+Does this include the three patches:
 
-$ sudo ./samples/bpf/sampleip -F <Frequecny> <Duration>
+	staging: iio: adt7316: Convert to i2c's .probe_new()
+	staging: iio: ad5933: Convert to i2c's .probe_new()
+	staging: iio: ade7854: Convert to i2c's .probe_new()
 
-I am not insisting strongly on this, so if I have misunderstood something,
-I'll respect the existing way.
+?
 
-Regards,
+Best regards
+Uwe
 
-Kang Minchul
-> >
-> > This patch adds option -D for duration like below:
-> >
-> > $ sudo ./samples/bpf/sampleip -h
-> > USAGE: sampleip [-F freq] [-D duration]
-> >        -F freq       # sample frequency (Hertz), default 99
-> >        -D duration   # sampling duration (seconds), default 5
-> >
-> > $ sudo ./samples/bpf/sampleip -F 120
-> > Sampling at 120 Hertz for 5 seconds. Ctrl-C also ends.
-> > ADDR                KSYM                          COUNT
-> > ...
-> >
-> > $ sudo ./samples/bpf/sampleip -D 7
-> > Sampling at 99 Hertz for 7 seconds. Ctrl-C also ends.
-> > ADDR                KSYM                          COUNT
-> > ...
-> >
-> > $ sudo ./samples/bpf/sampleip -F 120 -D 7
-> > Sampling at 120 Hertz for 7 seconds. Ctrl-C also ends.
-> > ADDR                KSYM                          COUNT
-> > ...
-> >
-> > Signed-off-by: Kang Minchul <tegongkang@gmail.com>
-> > ---
-> >  samples/bpf/sampleip_user.c | 13 +++++++------
-> >  1 file changed, 7 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/samples/bpf/sampleip_user.c b/samples/bpf/sampleip_user.c
-> > index 921c505bb567..ce6aadd496e1 100644
-> > --- a/samples/bpf/sampleip_user.c
-> > +++ b/samples/bpf/sampleip_user.c
-> > @@ -28,9 +28,9 @@ static int nr_cpus;
-> >
-> >  static void usage(void)
-> >  {
-> > -       printf("USAGE: sampleip [-F freq] [duration]\n");
-> > -       printf("       -F freq    # sample frequency (Hertz), default 9=
-9\n");
-> > -       printf("       duration   # sampling duration (seconds), defaul=
-t 5\n");
-> > +       printf("USAGE: sampleip [-F freq] [-D duration]\n");
-> > +       printf("       -F freq       # sample frequency (Hertz), defaul=
-t 99\n");
-> > +       printf("       -D duration   # sampling duration (seconds), def=
-ault 5\n");
-> >  }
-> >
-> >  static int sampling_start(int freq, struct bpf_program *prog,
-> > @@ -145,19 +145,20 @@ int main(int argc, char **argv)
-> >         char filename[256];
-> >
-> >         /* process arguments */
-> > -       while ((opt =3D getopt(argc, argv, "F:h")) !=3D -1) {
-> > +       while ((opt =3D getopt(argc, argv, "F:D:h")) !=3D -1) {
-> >                 switch (opt) {
-> >                 case 'F':
-> >                         freq =3D atoi(optarg);
-> >                         break;
-> > +               case 'D':
-> > +                       secs =3D atoi(optarg);
-> > +                       break;
-> >                 case 'h':
-> >                 default:
-> >                         usage();
-> >                         return 0;
-> >                 }
-> >         }
-> > -       if (argc - optind =3D=3D 1)
-> > -               secs =3D atoi(argv[optind]);
-> >         if (freq =3D=3D 0 || secs =3D=3D 0) {
-> >                 usage();
-> >                 return 1;
-> > --
-> > 2.34.1
-> >
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--fzajp72vidmhqheg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN4/3AACgkQwfwUeK3K
+7AlBbgf/VdCmGxE5p4WJBUVZ+DQrgE1H86TeDTZ2w+zWM3wA9/kHjrtrEuoEtnfD
+EgU2wlCKpII2vBUFBQCOH23CyUAiFMN//1kCD98poRXowoV1brNdxcLE6hR4ORsW
+PFBSI068CVRecB54XASUxIUN1MzGTyBpXpfAUdIVpyUSS0D1fQEpLucKfTo8rDsF
+9034bo8xvDA3g4qDztC6/Lj9pmma5c8UmB2mBn3P/jPEhUeg+3Jz5c0ZkJ636YNQ
+BwgI7vXDnKXp4nzrKOWBf5snc++Eb7KugMwcTUwPBPwkMewlTAIpXX+GDQRfYaME
+yZN+2yr31DTQntFeff080hjXeXsGlQ==
+=8K2+
+-----END PGP SIGNATURE-----
+
+--fzajp72vidmhqheg--
