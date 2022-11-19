@@ -2,45 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBAE630C9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2887630C9D
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiKSGoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 01:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S231425AbiKSGtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 01:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbiKSGoJ (ORCPT
+        with ESMTP id S229606AbiKSGtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 01:44:09 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A477E7C;
-        Fri, 18 Nov 2022 22:44:07 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NDkYC0qlLzqSYH;
-        Sat, 19 Nov 2022 14:40:15 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+        Sat, 19 Nov 2022 01:49:06 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAA218366
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 22:49:05 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NDkks0sWvz15Md2;
+        Sat, 19 Nov 2022 14:48:37 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 19 Nov 2022 14:44:06 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 19 Nov 2022 14:44:05 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, <linux-btrfs@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH] btrfs: fix a resource leak in btrfs_init_sysfs()
-Date:   Sat, 19 Nov 2022 14:43:48 +0800
-Message-ID: <20221119064348.1743-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
+ 15.1.2375.31; Sat, 19 Nov 2022 14:49:02 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <mpe@ellerman.id.au>, <npiggin@gmail.com>,
+        <christophe.leroy@csgroup.eu>, <benh@kernel.crashing.org>
+CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] powerpc: Fix potential memory leak in icp_native_map_one_cpu()
+Date:   Sat, 19 Nov 2022 14:45:56 +0800
+Message-ID: <20221119064556.83237-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
 X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
+ dggpeml500023.china.huawei.com (7.185.36.114)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,27 +44,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When btrfs_debug_feature_attr_group fails to be created,
-btrfs_feature_attr_group is not removed.
+Before return error, it has allocated memory by kasprintf() and save it
+in @rname, may cause a memory leak issue, fix it.
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Fixes: 0b05ac6e2480 ("powerpc/xics: Rewrite XICS driver")
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 ---
- fs/btrfs/sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/sysdev/xics/icp-native.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
-index 699b54b3acaae0b..947125f2ceaaf96 100644
---- a/fs/btrfs/sysfs.c
-+++ b/fs/btrfs/sysfs.c
-@@ -2322,7 +2322,7 @@ int __init btrfs_init_sysfs(void)
- #ifdef CONFIG_BTRFS_DEBUG
- 	ret = sysfs_create_group(&btrfs_kset->kobj, &btrfs_debug_feature_attr_group);
- 	if (ret)
--		goto out2;
-+		goto out_remove_group;
- #endif
+diff --git a/arch/powerpc/sysdev/xics/icp-native.c b/arch/powerpc/sysdev/xics/icp-native.c
+index edc17b6b1cc2..126230206350 100644
+--- a/arch/powerpc/sysdev/xics/icp-native.c
++++ b/arch/powerpc/sysdev/xics/icp-native.c
+@@ -239,6 +239,7 @@ static int __init icp_native_map_one_cpu(int hw_id, unsigned long addr,
+ 	if (!request_mem_region(addr, size, rname)) {
+ 		pr_warn("icp_native: Could not reserve ICP MMIO for CPU %d, interrupt server #0x%x\n",
+ 			cpu, hw_id);
++		kfree(rname);
+ 		return -EBUSY;
+ 	}
  
+@@ -248,6 +249,7 @@ static int __init icp_native_map_one_cpu(int hw_id, unsigned long addr,
+ 		pr_warn("icp_native: Failed ioremap for CPU %d, interrupt server #0x%x, addr %#lx\n",
+ 			cpu, hw_id, addr);
+ 		release_mem_region(addr, size);
++		kfree(rname);
+ 		return -ENOMEM;
+ 	}
  	return 0;
 -- 
-2.25.1
+2.17.1
 
