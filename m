@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2846311F4
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 00:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214D36311FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 00:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbiKSXU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 18:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S234079AbiKSX6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 18:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234167AbiKSXU1 (ORCPT
+        with ESMTP id S231666AbiKSX6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 18:20:27 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE1E1A222;
-        Sat, 19 Nov 2022 15:20:26 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id p8so13703860lfu.11;
-        Sat, 19 Nov 2022 15:20:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PnhRnJNAyjU6feAu0abzX3ol/WrQz0Qd4vkqXDr2Luw=;
-        b=idpQMRnwoQfYlxRNRoka53gYOGZ6pWpnaVYc1ceez2qA1VcLtmcaJ2GOwms2IhgX1f
-         9lS9v9gCaHTA7LCU9uhjkPiX1SU5XOZY2uenWG2FkDla/RE6V1LP30BGHRFgy71ZAQFr
-         iSMHbYi9+vSZc/l8lpXsROX2EWcAIDwlxVC4KW2JBW8PyeynRHEpfhOCykSJA8A1bm3K
-         JFftd8VUl9/z5Zb6XQPtlWpaYYqyVaUP3YYj/kphtdIDLHZUZTUwaNqzEjjTR88rclzn
-         vpyLvUIwoXamHmKQEjO9SI/wGa1bhT0zXrvFvKxEDWFWqoGorqB3IVfvxQB15acJzkK+
-         40ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PnhRnJNAyjU6feAu0abzX3ol/WrQz0Qd4vkqXDr2Luw=;
-        b=HDj0n19ZG1diyMC3jsr64O3DQ75xheloo/wWZ2J0AWEDgRxXve7o+s6jzqb1fi5mwF
-         aq2YV5EuGppGvMjCup+fVMxB+ptR5QoSRLJ0+MgZF6aCIIA4oZ9Vn4gObJNKpUUMYDol
-         PDiSPQ5pFBaVqvR/jeek66IGtr4Q7lxNKZfZF8Nk2tlIrVLdubgobgQqVRIpYg9ciAhE
-         TT0TuMk8T7KRGzd+dIzVCxLEdx2U0GTdxyYhC1SG1BNm7Yc4AQiRe6pusSNSRRkUpCoA
-         RfqIYYQuiJsOtKZVIUITUn3tVrqSOuZ59UkI08Yt7OwgI3Va7v0pI9jjjl7CsSajkqjn
-         40Dw==
-X-Gm-Message-State: ANoB5pl28+ssBoXIdMjGM4yC24TG7x4MZjcqU6rVzVL730hOVftNPLA9
-        kX/hj2SdzuDiEVBFfdD1/BWwlNV7NkmicNxMpeqqVXuddEpF1Q==
-X-Google-Smtp-Source: AA0mqf4bTD56V41OFfrKfmfQa/7rNrYxbA0at0tfetRTfzYEzZJLSj6Xe3A2SrjfR2RZC3eV+wtTD8ZPaIknFKCUjSo=
-X-Received: by 2002:a05:6512:484:b0:4a2:33f8:2d0f with SMTP id
- v4-20020a056512048400b004a233f82d0fmr3999702lfq.140.1668900024725; Sat, 19
- Nov 2022 15:20:24 -0800 (PST)
+        Sat, 19 Nov 2022 18:58:49 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BED313DEF;
+        Sat, 19 Nov 2022 15:58:47 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 386471BF207;
+        Sat, 19 Nov 2022 23:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668902326;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=17CqComxe+k6h8f0mE/chWaXjRFAVcoSj3D8bZumfx0=;
+        b=akFF+cTrOMDG+B+BpYqPxd+pmuBuDC3i+6oD0CJgq9R0IhWRKIX36egShNIOdpyA/XueLh
+        xGdSUiSocTV1O1UzmNSL7WHeI1bojNgcUILzod+VhYa4ymUMg3fyUTLTS9r4S5oAeAYO+y
+        Tf5cOfyOKlH1WbrIdFptcgjVWprnnDoMIY+XrUoaMk2yzhb51qSJV0LBF/WDa7tXOWzwda
+        TNdfx7Fc1cdZhQg5P0tcnzkHYX49S2r2crrkPPR0uHM1ge3PnlBCjVrPf3RVlFhNtaIyW6
+        H3D5XazNjHRejV+wXtEYXYZhEwmjUniS1nT0j3nCJL+BdaeBhT1Wyc/A6fWMXg==
+Date:   Sun, 20 Nov 2022 00:58:44 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 561/606] rtc: isl1208: Convert to i2c's .probe_new()
+Message-ID: <Y3lttA22QlR46RXz@mail.local>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-562-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-References: <CAHWihb_EYWKXOqdN0iDBDygk+EGbhaxWHTKVRhtpm_TihbCjtw@mail.gmail.com>
- <Y3h118oIDsvclZHM@casper.infradead.org>
-In-Reply-To: <Y3h118oIDsvclZHM@casper.infradead.org>
-From:   Jorropo <jorropo.pgm@gmail.com>
-Date:   Sun, 20 Nov 2022 00:20:13 +0100
-Message-ID: <CAHWihb_HugpV44NdvUc2CV_0q2wk-XWyhmGdQhwCP6nDmo1k7g@mail.gmail.com>
-Subject: Re: [REGRESSION] XArray commit prevents booting with 6.0-rc1 or later
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev, nborisov@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221118224540.619276-562-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> wrote :
->
-> On Sat, Nov 19, 2022 at 05:07:45AM +0100, Jorropo wrote:
-> > #regzbot introduced v5.19-rc6..1dd685c414a7b9fdb3d23aca3aedae84f0b998ae
-> >
-> > Hi, I recently tried to upgrade to linux v6.0.x but when trying to
-> > boot it fails with "error: out of memory" when or after loading
-> > initramfs (which then kpanics because the vfs root is missing).
-> > The latest releases I tested are v6.0.9 and v6.1-rc5 and it's broken there too.
-> >
-> > I bisected the error to this patch:
-> > 1dd685c414a7b9fdb3d23aca3aedae84f0b998ae "XArray: Add calls to
-> > might_alloc()" is the first bad commit.
-> > I've confirmed this is not a side effect of a poor bitsect because
-> > 1dd685c414a7b9fdb3d23aca3aedae84f0b998ae~1 (v5.19-rc6) works.
->
-> That makes no sense.  I can't look into this until Wednesday, but I
-> suggest that what you have is an intermittent failure to boot, and
-> the bisect has led you down the wrong path.
+On 18/11/2022 23:44:55+0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+> 
 
-I rebuilt both 1dd685c414a7b9fdb3d23aca3aedae84f0b998ae and
-the parent commit (v5.19-rc6), then tried to start each one 8 times
-(shuffled in a Thue morse sequence).
-0 successes for 1dd685c414a7b9fdb3d23aca3aedae84f0b998ae
-8 successes for v5.19-rc6
+This is already done later on in the function, please check the rtc
+patches as I took your previous series.
 
-This really does not look like an intermittent issue.
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/rtc/rtc-isl1208.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
+> index 73cc6aaf9b8b..fca9cc440296 100644
+> --- a/drivers/rtc/rtc-isl1208.c
+> +++ b/drivers/rtc/rtc-isl1208.c
+> @@ -799,6 +799,7 @@ static int isl1208_setup_irq(struct i2c_client *client, int irq)
+>  static int
+>  isl1208_probe(struct i2c_client *client)
+>  {
+> +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+>  	int rc = 0;
+>  	struct isl1208_state *isl1208;
+>  	int evdet_irq = -1;
+> -- 
+> 2.38.1
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
