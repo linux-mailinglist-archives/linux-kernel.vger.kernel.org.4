@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716FC630C7B
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E29630C86
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiKSGdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 01:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
+        id S231300AbiKSGiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 01:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKSGds (ORCPT
+        with ESMTP id S229470AbiKSGh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 01:33:48 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ED1748F1;
-        Fri, 18 Nov 2022 22:33:45 -0800 (PST)
-Received: from pyrite.rasen.tech (unknown [IPv6:2001:268:c210:aac1:54ed:fa5d:b703:111a])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9B9D3749;
-        Sat, 19 Nov 2022 07:33:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668839623;
-        bh=Ic82wUkZuLtGFavTFu6myb5mSBksTXz8qGgcf1Ma+h8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bpOhL2sbe2n0TAY0Pz5xQPEHawykiv47TbHLlg/aFa1G5QPNWo/aYpwHXckBE3q1e
-         WearvTYAR8U0LFWjLgjInOveUezMfJVX9h7zyxw3c7IVFe+cSPxtoHKlHXGQyDF1/D
-         KzqDs2OFuyB+h7xaje0m0LfffojbjlV04y96VOfo=
-Date:   Sat, 19 Nov 2022 15:33:32 +0900
-From:   Paul Elder <paul.elder@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dafna Hirschfeld <dafna@fastmail.com>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 02/14] dt-bindings: media: rkisp1: Add i.MX8MP ISP
- example
-Message-ID: <Y3h4vBWJRr7NkoPm@pyrite.rasen.tech>
-References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
- <20221118093931.1284465-3-paul.elder@ideasonboard.com>
- <166877740033.1426068.13359373358036408238.robh@kernel.org>
+        Sat, 19 Nov 2022 01:37:58 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F560B4F1C;
+        Fri, 18 Nov 2022 22:37:56 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-142612a5454so7803925fac.2;
+        Fri, 18 Nov 2022 22:37:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cLYrlsSUJ/3iV70MlNgEm3O6sI1BB8dOzm7Fo6KqsgM=;
+        b=cNFOo+VqMgo+mnOiJFXxMwMeFQLoitwcWJzIOOFWlhDZn66wiP2M4eBUI7NktrM1uC
+         yaoxkbPYDfgg1iDxd9fZ4xi9O867toY85OU0FO1wgrIcYtErgNqSkIaDFS1yLEWy06Ze
+         Nw1/AIkSKmJKMc018JElW0dxYRL+GkqGyoV263phPIjoXOrycZ0f4UAzEZVysgHM2sCC
+         u3DTAZg7k0XUYqkROhzjmjl20OPHdLpF2N4VWXL/gTSjK7lRgBotEJdsiOLa4wIH6cX7
+         RdwHdpMT7MwsU0JqQ6wxuSX6BvrKyH1TcIs0CmWyKM61aIq78ZXPr1jlmFDGDcT3Hvct
+         8DkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cLYrlsSUJ/3iV70MlNgEm3O6sI1BB8dOzm7Fo6KqsgM=;
+        b=JNHys+KzBdTEcO+lu28uAqacEaqwIcH0i2GzKSxcghntUK/4R7o/SeDGb1I0oPJaSv
+         NzPtsfL3SkUm8js6oLcoQs1/j97FJjIET5w0pWacBv44whuB3KozQQdDdXKFYhKMiVO/
+         0VB1nKwlNgZLdRrAb/AQUHKEZIAUE7WyCpEj7/3NkDMDGktUBB535ET3umx2HWa346YC
+         brAwTW67rpiC0RKIgsQLVgnGDh5AoApOXhNO5yKx1Idmh3TbE8g4SoaZJoxzLKcmI6tb
+         rQ3S/vh84woLhkahSqJbZilb9S/j/RoYzgpV1U1/gHmqjMbI+NfIKvnCRMvzisGcEyjc
+         91MA==
+X-Gm-Message-State: ANoB5pkTMheAmDzaX7Zo7GdTJ5Px/iv+4+rRAv5RbpNS0zwCEuYcw1vj
+        AA+t9Qr68koZ7h6vo1/JFzP7w4KsyilzC19Vfxw=
+X-Google-Smtp-Source: AA0mqf4YHBgpQyRnlsR8IJwpaWfoiK6RVHKjHFNz8PNwpwXg9+N4cVuAs+273DwuP7yKjh9Nyq4wN2dl85vztU/s7dM=
+X-Received: by 2002:a05:6870:9591:b0:13a:eee0:b499 with SMTP id
+ k17-20020a056870959100b0013aeee0b499mr378364oao.83.1668839875548; Fri, 18 Nov
+ 2022 22:37:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166877740033.1426068.13359373358036408238.robh@kernel.org>
+References: <20221118223728.1721589-1-robh@kernel.org>
+In-Reply-To: <20221118223728.1721589-1-robh@kernel.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sat, 19 Nov 2022 07:37:43 +0100
+Message-ID: <CAMhs-H99X9aV7cdotCPar6g50KXL+qNS+jM16Tveq9nxfUY4Rg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Add missing start and/or end of line regex anchors
+To:     Rob Herring <robh@kernel.org>
+Cc:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yangtao Li <tiny.windzz@gmail.com>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Daniel Mack <zonque@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 07:31:19AM -0600, Rob Herring wrote:
-> 
-> On Fri, 18 Nov 2022 18:39:19 +0900, Paul Elder wrote:
-> > From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > 
-> > Add an example to the rockchip-isp1 DT binding that showcases usage of
-> > the parallel input of the ISP, connected to the CSI-2 receiver internal
-> > to the i.MX8MP.
-> > 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  .../bindings/media/rockchip-isp1.yaml         | 72 +++++++++++++++++++
-> >  1 file changed, 72 insertions(+)
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/media/rockchip-isp1.example.dts:199:18: fatal error: dt-bindings/media/video-interfaces.h: No such file or directory
->   199 |         #include <dt-bindings/media/video-interfaces.h>
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1492: dt_binding_check] Error 2
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221118093931.1284465-3-paul.elder@ideasonboard.com
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
+On Fri, Nov 18, 2022 at 11:38 PM Rob Herring <robh@kernel.org> wrote:
+>
+> json-schema patterns by default will match anywhere in a string, so
+> typically we want at least the start or end anchored. Fix the obvious
+> cases where the anchors were forgotten.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/pci/mediatek,mt7621-pcie.yaml         | 2 +-
 
-In the cover letter I mention:
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-"This series depends on v3 of "dt-bindings: media: Add macros for video
-interface bus types" [1]."
-
-[1] https://lore.kernel.org/linux-media/20220615221410.27459-2-laurent.pinchart@ideasonboard.com/
-
-
-Paul
-
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command.
-> 
+Thanks,
+    Sergio Paracuellos
