@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A03630DBC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 10:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94839630DC0
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 10:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiKSJSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 04:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
+        id S233069AbiKSJU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 04:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKSJSa (ORCPT
+        with ESMTP id S229470AbiKSJUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 04:18:30 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 357A1271A
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 01:18:27 -0800 (PST)
-Received: from 8bytes.org (p200300c27724780086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7724:7800:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 765282A02A4;
-        Sat, 19 Nov 2022 10:18:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1668849506;
-        bh=Vt5L0VElcFLbmhh0x4LVugTf29bcONLPlCjevjgvFSg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pxqePUhEdc0C9R5uhSi+uSJ/g85ULckh94wlPP27t6X8nuCvyvAbpxUIWRuoahfuu
-         eO7zx1vYItI4B4YLKAFyGoTjN3jl8oPfhNj3hiS4jdlr7j2/SSq56ihOmpnizwj9JC
-         ZDxF8CW4kvQDq7qD+2LlGw16aJqTA4Xkw8FB/qCsBGq6I+JG2miXnT/kA3v7NnMx0R
-         wlNqj27wNFIwt+f2Gcp5q90fWxR6IY7+dczbcH7seymKYp1REx45BgSfsVi5YXlI9x
-         VQxRI4RZa4v0JIxw4wT0eEv5YQqpKM47wIcpp/qPGa2B1VZoJw0RyOq92GRsXeoCPG
-         yr65UEbrXrAPg==
-Date:   Sat, 19 Nov 2022 10:18:25 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH] iommu: Avoid races around device probe
-Message-ID: <Y3ifYR9ZuqQN79vb@8bytes.org>
-References: <1946ef9f774851732eed78760a78ec40dbc6d178.1667591503.git.robin.murphy@arm.com>
+        Sat, 19 Nov 2022 04:20:25 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBDC74602;
+        Sat, 19 Nov 2022 01:20:24 -0800 (PST)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NDp5S53hXzmVt9;
+        Sat, 19 Nov 2022 17:19:56 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 19 Nov 2022 17:20:22 +0800
+Subject: Re: [PATCH net] wifi: plfxlc: fix potential memory leak in
+ __lf_x_usb_enable_rx()
+To:     Kalle Valo <kvalo@kernel.org>
+CC:     <srini.raju@purelifi.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221119051900.1192401-1-william.xuanziyang@huawei.com>
+ <87v8nbphrr.fsf@kernel.org>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <215ec3cc-88ad-3f68-6dc3-c1aed2a17c76@huawei.com>
+Date:   Sat, 19 Nov 2022 17:20:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1946ef9f774851732eed78760a78ec40dbc6d178.1667591503.git.robin.murphy@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87v8nbphrr.fsf@kernel.org>
+Content-Type: text/plain; charset="gbk"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 07:51:43PM +0000, Robin Murphy wrote:
-> We currently have 3 different ways that __iommu_probe_device() may be
-> called, but no real guarantee that multiple callers can't tread on each
-> other, especially once asynchronous driver probe gets involved. It would
-> likely have taken a fair bit of luck to hit this previously, but commit
-> 57365a04c921 ("iommu: Move bus setup to IOMMU device registration") ups
-> the odds since now it's not just omap-iommu that may trigger multiple
-> bus_iommu_probe() calls in parallel if probing asynchronously.
+> Ziyang Xuan <william.xuanziyang@huawei.com> writes:
 > 
-> Add a lock to ensure we can't try to double-probe a device, and also
-> close some possible race windows to make sure we're truly robust against
-> trying to double-initialise a group via two different member devices.
+>> urbs does not be freed in exception paths in __lf_x_usb_enable_rx().
+>> That will trigger memory leak. To fix it, add kfree() for urbs within
+>> "error" label. Compile tested only.
+>>
+>> Fixes: 68d57a07bfe5 ("wireless: add plfxlc driver for pureLiFi X, XL, XC devices")
+>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+>> ---
+>>  drivers/net/wireless/purelifi/plfxlc/usb.c | 1 +
+>>  1 file changed, 1 insertion(+)
 > 
-> Reported-by: Brian Norris <briannorris@chromium.org>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
->  drivers/iommu/iommu.c | 28 ++++++++++++++++++++++------
->  1 file changed, 22 insertions(+), 6 deletions(-)
+> plfxlc patches go to wireless tree, not net. But I think I'll take this
+> to wireless-next actually.
 
-Applied, thanks Robin.
+OK, thanks.
+
+> 
