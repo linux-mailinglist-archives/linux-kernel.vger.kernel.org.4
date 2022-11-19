@@ -2,99 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0A36310DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC05E6310E2
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234911AbiKSUkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 15:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
+        id S234247AbiKSUnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 15:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbiKSUja (ORCPT
+        with ESMTP id S230471AbiKSUni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 15:39:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773DB12D1D;
-        Sat, 19 Nov 2022 12:39:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E03D060BBA;
-        Sat, 19 Nov 2022 20:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00685C433C1;
-        Sat, 19 Nov 2022 20:39:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668890368;
-        bh=+YFG65zK+ig5GsbiwocxVDqflXqp3NTQLYHgrK//RV8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uI4+VOv5qj+YubiO/jBt2kpkGPiwzDuZXWyX1lVzq5T2ysdrmunWaK02PLLSWIgRG
-         M47WLr0UdxMFYuXmyDwngVF+Phrm/0ZdX3dg41OetTY7MItuKSsQtPmm6Cz9IWE8oT
-         MoiUrwYCfmAID9ZDP0Th8pSfbDLelCTy3o3Da8H8xut8FadG0eSgNIx4W7EjnkOZNv
-         Gnev27yrn4U/QBmY5ZkFHBHVT5xHFjL0fJD0sFY9662vC4VJT6x6dr0rIc1l1filVK
-         1oTat6Hu/bG4ifVPxw+MUsZrQZGiKxXLXty1xoC8cKql0V22PnrqKaCyvdkM2H7asG
-         CAcUrFa/7TvQA==
-Date:   Sat, 19 Nov 2022 12:39:26 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>
-Subject: Re: [PATCH v5 1/3] random: add vgetrandom_alloc() syscall
-Message-ID: <Y3k+/hSL5rIIkBhK@sol.localdomain>
-References: <20221119120929.2963813-1-Jason@zx2c4.com>
- <20221119120929.2963813-2-Jason@zx2c4.com>
+        Sat, 19 Nov 2022 15:43:38 -0500
+Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E75AB865;
+        Sat, 19 Nov 2022 12:43:35 -0800 (PST)
+Date:   Sat, 19 Nov 2022 20:43:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1668890614; x=1669149814;
+        bh=vYtpxWnV/FvWFbyTZ/5TUA5YNvh9E7rS04u3mJvTPFg=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=tp6uChTRb3fkoz3LuI/4RE9jibeyGEH8nwB4Lc5Y5bTMESkXSPRyGyazhmZUp3gsd
+         1La0pTfg6C5ojrHHprdTTnLjDaHeVwl2+MVxl/NafI2ofTGRggZPMe2I8scf8X1wLn
+         iqeJm0pb5ok1dNNKmFHVv80JkedgmcmxWwhItGpEwzh7dEbra9CHiBFVEaS7xNeOAY
+         Zy6pxXhVyJm5YXCptKqw2nzh+hVi9QJizCrEPMFdP+QYUjcqS2LkCxP+aK6WGZXtST
+         Ci86/w4Zb/nBDz5BELJzUaor4/gdOhU036SJ0EKeTuyB2hEK+/2kQHtOqzpNJsfbwO
+         8taVWUZnb7R/g==
+To:     linux-kernel@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v2 0/3] arm64: dts: qcom: msm8916-acer-a1-724: Add initial device tree
+Message-ID: <20221119204209.94125-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119120929.2963813-2-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 01:09:27PM +0100, Jason A. Donenfeld wrote:
-> +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned long __user *, num,
-> +		unsigned long __user *, size_per_each, unsigned int, flags)
-> +{
-> +	unsigned long alloc_size;
-> +	unsigned long num_states;
-> +	unsigned long pages_addr;
-> +	int ret;
-> +
-> +	if (flags)
-> +		return -EINVAL;
-> +
-> +	if (get_user(num_states, num))
-> +		return -EFAULT;
-> +
-> +	alloc_size = size_mul(num_states, sizeof(struct vgetrandom_state));
-> +	if (alloc_size == SIZE_MAX)
-> +		return -EOVERFLOW;
-> +	alloc_size = roundup(alloc_size, PAGE_SIZE);
+v2: Fix a typo dt-bindings commit message
 
-Small detail: the roundup to PAGE_SIZE can make alloc_size overflow to 0.
+Acer Iconia Talk S A1-724 is a tablet using the MSM8916 SoC released
+in 2014.
 
-Also, 'roundup(alloc_size, PAGE_SIZE)' could be 'PAGE_ALIGN(alloc_size)'.
+Note: The original firmware from Acer can only boot 32-bit kernels.
+To boot arm64 kernels it is necessary to flash 64-bit TZ/HYP firmware
+with EDL, e.g. taken from the DragonBoard 410c. This works because Acer
+didn't set up (firmware) secure boot.
 
-> +	pages_addr = vm_mmap(NULL, 0, alloc_size, PROT_READ | PROT_WRITE,
-> +			     MAP_PRIVATE | MAP_ANONYMOUS | MAP_LOCKED, 0);
-> +	if (IS_ERR_VALUE(pages_addr))
-> +		return pages_addr;
+Add a device tree for with initial support for:
 
-This will only succeed if the userspace process has permission to mlock pages,
-i.e. if there is space available in RLIMIT_MEMLOCK or if process has
-CAP_IPC_LOCK.  I suppose this is working as intended, as this syscall can be
-used to try to allocate and mlock arbitrary amounts of memory.
+- GPIO keys
+- pm8916-vibrator
+- SDHCI (internal and external storage)
+- USB Device Mode
+- UART
+- WCNSS (WiFi/BT)
+- Regulators
+- Bosch BMC150 accelerometer/magnetometer
 
-I wonder if this permission check will cause problems.  Maybe there could be a
-way to relax it for just one page per task?  I don't know how that would work,
-though, especially when the planned usage involves userspace allocating a single
-pool of these contexts per process that get handed out to threads.
-
-- Eric
