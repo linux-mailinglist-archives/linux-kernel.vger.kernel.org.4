@@ -2,121 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1E2630DFC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 281FA630E03
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 11:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiKSKEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 05:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
+        id S231756AbiKSKMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 05:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiKSKEL (ORCPT
+        with ESMTP id S229470AbiKSKMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 05:04:11 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5832193DE;
-        Sat, 19 Nov 2022 02:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=RMNXYrumhI3yLofiZI7k3r2DEJ+lXONtPLs3WFv5g+o=; b=5SsmuCcG6tK82cWqUfyg9d5Eck
-        KksnUD/SWupHQBxwWvOf/0nvvNjb6cxknUFGI+j80Y9R+kKA/6TKtoWvbPIjZozzgbKWomxQtfNYz
-        Y7uImLQblBjsKTvabMuZOzRF6QZXYiD9m1tWIClhx0oG+Dre6nBQGhQ6IaVRacUi7WtYThIiwmPW2
-        zt1GSi5mnynxPaPOPRzphluF4GIu9yPBGCqOTV4QlYwvIppsaJXq/pRX/mr0vBIQGJcB4WBJ4c6ub
-        dN+1SjblSLACfPUtXxXovJu1FyAVtaUAK2wtbvtEB3YZDBxfxxVNKOzPAXUjehDaF/wHtF5TT4izx
-        4xs+cLfA==;
-Received: from p200300ccff2ff3001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2f:f300:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1owKhf-0000Nr-Oi; Sat, 19 Nov 2022 11:04:04 +0100
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1owKhe-00CIPK-Qp; Sat, 19 Nov 2022 11:04:02 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     tony@atomide.com, lee@kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>, Bin Liu <b-liu@ti.com>
-Subject: [PATCH] mfd: twl: fix TWL6032 phy vbus detection
-Date:   Sat, 19 Nov 2022 11:03:41 +0100
-Message-Id: <20221119100341.2930647-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
+        Sat, 19 Nov 2022 05:12:37 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E326AEF9
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 02:12:35 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1owKpe-0007kV-V0; Sat, 19 Nov 2022 11:12:18 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1owKpX-00043P-IH; Sat, 19 Nov 2022 11:12:11 +0100
+Date:   Sat, 19 Nov 2022 11:12:11 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        kbuild test robot <lkp@intel.com>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-kernel@vger.kernel.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, kernel@pengutronix.de,
+        David Jander <david@protonic.nl>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
+ was already claimed
+Message-ID: <20221119101211.GA7626@pengutronix.de>
+References: <20220511162247.2cf3fb2e@erd992>
+ <3566cba652c64641603fd0ad477e2c90cd77655b.camel@egluetechnologies.com>
+ <e0f6b26e2c724439752f3c13b53af1a56a42a5bf.camel@egluetechnologies.com>
+ <20221117162251.5e5933c1@erd992>
+ <20221118060647.GE12278@pengutronix.de>
+ <7b575cface09a2817ac53485507985a7fef7b835.camel@egluetechnologies.com>
+ <20221118123013.GF12278@pengutronix.de>
+ <1fd663d232c7fba5f956faf1ad45fb410a675086.camel@egluetechnologies.com>
+ <20221118134447.GG12278@pengutronix.de>
+ <a01fe547c052e861d47089d6767aba639250adda.camel@egluetechnologies.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a01fe547c052e861d47089d6767aba639250adda.camel@egluetechnologies.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWL6032 has a few charging registers prepended before the charging
-registers the TWL6030 has. To be able to use common register defines
-declare the additional registers as additional module.
-At the moment this affects the access to CHARGERUSB_CTRL1 in
-phy-twl6030-usb.  Without this patch, it is accessing the wrong register
-on TWL6032.
-The consequence is that presence of Vbus is not reported.
+On Fri, Nov 18, 2022 at 04:12:40PM +0100, Devid Antonio Filoni wrote:
+> Hi Oleksij,
+> 
+> honestly I would apply proposed patch because it is the easier solution
+> and makes the driver compliant with the standard for the following
+> reasons:
+> - on the first claim, the kernel will wait 250 ms as stated by the
+> standard
+> + on successive claims with the same name, the kernel will not wait
+> 250ms, this implies:
+>   - it will not wait after sending the address-claimed message when the
+> claimed address has been spoofed, but the standard does not explicitly
+> states what to do in this case (see previous emails in this thread), so
+> it would be up to the application developer to decide how to manage the
+> conflict
+>   - it will not wait after sending the address-claimed message when a
+> request for address-claimed message has been received as stated by the
+> standard
 
-Cc: Bin Liu <b-liu@ti.com>
-Cc: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/mfd/twl-core.c  | 8 ++++----
- include/linux/mfd/twl.h | 2 ++
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Standard says:
+1. No CF _shall_ begin, or resume, transmission on the network until 250 ms
+   after it has successfully claimed an address (Figure 4).
+2. This does not apply when responding to a request for address claimed.
 
-diff --git a/drivers/mfd/twl-core.c b/drivers/mfd/twl-core.c
-index f6b4b9d94bbd..5a7ed71d0e30 100644
---- a/drivers/mfd/twl-core.c
-+++ b/drivers/mfd/twl-core.c
-@@ -111,6 +111,7 @@
- #define TWL6030_BASEADD_GASGAUGE	0x00C0
- #define TWL6030_BASEADD_PIH		0x00D0
- #define TWL6030_BASEADD_CHARGER		0x00E0
-+/* A few regs prepended before the 6030 regs */
- #define TWL6032_BASEADD_CHARGER		0x00DA
- #define TWL6030_BASEADD_LED		0x00F4
- 
-@@ -353,6 +354,9 @@ static struct twl_mapping twl6030_map[] = {
- 	{ 2, TWL6030_BASEADD_ZERO },
- 	{ 1, TWL6030_BASEADD_GPADC_CTRL },
- 	{ 1, TWL6030_BASEADD_GASGAUGE },
-+
-+	/* TWL6032 specific charger registers */
-+	{ 1, TWL6032_BASEADD_CHARGER },
- };
- 
- static const struct regmap_config twl6030_regmap_config[3] = {
-@@ -802,10 +806,6 @@ twl_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	if ((id->driver_data) & TWL6030_CLASS) {
- 		twl_priv->twl_id = TWL6030_CLASS_ID;
- 		twl_priv->twl_map = &twl6030_map[0];
--		/* The charger base address is different in twl6032 */
--		if ((id->driver_data) & TWL6032_SUBCLASS)
--			twl_priv->twl_map[TWL_MODULE_MAIN_CHARGE].base =
--							TWL6032_BASEADD_CHARGER;
- 		twl_regmap_config = twl6030_regmap_config;
- 	} else {
- 		twl_priv->twl_id = TWL4030_CLASS_ID;
-diff --git a/include/linux/mfd/twl.h b/include/linux/mfd/twl.h
-index eaa233038254..6e3d99b7a0ee 100644
---- a/include/linux/mfd/twl.h
-+++ b/include/linux/mfd/twl.h
-@@ -69,6 +69,8 @@ enum twl6030_module_ids {
- 	TWL6030_MODULE_GPADC,
- 	TWL6030_MODULE_GASGAUGE,
- 
-+	/* A few extra registers before the registers shared with the 6030 */
-+	TWL6032_MODULE_CHARGE,
- 	TWL6030_MODULE_LAST,
- };
- 
+With current patch state: 1. is implemented and working as expected, 2.
+is not implemented.
+With this patch: 1. is partially broken and 2. is partially faking
+needed behavior.
+
+It will not wait if remote ECU which rebooted for some reasons. With this patch
+we are breaking one case of the standard in favor to fake compatibility to the
+other case. We should avoid waiting only based on presence of RfAC not based
+on the old_addr == new_addr.
+
+Without words 2. part should be implemented without breaking 1.
+
+> Otherwise you will have to keep track of above cases and decide if the
+> wait is needed or not, but this is hard do accomplish because is the
+> application in charge of sending the address-claimed message, so you
+> would have to decide how much to keep track of the request for address-
+> claimed message thus adding more complexity to the code of the driver.
+
+Current kernel already tracks all claims on the bus and knows all registered
+NAMEs. I do not see increased complicity in this case.
+
+IMHO, only missing part i a user space interface. Some thing like "ip n"
+will do.
+
+> Another solution is to let the driver send the address-claimed message
+> waiting or without waiting 250 ms for successive messages depending on
+> the case.
+
+You can send "address-claimed message" in any time you wont. Kernel will
+just not resolve the NAME to address until 1. part of the spec will
+apply. Do not forget, the NAME cache is used for local _and_ remote
+names. You can trick out local system, not remote.
+
+Even if you implement "smart" logic in user space and will know better
+then kernel, that this application is responding to RfAC. You will newer
+know if address-claimed message of remote system is a response to RfAC.
+
+From this perspective, I do not know, how allowing the user space break
+the rules will help to solve the problem?
+
+Regards,
+Oleksij
 -- 
-2.30.2
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
