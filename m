@@ -2,142 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29DB6308E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E686308EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiKSByY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 20:54:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
+        id S232159AbiKSByg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 20:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233764AbiKSBw4 (ORCPT
+        with ESMTP id S234266AbiKSBxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 20:52:56 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DA8C622F;
-        Fri, 18 Nov 2022 17:36:43 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id x2so9455848edd.2;
-        Fri, 18 Nov 2022 17:36:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=83d8Sesnunr+hRGPm9723ZzIcrO1pd7HQn5mMps4VUU=;
-        b=oTaUSXNyESqaleRxe/fBbCQ3ybvPTU8zftHi+nWmGdUtWMvEyMvH46iRf8tCgeBtgh
-         gz4pBbHxEMlq4CKiMSwvF9VBkQmiO6CWi9QbQvdbGPG+lX8yqYn4hElOeBOhsQ/wOrp+
-         vMNU/ZE5iu2Wwr4b6IoGs9Z99/gx8e1J1TZ2pEjYSlb49xBVyRlsKA3a/F9cohfs9X6d
-         cpvlma/vE5msLyrHj3K911MQFwQKnqzGAZq8dDu1NlhffsVJnZcwoaGNX7Ra2lD0LIGP
-         fO3qNubLpkdgYY/3EQsVLovaK3CdE8+YEHsFGfyyWfNYjmNi9f2BUKzxI4g/DMZhJ7ju
-         hksQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=83d8Sesnunr+hRGPm9723ZzIcrO1pd7HQn5mMps4VUU=;
-        b=32/awBVXA9nOW+Nu+emHh41qMyxs6DK9eTGmgYEpgmmMBzGEkOoK3dn0bAJ1m94b2n
-         jPwJWC05jeDvwMQufwHmEGnt6/wu5JUhD/u6JSrZBYgiuU6v4uuEH5WQKdJ8GKtZCGq8
-         CzxAIIAKYjcZlKLrtWr88wopoRmkeIzL8df8GAYM8i4ww3s1Q88LyEI53fOXA2+FqnU4
-         1tRylaZNFdWHc79hVsFl5/7opFgiVxhwcl4SMB4gjoZX6ASVWqllbuwHxShCrwgZOSTo
-         b9Avm6MvesBEfl9hG1QuYtp7uZ5JwmzfGj+87gcqRzt0nryCK5KXI6/4b0W9yYO3zSq6
-         OFWA==
-X-Gm-Message-State: ANoB5pkzvjx/8QM53Dvarz8T7/izu2NKBZWVRyZN2cV/2lto8oRKNzJw
-        RRA+TFFKWlz5nO0ZGqmNryP4M6eJYx4WwQ==
-X-Google-Smtp-Source: AA0mqf5lRirvVKif3H699fIn6g7xywiXHj9A30EqfCEybWCCCeAtk3UI+uiSDLG556dm3cJLbEz70w==
-X-Received: by 2002:a05:6402:3ce:b0:469:40c:ecfb with SMTP id t14-20020a05640203ce00b00469040cecfbmr5450442edw.164.1668821801677;
-        Fri, 18 Nov 2022 17:36:41 -0800 (PST)
-Received: from shift.daheim (pd9e2965c.dip0.t-ipconnect.de. [217.226.150.92])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1709060cc200b0072f112a6ad2sm2329995ejh.97.2022.11.18.17.36.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 17:36:41 -0800 (PST)
-Received: from localhost ([127.0.0.1])
-        by shift.daheim with esmtp (Exim 4.96)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1owCme-0002ms-0Q;
-        Sat, 19 Nov 2022 02:36:40 +0100
-Message-ID: <db584852-b6a6-f479-d073-1236ba1f3c0c@gmail.com>
-Date:   Sat, 19 Nov 2022 02:36:40 +0100
+        Fri, 18 Nov 2022 20:53:10 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A451EC6D02;
+        Fri, 18 Nov 2022 17:39:49 -0800 (PST)
+Received: from [192.168.0.5] (71-212-113-106.tukw.qwest.net [71.212.113.106])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 15C3A20B83C2;
+        Fri, 18 Nov 2022 17:39:49 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 15C3A20B83C2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1668821989;
+        bh=tpBioxUJdr+zIDBZjxvEcm/NSQO7L5i+paa1kbCpVYQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=N8EpbWcF0GynpIQSHEuzgFQ9Pw6NxTBgt4hE0R7HgaqUr03Kx9vVwdfFZb57P/X7w
+         tr8doQjtb+dlpK8E4td6w2nRCCkkCrET0HB9w1EU/Wd6czfZMbxM6WTZ/CEVhsHOTB
+         DqKgP4XZ1weqzfNkiaxXxj5OT4RS3KkZC36tooOk=
+Message-ID: <a42b1927-b4ec-bee6-ef11-344a6c2c3c23@linux.microsoft.com>
+Date:   Fri, 18 Nov 2022 17:39:48 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] p54: Replace zero-length array of trailing structs
- with flex-array
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20221118234240.gonna.369-kees@kernel.org>
-Content-Language: de-DE
-From:   Christian Lamparter <chunkeey@gmail.com>
-In-Reply-To: <20221118234240.gonna.369-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 2/5] Drivers: hv: Setup synic registers in case of
+ nested root partition
+Content-Language: en-US
+To:     Jinank Jain <jinankjain@linux.microsoft.com>,
+        jinankjain@microsoft.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, seanjc@google.com,
+        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+References: <cover.1668618583.git.jinankjain@linux.microsoft.com>
+ <11dda2c697781c5d12bbffd11052e6d6bb2ca705.1668618583.git.jinankjain@linux.microsoft.com>
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <11dda2c697781c5d12bbffd11052e6d6bb2ca705.1668618583.git.jinankjain@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/19/22 00:42, Kees Cook wrote:
-> Zero-length arrays are deprecated[1] and are being replaced with
-> flexible array members in support of the ongoing efforts to tighten the
-> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+On 11/16/2022 7:27 PM, Jinank Jain wrote:
+> Child partitions are free to allocate SynIC message and event page but in
+> case of root partition it must use the pages allocated by Microsoft
+> Hypervisor (MSHV). Base address for these pages can be found using
+> synthetic MSRs exposed by MSHV. There is a slight difference in those MSRs
+> for nested vs non-nested root partition.
 > 
-> Replace zero-length array with flexible-array member.
-> 
-> This results in no differences in binary output (most especially because
-> struct pda_antenna_gain is unused). The struct is kept for future
-> reference.
-> 
-> [1] https://github.com/KSPP/linux/issues/78
-> 
-
-Thank you!
-
-> Cc: Christian Lamparter <chunkeey@googlemail.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-Acked-by: Christian Lamparter <chunkeey@gmail.com>
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
 > ---
-> v2:
-> - convert normally (chunkeey)
-> v1: https://lore.kernel.org/lkml/20221118210639.never.072-kees@kernel.org/
-> ---
->   drivers/net/wireless/intersil/p54/eeprom.h | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>  arch/x86/include/asm/hyperv-tlfs.h | 11 +++++++
+>  arch/x86/include/asm/mshyperv.h    | 26 ++--------------
+>  arch/x86/kernel/cpu/mshyperv.c     | 49 ++++++++++++++++++++++++++++++
+>  drivers/hv/hv.c                    | 18 ++++++++---
+>  4 files changed, 75 insertions(+), 29 deletions(-)
 > 
-> diff --git a/drivers/net/wireless/intersil/p54/eeprom.h b/drivers/net/wireless/intersil/p54/eeprom.h
-> index 1d0aaf54389a..641c4e79879e 100644
-> --- a/drivers/net/wireless/intersil/p54/eeprom.h
-> +++ b/drivers/net/wireless/intersil/p54/eeprom.h
-> @@ -108,10 +108,10 @@ struct pda_country {
->   } __packed;
->   
->   struct pda_antenna_gain {
-> -	struct {
-> +	DECLARE_FLEX_ARRAY(struct {
->   		u8 gain_5GHz;	/* 0.25 dBi units */
->   		u8 gain_2GHz;	/* 0.25 dBi units */
-> -	} __packed antenna[0];
-> +	} __packed, antenna);
->   } __packed;
->   
->   struct pda_custom_wrapper {
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 58c03d18c235..b5019becb618 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -225,6 +225,17 @@ enum hv_isolation_type {
+>  #define HV_REGISTER_SINT14			0x4000009E
+>  #define HV_REGISTER_SINT15			0x4000009F
+>  
+> +/*
+> + * Define synthetic interrupt controller model specific registers for
+> + * nested hypervisor.
+> + */
+> +#define HV_REGISTER_NESTED_SCONTROL            0x40001080
+> +#define HV_REGISTER_NESTED_SVERSION            0x40001081
+> +#define HV_REGISTER_NESTED_SIEFP               0x40001082
+> +#define HV_REGISTER_NESTED_SIMP                0x40001083
+> +#define HV_REGISTER_NESTED_EOM                 0x40001084
+> +#define HV_REGISTER_NESTED_SINT0               0x40001090
+> +
+>  /*
+>   * Synthetic Timer MSRs. Four timers per vcpu.
+>   */
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 61f0c206bff0..326d699b30d5 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -198,30 +198,8 @@ static inline bool hv_is_synic_reg(unsigned int reg)
+>  	return false;
+>  }
+>  
+> -static inline u64 hv_get_register(unsigned int reg)
+> -{
+> -	u64 value;
+> -
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> -		hv_ghcb_msr_read(reg, &value);
+> -	else
+> -		rdmsrl(reg, value);
+> -	return value;
+> -}
+> -
+> -static inline void hv_set_register(unsigned int reg, u64 value)
+> -{
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> -		hv_ghcb_msr_write(reg, value);
+> -
+> -		/* Write proxy bit via wrmsl instruction */
+> -		if (reg >= HV_REGISTER_SINT0 &&
+> -		    reg <= HV_REGISTER_SINT15)
+> -			wrmsrl(reg, value | 1 << 20);
+> -	} else {
+> -		wrmsrl(reg, value);
+> -	}
+> -}
+> +u64 hv_get_register(unsigned int reg);
+> +void hv_set_register(unsigned int reg, u64 value);
+>  
+>  #else /* CONFIG_HYPERV */
+>  static inline void hyperv_init(void) {}
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index 9a4204139490..3e6711a6af6b 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -41,6 +41,55 @@ bool hv_root_partition;
+>  bool hv_nested;
+>  struct ms_hyperv_info ms_hyperv;
+>  
+> +static inline unsigned int hv_get_nested_reg(unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case HV_REGISTER_SIMP:
+> +		return HV_REGISTER_NESTED_SIMP;
+> +	case HV_REGISTER_NESTED_SIEFP:
+> +		return HV_REGISTER_SIEFP;
+> +	case HV_REGISTER_SCONTROL:
+> +		return HV_REGISTER_NESTED_SCONTROL;
+> +	case HV_REGISTER_SINT0:
+> +		return HV_REGISTER_NESTED_SINT0;
+> +	case HV_REGISTER_EOM:
+> +		return HV_REGISTER_NESTED_EOM;
+> +	default:
+> +		return reg;
+> +	}
+> +}
+> +
+> +inline u64 hv_get_register(unsigned int reg)
+> +{
+> +	u64 value;
+> +
+> +	if (hv_nested)
+> +		reg = hv_get_nested_reg(reg);
+> +
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> +		hv_ghcb_msr_read(reg, &value);
+> +	else
+> +		rdmsrl(reg, value);
+> +	return value;
+> +}
+> +
+> +inline void hv_set_register(unsigned int reg, u64 value)
+> +{
+> +	if (hv_nested)
+> +		reg = hv_get_nested_reg(reg);
+> +
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> +		hv_ghcb_msr_write(reg, value);
+> +
+> +		/* Write proxy bit via wrmsl instruction */
+> +		if (reg >= HV_REGISTER_SINT0 &&
+> +		    reg <= HV_REGISTER_SINT15)
+> +			wrmsrl(reg, value | 1 << 20);
+> +	} else {
+> +		wrmsrl(reg, value);
+> +	}
+> +}
 
+This approach has a problem, in that it removes the interface for getting and
+setting the non-nested SIMP etc...
+We will need to use the non-nested SIMP for getting intercepts in the root
+partition from the L1 hypervisor.
+
+Nuno
