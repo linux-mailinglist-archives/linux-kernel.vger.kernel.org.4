@@ -2,239 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C6B630D46
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D8A630D48
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbiKSIZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 03:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S232734AbiKSI0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 03:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiKSIZD (ORCPT
+        with ESMTP id S230266AbiKSI0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:25:03 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44E6ACEA8
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:25:02 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id i2so6874627vsc.1
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:25:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tBKctCSsO4IhJse8SM9VVJISDFKCV3kqeBBJTAuoR40=;
-        b=AHYlHSbn4R+EwERHqSQGEVdbhJbOnXODNo1gp4IDh6ZND1hNVyfEp+jkGHDS1uRw2f
-         tjc9zm4fH+J5KVxOF2/Mp9id2psz/CL4v3o6ETtVBia5bb9Zjq/s/ciEGUEFqDu6xbDc
-         D2/YKS3G1OTWp8v8/2YfnJkAEOoX4yq8Lfpf/51iAdSzT6mLIShELoY4Ex4+UYgbHMsQ
-         CW/7KA1z++TSc7RkIt82K2LAu62CZiV4ztE19yh6kd6k1C2774Zch8zKMljXb7M5ArUR
-         MxSq3O7PAPgqZ1JAL63hpUuw898lN6afiS/xlC48BaRh53DpzEFReHPY9zsWYGGMxOHh
-         kDhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tBKctCSsO4IhJse8SM9VVJISDFKCV3kqeBBJTAuoR40=;
-        b=A9xzGW6xJNXrumIVE9XpdIqfxvfEo8OTVTv7WDoc2BCuZCahyIMXYN9sAx0KGNSKGa
-         8RTqiny1X2Ppc5JDTKQvNeXmbRKfx4txInGAeNSsN3wReZWs6frIqwLLuC7hWZy5KAwI
-         9sRtSqcLFVevNNCp74dgrTtmqZBZX8T3bWN+duPLgSZyQgqSVugbz2f3nFFqzvp+DCYd
-         JHY2/McSTikSYxt6E2/nKJFZxiZVLrCpip2PX/pyLRmxFfHn4DqsNAcd3A5FOOpS10SL
-         s0ofTnymul9eFM1ARUryiSrkdOWJ1bZFyrPM1pWWyvrIJNDFi7fl46IpXNB4syDgkUsq
-         rzgA==
-X-Gm-Message-State: ANoB5pkK17ckkHeo5Moe/tyRNn5odHPtjOve5Au9Jy2LnU1AluNfLV0e
-        lnYCU87IE1NSzSmD7pvOdiS8xIuxn2/oKcstgSJsKA==
-X-Google-Smtp-Source: AA0mqf49qoOsRCpYMDwP6CcFAB5kKqF06GSVrJmajFn7RtQr/k/AwUkJHIWh2+2rFUBEcLfSMbbsCQ632ckzzYE4RDM=
-X-Received: by 2002:a05:6102:3c82:b0:3aa:17f4:d63d with SMTP id
- c2-20020a0561023c8200b003aa17f4d63dmr6226760vsv.22.1668846301727; Sat, 19 Nov
- 2022 00:25:01 -0800 (PST)
+        Sat, 19 Nov 2022 03:26:05 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB3EACEA8;
+        Sat, 19 Nov 2022 00:26:03 -0800 (PST)
+Message-ID: <c806a812-4ecd-226f-109e-84642357fbcb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668846361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gfn1N8MLZTcJX22BXGXP9eTQh7aXYUOkE4nO8D9F2+U=;
+        b=w701wdjyKQhkOLcG8+obDqjtM+rgbf9kPAXpkBOfaqJ5NYt12Bo81idGEOa9ykQuYnyWUD
+        5kewtMlfuAkScbD2CMHuQiY3Hh65ukbR+x/RNsxuxaQsWV/d/fyqFhTEVUcFlsuJI10Pxe
+        TY2z91jGIiruYG31ow23QeEmYlKRq14=
+Date:   Sat, 19 Nov 2022 16:25:47 +0800
 MIME-Version: 1.0
-References: <20221109212032.123021-1-dlatypov@google.com>
-In-Reply-To: <20221109212032.123021-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 19 Nov 2022 16:24:50 +0800
-Message-ID: <CABVgOS=inucWN+gSar+fK5py-RDB2vq8pdr0WScMDGGf5oxo8Q@mail.gmail.com>
-Subject: Re: [PATCH] kunit: remove KUNIT_INIT_MEM_ASSERTION macro
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000004b8a905edce8fb9"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH for-next v2] RDMA/rxe: Fix mr->map double free
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Li Zhijian <lizhijian@fujitsu.com>
+Cc:     zyjzyj2000@gmail.com, leon@kernel.org, linux-rdma@vger.kernel.org,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <1667099073-2-1-git-send-email-lizhijian@fujitsu.com>
+ <Y3ggL8RJw6mDaWxT@nvidia.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yanjun Zhu <yanjun.zhu@linux.dev>
+In-Reply-To: <Y3ggL8RJw6mDaWxT@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000004b8a905edce8fb9
-Content-Type: text/plain; charset="UTF-8"
+在 2022/11/19 8:15, Jason Gunthorpe 写道:
+> On Sun, Oct 30, 2022 at 03:04:33AM +0000, Li Zhijian wrote:
+>> rxe_mr_cleanup() which tries to free mr->map again will be called
+>> when rxe_mr_init_user() fails.
+>>
+>> [43895.939883] CPU: 0 PID: 4917 Comm: rdma_flush_serv Kdump: loaded Not tainted 6.1.0-rc1-roce-flush+ #25
+>> [43895.942341] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+>> [43895.945208] Call Trace:
+>> [43895.946130]  <TASK>
+>> [43895.946931]  dump_stack_lvl+0x45/0x5d
+>> [43895.948049]  panic+0x19e/0x349
+>> [43895.949010]  ? panic_print_sys_info.part.0+0x77/0x77
+>> [43895.950356]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
+>> [43895.952589]  ? preempt_count_sub+0x14/0xc0
+>> [43895.953809]  end_report.part.0+0x54/0x7c
+>> [43895.954993]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+>> [43895.956406]  kasan_report.cold+0xa/0xf
+>> [43895.957668]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+>> [43895.959090]  rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+>> [43895.960502]  __rxe_cleanup+0x10a/0x1e0 [rdma_rxe]
+>> [43895.961983]  rxe_reg_user_mr+0xb7/0xd0 [rdma_rxe]
+>> [43895.963456]  ib_uverbs_reg_mr+0x26a/0x480 [ib_uverbs]
+>> [43895.964921]  ? __lock_acquire+0x876/0x31e0
+>> [43895.966182]  ? ib_uverbs_ex_create_wq+0x630/0x630 [ib_uverbs]
+>> [43895.967739]  ? uverbs_fill_udata+0x1c6/0x330 [ib_uverbs]
+>> [43895.969204]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x1a2/0x250 [ib_uverbs]
+>> [43895.971126]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+>> [43895.973094]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+>> [43895.975096]  ? uverbs_fill_udata+0x25f/0x330 [ib_uverbs]
+>> [43895.976466]  ib_uverbs_cmd_verbs+0x1397/0x15a0 [ib_uverbs]
+>> [43895.977930]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+>> [43895.979937]  ? uverbs_fill_udata+0x330/0x330 [ib_uverbs]
+> 
+> Please dont include timestamps in commit messages
+> 
+>> @@ -163,9 +163,8 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>>   				pr_warn("%s: Unable to get virtual address\n",
+>>   						__func__);
+>>   				err = -ENOMEM;
+>> -				goto err_cleanup_map;
+>> +				goto err_release_umem;
+>>   			}
+>> -
+> 
+> page_address() fails if this is a highmem system and the page hasn't
+> been kmap'd yet. So the right thing to do is to use kmap..
 
-On Thu, Nov 10, 2022 at 5:20 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Commit 870f63b7cd78 ("kunit: eliminate KUNIT_INIT_*_ASSERT_STRUCT
-> macros") removed all the other macros of this type.
->
-> But it raced with commit b8a926bea8b1 ("kunit: Introduce
-> KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros"), which added another
-> instance.
->
-> Remove KUNIT_INIT_MEM_ASSERTION and just use the generic
-> KUNIT_INIT_ASSERT macro instead.
-> Rename the `size` arg to avoid conflicts by appending a "_" (like we did
-> in the previous commit).
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+Sure.
 
-Thanks for catching this. Looks good and works here.
+sgt_append.sgt is allocated in this function ib_umem_get. And the 
+function sg_alloc_append_table_from_pages is called to allocate memory.
 
-Reviewed-by: David Gow <davidgow@google.com>
+147 struct ib_umem *ib_umem_get(struct ib_device *device, unsigned long 
+addr,
+148                             size_t size, int access)
+149 {
+...
+230                 ret = sg_alloc_append_table_from_pages(
+231                         &umem->sgt_append, page_list, pinned, 0,
+232                         pinned << PAGE_SHIFT, 
+ib_dma_max_seg_size(device),
+233                         npages, GFP_KERNEL);
+...
 
-Cheers,
--- David
+And it seems that it is not highmem.
 
->  include/kunit/assert.h |  7 -------
->  include/kunit/test.h   | 12 ++++++------
->  2 files changed, 6 insertions(+), 13 deletions(-)
->
-> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
-> index 43144cfddc19..24c2b9fa61e8 100644
-> --- a/include/kunit/assert.h
-> +++ b/include/kunit/assert.h
-> @@ -192,13 +192,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
->                                     const struct va_format *message,
->                                     struct string_stream *stream);
->
-> -#define KUNIT_INIT_MEM_ASSERT_STRUCT(text_, left_val, right_val, size_) {      \
-> -       .text = text_,                                                         \
-> -       .left_value = left_val,                                                \
-> -       .right_value = right_val,                                              \
-> -       .size = size_                                                          \
-> -}
-> -
->  /**
->   * struct kunit_mem_assert - An expectation/assertion that compares two
->   *     memory blocks.
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index d7f60e8aab30..4666a4d199ea 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -666,13 +666,13 @@ do {                                                                             \
->                             left,                                              \
->                             op,                                                \
->                             right,                                             \
-> -                           size,                                              \
-> +                           size_,                                             \
->                             fmt,                                               \
->                             ...)                                               \
->  do {                                                                          \
->         const void *__left = (left);                                           \
->         const void *__right = (right);                                         \
-> -       const size_t __size = (size);                                          \
-> +       const size_t __size = (size_);                                         \
->         static const struct kunit_binary_assert_text __text = {                \
->                 .operation = #op,                                              \
->                 .left_text = #left,                                            \
-> @@ -686,10 +686,10 @@ do {                                                                             \
->                       assert_type,                                             \
->                       kunit_mem_assert,                                        \
->                       kunit_mem_assert_format,                                 \
-> -                     KUNIT_INIT_MEM_ASSERT_STRUCT(&__text,                    \
-> -                                                  __left,                     \
-> -                                                  __right,                    \
-> -                                                  __size),                    \
-> +                     KUNIT_INIT_ASSERT(.text = &__text,                       \
-> +                                       .left_value = __left,                  \
-> +                                       .right_value = __right,                \
-> +                                       .size = __size),                       \
->                       fmt,                                                     \
->                       ##__VA_ARGS__);                                          \
->  } while (0)
->
-> base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
-> --
-> 2.38.1.431.g37b22c650d-goog
->
+So page_address will not be NULL?
 
---00000000000004b8a905edce8fb9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+As such, it is not necessary to test the return vaue of page_address?
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBC
-riGXpKZPcKIXX2Nnlm0QtYDeF7S1lZsgGB5TxZbQ8TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODI1MDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAmmg35rN9OImUbiFTq0yB
-SWrxs9PF9GYfP2rsIBuKtWG7e6JCibmPXkwfQ3Nq9NMNrJ24vQ9whjl0J0oDTFV68Fxt6Xk09R16
-bNmjBBr16dZyGTs+TIYobWG9b1Zu3LDgs5QFIgA9B9MZulAaZmo+ElxuBrhjZ7kdyjhSfdQ/Gw4b
-DVxamNiN1BafhYQYYjwyBxFPx0IKmh39zWBzBDH/7CpotUogmJvrCrRvq5GY6y2MBfei62+s45PV
-5r22bh/4wA8TbUo42AZa/KgQyY2ifumaYWhBfDtcJK4RiXmYiHA+M5WwNrYeDJXTnVsnYS7R8C2+
-0cH52/NjOJ683mNSNQ==
---00000000000004b8a905edce8fb9--
+If so, can we add a new commit to avoid testing of the return value of 
+page_address?
+
+Zhu Yanjun
+
+> 
+> But this looks right, so applied to for-next
+> 
+> Thanks,
+> Jason
+
