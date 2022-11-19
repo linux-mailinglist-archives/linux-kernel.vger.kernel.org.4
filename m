@@ -2,98 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D2C63108C
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 20:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E552631097
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234476AbiKSTyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 14:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S234589AbiKSUES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 15:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232895AbiKSTye (ORCPT
+        with ESMTP id S232895AbiKSUEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 14:54:34 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85765165A7
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 11:54:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1668887665; bh=ZzvCx/aKQd3EBJiLy/UGUsE7vHM6TVSTh1wAr6CeKRc=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=lCSzw6arnyhsMU2jhj2JAJ6v39ZZEghds1jmihmrtdDk48TvXpqDehIjAkkHJ+eLv
-         GcQyQoD2ej/wsYB+lhFC1qcmNTW+Qg7dk+nrtfxBq0PBmng7uHifQU6pDSCts7EemG
-         8B4DY8kWoQCpYQnScxRg/5TD2MfIDkjIOP1awN0c=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 19 Nov 2022 20:54:25 +0100 (CET)
-X-EA-Auth: YoniFlBPfdtLBBKBkWGtb73v/GdX0sJh9s2NeO1AaQWeVUawd3H2BKTvclMzz/T07W55oJrfEUk89QEC2n3jFxzh/Throbsk
-Date:   Sun, 20 Nov 2022 01:24:21 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     drv@mailo.com
-Subject: [PATCH] staging: pi433: set DCC setting to spec recommended value
-Message-ID: <Y3k0bbM2/5jXfNKQ@qemulion>
+        Sat, 19 Nov 2022 15:04:16 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588F6193FC;
+        Sat, 19 Nov 2022 12:04:15 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id g12so13372026lfh.3;
+        Sat, 19 Nov 2022 12:04:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ccp2wBYFO08vbXEm/oc3l6HKT+S2pZFfZ4H2UKRPVcM=;
+        b=oJIdZboD3LegFim07gTIpp2yjxJgy6JTs/1S+LgCUkXEHlNZp1otIlsxSu8jimHZoz
+         KNcCV4OHsBzp0dtTE0spPqgKXa8M54B2NUtIkt8ViDhh3r5qrmBaBhztY6a5kBnM8y3q
+         Rdzj4rFrqxJ5fmPSXV6qJ7rxwN8cfgmW6X+fRotJhCzxEkXK/4AJxqXDEYhNc4Ms0FBe
+         M3LP6x0HDK/PESNm4LFXHNpN/kSOhwXT5PdQOIECMHiwDSiwRTR4Ij/U9xGGHVdu7rOh
+         HSfHh/7aOKspgZmAG1a0SgpbeaOPmyGSMyQ8ydbpjSl+RqLYuhU7H0PZAiGvBfq8vCMl
+         /sBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ccp2wBYFO08vbXEm/oc3l6HKT+S2pZFfZ4H2UKRPVcM=;
+        b=H5vUi6dwpQk40/Utw8chXMkD/4YcmYOmzB+E7XUwTsZQrOvuxGYNtT8zpUpgsR4ipe
+         k92wlOJMF6MVuK+DBfOn7kPuEbBHDOll3ZHz6gK8opkm7t5SDS05XbLAmYf+K5/uoJJX
+         RxzXK2RKxMRSL9SjY5bgGkNXeQdoykHrWVxwXrOCssImc3hRHO2O3pMr5ARwioff0ZOO
+         /idAsDv8tEA2Rf/AvqQ7/i6Wx4/c8hd+5dFnsYFyXhu2i554kBZxaXEEmu2ssHnadUZe
+         xH7s53/IF80wdStELjV2nDkkUv20l7w+JXUPk6SlZzB3z+lUy0Qk4XI0EkLdP8GmB/oO
+         VXEg==
+X-Gm-Message-State: ANoB5pl0hDqCC1u1dDDkF/gCdpJfSxUqTGkb01GPeTa3Ms3dtEDPG3Y2
+        4apBQp4WAHoiBPob1SDFVd4uaWjZkyjQn+qgQIU=
+X-Google-Smtp-Source: AA0mqf6Ox0HWsFKikihBgL/tqHbJffquiFQYL/D/NGLcRMUKabfuF1EhgDX6YA33mt/gp/ydXospydzbprKOFR6YxGs=
+X-Received: by 2002:a05:6512:20cb:b0:4a2:23f5:c1f6 with SMTP id
+ u11-20020a05651220cb00b004a223f5c1f6mr4164415lfr.472.1668888253418; Sat, 19
+ Nov 2022 12:04:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20221119045159.1400244-1-chenxiaosong2@huawei.com>
+In-Reply-To: <20221119045159.1400244-1-chenxiaosong2@huawei.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 19 Nov 2022 14:04:01 -0600
+Message-ID: <CAH2r5mttt0zhzaz4XwPqz0x2m-P98oD45JJuMVfqu7EP2nbq_g@mail.gmail.com>
+Subject: Re: [PATCH] cifs: fix missing unlock in cifs_file_copychunk_range()
+To:     ChenXiaoSong <chenxiaosong2@huawei.com>
+Cc:     sfrench@samba.org, pc@cjr.nz, dhowells@redhat.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        zhangxiaoxu5@huawei.com, yanaijie@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DCCFreq value is used to obtain the DC offset canceller cut-off
-frequency. Upon device power reset, the bits 7-5 of the RegRxBw register
-that represent the DCCFreq setting are set to 0x4, which evaluates the
-cut-off frequency to be 1% of RxBw.
+good catch.
 
-In the current implementation, first, there is no configuration variable
-defined in the struct pi433_rx_cfg for the user to set this value as
-part of the UAPI. Second, the code simply ignores the value of DCC
-setting and allows it to never change.
+merged into cifs-2.6.git for-next
 
-As per the RFM69HCW tech specs, the default value for DCC frequency is
-recommended to be 4% of the RxBw; which requires the DCC setting bits
-to be set to 010. So allow the DCC setting to change to recommended /
-default value for improved rx sensitivity.
+On Fri, Nov 18, 2022 at 10:09 PM ChenXiaoSong <chenxiaosong2@huawei.com> wrote:
+>
+> xfstests generic/013 and generic/476 reported WARNING as follows:
+>
+>   WARNING: lock held when returning to user space!
+>   6.1.0-rc5+ #4 Not tainted
+>   ------------------------------------------------
+>   fsstress/504233 is leaving the kernel with locks still held!
+>   2 locks held by fsstress/504233:
+>    #0: ffff888054c38850 (&sb->s_type->i_mutex_key#21){+.+.}-{3:3}, at:
+>                         lock_two_nondirectories+0xcf/0xf0
+>    #1: ffff8880b8fec750 (&sb->s_type->i_mutex_key#21/4){+.+.}-{3:3}, at:
+>                         lock_two_nondirectories+0xb7/0xf0
+>
+> This will lead to deadlock and hungtask.
+>
+> Fix this by releasing locks when failed to write out on a file range in
+> cifs_file_copychunk_range().
+>
+> Fixes: 3e3761f1ec7d ("smb3: use filemap_write_and_wait_range instead of filemap_write_and_wait")
+> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> ---
+>  fs/cifs/cifsfs.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+> index fe220686bba4..712a43161448 100644
+> --- a/fs/cifs/cifsfs.c
+> +++ b/fs/cifs/cifsfs.c
+> @@ -1281,7 +1281,7 @@ ssize_t cifs_file_copychunk_range(unsigned int xid,
+>         rc = filemap_write_and_wait_range(src_inode->i_mapping, off,
+>                                           off + len - 1);
+>         if (rc)
+> -               goto out;
+> +               goto unlock;
+>
+>         /* should we flush first and last page first */
+>         truncate_inode_pages(&target_inode->i_data, 0);
+> @@ -1297,6 +1297,8 @@ ssize_t cifs_file_copychunk_range(unsigned int xid,
+>          * that target is updated on the server
+>          */
+>         CIFS_I(target_inode)->time = 0;
+> +
+> +unlock:
+>         /* although unlocking in the reverse order from locking is not
+>          * strictly necessary here it is a little cleaner to be consistent
+>          */
+> --
+> 2.31.1
+>
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
 
-Please Note: The proposed change is compile tested only. I am unable to perform
-device based testing in the absence of the hardware, both the RasPi board and the
-Pi433 device. Please let me know if it is necessary for me to test such patches
-on the real device myself. I will stop sending the patches till I have the hardware
-to test them. Thanks.
+-- 
+Thanks,
 
-
-
- drivers/staging/pi433/rf69.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index 8c7fab6a46bb..8468d4717dd0 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -465,6 +465,13 @@ static int rf69_set_bandwidth_intern(struct spi_device *spi, u8 reg,
- 	// read old value
- 	bandwidth = rf69_read_reg(spi, reg);
-
-+	/* DCC setting bits [7-5] are set to 0x4 on reset. Since there is no user
-+	 * input available in the rx config struct, we should set it to default
-+	 * or the recommended value as per the technical specification.
-+	 */
-+	if ((bandwidth >> 5) == 0x4)
-+		bandwidth = bandwidth & BW_DCC_4_PERCENT;
-+
- 	// "delete" mantisse and exponent = just keep the DCC setting
- 	bandwidth = bandwidth & MASK_BW_DCC_FREQ;
-
---
-2.34.1
-
-
-
+Steve
