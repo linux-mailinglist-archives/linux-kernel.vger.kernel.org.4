@@ -2,233 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0946C630D4F
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E739E630D55
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbiKSIcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 03:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S232544AbiKSImK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 19 Nov 2022 03:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiKSIcR (ORCPT
+        with ESMTP id S229470AbiKSImI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:32:17 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F1FB1BAD
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:32:15 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id a36so2472437uax.9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1L9EQwnh4mDP+cXHSglyamvt66mQXj7RFFlBY9BjZY=;
-        b=R6WUDgn4LSPljIMFgvE/1Oq3qOdLQBSEK+sN0U0VR5PiLiOSEVzjvSrrK+TldJC8iC
-         zLf+q2vVfialRzIspEb1knDVpxT2uF+1LAhpC+hTUUJcT64tjG8fS1vVjb1NuKUWfjvd
-         ZFoDMwBZXzyjG37RhndYXiqDNWe8pZOYOjc6bXNbMKDpGInBJGU3xzI2FV2iPLGXZYTK
-         pYOrh7/kEdJG1mp/qVV+Q8LtRmue8dbZ8kv0GuOtBDBRSSE/5ZcCbqOcjtArUnmiMsJv
-         6y+9rIAmBkWOv+OeGiDU2ThvYnzjORTYEZr1KHfg7WepP9fKyTrfrSGo66DZ6ZclLHnC
-         qj4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O1L9EQwnh4mDP+cXHSglyamvt66mQXj7RFFlBY9BjZY=;
-        b=5VC1zqo+MP3QGO70MBF1g3GOrp0P90nz+17Wc5f0M4sEc8+l1iYO1p8Q8MiUjJ5gga
-         PTCe0+4aNHk0Y3sPutdyydE/bxecFxAE6MgA5Y51XJwb6kBFa+la9waeMuMSAcEopW1t
-         rWUKfUN4MBpj6j4+wdDC53d5qlP3Nw885BjNp0FMayqJBl/VABffAWjaqsIQX+IteCR4
-         2x4TQjDBl/b7uTbE06T1tWi4VqyVyAI3WJB5dvfguuW1GZOmY4BR/YoAdfx5Y6PKMCEI
-         cTvEl7QSeMzM2+OQtZ7u64mErOO57gMFYDRj5T5v2Da929nLyzHhV9l8jzJGhxXEvBmS
-         uvwA==
-X-Gm-Message-State: ANoB5pnSg7QdKd4KSwAkjg822YGiQGuWEl93gB8ZNLiQCM2HLXY/mH49
-        qlZj3vE70uOasqCagUxzWkUlTTzlhkTTO6nSnNCfPA==
-X-Google-Smtp-Source: AA0mqf4to+L5gnkUZClqyxSvKxQsE6HDZJBr2+90z8ErkvAaSScaQ/oODtb/Ufn/8ZwhbHBoNorVhqgLoAKnFQKYO9g=
-X-Received: by 2002:ab0:238f:0:b0:411:968:212 with SMTP id b15-20020ab0238f000000b0041109680212mr6176340uan.107.1668846734518;
- Sat, 19 Nov 2022 00:32:14 -0800 (PST)
+        Sat, 19 Nov 2022 03:42:08 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DAC79351;
+        Sat, 19 Nov 2022 00:42:05 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1owJQD-00077J-K4; Sat, 19 Nov 2022 09:41:57 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= <uwe@kleine-koenig.org>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 228/606] Input: auo-pixcir-ts - Convert to i2c's .probe_new()
+Date:   Sat, 19 Nov 2022 09:41:56 +0100
+Message-ID: <6247861.DvuYhMxLoT@diego>
+In-Reply-To: <20221118224540.619276-229-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-229-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-References: <20221111031855.592333-1-dlatypov@google.com>
-In-Reply-To: <20221111031855.592333-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 19 Nov 2022 16:32:03 +0800
-Message-ID: <CABVgOSn6CaPfr_ceOzu3RUJ46TajLe7icLYsi-psnJt_knCh0g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: tweak error message when no KTAP found
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d0d56205edcea865"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000d0d56205edcea865
-Content-Type: text/plain; charset="UTF-8"
+Am Freitag, 18. November 2022, 23:39:22 CET schrieb Uwe Kleine-König:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-On Fri, Nov 11, 2022 at 11:19 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> We currently tell people we "couldn't find any KTAP output" with no
-> indication as to what this might mean.
->
-> After this patch, we get:
->
-> $ ./tools/testing/kunit/kunit.py parse /dev/null
-> ============================================================
-> [ERROR] Test: <missing>: Could not find any KTAP output. Did any KUnit tests run?
-> ============================================================
-> Testing complete. Ran 0 tests: errors: 1
->
-> Note: we could try and generate a more verbose message like
-> > Please check .kunit/test.log to see the raw kernel output.
-> or the like, but we'd need to know what the build dir was to know where
-> test.log actually lives.
->
-> This patch tries to make a more minimal improvement.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
 > ---
+>  drivers/input/touchscreen/auo-pixcir-ts.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/input/touchscreen/auo-pixcir-ts.c b/drivers/input/touchscreen/auo-pixcir-ts.c
+> index 2deae5a6823a..a4a1d58aeeac 100644
+> --- a/drivers/input/touchscreen/auo-pixcir-ts.c
+> +++ b/drivers/input/touchscreen/auo-pixcir-ts.c
+> @@ -482,8 +482,7 @@ static void auo_pixcir_reset(void *data)
+>  	gpiod_set_value_cansleep(ts->gpio_rst, 1);
+>  }
+>  
+> -static int auo_pixcir_probe(struct i2c_client *client,
+> -			    const struct i2c_device_id *id)
+> +static int auo_pixcir_probe(struct i2c_client *client)
+>  {
+>  	struct auo_pixcir_ts *ts;
+>  	struct input_dev *input_dev;
+> @@ -637,7 +636,7 @@ static struct i2c_driver auo_pixcir_driver = {
+>  		.pm	= &auo_pixcir_pm_ops,
+>  		.of_match_table	= of_match_ptr(auo_pixcir_ts_dt_idtable),
+>  	},
+> -	.probe		= auo_pixcir_probe,
+> +	.probe_new	= auo_pixcir_probe,
+>  	.id_table	= auo_pixcir_idtable,
+>  };
+>  
+> 
 
-I agree that this is clearer.
 
-One minor nitpick is that we still have the (useless) 'Test:
-<missing>:' prefix, which also makes the error much longer than the
-'===' dividers. I think the error would be more aesthetically pleasing
-if we could fix that.
 
-That's a very minor point, though, so regardless:
 
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  tools/testing/kunit/kunit_parser.py    | 2 +-
->  tools/testing/kunit/kunit_tool_test.py | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index a56c75a973b5..d0ed5dd5cfc4 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -782,7 +782,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
->         test = Test()
->         if not lines:
->                 test.name = '<missing>'
-> -               test.add_error('could not find any KTAP output!')
-> +               test.add_error('Could not find any KTAP output. Did any KUnit tests run?')
->                 test.status = TestStatus.FAILURE_TO_PARSE_TESTS
->         else:
->                 test = parse_test(lines, 0, [])
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 90c65b072be9..84a08cf07242 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -207,7 +207,7 @@ class KUnitParserTest(unittest.TestCase):
->                 with open(crash_log) as file:
->                         result = kunit_parser.parse_run_tests(
->                                 kunit_parser.extract_tap_lines(file.readlines()))
-> -               print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
-> +               print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
->                 print_mock.stop()
->                 self.assertEqual(0, len(result.subtests))
->                 self.assertEqual(result.counts.errors, 1)
-> @@ -588,7 +588,7 @@ class KUnitMainTest(unittest.TestCase):
->                 self.assertEqual(e.exception.code, 1)
->                 self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
->                 self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
-> -               self.print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
-> +               self.print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
->
->         def test_exec_no_tests(self):
->                 self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
->
-> base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
-> --
-> 2.38.1.431.g37b22c650d-goog
->
-
---000000000000d0d56205edcea865
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAZ
-h9J0IXeqtlsoMuEDIIlnTTv58OemGp3sTuIyUXVUnzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODMyMTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAoldagdXLHnSiCai5PFnk
-BdYTnmWVNeSDsR5xGwjUfyWZlRlTICYQOGA8xuV+JlzcJQToJ7ZQ7eyFpb0uaDHryVF7turIkgDz
-yLjbAhPrq+jtEfxTz34wImqgF/35jP8zr/2/lABB3sfG+4Bn4wUndkRDY1fGsZIMcbNovQ98dcd7
-Ic5RkowIs3bjGPYUNpL91jtSLyMsD/Ckk0vVzfdlvFULSw3Krf/bz+SBf/319hIslnyToJ9ofHrS
-fEc3N+niiOPYJgkOL9P2bAla3M/f7z40jFoCdCpmrD8iJCuQ2K9Pj9Mhwh2a6STcvzWiDtHdfhEa
-TvTXRph/FviLBHDEFw==
---000000000000d0d56205edcea865--
