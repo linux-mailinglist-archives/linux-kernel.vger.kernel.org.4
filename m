@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B7D630D9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE58F630D9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 09:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiKSI42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 03:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S233598AbiKSI5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 03:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKSI41 (ORCPT
+        with ESMTP id S229470AbiKSI5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:56:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589B199EB2;
-        Sat, 19 Nov 2022 00:56:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBE5E6009E;
-        Sat, 19 Nov 2022 08:56:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 511E8C433C1;
-        Sat, 19 Nov 2022 08:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668848185;
-        bh=krixhKpby3khoZS5ZrXiQOYkpJ3aUIRA96zasq5os58=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qh0iMCLdTFFK024CYjNk1NiqC9BV6bhxUiEeq4wBDrjOZWe6BN6MNT6+Vt3pKZj61
-         j30ndvwKFCl/vFUvOwWE0R49wkiv6bQcCUiuRqJk6Kk5w1XnAJpF9VnlXk9f1dDH/2
-         Cwa3p19XwhzIC4Aaod5d7CC1jzdUQH+ovYB13y1LgKFTLga0DWfdLjoHw0qEily9He
-         kWP7izjYKaED0Zp0nODboxV6ZGlb+dysss5sU/Xo5oXZ54XhWb9EYFF2eRdq+dNbyB
-         8N0VRPcpPgwS80wRZtld6nlB5XwVF3oPm2iXOdkqvRgZyrGfmDkM1np4z07pzmDQ1Y
-         lsWqaYGDise1g==
-Date:   Sat, 19 Nov 2022 02:56:12 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Nilesh Javali <njavali@marvell.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2][next] scsi: qla2xxx: Replace one-element array with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <Y3iaLCY68E6Stgrp@work>
-References: <cover.1668814746.git.gustavoars@kernel.org>
- <faa40e6b31ecc9387ad1644bb1957aa53d7c682f.1668814746.git.gustavoars@kernel.org>
- <ef2881de-7843-97b5-8e0e-64c23ee168d8@wanadoo.fr>
+        Sat, 19 Nov 2022 03:57:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5219E096
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:56:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668848203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mH+aNM2CVMwH3fEpJlA6Odig9WHLu4rdFuKDTlmn9xw=;
+        b=L3QTLpmlYzgqA0rH6bQNF2uRYhGycwoEvwAVAC0vvcKi11gvATQDWdvIZsXEuq/DrK5UfM
+        VTN59vVcMuRpAOd8OlzVDklaEn+e7ODTu49C1sFwDhwNzpIBMnyV3xFL8MLhgTWO+f4oo3
+        ZBdvL7TOQC7AMAWg1PgdnyPFkLDvFA4=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-58-ydcGrI23N5iYS0hIQxFqDQ-1; Sat, 19 Nov 2022 03:56:42 -0500
+X-MC-Unique: ydcGrI23N5iYS0hIQxFqDQ-1
+Received: by mail-wm1-f70.google.com with SMTP id l42-20020a05600c1d2a00b003cf8e70c1ecso5845136wms.4
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 00:56:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mH+aNM2CVMwH3fEpJlA6Odig9WHLu4rdFuKDTlmn9xw=;
+        b=eb7HW3qr7mv4xYRY0jLsK0zlTocOIHjJ+c9rUCyxguu1UwDjknQhk7CeIf4pJE31DV
+         AjvGc+lNJwVo+C+KJjGVz02Jn4VcNJyLQnBeqHlQT11i+6iyP3E2B+MmNNDl5JaraSFj
+         bK2207iiUjmgHfOdWQzyD7+G1kfrIwgVh194JcG6+aFZOb5XbbyQASDDflCMdPA9SH0r
+         R7W7305f6P+2VOXJXMVbxfu+tmvI295UsZR7PUCJFCdKpKoPFM9va3keZ/9iXigmXagU
+         fweSUyZd5eNrSizXI5BvZdWO+WXLzHvH/P86AJVEo/a1fBsX4bXUX16c7Y7bUvlAdkdN
+         Nong==
+X-Gm-Message-State: ANoB5pnWbfw+CkwFodWk/lZlJTbwMiPd8L/UQ27Qe6P0Lh+edCIcgQmx
+        /HzjMJAUI8OTUneVUiNJv7ws6X+q0gomQN+e9NhMUFef3CzlU9SoFCDcWSL8elUaGpL51Hws0zc
+        S9snGALeVE1mvgwBm394BM+2P7AnVBnAyr7IDtAbeluUXEj5gcjPHsE8M3BpRGGki4jqp6EtIKP
+        o=
+X-Received: by 2002:a05:600c:688:b0:3cf:a18d:39a4 with SMTP id a8-20020a05600c068800b003cfa18d39a4mr6918248wmn.125.1668848200650;
+        Sat, 19 Nov 2022 00:56:40 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6qupPcZoq50xJgdSZoP+qL0pA/oAKL+yADqU3RoWWkP/e/BZHdbrcFH9iAJ2xEEvIoj2TvWg==
+X-Received: by 2002:a05:600c:688:b0:3cf:a18d:39a4 with SMTP id a8-20020a05600c068800b003cfa18d39a4mr6918229wmn.125.1668848200359;
+        Sat, 19 Nov 2022 00:56:40 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id fc10-20020a05600c524a00b003cf9bf5208esm12708160wmb.19.2022.11.19.00.56.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Nov 2022 00:56:39 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Sergio Lopez Pascual <slp@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 1/2] KVM: Mark KVM_SET_MEMORY_REGION and KVM_SET_MEMORY_ALIAS as obsoleted
+Date:   Sat, 19 Nov 2022 09:56:31 +0100
+Message-Id: <20221119085632.1018994-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ef2881de-7843-97b5-8e0e-64c23ee168d8@wanadoo.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 09:44:02AM +0100, Christophe JAILLET wrote:
-> Le 19/11/2022 à 00:47, Gustavo A. R. Silva a écrit :
-> > One-element arrays as fake flex arrays are deprecated and we are moving
-> > towards adopting C99 flexible-array members, instead. So, replace
-> > one-element array declaration in struct ct_sns_gpnft_rsp, which is
-> > ultimately being used inside a union:
-> > 
-> > drivers/scsi/qla2xxx/qla_def.h:
-> > 3240 struct ct_sns_gpnft_pkt {
-> > 3241         union {
-> > 3242                 struct ct_sns_req req;
-> > 3243                 struct ct_sns_gpnft_rsp rsp;
-> > 3244         } p;
-> > 3245 };
-> > 
-> > Important to mention is that doing a build before/after this patch results
-> > in no binary differences.
-> 
-> Hi,
-> 
-> even with the:
-> 
-> >   		rspsz = sizeof(struct ct_sns_gpnft_rsp) +
-> > -			((vha->hw->max_fibre_devices - 1) *
-> > +			(vha->hw->max_fibre_devices *
-> >   			    sizeof(struct ct_sns_gpn_ft_data));
-> 
-> change ?
+Other ioctl such as KVM_ARM_SET_DEVICE_ADDR have a (deprecated) next to it
+which makes it easier to determine that is deprecated. Do the same for the
+ioctls that have been obsoleted.
 
-Yep; that change compensates for the removal of the 1 in the declaration
-of entries[].
+Suggested-by: Sergio Lopez Pascual <slp@redhat.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-The above piece of code is a common idiom to calculate the size for an
-allocation when a one-element array is involved. In the original code
-(vha->hw->max_fibre_devices - 1) compensates for the _extra_ size of one
-element of type struct ct_sns_gpn_ft_data in sizeof(struct ct_sns_gpnft_rsp).
+ Documentation/virt/kvm/api.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---
-Gustavo
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index eee9f857a986..c17bac32d25c 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -272,7 +272,7 @@ the VCPU file descriptor can be mmap-ed, including:
+   KVM_CAP_DIRTY_LOG_RING, see section 8.3.
+ 
+ 
+-4.6 KVM_SET_MEMORY_REGION
++4.6 KVM_SET_MEMORY_REGION (obsoleted)
+ -------------------------
+ 
+ :Capability: basic
+@@ -368,7 +368,7 @@ see the description of the capability.
+ Note that the Xen shared info page, if configured, shall always be assumed
+ to be dirty. KVM will not explicitly mark it such.
+ 
+-4.9 KVM_SET_MEMORY_ALIAS
++4.9 KVM_SET_MEMORY_ALIAS (obsoleted)
+ ------------------------
+ 
+ :Capability: basic
+-- 
+2.38.1
 
-> 
-> CJ
-> 
-> > 
-> > This help us make progress towards globally enabling
-> > -fstrict-flex-arrays=3 [1].
-> > 
-> > Link: https://github.com/KSPP/linux/issues/245
-> > Link: https://github.com/KSPP/linux/issues/193
-> > Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > ---
-> >   drivers/scsi/qla2xxx/qla_def.h | 4 ++--
-> >   drivers/scsi/qla2xxx/qla_gs.c  | 2 +-
-> >   2 files changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-> > index a26a373be9da..1eea977ef426 100644
-> > --- a/drivers/scsi/qla2xxx/qla_def.h
-> > +++ b/drivers/scsi/qla2xxx/qla_def.h
-> > @@ -3151,12 +3151,12 @@ struct ct_sns_gpnft_rsp {
-> >   		uint8_t vendor_unique;
-> >   	};
-> >   	/* Assume the largest number of targets for the union */
-> > -	struct ct_sns_gpn_ft_data {
-> > +	DECLARE_FLEX_ARRAY(struct ct_sns_gpn_ft_data {
-> >   		u8 control_byte;
-> >   		u8 port_id[3];
-> >   		u32 reserved;
-> >   		u8 port_name[8];
-> > -	} entries[1];
-> > +	}, entries);
-> >   };
-> >   /* CT command response */
-> > diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-> > index 64ab070b8716..69d3bc795f90 100644
-> > --- a/drivers/scsi/qla2xxx/qla_gs.c
-> > +++ b/drivers/scsi/qla2xxx/qla_gs.c
-> > @@ -4073,7 +4073,7 @@ int qla24xx_async_gpnft(scsi_qla_host_t *vha, u8 fc4_type, srb_t *sp)
-> >   		sp->u.iocb_cmd.u.ctarg.req_size = GPN_FT_REQ_SIZE;
-> >   		rspsz = sizeof(struct ct_sns_gpnft_rsp) +
-> > -			((vha->hw->max_fibre_devices - 1) *
-> > +			(vha->hw->max_fibre_devices *
-> >   			    sizeof(struct ct_sns_gpn_ft_data));
-> >   		sp->u.iocb_cmd.u.ctarg.rsp = dma_alloc_coherent(&vha->hw->pdev->dev,
-> 
