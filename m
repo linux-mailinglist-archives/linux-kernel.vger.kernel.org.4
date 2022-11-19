@@ -2,114 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72717630CEC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 08:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309FF630CF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 08:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbiKSHU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 02:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
+        id S232683AbiKSHZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 02:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiKSHUY (ORCPT
+        with ESMTP id S232279AbiKSHZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 02:20:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4ADBA317A;
-        Fri, 18 Nov 2022 23:20:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB8B60AC1;
-        Sat, 19 Nov 2022 07:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F88C433C1;
-        Sat, 19 Nov 2022 07:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668842422;
-        bh=sW4bR0iino+52jhmCyIFPNfNs72ZrD2mGqFwf4IX264=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ob2H1EUF3u2Qd3sE7bMNaJIehqs7LeqLnkshPiuSAFnKZBCS8084Snv+dzCsurabc
-         K1T87oN1cOuFCIadyFxLXQbY3zRsXclKqnG82NvnTD598LBQdlE9oIGfptSibI6a+X
-         6JXmIJJri24URftwRxGrcfXnU9Ob8IMMFZuCFEep0Cp4FNXZXq2vyP8J0X5eafIS22
-         nTIyYRAAktBuphoDfvtcIOMEPsWMUyOQZQeGpYLcs8d5N2lN0qiVsl+xkvUMZA1d2h
-         0Hy2tB0XTzySLgujEd1DTJl/0TepUzzREGHaquZHdc0ZxevM6uWkrk4jEQ2pwWyZMk
-         7Xlmr2c/eoJTA==
-Date:   Sat, 19 Nov 2022 01:20:09 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Nilesh Javali <njavali@marvell.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/2][next] scsi: qla2xxx: Use struct_size() in code
- related to struct ct_sns_gpnft_rsp
-Message-ID: <Y3iDqTPFdoUQ3a0f@work>
-References: <cover.1668814746.git.gustavoars@kernel.org>
- <9bd4775fe9c88b33c3194f841a2ec2f559d58032.1668814746.git.gustavoars@kernel.org>
- <202211182309.D5AC082E3@keescook>
+        Sat, 19 Nov 2022 02:25:08 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6CFB9736;
+        Fri, 18 Nov 2022 23:25:01 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id a6so6788356vsc.5;
+        Fri, 18 Nov 2022 23:25:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pBdMJNbSH8U8r3sDotTSzBIJa9GdWBR9o8sXjNY/x8I=;
+        b=QneZXLTu/TV8Zrw0Vs8fqN62kXxM0ofhET0pwOh3uIjPAu02hOdd4dXZXR2towYCV7
+         VWNyqv8eRp/XSY5b26St/+ch2z/LJ7oxVk7pFbGvfmYe6TezAR/MUe1VhuAMk0gAJxZN
+         KwtyG82Gj4zGut9f9xbX6YbI/EOYgG+3AqYvA1BpOLTYJzu+colIarHQKCJIPD3rfLT1
+         qf1eEujz2HsYv43WdEJxsQJ/dbPjPGstEgPMxKJkS84D7inypvpN5D/104wNMaVzLxS4
+         olGLbsCpb7a1L9cuCAaNIc/zlJp2TPc9orOCQUp0sWHpA0ppRQLPxJxTE90LslVyC+XM
+         EW5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pBdMJNbSH8U8r3sDotTSzBIJa9GdWBR9o8sXjNY/x8I=;
+        b=q6ToNR+bU1mSvnQFtjYF/krn2tws0UUK1WJsPkkJ+9pZugW5tFhPIARhFleDSWq2Xp
+         WmDDwZGUclc/UGumCRuwLZoROH25JuJiQLkN+7qkrntbruBLz+8PwDMTu54tYl+gAATs
+         JQNSjHGwvC343/V0OrdDre/pT8J9Nkic/cCUUyn2R2D1LcvfEMk6PqwJfX1/TLJq26tR
+         dWEBUr4rm+Jbb9KAGBujuJK5d6cYgMCz1Z+2rapsliaStYZ3OeHxUiwGzgFU3iK3RSFw
+         1veHmUhl6UTCxJ1lr0zgEEwrVmwU0ZF/Rnd6v8WCHoDVqPh1IXlLP9PGzf+ryssgqTTJ
+         Zy3Q==
+X-Gm-Message-State: ANoB5pnJBfdXQqblehJ22i5aBxX9dvyXvjSr1NZklYFP43umvg3KVZ1T
+        djBsdJqYh4sLXw9r2QXOY1GB9RYynRu1YhtYxAk=
+X-Google-Smtp-Source: AA0mqf5kgwvTQxQ74Nr66JB9hCXZ02yfsW/5qDiD+30udm8BlLYIhz/OZEWt8jfdQgtbP1H/yM/1XXJoxms9hhDtp5s=
+X-Received: by 2002:a67:1006:0:b0:3aa:5e8:3a19 with SMTP id
+ 6-20020a671006000000b003aa05e83a19mr5333896vsq.37.1668842700581; Fri, 18 Nov
+ 2022 23:25:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202211182309.D5AC082E3@keescook>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114040441.1649940-1-zhangpeng362@huawei.com>
+ <CAKFNMomu3Sf4_QHOm=zXM-QiLaVxASpMqpjek0F3SQnXwje4KA@mail.gmail.com>
+ <CAKFNMonXdyMw9mrQeGe_KtSfMDPSC_jNai8FZGceVyV9Nxw8AQ@mail.gmail.com> <422d9c54-a119-b2a2-f381-11f83af3d9ea@huawei.com>
+In-Reply-To: <422d9c54-a119-b2a2-f381-11f83af3d9ea@huawei.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Sat, 19 Nov 2022 16:24:43 +0900
+Message-ID: <CAKFNMokh1fQNyqVCMWoQVnRnXf65j__Op9p+a3Prz_qk-YnoVQ@mail.gmail.com>
+Subject: Re: [PATCH] nilfs2: fix NULL pointer dereference in nilfs_palloc_commit_free_entry()
+To:     "zhangpeng (AS)" <zhangpeng362@huawei.com>
+Cc:     ye.xingchen@zte.com.cn, chi.minghao@zte.com.cn,
+        vishal.moola@gmail.com, linux-nilfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+ebe05ee8e98f755f61d0@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:10:44PM -0800, Kees Cook wrote:
-> On Fri, Nov 18, 2022 at 05:47:56PM -0600, Gustavo A. R. Silva wrote:
-> > Prefer struct_size() over open-coded versions of idiom:
-> > 
-> > sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
-> > 
-> > where count is the max number of items the flexible array is supposed to
-> > contain.
-> > 
-> > Link: https://github.com/KSPP/linux/issues/160
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > ---
-> >  drivers/scsi/qla2xxx/qla_gs.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-> > index 69d3bc795f90..27e1df56b0fb 100644
-> > --- a/drivers/scsi/qla2xxx/qla_gs.c
-> > +++ b/drivers/scsi/qla2xxx/qla_gs.c
-> > @@ -4072,9 +4072,8 @@ int qla24xx_async_gpnft(scsi_qla_host_t *vha, u8 fc4_type, srb_t *sp)
-> >  		}
-> >  		sp->u.iocb_cmd.u.ctarg.req_size = GPN_FT_REQ_SIZE;
-> >  
-> > -		rspsz = sizeof(struct ct_sns_gpnft_rsp) +
-> > -			(vha->hw->max_fibre_devices *
-> > -			    sizeof(struct ct_sns_gpn_ft_data));
-> > +		rspsz = struct_size((struct ct_sns_gpnft_rsp *)0, entries,
-> > +				vha->hw->max_fibre_devices);
-> 
-> This should be able to use sp->u.iocb_cmd.u.ctarg.rsp instead of the
-> explicit struct with a NULL. (It's just using typeof() internally, so
-> it's okay that it isn't allocated yet.)
+On Sat, Nov 19, 2022 at 3:38 PM zhangpeng (AS)  wrote:
+>
+> Hi, ZhangPeng,
+>
+> On Tue, Nov 15, 2022 at 3:39 AM Ryusuke Konishi  wrote:
+> As for the current outlook, it seems difficult to eliminate
+> duplication of the virtual block number, so I think we will call
+> nilfs_error() as follows:
+>
+>         nilfs_dat_commit_entry(dat, req);
+> +        if (unlikely(req->pr_desc_bh == NULL || req->pr_bitmap_bh == NULL)) {
+> +                nilfs_error(dat->i_sb,
+> +                            "state inconsistency due to duplicate use
+> of vblocknr = %llu",
+> +                            (unsigned long long)req->pr_entry_nr);
+> +                return;
+> +       }
+>         nilfs_palloc_commit_free_entry(dat, req);
+>
+> In that case, I would like to modify your patch and send it upstream
+> as your patch.  Is that OK ?
+> Or do you want to fix it more by yourself ?
+>
+> Thanks,
+> Ryusuke Konishi
+>
+> Thanks for your advice.
+>
+> Please modify my patch and send it upstream.
+>
+> That is really a complicated problem. Duplication of the virtual block
+> number is not easy to fix. It is necessary to prevent further operations
+>  of the filesystem when the filesystem has a fatal flaw. I will continue
+>  to follow up.
 
-mmh... yeah; and considering they're already going all the way down to
-sp->u.iocb_cmd.u.ctarg.req_size, I think accessing sp->u.iocb_cmd.u.ctarg.rsp
-is perfectly fine. :)
+All right, thanks!
 
-I'll respin. Thanks for the feedback!
---
-Gustavo
-
-> 
-> -Kees
-> 
-> >  
-> >  		sp->u.iocb_cmd.u.ctarg.rsp = dma_alloc_coherent(&vha->hw->pdev->dev,
-> >  								rspsz,
-> > -- 
-> > 2.34.1
-> > 
-> 
-> -- 
-> Kees Cook
+Ryusuke Konishi
