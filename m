@@ -2,59 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAC8630B08
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 04:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8A4630B30
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 04:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbiKSDSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 22:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
+        id S229824AbiKSDaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 22:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiKSDSP (ORCPT
+        with ESMTP id S229592AbiKSDaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 22:18:15 -0500
+        Fri, 18 Nov 2022 22:30:09 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECBB5CD2C;
-        Fri, 18 Nov 2022 19:18:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78119E97D;
+        Fri, 18 Nov 2022 19:30:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E03B4B8265A;
-        Sat, 19 Nov 2022 03:18:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913CAC433C1;
-        Sat, 19 Nov 2022 03:18:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54838B82689;
+        Sat, 19 Nov 2022 03:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7042AC433D7;
+        Sat, 19 Nov 2022 03:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668827891;
-        bh=Skx/V/hHZ/xZPl7pWfc2hBThZcNpW83cxRVyzlPkisk=;
+        s=k20201202; t=1668828606;
+        bh=s0Ajg/gzQ56VpBktK3FHWtDUaTd25s6hfvbrY/z3SMs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QFd7ysay0SxnX6WGed+t2yDLqWHbqa9tdwrPa8FA/cqYm4gcCXJqOgDGmZFGRltqv
-         Eet7LgnNzONIfphzorvLMC3Lp5s3YxT4dPv/REGVAlElyykHE4ZQKTp0/1KHEDmoqJ
-         vEm+sgGP4qumzeJfXmoh3/B9es6W6/W/K83KTM/2DJ/GWXUc8kBF4duY4fYE9zwnV7
-         od6sT58U7ap8z7VWmvZAttiKOGcuVB2Ts/oMCiDhDjviqbzXyuk+6bG0S51SMk5jwO
-         wC4A9p/7/YL1D8QqwFyY6Qs02CzDZgoYw/3cv/DsZrADRu58Cm4KVlNjtBlat4j5BQ
-         ir/GcYp77BjUg==
-Date:   Fri, 18 Nov 2022 19:18:09 -0800
+        b=IvrprgOU5AXfZ/HAuxRvpu+gV6u/WXgzCrYG6bho4ITXeaVc1cOH9qsAFJGsUgZgk
+         3a7Jf1xXEwXPXUCJj6JdZYdOy+tIlYknFYpquACkzTgzaSKm9OzeLEM2gKbJDdx079
+         tgHQ+a6OjHDmteeUBUiiwEqCLDGK66GSg8H9nPriP3OmxRvPyQWvsjDTVIzqFV5mDG
+         GnT2KKnTVX4wBgi9zYTYmfo65QIvbX+UicR+4rInMCML3oZ9TEK2TxKx0OmOTAm0at
+         7Zo4FTt0JXozml8AF2z19lRsySqCISV2oPOdVj2ZvnCFsweJnw6iK8t6jZS3J/b6CM
+         evvdpDe/A6UGQ==
+Date:   Fri, 18 Nov 2022 19:30:04 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Dmitry Safonov <dima@arista.com>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
-Subject: Re: [PATCH v4 3/5] net/tcp: Disable TCP-MD5 static key on
- tcp_md5sig_info destruction
-Message-ID: <20221118191809.0174f4da@kernel.org>
-In-Reply-To: <20221115211905.1685426-4-dima@arista.com>
-References: <20221115211905.1685426-1-dima@arista.com>
-        <20221115211905.1685426-4-dima@arista.com>
+To:     Li zeming <zeming@nfschina.com>
+Cc:     pabeni@redhat.com, vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, davem@davemloft.net,
+        edumazet@google.com, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sctp: sm_statefuns: Remove unnecessary
+ =?UTF-8?B?4oCYTlVMTOKAmQ==?= values from Pointer
+Message-ID: <20221118193004.5a6fbf52@kernel.org>
+In-Reply-To: <20221118014641.3035-1-zeming@nfschina.com>
+References: <20221118014641.3035-1-zeming@nfschina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -67,18 +56,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 21:19:03 +0000 Dmitry Safonov wrote:
-> +	if (!rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk))) {
-> +		if (tcp_md5sig_info_add(sk, sk_gfp_mask(sk, GFP_ATOMIC)))
-> +			return -ENOMEM;
-> +
-> +		if (!static_key_fast_inc_not_negative(&tcp_md5_needed.key.key)) {
-> +			struct tcp_md5sig_info *md5sig = tp->md5sig_info;
+On Fri, 18 Nov 2022 09:46:42 +0800 Li zeming wrote:
+> -	struct sctp_packet *packet = NULL;
+> +	struct sctp_packet *packet;
+>  	struct sctp_chunk *chunk = arg;
+>  	struct sctp_chunk *shut;
 
-I don't think sparse will be able to deduce that ->md5sig_info access
-is safe here, so could you wrap it up as well? Maybe it wouldn't be 
-the worst move to provide a sk_rcu_dereference() or rcu_dereference_sk()
-or some such wrapper.
-
-More importantly tho - was the merging part for this patches discussed?
-They don't apply to net-next.
+Please don't sent such patches to networking.
