@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87A46308CE
+	by mail.lfdr.de (Postfix) with ESMTP id 710FA6308CD
 	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbiKSBw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 20:52:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S234080AbiKSBxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 20:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbiKSBwl (ORCPT
+        with ESMTP id S232994AbiKSBwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 20:52:41 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C475AA44F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:34:54 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id b2-20020a170902d50200b001871a3c51afso4965051plg.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:34:54 -0800 (PST)
+        Fri, 18 Nov 2022 20:52:42 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D32C4B63
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:34:55 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id my9-20020a17090b4c8900b002130d29fd7cso7638361pjb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 17:34:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CjK5nD/uvnQk7qUQi9oIboYcWNk4lZcV0pG+jDjHbYw=;
-        b=sO/BixX+Fxa6IYPQU8TkdF+XFQ44C4ZySQ2iwNGf4nj3I51S8QIRUibkPiKNqU6bw1
-         j4PlnepiO1Ad8v/zZSnMeIBI68hxaFqyJGMZebX4cy3Jv14uXBvY/oT0aik++6OQL6oN
-         DbLgAWDsPzUK72v+4dKMHKRTS+Pj0wR02zmTyQNbwMmm5J9cue1G73b6Acb3Oy+6Rqq7
-         SFCX3tIjVDK5Bkgwj3xiOgKx932eMjN+X5AA0/Lbv6Dl4c1cRTcxk/wdcfGn/cUpN1uD
-         EJ0BOyIS/RA9GP99cIy1ORxMCIBlL+dVVmi0pQd37KDIkkhww3/YCplg0uN9lfWxW1qn
-         tETw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=ainK2RDn+jZipfmA59p8DPXtbCjd5fvmnXnNzM45Lqs=;
+        b=ElbaUsSFUGAHxw9FaGIh9WqW076YqYTniSp+9sLgIbyAZGXc9q18pS+d+PVOfEWLyg
+         Kx/QdBqkeFSoCaN0e1TOjAh4OmvJCcZTfbRkoIs9Pa9Ier3h3eU6dfc5nhMeLRYb7If1
+         R8gMGaRsYzdOWxgY6umO5g2RAl06ZRzk4tCJFWsOlqsTdFgeOz+FKVhUFHG0gjETIWMB
+         SJsXPpuWt8ijNGjeVGXQ26qTfp0uSqxFA3Tr0kPraQUGqTQxkgiCsPpjq4Ug8UUJokHo
+         3S2V7A4WGHkj82py+dbabm8Ds9t2svz5QsJ1xSBiuk9loWQwWH1Z8uCRnLa36e7zSQDg
+         hRig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CjK5nD/uvnQk7qUQi9oIboYcWNk4lZcV0pG+jDjHbYw=;
-        b=ckPZYC0qkM476GBKmZY8tyaVX9veRJ/HANTSG08dQ9gmbKSU+38CdTFCcTkItLUy4W
-         QL7VJ54Ztre7UeSuRariyrp3XCkME7EFMbwdIpqO42Qi5e9VV+dKcFHpdVJM3YjazEn6
-         Jr69CeIq9DIj8P9bIKytlhva5ZmI+9zlbE1OZFpTHaCLvrmNNJbuPyURlgOqft7GvPOn
-         jIM2hV0V2Ay0poDOzDxWJcaE1ahDUcahtNDHT6R6DI88kyzdqx8+Saycwpf2/I2mYZCc
-         L4ZfCQkHiI7+WW59U/Ka7ewpe08iRznpqnBoyrIBgm+hjSpE/W49JOiMwVjqAjVWtq3+
-         bN+Q==
-X-Gm-Message-State: ANoB5pl21/M6IAuzNvUD0GmGD7jU6vlenEsJHBMtNb/UHLSnH/dv0Doh
-        tyL7SY0b3V5feVzTZegkHZf5UmvsYAE=
-X-Google-Smtp-Source: AA0mqf40VxY3bniB1w/5m0fnfOQyqSksKugX3b7aeyvG44COkqlBU1UDui2GOB4g4JxSgT+nQap4mhTD/UM=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ainK2RDn+jZipfmA59p8DPXtbCjd5fvmnXnNzM45Lqs=;
+        b=W/QB5Lerbme1hi+vCgI83I/dxj63cNwkYJdcTZUWSkWqknb7k7vLyoeNvg7+nuOvhS
+         E9OEPYSd7sIPQ4RWOuUu1G5eG0T2zKUOE7+PnG1gPmCOdzPxtvLLpggBp7cHNiuJqc0s
+         zfYM5niXHIW2cBU90fvt1KqKnJx8YnDRm82mz3vF4WOW4/ccNcbNJ4EW35FC6lRkyBFR
+         Se9RK6uYxBip4yIOmHnrYQuYsVrBvIndKgETCawxjfxAGl1txb0551zhsRTiDFxjNM8v
+         SNNPDuaXGW/JZ6KQX6IdRjE/Dt6GmAroLmme3+NutZAVJWRikP05x4AIv1nJ3/1wKDW5
+         +Hjg==
+X-Gm-Message-State: ANoB5pmBA6/JozLO8bNvpjx1qeKnPKkDUdkpztIYtdGt9MrEUnvtrskF
+        61YI/N8JVnRhO+/1RfiMQ88eHTULDiM=
+X-Google-Smtp-Source: AA0mqf6tFBmKyZhX4sewzWE/FLSMviulSVp5ypejrlokkSGEnAY1MSlwDguv1kCBOyWnNtV82VmzeHcBdl4=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:31c4:0:b0:56e:989d:7410 with SMTP id
- x187-20020a6231c4000000b0056e989d7410mr10648162pfx.1.1668821693609; Fri, 18
- Nov 2022 17:34:53 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:ca14:b0:187:3fc8:986e with SMTP id
+ w20-20020a170902ca1400b001873fc8986emr2206032pld.4.1668821695384; Fri, 18 Nov
+ 2022 17:34:55 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 19 Nov 2022 01:34:41 +0000
+Date:   Sat, 19 Nov 2022 01:34:42 +0000
+In-Reply-To: <20221119013450.2643007-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20221119013450.2643007-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221119013450.2643007-1-seanjc@google.com>
-Subject: [PATCH 0/9] tools: Make {clear,set}_bit() atomic for reals
+Message-ID: <20221119013450.2643007-2-seanjc@google.com>
+Subject: [PATCH 1/9] KVM: selftests: Add rdmsr_from_l2() implementation in
+ Hyper-V eVMCS test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -76,7 +80,7 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,91 +88,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For obvious reasons I'd like to route the this through Paolo's tree.
-In theory, taking just patch 5 through tip would work, but creating a
-topic branch seems like the way to go, though maybe I'm being overly
-paranoid.  The current tip/perf/core doesn't have any conflicts, nor does
-it have new set_bit() or clear_bit() users.
+Add rdmsr_from_l2() in hyperv_evmcs.c, it got left unintentionally omitted
+when applying code review feeback on the fly.  Intentionally duplicate
+the code that's in hyperv_svm_test.c, the helper really should not exist
+(L1 shouldn't clobber GPRs) and will hopefully be removed sooner than
+later.  Until that happens, deter other tests from using the somewhat
+misleading helper (it doesn't actually read L2's MSR value).
 
+Link: https://lore.kernel.org/all/Y2FFNO3Bu9Z3LtCW@google.com
+Fixes: 860e80157068 ("KVM: selftests: Introduce rdmsr_from_l2() and use it for MSR-Bitmap tests")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c b/tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
+index d418954590b1..ea58e5b436e8 100644
+--- a/tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
+@@ -31,6 +31,15 @@ static void guest_nmi_handler(struct ex_regs *regs)
+ {
+ }
  
-Code sitting in kvm/queue for 6.2 adds functionality that relies on
-clear_bit() being an atomic operation.  Unfortunately, despite being
-implemented in atomic.h (among other strong hits that they should be
-atomic), clear_bit() and set_bit() aren't actually atomic (and of course
-I realized this _just_ after everything got queued up).
-
-Move current tools/ users of clear_bit() and set_bit() to the
-double-underscore versions (which tools/ already provides and documents
-as being non-atomic), and then implement clear_bit() and set_bit() as
-actual atomics to fix the KVM selftests bug.
-
-Perf and KVM are the only affected users.  NVDIMM also has test code
-in tools/, but that builds against the kernel proper.  The KVM code is
-well tested and fully audited.  The perf code is lightly tested; if I
-understand the build system, it's probably not even fully compile tested.
-
-Patches 1 and 2 are completely unrelated and are fixes for patches
-sitting in kvm/queue.  Paolo, they can be squashed if you want to rewrite
-history.
-
-Patch 3 fixes a hilarious collision in a KVM ARM selftest that will arise
-when clear_bit() is converted to an atomic.
-
-Patch 4 changes clear_bit() and set_bit() to take an "unsigned long"
-instead of an "int" so that patches 5-6 aren't accompanied by functional
-changes.  I.e. if something in perf is somehow relying on "bit" being a
-signed int, failures will bisect to patch 4 and not to the
-supposed-to-be-a-nop conversion to __clear_bit() and __set_bit().
-
-Patch 5-9 switch perf+KVM and complete the conversion.
-
-Applies on:
-  
-  git://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-
-Sean Christopherson (9):
-  KVM: selftests: Add rdmsr_from_l2() implementation in Hyper-V eVMCS
-    test
-  KVM: selftests: Remove unused "vcpu" param to fix build error
-  KVM: arm64: selftests: Enable single-step without a "full" ucall()
-  tools: Take @bit as an "unsigned long" in {clear,set}_bit() helpers
-  perf tools: Use dedicated non-atomic clear/set bit helpers
-  KVM: selftests: Use non-atomic clear/set bit helpers in KVM tests
-  tools: Drop conflicting non-atomic test_and_{clear,set}_bit() helpers
-  tools: Drop "atomic_" prefix from atomic test_and_set_bit()
-  tools: KVM: selftests: Convert clear/set_bit() to actual atomics
-
- tools/arch/x86/include/asm/atomic.h           |  6 +++-
- tools/include/asm-generic/atomic-gcc.h        | 13 ++++++-
- tools/include/asm-generic/bitops/atomic.h     | 15 ++++----
- tools/include/linux/bitmap.h                  | 34 -------------------
- tools/perf/bench/find-bit-bench.c             |  2 +-
- tools/perf/builtin-c2c.c                      |  6 ++--
- tools/perf/builtin-kwork.c                    |  6 ++--
- tools/perf/builtin-record.c                   |  6 ++--
- tools/perf/builtin-sched.c                    |  2 +-
- tools/perf/tests/bitmap.c                     |  2 +-
- tools/perf/tests/mem2node.c                   |  2 +-
- tools/perf/util/affinity.c                    |  4 +--
- tools/perf/util/header.c                      |  8 ++---
- tools/perf/util/mmap.c                        |  6 ++--
- tools/perf/util/pmu.c                         |  2 +-
- .../util/scripting-engines/trace-event-perl.c |  2 +-
- .../scripting-engines/trace-event-python.c    |  2 +-
- tools/perf/util/session.c                     |  2 +-
- tools/perf/util/svghelper.c                   |  2 +-
- .../selftests/kvm/aarch64/arch_timer.c        |  2 +-
- .../selftests/kvm/aarch64/debug-exceptions.c  | 21 ++++++------
- tools/testing/selftests/kvm/dirty_log_test.c  | 34 +++++++++----------
- .../selftests/kvm/include/ucall_common.h      |  8 +++++
- .../testing/selftests/kvm/lib/ucall_common.c  |  2 +-
- .../selftests/kvm/x86_64/hyperv_evmcs.c       | 13 +++++--
- .../selftests/kvm/x86_64/hyperv_svm_test.c    |  4 +--
- .../selftests/kvm/x86_64/hyperv_tlb_flush.c   |  2 +-
- 27 files changed, 102 insertions(+), 106 deletions(-)
-
-
-base-commit: 3321eef4acb51c303f0598d8a8493ca58528a054
++/* Exit to L1 from L2 with RDMSR instruction */
++static inline void rdmsr_from_l2(uint32_t msr)
++{
++	/* Currently, L1 doesn't preserve GPRs during vmexits. */
++	__asm__ __volatile__ ("rdmsr" : : "c"(msr) :
++			      "rax", "rbx", "rdx", "rsi", "rdi", "r8", "r9",
++			      "r10", "r11", "r12", "r13", "r14", "r15");
++}
++
+ void l2_guest_code(void)
+ {
+ 	u64 unused;
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
