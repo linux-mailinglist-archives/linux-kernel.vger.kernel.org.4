@@ -2,86 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E1C630876
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D39630878
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 02:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiKSBcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Nov 2022 20:32:45 -0500
+        id S232698AbiKSBdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Nov 2022 20:33:12 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbiKSBcU (ORCPT
+        with ESMTP id S231202AbiKSBcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Nov 2022 20:32:20 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087F3116592
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:37:23 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id k2so3283100qvo.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:37:23 -0800 (PST)
+        Fri, 18 Nov 2022 20:32:41 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB79115D01
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:37:33 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id k22so6393729pfd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Nov 2022 16:37:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dyEPY+SojRhqXF/AvB0DrGy+gEBy7oa95tVCQD643p0=;
-        b=no0Tfx19bBOZUAeRN3mzYn4qcd7kLI8jUwU9vN5lbhqXXNIoo1QCS2A9e6LG4U0Or7
-         QY2bB2l5Z3pUGj2gA9Aw/njcKYwjrfj/oKHgw2oEwiMqbIA8R9sEtQ8zlmC3WWdzdmNd
-         G4sNIs8QA/OoRGYnozf7yuka7VeDzAz+HGgy8wS6MENGIVT/XVNPQS96wwktYfdNVP7u
-         K85AkTOjPQO/E7XCXBLuON5090rAPuzDsAEF8Gk6j8SKh0VQfJigAOHRFV/IeZ0Rkm/b
-         FHPSt5HAkVZa+wj/or5IYfzxpf0C44y8QoXeTYMHrgvDBRp2t1fj4bLYw2HK9ShEsuBM
-         GpmA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oqG09mkEzdQHCKSzSEmyl/u3LpiENnPKSBfep8+TELk=;
+        b=FrYhvC5W71DrNk8gagVsG+b26lBAjW0O8X/bMJZrcTpZuCTEuRdPrDHA3eWFnVImei
+         V9SfzXlbgAWEjmBoliD9ON6kauCWmcK9OzMoJWwz7fHJUz9B5lHL0ubFUT6VCcH8q11q
+         nKFlPkFGs7nzwrJmJ6s7vwg7U6uQ/cCvnFZ3b8ZawTR8q7W1jP501MDu1FK7jE1XA8F4
+         SYYnLOUyS6MSHO6NclSn3R9vV6nVHxeSGaHAP+vHJgo4vhzL/1svRYSQdL22nI9d26W1
+         V9CIpHei/PwqK9YhsMmwfwkQ68bgzPMIrurPg+rD1V9PJk9aU0i904wol515mkrpkDnr
+         Ufpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dyEPY+SojRhqXF/AvB0DrGy+gEBy7oa95tVCQD643p0=;
-        b=vsStgd5qN3eWHPyKpdiTEKYVqJJ5bButWi4aJDxhsnH8n8D/1EBZcMgIf2EVmj1v3i
-         4IZDtGM7bMzKwk0GoENylhWrAWjwBjy4AnxSrFp0/TXzwDEyy4VEWenR6h0Nk1HlmTI5
-         AN/CJfJn3yvAVOyvY20MhBVigTRE0XtP3/PZM/U5NYZbvIFJc/HGPTubY5G68AM3yOOu
-         kGY334HJqUkxHScn9oyg8wS3w8HFCAPNaI9+WZlVu/6b3yQzAwpv5Vv3KEfOD7LdoBeD
-         e3excixqSaFOXGxhiGhGr4kadaNrI98hgjc7pzXuqKS/dAXukHITKCKp2dQiT/vr076V
-         bgiw==
-X-Gm-Message-State: ANoB5pkRVWgoZM1kvcRk+quMkbUyo/IweZGlGF9y2z8TdHVjVRA2hRp4
-        dZqjMblAqlK0M4/1L8bmY3b1Aw==
-X-Google-Smtp-Source: AA0mqf6fsjaaxYUp3xx21CcJ8zpCHmptZyty/Ag71ufur/HJeNekLLxWkxwOOWjGfITrpe30FuE7mA==
-X-Received: by 2002:a0c:9c43:0:b0:4c6:62af:5e17 with SMTP id w3-20020a0c9c43000000b004c662af5e17mr8967454qve.95.1668818242976;
-        Fri, 18 Nov 2022 16:37:22 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id ay20-20020a05620a179400b006faa88ba2b5sm3461329qkb.7.2022.11.18.16.37.19
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oqG09mkEzdQHCKSzSEmyl/u3LpiENnPKSBfep8+TELk=;
+        b=2bVQFpBJ26O85DIyvuPf4XsUC6L+oqN19n5af6VrJ7k9UYPGl4Ryh+PHZSgCvjIlrK
+         Q/vUTW43fG0/G6X2baS1ItBqClfPyFNceAB96FogbbwQW3Y39+lrksFs5TV/VbgogoBB
+         lQhAP9g7CTezwrPLlxUY6ZzIYVVPFH0jAY1+uHy2sdnO1QE131MqYlgyFEPOxb+BXcy6
+         2COvCx6DYV3SwbJ+nE3P1+33wvGdn2QH/GNPzd0NMOcaDKrmKF8EuYd9eERwmyLgw4tf
+         SgWWZFpUecu7ek66t2r7UD2EI0oDucKo1SqnsWCjTgdq8ef61yxclipDxUFj8EGq65z0
+         oPBw==
+X-Gm-Message-State: ANoB5pnyz42dQ4f3leZ0MwbqT6F+jqJ+Qel9yJ2oLUwxZA7vPeHpVzCP
+        FUSZLs1nvZmf0pnkF+MZffQ=
+X-Google-Smtp-Source: AA0mqf4wC0j3vuw/ZJsQUMZUp/HpfM7cR67mTPKHxVISRpldeWMMhUsRA0IxjEl+zk8KuwLLP0NLAw==
+X-Received: by 2002:a05:6a00:22ca:b0:56e:64c8:f222 with SMTP id f10-20020a056a0022ca00b0056e64c8f222mr10210761pfj.71.1668818252807;
+        Fri, 18 Nov 2022 16:37:32 -0800 (PST)
+Received: from localhost (fwdproxy-prn-019.fbsv.net. [2a03:2880:ff:13::face:b00c])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090341c500b00188fce6e8absm2628813ple.280.2022.11.18.16.37.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 16:37:21 -0800 (PST)
-Date:   Fri, 18 Nov 2022 16:37:12 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Yu Zhao <yuzhao@google.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 1/3] mm,thp,rmap: subpages_mapcount of PTE-mapped
- subpages
-In-Reply-To: <CAOUHufYf9Ns6vPpDeSOnUBaQm3Th+N6WbLiT7F=191LNpsatNQ@mail.gmail.com>
-Message-ID: <759077a6-a08-5bb0-a0b6-53be2fe8b56a@google.com>
-References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <78fa518-85b5-32c0-ee92-537fa46131f6@google.com> <CAOUHufYf9Ns6vPpDeSOnUBaQm3Th+N6WbLiT7F=191LNpsatNQ@mail.gmail.com>
+        Fri, 18 Nov 2022 16:37:32 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     minchan@kernel.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ngupta@vflare.org,
+        senozhatsky@chromium.org, akpm@linux-foundation.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v5 6/6] zsmalloc: Implement writeback mechanism for zsmalloc
+Date:   Fri, 18 Nov 2022 16:37:31 -0800
+Message-Id: <20221119003731.2201964-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Y3gJZxm3OlXmlTVj@google.com>
+References: <Y3gJZxm3OlXmlTVj@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,39 +74,4 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022, Yu Zhao wrote:
-> On Fri, Nov 18, 2022 at 2:12 AM Hugh Dickins <hughd@google.com> wrote:
-> 
-> ...
-> 
-> > @@ -1308,31 +1285,29 @@ void page_add_anon_rmap(struct page *page,
-...
-> >
-> >         VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
-> 
-> Hi Hugh, I got the following warning from the removed "else" branch.
-> Is it legit? Thanks.
-> 
-> mm/rmap.c:1236:13: warning: variable 'first' is used uninitialized
-> whenever 'if' condition is false [-Wsometimes-uninitialized]
->         } else if (PageTransHuge(page)) {
->                    ^~~~~~~~~~~~~~~~~~~
-> mm/rmap.c:1248:18: note: uninitialized use occurs here
->         VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
->                         ^~~~~
-
-Thanks a lot for that.  From the compiler's point of view, it is
-certainly a legit warning.  From our point of view, it's unimportant,
-because we know that page_add_anon_rmap() should only ever be called
-with compound true when PageTransHuge(page) (and should never be
-called with compound true when TRANSPARENT_HUGEPAGE is disabled):
-so it's a "system error" if first is uninitialized there.
-
-But none of us want a compiler warning: I'll follow up with a fix
-patch, when I've decided whether it's better initialized to true
-or to false in the impossible case...
-
-Although the same pattern is used in other functions, this is the
-only one of them which goes on to use "first" or "last" afterwards.
-
-Hugh
+Just sent out v6 of my patch that incorporates this - thanks, Minchan!
