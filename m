@@ -2,253 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669C46310EC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68696310F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbiKSUp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 15:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S232528AbiKSUqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 15:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234911AbiKSUpQ (ORCPT
+        with ESMTP id S234544AbiKSUqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 15:45:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978421A38D
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 12:45:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B48CB801BA
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 20:45:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48A10C433B5;
-        Sat, 19 Nov 2022 20:45:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668890709;
-        bh=CBD8OmSr5rPgSjZyuyDPRILXCnJ2vLZOKnkTF8abduY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BTlKETCBlC50W1bvIe0y4agSrAnfuz4DL+MDlTFJ4+4EqNgd8uPqna8IjWw0CYK1V
-         Rdtwfu8CFpacTMPvonQD20+USLFQVW2WW2AYtUeVFCNwej/ry6MOIgo2Zd98+36bpX
-         hLJGbz1X9Nke7pc5a4Z7d1J7kJ1tau+B3MRnnlo4aVa3N5RrWJcCaNo0H9MzpPuUWZ
-         1Z3p1Y3n/Faekbmm4ZLRYSVsMFXHFWKeZc/1olwYCVmBHkcataTpwakiPtwFSAupnp
-         2LtKKyciT8BytNUi8MDg3QuJnd8A1oUppwKFIrbWBRDhCpf7EZWFZi0hSGIPNtZx9v
-         rAtVePdAyFk/g==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Christopher Friedt <chrisfriedt@gmail.com>
-Subject: [PATCH v4 4/4] doc: add documentation for accel subsystem
-Date:   Sat, 19 Nov 2022 22:44:35 +0200
-Message-Id: <20221119204435.97113-5-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221119204435.97113-1-ogabbay@kernel.org>
-References: <20221119204435.97113-1-ogabbay@kernel.org>
+        Sat, 19 Nov 2022 15:46:00 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A4213D32
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 12:45:59 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id f27so20747665eje.1
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 12:45:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SQ/WZFLVVDxittaiC79H/LzvEV3RqoAAIkd3OTcJKH0=;
+        b=K27ut1PNT2YlrreADla7CHlY/8c/PPCvFQttfd0LQY8Lzt6EFOrWspfzBum7JBRnd9
+         hOUb8nJzE2N2+p3Mi/dmz/QAS4sDKZm7fp56CZdr8webWj+V8udHxlRdbT+/Ek0LNVfm
+         TiTa4ZmtAF67zJCMbZmpDS8P3HmNxwB6uvp14=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SQ/WZFLVVDxittaiC79H/LzvEV3RqoAAIkd3OTcJKH0=;
+        b=N7FOFU40Nr6p8a+JIUdNmvryUqkLfWYWFieZJ8hOZnAI8ckQB04fanR9XSjbbwnN5Y
+         LowjVMXWclYvRDSiWdAMN2LIIJFaZVzHEFoYxNY+BVT1BaozzLQWW2ThTkHV2eGmuliJ
+         WTfS3ehCXpMP1/UyIL2N4iIyBYFGR2nwXS2TauMwK0kLCK7N1a80kCluu+ki0aKrkhqj
+         XoUNCS11d6MuTwzRz4hsDfLuBL95MFw5h8IdV1HU0KEin2Dlb5wqfwF92Nzeu/Je94vp
+         d9a6l4/0zzPYVzPr5Mcr1MpUXOGOFiIKT/GCr6GJBO/plXlwk9s8werVtuNFEiW38fk9
+         GeTw==
+X-Gm-Message-State: ANoB5pmodXWGOqFPMlbupFZsH3B1paOva7iuQhcSftO81G1vfU6jF+bN
+        dSyT/q31OEcZczTzl+QqriqE6A==
+X-Google-Smtp-Source: AA0mqf5VgWgcm8Pi02RV6zJXPKtv7uTC4zNVEyX3Kh5VS6nCAIeWiQ65kbBq8iGZ7QytXY2HVdFlAQ==
+X-Received: by 2002:a17:907:8d03:b0:7ae:1d34:4da5 with SMTP id tc3-20020a1709078d0300b007ae1d344da5mr6729017ejc.340.1668890757551;
+        Sat, 19 Nov 2022 12:45:57 -0800 (PST)
+Received: from [192.168.1.149] ([80.208.71.65])
+        by smtp.gmail.com with ESMTPSA id k26-20020a17090632da00b007ae4717bef1sm3269163ejk.15.2022.11.19.12.45.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Nov 2022 12:45:56 -0800 (PST)
+Message-ID: <b83f5433-52eb-f23c-566e-5195ec32db5a@rasmusvillemoes.dk>
+Date:   Sat, 19 Nov 2022 21:45:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] clk: imx8mp: register driver at arch_initcall time
+Content-Language: en-US, da
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220928124108.500369-1-linux@rasmusvillemoes.dk>
+ <08df1f08-1eea-0ee5-8e7b-6c427aa11d02@rasmusvillemoes.dk>
+In-Reply-To: <08df1f08-1eea-0ee5-8e7b-6c427aa11d02@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an introduction section for the accel subsystem. Most of the
-relevant data is in the DRM documentation, so the introduction only
-presents the why of the new subsystem, how are the compute accelerators
-exposed to user-space and what changes need to be done in a standard
-DRM driver to register it to the new accel subsystem.
+On 07/11/2022 14.54, Rasmus Villemoes wrote:
+> On 28/09/2022 14.41, Rasmus Villemoes wrote:
+>> We have an imx8mp-based board with an external gpio-triggered
+>> watchdog. Currently, we don't get to handle that in time before it
+>> resets the board.
+>>
+>> The probe of the watchdog device gets deferred because the SOC's GPIO
+>> controller is not yet ready, and the probe of that in turn gets deferred
+>> because its clock provider (namely, this driver) is not yet
+>> ready. Altogether, the watchdog does not get handled until the late
+>> initcall deferred_probe_initcall has made sure all leftover devices
+>> have been probed, and that's way too late.
+>>
+>> Aside from being necessary for our board, this also reduces total boot
+>> time because fewer device probes get deferred.
+> 
+> Please advise on what I need to do in order to make progress here.
 
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- Documentation/accel/index.rst        |  17 +++++
- Documentation/accel/introduction.rst | 109 +++++++++++++++++++++++++++
- Documentation/subsystem-apis.rst     |   1 +
- MAINTAINERS                          |   1 +
- 4 files changed, 128 insertions(+)
- create mode 100644 Documentation/accel/index.rst
- create mode 100644 Documentation/accel/introduction.rst
-
-diff --git a/Documentation/accel/index.rst b/Documentation/accel/index.rst
-new file mode 100644
-index 000000000000..2b43c9a7f67b
---- /dev/null
-+++ b/Documentation/accel/index.rst
-@@ -0,0 +1,17 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+====================
-+Compute Accelerators
-+====================
-+
-+.. toctree::
-+   :maxdepth: 1
-+
-+   introduction
-+
-+.. only::  subproject and html
-+
-+   Indices
-+   =======
-+
-+   * :ref:`genindex`
-diff --git a/Documentation/accel/introduction.rst b/Documentation/accel/introduction.rst
-new file mode 100644
-index 000000000000..5a3963eae973
---- /dev/null
-+++ b/Documentation/accel/introduction.rst
-@@ -0,0 +1,109 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+============
-+Introduction
-+============
-+
-+The Linux compute accelerators subsystem is designed to expose compute
-+accelerators in a common way to user-space and provide a common set of
-+functionality.
-+
-+These devices can be either stand-alone ASICs or IP blocks inside an SoC/GPU.
-+Although these devices are typically designed to accelerate Machine-Learning
-+and/or Deep-Learning computations, the accel layer is not limited to handling
-+these types of accelerators.
-+
-+typically, a compute accelerator will belong to one of the following
-+categories:
-+
-+- Edge AI - doing inference at an edge device. It can be an embedded ASIC/FPGA,
-+  or an IP inside a SoC (e.g. laptop web camera). These devices
-+  are typically configured using registers and can work with or without DMA.
-+
-+- Inference data-center - single/multi user devices in a large server. This
-+  type of device can be stand-alone or an IP inside a SoC or a GPU. It will
-+  have on-board DRAM (to hold the DL topology), DMA engines and
-+  command submission queues (either kernel or user-space queues).
-+  It might also have an MMU to manage multiple users and might also enable
-+  virtualization (SR-IOV) to support multiple VMs on the same device. In
-+  addition, these devices will usually have some tools, such as profiler and
-+  debugger.
-+
-+- Training data-center - Similar to Inference data-center cards, but typically
-+  have more computational power and memory b/w (e.g. HBM) and will likely have
-+  a method of scaling-up/out, i.e. connecting to other training cards inside
-+  the server or in other servers, respectively.
-+
-+All these devices typically have different runtime user-space software stacks,
-+that are tailored-made to their h/w. In addition, they will also probably
-+include a compiler to generate programs to their custom-made computational
-+engines. Typically, the common layer in user-space will be the DL frameworks,
-+such as PyTorch and TensorFlow.
-+
-+Sharing code with DRM
-+=====================
-+
-+Because this type of devices can be an IP inside GPUs or have similar
-+characteristics as those of GPUs, the accel subsystem will use the
-+DRM subsystem's code and functionality. i.e. the accel core code will
-+be part of the DRM subsystem and an accel device will be a new type of DRM
-+device.
-+
-+This will allow us to leverage the extensive DRM code-base and
-+collaborate with DRM developers that have experience with this type of
-+devices. In addition, new features that will be added for the accelerator
-+drivers can be of use to GPU drivers as well.
-+
-+Differentiation from GPUs
-+=========================
-+
-+Because we want to prevent the extensive user-space graphic software stack
-+from trying to use an accelerator as a GPU, the compute accelerators will be
-+differentiated from GPUs by using a new major number and new device char files.
-+
-+Furthermore, the drivers will be located in a separate place in the kernel
-+tree - drivers/accel/.
-+
-+The accelerator devices will be exposed to the user space with the dedicated
-+261 major number and will have the following convention:
-+
-+- device char files - /dev/accel/accel*
-+- sysfs             - /sys/class/accel/accel*/
-+- debugfs           - /sys/kernel/debug/accel/accel*/
-+
-+Getting Started
-+===============
-+
-+First, read the DRM documentation. Not only it will explain how to write a new
-+DRM driver but it will also contain all the information on how to contribute,
-+the Code Of Conduct and what is the coding style/documentation. All of that
-+is the same for the accel subsystem.
-+
-+Second, make sure the kernel is configured with CONFIG_DRM_ACCEL.
-+
-+To expose your device as an accelerator, two changes are needed to
-+be done in your driver (as opposed to a standard DRM driver):
-+
-+- Add the DRIVER_COMPUTE_ACCEL feature flag in your drm_driver's
-+  driver_features field. It is important to note that this driver feature is
-+  mutually exclusive with DRIVER_RENDER and DRIVER_MODESET. Devices that want
-+  to expose both graphics and compute device char files should be handled by
-+  two drivers that are connected using the auxiliary bus framework.
-+
-+- Change the open callback in your driver fops structure to accel_open().
-+  Alternatively, your driver can use DEFINE_DRM_ACCEL_FOPS macro to easily
-+  set the correct function operations pointers structure.
-+
-+External References
-+===================
-+
-+email threads
-+-------------
-+
-+* `Initial discussion on the New subsystem for acceleration devices <https://lkml.org/lkml/2022/7/31/83>`_ - Oded Gabbay (2022)
-+* `patch-set to add the new subsystem <https://lkml.org/lkml/2022/10/22/544>`_ - Oded Gabbay (2022)
-+
-+Conference talks
-+----------------
-+
-+* `LPC 2022 Accelerators BOF outcomes summary <https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summary.html>`_ - Dave Airlie (2022)
-diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
-index af65004a80aa..b51f38527e14 100644
---- a/Documentation/subsystem-apis.rst
-+++ b/Documentation/subsystem-apis.rst
-@@ -43,6 +43,7 @@ needed).
-    input/index
-    hwmon/index
-    gpu/index
-+   accel/index
-    security/index
-    sound/index
-    crypto/index
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4d752aac3ec0..6ba7bb35208a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6837,6 +6837,7 @@ L:	dri-devel@lists.freedesktop.org
- S:	Maintained
- C:	irc://irc.oftc.net/dri-devel
- T:	git https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git
-+F:	Documentation/accel/
- F:	drivers/accel/
- 
- DRM DRIVERS FOR ALLWINNER A10
--- 
-2.25.1
+Ping.
 
