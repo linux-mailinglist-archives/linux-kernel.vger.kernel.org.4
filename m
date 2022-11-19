@@ -2,108 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DEA630CB3
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC3B630CCE
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 07:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiKSGuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 01:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S232429AbiKSGxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 01:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiKSGuU (ORCPT
+        with ESMTP id S229502AbiKSGxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 01:50:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6A91704F;
-        Fri, 18 Nov 2022 22:50:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0B52B80D1E;
-        Sat, 19 Nov 2022 06:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5944BC433D6;
-        Sat, 19 Nov 2022 06:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668840616;
-        bh=ak6M5fgrTHQ1MM2vf+n5AubLq+AMYqmK/RRzz3/3gig=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=seXipkg9CAyFA9/DRpiD01V8ITXAB4g0Feuk+M72plAUXo40561rs1dMVurztjC0R
-         UGqXlOdf3JC5VrI2IWVezRWqsbHRKhLTyD3mEBicEAh2WBWvOY+SAmQ5aoJgjdz1Vk
-         5aq4YUvgNncdPRSw5IsP6xY0s8PudX8SdTsR/EyWyOmZxNi+pkZtOu70losD9BrvnB
-         Du21LerJzoVvVs4d9eSLNMvDcUU7T0jOw29zyRduMgSnRBWCRcfu03u6uXJN2UHbLy
-         DMpzJwBt86Z35Odc5hTd6y/3r7eqH4zheZmOWuKtOuYVHcjUBHn5l00sWabdAIfdsG
-         FRNiHf2EtKUDg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 37F78E29F44;
-        Sat, 19 Nov 2022 06:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 19 Nov 2022 01:53:39 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E561A18B18;
+        Fri, 18 Nov 2022 22:53:36 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MryXN-1pJjuo0tFt-00nwHa; Sat, 19
+ Nov 2022 07:53:16 +0100
+Message-ID: <a076e281-022f-1f49-b70d-513272ca86cf@gmx.com>
+Date:   Sat, 19 Nov 2022 14:53:10 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <166884061622.19423.870710096225259467.git-patchwork-notify@kernel.org>
-Date:   Sat, 19 Nov 2022 06:50:16 +0000
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cuwe=40kleine-koenig=2Eorg=3E?=@ci.codeaurora.org
-Cc:     ang.iglesiasg@gmail.com, lee.jones@linaro.org,
-        grant.likely@linaro.org, wsa@kernel.org, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-actions@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-pm@vger.kernel.org, kernel@puri.sm,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] btrfs: fix a resource leak in btrfs_init_sysfs()
+To:     Zhen Lei <thunder.leizhen@huawei.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221119064348.1743-1-thunder.leizhen@huawei.com>
+Content-Language: en-US
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20221119064348.1743-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:iEavSc+zX6PCY8pCzSIgmtnoS7afG0PA1HRj6P41eW+Skly5KKa
+ RWPVwC/aoLQb1yNk8wUnqTO1BkTu6mwo/jTwQQR5OWUs7NVm4qirNWFuUTAqnIULJit8VbR
+ 1ElRYB5xBnuaHV5YRwZRtJm4YCmT75ymB/0WbsmTEqKwx2UcR9JgTC51nUSLtnH6xJU5GLH
+ fH0hNPOkxbHn/1qrMdhHw==
+UI-OutboundReport: notjunk:1;M01:P0:5LMp6awC1Ss=;unzldrecvpc2gbpzIhCz09FEo3/
+ LvjPD8VKYSCpwzJMgZjgIGmcGcqYoGZmyVltRFE1oNHsbpRdEttYwrVmoCip1s+P+X0fawPDX
+ F0ILzsjo+Q0PPdBSQrfpv1dIU2SWrx+twskztexdagirG7W+fdz7Jrie2laFr1ZRIyI6SGhPn
+ qVtzuoz9KDqpWWkFDCCE9Uo5ThIunhWeh7or+Qah1eKy0gFfsweyQjg4xepNmhumqx2FlYhTv
+ ao4ylg2tyX6eYA+w+P4742GGapMCWJftjS4vioBVxWKLNCByLyTf7VlZHo8hoO/OoOcXIWgR1
+ r56t4Cowc9vNXZt1swNYWkCfuLk+iibXCdoGm+eHTVdPVJki8qoK1VKwtZtTthu1O2yazAzcV
+ /GeNt7EG0S17veKpSbvgG9ejLwT7/gQuKwRrm0DeAcndya+w2CcXiw6jv1TCvj1uZ4euuwVXS
+ vKy1zz5mrfKT8vSGWIm8v4F4fPNFcy/3GFCXeb0BGfQSp8bd4abx6SBG5kB+SRs5iZya92lmX
+ Fj91STY1VLxTcjd67ASRRp2+zuyeu+3dqF91dDWufICMRu12max1tVJ3Gk2o2eLRrSXpm759K
+ 1s4vNizIscNaCJqaM6BNQ8/s+WyQgvv1B2kEhyswiTrDP55YqVLYBrfHKmjAv3Ah+hhZBNHak
+ 9B+xbjt/R1tFGsv0SF90JD1Zs7jLGjle28jBNtkyiuOAINXgIxnNRn8ekLI1fZDLTWuWY9oXE
+ YKxUt70bdl/wg4duzcaQQG50abWCvKRC+Mh2reJhyht9uOzEizqCTwU+6fSXGwN63VM03m0DI
+ B4FSkUKMI0israjtjX13lhcoz7QPhO8/pOsbJ3bxYDGv4a/2wXA6QdY7ir5n14feHpNFf+tyH
+ XgJndBWZtWzlyyltcLV/ncITFoa+iUJ5I5JTE8CefM2iZlwD0RxkByRuJYIihFn0TNkQt2FJ8
+ +Gdb0a/qak4XTTyzG//ltb9BiSk=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-On Fri, 18 Nov 2022 23:35:34 +0100 you wrote:
-> Hello,
+On 2022/11/19 14:43, Zhen Lei wrote:
+> When btrfs_debug_feature_attr_group fails to be created,
+> btrfs_feature_attr_group is not removed.
 > 
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+
+Thanks,
+Qu
+> ---
+>   fs/btrfs/sysfs.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch that
-> you can pull into your tree to get it:
-> 
-> [...]
-
-Here is the summary with links:
-  - [512/606] platform/chrome: cros_ec: Convert to i2c's .probe_new()
-    https://git.kernel.org/chrome-platform/c/f9e510dc92df
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
+> index 699b54b3acaae0b..947125f2ceaaf96 100644
+> --- a/fs/btrfs/sysfs.c
+> +++ b/fs/btrfs/sysfs.c
+> @@ -2322,7 +2322,7 @@ int __init btrfs_init_sysfs(void)
+>   #ifdef CONFIG_BTRFS_DEBUG
+>   	ret = sysfs_create_group(&btrfs_kset->kobj, &btrfs_debug_feature_attr_group);
+>   	if (ret)
+> -		goto out2;
+> +		goto out_remove_group;
+>   #endif
+>   
+>   	return 0;
