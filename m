@@ -2,113 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5746310C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0CA6310CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Nov 2022 21:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbiKSUix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 15:38:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S233943AbiKSUje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 15:39:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiKSUit (ORCPT
+        with ESMTP id S234820AbiKSUjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 15:38:49 -0500
+        Sat, 19 Nov 2022 15:39:17 -0500
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC68912D03;
-        Sat, 19 Nov 2022 12:38:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE4513CCC;
+        Sat, 19 Nov 2022 12:39:12 -0800 (PST)
 Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id E197BD0408;
-        Sat, 19 Nov 2022 20:38:40 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 6572AD05D1;
+        Sat, 19 Nov 2022 20:38:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1668890321; bh=tuVtU4q2uIOJEKAiMSeRAHcThbYyr1bOieP4LnPQWEg=;
-        h=From:To:Cc:Subject:Date;
-        b=g7aTFsx+jmbtYFuwicxmcW9ND8o1hIlSA/lBTCtHa/qEy9vJmvEfHQReb6JhiA4fT
-         d+Z7Aas/lDETWdFYAN6XIAL9BDJ2sCKFHBHYzTu9sdFY6GQOBGUTt3A30SQjptyRdv
-         OJxn84sBtI3qxgcYNGAU63K4wFLW9peBhtHesvLM=
+        t=1668890321; bh=pDMbbV3tKdaZDTFgXz4iSvwSeCqGO4wqmQzHXYEVKk8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=r8SYhJirVHQ0uqckZXCxJ4wl862RgJyWRlfjRBKvGy5dtIb5DLK4fOV6UxeRBadpK
+         MOUXYy1DgX8NTZqEEtLZFh7MwX/sjLMUkEBtOR1yT/bqy4KeJM4Oqxg2mfzkxy3HJ5
+         NJ1q5abSrFHSsDauHeoKDuqPCfsmziFefcrym2uU=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Tony Luck <tony.luck@intel.com>, devicetree@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/9] Add a bunch of msm8953 dts files
-Date:   Sat, 19 Nov 2022 21:37:41 +0100
-Message-Id: <20221119203758.888207-1-luca@z3ntu.xyz>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/9] dt-bindings: arm: qcom: document new msm8953-family devices
+Date:   Sat, 19 Nov 2022 21:37:42 +0100
+Message-Id: <20221119203758.888207-2-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221119203758.888207-1-luca@z3ntu.xyz>
+References: <20221119203758.888207-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following patches add a bunch of msm8953-based devices that have
-been created in the msm8953-mainline[0] repository, which includes
-Snapdragon 450 (SDM450), Snapdragon 625 (msm8953) and Snapdragon 632
-(SDM632) devices.
-The dts files are trimmed down to what is currently supported upstream,
-as a way to also minimizing diff for further patches.
+Document the various phones added in upcoming patches. Also allow
+qcom,msm-id and qcom,board-id for msm8953 and sdm450.
 
-I've tried my best in keeping all the relevant author tags based on the
-git info I could find there.
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes in v2:
+* Add msm8953 & sdm450 to qcom,board-id exception list
 
-*This series depends on pmi8950.dtsi patches[1]*
+ .../devicetree/bindings/arm/qcom.yaml         | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-[0] https://github.com/msm8953-mainline/linux
-[1] https://lore.kernel.org/linux-arm-msm/20221101161801.1058969-2-luca@z3ntu.xyz/
-
-Adam Skladowski (1):
-  arm64: dts: qcom: msm8953: Add device tree for Xiaomi Redmi Note 4X
-
-Alejandro Tafalla (1):
-  arm64: dts: qcom: msm8953: Add device tree for Xiaomi Mi A2 Lite
-
-Danila Tikhonov (1):
-  arm64: dts: qcom: msm8953: Add device tree for Xiaomi Mi A1
-
-Eugene Lepshy (1):
-  arm64: dts: qcom: msm8953: Add device tree for Xiaomi Redmi 5 Plus
-
-Gabriela David (1):
-  arm64: dts: qcom: sdm632: Add device tree for Motorola G7 Power
-
-Julian Braha (1):
-  arm64: dts: qcom: sdm450: Add device tree for Motorola Moto G6
-
-Luca Weiss (2):
-  dt-bindings: arm: qcom: document new msm8953-family devices
-  arm64: dts: qcom: msm8953: Adjust reserved-memory nodes
-
-Sireesh Kodali (1):
-  arm64: dts: qcom: msm8953: Add device tree for Motorola G5 Plus
-
- .../devicetree/bindings/arm/qcom.yaml         |  19 +
- arch/arm64/boot/dts/qcom/Makefile             |   7 +
- .../boot/dts/qcom/msm8953-motorola-potter.dts | 305 +++++++++++++++
- .../boot/dts/qcom/msm8953-xiaomi-daisy.dts    | 319 ++++++++++++++++
- .../boot/dts/qcom/msm8953-xiaomi-mido.dts     | 329 ++++++++++++++++
- .../boot/dts/qcom/msm8953-xiaomi-tissot.dts   | 319 ++++++++++++++++
- .../boot/dts/qcom/msm8953-xiaomi-vince.dts    | 358 ++++++++++++++++++
- arch/arm64/boot/dts/qcom/msm8953.dtsi         |  24 +-
- .../boot/dts/qcom/sdm450-motorola-ali.dts     | 250 ++++++++++++
- .../boot/dts/qcom/sdm632-motorola-ocean.dts   | 291 ++++++++++++++
- 10 files changed, 2209 insertions(+), 12 deletions(-)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8953-motorola-potter.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-daisy.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-mido.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sdm632-motorola-ocean.dts
-
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 463509f0f23a..0f6192f8d888 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -35,6 +35,7 @@ description: |
+         mdm9615
+         msm8226
+         msm8916
++        msm8953
+         msm8974
+         msm8992
+         msm8994
+@@ -50,6 +51,7 @@ description: |
+         sc8180x
+         sc8280xp
+         sda660
++        sdm450
+         sdm630
+         sdm632
+         sdm636
+@@ -199,6 +201,15 @@ properties:
+           - const: qcom,msm8916-v1-qrd/9-v1
+           - const: qcom,msm8916
+ 
++      - items:
++          - enum:
++              - motorola,potter
++              - xiaomi,daisy
++              - xiaomi,mido
++              - xiaomi,tissot
++              - xiaomi,vince
++          - const: qcom,msm8953
++
+       - items:
+           - enum:
+               - lg,bullhead
+@@ -669,6 +680,11 @@ properties:
+               - qcom,sc8280xp-qrd
+           - const: qcom,sc8280xp
+ 
++      - items:
++          - enum:
++              - motorola,ali
++          - const: qcom,sdm450
++
+       - items:
+           - enum:
+               - sony,discovery-row
+@@ -685,6 +701,7 @@ properties:
+       - items:
+           - enum:
+               - fairphone,fp3
++              - motorola,ocean
+           - const: qcom,sdm632
+ 
+       - items:
+@@ -896,10 +913,12 @@ allOf:
+               - qcom,apq8026
+               - qcom,apq8094
+               - qcom,apq8096
++              - qcom,msm8953
+               - qcom,msm8992
+               - qcom,msm8994
+               - qcom,msm8996
+               - qcom,msm8998
++              - qcom,sdm450
+               - qcom,sdm630
+               - qcom,sdm632
+               - qcom,sdm845
 -- 
 2.38.1
 
