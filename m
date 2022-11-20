@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F1C631547
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 17:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9318B63154A
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 17:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiKTQxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 11:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
+        id S229724AbiKTQ6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 11:58:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKTQxW (ORCPT
+        with ESMTP id S229517AbiKTQ56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 11:53:22 -0500
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2C72E9EB;
-        Sun, 20 Nov 2022 08:53:22 -0800 (PST)
-Received: by mail-ot1-f54.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so6065267otl.7;
-        Sun, 20 Nov 2022 08:53:22 -0800 (PST)
+        Sun, 20 Nov 2022 11:57:58 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1332C178BD
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 08:57:58 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id w4so6109586qts.0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 08:57:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n+VIo3bXwJL7SCkFUqftA57rk/MTISGf9OS0PkQ53fU=;
+        b=q7rQ4P8FRSe8E4ITCTt7ygFztDEN/f4BX/t+YYivurGMIldAoMBFXKPy7YPxIK1vpD
+         kzt5k5geD3mwTOxtpmZOCoNAowgFqf0W6Qz5LVkwcOyd+02PHocQ/3dWOwT6huSlWqMh
+         pW4E/8xjXAWgJpf8qlbraXTgM7qLRm6Cqjs2fCNrxz3/VAdYw8LELhdXWzG7bckTv6fc
+         nSFwGokZN9pYj9IdFVdRn+vHlaKBESf9VqTkGBwfZME5REB7L5m3So8bc7yDJTQXUlSI
+         EUQkfVkUtELmqZahiO1HeDVGjw9v2H35+gcKSTcNV3o26K2DaqO+08TH0mw8u4c5FRGw
+         IsfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aoQ4zuyTd7evirB3DHF86QcOknBwVYfLo01LRkadhOQ=;
-        b=u0CZTlhYPZ5ckXtB/w2AhrovL27QJCgeBEjvlW4zaByxMdJbTB/vcVEKc7b3va21st
-         pyOIo01WLrqMq816N8Q1LgQwqzkH8VFL7MQUpjD23FBNPyr0HCMc+COLi57tpQa9jfIq
-         7Cnk0zz/LFHDUu4TU9s7guZM9YUDLHPfmjTMPmYrOrQ2VqjzKQzBdufHMiAhDG04yWh7
-         b7Y6/EhjRtNWhiuKVIk979WD3IExGEFGld1xFbvZjzRP5HfRe8Qy1oUALqbWFytixbqs
-         V7swzXYQKQyBnJs9oy9k4n/BLRLBJ4031AVk5efkASn1qJbEVbayweDP079yQsvxudV8
-         bmvg==
-X-Gm-Message-State: ANoB5pl9zog/Il5BR5Eypzj4A9GsAX5iYxgK8SF9kbsHb3ONQQu2nqMe
-        JGDY3xgrNm9xY3tsJnyfufdD17TIPQ==
-X-Google-Smtp-Source: AA0mqf7VoumVeOat8gcKUatjmfqniX6zO3MOiPw3zmmtuxnZ2rqYap6OXiFNILEtWXSN+2z5E8jX9A==
-X-Received: by 2002:a9d:7e9a:0:b0:66c:6096:1878 with SMTP id m26-20020a9d7e9a000000b0066c60961878mr634215otp.203.1668963201355;
-        Sun, 20 Nov 2022 08:53:21 -0800 (PST)
-Received: from robh_at_kernel.org ([2605:ef80:80f8:5cb3:df5a:23c3:86fb:15a6])
-        by smtp.gmail.com with ESMTPSA id k5-20020a056870d0c500b0014185b2b3d5sm2833328oaa.18.2022.11.20.08.53.19
+        bh=n+VIo3bXwJL7SCkFUqftA57rk/MTISGf9OS0PkQ53fU=;
+        b=sG+TBi6vm46JIgDcKiClJvacQUMynqyHkHVy4l5KA6m53dw7Wp6w9VI5ufEVOon8As
+         bsPP+VFL0wni2xgiznf/5WB6xF7d/vUhg6VGov0N1Qk592qTGEWV3DZxiF+zlGEkPByy
+         V+QZ2Eu21I1Ok5aA6Smy6UJja5gu4SGoWyPWgrKN4py29qBf+hQT0Ji22Dp+RLS2iY/E
+         euI4+rIgWv7fjTEPC3pO88KY5eZQvu40DPWdn+0TILNmH11IoniiE/cNyq5OCpjFZuSZ
+         YyeFp7GQO4xBaXGK4lMezD265aP8NnWKmx3WPdK6xazO20m8v2RN7OM+OMswuxTRY/Bo
+         YBSQ==
+X-Gm-Message-State: ANoB5pk3LJKOucciIwSWGN6lb6EDuFejJvkN54FqcTU+B6bQKd3snqOO
+        8mWUFOWJwdbOgiMrzf5rdA3qEg==
+X-Google-Smtp-Source: AA0mqf77g62bEStNLdYbkKLq1/LPs3WrGz4b2DsWAst4+5+zzDaFRf4TgscqOEnJTMYksAesFpWuhg==
+X-Received: by 2002:ac8:4545:0:b0:3a5:89c1:a4bf with SMTP id z5-20020ac84545000000b003a589c1a4bfmr14734955qtn.387.1668963477194;
+        Sun, 20 Nov 2022 08:57:57 -0800 (PST)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id h17-20020a05620a245100b006cfc1d827cbsm6766753qkn.9.2022.11.20.08.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 08:53:20 -0800 (PST)
-Received: (nullmailer pid 3191260 invoked by uid 1000);
-        Sun, 20 Nov 2022 16:53:22 -0000
-Date:   Sun, 20 Nov 2022 10:53:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>, agross@kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        andersson@kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        krzysztof.kozlowski@linaro.org, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        patches@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] dt-bindings: msm/dsi: Don't require vdds-supply on 10nm
- PHY
-Message-ID: <166896320103.3191204.6491707287483372164.robh@kernel.org>
-References: <20221116163218.42449-1-konrad.dybcio@linaro.org>
+        Sun, 20 Nov 2022 08:57:56 -0800 (PST)
+Date:   Sun, 20 Nov 2022 11:57:54 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Michael Walle <michael@walle.cc>, Mark Brown <broonie@kernel.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
+Message-ID: <Y3pcktcpTaLYlOa2@fedora>
+References: <cover.1668129763.git.william.gray@linaro.org>
+ <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
+ <5123090e11da67e57fb00984445ece2f@walle.cc>
+ <Y3ZflHI6CYfaGIbn@sirena.org.uk>
+ <bbe25d96e892e8cfd3f0da5d6755be22@walle.cc>
+ <Y3dx1rx8mXR7vRX9@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hQ+79pNt5B3VS6wu"
 Content-Disposition: inline
-In-Reply-To: <20221116163218.42449-1-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y3dx1rx8mXR7vRX9@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,15 +79,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 16 Nov 2022 17:32:18 +0100, Konrad Dybcio wrote:
-> On some SoCs (hello SM6350) vdds-supply is not wired to any smd-rpm
-> or rpmh regulator, but instead powered by the VDD_MX/mx.lvl line,
-> which is voted for in the DSI ctrl node.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
+--hQ+79pNt5B3VS6wu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Fri, Nov 18, 2022 at 11:51:50AM +0000, Mark Brown wrote:
+> On Thu, Nov 17, 2022 at 05:30:29PM +0100, Michael Walle wrote:
+> > Am 2022-11-17 17:21, schrieb Mark Brown:
+>=20
+> > > It's probably useful to provide a query function in the regmap
+> > > API for generic regmap users like this.
+>=20
+> > Now I'm confused. Last time, I've proposed that, there was push
+> > back from you:
+> > https://lore.kernel.org/linux-gpio/20210430151908.GC5981@sirena.org.uk/
+>=20
+> > That being said, I'd prefer to have such a query API :)
+>=20
+> Now we have a generic user which cares about the distinction.
+
+I plan on adding more drivers in future patch sets so I expect this to
+actually grow in users. Having a query function in the regmap API would
+be useful after all I think.
+
+Michael, if you resubmit your proposal for such a function, please CC me
+so I can be kept aware of this as well.
+
+Thanks,
+
+William Breathitt Gray
+
+--hQ+79pNt5B3VS6wu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY3pckgAKCRC1SFbKvhIj
+K3Q6APsEkODNI0xc3PzAKl8kfwwfL58JCdeUAaR/5fwN4YbBBQEA/xy6zJzu22Ik
+8QWrFewhKB6MWgSosfK9IYGe4lZUfAc=
+=atAX
+-----END PGP SIGNATURE-----
+
+--hQ+79pNt5B3VS6wu--
