@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F334631574
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F9A63157C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiKTRXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 12:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S229695AbiKTR1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 12:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiKTRXu (ORCPT
+        with ESMTP id S229491AbiKTR1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 12:23:50 -0500
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBB7764E;
-        Sun, 20 Nov 2022 09:23:49 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id m204so10482745oib.6;
-        Sun, 20 Nov 2022 09:23:49 -0800 (PST)
+        Sun, 20 Nov 2022 12:27:23 -0500
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7629C23BC0;
+        Sun, 20 Nov 2022 09:27:22 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-141ca09c2fbso11396201fac.6;
+        Sun, 20 Nov 2022 09:27:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d30jJeAxerIlzwFGGy9nfRUbZyV0z2QF3WoX1g+cHTI=;
-        b=A0HaGqBfZMoDVO5KZM1nOkqAXquPr+D6yviBmXstUz0fGqIlk1WwEp8K7Z5HCqfsfa
-         Mm5fDHHHe68+q42ryXwJMg+IPnwU9/2MGZffnXLBDzEgu5AtyZmyfDWyn11zi5rksw85
-         Qz4cbf8y704GB8CUs0jb/FUgHOyj8PusOqv4iNX+3xStD7nD9vcedqO7M4FFwnH5ipD9
-         GB5WI0Pp/PvkZ8KTdL5PJ7ckrqvB4K3eCUpf2gy/gqnU79ognrs0dgcc+ytPMCXipccl
-         DirdZFhpYGXzHlljBh4lnr3KKtqv6ET/JeNHkprYy/F/9Ie1yVGSa+wlPjKcpwY483yh
-         WqqA==
-X-Gm-Message-State: ANoB5pkRFOUZ47w3ILxvY3dpqMuyJLhhR1GnEWn+DFGQhBbCdYQIO80Q
-        O1lL5MzFlFAsNQvGJ4tcGg==
-X-Google-Smtp-Source: AA0mqf4Q6nTk2OgOV3t7s56id1kjgeA2zMG4hXa787VavOcsRaMC6AnDNNR7pIcy5f51FuSNIAWFtg==
-X-Received: by 2002:a05:6808:57:b0:359:6a8d:a3f6 with SMTP id v23-20020a056808005700b003596a8da3f6mr7589143oic.51.1668965028981;
-        Sun, 20 Nov 2022 09:23:48 -0800 (PST)
+        bh=Psr43w/KwYpCS09PSnvsr6T/BOSKuDQbf/f9YtbaYyM=;
+        b=kv2L+VxCTb8uRw2Bms2auLFSqWKY/KkyL3UIyZNXYgRAXW/DeiijEilWF7gB1HqxSE
+         poh6oCo7Fk+ptzjxf/9BQ7XMezttTBM/nV7XoopSKyDtknzynbu8/a9QQvRcI6NLYM4k
+         BzvlfoWoCifFz5rRSK3QQlgcl5Ih80QtpmBgvQAzK5JOjwQviP/AHrhj3Jf2rvA2YKYk
+         GPTDtHPiNTU3I+pTBxhl90CGQzk+KN8NrxBN6YAUwNzCB+HT4n5kSD5unS++eQN40ROQ
+         4oRnQV4UuaFLY+CeVEzX6CMZNX5/mhH3tilyqYnjNX3e8F93Vhj/MqDKbE3ZBhnWtQo6
+         mEfw==
+X-Gm-Message-State: ANoB5pl+N2jfghR12IDMY3m4xiap0DuPEQR0G0xsduNYIhGTc934mr5/
+        15n0dT6HzVs8psopXUEwiQ==
+X-Google-Smtp-Source: AA0mqf64hyvtqeROaDRbdlYaX4sITQ6nML+AL8AWNYiaz+na1pOcPZOwYnk8alXGVc31DPju9buvKg==
+X-Received: by 2002:a05:6870:3843:b0:131:db21:c62a with SMTP id z3-20020a056870384300b00131db21c62amr1251138oal.214.1668965241710;
+        Sun, 20 Nov 2022 09:27:21 -0800 (PST)
 Received: from robh_at_kernel.org ([2605:ef80:80f8:5cb3:df5a:23c3:86fb:15a6])
-        by smtp.gmail.com with ESMTPSA id m21-20020a9d6455000000b006393ea22c1csm3965138otl.16.2022.11.20.09.23.46
+        by smtp.gmail.com with ESMTPSA id t21-20020a056870f21500b0010d7242b623sm4907785oao.21.2022.11.20.09.27.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 09:23:48 -0800 (PST)
-Received: (nullmailer pid 3223594 invoked by uid 1000);
-        Sun, 20 Nov 2022 17:23:48 -0000
-Date:   Sun, 20 Nov 2022 11:23:48 -0600
+        Sun, 20 Nov 2022 09:27:21 -0800 (PST)
+Received: (nullmailer pid 3227469 invoked by uid 1000);
+        Sun, 20 Nov 2022 17:27:22 -0000
+Date:   Sun, 20 Nov 2022 11:27:22 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] dt-bindings: i2c: add loongson i2c
-Message-ID: <20221120172348.GA3217015-robh@kernel.org>
-References: <20221117075938.23379-1-zhuyinbo@loongson.cn>
- <20221117075938.23379-2-zhuyinbo@loongson.cn>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: iio: addac: add AD74115
+Message-ID: <166896524133.3227417.14306497239130014722.robh@kernel.org>
+References: <20221117080916.411766-1-cosmin.tanislav@analog.com>
+ <20221117080916.411766-2-cosmin.tanislav@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221117075938.23379-2-zhuyinbo@loongson.cn>
+In-Reply-To: <20221117080916.411766-2-cosmin.tanislav@analog.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:59:38PM +0800, Yinbo Zhu wrote:
-> Add the Loongson platform i2c binding with DT schema format using
-> json-schema.
+
+On Thu, 17 Nov 2022 10:09:15 +0200, Cosmin Tanislav wrote:
+> The AD74115H is a single-channel, software-configurable, input and
+> output device for industrial control applications. The AD74115H
+> provides a wide range of use cases, integrated on a single chip.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> These use cases include analog output, analog input, digital output,
+> digital input, resistance temperature detector (RTD), and thermocouple
+> measurement capability. The AD74115H also has an integrated HART modem.
+> 
+> A serial peripheral interface (SPI) is used to handle all communications
+> to the device, including communications with the HART modem. The digital
+> input and digital outputs can be accessed via the SPI or the
+> general-purpose input and output (GPIO) pins to support higher
+> speed data rates.
+> 
+> The device features a 16-bit, sigma-delta analog-to-digital converter
+> (ADC) and a 14-bit digital-to-analog converter (DAC).
+> The AD74115H contains a high accuracy 2.5 V on-chip reference that can
+> be used as the DAC and ADC reference.
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 > ---
->  .../bindings/i2c/loongson,ls-i2c.yaml         | 49 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
+>  .../bindings/iio/addac/adi,ad74115.yaml       | 373 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 380 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-> new file mode 100644
-> index 000000000000..275afe8c8483
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/loongson,ls-i2c.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/loongson,ls-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson I2C controller
-> +
-> +maintainers:
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,ls2k-i2c
-> +      - loongson,ls7a-i2c
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-
-> +  - "#address-cells"
-> +  - "#size-cells"
-
-You can drop these 2. i2c-controller.yaml requires them.
-
-With that,
 
 Reviewed-by: Rob Herring <robh@kernel.org>
