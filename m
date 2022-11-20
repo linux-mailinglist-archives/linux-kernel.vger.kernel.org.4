@@ -2,73 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CDB6315FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 20:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ABF6315FF
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 20:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiKTTqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 14:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
+        id S229674AbiKTTtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 14:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKTTqC (ORCPT
+        with ESMTP id S229449AbiKTTtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 14:46:02 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FC62E9D5;
-        Sun, 20 Nov 2022 11:46:00 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id j12so8817948plj.5;
-        Sun, 20 Nov 2022 11:46:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VSrs1ucQDnZEbTziL8NtM/AcshFZ2RL7pB9xrfB5Jj0=;
-        b=oTSc1ChFNecJAo5dWHcbAlgb8kGAbU8VfEs1r9JKZ6zKaMj986xKhBB4OuSUfC6n+a
-         wdpN30UEj5bKTrm61MyPc9JWmRhKYomiqKmklXYiT7FbykqRWep5C4MgOSVn9of7/1tE
-         j5nZZRX4TP52N8ryTpwD9To46lv2g8xpmeHTKy9VNNrlbTlX10g9sMOYxc1WH3cdzT1v
-         LaLh9Z6fUTUQ21r9q+BiqvPd7rHzFEQ/GxAB8v8zvEWkvVH65T6gwHVpwhIP0ebVSaxr
-         Qz2Xk2rUJoOESEUj39hWza/e4G5EE8KrkAYSBhW0W/kCCW0d1mCYGKnpwhuvOe7CUd8T
-         JGlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VSrs1ucQDnZEbTziL8NtM/AcshFZ2RL7pB9xrfB5Jj0=;
-        b=K8oal4hz4FSZHvKt23AXFOxyZPTxrfBO60i7LgDE24zPKo2mSeaapREvjcBU9fu/rQ
-         wp6Q+US8kshIYQFZ2yKdeduiorcg8YXQYVYoEoV5RMJlC65ikITzU1nLas6QtqXnbDXJ
-         sZyT8yPFcVZ4XZig/zxtEhYvQPEuOSwbIdtkgfWqe5N3W9fOvgcAvRgZjOVkVHFQnHEp
-         b7nsWJvFJhsAUFTSqEQKdcTr1cbL6JSGeEL+wuvxcm92LS7fOcG2uddA/PBkOu52S67P
-         hvzRGhN2ym8gFcHLvbJvQLDziHOP/nxblSTytg8cCfB3zTxR3UAB7L/iR6oZrWJlCHnV
-         OcNQ==
-X-Gm-Message-State: ANoB5pnsPDz8QYUpCmM4yw6BvENDS+oQxq5vYWEHNHQGx+ToEfj6yH+2
-        AxamJ4npxI1PebQ/nz7dh2E=
-X-Google-Smtp-Source: AA0mqf7W2fgxhtALotAWVantX1jA210Z6dfBexYTytSusvrPGALz6gNVmHYRxiBjo6pQZ6TwoH6rmA==
-X-Received: by 2002:a17:902:d38c:b0:188:4c74:e1f1 with SMTP id e12-20020a170902d38c00b001884c74e1f1mr8519036pld.98.1668973560184;
-        Sun, 20 Nov 2022 11:46:00 -0800 (PST)
-Received: from localhost ([103.4.222.252])
-        by smtp.gmail.com with ESMTPSA id x11-20020a170902ec8b00b001869d71228bsm7954040plg.170.2022.11.20.11.45.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 11:45:59 -0800 (PST)
-Date:   Mon, 21 Nov 2022 01:15:48 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     David Vernet <void@manifault.com>
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, yhs@fb.com, song@kernel.org, sdf@google.com,
-        john.fastabend@gmail.com, haoluo@google.com, jolsa@kernel.org,
-        kpsingh@kernel.org, tj@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH bpf-next v9 2/4] bpf: Allow trusted pointers to be passed
- to KF_TRUSTED_ARGS kfuncs
-Message-ID: <20221120194548.g76fytbyxhi7xqcu@apollo>
-References: <20221120051004.3605026-1-void@manifault.com>
- <20221120051004.3605026-3-void@manifault.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Sun, 20 Nov 2022 14:49:15 -0500
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com (mail-gv0che01on2101.outbound.protection.outlook.com [40.107.23.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E1922B25;
+        Sun, 20 Nov 2022 11:49:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RkfVyMhtu+r8rJ92BjE9wBnl4Kul8IfatNu7Av45nH9+g27x1AmvcCcY5vFu540pKlXdVzIuWJuk+WwTUKcdSlB0lubD3ghM3S1/hK0gVeT3yST11ou4BevJxuqSA0JY/fdDWEbcQ6znrY2Z80lwFIH/zK2uaajdI85wJHWl98Z/vO1IdjmJPcJIPQENX/GB2C1PfyuBnDyrQGos548sxD3aMV+gLuzyojAyfvGJ5URRb4obYtocQoD0D+QDEdmIUiYcAQTGoaJGjD5gXnGlIRhLP1H4bkD94KTZvzwvdulIEn/gxvj/ROtrWHRqZiELKVUVtVMwoGncT+W36nzpzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9dYXGtC5DiZsJTGl+BAeaSmLg5gsMqUWjk1TceT0Fos=;
+ b=WzQ34QdhbBXPO7geqMSqtcsQS1yUiTyPImecc1zxv3jRPW7hL+9frc7k7Xac+pb//TdiLg24WfBK+v5VTMwOWFLewQtoimP0mWEKFWZKrwBSaWwpjLfYnbmU1iSsC3esxjk4uRoPneEhS3KsjzX13SPIaO0PrXWikNafSn0CMehh8BM98cyAPnvurYatuWbx/zOSJl7SKz/3+ivd23HRnUUrgbyYrrMVoMdmGDj2goiZ2jtjxRmZeHZG3uQWU13j6OdzEfwvi2PGBO3O8vN1h+sazUNZCvnHCG+uVphXl87kEJGbzDcL+wZqovyPZG3AN0NEZx8CApRBQ/cBl7UQ9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=skidata.com; dmarc=pass action=none header.from=skidata.com;
+ dkim=pass header.d=skidata.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skidata.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9dYXGtC5DiZsJTGl+BAeaSmLg5gsMqUWjk1TceT0Fos=;
+ b=vQMrIQYm5R/gUsSyFudlGB0GDIgC70vYFQW1OGVHPe8uuboIxrruZvUdbMlDrPfeQADQ64ZvRq9rM3WpNvm+3JU+vzlsawxziHYj8t2VJjh7agFtaI7vDCx36RkxhYcQCm2IGq5+WK8Dkp2E4HPApxWlrXZDxgtZ/0QAX+DtvsO0q9bFX83rNnPtouuYkSo1vrFPR1YNLGGBdv9NCIAjFI4IEiAJpu7Wxv5Am/io7K6DCWPHa3XlHEvbLTvpLZwwss81vR4g9I59hFvf74FLu5Lj6KMPAs488DUS/+VYg7TbBIUxq1XnvUv/8hz/L26z6UaxSlzPVqbL9gmP1mZN3w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=skidata.com;
+Received: from GV0P278MB0211.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:30::7) by
+ ZR0P278MB0123.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:19::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5834.15; Sun, 20 Nov 2022 19:49:10 +0000
+Received: from GV0P278MB0211.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::1c71:4a76:792c:3b06]) by GV0P278MB0211.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::1c71:4a76:792c:3b06%6]) with mapi id 15.20.5834.015; Sun, 20 Nov 2022
+ 19:49:10 +0000
+Date:   Sun, 20 Nov 2022 20:49:07 +0100
+From:   Richard Leitner <richard.leitner@skidata.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 572/606] usb: usb251xb: Convert to i2c's .probe_new()
+Message-ID: <Y3qEs6OkpgiJ5M7B@skidata.com>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-573-uwe@kleine-koenig.org>
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221120051004.3605026-3-void@manifault.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221118224540.619276-573-uwe@kleine-koenig.org>
+X-ClientProxiedBy: FR2P281CA0148.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:98::6) To GV0P278MB0211.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:710:30::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV0P278MB0211:EE_|ZR0P278MB0123:EE_
+X-MS-Office365-Filtering-Correlation-Id: 567bf0f2-e707-4156-bfe2-08dacb304aed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Twb3ubK+9qgk8Q+omNgWsWd8A3Cx8s3RujNC3OAw7ycC4hGtf8eaSMLhlE10zITIqMA9gW5o5u8sSWr/cA/Fyfms2x3rhtnutMYBNVtojf8gvNUoI+7VpLwaemPkl35oCkPDB0pyNovn9WK4jQR6lHq+WCLkoR0RkVEkLfOhQxqsF+r1AY8pOqhdVSXTwPStPtbgZXz6hITfizPEoJK1RRTqXM9/+VuOhVlU4G2Bpymdf1CHajaTMi3mLBzr2wE4l1hbKfP4x13L87Hfe8xhC6kKagbHnZUFVjEq97bX/oJfvNQxO3R85GWtfwHyPetIcnnJGTMeETNlcT0e0r+0YTvXtXfaQEKp8pKVhZWCbNqCzWa1mHA/p3MqPq1a4Kqu8aopmeoDJfOKIE7i7rguDnHKfPJEnwK5cWm0LflJM7f7gHz2A7KtNmu5oXzu2b2Xxk0cOsGMPJOT6oiZEdlhjNemX6zROYj++ofxkY93FLuZ6yXWButK/d9ecTIqm06xK7vccAhxCxIt5oNckWEVUqV5ysBtsdzT9AuEHltrpWKaP8tHL+9M+KOfXlf2VB6lb4rutgbi/zaeuRg0BIoGnUx6rx0ihTaT6KH957YA+pNlDYngDijzlcb2KjI6Tqu0nKk4f8Im5aE/5wGEHJlvyN3PhuNG1i/MIBP6jynXqsE7F4xi2W585I0g08Z5wVJX
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV0P278MB0211.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39840400004)(346002)(396003)(366004)(451199015)(36756003)(558084003)(86362001)(26005)(38100700002)(186003)(6512007)(44832011)(2906002)(2616005)(54906003)(6916009)(7416002)(5660300002)(6506007)(8936002)(6666004)(6486002)(478600001)(66476007)(41300700001)(316002)(66556008)(66946007)(4326008)(8676002)(142923001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SmQ4U0Q0cEN2Vmk1WVREKzFOUEVtbnhlcjdDMzBrVk81aklJcHhRWnBqRk1U?=
+ =?utf-8?B?cGNCTEFwWjRHZXpQU2dYa0Z0R2o3NW5mR05ucmcvMTNuck1uUERIa0E3RE9u?=
+ =?utf-8?B?ejFsZkJvbm9tbDFJcUk1SWlPK3o1VUExWXRWRGpJM0FITUJYY0tSNHhhUTlD?=
+ =?utf-8?B?dmZKZ1kvYm4xVll6L0lNOWVqZ2VjZ0ZWV0NRTG5oR2JSWVo4TVlNUTByazBT?=
+ =?utf-8?B?eDBlUUt6SkFTSTNwZUVjS0ovZEI4R1ZPR3lFWDg5Rzhoem9ScVVCM1B4VnJh?=
+ =?utf-8?B?eWx3bCtYblBqSHNhbHdvcHZ1MCtkR2V4RFNCSW5iLzRyZmFDTVZnUXVRTlpK?=
+ =?utf-8?B?K2RZQmhwVjZaMEovaFhZRy9IUGd4OEY5SjRaWHg2eFFCc0xBQ3NNbFljZTNa?=
+ =?utf-8?B?MkQyQk9FUXhYdDZ1dW03M3dtNmhGektUSkx5V1NJU2phRStrVHArbGtUZUFZ?=
+ =?utf-8?B?Yk9PVWhja0tSdVQrQVBWR1J3WHJRYklqb0ZqaVM0U21LRU55UDBtcy8vNmFI?=
+ =?utf-8?B?VndRcWtLQklRYldRVUxNc1FUdXo1NThZYjAxNnM4QmdSbXRHNFhSNFhGczVL?=
+ =?utf-8?B?N1RtWHU0U1pDcGtaVVBucGJaZDJLNHJEcXQ5a3d3VlRkTDBCeGxzclNFL2lK?=
+ =?utf-8?B?Q1BvcDA0K2dORlJPZ2J0NnJuS3h4MlhpV0kwMFpsQ1o3Q2tMQ1hwUUpObnZk?=
+ =?utf-8?B?anYzWlNTVHlYNEhadlhvK2RKZXhUSGszM0dlQzUwZ1dRSXZmWGJ6NHJFdmcy?=
+ =?utf-8?B?SENqNHZHdGZqUXVJZHc4WS9hOWpGYnZ3bUY4SndFRlJFWlFEY2hCYzJuckdT?=
+ =?utf-8?B?Nzk2SjV4eUVSN0V2eW5HajgyS1FvQ01TcTV0QmFYMTVVSVIrRGlLbmNZQ2hE?=
+ =?utf-8?B?dFVFODFCZDZjVy9IM3FZbVVkUmY0MzRNNFhyWlI1WHR0RnNoQ005a1g5UzNO?=
+ =?utf-8?B?L3doYlV2TmgrRE5xVHE4QVJnVWhKYjg0VFhNYUpmSHVOOFpBWCt1VlhGN0N4?=
+ =?utf-8?B?eEs0ZlNPNDNoT3NoSmFuUG5iaXNaYll6YThmSldGSm9GMlJ0N2p5YVdDWEll?=
+ =?utf-8?B?T0hBeCs3TGRjUGN2b2tWOXJPamZEL09SanVadmlxNWNEcmlncDNFbEtYbDhE?=
+ =?utf-8?B?bVpicDh5MUZnV09HbTdjaU4vM2FHRkNHYVhXWGpsZkNpampHeEZoaHoyekFM?=
+ =?utf-8?B?NnA3UjJtT0FWYlRKMDRLZDl3dFR6Tm1QK0VnSlZCNm00WDQvTXBxdWlrWmIw?=
+ =?utf-8?B?V2ZzNjBMS1IwUlZyOFRyS1VOajlzc2lmb2JJbXhQZUIvYU14ZHlma0owNFk2?=
+ =?utf-8?B?Q0pGMWluQTlLcTZReGJKSnJ6L3J2aW9BZ1hCQis1OWxYbi93TXRJY0JzOXhK?=
+ =?utf-8?B?Qm1NODBJWFFGSWMzazBYT05QcnNOS2lOWXl1QWZUREVzYUt5V3VGVHdleVh4?=
+ =?utf-8?B?UnF2UmdGUlQ2OFlaNjZWdzB2WGtOQ3pOSURnaENORlJpU1Myc0U3dUZTUVlp?=
+ =?utf-8?B?TTJrdEF2emVDckgvTU4xUzJDdkRSbHdHeHNJTUszSDNTeG9wSTR5UTdsUHZh?=
+ =?utf-8?B?Y3hEQklBSUpyTFRwSDdMSDdGUGI4WWxkS2RDcitOUHRHWEFmeVV6OTdBMDZx?=
+ =?utf-8?B?V09TVFBLaGJhcDU4c1Qvc00rZHVmRXNVa3pCRzlkR3dHaytNSHZjejUzV1Rk?=
+ =?utf-8?B?Z3pnZmtWR0tVWnViRDFuLzRaNERlaGVsdk5MNDRHU2Z0aFlOZDc4V3dEUUN0?=
+ =?utf-8?B?RzRITWc1QTJSV0FlR0N3TGZTelJHL0JNSmNvSHMzS3BJK0hmaDVhUGhORGND?=
+ =?utf-8?B?UFc3TmlVN0FkcFppc21WWkJZRndJVDRqblBIdTdZem1haXVXa0xZNXpYSzNY?=
+ =?utf-8?B?eFR2SGNLNElOMmRDVGg1SjZBS0ZXdEcyR1d0dHI0Q0tNZUZ2dEVmd0lsM25L?=
+ =?utf-8?B?VnVIRkRXSlNYMnVWeTJFcUR3bGZ2UmxDbi9ZY1VhamlET2FzaWJZVU1Ba3cx?=
+ =?utf-8?B?WG5wdGxjRmtraTQyVXFYVS9BcG0rbXI5aVBtUjJVMnQxc1JXN2Q3bHhDdG1s?=
+ =?utf-8?B?V2ZsRE10WEZMVmZzVm9HMi9tY3dhMmpTTXhvZU4yM2I3Nlo0REdxd1lDejdS?=
+ =?utf-8?B?WTNQclhiOVdZYXpuRjNRaXdrNXdvS0RIR1piM2FaaHY3YmlHSVpVUGR0bTYw?=
+ =?utf-8?B?TFE9PQ==?=
+X-OriginatorOrg: skidata.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 567bf0f2-e707-4156-bfe2-08dacb304aed
+X-MS-Exchange-CrossTenant-AuthSource: GV0P278MB0211.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2022 19:49:10.2935
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e5733095-4425-4f08-b6ba-487b9a46a425
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UkiqTbKM+IMcOtwtlCvQ9kyyHbY1gEfre+k3QW//+Gzf5jLzChIWjby7TemhNC/MKxSCH6Fi04n00nCHF4Uuf3TgL5Rec/tVwoJMnM6Jey8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0123
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,214 +131,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 10:40:02AM IST, David Vernet wrote:
-> Kfuncs currently support specifying the KF_TRUSTED_ARGS flag to signal
-> to the verifier that it should enforce that a BPF program passes it a
-> "safe", trusted pointer. Currently, "safe" means that the pointer is
-> either PTR_TO_CTX, or is refcounted. There may be cases, however, where
-> the kernel passes a BPF program a safe / trusted pointer to an object
-> that the BPF program wishes to use as a kptr, but because the object
-> does not yet have a ref_obj_id from the perspective of the verifier, the
-> program would be unable to pass it to a KF_ACQUIRE | KF_TRUSTED_ARGS
-> kfunc.
->
-> The solution is to expand the set of pointers that are considered
-> trusted according to KF_TRUSTED_ARGS, so that programs can invoke kfuncs
-> with these pointers without getting rejected by the verifier.
->
-> There is already a PTR_UNTRUSTED flag that is set in some scenarios,
-> such as when a BPF program reads a kptr directly from a map
-> without performing a bpf_kptr_xchg() call. These pointers of course can
-> and should be rejected by the verifier. Unfortunately, however,
-> PTR_UNTRUSTED does not cover all the cases for safety that need to
-> be addressed to adequately protect kfuncs. Specifically, pointers
-> obtained by a BPF program "walking" a struct are _not_ considered
-> PTR_UNTRUSTED according to BPF. For example, say that we were to add a
-> kfunc called bpf_task_acquire(), with KF_ACQUIRE | KF_TRUSTED_ARGS, to
-> acquire a struct task_struct *. If we only used PTR_UNTRUSTED to signal
-> that a task was unsafe to pass to a kfunc, the verifier would mistakenly
-> allow the following unsafe BPF program to be loaded:
->
-> SEC("tp_btf/task_newtask")
-> int BPF_PROG(unsafe_acquire_task,
->              struct task_struct *task,
->              u64 clone_flags)
-> {
->         struct task_struct *acquired, *nested;
->
->         nested = task->last_wakee;
->
->         /* Would not be rejected by the verifier. */
->         acquired = bpf_task_acquire(nested);
->         if (!acquired)
->                 return 0;
->
->         bpf_task_release(acquired);
->         return 0;
-> }
->
-> To address this, this patch defines a new type flag called PTR_TRUSTED
-> which tracks whether a PTR_TO_BTF_ID pointer is safe to pass to a
-> KF_TRUSTED_ARGS kfunc or a BPF helper function. PTR_TRUSTED pointers are
-> passed directly from the kernel as a tracepoint or struct_ops callback
-> argument. Any nested pointer that is obtained from walking a PTR_TRUSTED
-> pointer is no longer PTR_TRUSTED. From the example above, the struct
-> task_struct *task argument is PTR_TRUSTED, but the 'nested' pointer
-> obtained from 'task->last_wakee' is not PTR_TRUSTED.
->
-> A subsequent patch will add kfuncs for storing a task kfunc as a kptr,
-> and then another patch will add selftests to validate.
->
-> Signed-off-by: David Vernet <void@manifault.com>
-> ---
+On Fri, Nov 18, 2022 at 11:45:06PM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
 
-Sorry that I couldn't look at it earlier.
+Acked-by: Richard Leitner <richard.leitner@skidata.com>
 
-> [...]
-> @@ -5884,8 +5889,18 @@ static const struct bpf_reg_types scalar_types = { .types = { SCALAR_VALUE } };
->  static const struct bpf_reg_types context_types = { .types = { PTR_TO_CTX } };
->  static const struct bpf_reg_types ringbuf_mem_types = { .types = { PTR_TO_MEM | MEM_RINGBUF } };
->  static const struct bpf_reg_types const_map_ptr_types = { .types = { CONST_PTR_TO_MAP } };
-> -static const struct bpf_reg_types btf_ptr_types = { .types = { PTR_TO_BTF_ID } };
-> -static const struct bpf_reg_types percpu_btf_ptr_types = { .types = { PTR_TO_BTF_ID | MEM_PERCPU } };
-> +static const struct bpf_reg_types btf_ptr_types = {
-> +	.types = {
-> +		PTR_TO_BTF_ID,
-> +		PTR_TO_BTF_ID | PTR_TRUSTED,
-> +	},
-> +};
-> +static const struct bpf_reg_types percpu_btf_ptr_types = {
-> +	.types = {
-> +		PTR_TO_BTF_ID | MEM_PERCPU,
-> +		PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED,
-
-Where is PTR_TRUSTED set for MEM_PERCPU?
-
-> +	}
-> +};
->  static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
->  static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
->  static const struct bpf_reg_types const_str_ptr_types = { .types = { PTR_TO_MAP_VALUE } };
-> @@ -5973,7 +5988,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
->  	return -EACCES;
->
->  found:
-> -	if (reg->type == PTR_TO_BTF_ID) {
-> +	if (reg->type == PTR_TO_BTF_ID || reg->type & PTR_TRUSTED) {
-
-Now, earlier MEM_ALLOC was supposed to not enter this branch. If your patch
-allows MEM_ALLOC | PTR_TRUSTED (but I don't think it does), it will enter this
-branch. I think it is better to just be explicit and say PTR_TO_BTF_ID ||
-PTR_TO_BTF_ID | PTR_TRUSTED.
-
->  		/* For bpf_sk_release, it needs to match against first member
->  		 * 'struct sock_common', hence make an exception for it. This
->  		 * allows bpf_sk_release to work for multiple socket types.
-> @@ -6055,6 +6070,8 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
->  	 */
->  	case PTR_TO_BTF_ID:
->  	case PTR_TO_BTF_ID | MEM_ALLOC:
-> +	case PTR_TO_BTF_ID | PTR_TRUSTED:
-> +	case PTR_TO_BTF_ID | MEM_ALLOC | PTR_TRUSTED:
-
-This and the one below:
-
-> @@ -8366,6 +8402,7 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
->  		ptr = reg->map_ptr;
->  		break;
->  	case PTR_TO_BTF_ID | MEM_ALLOC:
-> +	case PTR_TO_BTF_ID | MEM_ALLOC | PTR_TRUSTED:
-
-I think this will never be set, based on my reading of the code.
-Is the case with MEM_ALLOC | PTR_TRUSTED ever possible?
-And if this is needed here, why not update btf_struct_access?
-And KF_ARG_PTR_TO_ALLOC_BTF_ID is not updated either?
-Let me know if I missed something.
-
->  		/* When referenced PTR_TO_BTF_ID is passed to release function,
->  		 * it's fixed offset must be 0.	In the other cases, fixed offset
->  		 * can be non-zero.
-> @@ -7939,6 +7956,25 @@ static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
->  	return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
->  }
->
-> +static bool is_trusted_reg(const struct bpf_reg_state *reg)
-> +{
-> +	/* A referenced register is always trusted. */
-> +	if (reg->ref_obj_id)
-> +		return true;
-> +
-> +	/* If a register is not referenced, it is trusted if it has either the
-> +	 * MEM_ALLOC or PTR_TRUSTED type modifiers, and no others. Some of the
-> +	 * other type modifiers may be safe, but we elect to take an opt-in
-> +	 * approach here as some (e.g. PTR_UNTRUSTED and PTR_MAYBE_NULL) are
-> +	 * not.
-> +	 *
-> +	 * Eventually, we should make PTR_TRUSTED the single source of truth
-> +	 * for whether a register is trusted.
-> +	 */
-> +	return type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS &&
-> +	       !bpf_type_has_unsafe_modifiers(reg->type);
-> +}
-> +
->  static bool __kfunc_param_match_suffix(const struct btf *btf,
->  				       const struct btf_param *arg,
->  				       const char *suffix)
-> @@ -8220,7 +8256,7 @@ static int process_kf_arg_ptr_to_btf_id(struct bpf_verifier_env *env,
->  	const char *reg_ref_tname;
->  	u32 reg_ref_id;
->
-> -	if (reg->type == PTR_TO_BTF_ID) {
-> +	if (base_type(reg->type) == PTR_TO_BTF_ID) {
->  		reg_btf = reg->btf;
->  		reg_ref_id = reg->btf_id;
->  	} else {
->  		ptr = reg->btf;
->  		break;
->  	default:
-> @@ -8596,8 +8633,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  		case KF_ARG_PTR_TO_BTF_ID:
->  			if (!is_kfunc_trusted_args(meta))
->  				break;
-> -			if (!reg->ref_obj_id) {
-> -				verbose(env, "R%d must be referenced\n", regno);
-> +
-> +			if (!is_trusted_reg(reg)) {
-> +				verbose(env, "R%d must be referenced or trusted\n", regno);
->  				return -EINVAL;
->  			}
->  			fallthrough;
-> @@ -8702,9 +8740,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			break;
->  		case KF_ARG_PTR_TO_BTF_ID:
->  			/* Only base_type is checked, further checks are done here */
-> -			if (reg->type != PTR_TO_BTF_ID &&
-> -			    (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
-> -				verbose(env, "arg#%d expected pointer to btf or socket\n", i);
-> +			if ((base_type(reg->type) != PTR_TO_BTF_ID ||
-> +			     bpf_type_has_unsafe_modifiers(reg->type)) &&
-> +			    !reg2btf_ids[base_type(reg->type)]) {
-> +				verbose(env, "arg#%d is %s ", i, reg_type_str(env, reg->type));
-> +				verbose(env, "expected %s or socket\n",
-> +					reg_type_str(env, base_type(reg->type) |
-> +							  (type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS)));
->  				return -EINVAL;
->  			}
->  			ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i);
-> @@ -14713,6 +14755,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
->  			break;
->  		case PTR_TO_BTF_ID:
->  		case PTR_TO_BTF_ID | PTR_UNTRUSTED:
-> +		case PTR_TO_BTF_ID | PTR_TRUSTED:
->  		/* PTR_TO_BTF_ID | MEM_ALLOC always has a valid lifetime, unlike
->  		 * PTR_TO_BTF_ID, and an active ref_obj_id, but the same cannot
->  		 * be said once it is marked PTR_UNTRUSTED, hence we must handle
-> @@ -14720,6 +14763,8 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
->  		 * for this case.
->  		 */
->  		case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
-> +		case PTR_TO_BTF_ID | PTR_UNTRUSTED | PTR_TRUSTED:
-
-I feel this is confusing. What do we mean with PTR_UNTRUSTED | PTR_TRUSTED?
-
-> +		case PTR_TO_BTF_ID | PTR_UNTRUSTED | MEM_ALLOC | PTR_TRUSTED:
+regards;rl
