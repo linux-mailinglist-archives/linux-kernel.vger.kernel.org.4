@@ -2,99 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4499363149F
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 15:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCF56314A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 15:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiKTOOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 09:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S229699AbiKTORr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 09:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKTOOg (ORCPT
+        with ESMTP id S229711AbiKTORo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 09:14:36 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694361F9FE;
-        Sun, 20 Nov 2022 06:14:35 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id z6so5931718qtv.5;
-        Sun, 20 Nov 2022 06:14:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JRurPD3dxAgJDwueyUw726M/HmNgn8rlVg8EEi0jmK4=;
-        b=b7//zC14ynpX3J+/pUn58m3+or6w52NB8az22w1gs4RFL3PFs6yhFZhc1BU9NryZ/Q
-         zLKGX4p+z570YgjJgH6wTHHGOAmDumfDoe50autvOooPJQN9rGIGcoMfVIjCn6L2ydSl
-         22ebXR3EBExfH1mnEDPJzT/qPSDgSUvu7WMbPworU9ba0dLFp15VjKOy3eOosFm8NkQ1
-         M7+nXkX4IxB+J1FnfQXtb9td+R0p3bZUG78vcokiTiWdI7tIngbR4+c8ioOBg2S6ia/z
-         DojD+nKlGNBfYeEUhsaxn8RnO03Vfxv9D9e1+RQxdMUEPnxTCwwmdUmXJPHVL8B4HeYD
-         +GVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JRurPD3dxAgJDwueyUw726M/HmNgn8rlVg8EEi0jmK4=;
-        b=g/w+2KiJwVt5W0lZKc5Q2jegZu2s499OhImfrtGo4wBKoTJl/+8iIYfVaJrY9L36+5
-         F3nm23DsyUe2k2G11NsKKVd/YgOJ1DA8C1jIwgSj+YF4WKKuHirn4I++F202KWOB36ps
-         6tKbyZ4v5Bw/a6eD+3G+UxmpE5hqBFBBjug41of034voTkH33MTQP7PM+uIaiGz0Il+q
-         xakHdpituOBPIbDtc+l0UGgD0ZPR9WPEuIfcLdJTKCweml+tREOnxUn2xvBQKaWPAdXr
-         ry/mrx5ETOTBRrkxyVUCeAMkMifk60Kd/QhL73691xNDIo7VGiWwDwoS6YdJ6iUpKvWN
-         0fcw==
-X-Gm-Message-State: ANoB5pm7tYZfM0J2VSvVTkAgyRB5ytpRe7ZgzB5u+JpTK+698MNulosY
-        M0cmpwem1F7m1IXA+1pS7OxjrGlzFDQ=
-X-Google-Smtp-Source: AA0mqf4J+4vwOG8VMG+PmvQo9n5pOwCcJVDUWebrJIEQ770JQVq0RUDi0Q8ES06/8L2LT5oFkM6Mcw==
-X-Received: by 2002:ac8:4243:0:b0:3a4:ec88:4985 with SMTP id r3-20020ac84243000000b003a4ec884985mr13918970qtm.521.1668953674548;
-        Sun, 20 Nov 2022 06:14:34 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r2-20020ae9d602000000b006cebda00630sm6366684qkk.60.2022.11.20.06.14.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 06:14:34 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 20 Nov 2022 06:14:32 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        broonie@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (pmbus/core): Implement regulator get_status
-Message-ID: <20221120141432.GA1790249@roeck-us.net>
-References: <20221119182517.2334156-1-Naresh.Solanki@9elements.com>
+        Sun, 20 Nov 2022 09:17:44 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB99222A5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 06:17:41 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AKDKVFQ025901;
+        Sun, 20 Nov 2022 14:17:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ subject : message-id : date : cc : to : content-transfer-encoding :
+ mime-version; s=pp1; bh=gnutQR7hOoWC6FKmPPevnGWiiamdM5j9qEgpT0D6cYs=;
+ b=TwWnIFg9v4bt0suDDYJrKMtdtBehG9UB5hugGWhSzk/DnBL9NcGNceQ1XgSwZkHsAyC5
+ j2WcOpF/xRHfcobDI34QXEISy89PxuCMEzsOWCaZH56uhPJDPRg917E0uT+RN6yGPEMl
+ LzLfdIKlceikMEy7oWtAgc6K7AQEMp8jY+VS5eDRwYk8YCpo5tDo6wS7cUNirFBvI3mK
+ fgg56JWHOYVJ6fbQBf6YrenYfW737z5u2P65zAji8+hYJBaF/OY6BuFPcy7lKYYdN7YA
+ 4nMCrvcRicTnP+vHdPFEXbkuHJ3ct95Cyea9GsdpH1R1Zc94AdrANTYed8NpRXfQhb+O fg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ky9a1jpxr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Nov 2022 14:17:32 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AKE8Bun010818;
+        Sun, 20 Nov 2022 14:17:30 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3kxps911d7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Nov 2022 14:17:30 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AKEHSnn39453424
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 20 Nov 2022 14:17:28 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B289AE045;
+        Sun, 20 Nov 2022 14:17:28 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3C803AE04D;
+        Sun, 20 Nov 2022 14:17:27 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.20.12])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 20 Nov 2022 14:17:27 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Subject: [6.1.0-rc5-next-20221118] Kernel crash (alloc_buddy_hugetlb_folio) -
+ THP tests
+Message-Id: <EA3E3887-24D7-4EA6-9F24-37979FDF1ECD@linux.ibm.com>
+Date:   Sun, 20 Nov 2022 19:47:16 +0530
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+To:     linux-mm@kvack.org, sidhartha.kumar@oracle.com
+X-Mailer: Apple Mail (2.3731.200.110.1.12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6WAwQuzjI8reJ4MOCHGyEOwUkt70W3Nd
+X-Proofpoint-GUID: 6WAwQuzjI8reJ4MOCHGyEOwUkt70W3Nd
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119182517.2334156-1-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-20_09,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 mlxscore=0 adultscore=0 malwarescore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211200120
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 07:25:16PM +0100, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Add get_status for pmbus_regulator_ops.
-> 
-> Changes:
-> - use lock throughout the function
-> - Avoid line continuation upto 100 column
-> - Optimize use of & and | operator
-> - Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
->   respective status register for fault.
-> - Report regulator current status.
-> 
-Change log should be after '---'
+While running transparent hugepage defragmentation test [1]
+on Power10 server following crash was seen
 
-Also, when looking into this, I realized that we already have
-pmbus_regulator_get_error_flags() which has somewhat overlapping
-functionality. Would it be possible to utilize that function to get
-the error status instead of more or less hand-coding it ?
+[11725.379229] Kernel attempted to read user page (8) - exploit attempt? (u=
+id: 0)
+[11725.379251] BUG: Kernel NULL pointer dereference on read at 0x00000008
+[11725.379257] Faulting instruction address: 0xc0000000004da04c
+[11725.379266] Oops: Kernel access of bad area, sig: 11 [#1]
+[11725.379269] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA pSeri=
+es
+[11725.379275] Modules linked in: nvram(E) rpadlpar_io(E) rpaphp(E) uinput(=
+E) torture(E) vmac(E) poly1305_generic(E) chacha_generic(E) chacha20poly130=
+5(E) n_gsm(E) pps_ldisc(E) ppp_synctty(E) ppp_async(E) ppp_generic(E) serpo=
+rt(E) slcan(E) can_dev(E) slip(E) slhc(E) snd_hrtimer(E) snd_seq(E) snd_seq=
+_device(E) snd_timer(E) snd(E) soundcore(E) pcrypt(E) crypto_user(E) n_hdlc=
+(E) dummy(E) veth(E) nfsv3(E) nfs_acl(E) nfs(E) lockd(E) grace(E) fscache(E=
+) netfs(E) tun(E) brd(E) overlay(E) exfat(E) vfat(E) fat(E) btrfs(E) blake2=
+b_generic(E) xor(E) raid6_pq(E) zstd_compress(E) xfs(E) loop(E) sctp(E) ip6=
+_udp_tunnel(E) udp_tunnel(E) dm_mod(E) nft_fib_inet(E) nft_fib_ipv4(E) nft_=
+fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E) nf_reject_ipv6(=
+E) nft_reject(E) nft_ct(E) nft_chain_nat(E) nf_nat(E) nf_conntrack(E) nf_de=
+frag_ipv6(E) nf_defrag_ipv4(E) bonding(E) rfkill(E) tls(E) ip_set(E) nf_tab=
+les(E) libcrc32c(E) nfnetlink(E) sunrpc(E) pseries_rng(E) vmx_crypto(E) ext=
+4(E) mbcache(E) jbd2(E)
+[11725.379333] sd_mod(E) t10_pi(E) crc64_rocksoft(E) crc64(E) sg(E) ibmvscs=
+i(E) scsi_transport_srp(E) ibmveth(E) fuse(E) [last unloaded: ipistorm(OE)]
+[11725.379371] CPU: 1 PID: 2273459 Comm: sysctl Tainted: G OE 6.1.0-rc5-nex=
+t-20221118 #1
+[11725.379376] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006=
+ of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
+[11725.379381] NIP: c0000000004da04c LR: c0000000004d9f94 CTR: 000000000000=
+0000
+[11725.379385] REGS: c00000000872b740 TRAP: 0300 Tainted: G OE (6.1.0-rc5-n=
+ext-20221118)
+[11725.379390] MSR: 800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> CR: =
+24048224 XER: 00000001
+[11725.379402] CFAR: c0000000004d9fa0 DAR: 0000000000000008 DSISR: 40000000=
+ IRQMASK: 0=20
+[11725.379402] GPR00: c0000000004d9f94 c00000000872b9e0 c0000000013bee00 00=
+00000000000000=20
+[11725.379402] GPR04: c000000002ac8ac0 c000000001218470 0000000000000005 c0=
+00000471d7e280=20
+[11725.379402] GPR08: 0000000000000000 0000000000000000 0000000000000002 00=
+00000000000000=20
+[11725.379402] GPR12: 0000000024048242 c000000efffff300 0000000000000000 00=
+00000000000000=20
+[11725.379402] GPR16: 0000000000000000 0000000000000000 0000000000000000 c0=
+0000000872bb18=20
+[11725.379402] GPR20: 0000000000000001 0000000000000100 0000000000300cca 00=
+00000000000001=20
+[11725.379402] GPR24: c00000000872bb18 c000000002ac8ac0 0000000000000002 00=
+00000000000000=20
+[11725.379402] GPR28: 0000000000000001 0000000000000005 0000000000000001 00=
+00000000346cca=20
+[11725.379455] NIP [c0000000004da04c] alloc_buddy_hugetlb_folio+0x17c/0x250
+[11725.379464] LR [c0000000004d9f94] alloc_buddy_hugetlb_folio+0xc4/0x250
+[11725.379469] Call Trace:
+[11725.379471] [c00000000872b9e0] [c0000000004dc004] alloc_fresh_hugetlb_fo=
+lio.part.78+0x224/0x2f0 (unreliable)
+[11725.379478] [c00000000872ba70] [c0000000004dfa38] alloc_pool_huge_page+0=
+x118/0x190
+[11725.379484] [c00000000872bac0] [c0000000004dff8c] __nr_hugepages_store_c=
+ommon+0x4dc/0x610
+[11725.379490] [c00000000872bba0] [c0000000004e036c] hugetlb_sysctl_handler=
+_common+0x13c/0x180
+[11725.379496] [c00000000872bc40] [c0000000006413b0] proc_sys_call_handler+=
+0x210/0x350
+[11725.379503] [c00000000872bcc0] [c00000000055da10] vfs_write+0x2e0/0x460
+[11725.379508] [c00000000872bd80] [c00000000055dd6c] ksys_write+0x7c/0x140
+[11725.379513] [c00000000872bdd0] [c000000000035220] system_call_exception+=
+0x140/0x350
+[11725.379519] [c00000000872be10] [c00000000000c6d4] system_call_common+0xf=
+4/0x278
+[11725.379525] --- interrupt: c00 at 0x7fff7fb20c34
+[11725.379530] NIP: 00007fff7fb20c34 LR: 0000000134d554bc CTR: 000000000000=
+0000
+[11725.379533] REGS: c00000000872be80 TRAP: 0c00 Tainted: G OE (6.1.0-rc5-n=
+ext-20221118)
+[11725.379538] MSR: 800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> C=
+R: 28002202 XER: 00000000
+[11725.379548] IRQMASK: 0=20
+[11725.379548] GPR00: 0000000000000004 00007fffedd64fc0 00007fff7fc07300 00=
+00000000000003=20
+[11725.379548] GPR04: 000000014eac37f0 0000000000000006 fffffffffffffff6 00=
+00000000000000=20
+[11725.379548] GPR08: 000000014eac37f0 0000000000000000 0000000000000000 00=
+00000000000000=20
+[11725.379548] GPR12: 0000000000000000 00007fff80000940 0000000000000000 00=
+00000000000000=20
+[11725.379548] GPR16: 0000000000000000 0000000000000000 0000000000000000 00=
+00000000000000=20
+[11725.379548] GPR20: 0000000000000000 0000000000000000 0000000000000000 00=
+00000000000000=20
+[11725.379548] GPR24: 0000000000000001 0000000000000010 0000000000000006 00=
+0000014eac5800=20
+[11725.379548] GPR28: 00007fff7fbfc2c8 000000014eac5800 0000000000000006 00=
+0000014eac0fc0=20
+[11725.379589] NIP [00007fff7fb20c34] 0x7fff7fb20c34
+[11725.379593] LR [0000000134d554bc] 0x134d554bc
+[11725.379596] --- interrupt: c00
+[11725.379598] Instruction dump:
+[11725.379601] 39400001 55283032 7d291ef4 7fc8f050 7f184a14 7d49f036 7d40c0=
+a8 7d4a4b78=20
+[11725.379609] 7d40c1ad 40c2fff4 39200000 382100b0 <e9490008> e8010010 8181=
+0008 eae1ffb8=20
+[11725.379616] ---[ end trace 0000000000000000 ]---
+[11725.380328]=20
+[11726.380333] Kernel panic - not syncing: Fatal exception
+[11726.392564] Rebooting in 10 seconds..
 
-Thanks,
-Guenter
+Git bisect points to following patch
+commit 7a410b1d773853d1d6ec522a871869541fe48c22 (refs/bisect/bad)
+Date:   Thu Nov 17 13:15:01 2022 -0800
+    mm/hugetlb: change hugetlb allocation functions to return a folio
+
+Reverting this patch allows the test to run to completion.
+
+- Sachin
+
+[1]  https://github.com/avocado-framework-tests/avocado-misc-tests/blob/mas=
+ter/memory/transparent_hugepages_defrag.py=
