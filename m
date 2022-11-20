@@ -2,309 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB3C631321
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 09:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275BE631324
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 09:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiKTImw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 03:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        id S229561AbiKTIpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 03:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiKTImr (ORCPT
+        with ESMTP id S229480AbiKTIpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 03:42:47 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89EE15FD3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 00:42:45 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id b185so8753679pfb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 00:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i+vTHLv2t8e2dZjqwxHsggGsRbhxbyfOV9rsfRHb70Y=;
-        b=nTZjZgw9+nloB9RAXQaDlB0LG++6l2z1uj8Tod+65bSvolYhUqtqww0K+IDkwUG18O
-         3byDH3QFl952d8bDiLmHoNodwtdVOFO3o2kTspdYNyzYd+b8suFIuNN3sA0qQqndS4u0
-         JhkwUEMAgByCBeHrMrhKim2puHs60L9AeekSokrBp7EKcBZa4NycP0MThDSzkiDz0fEo
-         H6Z4BwnEYXVYXwYsXv0+992NB2E8tggx6DmgBGgupeTUKu8WF1VEsUVEa1PH0qdqOqDk
-         jXdffIrRDqvjmRC6thKIr+vIf2w1ciyQtX9CORI1TvX8WDLdyOb8o/W3nbWDBPQ/PZta
-         u6vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i+vTHLv2t8e2dZjqwxHsggGsRbhxbyfOV9rsfRHb70Y=;
-        b=z59UtxBDnsYJx/EQzeXotqMItqYLYLjOjHz7/lgkCa6LDC+5ZtVK/Ukz8xiPzqapuF
-         iJBI0TNsmL8NDhw9G8X8gmegcsdUgWHu+xCZvRPGd7LUGHA4JYVMTXvroHHQCb/HiRbL
-         xIxbOxvzKRtVNwC6cECXsKCGf+O/ynVr+2tnTQOuOijgYb1FIL5E01V8O9jEMIpG3RiA
-         AakB97DLYR8tstbp7UVqPAhtvNUVNdtPKtQpaqTenH3eBQs6DQCkWEKMNH/o1XqQ2fn8
-         W/xyaDhVtyX+wzq8jpYIM1Jxk5qD6iiK34h0qQbU8rCd5NS0eOE5wMKWP3Kxm2pzwkiC
-         KSpA==
-X-Gm-Message-State: ANoB5pkRvydy8OInDNsJAWbSJOBBioPRU87lN5kKWy+7T8KK7kaHHT3t
-        +5ReP4s7L/+qJfCJzwqLqR0=
-X-Google-Smtp-Source: AA0mqf5bFOXHpw5L9JJLHbwXCwglTcZQxipn/dXDlE23EloecQddqgL0MJueC+Lmmntj+/GCu+MoYA==
-X-Received: by 2002:a05:6a00:99b:b0:56d:3de3:c401 with SMTP id u27-20020a056a00099b00b0056d3de3c401mr15510972pfg.6.1668933765241;
-        Sun, 20 Nov 2022 00:42:45 -0800 (PST)
-Received: from localhost.localdomain ([122.192.14.194])
-        by smtp.gmail.com with ESMTPSA id q40-20020a17090a17ab00b00212735c8898sm8188273pja.30.2022.11.20.00.42.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 00:42:44 -0800 (PST)
-From:   Song Shuai <suagrfillet@gmail.com>
-To:     guoren@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
-        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Song Shuai <suagrfillet@gmail.com>
-Subject: [PATCH v4 2/2] riscv/ftrace: make ftrace_caller call ftrace_graph_func
-Date:   Sun, 20 Nov 2022 16:42:30 +0800
-Message-Id: <20221120084230.910152-3-suagrfillet@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221120084230.910152-1-suagrfillet@gmail.com>
-References: <20221120084230.910152-1-suagrfillet@gmail.com>
+        Sun, 20 Nov 2022 03:45:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEEA1582D
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 00:45:49 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1owfwv-0007RS-DW; Sun, 20 Nov 2022 09:45:13 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1owfwr-0002Gx-Lp; Sun, 20 Nov 2022 09:45:09 +0100
+Date:   Sun, 20 Nov 2022 09:45:09 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+Cc:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        kbuild test robot <lkp@intel.com>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        David Jander <david@protonic.nl>, linux-kernel@vger.kernel.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        kernel@pengutronix.de, Robin van der Gracht <robin@protonic.nl>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org
+Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
+ was already claimed
+Message-ID: <20221120084509.GB7626@pengutronix.de>
+References: <e0f6b26e2c724439752f3c13b53af1a56a42a5bf.camel@egluetechnologies.com>
+ <20221117162251.5e5933c1@erd992>
+ <20221118060647.GE12278@pengutronix.de>
+ <7b575cface09a2817ac53485507985a7fef7b835.camel@egluetechnologies.com>
+ <20221118123013.GF12278@pengutronix.de>
+ <1fd663d232c7fba5f956faf1ad45fb410a675086.camel@egluetechnologies.com>
+ <20221118134447.GG12278@pengutronix.de>
+ <a01fe547c052e861d47089d6767aba639250adda.camel@egluetechnologies.com>
+ <20221119101211.GA7626@pengutronix.de>
+ <6c13c3072ca4c8c3217f9449f56921a8496c32eb.camel@egluetechnologies.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6c13c3072ca4c8c3217f9449f56921a8496c32eb.camel@egluetechnologies.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to make the function graph use ftrace directly, ftrace_caller
-should be adjusted to save the necessary regs against the pt_regs layout
-so it can call ftrace_graph_func reasonably.
+On Sun, Nov 20, 2022 at 01:11:52AM +0100, Devid Antonio Filoni wrote:
+> On Sat, 2022-11-19 at 11:12 +0100, Oleksij Rempel wrote:
+> > On Fri, Nov 18, 2022 at 04:12:40PM +0100, Devid Antonio Filoni wrote:
+> > > Hi Oleksij,
+> > > 
+> > > honestly I would apply proposed patch because it is the easier solution
+> > > and makes the driver compliant with the standard for the following
+> > > reasons:
+> > > - on the first claim, the kernel will wait 250 ms as stated by the
+> > > standard
+> > > + on successive claims with the same name, the kernel will not wait
+> > > 250ms, this implies:
+> > >   - it will not wait after sending the address-claimed message when the
+> > > claimed address has been spoofed, but the standard does not explicitly
+> > > states what to do in this case (see previous emails in this thread), so
+> > > it would be up to the application developer to decide how to manage the
+> > > conflict
+> > >   - it will not wait after sending the address-claimed message when a
+> > > request for address-claimed message has been received as stated by the
+> > > standard
+> > 
+> > Standard says:
+> > 1. No CF _shall_ begin, or resume, transmission on the network until 250 ms
+> >    after it has successfully claimed an address (Figure 4).
+> > 2. This does not apply when responding to a request for address claimed.
+> > 
+> > With current patch state: 1. is implemented and working as expected, 2.
+> > is not implemented.
+> > With this patch: 1. is partially broken and 2. is partially faking
+> > needed behavior.
+> > 
+> > It will not wait if remote ECU which rebooted for some reasons. With this patch
+> > we are breaking one case of the standard in favor to fake compatibility to the
+> > other case. We should avoid waiting only based on presence of RfAC not based
+> > on the old_addr == new_addr.
+> 
+> I'm sorry, I don't think I understood the point about reboot ("It will
+> not wait if remote ECU which rebooted for some reasons"). If another ECU
+> rebooted, then *it* will have to perform the claim procedure again
+> waiting 250 ms before beginning the transmission. Your ECU doesn't have
+> to check if the other ECUs respected the 250 ms wait.
 
-SAVE_ALL now saves all the regs according to the pt_regs struct. Here
-supersedes SAVE_ALL by SAVE_ABI_REGS which has an extra option to allow
-saving only the necessary ABI-related regs for ftrace_caller.
+With proposed patch:
+- local application which is sending to the remote NAME, will start or continue
+  communication with ECU which should stay silent.
+- local application which was manually or automatically restarted (see
+  application watchdogs), will bypass address claim procedure
+  completion and start sending without 250ms delay.
 
-ftrace_caller and ftrace_regs_caller save their regs with the respective
-option of SAVE_ABI_REGS, then call the tracing function, especially
-graph_ops's ftrace_graph_func. So the ftrace_graph_[regs]_call labels
-aren't needed anymore if FTRACE_WITH_REGS is defined.
+> Also, the ISO11783-5 standard, with "Figure 6 (Resolving address
+> contention between two self-configurable-address CF)" of "4.5.4.2 -
+> Address-claim prioritization", shows that:
+> - ECU1 claims the address (time: 0 ms)
+> - ECU2 claims the same address (time: 0+x ms)
+> - ECU1 NAME has the higher priority, so ECU1 sends again the address
+> claimed message as soon as it received the address-claim from ECU2
+> (time: 0+x+y ms)
+> - ECU1 starts normal transmission (time: 250 ms)
+> With current implementation, the ECU1 would start the transmission at
+> time 0+x+y+250 ms, with proposed patch it would not.
 
-As the previous patch described, the ftrace_caller remains with its
-ftrace_graph_call if FTRACE_WITH_REGS isn't defined,
+You are right, this should be fixed.
+But proposed patch closes one issues and opens another, with this patch it will
+be enough to send at least two address claimed messages to bypass the delay.
 
-For convenience, the original argument setup for the tracing function in
-ftrace_[regs]_caller is separated as PREPARE_ARGS.
+> Same is showed in "Figure 7 (Resolving address contention between a non-
+> configurable address CF and a self-configurable address CF)", the ECU
+> waits again 250 ms only when claiming a different address.
 
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
----
- arch/riscv/kernel/mcount-dyn.S | 142 ++++++++++++++++++++++++---------
- 1 file changed, 104 insertions(+), 38 deletions(-)
+Ack
 
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index 64bc79816f5e..466c6ef217b1 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -57,19 +57,52 @@
- 	.endm
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
--	.macro SAVE_ALL
-+
-+/**
-+* SAVE_ABI_REGS - save regs against the pt_regs struct
-+*
-+* @all: tell if saving all the regs
-+*
-+* If all is set, all the regs will be saved, otherwise only ABI
-+* related regs (a0-a7,epc,ra and optional s0) will be saved.
-+*
-+* After the stack is established,
-+*
-+* 0(sp) stores the PC of the traced function which can be accessed
-+* by &(fregs)->regs->epc in tracing function. Note that the real
-+* function entry address should be computed with -FENTRY_RA_OFFSET.
-+*
-+* 8(sp) stores the function return address (i.e. parent IP) that
-+* can be accessed by &(fregs)->regs->ra in tracing function.
-+*
-+* The other regs are saved at the respective localtion and accessed
-+* by the respective pt_regs member.
-+*
-+* Here is the layout of stack for your reference.
-+*
-+* PT_SIZE_ON_STACK  ->  +++++++++
-+*                       + ..... +
-+*                       + t3-t6 +
-+*                       + s2-s11+
-+*                       + a0-a7 + --++++-> ftrace_caller saved
-+*                       + s1    +   +
-+*                       + s0    + --+
-+*                       + t0-t2 +   +
-+*                       + tp    +   +
-+*                       + gp    +   +
-+*                       + sp    +   +
-+*                       + ra    + --+ // parent IP
-+*               sp  ->  + epc   + --+ // PC
-+*                       +++++++++
-+**/
-+	.macro SAVE_ABI_REGS, all=0
- 	addi	sp, sp, -PT_SIZE_ON_STACK
- 
- 	REG_S t0,  PT_EPC(sp)
- 	REG_S x1,  PT_RA(sp)
--	REG_S x2,  PT_SP(sp)
--	REG_S x3,  PT_GP(sp)
--	REG_S x4,  PT_TP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
-+
-+	// always save the ABI regs
-+
- 	REG_S x10, PT_A0(sp)
- 	REG_S x11, PT_A1(sp)
- 	REG_S x12, PT_A2(sp)
-@@ -78,6 +111,18 @@
- 	REG_S x15, PT_A5(sp)
- 	REG_S x16, PT_A6(sp)
- 	REG_S x17, PT_A7(sp)
-+
-+	// save the leftover regs
-+
-+	.if \all == 1
-+	REG_S x2,  PT_SP(sp)
-+	REG_S x3,  PT_GP(sp)
-+	REG_S x4,  PT_TP(sp)
-+	REG_S x5,  PT_T0(sp)
-+	REG_S x6,  PT_T1(sp)
-+	REG_S x7,  PT_T2(sp)
-+	REG_S x8,  PT_S0(sp)
-+	REG_S x9,  PT_S1(sp)
- 	REG_S x18, PT_S2(sp)
- 	REG_S x19, PT_S3(sp)
- 	REG_S x20, PT_S4(sp)
-@@ -92,19 +137,19 @@
- 	REG_S x29, PT_T4(sp)
- 	REG_S x30, PT_T5(sp)
- 	REG_S x31, PT_T6(sp)
-+
-+	// save s0 if FP_TEST defined
-+
-+	.else
-+#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
-+	REG_S x8,  PT_S0(sp)
-+#endif
-+	.endif
- 	.endm
- 
--	.macro RESTORE_ALL
-+	.macro RESTORE_ABI_REGS, all=0
- 	REG_L t0,  PT_EPC(sp)
- 	REG_L x1,  PT_RA(sp)
--	REG_L x2,  PT_SP(sp)
--	REG_L x3,  PT_GP(sp)
--	REG_L x4,  PT_TP(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
- 	REG_L x10, PT_A0(sp)
- 	REG_L x11, PT_A1(sp)
- 	REG_L x12, PT_A2(sp)
-@@ -113,6 +158,16 @@
- 	REG_L x15, PT_A5(sp)
- 	REG_L x16, PT_A6(sp)
- 	REG_L x17, PT_A7(sp)
-+
-+	.if \all == 1
-+	REG_L x2,  PT_SP(sp)
-+	REG_L x3,  PT_GP(sp)
-+	REG_L x4,  PT_TP(sp)
-+	REG_L x5,  PT_T0(sp)
-+	REG_L x6,  PT_T1(sp)
-+	REG_L x7,  PT_T2(sp)
-+	REG_L x8,  PT_S0(sp)
-+	REG_L x9,  PT_S1(sp)
- 	REG_L x18, PT_S2(sp)
- 	REG_L x19, PT_S3(sp)
- 	REG_L x20, PT_S4(sp)
-@@ -128,10 +183,25 @@
- 	REG_L x30, PT_T5(sp)
- 	REG_L x31, PT_T6(sp)
- 
-+	.else
-+#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
-+	REG_L x8,  PT_S0(sp)
-+#endif
-+	.endif
- 	addi	sp, sp, PT_SIZE_ON_STACK
- 	.endm
-+
-+	.macro PREPARE_ARGS
-+	addi	a0, t0, -FENTRY_RA_OFFSET	// ip
-+	la	a1, function_trace_op
-+	REG_L	a2, 0(a1)			// op
-+	REG_L	a1, PT_RA(sp)			// parent_ip
-+	mv	a3, sp				// fregs
-+	.endm
-+
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- 
-+#ifndef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- ENTRY(ftrace_caller)
- 	SAVE_ABI
- 
-@@ -160,33 +230,29 @@ ftrace_graph_call:
- 	jr t0
- ENDPROC(ftrace_caller)
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- ENTRY(ftrace_regs_caller)
--	SAVE_ALL
--
--	addi	a0, t0, -FENTRY_RA_OFFSET
--	la	a1, function_trace_op
--	REG_L	a2, 0(a1)
--	REG_L	a1, PT_RA(sp)
--	mv	a3, sp
-+	SAVE_ABI_REGS 1
-+	PREPARE_ARGS
- 
- ftrace_regs_call:
- 	.global ftrace_regs_call
- 	call	ftrace_stub
- 
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--	addi	a0, sp, PT_RA
--	REG_L	a1, PT_T0(sp)
--	addi	a1, a1, -FENTRY_RA_OFFSET
--#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
--	mv	a2, s0
--#endif
--ftrace_graph_regs_call:
--	.global ftrace_graph_regs_call
--	call	ftrace_stub
--#endif
- 
--	RESTORE_ALL
-+	RESTORE_ABI_REGS 1
- 	jr t0
- ENDPROC(ftrace_regs_caller)
-+
-+ENTRY(ftrace_caller)
-+	SAVE_ABI_REGS 0
-+	PREPARE_ARGS
-+
-+ftrace_call:
-+	.global ftrace_call
-+	call	ftrace_stub
-+
-+	RESTORE_ABI_REGS 0
-+	jr t0
-+ENDPROC(ftrace_caller)
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> Also, as previously discussed in this thread, the standard states in
+> 4.4.4.3 - Address violation:
+> If a CF receives a message, other than the address-claimed message,
+> which uses the CF's own SA,
+> then the CF:
+> - shall send the address-claim message to the Global address;
+> - shall activate a diagnostic trouble code with SPN = 2000+SA and FMI =
+> 31
+> It is not *explicitly* stated that you have to wait 250 ms after the
+> address-claim message has been sent.
+
+There is no need to explicitly state it. The requirement is clearly described
+in the 4.5.2.d part 1 with clearly defined exception in  4.5.2.d part 2.
+If something is not explicitly stated, the stated requirement has always
+priority.
+
+> Please note that the 250 ms wait is  mentioned only in "4.5 - Network
+> initialization"
+
+OK, we need to refer to the wording used in a specifications, in
+general:
+Shall – Shall is used to designate a mandatory requirement.
+Should – Should is used for requirements that are considered good and are
+         recommended, but are not absolutely mandatory.
+May – May is used to for requirements that are optional.
+
+If a requirement with strong wording as "shall" is not strong enough for
+you and you are suing words as ".. mentioned only in .." then even a
+statistical analysis of this spec will have no meaning. In all
+cases we can just invalidate all arguments by using: it is only X or Y. 
+
+> while above statements come from "4.4 - Network-management procedures".
+> Also in this case, the proposed patch is still standard compliant.
+
+If we remove 4.5.2.d from the spec, then yes.
+
+> So I'm sorry but I have to disagree with you, there are many things
+> broken in the current implementation because it is forcing the 250 wait
+> to all cases but it should not.
+
+If we remove 4.5.2.d from the spec, then yes. Every construction is
+logical if we adopt input variables to the construction.
+
+> > Without words 2. part should be implemented without breaking 1.
+> > 
+> > > Otherwise you will have to keep track of above cases and decide if the
+> > > wait is needed or not, but this is hard do accomplish because is the
+> > > application in charge of sending the address-claimed message, so you
+> > > would have to decide how much to keep track of the request for address-
+> > > claimed message thus adding more complexity to the code of the driver.
+> > 
+> > Current kernel already tracks all claims on the bus and knows all registered
+> > NAMEs. I do not see increased complicity in this case.
+> 
+> The kernel tracks the claims but it does *not track* incoming requests
+> for address-claimed message, it would have to and it would have to
+
+yes
+
+> allow the application to answer to it *within a defined time window*.
+
+yes.
+
+> But keep in mind that there are other cases when the 250 ms wait is wrong
+> or it is not explicitly stated by the standard.
+
+If it is not stated in the standard how can we decide if it is wrong?
+And if strongly worded statements have no value just because it is
+stated only one time, how proper standard should look like? 
+
+> > IMHO, only missing part i a user space interface. Some thing like "ip n"
+> > will do.
+> > 
+> > > Another solution is to let the driver send the address-claimed message
+> > > waiting or without waiting 250 ms for successive messages depending on
+> > > the case.
+> > 
+> > You can send "address-claimed message" in any time you wont. Kernel will
+> > just not resolve the NAME to address until 1. part of the spec will
+> > apply. Do not forget, the NAME cache is used for local _and_ remote
+> > names. You can trick out local system, not remote.
+> > 
+> > Even if you implement "smart" logic in user space and will know better
+> > then kernel, that this application is responding to RfAC. You will newer
+> > know if address-claimed message of remote system is a response to RfAC.
+> > 
+> > From this perspective, I do not know, how allowing the user space break
+> > the rules will help to solve the problem?
+> 
+> I think you did not understand this last proposal: since the driver is
+> already implementing part of the standard, then it might as well send
+> the address-claimed message when needed and wait 250 ms or not depending
+> on the case.
+
+Let's try following test:
+j1939acd -r 80 -c /tmp/1122334455667788.jacd 11223344556677 vcan0 &
+while(true); do testj1939 -s8 vcan0:0x80 :0x90,0x12300; done
+
+And start candump with delta time stamps:
+:~ candump -t d vcan0                                                 
+ (000.000000)  vcan0  18EAFFFE   [3]  00 EE 00               
+ (000.002437)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF <---- no 250ms delay
+ (000.011458)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.011964)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.011712)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012585)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012891)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012082)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012604)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012357)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012790)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012765)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012483)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012680)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012144)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+... snip ...
+ (000.012592)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012515)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.013183)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012653)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.011886)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012836)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.009494)  vcan0  18EEFF80   [8]  77 66 55 44 33 22 11 00 <---- SA 0x80 address claimed 
+ (000.003362)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF <---- next packet from SA 0x80 3 usecs after previous. No 250ms delay.
+ (000.012351)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012983)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012602)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012594)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.012348)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+ (000.011922)  vcan0  19239080   [8]  01 23 45 67 89 AB CD EF
+
+As you can see, the j1939 stack do not forcing application to use NAMEs and
+do not preventing sending any message withing 250ms delay. The only thing
+what has the 250 timer is NAME to address resolution which should be fixed in
+respect of 4.5.2.d without breaking every thing else.
+
+> In this way, for example, you won't have to keep track of a request for
+> address-claimed, you just would have to answer to it directly.
+
+see example above.
+
+> Feel free to implement what you think is more appropriate but please
+> read the ISO11783-5 standard carefully too before changing the code,
+> there are many cases and it is not possible to simplify everything into
+> one rule.
+
+this is why we have this discussion.
+
+> Meanwhile I'm going to apply the patch to my own kernel, I've tried to
+> workaround the limitation using a CAN_RAW socket to send the address-
+> claimed message but the J1939 driver refuses to send other messages in
+> the 250 ms time window because it has detected the address-claimed
+> message sent from the other socket, so I can only apply the patch to
+> make it compliant with the standard.
+
+If you can use CAN_RAW you can use above example without any delay.
+
+Regards,
+Oleksij
 -- 
-2.20.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
