@@ -2,125 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66BB6313A3
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 12:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2486313A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 12:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiKTLYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 06:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S229633AbiKTLZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 06:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKTLYm (ORCPT
+        with ESMTP id S229568AbiKTLZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 06:24:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775E34046D
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 03:24:40 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sun, 20 Nov 2022 06:25:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBA04874F;
+        Sun, 20 Nov 2022 03:25:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id ABDF122486;
-        Sun, 20 Nov 2022 11:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668943478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8NLUue1qdWi3gbbn4CDCrTs4np4/mrBW7r8jTMowM/c=;
-        b=BIDFESSqZrh8Yw8gWQ6i7IdxIoR77FejWycwv2JEFpnj8exfvcbKuvH9mjmzNVjEWY27Ay
-        LAuWu3gj50lRp/eKCCJdEcVcBigP8AAFaHOK0Y20oKlkPhca9kBRPZTkdYnQ9SLUuz4cgI
-        LQvCOeBdX3n9juMqUi6ENvdp73uh53M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668943478;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8NLUue1qdWi3gbbn4CDCrTs4np4/mrBW7r8jTMowM/c=;
-        b=EMrzvNJm/w2Z6H3kC1BtqBg0u8c4nh5mGQeEKq3zh/5ZgsKIMiJqEXL8Pzc0QnbdNq8zpU
-        oJW5foxzZxpCTtBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9F78113216;
-        Sun, 20 Nov 2022 11:24:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id aWjqJnYOemONXQAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 20 Nov 2022 11:24:38 +0000
-Date:   Sun, 20 Nov 2022 12:24:34 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] perf/urgent for 6.1-rc6
-Message-ID: <Y3oOcqhGQqpH7xtd@zn.tnic>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A64FAB80B04;
+        Sun, 20 Nov 2022 11:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4EAAC433D6;
+        Sun, 20 Nov 2022 11:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668943541;
+        bh=CvicEi2gnrYnqmDZV/HRfQ9d4uUEUscbiNOKOA4VLvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QzE4ScY+yQPVnxdhIEUv4V6wLLfcH9KnnEj76Lr1WZDQPOZCG8iS93MIobfuFKQb7
+         fQUWURPlbf/3KdCy5Icwss66BJi/cLZW1sc1083W5YLh+oPCb67nbiIUbEwO/Yqy+B
+         sovnZbz3bzq48JA6/MfP3h2bQ7DqEMNCOHs8EbBCtpA8QS+R5Xe+d5Rr6bnI+MaflD
+         CSJeSHmCaOjorE47TOOwR6bhcB/m7lxmanPAJ6w+c/f140HMAeEB5A4lUMcYdcffVe
+         51RFDouHOMCLSK7uYVeL/qf3md3PvgJJC0xkXUxeV/7RMDGc8Zv0+52rt6HGwwLEoJ
+         LtvuJnINTgr5A==
+Date:   Sun, 20 Nov 2022 11:25:36 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Icenowy Zheng <uwu@icenowy.me>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 02/12] dt-bindings: riscv: Add T-HEAD C906 and C910
+ compatibles
+Message-ID: <Y3oOsBxqUxeGMRJK@spud>
+References: <20220815050815.22340-1-samuel@sholland.org>
+ <20220815050815.22340-3-samuel@sholland.org>
+ <76d9c4fb368dca87c64494b927706d0b18d712d2.camel@icenowy.me>
+ <Y3oOOOdG4e24ByEc@spud>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3oOOOdG4e24ByEc@spud>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Sun, Nov 20, 2022 at 11:23:42AM +0000, Conor Dooley wrote:
+> On Fri, Nov 04, 2022 at 10:57:58AM +0800, Icenowy Zheng wrote:
+> > 在 2022-08-15星期一的 00:08 -0500，Samuel Holland写道：
+> > > The C906 and C910 are RISC-V CPU cores from T-HEAD Semiconductor.
+> > > Notably, the C906 core is used in the Allwinner D1 SoC.
+> > 
+> > Could this get applied first?
+> > 
+> > C906 and C910 now have a fixed-configuration open-source version, which
+> > means these cores could be played by anyone, and having them in the DT
+> > binding really helps people. In addition I am aware of some C906-
+> > equipped SoC out of Allwinner.
+> 
+> I've applied this one patch as v6.2 material since I doubt this series is
+> gonna make it & the Bouffalolabs dt is going to need this compatible too.
+> I applied it on top of v6.1-rc1 just in case:
+> 
+> https://git.kernel.org/conor/c/0d814000ad3589bf4f69c9cb25a3b77bbd55ffec
 
-please pull a couple of urgent perf fixes for 6.1.
+Woops, totally the wrong hash. Fixed:
+https://git.kernel.org/conor/c/41adc2fbad8bc42ed5fdf480e5318133a4941bbb
 
-Thx.
+Thanks,
+Conor.
 
----
-
-The following changes since commit f0c4d9fc9cc9462659728d168387191387e903cc:
-
-  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v6.1_rc6
-
-for you to fetch changes up to ce0d998be9274dd3a3d971cbeaa6fe28fd2c3062:
-
-  perf/x86/intel/pt: Fix sampling using single range output (2022-11-16 10:12:59 +0100)
-
-----------------------------------------------------------------
-- Fix an intel PT erratum where CPUs do not support single range output
-for more than 4K
-
-- Fix a NULL ptr dereference which can happen after an NMI interferes
-with the event enabling dance in amd_pmu_enable_all()
-
-- Free the events array too when freeing uncore contexts on CPU online,
-  thereby fixing a memory leak
-
-- Improve the pending SIGTRAP check
-
-----------------------------------------------------------------
-Adrian Hunter (1):
-      perf/x86/intel/pt: Fix sampling using single range output
-
-Marco Elver (1):
-      perf: Improve missing SIGTRAP checking
-
-Ravi Bangoria (1):
-      perf/x86/amd: Fix crash due to race between amd_pmu_enable_all, perf NMI and throttling
-
-Sandipan Das (1):
-      perf/x86/amd/uncore: Fix memory leak for events array
-
- arch/x86/events/amd/core.c   |  5 ++---
- arch/x86/events/amd/uncore.c |  1 +
- arch/x86/events/intel/pt.c   |  9 +++++++++
- kernel/events/core.c         | 25 +++++++++++++++++++------
- 4 files changed, 31 insertions(+), 9 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
