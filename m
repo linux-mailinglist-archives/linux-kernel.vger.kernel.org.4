@@ -2,176 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B13F6315F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 20:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CDB6315FC
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 20:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiKTTnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 14:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S229674AbiKTTqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 14:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKTTns (ORCPT
+        with ESMTP id S229518AbiKTTqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 14:43:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703BD1EC46;
-        Sun, 20 Nov 2022 11:43:47 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 981D16602381;
-        Sun, 20 Nov 2022 19:43:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668973425;
-        bh=T3nU7r4TDRBfUE21qBPtx6/vbbqNd5aTZrUhEKVEpe8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTDOl2wCVRsu/tyZH+YPJZtqzX+lTk+zyDWIOt7B5OERtVQXV05JqgkECzvZaxhvq
-         GWHynwzbAdTGjQc4EiizPb4JzuNJErOOA6MGMcIE1OOBJsR2nJxdyKqik4rZXW8I8S
-         YL9hLYJH9B0qYNlv0ofE25pkedfO3Zr0ukRr6nTWoiYIF0ElBn0uG1ehB/KKpnJkB6
-         LmHZCe95IKsjPugXIHsbUyR3TPbe/Uz/FTgEe5YV5fHfIiRZ+dwYB8lU4/MgAmu4vM
-         BZjO4bgM9A0wAKu6Ub+wy7zE/lgrgtzyeA/1iFwakjmg/vd8UL0auYvToqpQCZqsxv
-         +Bmg67/Ow+Rwg==
-Received: by mercury (Postfix, from userid 1000)
-        id 1C1D2106F223; Sun, 20 Nov 2022 20:43:43 +0100 (CET)
-Date:   Sun, 20 Nov 2022 20:43:43 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-actions@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <20221120194343.nnpzhgjapep7iwqk@mercury.elektranox.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        Sun, 20 Nov 2022 14:46:02 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FC62E9D5;
+        Sun, 20 Nov 2022 11:46:00 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id j12so8817948plj.5;
+        Sun, 20 Nov 2022 11:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VSrs1ucQDnZEbTziL8NtM/AcshFZ2RL7pB9xrfB5Jj0=;
+        b=oTSc1ChFNecJAo5dWHcbAlgb8kGAbU8VfEs1r9JKZ6zKaMj986xKhBB4OuSUfC6n+a
+         wdpN30UEj5bKTrm61MyPc9JWmRhKYomiqKmklXYiT7FbykqRWep5C4MgOSVn9of7/1tE
+         j5nZZRX4TP52N8ryTpwD9To46lv2g8xpmeHTKy9VNNrlbTlX10g9sMOYxc1WH3cdzT1v
+         LaLh9Z6fUTUQ21r9q+BiqvPd7rHzFEQ/GxAB8v8zvEWkvVH65T6gwHVpwhIP0ebVSaxr
+         Qz2Xk2rUJoOESEUj39hWza/e4G5EE8KrkAYSBhW0W/kCCW0d1mCYGKnpwhuvOe7CUd8T
+         JGlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VSrs1ucQDnZEbTziL8NtM/AcshFZ2RL7pB9xrfB5Jj0=;
+        b=K8oal4hz4FSZHvKt23AXFOxyZPTxrfBO60i7LgDE24zPKo2mSeaapREvjcBU9fu/rQ
+         wp6Q+US8kshIYQFZ2yKdeduiorcg8YXQYVYoEoV5RMJlC65ikITzU1nLas6QtqXnbDXJ
+         sZyT8yPFcVZ4XZig/zxtEhYvQPEuOSwbIdtkgfWqe5N3W9fOvgcAvRgZjOVkVHFQnHEp
+         b7nsWJvFJhsAUFTSqEQKdcTr1cbL6JSGeEL+wuvxcm92LS7fOcG2uddA/PBkOu52S67P
+         hvzRGhN2ym8gFcHLvbJvQLDziHOP/nxblSTytg8cCfB3zTxR3UAB7L/iR6oZrWJlCHnV
+         OcNQ==
+X-Gm-Message-State: ANoB5pnsPDz8QYUpCmM4yw6BvENDS+oQxq5vYWEHNHQGx+ToEfj6yH+2
+        AxamJ4npxI1PebQ/nz7dh2E=
+X-Google-Smtp-Source: AA0mqf7W2fgxhtALotAWVantX1jA210Z6dfBexYTytSusvrPGALz6gNVmHYRxiBjo6pQZ6TwoH6rmA==
+X-Received: by 2002:a17:902:d38c:b0:188:4c74:e1f1 with SMTP id e12-20020a170902d38c00b001884c74e1f1mr8519036pld.98.1668973560184;
+        Sun, 20 Nov 2022 11:46:00 -0800 (PST)
+Received: from localhost ([103.4.222.252])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170902ec8b00b001869d71228bsm7954040plg.170.2022.11.20.11.45.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 11:45:59 -0800 (PST)
+Date:   Mon, 21 Nov 2022 01:15:48 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     David Vernet <void@manifault.com>
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, yhs@fb.com, song@kernel.org, sdf@google.com,
+        john.fastabend@gmail.com, haoluo@google.com, jolsa@kernel.org,
+        kpsingh@kernel.org, tj@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH bpf-next v9 2/4] bpf: Allow trusted pointers to be passed
+ to KF_TRUSTED_ARGS kfuncs
+Message-ID: <20221120194548.g76fytbyxhi7xqcu@apollo>
+References: <20221120051004.3605026-1-void@manifault.com>
+ <20221120051004.3605026-3-void@manifault.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wvm2z6appxwdd5fa"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+In-Reply-To: <20221120051004.3605026-3-void@manifault.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Nov 20, 2022 at 10:40:02AM IST, David Vernet wrote:
+> Kfuncs currently support specifying the KF_TRUSTED_ARGS flag to signal
+> to the verifier that it should enforce that a BPF program passes it a
+> "safe", trusted pointer. Currently, "safe" means that the pointer is
+> either PTR_TO_CTX, or is refcounted. There may be cases, however, where
+> the kernel passes a BPF program a safe / trusted pointer to an object
+> that the BPF program wishes to use as a kptr, but because the object
+> does not yet have a ref_obj_id from the perspective of the verifier, the
+> program would be unable to pass it to a KF_ACQUIRE | KF_TRUSTED_ARGS
+> kfunc.
+>
+> The solution is to expand the set of pointers that are considered
+> trusted according to KF_TRUSTED_ARGS, so that programs can invoke kfuncs
+> with these pointers without getting rejected by the verifier.
+>
+> There is already a PTR_UNTRUSTED flag that is set in some scenarios,
+> such as when a BPF program reads a kptr directly from a map
+> without performing a bpf_kptr_xchg() call. These pointers of course can
+> and should be rejected by the verifier. Unfortunately, however,
+> PTR_UNTRUSTED does not cover all the cases for safety that need to
+> be addressed to adequately protect kfuncs. Specifically, pointers
+> obtained by a BPF program "walking" a struct are _not_ considered
+> PTR_UNTRUSTED according to BPF. For example, say that we were to add a
+> kfunc called bpf_task_acquire(), with KF_ACQUIRE | KF_TRUSTED_ARGS, to
+> acquire a struct task_struct *. If we only used PTR_UNTRUSTED to signal
+> that a task was unsafe to pass to a kfunc, the verifier would mistakenly
+> allow the following unsafe BPF program to be loaded:
+>
+> SEC("tp_btf/task_newtask")
+> int BPF_PROG(unsafe_acquire_task,
+>              struct task_struct *task,
+>              u64 clone_flags)
+> {
+>         struct task_struct *acquired, *nested;
+>
+>         nested = task->last_wakee;
+>
+>         /* Would not be rejected by the verifier. */
+>         acquired = bpf_task_acquire(nested);
+>         if (!acquired)
+>                 return 0;
+>
+>         bpf_task_release(acquired);
+>         return 0;
+> }
+>
+> To address this, this patch defines a new type flag called PTR_TRUSTED
+> which tracks whether a PTR_TO_BTF_ID pointer is safe to pass to a
+> KF_TRUSTED_ARGS kfunc or a BPF helper function. PTR_TRUSTED pointers are
+> passed directly from the kernel as a tracepoint or struct_ops callback
+> argument. Any nested pointer that is obtained from walking a PTR_TRUSTED
+> pointer is no longer PTR_TRUSTED. From the example above, the struct
+> task_struct *task argument is PTR_TRUSTED, but the 'nested' pointer
+> obtained from 'task->last_wakee' is not PTR_TRUSTED.
+>
+> A subsequent patch will add kfuncs for storing a task kfunc as a kptr,
+> and then another patch will add selftests to validate.
+>
+> Signed-off-by: David Vernet <void@manifault.com>
+> ---
 
---wvm2z6appxwdd5fa
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry that I couldn't look at it earlier.
 
-Hi,
+> [...]
+> @@ -5884,8 +5889,18 @@ static const struct bpf_reg_types scalar_types = { .types = { SCALAR_VALUE } };
+>  static const struct bpf_reg_types context_types = { .types = { PTR_TO_CTX } };
+>  static const struct bpf_reg_types ringbuf_mem_types = { .types = { PTR_TO_MEM | MEM_RINGBUF } };
+>  static const struct bpf_reg_types const_map_ptr_types = { .types = { CONST_PTR_TO_MAP } };
+> -static const struct bpf_reg_types btf_ptr_types = { .types = { PTR_TO_BTF_ID } };
+> -static const struct bpf_reg_types percpu_btf_ptr_types = { .types = { PTR_TO_BTF_ID | MEM_PERCPU } };
+> +static const struct bpf_reg_types btf_ptr_types = {
+> +	.types = {
+> +		PTR_TO_BTF_ID,
+> +		PTR_TO_BTF_ID | PTR_TRUSTED,
+> +	},
+> +};
+> +static const struct bpf_reg_types percpu_btf_ptr_types = {
+> +	.types = {
+> +		PTR_TO_BTF_ID | MEM_PERCPU,
+> +		PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED,
 
-On Fri, Nov 18, 2022 at 11:35:34PM +0100, Uwe Kleine-K=F6nig wrote:
-> Hello,
->=20
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
->=20
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch t=
-hat
-> you can pull into your tree to get it:
->=20
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client=
-_device_id_helper-immutable
->=20
-> I don't think it's feasable to apply this series in one go, so I ask the
-> maintainers of the changed files to apply via their tree. I guess it
-> will take a few kernel release iterations until all patch are in, but I
-> think a single tree creates too much conflicts.
->=20
-> The last patch changes i2c_driver::probe, all non-converted drivers will
-> fail to compile then. So I hope the build bots will tell me about any
-> driver I missed to convert. This patch is obviously not for application
-> now.
->=20
-> I dropped most individuals from the recipents of this mail to not
-> challenge the mail servers and mailing list filters too much. Sorry if
-> you had extra efforts to find this mail.
->=20
-> Best regards
-> Uwe
+Where is PTR_TRUSTED set for MEM_PERCPU?
 
-=2E..
+> +	}
+> +};
+>  static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
+>  static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
+>  static const struct bpf_reg_types const_str_ptr_types = { .types = { PTR_TO_MAP_VALUE } };
+> @@ -5973,7 +5988,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+>  	return -EACCES;
+>
+>  found:
+> -	if (reg->type == PTR_TO_BTF_ID) {
+> +	if (reg->type == PTR_TO_BTF_ID || reg->type & PTR_TRUSTED) {
 
->   power: supply: adp5061: Convert to i2c's .probe_new()
->   power: supply: bq2415x: Convert to i2c's .probe_new()
->   power: supply: bq24190: Convert to i2c's .probe_new()
->   power: supply: bq24257: Convert to i2c's .probe_new()
->   power: supply: bq24735: Convert to i2c's .probe_new()
->   power: supply: bq2515x: Convert to i2c's .probe_new()
->   power: supply: bq256xx: Convert to i2c's .probe_new()
->   power: supply: bq25890: Convert to i2c's .probe_new()
->   power: supply: bq25980: Convert to i2c's .probe_new()
->   power: supply: bq27xxx: Convert to i2c's .probe_new()
->   power: supply: ds2782: Convert to i2c's .probe_new()
->   power: supply: lp8727: Convert to i2c's .probe_new()
->   power: supply: ltc2941: Convert to i2c's .probe_new()
->   power: supply: ltc4162-l: Convert to i2c's .probe_new()
->   power: supply: max14656: Convert to i2c's .probe_new()
->   power: supply: max17040: Convert to i2c's .probe_new()
->   power: supply: max17042_battery: Convert to i2c's .probe_new()
->   power: supply: rt5033_battery: Convert to i2c's .probe_new()
->   power: supply: rt9455: Convert to i2c's .probe_new()
->   power: supply: sbs: Convert to i2c's .probe_new()
->   power: supply: sbs-manager: Convert to i2c's .probe_new()
->   power: supply: smb347: Convert to i2c's .probe_new()
->   power: supply: ucs1002: Convert to i2c's .probe_new()
->   power: supply: z2_battery: Convert to i2c's .probe_new()
->   [...]
+Now, earlier MEM_ALLOC was supposed to not enter this branch. If your patch
+allows MEM_ALLOC | PTR_TRUSTED (but I don't think it does), it will enter this
+branch. I think it is better to just be explicit and say PTR_TO_BTF_ID ||
+PTR_TO_BTF_ID | PTR_TRUSTED.
 
-Thanks, I queued patches 513-536 to the power-supply subsystem.
+>  		/* For bpf_sk_release, it needs to match against first member
+>  		 * 'struct sock_common', hence make an exception for it. This
+>  		 * allows bpf_sk_release to work for multiple socket types.
+> @@ -6055,6 +6070,8 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
+>  	 */
+>  	case PTR_TO_BTF_ID:
+>  	case PTR_TO_BTF_ID | MEM_ALLOC:
+> +	case PTR_TO_BTF_ID | PTR_TRUSTED:
+> +	case PTR_TO_BTF_ID | MEM_ALLOC | PTR_TRUSTED:
 
--- Sebastian
+This and the one below:
 
---wvm2z6appxwdd5fa
-Content-Type: application/pgp-signature; name="signature.asc"
+> @@ -8366,6 +8402,7 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
+>  		ptr = reg->map_ptr;
+>  		break;
+>  	case PTR_TO_BTF_ID | MEM_ALLOC:
+> +	case PTR_TO_BTF_ID | MEM_ALLOC | PTR_TRUSTED:
 
------BEGIN PGP SIGNATURE-----
+I think this will never be set, based on my reading of the code.
+Is the case with MEM_ALLOC | PTR_TRUSTED ever possible?
+And if this is needed here, why not update btf_struct_access?
+And KF_ARG_PTR_TO_ALLOC_BTF_ID is not updated either?
+Let me know if I missed something.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmN6g2YACgkQ2O7X88g7
-+pocPA/+MG7rp45xJuAH0zlIFTM8ovBviXnLvra0hpvK+vMB8SVdh4K8vRCAoeoT
-lxML9oRVfhraHzo/3X6+7V87cw+QzEx3GZbYsIasGqic46MoFYkbA2i3Q8s8hS5y
-qpAcKn/efXJaBtdIxWQnOc0xU0YCiteiIik8Idb9MjHFupUspLxtIjCzTAmvKQ0k
-hJ5u5cqv3d/MP6VpsOCUYPDet9nS9ByPeg8Kr9Ux1a0WEldPYUO+dU0ObqRdhliZ
-agftaEtCvFYkfO9k8ubBL/x00gTn002xOB7gp+5s0V0D3wKfT5EPVYOoUZbeYMIu
-QOZaLHkNkBtV85kGm18h7IFdQZQY9ahcaGTYZplyz/YzHlK/AlfjA2umKS1+rs5m
-A+DDqnAkuWw9fLg0MJ4dLSPwOSPX3VfgmVS3By3Do2gotQkCqXsRdhrG1cIoE1aL
-AZYpSwLTn2rAYF59poL3rgSqx/MhgrLwmKQOH3fjwZ3R7PIAWFhYP1We2UtKdCEM
-Gjpr7QfAUiOuXDKi5OrBbWr4m2eX26A4uifwR62OyldwH8pUWAq3umgkw3rotQAA
-hdwOOPM+cHTyLbtP8kaP1XSR6u0ybuTbw8OQE/XPDNVceoMqR4XxUSYbs0Q0UzY6
-fwljGfbakuGbaNlb7s2LBsy0ESZuiz64Za/0gfJhI5rP1eNRR1U=
-=Dh+o
------END PGP SIGNATURE-----
+>  		/* When referenced PTR_TO_BTF_ID is passed to release function,
+>  		 * it's fixed offset must be 0.	In the other cases, fixed offset
+>  		 * can be non-zero.
+> @@ -7939,6 +7956,25 @@ static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
+>  	return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
+>  }
+>
+> +static bool is_trusted_reg(const struct bpf_reg_state *reg)
+> +{
+> +	/* A referenced register is always trusted. */
+> +	if (reg->ref_obj_id)
+> +		return true;
+> +
+> +	/* If a register is not referenced, it is trusted if it has either the
+> +	 * MEM_ALLOC or PTR_TRUSTED type modifiers, and no others. Some of the
+> +	 * other type modifiers may be safe, but we elect to take an opt-in
+> +	 * approach here as some (e.g. PTR_UNTRUSTED and PTR_MAYBE_NULL) are
+> +	 * not.
+> +	 *
+> +	 * Eventually, we should make PTR_TRUSTED the single source of truth
+> +	 * for whether a register is trusted.
+> +	 */
+> +	return type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS &&
+> +	       !bpf_type_has_unsafe_modifiers(reg->type);
+> +}
+> +
+>  static bool __kfunc_param_match_suffix(const struct btf *btf,
+>  				       const struct btf_param *arg,
+>  				       const char *suffix)
+> @@ -8220,7 +8256,7 @@ static int process_kf_arg_ptr_to_btf_id(struct bpf_verifier_env *env,
+>  	const char *reg_ref_tname;
+>  	u32 reg_ref_id;
+>
+> -	if (reg->type == PTR_TO_BTF_ID) {
+> +	if (base_type(reg->type) == PTR_TO_BTF_ID) {
+>  		reg_btf = reg->btf;
+>  		reg_ref_id = reg->btf_id;
+>  	} else {
+>  		ptr = reg->btf;
+>  		break;
+>  	default:
+> @@ -8596,8 +8633,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>  		case KF_ARG_PTR_TO_BTF_ID:
+>  			if (!is_kfunc_trusted_args(meta))
+>  				break;
+> -			if (!reg->ref_obj_id) {
+> -				verbose(env, "R%d must be referenced\n", regno);
+> +
+> +			if (!is_trusted_reg(reg)) {
+> +				verbose(env, "R%d must be referenced or trusted\n", regno);
+>  				return -EINVAL;
+>  			}
+>  			fallthrough;
+> @@ -8702,9 +8740,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>  			break;
+>  		case KF_ARG_PTR_TO_BTF_ID:
+>  			/* Only base_type is checked, further checks are done here */
+> -			if (reg->type != PTR_TO_BTF_ID &&
+> -			    (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
+> -				verbose(env, "arg#%d expected pointer to btf or socket\n", i);
+> +			if ((base_type(reg->type) != PTR_TO_BTF_ID ||
+> +			     bpf_type_has_unsafe_modifiers(reg->type)) &&
+> +			    !reg2btf_ids[base_type(reg->type)]) {
+> +				verbose(env, "arg#%d is %s ", i, reg_type_str(env, reg->type));
+> +				verbose(env, "expected %s or socket\n",
+> +					reg_type_str(env, base_type(reg->type) |
+> +							  (type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS)));
+>  				return -EINVAL;
+>  			}
+>  			ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i);
+> @@ -14713,6 +14755,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+>  			break;
+>  		case PTR_TO_BTF_ID:
+>  		case PTR_TO_BTF_ID | PTR_UNTRUSTED:
+> +		case PTR_TO_BTF_ID | PTR_TRUSTED:
+>  		/* PTR_TO_BTF_ID | MEM_ALLOC always has a valid lifetime, unlike
+>  		 * PTR_TO_BTF_ID, and an active ref_obj_id, but the same cannot
+>  		 * be said once it is marked PTR_UNTRUSTED, hence we must handle
+> @@ -14720,6 +14763,8 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+>  		 * for this case.
+>  		 */
+>  		case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
+> +		case PTR_TO_BTF_ID | PTR_UNTRUSTED | PTR_TRUSTED:
 
---wvm2z6appxwdd5fa--
+I feel this is confusing. What do we mean with PTR_UNTRUSTED | PTR_TRUSTED?
+
+> +		case PTR_TO_BTF_ID | PTR_UNTRUSTED | MEM_ALLOC | PTR_TRUSTED:
