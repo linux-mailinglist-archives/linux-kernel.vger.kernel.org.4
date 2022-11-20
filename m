@@ -2,102 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968FA63165B
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 21:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C8E631666
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 21:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiKTUhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 15:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S229719AbiKTUpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 15:45:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiKTUhl (ORCPT
+        with ESMTP id S229551AbiKTUpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 15:37:41 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DFDDFA7
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 12:37:38 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owr4H-0008BO-D6; Sun, 20 Nov 2022 21:37:33 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owr4D-005WVs-Jw; Sun, 20 Nov 2022 21:37:30 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owr4D-000Pot-Ox; Sun, 20 Nov 2022 21:37:29 +0100
-Date:   Sun, 20 Nov 2022 21:37:25 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Petr Machata <petrm@nvidia.com>, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 500/606] net/mlx5: Convert to i2c's .probe_new()
-Message-ID: <20221120203725.je2nozmdq3bp2spi@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-501-uwe@kleine-koenig.org>
- <Y3nSPYlgl89cserh@shredder>
+        Sun, 20 Nov 2022 15:45:41 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3386310
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 12:45:39 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id v1so17112991wrt.11
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 12:45:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yH4lroM0lccRjMmDthb5fhzeP4eDRl234TJfi4eO4zY=;
+        b=BmrW7Pb8PgH85NJmjsaLP3Wagkr+GFcL6qZ4f62fN3RJDq/6a/c9hBuH/m3Cj3Kyjt
+         owAfUe19VnDQso7lFyvwE0owxl/XtPPlRKC+MPtS3GRwMU4w4soOX/ochq4yiFnpu+6U
+         X/kUOwpwe6pxXSo+z/0wsAnNG4kXKKIOtJ5CW8iqcG0SWtBFE3sYONmoZVGUMfDOKnr3
+         1X9ZI5V1zXm4haAO4q2a3pMmYMbs0370ckx9YtDIGmTDHWG0GAATz5p7Bor2MUQE2SCL
+         s4C+tsxB6T/6JFqNBSYe3shWeVMjy+ENr4s07wD3dlvFWTA4kr1gNKAg/uWQT4uUmLxC
+         tv3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yH4lroM0lccRjMmDthb5fhzeP4eDRl234TJfi4eO4zY=;
+        b=dm5E7NVYWdIIu1cqd8uiu/RIDUoD+OeUbtvfcHSIieG9Ex6SirPwWzSCMs3ztHKU/N
+         g3rCmYIhFWnDSuF3nwBozv5IxMIuO1cQvolzqnZIeiZ92U4JV+3XsKwiFvwGTBXVlUpu
+         nOjdxKk1EKWkp1OZun5EUF+AbqMjtrNn0QF7bx9B3bKcstcGEiTCLdB1mgbSD14AES7U
+         K4Aj445beBFrxYOefKsNmqoOy/4Uu6nz8nmzwEMqog7nELpq8mQBYfxjqRVer8DRGy4U
+         nwH9+y5AxflK2Ljsug6mzOBkcAIiGkzry8gIUmLTDQB14Bpgz3W9kN1lQvy0m8z8IINi
+         fCRg==
+X-Gm-Message-State: ANoB5pmYIKTPoSCQLwiONwlJyK/KfF6o6UGyQbKTflio1SkZHDKQoWp2
+        sS7T7xYP/MpsKdo9JmjQRC8sRAN4YHCR2Q==
+X-Google-Smtp-Source: AA0mqf4vW45zfKzlNKIug6pa0YB7LuiYwzDGKiVPReyAmOX4sa8PbfSYPyhVoVKIyn4LFc/GJjFm2g==
+X-Received: by 2002:adf:e647:0:b0:236:69fd:643e with SMTP id b7-20020adfe647000000b0023669fd643emr8894200wrn.560.1668977138383;
+        Sun, 20 Nov 2022 12:45:38 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id v11-20020a5d43cb000000b00241bd177f89sm8667302wrr.14.2022.11.20.12.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 12:45:38 -0800 (PST)
+Date:   Sun, 20 Nov 2022 20:45:36 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     oe-kbuild@lists.linux.dev, Qais Yousef <qais.yousef@arm.com>,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [tip:sched/core 3/19] kernel/sched/fair.c:7263
+ find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
+Message-ID: <20221120204536.ei2st4yv76lboe6x@airbuntu>
+References: <202211121723.P4V3w801-lkp@intel.com>
+ <20221112174705.pymjyzr4nqhkqfoc@airbuntu>
+ <Y3H7AcgnGMq5p+nn@kadam>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2hrmtg7srutfafrx"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y3nSPYlgl89cserh@shredder>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y3H7AcgnGMq5p+nn@kadam>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/14/22 11:23, Dan Carpenter wrote:
+> On Sat, Nov 12, 2022 at 05:47:05PM +0000, Qais Yousef wrote:
+> > On 11/12/22 13:16, Dan Carpenter wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+> > > head:   52b33d87b9197c51e8ffdc61873739d90dd0a16f
+> > > commit: 244226035a1f9b2b6c326e55ae5188fab4f428cb [3/19] sched/uclamp: Fix fits_capacity() check in feec()
+> > > config: riscv-randconfig-m031-20221111
+> > > compiler: riscv64-linux-gcc (GCC) 12.1.0
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Reported-by: Dan Carpenter <error27@gmail.com>
+> > > 
+> > > smatch warnings:
+> > > kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
+> > > kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_max'.
+> > > 
+> > > vim +/util_min +7263 kernel/sched/fair.c
+> > 
+> > [...]
+> > 
+> > > util_min/max not initialized if uclamp_is_used() is false.  (I thought
+> > > I had reported this earlier but I don't see it on vger).
+> > 
+> > Thanks Dan!
+> > 
+> > It's harmless since util_min/max are ignored in util_fits_cpu() too;
+> > uclamp_is_used() is checked there as well.
+> > 
+> > I couldn't reproduce, I need to get GCC 12.1.0, but the below ought to cure it.
+> > Let me test it a bit more and send a patch.
+> 
+> In that case it's fine.  This is inlined.  I guess, generally, we are
+> going to only consider passing uninitialized variables to functions as
+> bugs when the functions are not inlined.  I believe that one of the
+> KMsan things will trigger a warning at runtime for this as well but it's
+> the same situation, where it's considered a false positive because it's
+> inlined.  (Technically it's undefined behavior either way according to
+> the C standard, but the standard is sometimes useless).
+> 
+> It's not a GCC warning, it's from Smatch.
+> 
+> GCC uninitialized warnings were disabled by defualt because they have
+> too many false positives.  Use "make W=2" to enable them.  GCC will
+> complain.
 
---2hrmtg7srutfafrx
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks Dan. I could reproduce it a while ago and I have the full patch below
+- but I couldn't run it on real hardware just to do some sanity check and it
+seems I'll have to wait for a while longer.
 
-On Sun, Nov 20, 2022 at 09:07:41AM +0200, Ido Schimmel wrote:
-> In subject: s/mlx5/mlxsw/
+Putting it down here in case Peter fancies picking it up. I'll be posting it
+along with other fixes in this area as soon as I get chance to run them
+somewhere.
 
-Hmm, I wonder how I did that, given I didn't determine the prefix by
-hand. *shrug*
 
-Thanks, I fixed that in my tree and added your Reviewed-by tag.
+Cheers
 
-Best regards
-Uwe
+--
+Qais Yousef
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---2hrmtg7srutfafrx
-Content-Type: application/pgp-signature; name="signature.asc"
+--->8----
 
------BEGIN PGP SIGNATURE-----
+commit 8539b7d7b9e3c3bb6d817cbbd5be002f80f6eb31
+Author: Qais Yousef <qyousef@layalina.io>
+Date:   Sat Nov 19 23:12:34 2022 +0000
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN6kAMACgkQwfwUeK3K
-7AnLDQf/QDgRkygwFrlHH43sRHoAfatIKwkP6WXVxL8ubCCgyO+REzW/pj9yIYQl
-rqjmUANVRXJFbQbi/g1mf8LknpeXGbRtnpnxFGMP+jJVEU/KcpTMSIO/cPncEuDJ
-Higf0lSvUEK5q8ufL+j1cJXUdw9Thil2QLrZJWyt2n3yHCpr1ZFOWT+aqEKhW3qj
-ejsIPiXeeXB3SYaIO63cPS0eZbGK4f/pNX3NTqYosicGDtei/PgTl9g4JakaQpIk
-nLW8VgpBjml8d2mRmfmAKuiAwDsx9Y06xVaXF6egeHaKrC1toB7Xwi/mrzRrwpyS
-ZWhgoOMOwDMp3XoGjFju/T1MPqYtjQ==
-=ppU8
------END PGP SIGNATURE-----
+    sched/uclamp: Fix a uninitialized variable warnings
+    
+    Addresses the following warnings:
+    
+    > config: riscv-randconfig-m031-20221111
+    > compiler: riscv64-linux-gcc (GCC) 12.1.0
+    >
+    > smatch warnings:
+    > kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
+    > kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_max'.
+    
+    Reported-by: kernel test robot <lkp@intel.com>
+    Reported-by: Dan Carpenter <error27@gmail.com>
+    Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
 
---2hrmtg7srutfafrx--
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 4cc56c91e06e..89dadaafc1ec 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7217,10 +7217,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	eenv_task_busy_time(&eenv, p, prev_cpu);
+ 
+ 	for (; pd; pd = pd->next) {
++		unsigned long util_min = p_util_min, util_max = p_util_max;
+ 		unsigned long cpu_cap, cpu_thermal_cap, util;
+ 		unsigned long cur_delta, max_spare_cap = 0;
+ 		unsigned long rq_util_min, rq_util_max;
+-		unsigned long util_min, util_max;
+ 		unsigned long prev_spare_cap = 0;
+ 		int max_spare_cap_cpu = -1;
+ 		unsigned long base_energy;
+@@ -7258,10 +7258,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			 * aligned with sched_cpu_util().
+ 			 */
+ 			if (uclamp_is_used()) {
+-				if (uclamp_rq_is_idle(cpu_rq(cpu))) {
+-					util_min = p_util_min;
+-					util_max = p_util_max;
+-				} else {
++				if (!uclamp_rq_is_idle(cpu_rq(cpu))) {
+ 					/*
+ 					 * Open code uclamp_rq_util_with() except for
+ 					 * the clamp() part. Ie: apply max aggregation
