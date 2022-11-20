@@ -2,117 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFC863158E
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E8B631594
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiKTRjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 12:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        id S229572AbiKTRrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 12:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKTRjn (ORCPT
+        with ESMTP id S229712AbiKTRrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 12:39:43 -0500
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C356E1CB1B;
-        Sun, 20 Nov 2022 09:39:41 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id c15so6101173qtw.8;
-        Sun, 20 Nov 2022 09:39:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hS6W8Uj2CHGPpGwY8BWid1qKNLVHTFW0WXbmUfuRRvA=;
-        b=oGOEfLUr/4ppHKq95rwSeaN6c/SheIZRzLPmLSGOLP7wkkObIhfbRVGMd93eqgGJP7
-         /v/7siu5BnKQpO9VpFtkc0XTxeaxfvpJSfBDG8TL+GWfBavdq+PP7WOwkOJj4NoD8+Fi
-         a6obv6Fj9brBq2wmnCFhJc+mXjK+CrkvgmhjgWvNtI4L370hzmUMZPTWJ0ebfLet5ZQh
-         AIm4OjKd67MeLd4mkg9Z8h/9Q3zTzR2BjdzZPiQvLmhU0vrfS72/ohbp2t1y8AlDtBp9
-         +YUn9WIJk+qlBG7uFEN3Q4v4BP7HzKe6QObpu+mjBP+wlLUvZkZpCQ1BuCLHQfLe2RSN
-         ouog==
-X-Gm-Message-State: ANoB5pmO8VjloML721ITSjGYq6wOgv8zh0gWvHulXQ/amCMa1dNgQspC
-        RwO3PXzHB93VvBmQLmFW7go=
-X-Google-Smtp-Source: AA0mqf4rfb8iHYidBkc7xuxKIhMoA2+iDc2Nze/ktGesCpGlIE4N7o2V6PTQ0IyHXKTzUsDLk7Ty9g==
-X-Received: by 2002:a05:622a:5989:b0:3a5:50fa:1a30 with SMTP id gb9-20020a05622a598900b003a550fa1a30mr14452371qtb.442.1668965980730;
-        Sun, 20 Nov 2022 09:39:40 -0800 (PST)
-Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
-        by smtp.gmail.com with ESMTPSA id s1-20020a05620a0bc100b006cbc00db595sm6725619qki.23.2022.11.20.09.39.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 09:39:39 -0800 (PST)
-Date:   Sun, 20 Nov 2022 11:39:44 -0600
-From:   David Vernet <void@manifault.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, yhs@fb.com, song@kernel.org, sdf@google.com,
-        john.fastabend@gmail.com, haoluo@google.com, jolsa@kernel.org,
-        kpsingh@kernel.org, memxor@gmail.com, tj@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH bpf-next v9 2/4] bpf: Allow trusted pointers to be passed
- to KF_TRUSTED_ARGS kfuncs
-Message-ID: <Y3pmYKTKhdf69MPW@maniforge.lan>
-References: <20221120051004.3605026-1-void@manifault.com>
- <20221120051004.3605026-3-void@manifault.com>
- <20221120172815.godn2rt22yk7j22z@macbook-pro-5.dhcp.thefacebook.com>
+        Sun, 20 Nov 2022 12:47:17 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4171D0D4;
+        Sun, 20 Nov 2022 09:47:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 534F91F38A;
+        Sun, 20 Nov 2022 17:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668966431; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qQlkNKhlh2I+jMc5FdVV/7SJOjtEM9O9Z7NPgfkMBVg=;
+        b=prEOr59tiXnLEQkbf/tRGw+dZIKs6ddqY0KpoB1YlRNUmI3NZIE2S8qBxIq/a2pS5/9aoJ
+        p95hLhLCXNoJ1yZus47qavY7CJoDRvGLR/zbCBTEQULEldXHBVifQKNs0f6jSdBAgd7RAD
+        pKUsjaGnVZglq7WRpPlAFYgV+RpxP4w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668966431;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qQlkNKhlh2I+jMc5FdVV/7SJOjtEM9O9Z7NPgfkMBVg=;
+        b=2lDE5UaYHzj4m59MtraFqRie9mXVzgkVy39I9K//Xdl643B+mxoLxOqu1XiCQoQxViE/pp
+        mpOsS/RYuGW5HSBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 24F7F1348D;
+        Sun, 20 Nov 2022 17:47:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dpGvBx9oemMVbgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Sun, 20 Nov 2022 17:47:11 +0000
+Message-ID: <fc0b2426-d463-028a-68df-26b73e8ba802@suse.de>
+Date:   Sun, 20 Nov 2022 18:47:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221120172815.godn2rt22yk7j22z@macbook-pro-5.dhcp.thefacebook.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: build failure in linux-next: offb missing fb helpers
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-fbdev@vger.kernel.org, linux-kbuild@vger.kernel.org
+References: <20221118150351.GV28810@kitsune.suse.cz>
+ <b8191c01-4d78-537b-9650-a783e14e5997@infradead.org>
+ <CAK7LNASBhTvzkjXuJDH8ePCVXnZ=GUYdNa-OU+QURbBp3oyEBQ@mail.gmail.com>
+ <20221119153729.GX28810@kitsune.suse.cz>
+ <ff3a1ee2-3439-d79c-aa59-5bccec99bf3e@infradead.org>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <ff3a1ee2-3439-d79c-aa59-5bccec99bf3e@infradead.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Hd9vTpvjP00gY5a6j0YzCwNO"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 09:28:15AM -0800, Alexei Starovoitov wrote:
-> On Sat, Nov 19, 2022 at 11:10:02PM -0600, David Vernet wrote:
-> >  		case KF_ARG_PTR_TO_BTF_ID:
-> >  			/* Only base_type is checked, further checks are done here */
-> > -			if (reg->type != PTR_TO_BTF_ID &&
-> > -			    (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
-> > -				verbose(env, "arg#%d expected pointer to btf or socket\n", i);
-> > +			if ((base_type(reg->type) != PTR_TO_BTF_ID ||
-> > +			     bpf_type_has_unsafe_modifiers(reg->type)) &&
-> > +			    !reg2btf_ids[base_type(reg->type)]) {
-> > +				verbose(env, "arg#%d is %s ", i, reg_type_str(env, reg->type));
-> > +				verbose(env, "expected %s or socket\n",
-> > +					reg_type_str(env, base_type(reg->type) |
-> > +							  (type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS)));
-> ...
-> > diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-> > index 86d6fef2e3b4..3193915c5ee6 100644
-> > --- a/tools/testing/selftests/bpf/verifier/calls.c
-> > +++ b/tools/testing/selftests/bpf/verifier/calls.c
-> > @@ -109,7 +109,7 @@
-> >  	},
-> >  	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-> >  	.result = REJECT,
-> > -	.errstr = "arg#0 expected pointer to btf or socket",
-> > +	.errstr = "arg#0 is ptr_or_null_ expected ptr_ or socket",
-> 
-> Nice.
-> I missed the fact that reg_type_str() prints only the type.
-> We see more verbose prints in print_verifier_state():
->   verbose(env, "%s", reg_type_str(env, t));
->   if (base_type(t) == PTR_TO_BTF_ID)
->           verbose(env, "%s", kernel_type_name(reg->btf, reg->btf_id));
-> Since reg_type_str() prints into a buffer maybe we can enhance it with
-> struct name printing too?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Hd9vTpvjP00gY5a6j0YzCwNO
+Content-Type: multipart/mixed; boundary="------------DiVkbqDeZoAT8wL94A68726j";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Randy Dunlap <rdunlap@infradead.org>, =?UTF-8?Q?Michal_Such=c3=a1nek?=
+ <msuchanek@suse.de>, Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-fbdev@vger.kernel.org, linux-kbuild@vger.kernel.org
+Message-ID: <fc0b2426-d463-028a-68df-26b73e8ba802@suse.de>
+Subject: Re: build failure in linux-next: offb missing fb helpers
+References: <20221118150351.GV28810@kitsune.suse.cz>
+ <b8191c01-4d78-537b-9650-a783e14e5997@infradead.org>
+ <CAK7LNASBhTvzkjXuJDH8ePCVXnZ=GUYdNa-OU+QURbBp3oyEBQ@mail.gmail.com>
+ <20221119153729.GX28810@kitsune.suse.cz>
+ <ff3a1ee2-3439-d79c-aa59-5bccec99bf3e@infradead.org>
+In-Reply-To: <ff3a1ee2-3439-d79c-aa59-5bccec99bf3e@infradead.org>
 
-I like that, and we have a bit of extra space after bumping
-TYPE_STR_BUF_LEN to 128 so why not. I'll take care of it in a follow-up
-change.
+--------------DiVkbqDeZoAT8wL94A68726j
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> Not urgent.
-> The set looks great. Applied.
+SGkNCg0KQW0gMTkuMTEuMjIgdW0gMTk6MTUgc2NocmllYiBSYW5keSBEdW5sYXA6DQo+IEhp
+LA0KPiANCj4gT24gMTEvMTkvMjIgMDc6MzcsIE1pY2hhbCBTdWNow6FuZWsgd3JvdGU6DQo+
+PiBIZWxsbywNCj4+DQo+PiBPbiBTYXQsIE5vdiAxOSwgMjAyMiBhdCAxMDoyNzowNFBNICsw
+OTAwLCBNYXNhaGlybyBZYW1hZGEgd3JvdGU6DQo+Pj4gT24gU2F0LCBOb3YgMTksIDIwMjIg
+YXQgMzoyMCBQTSBSYW5keSBEdW5sYXAgPHJkdW5sYXBAaW5mcmFkZWFkLm9yZz4gd3JvdGU6
+DQo+Pj4+DQo+Pj4+IEhpLS0NCj4+Pj4NCj4+Pj4gW2FkZGluZyBNYXNhaGlyby1zYW5dDQo+
+Pj4+DQo+Pj4+DQo+Pj4+IE9uIDExLzE4LzIyIDA3OjAzLCBNaWNoYWwgU3VjaMOhbmVrIHdy
+b3RlOg0KPj4+Pj4gSGVsbG8sDQo+Pj4+Pg0KPj4+Pj4gSSBhbSBzZWVpbmcgdGhlc2UgZXJy
+b3JzOg0KPj4+Pj4NCj4+Pj4+IFsgMzgyNXNdICAgQVIgICAgICBidWlsdC1pbi5hDQo+Pj4+
+PiBbIDM4MjdzXSAgIEFSICAgICAgdm1saW51eC5hDQo+Pj4+PiBbIDM4MzVzXSAgIExEICAg
+ICAgdm1saW51eC5vDQo+Pj4+PiBbIDM4MzVzXSAgIE9CSkNPUFkgbW9kdWxlcy5idWlsdGlu
+Lm1vZGluZm8NCj4+Pj4+IFsgMzgzNXNdICAgR0VOICAgICBtb2R1bGVzLmJ1aWx0aW4NCj4+
+Pj4+IFsgMzgzNXNdICAgR0VOICAgICAudm1saW51eC5vYmpzDQo+Pj4+PiBbIDM4NDhzXSAg
+IE1PRFBPU1QgTW9kdWxlLnN5bXZlcnMNCj4+Pj4+IFsgMzg0OHNdICAgQ0MgICAgICAudm1s
+aW51eC5leHBvcnQubw0KPj4+Pj4gWyAzODQ5c10gICBVUEQgICAgIGluY2x1ZGUvZ2VuZXJh
+dGVkL3V0c3ZlcnNpb24uaA0KPj4+Pj4gWyAzODQ5c10gICBDQyAgICAgIGluaXQvdmVyc2lv
+bi10aW1lc3RhbXAubw0KPj4+Pj4gWyAzODQ5c10gICBMRCAgICAgIC50bXBfdm1saW51eC5i
+dGYNCj4+Pj4+IFsgMzg2NHNdIGxkOiBkcml2ZXJzL3ZpZGVvL2ZiZGV2L29mZmIubzooLmRh
+dGEucmVsLnJvKzB4NTgpOiB1bmRlZmluZWQNCj4+Pj4+IHJlZmVyZW5jZSB0byBgY2ZiX2Zp
+bGxyZWN0Jw0KPj4+Pj4gWyAzODY0c10gbGQ6IGRyaXZlcnMvdmlkZW8vZmJkZXYvb2ZmYi5v
+OiguZGF0YS5yZWwucm8rMHg2MCk6IHVuZGVmaW5lZA0KPj4+Pj4gcmVmZXJlbmNlIHRvIGBj
+ZmJfY29weWFyZWEnDQo+Pj4+PiBbIDM4NjRzXSBsZDogZHJpdmVycy92aWRlby9mYmRldi9v
+ZmZiLm86KC5kYXRhLnJlbC5ybysweDY4KTogdW5kZWZpbmVkDQo+Pj4+PiByZWZlcmVuY2Ug
+dG8gYGNmYl9pbWFnZWJsaXQnDQo+Pj4+Pg0KPj4+Pj4gY2ZiX2ZpbGxyZWN0IGlzIHByb3Zp
+ZGVkIGJ5IGRyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9jZmJmaWxscmVjdC5jDQo+Pj4+Pg0K
+Pj4+Pj4gSXQgaXMgY29tcGlsZWQgd2hlbiBDT05GSUdfRkJfQ0ZCX0ZJTExSRUNUDQo+Pj4+
+PiBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvTWFrZWZpbGU6b2JqLSQoQ09ORklHX0ZCX0NG
+Ql9GSUxMUkVDVCkgICs9IGNmYmZpbGxyZWN0Lm8NCj4+Pj4+DQo+Pj4+PiBkcml2ZXJzL3Zp
+ZGVvL2ZiZGV2L01ha2VmaWxlOm9iai0kKENPTkZJR19GQl9PRikgICAgICAgICAgICAgICAr
+PSBvZmZiLm8NCj4+Pj4+IGlzIGNvbXBpbGVkIHdoZW4gQ09ORklHX0ZCX09GDQo+Pj4+Pg0K
+Pj4+Pj4gSXQgc2VsZWN0cyBDT05GSUdfRkJfQ0ZCX0ZJTExSRUNUDQo+Pj4+PiBjb25maWcg
+RkJfT0YNCj4+Pj4+ICAgICAgICAgIGJvb2wgIk9wZW4gRmlybXdhcmUgZnJhbWUgYnVmZmVy
+IGRldmljZSBzdXBwb3J0Ig0KPj4+Pj4gICAgICAgICAgZGVwZW5kcyBvbiAoRkIgPSB5KSAm
+JiBQUEMgJiYgKCFQUENfUFNFUklFUyB8fCBQQ0kpDQo+Pj4+PiAgICAgICAgICBzZWxlY3Qg
+QVBFUlRVUkVfSEVMUEVSUw0KPj4+Pj4gICAgICAgICAgc2VsZWN0IEZCX0NGQl9GSUxMUkVD
+VA0KPj4+Pj4gICAgICAgICAgc2VsZWN0IEZCX0NGQl9DT1BZQVJFQQ0KPj4+Pj4gICAgICAg
+ICAgc2VsZWN0IEZCX0NGQl9JTUFHRUJMSVQNCj4+Pj4+ICAgICAgICAgIHNlbGVjdCBGQl9N
+QUNNT0RFUw0KPj4+Pj4NCj4+Pj4+IFRoZSBjb25maWcgaGFzIEZCX09GIGJ1aWx0LWluIGFu
+ZCBGQl9DRkJfRklMTFJFQ1QgbW9kdWxhcg0KPj4+Pj4gY29uZmlnL3BwYzY0bGUvdmFuaWxs
+YTpDT05GSUdfRkJfQ0ZCX0ZJTExSRUNUPW0NCj4+Pj4+IGNvbmZpZy9wcGM2NGxlL3Zhbmls
+bGE6Q09ORklHX0ZCX0NGQl9DT1BZQVJFQT1tDQo+Pj4+PiBjb25maWcvcHBjNjRsZS92YW5p
+bGxhOkNPTkZJR19GQl9DRkJfSU1BR0VCTElUPW0NCj4+Pj4+IGNvbmZpZy9wcGM2NGxlL3Zh
+bmlsbGE6Q09ORklHX0ZCX09GPXkNCj4+Pj4+DQo+Pj4+PiBJdCBvbmx5IGRlcGVuZHMgb24g
+RkIgd2hpY2ggbXV0IGJlIGJ1aWx0LWluIGZvciBGQl9PRg0KPj4+Pj4gY29uZmlnIEZCX0NG
+Ql9GSUxMUkVDVA0KPj4+Pj4gICAgICAgICAgdHJpc3RhdGUNCj4+Pj4+ICAgICAgICAgIGRl
+cGVuZHMgb24gRkINCj4+Pj4+DQo+Pj4+PiBJcyBzZWxlY3QgaW4ga2NvbmZpZyBicm9rZW4/
+DQo+Pj4+Pg0KPj4+Pj4gQXR0YWNobmlnIHRoZSBjb25maWcgaW4gcXVlc3Rpb24uDQo+Pj4+
+DQo+Pj4+IFRoZSBzeW1ib2wgaW5mbyBmcm9tIHhjb25maWcgc2F5czoNCj4+Pj4NCj4+Pj4g
+U3ltYm9sOiBGQl9DRkJfRklMTFJFQ1QgWz1tXQ0KPj4+PiBUeXBlIDogdHJpc3RhdGUNCj4+
+Pj4gRGVmaW5lZCBhdCBkcml2ZXJzL3ZpZGVvL2ZiZGV2L0tjb25maWc6NjkNCj4+Pj4gRGVw
+ZW5kcyBvbjogSEFTX0lPTUVNIFs9eV0gJiYgRkIgWz15XQ0KPj4+PiBTZWxlY3RlZCBieSBb
+bV06DQo+Pj4+IFtkZWxldGVkXQ0KPj4+PiAtIEZCX09GIFs9eV0gJiYgSEFTX0lPTUVNIFs9
+eV0gJiYgRkIgWz15XT15ICYmIFBQQyBbPXldICYmICghUFBDX1BTRVJJRVMgWz15XSB8fCBQ
+Q0kgWz15XSkgJiYgIURSTV9PRkRSTSBbPW1dDQo+Pj4+DQo+Pj4+IEkgZG9uJ3Qgc2VlIHdo
+eSB0aGUgJ3NlbGVjdCcgZnJvbSAoYm9vbCkgRkJfT0Ygd291bGQgbGVhdmUgRkJfQ0ZCX0ZJ
+TExSRUNUIChhbmQgdGhlIG90aGVycykNCj4+Pj4gYXMgPW0gaW5zdGVhZCBvZiA9eS4NCj4+
+Pj4NCj4+Pj4gSG9wZWZ1bGx5IE1hc2FoaXJvIGNhbiBzaGVkIHNvbWUgbGlnaHQgb24gdGhp
+cy4NCj4+Pj4NCj4+Pj4gLS0NCj4+Pj4gflJhbmR5DQo+Pj4NCj4+Pg0KPj4+IFRoZSByZWFz
+b24gaXMgc2hvd24gaW4geW91ciBwYXN0ZSBvZiBoZWxwIG1lc3NhZ2U6DQo+Pj4NCj4+PiAi
+JiYgIURSTV9PRkRSTSBbPW1dIiBkb3duZ3JhZGVzIGl0IHRvICJzZWxlY3RlZCBieSBtIg0K
+Pj4+DQo+Pj4gVG8gYWlkIHRoaXMgcGFydGljdWxhciBjYXNlLCB0aGUgZm9sbG93aW5nIHdp
+bGwgc2VsZWN0DQo+Pj4gRkJfQ0ZCX0ZJTExSRUNUPXkuDQo+Pj4NCj4+Pg0KPiANCj4gVGhh
+bmtzIGFnYWluIGZvciB5b3VyIGhlbHAuDQo+IA0KPj4+DQo+Pj4NCj4+PiBkaWZmIC0tZ2l0
+IGEvZHJpdmVycy92aWRlby9mYmRldi9LY29uZmlnIGIvZHJpdmVycy92aWRlby9mYmRldi9L
+Y29uZmlnDQo+Pj4gaW5kZXggNjZmMzZiNjllOGYzLi4yYmNmODYyNzgxOWYgMTAwNjQ0DQo+
+Pj4gLS0tIGEvZHJpdmVycy92aWRlby9mYmRldi9LY29uZmlnDQo+Pj4gKysrIGIvZHJpdmVy
+cy92aWRlby9mYmRldi9LY29uZmlnDQo+Pj4gQEAgLTQ1OCw3ICs0NTgsNyBAQCBjb25maWcg
+RkJfQVRBUkkNCj4+PiAgIGNvbmZpZyBGQl9PRg0KPj4+ICAgICAgICAgIGJvb2wgIk9wZW4g
+RmlybXdhcmUgZnJhbWUgYnVmZmVyIGRldmljZSBzdXBwb3J0Ig0KPj4+ICAgICAgICAgIGRl
+cGVuZHMgb24gKEZCID0geSkgJiYgUFBDICYmICghUFBDX1BTRVJJRVMgfHwgUENJKQ0KPj4+
+IC0gICAgICAgZGVwZW5kcyBvbiAhRFJNX09GRFJNDQo+Pj4gKyAgICAgICBkZXBlbmRzIG9u
+IERSTV9PRkRSTSAhPSB5DQo+Pj4gICAgICAgICAgc2VsZWN0IEFQRVJUVVJFX0hFTFBFUlMN
+Cj4+PiAgICAgICAgICBzZWxlY3QgRkJfQ0ZCX0ZJTExSRUNUDQo+Pj4gICAgICAgICAgc2Vs
+ZWN0IEZCX0NGQl9DT1BZQVJFQQ0KPj4NCj4+IFRoYW5rcyBmb3IgY2xhcmlmaWNhdGlvbi4N
+Cj4+DQo+PiBUaGlzIGNoYW5nZSBmaXhlc3MgdGhlIGNvbmZpZyBmb3IgbWUuDQo+IA0KPiAN
+Cj4gVGhvbWFzLCBpcyB0aGlzIGNoYW5nZSB0byBEUk1fT0ZEUk0gdW5kZXIgRkJfT0YgYWNj
+ZXB0YWJsZSB0byB5b3U/DQoNClN1cmUsIHRoYW5rcyBmb3IgaGVscGluZy4NCg0KVGhlIG9u
+bHkgcmVhc29uIGZvciBhZGRpbmcgdGhpcyBLY29uZmlnIHJ1bGUgaXMgdGhhdCBpdCBkb2Vz
+bid0IG1ha2UgDQptdWNoIHNlbnNlIHRvIGhhdmUgb2ZmYiBhbmQgb2Zkcm0gZW5hYmxlZCBh
+dCB0aGUgc2FtZSB0aW1lLiBCVFcgd2UgaGF2ZSANCmEgc2ltaWxhciBydWxlIGZvciBzaW1w
+bGVmYi9zaW1wbGVkcm0sIHdoaWNoIG5ldmVyIG1hZGUgYW55IHByb2JsZW1zLg0KDQpCZXN0
+IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiANCj4+PiBPciwgcGVyaGFwcyAiZGVwZW5kcyBv
+biBEUk1fT0ZEUk0gPSBuIg0KPj4+IEkgZG8gbm90IGtub3cgdGhlIGludGVudGlvbiBvZiB0
+aGlzIGRlcGVuZGVuY3kuDQo+Pj4NCj4+PiBSZWNvbW1lbmRhdGlvbiBpcyB0byB1c2UgImRl
+cGVuZHMgb24iIGluc3RlYWQgb2YgInNlbGVjdCIgdGhvdWdoLg0KPj4+DQo+Pj4NCj4+Pg0K
+Pj4+IEJUVywgdGhpcyBpcyBzaW1pbGFyIHRvIHdoYXQgeW91IGFza2VkIGJlZm9yZS4NCj4+
+Pg0KPj4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWtidWlsZC9lMWE2MjI4ZC0x
+MzQxLTYyNjQtZDk3YS1lMmJkNTJhNjVjODJAaW5mcmFkZWFkLm9yZy8NCj4+Pg0KPj4+DQo+
+Pj4gSSB0cmllZCB0byBmaXggaXQgaW4gdGhlIHBhc3QsIGJ1dCB0aGUgaXNzdWUgd2FzIG5v
+dCBhcyBzaGFsbG93IGFzIEkNCj4+PiBoYWQgZXhwZWN0ZWQuDQo+Pj4gSSBkaWQgbm90IGdl
+dCBhcm91bmQgdG8gcmV2aXNpdGluZyB0aGlzIHRvcGljLg0KPj4+DQo+Pj4gaHR0cHM6Ly9w
+YXRjaHdvcmsua2VybmVsLm9yZy9wcm9qZWN0L2xpbnV4LWtidWlsZC9wYXRjaC8xNTQzMjE2
+OTY5LTIyMjctMS1naXQtc2VuZC1lbWFpbC15YW1hZGEubWFzYWhpcm9Ac29jaW9uZXh0LmNv
+bS8NCj4+Pg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVy
+IERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhm
+ZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7D
+vHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Thanks!
+--------------DiVkbqDeZoAT8wL94A68726j--
 
-> There is an odd arm64 failure in bonding test reported by CI, but looks unrelated.
+--------------Hd9vTpvjP00gY5a6j0YzCwNO
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Hmmm yeah, can't see how this change would have affected that. I'll keep
-an eye on it in CI to see if it persists.
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmN6aBwFAwAAAAAACgkQlh/E3EQov+Bw
+hhAArl4AVotTy386F5ntfFIvxY+AlvG68dHXSpnrxqel4zUBbU3rGQy7a2heXeZHjx+Wv02ylAN2
+tZ1qAcb1v3Iezrg9goYmRKE+fAZgpRKOggEu/sumDW2NuWutZrKIedLKYe3XSGCFsWR7ee43KoRn
+bGWPr1olHTs4Ny5ecYNHNMW21OS71ONwE/LQc+4mllopk/rlFJeHLucSjH04dG0Z0Th40/CwaBJv
+bU59iPCut6peMdWusXQHeUkcGjdiPR5uTzZRp66OGEYiYY3e91z//KlbAKCNstN18cH6fhMJCKOQ
+8aswW5Ba0/0W1vqX8DfTHXqNTGT9fUrCNpqkh5HQH7YFUKWYa7ucjgHBkqvDvzY/HJHk5t26Yq6D
+jlDznX74cGMASKCArQsqGUH1yglkK9y0bdllP2i+7kJEslfJwW0GWz2PQzB0AN+Suqj112SN8yUu
+1RZ1/cXSYp6wuye3BXDW3+WEegyq4UqfteFaKdwifmLESCJ9XZ+alOJUL0lIg4oe5ANPuKMqx++f
+IbYbJq3sZI0Jrn/gamD9cwjNs3UhTI1uMvrqCkuqy75iBmnTiVrYkegn4dNKDJ70dqv7EhdfXkTq
+w3K/7wrxiLpb5V1JmorP0p54OnMROKGRCq7LxzvZZks0HFOopVcDYRvdqH/0mwHBtjFMVwWgWGnL
+McA=
+=UxHj
+-----END PGP SIGNATURE-----
+
+--------------Hd9vTpvjP00gY5a6j0YzCwNO--
