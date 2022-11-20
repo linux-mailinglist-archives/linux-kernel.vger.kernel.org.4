@@ -2,69 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46FF6312FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 09:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8086312FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 09:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbiKTIVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 03:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S229576AbiKTI0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 03:26:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKTIVs (ORCPT
+        with ESMTP id S229454AbiKTI0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 03:21:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716D4970A8
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 00:21:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F13B60C0B
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 08:21:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957BBC433C1;
-        Sun, 20 Nov 2022 08:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668932505;
-        bh=elZoUtt4+Cz+4m6hCEZRiBaFyMNqvEmC2jXE1vEy4gU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T8mOFsocyCJ5i9x7p9AAcQx5oQv0JeazCM+ihLU2urL7QgET15UM/kHpxXH9d1OFl
-         dd+E60K4HAvU3eNFyfR5x2zynfJZXo2YV5dRaxfzlPSPMgfKeeUIIIJxMOjGNV3zX1
-         EmjvvCzzLor6xjYjOvG7s6p4lQ73DirZ3hVjZUYE=
-Date:   Sun, 20 Nov 2022 09:21:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] Add a new generic system call which has better
- performance, to get /proc data, than existing mechanisms
-Message-ID: <Y3njl8c0Azfq6QKm@kroah.com>
-References: <20221118191202.2357801-1-anjali.k.kulkarni@oracle.com>
- <Y3iYlLmxvIqn/ETF@kroah.com>
- <MN2PR10MB414411D0E29F20412E6DF0C0C4089@MN2PR10MB4144.namprd10.prod.outlook.com>
+        Sun, 20 Nov 2022 03:26:03 -0500
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D5E2B632
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 00:26:02 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id wfeJoeBiaNKuIwfeJoF2Sw; Sun, 20 Nov 2022 09:26:00 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 20 Nov 2022 09:26:00 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] mailbox: zynq: Switch to flexible array to simplify code
+Date:   Sun, 20 Nov 2022 09:25:54 +0100
+Message-Id: <3c21e60417a0b57e7a80976b786726048119b5cf.1668932733.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN2PR10MB414411D0E29F20412E6DF0C0C4089@MN2PR10MB4144.namprd10.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note, html email is rejected by kernel mailing lists, and top-posting
-does not work at all in discussions.  Please fix your email client if
-you wish to participate in kernel development.
+Using flexible array is more straight forward. It
+  - saves 1 pointer in the 'zynqmp_ipi_pdata' structure
+  - saves an indirection when using this array
+  - saves some LoC and avoids some always spurious pointer arithmetic
 
-On Sat, Nov 19, 2022 at 05:50:03PM +0000, Anjali Kulkarni wrote:
-> I will give it a try, but the majority of the savings are due to avoiding the conversion from binary to string in /proc.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Compile tested only
+---
+ drivers/mailbox/zynqmp-ipi-mailbox.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-That goes contrary to your previous statement saying that the readfile
-call would help out here.
+diff --git a/drivers/mailbox/zynqmp-ipi-mailbox.c b/drivers/mailbox/zynqmp-ipi-mailbox.c
+index 31a0fa914274..68e5726f5157 100644
+--- a/drivers/mailbox/zynqmp-ipi-mailbox.c
++++ b/drivers/mailbox/zynqmp-ipi-mailbox.c
+@@ -110,7 +110,7 @@ struct zynqmp_ipi_pdata {
+ 	unsigned int method;
+ 	u32 local_id;
+ 	int num_mboxes;
+-	struct zynqmp_ipi_mbox *ipi_mboxes;
++	struct zynqmp_ipi_mbox ipi_mboxes[];
+ };
+ 
+ static struct device_driver zynqmp_ipi_mbox_driver = {
+@@ -633,7 +633,7 @@ static int zynqmp_ipi_probe(struct platform_device *pdev)
+ 	int num_mboxes, ret = -EINVAL;
+ 
+ 	num_mboxes = of_get_child_count(np);
+-	pdata = devm_kzalloc(dev, sizeof(*pdata) + (num_mboxes * sizeof(*mbox)),
++	pdata = devm_kzalloc(dev, struct_size(pdata, ipi_mboxes, num_mboxes),
+ 			     GFP_KERNEL);
+ 	if (!pdata)
+ 		return -ENOMEM;
+@@ -647,8 +647,6 @@ static int zynqmp_ipi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	pdata->num_mboxes = num_mboxes;
+-	pdata->ipi_mboxes = (struct zynqmp_ipi_mbox *)
+-			    ((char *)pdata + sizeof(*pdata));
+ 
+ 	mbox = pdata->ipi_mboxes;
+ 	for_each_available_child_of_node(np, nc) {
+-- 
+2.34.1
 
-And there might be ways to convert binary to strings, perhaps look into
-doing that?
-
-good luck,
-
-greg k-h
