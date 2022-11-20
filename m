@@ -2,101 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0496313F1
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 13:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0460F631431
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 13:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiKTMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 07:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S229788AbiKTMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 07:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiKTMqD (ORCPT
+        with ESMTP id S229769AbiKTMtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 07:46:03 -0500
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D783B27DE1;
-        Sun, 20 Nov 2022 04:46:01 -0800 (PST)
-Received: from mailer.emlix.com (unknown [81.20.119.6])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 20 Nov 2022 07:49:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C399624C;
+        Sun, 20 Nov 2022 04:49:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 439275FCEB;
-        Sun, 20 Nov 2022 13:46:00 +0100 (CET)
-From:   Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Edmund Berenson <edmund.berenson@emlix.com>,
-        Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E990A60C50;
+        Sun, 20 Nov 2022 12:49:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E92C433D6;
+        Sun, 20 Nov 2022 12:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668948548;
+        bh=nz8FaCJsE6nQVjYd6opo+NOxNY7O1Q6mlJqMIbxZRMA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CfBDyuF9Cy0rbRKEIaAYE8BTmDFFcpzd2NDMKBrCrT38RjT9IgOgqn6+3SeJjGG0c
+         m8doMp+iGOIfHLvN7dlkzgOIPDvZLTgU2I2bwbIRn/73sAHrbhDRqTyFNPSXXEVdF1
+         zF+mLkSCQ3EhSW602Yc6bIsWoa6lxat0aAHZ2xHNJzc0BRpRBPXyuVA41AVR3by1RC
+         uQC7H1YtziEI9jEl9cWbyqaESYSVHKanB7HUvvd+A9Gq3JjvPu6ZxzPR3uyQZFFJzp
+         p7IcEgCv/OKH2blBDShYcre/8Dc65MvvScAHK9TJFLwy1aB9OR7a5/MJ5OqKU9svtT
+         zXNf4qjhnuD6A==
+Date:   Sun, 20 Nov 2022 13:49:01 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?UTF-8?B?S2xlaW5l?= =?UTF-8?B?LUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, linux-leds@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: iio: adc: ad7923: adjust documentation
-Date:   Sun, 20 Nov 2022 13:45:43 +0100
-Message-Id: <20221120124543.18973-1-edmund.berenson@emlix.com>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221116191208.269e67eb@jic23-huawei>
-References: <20221116191208.269e67eb@jic23-huawei>
+Subject: Re: [PATCH 288/606] leds: turris-omnia: Convert to i2c's
+ .probe_new()
+Message-ID: <20221120134901.5f4c0d99@thinkpad>
+In-Reply-To: <20221118224540.619276-289-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        <20221118224540.619276-289-uwe@kleine-koenig.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Add the ad7927 compatibility string, with fallback compatibility
-to ad7928.
-- ad7923 and ad7924 are treated the same in the driver, show
-the relationship in the documentation.
+On Fri, 18 Nov 2022 23:40:22 +0100
+Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org> wrote:
 
-Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
----
- .../bindings/iio/adc/adi,ad7923.yaml          | 21 +++++++++++--------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-index 07f9d1c09c7d..165c4b6863e0 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-@@ -11,7 +11,7 @@ maintainers:
- 
- description: |
-   Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
--   AD7918, AD7928 8 Channels ADCs.
-+   AD7918, AD7927, AD7928 8 Channels ADCs.
- 
-   Specifications about the part can be found at:
-     https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
-@@ -20,14 +20,17 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - adi,ad7904
--      - adi,ad7914
--      - adi,ad7923
--      - adi,ad7924
--      - adi,ad7908
--      - adi,ad7918
--      - adi,ad7928
-+    oneOf:
-+      - const: adi,ad7904
-+      - const: adi,ad7914
-+      - items:
-+        - const: adi,ad7923
-+        - const: adi,ad7924
-+      - const: adi,ad7908
-+      - const: adi,ad7918
-+      - items:
-+        - const: adi,ad7927
-+        - const: adi,ad7928
- 
-   reg:
-     maxItems: 1
--- 
-2.37.4
-
+Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
