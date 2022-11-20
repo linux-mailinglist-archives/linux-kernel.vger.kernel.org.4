@@ -2,355 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A65D6315AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 19:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7001E6315B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 19:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiKTSgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 13:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S229597AbiKTSlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 13:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKTSga (ORCPT
+        with ESMTP id S229546AbiKTSlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 13:36:30 -0500
-Received: from domac.alu.hr (domac.alu.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33F4218A7
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 10:36:27 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 7341F604E6;
-        Sun, 20 Nov 2022 19:36:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1668969385; bh=BrB6yxoyiH7kZ9j20RnLePmRBmePENfte83o4cHaNgA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BLhq/Dq3REy0I5BXHmvm+pePQ2Au6+9BR2KELPiTZSEpfo59lcAP1lfKmGrZw6jzQ
-         S2t8xwvVUelDQw/lruljKfwYSZYQ4fx9no3Hd4l5jmjZLudcvDLTOOZCh2TD73Sm3M
-         xDhCKxpGyPbqtQC259PH1lZgeQ/UKaAUtVnGm1vUAxfA50o1hryOVfWp9NvqmrrAR4
-         7Nesre9fWznRO3gv2b8Pf2ZOk0I3aq2iMrjfrLQpr2BUYgGCZLJjL/rTA4m62sZkfP
-         MAlQJnG7YZ7t7cnLjsV+WT3Ftq336wsHrCbVv7PiyuxSWGU17gnPCvl4EiJVESIsJ1
-         PR4f6IIB1JFbA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vnZfNRfZI7d1; Sun, 20 Nov 2022 19:36:22 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.198.198])
-        by domac.alu.hr (Postfix) with ESMTPSA id B4DA1604E4;
-        Sun, 20 Nov 2022 19:36:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1668969382; bh=BrB6yxoyiH7kZ9j20RnLePmRBmePENfte83o4cHaNgA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=c+qV20pg+XhJxy4T7GYPEuT+sKPcw6F23XIHHo6Hg9+J4SiV9K0HKK3f92uxsUek+
-         bmxy+1jHSs/leoefgTtHgkdtYU0iUVB4tHcnHJE/MJRBDrDU98s65PgY3cxik6LuSz
-         Dp/V/vnZecH4+Ee5wxrobJkHjarYWsMBXN/9Yxf6kXlshZGBLdaIAVFlQr9RHKZeiq
-         J0MJP8UQ6aUJyxS28A7wb2B/RRFttSLfsfEt4iHDI3aOngTwm+R2sQuuf4Ytopuq4k
-         4g2qrJTkhrwY5XOeLz17IfSjx0wrcrrYET71QXwYg5bbv9R4kEZUwb4AGQdoKD2qui
-         ox6MEeOjXeeqA==
-Message-ID: <8e62a31f-3ef8-71ec-6181-2afa56eeb5db@alu.unizg.hr>
-Date:   Sun, 20 Nov 2022 19:36:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: BUG: BISECTED: in squashfs_xz_uncompress() (Was: RCU stalls in
- squashfs_readahead())
-To:     paulmck@kernel.org
-Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, phillip.lougher@gmail.com,
-        Thorsten Leemhuis <regressions@leemhuis.info>, elliott@hpe.com
-References: <9697fcf5-4213-3d5e-176a-e82d4bd07870@alu.unizg.hr>
- <eac8af79-8936-f845-c8dd-c63ebf0d5e81@alu.unizg.hr>
- <02877aee-8c05-6534-8a91-94ba366d0276@squashfs.org.uk>
- <20221118155534.GJ4001@paulmck-ThinkPad-P17-Gen-1>
- <dd430080-774b-1cba-1758-2bf92cb1acac@alu.unizg.hr>
- <20221120175016.GC4001@paulmck-ThinkPad-P17-Gen-1>
-Content-Language: en-US
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20221120175016.GC4001@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sun, 20 Nov 2022 13:41:16 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2084.outbound.protection.outlook.com [40.107.93.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDF424BFA;
+        Sun, 20 Nov 2022 10:41:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IS+w4uQeZQ8hXJ5riYIDPHbtfbypv/oiRor7RQ38RWwn8buWAMx2qwGP3/tnAcbPb/zlXS0Zt++a9X3OE8kvf40FEFcera0YC2+g2Y4U1cHFtVVXauBSeCuGzEUhnFTJJfEUfSQUIM1y2z4rbQelDy9HwOleUEF3z8PoqD5tZEHqeNtzMk7gfG5R33o5VZHHwG/OpYr2I0mSWqEBfgdtDSj/U1lQzBJkFbB/w6aP2VpyjK1wYjM73pgdaBW2TwLuBDOOeMCxKgXrK12eSlJR31WNpRJ15Bvaq1kVZzp5LkRwoM49+f78RAbxG5sqvD0L08HATDCPno5RYPhs3OVL5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4JddZJqfFxE9DKmwTlm5mbrCnBzKKMbnIxbC6Kb1FnI=;
+ b=dJfwPNXsGro5HyEhERLzfjS14nyko93vZ8FSDRXW77VQBbg99V8+uS0dyJ/LrWXYdqEcA5x2mezX1Rh7KLdLng5KgUHi9k9+8nO6ct1Bcau9gYAix6bMyRKD8b3YAz/fBM8em3imgI+OPgEhPCGMAgsyiV1nRBAs4AinKQgDCdBOfjdDFbaJ9M9t+jhwkMIAL4ET8YiY3R3icHvt8gVdgQUYcA58BjqkjustnbvXhfT756w5PtdqxDGpQr7cVGeqwxjEw2CkU9l+EkYf2e44ZqhMwpIxKGFkbgwGcbuHTmqkAjCECBnpt7cqmwav+g+Q8E4pROEQtNuWaayVi6B3jQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
+ dkim=pass header.d=labundy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4JddZJqfFxE9DKmwTlm5mbrCnBzKKMbnIxbC6Kb1FnI=;
+ b=QLZGRDaZ8ZDHWUi2jUDiaFyamHXevrcL+Z0R7NIurxFtVahgNj4TIOmKjJ8jK5qD8tk4kXJMMVesdKVWuOWII53szx1O0w1jNVsTvi/Sy01pR+mmNwYWphVjj0LaL99C5Vis///FfX01tGClitKrLPN1eou9g2S7RZILNoGklQs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=labundy.com;
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21) by DM5PR0801MB3830.namprd08.prod.outlook.com
+ (2603:10b6:4:7c::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Sun, 20 Nov
+ 2022 18:41:12 +0000
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::ea42:ebaf:dd18:6a4c]) by SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::ea42:ebaf:dd18:6a4c%4]) with mapi id 15.20.5813.019; Sun, 20 Nov 2022
+ 18:41:12 +0000
+Date:   Sun, 20 Nov 2022 12:41:10 -0600
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 247/606] Input: iqs5xx - Convert to i2c's .probe_new()
+Message-ID: <Y3p0xgsvyWLwzzWb@nixie71>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-248-uwe@kleine-koenig.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221118224540.619276-248-uwe@kleine-koenig.org>
+X-ClientProxiedBy: SN7PR04CA0003.namprd04.prod.outlook.com
+ (2603:10b6:806:f2::8) To SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|DM5PR0801MB3830:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35e4b31e-d9c5-46c7-ac45-08dacb26cc47
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HM2bwf9JLFba9GzRHnmiXDh2B8GA94WHwOOjLlVivH9DLGyrq3yTvHeF2T0l86soCp8ZgOOc9TunDwfaTAGokNDx2EVjGxGYyS+Gkrzh7s6ffAlvY/NWBMjJPsOr2j8CuZ8NhSF2nJDEKS2xLIUWxlUKoT9iIOEHIQwQQv98GnrT+mNA925w2Td+TSzNwqMV5PvWmw72pByUvfScRmowYEaC7TYYDRI3ncrq1d6SUqUGAg9wRbonnbGbyh3ntanSmmIBmkvq7TowYJFKr3GVYEgE3rO7kR7TYda/10WBkgJexKG6l6bmDfwPvomDfcZZzsf9aao39lyVj3R12qyws6nIkwinj3kEGRN78uewh8vhz2BQU/QZSx9/+lZ5KQCuXJjkNYkeYlD+Q+EnZ53KhTsqOUqOuWma8gL5kh49mOJDPEbZpImOef4KaKAcYZslmMUwp4yiW3O6PK3RXv6ZB7lv1zocYJUkI00iGv2ine5kSN/0+fmPMeWjoBfdAFKTltk1oxltkGJkpiJrvD/pQvKTBxPrJ+xHGw9GeAJNHBUl+s+wYLOX/aqUwQSJv8lADDUPwzzDS6aQHMT1zWRquqINkp6d4QzA56Od3nCcmlOc7k/IqOOq4hrL7NgYdjL5Xo3mDRTa2gyj2wpXXCs6WJgEj/u0hJDV27JKMYHQnEiKtWw2dDDUb6EYLqdjsN3Nr6UNbu+olkhQd0v7cE8T9M7oKSHQ4EktqRjJAkEEDLvX4oLKvEoWuveZT9UxFZnS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(136003)(346002)(39830400003)(376002)(366004)(451199015)(2906002)(8936002)(7416002)(316002)(6916009)(5660300002)(41300700001)(54906003)(6486002)(478600001)(66556008)(66946007)(66476007)(4326008)(8676002)(186003)(66574015)(33716001)(6512007)(9686003)(26005)(6506007)(83380400001)(86362001)(38100700002)(42413004)(142923001)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?iDKVO1bfzGnOEpYqCjOGg3dkwCsRrRgHrqp6TCMKBYqrpSW43yJkyaQbOV?=
+ =?iso-8859-1?Q?oXErgqJfjHeSVSNiVe7y49OMgBD+I6AUrqh5T2K5Y8wdP5Ou8fBz+nBftD?=
+ =?iso-8859-1?Q?Q9Fq7YrvOJBoqdGsPBCrh3I/4oLMr4zTKvDF6NdyPXBqdzltm+HooNfCcc?=
+ =?iso-8859-1?Q?WBuJ9Fw+VG83UitbvyP9+TYTplbJQUM/b7P6FPYi98KZs4yyMxfA8M4Wx+?=
+ =?iso-8859-1?Q?GPNQ8GzutvaFDxHe95Ix7wj7CtqivMDt1RgbUIiPZSQHqDDZKEvovuPyCr?=
+ =?iso-8859-1?Q?SWzbPDO17aEzJjPVujp+g5WriuHNi2xLDa2dRosY2UaUYVv16YZMTeC9gU?=
+ =?iso-8859-1?Q?MPOLW2jOglrqKbw3D/cA/EaPGwEHeLeqoRarbGo74lJI2T/cAkXq7mE+Pq?=
+ =?iso-8859-1?Q?6hk8xjhe+qzVvuRQjtRCctLkauhPvGfmvp0TKBtzERta2J2oGMQep7uhU+?=
+ =?iso-8859-1?Q?cvcBD1X3W6x0LYndT/3oH2iRA1hsA2HnmXAnHw6FP7xPiRfk7sl1qj2BT2?=
+ =?iso-8859-1?Q?Q/byhrcZjIKvOCkHoqn4vs6F34A/Jo6ixfkiqOm85/yKQuus1/FobKQ5To?=
+ =?iso-8859-1?Q?fTE40ESUPDBE68TMzfS675T3KdRoXIhTMHZDGm2WwlPqwhe0Kakph6ZnqY?=
+ =?iso-8859-1?Q?0h9TDcenscbR/4iIHA1guT7ihgS1bhLj1ZPC8kq73k0KWj5xvMEOMcbyPz?=
+ =?iso-8859-1?Q?5awFb01h1DfhltMM2CGwyewHf4C3kiduWk94jlOSFFgWtiADS/bqJCS/4c?=
+ =?iso-8859-1?Q?Ie9QdxEIjAtwTTNoW1U7kciK4F8Dp1L9aEnbgAsyhwdzRGUpDl5Z/otcvR?=
+ =?iso-8859-1?Q?GwcBtouEYJXenFmJdN/bqHECa/EaogjXTgy7ek9y05fNuMj6rjr9o4tVvu?=
+ =?iso-8859-1?Q?Xym/u6rzWQ3psrgIe6LcozCY6B2NY5/hHNbYsO5a3ueA6mBdDZbsuJLDWt?=
+ =?iso-8859-1?Q?QupN03kdr63XtWu1P1GEvKwZWIDo/AWdnv7eEDjLOoZDfd13Af0IMxhkx0?=
+ =?iso-8859-1?Q?hPY/u3zkI+1gO0wmI///zYYvXlqIN8WPCwu7qKYPoSeJDwWQVtsx3mSfvG?=
+ =?iso-8859-1?Q?qSoR8Yi+14j/welGSEqio4pJ1+S/x1qAndXgSSLJBssGSn4LrAhhoKm0Mp?=
+ =?iso-8859-1?Q?3rCBCMgahyWiBfxWumg6bSObeSYLhlg9sKxmzVooTp8krQqvjVkUy0isCl?=
+ =?iso-8859-1?Q?0SdlkxdqslI/ElUrQzQNY2eNOtk0auOz2OqGxhgka+SK/LOKf1zLWK1zn6?=
+ =?iso-8859-1?Q?G0NYynxO9zGQZ+9vx+B3PcNGb1Qk9umxo5g5qPBhoN1F5BVLA6udjV9CN3?=
+ =?iso-8859-1?Q?gCx3C9Uoe2WNr/9sNKHb7IXqPeAVuPlqSijvJ9Fy3f9zUTsaAXQdoqjj8M?=
+ =?iso-8859-1?Q?fliR60P/i/0mfIKwF6qBAWqFIyTVhkDf5TCMZP162MgOH1YvTW9aN0Chsc?=
+ =?iso-8859-1?Q?svLOq7JIFehqZXxTm6ip5YyBwEANgksB0ONAAmYIh27wlHncPNaHWNMmqv?=
+ =?iso-8859-1?Q?UAPJimsp6sLJWau/EWuQkisqStW8BeAKFejrnv7dhv1aIiG48s0CpxRcBM?=
+ =?iso-8859-1?Q?8S6BCxQWoheKwb7fcAyryJOU7aBzfJRj+HfZQCVYaiRs6NTRxq6Jd6dOFh?=
+ =?iso-8859-1?Q?YL5xQ5THoC1ITI2RGZM0e0DcryFg/d4y7p?=
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35e4b31e-d9c5-46c7-ac45-08dacb26cc47
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2022 18:41:12.5291
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WfcwshEM6qJ3kf9SvAfsBJ1d48w0/CyQfw1hXa7hga6v9Pakb+VRpXCdVpCweWUhn0mu1jCopKszWu3dwW3O8A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0801MB3830
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20. 11. 2022. 18:50, Paul E. McKenney wrote:
-> On Sun, Nov 20, 2022 at 04:49:37PM +0100, Mirsad Goran Todorovac wrote:
->> On 18. 11. 2022. 16:55, Paul E. McKenney wrote:
->>> On Fri, Nov 18, 2022 at 06:11:16AM +0000, Phillip Lougher wrote:
->>>> On 17/11/2022 23:05, Mirsad Goran Todorovac wrote:
->>>>> Hi,
->>>>>
->>>>> While trying to bisect, I've found another bug that predated the
->>>>> introduction of squashfs_readahead(), but it has
->>>>> a common denominator in squashfs_decompress() and squashfs_xz_uncompress().
->>>>
->>>> Wrong, the stall is happening in the XZ decompressor library, which
->>>> is *not* in Squashfs.
->>>>
->>>> This reported stall in the decompressor code is likely a symptom of you
->>>> deliberately thrashing your system.  When the system thrashes everything
->>>> starts to happen very slowly, and the system will spend a lot of
->>>> its time doing page I/O, and the CPU will spend a lot of time in
->>>> any CPU intensive code like the XZ decompressor library.
->>>>
->>>> So the fact the stall is being hit here is a symptom and not
->>>> a cause.  The decompressor code is likely running slowly due to
->>>> thrashing and waiting on paged-out buffers.  This is not indicative
->>>> of any bug, merely a system running slowly due to overload.
->>>>
->>>> As I said, this is not a Squashfs issue, because the code when the
->>>> stall takes place isn't in Squashfs.
->>>>
->>>> The people responsible for the rcu code should have a lot more insight
->>>> about what happens when the system is thrashing, and how this will
->>>> throw up false positives.  In this I believe this is an instance of
->>>> perfectly correct code running slowly due to thrashing incorrectly
->>>> being flagged as looping.
->>>>
->>>> CC'ing Paul E. McKenney <paulmck@kernel.org>
->>>>
->>>>> Frankly, I need an advice on how to handle a situation like this.
->>>>>
->>>>> Obviously, the best place to test the RCU problem with
->>>>> squashfs_readahead() is where it is introduced + Phillip's patches
->>>>> [012]/3.
->>>>>
->>>>> Thanks,
->>>>> Mirsad
->>>>>
->>>>> P.S.
->>>>>
->>>>> This is excerpt from dmesg log attached:
->>>>>
->>>>> [   25.338169] rcu: INFO: rcu_preempt detected expedited stalls on
->>>>> CPUs/tasks: { 4-... } 6 jiffies s: 373 root: 0x10/.
->>>
->>> The "6 jiffies" leads me to believe that this kernel was built with
->>> CONFIG_ANDROID=y, but also with the short expedited grace-period commit,
->>> that is, with CONFIG_RCU_EXP_CPU_STALL_TIMEOUT set to 20 milliseconds
->>> and with HZ set to something like 250.  This means that the kernel
->>> will complain if an RCU read-side critical section exceeeds about 20
->>> milliseconds.  This is a fine thing if you are actually running on an
->>> Android, but a bit extreme for general usage.
->>>
->>> If my guesses are correct, please apply this commit from mainline:
->>>
->>> 1045a06724f3 ("remove CONFIG_ANDROID")
->>>
->>> With this commit in place, CONFIG_RCU_EXP_CPU_STALL_TIMEOUT will default
->>> to 21000 (that is, 21 seconds) and things will be much better.
+On Fri, Nov 18, 2022 at 11:39:41PM +0100, Uwe Kleine-K�nig wrote:
+> From: Uwe Kleine-K�nig <u.kleine-koenig@pengutronix.de>
 > 
-> Please apply the commit called out above and rerun your test.
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
 > 
-> But if you still cannot bring yourself to do that, more interspersed
-> below...
-> 
->> Dear Paul,
->>
->> Actually, I was able to reproduce and bisect the commit that started causing
->> described stalls (I have already explained how 5.10 didn't show any under the
->> exactly same saved widows and tabs set.)
->>
->> # bad: [1e57930e9f4083ad5854ab6eadffe790a8167fb4] Merge tag
->> 'rcu.2022.05.19a' of
->> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu
->> git bisect bad 1e57930e9f4083ad5854ab6eadffe790a8167fb4
->> # good: [f993aed406eaf968ba3867a76bb46c95336a33d0] Merge tag 'block-5.18-2022-05-18' of git://git.kernel.dk/linux-block
->> git bisect good f993aed406eaf968ba3867a76bb46c95336a33d0
->> # good: [bf2431021c8cfe52c866d7bf640ced03a35ebe91] Merge tag
->> 'efi-next-for-v5.19' of
->> git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi
->> git bisect good bf2431021c8cfe52c866d7bf640ced03a35ebe91
->> # good: [be05ee54378d451e1d60196921566d6087f3079f] Merge branches
->> 'docs.2022.04.20a', 'fixes.2022.04.20a', 'nocb.2022.04.11b',
->> 'rcu-tasks.2022.04.11b', 'srcu.2022.
->> 05.03a', 'torture.2022.04.11b', 'torture-tasks.2022.04.20a' and 'torturescript.2022.04.20a' into HEAD
->> git bisect good be05ee54378d451e1d60196921566d6087f3079f
->> # good: [023033fe343cdf2ba83ab762f8de69241c7fc086] tools/nolibc/types: define PATH_MAX and MAXPATHLEN
->> git bisect good 023033fe343cdf2ba83ab762f8de69241c7fc086
->> # good: [96980b833a21c6dc29d0dfdc8f211fb8a10256a7] tools/nolibc/string: do not use __builtin_strlen() at -O0
->> git bisect good 96980b833a21c6dc29d0dfdc8f211fb8a10256a7
->> # good: [0e0ff638400be8f497a35b51a4751fd823f6bd6a] tools/nolibc/stdlib: Implement `malloc()`, `calloc()`, `realloc()` and `free()`
->> git bisect good 0e0ff638400be8f497a35b51a4751fd823f6bd6a
->> # good: [b2f02e9cdaade3ce565e6973ac313d2f814447f2] Merge tag
->> 'lkmm.2022.05.20a' of
->> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu
->> git bisect good b2f02e9cdaade3ce565e6973ac313d2f814447f2
->> # good: [9621fbee44df940e2e1b94b0676460a538dffefa] rcu: Move expedited grace period (GP) work to RT kthread_worker
->> git bisect good 9621fbee44df940e2e1b94b0676460a538dffefa
->> # bad: [ce13389053a347aa9f8ffbfda2238352536e15c9] Merge branch 'exp.2022.05.11a' into HEAD
->> git bisect bad ce13389053a347aa9f8ffbfda2238352536e15c9
->> # first bad commit: [ce13389053a347aa9f8ffbfda2238352536e15c9] Merge branch 'exp.2022.05.11a' into HEAD
-> 
-> More precisely, this commit:
-> 
-> 28b3ae426598 ("rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT")
-> 
-> The idea was to cause Android-based systems to have 20-millisecond
-> expedited RCU CPU stall warnings, but to leave other kernels at the
-> traditional 21-second value.  Again, the "6 jiffies" below indicates
-> that you are running a kernel with CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=0
-> and CONFIG_ANDROID=y.
-> 
-> Except that there were a lot of non-Android systems (including Debian
-> and Fedora) that have nothing to do with Android, but that nevertheless
-> build their kernels with CONFIG_ANDROID=y, which no doubt seemed like
-> a good idea at the time.
-> 
-> For more information, please see https://lwn.net/Articles/899743/
-> 
-> The upshot of the discussion was this same commit that I pointed out
-> earlier that removes CONFIG_ANDROID completely:
-> 
-> 1045a06724f3 ("remove CONFIG_ANDROID")
-> 
-> Again, please apply this commit and rerun your test.
-> 
->> The bug looks like this:
->>
->> [   57.876820] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 0-... } 6 jiffies s: 545 root: 0x1/.
-> 
-> Yes, again "6 jiffies" which is roughly the 20 milliseconds set for
-> kernels built with CONFIG_ANDROID=y and HZ=250 that have this commit:
-> 
-> 28b3ae426598 ("rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT")
-> 
-> But not this commit:
-> 
-> 1045a06724f3 ("remove CONFIG_ANDROID")
-> 
-> Yet again, please apply this commit and rerun your test.
-> 
->> [   57.876854] rcu: blocking rcu_node structures (internal RCU debug):
->> [   57.876862] Task dump for CPU 0:
->> [   57.876867] task:snap-store      state:R  running task     stack:    0 pid: 2678 ppid:  2230 flags:0x00004008
->> [   57.876883] Call Trace:
->> [   57.876888]  <TASK>
->> [   57.876893]  ? _raw_spin_lock_irqsave+0x93/0xf0
->> [   57.876909]  ? sysvec_apic_timer_interrupt+0x89/0x90
->> [   57.876920]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
->> [   57.876930]  ? sysvec_apic_timer_interrupt+0x89/0x90
->> [   57.876939]  ? sysvec_apic_timer_interrupt+0x89/0x90
->> [   57.876948]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
->> [   57.876959]  ? lzma_len+0x1fb/0x3b0
->> [   57.876971]  ? dict_repeat+0xb3/0x120
->> [   57.876981]  ? lzma_main+0x943/0x1260
->> [   57.876995]  ? lzma2_lzma+0x2a4/0x3b0
->> [   57.877007]  ? xz_dec_lzma2_run+0x11f/0xb90
->> [   57.877018]  ? crc32_le_base+0x186/0x250
->> [   57.877032]  ? xz_dec_run+0x346/0x11e0
->> [   57.877046]  ? squashfs_xz_uncompress+0x135/0x330
->> [   57.877060]  ? lzo_init+0xd0/0xd0
->> [   57.877069]  ? squashfs_decompress+0x80/0xb0
->> [   57.877079]  ? squashfs_read_data+0x1eb/0x920
->> [   57.877090]  ? __filemap_get_folio+0x37e/0x540
->> [   57.877104]  ? squashfs_bio_read.isra.2+0x2a0/0x2a0
->> [   57.877118]  ? squashfs_readpage_block+0x493/0x950
->> [   57.877131]  ? squashfs_readpage+0xa52/0x1140
->> [   57.877143]  ? xas_nomem+0x2f/0x100
->> [   57.877154]  ? squashfs_copy_cache+0x360/0x360
->> [   57.877164]  ? folio_wait_bit+0x3c0/0x3c0
->> [   57.877175]  ? __kasan_check_read+0x11/0x20
->> [   57.877186]  ? pagevec_add_and_need_flush+0x8c/0xa0
->> [   57.877197]  ? folio_add_lru+0x42/0x70
->> [   57.877206]  ? filemap_add_folio+0xd4/0x130
->> [   57.877216]  ? add_to_page_cache_locked+0xa0/0xa0
->> [   57.877228]  ? filemap_read_folio.isra.62+0xbe/0x4d0
->> [   57.877238]  ? __kasan_check_write+0x14/0x20
->> [   57.877248]  ? filemap_page_mkwrite+0x6a0/0x6a0
->> [   57.877260]  ? filemap_add_folio+0x130/0x130
->> [   57.877269]  ? try_charge_memcg+0x4cc/0xa90
->> [   57.877281]  ? filemap_fault+0xc9a/0xe50
->> [   57.877293]  ? generic_file_read_iter+0x230/0x230
->> [   57.877305]  ? __rcu_read_unlock+0x55/0x260
->> [   57.877317]  ? __do_fault+0x7c/0x1b0
->> [   57.877329]  ? __handle_mm_fault+0x173b/0x1970
->> [   57.877340]  ? copy_page_range+0x1890/0x1890
->> [   57.877356]  ? handle_mm_fault+0x11b/0x380
->> [   57.877366]  ? do_user_addr_fault+0x258/0x810
->> [   57.877380]  ? exc_page_fault+0x60/0xe0
->> [   57.877389]  ? asm_exc_page_fault+0x8/0x30
->> [   57.877398]  ? asm_exc_page_fault+0x1e/0x30
->> [   57.877410]  </TASK>
->>
->> Please find complete dmesg, my lshw and bisect attached.
->>
->> I am not competent to estimate how this commit causes this kind of problems,
->> and whether stalls up to 20 jiffies are worth eradicating.
-> 
-> The Android folks believe that they are on Android platforms, as you
-> can see from the commit log on:
-> 
-> 28b3ae426598 ("rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT")
-> 
-> But this would be excessive on many other platforms, especially those
-> with large quantities of CPUs, devices, or memory.
-> 
->> Hope this helps.
-> 
-> Likewise!
-> 
-> 							Thanx, Paul
+> Signed-off-by: Uwe Kleine-K�nig <u.kleine-koenig@pengutronix.de>
 
-Dear Mr. McKenney,
+Acked-by: Jeff LaBundy <jeff@labundy.com>
 
-And what about the Mr. Robert Elliott's observation about calling conf_recshed()?
-
- > How big can these readahead sizes be? Should one of the loops include
- > cond_resched() calls?
-
-That is IMHO better than allowing 21000 milisecond stalls on a core (or more of them).
-
-I don't think it is correct to stay in kernel mode for more than an timer unit
-without yielding the CPU. It creates stalls in multimedia and audio (chirps like on scratched
-CD-ROMs). This is especially noticeable with a KASAN build.
-
-Since Firefox and most snaps are using squashfs as compressed ROFS, the Firefox appears
-to perform poorer since snaps are introduced than Chrome.
-
-IMHO, if we want something like realtime and multimedia processing (which is the specific
-area of my research), it seems that anything trying to hold processor for 21000 ms (21 secs)
-is either buggy or deliberately malicious. 20 ms is quite enough of work for a threat
-in one allotted timeslot.
-
-I do not agree with Mr. Lougher's observation that I am thrashing my laptop. I think that
-a system has to endure stress and torture testing. I was raised on Digital MicroVAX systems
-on Ultrix which compiled lab at a time in memory that would today sound funny. :)
-
-Besides, this is the very idea behind the MG-LRU algorithm commit, to test eviction of
-memory pages in the system with heavy load and low on memory.
-
-I will probably test your commits, but now I have to do my own evening ritual, unwinding,
-and knowledge and memory consolidation (called "sleep").
-
-I appreciate your lots of commits on the kernel.org and I hope I do not sound like
-I am thinking you are a village idiot :(
-
-I am trying to adhere to the Code of Conduct with mutual respect and politeness.
-
-I know that the Linux kernel is about 30 million lines by now, and by the security experts
-we should expect 30,000 bugs in such a solid piece of written code (one per thousand of
-lines). Only Mr. Thorsten mentioned 950 unresolved in the "open" list.
-
-Knowing all of this is difficult, but I still believe in open source and open systems
-interconnected.
-
-Of course, I always remember a proverb "Who hath despised the day of the small beginnings?"
-
-Hope this helps. My $0.02.
-
-Thank you,
-Mirsad
-
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+> ---
+>  drivers/input/touchscreen/iqs5xx.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/input/touchscreen/iqs5xx.c b/drivers/input/touchscreen/iqs5xx.c
+> index 34c4cca57d13..dc3137a34f35 100644
+> --- a/drivers/input/touchscreen/iqs5xx.c
+> +++ b/drivers/input/touchscreen/iqs5xx.c
+> @@ -1019,8 +1019,7 @@ static int __maybe_unused iqs5xx_resume(struct device *dev)
+>  
+>  static SIMPLE_DEV_PM_OPS(iqs5xx_pm, iqs5xx_suspend, iqs5xx_resume);
+>  
+> -static int iqs5xx_probe(struct i2c_client *client,
+> -			const struct i2c_device_id *id)
+> +static int iqs5xx_probe(struct i2c_client *client)
+>  {
+>  	struct iqs5xx_private *iqs5xx;
+>  	int error;
+> @@ -1094,7 +1093,7 @@ static struct i2c_driver iqs5xx_i2c_driver = {
+>  		.pm		= &iqs5xx_pm,
+>  	},
+>  	.id_table	= iqs5xx_id,
+> -	.probe		= iqs5xx_probe,
+> +	.probe_new	= iqs5xx_probe,
+>  };
+>  module_i2c_driver(iqs5xx_i2c_driver);
+>  
+> -- 
+> 2.38.1
+> 
