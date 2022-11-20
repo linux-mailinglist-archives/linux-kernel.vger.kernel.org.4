@@ -2,141 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B86A63155D
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4830A631560
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiKTRFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 12:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
+        id S229572AbiKTRGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 12:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKTRFQ (ORCPT
+        with ESMTP id S229454AbiKTRGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 12:05:16 -0500
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2615800B;
-        Sun, 20 Nov 2022 09:05:14 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-14286d5ebc3so8068673fac.3;
-        Sun, 20 Nov 2022 09:05:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VheYSDFtvLHCDiituLIR+eRxXrleFk3aorOpSVzMQ4U=;
-        b=02RCHBfY/JbB+jtltqGWqCpUs1ufgupKWQSpwdFwa8TyqXyDfRLH4IK30HR69zsWAo
-         qAcaznQ5WqaiqYBXpyZTAiXB67yiPrsyO+LA909GFIDquz2xeDQ267qpZbHZI+BfmjJN
-         /JYCP5qTLP0AQV1upJCrhUfGZjIlxIq2cAXjjTUgo4oXqluCfdaSmDiHO4SjeKWS2Kai
-         TG7FgmXiiHHlznkH0Jf4auu2Ai8lWbXzeKbit0qqgWDCiTTkCfgKa/G1xucQ3gReUzrq
-         KRJbv0ZTXtDyz0bsHATn3sr895fxE0cZ7IkSmf2aF7/2EluI0xpE/91PzMegYoBPZboq
-         8wrQ==
-X-Gm-Message-State: ANoB5plygqy5AqeesL8++1a3swnD2pqPxuP+sPEAKK0A4E4fDiuTj+06
-        oEY2rY7vkx8LEu+uYHpKCfMoGuJvGw==
-X-Google-Smtp-Source: AA0mqf67G516TnraaP+JTVCHo56B4CXRmRuPFyOwAhESA4hEJqYmyLjQMdbVK1YDhqM7/GIM3MGdLw==
-X-Received: by 2002:a05:6870:2c85:b0:13c:4592:c2f2 with SMTP id oh5-20020a0568702c8500b0013c4592c2f2mr8070284oab.160.1668963913800;
-        Sun, 20 Nov 2022 09:05:13 -0800 (PST)
-Received: from robh_at_kernel.org ([2605:ef80:80f8:5cb3:df5a:23c3:86fb:15a6])
-        by smtp.gmail.com with ESMTPSA id 59-20020a9d0141000000b0066aba96addbsm3945259otu.81.2022.11.20.09.05.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 09:05:13 -0800 (PST)
-Received: (nullmailer pid 3203993 invoked by uid 1000);
-        Sun, 20 Nov 2022 17:05:14 -0000
-Date:   Sun, 20 Nov 2022 11:05:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v6 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-Message-ID: <20221120170514.GA3192266-robh@kernel.org>
-References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
- <20221116213615.1256297-2-Naresh.Solanki@9elements.com>
- <20221120151331.GA1791561@roeck-us.net>
+        Sun, 20 Nov 2022 12:06:01 -0500
+Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DA45801C
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 09:05:59 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id wnlTouwJkx4XXwnlUoEiow; Sun, 20 Nov 2022 18:05:57 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 20 Nov 2022 18:05:57 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Lee Jones <lee.jones@linaro.org>, linux-arm-msm@vger.kernel.org
+Subject: [PATCH 1/2] mfd: qcom_rpm: Fix an error handling path in qcom_rpm_probe()
+Date:   Sun, 20 Nov 2022 18:05:53 +0100
+Message-Id: <e39752476d02605b2be46cab7115f71255ce13a8.1668949256.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221120151331.GA1791561@roeck-us.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 07:13:31AM -0800, Guenter Roeck wrote:
-> On Wed, Nov 16, 2022 at 10:36:13PM +0100, Naresh Solanki wrote:
-> > Add common fan properties bindings to a schema.
-> > 
-> > Bindings for fan controllers can reference the common schema for the
-> > fan
-> > 
-> > child nodes:
-> > 
-> >   patternProperties:
-> >     "^fan@[0-2]":
-> >       type: object
-> >       $ref: fan-common.yaml#
-> > 
-> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> > ---
-> >  .../devicetree/bindings/hwmon/fan-common.yaml | 42 +++++++++++++++++++
-> >  1 file changed, 42 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> > new file mode 100644
-> > index 000000000000..1954882eed77
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> > @@ -0,0 +1,42 @@
-> > +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Common fan properties
-> > +
-> > +maintainers:
-> > +  - Naresh Solanki <naresh.solanki@9elements.com>
-> > +
-> > +properties:
-> > +  max-rpm:
-> > +    description:
-> > +      Max RPM supported by fan.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  pulses-per-revolution:
-> > +    description:
-> > +      The number of pulse from fan sensor per revolution.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  target-rpm:
-> > +    description:
-> > +      Target RPM the fan should be configured during driver probe.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  pwms:
-> > +    description:
-> > +      PWM provider.
-> > +
-> > +  label:
-> > +    description:
-> > +      Optional fan label
-> > +
-> > +  fan-supply:
-> > +    description:
-> > +      Power supply for fan.
-> > +
-> 
-> I still think that at least min-rpm should be added. It is just as common
-> as max-rpm.
+If an error occurs after the clk_prepare_enable() call, a corresponding
+clk_disable_unprepare() should be called.
 
-Or a table if the response is not linear like LEDs/backlights? Though if 
-there's a tach, that wouldn't be necessary.
+Simplify code and switch to devm_clk_get_enabled() to fix it.
 
-Rob
+Fixes: 3526403353c2 ("mfd: qcom_rpm: Handle message RAM clock")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This changes the order of the clean-ups if the .remove() function is called
+but it looks fine to me.
+---
+ drivers/mfd/qcom_rpm.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/mfd/qcom_rpm.c b/drivers/mfd/qcom_rpm.c
+index 71bc34b74bc9..ea5eb94427c4 100644
+--- a/drivers/mfd/qcom_rpm.c
++++ b/drivers/mfd/qcom_rpm.c
+@@ -547,7 +547,7 @@ static int qcom_rpm_probe(struct platform_device *pdev)
+ 	init_completion(&rpm->ack);
+ 
+ 	/* Enable message RAM clock */
+-	rpm->ramclk = devm_clk_get(&pdev->dev, "ram");
++	rpm->ramclk = devm_clk_get_enabled(&pdev->dev, "ram");
+ 	if (IS_ERR(rpm->ramclk)) {
+ 		ret = PTR_ERR(rpm->ramclk);
+ 		if (ret == -EPROBE_DEFER)
+@@ -558,7 +558,6 @@ static int qcom_rpm_probe(struct platform_device *pdev)
+ 		 */
+ 		rpm->ramclk = NULL;
+ 	}
+-	clk_prepare_enable(rpm->ramclk); /* Accepts NULL */
+ 
+ 	irq_ack = platform_get_irq_byname(pdev, "ack");
+ 	if (irq_ack < 0)
+@@ -681,7 +680,6 @@ static int qcom_rpm_remove(struct platform_device *pdev)
+ 	struct qcom_rpm *rpm = dev_get_drvdata(&pdev->dev);
+ 
+ 	of_platform_depopulate(&pdev->dev);
+-	clk_disable_unprepare(rpm->ramclk);
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
+
