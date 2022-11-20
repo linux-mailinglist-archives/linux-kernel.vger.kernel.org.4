@@ -2,123 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9318B63154A
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 17:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B86A63155D
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiKTQ6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 11:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S229546AbiKTRFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 12:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKTQ56 (ORCPT
+        with ESMTP id S229454AbiKTRFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 11:57:58 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1332C178BD
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 08:57:58 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id w4so6109586qts.0
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 08:57:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n+VIo3bXwJL7SCkFUqftA57rk/MTISGf9OS0PkQ53fU=;
-        b=q7rQ4P8FRSe8E4ITCTt7ygFztDEN/f4BX/t+YYivurGMIldAoMBFXKPy7YPxIK1vpD
-         kzt5k5geD3mwTOxtpmZOCoNAowgFqf0W6Qz5LVkwcOyd+02PHocQ/3dWOwT6huSlWqMh
-         pW4E/8xjXAWgJpf8qlbraXTgM7qLRm6Cqjs2fCNrxz3/VAdYw8LELhdXWzG7bckTv6fc
-         nSFwGokZN9pYj9IdFVdRn+vHlaKBESf9VqTkGBwfZME5REB7L5m3So8bc7yDJTQXUlSI
-         EUQkfVkUtELmqZahiO1HeDVGjw9v2H35+gcKSTcNV3o26K2DaqO+08TH0mw8u4c5FRGw
-         IsfQ==
+        Sun, 20 Nov 2022 12:05:16 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2615800B;
+        Sun, 20 Nov 2022 09:05:14 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-14286d5ebc3so8068673fac.3;
+        Sun, 20 Nov 2022 09:05:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n+VIo3bXwJL7SCkFUqftA57rk/MTISGf9OS0PkQ53fU=;
-        b=sG+TBi6vm46JIgDcKiClJvacQUMynqyHkHVy4l5KA6m53dw7Wp6w9VI5ufEVOon8As
-         bsPP+VFL0wni2xgiznf/5WB6xF7d/vUhg6VGov0N1Qk592qTGEWV3DZxiF+zlGEkPByy
-         V+QZ2Eu21I1Ok5aA6Smy6UJja5gu4SGoWyPWgrKN4py29qBf+hQT0Ji22Dp+RLS2iY/E
-         euI4+rIgWv7fjTEPC3pO88KY5eZQvu40DPWdn+0TILNmH11IoniiE/cNyq5OCpjFZuSZ
-         YyeFp7GQO4xBaXGK4lMezD265aP8NnWKmx3WPdK6xazO20m8v2RN7OM+OMswuxTRY/Bo
-         YBSQ==
-X-Gm-Message-State: ANoB5pk3LJKOucciIwSWGN6lb6EDuFejJvkN54FqcTU+B6bQKd3snqOO
-        8mWUFOWJwdbOgiMrzf5rdA3qEg==
-X-Google-Smtp-Source: AA0mqf77g62bEStNLdYbkKLq1/LPs3WrGz4b2DsWAst4+5+zzDaFRf4TgscqOEnJTMYksAesFpWuhg==
-X-Received: by 2002:ac8:4545:0:b0:3a5:89c1:a4bf with SMTP id z5-20020ac84545000000b003a589c1a4bfmr14734955qtn.387.1668963477194;
-        Sun, 20 Nov 2022 08:57:57 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05620a245100b006cfc1d827cbsm6766753qkn.9.2022.11.20.08.57.55
+        bh=VheYSDFtvLHCDiituLIR+eRxXrleFk3aorOpSVzMQ4U=;
+        b=02RCHBfY/JbB+jtltqGWqCpUs1ufgupKWQSpwdFwa8TyqXyDfRLH4IK30HR69zsWAo
+         qAcaznQ5WqaiqYBXpyZTAiXB67yiPrsyO+LA909GFIDquz2xeDQ267qpZbHZI+BfmjJN
+         /JYCP5qTLP0AQV1upJCrhUfGZjIlxIq2cAXjjTUgo4oXqluCfdaSmDiHO4SjeKWS2Kai
+         TG7FgmXiiHHlznkH0Jf4auu2Ai8lWbXzeKbit0qqgWDCiTTkCfgKa/G1xucQ3gReUzrq
+         KRJbv0ZTXtDyz0bsHATn3sr895fxE0cZ7IkSmf2aF7/2EluI0xpE/91PzMegYoBPZboq
+         8wrQ==
+X-Gm-Message-State: ANoB5plygqy5AqeesL8++1a3swnD2pqPxuP+sPEAKK0A4E4fDiuTj+06
+        oEY2rY7vkx8LEu+uYHpKCfMoGuJvGw==
+X-Google-Smtp-Source: AA0mqf67G516TnraaP+JTVCHo56B4CXRmRuPFyOwAhESA4hEJqYmyLjQMdbVK1YDhqM7/GIM3MGdLw==
+X-Received: by 2002:a05:6870:2c85:b0:13c:4592:c2f2 with SMTP id oh5-20020a0568702c8500b0013c4592c2f2mr8070284oab.160.1668963913800;
+        Sun, 20 Nov 2022 09:05:13 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:80f8:5cb3:df5a:23c3:86fb:15a6])
+        by smtp.gmail.com with ESMTPSA id 59-20020a9d0141000000b0066aba96addbsm3945259otu.81.2022.11.20.09.05.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 08:57:56 -0800 (PST)
-Date:   Sun, 20 Nov 2022 11:57:54 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Michael Walle <michael@walle.cc>, Mark Brown <broonie@kernel.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
-Message-ID: <Y3pcktcpTaLYlOa2@fedora>
-References: <cover.1668129763.git.william.gray@linaro.org>
- <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
- <5123090e11da67e57fb00984445ece2f@walle.cc>
- <Y3ZflHI6CYfaGIbn@sirena.org.uk>
- <bbe25d96e892e8cfd3f0da5d6755be22@walle.cc>
- <Y3dx1rx8mXR7vRX9@sirena.org.uk>
+        Sun, 20 Nov 2022 09:05:13 -0800 (PST)
+Received: (nullmailer pid 3203993 invoked by uid 1000);
+        Sun, 20 Nov 2022 17:05:14 -0000
+Date:   Sun, 20 Nov 2022 11:05:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v6 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Message-ID: <20221120170514.GA3192266-robh@kernel.org>
+References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
+ <20221116213615.1256297-2-Naresh.Solanki@9elements.com>
+ <20221120151331.GA1791561@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hQ+79pNt5B3VS6wu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3dx1rx8mXR7vRX9@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221120151331.GA1791561@roeck-us.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Nov 20, 2022 at 07:13:31AM -0800, Guenter Roeck wrote:
+> On Wed, Nov 16, 2022 at 10:36:13PM +0100, Naresh Solanki wrote:
+> > Add common fan properties bindings to a schema.
+> > 
+> > Bindings for fan controllers can reference the common schema for the
+> > fan
+> > 
+> > child nodes:
+> > 
+> >   patternProperties:
+> >     "^fan@[0-2]":
+> >       type: object
+> >       $ref: fan-common.yaml#
+> > 
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > ---
+> >  .../devicetree/bindings/hwmon/fan-common.yaml | 42 +++++++++++++++++++
+> >  1 file changed, 42 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > new file mode 100644
+> > index 000000000000..1954882eed77
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > @@ -0,0 +1,42 @@
+> > +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Common fan properties
+> > +
+> > +maintainers:
+> > +  - Naresh Solanki <naresh.solanki@9elements.com>
+> > +
+> > +properties:
+> > +  max-rpm:
+> > +    description:
+> > +      Max RPM supported by fan.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pulses-per-revolution:
+> > +    description:
+> > +      The number of pulse from fan sensor per revolution.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  target-rpm:
+> > +    description:
+> > +      Target RPM the fan should be configured during driver probe.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pwms:
+> > +    description:
+> > +      PWM provider.
+> > +
+> > +  label:
+> > +    description:
+> > +      Optional fan label
+> > +
+> > +  fan-supply:
+> > +    description:
+> > +      Power supply for fan.
+> > +
+> 
+> I still think that at least min-rpm should be added. It is just as common
+> as max-rpm.
 
---hQ+79pNt5B3VS6wu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Or a table if the response is not linear like LEDs/backlights? Though if 
+there's a tach, that wouldn't be necessary.
 
-On Fri, Nov 18, 2022 at 11:51:50AM +0000, Mark Brown wrote:
-> On Thu, Nov 17, 2022 at 05:30:29PM +0100, Michael Walle wrote:
-> > Am 2022-11-17 17:21, schrieb Mark Brown:
->=20
-> > > It's probably useful to provide a query function in the regmap
-> > > API for generic regmap users like this.
->=20
-> > Now I'm confused. Last time, I've proposed that, there was push
-> > back from you:
-> > https://lore.kernel.org/linux-gpio/20210430151908.GC5981@sirena.org.uk/
->=20
-> > That being said, I'd prefer to have such a query API :)
->=20
-> Now we have a generic user which cares about the distinction.
-
-I plan on adding more drivers in future patch sets so I expect this to
-actually grow in users. Having a query function in the regmap API would
-be useful after all I think.
-
-Michael, if you resubmit your proposal for such a function, please CC me
-so I can be kept aware of this as well.
-
-Thanks,
-
-William Breathitt Gray
-
---hQ+79pNt5B3VS6wu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY3pckgAKCRC1SFbKvhIj
-K3Q6APsEkODNI0xc3PzAKl8kfwwfL58JCdeUAaR/5fwN4YbBBQEA/xy6zJzu22Ik
-8QWrFewhKB6MWgSosfK9IYGe4lZUfAc=
-=atAX
------END PGP SIGNATURE-----
-
---hQ+79pNt5B3VS6wu--
+Rob
