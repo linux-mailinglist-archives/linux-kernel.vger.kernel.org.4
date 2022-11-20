@@ -2,117 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527846316DD
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 23:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A765363174B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 00:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiKTWd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 17:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S229719AbiKTXXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 18:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKTWd4 (ORCPT
+        with ESMTP id S229449AbiKTXXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 17:33:56 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927D015FFF
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 14:33:54 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id s18so11656552ybe.10
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 14:33:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nv+M9JLErYIuqpEJrx3jYZjNp1otlxlEOydAF6yu7ts=;
-        b=KdYBUjtQ78WAwpkKFAdrq1i8V9OJyZkN2IVbP3L5yW8MqFJh9WXNDOGRT/nSldRjRo
-         1qabr363Bqlk/m98zXhxj96Eb+P9y6DbpZ+MjCWkMEZCMssBH999FBC8T3R3R3FNZREV
-         gA8hNJJlpVqEY24acpDmrYIsRZQF3Aj7bxSH/nMSWJt/hmBeouyOUvwLcSTTiZkR8eSY
-         jJG76WQlt/+gdOV6Bxg8y4jO2Eo6psooO+3OwGPhmcgs1HyU616i70hZLalwe4u9Xguy
-         M4hR38VivS13Yj9Ut2uoyzf5ebtSD7PGHT5a0eZ6Ti1XogT1m5hOrp3sdWlQPqS17Ale
-         6uNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nv+M9JLErYIuqpEJrx3jYZjNp1otlxlEOydAF6yu7ts=;
-        b=xZ4PUq8uRN9GjsLv4C3RC6msFO2bHS3e1pZFr8Ec6I0poAAE3nn3t8AoxsZd77ZipN
-         NuxO/XH2Lr2PmfhOeUYX0JyneRHReuq+67XxwDX/JWFlN8MhFNzdMs9yer73vDK6qTW5
-         CQZ4ZNHSKSmyx3W5VlpSiLjQhi2ebTgB4fRNQqxmW8rl4ygEqDWgwN4NuvJTvcaVZBRj
-         wCMExEydXoSLQKaSmp5MXNPbEdKHLFvnhcpXpAwNAP8pPJwHDXTnFQnf9jUXnBeTTZ/u
-         G718ukDUZKDjXlcxjkTEELZsYJ4QQX3xznTn8dempy63aTfd1/01EIOFPZr1RwGadJZu
-         kA0Q==
-X-Gm-Message-State: ANoB5pk4CDyIWjnkmlULsgxcO08nabXAIeo+/WEJIeicDmkKKWv+LCRl
-        ikMpYVWP8ky5Kmyl3A1OK5dkuW2kCDRt6/jXoYB3vg==
-X-Google-Smtp-Source: AA0mqf4oaYEs6nyurYgDspJUitDASblVPhkFdzdzfLsurUJhkpJRnfsTFSueaJYVZt1Ws5024Q4gARHV2JCCZskFj9A=
-X-Received: by 2002:a05:6902:4e8:b0:6d1:16bf:1f8f with SMTP id
- w8-20020a05690204e800b006d116bf1f8fmr1609540ybs.206.1668983633802; Sun, 20
- Nov 2022 14:33:53 -0800 (PST)
+        Sun, 20 Nov 2022 18:23:37 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A908F24947;
+        Sun, 20 Nov 2022 15:23:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NFmmG5XCRz4xFy;
+        Mon, 21 Nov 2022 10:23:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668986608;
+        bh=rSJAp/xDj/o/LrvpHb38oZzEBW6AIilKhKqZVk4UBoc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jMTYeCEKRKmdmOlg5687nerJHD6fl6a4hE4ywSxThxllhYDsB8BgYxIDGu8lQVuWa
+         XPBqO01zmpEWYbzN8q3gGF7Xb4D5s4D6YCq7SA/sgHhCtbJ4Pb8D60R3He3q6SmJ4A
+         e7iU/3xPMesXK9aBuRq90Qq34aOsUaVxWfJU/VFcKDXW7luZitdX/71SK3lqdvQfbP
+         +oLv6Auzlkq9XViluoK8z26GdmBHFWzu6U8xqfNiHA0wLveFlCD9i7XucoFqlqH8R8
+         mIRLalTUfRpHosRifUsr3O6LkB8kwHlDA2sXOxeR+f4c9pwOUf1EPCKZud+NUNWs2U
+         Z7SPBuRsBzxjQ==
+Date:   Mon, 21 Nov 2022 10:23:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Conor Dooley <Conor.Dooley@microchip.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Subject: linux-next: manual merge of the riscv-dt tree with the renesas tree
+Message-ID: <20221121102318.40c58114@canb.auug.org.au>
 MIME-Version: 1.0
-References: <BYAPR11MB3240F382BD180FF90C7DF0B9E1069@BYAPR11MB3240.namprd11.prod.outlook.com>
- <7de35859-97ab-8e88-f590-d5851b81773b@nvidia.com>
-In-Reply-To: <7de35859-97ab-8e88-f590-d5851b81773b@nvidia.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 20 Nov 2022 23:33:41 +0100
-Message-ID: <CACRpkdYrF9O+nJZkH+EVP=3gvdKBrnf11gTVh-xzKjPFk1EHfg@mail.gmail.com>
-Subject: Re: Intel timed i/o driver in HTE
-To:     Dipen Patel <dipenp@nvidia.com>
-Cc:     "N, Pandith" <pandith.n@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hall, Christopher S" <christopher.s.hall@intel.com>,
-        "Gross, Mark" <mark.gross@intel.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        "T R, Thejesh Reddy" <thejesh.reddy.t.r@intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>, timestamp@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/S9ibRPAZlHDU0kL3jX5O1E7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 3:33 AM Dipen Patel <dipenp@nvidia.com> wrote:
-> On 11/17/22 10:47 AM, N, Pandith wrote:
+--Sig_/S9ibRPAZlHDU0kL3jX5O1E7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> > To support Intel timed i/o driver, it was suggested by Linux community to enhance hte framework.
-> > However, we see some limitations to support complete Intel timed i/o device.
-(...)
-> >       b. Timed output  - single shot or periodic pulse train.
-> >       Uses TSC(Timestamp counter) for timestamp or generate events, which could be translated to system time.
-(...)
-> For 1b, the timestamp part can be added as hte provider. I see opportunity to enhance hte framework to provide
-> translation facility between the domain, system time in this case. However programming interface to facilitate
-> timed IO output can not fit into HTE the way it is right now. May be one possible way is to enchance HTE with API something like
-> hte_configure_timestamp_periodic/timed could be possible in which case HTE does something more than just timestamping the event.
->
-> I have to see how in GPIO case that proposed API works out, if it will bypass gpio framework etc...
->
-> Adding Linus W into the discussion....
+Hi all,
 
-I think I already answered with some open ended questions in discussion
-with Christopher S. Hall:
-https://lore.kernel.org/linux-iio/CACRpkdbeQ_67V3jkw_-KfTwe54TxrK_LA7N8Nwj1qEpTELN9dQ@mail.gmail.com/
-https://lore.kernel.org/linux-iio/CACRpkda63TNWLdTjY+_xxXb4df4qCZi1EaXL3pXK=+Hon-0RLQ@mail.gmail.com/
-https://lore.kernel.org/linux-iio/CACRpkdYxverx-KsG9URrh5qkEFXDknZKCE6RM555mjOuC--vMg@mail.gmail.com/
+Today's linux-next merge of the riscv-dt tree got a conflict in:
 
-I think Intel is in a bit of uncomfortable design space with this thing that
-isn't fitting properly anywhere. Dunno what to do about that :/
+  Documentation/devicetree/bindings/riscv/cpus.yaml
 
-One thing I didn't get a clear answer for is what kind of use cases the
-timed GPIO is for. I was suspecting things like stepper motors. I was
-suspecting at one point some kind of sync pulse to something. But
-no clear answer.
+between commit:
 
-It is useful to know the usecase to be able to figure out the appropriate
-subsystem. It might be that GPIO with some custom ioctl()s for
-the gpiodev is the right answer to some of the question, as outlined
-above.
+  57e1b873c2f5 ("dt-bindings: riscv: Sort the CPU core list alphabetically")
 
-and I see Dipen has some answers:
+from the renesas tree and commit:
 
-Yours,
-Linus Walleij
+  41adc2fbad8b ("dt-bindings: riscv: Add T-HEAD C906 and C910 compatibles")
+
+from the riscv-dt tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/devicetree/bindings/riscv/cpus.yaml
+index 2bf91829c8de,e98a716c6f18..000000000000
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@@ -34,12 -33,14 +34,14 @@@ properties
+                - sifive,e5
+                - sifive,e7
+                - sifive,e71
+ -              - sifive,u74-mc
+ -              - sifive,u54
+ -              - sifive,u74
+ +              - sifive,rocket0
+                - sifive,u5
+ +              - sifive,u54
+                - sifive,u7
+ -              - canaan,k210
+ +              - sifive,u74
+ +              - sifive,u74-mc
++               - thead,c906
++               - thead,c910
+            - const: riscv
+        - items:
+            - enum:
+
+--Sig_/S9ibRPAZlHDU0kL3jX5O1E7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN6tuYACgkQAVBC80lX
+0GwdrQf+N7aDqG0Ql0yVDk+31p7V+uyYXR1e4lydR9xp5l0avw2FjDHRTCYxjIh2
+JYIj8K8ORT3BuUvAU7ivd0MV9i7lMqoJ5+GABGrqmFKTVII0Y5kEJFRqw7eCdPiy
+D1p9YYdtxT+ULk3sEWs05jvNI6mlDHm80yfkgfGkcbWpGr/Rb/aT1PvgPlMnWPCQ
+jjjP8IQaX+RpAPkD0pW82XJCMOol2pNzThmWgKQafjp1dLKb1rzRJIntxRtoK+KT
+3ZusoX3OT+5d3LSpI7YNVKsXrAKhVeUFznl3++Z17X9ke7kFeL2MMBhzFpMKDdiH
+7Ceblo0nTWjFcJD8d1DhjUpARf3uqw==
+=OwQI
+-----END PGP SIGNATURE-----
+
+--Sig_/S9ibRPAZlHDU0kL3jX5O1E7--
