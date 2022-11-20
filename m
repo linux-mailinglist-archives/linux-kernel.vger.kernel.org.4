@@ -2,106 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BBA631563
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7477B631567
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiKTRGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 12:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S229693AbiKTROu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 12:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKTRGu (ORCPT
+        with ESMTP id S229454AbiKTROs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 12:06:50 -0500
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EB05800B;
-        Sun, 20 Nov 2022 09:06:48 -0800 (PST)
-Received: from mailer.emlix.com (unknown [81.20.119.6])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 6F7AC5F7AB;
-        Sun, 20 Nov 2022 18:06:46 +0100 (CET)
-From:   Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Edmund Berenson <edmund.berenson@emlix.com>,
-        Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: iio: adc: ad7923: adjust documentation
-Date:   Sun, 20 Nov 2022 18:06:30 +0100
-Message-Id: <20221120170630.29354-1-edmund.berenson@emlix.com>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221120153419.GA3094349-robh@kernel.org>
-References: <20221120153419.GA3094349-robh@kernel.org>
+        Sun, 20 Nov 2022 12:14:48 -0500
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6D2236;
+        Sun, 20 Nov 2022 09:14:48 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso6102587otb.2;
+        Sun, 20 Nov 2022 09:14:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n+rkX70e7RE0S7j3/g/2Phldb7Wlk6Lkj7kfdf/nfow=;
+        b=b3KmmpqRcxaSufYzxUqr3TIfPcNgr8j0RDuHfwXIpNLiAVtVE1geb+OAWmOrUMxDWO
+         p9s9VByqdhbWNTzDps+plo/4UVV+7DUSx/EOJatbhAEEmc5hkbT/ARMigeN+9KnTWZpW
+         Of9pC9A6Q79z9yS7EBkT+ITylLPNsVqxEGl4HeFjpZHE7kNdcuM8wJOHHyfgFoNbQZmZ
+         TDgLripS0FCvZR5ivXavURNdop1K5Snwf0Af1GbKTWPcIcC6C2IveLE3zHeNxLx4ngA+
+         flW3YnSoo23vrfnqatTu9/hq8hSZqUFWjona6EbkwMMVA4jlnx+38ncRqWL2Vw0PyeYD
+         Xu0w==
+X-Gm-Message-State: ANoB5pn5AYwfsyIpkqPIlPdlsic1f7luonMgroOaiDBdgZVIkAiAKKVf
+        5AOhJDxdEcidnLxO2gcvr3jlpAZbwg==
+X-Google-Smtp-Source: AA0mqf7cjZEsUZlQYmDs59qSWPEUEPIiBl5AQyT5kP2xNrQSaUWhyCc6yJkzO+Zli3vdjNuwfy/2bw==
+X-Received: by 2002:a9d:5c81:0:b0:661:c48b:12db with SMTP id a1-20020a9d5c81000000b00661c48b12dbmr7767190oti.105.1668964487486;
+        Sun, 20 Nov 2022 09:14:47 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:80f8:5cb3:df5a:23c3:86fb:15a6])
+        by smtp.gmail.com with ESMTPSA id b43-20020a056870392b00b0011d02a3fa63sm1392288oap.14.2022.11.20.09.14.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 09:14:47 -0800 (PST)
+Received: (nullmailer pid 3214059 invoked by uid 1000);
+        Sun, 20 Nov 2022 17:14:48 -0000
+Date:   Sun, 20 Nov 2022 11:14:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] hwmon: (max6639) Change from pdata to dt
+ configuration
+Message-ID: <20221120171448.GA3204528-robh@kernel.org>
+References: <20221116213615.1256297-1-Naresh.Solanki@9elements.com>
+ <20221116213615.1256297-4-Naresh.Solanki@9elements.com>
+ <20221117074510.qqtjc6h3bnh5rccx@pengutronix.de>
+ <81cd642f-c5fb-77ec-a634-5655d5b6088c@9elements.com>
+ <20221117091324.h7etwyzckzvpoa4p@pengutronix.de>
+ <20221120151946.GA1791682@roeck-us.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221120151946.GA1791682@roeck-us.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Add the ad7927 compatibility string, with fallback compatibility
-to ad7928.
-- ad7923 and ad7924 are treated the same in the driver, show
-the relationship in the documentation.
+On Sun, Nov 20, 2022 at 07:19:46AM -0800, Guenter Roeck wrote:
+> On Thu, Nov 17, 2022 at 10:13:24AM +0100, Uwe Kleine-König wrote:
+> > On Thu, Nov 17, 2022 at 02:10:45PM +0530, Naresh Solanki wrote:
+> > > 
+> > > 
+> > > On 17-11-2022 01:15 pm, Uwe Kleine-König wrote:
+> > > > Hello,
+> > > > 
+> > > > On Wed, Nov 16, 2022 at 10:36:15PM +0100, Naresh Solanki wrote:
+> > > > > max6639_platform_data is not used by any in-kernel driver and does not
+> > > > > address the MAX6639 fans separately.
+> > > > > Move to device tree configuration with explicit properties to configure
+> > > > > each fan.
+> > > > > 
+> > > > > Non-DT platform can still use this module with its default
+> > > > > configuration.
+> > > > > 
+> > > > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > > 
+> > > > What changed here since v5? Please either add a changelog below the
+> > > > tripple-dash for a new revision, or make sure that all relevant people
+> > > > get the cover letter.
+> > > > 
+> > > > It seems you didn't address my comments for v5 :-\
+> > > Not sure what I missed but did following changes:
+> > > Removed unused header max6639.h
+> > > Used dev_err_probe instead,
+> > > Removed of_pwm_n_cells,
+> > > if condition for freq_table
+> > > removed pwm_get_state & instead use pwm->state
+> > > division/multiplication optimizations,
+> > > indentation of freq_table,
+> > 
+> > In the cover letter you just wrote:
+> > 
+> > | Changes in V6:
+> > | - Remove unused header file
+> > | - minor cleanup
+> > 
+> > which is too short in my eyes. If you wrote instead:
+> > 
+> > 	Address review feedback by Uwe Kleine-König in patch #3, patches #1 and
+> > 	#2 unchanged.
+> > 
+> > This would be much more helpful as people that were already happy with
+> > v5 wouldn't need to look at the first two patches and I would know that
+> > you addressed my feedback and would have looked in more detail.
+> > 
+> > What I miss is the most critical part of my feedback, i.e.:
+> > | My overall impression is that this patch mixes too much things. IMHO it
+> > | should be split in (at least)
+> > | 
+> > |  - Add dt support
+> > |  - Drop platform support
+> > |  - Add PWM provider support
+> > |  - Make use of the PWM API
+> > |
+> > | maybe also add the 2nd PWM in a separate step.
+> 
+> Those will definitely need to be separate patches. I am far from convinced
+> that all fan controllers in the hwmon subsystem should implement pwm
+> providers just to match devicetree requirements. That adds zero value in
+> 99% of all use cases. Actually, I don't know of any use cases where it
+> would add value or even make sense.
 
-Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
----
- .../bindings/iio/adc/adi,ad7923.yaml          | 26 ++++++++++++-------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+There's no requirement that using a binding means using corresponding 
+Linux subsystem. Convenient usually, but not required.
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-index 07f9d1c09c7d..e553853e25d5 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-@@ -11,7 +11,7 @@ maintainers:
- 
- description: |
-   Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
--   AD7918, AD7928 8 Channels ADCs.
-+   AD7918, AD7927, AD7928 8 Channels ADCs.
- 
-   Specifications about the part can be found at:
-     https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
-@@ -20,14 +20,22 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - adi,ad7904
--      - adi,ad7914
--      - adi,ad7923
--      - adi,ad7924
--      - adi,ad7908
--      - adi,ad7918
--      - adi,ad7928
-+    oneOf:
-+      - enum:
-+          - adi,ad7904
-+          - adi,ad7914
-+          - adi,ad7908
-+          - adi,ad7918
-+          - adi,ad7923
-+          - adi,ad7924
-+          - adi,ad7927
-+          - adi,ad7928
-+      - items:
-+          - const: adi,ad7923
-+          - const: adi,ad7924
-+      - items:
-+          - const: adi,ad7927
-+          - const: adi,ad7928
- 
-   reg:
-     maxItems: 1
--- 
-2.37.4
-
+Rob
