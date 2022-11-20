@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A809C63125A
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 04:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E20B63125C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 04:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiKTDDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 22:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S229624AbiKTDDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 22:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKTDD2 (ORCPT
+        with ESMTP id S229520AbiKTDDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 22:03:28 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BE0B4818;
-        Sat, 19 Nov 2022 19:03:27 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id k2so4808146qvo.1;
-        Sat, 19 Nov 2022 19:03:27 -0800 (PST)
+        Sat, 19 Nov 2022 22:03:30 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FD2B4823;
+        Sat, 19 Nov 2022 19:03:28 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id a27so5500215qtw.10;
+        Sat, 19 Nov 2022 19:03:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w3ZLtBm0Tp52wW3OyBwZ0ioH8NSv4clGJ5jYAcXM5gw=;
-        b=XHDKLERdcxFQ0lj0gT0uZxwu/30BC7yb/XW6E+bvfB5MqpvtemUHXVenGrZ/H8UD8m
-         P1D8qSou4V8iZ/nb82QcjeYKIQWDT3DfuC+lUH0clTpnLTtZ4EhRuIuK/gerPGMoENER
-         lxA5ixluy2/+I+nE1skdJ4Mcj1rgCAkz8ELXA31uWvdxWyRMNekFpvN0xg5Ajkm5kKNX
-         2AtLgk4zTjPCLoAFwVQfqdNf83tkROZSvy0PNgHd9UdQ7bnDahNs3v1zEPxCLC0CuvyD
-         0k696xdq77fINUaDo773/xsFooXsdiwyhXW7DdRlQRnqQtj9naoYVpIMvVsmEoaegfRg
-         1rSg==
+        bh=Ecmtg8Xz1vo78RX1IEc/ka9eYTVT7RxfN8Rs3E8/0cY=;
+        b=g2uGY9p5ZdSLTLsXOhHdUd2vdjxbsAfaQPLrYP/r7kpXa9ON0jSONjY1n+mhNMl/A1
+         BtuX3Sr6Cxrz0PnlzAgHXk+HKtbe3NqHDWulqObV5JUY7QSYRd+p55aGqQyX1tGPbNsl
+         G1HnKevwRSY2mQo05/1xUVOgTuPtyNfBGQRl9JatpjTQg4HtpvOBcmVOsR5dc0yocEA6
+         YK8fujpmscdbONh0IfdPPQMbTGeJNuP+39soAVgVznt33g7+uwoXiDWk8mOdsMAmDIpx
+         kDxqfPiOBPVi7rD9K3gUcgldmpzq8nNoNNMvHZofJSDUl7SA6y/fSoErkcOcXkfhw9g4
+         ytlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=w3ZLtBm0Tp52wW3OyBwZ0ioH8NSv4clGJ5jYAcXM5gw=;
-        b=yhnxrqdSspYGKCnrpWlfx3cVnuDqDGoLnjZlWS6geSwF/n+u9q+ClIB9wFed0hvPGW
-         TrThGYDh3uLMhNShGIijNqhEKuVY2Q+lCuh3cjOY8eKeB3ax/1PcOkuuxvx1FPoBEtZY
-         Hrov7tj9OuFfZFwRY4uscJ09rDQ8JDtQA0sP0aJOnlBCWRFLKujVccaUPEz09vFGv0Sc
-         TTmUALTGcyQctJ7CPoE2/YGQAyGRfDtnyNW+M7Fk3kJ9gOFnNIyG11kS+h1oKrfnAnMP
-         wqo81+vB1B8gL33aCoJf/rGAhM0NDjCz32WYdAPOhlqJ0LBgz9+kxq3gUTDc7avn49i1
-         eyfA==
-X-Gm-Message-State: ANoB5pnPWQ9Ww5NmZj/XoWYsvuw3PsD0ZKKMuJIOy0ZEK39+hxq2RjZy
-        4BYemWYSg7yvAPP1Ls5AHbRfRbKu5qE=
-X-Google-Smtp-Source: AA0mqf4m7Lsl7R1/c+qcevJF27vxxJNFNsEdhENVdw12h2UnaJTbrRt2vFdFr6ld4C5IWuljGIdplQ==
-X-Received: by 2002:ad4:5343:0:b0:4b1:8165:58da with SMTP id v3-20020ad45343000000b004b1816558damr12706647qvs.30.1668913406515;
-        Sat, 19 Nov 2022 19:03:26 -0800 (PST)
+        bh=Ecmtg8Xz1vo78RX1IEc/ka9eYTVT7RxfN8Rs3E8/0cY=;
+        b=uLPXTDbff9QNKC+8eD/WE0IdAGPWtkwex6I3wKjEifDmECavzzm26jlGrKTdcAAS//
+         xUrriJGv4VoC2SmmE1bv7c3VYQckAoo+6oatGr2E/97KDkQwa6ao6cFCAesyeVxWfM+e
+         1zVJpDDrHQVeQFYxeWL54u5pwx9+yvw7RZB4dc2QD6+CmRgsDbi4hDrTnqAO6vt8+PZr
+         QuNGBbDk5JSH2B86lndRrLgktzK4NAP2118wHVMqkxMA4W4DkwfJ636qwO4IvWwrWX8Q
+         jlTaP2m4h3uCxcX/b45ycogvEiXaH2FoHUU3OOI1Mb1Y6CvS5HTjeqBrGBCbLb6bUY8j
+         OjaQ==
+X-Gm-Message-State: ANoB5pmMYv6leJ5Ysb4TSITRYeIK4Hdu0YTVYm1Fg1HH40v6beveRNdG
+        wRbjE4xnsqs5nyGJoP99/D4=
+X-Google-Smtp-Source: AA0mqf6LQqwRM7kBSkQmtdPhpc0QfAcgBntu0c160jXag+6d6vSVgHQN9+PE7mk+8gHwagCB3zi7Zw==
+X-Received: by 2002:ac8:5c03:0:b0:3a5:3979:23f0 with SMTP id i3-20020ac85c03000000b003a5397923f0mr12599783qti.216.1668913407408;
+        Sat, 19 Nov 2022 19:03:27 -0800 (PST)
 Received: from shaak.. (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id u8-20020ac80508000000b0039cc47752casm4522423qtg.77.2022.11.19.19.03.25
+        by smtp.gmail.com with ESMTPSA id u8-20020ac80508000000b0039cc47752casm4522423qtg.77.2022.11.19.19.03.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 19 Nov 2022 19:03:26 -0800 (PST)
 From:   Liam Beguin <liambeguin@gmail.com>
 To:     Liam Beguin <liambeguin@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v1 3/4] clk: lmk04832: drop superfluous #include
-Date:   Sat, 19 Nov 2022 22:02:56 -0500
-Message-Id: <20221120030257.531153-4-liambeguin@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 4/4] clk: lmk04832: fix kernel-doc warnings
+Date:   Sat, 19 Nov 2022 22:02:57 -0500
+Message-Id: <20221120030257.531153-5-liambeguin@gmail.com>
 X-Mailer: git-send-email 2.37.1.223.g6a475b71f8c4
 In-Reply-To: <20221120030257.531153-1-liambeguin@gmail.com>
 References: <20221120030257.531153-1-liambeguin@gmail.com>
@@ -74,34 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iwyu warnings: (new ones prefixed by >>)
->> drivers/clk/clk-lmk04832.c:15:1: iwyu: warning: superfluous #include <linux/debugfs.h>
->> drivers/clk/clk-lmk04832.c:20:1: iwyu: warning: superfluous #include <linux/uaccess.h>
+Fix syntax generating the following kernel-doc warnings:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202107110620.926Sm95z-lkp@intel.com/
+drivers/clk/clk-lmk04832.c:189: warning: cannot understand function prototype: 'struct lmk04832_device_info '
+drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'pid' not described in 'lmk04832_device_info'
+drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'maskrev' not described in 'lmk04832_device_info'
+drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'num_channels' not described in 'lmk04832_device_info'
+drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'vco0_range' not described in 'lmk04832_device_info'
+drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'vco1_range' not described in 'lmk04832_device_info'
+drivers/clk/clk-lmk04832.c:420: warning: No description found for return value of 'lmk04832_check_vco_ranges'
+drivers/clk/clk-lmk04832.c:459: warning: No description found for return value of 'lmk04832_calc_pll2_params'
+
 Signed-off-by: Liam Beguin <liambeguin@gmail.com>
 ---
- drivers/clk/clk-lmk04832.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/clk/clk-lmk04832.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/clk/clk-lmk04832.c b/drivers/clk/clk-lmk04832.c
-index 3a5961fe604d..7e01370fb6d4 100644
+index 7e01370fb6d4..57485356de4c 100644
 --- a/drivers/clk/clk-lmk04832.c
 +++ b/drivers/clk/clk-lmk04832.c
-@@ -12,12 +12,10 @@
- #include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
--#include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/gcd.h>
- #include <linux/gpio/consumer.h>
- #include <linux/module.h>
--#include <linux/uaccess.h>
- #include <linux/regmap.h>
- #include <linux/spi/spi.h>
+@@ -175,14 +175,14 @@ enum lmk04832_device_types {
+ };
  
+ /**
+- * lmk04832_device_info - Holds static device information that is specific to
+- *                        the chip revision
++ * struct lmk04832_device_info - Holds static device information that is
++ *                               specific to the chip revision
+  *
+- * pid:          Product Identifier
+- * maskrev:      IC version identifier
+- * num_channels: Number of available output channels (clkout count)
+- * vco0_range:   {min, max} of the VCO0 operating range (in MHz)
+- * vco1_range:   {min, max} of the VCO1 operating range (in MHz)
++ * @pid:          Product Identifier
++ * @maskrev:      IC version identifier
++ * @num_channels: Number of available output channels (clkout count)
++ * @vco0_range:   {min, max} of the VCO0 operating range (in MHz)
++ * @vco1_range:   {min, max} of the VCO1 operating range (in MHz)
+  */
+ struct lmk04832_device_info {
+ 	u16 pid;
+@@ -412,7 +412,7 @@ static unsigned long lmk04832_vco_recalc_rate(struct clk_hw *hw,
+  * The LMK04832 has 2 internal VCO, each with independent operating ranges.
+  * Use the device_info structure to determine which VCO to use based on rate.
+  *
+- * Returns VCO_MUX value or negative errno.
++ * Returns: VCO_MUX value or negative errno.
+  */
+ static int lmk04832_check_vco_ranges(struct lmk04832 *lmk, unsigned long rate)
+ {
+@@ -449,7 +449,7 @@ static int lmk04832_check_vco_ranges(struct lmk04832 *lmk, unsigned long rate)
+  *
+  *	VCO = OSCin * 2 * PLL2_N * PLL2_P / PLL2_R
+  *
+- * Returns vco rate or negative errno.
++ * Returns: vco rate or negative errno.
+  */
+ static long lmk04832_calc_pll2_params(unsigned long prate, unsigned long rate,
+ 				      unsigned int *n, unsigned int *p,
 -- 
 2.37.1.223.g6a475b71f8c4
 
