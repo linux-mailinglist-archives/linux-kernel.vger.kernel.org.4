@@ -2,188 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BF8631385
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 12:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCA5631387
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 12:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiKTLCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 06:02:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S229633AbiKTLGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 06:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiKTLCk (ORCPT
+        with ESMTP id S229480AbiKTLGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 06:02:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C5610B49;
-        Sun, 20 Nov 2022 03:02:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 20 Nov 2022 06:06:09 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15263920B5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 03:06:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2302760A50;
-        Sun, 20 Nov 2022 11:02:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E6EC433C1;
-        Sun, 20 Nov 2022 11:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668942158;
-        bh=gDU2LVXIzZwLgBshn5UVoInFo0YQ5h+qGGMcrbbByiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cs/PSADvyqH2ADXPbipsh1UqqL5+N4J52iN86y/9Ew92/X+0a29He9D9ds1c9FvmK
-         +QVB8ohmocBD4E6DpjYtlBx6DfFOUJJdmSbBq5g6TmFGlMJVJ/zRsCXtiehfI4G8OB
-         JQ3ZTopkx++6lrMFU8Hl8HVrqhMV3jOMZgHE06adWe/KPefOJaLhLsQiFqreK7nGVT
-         k6BoUN6D97PzBNuaVG+LiHjOCa+E/H3D92esGe60FgVtJpyd27a/QRK3Va6TpbkEb9
-         PW7Y/Rt8Va7jUm0rXv632cPL308HS/RnxY0gB7vlmQ+g82T7vxMWqMaJ6ADsFLcTVg
-         W/XfX2LZHQblA==
-Date:   Sun, 20 Nov 2022 11:02:33 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 5/7] riscv: dts: bouffalolab: add the bl808 SoC base
- device tree
-Message-ID: <Y3oJSfsNFE9Cn0Al@spud>
-References: <20221120082114.3030-1-jszhang@kernel.org>
- <20221120082114.3030-6-jszhang@kernel.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AEE09223EF;
+        Sun, 20 Nov 2022 11:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668942366; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=saQ6k/5u5AwfbQgqLqgkEOPVOb4XU7pT+ypq8UgqrlA=;
+        b=w4OKc/YsJ1Fgi31JsjAuzQDLPJ+XpykxGQvUWJvpuqbtQyhNizQAeHYAXmhLELUomDnNRD
+        0T3ZcjAL+iDDhTEKSeBZAtWv2Fg8GI88G3AS8ZHp2Qw7ZkEMLw66ygyNP2rBq86O7QQycX
+        +gmUjqWnY6E+DzmnirIPokpWOsfKrrA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668942366;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=saQ6k/5u5AwfbQgqLqgkEOPVOb4XU7pT+ypq8UgqrlA=;
+        b=OGjALRNVMTd3hmviXDJS/xxgBQbroqCOxMGhRwFbDNNCPshnPK4Z1rdZVIzuSWNeKzZ4Zk
+        c81ow7QfKq9TFjBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A468F1348D;
+        Sun, 20 Nov 2022 11:06:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tx8eKB4KemOlVgAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 20 Nov 2022 11:06:06 +0000
+Date:   Sun, 20 Nov 2022 12:06:01 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] locking/urgent for 6.1-rc6
+Message-ID: <Y3oKGZRs9Evwwz5j@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221120082114.3030-6-jszhang@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 04:21:12PM +0800, Jisheng Zhang wrote:
-> Add a baisc dtsi for the bouffalolab bl808 SoC.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/boot/dts/Makefile               |  1 +
->  arch/riscv/boot/dts/bouffalolab/bl808.dtsi | 74 ++++++++++++++++++++++
->  2 files changed, 75 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808.dtsi
-> 
-> diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-> index ff174996cdfd..b525467152b2 100644
-> --- a/arch/riscv/boot/dts/Makefile
-> +++ b/arch/riscv/boot/dts/Makefile
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +subdir-y += bouffalolab
->  subdir-y += sifive
->  subdir-y += starfive
->  subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
-> diff --git a/arch/riscv/boot/dts/bouffalolab/bl808.dtsi b/arch/riscv/boot/dts/bouffalolab/bl808.dtsi
-> new file mode 100644
-> index 000000000000..c98ebb14ee10
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/bouffalolab/bl808.dtsi
-> @@ -0,0 +1,74 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +/*
-> + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +/ {
-> +	compatible = "bouffalolab,bl808";
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +
-> +	cpus {
-> +		timebase-frequency = <1000000>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		cpu0: cpu@0 {
-> +			compatible = "thead,c906", "riscv";
+Hi Linus,
 
-So this is not yet defined as the dt etc for the d1 has not yet landed.
-I think I will go pick up that patch for v6.2 as it should make
-everyone's life easier.
+please pull a single urgent locking build fix for 6.1.
 
-Without that, dtbs_check produces:
-arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtb:0:0: /cpus/cpu@0: failed to match any schema with compatible: ['thead,c906', 'riscv']
+Thx.
 
-> +			device_type = "cpu";
-> +			reg = <0>;
-> +			d-cache-block-size = <64>;
-> +			d-cache-sets = <256>;
-> +			d-cache-size = <32768>;
-> +			i-cache-block-size = <64>;
-> +			i-cache-sets = <128>;
-> +			i-cache-size = <32768>;
-> +			mmu-type = "riscv,sv39";
-> +			riscv,isa = "rv64imafdc";
-> +
-> +			cpu0_intc: interrupt-controller {
-> +				compatible = "riscv,cpu-intc";
-> +				interrupt-controller;
-> +				#address-cells = <0>;
-> +				#interrupt-cells = <1>;
-> +			};
-> +		};
-> +	};
-> +
-> +	xtal: xtal-clk {
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <40000000>;
-> +		clock-output-names = "xtal";
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	soc {
-> +		compatible = "simple-bus";
-> +		ranges;
-> +		interrupt-parent = <&plic>;
-> +		dma-noncoherent;
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +
-> +		uart0: serial@30002000 {
-> +			compatible = "bouffalolab,uart";
-> +			reg = <0x30002000 0x1000>;
-> +			interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&xtal>;
-> +			status = "disabled";
-> +		};
-> +
-> +		plic: interrupt-controller@e0000000 {
-> +			compatible = "thead,c900-plic";
+---
 
-Hmm, this one fails validation too. Likely you need to add a
-"bouffalolab,plic" to the plic dt-binding or otherwise modify the
-binding such that thead,c900-plic on it's own is permitted. CC Samuel on
-that patch please in case he has an opinion on it.
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
 
-Also, I've taken over picking up the misc dt stuff that Palmer used to
-apply - so canaan, starfive & sifive stuff. Do you intended sending PRs
-to Arnd for this stuff, or would you like to me bundle it with what I am
-going to be sending anyway?
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
 
-Thanks,
-Conor.
+are available in the Git repository at:
 
-> +			reg = <0xe0000000 0x4000000>;
-> +			interrupts-extended = <&cpu0_intc 0xffffffff>,
-> +					      <&cpu0_intc 9>;
-> +			interrupt-controller;
-> +			#address-cells = <0>;
-> +			#interrupt-cells = <2>;
-> +			riscv,ndev = <64>;
-> +		};
-> +	};
-> +};
-> -- 
-> 2.37.2
-> 
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/locking_urgent_for_v6.1_rc6
+
+for you to fetch changes up to 23df39fc6a36183af5e6e4f47523f1ad2cdc1d30:
+
+  locking: Fix qspinlock/x86 inline asm error (2022-11-16 10:18:09 +0100)
+
+----------------------------------------------------------------
+- Fix a build error with clang 11
+
+----------------------------------------------------------------
+Guo Jin (1):
+      locking: Fix qspinlock/x86 inline asm error
+
+ arch/x86/include/asm/qspinlock_paravirt.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
