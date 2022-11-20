@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1344A631355
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 11:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FBC631358
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 11:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiKTKbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 05:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S229660AbiKTKer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 05:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiKTKbs (ORCPT
+        with ESMTP id S229546AbiKTKep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 05:31:48 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1BA776C6
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 02:31:45 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id s8so14887996lfc.8
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 02:31:45 -0800 (PST)
+        Sun, 20 Nov 2022 05:34:45 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C19A7D50D
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 02:34:44 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id j4so14968345lfk.0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 02:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0OGFENIO3DSQAq7m00vJ/5Y2wI4AbIbEyIhhqocLUF8=;
-        b=G34Ax0pxDeb0umq8Wg6bINoXwwg4xrj4gplMlIvhlhJkfWDjRCpDAB0/KcrvlKUOuM
-         bcjLjGLw1TYr9l3GciuUlFJvEt+qaAoVZvVtamrkMzA9S/qyU2QXdMi07aMGRH5+thUv
-         MxGiUnohfGraIr+OObOUTHxPkkj28ZjUghw+U2LGIaZvBTJ9IQ8/mkUnfTbE7wgukfet
-         R0zmP4k3cpRXhIlTwttu/Aj+/AuCbopVR3lnSVwqmPuPqugFqXRgqooYlDyD+Xq9GbU6
-         PyE3ejo+lFOiNdUJ/KWtVrGlxmtc04l3PtLHeF3S8TpTc2S/Got65pRsIEp/HsDmLQlt
-         7koQ==
+        bh=8D4BClPP9qrwATF1t4nCunXzUqHb8yDxaV0KlH+7vLs=;
+        b=ngHAa6H5aYEfS3vMjANdUuM9RsJdWy9RmqP1HxGhiDlqZzHX3bMuK5JHG7yjhKHMU9
+         41+DdKziUR4qZ0Jg2m6OxkucZzaC/z2rTF2766hh1O4sxASm9sHaaZup8FvZVV9IaHdc
+         ObKMgReB3Ym325bcng3X/NNJXvSs4oJz9QymH9VVmZf0CeGfE+CqVop6efX552xJuiNN
+         lV/XAtAsIcsyDwObFzlyrXidYxHA0If1H2ZiPZurHoTek8gXD+7wR2kvRQgb29vRj+jd
+         WCcNeu9OJ7ehepkL3CUw+x+t4Ccka9BkJdI8Q/6HpFA3SohZd6OarmGaUZEnQU8lB4Ez
+         x/gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0OGFENIO3DSQAq7m00vJ/5Y2wI4AbIbEyIhhqocLUF8=;
-        b=FhB2HzD/yF/l5koOwRi3UX2nldrR0+m4PjjALTvXSaomtUfEdvxGzNNzEI8iNFsc3Z
-         EYFrhanRSPMTPvYnIxwplcwi9WOh3xLP7my+SxHlbz1cuc+c7+L4CrMH4qWB2INQxuh0
-         aoPREAdkhX0y/BMd33X8tHDl//YMFeameBlk0+tMzN/r/PpColm8OkPByguBD4HuF5h4
-         VowoOEISwiZpbHY3A+JqThZBJ9HGuF9djudN8+Sym/mCz86sMuEqg87bSNVxPDJYgSKf
-         gtPBZxqatHzk0/VtzSMrW0OhGO3UvdfPgltQdKt2f4FqTgy5n9zCXWZM7v0j8E5EWFZ/
-         LQdQ==
-X-Gm-Message-State: ANoB5pnwMksUG3g9QUCCNvLCxC4y3E79swkheYYGva3z7NzPxbiXzGf1
-        HIHx71ApOsixYPw1UjImF57g5w==
-X-Google-Smtp-Source: AA0mqf6Q6IMpj3NP1GucZRXTNScUlowQod5pAwuxeeweJ7M+4+YKBtZlVjbdYqoZWICNRSEzitXHZw==
-X-Received: by 2002:ac2:5dea:0:b0:4b2:2cff:8446 with SMTP id z10-20020ac25dea000000b004b22cff8446mr4560400lfq.572.1668940304033;
-        Sun, 20 Nov 2022 02:31:44 -0800 (PST)
+        bh=8D4BClPP9qrwATF1t4nCunXzUqHb8yDxaV0KlH+7vLs=;
+        b=up7AKg4CRzt3JKiAnCt/9SxUOhsqFXHEflRDnO3vB0g5TxvBGbaVfgNVtf9Kaswcqm
+         b9KgqCct5YjUjYkqHnSMJUD5zdj6cwUaX6rraVhvNRfnorwKyE8CWN/ph7moOTv7HRpU
+         zLNTX9kZxmU29Gu5inAaJ7CE8Vih6uyhuWVUPTU9vlr8p9JdKl4gOoIM0rMCuN7Xz6Fk
+         U/vddq9xlKU4x/1Kz4/roe5vcLE9AxoibYepcLJ+zqmzWBYgYP0bV2PDSyCteph2IYOV
+         HDLlme1RDHJbWqMSm/KAu2VfwhwUNT5aBX9NVEjLIrm5uST6Vea9sypngcGBNBhbuc8R
+         YlSQ==
+X-Gm-Message-State: ANoB5plhNmEY6DbCMEkNl3VguO4Y4UYAIXuzjRzPHq+h8qhwQVssme9B
+        qjCE/PyNtAEdEiUtt6R7ZhKGOA==
+X-Google-Smtp-Source: AA0mqf7o759OuxPpc1jEao2vB98NHQHMxY3bsLWqPy3t+QLguIdEiBC/oMg307GKo5mtBXonCmHJYA==
+X-Received: by 2002:a19:ca0b:0:b0:4b1:7972:627a with SMTP id a11-20020a19ca0b000000b004b17972627amr4266924lfg.101.1668940482960;
+        Sun, 20 Nov 2022 02:34:42 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v23-20020a056512349700b004994c190581sm1491384lfr.123.2022.11.20.02.31.42
+        by smtp.gmail.com with ESMTPSA id i5-20020a0565123e0500b004978e51b691sm1491759lfv.266.2022.11.20.02.34.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Nov 2022 02:31:43 -0800 (PST)
-Message-ID: <f0425349-d965-0a40-0672-27dfbe45eb44@linaro.org>
-Date:   Sun, 20 Nov 2022 11:31:42 +0100
+        Sun, 20 Nov 2022 02:34:42 -0800 (PST)
+Message-ID: <7ab50a13-9711-2d77-ff47-ad4c2d9b4faf@linaro.org>
+Date:   Sun, 20 Nov 2022 11:34:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH] ARM: s3c: Fix a build error after the s3c24xx dma driver
- was removed
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Arnd Bergmann <arnd@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        dmaengine@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20221021203329.4143397-14-arnd@kernel.org>
- <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v3 02/14] dt-bindings: media: rkisp1: Add i.MX8MP ISP
+ example
 Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
+ <20221118093931.1284465-3-paul.elder@ideasonboard.com>
+ <ca8a6070-3888-8d42-5974-d7c2adc62417@linaro.org>
+ <Y3kLZ6nQ1VzN+2eu@pendragon.ideasonboard.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <Y3kLZ6nQ1VzN+2eu@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,17 +85,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 22:54, Uwe Kleine-König wrote:
-> The linux/platform_data/dma-s3c24xx.h header file was removed. It didn't
-> declare or define any symbol needed in devs.c though, so the #include
-> can just be dropped.
+On 19/11/2022 17:59, Laurent Pinchart wrote:
+> Hi Krzysztof,
 > 
-> Fixes: cccc46ae3623 ("dmaengine: remove s3c24xx driver")
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
+> On Fri, Nov 18, 2022 at 02:06:14PM +0100, Krzysztof Kozlowski wrote:
+>> On 18/11/2022 10:39, Paul Elder wrote:
+>>> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>>>
+>>> Add an example to the rockchip-isp1 DT binding that showcases usage of
+>>> the parallel input of the ISP, connected to the CSI-2 receiver internal
+>>> to the i.MX8MP.
+>>>
+>>> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>>
+>> Missing SoB.
+>>
+>>> ---
+>>>  .../bindings/media/rockchip-isp1.yaml         | 72 +++++++++++++++++++
+>>>  1 file changed, 72 insertions(+)
+>>>
+>>
+>> I don't know what do you demonstrate there... usage of endpoints? That's
+>> the only difference. Such usage is the same everywhere, nothing specific
+>> to this example. You already have two examples, so I don't think this
+>> brings anything more.
+> 
+> The i.MX8MP is the only SoC integrating this ISP (and supported in
+> mainlineà that has an external CSI-2 receiver, as opposed to using the
+> CSI-2 receiver from the ISP. This patch this showcases the DT
+> integration for that use case. If you think it's not worth it, I'm fine
+> dropping it.
 
-The file was not removed... or it should not have been yet. The s3c24xx
-dma driver removal should be part of Arnd series taken via SoC ARM.
+The purpose of examples are not to demonstrate the SoC, but only this
+given binding.
+> 
 
 Best regards,
 Krzysztof
