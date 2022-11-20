@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D908E63175D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 00:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC8A63175A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 00:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiKTXgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 18:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
+        id S229622AbiKTXfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 18:35:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiKTXgJ (ORCPT
+        with ESMTP id S229530AbiKTXfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 18:36:09 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA8C2B613;
-        Sun, 20 Nov 2022 15:36:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=aI2jnEgK19wCHQqoMeLWDiWUB6RdVgk21HiT4Yh9Fak=; b=cYz+hH9JTM6DDVFwQJJxm1/mW+
-        4U7d5VyO+Na0o05Z9b75x0D4Kq1odfCa5rESy/6fgNMC7pA2w+B0Ja3R44WyaJy0cVsIE8AALcU0T
-        /t9evWN/T6aj49iIwdKgvun2RCqmF8a1H5zlG/f6i0HBY6YRgZ04wfp2BiQhj/kZBN1s=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1owtqJ-002x8q-Qr; Mon, 21 Nov 2022 00:35:19 +0100
-Date:   Mon, 21 Nov 2022 00:35:19 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 0/3] add dt configuration for dp83867 led modes
-Message-ID: <Y3q5t+1M5A0+FQ0M@lunn.ch>
-References: <20221118001548.635752-1-tharvey@gateworks.com>
- <Y3bRX1N0Rp7EDJkS@lunn.ch>
- <CAJ+vNU3P-t3Q1XZrNG=czvFBU7UsCOA_Ap47k9Ein_3VQy_tGw@mail.gmail.com>
- <Y3eEiyUn6DDeUZmg@lunn.ch>
- <CAJ+vNU2pAQh6KKiX5x7hFuVpN68NZjhnzwFLRAzS9YZ8bWm1KA@mail.gmail.com>
+        Sun, 20 Nov 2022 18:35:50 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EDB2870B
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 15:35:46 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so7615699wma.1
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 15:35:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Iuzx2Yj9BTVMbKCUWOJh6Sm9EMLl+t5LIqj46fDmcTs=;
+        b=ni6wGTrz4Gr4HPb044i1emFNaAgSyKqBHE554eA8hVZu0kbHRRqzR4r6KNoKuB/sTg
+         RBK3nE03uDe1ignrhry6gB5AnPU0alkHugHzTCCRJsZAYSgyhETPqTFULZt+s/2KV/iI
+         7twkkLsYcTvCPrFrx0Rbs3xWTTrP5ok47NuoD+btEC8/BT//SQXT/BTsrDaNM9xgvhi9
+         ILG2nfeASyG3Thd2t4EfrWLdrQFHBGvzKmDVhi1VEUrSyioIjvWNrcvGZRSgT0M5M8hH
+         R91cmsp0IF44d10EKJDmO1Mg3nyBIe77D4t9sWHFYNvDOGyzHruzNLQ93vrnoLg9dyBX
+         LeYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Iuzx2Yj9BTVMbKCUWOJh6Sm9EMLl+t5LIqj46fDmcTs=;
+        b=6PK9w30LEztmGX0RUFTqjoctJJUa/8GiOOHiTuBl0Z4ucneiy9dOrZH8Cptci/SjPj
+         xVqSvLbBLLbKoPZJU/0LynCDaFn++XTt2Bc5en2FvIoRuG+U6sZpX66CeZKEGDkV782o
+         XbxSfxQ4D9F4LZgDRC/DXZ/J2m+t8tktJonbQ4hzk2otkV6ifePj56lJsJj1BIltx7Xi
+         c3ZW9L7aM/2zVpO+piqLHQSlIb6HRPnr1vNkwY2IFSzqlkjxb9ZHrTy87o2SkHIHlGqB
+         VlkByrrf2f/TL1paJjruezvZSLNcdmM0bl3NAVpq2ssEowXN6AJr40XaRIPkfPXQbR3T
+         SX+Q==
+X-Gm-Message-State: ANoB5pmr/21uTlTmkdX89s/VphZY49LnNGKfVf47+ee+YjO+DPtnYHJQ
+        okWulmyGieQlRTVCafNmg1fxXw==
+X-Google-Smtp-Source: AA0mqf4vohM+8neL2KxqtPdegKCfGeaX/+wJ4+Oj772c++qkNldbpQMk0JpgjJ1YtFxnpyxkU0rALg==
+X-Received: by 2002:a05:600c:1da2:b0:3cf:147d:ad9a with SMTP id p34-20020a05600c1da200b003cf147dad9amr10471997wms.33.1668987345411;
+        Sun, 20 Nov 2022 15:35:45 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id bg28-20020a05600c3c9c00b003cfaae07f68sm18031771wmb.17.2022.11.20.15.35.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 15:35:44 -0800 (PST)
+Date:   Sun, 20 Nov 2022 23:35:43 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, peterz@infradead.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, ke.wang@unisoc.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/rt: Use cpu_active_mask to prevent
+ rto_push_irq_work's dead loop
+Message-ID: <20221120233543.yerjypgym7laxe42@airbuntu>
+References: <20221114120453.3233-1-xuewen.yan@unisoc.com>
+ <20221117170028.04fd7013@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJ+vNU2pAQh6KKiX5x7hFuVpN68NZjhnzwFLRAzS9YZ8bWm1KA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,T_SPF_HELO_TEMPERROR,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221117170028.04fd7013@gandalf.local.home>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:57:00AM -0800, Tim Harvey wrote:
-> On Fri, Nov 18, 2022 at 5:11 AM Andrew Lunn <andrew@lunn.ch> wrote:
-> >
-> > > Andrew,
-> > >
-> > > I completely agree with you but I haven't seen how that can be done
-> > > yet. What support exists for a PHY driver to expose their LED
-> > > configuration to be used that way? Can you point me to an example?
-> >
-> > Nobody has actually worked on this long enough to get code merged. e.g.
-> > https://lore.kernel.org/netdev/20201004095852.GB1104@bug/T/
-> > https://lists.archive.carbon60.com/linux/kernel/3396223
-> >
-> > This is probably the last attempt, which was not too far away from getting merged:
-> > https://patches.linaro.org/project/linux-leds/cover/20220503151633.18760-1-ansuelsmth@gmail.com/
-> >
-> > I seem to NACK a patch like yours every couple of months. If all that
-> > wasted time was actually spent on a common framework, this would of
-> > been solved years ago.
-> >
-> > How important is it to you to control these LEDs? Enough to finish
-> > this code and get it merged?
-> >
+On 11/17/22 17:00, Steven Rostedt wrote:
+> On Mon, 14 Nov 2022 20:04:53 +0800
+> Xuewen Yan <xuewen.yan@unisoc.com> wrote:
 > 
-> Andrew,
+> > +++ b/kernel/sched/rt.c
+> > @@ -2219,6 +2219,7 @@ static int rto_next_cpu(struct root_domain *rd)
+> >  {
+> >  	int next;
+> >  	int cpu;
+> > +	struct cpumask tmp_cpumask;
 > 
-> Thanks for the links - the most recent attempt does look promising.
-> For whatever reason I don't have that series in my mail history so
-> it's not clear how I can respond to it.
-
-apt-get install b4
-
-> Ansuel, are you planning on posting a v7 of 'Adds support for PHY LEDs
-> with offload triggers' [1]?
+> If you have a machine with thousands of CPUs, this will likely kill the
+> stack.
 > 
-> I'm not all that familiar with netdev led triggers. Is there a way to
-> configure the default offload blink mode via dt with your series? I
-> didn't quite follow how the offload function/blink-mode gets set.
+> >  
+> >  	/*
+> >  	 * When starting the IPI RT pushing, the rto_cpu is set to -1,
+> > @@ -2238,6 +2239,11 @@ static int rto_next_cpu(struct root_domain *rd)
+> >  		/* When rto_cpu is -1 this acts like cpumask_first() */
+> >  		cpu = cpumask_next(rd->rto_cpu, rd->rto_mask);
+> >  
+> > +		cpumask_and(&tmp_cpumask, rd->rto_mask, cpu_active_mask);
+> > +		if (rd->rto_cpu == -1 && cpumask_weight(&tmp_cpumask) == 1 &&
+> > +		    cpumask_test_cpu(smp_processor_id(), &tmp_cpumask))
+> > +			break;
+> > +
+> 
+> Kill the above.
+> 
+> >  		rd->rto_cpu = cpu;
+> >  
+> >  		if (cpu < nr_cpu_ids) {
+> 
+> Why not just add here:
+> 
+> 			if (!cpumask_test_cpu(cpu, cpu_active_mask))
+> 				continue;
+> 			return cpu;
+> 		}
+> 
+> ?
 
-The idea is that the PHY LEDs are just LEDs in the Linux LED
-framework. So read Documentation/devicetree/bindings/leds/common.yaml.
-The PHY should make use of these standard DT properties, including
-linux,default-trigger.
+Or this?
 
-	Andrew
+
+	diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+	index ed2a47e4ddae..5073e06e34c3 100644
+	--- a/kernel/sched/rt.c
+	+++ b/kernel/sched/rt.c
+	@@ -2236,7 +2236,7 @@ static int rto_next_cpu(struct root_domain *rd)
+		for (;;) {
+
+			/* When rto_cpu is -1 this acts like cpumask_first() */
+	-               cpu = cpumask_next(rd->rto_cpu, rd->rto_mask);
+	+               cpu = cpumask_next_and(rd->rto_cpu, rd->rto_mask, cpu_active_mask);
+
+			rd->rto_cpu = cpu;
+
+
+I think we might be circumventing the root cause though. It looks like that
+there are only 2 cpus online in the system and one of them going offline (cpu1)
+while the other is being overloaded (cpu0), ending in ping-ponging the tasks?
+
+If that's the case, it seems to me the rto state needs to be cleared for cpu0
+and stop attempting to push tasks. Which I'd assume it usually happens but
+there's a race that prevents it from realizing this.
+
+Maybe something like this would be better? Assuming I understood the problem
+correctly of course.
+
+
+	diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+	index ed2a47e4ddae..d80072cc2596 100644
+	--- a/kernel/sched/rt.c
+	+++ b/kernel/sched/rt.c
+	@@ -334,6 +334,10 @@ static inline void rt_set_overload(struct rq *rq)
+		if (!rq->online)
+			return;
+
+	+       /* Overload is meaningless if we shrank to become a UP system */
+	+       if (cpumask_weight(cpu_online_mask) == 1)
+	+               return;
+	+
+		cpumask_set_cpu(rq->cpu, rq->rd->rto_mask);
+		/*
+		 * Make sure the mask is visible before we set
+
+This could be working around the problem too, not sure. But the bug IMHO is
+that if we shrink to a UP system, the whole push-pull mechanism should retire
+temporarily. Which I assume this usually happens, but there's a race somewhere.
+
+
+Thanks
+
+--
+Qais Yousef
