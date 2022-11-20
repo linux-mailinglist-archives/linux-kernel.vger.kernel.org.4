@@ -2,148 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974216314F6
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 16:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5836314F8
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 16:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiKTPhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 10:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
+        id S229775AbiKTPjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 10:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiKTPht (ORCPT
+        with ESMTP id S229517AbiKTPjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 10:37:49 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF765FD0;
-        Sun, 20 Nov 2022 07:37:46 -0800 (PST)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id A569A419E9E4;
-        Sun, 20 Nov 2022 15:37:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru A569A419E9E4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1668958660;
-        bh=CAqPKJIi1yDbm+KHX7GSdiJRmyN/LoZvZ7O2KKu+0oU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BfhnW4Tg18Q2kjMjhrZ+it1vXEv2GKRfsvqlJszTREcnFhOecGwBbIT8E7dM5eGbo
-         GTx5Ui2G91zwVXvQL70WqU7xi1mPQPVBkIE/cHTdLi4CySPCCbKrMz55LgOhf9YWgP
-         wDW36Z90jya5IL/NGmdtvPPIv5eu46RbUnNVUqZw=
-MIME-Version: 1.0
-Date:   Sun, 20 Nov 2022 18:37:40 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     joeyli <jlee@suse.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        Sun, 20 Nov 2022 10:39:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C849938E;
+        Sun, 20 Nov 2022 07:39:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87ACBB80AFE;
+        Sun, 20 Nov 2022 15:39:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130A5C433C1;
+        Sun, 20 Nov 2022 15:39:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668958755;
+        bh=Ov21CMzyp/BQx+oKvHSoXyGPtWjylszVmHmrXdDBnII=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nOpBz/Tt2MK+815wxsJ0xqHHMbU+V533z6kX9S+HtVhHHrM+ANNZ7enBRY0oLlSCW
+         kPHHQyRdeN2Ju7Bxz5m+putCll6atJraZtSM2WIj8eCVkMYqbvvECX7wx1vzTgRdSl
+         juUv7hUR21RwU+l4cWgEZ7exWeaJpNmAL2tzWy7u6ynQlcWb41f/fAzMWLvk6pPgAR
+         U23rmZMcHA5dQA6vObztRffz8YqQzfckAGNCqmyVlhkPqx5ej4u7q4raW9pKK4ps7o
+         NlEh4V8MuXXFWdRILicRHOEgZ+yV1WMlEbgK2krB92PGoExk2RpBuQk+OTfLZ9vQer
+         BVcb1lnqQHXHA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C6CE74034E; Sun, 20 Nov 2022 12:39:11 -0300 (-03)
+Date:   Sun, 20 Nov 2022 12:39:11 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 00/23] x86_64: Improvements at compressed kernel stage
-In-Reply-To: <20221120014919.GV3967@linux-l9pv.suse>
-References: <cover.1666705333.git.baskov@ispras.ru>
- <20221120014919.GV3967@linux-l9pv.suse>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <50aa7df3f34f55ec435c4f489d8f3df3@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Subject: Re: [PATCH 08/12] perf test: Replace arm spe fork test workload with
+ sqrtloop
+Message-ID: <Y3pKH1djhiS31Wtn@kernel.org>
+References: <20221116233854.1596378-1-namhyung@kernel.org>
+ <20221116233854.1596378-9-namhyung@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116233854.1596378-9-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-20 04:49, joeyli wrote:
-> Hi Evgeniy,
+Em Wed, Nov 16, 2022 at 03:38:50PM -0800, Namhyung Kim escreveu:
+> So that it can get rid of requirement of a compiler.  I've also removed
+> killall as it'll kill perf process now and run the test workload for 10
+> sec instead.
+
+   8    73.81 alpine:edge                   : FAIL gcc version 11.2.1 20220219 (Alpine 11.2.1_git20220219)
+    tests/workloads/sqrtloop.c:23:3: error: ignoring return value of function declared with const attribute [-Werror,-Wunused-value]
+                    sqrt(rand());
+                    ^~~~ ~~~~~~
+    1 error generated.
+    make[4]: *** [/git/perf-6.1.0-rc5/tools/build/Makefile.build:139: workloads] Error 2
+    make[3]: *** [/git/perf-6.1.0-rc5/tools/build/Makefile.build:139: tests] Error 2
+
+
+I'll fix this one, probably just prepending a (void *).
+
+- Arnaldo
+ 
+> Tested-by: Leo Yan <leo.yan@linaro.org>
+> Tested-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/tests/shell/test_arm_spe_fork.sh | 44 +--------------------
+>  1 file changed, 1 insertion(+), 43 deletions(-)
 > 
-> Thanks for your effort!
-> 
-> On Tue, Oct 25, 2022 at 05:12:38PM +0300, Evgeniy Baskov wrote:
-...
-> 
-> Because Peter Jones point out this patchset to me, so I tried it
-> on OVMF, and I set the EfiLoaderData in DXE memory protection policy:
-> 
-> Index: edk2/MdeModulePkg/MdeModulePkg.dec
-> ===================================================================
-> --- edk2.orig/MdeModulePkg/MdeModulePkg.dec
-> +++ edk2/MdeModulePkg/MdeModulePkg.dec
-> @@ -1392,7 +1392,7 @@
->    # e.g. 0x7BD4 can be used for all memory except Code and
-> ACPINVS/Reserved. <BR>
->    #
->    # @Prompt Set DXE memory protection policy.
+> diff --git a/tools/perf/tests/shell/test_arm_spe_fork.sh b/tools/perf/tests/shell/test_arm_spe_fork.sh
+> index c920d3583d30..da810e1b2b9e 100755
+> --- a/tools/perf/tests/shell/test_arm_spe_fork.sh
+> +++ b/tools/perf/tests/shell/test_arm_spe_fork.sh
+> @@ -11,14 +11,7 @@ skip_if_no_arm_spe_event() {
+>  
+>  skip_if_no_arm_spe_event || exit 2
+>  
+> -# skip if there's no compiler
+> -if ! [ -x "$(command -v cc)" ]; then
+> -	echo "failed: no compiler, install gcc"
+> -	exit 2
+> -fi
 > -
-> gEfiMdeModulePkgTokenSpaceGuid.PcdDxeNxMemoryProtectionPolicy|0x0000000|UINT64|0x00001048^M
-> +
-> gEfiMdeModulePkgTokenSpaceGuid.PcdDxeNxMemoryProtectionPolicy|0x0000004|UINT64|0x00001048^M
-> 
->    ## PCI Serial Device Info. It is an array of Device, Function, and
-> Power Management
->    #  information that describes the path that contains zero or more
-> PCI to PCI bridges
-> 
-> 
-> I applied this v2 patch set on top of v6.1-rc5 kernel, and boot with a
-> shim which
-> set the PE NX-compatibility DLL Characteristic flag. I got a page
-> fault exception:
-> 
-> Loading Linux 6.1.0-rc5-default+ ...
-> Loading initial ramdisk ...
-> !!!! X64 Exception Type - 0E(#PF - Page-Fault)  CPU Apic ID - 00000000 
-> !!!!
-> ExceptionData - 0000000000000011  I:1 R:0 U:0 W:0 P:1 PK:0 SS:0 SGX:0
-> RIP  - 0000000076A3C390, CS  - 0000000000000038, RFLAGS - 
-> 0000000000210202
-> RAX  - 000000007D8CCDF8, RCX - 0000000076A3C390, RDX - 000000007DE86000
-> RBX  - 0000000076A3C000, RSP - 000000007FF0D2C8, RBP - 000000007DE86000
-> RSI  - 000000007F9EE018, RDI - 000000007DFD1C18
-> R8   - 0000000076A3C000, R9  - 0000000000000190, R10 - 000000007FF1D658
-> R11  - 0000000000000004, R12 - 0000000000000190, R13 - 000000007D8CCE00
-> R14  - 000000007D8C76B4, R15 - 000000007BF0CBD5
-> DS   - 0000000000000030, ES  - 0000000000000030, FS  - 0000000000000030
-> GS   - 0000000000000030, SS  - 0000000000000030
-> CR0  - 0000000080010033, CR2 - 0000000076A3C390, CR3 - 000000007FC01000
-> CR4  - 0000000000000668, CR8 - 0000000000000000
-> DR0  - 0000000000000000, DR1 - 0000000000000000, DR2 - 0000000000000000
-> DR3  - 0000000000000000, DR6 - 00000000FFFF0FF0, DR7 - 0000000000000400
-> GDTR - 000000007F9DE000 0000000000000047, LDTR - 0000000000000000
-> IDTR - 000000007F2E9018 0000000000000FFF,   TR - 0000000000000000
-> FXSAVE_STATE - 000000007FF0CF20
-> !!!! Find image based on IP(0x7BF0BAB5)
-> /mnt/working/source_code-git/edk2/Build/OvmfX64/DEBUG_GCC5/X64/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe/DEBUG/VariableRuntimeDxe.dll
-> (ImageBase=0000000000F40E7C, EntryPoint=0000000000F767B8) !!!!
-> 
-> 
-> My question is: Can I just set EfiLoaderData in DXE memory protection 
-> policy
-> in EDK2/OVMF to test this patchset? Or which platform (virtual or 
-> physical)
-> can we use for testing?
-> 
-> Thanks a lot!
-> Joey Lee
+> -TEST_PROGRAM_SOURCE=$(mktemp /tmp/__perf_test.program.XXXXX.c)
+> -TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
+> +TEST_PROGRAM="perf test -w sqrtloop 10"
+>  PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+>  PERF_RECORD_LOG=$(mktemp /tmp/__perf_test.log.XXXXX)
+>  
+> @@ -27,43 +20,10 @@ cleanup_files()
+>  	echo "Cleaning up files..."
+>  	rm -f ${PERF_RECORD_LOG}
+>  	rm -f ${PERF_DATA}
+> -	rm -f ${TEST_PROGRAM_SOURCE}
+> -	rm -f ${TEST_PROGRAM}
+>  }
+>  
+>  trap cleanup_files exit term int
+>  
+> -# compile test program
+> -cat << EOF > $TEST_PROGRAM_SOURCE
+> -#include <math.h>
+> -#include <stdio.h>
+> -#include <stdlib.h>
+> -#include <unistd.h>
+> -#include <sys/wait.h>
+> -
+> -int workload() {
+> -  while (1)
+> -    sqrt(rand());
+> -  return 0;
+> -}
+> -
+> -int main() {
+> -  switch (fork()) {
+> -    case 0:
+> -      return workload();
+> -    case -1:
+> -      return 1;
+> -    default:
+> -      wait(NULL);
+> -  }
+> -  return 0;
+> -}
+> -EOF
+> -
+> -echo "Compiling test program..."
+> -CFLAGS="-lm"
+> -cc $TEST_PROGRAM_SOURCE $CFLAGS -o $TEST_PROGRAM || exit 1
+> -
+>  echo "Recording workload..."
+>  perf record -o ${PERF_DATA} -e arm_spe/period=65536/ -vvv -- $TEST_PROGRAM > ${PERF_RECORD_LOG} 2>&1 &
+>  PERFPID=$!
+> @@ -78,8 +38,6 @@ echo Log lines after 1 second = $log1
+>  
+>  kill $PERFPID
+>  wait $PERFPID
+> -# test program may leave an orphan process running the workload
+> -killall $(basename $TEST_PROGRAM)
+>  
+>  if [ "$log0" = "$log1" ];
+>  then
+> -- 
+> 2.38.1.584.g0f3c55d4c2-goog
 
-Hi,
+-- 
 
-Thank you for testing!
-
-The EDK2 OVMF with adjusted PcdDxeNxMemoryProtectionPolicy
-should work with the kernel itself.
-
-As far as I can see from my testing with EDK2 OVMF, this
-#PF occurred inside GRUB code before the first instruction
-of the kernel. You can try using GRUB master branch, where
-allocations are changed to use EfiLoaderCode type and with
-PcdDxeNxMemoryProtectionPolicy=0x0000004 it will still be
-executable.
-
-Thanks,
-Evgeniy Baskov
+- Arnaldo
