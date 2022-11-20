@@ -2,89 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DF3631483
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 14:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A6C631487
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 14:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiKTNyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 08:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
+        id S229672AbiKTNzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 08:55:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiKTNyu (ORCPT
+        with ESMTP id S229647AbiKTNzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 08:54:50 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D22BE00B;
-        Sun, 20 Nov 2022 05:54:49 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id j6so6465708qvn.12;
-        Sun, 20 Nov 2022 05:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l2eBU6ujLjyRJynR0RvOp7u1Nyp2ufatO0a0XjB50bs=;
-        b=Qf6h5tbxlpXEZr64yYl4hlz7wLka+FXS26VzVb8+gFuUb+oi2RoNpYpbuU65Fwzycs
-         0mu8diBrFaz4yzH1+YJX923cRRwhB1jCobagLYQvPXHRFFffKOcP+3WzbH5TvaVv00u5
-         0sehlNEBK6exUSLOPvrZXTTBByisRCol+uf5/emaSc3XlyzIOLds8LzW+VbP/RpPKpr0
-         0y/TMZWwLwoN83TRPw6F1X9O2V7kP3BWn7W+mE2jyKCkKxH+rPqTvQkP216GVgdn1sFp
-         e6ggDlELNvYMgRlqeQbtOpyMH21z8Zi0Q9oQ08lzRHWeFYw9AnRuUQ0XBPwiNU4C5yOX
-         i2jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l2eBU6ujLjyRJynR0RvOp7u1Nyp2ufatO0a0XjB50bs=;
-        b=JZjoXer5bU4oJmLcXxOZXPjY3kVeWAak2+FH1ZmTTjPkhJWyq5gf/dFGJLDgI58BLg
-         wBTwtd6s5Vu2ADn9jmI7/5zj/zWjYYM8+JcZWzdSRWzM0FzkSVNspP1/l9YSjJAxaOt1
-         nvObBvTLCeveUf2yb+JhUvbk7wDSytttpJTijvzVm5Z9XKwiDcAOGShzIamlAwcFtzId
-         LwuH2u1DFXsf4qIfLn5AI7Z4/GUjP2FBUiQq2joaJEdV2ZLFLkyh3WVkMgriqPOGubMo
-         0ojiUrIGuwBk1tv61KR6jMdjJVMpc5FN41s1xqj6RXMedX3mtly7o0I7UA04vSy4Zn3d
-         BU7w==
-X-Gm-Message-State: ANoB5plrf7CDGl3uIwCM5Wzx88TRyryfbsFAzzSUlJ3lVmEx9BpcRByE
-        2CpNBxwAGcgk4cilR0c9me0=
-X-Google-Smtp-Source: AA0mqf4wSbT3cOLHR/0uBg22tGhXq9/EKpLQkf5i1JmpcnVOFjdE/00XNQRZt8nKzczfYnEj9/E1vw==
-X-Received: by 2002:a0c:c589:0:b0:4b1:af4a:5c65 with SMTP id a9-20020a0cc589000000b004b1af4a5c65mr2397651qvj.121.1668952488677;
-        Sun, 20 Nov 2022 05:54:48 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gd10-20020a05622a5c0a00b003a5c6ad428asm5171344qtb.92.2022.11.20.05.54.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 05:54:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 20 Nov 2022 05:54:47 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Sun, 20 Nov 2022 08:55:31 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E1F12D1E;
+        Sun, 20 Nov 2022 05:55:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668952530; x=1700488530;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6oz/VGdHbmnvKnjIBkMxIP78ltMPsharNqLSWuk0xuk=;
+  b=UbQIeKvWEQLfUe0vxAZ7mxayS5abA8Llq2JtN1+ZtsNOIbRq3/Cfa77y
+   iZqnQ3/vbaEFjhDwcUd98MvRVCnxvnmPmx3ngn+61fhHrynIqBY2jiLqw
+   xrG6BampbB25emJzKicvBRXQ+uopz9NlL/k7bz3okXnJL9TXD3L4732o9
+   LrKaeTncvnMzTqYywGEegvJ9sadycPhiXBMOXIDOhYm4918VAS7rhFEGz
+   prjwA297TzWq9BUyr/GUzHOYqaoKmPf7k4bOqf4nH1TyTS9+k8xS0LzDT
+   5h8rpxRRVBM/xd1OVIOkm0J41BD8HrirPudtcQ6xSmkx3zB8RJzxd8O/c
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10536"; a="296760503"
+X-IronPort-AV: E=Sophos;i="5.96,179,1665471600"; 
+   d="scan'208";a="296760503"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 05:55:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10536"; a="640740467"
+X-IronPort-AV: E=Sophos;i="5.96,179,1665471600"; 
+   d="scan'208";a="640740467"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 20 Nov 2022 05:55:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1owkn3-00Eqr5-1w;
+        Sun, 20 Nov 2022 15:55:21 +0200
+Date:   Sun, 20 Nov 2022 15:55:21 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pmbus core: Add power good support
-Message-ID: <20221120135447.GA1787833@roeck-us.net>
-References: <20221117184022.1808508-1-Naresh.Solanki@9elements.com>
+Subject: Re: [PATCH 11/18] platform/x86: int3472: fix object shared between
+ several modules
+Message-ID: <Y3oxyUx0UkWVjGvn@smile.fi.intel.com>
+References: <20221119225650.1044591-1-alobakin@pm.me>
+ <20221119225650.1044591-12-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221117184022.1808508-1-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221119225650.1044591-12-alobakin@pm.me>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 07:40:22PM +0100, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On Sat, Nov 19, 2022 at 11:08:17PM +0000, Alexander Lobakin wrote:
+> common.o is linked to both intel_skl_int3472_{discrete,tps68470}:
 > 
-> Update error flags with regulation out if regulator is on & power
-> good status bit is set
+> > scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile:
+> > common.o is added to multiple modules: intel_skl_int3472_discrete
+> > intel_skl_int3472_tps68470
 > 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Although both drivers share one Kconfig option
+> (CONFIG_INTEL_SKL_INT3472), it's better to not link one object file
+> into several modules (and/or vmlinux).
+> Under certain circumstances, such can lead to the situation fixed by
+> commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
+> 
+> Introduce the new module, intel_skl_int3472_common, to provide the
+> functions from common.o to both discrete and tps68470 drivers. This
+> adds only 3 exports and doesn't provide any changes to the actual
+> code.
 
-Applied to hwmon-next.
+...
 
-Thanks,
-Guenter
+> +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
+> +
+
+Redundant blank line. You may put it to be last MODULE_*() in the file, if you
+think it would be more visible.
+
+>  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI Discrete Device Driver");
+>  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
+>  MODULE_LICENSE("GPL v2");
+
+...
+
+> +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
+> +
+>  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI TPS68470 Device Driver");
+>  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
+>  MODULE_LICENSE("GPL v2");
+
+Ditto. And the same to all your patches.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
