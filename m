@@ -2,77 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60F1631333
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 10:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9734631337
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 10:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiKTJeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 04:34:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S229446AbiKTJeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 04:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKTJeK (ORCPT
+        with ESMTP id S229500AbiKTJer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 04:34:10 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A661CFFE;
-        Sun, 20 Nov 2022 01:34:05 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id F16D318833EC;
-        Sun, 20 Nov 2022 09:33:57 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id E9CED2500516;
-        Sun, 20 Nov 2022 09:33:57 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id BC6E491201E4; Sun, 20 Nov 2022 09:33:57 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sun, 20 Nov 2022 04:34:47 -0500
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE9F1CFFE
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 01:34:45 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id wgiooJbLW0H6IwgioonYC1; Sun, 20 Nov 2022 10:34:44 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 20 Nov 2022 10:34:44 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Tim Harvey <tharvey@gateworks.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (gsc-hwmon) Switch to flexible array to simplify code
+Date:   Sun, 20 Nov 2022 10:34:41 +0100
+Message-Id: <61a23e1d642397cfcecc4ac3bb0ab485d257987d.1668936855.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Sun, 20 Nov 2022 10:33:57 +0100
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 net-next 2/2] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221115222312.lix6xpvddjbsmoac@skbuf>
-References: <20221112203748.68995-1-netdev@kapio-technology.com>
- <20221112203748.68995-1-netdev@kapio-technology.com>
- <20221112203748.68995-3-netdev@kapio-technology.com>
- <20221112203748.68995-3-netdev@kapio-technology.com>
- <20221115222312.lix6xpvddjbsmoac@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <b2067339924d0ed7dec25ab51b43a17c@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-15 23:23, Vladimir Oltean wrote:
-> 
-> How much (and what) do you plan to add to switchdev.{c,h} in the 
-> future?
-> It's a bit arbitrary to put only mv88e6xxx_handle_violation() in a file
-> called switchdev.c.
-> 
-> port_fdb_add(), port_mdb_add(), port_vlan_add(), port_vlan_filtering(),
-> etc etc, are all switchdev things. Anyway.
-> 
+Using flexible array is more straight forward. It
+  - saves 1 pointer in the 'gsc_hwmon_platform_data' structure
+  - saves an indirection when using this array
+  - saves some LoC and avoids some always spurious pointer arithmetic
 
-Firstly, those functions you list are ops functions, while what is in
-switchdev.{c,h} is not, secondly the functions in switchdev.{c,h} are 
-the
-first to send switchdev messages like SWITCHDEV_FDB_ADD_TO_BRIDGE 
-events.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Compile tested only
+---
+ drivers/hwmon/gsc-hwmon.c               | 6 ++----
+ include/linux/platform_data/gsc_hwmon.h | 5 ++---
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-Furthermore I think that chip.c is bloated, but I also do plan to add 
-more
-to switchdev.{c,h}, and there can be others adding in the future...
+diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
+index b60ec95b5edb..73e5d92b200b 100644
+--- a/drivers/hwmon/gsc-hwmon.c
++++ b/drivers/hwmon/gsc-hwmon.c
+@@ -257,13 +257,10 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
+ 	if (nchannels == 0)
+ 		return ERR_PTR(-ENODEV);
+ 
+-	pdata = devm_kzalloc(dev,
+-			     sizeof(*pdata) + nchannels * sizeof(*ch),
++	pdata = devm_kzalloc(dev, struct_size(pdata, channels, nchannels),
+ 			     GFP_KERNEL);
+ 	if (!pdata)
+ 		return ERR_PTR(-ENOMEM);
+-	ch = (struct gsc_hwmon_channel *)(pdata + 1);
+-	pdata->channels = ch;
+ 	pdata->nchannels = nchannels;
+ 
+ 	/* fan controller base address */
+@@ -277,6 +274,7 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
+ 
+ 	of_node_put(fan);
+ 
++	ch = pdata->channels;
+ 	/* allocate structures for channels and count instances of each type */
+ 	device_for_each_child_node(dev, child) {
+ 		if (fwnode_property_read_string(child, "label", &ch->name)) {
+diff --git a/include/linux/platform_data/gsc_hwmon.h b/include/linux/platform_data/gsc_hwmon.h
+index 281f499eda97..f2781aa7eff8 100644
+--- a/include/linux/platform_data/gsc_hwmon.h
++++ b/include/linux/platform_data/gsc_hwmon.h
+@@ -29,18 +29,17 @@ struct gsc_hwmon_channel {
+ 
+ /**
+  * struct gsc_hwmon_platform_data - platform data for gsc_hwmon driver
+- * @channels:	pointer to array of gsc_hwmon_channel structures
+- *		describing channels
+  * @nchannels:	number of elements in @channels array
+  * @vreference: voltage reference (mV)
+  * @resolution: ADC bit resolution
+  * @fan_base: register base for FAN controller
++ * @channels:	array of gsc_hwmon_channel structures describing channels
+  */
+ struct gsc_hwmon_platform_data {
+-	const struct gsc_hwmon_channel *channels;
+ 	int nchannels;
+ 	unsigned int resolution;
+ 	unsigned int vreference;
+ 	unsigned int fan_base;
++	struct gsc_hwmon_channel channels[];
+ };
+ #endif
+-- 
+2.34.1
+
