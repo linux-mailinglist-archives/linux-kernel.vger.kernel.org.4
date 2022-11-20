@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE966316A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 22:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388766316A1
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 22:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiKTVsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 16:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S229698AbiKTVvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 16:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKTVr6 (ORCPT
+        with ESMTP id S229489AbiKTVvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 16:47:58 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213DC265E
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 13:47:57 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AKLlIWr031340;
-        Sun, 20 Nov 2022 21:47:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LAMfF8kmKnNg+FHVFGSxFLkYm8i6qRF4/9CYNy9gWLo=;
- b=dcXp7um9jsrx69un2GgNHlYZoMLmkB30lVh+PJgMgf2g4Hf0biMH2ewJMjB0ghFxx6Qu
- ZjAt5eMDpd4HuhywGesTLZqoRHR28qQebqzcesD9qoRuam2P/7szeVaRnzT8WRvJha95
- xYj3MQP8vAjTBl96haMopNaV6y7HDR6OcodqGHO+IZsS8YMIZeuH4NXwtYN4GL6kmDQd
- HdP+xathRPH599lL6lQQuVvRx9z+LXAzD3WuzLW29eMwdgMO0WbMQ9nY/jKrWsOxaz7x
- s18yk2broruBOhzRsz1Z1b1crTHT2/Vtj2w6a7//isOp7tckErqSb6z4f/nPBD4Vn5pC DA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrf5jurw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 20 Nov 2022 21:47:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AKLlGMD006377
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 20 Nov 2022 21:47:16 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 20 Nov
- 2022 13:47:15 -0800
-Message-ID: <9ce1bf9f-a481-92e3-c7cc-a1b41270468d@quicinc.com>
-Date:   Sun, 20 Nov 2022 14:47:14 -0700
+        Sun, 20 Nov 2022 16:51:43 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB37D1DDCA
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 13:51:41 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id c4-20020a056e020bc400b0030098df879dso7383816ilu.6
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 13:51:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P7wGAMcIVofRqI8zstaVUtFUGyhqG2P4qJdj3ueLM4o=;
+        b=aCmkiEGZ9/kywI+yQYzlv/gAOZwFBinn+SvWxvDgo2kScwxjUqr94EWzfC4esSjy7a
+         VVQFHuDKRNiHso73DpHgX28HhnVLklZOqSHmj5XvoECcqrIfSjhDk/2+c1zcoGKcsSeF
+         0Usye0yxMcFcmdkkkxHa+x+p3Jve7/qd20t1UErrIRgeJ5WugChKHYS2NUMZ2ZQRETyi
+         hdMf9nm4mZgwzBoVXJKUQ9EzCSKmbkIqMI0KeygRPBYqQZGzl6v2MDUZuzYOB6o9Ufvc
+         p0YbNyCnJgE/DBYezWlouq9VDFt7g2O2ayceFnpeMUZq59O2JNNtOkr4D+lJ1497vmgM
+         aXtw==
+X-Gm-Message-State: ANoB5pnqEIQotUWAXmuVy1IFklltDrBucbTWyN5zY1uQtUc8dxeL7xkU
+        Q/ARYVfksCyKIJsKZnSI2cMaAsZGqY/zxKKaDhplS5bQxr9h
+X-Google-Smtp-Source: AA0mqf4LjfznLu+pROq3l3HGoPzd1ylEPt85FP+WIzNnbDOpRogNEd6sqoStItjFPSN1tOTF/VK31QwUhgWB/uACPn6zjREmMcmH
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v4 2/4] accel: add dedicated minor for accelerator devices
-Content-Language: en-US
-To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Christopher Friedt <chrisfriedt@gmail.com>
-References: <20221119204435.97113-1-ogabbay@kernel.org>
- <20221119204435.97113-3-ogabbay@kernel.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221119204435.97113-3-ogabbay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nh_pMpcUh2-irDtlfHgVUNxLkH1X63kv
-X-Proofpoint-ORIG-GUID: nh_pMpcUh2-irDtlfHgVUNxLkH1X63kv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-20_13,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211200184
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:c844:0:b0:6db:fe34:6948 with SMTP id
+ y65-20020a6bc844000000b006dbfe346948mr190016iof.209.1668981101039; Sun, 20
+ Nov 2022 13:51:41 -0800 (PST)
+Date:   Sun, 20 Nov 2022 13:51:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aa181605ededf1fa@google.com>
+Subject: [syzbot] memory leak in binder_transaction (2)
+From:   syzbot <syzbot+7f10c1653e35933c0f1e@syzkaller.appspotmail.com>
+To:     arve@android.com, brauner@kernel.org, cmllamas@google.com,
+        gregkh@linuxfoundation.org, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, maco@android.com, surenb@google.com,
+        syzkaller-bugs@googlegroups.com, tkjos@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/19/2022 1:44 PM, Oded Gabbay wrote:
-> diff --git a/drivers/accel/drm_accel.c b/drivers/accel/drm_accel.c
-> index fac6ad6ac28e..703d40c4ff45 100644
-> --- a/drivers/accel/drm_accel.c
-> +++ b/drivers/accel/drm_accel.c
-> @@ -8,14 +8,25 @@
-> 
->   #include <linux/debugfs.h>
->   #include <linux/device.h>
-> +#include <linux/xarray.h>
+Hello,
 
-Including xarray, but using idr
-This should be linux/idr.h
+syzbot found the following issue on:
 
-This seems so minor, I don't think I advise spinning a v5 for it.  If a 
-v5 is warranted elsewhere, obviously fix this.  If not, hopefully this 
-can be fixed up by whoever applies it, or someone submits a follow up patch.
+HEAD commit:    59d0d52c30d4 AMerge tag 'netfs-fixes-20221115' of git://gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14a7b445880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=435fb8cdd395f932
+dashboard link: https://syzkaller.appspot.com/bug?extid=7f10c1653e35933c0f1e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114a3b35880000
 
-Hopefully this is the only nit.  I would like to see this merged.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/854c98a663e0/disk-59d0d52c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/233c8e05ab54/vmlinux-59d0d52c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7254f9286f1d/bzImage-59d0d52c.xz
 
--Jeff
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7f10c1653e35933c0f1e@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88811b0bbe00 (size 32):
+  comm "syz-executor.1", pid 4041, jiffies 4294986632 (age 15.340s)
+  hex dump (first 32 bytes):
+    00 be 0b 1b 81 88 ff ff 00 be 0b 1b 81 88 ff ff  ................
+    03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814ed530>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
+    [<ffffffff8396b973>] kmalloc include/linux/slab.h:553 [inline]
+    [<ffffffff8396b973>] kzalloc include/linux/slab.h:689 [inline]
+    [<ffffffff8396b973>] binder_transaction+0xc53/0x3f20 drivers/android/binder.c:3128
+    [<ffffffff8396f213>] binder_thread_write+0x5d3/0x1790 drivers/android/binder.c:3975
+    [<ffffffff839726cb>] binder_ioctl_write_read drivers/android/binder.c:5034 [inline]
+    [<ffffffff839726cb>] binder_ioctl+0x22fb/0x3a30 drivers/android/binder.c:5321
+    [<ffffffff8161f20c>] vfs_ioctl fs/ioctl.c:51 [inline]
+    [<ffffffff8161f20c>] __do_sys_ioctl fs/ioctl.c:870 [inline]
+    [<ffffffff8161f20c>] __se_sys_ioctl fs/ioctl.c:856 [inline]
+    [<ffffffff8161f20c>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:856
+    [<ffffffff848802d5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff848802d5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
