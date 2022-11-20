@@ -2,90 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2486313A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 12:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535D96313BE
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 12:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiKTLZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 06:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
+        id S229709AbiKTLuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 06:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiKTLZo (ORCPT
+        with ESMTP id S229480AbiKTLuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 06:25:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBA04874F;
-        Sun, 20 Nov 2022 03:25:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A64FAB80B04;
-        Sun, 20 Nov 2022 11:25:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4EAAC433D6;
-        Sun, 20 Nov 2022 11:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668943541;
-        bh=CvicEi2gnrYnqmDZV/HRfQ9d4uUEUscbiNOKOA4VLvk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QzE4ScY+yQPVnxdhIEUv4V6wLLfcH9KnnEj76Lr1WZDQPOZCG8iS93MIobfuFKQb7
-         fQUWURPlbf/3KdCy5Icwss66BJi/cLZW1sc1083W5YLh+oPCb67nbiIUbEwO/Yqy+B
-         sovnZbz3bzq48JA6/MfP3h2bQ7DqEMNCOHs8EbBCtpA8QS+R5Xe+d5Rr6bnI+MaflD
-         CSJeSHmCaOjorE47TOOwR6bhcB/m7lxmanPAJ6w+c/f140HMAeEB5A4lUMcYdcffVe
-         51RFDouHOMCLSK7uYVeL/qf3md3PvgJJC0xkXUxeV/7RMDGc8Zv0+52rt6HGwwLEoJ
-         LtvuJnINTgr5A==
-Date:   Sun, 20 Nov 2022 11:25:36 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 02/12] dt-bindings: riscv: Add T-HEAD C906 and C910
- compatibles
-Message-ID: <Y3oOsBxqUxeGMRJK@spud>
-References: <20220815050815.22340-1-samuel@sholland.org>
- <20220815050815.22340-3-samuel@sholland.org>
- <76d9c4fb368dca87c64494b927706d0b18d712d2.camel@icenowy.me>
- <Y3oOOOdG4e24ByEc@spud>
+        Sun, 20 Nov 2022 06:50:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06CE2870D
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 03:49:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668944947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eFFRtDG3SnY31rS3/TY9saZ3cpDv+kx8E+R9eiFK10I=;
+        b=QcMrffzZSfwBoEAtK1sberGc+k2aeBzqCBqQuldXlK7gxFKqCUvrmRdXsPX4vHXgUlNRKz
+        jWNWCZtnrZ3TYrFgxbWeXsX5fw59bE/1YaJf5PKfmxtic+aIOKNTdgjC50fYwsI+E9fD0z
+        oYIZkbAni2UrCw/x5kfcfVqaOFL8uLY=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-527-rleWJY-9ORS8eFSQ5deidw-1; Sun, 20 Nov 2022 06:49:05 -0500
+X-MC-Unique: rleWJY-9ORS8eFSQ5deidw-1
+Received: by mail-wr1-f69.google.com with SMTP id h2-20020adfa4c2000000b00241cf936619so289554wrb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 03:49:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eFFRtDG3SnY31rS3/TY9saZ3cpDv+kx8E+R9eiFK10I=;
+        b=tSzI7XRl6juDuRixlxHea1Hu+WDtMnDf+NqlPvz9tZHWdY7mkqwd0lUX93I2EiLitJ
+         lyGDvKaaZg1mMSrgwRX9zR8xzWkdnz8PNNX2iygKHbfpVjlMx9pGCBgGIXfinHzY8pC0
+         sju0RnCe+DdBjMISZs9Y7QNrnb+kiu/bFfSLeU4qdbG65T3ht/qsvDxrDzOzMg7gZMvQ
+         67FCvCx901+TxB4X/iIOmJu/dR0Tq/BUDUZ6E2Yrgh5fDcxmK6bwVmI0u+TCijfV4MJh
+         6z3ueHalYd1EKh/1YHS/BdeFoNzM8PGIsE8t62G4XvrimWhjdZflcW4RMXEkLcH9OmvY
+         kDCw==
+X-Gm-Message-State: ANoB5pnXdOK8jUecjrk5SAtNHV8pXc1MQZlSM3LMzsWWAFkyKIP15tVl
+        nadclDVHIpeOp2L7TDsUYsvDbWL+Fg9CzMq6ujbJ66PVcSwzvEyVzsTod9/Pb+LUsQkzOg8pRuq
+        JX2FHPGxEFc7gzE7Y5AAfydUR
+X-Received: by 2002:adf:f74d:0:b0:236:4e3c:7720 with SMTP id z13-20020adff74d000000b002364e3c7720mr8545090wrp.674.1668944944703;
+        Sun, 20 Nov 2022 03:49:04 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7udSW6/pfqawh/yYUkdpdhzbG5vE8EEGEBnisT1ahzb5hGEDLmfhdqECpSPgvVpZoIghYixw==
+X-Received: by 2002:adf:f74d:0:b0:236:4e3c:7720 with SMTP id z13-20020adff74d000000b002364e3c7720mr8545068wrp.674.1668944944420;
+        Sun, 20 Nov 2022 03:49:04 -0800 (PST)
+Received: from localhost (net-188-216-77-84.cust.vodafonedsl.it. [188.216.77.84])
+        by smtp.gmail.com with ESMTPSA id t11-20020adff60b000000b0022e035a4e93sm8629318wrp.87.2022.11.20.03.49.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 03:49:03 -0800 (PST)
+Date:   Sun, 20 Nov 2022 12:49:01 +0100
+From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
+        Mark-MC.Lee@mediatek.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, matthias.bgg@gmail.com,
+        linux@armlinux.org.uk, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        lorenzo@kernel.org
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: fix potential memory
+ leak in mtk_rx_alloc()
+Message-ID: <Y3oULSsTwbDY2Bvv@lore-desk>
+References: <20221120035405.1464341-1-william.xuanziyang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Mg3mLB7M7b1XKZaD"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3oOOOdG4e24ByEc@spud>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221120035405.1464341-1-william.xuanziyang@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 11:23:42AM +0000, Conor Dooley wrote:
-> On Fri, Nov 04, 2022 at 10:57:58AM +0800, Icenowy Zheng wrote:
-> > 在 2022-08-15星期一的 00:08 -0500，Samuel Holland写道：
-> > > The C906 and C910 are RISC-V CPU cores from T-HEAD Semiconductor.
-> > > Notably, the C906 core is used in the Allwinner D1 SoC.
-> > 
-> > Could this get applied first?
-> > 
-> > C906 and C910 now have a fixed-configuration open-source version, which
-> > means these cores could be played by anyone, and having them in the DT
-> > binding really helps people. In addition I am aware of some C906-
-> > equipped SoC out of Allwinner.
-> 
-> I've applied this one patch as v6.2 material since I doubt this series is
-> gonna make it & the Bouffalolabs dt is going to need this compatible too.
-> I applied it on top of v6.1-rc1 just in case:
-> 
-> https://git.kernel.org/conor/c/0d814000ad3589bf4f69c9cb25a3b77bbd55ffec
 
-Woops, totally the wrong hash. Fixed:
-https://git.kernel.org/conor/c/41adc2fbad8bc42ed5fdf480e5318133a4941bbb
+--Mg3mLB7M7b1XKZaD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Conor.
+> When fail to dma_map_single() in mtk_rx_alloc(), it returns directly.
+> But the memory allocated for local variable data is not freed, and
+> local variabel data has not been attached to ring->data[i] yet, so the
+> memory allocated for local variable data will not be freed outside
+> mtk_rx_alloc() too. Thus memory leak would occur in this scenario.
+>=20
+> Add skb_free_frag(data) when dma_map_single() failed.
+>=20
+> Fixes: 23233e577ef9 ("net: ethernet: mtk_eth_soc: rely on page_pool for s=
+ingle page buffers")
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> ---
+>  drivers/net/ethernet/mediatek/mtk_eth_soc.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+
+Acked-by: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+
+>=20
+> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/et=
+hernet/mediatek/mtk_eth_soc.c
+> index 7cd381530aa4..bc47ef1e4dd5 100644
+> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+> @@ -2378,8 +2378,10 @@ static int mtk_rx_alloc(struct mtk_eth *eth, int r=
+ing_no, int rx_flag)
+>  				data + NET_SKB_PAD + eth->ip_align,
+>  				ring->buf_size, DMA_FROM_DEVICE);
+>  			if (unlikely(dma_mapping_error(eth->dma_dev,
+> -						       dma_addr)))
+> +						       dma_addr))) {
+> +				skb_free_frag(data);
+>  				return -ENOMEM;
+> +			}
+>  		}
+>  		rxd->rxd1 =3D (unsigned int)dma_addr;
+>  		ring->data[i] =3D data;
+> --=20
+> 2.25.1
+>=20
+
+--Mg3mLB7M7b1XKZaD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY3oULQAKCRA6cBh0uS2t
+rB+XAQC1NS342yCNR/mijZECnJw0DZzDUciWxdRU9qpQUcIisAD8C9l7RVkWprf7
+ZY5de9YVDFIspT/WErMrTjJIkJRU4g8=
+=vshG
+-----END PGP SIGNATURE-----
+
+--Mg3mLB7M7b1XKZaD--
 
