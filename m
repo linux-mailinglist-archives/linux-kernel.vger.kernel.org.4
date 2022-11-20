@@ -2,402 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBA66314FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 16:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952FB6314FF
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 16:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbiKTPlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 10:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        id S229682AbiKTPmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 10:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKTPlK (ORCPT
+        with ESMTP id S229517AbiKTPmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 10:41:10 -0500
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8718613E1F;
-        Sun, 20 Nov 2022 07:41:09 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-13bd2aea61bso11299935fac.0;
-        Sun, 20 Nov 2022 07:41:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z98zIiP0XDelHv1JIf2EEK8sreW5/hVd5nm6SS85PHU=;
-        b=6jdU8CsPcLIkjjeA8AuwTWVPgT+Q2BDH0iPBgmXepXL3i90THCt+gZazrbJhEJSQrg
-         UXnVYF7nQeN9TMNDh/jD92PKeEkyg+oJEhKJlOjoI1clOqjyOQi+ypTFGpqY7damD7Ke
-         TA6UJ7ODgWx2c29R8l1WWk/R11behyN9DX6ESxGdIelgDMJbCgeZ9QJ316iVYbknJJ4V
-         wTeI0QkuY2C0fuPcw0MKroEAI2CVhVQsJ2PF9OxVp8FeJlRucVeYtpW71PRfjEf/XpbK
-         7cZ6Y0sNillSN/F2V1Li/VwxcP/Shb26idJ27qz2E2UjXgJBsXKXgM8YdXmVCNmv9aHE
-         rq4g==
-X-Gm-Message-State: ANoB5pkbDWaQEWwamy3pooXoJWlgsvksaBPTpkglb3Y1gk/MqJyUy9qZ
-        P5ZMYV7+IlIXfKclaNm/ZA==
-X-Google-Smtp-Source: AA0mqf7OrdBl8Mlxc2qixX2M/45/9DvJs3ecMsJTSK7aaPrwd7Hc+YbMMymxtJabWv1n+UmKCSrGNA==
-X-Received: by 2002:a05:6871:82a:b0:142:d7cf:b291 with SMTP id q42-20020a056871082a00b00142d7cfb291mr1248699oap.78.1668958868739;
-        Sun, 20 Nov 2022 07:41:08 -0800 (PST)
-Received: from robh_at_kernel.org ([2605:ef80:80f6:1a48:29f6:113d:266f:a78e])
-        by smtp.gmail.com with ESMTPSA id e1-20020a4aaac1000000b0049fb2dafac3sm3376248oon.2.2022.11.20.07.41.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 07:41:08 -0800 (PST)
-Received: (nullmailer pid 3107010 invoked by uid 1000);
-        Sun, 20 Nov 2022 15:41:07 -0000
-Date:   Sun, 20 Nov 2022 09:41:07 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Adam Skladowski <a_skl39@protonmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: display/msm: add support for the display
-Message-ID: <20221120154107.GA3103648-robh@kernel.org>
-References: <20221120133744.24808-1-a39.skl@gmail.com>
- <20221120133744.24808-2-a39.skl@gmail.com>
+        Sun, 20 Nov 2022 10:42:15 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9CE13E1F
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 07:42:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=e5V74uO+lPGfLCVFC2OTvdyO/WcjexhhijVYs6KZ/ac=; b=YbE1m9+HYuxGK6UZiyQSXJmrLi
+        bQz83Gb3RcS7uKmB69PXmPfhW616XS0jWppEgsMk6MG0+nO941NkKZZ891mr1G789zmSwLB3/DfE7
+        fOa33qk7AOKuC4Azj53lwAlGwCsevTq36i20RIFCfuesn39Pjvv/vTkLtRfU9xJVgqD5W1ahSakqS
+        MFSfnlBppi0pzfm7GH1WTiLMcYWMJSCCOJKdpbHbE+R75TOBt20d5GQV++0/wcqeic2JiZ1ELER3f
+        Wqffh5HurP405r59qlmZQ7Xn/IcqFNIPRf5mSM3loCnGh2ddBZYUNGclf6iMd5HleslsSt7oB71RD
+        1qpjXHbw==;
+Received: from [177.102.6.147] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1owmRn-005Gz5-HU; Sun, 20 Nov 2022 16:41:31 +0100
+Message-ID: <08ea8a0f-f7b2-911f-1efa-2aa8fa04256d@igalia.com>
+Date:   Sun, 20 Nov 2022 12:41:21 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221120133744.24808-2-a39.skl@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH RESEND] panic: Add register_panic_notifier and
+ unregister_panic_notifier
+Content-Language: en-US
+To:     Xu Qiang <xuqiang36@huawei.com>
+Cc:     daniel.vetter@ffwll.ch, andriy.shevchenko@linux.intel.com,
+        elver@google.com, tangmeng@uniontech.com, bigeasy@linutronix.de,
+        pmladek@suse.com, mcgrof@kernel.org, akpm@linux-foundation.org,
+        john.ogness@linutronix.de, yangtiezhu@loongson.cn,
+        linux-kernel@vger.kernel.org, weiyongjun1@huawei.com
+References: <20221119080305.111863-1-xuqiang36@huawei.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221119080305.111863-1-xuqiang36@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 02:37:36PM +0100, Adam Skladowski wrote:
-> Add DPU and MDSS schemas to describe MDSS and DPU blocks on the Qualcomm
-> SM6115 platform.
-> Configuration for DSI/PHY is shared with QCM2290 so compatibles are reused.
-> Lack of dsi phy supply in example is intended
-> due to fact on qcm2290, sm6115 and sm6125
-> this phy is supplied via power domain, not regulator.
-
-The subject needs 'sm6115' somewhere.
-
+On 19/11/2022 05:03, Xu Qiang wrote:
+> Add two methods to manipulate panic_notifier_list and export them.
+> Subsequently, panic_notifier_list is changed to static variable.
 > 
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
 > ---
->  .../bindings/display/msm/qcom,sm6115-dpu.yaml |  87 ++++++++
->  .../display/msm/qcom,sm6115-mdss.yaml         | 187 ++++++++++++++++++
->  2 files changed, 274 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml
-> new file mode 100644
-> index 000000000000..cc77675ec4f6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/msm/qcom,sm6115-dpu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Display DPU dt properties for SM6115 target
-> +
-> +maintainers:
-> +  - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> +
-> +$ref: /schemas/display/msm/dpu-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: qcom,sm6115-dpu
-> +
-> +  reg:
-> +    items:
-> +      - description: Address offset and size for mdp register set
-> +      - description: Address offset and size for vbif register set
+>  include/linux/panic_notifier.h |  3 +++
+>  kernel/panic.c                 | 12 ++++++++++++
+>  2 files changed, 15 insertions(+)
+>
 
-Drop 'Address offset and size for'.
+Hi Xu Qiang,  thanks for your patch!
 
-s/mdp/MDP/ ?
-s/vbif/VBIF/ ?
+Did you manage to change all users in the kernel? I only received this
+email that introduces the helpers, but I don't see them getting used in
+code...
 
-> +
-> +  reg-names:
-> +    items:
-> +      - const: mdp
-> +      - const: vbif
-> +
-> +  clocks:
-> +    items:
-> +      - description: Display AXI clock from gcc
-> +      - description: Display AHB clock from dispcc
-> +      - description: Display core clock from dispcc
-> +      - description: Display lut clock from dispcc
-> +      - description: Display rotator clock from dispcc
-> +      - description: Display vsync clock from dispcc
+Also, did you follow [0]? I stopped a bit this work since the main
+reviewers got busy in other stuff (so did I), but I intend to resume
+that and submit a new version. With that said, these helpers you're
+adding now will eventually require to be all replaced if my work reach a
+consensus and gets merged..so, personally I don't think it's a necessary
+addition for now [but don't oppose as well =)]
 
-Source of the clock is outside the scope of the binding.
+Cheers,
 
+
+Guilherme
+
+
+[0]
+https://lore.kernel.org/linux-kernel/20220427224924.592546-1-gpiccoli@igalia.com/
+
+> diff --git a/include/linux/panic_notifier.h b/include/linux/panic_notifier.h
+> index 41e32483d7a7..9543d498b90b 100644
+> --- a/include/linux/panic_notifier.h
+> +++ b/include/linux/panic_notifier.h
+> @@ -5,6 +5,9 @@
+>  #include <linux/notifier.h>
+>  #include <linux/types.h>
+>  
+> +int register_panic_notifier(struct notifier_block *nb);
+> +int unregister_panic_notifier(struct notifier_block *nb);
 > +
-> +  clock-names:
-> +    items:
-> +      - const: bus
-> +      - const: iface
-> +      - const: core
-> +      - const: lut
-> +      - const: rot
-> +      - const: vsync
+>  extern struct atomic_notifier_head panic_notifier_list;
+>  
+>  extern bool crash_kexec_post_notifiers;
+> diff --git a/kernel/panic.c b/kernel/panic.c
+> index 75fe389e8814..8f34dbd389cf 100644
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -200,6 +200,18 @@ static void panic_print_sys_info(bool console_flush)
+>  		ftrace_dump(DUMP_ALL);
+>  }
+>  
+> +int register_panic_notifier(struct notifier_block *nb)
+> +{
+> +	return atomic_notifier_chain_register(&panic_notifier_list, nb);
+> +}
+> +EXPORT_SYMBOL(register_panic_notifier);
 > +
-> +unevaluatedProperties: false
+> +int unregister_panic_notifier(struct notifier_block *nb)
+> +{
+> +	return atomic_notifier_chain_unregister(&panic_notifier_list, nb);
+> +}
+> +EXPORT_SYMBOL(unregister_panic_notifier);
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,sm6115-dispcc.h>
-> +    #include <dt-bindings/clock/qcom,gcc-sm6115.h>
-> +    #include <dt-bindings/power/qcom-rpmpd.h>
-> +
-> +    display-controller@5e01000 {
-> +        compatible = "qcom,sm6115-dpu";
-> +        reg = <0x05e01000 0x8f000>,
-> +              <0x05eb0000 0x2008>;
-> +        reg-names = "mdp", "vbif";
-> +
-> +        clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_MDP_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_ROT_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +        clock-names = "bus", "iface", "core", "lut", "rot", "vsync";
-> +
-> +        operating-points-v2 = <&mdp_opp_table>;
-> +        power-domains = <&rpmpd SM6115_VDDCX>;
-> +
-> +        interrupt-parent = <&mdss>;
-> +        interrupts = <0>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +                endpoint {
-> +                    remote-endpoint = <&dsi0_in>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> new file mode 100644
-> index 000000000000..af721aa05b22
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> @@ -0,0 +1,187 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/msm/qcom,sm6115-mdss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SM6115 Display MDSS
-> +
-> +maintainers:
-> +  - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> +
-> +description:
-> +  Device tree bindings for MSM Mobile Display Subsystem(MDSS) that encapsulates
-> +  sub-blocks like DPU display controller and DSI. Device tree bindings of MDSS
-> +  are mentioned for SM6115 target.
-> +
-> +$ref: /schemas/display/msm/mdss-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: qcom,sm6115-mdss
-> +
-> +  clocks:
-> +    items:
-> +      - description: Display AHB clock from gcc
-> +      - description: Display AXI clock
-> +      - description: Display core clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: iface
-> +      - const: bus
-> +      - const: core
-> +
-> +  iommus:
-> +    maxItems: 2
-> +
-> +patternProperties:
-> +  "^display-controller@[0-9a-f]+$":
-> +    type: object
-> +    properties:
-> +      compatible:
-> +        const: qcom,sm6115-dpu
-> +
-> +  "^dsi@[0-9a-f]+$":
-> +    type: object
-> +    properties:
-> +      compatible:
-> +        const: qcom,dsi-ctrl-6g-qcm2290
-> +
-> +  "^phy@[0-9a-f]+$":
-> +    type: object
-> +    properties:
-> +      compatible:
-> +        const: qcom,dsi-phy-14nm-2290
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,sm6115-dispcc.h>
-> +    #include <dt-bindings/clock/qcom,gcc-sm6115.h>
-> +    #include <dt-bindings/clock/qcom,rpmcc.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/qcom-rpmpd.h>
-> +
-> +    mdss@5e00000 {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        compatible = "qcom,sm6115-mdss";
-> +        reg = <0x05e00000 0x1000>;
-> +        reg-names = "mdss";
-> +        power-domains = <&dispcc MDSS_GDSC>;
-> +        clocks = <&gcc GCC_DISP_AHB_CLK>,
-> +                 <&gcc GCC_DISP_HF_AXI_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_MDP_CLK>;
-> +        clock-names = "iface", "bus", "core";
-> +
-> +        interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <1>;
-> +
-> +        iommus = <&apps_smmu 0x420 0x2>,
-> +                 <&apps_smmu 0x421 0x0>;
-> +        ranges;
-> +
-> +        display-controller@5e01000 {
-> +            compatible = "qcom,sm6115-dpu";
-> +            reg = <0x05e01000 0x8f000>,
-> +                  <0x05eb0000 0x2008>;
-> +            reg-names = "mdp", "vbif";
-> +
-> +            clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_MDP_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_ROT_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +            clock-names = "bus", "iface", "core", "lut", "rot", "vsync";
-> +
-> +            operating-points-v2 = <&mdp_opp_table>;
-> +            power-domains = <&rpmpd SM6115_VDDCX>;
-> +
-> +            interrupt-parent = <&mdss>;
-> +            interrupts = <0>;
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    dpu_intf1_out: endpoint {
-> +                        remote-endpoint = <&dsi0_in>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +
-> +        dsi@5e94000 {
-> +            compatible = "qcom,dsi-ctrl-6g-qcm2290";
-> +            reg = <0x05e94000 0x400>;
-> +            reg-names = "dsi_ctrl";
-> +
-> +            interrupt-parent = <&mdss>;
-> +            interrupts = <4>;
-> +
-> +            clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_ESC0_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +                     <&gcc GCC_DISP_HF_AXI_CLK>;
-> +            clock-names = "byte",
-> +                          "byte_intf",
-> +                          "pixel",
-> +                          "core",
-> +                          "iface",
-> +                          "bus";
-> +            assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>, <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
-> +            assigned-clock-parents = <&dsi0_phy 0>, <&dsi0_phy 1>;
-> +
-> +            operating-points-v2 = <&dsi_opp_table>;
-> +            power-domains = <&rpmpd SM6115_VDDCX>;
-> +            phys = <&dsi0_phy>;
-> +            phy-names = "dsi";
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    dsi0_in: endpoint {
-> +                        remote-endpoint = <&dpu_intf1_out>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +                    dsi0_out: endpoint {
-> +                    };
-> +                };
-> +            };
-> +        };
-> +
-> +        dsi0_phy: phy@5e94400 {
-> +            compatible = "qcom,dsi-phy-14nm-2290";
-> +            reg = <0x05e94400 0x100>,
-> +                  <0x05e94500 0x300>,
-> +                  <0x05e94800 0x188>;
-> +            reg-names = "dsi_phy",
-> +                        "dsi_phy_lane",
-> +                        "dsi_pll";
-> +
-> +            #clock-cells = <1>;
-> +            #phy-cells = <0>;
-> +
-> +            clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>, <&rpmcc RPM_SMD_XO_CLK_SRC>;
-> +            clock-names = "iface", "ref";
-> +        };
-> +    };
-> +...
-> -- 
-> 2.25.1
-> 
-> 
+>  /**
+>   *	panic - halt the system
+>   *	@fmt: The text string to print
