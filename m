@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6636A63132A
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 10:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE3E63132D
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 10:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiKTJDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 04:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S229617AbiKTJMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 04:12:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKTJDb (ORCPT
+        with ESMTP id S229454AbiKTJMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 04:03:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7C610AB
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 01:02:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668934952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oEYRj+tvOCAOAYfObhytG1SVOeN3XgfIQzsjLTeBgGY=;
-        b=b/yM8opZEW1JjuO7UTNj7NlVg192MAqzjUVZ4MdgyoG9SiBaGgIzv9UhxzMU6YBEN7siQ8
-        bWIaGgMxpGZr03gS2KQFiDZAK2/I1FCFSt3PTGhklh5JricLar1UjdkjaTMQqli43sygY0
-        J4+HhIALZm398fuDi08beOYEmqG98AM=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-669-hFMFia6RMv26j7ORsP0WTA-1; Sun, 20 Nov 2022 04:02:30 -0500
-X-MC-Unique: hFMFia6RMv26j7ORsP0WTA-1
-Received: by mail-pj1-f69.google.com with SMTP id p1-20020a17090a2c4100b00212733d7aaaso4688684pjm.4
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 01:02:30 -0800 (PST)
+        Sun, 20 Nov 2022 04:12:20 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405D88F3CF
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 01:12:19 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso8379024pjt.0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 01:12:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rekVEDKKlijw7I/2Qf31vZa1TulCD9iTi5HOGYS/PLk=;
+        b=C2WZax14f5SkUzd4O3PNrmtFTC/w+YH5ebqMXfcH5DvU4TzZyyBGCzDr3AOcw3fNj5
+         yJhHkijjHf+eUnb88FlsHynTlxrnXc7SEueO54KK8sr7kJHOen0hN+SYLYqUuhQGdGbG
+         lXT3Ohp3KRut6/aD7erwPb2t1q5z9Te/DBjDNo5risNzwsPlW3cysG6XWJSR7UUt/WLh
+         hWDd4+mNeyH8EbNto9Taj2FCa53oA5hPqlNC4UoJhi3/balQ3LnZ1FPaLf8d/aDPCrmj
+         pLoOdC8hzJn+5tmKYKnE6BLOx4J2trcjpOaFeEocSSmeSErZ9Dr2cbGMtaBRXHAtEnVq
+         ZaMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oEYRj+tvOCAOAYfObhytG1SVOeN3XgfIQzsjLTeBgGY=;
-        b=h8FycCaSAIzbzEIOGJvKcBDL/n9Od60A4ubWjE6zhWTnQS8bEfT0HHX+cIrKX3u1GY
-         Kkbpt4MAChP0eBvSIRWnR2YX4RO6oiti4VfpbE72Vo4m38wjntOaHDKRu+pKTOVKgIU6
-         JQsXnkHTuyL+ihRQugypLg4WuMQKPfwSUciGnJe4G7mukilmZ9MPElusVvLzLIkdjsln
-         gqxU8TzBH3+DE2IXPx0HtCDV6pPgE5xviycy4XVxq7FA2NxAbaVlv+h5yKIamBbuPc9+
-         2NDZQAOMP+p20XJ6vJ1HEhXiKaySVLBJtvuy1uDqefYo02PeC0GoOqCc7qqfwjL2rYK1
-         RLig==
-X-Gm-Message-State: ANoB5pm0kCDi64WGQJLqUPgK9wHdwXMgkESskUPnhnx5wpR1WXD8LYwo
-        tRQMZgTlgOcE9OaLjrCpqEFYMPDQl+smPSXqm9chOd16d4dhjXUMfr6Penx4IOVC9SKkbU/QT0+
-        3/Bh3QBkUF2Z0jPZZmjQn7JRX
-X-Received: by 2002:a17:902:b40b:b0:188:ca57:ce0c with SMTP id x11-20020a170902b40b00b00188ca57ce0cmr7033110plr.57.1668934949248;
-        Sun, 20 Nov 2022 01:02:29 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4c5i9VsfKVT/Mxkk5lyuy7Yin/M7or7UVp/BJAMTxyKaeZuWn4RbXKkx9F9pBOVxYbPS6Ptg==
-X-Received: by 2002:a17:902:b40b:b0:188:ca57:ce0c with SMTP id x11-20020a170902b40b00b00188ca57ce0cmr7033078plr.57.1668934948810;
-        Sun, 20 Nov 2022 01:02:28 -0800 (PST)
-Received: from ryzen.. ([240d:1a:c0d:9f00:fc9c:8ee9:e32c:2d9])
-        by smtp.gmail.com with ESMTPSA id h129-20020a625387000000b0056c063dd4cfsm6323422pfb.66.2022.11.20.01.02.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 01:02:28 -0800 (PST)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        syzbot+106f9b687cd64ee70cd1@syzkaller.appspotmail.com
-Subject: [PATCH v2] net: tun: Fix use-after-free in tun_detach()
-Date:   Sun, 20 Nov 2022 18:02:13 +0900
-Message-Id: <20221120090213.922567-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rekVEDKKlijw7I/2Qf31vZa1TulCD9iTi5HOGYS/PLk=;
+        b=GyhbcOyeWgbnOzkB7PoUEYsk4uU08kjsikJn24Z/zorhr/gIrotKbFHfKULcfan6UH
+         CCQlbOmlR2Y6pP3dOc1oe+50T3i5qxcKdL4zJuM1dkX+wzNEb7c8lstMBQTH53Vb3OPk
+         zHyHSlns6aWPYJAA4cQxFU1ez2rhWL65fwrY0UpYSGzSvsxvttEg7kvdpLteJN7PcxV2
+         2teT8acAIOxNGkk3iMHc9vHb0yIKMStsHRSvQfD9gKQ4ZAFqgx9PNY57DmCBn2nAb0bC
+         TiTcuDGn2iw80lWoEvE51We54IHFDhVMMWuipzVE9Dlk3XnX4qRja2p9A7UDnxoX99qY
+         3E1w==
+X-Gm-Message-State: ANoB5pkw2UZFKtoLqM/KI6awbcTSi8+dJJkoHqUHb6+FZ8jedZ35eeYR
+        trQ/0ZH0k0pCzJZ877uHJiSwgC+dwXz+wVrfB04=
+X-Google-Smtp-Source: AA0mqf4vTe0Ybq/3/VHIqM7d+6C/bTPB1GxUDmLT8wRMuvBKK2ijhCybePhbgLPaIiIC6xTvBPTzc4WVdcv3mBQcRPA=
+X-Received: by 2002:a17:902:6847:b0:183:6555:38ef with SMTP id
+ f7-20020a170902684700b00183655538efmr6808724pln.157.1668935538643; Sun, 20
+ Nov 2022 01:12:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221118173217.888077-1-suagrfillet@gmail.com> <CAJF2gTTHWtm-nYD0SdcvnxAXkiNOVBZAkVx8SkJL2w-K9iaWZQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTTHWtm-nYD0SdcvnxAXkiNOVBZAkVx8SkJL2w-K9iaWZQ@mail.gmail.com>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Sun, 20 Nov 2022 09:12:06 +0000
+Message-ID: <CAAYs2=hvw0eKDpZtxmQzqXrgvfoj+XD9qCjcAmddZLQvOEqtHQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] riscv/ftrace: make function graph use ftrace directly
+To:     Guo Ren <guoren@kernel.org>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,88 +71,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot reported use-after-free in tun_detach() [1].  This causes call
-trace like below:
+Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8820=E6=97=A5=E5=
+=91=A8=E6=97=A5 04:26=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Sat, Nov 19, 2022 at 1:32 AM Song Shuai <suagrfillet@gmail.com> wrote:
+> >
+> > In RISC-V architecture, when we enable the ftrace_graph tracer on some
+> > functions, the function tracings on other functions will suffer extra
+> > graph tracing work. In essence, graph_ops isn't limited by its func_has=
+h
+> > due to the global ftrace_graph_[regs]_call label. That should be correc=
+ted.
+> >
+> > What inspires me is the commit 0c0593b45c9b ("x86/ftrace: Make function
+> > graph use ftrace directly") that uses graph_ops::func function to insta=
+ll
+> > return_hooker and makes the function called against its func_hash.
+> >
+> > This series of patches makes function graph use ftrace directly for ris=
+cv.
+> >
+> > If FTRACE_WITH_REGS isn't defined, ftrace_caller keeps ftrace_graph_cal=
+l
+> > so that it can be replaced with the calling of prepare_ftrace_return by
+> > the enable/disable helper.
+> >
+> > As for defining FTRACE_WITH_REGS, ftrace_caller is adjusted to save the
+> > necessary regs against the pt_regs layout, so it can reasonably call th=
+e
+> > graph_ops::func function - ftrace_graph_func. And ftrace_graph_[regs]_c=
+all
+> > and its enable/disable helper aren't needed.
+> >
+> > The tests generated by CONFIG_FTRACE_STARTUP_TEST have passed in the lo=
+cal
+> > qemu-system-riscv64 virt machine. The following is the log during start=
+up.
+> >
+> > ```
+> > Nov 15 03:07:13 stage4 kernel: Testing tracer function: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #1:
+> > Nov 15 03:07:13 stage4 kernel: (1 0 1 0 0)
+> > Nov 15 03:07:13 stage4 kernel: (1 1 2 0 0)
+> > Nov 15 03:07:13 stage4 kernel: (2 1 3 0 365)
+> > Nov 15 03:07:13 stage4 kernel: (2 2 4 0 399)
+> > Nov 15 03:07:13 stage4 kernel: (3 2 4 0 146071)
+> > Nov 15 03:07:13 stage4 kernel: (3 3 5 0 146105) PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #2:
+> > Nov 15 03:07:13 stage4 kernel: (1 0 1 589 0)
+> > Nov 15 03:07:13 stage4 kernel: (1 1 2 635 0)
+> > Nov 15 03:07:13 stage4 kernel: (2 1 3 1 2)
+> > Nov 15 03:07:13 stage4 kernel: (2 2 4 125 126)
+> > Nov 15 03:07:13 stage4 kernel: (3 2 4 146001 146078)
+> > Nov 15 03:07:13 stage4 kernel: (3 3 5 146035 146112) PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion safe: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing ftrace regs: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing tracer nop: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing tracer irqsoff: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup:
+> > Nov 15 03:07:13 stage4 kernel: sched: DL replenish lagged too much
+> > Nov 15 03:07:13 stage4 kernel: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_rt: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_dl: PASSED
+> > Nov 15 03:07:13 stage4 kernel: Testing tracer function_graph: PASSED
+> > ```
+> >
+> > Note that the changes of mcount-dyn.S conflicts with this unmerged
+> > commit (riscv: entry: consolidate general regs saving/restoring).
+> > https://lore.kernel.org/linux-riscv/20221103075047.1634923-15-guoren@ke=
+rnel.org
+> >
+> > Changes since v2:
+> > - line up the comments [Andrew]
+> > - rename SAVE_ALL as SAVE_ABI_REGS [Guo Ren]
+> > - consolidate the modifications of mcount-dyn.S into one patch [Guo Ren=
+]
+> > - adapt this series based on [riscv: ftrace: Fixup ftrace detour code][=
+1] [Guo Ren]
+> Tested-by: Guo Ren <guoren@kernel.org>
+>
+> https://github.com/guoren83/linux/tree/ftrace_fixup_v3
+>
+Thanks for your tests.
 
-==================================================================
-BUG: KASAN: use-after-free in notifier_call_chain+0x1ee/0x200 kernel/notifier.c:75
-Read of size 8 at addr ffff88807324e2a8 by task syz-executor.0/3673
+And the PREPARE_ARGS you suggested has been added in the v4 thread.
+Here is the link for your convenience.
+https://lore.kernel.org/linux-riscv/20221120084230.910152-1-suagrfillet@gma=
+il.com/
 
-CPU: 0 PID: 3673 Comm: syz-executor.0 Not tainted 6.1.0-rc5-syzkaller-00044-gcc675d22e422 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:284 [inline]
- print_report+0x15e/0x461 mm/kasan/report.c:395
- kasan_report+0xbf/0x1f0 mm/kasan/report.c:495
- notifier_call_chain+0x1ee/0x200 kernel/notifier.c:75
- call_netdevice_notifiers_info+0x86/0x130 net/core/dev.c:1942
- call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
- call_netdevice_notifiers net/core/dev.c:1997 [inline]
- netdev_wait_allrefs_any net/core/dev.c:10237 [inline]
- netdev_run_todo+0xbc6/0x1100 net/core/dev.c:10351
- tun_detach drivers/net/tun.c:704 [inline]
- tun_chr_close+0xe4/0x190 drivers/net/tun.c:3467
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xb3d/0x2a30 kernel/exit.c:820
- do_group_exit+0xd4/0x2a0 kernel/exit.c:950
- get_signal+0x21b1/0x2440 kernel/signal.c:2858
- arch_do_signal_or_restart+0x86/0x2300 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The cause of the issue is that sock_put() from __tun_detach() drops
-last reference count for struct net, and then notifier_call_chain()
-from netdev_state_change() accesses that struct net.
-
-This patch fixes the issue by calling sock_put() from tun_detach()
-after all necessary accesses for the struct net has done.
-
-Fixes: 83c1f36f9880 ("tun: send netlink notification when the device is modified")
-Reported-by: syzbot+106f9b687cd64ee70cd1@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?id=96eb7f1ce75ef933697f24eeab928c4a716edefe [1]
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
-v2:
-- Include symbolic stack trace
-- Add Fixes and Reported-by tags
-v1: https://lore.kernel.org/all/20221119075615.723290-1-syoshida@redhat.com/
----
- drivers/net/tun.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 7a3ab3427369..ce9fcf4c8ef4 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -686,7 +686,6 @@ static void __tun_detach(struct tun_file *tfile, bool clean)
- 		if (tun)
- 			xdp_rxq_info_unreg(&tfile->xdp_rxq);
- 		ptr_ring_cleanup(&tfile->tx_ring, tun_ptr_free);
--		sock_put(&tfile->sk);
- 	}
- }
- 
-@@ -702,6 +701,11 @@ static void tun_detach(struct tun_file *tfile, bool clean)
- 	if (dev)
- 		netdev_state_change(dev);
- 	rtnl_unlock();
-+
-+	if (clean) {
-+		synchronize_rcu();
-+		sock_put(&tfile->sk);
-+	}
- }
- 
- static void tun_detach_all(struct net_device *dev)
--- 
-2.38.1
-
+> >
+> > [1]: https://lore.kernel.org/linux-riscv/20220921034910.3142465-1-guore=
+n@kernel.org/
+> > v2 Link: https://lore.kernel.org/linux-riscv/20221116031305.286634-1-su=
+agrfillet@gmail.com/
+> >
+> > Changes since v1:
+> > - fix the checkpatch warnings in patch 1
+> > v1 Link: https://lore.kernel.org/linux-riscv/20221115061525.112757-1-su=
+agrfillet@gmail.com
+> >
+> > Song Shuai (2):
+> >   riscv/ftrace: add ftrace_graph_func
+> >   riscv/ftrace: make ftrace_caller call ftrace_graph_func
+> >
+> >  arch/riscv/include/asm/ftrace.h |  13 ++-
+> >  arch/riscv/kernel/ftrace.c      |  30 +++----
+> >  arch/riscv/kernel/mcount-dyn.S  | 143 +++++++++++++++++++++++---------
+> >  3 files changed, 129 insertions(+), 57 deletions(-)
+> >
+> > --
+> > 2.20.1
+> >
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+Thanks,
+Song
