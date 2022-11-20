@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9236316D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 23:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1DA6316CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 23:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiKTWWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 17:22:53 -0500
+        id S229849AbiKTWWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 17:22:44 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiKTWWg (ORCPT
+        with ESMTP id S229526AbiKTWWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 17:22:36 -0500
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC716AE7D;
+        Sun, 20 Nov 2022 17:22:35 -0500
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BD195BA;
         Sun, 20 Nov 2022 14:22:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1668982948;
     s=strato-dkim-0002; d=iokpp.de;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=E8p70nvSesLfndCY1xjueUyWPXUe3zm6EYO0Xs9t1IM=;
-    b=iic2hRa02Ln/L3XM5cBpNHh+3er4LOhrYnz6b4tcqyycvUgaTjj3u5wcbv6uKLsO4y
-    YoRvLWqmEDNeAoKTjnbzYttRB2kw+dGA94qlaYBrMIMTsw/u60I3OulbDxmq540u7dMA
-    5GlT49LlwTuLd5e6Pz5N92mFKc851JF9n74McOt06ZysDqioEhsdy7gz8rupttWOkMbU
-    c6xMrPBXYWmi15ebif+1vfi1SY23taDb1VPILhioNfsFPCsgZA9kOVMAd+nP5BXH2ybp
-    UBBt9iAwD2xuU3j8A3e6Z4rADa7sUhc67Vc0PeH1iHzkyIvrMMJiXuqzXqxhIJBVMNiN
-    NC1w==
+    bh=L6mh5zsLhuVTmCwSO3QZwUu6OHt2W2tyY93OTBilDdc=;
+    b=LoC0iLVqrhgCECmI5K32EiJeE1Oyc1kQ07K5TYUVOXRjJwBACRinQMDEIHdO1YJVZx
+    EfSirmTR+5oPQ/uivOaDAQFo+ZN+pvNbAB7Vg7aOu6I/gyt1W2cXnNVNyK11rz+57hcF
+    RDsYk17rUvKX3mUSBugdt7mRpBQXKK1+B5W7jTnBjYLahrO1UekBreE+866Sp6tbLlyB
+    oruEptezt2uJBicZYvqu2rgG+mDUCgysokLmkx7Zczgq3MU3BZuJi7xueElDVJbkq0iR
+    hGWO84wgP5yF9a6YTMY6yssbNX3fDrRh74xtzWtg0U3ifahVPdC8QgBGsnhTdgoPBmr9
+    /KoQ==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1RvWtIfZ/7Q8ZGqEBlwxF4QH61wYa9UK/y81Dg=="
 X-RZG-CLASS-ID: mo03
 Received: from blinux.speedport.ip
     by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id z9cfbfyAKMMSWc8
+    with ESMTPSA id z9cfbfyAKMMSWc9
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Sun, 20 Nov 2022 23:22:28 +0100 (CET)
@@ -44,13 +44,14 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
         quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
         quic_richardp@quicinc.com, quic_asutoshd@quicinc.com, hare@suse.de
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/6] ufs: core: Advanced RPMB detection
-Date:   Sun, 20 Nov 2022 23:22:15 +0100
-Message-Id: <20221120222217.108492-5-beanhuo@iokpp.de>
+Subject: [PATCH v2 5/6] ufs: core: Pass EHS length into ufshcd_prepare_req_desc_hdr()
+Date:   Sun, 20 Nov 2022 23:22:16 +0100
+Message-Id: <20221120222217.108492-6-beanhuo@iokpp.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221120222217.108492-1-beanhuo@iokpp.de>
 References: <20221120222217.108492-1-beanhuo@iokpp.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -63,73 +64,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-Check UFS Advanced RPMB LU enablement during ufshcd_lu_init().
+We need to fill in the total EHS length in UTP Transfer Request Descriptor,
+add this functionality to ufshcd_prepare_req_desc_hdr().
 
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- drivers/ufs/core/ufshcd.c |  6 ++++++
- include/ufs/ufs.h         | 24 ++++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+ drivers/ufs/core/ufshcd.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 1b252e6cf93f..311172578fd8 100644
+index 311172578fd8..2936e1e583c3 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -4956,6 +4956,12 @@ static void ufshcd_lu_init(struct ufs_hba *hba, struct scsi_device *sdev)
- 	    desc_buf[UNIT_DESC_PARAM_LU_WR_PROTECT] == UFS_LU_POWER_ON_WP)
- 		hba->dev_info.is_lu_power_on_wp = true;
+@@ -2508,14 +2508,15 @@ static void ufshcd_disable_intr(struct ufs_hba *hba, u32 intrs)
+ }
  
-+	/* In case of RPMB LU, check if advanced RPMB mode is enabled */
-+	if (desc_buf[UNIT_DESC_PARAM_UNIT_INDEX] == UFS_UPIU_RPMB_WLUN &&
-+	    desc_buf[RPMB_UNIT_DESC_PARAM_REGION_EN] & BIT(4))
-+		hba->dev_info.b_advanced_rpmb_en = true;
-+
-+
- 	kfree(desc_buf);
- set_qdepth:
- 	/*
-diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h
-index 1bba3fead2ce..17e401df674c 100644
---- a/include/ufs/ufs.h
-+++ b/include/ufs/ufs.h
-@@ -212,6 +212,28 @@ enum unit_desc_param {
- 	UNIT_DESC_PARAM_WB_BUF_ALLOC_UNITS	= 0x29,
- };
+ /**
+- * ufshcd_prepare_req_desc_hdr() - Fills the requests header
++ * ufshcd_prepare_req_desc_hdr - Fill UTP Transfer request descriptor header according to request
+  * descriptor according to request
+  * @lrbp: pointer to local reference block
+  * @upiu_flags: flags required in the header
+  * @cmd_dir: requests data direction
++ * @ehs_length: Total EHS Length (in 32‐bytes units of all Extra Header Segments)
+  */
+-static void ufshcd_prepare_req_desc_hdr(struct ufshcd_lrb *lrbp,
+-			u8 *upiu_flags, enum dma_data_direction cmd_dir)
++static void ufshcd_prepare_req_desc_hdr(struct ufshcd_lrb *lrbp, u8 *upiu_flags,
++					enum dma_data_direction cmd_dir, int ehs_length)
+ {
+ 	struct utp_transfer_req_desc *req_desc = lrbp->utr_descriptor_ptr;
+ 	u32 data_direction;
+@@ -2534,8 +2535,8 @@ static void ufshcd_prepare_req_desc_hdr(struct ufshcd_lrb *lrbp,
+ 		*upiu_flags = UPIU_CMD_FLAGS_NONE;
+ 	}
  
-+/* RPMB Unit descriptor parameters offsets in bytes*/
-+enum rpmb_unit_desc_param {
-+	RPMB_UNIT_DESC_PARAM_LEN		= 0x0,
-+	RPMB_UNIT_DESC_PARAM_TYPE		= 0x1,
-+	RPMB_UNIT_DESC_PARAM_UNIT_INDEX		= 0x2,
-+	RPMB_UNIT_DESC_PARAM_LU_ENABLE		= 0x3,
-+	RPMB_UNIT_DESC_PARAM_BOOT_LUN_ID	= 0x4,
-+	RPMB_UNIT_DESC_PARAM_LU_WR_PROTECT	= 0x5,
-+	RPMB_UNIT_DESC_PARAM_LU_Q_DEPTH		= 0x6,
-+	RPMB_UNIT_DESC_PARAM_PSA_SENSITIVE	= 0x7,
-+	RPMB_UNIT_DESC_PARAM_MEM_TYPE		= 0x8,
-+	RPMB_UNIT_DESC_PARAM_REGION_EN		= 0x9,
-+	RPMB_UNIT_DESC_PARAM_LOGICAL_BLK_SIZE	= 0xA,
-+	RPMB_UNIT_DESC_PARAM_LOGICAL_BLK_COUNT	= 0xB,
-+	RPMB_UNIT_DESC_PARAM_REGION0_SIZE	= 0x13,
-+	RPMB_UNIT_DESC_PARAM_REGION1_SIZE	= 0x14,
-+	RPMB_UNIT_DESC_PARAM_REGION2_SIZE	= 0x15,
-+	RPMB_UNIT_DESC_PARAM_REGION3_SIZE	= 0x16,
-+	RPMB_UNIT_DESC_PARAM_PROVISIONING_TYPE	= 0x17,
-+	RPMB_UNIT_DESC_PARAM_PHY_MEM_RSRC_CNT	= 0x18,
-+};
-+
- /* Device descriptor parameters offsets in bytes*/
- enum device_desc_param {
- 	DEVICE_DESC_PARAM_LEN			= 0x0,
-@@ -601,6 +623,8 @@ struct ufs_dev_info {
+-	dword_0 = data_direction | (lrbp->command_type
+-				<< UPIU_COMMAND_TYPE_OFFSET);
++	dword_0 = data_direction | (lrbp->command_type << UPIU_COMMAND_TYPE_OFFSET) |
++		ehs_length << 8;
+ 	if (lrbp->intr_cmd)
+ 		dword_0 |= UTP_REQ_DESC_INT_CMD;
  
- 	bool	b_rpm_dev_flush_capable;
- 	u8	b_presrv_uspc_en;
-+
-+	bool    b_advanced_rpmb_en;
- };
+@@ -2590,8 +2591,7 @@ void ufshcd_prepare_utp_scsi_cmd_upiu(struct ufshcd_lrb *lrbp, u8 upiu_flags)
+ }
  
- /*
+ /**
+- * ufshcd_prepare_utp_query_req_upiu() - fills the utp_transfer_req_desc,
+- * for query requsts
++ * ufshcd_prepare_utp_query_req_upiu() - fill the utp_transfer_req_desc for query request
+  * @hba: UFS hba
+  * @lrbp: local reference block pointer
+  * @upiu_flags: flags
+@@ -2662,7 +2662,7 @@ static int ufshcd_compose_devman_upiu(struct ufs_hba *hba,
+ 	else
+ 		lrbp->command_type = UTP_CMD_TYPE_UFS_STORAGE;
+ 
+-	ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags, DMA_NONE);
++	ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags, DMA_NONE, 0);
+ 	if (hba->dev_cmd.type == DEV_CMD_TYPE_QUERY)
+ 		ufshcd_prepare_utp_query_req_upiu(hba, lrbp, upiu_flags);
+ 	else if (hba->dev_cmd.type == DEV_CMD_TYPE_NOP)
+@@ -2690,8 +2690,7 @@ static int ufshcd_comp_scsi_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 		lrbp->command_type = UTP_CMD_TYPE_UFS_STORAGE;
+ 
+ 	if (likely(lrbp->cmd)) {
+-		ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags,
+-						lrbp->cmd->sc_data_direction);
++		ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags, lrbp->cmd->sc_data_direction, 0);
+ 		ufshcd_prepare_utp_scsi_cmd_upiu(lrbp, upiu_flags);
+ 	} else {
+ 		ret = -EINVAL;
+@@ -6862,7 +6861,7 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
+ 	/* update the task tag in the request upiu */
+ 	req_upiu->header.dword_0 |= cpu_to_be32(tag);
+ 
+-	ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags, DMA_NONE);
++	ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags, DMA_NONE, 0);
+ 
+ 	/* just copy the upiu request as it is */
+ 	memcpy(lrbp->ucd_req_ptr, req_upiu, sizeof(*lrbp->ucd_req_ptr));
 -- 
 2.25.1
 
