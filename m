@@ -2,121 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A716311FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 00:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE639631200
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 01:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbiKSX7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 18:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S234669AbiKTACI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 19:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKSX7R (ORCPT
+        with ESMTP id S229635AbiKTABs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 18:59:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3FE14D32;
-        Sat, 19 Nov 2022 15:59:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D89F60BFA;
-        Sat, 19 Nov 2022 23:59:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B85CC433C1;
-        Sat, 19 Nov 2022 23:59:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gQCJ1S+O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1668902350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pF5hygQOZimknkE9dVS3ToHPgi15Fs/0Dk7gv5XPx2I=;
-        b=gQCJ1S+OriuBT7to95epQyIA2rapjpQ/C5zZiKyFZeQnVxr41IehVybTQz1bYZ23k99xST
-        cAbM5WFiac4vkg2pXEsah7omTBW1qQjex1gv7LaKbB4tHeC9XG9+JmfOguXy2mXHQ5a2W8
-        6FU171U7Q+37zlYEkJiztmMtxU3E0PU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 01fc7d27 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 19 Nov 2022 23:59:10 +0000 (UTC)
-Date:   Sun, 20 Nov 2022 00:59:07 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>
-Subject: Re: [PATCH v5 1/3] random: add vgetrandom_alloc() syscall
-Message-ID: <Y3ltyzxIPwniRNW5@zx2c4.com>
-References: <20221119120929.2963813-1-Jason@zx2c4.com>
- <20221119120929.2963813-2-Jason@zx2c4.com>
- <Y3k+/hSL5rIIkBhK@sol.localdomain>
+        Sat, 19 Nov 2022 19:01:48 -0500
+Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E6815A21
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 16:01:44 -0800 (PST)
+Date:   Sun, 20 Nov 2022 00:01:30 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
+        s=protonmail; t=1668902501; x=1669161701;
+        bh=lvzGxYQdIo6DToOuBILM9gN0gZvQcQ+reM0/jv620qw=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=slKxsVaLdg8gvQ2+rTPW+9hG8eGAOdJ2qlNJCWCKjtgce7sCcDjsftS0IRha5cgjv
+         EHB0ik2GjopNoLHPgb2xECbZLEX4d3uRkU2eELjRc2o/0BqRBSbbWRSgLCZEfnh0Xs
+         yPSBIB/WipNjozeS/jd3hzbIED7GklQQlvlN8kmN7WxJkTHV02QQEAkxQ2eaBXfmC4
+         KjCbkwoFQMAzLwlXplx4wgX16nJlWG/HWundIObJ1f5Yr09TBgf96grrsbnd0iZ8PX
+         On8ZD9tV3Sak6fBnaikT6T1+wXJTdkVHpETC6lqZc156ZgLjKIp5EhOEK6QpUYt3VI
+         l8fPy/D22jC8Q==
+To:     syzbot <syzbot+4643bc868f47ad276452@syzkaller.appspotmail.com>
+From:   Peter Lafreniere <peter@n8pjl.ca>
+Cc:     davem@davemloft.net, edumazet@google.com, jreuter@yaina.de,
+        kuba@kernel.org, linux-hams@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, ralf@linux-mips.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] general protection fault in ax25_send_frame (2)
+Message-ID: <_EStAmQIIbOHjwEqqb54KlnJy9ltngO0A__i8T4sJISE0rRSCaa8TlYBrwJ9AJPxJtrp27MNaXRISYfABlCoIWA1bze3-o2Oblw7PcCdxM4=@n8pjl.ca>
+In-Reply-To: <000000000000da093705edbd2ca4@google.com>
+References: <000000000000da093705edbd2ca4@google.com>
+Feedback-ID: 53133685:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y3k+/hSL5rIIkBhK@sol.localdomain>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+In response to the following syzbot report:
 
-On Sat, Nov 19, 2022 at 12:39:26PM -0800, Eric Biggers wrote:
-> On Sat, Nov 19, 2022 at 01:09:27PM +0100, Jason A. Donenfeld wrote:
-> > +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned long __user *, num,
-> > +		unsigned long __user *, size_per_each, unsigned int, flags)
-> > +{
-> > +	unsigned long alloc_size;
-> > +	unsigned long num_states;
-> > +	unsigned long pages_addr;
-> > +	int ret;
-> > +
-> > +	if (flags)
-> > +		return -EINVAL;
-> > +
-> > +	if (get_user(num_states, num))
-> > +		return -EFAULT;
-> > +
-> > +	alloc_size = size_mul(num_states, sizeof(struct vgetrandom_state));
-> > +	if (alloc_size == SIZE_MAX)
-> > +		return -EOVERFLOW;
-> > +	alloc_size = roundup(alloc_size, PAGE_SIZE);
-> 
-> Small detail: the roundup to PAGE_SIZE can make alloc_size overflow to 0.
-> 
-> Also, 'roundup(alloc_size, PAGE_SIZE)' could be 'PAGE_ALIGN(alloc_size)'.
+> general protection fault, probably for non-canonical address 0xdffffc0000=
+00006c: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000360-0x0000000000000367]
+> CPU: 1 PID: 10715 Comm: syz-executor.3 Not tainted 6.0.0-rc4-syzkaller-00=
+136-g0727a9a5fbc1 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 08/26/2022
+> RIP: 0010:ax25_dev_ax25dev include/net/ax25.h:342 [inline]
+> RIP: 0010:ax25_send_frame+0xe4/0x640 net/ax25/ax25_out.c:56
+> Code: 00 48 85 c0 49 89 c4 0f 85 fb 03 00 00 e8 34 cb 2b f9 49 8d bd 60 0=
+3 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f=
+ 85 b1 04 00 00 4d 8b ad 60 03 00 00 4d 85 ed 0f 84
+>=20
+> RSP: 0000:ffffc90004c77a00 EFLAGS: 00010206
+> RAX: dffffc0000000000 RBX: ffff88814a308008 RCX: 0000000000000100
+> RDX: 000000000000006c RSI: ffffffff88503efc RDI: 0000000000000360
+> RBP: ffffffff91561460 R08: 0000000000000001 R09: ffffffff908e4a9f
+> R10: 0000000000000001 R11: 1ffffffff2020d9a R12: 0000000000000000
+> R13: 0000000000000000 R14: 0000000000000104 R15: 0000000000000000
+> FS: 0000555556215400(0000) GS:ffff8880b9b00000(0000) knlGS:00000000000000=
+00
+> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000001b2f328000 CR3: 0000000050a64000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+> <TASK>
+>
+> rose_send_frame+0xcc/0x2f0 net/rose/rose_link.c:106
+> rose_transmit_clear_request+0x1d5/0x290 net/rose/rose_link.c:255
+> rose_rx_call_request+0x4c0/0x1bc0 net/rose/af_rose.c:1009
+> rose_loopback_timer+0x19e/0x590 net/rose/rose_loopback.c:111
+> call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
+> expire_timers kernel/time/timer.c:1519 [inline]
+> __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
+> __run_timers kernel/time/timer.c:1768 [inline]
+> run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
+> [...]
+> </TASK>
 
-Good catch, thanks. So perhaps this?
+The null dereference in ax25_dev_ax25dev() must be from a null struct
+net_device* dev being passed to ax25_send_frame(). By tracing the call stac=
+k,
+the null pointer can be shown as coming from the dev field of
+rose_loopback_neigh being null.
 
-        alloc_size = size_mul(num_states, sizeof(struct vgetrandom_state));
-        if (alloc_size > SIZE_MAX - PAGE_SIZE + 1)
-                return -EOVERFLOW;
-        alloc_size = PAGE_ALIGN(alloc_size);
+The null dereference was already mitigated with a fail-silent check by
+commit e97c089d7a49 ("rose: Fix NULL pointer dereference in rose_send_frame=
+()")
+in response to a previous syzbot report "general protection fault in=20
+rose_send_frame (2)", which was not closed.
 
-Does that look right?
+Does anyone object to marking syzbot bugs
+"general protection fault in {ax25|rose}_send_frame (2)"
+as fixed?
 
-> > +	pages_addr = vm_mmap(NULL, 0, alloc_size, PROT_READ | PROT_WRITE,
-> > +			     MAP_PRIVATE | MAP_ANONYMOUS | MAP_LOCKED, 0);
-> > +	if (IS_ERR_VALUE(pages_addr))
-> > +		return pages_addr;
-> 
-> This will only succeed if the userspace process has permission to mlock pages,
-> i.e. if there is space available in RLIMIT_MEMLOCK or if process has
-> CAP_IPC_LOCK.  I suppose this is working as intended, as this syscall can be
-> used to try to allocate and mlock arbitrary amounts of memory.
-> 
-> I wonder if this permission check will cause problems.  Maybe there could be a
-> way to relax it for just one page per task?  I don't know how that would work,
-> though, especially when the planned usage involves userspace allocating a single
-> pool of these contexts per process that get handed out to threads.
+Respectfully,
+Peter Lafreniere (N8PJL)
 
-Probably though, we don't want to create a mlock backdoor, right? I
-suppose if a user is above RLIMIT_MEMLOCK, it'll just fallback to the
-slowpath, which still works. That seems like an okay enough
-circumstance.
-
-Jason
