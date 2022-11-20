@@ -2,73 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFCE6312E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 08:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E796312EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 08:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiKTHuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 02:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S229597AbiKTH6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 02:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiKTHux (ORCPT
+        with ESMTP id S229462AbiKTH6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 02:50:53 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32BDA3409;
-        Sat, 19 Nov 2022 23:50:51 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NFN3f0VbdzmVx6;
-        Sun, 20 Nov 2022 15:50:22 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 20 Nov 2022 15:50:49 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <varkabhadram@gmail.com>, <alex.aring@gmail.com>,
-        <stefan@datenfreihafen.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-wpan@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ieee802154: cc2520: Fix error return code in cc2520_hw_init()
-Date:   Sun, 20 Nov 2022 15:50:46 +0800
-Message-ID: <20221120075046.2213633-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 20 Nov 2022 02:58:05 -0500
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8D120F66;
+        Sat, 19 Nov 2022 23:58:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1668931078;
+        bh=d4ahvWb2gNc1rhQu8JuZV0eJfYfDExPnefQFcNGCdWU=;
+        h=From:To:Cc:Subject:Date;
+        b=IdNo8jui8le2HIQ8NVTqmg0n8xhxY3Rrrb2D3u9EWgkMAx2fdst1LHI1w5VhxryCA
+         o4y6CQS5jhDyiwWltbLEzJd9iUvSEvBnJtApYs2gbZs3cv7I73k6P0LmFEgiTVs3ZK
+         1UZ0xAAVpkMygeqCKpDCx5tQZOLOl4bzAoTeRnBc=
+Received: from rtoax.. ([111.199.191.46])
+        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+        id E759BAC1; Sun, 20 Nov 2022 15:57:53 +0800
+X-QQ-mid: xmsmtpt1668931073tm5can0j3
+Message-ID: <tencent_7F84D04F96EBE594CAD5EBD12815A2B00106@qq.com>
+X-QQ-XMAILINFO: OC704IrkdJt6FR5h+jFcRqcFPR/JwCe/gbhfN7SRnUcsP5N5wTBJQteuPOWcKR
+         8/RlE/HbME4+xyU5b4L88i1o+V4EoLyTQz3+ft0vAMVnTn2HpOLMfYK1sjvmb3RIeu/R/X8fxpUZ
+         ycyc07CLGHztvASlhieB/4dPOlJ5xakRKNhF2kbrl0eckBzC5XIyyylp00a1ADcQBcJ3JA1giY1c
+         AQtJ0KDU9GAqDRw+Fr92Q3s5b+BNqVgHDgr1lGD/HLWIj/iqXfIzfc4SSiZIxwVRbkjXR5KDBYIl
+         g+jjxJnjXh0QnH4Ep+BtSkWo96mnT8ycMd5uE34w76Q8N8St+ZnFUZ2DYjbnFpSmIv+47t4E+dKX
+         XJqleWm98zMaD8GhFLADnJmlujjyfd1DxiZaCdladj/DRqPVCaX5+8Q9HQq5InZonXOhQIBnwg57
+         GDbFQ8dujLo6yZ7AIuIVzfuYVaID0EJts5biy+IUJLTb54bgMfQvBlvM8xV7HWP7bdywDCo3/WVL
+         awGaUAeo1d9XOCOq3VNBhouJSTX6zSaSwubQnvh8SU6UfHMM0clGAZb/r2bTqa+lK9cPBjef8ffw
+         RuptJidGmdRjRG7xS/45Lio+ingV4BYEtPWyameAXQuLnceTSAepU0KC0nY3exZm0F9baLv0B46b
+         TEvNDHUK1zzo1lBcltGIAtm1Hn71lJLOFoodZl03/LAshbZSUGdwoE9qry05ed3tCeLPYVt9fEiS
+         /7UJ+k4nxT7IzxA/E5kyLtKFlcZlmt/06EbTUds0H0PNsJ6MeTaqVvVZmXpeURoVql0yR3YCV3cm
+         IZMFvQ0NY50wk/JVEs4iLtGyuwbv9tqbERWRlLXlE8sD2OrgGKpQv7AvIZ4He257awWW7KOLFFCg
+         R73sW/4Uhk6WQ7L7u3HhRy4dB+oMTciqQNDY1WtzVvPijGKIzqY0goA/YLrgn0fntDvK0L4+5YgV
+         xigPDs2444iHvuc5oL9HQKH0aPOdVKvdvypOAkgRO/8kIZapmfGw==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     ast@kernel.org
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)), linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next] docs/bpf: Update btf test programe code
+Date:   Sun, 20 Nov 2022 15:57:51 +0800
+X-OQ-MSGID: <20221120075751.24603-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cc2520_hw_init(), if oscillator start failed, the error code
-should be returned.
+From: Rong Tao <rongtao@cestc.cn>
 
-Fixes: 0da6bc8cc341 ("ieee802154: cc2520: adds driver for TI CC2520 radio")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+commit c64779e24e88("selftests/bpf: Merge most of test_btf into
+test_progs") rename selftests/bpf btf test from 'test_btf.c' to
+'prog_tests/btf.c'.
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- drivers/net/ieee802154/cc2520.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/bpf/btf.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ieee802154/cc2520.c b/drivers/net/ieee802154/cc2520.c
-index c69b87d3837d..edc769daad07 100644
---- a/drivers/net/ieee802154/cc2520.c
-+++ b/drivers/net/ieee802154/cc2520.c
-@@ -970,7 +970,7 @@ static int cc2520_hw_init(struct cc2520_private *priv)
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index cf8722f96090..59ccd9bad1e0 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -1062,4 +1062,5 @@ format.::
+ 7. Testing
+ ==========
  
- 		if (timeout-- <= 0) {
- 			dev_err(&priv->spi->dev, "oscillator start failed!\n");
--			return ret;
-+			return -ETIMEDOUT;
- 		}
- 		udelay(1);
- 	} while (!(status & CC2520_STATUS_XOSC32M_STABLE));
+-Kernel bpf selftest `test_btf.c` provides extensive set of BTF-related tests.
++Kernel bpf selftest `prog_tests/btf.c` provides extensive set of BTF-related
++tests.
 -- 
-2.25.1
+2.38.1
 
