@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E789D63169A
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 22:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE966316A0
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 22:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiKTVeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 16:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S229723AbiKTVsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 16:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiKTVeQ (ORCPT
+        with ESMTP id S229489AbiKTVr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 16:34:16 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F87927FED;
-        Sun, 20 Nov 2022 13:34:13 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e725329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e725:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C6D581EC02FE;
-        Sun, 20 Nov 2022 22:34:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668980051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=MU/mPOtQaxPIEiXZaqef4n2ESApESPnWFV9ksNgEQU0=;
-        b=gFsAknCC944e+v3lSc/yaLPJAy9TZ++t5KLypK6/QtbQQV1+nSewg1M/XPNPbe7udjUoKY
-        XkJYWm7M3S2B55bQ82gf5JmgRLTzx9o51DwMSbzF90QR2CE4t51TA++ITub8kM89vDlwYj
-        WqVsyvDAGl5XDyti2GFZL3qEqoO94ZU=
-Date:   Sun, 20 Nov 2022 22:34:06 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
-Message-ID: <Y3qdTuZQoDZxUgbw@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
- <Y0grhk1sq2tf/tUl@zn.tnic>
- <380c9748-1c86-4763-ea18-b884280a3b60@amd.com>
- <b712bc81-4446-9be4-fd59-d08981d13475@amd.com>
+        Sun, 20 Nov 2022 16:47:58 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213DC265E
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 13:47:57 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AKLlIWr031340;
+        Sun, 20 Nov 2022 21:47:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=LAMfF8kmKnNg+FHVFGSxFLkYm8i6qRF4/9CYNy9gWLo=;
+ b=dcXp7um9jsrx69un2GgNHlYZoMLmkB30lVh+PJgMgf2g4Hf0biMH2ewJMjB0ghFxx6Qu
+ ZjAt5eMDpd4HuhywGesTLZqoRHR28qQebqzcesD9qoRuam2P/7szeVaRnzT8WRvJha95
+ xYj3MQP8vAjTBl96haMopNaV6y7HDR6OcodqGHO+IZsS8YMIZeuH4NXwtYN4GL6kmDQd
+ HdP+xathRPH599lL6lQQuVvRx9z+LXAzD3WuzLW29eMwdgMO0WbMQ9nY/jKrWsOxaz7x
+ s18yk2broruBOhzRsz1Z1b1crTHT2/Vtj2w6a7//isOp7tckErqSb6z4f/nPBD4Vn5pC DA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrf5jurw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Nov 2022 21:47:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AKLlGMD006377
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Nov 2022 21:47:16 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 20 Nov
+ 2022 13:47:15 -0800
+Message-ID: <9ce1bf9f-a481-92e3-c7cc-a1b41270468d@quicinc.com>
+Date:   Sun, 20 Nov 2022 14:47:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b712bc81-4446-9be4-fd59-d08981d13475@amd.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v4 2/4] accel: add dedicated minor for accelerator devices
+Content-Language: en-US
+To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Christopher Friedt <chrisfriedt@gmail.com>
+References: <20221119204435.97113-1-ogabbay@kernel.org>
+ <20221119204435.97113-3-ogabbay@kernel.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20221119204435.97113-3-ogabbay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nh_pMpcUh2-irDtlfHgVUNxLkH1X63kv
+X-Proofpoint-ORIG-GUID: nh_pMpcUh2-irDtlfHgVUNxLkH1X63kv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-20_13,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 clxscore=1011
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211200184
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 02:56:47PM -0600, Kalra, Ashish wrote:
-> So we need to be able to reclaim all the pages or none.
+On 11/19/2022 1:44 PM, Oded Gabbay wrote:
+> diff --git a/drivers/accel/drm_accel.c b/drivers/accel/drm_accel.c
+> index fac6ad6ac28e..703d40c4ff45 100644
+> --- a/drivers/accel/drm_accel.c
+> +++ b/drivers/accel/drm_accel.c
+> @@ -8,14 +8,25 @@
+> 
+>   #include <linux/debugfs.h>
+>   #include <linux/device.h>
+> +#include <linux/xarray.h>
 
-/me goes and looks at SNP_PAGE_RECLAIM's retvals:
+Including xarray, but using idr
+This should be linux/idr.h
 
-- INVALID_PLATFORM_STATE - platform is not in INIT state. That's
-certainly not a reason to leak pages.
+This seems so minor, I don't think I advise spinning a v5 for it.  If a 
+v5 is warranted elsewhere, obviously fix this.  If not, hopefully this 
+can be fixed up by whoever applies it, or someone submits a follow up patch.
 
-- INVALID_ADDRESS - PAGE_PADDR is not a valid system physical address.
-That's botched command buffer but not a broken page so no reason to leak
-them either.
+Hopefully this is the only nit.  I would like to see this merged.
 
-- INVALID_PAGE_STATE - the page is neither of those types: metadata,
-firmware, pre-guest nor pre-swap. So if you issue page reclaim on the
-wrong range of pages that looks again like a user error but no need to
-leak pages.
-
-- INVALID_PAGE_SIZE - a size mismatch. Still sounds to me like a user
-error of sev-guest instead of anything wrong deeper in the FW or HW.
-
-So in all those, if you end up supplying the wrong range of addresses,
-you most certainly will end up leaking the wrong pages.
-
-So it sounds to me like you wanna say: "Error reclaiming range, check
-your driver" instead of punishing any innocent pages.
-
-Now, if the retval from the fw were FIRMWARE_INTERNAL_ERROR or so, then
-sure, by all means. But not for the above. All the error conditions
-above sound like the kernel has supplied the wrong range/botched command
-buffer to the firmware so there's no need to leak pages.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+-Jeff
