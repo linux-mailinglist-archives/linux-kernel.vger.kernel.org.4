@@ -2,111 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0E8631589
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CB163158A
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 18:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiKTR3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 12:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
+        id S229701AbiKTRaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 12:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiKTR3W (ORCPT
+        with ESMTP id S229520AbiKTRaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 12:29:22 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6779305;
-        Sun, 20 Nov 2022 09:29:21 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id w9so6073049qtv.13;
-        Sun, 20 Nov 2022 09:29:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2m/oKh2JCFyE3zOn/G6TKOcNovbaWdXH+bxKkKXD33I=;
-        b=oRg5bgvYMF9lYUEYVF7qrIDKg9wY5WQdB+eHVKqxYG+rfxCnwNzFRia2/zXjHVkvNS
-         HS8zoHw15lcneimrtFvxODpRu1oDfmJXsqlnlCg9LiPvimbGcMOUyjKgrRSXlLASFLbo
-         7FsBCN0Srp+6d7ZhtejdLssqo4QmzU9qqiUyv/CX/HOD5LopKY6vRADXQob06FyYl7hW
-         HQ3rSlD5iiLPzE4ZGjFJv5UlOXFoq5t5fKlEd8ZBOe/XcUb9JYuOqq6NIR60pUIXqJFv
-         rZT8xyU8f8PY7erSUxlpMvLz93WHWr4pMzSkCfu+CK9DajLnsZ9+9O2FaJJka9OFhCdK
-         GdbA==
-X-Gm-Message-State: ANoB5pkxDQHmcT2t38eaXLtgdoFN1pSJmI5jX1PEYlLuSfyf6qP4OXOd
-        dOnJDDNN3gI4cfeEBNC5JkE=
-X-Google-Smtp-Source: AA0mqf5iklrigu3ogCld1s+7y6kFYaSrTYriw4iHyNJySr4/kwt/B1Dp0whscLdPjgscK35e6t3GKA==
-X-Received: by 2002:ac8:1306:0:b0:3a5:9fb3:ba72 with SMTP id e6-20020ac81306000000b003a59fb3ba72mr14202220qtj.617.1668965360741;
-        Sun, 20 Nov 2022 09:29:20 -0800 (PST)
-Received: from maniforge.lan (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006fab68c7e87sm6873447qkp.70.2022.11.20.09.29.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 09:29:19 -0800 (PST)
-Date:   Sun, 20 Nov 2022 11:29:24 -0600
-From:   David Vernet <void@manifault.com>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     ast@kernel.org, Rong Tao <rongtao@cestc.cn>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
-        <bpf@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] docs/bpf: Update btf test programe code
-Message-ID: <Y3pj9FCI5SOEHZXz@maniforge.lan>
-References: <tencent_7F84D04F96EBE594CAD5EBD12815A2B00106@qq.com>
+        Sun, 20 Nov 2022 12:30:04 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E366F305
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 09:30:02 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1owo8m-0001mI-8v; Sun, 20 Nov 2022 18:30:00 +0100
+Message-ID: <a4501ec8-cf5d-3ea5-31be-9b9700e8e370@leemhuis.info>
+Date:   Sun, 20 Nov 2022 18:29:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_7F84D04F96EBE594CAD5EBD12815A2B00106@qq.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: Regression bisected: drm/display/dp_mst: Move all payload info
+ into the atomic state #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     Linux Kernel <linux-kernel@vger.kernel.org>
+References: <ghwn827862.fsf@gouders.net>
+ <45ca4839-fa2a-9511-fd47-2d75fa3766cd@leemhuis.info>
+In-Reply-To: <45ca4839-fa2a-9511-fd47-2d75fa3766cd@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668965403;2533757f;
+X-HE-SMSGID: 1owo8m-0001mI-8v
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 03:57:51PM +0800, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
+[Note: this mail is primarily send for documentation purposes and/or for
+regzbot, my Linux kernel regression tracking bot. That's why I removed
+most or all folks from the list of recipients, but left any that looked
+like a mailing lists. These mails usually contain '#forregzbot' in the
+subject, to make them easy to spot and filter out.]
+
+On 13.11.22 10:28, Thorsten Leemhuis wrote:
+> On 10.11.22 23:32, Dirk Gouders wrote:
+>>
+>> I noticed a regression with Linus' current tree and bisected it to
+>> 4d07b0bc403403 (drm/display/dp_mst: Move all payload info into the atomic state):
+>>
+>> I have two monitors connected to my laptop's USB-C port and since this
+>> patch, one of the monitors remains dark.
+>>
+>> Please let me know if I can provide additional information that could help
+>> to investigate this problem.
 > 
-> commit c64779e24e88("selftests/bpf: Merge most of test_btf into
-> test_progs") rename selftests/bpf btf test from 'test_btf.c' to
-> 'prog_tests/btf.c'.
+> Thanks for the report. To be sure below issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+> tracking bot:
 > 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
->  Documentation/bpf/btf.rst | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-> index cf8722f96090..59ccd9bad1e0 100644
-> --- a/Documentation/bpf/btf.rst
-> +++ b/Documentation/bpf/btf.rst
-> @@ -1062,4 +1062,5 @@ format.::
->  7. Testing
->  ==========
->  
-> -Kernel bpf selftest `test_btf.c` provides extensive set of BTF-related tests.
-> +Kernel bpf selftest `prog_tests/btf.c` provides extensive set of BTF-related
+> #regzbot introduced 4d07b0bc403403 ^
+> https://gitlab.freedesktop.org/drm/amd/-/issues/2171
+> #regzbot title drm: amdgpu: No payload for [MST PORT:0000000006da5d29]
+> found in mst state 00000000b0e556d6" on system resume with TBT dock
+> connected.
+> #regzbot ignore-activity
 
-s/Kernel bpf selftest/The kernel BPF selftest
-
-s/provide extensive/provides an extensive
-
-> +tests.
-
-Thanks for adjusting this. Could you please mirror what prog_lsm.rst
-does [0], and add a link to the file in the linux.git repo?
-
-[0]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/Documentation/bpf/prog_lsm.rst#n134
-
-> -- 
-> 2.38.1
-> 
+#regzbot monitor
+https://lore.kernel.org/amd-gfx/20221114221754.385090-1-lyude@redhat.com/
