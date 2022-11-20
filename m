@@ -2,505 +2,522 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17AD6316CE
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 23:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 487876316DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 23:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiKTWWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 17:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S229586AbiKTWdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 17:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiKTWWg (ORCPT
+        with ESMTP id S229449AbiKTWdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 17:22:36 -0500
-Received: from mo4-p04-ob.smtp.rzone.de (mo4-p04-ob.smtp.rzone.de [85.215.255.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CCF9FC8;
-        Sun, 20 Nov 2022 14:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1668982949;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=1XznSLoa8sEKJ2TJbavwF0mcz8Vokg4eo59VUxsl9Xw=;
-    b=pI1uxzt8lGvjuPqCiyiF8hOf7dGfzKDYNqZVE0VX/0mZFmKWJkBzS1PSfGWuvSFzv7
-    wi1VSbSE1Hxd0HqKVA3PcFGsPPxmb2GRp1Iugaqmo3DTwVZlKmZCKap2UtH6u6I2il1H
-    BS4xBk8VrdBzFzjyfX5Uvp28FyZT33AjmlRaqMHnND12zF6OslD2bW1eyXdev1+X5ARE
-    G2ikByL0PrOBoSRFnk206tUkSaxa7JJhtGAe74TZgT7QpuG8ibGE/tu1SNMwwQTsUUCl
-    czA/ISq1ejSnM3pwNgRCVjVKc7uLKHsRRjXEKFQET+jbSYNTNnI6oAvx/ObPit+nP8ns
-    FgXg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1RvWtIfZ/7Q8ZGqEBlwxF4QH61wYa9UK/y81Dg=="
-X-RZG-CLASS-ID: mo03
-Received: from blinux.speedport.ip
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id z9cfbfyAKMMSWcA
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 20 Nov 2022 23:22:28 +0100 (CET)
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        daejun7.park@samsung.com, quic_cang@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
-        quic_richardp@quicinc.com, quic_asutoshd@quicinc.com, hare@suse.de
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] ufs: core: Add advanced RPMB support in ufs_bsg
-Date:   Sun, 20 Nov 2022 23:22:17 +0100
-Message-Id: <20221120222217.108492-7-beanhuo@iokpp.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221120222217.108492-1-beanhuo@iokpp.de>
-References: <20221120222217.108492-1-beanhuo@iokpp.de>
+        Sun, 20 Nov 2022 17:33:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8184715A0B;
+        Sun, 20 Nov 2022 14:32:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7215B80BA1;
+        Sun, 20 Nov 2022 22:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A43EC433C1;
+        Sun, 20 Nov 2022 22:32:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668983575;
+        bh=aKS63OJkkvE926pBZJPn+rkmWS2xg4pXPNSFgHA89Bs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DV9UIz9VipWdhR4sCGFU0aPFbB6ERZyF1r+cL+eOj29bSWjLckicQtHslHjZYVo0V
+         FAeam4Typ1eGjtI6do+uen81r+f/9/qTzjNrTNr7z2gL5SoyoNxvCxbK58EnZ8YlVb
+         PSyqym3RgEjEwHk6R+J+s3/9SCQGgpTgaS664ToQtxqgrlCGk5aERJOQyG5FL0Y1oq
+         0/rFtco56MHvcUY4AWPPoqKG5G7hXdiCrlokpnY2UPenuANPp9soBJwewqYqU1FZTS
+         ZilnvwK1xPL2lU670yX0ECPqsHe7H4CbwBhQrxaxHFeHabkulK6SM6TJOxVr/Azj3k
+         YFP+0Gj+DGawg==
+Date:   Mon, 21 Nov 2022 06:32:48 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zirong Lang <zlang@redhat.com>
+Subject: Re: [PATCH] xfs: account extra freespace btree splits for multiple
+ allocations
+Message-ID: <Y3qrEIy3DgGyhjli@debian>
+Mail-Followup-To: Dave Chinner <david@fromorbit.com>,
+        linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, Zirong Lang <zlang@redhat.com>
+References: <20221109034802.40322-1-hsiangkao@linux.alibaba.com>
+ <20221111203905.GN3600936@dread.disaster.area>
+ <Y27e2U155YvH9et4@debian>
+ <20221112214545.GQ3600936@dread.disaster.area>
+ <Y3NGghqFDEoMPojt@B-P7TQMD6M-0146.local>
+ <20221116025106.GB3600936@dread.disaster.area>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221116025106.GB3600936@dread.disaster.area>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+Hi Dave,
 
-Add advanced RPMB support in ufs_bsg. For these reasons, we try to add
-Advanced RPMB support in ufs_bsg:
+On Wed, Nov 16, 2022 at 01:51:06PM +1100, Dave Chinner wrote:
+> On Tue, Nov 15, 2022 at 03:57:54PM +0800, Gao Xiang wrote:
+> > On Sun, Nov 13, 2022 at 08:45:45AM +1100, Dave Chinner wrote:
+> > > On Sat, Nov 12, 2022 at 07:46:33AM +0800, Gao Xiang wrote:
+> > > > On Sat, Nov 12, 2022 at 07:39:05AM +1100, Dave Chinner wrote:
+> > > > > On Wed, Nov 09, 2022 at 11:48:02AM +0800, Gao Xiang wrote:
+> > > > > > diff --git a/fs/xfs/libxfs/xfs_alloc.c b/fs/xfs/libxfs/xfs_alloc.c
+> > > > > > index 6261599bb389..684c67310175 100644
+> > > > > > --- a/fs/xfs/libxfs/xfs_alloc.c
+> > > > > > +++ b/fs/xfs/libxfs/xfs_alloc.c
+> > > > > > @@ -2630,7 +2630,12 @@ xfs_alloc_fix_freelist(
+> > > > > >  		goto out_agbp_relse;
+> > > > > >  	}
+> > > > > >  
+> > > > > > -	need = xfs_alloc_min_freelist(mp, pag);
+> > > > > > +	/
+> > > > > > +	 * Also need to fulfill freespace btree splits by reservaing more
+> > > > > > +	 * blocks to perform multiple allocations from a single AG and
+> > > > > > +	 * transaction if needed.
+> > > > > > +	 */
+> > > > > > +	need = xfs_alloc_min_freelist(mp, pag) * (1 + args->postallocs);
+> > > > > >  	if (!xfs_alloc_space_available(args, need, flags |
+> > > > > >  			XFS_ALLOC_FLAG_CHECK))
+> > > > > >  		goto out_agbp_relse;
+> > > > > > @@ -2654,7 +2659,7 @@ xfs_alloc_fix_freelist(
+> > > > > >  		xfs_agfl_reset(tp, agbp, pag);
+> > > > > >  
+> > > > > >  	/* If there isn't enough total space or single-extent, reject it. */
+> > > > > > -	need = xfs_alloc_min_freelist(mp, pag);
+> > > > > > +	need = xfs_alloc_min_freelist(mp, pag) * (1 + args->postallocs);
+> > > > > >  	if (!xfs_alloc_space_available(args, need, flags))
+> > > > > >  		goto out_agbp_relse;
+> > > > > >  
+> > > > > > diff --git a/fs/xfs/libxfs/xfs_alloc.h b/fs/xfs/libxfs/xfs_alloc.h
+> > > > > > index 2c3f762dfb58..be7f15d6a40d 100644
+> > > > > > --- a/fs/xfs/libxfs/xfs_alloc.h
+> > > > > > +++ b/fs/xfs/libxfs/xfs_alloc.h
+> > > > > > @@ -73,6 +73,7 @@ typedef struct xfs_alloc_arg {
+> > > > > >  	int		datatype;	/* mask defining data type treatment */
+> > > > > >  	char		wasdel;		/* set if allocation was prev delayed */
+> > > > > >  	char		wasfromfl;	/* set if allocation is from freelist */
+> > > > > > +	bool		postallocs;	/* number of post-allocations */
+> > > > > >  	struct xfs_owner_info	oinfo;	/* owner of blocks being allocated */
+> > > > > >  	enum xfs_ag_resv_type	resv;	/* block reservation to use */
+> > > > > >  #ifdef DEBUG
+> > > > > > diff --git a/fs/xfs/libxfs/xfs_bmap.c b/fs/xfs/libxfs/xfs_bmap.c
+> > > > > > index 49d0d4ea63fc..ed92c6a314b6 100644
+> > > > > > --- a/fs/xfs/libxfs/xfs_bmap.c
+> > > > > > +++ b/fs/xfs/libxfs/xfs_bmap.c
+> > > > > > @@ -3497,6 +3497,7 @@ xfs_bmap_exact_minlen_extent_alloc(
+> > > > > >  	args.alignment = 1;
+> > > > > >  	args.minalignslop = 0;
+> > > > > >  
+> > > > > > +	args.postallocs = 1;
+> > > > > >  	args.minleft = ap->minleft;
+> > > > > >  	args.wasdel = ap->wasdel;
+> > > > > >  	args.resv = XFS_AG_RESV_NONE;
+> > > > > > @@ -3658,6 +3659,7 @@ xfs_bmap_btalloc(
+> > > > > >  		args.alignment = 1;
+> > > > > >  		args.minalignslop = 0;
+> > > > > >  	}
+> > > > > > +	args.postallocs = 1;
+> > > > > >  	args.minleft = ap->minleft;
+> > > > > >  	args.wasdel = ap->wasdel;
+> > > > > >  	args.resv = XFS_AG_RESV_NONE;
+> > > > > 
+> > > > > That's not going to work. What happens when we do a full bno
+> > > > > split? Or we do both a bno and a cnt split in the same allocation?
+> > > > 
+> > > > I'm not sure if I got your point or not. I think it reserves another
+> > > > full splits in the first allocation by doing:
+> > > > 
+> > > > 	need = xfs_alloc_min_freelist(mp, pag) * (1 + args->postallocs);
+> > > > 
+> > > > as I wrote above.
+> > > 
+> > > You're changing the BMBT reservation code. If the first "post-extent
+> > > BMBT block allocation" does a full split of both the bno/cnt trees,
+> > > then this uses all the AGFL reservations made.
+> > 
+> > Emmm... I have to align my understanding of this first, I think one
+> > example of what you meant is
+> >   1. allocate an extent for an inode with minleft = 1;
+> >   2. then do extents-to-btree allocation with one block, even minleft
+> >      was reserved as 1 in the previous allocation but such one-block
+> >      allocation from non-AGFL can cause full bno/cnt splits, which
+> >      could takes xfs_alloc_min_freelist() blocks from AGFL and could
+> >      take up all AGFL blocks?
+> >
+> > If my understanding above is like what you said, I think the current
+> > codebase may also have a chance to eat up all AGFL blocks in the first
+> > allocation since more agfl blocks are only filled in
+> > xfs_alloc_fix_freelist(), but later xfs_alloc_ag_vextent() could
+> > cause full bno/cnt splits as well?
+> 
 
-1. According to the UFS specification, only one RPMB operation can be
-performed at any time. We can ensure this by using reserved slot and
-its dev_cmd sync operation protection mechanism.
+Thanks for your detailed reply.
 
-2. For the Advanced RPMB, RPMB metadata is packaged in an EHS(Extra
-Header Segment) of a command UPIU, and the corresponding reply EHS
-(from the device) should also be returned to the user space.
-bsg_job->request and bsg_job->reply allow us to pass and return EHS
-from/back to userspace.
+Sorry for late reply.  I pinged you on IRC last Friday but seems you are
+busy, so I try to reply here as well.
 
-Compared to normal/legacy RPMB, the advantage of advanced RPMB are:
+> Yes, the second allocation here might only require 1 block, which is
+> what args->minleft says. But the problem is that nothing is
+> reserving AGFL blocks for those nested extent allocations...
 
-1. The data length in the Advanced RPBM data read/write command could
-be > 4KB. For the legacy RPMB, the data length in a single RPMB data
-transfer is 256 bytes.
-2.  All of the advanced RPMB operations will be a single command shot.
-But for the legacy  RPBM, take the read write-counter value as an example,
-you need two commands(first SECURITY PROTOCOL OUT, then the second SECURITY
-PROTOCOL IN).
+Yeah, that is also what I meant.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/ufs/core/ufs_bsg.c       | 93 ++++++++++++++++++++++++++----
- drivers/ufs/core/ufshcd.c        | 99 ++++++++++++++++++++++++++++++++
- include/uapi/scsi/scsi_bsg_ufs.h | 46 ++++++++++++++-
- include/ufs/ufs.h                |  5 ++
- include/ufs/ufshcd.h             |  6 +-
- include/ufs/ufshci.h             |  1 +
- 6 files changed, 238 insertions(+), 12 deletions(-)
+> 
+> ..... because the assumption is that AGFL blocks come from free
+> space and so when we are at ENOSPC bno/cnt btrees *do no require
+> splits* so will not consume extra space. Hence allocation at ENOSPC
+> doesn't need to take into account AGFL block usage because the AGFL
+> will not be consumed.
 
-diff --git a/drivers/ufs/core/ufs_bsg.c b/drivers/ufs/core/ufs_bsg.c
-index 850a0d798f63..a8e58faa7da2 100644
---- a/drivers/ufs/core/ufs_bsg.c
-+++ b/drivers/ufs/core/ufs_bsg.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/bsg-lib.h>
-+#include <linux/dma-mapping.h>
- #include <scsi/scsi.h>
- #include <scsi/scsi_host.h>
- #include "ufs_bsg.h"
-@@ -68,6 +69,72 @@ static int ufs_bsg_alloc_desc_buffer(struct ufs_hba *hba, struct bsg_job *job,
- 	return 0;
- }
- 
-+static int ufs_bsg_exec_advanced_rpmb_req(struct ufs_hba *hba, struct bsg_job *job)
-+{
-+	struct ufs_rpmb_request *rpmb_request = job->request;
-+	struct ufs_rpmb_reply *rpmb_reply = job->reply;
-+	struct bsg_buffer *payload = NULL;
-+	enum dma_data_direction dir;
-+	struct scatterlist *sg_list;
-+	int rpmb_req_type;
-+	int sg_cnt;
-+	int ret;
-+	int data_len;
-+
-+	if (hba->ufs_version < ufshci_version(4, 0) || !hba->dev_info.b_advanced_rpmb_en ||
-+	    !(hba->capabilities & MASK_EHSLUTRD_SUPPORTED))
-+		return -EINVAL;
-+
-+	if (rpmb_request->ehs_req.length != 2 || rpmb_request->ehs_req.ehs_type != 1)
-+		return -EINVAL;
-+
-+	rpmb_req_type = be16_to_cpu(rpmb_request->ehs_req.meta.req_resp_type);
-+
-+	switch (rpmb_req_type) {
-+	case UFS_RPMB_WRITE_KEY:
-+	case UFS_RPMB_READ_CNT:
-+	case UFS_RPMB_PURGE_ENABLE:
-+		dir = DMA_NONE;
-+		break;
-+	case UFS_RPMB_WRITE:
-+	case UFS_RPMB_SEC_CONF_WRITE:
-+		dir = DMA_TO_DEVICE;
-+		break;
-+	case UFS_RPMB_READ:
-+	case UFS_RPMB_SEC_CONF_READ:
-+	case UFS_RPMB_PURGE_STATUS_READ:
-+		dir = DMA_FROM_DEVICE;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (dir != DMA_NONE) {
-+		payload = &job->request_payload;
-+		if (!payload || !payload->payload_len || !payload->sg_cnt)
-+			return -EINVAL;
-+
-+		sg_cnt = dma_map_sg(hba->host->dma_dev, payload->sg_list, payload->sg_cnt, dir);
-+		if (unlikely(!sg_cnt))
-+			return -ENOMEM;
-+		sg_list = payload->sg_list;
-+		data_len = payload->payload_len;
-+	}
-+
-+	ret = ufshcd_advanced_rpmb_req_handler(hba, &rpmb_request->bsg_request.upiu_req,
-+				   &rpmb_reply->bsg_reply.upiu_rsp, &rpmb_request->ehs_req,
-+				   &rpmb_reply->ehs_rsp, sg_cnt, sg_list, dir);
-+
-+	if (dir != DMA_NONE) {
-+		dma_unmap_sg(hba->host->dma_dev, payload->sg_list, payload->sg_cnt, dir);
-+
-+		if (!ret)
-+			rpmb_reply->bsg_reply.reply_payload_rcv_len = data_len;
-+	}
-+
-+	return ret;
-+}
-+
- static int ufs_bsg_request(struct bsg_job *job)
- {
- 	struct ufs_bsg_request *bsg_request = job->request;
-@@ -75,10 +142,11 @@ static int ufs_bsg_request(struct bsg_job *job)
- 	struct ufs_hba *hba = shost_priv(dev_to_shost(job->dev->parent));
- 	struct uic_command uc = {};
- 	int msgcode;
--	uint8_t *desc_buff = NULL;
-+	uint8_t *buff = NULL;
- 	int desc_len = 0;
- 	enum query_opcode desc_op = UPIU_QUERY_OPCODE_NOP;
- 	int ret;
-+	bool rpmb = false;
- 
- 	bsg_reply->reply_payload_rcv_len = 0;
- 
-@@ -88,8 +156,7 @@ static int ufs_bsg_request(struct bsg_job *job)
- 	switch (msgcode) {
- 	case UPIU_TRANSACTION_QUERY_REQ:
- 		desc_op = bsg_request->upiu_req.qr.opcode;
--		ret = ufs_bsg_alloc_desc_buffer(hba, job, &desc_buff,
--						&desc_len, desc_op);
-+		ret = ufs_bsg_alloc_desc_buffer(hba, job, &buff, &desc_len, desc_op);
- 		if (ret)
- 			goto out;
- 		fallthrough;
-@@ -97,25 +164,31 @@ static int ufs_bsg_request(struct bsg_job *job)
- 	case UPIU_TRANSACTION_TASK_REQ:
- 		ret = ufshcd_exec_raw_upiu_cmd(hba, &bsg_request->upiu_req,
- 					       &bsg_reply->upiu_rsp, msgcode,
--					       desc_buff, &desc_len, desc_op);
-+					       buff, &desc_len, desc_op);
- 		if (ret)
- 			dev_err(hba->dev, "exe raw upiu: error code %d\n", ret);
--		else if (desc_op == UPIU_QUERY_OPCODE_READ_DESC && desc_len)
-+		else if (desc_op == UPIU_QUERY_OPCODE_READ_DESC && desc_len) {
- 			bsg_reply->reply_payload_rcv_len =
- 				sg_copy_from_buffer(job->request_payload.sg_list,
- 						    job->request_payload.sg_cnt,
--						    desc_buff, desc_len);
-+						    buff, desc_len);
-+		}
- 		break;
- 	case UPIU_TRANSACTION_UIC_CMD:
- 		memcpy(&uc, &bsg_request->upiu_req.uc, UIC_CMD_SIZE);
- 		ret = ufshcd_send_uic_cmd(hba, &uc);
- 		if (ret)
--			dev_err(hba->dev,
--				"send uic cmd: error code %d\n", ret);
-+			dev_err(hba->dev, "send uic cmd: error code %d\n", ret);
- 
- 		memcpy(&bsg_reply->upiu_rsp.uc, &uc, UIC_CMD_SIZE);
- 
- 		break;
-+	case UPIU_TRANSACTION_ARPMB_CMD:
-+		rpmb = true;
-+		ret = ufs_bsg_exec_advanced_rpmb_req(hba, job);
-+		if (ret)
-+			dev_err(hba->dev, "ARPMB OP failed: error code  %d\n", ret);
-+		break;
- 	default:
- 		ret = -ENOTSUPP;
- 		dev_err(hba->dev, "unsupported msgcode 0x%x\n", msgcode);
-@@ -125,9 +198,9 @@ static int ufs_bsg_request(struct bsg_job *job)
- 
- out:
- 	ufshcd_rpm_put_sync(hba);
--	kfree(desc_buff);
-+	kfree(buff);
- 	bsg_reply->result = ret;
--	job->reply_len = sizeof(struct ufs_bsg_reply);
-+	job->reply_len = !rpmb ? sizeof(struct ufs_bsg_reply) : sizeof(struct ufs_rpmb_reply);
- 	/* complete the job here only if no error */
- 	if (ret == 0)
- 		bsg_job_done(job, ret, bsg_reply->reply_payload_rcv_len);
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 2936e1e583c3..863aa9dd28bb 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -56,6 +56,9 @@
- /* Query request timeout */
- #define QUERY_REQ_TIMEOUT 1500 /* 1.5 seconds */
- 
-+/* Advanced RPMB request timeout */
-+#define ADVANCED_RPMB_REQ_TIMEOUT  3000 /* 3 seconds */
-+
- /* Task management command timeout */
- #define TM_CMD_TIMEOUT	100 /* msecs */
- 
-@@ -2956,6 +2959,12 @@ ufshcd_dev_cmd_completion(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 		dev_err(hba->dev, "%s: Reject UPIU not fully implemented\n",
- 				__func__);
- 		break;
-+	case UPIU_TRANSACTION_RESPONSE:
-+		if (hba->dev_cmd.type != DEV_CMD_TYPE_RPMB) {
-+			err = -EINVAL;
-+			dev_err(hba->dev, "%s: unexpected response %x\n", __func__, resp);
-+		}
-+		break;
- 	default:
- 		err = -EINVAL;
- 		dev_err(hba->dev, "%s: Invalid device management cmd response: %x\n",
-@@ -6984,6 +6993,96 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 	return err;
- }
- 
-+/**
-+ * ufshcd_advanced_rpmb_req_handler - handle advanced RPMB request
-+ * @hba:	per adapter instance
-+ * @req_upiu:	upiu request
-+ * @rsp_upiu:	upiu reply
-+ * @req_ehs:	EHS field which contains Advanced RPMB Request Message
-+ * @rsp_ehs:	EHS field which returns Advanced RPMB Response Message
-+ * @sg_cnt:	The number of sg lists actually used
-+ * @sg_list:	Pointer to SG list when DATA IN/OUT UPIU is required in ARPMB operation
-+ * @dir:	DMA direction
-+ *
-+ * Returns zero on success, non-zero on failure
-+ */
-+int ufshcd_advanced_rpmb_req_handler(struct ufs_hba *hba, struct utp_upiu_req *req_upiu,
-+			 struct utp_upiu_req *rsp_upiu, struct ufs_ehs *req_ehs,
-+			 struct ufs_ehs *rsp_ehs, int sg_cnt, struct scatterlist *sg_list,
-+			 enum dma_data_direction dir)
-+{
-+	DECLARE_COMPLETION_ONSTACK(wait);
-+	const u32 tag = hba->reserved_slot;
-+	struct ufshcd_lrb *lrbp;
-+	int err = 0;
-+	u8 upiu_flags;
-+	u8 *ehs_data;
-+	u16 ehs_len;
-+
-+	/* Protects use of hba->reserved_slot. */
-+	ufshcd_hold(hba, false);
-+	mutex_lock(&hba->dev_cmd.lock);
-+	down_read(&hba->clk_scaling_lock);
-+
-+	lrbp = &hba->lrb[tag];
-+	WARN_ON(lrbp->cmd);
-+	lrbp->cmd = NULL;
-+	lrbp->task_tag = tag;
-+	lrbp->lun = UFS_UPIU_RPMB_WLUN;
-+
-+	lrbp->intr_cmd = true;
-+	ufshcd_prepare_lrbp_crypto(NULL, lrbp);
-+	hba->dev_cmd.type = DEV_CMD_TYPE_RPMB;
-+
-+	/* Advanced RPMB starts from UFS 4.0, so its command type is UTP_CMD_TYPE_UFS_STORAGE */
-+	lrbp->command_type = UTP_CMD_TYPE_UFS_STORAGE;
-+
-+	ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags, dir, 2);
-+
-+	/* update the task tag and LUN in the request upiu */
-+	req_upiu->header.dword_0 |= cpu_to_be32(upiu_flags << 16 | UFS_UPIU_RPMB_WLUN << 8 | tag);
-+
-+	/* copy the UPIU(contains CDB) request as it is */
-+	memcpy(lrbp->ucd_req_ptr, req_upiu, sizeof(*lrbp->ucd_req_ptr));
-+	/* Copy EHS, starting with byte32, immediately after the CDB package */
-+	memcpy(lrbp->ucd_req_ptr + 1, req_ehs, sizeof(*req_ehs));
-+
-+	if (dir != DMA_NONE && sg_list)
-+		ufshcd_sgl_to_prdt(hba, lrbp, sg_cnt, sg_list);
-+
-+	memset(lrbp->ucd_rsp_ptr, 0, sizeof(struct utp_upiu_rsp));
-+
-+	hba->dev_cmd.complete = &wait;
-+
-+	ufshcd_send_command(hba, tag);
-+
-+	err = ufshcd_wait_for_dev_cmd(hba, lrbp, ADVANCED_RPMB_REQ_TIMEOUT);
-+
-+	if (!err) {
-+		/* just copy the upiu response as it is */
-+		memcpy(rsp_upiu, lrbp->ucd_rsp_ptr, sizeof(*rsp_upiu));
-+		ehs_len = be32_to_cpu(lrbp->ucd_rsp_ptr->header.dword_2) >> 24;
-+		/*
-+		 * Since the bLength in EHS indicates the total size of the EHS Header and EHS Data
-+		 * in 32 Byte units, the value of the bLength Request/Response for Advanced RPMB
-+		 * Message is 02h
-+		 */
-+		if (ehs_len == 2 && rsp_ehs) {
-+			/*
-+			 * ucd_rsp_ptr points to a buffer with a length of 512 bytes
-+			 * (ALIGNED_UPIU_SIZE = 512), and the EHS data just starts from byte32
-+			 */
-+			ehs_data = (u8 *)lrbp->ucd_rsp_ptr + EHS_OFFSET_IN_RESPONSE;
-+			memcpy(rsp_ehs, ehs_data, ehs_len * 32);
-+		}
-+	}
-+
-+	up_read(&hba->clk_scaling_lock);
-+	mutex_unlock(&hba->dev_cmd.lock);
-+	ufshcd_release(hba);
-+	return err;
-+}
-+
- /**
-  * ufshcd_eh_device_reset_handler() - Reset a single logical unit.
-  * @cmd: SCSI command pointer
-diff --git a/include/uapi/scsi/scsi_bsg_ufs.h b/include/uapi/scsi/scsi_bsg_ufs.h
-index d55f2176dfd4..1d605aaf5d6f 100644
---- a/include/uapi/scsi/scsi_bsg_ufs.h
-+++ b/include/uapi/scsi/scsi_bsg_ufs.h
-@@ -14,10 +14,27 @@
-  */
- 
- #define UFS_CDB_SIZE	16
--#define UPIU_TRANSACTION_UIC_CMD 0x1F
- /* uic commands are 4DW long, per UFSHCI V2.1 paragraph 5.6.1 */
- #define UIC_CMD_SIZE (sizeof(__u32) * 4)
- 
-+enum ufs_bsg_msg_code {
-+	UPIU_TRANSACTION_UIC_CMD = 0x1F,
-+	UPIU_TRANSACTION_ARPMB_CMD,
-+};
-+
-+/* UFS RPMB Request Message Types */
-+enum ufs_rpmb_op_type {
-+	UFS_RPMB_WRITE_KEY		= 0x01,
-+	UFS_RPMB_READ_CNT		= 0x02,
-+	UFS_RPMB_WRITE			= 0x03,
-+	UFS_RPMB_READ			= 0x04,
-+	UFS_RPMB_READ_RESP		= 0x05,
-+	UFS_RPMB_SEC_CONF_WRITE		= 0x06,
-+	UFS_RPMB_SEC_CONF_READ		= 0x07,
-+	UFS_RPMB_PURGE_ENABLE		= 0x08,
-+	UFS_RPMB_PURGE_STATUS_READ	= 0x09,
-+};
-+
- /**
-  * struct utp_upiu_header - UPIU header structure
-  * @dword_0: UPIU header DW-0
-@@ -79,6 +96,23 @@ struct utp_upiu_req {
- 	};
- };
- 
-+struct ufs_arpmb_meta {
-+	__u16	req_resp_type;
-+	__u8	nonce[16];
-+	__u32	write_counter;
-+	__u16	addr_lun;
-+	__u16	block_count;
-+	__u16	result;
-+};
-+
-+struct ufs_ehs {
-+	__u8	length;
-+	__u8	ehs_type;
-+	__u16	ehssub_type;
-+	struct ufs_arpmb_meta meta;
-+	__u8	mac_key[32];
-+};
-+
- /* request (CDB) structure of the sg_io_v4 */
- struct ufs_bsg_request {
- 	__u32 msgcode;
-@@ -102,4 +136,14 @@ struct ufs_bsg_reply {
- 
- 	struct utp_upiu_req upiu_rsp;
- };
-+
-+struct ufs_rpmb_request {
-+	struct ufs_bsg_request bsg_request;
-+	struct ufs_ehs ehs_req;
-+};
-+
-+struct ufs_rpmb_reply {
-+	struct ufs_bsg_reply bsg_reply;
-+	struct ufs_ehs ehs_rsp;
-+};
- #endif /* UFS_BSG_H */
-diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h
-index 17e401df674c..0c112195b288 100644
---- a/include/ufs/ufs.h
-+++ b/include/ufs/ufs.h
-@@ -49,6 +49,11 @@
-  */
- #define UFS_WB_EXCEED_LIFETIME		0x0B
- 
-+/*
-+ * In UFS Spec, the Extra Header Segment (EHS) starts from byte 32 in UPIU request/response packet
-+ */
-+#define EHS_OFFSET_IN_RESPONSE 32
-+
- /* Well known logical unit id in LUN field of UPIU */
- enum {
- 	UFS_UPIU_REPORT_LUNS_WLUN	= 0x81,
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 5cf81dff60aa..c3dfa8084b5c 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -30,6 +30,7 @@ struct ufs_hba;
- enum dev_cmd_type {
- 	DEV_CMD_TYPE_NOP		= 0x0,
- 	DEV_CMD_TYPE_QUERY		= 0x1,
-+	DEV_CMD_TYPE_RPMB		= 0x2,
- };
- 
- enum ufs_event_type {
-@@ -1201,7 +1202,10 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 			     int msgcode,
- 			     u8 *desc_buff, int *buff_len,
- 			     enum query_opcode desc_op);
--
-+int ufshcd_advanced_rpmb_req_handler(struct ufs_hba *hba, struct utp_upiu_req *req_upiu,
-+				     struct utp_upiu_req *rsp_upiu, struct ufs_ehs *ehs_req,
-+				     struct ufs_ehs *ehs_rsp, int sg_cnt,
-+				     struct scatterlist *sg_list, enum dma_data_direction dir);
- int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
- int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
- int ufshcd_suspend_prepare(struct device *dev);
-diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
-index f525566a0864..af216296b86e 100644
---- a/include/ufs/ufshci.h
-+++ b/include/ufs/ufshci.h
-@@ -63,6 +63,7 @@ enum {
- enum {
- 	MASK_TRANSFER_REQUESTS_SLOTS		= 0x0000001F,
- 	MASK_TASK_MANAGEMENT_REQUEST_SLOTS	= 0x00070000,
-+	MASK_EHSLUTRD_SUPPORTED			= 0x00400000,
- 	MASK_AUTO_HIBERN8_SUPPORT		= 0x00800000,
- 	MASK_64_ADDRESSING_SUPPORT		= 0x01000000,
- 	MASK_OUT_OF_ORDER_DATA_DELIVERY_SUPPORT	= 0x02000000,
--- 
-2.25.1
+I noticed another thing.  I think the reason why the first allocation
+in this case caused a cntbt split is that Zorro's workload set
+sunit/swidth.  Therefore, due to align requirement, I assume it
+called xfs_alloc_fix_len() to fix up agbno and len.
 
+Actually I found our workload has the similar sunit/swidth setup and
+I am thinking about this these days.  One thing is that why we need
+freespace btree splits when consuming free blocks.
+
+Another thing is that considering we're near ENOSPC, and bno/cnt
+btrees has only a few records.  If we allocates without alignment,
+I also think bno/cnt btrees do no require splits so it will not
+consume extra space since the overall extents only decrease.
+
+Yet how about allocating with alignment? It seems that it can add
+another free extent in order to fulfill the alignment.  I'm not sure
+if it can cause some corner cases here.
+
+> 
+> Similarly, if we have enough free space records to split a free
+> space btree block, we have enough free space to refill the AGFL
+> multiple times and we don't have to reserve space for them.
+> 
+> IOWs, the allocation code has, historically, never had to care about
+> AGFL refilling when the AG is near ENOSPC as nothing will consume
+> AGFL blocks when the AG is near empty.
+> 
+> This is the design assumption that AG reservations broke. This is
+> why I'm asking you to look into taking blocks that are supposedly
+> reserved for the AGFL, because as reserved space is used, the
+> bno/cnt btrees will shrink and return those blocks to free space and
+> hence they are still available for reserved allocations to use as
+> the real physical ENOSPC condition approaches.
+
+Yeah, intuitively I also imagine like what you said.  However, does it
+have strictly monotonicity, especially with stripe alignment setup?
+
+> 
+> The more I look at this, the more I think overall answer to this
+> problem is to allow AGFL refilling to ignore AG reserves rather than
+> causing ENOSPC....
+
+Could you give more details how to fit this case?  Also we have a
+short talk last Wednesday (sorry that I had an urgent thing at that
+time).  You mentioned "the simple solution is something like
+min(ag reservation blocks, needed AGFL blocks) instead of accounting
+them separately", could you give an example for this case as well?
+
+
+Nevertheless, I wonder if `need` now can be fixed up as
+	need = xfs_alloc_min_freelist(mp, pag) * (1 + args->minleft);
+
+> 
+> ----
+> 
+> Regardless of the above, answers to the rest of you questions follow.
+> 
+> > Please help correct me if my understanding about your ask is wrong.
+> > 
+> > > 
+> > > How many blocks does a BMBT split need to allocate?
+> > 
+> > IMO, a full bmbt split can allocate btree level blocks at maximum,
+> > but if these block allocation cause bno/cnt btree splits, that
+> > needs more than such blocks.
+> 
+> And how many individual allocations does that require?
+
+ok, you're right, so args->minleft may be enough.
+
+> 
+> > So I think that's why AGFL is needed
+> > for XFS.  IOWs, that is to prepare enough blocks for bno/cnt splits
+> > to avoid cyclic dependency.
+> 
+> The AGFL is there to ensure any *one* space allocation succeeds.
+> 
+> > But I'm not sure if the current AGFL reservation works properly
+> > if multiple allocations must be succeeded in the same AG, see below..)
+> 
+> Right, it does not provide any guarantees across mutliple successive
+> allocations like an extent + BMBT split chain. That's what
+> args->minleft is supposed to provide.
+> 
+> However, it does provide the guarantee that when near ENOSPC,
+> bno/cnt splits and hence AGFL consumption will not occur, thereby
+> ensuring that if args->minleft is reserved correctly, operation
+> right up to ENOSPC will work correctly without AGFL reservations
+> because the AGFL will not be consumed.
+> 
+> Hence my comments above about the problem being the way AG
+> reservations moved ENOSPC from "AG physically empty" to "AG still
+> has thousands of free extents but remaining space unavailable to
+> user data allocation".
+
+Partially because of that, the main reason I think may be due to
+stripe alignment.
+
+> 
+> > > > > Regardless, I don't see anything wrong with the allocation setup -
+> > > > > it's telling the allocation code exactly what it needs for
+> > > > > subsequent BMBT block allocations to succeed (i.e. args->minleft).
+> > > > 
+> > > > In the long term, I think the main point is that args->minleft doesn't
+> > > > have the exact meaning.  I don't know how many blocks should be counted
+> > > > by args->minleft or other ways.
+> > > 
+> > > args->minleft has an *exact* meaning - that the AG must have that
+> > > many blocks left available for potential btree record insertion
+> > > allocations after the initial extent is allocated. For inode fork
+> > > allocations, the BMBT blocks required is defined by
+> > > xfs_bmapi_minleft(). For inode chunk extent allocation and inobt
+> > > record insertion, it is defined by the pre-calculated
+> > > igeo->inobt_maxlevels variable.
+> > > 
+> > > IOWs, this "postalloc" concept is redundant - minleft already
+> > > provides the maximum number of single block allocations that need to
+> > > have space reserved in the AG for the initial extent allocation to
+> > > succeed. i.e.  the allocation setup is already taking into account
+> > > blocks needed for extra allocations within the AG, but that's not
+> > > being handled correctly by the AG allocation code.
+> > 
+> > I don't think it's the case as I described in the patch commit message,
+> > if we go over the words at the top, the main point is
+> >  
+> >  In the first allocation, minleft = 1, the current allocator assumes
+> >  it can allocate an extent with 27 blocks (the remaining blocks are
+> >  18276 per-AG reservation, 6 for AGFL reservation, 1 for inode extents
+> >  -to-btree for the following allocation).
+> > 
+> >  But here in order to finish this allocation with 27 blocks, it splits
+> >  cntbt so that it takes another unexpected block from AGFL, and
+> >  that wasn't accounted in minleft (or with any other fields) before.
+> > 
+> >  I don't think it can be directly described by minleft because
+> >  such extra bno/cntbt reservation needs more knowledge of bno/cntbt
+> >  internals (such as current bno/cnt btree levels), so I don't think
+> >  it should belong to BMBT allocation code at least.
+> > 
+> >  So here I introduced another variable to describe the total number
+> >  of post-allocations, I think it's just enough to resolve the inode
+> >  extents-to-btree bno/cntbt reservation issue.
+> 
+> extents-to-btree is the degenerate case of a btree split. It's
+> moving the in-inode extent block to a single btree root block - it's
+> the same case as having a multi-level BMBT and splitting a single
+> leaf block during an xfs_btree_insert() call. Both require a second
+> discrete allocation to be made in the same transaction from the same
+> AG.
+> 
+> But if that xfs_btree_insert() call triggers a multi-level btree
+> split, we've now got more than 1 "post allocation" allocation being
+> done - there's one allocation for every level that needs to have a
+> block split. To handle this, we'd need to set up this args.postalloc
+> variable with the number of allocations a btree split might require.
+> 
+> What I'm trying to tell you is that args->minleft is already
+> configured with exactly this number of blocks/post-allocations that
+> the btree split might require, and hence allow the allocation code
+> to select an AG with the right amount of space needed before it
+> starts.
+
+Yeah, you are right.
+
+> 
+> 
+> > > On review, it is quite possible that args->minleft is not being
+> > > handled by the BMBT and inobt block allocation code correctly.
+> > > Shouldn't btree block allocation drop args->minleft by 1 for
+> > > each block that is allocated?
+> > 
+> > At least, in order to convert from inode extents-to-btree, we need
+> > another block for the following allocation, so minleft = 1 here.
+> > 
+> > 	if (ifp->if_format != XFS_DINODE_FMT_BTREE)
+> > 		return 1;
+> 
+> Yes, as I said above, that's the degenerate case where we only need
+> to allocate a root block and set the btree level to 1.
+> 
+> > So I guess what you meant is
+> > 	return be16_to_cpu(ifp->if_broot->bb_level) + 1; ?
+> > 
+> > I don't know why it has another 1 here,
+> 
+> It's a btree. What does a full height btree split do?
+> 
+> It adds a block to each existing level, and splits the root block
+> into two. Which means we need to increase the tree height by 1 and
+> allocate a new root block. IOWs, the number of allocations/blocks
+> needed by a full split is (current height + 1).
+
+Agreed, sorry for missing that point.
+
+> 
+> > yet even if we account an
+> > extra block here, I think it doesn't have some critical result
+> > since the worst case is that it just returns -ENOSPC in advance.
+> > 
+> > But in principle, most users use terabytes XFS, so I think such
+> > one extra block doesn't matter too much.  I will update this if
+> > such 1 is meaningless, but it doesn't actually contribute to the
+> > real shutdown issue.
+> 
+> I think you misunderstood what I was asking. Let's unroll the
+> extent allocation/BMBT record insert loop:
+> 
+> extent allocation
+>  args.minleft = bb_level + 1
+>  xfs_alloc_vextent(args)
+> bmbt record insert
+>   xfs_btree_insert()
+>     leaf split
+>       xfs_bmbt_alloc_block()
+>         args.minleft = ???
+>         xfs_alloc_vextent(args)
+>     level 1 node split
+>       xfs_bmbt_alloc_block()
+>         args.minleft = ???
+>         xfs_alloc_vextent(args)
+>     level 2 node split
+>       xfs_bmbt_alloc_block()
+>         args.minleft = ???
+>         xfs_alloc_vextent(args)
+>     ....
+>     root split
+>       xfs_bmbt_alloc_block()
+>         args.minleft = ???
+>         xfs_alloc_vextent(args)
+> 
+> A BMBT split results in a chain of individual allocations. What
+> should args.minleft be set to on each of these allocations, and
+> what context do we have to ensure it is set correctly? 
+> So the question I was asking was whether what we are doing with
+> args->minleft for each allocation in the chain is correct, and
+> whether they need modification if we have to take into account the
+> AGFL block refilling that may need to occur after each BMBT block
+> allocation?
+> 
+> Indeed, if we get the initial extent allocation reservation correct,
+> does minleft even matter for the rest of the allocations in the
+> chain?
+> 
+> Looking at xfs_bmbt_alloc_block(), it sets args.minleft = 0 if there
+> was a previous allocation in the transaction (i.e. args.fsbno !=
+> NULLFSBLOCK). It assumes that the original extent reservation set
+> args.minleft appropriately to reserve enough space for all
+> subsequent calls to xfs_bmbt_alloc_block() in this transaction to
+> succeed.
+> 
+> Hence, given the way it is implemented right now, all we need to do
+> is ensure that the initial allocation has all the space reservation
+> the entire operation may need and the rest is good, yes?
+> 
+> xfs_bmap_extents_to_btree() also sets args->minleft = 0, so as long
+> as the first allocation in the transaction has reserved enough
+> blocks in args->minleft it doesn't need any special help, either.
+> 
+> So, yes, you are right that avoiding ENOSPC when running multiple
+> allocations in a single transaction is all based on the initial
+> allocation ensuring there is enough space in the AG for all
+> subsequent allocations to succeed. But there's a lot more to it than
+> that....
+
+Yeah..
+
+> 
+> > > > > The problem here is that the internal allocation code is failing to
+> > > > > handle the corner case where space is just about gone correctly.
+> > > > > 
+> > > > > As I pointed out previously - we have a huge amount of reserve space
+> > > > > available in the AG here, so why not use some of the reserve space
+> > > > > to get out of this temporary deficit corner case? We can argue that
+> > > > > it's not really a deficit, either, because moving free blocks to the
+> > > > > free list still accounts them as unused and free, so could still
+> > > > > make up part of the unused reservation....
+> > > > > 
+> > > > > i.e. is the problem here simply that we don't allow AGFL blocks to
+> > > > > be considered part of the reserved free space?
+> > > > 
+> > > > I don't know how to simply reuse per-AG reservation blocks for this,
+> > > 
+> > > I don't know either, which is *why I asked the question*. i.e. I'm
+> > > asking for you to investigate a potential alternative solution that
+> > > challenges a design assumption this code makes. i.e. AGBNO and AGCNT
+> > > btree blocks are considered free space because when we are at ENOSPC
+> > > they are empty.
+> > > 
+> > > However, with this ag reservation code, we can be at ENOSPC when
+> > > there are still tens of thousands of free extents, and hence the
+> > > AGBNO and AGCNT btree blocks are used space, not free space. The
+> > > AGFL accounting is based on AGFL blocks being considered free space,
+> > > which matches the AG btree blocks being considered free space, and
+> > > so maybe the root of the problem here is the assumption that AG
+> > > btree blocks and AGFL blocks are accounted as free space rather than
+> > > part of this new "reserved space"....
+> > 
+> > I have strong feeling that the current per-AG reservation code (or
+> > AGFL reservation as in xfs_alloc_min_freelist() ) doesn't work
+> > properly for multiple allocations in the same AG in order to make
+> > sure such multiple allocations all succeed.
+> > 
+> > Also, a wilder question is that I'm not sure why such multiple
+> > allocations in oneshot _cannot_ be handled with a defer ops as
+> > some new log intent, so that we don't need to care about minleft
+> > messy anymore.
+> 
+> We do use intents and deferred ops for BMBT freeing and reflink
+> based insertion, but those only log changes to individual records in
+> the btree. They do not record internal btree shape changes at all.
+> Yes, we could convert normal extent allocation to use these intents
+> as well, but that doesn't solve the problem of chained allocations
+> within a single AG.
+> 
+> IOWs, the chain of allocations for a BMBT split I mention above
+> still exists for record level intents. To handle the btree split
+> case as a chain of intents involves a whole new level of complexity
+> and overhead in the btree code, and likely introduces more problems
+> at ENOSPC than it solves...
+
+My question was that if we convert some allocations into dfops, does
+inode extents-to-btree needs to be strictly allocated in this AG
+anymore? ... Does that tend to be a long-term plan?
+
+
+Sorry I'm not good at replying a long email, hopefully reflect what I'm
+thinking.
+
+Thanks,
+Gao Xiang
+
+> 
+> Cheers,
+> 
+> Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com
