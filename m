@@ -2,173 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC8A63175A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 00:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A40631761
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 00:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiKTXfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 18:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S229766AbiKTXiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 18:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiKTXfu (ORCPT
+        with ESMTP id S229755AbiKTXh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 18:35:50 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EDB2870B
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 15:35:46 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so7615699wma.1
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 15:35:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iuzx2Yj9BTVMbKCUWOJh6Sm9EMLl+t5LIqj46fDmcTs=;
-        b=ni6wGTrz4Gr4HPb044i1emFNaAgSyKqBHE554eA8hVZu0kbHRRqzR4r6KNoKuB/sTg
-         RBK3nE03uDe1ignrhry6gB5AnPU0alkHugHzTCCRJsZAYSgyhETPqTFULZt+s/2KV/iI
-         7twkkLsYcTvCPrFrx0Rbs3xWTTrP5ok47NuoD+btEC8/BT//SQXT/BTsrDaNM9xgvhi9
-         ILG2nfeASyG3Thd2t4EfrWLdrQFHBGvzKmDVhi1VEUrSyioIjvWNrcvGZRSgT0M5M8hH
-         R91cmsp0IF44d10EKJDmO1Mg3nyBIe77D4t9sWHFYNvDOGyzHruzNLQ93vrnoLg9dyBX
-         LeYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Iuzx2Yj9BTVMbKCUWOJh6Sm9EMLl+t5LIqj46fDmcTs=;
-        b=6PK9w30LEztmGX0RUFTqjoctJJUa/8GiOOHiTuBl0Z4ucneiy9dOrZH8Cptci/SjPj
-         xVqSvLbBLLbKoPZJU/0LynCDaFn++XTt2Bc5en2FvIoRuG+U6sZpX66CeZKEGDkV782o
-         XbxSfxQ4D9F4LZgDRC/DXZ/J2m+t8tktJonbQ4hzk2otkV6ifePj56lJsJj1BIltx7Xi
-         c3ZW9L7aM/2zVpO+piqLHQSlIb6HRPnr1vNkwY2IFSzqlkjxb9ZHrTy87o2SkHIHlGqB
-         VlkByrrf2f/TL1paJjruezvZSLNcdmM0bl3NAVpq2ssEowXN6AJr40XaRIPkfPXQbR3T
-         SX+Q==
-X-Gm-Message-State: ANoB5pmr/21uTlTmkdX89s/VphZY49LnNGKfVf47+ee+YjO+DPtnYHJQ
-        okWulmyGieQlRTVCafNmg1fxXw==
-X-Google-Smtp-Source: AA0mqf4vohM+8neL2KxqtPdegKCfGeaX/+wJ4+Oj772c++qkNldbpQMk0JpgjJ1YtFxnpyxkU0rALg==
-X-Received: by 2002:a05:600c:1da2:b0:3cf:147d:ad9a with SMTP id p34-20020a05600c1da200b003cf147dad9amr10471997wms.33.1668987345411;
-        Sun, 20 Nov 2022 15:35:45 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id bg28-20020a05600c3c9c00b003cfaae07f68sm18031771wmb.17.2022.11.20.15.35.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 15:35:44 -0800 (PST)
-Date:   Sun, 20 Nov 2022 23:35:43 +0000
-From:   Qais Yousef <qyousef@layalina.io>
+        Sun, 20 Nov 2022 18:37:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386C21EAF4
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 15:37:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB741B80BFE
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 23:37:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F6E6C433D7;
+        Sun, 20 Nov 2022 23:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668987473;
+        bh=k74DB+A/c6keA65rwx9w5GFDT0SH2f36UoEyh90pulc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=f0LZAX3sp3H4U+DM6EqQsDilBUGXHc8MhK83c/y3Ec/DypDdkEtg0nBg87RfP4fPi
+         XSEMjlI0j6beQ1UU2hUukkRti57ZnlhjetvWbGekP7HWcss73SDS5qVzoz0df+Flda
+         8HZIINJi+i8p3ZIXdDYrGrfNSxHzNDy/NxOG4mE3gSJNydl9o38d1YGZTkmEtD+ys0
+         2xb35cW6DFilkSVvVECYn5PO8yDTkFD7KcQONiCpTZkah3GipVdAFH/QmGWkxiGFg/
+         gLBJuzGSfZhEYgLYIYGIkwpYf2e5MEKKfbeDKnGloYnblxuKZcS8u724gyw/7P9CT+
+         mD7vRk9cSy+pQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 621F0E270C7;
+        Sun, 20 Nov 2022 23:37:53 +0000 (UTC)
+Subject: Re: [GIT PULL] tracing/probes: Fixes for 6.1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221120154645.63d5c899@rorschach.local.home>
+References: <20221120154645.63d5c899@rorschach.local.home>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221120154645.63d5c899@rorschach.local.home>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git trace-probes-v6.1
+X-PR-Tracked-Commit-Id: 40adaf51cb318131073d1ba8233d473cc105ecbf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c6c67bf9bc2714d9c2c2e7ecfbf29d912b8c4f17
+Message-Id: <166898747339.25585.16030540635168944340.pr-tracker-bot@kernel.org>
+Date:   Sun, 20 Nov 2022 23:37:53 +0000
 To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, peterz@infradead.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, ke.wang@unisoc.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/rt: Use cpu_active_mask to prevent
- rto_push_irq_work's dead loop
-Message-ID: <20221120233543.yerjypgym7laxe42@airbuntu>
-References: <20221114120453.3233-1-xuewen.yan@unisoc.com>
- <20221117170028.04fd7013@gandalf.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221117170028.04fd7013@gandalf.local.home>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Li Huafei <lihuafei1@huawei.com>,
+        Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Yi Yang <yiyang13@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/17/22 17:00, Steven Rostedt wrote:
-> On Mon, 14 Nov 2022 20:04:53 +0800
-> Xuewen Yan <xuewen.yan@unisoc.com> wrote:
-> 
-> > +++ b/kernel/sched/rt.c
-> > @@ -2219,6 +2219,7 @@ static int rto_next_cpu(struct root_domain *rd)
-> >  {
-> >  	int next;
-> >  	int cpu;
-> > +	struct cpumask tmp_cpumask;
-> 
-> If you have a machine with thousands of CPUs, this will likely kill the
-> stack.
-> 
-> >  
-> >  	/*
-> >  	 * When starting the IPI RT pushing, the rto_cpu is set to -1,
-> > @@ -2238,6 +2239,11 @@ static int rto_next_cpu(struct root_domain *rd)
-> >  		/* When rto_cpu is -1 this acts like cpumask_first() */
-> >  		cpu = cpumask_next(rd->rto_cpu, rd->rto_mask);
-> >  
-> > +		cpumask_and(&tmp_cpumask, rd->rto_mask, cpu_active_mask);
-> > +		if (rd->rto_cpu == -1 && cpumask_weight(&tmp_cpumask) == 1 &&
-> > +		    cpumask_test_cpu(smp_processor_id(), &tmp_cpumask))
-> > +			break;
-> > +
-> 
-> Kill the above.
-> 
-> >  		rd->rto_cpu = cpu;
-> >  
-> >  		if (cpu < nr_cpu_ids) {
-> 
-> Why not just add here:
-> 
-> 			if (!cpumask_test_cpu(cpu, cpu_active_mask))
-> 				continue;
-> 			return cpu;
-> 		}
-> 
-> ?
+The pull request you sent on Sun, 20 Nov 2022 15:46:45 -0500:
 
-Or this?
+> git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git trace-probes-v6.1
 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c6c67bf9bc2714d9c2c2e7ecfbf29d912b8c4f17
 
-	diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-	index ed2a47e4ddae..5073e06e34c3 100644
-	--- a/kernel/sched/rt.c
-	+++ b/kernel/sched/rt.c
-	@@ -2236,7 +2236,7 @@ static int rto_next_cpu(struct root_domain *rd)
-		for (;;) {
+Thank you!
 
-			/* When rto_cpu is -1 this acts like cpumask_first() */
-	-               cpu = cpumask_next(rd->rto_cpu, rd->rto_mask);
-	+               cpu = cpumask_next_and(rd->rto_cpu, rd->rto_mask, cpu_active_mask);
-
-			rd->rto_cpu = cpu;
-
-
-I think we might be circumventing the root cause though. It looks like that
-there are only 2 cpus online in the system and one of them going offline (cpu1)
-while the other is being overloaded (cpu0), ending in ping-ponging the tasks?
-
-If that's the case, it seems to me the rto state needs to be cleared for cpu0
-and stop attempting to push tasks. Which I'd assume it usually happens but
-there's a race that prevents it from realizing this.
-
-Maybe something like this would be better? Assuming I understood the problem
-correctly of course.
-
-
-	diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-	index ed2a47e4ddae..d80072cc2596 100644
-	--- a/kernel/sched/rt.c
-	+++ b/kernel/sched/rt.c
-	@@ -334,6 +334,10 @@ static inline void rt_set_overload(struct rq *rq)
-		if (!rq->online)
-			return;
-
-	+       /* Overload is meaningless if we shrank to become a UP system */
-	+       if (cpumask_weight(cpu_online_mask) == 1)
-	+               return;
-	+
-		cpumask_set_cpu(rq->cpu, rq->rd->rto_mask);
-		/*
-		 * Make sure the mask is visible before we set
-
-This could be working around the problem too, not sure. But the bug IMHO is
-that if we shrink to a UP system, the whole push-pull mechanism should retire
-temporarily. Which I assume this usually happens, but there's a race somewhere.
-
-
-Thanks
-
---
-Qais Yousef
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
