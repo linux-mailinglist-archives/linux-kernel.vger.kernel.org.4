@@ -2,155 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418C4631347
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 11:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DB8631348
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 11:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiKTKFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 05:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
+        id S229648AbiKTKLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 05:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiKTKFi (ORCPT
+        with ESMTP id S229462AbiKTKLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 05:05:38 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20F15E9D4
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 02:05:36 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id f3so8749831pgc.2
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 02:05:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U/Bc33roI0zaP9sSLDzodRArZVx0/t4o6T76+RrU4H0=;
-        b=ADqMPAA5ZVDwR9PpWXgLt+7nF9o55cUhfnp7ySzMXq/emBtxoJvGVLvuvbCSMZmMrs
-         jYDHaEnTMXtxH6nHXqO/EiiSbFGruY+c8syRhDEAGjbwIptDNlgQR+IEinYwQy5nkf9t
-         /p5UHmPtxVvsN0E/fwYHzbozJgo4lva238AuBv7iHI2KmxfE3nzQjj+/9ZgGSuS2Rrh1
-         ImVhB5NRYztV5GhlO6wsAVyr84V7tTnVGMyLXdD8XbDCdiNpzGgCNOx72vfBK23yYXZ9
-         761I/P6gmp3lgHm3dE/PQuIreK8yC8Y8K2SvUWk/sQZvD+2mc+V+pKDvYqT0V1IJ5nWj
-         W2Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U/Bc33roI0zaP9sSLDzodRArZVx0/t4o6T76+RrU4H0=;
-        b=2d3zWyX9RNjPez+13zl1kcikyXn+QH4Ax/iyXSRepmonl8eWSqlmYQMitDXrZYLqRE
-         QOOcmFolOunHlP8w4WZlVMkc1j4a+utW5oJnqdjUUYOkDOhF28mctPvjuDURo2KiC7tD
-         mqGfaVekwGkpSmeVf1A1x/fpmmKWcJ3IQTxArf9rNYKdRPisDa8agGN/Ll/J9D0pOYO2
-         sr1WkYUb8wU8NtFYXvNCUCO54Y4tQrCs5Cuwcv+JROqA1BHsq8Re4+Mp//FrjtL9xIx4
-         h/iMCscYoAj0RdQ9k2YO5QSvnURHYyWS0HT/G16ZS46ByG/L8UQs3liP1MJYjpTu95jO
-         TF1Q==
-X-Gm-Message-State: ANoB5pmIDf/kTNMlcpE5pnYKJ6bwc1WSwOiKq0MMFa9WyRx2q8ws625R
-        R2Bsb3BaLA9HHn1q8l7zOHc=
-X-Google-Smtp-Source: AA0mqf4TDU/lhiFMzadOM8ogPB1ww30eKR2t74wnz/8nLfGzsB3NZSyCtiwdXRb76OFZv/31gp4ChQ==
-X-Received: by 2002:a63:5343:0:b0:452:8774:d5ab with SMTP id t3-20020a635343000000b004528774d5abmr3109585pgl.74.1668938736239;
-        Sun, 20 Nov 2022 02:05:36 -0800 (PST)
-Received: from [198.18.0.1] ([20.78.222.52])
-        by smtp.gmail.com with ESMTPSA id p29-20020aa79e9d000000b005625ef68eecsm6424358pfq.31.2022.11.20.02.05.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Nov 2022 02:05:35 -0800 (PST)
-Message-ID: <a62fcd23-068d-38f0-f426-d2511e23ed73@gmail.com>
-Date:   Sun, 20 Nov 2022 18:05:20 +0800
+        Sun, 20 Nov 2022 05:11:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25AF78D67
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 02:11:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4911AB80123
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 10:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 387A7C433C1;
+        Sun, 20 Nov 2022 10:11:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668939075;
+        bh=QTDu4fLb9twOkqLiSjSp5OTaro/DCdN7tjTIlLKBosc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U/BTk09XUWCG08xPAg3hhWPph8uBDYe7Nf/RcI1+eSb0IPp6BEYD4b8bc6HIyco/M
+         rZL6D8ewyJqOER+zjXn7RrsFeBKyWUErX9eeUWIWqWjN0PkhvS60fAHSDoyktbY2PD
+         PuaFvIa33GFjkuEXojsVugjQKbNUz9yQbJM56kUhHLfDb8U3Qe/l3420lEbqOatZUN
+         9kCKfbb1BihoPLcS/26PQyWYcfkKi+/FC3EJmiz75njyr08Ekf4d7dVU1j1rkg3O9B
+         8CJjSkLId3xqActWV2EK+QEJ63f/volwbvjhYOP+uBsdTMXGcm55wL0S0pMi8O8q2m
+         2cKbOLyhrAppA==
+From:   guoren@kernel.org
+To:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, mhiramat@kernel.org, changbin.du@intel.com,
+        zong.li@sifive.com, rostedt@goodmis.org, boqun.feng@gmail.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>,
+        Guo Ren <guoren@kernel.org>
+Subject: [PATCH V2] riscv: patch: Fixup lockdep warning in stop_machine
+Date:   Sun, 20 Nov 2022 05:10:49 -0500
+Message-Id: <20221120101049.2078117-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] staging: android: ashmem: remove usage of list iterator
- after the loop body
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20220331213934.866804-1-jakobkoschel@gmail.com>
-From:   IFsuse <ifsuse14@gmail.com>
-In-Reply-To: <20220331213934.866804-1-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Changbin Du <changbin.du@gmail.com>
 
-在 2022/4/1 上午5:39, Jakob Koschel 写道:
-> In preparation to limit the scope of a list iterator to the list
-> traversal loop, use a dedicated pointer to point to the found element
-> [1].
->
-> Before, the code implicitly used the head when no element was found
-> when using &pos->list. Since the new variable is only set if an
-> element was found, the head needs to be used explicitly if the
-> variable is NULL.
->
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->   drivers/staging/android/ashmem.c | 21 ++++++++++++---------
->   1 file changed, 12 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/staging/android/ashmem.c b/drivers/staging/android/ashmem.c
-> index ddbde3f8430e..a1e245827cf6 100644
-> --- a/drivers/staging/android/ashmem.c
-> +++ b/drivers/staging/android/ashmem.c
-> @@ -703,30 +703,33 @@ static int ashmem_pin(struct ashmem_area *asma, size_t pgstart, size_t pgend,
->   static int ashmem_unpin(struct ashmem_area *asma, size_t pgstart, size_t pgend,
->   			struct ashmem_range **new_range)
->   {
-> -	struct ashmem_range *range, *next;
-> +	struct ashmem_range *range = NULL, *iter, *next;
->   	unsigned int purged = ASHMEM_NOT_PURGED;
->   
->   restart:
-> -	list_for_each_entry_safe(range, next, &asma->unpinned_list, unpinned) {
-> +	list_for_each_entry_safe(iter, next, &asma->unpinned_list, unpinned) {
->   		/* short circuit: this is our insertion point */
-> -		if (range_before_page(range, pgstart))
-> +		if (range_before_page(iter, pgstart)) {
-> +			range = iter;
->   			break;
-> +		}
->   
->   		/*
->   		 * The user can ask us to unpin pages that are already entirely
->   		 * or partially pinned. We handle those two cases here.
->   		 */
-> -		if (page_range_subsumed_by_range(range, pgstart, pgend))
-> +		if (page_range_subsumed_by_range(iter, pgstart, pgend))
->   			return 0;
-> -		if (page_range_in_range(range, pgstart, pgend)) {
-> -			pgstart = min(range->pgstart, pgstart);
-> -			pgend = max(range->pgend, pgend);
-> -			purged |= range->purged;
-> -			range_del(range);
-> +		if (page_range_in_range(iter, pgstart, pgend)) {
-> +			pgstart = min(iter->pgstart, pgstart);
-> +			pgend = max(iter->pgend, pgend);
-> +			purged |= iter->purged;
-> +			range_del(iter);
->   			goto restart;
->   		}
->   	}
->   
-> +	range = list_prepare_entry(range, &asma->unpinned_list, unpinned);
->   	range_alloc(asma, range, purged, pgstart, pgend, new_range);
->   	return 0;
->   }
->
-> base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
+The task of ftrace_arch_code_modify(_post)_prepare() caller is
+stop_machine, whose caller and work thread are different tasks. The
+lockdep checker needs the same task context, or it's wrong. That means
+it's a bug here to use lockdep_assert_held because we don't guarantee
+the same task context.
+
+kernel/locking/lockdep.c:
+int __lock_is_held(const struct lockdep_map *lock, int read)
+{
+        struct task_struct *curr = current;
+        int i;
+
+        for (i = 0; i < curr->lockdep_depth; i++) {
+			^^^^^^^^^^^^^^^^^^^
+                struct held_lock *hlock = curr->held_locks + i;
+					  ^^^^^^^^^^^^^^^^
+                if (match_held_lock(hlock, lock)) {
+                        if (read == -1 || !!hlock->read == read)
+                                return LOCK_STATE_HELD;
+
+The __lock_is_held depends on current held_locks records; if
+stop_machine makes the checker runing on another task, that's wrong.
+
+Here is the log:
+[   15.761523] ------------[ cut here ]------------
+[   15.762125] WARNING: CPU: 0 PID: 15 at arch/riscv/kernel/patch.c:63 patch_insn_write+0x72/0x364
+[   15.763258] Modules linked in:
+[   15.764154] CPU: 0 PID: 15 Comm: migration/0 Not tainted 6.1.0-rc1-00014-g66924be85884-dirty #377
+[   15.765339] Hardware name: riscv-virtio,qemu (DT)
+[   15.765985] Stopper: multi_cpu_stop+0x0/0x192 <- stop_cpus.constprop.0+0x90/0xe2
+[   15.766711] epc : patch_insn_write+0x72/0x364
+[   15.767011]  ra : patch_insn_write+0x70/0x364
+[   15.767276] epc : ffffffff8000721e ra : ffffffff8000721c sp : ff2000000067bca0
+[   15.767622]  gp : ffffffff81603f90 tp : ff60000002432a00 t0 : 7300000000000000
+[   15.767919]  t1 : 0000000000000000 t2 : 73695f6b636f6c5f s0 : ff2000000067bcf0
+[   15.768238]  s1 : 0000000000000008 a0 : 0000000000000000 a1 : 0000000000000000
+[   15.768537]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+[   15.768837]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
+[   15.769139]  s2 : ffffffff80009faa s3 : ff2000000067bd10 s4 : ffffffffffffffff
+[   15.769447]  s5 : 0000000000000001 s6 : 0000000000000001 s7 : 0000000000000003
+[   15.769740]  s8 : 0000000000000002 s9 : 0000000000000004 s10: 0000000000000003
+[   15.770027]  s11: 0000000000000002 t3 : 0000000000000000 t4 : ffffffff819af097
+[   15.770323]  t5 : ffffffff819af098 t6 : ff2000000067ba28
+[   15.770574] status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
+[   15.771102] [<ffffffff80007520>] patch_text_nosync+0x10/0x3a
+[   15.771421] [<ffffffff80009c66>] ftrace_update_ftrace_func+0x74/0x10a
+[   15.771704] [<ffffffff800fa17e>] ftrace_modify_all_code+0xb0/0x16c
+[   15.771958] [<ffffffff800fa24c>] __ftrace_modify_code+0x12/0x1c
+[   15.772196] [<ffffffff800e110e>] multi_cpu_stop+0x14a/0x192
+[   15.772454] [<ffffffff800e0a34>] cpu_stopper_thread+0x96/0x14c
+[   15.772699] [<ffffffff8003f4ea>] smpboot_thread_fn+0xf8/0x1cc
+[   15.772945] [<ffffffff8003ac9c>] kthread+0xe2/0xf8
+[   15.773160] [<ffffffff80003e98>] ret_from_exception+0x0/0x14
+[   15.773471] ---[ end trace 0000000000000000 ]---
+
+Fixes: 0ff7c3b33127 ("riscv: Use text_mutex instead of patch_lock")
+Cc: Changbin Du <changbin.du@gmail.com>
+Co-developed-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Zong Li <zong.li@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+---
+Changes in v2:
+ - Rewrite commit log with lockdep explanation [Guo Ren]
+ - Rebase on v6.1 [Guo Ren]
+
+v1:
+https://lore.kernel.org/linux-riscv/20210417023532.354714-1-changbin.du@gmail.com/
+---
+ arch/riscv/kernel/patch.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+index 765004b60513..8619706f8dfd 100644
+--- a/arch/riscv/kernel/patch.c
++++ b/arch/riscv/kernel/patch.c
+@@ -55,13 +55,6 @@ static int patch_insn_write(void *addr, const void *insn, size_t len)
+ 	bool across_pages = (((uintptr_t) addr & ~PAGE_MASK) + len) > PAGE_SIZE;
+ 	int ret;
+ 
+-	/*
+-	 * Before reaching here, it was expected to lock the text_mutex
+-	 * already, so we don't need to give another lock here and could
+-	 * ensure that it was safe between each cores.
+-	 */
+-	lockdep_assert_held(&text_mutex);
+-
+ 	if (across_pages)
+ 		patch_map(addr + len, FIX_TEXT_POKE1);
+ 
+-- 
+2.36.1
+
