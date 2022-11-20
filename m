@@ -2,152 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D1663122F
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 02:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A7D63124A
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 03:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKTBvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Nov 2022 20:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S229546AbiKTCW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Nov 2022 21:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKTBvH (ORCPT
+        with ESMTP id S229441AbiKTCW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Nov 2022 20:51:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38CFB8FAD;
-        Sat, 19 Nov 2022 17:51:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C6F8B801BA;
-        Sun, 20 Nov 2022 01:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CA0C433D6;
-        Sun, 20 Nov 2022 01:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668909063;
-        bh=El15VWDdgksRCN/WPGVj5AEcvb7V7Y1dygEuy92nPcU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=buOop9cfhLH6l9zCdRG66qwWw2Kzuf9uGT+iez3n57OnbkfwLgV2jc/fH++Xuxqj9
-         1BKpI8Y1N4nlLq2i3xVxW5vpZKJWdw9U5fZQoy6ZgNjlWdGcUUSmHN1j94Ftgo7V55
-         DEXt+eIYjkIZcWUFgSmFLvIfDGfT4L7WWC+Y6fb0ceLEiFdewiwOmElzlLdlheDAsw
-         OYmgnFTbOwsg7jFTuiTiXR8ADYgzcEOQYuWcHsp686leUKGMV1Jmyi3APulxhOZupc
-         +Ox1AZMEjw6kuTBJM/YWAfcQiYCYb1Je/bH1n7fZAOdOxuOGmfiJdGZ3Aim3AAjPYB
-         8eF8rXVlnMExg==
-Date:   Sat, 19 Nov 2022 17:51:01 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>
-Subject: Re: [PATCH v5 2/3] random: introduce generic vDSO getrandom()
- implementation
-Message-ID: <Y3mIBTzgqTv/ArDG@sol.localdomain>
-References: <20221119120929.2963813-1-Jason@zx2c4.com>
- <20221119120929.2963813-3-Jason@zx2c4.com>
- <Y3liVEdYByF2gZZU@sol.localdomain>
- <Y3l6ocn1dTN0+1GK@zx2c4.com>
+        Sat, 19 Nov 2022 21:22:57 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FE811808
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 18:22:54 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id y4so7760101plb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Nov 2022 18:22:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jAYxavzBh7dTg5qYVFFIARc9JdCSkYiV8sYDq21yJgo=;
+        b=U5rYp7ntQpJWnHWauDEUuWONMjpOBFNsgN77WM1RfleTF+7IslK3H4UjSv2EdYDDmE
+         LBaYHjhvAe2uWpZpYROJhVq9Wpm1qZ+MP08wn8uO6hhaKtk80tDN4rOD7wH2ZD4ndNFx
+         jLJ+Ump1QITJ2gIj8adA0qMz+VkCjcO700LI1DMvFjan6Odb5LEG5I6Jw+YZyXT2YvNd
+         qBLkHZAMlbn+xkhfBrZX/aG3/cA/x9h9nf9Ts3vg/G426Gof6/d0uy0KS5Dun+5MuD1M
+         UM/B6xw9BB4BZ6+cRlgdQKgZLgGwA0oNNoRedYm93pRBHp7++Rby1AQfThWs27/Fhbnn
+         Kr8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jAYxavzBh7dTg5qYVFFIARc9JdCSkYiV8sYDq21yJgo=;
+        b=6GPG9IR3euatLfUZoFPmrqruzkIBnE4nLdp+mX4jeQXqyQt/fBVNdtNBcTbWl9p5x8
+         D/Fe/tNDwxv4WjgydbMp0RvPk50NKQi4dr9dg7xkH9K7IfrGKxZ0aSSkllY083wJ8YZ6
+         HEb5wHS1U+86iPQHDQJZKBRgz6nGPeR7ojaflYtbE+xpogdwb3hrKteSxhJBFPUP2ACP
+         oYSGsBdR6+jxIpx4tlJ2DNEfs4rHf1lRHCpf+5m5tYGYe0/+MzpyUmtfX/orOlYZx0bI
+         tc/q9YDfxyxJ0Wa7m2kNHKSyMrN0nAKAHubPsfWkkouBPUVX7xZNmrE+fNv5gKvdpTJz
+         TrUA==
+X-Gm-Message-State: ANoB5pla9Oi7Dh65EA7O2T4kkPn0Wwo8wVRgQaTZUtVyxlfTOOAcRmPD
+        5Z6PYeT2xgZaNT6rOf1hD4UjWQ==
+X-Google-Smtp-Source: AA0mqf6LvDxsMedfgFPG8RHNwqB/bLf7x6CJ3Z6AtXA/xznfEkQPbXcXYtyRr/fnQRt9EsZBl/Z+3A==
+X-Received: by 2002:a17:90a:73c2:b0:200:a7b4:6511 with SMTP id n2-20020a17090a73c200b00200a7b46511mr14185138pjk.101.1668910973557;
+        Sat, 19 Nov 2022 18:22:53 -0800 (PST)
+Received: from ?IPV6:2409:8a28:e64:1940:9c00:a387:b0ad:7a03? ([2409:8a28:e64:1940:9c00:a387:b0ad:7a03])
+        by smtp.gmail.com with ESMTPSA id x18-20020a17090300d200b00186b138706fsm6477954plc.13.2022.11.19.18.22.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Nov 2022 18:22:52 -0800 (PST)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+X-Google-Original-From: Chengming Zhou <chengming.zhou@linux.dev>
+Message-ID: <094299a3-f039-04c1-d749-2bea0bc14246@linux.dev>
+Date:   Sun, 20 Nov 2022 10:22:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3l6ocn1dTN0+1GK@zx2c4.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v3] sched: async unthrottling for cfs bandwidth
+Content-Language: en-US
+To:     Josh Don <joshdon@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>
+References: <20221117005418.3499691-1-joshdon@google.com>
+ <Y3d+1a9AEnWaxFwq@hirez.programming.kicks-ass.net>
+ <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
+In-Reply-To: <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 01:53:53AM +0100, Jason A. Donenfeld wrote:
-> Hi Eric,
+On 2022/11/19 03:25, Josh Don wrote:
+> On Fri, Nov 18, 2022 at 4:47 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>>
+>> preempt_disable() -- through rq->lock -- also holds off rcu. Strictly
+>> speaking this here is superfluous. But if you want it as an annotation,
+>> that's fine I suppose.
 > 
-> On Sat, Nov 19, 2022 at 03:10:12PM -0800, Eric Biggers wrote:
-> > > +	if (IS_ENABLED(CONFIG_HAVE_VDSO_GETRANDOM))
-> > > +		smp_store_release(&_vdso_rng_data.generation, next_gen + 1);
-> > 
-> > Is the purpose of the smp_store_release() here to order the writes of
-> > base_crng.generation and _vdso_rng_data.generation?  It could use a comment.
-> > 
-> > > +		if (IS_ENABLED(CONFIG_HAVE_VDSO_GETRANDOM))
-> > > +			smp_store_release(&_vdso_rng_data.is_ready, true);
-> > 
-> > Similarly, is the purpose of this smp_store_release() to order the writes to the
-> > the generation counters and is_ready?  It could use a comment.
+> Yep, I purely added this as extra annotation for future readers.
 > 
-> Yes, I guess so. Actually this comes from an unexplored IRC comment from
-> Andy back in July:
+>> Ideally we'd first queue all the remotes and then process local, but
+>> given how all this is organized that doesn't seem trivial to arrange.
+>>
+>> Maybe have this function return false when local and save that cfs_rq in
+>> a local var to process again later, dunno, that might turn messy.
 > 
-> 2022-07-29 21:21:56 <amluto> zx2c4: WRITE_ONCE(_vdso_rng_data.generation, next_gen + 1);
-> 2022-07-29 21:22:23 <amluto> For x86 it shouldn’t matter much. For portability, smp_store_release
+> Maybe something like this? Apologies for inline diff formatting.
 > 
-> Though maybe that doesn't actually matter much? When the userspace CPU
-> learns about a change to vdso_rng_data, it's only course of action is
-> make a syscall to getrandom(), anyway, and those paths should be
-> consistent with themselves, thanks to the same locking and
-> synchronization there's always been there. So maybe I actually should
-> move back to WRITE_ONCE() here? Hm?
-
-Well, sys_getrandom() will just do:
-
-	if (unlikely(crng->generation != READ_ONCE(base_crng.generation)))
-
-So I think you do need ordering between base_crng.generation and
-_vdso_rng_data.generation.  If _vdso_rng_data.generation is changed, the change
-in base_crng.generation needs to be visible too.
-
-> > One question I have is about forking.  So, when a thread calls fork(), in the
-> > child the kernel automatically replaces all vgetrandom_state pages with zeroed
-> > pages (due to MADV_WIPEONFORK).  If the child calls __cvdso_getrandom_data()
-> > afterwards, it sees the zeroed state.  But that's indistinguishable from the
-> > state at the very beginning, after sys_vgetrandom_alloc() was just called,
-> > right?  So as long as this code handles initializing the state at the beginning,
-> > then I'd think it would naturally handle fork() as well.
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 012ec9d03811..100dae6023da 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -5520,12 +5520,15 @@ static bool distribute_cfs_runtime(struct
+> cfs_bandwidth *cfs_b)
+>         struct cfs_rq *cfs_rq;
+>         u64 runtime, remaining = 1;
+>         bool throttled = false;
+> +       int this_cpu = smp_processor_id();
+> +       struct cfs_rq *local_unthrottle = NULL;
+> +       struct rq *rq;
+> +       struct rq_flags rf;
 > 
-> Right, for this simple fork() case, it works fine. There are other cases
-> though that are trickier...
+>         rcu_read_lock();
+>         list_for_each_entry_rcu(cfs_rq, &cfs_b->throttled_cfs_rq,
+>                                 throttled_list) {
+> -               struct rq *rq = rq_of(cfs_rq);
+> -               struct rq_flags rf;
+> +               rq = rq_of(cfs_rq);
 > 
-> > However, it seems you have something a bit more subtle in mind, where the thread
-> > calls fork() *while* it's in the middle of __cvdso_getrandom_data().  I guess
-> > you are thinking of the case where a signal is sent to the thread while it's
-> > executing __cvdso_getrandom_data(), and then the signal handler calls fork()?
-> > Note that it doesn't matter if a different thread in the *process* calls fork().
-> > 
-> > If it's possible for the thread to fork() (and hence for the vgetrandom_state to
-> > be zeroed) at absolutely any time, it probably would be a good idea to mark that
-> > whole struct as volatile.
+>                 if (!remaining) {
+>                         throttled = true;
+> @@ -5556,14 +5559,36 @@ static bool distribute_cfs_runtime(struct
+> cfs_bandwidth *cfs_b)
+>                 cfs_rq->runtime_remaining += runtime;
 > 
-> Actually, this isn't something that matters, I don't think. If
-> state->key_batch is zeroed, the result will be wrong, but the function
-> logic will be fine. If state->pos is zeroed, it'll write to the
-> beginning of the batch, which might be wrong, but the function logic
-> will still be fine. That is, in both of these cases, even if the
-> calculation is wrong, there's no memory corruption or anything. So then,
-> the remaining member is state->generation. If this is zeroed, then it's
-> actually something we detect with that READ_ONCE()! And in this case,
-> it's a sign that something is off -- we forked -- and so we should start
-> over from the beginning. So I don't think there's a reason to mark the
-> whole struct as volatile. The one we care about is state->generation,
-> and for that we READ_ONCE() it at the place that matters.
+>                 /* we check whether we're throttled above */
+> -               if (cfs_rq->runtime_remaining > 0)
+> -                       unthrottle_cfs_rq_async(cfs_rq);
+> +               if (cfs_rq->runtime_remaining > 0) {
+> +                       if (cpu_of(rq) != this_cpu ||
+> +                           SCHED_WARN_ON(local_unthrottle)) {
+> +                               unthrottle_cfs_rq_async(cfs_rq);
+> +                       } else {
+> +                               local_unthrottle = cfs_rq;
+> +                       }
+> +               } else {
+> +                       throttled = true;
+> +               }
 
-It's undefined behavior for C code to be working on values that can be mutated
-underneath it, though, unless they are volatile.  Granted, people still do this
-all the time, but I'd hope we can be a bit more careful here...
+Hello,
 
-> There's actually a different scenario, though, that I'm concerned about,
-> and this is the case in which a multithreaded program forks in the
-> middle of one of its threads running this. Indeed, only the calling
-> thread will carry forward into the child process, but all the memory is
-> still left around from any concurrent threads in the middle of
-> vgetrandom(). And if they're in the middle of a vgetrandom() call, that
-> means they haven't yet done erasure and cleaned up the stack to prevent
-> their state from leaking, and so forward secrecy is potentially lost,
-> since the child process now has some state from the parent.
+I don't get the point why local unthrottle is put after all the remote cpus,
+since this list is FIFO? (earliest throttled cfs_rq is at the head)
 
-That is a separate problem though, right?  It does *not* mean that the
-vgetrandom_state can be zeroed out from underneath __cvdso_getrandom_data().
+Should we distribute runtime in the FIFO order?
 
-- Eric
+Thanks.
+
+> 
+>  next:
+>                 rq_unlock_irqrestore(rq, &rf);
+>         }
+>         rcu_read_unlock();
+> 
+> +       /*
+> +        * We prefer to stage the async unthrottles of all the remote cpus
+> +        * before we do the inline unthrottle locally. Note that
+> +        * unthrottle_cfs_rq_async() on the local cpu is actually synchronous,
+> +        * but it includes extra WARNs to make sure the cfs_rq really is
+> +        * still throttled.
+> +        */
+> +       if (local_unthrottle) {
+> +               rq = cpu_rq(this_cpu);
+> +               rq_lock_irqsave(rq, &rf);
+> +               unthrottle_cfs_rq_async(local_unthrottle);
+> +               rq_unlock_irqrestore(rq, &rf);
+> +       }
+> +
+>         return throttled;
+>  }
+> 
+> Note that one change we definitely want is the extra setting of
+> throttled = true in the case that cfs_rq->runtime_remaining <= 0, to
+> catch the case where we run out of runtime to distribute on the last
+> entity in the list.
+> 
+>>> +
+>>> +     /* Already enqueued */
+>>> +     if (SCHED_WARN_ON(!list_empty(&cfs_rq->throttled_csd_list)))
+>>> +             return;
+>>> +
+>>> +     list_add_tail(&cfs_rq->throttled_csd_list, &rq->cfsb_csd_list);
+>>> +
+>>> +     smp_call_function_single_async(cpu_of(rq), &rq->cfsb_csd);
+>>
+>> Hurmph.. so I was expecting something like:
+>>
+>>         first = list_empty(&rq->cfsb_csd_list);
+>>         list_add_tail(&cfs_rq->throttled_csd_list, &rq->cfsb_csd_list);
+>>         if (first)
+>>                 smp_call_function_single_async(cpu_of(rq), &rq->cfsb_csd);
+>>
+>> But I suppose I'm remembering the 'old' version. I don't think it is
+>> broken as written. There's a very narrow window where you'll end up
+>> sending a second IPI for naught, but meh.
+> 
+> The CSD doesn't get  unlocked until right before we call the func().
+> But you're right that that's a (very) narrow window for an  extra IPI.
+> Please feel free to modify the patch with that diff if you like.
+> 
+>>
+>>> +}
+>>
+>> Let me go queue this thing, we can always improve upon matters later.
+> 
+> Thanks! Please add at least the extra assignment of 'throttled = true'
+> from the diff above, but feel free to squash both the diffs if it
+> makes sense to you.
