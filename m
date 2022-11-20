@@ -2,171 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7726315A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 19:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 149266315A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 19:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiKTS0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 13:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
+        id S229735AbiKTSeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 13:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKTS0O (ORCPT
+        with ESMTP id S229558AbiKTSeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 13:26:14 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9C8C10
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 10:26:13 -0800 (PST)
-Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1owp19-0007X4-Ut; Sun, 20 Nov 2022 19:26:12 +0100
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2022-11-20]
-Date:   Sun, 20 Nov 2022 18:26:11 +0000
-Message-Id: <166896848178.941482.1410650446316360950@leemhuis.info>
-X-Mailer: git-send-email 2.38.1
-Content-Type: text/plain; charset="utf-8"
+        Sun, 20 Nov 2022 13:34:05 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C87310AD
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 10:34:04 -0800 (PST)
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com [209.85.219.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 859523F535
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 18:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668969240;
+        bh=dG5PIPBE2GHp36S+UZp6jaADUVR1TUqcHiS7ewQr4PU=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=OOfW4X9WAmhzquOYL/9Ch6Q+sF4hCdYRNArwmgM2RIMOvgG+sI4OWprzSErPc4X0u
+         08ug1l9c6FkDZ3xVTMTVSebjPCQxVfJ0nQeDWjq2Uh/6E89TxEwq+Ys0E+lroMoQw6
+         v8BSHZ+NzM2xv+Zcorlir28JYk6WihWTs4bxEawSu0HXgPA0Q8xHb5hdp2ETk2C8RR
+         oc+MNRlOiTL4GkbY37xA0ADibOjHSB4LVihLrNN7EZJxOtpwRUc9TVvb/eA12IdXOR
+         6MJoxkI1rP2QH4mAg14QMdsO/mLkZNUvGz2tptfvMqqFT86f1txAxDy2F9YwqYd2rr
+         pI82xTBby17xw==
+Received: by mail-yb1-f200.google.com with SMTP id f126-20020a255184000000b006cb2aebd124so9228286ybb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 10:34:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dG5PIPBE2GHp36S+UZp6jaADUVR1TUqcHiS7ewQr4PU=;
+        b=fDW2Qdt4lOSouvgtS8jKTTTlbOvw6J8+o9ZtqUOt2yC6PH5wsOX824XhZpiChs7DTh
+         OWpbKEwciGp/MTmeKQTd4zNWb0lck0J8iZuY+su/4HBF6C9qyIkexd0Wt9Ne8F6HOkMd
+         7mycGcHKbwe8bR6nAc+cilGDJ8rpzXrMdoAg/kXsDXDyud01b4UlMZuEohxDlkIEe6w6
+         qf7fO5Xug+SsBjA5ZFHTbuA3qsNmF95M6x9+73AJDaqo53WitXkPZRYE8mpUHH8S4zZ4
+         7vPKIHDVAFACSrUwzW9kGZSeiAz1PXKbGvakqJlpG75uLAQBMeH6jrMkYjH85H0ftOH6
+         V7GQ==
+X-Gm-Message-State: ANoB5pk9vVp0Tivy1IMMGunxFwqlwdSTO+/RETSWTL0CCOTA/liBeGRE
+        ercdtz25q5UrCMXYZ/rtXkvrYoV8zwx7wB9nJJ4+QWH4EFFEfJQZ+no4r9ZUaKhmq4JfvoRtJaP
+        O2EfdhllIWj2BdAmA23BtNQJi2ef7uJeymAc1LuwO9CUxdOvilRnVUMOeAA==
+X-Received: by 2002:a25:ce45:0:b0:6de:39c1:9cb3 with SMTP id x66-20020a25ce45000000b006de39c19cb3mr4557856ybe.469.1668969238857;
+        Sun, 20 Nov 2022 10:33:58 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7D5wi+VzurwIIfkrVA4oYQhDY3qKyG8JzAj9UB/Ym70XQ6dHirKxuyiYefeUUYc4HmKc2qyRnz8/hamiUIt4E=
+X-Received: by 2002:a25:ce45:0:b0:6de:39c1:9cb3 with SMTP id
+ x66-20020a25ce45000000b006de39c19cb3mr4557849ybe.469.1668969238637; Sun, 20
+ Nov 2022 10:33:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668968773;22bd4c08;
-X-HE-SMSGID: 1owp19-0007X4-Ut
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221120082114.3030-1-jszhang@kernel.org> <20221120082114.3030-6-jszhang@kernel.org>
+ <CAJM55Z_f=zp3Z=wno_yr7csAUMQ472RiZXD19CrDTTxmGAmU4w@mail.gmail.com> <Y3ppF88SuYAPOjbU@spud>
+In-Reply-To: <Y3ppF88SuYAPOjbU@spud>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Sun, 20 Nov 2022 19:33:42 +0100
+Message-ID: <CAJM55Z95sJzn0zQJF5pGQkeMWTRj8FLyO6i+52idJ4ZMLOT5tg@mail.gmail.com>
+Subject: Re: [PATCH 5/7] riscv: dts: bouffalolab: add the bl808 SoC base
+ device tree
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus! Below is a slightly edited report from regzbot listing all
-regression from this cycle that the bot and I are currently aware of.
+On Sun, 20 Nov 2022 at 18:51, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Sun, Nov 20, 2022 at 03:57:17PM +0100, Emil Renner Berthing wrote:
+> > On Sun, 20 Nov 2022 at 09:32, Jisheng Zhang <jszhang@kernel.org> wrote:
+> > >
+> > > Add a baisc dtsi for the bouffalolab bl808 SoC.
+>
+> > > +       xtal: xtal-clk {
+> > > +               compatible = "fixed-clock";
+> > > +               clock-frequency = <40000000>;
+> >
+> > This was discussed many times before, but I think the conclusion was
+> > that the frequency is a property of the crystal on the board, so this
+> > should be 0 in the SoC dtsi, and then overwritten in the board device
+> > tree.
+>
+> Or set nothing in soc.dtsi so that dtbs_check can be used to see if
+> someone forgot to set a clock for their board?
 
-For most of them there was recent activity and fixes will likely be
-heading your way over the next few days. The exception here is "drm:
-msm: DSI controller being switched off before the panel unprepare hook
-is called", that looks somewhat stalled.
+Sure. That sounds even better.
 
-HTH, Ciao, Thorsten
-
----
-Hi, this is regzbot, the Linux kernel regression tracking bot.
-
-Currently I'm aware of 5 regressions in linux-mainline. Find the
-current status below and the latest on the web:
-
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-======================================================
-current cycle (v6.0.. aka v6.1-rc), culprit identified
-======================================================
-
-
-drm: amdgpu: some games (Cyberpunk 2077, Forza Horizon 4/5) hang at start
--------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CABXGCsOeQ7VYm98jRVaYp6KaNsFVsAnSb33ZT8JvZxcTcEGW0w@mail.gmail.com/
-https://lore.kernel.org/lkml/CABXGCsOeQ7VYm98jRVaYp6KaNsFVsAnSb33ZT8JvZxcTcEGW0w@mail.gmail.com/
-
-By Mikhail Gavrilov; 30 days ago; 17 activities, latest 0 days ago.
-Introduced in dd80d9c8eeca (v6.1-rc1)
-
-Fix incoming:
-* drm/amdgpu: fix userptr HMM range handling v2
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=fec8fdb54e8f74d88951c9f998f47bf4f2031fe0
-
-
-drm: amdgpu: No payload for [MST PORT:0000000006da5d29] found in mst state 00000000b0e556d6" on system resume with TBT dock connected.
---------------------------------------------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/ghwn827862.fsf@gouders.net/
-https://lore.kernel.org/lkml/ghwn827862.fsf@gouders.net/
-https://gitlab.freedesktop.org/drm/amd/-/issues/2171
-
-By Dirk Gouders and Unkown; 9 days ago; 15 activities, latest 1 days ago.
-Introduced in 4d07b0bc4034 (v6.1-rc1)
-
-Recent activities from: Lyude Paul (9), Alex Deucher (2), Lin, Wayne (1)
-
-4 patch postings are associated with this regression, the latest is this:
-* [PATCH v2 4/4] drm/amdgpu/dm/dp_mst: Don't grab mst_mgr->lock when computing DSC state
-  https://lore.kernel.org/lkml/20221114221754.385090-5-lyude@redhat.com/
-  5 days ago, by Lyude Paul
-
-Noteworthy links:
-* [PATCH v2 0/4] drm/amdgpu: Regression fixes from MST atomic-only conversion
-  https://lore.kernel.org/amd-gfx/20221114221754.385090-1-lyude@redhat.com/
-  5 days ago, by Lyude Paul; thread monitored.
-
-
-[ *NEW* ] arm64: crash on the Qualcomm SM8250
----------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com/
-https://lore.kernel.org/lkml/CAMi1Hd1VBCFhf7%2BEXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com/
-
-By Amit Pundir; 12 days ago; 14 activities, latest 2 days ago.
-Introduced in c44094eee32f (v6.1-rc1)
-
-Recent activities from: Will Deacon (3), Manivannan Sadhasivam (3),
-  Catalin Marinas (2), Robin Murphy (1)
-
-Noteworthy links:
-* [PATCH] Revert "arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()"
-  https://lore.kernel.org/lkml/20221114110329.68413-1-manivannan.sadhasivam@linaro.org/
-  6 days ago, by Manivannan Sadhasivam; thread monitored.
-
-
-[ *NEW* ] cpufreq: schedutil: improved latency on Pixel 6
----------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20221110195732.1382314-1-wusamuel@google.com/
-https://lore.kernel.org/lkml/20221110195732.1382314-1-wusamuel@google.com/
-
-By Sam Wu; 9 days ago; 6 activities, latest 2 days ago.
-Introduced in 6d5afdc97ea7 (v6.1-rc1)
-
-Recent activities from: Lukasz Luba (2), Sam Wu (1), Rafael J.
-  Wysocki (1), Saravana Kannan (1)
-
-
-drm: msm: DSI controller being switched off before the panel unprepare hook is called
--------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/1892d0af-8aa4-dc03-887a-e44bb623b836@linaro.org/
-https://lore.kernel.org/dri-devel/1892d0af-8aa4-dc03-887a-e44bb623b836@linaro.org/
-
-By Caleb Connolly; 9 days ago; 2 activities, latest 7 days ago.
-Introduced in 007ac0262b0d (v6.1-rc1)
-
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/166836521992.605503.16264140239924937400@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
+> > > +               clock-output-names = "xtal";
+> > > +               #clock-cells = <0>;
+> > > +       };
+>
