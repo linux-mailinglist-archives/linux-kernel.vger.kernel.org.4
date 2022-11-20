@@ -2,130 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7266314B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 15:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E38F6314B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 15:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiKTOjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 09:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S229644AbiKTO5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 09:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiKTOjF (ORCPT
+        with ESMTP id S229610AbiKTO5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 09:39:05 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D69F588
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 06:39:03 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id l42-20020a9d1b2d000000b0066c6366fbc3so5959778otl.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 06:39:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UkF984r0jfTzyI7tT6A37vG6Dq6NrZDLkNTSQzJ1szs=;
-        b=FkknNl8+w+PHZAEsszcaj6TK9kPpmxhf8hqcerwxC5O1stx9ns4RZ/+42f5YcrjFSO
-         b32/pr9TNcXXKesgg09UNuGx/jmd/g+11KmGXLwieKzKJHeF800iLkUuBcU0dJJRkNjy
-         gPBTauQfrp90FjVVT6H5FFR8u+s6b9eRHJfS3Wt6IXY5SI3nhq3vntva8f/TCjn2WjT6
-         preWJI5H9/6wxtXb25uUg6Q48J6/ze3hhMgSJusetrcOTg3BvSU6Bhwqe/HNCatc3jWv
-         BKrIwhku5hdXbu/LsFyaPxR9lIXF5sDPAgyvW4Y0v0QBU8AAxZH4P0RFo0ymCPOY0Tq+
-         umiw==
+        Sun, 20 Nov 2022 09:57:45 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D83162F6
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 06:57:37 -0800 (PST)
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E60F63F4B3
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 14:57:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668956255;
+        bh=EAN+jo73jsNjm6NxFzDUZqmJuYIU7qlxt8bnncU4Mvs=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=EweKhtbH0S4qHM3v9TJZWO4zW5LGRlwI3e55xlQOmYfJBZPVcIwG43FJah3h9/Loo
+         VUaMHTXJQodT2fa7ASDA+f2Cnn0kyGB8seZ0KGs0dPC/V0Xx1+Lyp+6gaXrL5Ma8V1
+         fjPf35TYhk+BVklKXQulT2RPxAAFQ8ZbBfbjSqKKJ6CKkaeaZ+oU3oLTCD+bX2+2Hq
+         vzjGc8C1azmt4LubMx3RyAaWd4Wbw/NUSKnj9K5tw4zgM4uXn6TElTwCIaWqLSYwtD
+         U5+xOW/shvAzj21CB1VmDChL76vMreGSMBOyyhB2wGccZ9x9Ct23rh3cclEpXu902F
+         Oa6dm4htjpYfw==
+Received: by mail-yb1-f199.google.com with SMTP id c188-20020a25c0c5000000b006d8eba07513so9126422ybf.17
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 06:57:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UkF984r0jfTzyI7tT6A37vG6Dq6NrZDLkNTSQzJ1szs=;
-        b=QdNt49T4k8nObbwy4PuugU0Hlz4o2xDcHynIxI/fyW8F+Nb9yIM1Dd3gVL+QaX9tf8
-         ijT+U3HRx0B11FxmXWF7QgflgPWQn8J1L2uc/90Yu4TI1jepGXi4duYDLWXOCQ/WlnLy
-         9T6+4Ous4S1dAVxshwBLEInQr/jNsRZq/3Iy8TqhUgRJM0Col6HJlZcOZ5mqoyLDxdB4
-         vXKHRg/UhQeoyNYb/1vQlFZhEC7Mf9XGiVeT7taPr4fT83WGsE24s5f9kKJGKXJQVRoY
-         yGq7lWdms0WVFg9tn5aaH5rLK+BmgP3QJ6/pBrZCHa/ZkpNiCGXdJjfSp7YBIuHvpQL7
-         vk0w==
-X-Gm-Message-State: ANoB5pkfduiuRP3wRS3POZtTKmj4H2i+aB7XFT2WKj4PY0IQfq7yBfkW
-        /YLeVHYfqHHaP3g9xROzkSKzRAj5HHUF+FXB4zv0pw==
-X-Google-Smtp-Source: AA0mqf5QbUJkXVIDNzWd1p6fxDx5nruCaRzVAH4gg+pHDxWzbCNuyfH+tzGeQnV8UhP7ITbVDOo+859w3u2Hq+bHCA0=
-X-Received: by 2002:a9d:6c4f:0:b0:66d:2671:da35 with SMTP id
- g15-20020a9d6c4f000000b0066d2671da35mr7528322otq.137.1668955142399; Sun, 20
- Nov 2022 06:39:02 -0800 (PST)
+        bh=EAN+jo73jsNjm6NxFzDUZqmJuYIU7qlxt8bnncU4Mvs=;
+        b=0Nuo3aim9+eishKcILrqnAU8UG1NKu8Fmcy8s+jid7F48mJJd7SQkLHSQX3q+HAqCm
+         +kkU1tP5TxbnahxHBFx/ds/cjna3PcrZp0DwrrrydBelEL9e4Op2t05knTByo6gCVka2
+         RwVWfGRcuDWMyLHXi4dlR3BWsGBHFlIoHU39JCq5fZriehAL/BDGlfrtqEy1YIIQ1sZW
+         13w3jOUFpD8SFOvF7jFH95nhUVpVzziJSigl86/XxcaWQ227ORS/r3LizkTDA1+vfW2/
+         /SiUwhpQynXyfFHWV6O2sTtHVyp/BJtYhakIc1bTJl+sZd7W4DPPzY8qYs67iCriJLFo
+         ggYQ==
+X-Gm-Message-State: ANoB5pmtvZZPspYwMSq52chG2IREAABfIfXWukP0cXFG/khG+I2YPkj1
+        u+0uRIohLaCFIZevFMZxCoU53GnuPpw4nCXrKfQiLvRkTXUKVpt6+kt30oF1kTPUXkorIFcBK+k
+        tciTW2/9t3JYYrsT2Zte9zODQxA/ToQb0gUtRb8D+U4pU/sp4FVMyzy1GOA==
+X-Received: by 2002:a25:ce45:0:b0:6de:39c1:9cb3 with SMTP id x66-20020a25ce45000000b006de39c19cb3mr3991251ybe.469.1668956254626;
+        Sun, 20 Nov 2022 06:57:34 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6QE5DtMEWnYNqTxZPXyHbUY3mIe3kVEW/kzSrOH//tkMR00zlzUTh2qwSJqJcuQ+yytC0Ib4Ivku6ASbIQfe0=
+X-Received: by 2002:a25:ce45:0:b0:6de:39c1:9cb3 with SMTP id
+ x66-20020a25ce45000000b006de39c19cb3mr3991228ybe.469.1668956254419; Sun, 20
+ Nov 2022 06:57:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20221117210356.3178578-1-bero@baylibre.com> <20221117210356.3178578-5-bero@baylibre.com>
- <06e916b7-f8f2-6de5-f86e-7b020c052451@linaro.org> <7ha64o9h1d.fsf@baylibre.com>
- <76cae9bf-c81a-684a-c22b-9548dd82c8d4@linaro.org>
-In-Reply-To: <76cae9bf-c81a-684a-c22b-9548dd82c8d4@linaro.org>
-From:   =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-Date:   Sun, 20 Nov 2022 15:38:51 +0100
-Message-ID: <CAP2ifjMQAx23xc0p_LZ9Dj79Hx1cyLZ-tx8HrGUbtDR-SmdECw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/7] dt-bindings: pinctrl: add bindings for Mediatek
- MT8365 SoC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
+References: <20221120082114.3030-1-jszhang@kernel.org> <20221120082114.3030-6-jszhang@kernel.org>
+In-Reply-To: <20221120082114.3030-6-jszhang@kernel.org>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Sun, 20 Nov 2022 15:57:17 +0100
+Message-ID: <CAJM55Z_f=zp3Z=wno_yr7csAUMQ472RiZXD19CrDTTxmGAmU4w@mail.gmail.com>
+Subject: Re: [PATCH 5/7] riscv: dts: bouffalolab: add the bl808 SoC base
+ device tree
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Sun, Nov 20, 2022 at 11:40 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> >>> +  pins-are-numbered:
-> >
-> > Yeah, having this as a flag kind of implies that this could be present
-> > for some boards but not others.  But in practice, the driver requires it
-> > to be present or just fails[1].  What's the right way to describe that?
-> > We're just trying to add a binding that reflects the existing driver.
+On Sun, 20 Nov 2022 at 09:32, Jisheng Zhang <jszhang@kernel.org> wrote:
 >
-> Uh, what an interesting property. What's the point of it then? Why
-> failing to probe on a missing property which does nothing else?
+> Add a baisc dtsi for the bouffalolab bl808 SoC.
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/boot/dts/Makefile               |  1 +
+>  arch/riscv/boot/dts/bouffalolab/bl808.dtsi | 74 ++++++++++++++++++++++
+>  2 files changed, 75 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+>
+> diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
+> index ff174996cdfd..b525467152b2 100644
+> --- a/arch/riscv/boot/dts/Makefile
+> +++ b/arch/riscv/boot/dts/Makefile
+> @@ -1,4 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> +subdir-y += bouffalolab
+>  subdir-y += sifive
+>  subdir-y += starfive
+>  subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
+> diff --git a/arch/riscv/boot/dts/bouffalolab/bl808.dtsi b/arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+> new file mode 100644
+> index 000000000000..c98ebb14ee10
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+> @@ -0,0 +1,74 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +/*
+> + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +       compatible = "bouffalolab,bl808";
+> +       #address-cells = <1>;
+> +       #size-cells = <1>;
+> +
+> +       cpus {
+> +               timebase-frequency = <1000000>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +
+> +               cpu0: cpu@0 {
+> +                       compatible = "thead,c906", "riscv";
+> +                       device_type = "cpu";
+> +                       reg = <0>;
+> +                       d-cache-block-size = <64>;
+> +                       d-cache-sets = <256>;
+> +                       d-cache-size = <32768>;
+> +                       i-cache-block-size = <64>;
+> +                       i-cache-sets = <128>;
+> +                       i-cache-size = <32768>;
+> +                       mmu-type = "riscv,sv39";
+> +                       riscv,isa = "rv64imafdc";
+> +
+> +                       cpu0_intc: interrupt-controller {
+> +                               compatible = "riscv,cpu-intc";
+> +                               interrupt-controller;
+> +                               #address-cells = <0>;
+> +                               #interrupt-cells = <1>;
+> +                       };
+> +               };
+> +       };
+> +
+> +       xtal: xtal-clk {
+> +               compatible = "fixed-clock";
+> +               clock-frequency = <40000000>;
 
-I couldn't find any other use of it in the kernel, and also checked
-u-boot (where the property also appears in some devicetree files, but
-isn't used anywhere).
-Both the MTK and STM drivers use it just to refuse it if it isn't there.
+This was discussed many times before, but I think the conclusion was
+that the frequency is a property of the crystal on the board, so this
+should be 0 in the SoC dtsi, and then overwritten in the board device
+tree.
 
-Unfortunately "git blame" only shows pins-are-numbered being added as
-part of a larger commit ("add the driver"), so there's no "add check
-for pins-are-numbered because xyz" commit message.
-
-I can think of 3 possible explanations, but none of them are good:
-1. It's something that had a purpose at some point, but doesn't
-anymore (but that would likely leave some trace in "git blame"...)
-2. It's something that was added in preparation for another patch (but
-I can't find any queued/suggested patches that make use of it)
-3. It's for the sake of userland -- check if pins-are-numbered is set
-(which will be true for MTK and STM because these drivers enforce it,
-false for anything else because the schemas don't mention it) and then
-do different things. But this seems unlikely as well, the usual
-suspects (libgpiod and friends) don't do any such lookup, and there
-are ways to look up pins without that property - and I'd expect pins
-are numbered on many controllers outside of MTK and STM, so looking up
-that property would give a false response there.
-
-> I would like to understand why do we need this property and what is
-> described by it.
-
-Same here...
-
-> Because if it's purpose is only to fail or not fail
-> driver probe, then we should just drop it everywhere.
-
-Agreed (and I think more likely than not, that is the only purpose),
-but probably a "add support for another board" patchset isn't the
-right context for that.
-
-I can prepare a "remove pins-are-numbered" patchset, but given it will
-likely take time to track down someone who knows why this was added in
-the first place, I don't think it should block the MT8365 patchset.
-
-Best regards
-bero
+> +               clock-output-names = "xtal";
+> +               #clock-cells = <0>;
+> +       };
+> +
+> +       soc {
+> +               compatible = "simple-bus";
+> +               ranges;
+> +               interrupt-parent = <&plic>;
+> +               dma-noncoherent;
+> +               #address-cells = <1>;
+> +               #size-cells = <1>;
+> +
+> +               uart0: serial@30002000 {
+> +                       compatible = "bouffalolab,uart";
+> +                       reg = <0x30002000 0x1000>;
+> +                       interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+> +                       clocks = <&xtal>;
+> +                       status = "disabled";
+> +               };
+> +
+> +               plic: interrupt-controller@e0000000 {
+> +                       compatible = "thead,c900-plic";
+> +                       reg = <0xe0000000 0x4000000>;
+> +                       interrupts-extended = <&cpu0_intc 0xffffffff>,
+> +                                             <&cpu0_intc 9>;
+> +                       interrupt-controller;
+> +                       #address-cells = <0>;
+> +                       #interrupt-cells = <2>;
+> +                       riscv,ndev = <64>;
+> +               };
+> +       };
+> +};
+> --
+> 2.37.2
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
