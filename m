@@ -2,253 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD98863180D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 02:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE976318C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiKUBBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 20:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S229932AbiKUDCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 22:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiKUBBP (ORCPT
+        with ESMTP id S229931AbiKUDCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 20:01:15 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A3D218BA
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 17:01:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1668992474; x=1700528474;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nqZwB4mUx5KtpzA6T+C4d6z/dqxxnpNbzXCnsfbUA04=;
-  b=j7PNdZbUFHxROliOm70wivB8xkjdGD7JXJIac5u8THPkYXadTuDtAVvg
-   N7GhGzROxKgwwsnjaq8w107DJTnDEChnBPKNWAGPtUKFJUU1rtdsd8NYe
-   DzmcKko7/7wMsvx8qM1ZjFOjRyNqH5ZMoskAnQ//xqEP7L8Ch7I/Rfec+
-   YxoJu1ACxIEkqhmaTP1o9l4PVxeLebPyiTjuQen7ksr/lFf2fZBhdgez7
-   1J2LatG3YXuU7dXbxuMmT5num5SbtKlAvrB3vVlSv34kPZpg1BY2PbvpZ
-   gqsao/IK6x4QTxL54mOVZP+gzhYJcvAFi4JA9OvSB/D66lvMaY5OjllLK
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,180,1665417600"; 
-   d="scan'208";a="216740457"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Nov 2022 09:01:13 +0800
-IronPort-SDR: ULsLp6ObLZvTv5Fs/pUuitQmyoOtBePJXBnxDsUxPTMuk66GJLpaZI7XHdhQQ7hH38oW3jcFEU
- S9sP5CwW/iIMqPMRMmFilIz3la/eyKQCx8ooT1xrWwpnYV+pNKigVZBgiCFHIzQ3zlMhuxNy1q
- BmJ3gBhF7JnV/4vGq4sHD9HVTo7rDBmaI52N4eAuKW8n6e4+W7oJ7ckHUi+j7YsshHmFzRyBnQ
- z1ioSg4mLju5fPUAzuWyCTLo6TrQXeSvKT5EqmGY7pTWpNX7JL0/ygP6w3cb3kVSZqk3YPClCE
- kIY=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 16:14:19 -0800
-IronPort-SDR: HHUUiyQPFnxQ95MmhFEQ3FSY1dHWNB0ZdNTP6RIawozNnFI78Ir3pENnBZg3AmhZrm/eqQN9qJ
- hZZVsXpholc9nVBa29G8V2sUijo5P7NFR8Bo8539UiH+IG1x37IjEm6LjDH50KOVCz59ZHMLb5
- BQfh6f5YcluQ1kPjGQJf7e7nrAXXdCCSzLw16hLDQ54xz3awN9AodFTplFWH4oe2fk77Z7U27q
- DEr+M6W0S40+F0XxJgljPbHWHCu4k/YwF39+kmppeZwu+5DJLjvIHYZ0r18EzcmRACx28VcinC
- jvk=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 17:01:14 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NFpx46F5Jz1Rwrq
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 17:01:12 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1668992471; x=1671584472; bh=nqZwB4mUx5KtpzA6T+C4d6z/dqxxnpNbzXC
-        nsfbUA04=; b=QRgGHXST91rVQRzoT0CMFD1RxF9sloXcoL2DuuMlEam6hYIbPMC
-        hTZg+Y8k60Dv3VPhKkCUbBJitEzP+h0VIRkIJTja3ihtjjgyPTmWUr1PMgpVe2Vm
-        D8Y1SrgUafCig8DxyhYjE3whmzRe8msWR9Q6LX77BnjfCOpWFhPRj8zwh60pFXcm
-        G3hfN/ktvct1HvDlZUhwL+JjSALlAglXhR+1dhzV4HhAf/92GUDfb09wxYq/EKgS
-        lk/3Img2NEDLoZDXkqIWP/XVU8DkdIZcEitJFgONzmPrdhu31hpPx58OaEsekrNd
-        NhDVMXGOo2NDCuIAbZn2/60u0OKr3JGHAVg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8xPIcpLXXd6h for <linux-kernel@vger.kernel.org>;
-        Sun, 20 Nov 2022 17:01:11 -0800 (PST)
-Received: from [10.225.163.53] (unknown [10.225.163.53])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NFpx21vDGz1RvLy;
-        Sun, 20 Nov 2022 17:01:10 -0800 (PST)
-Message-ID: <5d062001-2fff-35e5-d951-a61b510727d9@opensource.wdc.com>
-Date:   Mon, 21 Nov 2022 10:01:08 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH V6 6/8] block, bfq: retrieve independent access ranges
- from request queue
-Content-Language: en-US
-To:     Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
-        Federico Gavioli <f.gavioli97@gmail.com>
-References: <20221103162623.10286-1-paolo.valente@linaro.org>
- <20221103162623.10286-7-paolo.valente@linaro.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20221103162623.10286-7-paolo.valente@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sun, 20 Nov 2022 22:02:08 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB59D31DFE
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 19:02:04 -0800 (PST)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221121030201epoutp019c74877c89d38be399dd2ff9cac91ee9~pemdRcCbp0482804828epoutp01l
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:02:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221121030201epoutp019c74877c89d38be399dd2ff9cac91ee9~pemdRcCbp0482804828epoutp01l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1668999721;
+        bh=vjbfUFyJK93wID0lNnghGDCYcHsDlchldmX4KHuR58A=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=E8ClenqF1etN5uBw1yC3g1UNDn5TfwI7kaI8VAkTY9qd7iA47Z3/vCYIJxbSkakw3
+         bENMtaxM6B0aN6S97b9Xm1oOPahZZkBbaG0ZJZ+L/uzCRlEZgkJUhYcdFMZGC5Uv1k
+         DFlA1MVinX6D8s/uNroN5jNXSGfy0rCcIDOO5CE8=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20221121030200epcas5p3fb56e78c633640ee7a6e155b63d95a73~pemcl68AI0188501885epcas5p3j;
+        Mon, 21 Nov 2022 03:02:00 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4NFscQ556fz4x9Pv; Mon, 21 Nov
+        2022 03:01:58 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        14.1C.39477.62AEA736; Mon, 21 Nov 2022 12:01:58 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f~pX2FSUNgc0474704747epcas5p3X;
+        Sun, 20 Nov 2022 18:46:48 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221120184648epsmtrp1b7b1c94339974b98eae8144b4987909d~pX2FOtdYE0246702467epsmtrp1K;
+        Sun, 20 Nov 2022 18:46:48 +0000 (GMT)
+X-AuditID: b6c32a4a-007ff70000019a35-5b-637aea26ebc8
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F1.E5.14392.8167A736; Mon, 21 Nov 2022 03:46:48 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221120184646epsmtip2a39b4e4feb3d410449cd7cf54fb2a1fe~pX2DNRgsC1606116061epsmtip21;
+        Sun, 20 Nov 2022 18:46:46 +0000 (GMT)
+From:   Sathyakam M <sathya@samsung.com>
+To:     sathya@samsung.com
+Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pankaj Kumar Dubey <pankaj.dubey@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Aswani Reddy <aswani.reddy@samsung.com>,
+        Andi Shyti <andi@etezian.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ming Qian <ming.qian@nxp.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Will Deacon <will@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] media: add FSD MIPI-CSI2 Rx controller driver
+Date:   Mon, 21 Nov 2022 00:22:16 +0530
+Message-Id: <cover.1668963790.git.sathya@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAJsWRmVeSWpSXmKPExsWy7bCmlq7aq6pkg/eTVSwezNvGZrH4x3Mm
+        i0Obt7JbXJx5l8Xi7vMWRoujrf+ZLfpePGS22PT4GqvF5V1z2CwaH69istg1fQe7xaKtX9gt
+        vhx5zWjxYou4RcsdUwd+j+tLPjF7/L/xiNlj06pONo871/aweWxeUu+x8d0OJo++LasYPTa9
+        8vD4vEnO49TXz+wBXFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2
+        Si4+AbpumTlAPygplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL89L1
+        8lJLrAwNDIxMgQoTsjP+7SsvmCJfcfTDAuYGxn2SXYycHBICJhI/zt9g62Lk4hAS2M0ocbPz
+        BjOE84lRYsbLw6wQzjdGiQkvzjHBtLxbdAaqZS+jxN22jYwQTiuTxK1rE1hBqtgE1CTWd59j
+        BrFFBMQkrmz6BTaXWWADi8T95Q/BRgkLOElMnL4crIhFQFXi+OIFYHFeAVOJz/M/MUKsk5dY
+        veEAM4TdyiFxc5UnhO0icfLRbDYIW1ji1fEt7BC2lMTL/jYoO1mic/YBqJoMiWOvDrNA2PYS
+        B67MAbI5gA7SlFi/Sx8iLCsx9dQ6sBOYBfgken8/gfqYV2LHPBhbQWJB71WokWISp7svQNke
+        En9/PQFbKyQQKzH75GG2CYyysxA2LGBkXMUomVpQnJueWmxaYJSXWg6PqOT83E2M4KSp5bWD
+        8eGDD3qHGJk4GA8xSnAwK4nwihyrTBbiTUmsrEotyo8vKs1JLT7EaAoMsonMUqLJ+cC0nVcS
+        b2hiaWBiZmZmYmlsZqgkzrt4hlaykEB6YklqdmpqQWoRTB8TB6dUA1Me91fr7imKp9azJ5af
+        s02S8WVy4r0suJn11ZmfLyxEjv6e2LqazTmJ8WltHNPK/XInFRXXG0eys+VWJfVMW7/dRfLN
+        10f7S1RzVj2O0ePjXJznsFAi413+7WLL/S/uT/LU38K/NePOfvsLl3ILBf7HOdyv2PV17xMR
+        tmau1Z4aPxlWKghMSMnXn/aHc//d9Mq9TxKf/LoRUffhzC2Ta+vPfxTr2HvyTuXSsqifuWEV
+        rBZ/Y8Nvf9J64HuBK/ivv0FLe17Azy1rObqePBMVfOW565P07hcLbzWHvFT8WaTcHpT1IXnH
+        o89zn5THpjrecejg9VnBJ7sgU35d8cF70lvMZm4Mn1tfXP9r8wIfzi9KLMUZiYZazEXFiQCb
+        N7g/IwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDLMWRmVeSWpSXmKPExsWy7bCSvK5EWVWyQe8ZUYsH87axWSz+8ZzJ
+        4tDmrewWF2feZbG4+7yF0eJo639mi74XD5ktNj2+xmpxedccNovGx6uYLHZN38FusWjrF3aL
+        L0deM1q82CJu0XLH1IHf4/qST8we/288YvbYtKqTzePOtT1sHpuX1HtsfLeDyaNvyypGj02v
+        PDw+b5LzOPX1M3sAVxSXTUpqTmZZapG+XQJXxr995QVT5CuOfljA3MC4T7KLkZNDQsBE4t2i
+        M2xdjFwcQgK7GSUeTXrKDJEQk9iw8h6ULSyx8t9zdoiiZiaJb5dPsoMk2ATUJNZ3nwMrEgFq
+        uLLpFzNIEbPAHhaJ/50L2UASwgJOEhOnLwcrYhFQlTi+eAETiM0rYCrxef4nRogN8hKrNxxg
+        nsDIs4CRYRWjZGpBcW56brFhgWFearlecWJucWleul5yfu4mRnAAa2nuYNy+6oPeIUYmDsZD
+        jBIczEoivCLHKpOFeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCeWJKanZpakFoEk2Xi
+        4JRqYJoyzb5SPkzY6XKT2KVbh7+J3p0fedptYeB89b/eT1IjHxqXeDKkezzR4jTVmW31QqrX
+        W1JkzZbaqWdOfOw88UqFce/1TSw6HuvCfJZFzGnmjJ/NEjlzxTq3wwJ8Cq4nuJZybS65Hsi3
+        Z9v1Tv/2BatrmSzbtWVa2OeuuRHpffzP0iPS5llnnXYm3fGaI2kSE2z2Vz9HX6Rtn2eX5WHj
+        I95fjoQu3fQhqOWFzKF7r9asXF2X13639edF84yKTXu69roJLbu0astDUb6X7RzvVhnoe0nn
+        T5X8KdjEl+rLqFu3YdNC9YDHETo5K3vuP2q9U1S86V5jq1l7h9DfVwIsz+9a5L4PXNhbnBQz
+        d/a6vUosxRmJhlrMRcWJAPbRg4LPAgAA
+X-CMS-MailID: 20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f
+References: <CGME20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f@epcas5p3.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 01:26, Paolo Valente wrote:
-> From: Federico Gavioli <f.gavioli97@gmail.com>
-> 
-> This patch implements the code to gather the content of the
-> independent_access_ranges structure from the request_queue and copy
-> it into the queue's bfq_data. This copy is done at queue initialization.
-> 
-> We copy the access ranges into the bfq_data to avoid taking the queue
-> lock each time we access the ranges.
-> 
-> This implementation, however, puts a limit to the maximum independent
-> ranges supported by the scheduler. Such a limit is equal to the constant
-> BFQ_MAX_ACTUATORS. This limit was placed to avoid the allocation of
-> dynamic memory.
-> 
-> Co-developed-by: Rory Chen <rory.c.chen@seagate.com>
-> Signed-off-by: Rory Chen <rory.c.chen@seagate.com>
-> Signed-off-by: Federico Gavioli <f.gavioli97@gmail.com>
-> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-> ---
->  block/bfq-iosched.c | 54 ++++++++++++++++++++++++++++++++++++++-------
->  block/bfq-iosched.h |  5 +++++
->  2 files changed, 51 insertions(+), 8 deletions(-)
-> 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index c94b80e3f685..106c8820cc5c 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -1831,10 +1831,26 @@ static bool bfq_bfqq_higher_class_or_weight(struct bfq_queue *bfqq,
->  /* get the index of the actuator that will serve bio */
->  static unsigned int bfq_actuator_index(struct bfq_data *bfqd, struct bio *bio)
->  {
-> -	/*
-> -	 * Multi-actuator support not complete yet, so always return 0
-> -	 * for the moment.
-> -	 */
-> +	struct blk_independent_access_range *iar;
-> +	unsigned int i;
-> +	sector_t end;
-> +
-> +	/* no search needed if one or zero ranges present */
-> +	if (bfqd->num_actuators < 2)
-> +		return 0;
-> +
-> +	/* bio_end_sector(bio) gives the sector after the last one */
-> +	end = bio_end_sector(bio) - 1;
-> +
-> +	for (i = 0; i < bfqd->num_actuators; i++) {
-> +		iar = &(bfqd->ia_ranges[i]);
-> +		if (end >= iar->sector && end < iar->sector + iar->nr_sectors)
-> +			return i;
-> +	}
-> +
-> +	WARN_ONCE(true,
-> +		  "bfq_actuator_index: bio sector out of ranges: end=%llu\n",
-> +		  end);
->  	return 0;
->  }
->  
-> @@ -2479,7 +2495,6 @@ static void bfq_remove_request(struct request_queue *q,
->  
->  	if (rq->cmd_flags & REQ_META)
->  		bfqq->meta_pending--;
-> -
+This patch series adds the V4L2 media driver for
+Tesla Full Self Driving (FSD) SoC MIPI-CSI2 Rx controller.
 
-whiteline change
+The controller is compliant to MIPI CSI2 v1.3 specification.
+It receives images from camera sensors over the D-PHY interface.
 
->  }
->  
->  static bool bfq_bio_merge(struct request_queue *q, struct bio *bio,
-> @@ -7144,6 +7159,8 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
->  {
->  	struct bfq_data *bfqd;
->  	struct elevator_queue *eq;
-> +	unsigned int i;
-> +	struct blk_independent_access_ranges *ia_ranges = q->disk->ia_ranges;
->  
->  	eq = elevator_alloc(q, e);
->  	if (!eq)
-> @@ -7187,10 +7204,31 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
->  	bfqd->queue = q;
->  
->  	/*
-> -	 * Multi-actuator support not complete yet, default to single
-> -	 * actuator for the moment.
-> +	 * If the disk supports multiple actuators, we copy the independent
-> +	 * access ranges from the request queue structure.
->  	 */
-> -	bfqd->num_actuators = 1;
-> +	spin_lock_irq(&q->queue_lock);
-> +	if (ia_ranges) {
-> +		/*
-> +		 * Check if the disk ia_ranges size exceeds the current bfq
-> +		 * actuator limit.
-> +		 */
-> +		if (ia_ranges->nr_ia_ranges > BFQ_MAX_ACTUATORS) {
-> +			pr_crit("nr_ia_ranges higher than act limit: iars=%d, max=%d.\n",
-> +				ia_ranges->nr_ia_ranges, BFQ_MAX_ACTUATORS);
-> +			pr_crit("Falling back to single actuator mode.\n");
-> +			bfqd->num_actuators = 0;
-> +		} else {
-> +			bfqd->num_actuators = ia_ranges->nr_ia_ranges;
-> +
-> +			for (i = 0; i < bfqd->num_actuators; i++)
-> +				bfqd->ia_ranges[i] = ia_ranges->ia_range[i];
-> +		}
-> +	} else {
-> +		bfqd->num_actuators = 0;
+The D-PHY interface is compliant to MIPI D-PHY v1.2 specification. It
+supports up to maximum of 4 data lanes.
 
-That is very weird. The default should be 1 actuator.
-ia_ranges->nr_ia_ranges is 0 when the disk does not provide any range
-information, meaning it is a regular disk with a single actuator.
+V4L2 user control is provided to set the desired number of data lanes.
 
-> +	}
-> +
-> +	spin_unlock_irq(&q->queue_lock);
->  
->  	INIT_LIST_HEAD(&bfqd->dispatch);
->  
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index f1c2e77cbf9a..90130a893c8f 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -811,6 +811,11 @@ struct bfq_data {
->  	 */
->  	unsigned int num_actuators;
->  
-> +	/*
-> +	 * Disk independent access ranges for each actuator
-> +	 * in this device.
-> +	 */
-> +	struct blk_independent_access_range ia_ranges[BFQ_MAX_ACTUATORS];
+Maximum of up to 4 streams can be received simultaneously by one Rx
+port. (Each streams identified by designated Virtual Channel
+Identifier).
 
-I fail to see how keeping this information is useful, especially given
-that this struct contains a kobj. Why not just copy the sector &
-nr_sectors fields into struct bfq_queue ? That would also work for the
-single actuator case as then sector will be 0 and nr_sectors will be the
-disk total capacity.
+The controller instances consist of port property describing the endpoints.
+When combined with remote-endpoint property the driver instantiates
+video device nodes using V4L2 async subdev methods.
 
-I think this patch should be first in the series. That will avoid having
-the empty bfq_actuator_index() function.
+Streaming formats supported:
+- YUV420
+- RGB565, RGB666, RGB888
+- RAW8, RAW10, RAW12
+- JPEG
 
->  };
->  
->  enum bfqq_state_flags {
+The driver implementation is verified on FSD evaluation board.
 
+Thanks, Sathyakam
+
+Cc: Sathyakam M <sathya@samsung.com>,Vinod Koul <vkoul@kernel.org>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>,Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Pankaj Kumar Dubey <pankaj.dubey@samsung.com>,Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>,Shashank Prashar <s.prashar@samsung.com>
+Cc: Aswani Reddy <aswani.reddy@samsung.com>,Chandrasekar R <rcsekar@samsung.com>
+Cc: Andi Shyti <andi@etezian.org>,Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: Ming Qian <ming.qian@nxp.com>,Dmitry Osipenko <digetx@gmail.com>
+Cc: Jacopo Mondi <jacopo@jmondi.org>,Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>,Bjorn Andersson <andersson@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>,Arnd Bergmann <arnd@arndb.de>
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>,Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,linux-phy@lists.infradead.org,devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,linux-media@vger.kernel.org
+
+Sathyakam M (5):
+  dt-bindings: phy: fsd: MIPI CSI2 Rx controller syscon node
+  media: dt-bindings: fsd: MIPI CSI2 Rx controller device nodes
+  arm64: dts: fsd: add device tree nodes for MIPI CSI2 Rx controller
+  media: fsd: add MIPI CSI2 Rx controller driver
+  arm64: defconfig: enable FSD MIPI CSI2 Rx controller driver
+
+ .../bindings/media/tesla-fsd-csis.yaml        |  148 +
+ .../bindings/phy/fsd-csis-syscon.yaml         |   48 +
+ .../media/drivers/fsd-csis-uapi.rst           |   78 +
+ MAINTAINERS                                   |   12 +
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |  232 ++
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  162 +
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/fsd/Kconfig            |   73 +
+ drivers/media/platform/fsd/Makefile           |    1 +
+ drivers/media/platform/fsd/fsd-csis.c         | 2664 +++++++++++++++++
+ drivers/media/platform/fsd/fsd-csis.h         |  785 +++++
+ include/uapi/linux/fsd-csis.h                 |   19 +
+ include/uapi/linux/v4l2-controls.h            |    5 +
+ 15 files changed, 4230 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/tesla-fsd-csis.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/fsd-csis-syscon.yaml
+ create mode 100644 Documentation/userspace-api/media/drivers/fsd-csis-uapi.rst
+ create mode 100644 drivers/media/platform/fsd/Kconfig
+ create mode 100644 drivers/media/platform/fsd/Makefile
+ create mode 100644 drivers/media/platform/fsd/fsd-csis.c
+ create mode 100644 drivers/media/platform/fsd/fsd-csis.h
+ create mode 100644 include/uapi/linux/fsd-csis.h
+
+
+base-commit: 77c51ba552a1c4f73228766e43ae37c4101b3758
 -- 
-Damien Le Moal
-Western Digital Research
+2.17.1
 
