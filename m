@@ -2,83 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FC0631760
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 00:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A81A5631763
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 00:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiKTXiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 18:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S229642AbiKTXlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 18:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiKTXhz (ORCPT
+        with ESMTP id S229498AbiKTXlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 18:37:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B9315804
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 15:37:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1326260CEF
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 23:37:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65602C433C1;
-        Sun, 20 Nov 2022 23:37:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668987473;
-        bh=8SlsHszUWJ2DEwD4H0dsFfYa5kdWf7a3ywmxar/8S9A=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=q8337KwzbTo23I+SOkdIZbpABMxrWMlyVNWoy+iAwNgxzYoTTucrtcPV6ZGFJRJ0l
-         n70rpL4wKCReWbrmTzqycrtrPQad8aHgr8DPXmpSYQ/bM2xTCdFOQCZ2Vjnjpn9Ji6
-         9aKtwYwX4m3FDyffN/yIzvs//eJmglZMb0+4PRybBJB7bWeHcen0V4ulGwH13yB1J8
-         NaTgDnD6JJPJD8FrynBF6pGGxn8SWhq/n7dehuVQj8pcel0HdsPfWzEyI7E95nnfE6
-         8Qm45FUytOd7aIdG++r1pzWFT0lpYd+1vxnUC07mr1WFz+hdsOlUTcBn/lfYn4xw4q
-         lGFC3HOOXNWvg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5248DE21EFF;
-        Sun, 20 Nov 2022 23:37:53 +0000 (UTC)
-Subject: Re: [GIT PULL] tracing: Fixes for v6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221120152730.4d2a512d@rorschach.local.home>
-References: <20221120152730.4d2a512d@rorschach.local.home>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221120152730.4d2a512d@rorschach.local.home>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git trace-v6.1-rc5
-X-PR-Tracked-Commit-Id: 94eedf3dded5fb472ce97bfaf3ac1c6c29c35d26
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5239ddeb4872390856bb79655dba85350936681e
-Message-Id: <166898747332.25585.4187034776068040297.pr-tracker-bot@kernel.org>
-Date:   Sun, 20 Nov 2022 23:37:53 +0000
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aashish Sharma <shraash@google.com>,
-        Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Qiujun Huang <hqjagain@gmail.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        Wang Wensheng <wangwensheng4@huawei.com>,
-        Wang Yufen <wangyufen@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Zheng Yejian <zhengyejian1@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 20 Nov 2022 18:41:11 -0500
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C002B63A
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 15:41:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1668987670; x=1700523670;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+XIwttKFgbNBoFJSWuSeYcN6oZwEPMOr9GSzsTycsZQ=;
+  b=ZYTMNOz1kamrqJS2nqV/3SzNuDyoh0Xw7y/1GHwqYNyUncbtrBNzY4CF
+   ZaG7IwSzQ9WtudKuIymv8GA5BH4YPeCCxcvIGeAw7F40WQQJXhobNoNIf
+   /QXKpVPSo+UXp6gXWB+wt0I0lw5ckG5hGQnfaMd5Pe+TV+qMEZdqwsB2d
+   Phc62DgAs2uxfro1esmy0nFMbBgyOPVU87WaDMSy4hvL5+0XSphdebfr1
+   rteiGP3CLYDIaRN55mY/OIzYD+AdWO+bayrGLR2TtaQgHqBnealf4A+d+
+   Bi6bgXotlXJsyv6z69Zaziigai6KXFFOGgbkIh5vhk3Oa4SXfwXW4oejo
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,180,1665417600"; 
+   d="scan'208";a="216735513"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Nov 2022 07:41:09 +0800
+IronPort-SDR: C5djQ0LdX/P25UABEOhittVbGuMG0zJy+SQBp2R4x/vNlJxpUhjBquePdTbE8cZ/PonmTIfZM6
+ pMeZw18X2J2GNisg7wrbL3RkJrkcEx1xETtSfp3lgHcTr3g9csozhJhCWZvs9PKsmUOKBdSc7N
+ WofcV92lKq0O+AGC42AAtwC+z50NJ/Pw1DXj9/vT+qGg+KymCwVy6YyFHwWEMdA5xt/VVWF4x1
+ h6KfJqz9swu7FvXO9unF26FU2XIeLa7Q02iKwuERpJZTteevuXf/KIqKPuASkGHgtZJWuSGVEG
+ DjI=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 14:54:15 -0800
+IronPort-SDR: CnFvWDnNSXPeWS8Qf6/oWaRR8EyyIQxT08JIt56BOmaulFE+Goe9CBhcnEDQ8jRRoL0jfBqU5h
+ 6EnKjf6bmA3sQlF7Oq/Zl0vm1/Aoq6Kg2QEhaxGkFOksCIKiyllkaZrVIrVr4HYpjH5R35/u4c
+ QeleV278kNphjvlxeJRSBpT3A3lXE21B6tnUxJ9/uBhEn0+h6NbhQzYewtxGiEJS44Nw1XyIzL
+ MOU+l43EtTJF+h0zpoLTNr8hf8/ofbcwGzP5kcW1R3rkPxJkE/2qQVXTc7zG5ki1CuSb18IUf0
+ u7A=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 15:41:10 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NFn8h6tT8z1Rwrq
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 15:41:08 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1668987665; x=1671579666; bh=+XIwttKFgbNBoFJSWuSeYcN6oZwEPMOr9GS
+        zsTycsZQ=; b=OUKA67y8WGn8LkpiB3gVXr70gEbNA7akqRMa14x5ZBM8maAeuFj
+        BIeusjp8jn5HksW058+QUHttGqlfUvQjTRngWYQJxBOnirrVX0nibqkzPHTven3l
+        aQE/65VyQDpeZt4pBpQbQp9oNBBccv/tpy6EbREDSkT3YtFXH8DC5uMZhLNcPsq4
+        uIOZI09b2vTVc5dM4kou40CICIbbTTNJIMvWuw3SmlH4AdlJ7PBClgqi3yamWlRU
+        yWavkbwoe4KDOfVOgJaUR2UrRG21/by8ONFsunTOplg9siUKFZR57FuFiVMqqnhr
+        JO9aQqSQGnkmDLp3FYnMs17/ztaB9eRqOag==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Wfcx0qtrLsMB for <linux-kernel@vger.kernel.org>;
+        Sun, 20 Nov 2022 15:41:05 -0800 (PST)
+Received: from [10.225.163.53] (unknown [10.225.163.53])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NFn8c0rSzz1RvLy;
+        Sun, 20 Nov 2022 15:41:03 -0800 (PST)
+Message-ID: <fd584474-c6f6-37ce-debe-151d33a2d636@opensource.wdc.com>
+Date:   Mon, 21 Nov 2022 08:41:02 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH V6 8/8] block, bfq: balance I/O injection among
+ underutilized actuators
+To:     Jens Axboe <axboe@kernel.dk>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Arie van der Hoeven <arie.vanderhoeven@seagate.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rory Chen <rory.c.chen@seagate.com>,
+        Davide Zini <davidezini2@gmail.com>
+References: <20221103162623.10286-1-paolo.valente@linaro.org>
+ <20221103162623.10286-9-paolo.valente@linaro.org>
+ <PH7PR20MB5058FFC62E46AB2AE3AB0F38F1019@PH7PR20MB5058.namprd20.prod.outlook.com>
+ <FB99E53F-886D-4193-9B38-32452E70A35B@linaro.org>
+ <e2565d52-e75f-0320-6136-97b7953deda2@kernel.dk>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <e2565d52-e75f-0320-6136-97b7953deda2@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 20 Nov 2022 15:27:30 -0500:
+On 11/21/22 07:06, Jens Axboe wrote:
+> On 11/20/22 12:29 AM, Paolo Valente wrote:
+>>
+>>
+>>> Il giorno 10 nov 2022, alle ore 16:25, Arie van der Hoeven <arie.vanderhoeven@seagate.com> ha scritto:
+>>>
+>>> Checking in on this series and what we can communicate to partners as to potential integration into Linux.  Is 6.1 viable?
+>>
+>> Hi Arie,
+>> definitely too late for 6.1.
+>>
+>> Jens, could you enqueue this for 6.2?  Unless Damien, or anybody else
+>> still sees issues to address.
+> 
+> Would be nice to get Damien's feedback on the series.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git trace-v6.1-rc5
+I will try to have a look today.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5239ddeb4872390856bb79655dba85350936681e
-
-Thank you!
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Damien Le Moal
+Western Digital Research
+
