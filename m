@@ -2,96 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A47F631668
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 21:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 306AB63166B
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 21:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiKTUqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 15:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        id S229598AbiKTUqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 15:46:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKTUq3 (ORCPT
+        with ESMTP id S229644AbiKTUqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 15:46:29 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1034EE0CC
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 12:46:27 -0800 (PST)
-Received: (qmail 99007 invoked by uid 1000); 20 Nov 2022 15:46:26 -0500
-Date:   Sun, 20 Nov 2022 15:46:26 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     John Keeping <john@metanate.com>
-Cc:     Lee Jones <lee@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-        balbi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
- shared f_hidg pointer
-Message-ID: <Y3qSImZkZwCG1kA1@rowland.harvard.edu>
-References: <20221117120813.1257583-1-lee@kernel.org>
- <Y3YuL8rSE9pNfIZN@kroah.com>
- <Y3Y7MlwV0UFcA3w8@google.com>
- <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
- <Y3dIXUmjTfJLpPe7@google.com>
- <Y3er7nenAhbmBdBy@rowland.harvard.edu>
- <Y3e0zAa7+HiNVrKN@donbot>
- <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
- <Y3piS43drwSoipD9@donbot>
+        Sun, 20 Nov 2022 15:46:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19151B1FE
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 12:46:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C2B60CF3
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 20:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31780C433C1;
+        Sun, 20 Nov 2022 20:46:47 +0000 (UTC)
+Date:   Sun, 20 Nov 2022 15:46:45 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Li Huafei <lihuafei1@huawei.com>,
+        Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Yi Yang <yiyang13@huawei.com>
+Subject: [GIT PULL] tracing/probes: Fixes for 6.1
+Message-ID: <20221120154645.63d5c899@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3piS43drwSoipD9@donbot>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 05:22:19PM +0000, John Keeping wrote:
-> On Fri, Nov 18, 2022 at 04:07:24PM -0500, Alan Stern wrote:
-> > On Fri, Nov 18, 2022 at 04:37:32PM +0000, John Keeping wrote:
-> > > I don't think it's at all simple to fix this - I posted a series
-> > > addressing the lifetime issues here a few years ago but didn't chase it
-> > > up and there was no feedback:
-> > > 
-> > > 	https://lore.kernel.org/linux-usb/20191028114228.3679219-1-john@metanate.com/
-> > > 
-> > > That includes a patch to remove the embedded struct cdev and manage its
-> > > lifetime separately, which I think is needed as there are two different
-> > > struct device objects here and we cannot tie their lifetimes together.
-> > 
-> > I still don't have a clear picture of what the real problem is.  Lee's 
-> > original patch description just said "external references are presently 
-> > not tracked", with no details about what those external references are. 
-> > Why not add just proper cdev_get() and cdev_put() calls to whatever code 
-> > handles those external references, so that they _are_ tracked?
-> > 
-> > What are the two different struct device objects?  Why do their 
-> > lifetimes need to be tied together?  If you do need to tie their 
-> > lifetimes somehow, why not simply make one of them (the one which is 
-> > logically allowed to be shorter-lived) hold a reference to the other?
-> 
-> The problem is that we have a struct cdev embedded in f_hidg but the
-> lifetime of f_hidg is not tied to any kobject so we can't solve this in
-> the right way by setting the parent kobject of the cdev.
-> 
-> While refcounting struct f_hidg is necessary, it's not sufficient
-> because the only way to keep it alive long enough for the final
-> kobject_put() on the embedded cdev is to tie the lifetime to a kobject
-> of its own and there is no suitable object as this is not the model
-> followed by gadget function instances.
 
-I see.  The solution is simple: Embed a struct device in struct f_hidg, 
-and call cdev_device_add() to add the device and the cdev.  This will 
-automatically make the device the parent of the cdev, so the device's 
-refcount won't go to 0 until the cdev's refcount does.  Then you can tie 
-the f_hidg's lifetime to the device's, so the device's release routine 
-can safely deallocate the entire f_hidg structure.
+Linus,
 
-The parent of the new struct device should be set to &gadget->dev.  If 
-you can't think of a better name for the device, you could simply append 
-":I" to the parent's name, where I is the interface number, or even 
-append ":C.I" where C is the config number (like we do on the host 
-side).
+Note, Masami started working on top of the trace/urgent branch to
+create this branch (part way through). Thus, the trace/urgent branch
+needs to be pulled before this one, otherwise the diffstat will not
+match.
+[ see https://lore.kernel.org/all/20221120201156.868430827@goodmis.org/ ]
 
-Alan Stern
+tracing/probes: Fixes for v6.1
+
+- Fix possible NULL pointer dereference  on trace_event_file in kprobe_event_gen_test_exit()
+
+- Fix NULL pointer dereference for trace_array in kprobe_event_gen_test_exit()
+
+- Fix memory leak of filter string for eprobes
+
+- Fix a possible memory leak in rethook_alloc()
+
+- Skip clearing aggrprobe's post_handler in kprobe-on-ftrace case
+  which can cause a possible use-after-free
+
+- Fix warning in eprobe filter creation
+
+- Fix eprobe filter creation as it picked the wrong event for the fields
+
+
+Please pull the latest trace-probes-v6.1 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+trace-probes-v6.1
+
+Tag SHA1: 0ce1f4b2fe737505f4c48ad637033191789971e1
+Head SHA1: 40adaf51cb318131073d1ba8233d473cc105ecbf
+
+
+Li Huafei (1):
+      kprobes: Skip clearing aggrprobe's post_handler in kprobe-on-ftrace case
+
+Masami Hiramatsu (Google) (1):
+      tracing/eprobe: Fix eprobe filter to make a filter correctly
+
+Rafael Mendonca (2):
+      tracing/eprobe: Fix memory leak of filter string
+      tracing/eprobe: Fix warning in filter creation
+
+Shang XiaoJing (2):
+      tracing: kprobe: Fix potential null-ptr-deref on trace_event_file in kprobe_event_gen_test_exit()
+      tracing: kprobe: Fix potential null-ptr-deref on trace_array in kprobe_event_gen_test_exit()
+
+Yi Yang (1):
+      rethook: fix a potential memleak in rethook_alloc()
+
+----
+ kernel/kprobes.c                     |  8 +++++-
+ kernel/trace/kprobe_event_gen_test.c | 48 ++++++++++++++++++++++++------------
+ kernel/trace/rethook.c               |  4 ++-
+ kernel/trace/trace_eprobe.c          |  5 ++--
+ 4 files changed, 45 insertions(+), 20 deletions(-)
+---------------------------
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index cd9f5a66a690..3050631e528d 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1766,7 +1766,13 @@ static int __unregister_kprobe_top(struct kprobe *p)
+ 				if ((list_p != p) && (list_p->post_handler))
+ 					goto noclean;
+ 			}
+-			ap->post_handler = NULL;
++			/*
++			 * For the kprobe-on-ftrace case, we keep the
++			 * post_handler setting to identify this aggrprobe
++			 * armed with kprobe_ipmodify_ops.
++			 */
++			if (!kprobe_ftrace(ap))
++				ap->post_handler = NULL;
+ 		}
+ noclean:
+ 		/*
+diff --git a/kernel/trace/kprobe_event_gen_test.c b/kernel/trace/kprobe_event_gen_test.c
+index d81f7c51025c..c736487fc0e4 100644
+--- a/kernel/trace/kprobe_event_gen_test.c
++++ b/kernel/trace/kprobe_event_gen_test.c
+@@ -73,6 +73,10 @@ static struct trace_event_file *gen_kretprobe_test;
+ #define KPROBE_GEN_TEST_ARG3	NULL
+ #endif
+ 
++static bool trace_event_file_is_valid(struct trace_event_file *input)
++{
++	return input && !IS_ERR(input);
++}
+ 
+ /*
+  * Test to make sure we can create a kprobe event, then add more
+@@ -139,6 +143,8 @@ static int __init test_gen_kprobe_cmd(void)
+ 	kfree(buf);
+ 	return ret;
+  delete:
++	if (trace_event_file_is_valid(gen_kprobe_test))
++		gen_kprobe_test = NULL;
+ 	/* We got an error after creating the event, delete it */
+ 	ret = kprobe_event_delete("gen_kprobe_test");
+ 	goto out;
+@@ -202,6 +208,8 @@ static int __init test_gen_kretprobe_cmd(void)
+ 	kfree(buf);
+ 	return ret;
+  delete:
++	if (trace_event_file_is_valid(gen_kretprobe_test))
++		gen_kretprobe_test = NULL;
+ 	/* We got an error after creating the event, delete it */
+ 	ret = kprobe_event_delete("gen_kretprobe_test");
+ 	goto out;
+@@ -217,10 +225,12 @@ static int __init kprobe_event_gen_test_init(void)
+ 
+ 	ret = test_gen_kretprobe_cmd();
+ 	if (ret) {
+-		WARN_ON(trace_array_set_clr_event(gen_kretprobe_test->tr,
+-						  "kprobes",
+-						  "gen_kretprobe_test", false));
+-		trace_put_event_file(gen_kretprobe_test);
++		if (trace_event_file_is_valid(gen_kretprobe_test)) {
++			WARN_ON(trace_array_set_clr_event(gen_kretprobe_test->tr,
++							  "kprobes",
++							  "gen_kretprobe_test", false));
++			trace_put_event_file(gen_kretprobe_test);
++		}
+ 		WARN_ON(kprobe_event_delete("gen_kretprobe_test"));
+ 	}
+ 
+@@ -229,24 +239,30 @@ static int __init kprobe_event_gen_test_init(void)
+ 
+ static void __exit kprobe_event_gen_test_exit(void)
+ {
+-	/* Disable the event or you can't remove it */
+-	WARN_ON(trace_array_set_clr_event(gen_kprobe_test->tr,
+-					  "kprobes",
+-					  "gen_kprobe_test", false));
++	if (trace_event_file_is_valid(gen_kprobe_test)) {
++		/* Disable the event or you can't remove it */
++		WARN_ON(trace_array_set_clr_event(gen_kprobe_test->tr,
++						  "kprobes",
++						  "gen_kprobe_test", false));
++
++		/* Now give the file and instance back */
++		trace_put_event_file(gen_kprobe_test);
++	}
+ 
+-	/* Now give the file and instance back */
+-	trace_put_event_file(gen_kprobe_test);
+ 
+ 	/* Now unregister and free the event */
+ 	WARN_ON(kprobe_event_delete("gen_kprobe_test"));
+ 
+-	/* Disable the event or you can't remove it */
+-	WARN_ON(trace_array_set_clr_event(gen_kretprobe_test->tr,
+-					  "kprobes",
+-					  "gen_kretprobe_test", false));
++	if (trace_event_file_is_valid(gen_kretprobe_test)) {
++		/* Disable the event or you can't remove it */
++		WARN_ON(trace_array_set_clr_event(gen_kretprobe_test->tr,
++						  "kprobes",
++						  "gen_kretprobe_test", false));
++
++		/* Now give the file and instance back */
++		trace_put_event_file(gen_kretprobe_test);
++	}
+ 
+-	/* Now give the file and instance back */
+-	trace_put_event_file(gen_kretprobe_test);
+ 
+ 	/* Now unregister and free the event */
+ 	WARN_ON(kprobe_event_delete("gen_kretprobe_test"));
+diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+index c69d82273ce7..32c3dfdb4d6a 100644
+--- a/kernel/trace/rethook.c
++++ b/kernel/trace/rethook.c
+@@ -83,8 +83,10 @@ struct rethook *rethook_alloc(void *data, rethook_handler_t handler)
+ {
+ 	struct rethook *rh = kzalloc(sizeof(struct rethook), GFP_KERNEL);
+ 
+-	if (!rh || !handler)
++	if (!rh || !handler) {
++		kfree(rh);
+ 		return NULL;
++	}
+ 
+ 	rh->data = data;
+ 	rh->handler = handler;
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index 5dd0617e5df6..123d2c0a6b68 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -52,6 +52,7 @@ static void trace_event_probe_cleanup(struct trace_eprobe *ep)
+ 	kfree(ep->event_system);
+ 	if (ep->event)
+ 		trace_event_put_ref(ep->event);
++	kfree(ep->filter_str);
+ 	kfree(ep);
+ }
+ 
+@@ -642,7 +643,7 @@ new_eprobe_trigger(struct trace_eprobe *ep, struct trace_event_file *file)
+ 	INIT_LIST_HEAD(&trigger->list);
+ 
+ 	if (ep->filter_str) {
+-		ret = create_event_filter(file->tr, file->event_call,
++		ret = create_event_filter(file->tr, ep->event,
+ 					ep->filter_str, false, &filter);
+ 		if (ret)
+ 			goto error;
+@@ -900,7 +901,7 @@ static int trace_eprobe_tp_update_arg(struct trace_eprobe *ep, const char *argv[
+ 
+ static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const char *argv[])
+ {
+-	struct event_filter *dummy;
++	struct event_filter *dummy = NULL;
+ 	int i, ret, len = 0;
+ 	char *p;
+ 
