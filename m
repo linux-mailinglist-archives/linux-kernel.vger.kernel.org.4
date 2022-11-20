@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F386316A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 22:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B3D6316AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 23:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiKTV5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 16:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S229792AbiKTWC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 17:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiKTV5u (ORCPT
+        with ESMTP id S229750AbiKTWCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 16:57:50 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395291006C
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 13:57:45 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id vv4so15385366ejc.2
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 13:57:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:references:in-reply-to:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1AoTlJAK3QOFYfEmMhg1BA7nUrOPA852HOGrTdWcGU=;
-        b=b+jiQKg+Z0/DyLUCnkFCKKKrp8bhbvjO/p41Qg3tom/24Ob1FPaWnlgvd72Kibt5Ed
-         atQVOHg8RUJG/cs7CFHgWL0aPmNiNoevnB7casi1ogzM0z4bZhMJWrEffIL9vWex5DqW
-         1KQqtKNLtulRBMRISU5/wzIab3R5M0gPoS9xMxS01U3D1qT/srb0lqZYRi24LnpBt32B
-         pamgcwsxjQasF9OWgHIkjXfgdeMF4KBPAvrrUtnTjYdLWrXuvwFZ5+YH9z8uoKjaFn2P
-         q397yTpoCrOifbCLcgpT6/djUqrnUfbx5Pnc140oIQcmvwRu4Q85I3KGXHbhzf3onKfz
-         K9ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:references:in-reply-to:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e1AoTlJAK3QOFYfEmMhg1BA7nUrOPA852HOGrTdWcGU=;
-        b=jiUvzos2vRDL+CZBKg+20g3BYdK6hS/CvrK2yhVMIwrd+C5jedPRFJekEXr1yUp5Gd
-         afAQHTthtLXTLGWi/uTwvX4Kwrt/3REtIDHiMwfi/6wajDRBbHBuanItHgSAavr0HZX4
-         9vCqI7E0xsaHTzdwMwAB+1MdWYbNg3AR4iNSAormGjJ316nSyARbklr4oegvepkxxF5w
-         ybVXRtsnunkCEj17+Hh6ELC8qiX5N5WeDnCnWjg2fbJdmUo5cGe0aFgCPsGNhRy1lZSf
-         kY+j6F8/bnwQQE3l0OJV+TQp6aRYu1cjTnbzJLdusbuAvIdINtv6GtHf04ybWnDuz1Z3
-         Jp5w==
-X-Gm-Message-State: ANoB5pkPhEN6FXJTTrZWSJ/YBKMQi79/TERsGN4z7yo6Bztqh20aIOR1
-        mDTOBA92/1BHD5+xuhx8ss9kMzMeQzw0/fzvppE=
-X-Google-Smtp-Source: AA0mqf7BshE8PuNQG7Pw2bqlAKp+NnYa4MtkHEh5n/rOql/mPW0+nWPe5bL9Dl+sme1z7BsFz9bvenUCoDkiIrhr92U=
-X-Received: by 2002:a17:906:4a8d:b0:78d:a4ca:32df with SMTP id
- x13-20020a1709064a8d00b0078da4ca32dfmr12746328eju.686.1668981463917; Sun, 20
- Nov 2022 13:57:43 -0800 (PST)
+        Sun, 20 Nov 2022 17:02:50 -0500
+Received: from mo4-p05-ob.smtp.rzone.de (mo4-p05-ob.smtp.rzone.de [85.215.255.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D254EB843;
+        Sun, 20 Nov 2022 14:02:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1668981574;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=7gKo6W2XG8PXmAvzufvOcLgOJPE7tHjQ3B2GDJ9irCg=;
+    b=jsKSIRU0H05+Lx1O+pbuXvAYS2yABMqhc2xFZP/+jyhbPcXSGshHJ2YuGSnNKiAsTS
+    u0VJ6ZdO6W2QCaImH6lJlmVDj/63MyFKzpT9NVSCRR5B+i3WsEUXahEIuTpq+UmTTXM4
+    jj4mcdCwsw6nXQwiaMcjJOBoq9IXGGE0BSUFRSEsZT30k69i5e75m7WxZ+8NnytKQOcJ
+    Ov3YTiuPnJ2nXoFPcqtBPsKLO6ZvOkLy+nL2UA6bHD1tbJImVcyiwbBQEVTZtin1yqEe
+    DJ+JiwdnGl/XoxCUc/TU7kyrd7Zox7I80+/e/F097m967AKerLLMoqng5XFezpiSdpiS
+    QBdg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1RvWtIfZ/7Q8ZGqEBlwxF4QH61wYa9UK/y81Dg=="
+X-RZG-CLASS-ID: mo05
+Received: from blinux.speedport.ip
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id z9cfbfyAKLxXWa2
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 20 Nov 2022 22:59:33 +0100 (CET)
+From:   Bean Huo <beanhuo@micron.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        daejun7.park@samsung.com, quic_cang@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        quic_richardp@quicinc.com, quic_asutoshd@quicinc.com, hare@suse.de
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] UFS Advanced RPMB
+Date:   Sun, 20 Nov 2022 22:59:20 +0100
+Message-Id: <20221120215927.104580-1-beanhuo@micron.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:7208:d046:b0:5d:44ac:25cc with HTTP; Sun, 20 Nov 2022
- 13:57:43 -0800 (PST)
-Reply-To: davidtayo2007@gmail.com
-In-Reply-To: <CAN7LwtH+DvPsWDn-kdcTohHZtaUO6BaM9KZVC=0mA+R-E-jdWQ@mail.gmail.com>
-References: <CAN7LwtFHhewN0Q2hoz0i-+UhbUCTThU2+Aqmt=y2J+hpK_BbhA@mail.gmail.com>
- <CAN7LwtGCc3qL5AsMAA_V_BAZk-JNA1GJ8a-vnQwW0Xc+ygi6KA@mail.gmail.com>
- <CAN7LwtHMRHH3nB95WXmyff-whofbW3SMMigx8o2tpuN5ksLjaA@mail.gmail.com>
- <CAN7LwtE=Qx9TeHXUN+PA9RuKK844EmCmSaJFP2GZZ5H5tN-xHA@mail.gmail.com>
- <CAN7LwtGacf_mbJY3gMxS=aQvjet5cHBO72jh2Y5fN28s5Ny0iA@mail.gmail.com>
- <CAN7LwtHdtt3wGfjZ2CkGWu+k+Yvn6cLWJ6bfmXBpZDp+d_d8ZA@mail.gmail.com>
- <CAN7LwtGyAaRMw7Mk_7GfRGaUqpYpw6DFW9aakoSGk3+f271Lfw@mail.gmail.com>
- <CAN7LwtEboGwEi=wTamOLs+SfNHVxuoyxZSi2OtiQQqEgSusVxw@mail.gmail.com>
- <CAN7LwtFSafFNek0adTtXzqyN50XwJJ_niQSv0oeEwxrbRBkT9Q@mail.gmail.com>
- <CAN7LwtHqZ4FuK-8FuO4=WH674YpPQV7VVwdsMYadBeW4xgrVGw@mail.gmail.com>
- <CAN7LwtGhqpoMGb3J18LtNzDGvWT6Thy01dgezfL6jKZACOjeTA@mail.gmail.com>
- <CAN7LwtG-TjC1ueDSN2T47Y8Pu3Rx3d4a=zGvPkqPge7Tx1WiYg@mail.gmail.com>
- <CAN7LwtH=gpAKRqu8QJ9dLOY-w+7180dgzfEjnu4hXtt7Pgym8w@mail.gmail.com>
- <CAN7LwtHZ9XPX8BJpvTP1jYt9BD5XPtbJghrEG2-nXSCuK07__Q@mail.gmail.com>
- <CAN7LwtGxt7Wh5H2iw_f7TqiY54Ln5ofJe_vC_-K_xnB9OdJuiw@mail.gmail.com> <CAN7LwtH+DvPsWDn-kdcTohHZtaUO6BaM9KZVC=0mA+R-E-jdWQ@mail.gmail.com>
-From:   david tayo <larchermartin001@gmail.com>
-Date:   Sun, 20 Nov 2022 22:57:43 +0100
-Message-ID: <CAN7LwtE6MPAsVucpQHV4cOgQHLEngYM5YHS2WgsP-zheuuj4VA@mail.gmail.com>
-Subject: =?UTF-8?B?R3LDvMOfZSw=?=
-To:     davidtayo2007@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo, haben Sie die Ihnen zugesandten Detailinformationen erhalten?
-Bitte antworten Sie mir, es ist sehr wichtig
+Changelog:
 
-Mit besten Empfehlungen
-David Tayo
+V1 --> V2:
+    1. Added RPMB request completion handling in patch 6/6
+
+RFC --> V1:
+    1. Split the patch and Remove RFC
+    2. Add all 8 types of rpmb operations
+    3. Fix one EHS copy error in ufshcd_advanced_rpmb_req_handler()
+    4. Fix several issues raised by Avri in the RFC patch:
+    https://patchwork.kernel.org/project/linux-scsi/patch/20221107131038.201724-3-beanhuo@iokpp.de/#25081912
+
+Bean Huo (6):
+  ufs: ufs_bsg: Remove unnecessary length checkup
+  ufs: ufs_bsg: Cleanup ufs_bsg_request
+  ufs: core: Split ufshcd_map_sg
+  ufs: core: Advanced RPMB detection
+  ufs: core: Pass EHS length into ufshcd_prepare_req_desc_hdr()
+  ufs: core: Add advanced RPMB support in ufs_bsg
+
+ drivers/ufs/core/ufs_bsg.c       | 137 +++++++++++++++---------
+ drivers/ufs/core/ufshcd.c        | 176 +++++++++++++++++++++++++------
+ include/uapi/scsi/scsi_bsg_ufs.h |  46 +++++++-
+ include/ufs/ufs.h                |  29 +++++
+ include/ufs/ufshcd.h             |   6 +-
+ include/ufs/ufshci.h             |   1 +
+ 6 files changed, 315 insertions(+), 80 deletions(-)
+
+-- 
+2.25.1
+
