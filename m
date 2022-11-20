@@ -2,116 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C594D6316C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 23:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9F26316D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Nov 2022 23:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiKTWMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 17:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S229843AbiKTWW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 17:22:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiKTWMY (ORCPT
+        with ESMTP id S229677AbiKTWWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 17:12:24 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAF626552;
-        Sun, 20 Nov 2022 14:12:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/bcYYEBupthiwQFde2svNyfveIgcGiNItZQIVI9J6Ss=; b=Bg5jbkqHupRZJTsHapmaeOsvZu
-        LI4K4Y8mGOaSMFKqz5evy0COP2ho8d+q8mprBht9AgcaCGFKGllwhdifTJwEjEwhK/Nt+/sN1wbGN
-        ukDZ821qV4C40N3IEbjBWAmiAnfEhQ9PYWLwITdcAUPFcUVYHbQTJY+c4VyZrHNUKbl6fktJv7DXs
-        b71/72DRPJywmI4p//ikfup3Hxj6D5Fqn7oDhTFqAMAoSbotFcDNYKyx99RBlrPQlXl7DEqZmUhI2
-        0JU3HqPd5Cs0mThu8P1skZ5/WDMkYnPdNIh45ki/alZXXCux9+znFmKRHIPZaRSSMDuvOOQYtJt/f
-        j7Ruz+fA==;
-Received: from p200300ccff43b2001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff43:b200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1owsXw-00069B-6U; Sun, 20 Nov 2022 23:12:16 +0100
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1owsXv-00Cypm-CX; Sun, 20 Nov 2022 23:12:15 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     tony@atomide.com, lgirdwood@gmail.com, broonie@kernel.org,
-        Nicolae_Rosia@mentor.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 2/2] regulator: twl6030: fix get status of twl6032 regulators
-Date:   Sun, 20 Nov 2022 23:12:08 +0100
-Message-Id: <20221120221208.3093727-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221120221208.3093727-1-andreas@kemnade.info>
-References: <20221120221208.3093727-1-andreas@kemnade.info>
+        Sun, 20 Nov 2022 17:22:36 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72090BE12;
+        Sun, 20 Nov 2022 14:22:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1668982947;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=rHIWmEiOCODPVWqiYPeHv9zjayliBfKoMjHI89CGOSU=;
+    b=B8BTSLJYogGD67WP+p7TUWk+N1y5g+8q4pNLQh4zlADms0no54mmKEaPQkYkC2XOcQ
+    qZLDQEJp4fRnpCa1NPDSBawCE0az6RtIgSwXDCaCsFSMnpKr0Ap5awmlsUXl3y5lzeCf
+    Jrw9IrtXgGBt8QYpayZo2SeSg7zc+uqphTsJV3rB91/OOpiTSqnHG2qbak1+9X5d/Hkp
+    sslSlxvCko8ckgPWsyw/fjjqU3tE6rh5cCnbIlWdKU9wzLOmCwP5zDaX8gSvNPvuOh4M
+    xWHrwPQFYp6HlCcpxPQOYnU8xL1t6lydCyirBJouvmMMft7HCzN6CVejhsJyeYjLjXUT
+    +u2A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1RvWtIfZ/7Q8ZGqEBlwxF4QH61wYa9UK/y81Dg=="
+X-RZG-CLASS-ID: mo00
+Received: from blinux.speedport.ip
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id z9cfbfyAKMMQWc4
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 20 Nov 2022 23:22:26 +0100 (CET)
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        daejun7.park@samsung.com, quic_cang@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        quic_richardp@quicinc.com, quic_asutoshd@quicinc.com, hare@suse.de
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean Huo <beanhuo@iokpp.de>
+Subject: [PATCH v2 0/6] UFS Advanced RPMB
+Date:   Sun, 20 Nov 2022 23:22:11 +0100
+Message-Id: <20221120222217.108492-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Status is reported as always off in the 6032 case. Status
-reporting now matches the logic in the setters. Once of
-the differences to the 6030 is that there are no groups,
-therefore the state needs to be read out in the lower bits.
+Changelog:
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/regulator/twl6030-regulator.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+V1 -- V2:
+    1. Added RPMB request completion handling in patch 6/6
+RFC -- V1:
+    1. Split the patch and Remove RFC
+    2. Add all 8 types of rpmb operations
+    3. Fix one EHS copy error in ufshcd_advanced_rpmb_req_handler()
+    4. Fix several issues raised by Avri in the RFC patch:
+    https://patchwork.kernel.org/project/linux-scsi/patch/20221107131038.201724-3-beanhuo@iokpp.de/#25081912
 
-diff --git a/drivers/regulator/twl6030-regulator.c b/drivers/regulator/twl6030-regulator.c
-index 7c7e3648ea4b..f3856750944f 100644
---- a/drivers/regulator/twl6030-regulator.c
-+++ b/drivers/regulator/twl6030-regulator.c
-@@ -67,6 +67,7 @@ struct twlreg_info {
- #define TWL6030_CFG_STATE_SLEEP	0x03
- #define TWL6030_CFG_STATE_GRP_SHIFT	5
- #define TWL6030_CFG_STATE_APP_SHIFT	2
-+#define TWL6030_CFG_STATE_MASK		0x03
- #define TWL6030_CFG_STATE_APP_MASK	(0x03 << TWL6030_CFG_STATE_APP_SHIFT)
- #define TWL6030_CFG_STATE_APP(v)	(((v) & TWL6030_CFG_STATE_APP_MASK) >>\
- 						TWL6030_CFG_STATE_APP_SHIFT)
-@@ -128,13 +129,14 @@ static int twl6030reg_is_enabled(struct regulator_dev *rdev)
- 		if (grp < 0)
- 			return grp;
- 		grp &= P1_GRP_6030;
-+		val = twlreg_read(info, TWL_MODULE_PM_RECEIVER, VREG_STATE);
-+		val = TWL6030_CFG_STATE_APP(val);
- 	} else {
-+		val = twlreg_read(info, TWL_MODULE_PM_RECEIVER, VREG_STATE);
-+		val &= TWL6030_CFG_STATE_MASK;
- 		grp = 1;
- 	}
- 
--	val = twlreg_read(info, TWL_MODULE_PM_RECEIVER, VREG_STATE);
--	val = TWL6030_CFG_STATE_APP(val);
--
- 	return grp && (val == TWL6030_CFG_STATE_ON);
- }
- 
-@@ -187,7 +189,12 @@ static int twl6030reg_get_status(struct regulator_dev *rdev)
- 
- 	val = twlreg_read(info, TWL_MODULE_PM_RECEIVER, VREG_STATE);
- 
--	switch (TWL6030_CFG_STATE_APP(val)) {
-+	if (info->features & TWL6032_SUBCLASS)
-+		val &= TWL6030_CFG_STATE_MASK;
-+	else
-+		val = TWL6030_CFG_STATE_APP(val);
-+
-+	switch (val) {
- 	case TWL6030_CFG_STATE_ON:
- 		return REGULATOR_STATUS_NORMAL;
- 
+Bean Huo (6):
+  ufs: ufs_bsg: Remove unnecessary length checkup
+  ufs: ufs_bsg: Cleanup ufs_bsg_request
+  ufs: core: Split ufshcd_map_sg
+  ufs: core: Advanced RPMB detection
+  ufs: core: Pass EHS length into ufshcd_prepare_req_desc_hdr()
+  ufs: core: Add advanced RPMB support in ufs_bsg
+
+ drivers/ufs/core/ufs_bsg.c       | 137 +++++++++++++++---------
+ drivers/ufs/core/ufshcd.c        | 176 +++++++++++++++++++++++++------
+ include/uapi/scsi/scsi_bsg_ufs.h |  46 +++++++-
+ include/ufs/ufs.h                |  29 +++++
+ include/ufs/ufshcd.h             |   6 +-
+ include/ufs/ufshci.h             |   1 +
+ 6 files changed, 315 insertions(+), 80 deletions(-)
+
 -- 
-2.30.2
+2.25.1
 
