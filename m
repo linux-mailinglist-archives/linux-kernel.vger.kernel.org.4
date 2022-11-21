@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A068631C5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4E6631C59
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiKUJH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S229762AbiKUJGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiKUJHW (ORCPT
+        with ESMTP id S229508AbiKUJGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:07:22 -0500
-X-Greylist: delayed 33674 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 01:07:21 PST
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8E26DCF7;
-        Mon, 21 Nov 2022 01:07:20 -0800 (PST)
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 2AL96qJA015443;
-        Mon, 21 Nov 2022 18:06:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2AL96qJA015443
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669021613;
-        bh=7X6L8AAqOEY0/aQSZIAWdIdlY5cPDBedn82Z4qDbDj8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bnQuxmb5RXwPbs0ZUhMNOeDUNzwY/Zhp3ZOHah5mrJYICSCcNUgGwoPPHUg+BegtS
-         J5pOR0SpnPPe0CMz2/5zaUv0EMjloyHCipCzvBpgWgP5oZYfVjposgLigRwcWb8oGH
-         xeOb1/sGcD/hs/x7q+hmiHfCDuj6GRApfYKFGMmLqqY9DyJ5GZx0cs3+8G+kxyV1yR
-         9mHIoaQAXnbD7ta3fVmQMGlWgic0DZ0vihX9O5QatbZekvvHcuOddmheF5BFtJR77J
-         RwVI/6juTSl6HHmeT2AMWdHS0zmsqqca7hX2ruiTisv54Z2WAkOry2L6gcFQEBPaOT
-         Fbfvz7BhBRCmQ==
-X-Nifty-SrcIP: [209.85.167.171]
-Received: by mail-oi1-f171.google.com with SMTP id v81so11911434oie.5;
-        Mon, 21 Nov 2022 01:06:53 -0800 (PST)
-X-Gm-Message-State: ANoB5pnsxr4EPOygI75y6gbxGkHkInPVXXh5B+WiciRX9Nqx8H3/d9UL
-        Z7NVhLEHi+1MyNx1FRY1mE5e3TfqYcLe+Fw6mvc=
-X-Google-Smtp-Source: AA0mqf4oPAKiL8xYOTZ6xdM9i5EZ8/eV9uwfHeFU3qXK3j1ph/tgydAxQdRN8Em2+5zt0pL3BK3LUpJUuqi8g1IvgKM=
-X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
- ay9-20020a056808300900b0035494a6a721mr11148779oib.194.1669021611960; Mon, 21
- Nov 2022 01:06:51 -0800 (PST)
+        Mon, 21 Nov 2022 04:06:38 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F27131346;
+        Mon, 21 Nov 2022 01:06:37 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id v7so7995182wmn.0;
+        Mon, 21 Nov 2022 01:06:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/g7tdUKpMLQr11oIOFeI44OcDD56VSJn5Rj01iy3iwY=;
+        b=kaxrmS+jV349NXio1VBR/t2aJ33uIid0NxZP6rvhA60YD50a6uGWxBuhKE7XunwhgF
+         5rGXDzQlwSbyb+HOuyPDF6K0/U6BcpBpXbJrSwy+jqognXWlf4yDS+TLiMSMbX7d5h+U
+         N6QyfeNkyTG9g92YX15QSX7hSKO9WvapaTu753yQN6cbCNGAr9Pycu6kfIlKANPEjyNt
+         IOToqpAdeaB5wftQRMcY9m9pAwbOWt+lLVbpcYkbvzyPOXlQ0Bl3b5JlNwLBpZ2OQYnj
+         XvasldYzHx3rQGkIztnAMOObeYoncFLeNFTcPtLvB2+FxuMGO5D0Ab94RPTDC944sZxR
+         2G0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/g7tdUKpMLQr11oIOFeI44OcDD56VSJn5Rj01iy3iwY=;
+        b=lJYWFhtnwgSTFY6fFq5sR5yxdeluGF3/VxGnV1F3W7Y6abdHiNYnG3xjlWTwY2Fj1C
+         aAioE68obDZB8LLSuIgmhGZAhbtA54HGmarcFIAoS7JjlpIvYN0myuFOI1iqKd3llCvf
+         qR6SO6GN9/tL5mZPPrBforzqsm9I/hu0XEI/6MfVphdZmpp9ZIm/8thuR09HT9OlvIWm
+         H6ngePcwoILt7jMNfyRR5robjgSheSapSb8EZvyuL6eORI9Aa1JghUuM4h66vXsY/u0l
+         P1Yojhlh8bTgN+aJslp/Hm1QJhnFDgH9QCTSq5HRFLbcLLkvqSVpiHIlpAPxLtvnp9LL
+         xmgQ==
+X-Gm-Message-State: ANoB5pkm7eguHRGPKuWGodKZSK1RazZcjJymy6Dby5FC9v00ijra17cj
+        loEx9IA5SgjhhTeeRw7NXg7zfIm3tGwaBQYdLWkDR8KU
+X-Google-Smtp-Source: AA0mqf5+mc7GUhFtLfAFvnwgvMmVYb5Gy49x+6lhWzsLJFJjm1fiXEBjR1fvZSwUeWPclXZ3ED4vr+WMpmdfGPtjTKw=
+X-Received: by 2002:a7b:cb83:0:b0:3cf:96da:3846 with SMTP id
+ m3-20020a7bcb83000000b003cf96da3846mr14827224wmi.10.1669021595181; Mon, 21
+ Nov 2022 01:06:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20221119225650.1044591-1-alobakin@pm.me> <20221119225650.1044591-12-alobakin@pm.me>
- <Y3oxyUx0UkWVjGvn@smile.fi.intel.com> <961a7d7e-c917-86a8-097b-5961428e9ddc@redhat.com>
- <CAK7LNASxxzA1OEGuJR=BU=6G8XaatGx+gDCMe2s9Y3MRcwptYw@mail.gmail.com> <87852fc9-0757-7e58-35a2-90cccf970f5c@redhat.com>
-In-Reply-To: <87852fc9-0757-7e58-35a2-90cccf970f5c@redhat.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 21 Nov 2022 18:06:15 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAROUV6Z6L6yn4WiigfPRJTGU4+j0ujLt6nsxVp9+aCUzw@mail.gmail.com>
-Message-ID: <CAK7LNAROUV6Z6L6yn4WiigfPRJTGU4+j0ujLt6nsxVp9+aCUzw@mail.gmail.com>
-Subject: Re: [PATCH 11/18] platform/x86: int3472: fix object shared between
- several modules
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        linux-kbuild@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221119093424.193145-1-chenzhongjin@huawei.com>
+ <CAKFNMokEHD4FfPRcuRB4GrVquiT_RkWkNGKgb+ZPLPSGwfbDHQ@mail.gmail.com>
+ <db11fe6a-356b-a522-f275-9b8ce8ab3b4a@huawei.com> <CAKFNMo=SsnbZxrAU-ho_37J4ZBqG+VY0kDJxDa3widrb2Gkj1g@mail.gmail.com>
+ <35670b32-1337-04be-0269-f7f0f845833c@huawei.com> <CAKFNMokLfPLGZQetnXzf2Q4MWVtYOcdujdyYPBMsJgWoW2AMKA@mail.gmail.com>
+In-Reply-To: <CAKFNMokLfPLGZQetnXzf2Q4MWVtYOcdujdyYPBMsJgWoW2AMKA@mail.gmail.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Mon, 21 Nov 2022 18:06:17 +0900
+Message-ID: <CAKFNMo=ccYHUq5J10QR7-_JD9T634FV23QgMzeJ1m6NWRC4b9Q@mail.gmail.com>
+Subject: Re: [PATCH v2] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment
+ usage as dirty
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, akpm@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,169 +71,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 5:12 PM Hans de Goede <hdegoede@redhat.com> wrote:
+On Mon, Nov 21, 2022 at 5:48 PM Ryusuke Konishi wrote:
 >
 > Hi,
 >
-> On 11/21/22 00:45, Masahiro Yamada wrote:
-> > On Mon, Nov 21, 2022 at 5:55 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> >>
-> >> Hi,
-> >>
-> >> On 11/20/22 14:55, Andy Shevchenko wrote:
-> >>> On Sat, Nov 19, 2022 at 11:08:17PM +0000, Alexander Lobakin wrote:
-> >>>> common.o is linked to both intel_skl_int3472_{discrete,tps68470}:
-> >>>>
-> >>>>> scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile:
-> >>>>> common.o is added to multiple modules: intel_skl_int3472_discrete
-> >>>>> intel_skl_int3472_tps68470
-> >>>>
-> >>>> Although both drivers share one Kconfig option
-> >>>> (CONFIG_INTEL_SKL_INT3472), it's better to not link one object file
-> >>>> into several modules (and/or vmlinux).
-> >>>> Under certain circumstances, such can lead to the situation fixed by
-> >>>> commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
-> >>>>
-> >>>> Introduce the new module, intel_skl_int3472_common, to provide the
-> >>>> functions from common.o to both discrete and tps68470 drivers. This
-> >>>> adds only 3 exports and doesn't provide any changes to the actual
-> >>>> code.
-> >>
-> >> Replying to Andy's reply here since I never saw the original submission
-> >> which was not Cc-ed to platform-driver-x86@vger.kernel.org .
-> >>
-> >> As you mention already in the commit msg, the issue from:
-> >>
-> >> commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects")
-> >>
-> >> is not an issue here since both modules sharing the .o file are
-> >> behind the same Kconfig option.
-> >>
-> >> So there is not really an issue here and common.o is tiny, so
-> >> small chances are it does not ever increase the .ko size
-> >> when looking a the .ko size rounded up to a multiple of
-> >> the filesystem size.
-> >>
-> >> At the same time adding an extra module does come with significant
-> >> costs, it will eat up at least 1 possibly more then 1 fs blocks
-> >> (I don't know what the module header size overhead is).
-> >>
-> >> And it needs to be loaded separately and module loading is slow;
-> >> and it will grow the /lib/modules/<kver>/modules.* sizes.
-> >>
-> >> So nack from me for this patch, since I really don't see
-> >> it adding any value.
+> On Mon, Nov 21, 2022 at 4:45 PM Chen Zhongjin wrote:
+> > On 2022/11/21 14:48, Ryusuke Konishi wrote:
+> > > On Mon, Nov 21, 2022 at 11:16 AM Chen Zhongjin wrote:
+> > >> Hi,
+> > >>
+> > >> On 2022/11/19 22:09, Ryusuke Konishi wrote:
+> > >>> On Sat, Nov 19, 2022 at 6:37 PM Chen Zhongjin wrote:
+> > >>>> In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
+> > >>>> nilfs_segment_usage is not set dirty, which makes it can be found by
+> > >>>> nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
+> > >>> The body of the patch looks OK, but this part of the commit log is a
+> > >>> bit misleading.
+> > >>> Could you please modify the expression so that we can understand this
+> > >>> patch fixes the issue when the disk image is corrupted and the leak
+> > >>> wasn't always there ?
+> > >> Makes sense. I'm going to fix the message as this:
+> > > Thank you for responding to my comment.
+> > >
+> > >> When extending segment, the current segment is allocated and set dirty
+> > >> by previous nilfs_sufile_alloc().
+> > >> But for some special cases such as corrupted image it can be unreliable,
+> > >> so nilfs_sufile_mark_dirty()
+> > >> is called to promise that current segment is dirty.
+> > > This sentence is a little different because nilfs_sufile_mark_dirty()
+> > > is originally called to dirty the buffer to include it as a part of
+> > > the log of nilfs ahead, where the completed usage data will be stored
+> > > later.
+> > >
+> > > And, unlike the dirty state of buffers and inodes, the dirty state of
+> > > segments is persistent and resides on disk until it's freed by
+> > > nilfs_sufile_free() unless it's destroyed on disk.
+> > >
+> > >> However, nilfs_sufile_mark_dirty() only sets buffer and inode dirty
+> > >> while nilfs_segment_usage can
+> > >> still be clean an used by following nilfs_sufile_alloc() because it
+> > >> checks nilfs_segment_usage_clean(su).
+> > >>
+> > >> This will cause the problem reported...
+> > > So, how about a description like this:
+> > >
+> > > When extending segments, nilfs_sufile_alloc() is called to get an
+> > > unassigned segment.
+> > > nilfs_sufile_alloc() then marks it as dirty to avoid accidentally
+> > > allocating the same segment in the future.
+> > > But for some special cases such as a corrupted image it can be unreliable.
+> > >
+> > > If such corruption of the dirty state of the segment occurs, nilfs2
+> > > may reallocate a segment that is in use and pick the same segment for
+> > > writing twice at the same time.
+> > > ...
+> > > This will cause the reported problem.
+> > > ...
+> > > Fix the problem by setting usage as dirty every time in
+> > > nilfs_sufile_mark_dirty() which is called for the current segment
+> > > before allocating additional segments during constructing segments to
+> > > be written out.
+> >
+> > Thanks for your explanation!
+> >
+> > I made some simplification, so everything looks like:
 > >
 > >
+> > When extending segments, nilfs_sufile_alloc() is called to get an
+> > unassigned segment, then mark it as dirty to avoid accidentally
+> > allocating the same segment in the future.
 > >
+> > But for some special cases such as a corrupted image it can be
+> > unreliable.
+> > If such corruption of the dirty state of the segment occurs, nilfs2 may
+> > reallocate a segment that is in use and pick the same segment for
+> > writing twice at the same time.
 > >
-> > This does have a value.
+> > This will cause the problem reported by syzkaller:
+> > https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
 > >
-> > This clarifies the ownership of the common.o,
-> > in other words, makes KBUILD_MODNAME deterministic.
+> > This case started with segbuf1.segnum = 3, nextnum = 4 when constructed.
+> > It supposed segment 4 has already been allocated and marked as dirty.
 > >
+> > However the dirty state was corrupted and segment 4 usage was not dirty.
+> > For the first time nilfs_segctor_extend_segments() segment 4 was
+> > allocated again, which made segbuf2 and next segbuf3 had same segment 4.
 > >
-> > If an object belongs to a module,
-> > KBUILD_MODNAME is defined as the module name.
+> > sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
+> > added to both buffer lists of two segbuf. It makes the lists broken
+> > which causes NULL pointer dereference.
 > >
-> > If an object is always built-in,
-> > KBUILD_MODNAME is defined as the basename of the object.
-> >
-> >
-> >
-> > Here is a question:
-> > if common.o is shared by two modules intel_skl_int3472_discrete
-> > and intel_skl_int3472_tps68470, what should KBUILD_MODNAME be?
-> >
-> >
-> > I see some patch submissions relying on the assumption that
-> > KBUILD_MODNAME is unique.
-> > We cannot determine KBUILD_MODNAME correctly if an object is shared
-> > by multiple modules.
-> >
-> >
-> >
-> >
-> >
-> >
-> > BTW, this patch is not the way I suggested.
-> > The Suggested-by should not have been there
-> > (or at least Reported-by)
-> >
-> >
-> > You argued "common.o is tiny", so I would vote for
-> > making them inline functions, like
-> >
-> >
-> > https://lore.kernel.org/linux-kbuild/20221119225650.1044591-2-alobakin@pm.me/T/#u
->
-> Yes just moving the contents of common.c to static inline helpers in common.h
-> would be much better.
->
-> If someone creates such a patch, please do not forget to Cc
-> platform-driver-x86@vger.kernel.org
-
-
-
-I think this patch series should be split
-and sent to each sub-system instead of kbuild.
-
-
-
-
-
-
-> Regards,
->
-> Hans
->
->
->
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >> Regards,
-> >>
-> >> Hans
-> >>
-> >>
-> >>
-> >>
-> >>
-> >>>
-> >>> ...
-> >>>
-> >>>> +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
-> >>>> +
-> >>>
-> >>> Redundant blank line. You may put it to be last MODULE_*() in the file, if you
-> >>> think it would be more visible.
-> >>>
-> >>>>  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI Discrete Device Driver");
-> >>>>  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
-> >>>>  MODULE_LICENSE("GPL v2");
-> >>>
-> >>> ...
-> >>>
-> >>>> +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
-> >>>> +
-> >>>>  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI TPS68470 Device Driver");
-> >>>>  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
-> >>>>  MODULE_LICENSE("GPL v2");
-> >>>
-> >>> Ditto. And the same to all your patches.
-> >>>
-> >>
-> >
+> > Fix the problem by setting usage as dirty every time in
+> > nilfs_sufile_mark_dirty(), which is called during constructing current
+> > segment to be written out and before allocating next segment.
 > >
 >
+> > Also add lock in it to protect the usage modification.
+>
+> You don't have to say this because this lock is needed to complete
+> your modification and not the original.
+> If you want to mention it, how about saying like this:
+>
+> Along with this change, this also adds a lock in it to protect the
+> usage modification.
 
+Come to think of it, this was also a misleading expression because the
+patch doesn't add a new lock, but adds a use of an existing lock.
+Either way, I'll leave it up to you.
 
--- 
-Best Regards
-Masahiro Yamada
+Thanks,
+Ryusuke Konishi
+
+>
+> > If it looks good, I'll sent the v3 patch for it.
+> >
+> > Best,
+> > Chen
+>
+> I think the rest is OK as an overall description.
+>
+> Thanks,
+> Ryusuke Konishi
