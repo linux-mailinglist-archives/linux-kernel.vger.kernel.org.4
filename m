@@ -2,160 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74BE632AA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D4E632AA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbiKURQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
+        id S231209AbiKURRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbiKURPt (ORCPT
+        with ESMTP id S231162AbiKURRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:15:49 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C56CC8C90;
-        Mon, 21 Nov 2022 09:13:53 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id n3so4296778wrp.5;
-        Mon, 21 Nov 2022 09:13:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iOdZm+t0ZjNb9E1ZMCmZ/u5jw9aDGTn6ypSEA7WGmII=;
-        b=Bri+YqkxR9A7oBnDSBN5S+vyOvU73bMGjpOqXuh54mO57W/8vv2dISgFfJOv3GVPOO
-         oprFGOYKvPDkUXBkinoQBz9ugVtWHtbvoxjmtsz8uoKHrn3o4h7g8HzFMT7pZSWm3tQl
-         ClJNBQoFkCPAL0MU349QGlUMLQGqPY86xykMZKCWkbcHBRDAz2s9EzUbcjmMdXrFaeWy
-         KXJLqSv1NIG7+lIf0t23v2cu1b2bFHGZMN8NVVK6CAXLcA04FgEkSIorOTi9/NgTZfPk
-         2ZWmQ/1KOoaRIrZVUtuN5dcjuJheAkvjOXD8diWI7ljW/v9ofHCjrFQZKA5aY3kxeK6O
-         TpsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iOdZm+t0ZjNb9E1ZMCmZ/u5jw9aDGTn6ypSEA7WGmII=;
-        b=ZelV5ALgDxQc9l73EThonb7YOuonhjnLD2RrueobYNmgdWxdan8zUueLoojpFY9WNh
-         6Dkl3YCkizBZrFbVjvHSrp1azrsmsPVgXBC5VLrjngCnCXoGrtwsiCk63dJxZrBxNthJ
-         iPpzrE4Lmvp/sxViL7mrFHa358dlGPQFwaOH2qrWymKpKINQQqk7jcwsyqaGfLoFOuvh
-         Wfmo8aLIB6HN7wzm7/8t42ITi6AY67poy0XJNmAbgB+IMRK5KeccFWKX1nVJj7QM08Ar
-         u9qpgC/S0XBMgOE3p6D1Rdl2QsfrrzwrGTUypNEaMkPTv+WZc+tVC3rUJsHDFQq/FtsV
-         vzcA==
-X-Gm-Message-State: ANoB5pnGctMdzYfeOgpCpReA0XBSq1As2xs/PZfBGGFiMOHWbfGvZbWv
-        vWkDWEPY9QcySJl7hEGWGYY=
-X-Google-Smtp-Source: AA0mqf4hbwsmtUuhLGr69LHoOQQEqvX+EvI7mtwqoCP9NL9TQavoW8740rWW99QiGdXzv6vfRPk5aw==
-X-Received: by 2002:a05:6000:10c6:b0:241:d021:52d3 with SMTP id b6-20020a05600010c600b00241d02152d3mr4812424wrx.540.1669050831503;
-        Mon, 21 Nov 2022 09:13:51 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05600c020400b003b492753826sm13911425wmi.43.2022.11.21.09.13.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 09:13:50 -0800 (PST)
-Message-ID: <ef9c585f-37fd-f1f4-032b-20680bda1865@gmail.com>
-Date:   Mon, 21 Nov 2022 18:13:48 +0100
+        Mon, 21 Nov 2022 12:17:12 -0500
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7EFD5399;
+        Mon, 21 Nov 2022 09:15:17 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id 6552420199;
+        Mon, 21 Nov 2022 18:15:15 +0100 (CET)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id b8o36EmnEO1I; Mon, 21 Nov 2022 18:15:14 +0100 (CET)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id 73080200BB;
+        Mon, 21 Nov 2022 18:15:14 +0100 (CET)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 641EB80004A;
+        Mon, 21 Nov 2022 18:15:14 +0100 (CET)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 18:15:14 +0100
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
+ 2022 18:15:13 +0100
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 71E4531829DB; Mon, 21 Nov 2022 18:15:13 +0100 (CET)
+Date:   Mon, 21 Nov 2022 18:15:13 +0100
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Sabrina Dubroca <sd@queasysnail.net>
+CC:     syzbot <syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com>,
+        <davem@davemloft.net>, <edumazet@google.com>,
+        <herbert@gondor.apana.org.au>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <sfr@canb.auug.org.au>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] linux-next test error: general protection fault in
+ xfrm_policy_lookup_bytype
+Message-ID: <20221121171513.GB704954@gauss3.secunet.de>
+References: <000000000000706e6f05edfb4ce0@google.com>
+ <Y3uULqIZ31at0aIX@hog>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 05/11] dt-bindings: PCI: mediatek-gen3: add support for
- mt7986
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20221118190126.100895-1-linux@fw-web.de>
- <20221118190126.100895-6-linux@fw-web.de>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221118190126.100895-6-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y3uULqIZ31at0aIX@hog>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/11/2022 20:01, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On Mon, Nov 21, 2022 at 04:07:26PM +0100, Sabrina Dubroca wrote:
+> 2022-11-21, 05:47:38 -0800, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    e4cd8d3ff7f9 Add linux-next specific files for 20221121
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=1472370d880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a0ebedc6917bacc1
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=bfb2bee01b9c01fff864
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > 
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/b59eb967701d/disk-e4cd8d3f.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/37a7b43e6e84/vmlinux-e4cd8d3f.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/ebfb0438e6a2/bzImage-e4cd8d3f.xz
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com
+> > 
+> > general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
+> > KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
+> > CPU: 0 PID: 5295 Comm: kworker/0:3 Not tainted 6.1.0-rc5-next-20221121-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> > Workqueue: ipv6_addrconf addrconf_dad_work
+> > RIP: 0010:xfrm_policy_lookup_bytype.cold+0x1c/0x54 net/xfrm/xfrm_policy.c:2139
 > 
-> Add compatible string and clock-definition for mt7986. It needs 4 clocks
-> for PCIe, define them in binding.
+> That's the printk at the end of the function, when
+> xfrm_policy_lookup_bytype returns NULL. It seems to have snuck into
+> commit c39f95aaf6d1 ("xfrm: Fix oops in __xfrm_state_delete()"), we
+> can just remove it:
 > 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+> index 3a203c59a11b..e392d8d05e0c 100644
+> --- a/net/xfrm/xfrm_policy.c
+> +++ b/net/xfrm/xfrm_policy.c
+> @@ -2135,9 +2135,6 @@ static struct xfrm_policy *xfrm_policy_lookup_bytype(struct net *net, u8 type,
+>  fail:
+>  	rcu_read_unlock();
+>  
+> -	if (!IS_ERR(ret))
+> -		printk("xfrm_policy_lookup_bytype: policy if_id %d, wanted if_id  %d\n", ret->if_id, if_id);
+> -
+>  	return ret;
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> ---
-> v2:
-> - squashed patch 2+3 (compatible and clock definition)
-> ---
->   .../bindings/pci/mediatek-pcie-gen3.yaml        | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> index 5d7369debff2..f7a02019daea 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> @@ -48,6 +48,7 @@ properties:
->       oneOf:
->         - items:
->             - enum:
-> +              - mediatek,mt7986-pcie
->                 - mediatek,mt8188-pcie
->                 - mediatek,mt8195-pcie
->             - const: mediatek,mt8192-pcie
-> @@ -78,9 +79,11 @@ properties:
->         - const: mac
->   
->     clocks:
-> +    minItems: 4
->       maxItems: 6
->   
->     clock-names:
-> +    minItems: 4
->       maxItems: 6
->   
->     assigned-clocks:
-> @@ -160,6 +163,20 @@ allOf:
->               - const: tl_32k
->               - const: peri_26m
->               - const: peri_mem
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt7986-pcie
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: pl_250m
-> +            - const: tl_26m
-> +            - const: peri_26m
-> +            - const: top_133m
->   
->   unevaluatedProperties: false
->   
+Hm, this was not in the original patch. Maybe my tree was not
+clean when I applied it. Do you want to send a patch, or should
+I just remove it?
