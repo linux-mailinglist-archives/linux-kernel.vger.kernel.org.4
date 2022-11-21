@@ -2,175 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358FA631CDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AD7631CE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiKUJcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S230251AbiKUJdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiKUJcu (ORCPT
+        with ESMTP id S230236AbiKUJdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:32:50 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446A15FDD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:32:48 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 83955220C5;
-        Mon, 21 Nov 2022 09:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669023167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=+IB1aGd/z1BLz0hR/u2GFVPc2+6aTfO3p/KLk/OY+YQ=;
-        b=pCaLAKPOadyM9JJ2sgJI1rBx0795xJMSOizZLNSwLEKuNpy5sOfX6AS+wb9kk5eBocQZex
-        bN5x7UxAyhY54FFb1BAxOVH8RPb7xhOTeJPaMRmDvK51JVTwB/6gISLHipB5WAtpwgPhG4
-        Yc8DNfXDEJw2KOENjAqINFYwEFHJhfg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C4851377F;
-        Mon, 21 Nov 2022 09:32:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0wk5Bb9Fe2OPbwAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 21 Nov 2022 09:32:47 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org
-Cc:     yuzhao@google.com, Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sander Eikelenboom <linux@eikelenboom.it>
-Subject: [PATCH] mm: introduce arch_has_hw_pmd_young()
-Date:   Mon, 21 Nov 2022 10:32:45 +0100
-Message-Id: <20221121093245.4587-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Mon, 21 Nov 2022 04:33:17 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71C913FA0;
+        Mon, 21 Nov 2022 01:33:14 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL6EGQB024298;
+        Mon, 21 Nov 2022 03:32:55 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=PODMain02222019;
+ bh=aC0T7Vu4Q1kc1WkUgkaUMyxtsl8A2C/KujD/uy/JZBA=;
+ b=IRtUsnGFgJE2L9nfRpMCBJYBjrB0S4KltoP3d6+5fD5ZxWzwQ/Swqxh/GxADWUrsTKYd
+ +If44Nn6kb41hMilIz62x1AQK8LrFw4887WRvqd8urLme2aFcX4GyYNTYJaYfCnT3oKE
+ C/jPxKKSbJXZJq5/2jSHUoAcjr/Yz7WYoMmBIIvbOhukRAVY7iAxQp0sK92j5z9UL7hF
+ EtV64zLEe4KH6cJKOdWymxKBhGlKkFOIC/zq8c+BfkT5JdbLfMwZLbQBbosF3J+weruB
+ sufKWzDxi00oOuS8vpkXLDgstQc7DGuEnHg1zwkm/o/tMGhu3w+1nX25RvBhLETe6/S9 Pw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3kxwe6sxy1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 03:32:54 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 21 Nov
+ 2022 03:32:53 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.20 via Frontend Transport; Mon, 21 Nov 2022 03:32:52 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DAB7E468;
+        Mon, 21 Nov 2022 09:32:52 +0000 (UTC)
+Date:   Mon, 21 Nov 2022 09:32:52 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+CC:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <kernel@pengutronix.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 418/606] mfd: arizona-i2c: Convert to i2c's .probe_new()
+Message-ID: <20221121093252.GO10437@ediswmail.ad.cirrus.com>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-419-uwe@kleine-koenig.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221118224540.619276-419-uwe@kleine-koenig.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: 5IVW23JrfabCgE7Hhswp9oVIPgkEyPHe
+X-Proofpoint-GUID: 5IVW23JrfabCgE7Hhswp9oVIPgkEyPHe
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running as a Xen PV guests commit eed9a328aa1a ("mm: x86: add
-CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG") can cause a protection violation
-in pmdp_test_and_clear_young():
+On Fri, Nov 18, 2022 at 11:42:32PM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
 
- BUG: unable to handle page fault for address: ffff8880083374d0
- #PF: supervisor write access in kernel mode
- #PF: error_code(0x0003) - permissions violation
- PGD 3026067 P4D 3026067 PUD 3027067 PMD 7fee5067 PTE 8010000008337065
- Oops: 0003 [#1] PREEMPT SMP NOPTI
- CPU: 7 PID: 158 Comm: kswapd0 Not tainted 6.1.0-rc5-20221118-doflr+ #1
- RIP: e030:pmdp_test_and_clear_young+0x25/0x40
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-This happens because the Xen hypervisor can't emulate direct writes to
-page table entries other than PTEs.
-
-This can easily be fixed by introducing arch_has_hw_pmd_young()
-similar to arch_has_hw_pte_young() and test that instead of
-CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG.
-
-Fixes: eed9a328aa1a ("mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG")
-Reported-by: Sander Eikelenboom <linux@eikelenboom.it>
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- arch/x86/include/asm/pgtable.h |  8 ++++++++
- include/linux/pgtable.h        | 11 +++++++++++
- mm/vmscan.c                    | 10 +++++-----
- 3 files changed, 24 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 5059799bebe3..c567a6ed17ce 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1438,6 +1438,14 @@ static inline bool arch_has_hw_pte_young(void)
- 	return true;
- }
- 
-+#ifdef CONFIG_XEN_PV
-+#define arch_has_hw_nonleaf_pmd_young arch_has_hw_nonleaf_pmd_young
-+static inline bool arch_has_hw_nonleaf_pmd_young(void)
-+{
-+	return !cpu_feature_enabled(X86_FEATURE_XENPV);
-+}
-+#endif
-+
- #ifdef CONFIG_PAGE_TABLE_CHECK
- static inline bool pte_user_accessible_page(pte_t pte)
- {
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index a108b60a6962..58fc7e2d9575 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -260,6 +260,17 @@ static inline int pmdp_clear_flush_young(struct vm_area_struct *vma,
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
- #endif
- 
-+#ifndef arch_has_hw_nonleaf_pmd_young
-+/*
-+ * Return whether the accessed bit in non-leaf PMD entries is supported on the
-+ * local CPU.
-+ */
-+static inline bool arch_has_hw_nonleaf_pmd_young(void)
-+{
-+	return IS_ENABLED(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG);
-+}
-+#endif
-+
- #ifndef arch_has_hw_pte_young
- /*
-  * Return whether the accessed bit is supported on the local CPU.
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 04d8b88e5216..a04ac3b18326 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3975,7 +3975,7 @@ static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area
- 			goto next;
- 
- 		if (!pmd_trans_huge(pmd[i])) {
--			if (IS_ENABLED(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG) &&
-+			if (arch_has_hw_nonleaf_pmd_young() &&
- 			    get_cap(LRU_GEN_NONLEAF_YOUNG))
- 				pmdp_test_and_clear_young(vma, addr, pmd + i);
- 			goto next;
-@@ -4073,14 +4073,14 @@ static void walk_pmd_range(pud_t *pud, unsigned long start, unsigned long end,
- #endif
- 		walk->mm_stats[MM_NONLEAF_TOTAL]++;
- 
--#ifdef CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
--		if (get_cap(LRU_GEN_NONLEAF_YOUNG)) {
-+		if (arch_has_hw_nonleaf_pmd_young() &&
-+		    get_cap(LRU_GEN_NONLEAF_YOUNG)) {
- 			if (!pmd_young(val))
- 				continue;
- 
- 			walk_pmd_range_locked(pud, addr, vma, args, bitmap, &pos);
- 		}
--#endif
-+
- 		if (!walk->force_scan && !test_bloom_filter(walk->lruvec, walk->max_seq, pmd + i))
- 			continue;
- 
-@@ -5354,7 +5354,7 @@ static ssize_t show_enabled(struct kobject *kobj, struct kobj_attribute *attr, c
- 	if (arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK))
- 		caps |= BIT(LRU_GEN_MM_WALK);
- 
--	if (IS_ENABLED(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG) && get_cap(LRU_GEN_NONLEAF_YOUNG))
-+	if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG))
- 		caps |= BIT(LRU_GEN_NONLEAF_YOUNG);
- 
- 	return snprintf(buf, PAGE_SIZE, "0x%04x\n", caps);
--- 
-2.35.3
-
+Thanks,
+Charles
