@@ -2,74 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DBA632A0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17C8632A10
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiKUQxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S230305AbiKUQxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:53:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiKUQw6 (ORCPT
+        with ESMTP id S229917AbiKUQxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:52:58 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE15391FA
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:52:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SG3IFde9v1FXNN+qmS3U7oUZxUIMsSHLQSifYyRuHrQ=; b=mN9orELHv4UA+leiwa61sWFj0+
-        Gn03eFMm5CVLyKXDD2Vw0bYFQ13/oZlW71pSVGkGSX50AiFwXn1luRlZJdgPZsXg9AiKojOitqY3c
-        A4yKoOKrrYVnRWcVmtztDxnJScsxjp6fZ57l7yuabYSOLpR/heCBzdOnQ18wcDGxvVcUuU9ed7d6G
-        BTRk5heye/2ZZGp4eWdMdmF1AxowbezirKPGDmvrL8dKblpQtbTsLsCrGkcoLRI+8+Z5QNPMjTB0U
-        kdZZOmaJ5WHBLnZ9/4ArQ327XZbHymNyXJzFCITkiZ5upXXKw5iy9d02WfxBVJgtnoJwkW4cWlv1y
-        wHIbVdfw==;
-Received: from [2a01:799:95e:1700:6395:ccbd:d000:d42b] (port=64270)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oxA2N-00079a-6C; Mon, 21 Nov 2022 17:52:51 +0100
-Message-ID: <72e873e9-d4df-895b-2531-30168b8a4d64@tronnes.org>
-Date:   Mon, 21 Nov 2022 17:52:49 +0100
+        Mon, 21 Nov 2022 11:53:31 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD64D5E0;
+        Mon, 21 Nov 2022 08:53:28 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ALGr4jP010154;
+        Mon, 21 Nov 2022 10:53:04 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669049584;
+        bh=WjWo23JtttWhqV+cd1f60yZAJ4C0gsxz38omvfZwPrQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=NWQg2ps1s9LyQzHhvVttTa+mCy2uvC0en3we0LtAbHhnUh+5GULksyScxm8ASO7gQ
+         NlZ5YmAaWcETzluhVZdLUUAQzbh6winvgJVYM8cLEZ8MjQt5bqFTzXO7HnGDjC2NiM
+         OA7BEqXP3GxQymZsL1LZTzjDx8VT+hxBGZouQ9qQ=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ALGr4tr077290
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Nov 2022 10:53:04 -0600
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 21
+ Nov 2022 10:53:04 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 21 Nov 2022 10:53:04 -0600
+Received: from [10.250.38.44] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ALGr3lU017978;
+        Mon, 21 Nov 2022 10:53:03 -0600
+Message-ID: <e9de2a7b-4e04-9d6c-1e49-96469a23f705@ti.com>
+Date:   Mon, 21 Nov 2022 10:53:03 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: git send-email friendly smtp provider anyone?
-To:     Simon Ser <contact@emersion.fr>
-Cc:     dri-devel@lists.freedesktop.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
- <9-qCHLoI7vMtVX2UmZbrcDSyMIJRqoWx6G2sZEn08RP15vYjPwng_fInDkKYPvllUddwXshfYs_fIpPH3_TeFLat2MQx_LT5Hfb0dxb1vGA=@emersion.fr>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <9-qCHLoI7vMtVX2UmZbrcDSyMIJRqoWx6G2sZEn08RP15vYjPwng_fInDkKYPvllUddwXshfYs_fIpPH3_TeFLat2MQx_LT5Hfb0dxb1vGA=@emersion.fr>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 3/8] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support
+ of OSPI
+Content-Language: en-US
+To:     Matt Ranostay <mranostay@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
+        <r-gunasekaran@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221119040906.9495-1-mranostay@ti.com>
+ <20221119040906.9495-4-mranostay@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20221119040906.9495-4-mranostay@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 21.11.2022 14.33, skrev Simon Ser:
-> I think you can apply for a linux.dev mailbox [1].
+On 11/18/22 10:09 PM, Matt Ranostay wrote:
+> From: Aswath Govindraju <a-govindraju@ti.com>
 > 
+> Add support for two instance of OSPI in J721S2 SoC.
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> ---
+>   .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++++
+>   1 file changed, 40 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> index 0af242aa9816..46b3aab93c4b 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> @@ -306,4 +306,44 @@ cpts@3d000 {
+>   			ti,cpts-periodic-outputs = <2>;
+>   		};
+>   	};
+> +
+> +	fss: syscon@47000000 {
+> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
 
-Yeah you're right, I didn't know about that possibility.
-But it depends on whether or not I can just use their smtp server and
-keep my current email address. This looks like what's the problem with
-my current ISP, I need to use the email account I have in their email
-service (that I've never used) for sending through their smtp server,
-but I want to send From: another email address.
+This node is not the "ti,j721e-system-controller", and those don't have
+SPI nodes in the binding, so this will have failed the dtbs_check anyway..
 
-Noralf.
+Should be just a "simple-bus".
 
-> [1]: https://korg.docs.kernel.org/linuxdev.html
+Andrew
+
+> +		reg = <0x00 0x47000000 0x00 0x100>;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		ospi0: spi@47040000 {
+> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
+> +			reg = <0x00 0x47040000 0x00 0x100>,
+> +			      <0x5 0x0000000 0x1 0x0000000>;
+> +			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
+> +			cdns,fifo-depth = <256>;
+> +			cdns,fifo-width = <4>;
+> +			cdns,trigger-address = <0x0>;
+> +			clocks = <&k3_clks 109 5>;
+> +			assigned-clocks = <&k3_clks 109 5>;
+> +			assigned-clock-parents = <&k3_clks 109 7>;
+> +			assigned-clock-rates = <166666666>;
+> +			power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		ospi1: spi@47050000 {
+> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
+> +			reg = <0x00 0x47050000 0x00 0x100>,
+> +			      <0x7 0x0000000 0x1 0x0000000>;
+> +			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
+> +			cdns,fifo-depth = <256>;
+> +			cdns,fifo-width = <4>;
+> +			cdns,trigger-address = <0x0>;
+> +			clocks = <&k3_clks 110 5>;
+> +			power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +	};
+>   };
