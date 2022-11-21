@@ -2,179 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926E6631D59
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91161631D5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiKUJwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S231134AbiKUJws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:52:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiKUJwK (ORCPT
+        with ESMTP id S231287AbiKUJwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:52:10 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106A1A461;
-        Mon, 21 Nov 2022 01:51:47 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id z18so15437186edb.9;
-        Mon, 21 Nov 2022 01:51:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dbIkFxWp7OGSzVyZhCFFdNTbMlS4Au162oVI4e0U/e8=;
-        b=i0zqqyGezIfwQHSrRILCFIll7ZZUWu0GoKvsgEqVswfqBa7Mf+g6V4+TFB/LPVMK+i
-         6Hky+QlMkdm52C65DwVho8nbjcG8Aw1ZhY6/70nOW4O9i7VAneMgVMBB98Xk7hmydBhi
-         dCUetrS1FYeSGoBaDV3iI9c5BTQg2x1qT+Q4BARIOxMQj/fIPHTDGFuY4AXepdzajnS+
-         eoQPDRh+lUIstP92yrg4PHwvWo1I1EX9vtJc60ozxICem8zxXvfW/lkFDgxAkyTJFpHJ
-         Ds48n9R5pUucBCUNaz0SjITs51JRxCJZ32lvWhok/wgn040SiTpHCPoWKOKSGoS6k/vM
-         tYUQ==
+        Mon, 21 Nov 2022 04:52:15 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD4C9A5D1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:51:49 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id n10-20020a056e02140a00b00302aa23f73fso6174824ilo.20
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:51:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dbIkFxWp7OGSzVyZhCFFdNTbMlS4Au162oVI4e0U/e8=;
-        b=XpQOfIF1nRaIPqc1c65HPbLHr5zLMxg7fpWwclaB/9LT+sSfSye7KGCW5IMnSqpZkf
-         54Ha/I+sJpf26qz7R+XHv+VqXQbp/VECyY0EgqLIz9zXz32BkqjgNvNUJ1LAEMmclzwe
-         FN/vwqFXmfSg98GkJE3LaIjEsil5/MZv/ttJjSDP7i41HYGW0hVQkIURhwT+hqSXMx+a
-         7L0xaYzljouv+n7x6Yk60GsF7/oHbSpgsPyjxNUpwvhj2OZOB0WAdOlcPrn5gwdB4Vj3
-         7PGx9Rcu/kplYgPlsJi64ghadW33HhWwKEq+mHtKHT9mPOWWiFLAUzFFU6csQdnINMqO
-         nn8w==
-X-Gm-Message-State: ANoB5pnLNnb/zHRcaY19hEkPd3F8BjsCn5mIytuSQ/aVGBnEI0yY1F9F
-        fozw9Y1jYoqc6XK1tnkS/Ks=
-X-Google-Smtp-Source: AA0mqf5UmVueQ+rML91hvVDpfCRH9/Xe5Mop01dSSGY1DvZy+Z3CBmUqEesybd+1AthUHwK+D6XBtA==
-X-Received: by 2002:a05:6402:6c6:b0:469:590d:ae9a with SMTP id n6-20020a05640206c600b00469590dae9amr1672214edy.277.1669024305535;
-        Mon, 21 Nov 2022 01:51:45 -0800 (PST)
-Received: from [192.168.178.21] (p5b0ea229.dip0.t-ipconnect.de. [91.14.162.41])
-        by smtp.gmail.com with ESMTPSA id p18-20020a17090628d200b00782ee6b34f2sm4762763ejd.183.2022.11.21.01.51.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 01:51:44 -0800 (PST)
-Message-ID: <88779a02-6b99-09e3-2ad0-396fb9b2b13f@gmail.com>
-Date:   Mon, 21 Nov 2022 10:51:43 +0100
+        bh=lgl2I3AcBjeXgLSgGpzk/+BfkAuQ8JNYy6p5v2Gm+bE=;
+        b=jr/7uZlrj/c/pyW4DYgpspq2KtfOxF6+UXhI/hlEN/5yiX/CEM2tYYguFFcykYSak4
+         AyjeYwyY1CbVlg1PIwSG94snAhr1aoRRYbyVAKdQHcTcgUFOSuN6p2sQMeAjtRjesD/p
+         eMaLXo4icZfX8iIeulwm5qiU+SYddxeuNcoeumZznV61cQ5+t2J8Kw28+RIPKcbdOrpD
+         R2YUXvoYNWNLxQI5ib3yYrmZP70a6J6wPHRQlOtLWFWM5nUp2qb/B5otXEXPJTl8Fdca
+         0LYJ3Oa0sTlACKNkIJIXmZIY5j/NqJybsB2qNwykYAtaOAnbff+TWJHBgmw70nh4wxc7
+         36ww==
+X-Gm-Message-State: ANoB5pmg+8c/VsHeZA6PNwGatEXiGOYvUQjEoyWyknaQiOw49ZGr3Z3M
+        C3FZ9R49qO0+hlAiN9i+jmIxSVh0Zssgtbj+/N6DaCTrg5i/
+X-Google-Smtp-Source: AA0mqf5dSFgLBeL5qJboPPEyYYRGcJSGdZwzexKmG0dyeNYUJHranoGD9XoRCPCG5nKYJnidslHfKDVjjPlCoSM8Dacw4lJHPb5l
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Linaro-mm-sig] [PATCH 3/5] kobject: kset_uevent_ops: make
- filter() callback take a const *
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
- <20221121094649.1556002-3-gregkh@linuxfoundation.org>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20221121094649.1556002-3-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:234b:b0:6db:6299:1144 with SMTP id
+ r11-20020a056602234b00b006db62991144mr7622798iot.212.1669024309305; Mon, 21
+ Nov 2022 01:51:49 -0800 (PST)
+Date:   Mon, 21 Nov 2022 01:51:49 -0800
+In-Reply-To: <00000000000022a65705ec7f923c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000013eb0305edf801f8@google.com>
+Subject: Re: [syzbot] kernel BUG in do_journal_begin_r
+From:   syzbot <syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bvanassche@acm.org, jack@suse.cz,
+        jlayton@kernel.org, linux-kernel@vger.kernel.org, neilb@suse.de,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org, yi.zhang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 21.11.22 um 10:46 schrieb Greg Kroah-Hartman:
-> The filter() callback in struct kset_uevent_ops does not modify the
-> kobject passed into it, so make the pointer const to enforce this
-> restriction.  When doing so, fix up all existing filter() callbacks to
-> have the correct signature to preserve the build.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linaro-mm-sig@lists.linaro.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+syzbot has found a reproducer for the following issue on:
 
-Acked-by: Christian König <christian.koenig@amd.com> for the changes to 
-the DMA-buf subsystem.
+HEAD commit:    eb7081409f94 Linux 6.1-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=159feddd880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
+dashboard link: https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15f2377d880000
 
-> ---
->   drivers/base/bus.c                    | 2 +-
->   drivers/base/core.c                   | 4 ++--
->   drivers/dma-buf/dma-buf-sysfs-stats.c | 2 +-
->   include/linux/kobject.h               | 2 +-
->   kernel/params.c                       | 2 +-
->   5 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-> index 7ca47e5b3c1f..4ec6dbab73be 100644
-> --- a/drivers/base/bus.c
-> +++ b/drivers/base/bus.c
-> @@ -163,7 +163,7 @@ static struct kobj_type bus_ktype = {
->   	.release	= bus_release,
->   };
->   
-> -static int bus_uevent_filter(struct kobject *kobj)
-> +static int bus_uevent_filter(const struct kobject *kobj)
->   {
->   	const struct kobj_type *ktype = get_ktype(kobj);
->   
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index a79b99ecf4d8..005a2b092f3e 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2362,12 +2362,12 @@ static struct kobj_type device_ktype = {
->   };
->   
->   
-> -static int dev_uevent_filter(struct kobject *kobj)
-> +static int dev_uevent_filter(const struct kobject *kobj)
->   {
->   	const struct kobj_type *ktype = get_ktype(kobj);
->   
->   	if (ktype == &device_ktype) {
-> -		struct device *dev = kobj_to_dev(kobj);
-> +		const struct device *dev = kobj_to_dev(kobj);
->   		if (dev->bus)
->   			return 1;
->   		if (dev->class)
-> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> index 2bba0babcb62..f69d68122b9b 100644
-> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
-> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> @@ -132,7 +132,7 @@ void dma_buf_stats_teardown(struct dma_buf *dmabuf)
->   
->   
->   /* Statistics files do not need to send uevents. */
-> -static int dmabuf_sysfs_uevent_filter(struct kobject *kobj)
-> +static int dmabuf_sysfs_uevent_filter(const struct kobject *kobj)
->   {
->   	return 0;
->   }
-> diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-> index 5a2d58e10bf5..640f59d4b3de 100644
-> --- a/include/linux/kobject.h
-> +++ b/include/linux/kobject.h
-> @@ -135,7 +135,7 @@ struct kobj_uevent_env {
->   };
->   
->   struct kset_uevent_ops {
-> -	int (* const filter)(struct kobject *kobj);
-> +	int (* const filter)(const struct kobject *kobj);
->   	const char *(* const name)(struct kobject *kobj);
->   	int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
->   };
-> diff --git a/kernel/params.c b/kernel/params.c
-> index 5b92310425c5..d2237209ceda 100644
-> --- a/kernel/params.c
-> +++ b/kernel/params.c
-> @@ -926,7 +926,7 @@ static const struct sysfs_ops module_sysfs_ops = {
->   	.store = module_attr_store,
->   };
->   
-> -static int uevent_filter(struct kobject *kobj)
-> +static int uevent_filter(const struct kobject *kobj)
->   {
->   	const struct kobj_type *ktype = get_ktype(kobj);
->   
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4a019f55c517/disk-eb708140.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/eb36e890aa8b/vmlinux-eb708140.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/feee2c23ec64/bzImage-eb708140.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/55ea49124c39/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/reiserfs/journal.c:3039!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 4894 Comm: syz-executor.5 Not tainted 6.1.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:do_journal_begin_r+0x105b/0x1070 fs/reiserfs/journal.c:3039
+Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 22 ff ff ff 48 89 df e8 a6 eb b2 ff e9 15 ff ff ff e8 bc d3 5e ff 0f 0b e8 b5 d3 5e ff <0f> 0b e8 2e 6f 6a 08 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 55
+RSP: 0018:ffffc90005b975c0 EFLAGS: 00010293
+RAX: ffffffff822bc4bb RBX: 000000001100e1a7 RCX: ffff88807355d7c0
+RDX: 0000000000000000 RSI: 000000001100e1a7 RDI: 0000000000000100
+RBP: ffffc90005b97768 R08: ffffffff822bb592 R09: fffffbfff1d2f2de
+R10: fffffbfff1d2f2de R11: 1ffffffff1d2f2dd R12: ffff888076148678
+R13: ffffc90005c6c214 R14: dffffc0000000000 R15: 0000000000000100
+FS:  0000555556636400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fafdd314709 CR3: 0000000076c6c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ journal_begin+0x14b/0x350 fs/reiserfs/journal.c:3255
+ reiserfs_create+0x2c3/0x660 fs/reiserfs/namei.c:661
+ lookup_open fs/namei.c:3413 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x12d0/0x2df0 fs/namei.c:3710
+ do_filp_open+0x264/0x4f0 fs/namei.c:3740
+ do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_open fs/open.c:1334 [inline]
+ __se_sys_open fs/open.c:1330 [inline]
+ __x64_sys_open+0x221/0x270 fs/open.c:1330
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fafdd28b639
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc58937bf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007fafdd3abf80 RCX: 00007fafdd28b639
+RDX: 0000000000000000 RSI: 0000000000163042 RDI: 0000000020000280
+RBP: 00007fafdd2e6ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fafdce01c58 R14: 00007fafdd3abf80 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:do_journal_begin_r+0x105b/0x1070 fs/reiserfs/journal.c:3039
+Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 22 ff ff ff 48 89 df e8 a6 eb b2 ff e9 15 ff ff ff e8 bc d3 5e ff 0f 0b e8 b5 d3 5e ff <0f> 0b e8 2e 6f 6a 08 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 55
+RSP: 0018:ffffc90005b975c0 EFLAGS: 00010293
+RAX: ffffffff822bc4bb RBX: 000000001100e1a7 RCX: ffff88807355d7c0
+RDX: 0000000000000000 RSI: 000000001100e1a7 RDI: 0000000000000100
+RBP: ffffc90005b97768 R08: ffffffff822bb592 R09: fffffbfff1d2f2de
+R10: fffffbfff1d2f2de R11: 1ffffffff1d2f2dd R12: ffff888076148678
+R13: ffffc90005c6c214 R14: dffffc0000000000 R15: 0000000000000100
+FS:  0000555556636400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fafdd314709 CR3: 0000000076c6c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
