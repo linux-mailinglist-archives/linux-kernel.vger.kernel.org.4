@@ -2,90 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F02631CDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358FA631CDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiKUJcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S229956AbiKUJcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiKUJcP (ORCPT
+        with ESMTP id S229755AbiKUJcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:32:15 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19CE8FB2C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:32:13 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NG2G72bZhzmW4n;
-        Mon, 21 Nov 2022 17:31:43 +0800 (CST)
-Received: from [10.67.109.51] (10.67.109.51) by canpemm500009.china.huawei.com
- (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
- 2022 17:32:12 +0800
-Message-ID: <902bb40e-3eb8-cee6-cd6e-849d2fd87f15@huawei.com>
-Date:   Mon, 21 Nov 2022 17:32:11 +0800
+        Mon, 21 Nov 2022 04:32:50 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446A15FDD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:32:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 83955220C5;
+        Mon, 21 Nov 2022 09:32:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669023167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=+IB1aGd/z1BLz0hR/u2GFVPc2+6aTfO3p/KLk/OY+YQ=;
+        b=pCaLAKPOadyM9JJ2sgJI1rBx0795xJMSOizZLNSwLEKuNpy5sOfX6AS+wb9kk5eBocQZex
+        bN5x7UxAyhY54FFb1BAxOVH8RPb7xhOTeJPaMRmDvK51JVTwB/6gISLHipB5WAtpwgPhG4
+        Yc8DNfXDEJw2KOENjAqINFYwEFHJhfg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C4851377F;
+        Mon, 21 Nov 2022 09:32:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0wk5Bb9Fe2OPbwAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 21 Nov 2022 09:32:47 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org
+Cc:     yuzhao@google.com, Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sander Eikelenboom <linux@eikelenboom.it>
+Subject: [PATCH] mm: introduce arch_has_hw_pmd_young()
+Date:   Mon, 21 Nov 2022 10:32:45 +0100
+Message-Id: <20221121093245.4587-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] ubifs: Fix build errors as symbol undefined
-To:     Richard Weinberger <richard@nod.at>
-CC:     Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        yusongping <yusongping@huawei.com>
-References: <20221115083335.21211-1-hucool.lihua@huawei.com>
- <23feff35-6f2d-5cd7-57f9-ff2591a3c74e@huawei.com>
- <433070166.256175.1668893150374.JavaMail.zimbra@nod.at>
- <ed4618a5-67b4-7ee5-f172-a2709ee738fa@huawei.com>
- <540631712.260900.1669017601995.JavaMail.zimbra@nod.at>
-From:   "Lihua (lihua, ran)" <hucool.lihua@huawei.com>
-In-Reply-To: <540631712.260900.1669017601995.JavaMail.zimbra@nod.at>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.51]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Follow your suggestion, I will push a new patch，Thanks.
+When running as a Xen PV guests commit eed9a328aa1a ("mm: x86: add
+CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG") can cause a protection violation
+in pmdp_test_and_clear_young():
 
-在 2022/11/21 16:00, Richard Weinberger 写道:
-> ----- Ursprüngliche Mail -----
->> Von: "Lihua" <hucool.lihua@huawei.com>
->> An: "richard" <richard@nod.at>
->> CC: "Sascha Hauer" <s.hauer@pengutronix.de>, "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel"
->> <linux-kernel@vger.kernel.org>, "Wei Yongjun" <weiyongjun1@huawei.com>, "yusongping" <yusongping@huawei.com>
->> Gesendet: Montag, 21. November 2022 02:54:53
->> Betreff: Re: [PATCH] ubifs: Fix build errors as symbol undefined
-> 
->> You can verify it with the config in the attachment. TKS :D
-> 
-> Thanks for your .config, I was able to identify the problem.
-> When CONFIG_CC_OPTIMIZE_FOR_SIZE is set the compiler does not optimize this construct:
-> 
->          err = ubifs_node_check_hash(c, buf, zbr->hash);
->          if (err) {
->                  ubifs_bad_hash(c, buf, zbr->hash, lnum, offs);
->                  return 0;
->          }
-> 
-> With CONFIG_UBIFS_FS_AUTHENTICATION not set, the compiler can assume that
-> ubifs_node_check_hash() is never true and drops the call to ubifs_bad_hash().
-> Is CONFIG_CC_OPTIMIZE_FOR_SIZE enabled this optimization does not happen anymore.
-> 
-> So we need a no-op ubifs_bad_hash() for the CONFIG_UBIFS_FS_AUTHENTICATION=n case.
-> 
-> Thanks,
-> //richard
-> 
-> .
-> 
+ BUG: unable to handle page fault for address: ffff8880083374d0
+ #PF: supervisor write access in kernel mode
+ #PF: error_code(0x0003) - permissions violation
+ PGD 3026067 P4D 3026067 PUD 3027067 PMD 7fee5067 PTE 8010000008337065
+ Oops: 0003 [#1] PREEMPT SMP NOPTI
+ CPU: 7 PID: 158 Comm: kswapd0 Not tainted 6.1.0-rc5-20221118-doflr+ #1
+ RIP: e030:pmdp_test_and_clear_young+0x25/0x40
+
+This happens because the Xen hypervisor can't emulate direct writes to
+page table entries other than PTEs.
+
+This can easily be fixed by introducing arch_has_hw_pmd_young()
+similar to arch_has_hw_pte_young() and test that instead of
+CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG.
+
+Fixes: eed9a328aa1a ("mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG")
+Reported-by: Sander Eikelenboom <linux@eikelenboom.it>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+ arch/x86/include/asm/pgtable.h |  8 ++++++++
+ include/linux/pgtable.h        | 11 +++++++++++
+ mm/vmscan.c                    | 10 +++++-----
+ 3 files changed, 24 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 5059799bebe3..c567a6ed17ce 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1438,6 +1438,14 @@ static inline bool arch_has_hw_pte_young(void)
+ 	return true;
+ }
+ 
++#ifdef CONFIG_XEN_PV
++#define arch_has_hw_nonleaf_pmd_young arch_has_hw_nonleaf_pmd_young
++static inline bool arch_has_hw_nonleaf_pmd_young(void)
++{
++	return !cpu_feature_enabled(X86_FEATURE_XENPV);
++}
++#endif
++
+ #ifdef CONFIG_PAGE_TABLE_CHECK
+ static inline bool pte_user_accessible_page(pte_t pte)
+ {
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index a108b60a6962..58fc7e2d9575 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -260,6 +260,17 @@ static inline int pmdp_clear_flush_young(struct vm_area_struct *vma,
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ #endif
+ 
++#ifndef arch_has_hw_nonleaf_pmd_young
++/*
++ * Return whether the accessed bit in non-leaf PMD entries is supported on the
++ * local CPU.
++ */
++static inline bool arch_has_hw_nonleaf_pmd_young(void)
++{
++	return IS_ENABLED(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG);
++}
++#endif
++
+ #ifndef arch_has_hw_pte_young
+ /*
+  * Return whether the accessed bit is supported on the local CPU.
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 04d8b88e5216..a04ac3b18326 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -3975,7 +3975,7 @@ static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area
+ 			goto next;
+ 
+ 		if (!pmd_trans_huge(pmd[i])) {
+-			if (IS_ENABLED(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG) &&
++			if (arch_has_hw_nonleaf_pmd_young() &&
+ 			    get_cap(LRU_GEN_NONLEAF_YOUNG))
+ 				pmdp_test_and_clear_young(vma, addr, pmd + i);
+ 			goto next;
+@@ -4073,14 +4073,14 @@ static void walk_pmd_range(pud_t *pud, unsigned long start, unsigned long end,
+ #endif
+ 		walk->mm_stats[MM_NONLEAF_TOTAL]++;
+ 
+-#ifdef CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
+-		if (get_cap(LRU_GEN_NONLEAF_YOUNG)) {
++		if (arch_has_hw_nonleaf_pmd_young() &&
++		    get_cap(LRU_GEN_NONLEAF_YOUNG)) {
+ 			if (!pmd_young(val))
+ 				continue;
+ 
+ 			walk_pmd_range_locked(pud, addr, vma, args, bitmap, &pos);
+ 		}
+-#endif
++
+ 		if (!walk->force_scan && !test_bloom_filter(walk->lruvec, walk->max_seq, pmd + i))
+ 			continue;
+ 
+@@ -5354,7 +5354,7 @@ static ssize_t show_enabled(struct kobject *kobj, struct kobj_attribute *attr, c
+ 	if (arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK))
+ 		caps |= BIT(LRU_GEN_MM_WALK);
+ 
+-	if (IS_ENABLED(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG) && get_cap(LRU_GEN_NONLEAF_YOUNG))
++	if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG))
+ 		caps |= BIT(LRU_GEN_NONLEAF_YOUNG);
+ 
+ 	return snprintf(buf, PAGE_SIZE, "0x%04x\n", caps);
+-- 
+2.35.3
+
