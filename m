@@ -2,99 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A478631E85
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A121631E78
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiKUKfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
+        id S229840AbiKUKe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiKUKf3 (ORCPT
+        with ESMTP id S229518AbiKUKeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:35:29 -0500
-Received: from out203-205-221-153.mail.qq.com (out203-205-221-153.mail.qq.com [203.205.221.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677262871B;
-        Mon, 21 Nov 2022 02:35:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1669026926;
-        bh=AVLSmtrjCex5981fOssTpM+1X687TZMwrJJVa8zPf+Y=;
-        h=From:To:Cc:Subject:Date;
-        b=uSGaBSDWlQuk4505h6+LxoZtQ+5k5GgUXHmBdQFhSnsY6eLH8A2tEqbaNAGlzyHCi
-         dBxoiO5RwXRQCXFat6kbra9ehHp5Hq6enaef+PcCTQIW+lCkxyWHjd1lcgH3b8Ucrx
-         +MmoU88l++ZNWSeHpyBdsqLKVYtNXS4Z6J88zr+s=
-Received: from rtoax.. ([111.199.191.46])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id 8049C694; Mon, 21 Nov 2022 18:32:04 +0800
-X-QQ-mid: xmsmtpt1669026724thn6meyib
-Message-ID: <tencent_114656E8259D0AEA2BDB6810E29241995006@qq.com>
-X-QQ-XMAILINFO: M/NR0wiIuy70UK1COhJ4T9gM9U9PRI3VM4fIHTdcHCiNdpx3Qjq9dvfYft+4mS
-         zQaoK5Q3gq+Wo5jUAnQmzG1jKTdOx6amEwSprfR/r85kLELPu0eyzkEV+wuuAmcU37edmCptwEAf
-         poNmFJCr6zJalzJ+UjgaEmmeZL46lY81WfCWcN8dVCfUOlfCW9l/O8tY60Px0du0faiRqzEK5M1n
-         ixbR92gVTTbDtzPb/uqB1AnJVKQn9ygT/z51rsP5q0Txb5Ck8PSLZL77onIZKijr10Ut7yib2mPw
-         Zzl5EYbv5fnhZVOHYOvFuFWhIEX3rhr3uV0X+SsfnWF2BI9Rdr7dkmZo36tEGBbUdLNAtU+NActM
-         gMTgG8z76iKsT/TtUI+C+anPc+g/9uRQv5l0vnsMnd/HAYhi9P5S9rV8I6gxz9w8hWdyT51ca9k4
-         POojbswHfm7ephHf9BZ+Gvd7cHRARQgNgQwuiawzSHczKNojM0U82XvaQBWpwbqEz/6p50DUCOiO
-         YciRZ41DYl5QrZ0St5jChBA4ntLMcsgFDUtOrJkQhrQ9TKNEYl9O8FUU/NqdCt3jmGVXNfBpAqBi
-         HvjRWyXBls5/DvhiNCTBKZRnOmMCAVBq7gib3wyi0rfAmGrg3AW2fBY5rbCZ0Q0dj11RTDG8uBjY
-         78Ir9W9u7W/3UW+UVl0Vp0LbrncLDh43oxkycf0gthmNUHxqHWhiYhmqzjRZZMoRgyGWD/LTn9ju
-         Gp1uc+VGFcygbGYbpeKz1zUYjtkhTPRjwN396Xoym1QVy0UjQi28nY1yY0jy9A3G+jSQOxmUBsi0
-         axDyb4j/DwzM8dpTIL1dv3mNMJxo23S76hJgi1y9NmBJAfnneXq5ZyexdTSQvygRbLdLtmtD87qh
-         C3WgQNmfH79gUA4gKpCudvLTRFJfRScaTNvJas7qbDqhuVshSUYjSn3nNBx6gxO6N7mXUFlEuayQ
-         CGVD0pBmsGaeSSL9Bo8XObu9/0Ow+/LlqedVpQD+3e82+GNWI2j0UD4rTtqeBUqxe7JdQteXnKG8
-         7zoxUBVA==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     void@manifault.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        corbet@lwn.net, daniel@iogearbox.net, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, rongtao@cestc.cn, rtoax@foxmail.com,
-        sdf@google.com, song@kernel.org, yhs@fb.com
-Subject: [PATCH bpf-next v2] docs/bpf: Update btf selftests program and add link
-Date:   Mon, 21 Nov 2022 18:32:03 +0800
-X-OQ-MSGID: <20221121103203.3935-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 21 Nov 2022 05:34:24 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA5E27CC3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:34:23 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id bp15so18128238lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:34:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g01rBdqiiTuvoRvPxYyakM/ID62S4Z8P8ecgqOpG6Fk=;
+        b=wFH18v//BO+mSjYvq4+pAXmZBg4PjE0BeTd3kAFFjcC6xH8XmxyFZOr0GV27y7gg22
+         JMgpn7rDNTfrWd4H+zZCg0gOxri+c/wXE/KRmkO0U1V4URhgTQD3JzgBD0GfssH+VgTB
+         2GuW7sPQV2g+V1W0vbSDFQZPH9qYer/gQIcA/6OeKSl9C7gSG//OQf2+aXROMwGrSze+
+         qIJY1ezr9wzU5UG6xK3+zNjphPIipzAH7Asjz/sA3axJPnNtyUxtoFoEtYGElVgnNbnG
+         W6jUsODTfsclAmANjGIH8ASeQIKhjlIVWpStromLdg9memHEK7xNVemBBjXsCuPQ1xOC
+         rvYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g01rBdqiiTuvoRvPxYyakM/ID62S4Z8P8ecgqOpG6Fk=;
+        b=qmjXy3MJk8toTi5JV/496zU/Po7e0NhHPZo8ZYfFU7PU6KFwod+PldIT64Wx77iC3s
+         yVv77dlIDYpyS2/plyfpvdg0OEA0mVHtyurY+wqigsy+MOdklWmCipG0oLKOJ+iU727I
+         ddIAmchPBXAL0356z/NZ61c1r2Q0Fc5jTUYNSMaUoqRiJ6Vazw46id1PexGKumtIg5eB
+         2nn45nl+0HyfyYR9XoH54marLmcm/3h16MKyz4spjQJAJzUuCpuYFRYnaGj7uQVhJ8V7
+         yYObH6sbtInTiqEdI+67nUQtdkPMlcy9fwqRCOD4sLGka8h8DX9DsrVwup3kXNxwsvGJ
+         N/QQ==
+X-Gm-Message-State: ANoB5plgqNLlq5K8LqBv5Ouaew7V3L87lnWcYtYy2kILL2sXlLEPE0x7
+        eDzrWG+9vbkE8XLUV8qC60V2edNMdE6+7V34
+X-Google-Smtp-Source: AA0mqf6nYP6HjyYkv6L/aAK9yRawGjQhM899BPw2v0roscvBxNE129EPtnmzz2ueMEh8xr9bZNcfsQ==
+X-Received: by 2002:ac2:4346:0:b0:4b4:a5c8:cc0f with SMTP id o6-20020ac24346000000b004b4a5c8cc0fmr6388397lfl.138.1669026861877;
+        Mon, 21 Nov 2022 02:34:21 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id i16-20020a198c50000000b0048afb8b8e53sm1978969lfj.80.2022.11.21.02.34.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 02:34:21 -0800 (PST)
+Message-ID: <86ead5ed-b236-ce2f-d965-1eea72f58857@linaro.org>
+Date:   Mon, 21 Nov 2022 11:34:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v12 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus
+ SP7021
+Content-Language: en-US
+To:     Tony Huang <tonyhuang.sunplus@gmail.com>, lhjeff911@gmail.com,
+        ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, wells.lu@sunplus.com
+References: <cover.1669023361.git.tonyhuang.sunplus@gmail.com>
+ <8c8fbc29524819d8ab45a4fe75311b3b7b567650.1669023361.git.tonyhuang.sunplus@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8c8fbc29524819d8ab45a4fe75311b3b7b567650.1669023361.git.tonyhuang.sunplus@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On 21/11/2022 11:06, Tony Huang wrote:
+> Add MMC YAML file for Sunplus SP7021.
 
-commit c64779e24e88("selftests/bpf: Merge most of test_btf into
-test_progs") rename selftests/bpf btf test from 'test_btf.c' to
-'prog_tests/btf.c'.
+> +++ b/Documentation/devicetree/bindings/mmc/sunplus,mmc.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Ltd. Co. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/sunplus,mmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus MMC Controller
+> +
+> +maintainers:
+> +  - Tony Huang <tonyhuang.sunplus@gmail.com>
+> +  - Li-hao Kuo <lhjeff911@gmail.com>
+> +
+> +allOf:
+> +  - $ref: "mmc-controller.yaml"
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
-v2: Update btf selftests program and add link
-v1: https://lore.kernel.org/lkml/tencent_7F84D04F96EBE594CAD5EBD12815A2B00106@qq.com/
----
- Documentation/bpf/btf.rst | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+If there is going to be resend, drop the quotes (and keep my Reviewed-by
+tag).
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index cf8722f96090..dca0b0e9dd35 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -1062,4 +1062,9 @@ format.::
- 7. Testing
- ==========
- 
--Kernel bpf selftest `test_btf.c` provides extensive set of BTF-related tests.
-+Kernel bpf selftest `tools/testing/selftests/bpf/prog_tests/btf.c`_ provides
-+extensive set of BTF-related tests.
-+
-+.. Links
-+.. _tools/testing/selftests/bpf/prog_tests/btf.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/prog_tests/btf.c
--- 
-2.38.1
+Best regards,
+Krzysztof
 
