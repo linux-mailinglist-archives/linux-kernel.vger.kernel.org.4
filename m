@@ -2,156 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8038D632C94
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C777632C96
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiKUTDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 14:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
+        id S231225AbiKUTDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiKUTDE (ORCPT
+        with ESMTP id S231149AbiKUTDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:03:04 -0500
-Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25AA1B791
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:03:01 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id xC4IoUqnv1SdMxC4IoKsmk; Mon, 21 Nov 2022 20:02:59 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 21 Nov 2022 20:02:59 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <23c26121-6827-fef2-d9b6-6e64000d006f@wanadoo.fr>
-Date:   Mon, 21 Nov 2022 20:02:57 +0100
+        Mon, 21 Nov 2022 14:03:16 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03053627D7;
+        Mon, 21 Nov 2022 11:03:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JBM6P9/8GIhR4EwsVnymcej4u+05QBzB6q6S+C9qT1o=; b=BrhwzfyE6e/l09sfSmYIdYlUz8
+        uKB6a4rcWpJJJ/PAcs/yEne8H5J2M20KaEPdLpcFqfNV0WX73ddET6dKFBwn/0wRIVO3a9OQgqjnj
+        joIRLBDSpcq/LihJCQ2lJSklFy8kQ2CLRAF1UQf59TlKEPb2fHiQcFWkkfzBKKZXn4A0e87rLXpOu
+        xqVdYtVr/jxtU8i+A6+BoL1wg9+lqoRTjAHtVi8yWY/Zxe8Tmi6W5XixLgRl6+iT3xmWDxn931V2y
+        KVrp8h/xJqpq6veqIfuTI9Q5BxHQ+BK/QlY0kUM+XXwrFVXZUlRBHAWMpUkk33Jdino4kwSLdKQ1h
+        QvinXbsg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxC4S-00HB4h-2A; Mon, 21 Nov 2022 19:03:08 +0000
+Date:   Mon, 21 Nov 2022 11:03:08 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     Prarit Bhargava <prarit@redhat.com>, pmladek@suse.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+Message-ID: <Y3vLbDAeILx7gJPT@bombadil.infradead.org>
+References: <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
+ <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
+ <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
+ <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
+ <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
+ <Y3Jg8X7qv2AKPU1J@bombadil.infradead.org>
+ <5467e66d-55de-ca8f-c1ae-ffe6efe7290d@redhat.com>
+ <Y3Pol5H4kJioAV9W@bombadil.infradead.org>
+ <c2e841b7-e2b3-09f9-8187-328131d72c5d@redhat.com>
+ <049a8f8a-baf8-744d-6250-575fc0dc533e@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 3/3] interconnect: qcom: Add QDU1000/QRU1000
- interconnect driver
-To:     Melody Olvera <quic_molvera@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        christophe.jaillet@wanadoo.fr, devicetree@vger.kernel.org,
-        djakov@kernel.org, konrad.dybcio@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        quic_okukatla@quicinc.com, robh+dt@kernel.org
-References: <20221118182245.31035-1-quic_molvera@quicinc.com>
- <20221118182245.31035-4-quic_molvera@quicinc.com>
- <6b68b7c2-e070-0a88-35ee-2060dcbdee91@wanadoo.fr>
- <76219489-99cc-7f2e-7df6-b11f6a2c1933@quicinc.com>
-Content-Language: fr, en-GB
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <76219489-99cc-7f2e-7df6-b11f6a2c1933@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <049a8f8a-baf8-744d-6250-575fc0dc533e@suse.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 21/11/2022 à 18:55, Melody Olvera a écrit :
+On Mon, Nov 21, 2022 at 05:00:49PM +0100, Petr Pavlu wrote:
+> On 11/16/22 17:03, Prarit Bhargava wrote:
+> > On 11/15/22 14:29, Luis Chamberlain wrote:
+> >> On Mon, Nov 14, 2022 at 04:45:05PM +0100, David Hildenbrand wrote:
+> >>> Note that I don't think the issue I raised is due to 6e6de3dee51a.
+> >>> I don't have the machine at hand right now. But, again, I doubt this will
+> >>> fix it.
+> >>
+> >> There are *more* modules processed after that commit. That's all. So
+> >> testing would be appreciated.
+> >>
+> > 
+> > Can anyone tell us if
+> > 
+> > https://lore.kernel.org/linux-pm/20221102195957.82871-1-stuart.w.hayes@gmail.com/
+> > 
+> > resolves the module loading delay problem?
 > 
-> 
-> On 11/20/2022 6:19 AM, Christophe JAILLET wrote:
->> Le 18/11/2022 à 19:22, Melody Olvera a écrit :
->>> Add interconnect provider driver for Qualcomm QDU1000 and QRU1000
->>> platforms.
->>>
->>> Signed-off-by: Melody Olvera <quic_molvera-jfJNa2p1gH1BDgjK7y7TUQ@public.gmane.org>
->>> ---
->>>    drivers/interconnect/qcom/Kconfig   |    9 +
->>>    drivers/interconnect/qcom/Makefile  |    2 +
->>>    drivers/interconnect/qcom/qdu1000.c | 1079 +++++++++++++++++++++++++++
->>>    drivers/interconnect/qcom/qdu1000.h |   95 +++
->>>    4 files changed, 1185 insertions(+)
->>>    create mode 100644 drivers/interconnect/qcom/qdu1000.c
->>>    create mode 100644 drivers/interconnect/qcom/qdu1000.h
->>>
->>
->> [...]
->>
->>> +static int qnoc_probe(struct platform_device *pdev)
->>> +{
->>> +    int ret;
->>> +
->>> +    ret = qcom_icc_rpmh_probe(pdev);
->>> +    if (ret)
->>> +        dev_err(&pdev->dev, "failed to register ICC provider\n");
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +static int qnoc_remove(struct platform_device *pdev)
->>> +{
->>> +    struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
->>> +
->>> +    icc_nodes_remove(&qp->provider);
->>> +    icc_provider_del(&qp->provider);
->>
->> qcom_icc_rpmh_remove()?
->>
->> (more future proof, less verbose and more consistent with qcom_icc_rpmh_probe() in the probe)
->>
->> CJ
-> 
-> Good call. Does it make sense to just set the .probe and .remove functions as
-> qcom_icc_rpmh_probe() and qcom_icc_rpmh_remove(), respectively? Probe function
-> is just reporting if qcom_icc_rpmh_probe fails.
+> This patch unfortunately makes no difference on my test system. In my case,
+> the kernel has already intel_pstate loaded when udev starts inserting a burst
+> of acpi_cpufreq modules. It then causes the init function acpi_cpufreq_init()
+> to immediately return once the check cpufreq_get_current_driver() fails. The
+> code modified by the patch is not reached at all.
 
-I guess it is fine to remove qcom_icc_rpmh_probe() and 
-qcom_icc_rpmh_remove().
+To be clear I don't care about the patch mentioned in the above URL, I care
+about this:
 
-I've already seen such pattern in some other drivers.
+https://lkml.kernel.org/r/d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com
 
+David was this the on you tested too?
 
-But this is just the point of view of someone who never wrote a driver 
-himself :)
+Prarit, so you're left to please test, the hope would be that at the
+very least it still fixes your issue.
 
-So let see if a maintainer gives his POV.
+Petr, you had mentioned in the commit log for your second patch in this
+thread that your change fixes a regression. What I asked for was for a
+patch that fixes that regression alone first so we can send to stable.
+So what issue is that alternative patch fixing?
 
-CJ
-
-> 
-> Thanks,
-> Melody
->>
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static const struct of_device_id qnoc_of_match[] = {
->>> +    { .compatible = "qcom,qdu1000-clk-virt",
->>> +      .data = &qdu1000_clk_virt
->>> +    },
->>> +    { .compatible = "qcom,qdu1000-gem-noc",
->>> +      .data = &qdu1000_gem_noc
->>> +    },
->>> +    { .compatible = "qcom,qdu1000-mc-virt",
->>> +      .data = &qdu1000_mc_virt
->>> +    },
->>> +    { .compatible = "qcom,qdu1000-system-noc",
->>> +      .data = &qdu1000_system_noc
->>> +    },
->>> +    { }
->>> +};
->>> +MODULE_DEVICE_TABLE(of, qnoc_of_match);
->>> +
->>> +static struct platform_driver qnoc_driver = {
->>> +    .probe = qnoc_probe,
->>> +    .remove = qnoc_remove,
->>> +    .driver = {
->>> +        .name = "qnoc-qdu1000",
->>> +        .of_match_table = qnoc_of_match,
->>> +    },
->>> +};
->>
->> [...]
->>
-> 
-> 
-
+  Luis
