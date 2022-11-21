@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84750631B6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA56C631B70
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiKUI3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S230099AbiKUIaa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Nov 2022 03:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiKUI3c (ORCPT
+        with ESMTP id S230063AbiKUIaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:29:32 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1651C90F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:29:31 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id g7so17739968lfv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZhMKknOu+L4hL/MeAclcv9laMtxk7Kj4QsjwABrFVeU=;
-        b=y+vcmOVMKIcfBIqj6YndtIwVHMdjuQMSiuV1lkV1I7X27fTcD/H+TiIZEuedtwLo/A
-         mv2JYgbkjZ0HgAli6uNAETau/NRlMplPIoTFxa5uKDOujMppWs8dV73WxgYYfhlydFIZ
-         wXAL5M0bMj8bvHOi0oZp1nGFHczawCYZyCZyChoH5WKJv0F2bNbUxE/Xzv7VtyQU1+nA
-         ShkaFRCh3/CashM65P81MpzCu6yofxNzGYF5jfpphl4WU9VRImsF2A+QPW/UcTzMWvgG
-         sUVut25GfW5M4IbXeIOIb87Sl0J2mggXjbAaNAGrXOLntHZoST2jBOuytLWXld7AnnKw
-         3w3Q==
+        Mon, 21 Nov 2022 03:30:25 -0500
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57521C90F;
+        Mon, 21 Nov 2022 00:30:24 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id g10so7532048qkl.6;
+        Mon, 21 Nov 2022 00:30:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZhMKknOu+L4hL/MeAclcv9laMtxk7Kj4QsjwABrFVeU=;
-        b=GmTXVHDiBMHfSpiIdmquR+gdzjdoOT+FAGedSZMp1HcieFh7YyfscMv2ztNRdFwS1U
-         wQVGCAQXQMvSuKkAu5rcdUpHFtVNtPNWeBbonbBi3+j7ypROsldK6ai9sSBMJe7c9Sf2
-         TPQmxPX9wUfflLaaDNk4cLAaFfc7mWaRvHbXeD4PIU8W0/FoNSdSRaV/sciFE2uedrn7
-         SgXu9CJ5cj8lBRiERMqbmc4whbNNEfk34+Hk9NIiUTQT929DZKPadMLMwU3pgQlrzxSz
-         bMY1SqzqnoY9uy+gEL6Uhr2fvfcqrSp/Mz2Z05nDg91+wA/RUDi4Qbc7gaWq81sm8mnV
-         niXQ==
-X-Gm-Message-State: ANoB5pkMIorQ6O2Nfz2LQEJ/kzSo6o1XulAiUz13tEGEtwqclWKeGcM3
-        mHhLQygh4i27dRVC7AiNLPIDvg==
-X-Google-Smtp-Source: AA0mqf4YPJKO3rQ7bkdNyX3zwFYoPBIcLyWtDRGhYg6xJwPcyi/w0d2QKMslhMI8mshpPegxMN6gMg==
-X-Received: by 2002:a19:5e01:0:b0:4a2:2b5d:b95d with SMTP id s1-20020a195e01000000b004a22b5db95dmr5366515lfb.589.1669019369955;
-        Mon, 21 Nov 2022 00:29:29 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q20-20020a056512211400b00497a1f92a72sm1933849lfr.221.2022.11.21.00.29.29
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8VV82pu5u8NbT9jq7z3fcKpvggpPLbpVY5rhb5eoeVg=;
+        b=Bb5NBp9wH8abyyLYWcWE1Xp9pOY0cZ9tUDBGOZD752xseD2M2kUmxGeCXsejlREc8P
+         L9WZL6QjRF2op0U3LdQJTXgIriFSEeS9gx58rS0HRI/oxdpOy5KftrF9NAcNbyrkWiUh
+         LQvMIEAp+k/2ale0uQkLHsNh+7WF+PRPNYWaTr0UKlOXUYrf96OBq2bZs8CaQ55nY709
+         7lz0flMo+g6BBsnYIBrKainZMw0p9YHG71Rf9x1kF1PDJrXVRhcLChpXkCQubNSenI3d
+         fvQF4CoqkO6OwcbXC1klm4/lQy18DfyE+ZoeAEevwW1vx025Ry71pJ0X+LXauTjfI87a
+         LpxQ==
+X-Gm-Message-State: ANoB5pl7h2o4HX/9+xvwmjnwGUb75sKiTo29h+9fiyBShD2P7X4xnT9k
+        iTNE9ubVaPRfNOvHwVMj+yyjnyqpPaIuPQ==
+X-Google-Smtp-Source: AA0mqf5t78rHQSlm3H2YKV+FU7uqt3YYw7xeOFB19IY7AWRPwvbZlKl7EYQf8K8JuUR+rr3CXZ1rfg==
+X-Received: by 2002:a37:b1c4:0:b0:6fa:89:6642 with SMTP id a187-20020a37b1c4000000b006fa00896642mr15441239qkf.284.1669019423736;
+        Mon, 21 Nov 2022 00:30:23 -0800 (PST)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id dm53-20020a05620a1d7500b006fbbdc6c68fsm7656744qkb.68.2022.11.21.00.30.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 00:29:29 -0800 (PST)
-Message-ID: <d96a9798-7928-1303-60b1-3bb22badb5da@linaro.org>
-Date:   Mon, 21 Nov 2022 09:29:28 +0100
+        Mon, 21 Nov 2022 00:30:22 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3704852322fso106536657b3.8;
+        Mon, 21 Nov 2022 00:30:21 -0800 (PST)
+X-Received: by 2002:a05:690c:b81:b0:37e:6806:a5f9 with SMTP id
+ ck1-20020a05690c0b8100b0037e6806a5f9mr604336ywb.47.1669019421512; Mon, 21 Nov
+ 2022 00:30:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sc8280xp/sa8540p: add SoundWire
- and LPASS
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        agross@kernel.org, andersson@kernel.org
-Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221119164425.86014-1-srinivas.kandagatla@linaro.org>
- <20221119164425.86014-3-srinivas.kandagatla@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221119164425.86014-3-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-425-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-425-uwe@kleine-koenig.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 21 Nov 2022 09:30:10 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXQ3cW2a-SLsKJ7Oot_5ww-D78ainJkb4UBV318vfwrVQ@mail.gmail.com>
+Message-ID: <CAMuHMdXQ3cW2a-SLsKJ7Oot_5ww-D78ainJkb4UBV318vfwrVQ@mail.gmail.com>
+Subject: Re: [PATCH 424/606] mfd: bd9571mwv: Convert to i2c's .probe_new()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/11/2022 17:44, Srinivas Kandagatla wrote:
-> Add LPASS Codecs along with SoundWire controller for TX, RX, WSA and VA macros
-> along with LPASS LPI pinctrl node.
-> 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 319 +++++++++++++++++++++++++
+On Sat, Nov 19, 2022 at 1:05 AM Uwe Kleine-König <uwe@kleine-koenig.org> wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
+>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Gr{oetje,eeting}s,
 
-Best regards,
-Krzysztof
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
