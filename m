@@ -2,98 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9B36320DD
+	by mail.lfdr.de (Postfix) with ESMTP id C98BE6320DE
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiKULj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:39:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S231415AbiKULkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:40:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKULjj (ORCPT
+        with ESMTP id S230426AbiKULjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:39:39 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E85AA462
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:38:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xnc8nrimE8ZadiLzj8YpVfbtMkFptDEBBCizLKH9Aho=; b=VKlX+D3bIqajcYrTsTiDrH8EJF
-        p/weJ6/+0TBazPOjZ1tD6Pls1MPJFb4zg9qQJ2JwC0Ovt000qe1LmAIkxSaSJr6mARX6CgEgRJQA4
-        PDCVFgIqymgIwVmZf4rAch6927esOgcb6UpdHT/B5vSz/j5zk+M1glZbnyNY5xsUYsjvuo6bE4lFZ
-        eGrpOL9x35u7XeJMbkZOjGFq0L1H7dOob63H0CzFF2jlDYEe+PcQssQZEVX9lfsHgs0f84jCw823a
-        5rki2s7jChJWtgLoiYaBIxaBTHI87+++nPdDCB2d75jpy0XFWWZCblcpF4iOomLx4MZBmtwGvaFli
-        mvcTYUfQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ox57z-005APH-Lv; Mon, 21 Nov 2022 11:38:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Mon, 21 Nov 2022 06:39:40 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA63450B5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:38:36 -0800 (PST)
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 50BF6300244;
-        Mon, 21 Nov 2022 12:38:12 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 36098207A328C; Mon, 21 Nov 2022 12:38:12 +0100 (CET)
-Date:   Mon, 21 Nov 2022 12:38:12 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH] x86: suppress KMSAN reports in arch_within_stack_frames()
-Message-ID: <Y3tjJPtzyi9PD9VD@hirez.programming.kicks-ass.net>
-References: <20221118172305.3321253-1-glider@google.com>
- <Y3tRgGUKCxUoLeM8@hirez.programming.kicks-ass.net>
- <CAG_fn=Wpy8KA0cLBHapd7BdtnPHsRTpYip+z9TjfB1aUHUGH3g@mail.gmail.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 180DB3F513
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:38:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669030715;
+        bh=k1LFdNn2YthCqXfDo2Al9HOEWWRFBoST7OMZo/loF+4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=qQ8GF2PFJQe0ondbPn9KpePolZeE1DCKWnPRm56IMDk88w2zK9Zpy9idVkUprUBt3
+         jkzpC9PlwKjo6el/z7T5MlZVEzsLu24aa1TW1l7YjsETi/B1liUtAzPM1zlGdCtgs4
+         qtE19++7cSBqoisFsV2WTIYxL6Ww383Se8cbWhqCy+Xt4d48vxfc0f0WOTIvK6HFu8
+         vhyCcXhZo4bXlHeHdFEiPoGx1E6PmUfrYXPMrrZNu37v36HlimV04T5aD5YC+4sBIy
+         ojRUuI21RWdd9bPGAHmoEuAwC7P8a6wc3U8Hnp0nRIl9DRUz3uTq6UR2CnNwU7Barn
+         3eZrQY0GjyLGw==
+Received: by mail-yb1-f197.google.com with SMTP id w127-20020a25df85000000b006e990dfd5b8so6091418ybg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:38:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k1LFdNn2YthCqXfDo2Al9HOEWWRFBoST7OMZo/loF+4=;
+        b=LQikgSDP5VE1+wWg/jpgB9Jfo11C9GhTsbPs0DRsFVo80vVImZAR4rvsWqV/6PchzQ
+         IkkHvBFmI9Ml5/Wymig1NBvraZD4WIV8bTm7BBJmO4rUCmy7GHemceTCCluXeLXpPmNX
+         tA3V7bvdmnhr+hCOUMGbTKafkS+kaxn+bD8dwm6UmwOKiTplgi6WhbA2Qz41hvbZjyPC
+         TtVtdh9WSd5Zh6ET0vL9shm1Hb3FEq+JrUejuHd0TJ8eHR8VKPYVljTjYAG3mJz+E6FO
+         jzaTBoze98vtgCTe6HYP7E5/un99G34E2nhBoXYvu3y6oPQ6fBAczvyoW8SeYuDJsqPc
+         g+Rw==
+X-Gm-Message-State: ANoB5pnf53X+Vzp8I8Gras8PsOgQ+8mrebu3c4aJ9mGrgR4Pl7OQuwuG
+        Y06SddRKpxxJAZP9FEEcf5HWs9fBiHfwmJy12ZeIJ2OWLns30mqtdeqWgx+424D6+M9319tf0zu
+        h0K/E+R278TNHkKZpsqr6OG/p0PreKvuF04xNUDpdfbzbyO2qaycfM33d2Q==
+X-Received: by 2002:a25:e80f:0:b0:6df:927f:38c9 with SMTP id k15-20020a25e80f000000b006df927f38c9mr16158715ybd.92.1669030713973;
+        Mon, 21 Nov 2022 03:38:33 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5WqnZPCDXzAGWO5+CsGrfvY5dZ99oEse/5+ZdgxQLRmeJNBWFQZouQa8Zd7b6wtc3vX0BNaCAIpFXWIf5Gs/k=
+X-Received: by 2002:a25:e80f:0:b0:6df:927f:38c9 with SMTP id
+ k15-20020a25e80f000000b006df927f38c9mr16158698ybd.92.1669030713733; Mon, 21
+ Nov 2022 03:38:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=Wpy8KA0cLBHapd7BdtnPHsRTpYip+z9TjfB1aUHUGH3g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118010627.70576-1-hal.feng@starfivetech.com>
+ <20221118010627.70576-11-hal.feng@starfivetech.com> <8153973d-e8ad-e47a-3808-bbcdbfd169a5@linaro.org>
+In-Reply-To: <8153973d-e8ad-e47a-3808-bbcdbfd169a5@linaro.org>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Mon, 21 Nov 2022 12:38:17 +0100
+Message-ID: <CAJM55Z9ouj=jD2Otx3fK4W1wgnPjecUgFuKksw5CmU6SraM_Nw@mail.gmail.com>
+Subject: Re: [PATCH v2 10/14] dt-bindings: clock: Add StarFive JH7110
+ always-on clock and reset generator
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:28:39AM +0100, Alexander Potapenko wrote:
-
-> > > +__no_kmsan_checks
-> > >  static inline int arch_within_stack_frames(const void * const stack,
-> > >                                          const void * const stackend,
-> > >                                          const void *obj, unsigned long len)
+On Mon, 21 Nov 2022 at 09:49, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 18/11/2022 02:06, Hal Feng wrote:
+> > From: Emil Renner Berthing <kernel@esmil.dk>
 > >
-> > Seems OK; but now I'm confused as to the exact distinction between
-> > __no_sanitize_memory and __no_kmsan_checks.
+> > Add bindings for the always-on clock and reset generator (AONCRG) on the
+> > JH7110 RISC-V SoC by StarFive Ltd.
 > >
-> > The comments there about seem to suggest __no_sanitize_memory ensures no
-> > instrumentation at all, and __no_kmsan_checks some instrumentation but
-> > doesn't actually check anything -- so what's left then?
-> 
-> __no_sanitize_memory prohibits all instrumentation whatsoever, whereas
-> __no_kmsan_checks adds instrumentation that suppresses potential false
-> positives around this function.
-> 
-> Quoting include/linux/compiler-clang.h:
-> 
-> /*
->  * The __no_kmsan_checks attribute ensures that a function does not produce
->  * false positive reports by:
->  *  - initializing all local variables and memory stores in this function;
->  *  - skipping all shadow checks;
->  *  - passing initialized arguments to this function's callees.
->  */
-> 
-> Does this answer your question?
+> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> > ---
+> >  .../clock/starfive,jh7110-aoncrg.yaml         | 76 +++++++++++++++++++
+> >  1 file changed, 76 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+> > new file mode 100644
+> > index 000000000000..afbb205e294f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+> > @@ -0,0 +1,76 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/starfive,jh7110-aoncrg.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: StarFive JH7110 Always-On Clock and Reset Generator
+> > +
+> > +maintainers:
+> > +  - Emil Renner Berthing <kernel@esmil.dk>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: starfive,jh7110-aoncrg
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Main Oscillator
+> > +      - description: RTC clock
+>
+> Real Time Clock clock? :) I don't think the input to clock controller is
+> the output of RTC...
 
-So I read that comment; and it didn't click. So you're explicitly
-initializing variables/arguments and explicitly not checking shadow
-state vs, not doing explicit initialization and checking shadow state?
+The description is bad, but even the documentation calls it "clk_rtc"
+even though it's really an optional input from a 32k oscillator.
 
-That is, it doesn't do the normal checks and adds explicit
-initialization to avoid triggering discontent in surrounding functions?
-
+> Best regards,
+> Krzysztof
+>
