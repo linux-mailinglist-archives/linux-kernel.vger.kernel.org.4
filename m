@@ -2,189 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C58632359
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA43563235D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiKUNWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:22:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S229730AbiKUNYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiKUNW1 (ORCPT
+        with ESMTP id S229555AbiKUNYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:22:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45698BB;
-        Mon, 21 Nov 2022 05:22:25 -0800 (PST)
-Date:   Mon, 21 Nov 2022 13:22:22 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669036943;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jfhKsxVdcYuSS4iVLaMXHyFpJCAusOp0IRAhGPptqaw=;
-        b=hmyUWD+wABAkTih7MeofHzD3Ij2JLyozdukr3NAjkQmg3+cgNMm6cbm3ODDkYd0U8KL9QS
-        UODEc9+iXZJnkhUPDgoC49qRVz5K3Mus7LAYYJhvov2O9Evbj5e2fg3OPdOiKswLPDgP2j
-        AiZCoOX86Hp+I3ptPPRpPV5pbyiJO6vcjMWYz8x+Kg+QpqAaCPj7Vu8ICeuJWbyhDo7QxT
-        Z5y8WRoSgH8sWUbGhR2uNjGgosM+KDIao5ecmhHPbEeEGcca7cL+33yuxlfPQSebpYM8WF
-        OGGFfOdePtZnfbRxbNz4/ZKNUcsa1+eh00dhtBc9C/2x409NiaMEp4yPG7LW0A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669036943;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jfhKsxVdcYuSS4iVLaMXHyFpJCAusOp0IRAhGPptqaw=;
-        b=wVzr8HN4kYEk/1CyjjgSxIFge2rTi9wFzl8O4RnwJ0qRDsAproZjpRIb1QxplLddcDaRPK
-        AvronD3WMxZo+rCA==
-From:   "tip-bot2 for Pawan Gupta" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/tsx: Add a feature bit for TSX control MSR support
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <stable@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cde619764e1d98afbb7a5fa58424f1278ede37b45=2E16685?=
- =?utf-8?q?39735=2Egit=2Epawan=2Ekumar=2Egupta=40linux=2Eintel=2Ecom=3E?=
-References: =?utf-8?q?=3Cde619764e1d98afbb7a5fa58424f1278ede37b45=2E166853?=
- =?utf-8?q?9735=2Egit=2Epawan=2Ekumar=2Egupta=40linux=2Eintel=2Ecom=3E?=
+        Mon, 21 Nov 2022 08:24:09 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0302AC60
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:24:08 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id x5so15770777wrt.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:24:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4LJ8G4Vlx63n7xBM1es556I3FKQ+mU4sDRzPoRdCeX0=;
+        b=kd74NXQh18wXsJRyAWwjOEZo6k21PuwDdsL4ZmNCSg8eLPjALRuiX3ZSZ5RiPInHwR
+         ObrJ3F6rZaax9BBwPZ/cvOeJc/ZhxFdPBuWApa+uEQBY4ySZcH21fNOOgG9TV+srlhDK
+         sJY+fpmEVh/moUjqN9GhrBjkFat4UZ8IPCrZJcTuBV4VqYDooAI7toY9pkzEJnVlkZWj
+         qUmdWlYDENIMiVkRQwvaCWjmxPhzMpVE2mkYaJ/24jawnIMbzkaIv0uj21BSneaHWECg
+         gpmHNhIRtXHe3dnyAW2YWKDFkDqeOKdHhwnrRqZAbHOXP2OpS8mCCYsDgrBvNp1LaXvE
+         p7eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4LJ8G4Vlx63n7xBM1es556I3FKQ+mU4sDRzPoRdCeX0=;
+        b=W2sTsbF7YsWuAUQlZ1kSe5IyHlEWzlpm6Uuxd6kyV4GxOamVKoJ9bi8XSq21DchufB
+         Y+BEYTV7BvUXo246/cA63CTBbKk0BZBeM3w+GfHLy0Nh5vJBQg2jC57sieMyKShDzdAK
+         Tr4zT3I9OfdZvTrTMMtdlACHBjVmQnlsGE87WaK6SyNLQBwvzHbEH/vE1EFw7FITqjP4
+         43gfP6jSjoH9SFn/8qRxpCrCSYQXx08+5w2DpGzZiCQ+U38fowKjiNYIH8oB/bHP4Q+X
+         qcRM57gd6rcoEO9c73CQbbLgpLQJRw2383SPUr1c6o5bWgpZ5mQHjuet6dWZ4TOo8Ywz
+         Hv7A==
+X-Gm-Message-State: ANoB5pnnxE9I2gGYNTc8+wq7303Y3A6YHBIwxW6m/N/1pWP8TGbS8NJg
+        4Sp0MyijJj7zrI1pL9o5QxWxtFuDTzj8xELP
+X-Google-Smtp-Source: AA0mqf751Fr4N3/875Urx0i7J1CeHvrpttXLjJgI9qnKrrIfoaIeZRF5J+hyjNgMQMilcVeGAzzvMw==
+X-Received: by 2002:adf:e98b:0:b0:241:dbf1:dad with SMTP id h11-20020adfe98b000000b00241dbf10dadmr363012wrm.130.1669037046505;
+        Mon, 21 Nov 2022 05:24:06 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f19-20020a05600c155300b003c6f3e5ba42sm20242257wmg.46.2022.11.21.05.24.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 05:24:05 -0800 (PST)
+Message-ID: <7815f518-c764-a3d8-cde6-89c1f17c2329@linaro.org>
+Date:   Mon, 21 Nov 2022 14:24:04 +0100
 MIME-Version: 1.0
-Message-ID: <166903694262.4906.2840275250764271155.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 10/14] dt-bindings: clock: Add StarFive JH7110
+ always-on clock and reset generator
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc:     Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20221118010627.70576-1-hal.feng@starfivetech.com>
+ <20221118010627.70576-11-hal.feng@starfivetech.com>
+ <8153973d-e8ad-e47a-3808-bbcdbfd169a5@linaro.org>
+ <CAJM55Z9ouj=jD2Otx3fK4W1wgnPjecUgFuKksw5CmU6SraM_Nw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJM55Z9ouj=jD2Otx3fK4W1wgnPjecUgFuKksw5CmU6SraM_Nw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On 21/11/2022 12:38, Emil Renner Berthing wrote:
+> On Mon, 21 Nov 2022 at 09:49, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 18/11/2022 02:06, Hal Feng wrote:
+>>> From: Emil Renner Berthing <kernel@esmil.dk>
+>>>
+>>> Add bindings for the always-on clock and reset generator (AONCRG) on the
+>>> JH7110 RISC-V SoC by StarFive Ltd.
+>>>
+>>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>>> ---
+>>>  .../clock/starfive,jh7110-aoncrg.yaml         | 76 +++++++++++++++++++
+>>>  1 file changed, 76 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+>>> new file mode 100644
+>>> index 000000000000..afbb205e294f
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
+>>> @@ -0,0 +1,76 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-aoncrg.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: StarFive JH7110 Always-On Clock and Reset Generator
+>>> +
+>>> +maintainers:
+>>> +  - Emil Renner Berthing <kernel@esmil.dk>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: starfive,jh7110-aoncrg
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    items:
+>>> +      - description: Main Oscillator
+>>> +      - description: RTC clock
+>>
+>> Real Time Clock clock? :) I don't think the input to clock controller is
+>> the output of RTC...
+> 
+> The description is bad, but even the documentation calls it "clk_rtc"
+> even though it's really an optional input from a 32k oscillator.
 
-Commit-ID:     aaa65d17eec372c6a9756833f3964ba05b05ea14
-Gitweb:        https://git.kernel.org/tip/aaa65d17eec372c6a9756833f3964ba05b05ea14
-Author:        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-AuthorDate:    Tue, 15 Nov 2022 11:17:05 -08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 21 Nov 2022 14:08:20 +01:00
+Then description should match reality, not documentation. Documentation
+is often poor, so if possible better to extend it.
 
-x86/tsx: Add a feature bit for TSX control MSR support
+Best regards,
+Krzysztof
 
-Support for the TSX control MSR is enumerated in MSR_IA32_ARCH_CAPABILITIES.
-This is different from how other CPU features are enumerated i.e. via
-CPUID. Currently, a call to tsx_ctrl_is_supported() is required for
-enumerating the feature. In the absence of a feature bit for TSX control,
-any code that relies on checking feature bits directly will not work.
-
-In preparation for adding a feature bit check in MSR save/restore
-during suspend/resume, set a new feature bit X86_FEATURE_TSX_CTRL when
-MSR_IA32_TSX_CTRL is present. Also make tsx_ctrl_is_supported() use the
-new feature bit to avoid any overhead of reading the MSR.
-
-  [ bp: Remove tsx_ctrl_is_supported(), add room for two more feature
-    bits in word 11 which are coming up in the next merge window. ]
-
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: <stable@kernel.org>
-Link: https://lore.kernel.org/r/de619764e1d98afbb7a5fa58424f1278ede37b45.1668539735.git.pawan.kumar.gupta@linux.intel.com
----
- arch/x86/include/asm/cpufeatures.h |  3 ++-
- arch/x86/kernel/cpu/tsx.c          | 38 ++++++++++++-----------------
- 2 files changed, 20 insertions(+), 21 deletions(-)
-
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index b71f4f2..b2da7cb 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -305,6 +305,9 @@
- #define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
- #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
- 
-+
-+#define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
-+
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
- #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
-diff --git a/arch/x86/kernel/cpu/tsx.c b/arch/x86/kernel/cpu/tsx.c
-index ec7bbac..8009c83 100644
---- a/arch/x86/kernel/cpu/tsx.c
-+++ b/arch/x86/kernel/cpu/tsx.c
-@@ -58,24 +58,6 @@ static void tsx_enable(void)
- 	wrmsrl(MSR_IA32_TSX_CTRL, tsx);
- }
- 
--static bool tsx_ctrl_is_supported(void)
--{
--	u64 ia32_cap = x86_read_arch_cap_msr();
--
--	/*
--	 * TSX is controlled via MSR_IA32_TSX_CTRL.  However, support for this
--	 * MSR is enumerated by ARCH_CAP_TSX_MSR bit in MSR_IA32_ARCH_CAPABILITIES.
--	 *
--	 * TSX control (aka MSR_IA32_TSX_CTRL) is only available after a
--	 * microcode update on CPUs that have their MSR_IA32_ARCH_CAPABILITIES
--	 * bit MDS_NO=1. CPUs with MDS_NO=0 are not planned to get
--	 * MSR_IA32_TSX_CTRL support even after a microcode update. Thus,
--	 * tsx= cmdline requests will do nothing on CPUs without
--	 * MSR_IA32_TSX_CTRL support.
--	 */
--	return !!(ia32_cap & ARCH_CAP_TSX_CTRL_MSR);
--}
--
- static enum tsx_ctrl_states x86_get_tsx_auto_mode(void)
- {
- 	if (boot_cpu_has_bug(X86_BUG_TAA))
-@@ -135,7 +117,7 @@ static void tsx_clear_cpuid(void)
- 		rdmsrl(MSR_TSX_FORCE_ABORT, msr);
- 		msr |= MSR_TFA_TSX_CPUID_CLEAR;
- 		wrmsrl(MSR_TSX_FORCE_ABORT, msr);
--	} else if (tsx_ctrl_is_supported()) {
-+	} else if (cpu_feature_enabled(X86_FEATURE_MSR_TSX_CTRL)) {
- 		rdmsrl(MSR_IA32_TSX_CTRL, msr);
- 		msr |= TSX_CTRL_CPUID_CLEAR;
- 		wrmsrl(MSR_IA32_TSX_CTRL, msr);
-@@ -158,7 +140,8 @@ static void tsx_dev_mode_disable(void)
- 	u64 mcu_opt_ctrl;
- 
- 	/* Check if RTM_ALLOW exists */
--	if (!boot_cpu_has_bug(X86_BUG_TAA) || !tsx_ctrl_is_supported() ||
-+	if (!boot_cpu_has_bug(X86_BUG_TAA) ||
-+	    !cpu_feature_enabled(X86_FEATURE_MSR_TSX_CTRL) ||
- 	    !cpu_feature_enabled(X86_FEATURE_SRBDS_CTRL))
- 		return;
- 
-@@ -191,7 +174,20 @@ void __init tsx_init(void)
- 		return;
- 	}
- 
--	if (!tsx_ctrl_is_supported()) {
-+	/*
-+	 * TSX is controlled via MSR_IA32_TSX_CTRL.  However, support for this
-+	 * MSR is enumerated by ARCH_CAP_TSX_MSR bit in MSR_IA32_ARCH_CAPABILITIES.
-+	 *
-+	 * TSX control (aka MSR_IA32_TSX_CTRL) is only available after a
-+	 * microcode update on CPUs that have their MSR_IA32_ARCH_CAPABILITIES
-+	 * bit MDS_NO=1. CPUs with MDS_NO=0 are not planned to get
-+	 * MSR_IA32_TSX_CTRL support even after a microcode update. Thus,
-+	 * tsx= cmdline requests will do nothing on CPUs without
-+	 * MSR_IA32_TSX_CTRL support.
-+	 */
-+	if (x86_read_arch_cap_msr() & ARCH_CAP_TSX_CTRL_MSR) {
-+		setup_force_cpu_cap(X86_FEATURE_MSR_TSX_CTRL);
-+	} else {
- 		tsx_ctrl_state = TSX_CTRL_NOT_SUPPORTED;
- 		return;
- 	}
