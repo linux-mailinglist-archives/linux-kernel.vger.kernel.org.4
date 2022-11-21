@@ -2,116 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8680632F2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCB0632F33
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiKUVoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 16:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
+        id S231513AbiKUVqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 16:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiKUVns (ORCPT
+        with ESMTP id S229953AbiKUVp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:43:48 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEF517E06
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 13:43:33 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id 11so9672627iou.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 13:43:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ImVe+g+b+10JJjRyFbVg3VQDLgN59Ue/Abv7vaFmseQ=;
-        b=OHO4FjaPJmimqdrzS/OkstIvhocxCz1emkoHfOdBnFW624ABdZXIGpUr2qg1Kuoid7
-         jQ3zRS/xznKzGtwvpkBw8YcBHanbAjUGKtSMJ92a5WUJdkI77H4tBot4cVhu32vyccdd
-         iMTMhCXmKhazzg9UmrMMNr5aOJxLl31QLMnEw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ImVe+g+b+10JJjRyFbVg3VQDLgN59Ue/Abv7vaFmseQ=;
-        b=dLRB4FVIO0anQizKuGivf5EwqqOAbnQ5DHCIMCSwu5WG1EeSMmN4aKXt4GeJI52aLS
-         9LE/WyIDZyFj+vU33SV+Yu0LS7JOAJ1UCT9f/Hi4JeEpH+SHcne6inbj3xDkptmJlLTW
-         Hy09GfPT8NkpnY12JeCUitREFZDtnXNfT3YQfr7wNyDrLSfJO1lG7bbSOpvGeHbdQtSw
-         L8cwFmvjTdqzRs4hH82DQsTUFcNhZBfl+zj5THyf00JdOo21P220qJNmbOD7hMFLnTOl
-         B+8l+NUPoUrWtAtZm3xSP0TyN9T6KopVhcCq45MHK61ERIpR4ea/OYbxeIE+hEXtw+dc
-         CKvQ==
-X-Gm-Message-State: ANoB5plg7kNKxTPJ/ht3taxHiQtaXo1RzrafXmqfGI4VqGl480YAgnVd
-        ve9FoY9V123jth7A0m7uYbnhDQ==
-X-Google-Smtp-Source: AA0mqf7f7poc1w7ewSMxS1++ciq574fA83Q7zTNUSYFoHm3cWPyzQwbrRSPhTjg/tqVe+6wU++ijsA==
-X-Received: by 2002:a5d:9c0d:0:b0:6de:e346:27d4 with SMTP id 13-20020a5d9c0d000000b006dee34627d4mr639526ioe.138.1669067012402;
-        Mon, 21 Nov 2022 13:43:32 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p5-20020a92c105000000b00302a7165d9bsm3672008ile.53.2022.11.21.13.43.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 13:43:31 -0800 (PST)
-Message-ID: <26d98c8f-372b-b9c8-c29f-096cddaff149@linuxfoundation.org>
-Date:   Mon, 21 Nov 2022 14:43:29 -0700
+        Mon, 21 Nov 2022 16:45:58 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AC92E8;
+        Mon, 21 Nov 2022 13:45:57 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ALLjlUi089236;
+        Mon, 21 Nov 2022 15:45:47 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669067147;
+        bh=9nmkt/fM+sdQIIViulu9vtC5+7HYjTlTa5MRtxWn4fM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=AFFIzrXQpKWA+1SJ2QgnDZmJkQXNfbg6UBSM33x9qLaiiHnkpoVwRX2SzfzVNcyL1
+         oODPrznms/e76ti3FTrvJ6Hh12jth7NxNBfkcb1LqFs6yAcaR5nS5rKJlvrm9ySkCg
+         9e+j2PvlnE8KTzxpcyuYLZx8C6J49LMOuR0b5vZY=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ALLjli0017320
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Nov 2022 15:45:47 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 21
+ Nov 2022 15:45:47 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 21 Nov 2022 15:45:47 -0600
+Received: from [10.250.135.52] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ALLjbIn102805;
+        Mon, 21 Nov 2022 15:45:39 -0600
+Message-ID: <2558a8fd-68c0-1a3e-61d1-57d032024f5f@ti.com>
+Date:   Mon, 21 Nov 2022 23:45:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4 3/5] firmware: ti_sci: Allocate memory for the LPM
+ modes
 Content-Language: en-US
-To:     Benjamin Coddington <bcodding@redhat.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Steve French <sfrench@samba.org>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
-        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
- <cover.1669036433.git.bcodding@redhat.com>
- <382872.1669039019@warthog.procyon.org.uk>
- <51B5418D-34FB-4E87-B87A-6C3FCDF8B21C@redhat.com>
- <4585e331-03ad-959f-e715-29af15f63712@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <4585e331-03ad-959f-e715-29af15f63712@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Nishanth Menon <nm@ti.com>
+CC:     Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Vibhore Vardhan <vibhore@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>
+References: <20221116181307.198209-1-g-vlaev@ti.com>
+ <20221116181307.198209-4-g-vlaev@ti.com>
+ <20221121184435.btehz6dzliz3lizk@scuba>
+From:   Georgi Vlaev <g-vlaev@ti.com>
+In-Reply-To: <20221121184435.btehz6dzliz3lizk@scuba>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,32 +76,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 14:40, Shuah Khan wrote:
-> On 11/21/22 07:34, Benjamin Coddington wrote:
->> On 21 Nov 2022, at 8:56, David Howells wrote:
->>
->>> Benjamin Coddington <bcodding@redhat.com> wrote:
->>>
->>>> Since moving to memalloc_nofs_save/restore, SUNRPC has stopped setting the
->>>> GFP_NOIO flag on sk_allocation which the networking system uses to decide
->>>> when it is safe to use current->task_frag.
->>>
->>> Um, what's task_frag?
->>
->> Its a per-task page_frag used to coalesce small writes for networking -- see:
->>
->> 5640f7685831 net: use a per task frag allocator
->>
->> Ben
->>
->>
+Hi Nishanth,
+
+On 11/21/22 20:44, Nishanth Menon wrote:
+> On 20:13-20221116, Georgi Vlaev wrote:
+> [...]
 > 
-> I am not seeing this in the mainline. Where can find this commit?
+>> +static int ti_sci_init_suspend(struct platform_device *pdev,
+>> +			       struct ti_sci_info *info)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	int ret;
+>> +
+>> +	dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+>> +	info->ctx_mem_buf = dma_alloc_coherent(info->dev, LPM_CTX_MEM_SIZE,
+>> +					       &info->ctx_mem_addr,
+>> +					       GFP_KERNEL);
+>> +	if (!info->ctx_mem_buf) {
+>> +		dev_err(info->dev, "Failed to allocate LPM context memory\n");
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	/*
+>> +	 * Attempt to call prepare_sleep, this will be NAK'd if suspend is not
+>> +	 * supported by firmware in use, in which case we will not attempt to
+>> +	 * init suspend.
+>> +	 */
+>> +	ret = ti_sci_cmd_prepare_sleep(&info->handle, 0,
+>> +				       (u32)(info->ctx_mem_addr & 0xffffffff),
+>> +				       (u32)((u64)info->ctx_mem_addr >> 32), 0);
+>> +
+>> +	if (ret)
+>> +		goto err;
+>> +
+>> +	return 0;
+>> +err:
+>> +	dma_free_coherent(info->dev, LPM_CTX_MEM_SIZE,
+>> +			  info->ctx_mem_buf,
+>> +			  info->ctx_mem_addr);
+>> +	return ret;
+>> +}
+>> +
+>>  /* Description for K2G */
+>>  static const struct ti_sci_desc ti_sci_pmmc_k2g_desc = {
+>>  	.default_host_id = 2,
+>> @@ -3639,6 +3682,14 @@ static int ti_sci_probe(struct platform_device *pdev)
+>>  		}
+>>  	}
+>>  
+>> +	ret = ti_sci_init_suspend(pdev, info);
+>> +	if (ret)
+>> +		dev_warn(dev,
+>> +			 "ti_sci_init_suspend failed, mem suspend will be non-functional.\n");
+>> +
+>> +	/* Suspend is an optional feature, reset return value and continue. */
+>> +	ret = 0;
+> 
+> We end up getting this warning on all platforms with TISCI - even if
+> LPM sequence is capable or not - what does the message mean? firmware is
+> not capable of supporting sleep or it is a firmware capable of
+> supporting, but failed to allocate LPM context memory?
+> 
+> If it is optional (since it is probing to see if it has functionality),
+> then do we need a dev_warn - maybe a softer of form?
 > 
 
-Okay. I see this commit in the mainline. However, I don't see the
-sk_use_task_frag in mainline.
+Yeah, I agree, the message looks confusing. In both cases we can't enter suspend-to-ram,
+but we consider that an optional feature, so a softer message will be more appropriate.
 
-thanks,
--- Shuah
 
+> [...]
+> 
+
+-- 
+Regards,
+Georgi
