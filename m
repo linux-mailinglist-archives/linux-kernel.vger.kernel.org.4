@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804DD632040
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB17B63203E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiKULTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S229620AbiKULTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiKULTE (ORCPT
+        with ESMTP id S230249AbiKULTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:19:04 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E117B4F07
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:14:21 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id f6so1449306ilu.13
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:14:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YKmL238oBqxiRNanxS8WxENXsxx4KWSkzL71xeQ1GGU=;
-        b=cmTtkZsRLYZ2I7OrrX8A0P6ENVcoRjlUIfcoXkb+53K2jA1qr5lGYrpVGseSq278q+
-         GLJCGg6rHlo8FEqW8LGQIYXFXJ5a5dwgunZ0fsd/adJPLzAbKdLRdKwSMgVFFqHd8hQG
-         QO+fLy+vT8HOklP/uCk8dmMDdSwlr2Pl3c1yHtisY48EgVuuNTCiR3Cv3kjqmx3yqnQA
-         uLHHCB1I18mgGAPJfPMwZAiURQL8TotvBLKGsFUCKCUpbVnE75cRojgHxAfmG9cLwOEb
-         3U9B0C87KNHCKtfe5vPO4y0MRAFZ18zJtZZKROYda8xVEfwb/7M2z0I4epl0nYHUU/Hw
-         xZrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YKmL238oBqxiRNanxS8WxENXsxx4KWSkzL71xeQ1GGU=;
-        b=XScqbUAHIVn7YPk7AQVtTBEO6fiBWZYc+9Hqf+jT5+58w9AkiiB276hfNjra5z4Sa9
-         uQPe33knTStQajnoZo20/eVpGbSN88Xc740DIUYsbdPvlzRqO5aj45pLMbAwBmrC3yUX
-         2Br5fnDPhNPm+bCz5R8yY0k53j+RsXfq3bQAK7bYcKdZrfnrRGjqD8+ihExsdJ/EopGz
-         IlaUYQZkz0GbAVs4w5ki0nX2IBp/2vlQ/LBOa8H5775tknUnLZ3p+QqKeSbRr779iSJB
-         fH2uR7DDseu33jv8ibXfH1eUcs21BvEZJe4gp5f5n6ErEcMjzg5sjeN5wFQLQChXwxWb
-         W++Q==
-X-Gm-Message-State: ANoB5plqPVkf37tbS4qZ//PUzBuD5Dh7KQgEH85QSZVagtRwm2I4jJRh
-        lszFI6sAkf9l3Nw8DlGp/gSbhg/j5GVLKOKyAaBnqA==
-X-Google-Smtp-Source: AA0mqf5uuxubo0pCDvjXbIwnanubajZXjr7+F1Eregkc8LJqmNaOLK6kPnWI7ii9zYvuynlQ0vGgq5bNYlO61FtDZKs=
-X-Received: by 2002:a05:6e02:523:b0:2f6:9105:7a15 with SMTP id
- h3-20020a056e02052300b002f691057a15mr2247770ils.292.1669029261089; Mon, 21
- Nov 2022 03:14:21 -0800 (PST)
+        Mon, 21 Nov 2022 06:19:00 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D43BEB45;
+        Mon, 21 Nov 2022 03:14:18 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NG4Sk4j0xzFqSS;
+        Mon, 21 Nov 2022 19:11:02 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 19:14:16 +0800
+Subject: Re: [PATCH 2/3] ext4: WANR_ON when detect abnormal
+ 'i_reserved_data_blocks'
+To:     Jan Kara <jack@suse.cz>, Ye Bin <yebin10@huawei.com>
+References: <20221117014246.610202-1-yebin@huaweicloud.com>
+ <20221117014246.610202-3-yebin@huaweicloud.com>
+ <20221121094715.gpha7rkijbwr5r47@quack3>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <637B5D87.4000806@huawei.com>
+Date:   Mon, 21 Nov 2022 19:14:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-References: <20221120142737.17519-1-LinoSanfilippo@gmx.de>
-In-Reply-To: <20221120142737.17519-1-LinoSanfilippo@gmx.de>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Mon, 21 Nov 2022 11:14:04 +0000
-Message-ID: <CAPY8ntB-LdH-oy86x-4Ox-JzgLLpmBNKu7j=bQo+Danj-r3+Dw@mail.gmail.com>
-Subject: Re: [PATCH] drm/vc4: Fix NULL pointer access in vc4_platform_drm_probe()
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     airlied@gmail.com, daniel@ffwll.ch, eric@anholt.net,
-        emma@anholt.net, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
-        l.sanfilippo@kunbus.com, p.rosenberger@kunbus.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221121094715.gpha7rkijbwr5r47@quack3>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lino
 
-On Sun, 20 Nov 2022 at 15:26, Lino Sanfilippo <LinoSanfilippo@gmx.de> wrote:
->
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->
-> In vc4_platform_drm_probe() function vc4_match_add_drivers() is called to
-> find component matches for the component drivers. If no such match is found
-> the passed variable "match" is still NULL after the function returns.
 
-This would imply a very strange device tree that has bothered to add
-the drm device but none of the devices that are required to run the
-DRM pipeline, but avoiding a NULL deref is certainly preferable.
+On 2022/11/21 17:47, Jan Kara wrote:
+> On Thu 17-11-22 09:42:45, Ye Bin wrote:
+>> From: Ye Bin <yebin10@huawei.com>
+>>
+>> If 'i_reserved_data_blocks' is not cleared which mean something wrong
+>> with code, so emit WARN_ON to capture this abnormal closer to the first
+>> scene.
+>>
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>> ---
+>>   fs/ext4/super.c | 13 ++++++++-----
+>>   1 file changed, 8 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+>> index 63ef74eb8091..30885a6fe18b 100644
+>> --- a/fs/ext4/super.c
+>> +++ b/fs/ext4/super.c
+>> @@ -1385,11 +1385,14 @@ static void ext4_destroy_inode(struct inode *inode)
+>>   		dump_stack();
+>>   	}
+>>   
+>> -	if (EXT4_I(inode)->i_reserved_data_blocks)
+>> -		ext4_msg(inode->i_sb, KERN_ERR,
+>> -			 "Inode %lu (%p): i_reserved_data_blocks (%u) not cleared!",
+>> -			 inode->i_ino, EXT4_I(inode),
+>> -			 EXT4_I(inode)->i_reserved_data_blocks);
+>> +	if (EXT4_I(inode)->i_reserved_data_blocks) {
+>> +		ext4_warning(inode->i_sb, "Inode %lu (%p): "
+>> +			    "i_reserved_data_blocks (%u) not cleared!",
+>> +			     inode->i_ino, EXT4_I(inode),
+>> +			     EXT4_I(inode)->i_reserved_data_blocks);
+>> +
+>> +		WARN_ON(1);
+>> +	}
+> Hum, so I'd think that if this happens, the free space accounting is likely
+> wrong so we might as well just force the filesystem to error mode with
+> ext4_error() to force fsck?  I also gives a good chance to various test
+> systems to detect there is some problem so we don't need the WARN_ON then?
+> What do others think?
+>
+> 								Honza
+Thanks for your advice, use ext4_error() maybe is suitable and also 
+testable.
 
-> Do not pass "match" to component_master_add_with_match() in this case since
-> this results in a NULL pointer access as soon as match->num is used to
-> allocate a component_match array. Instead return with -ENODEV from the
-> drivers probe function.
->
-> Fixes: c8b75bca92cb ("drm/vc4: Add KMS support for Raspberry Pi.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-
-Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-
-> ---
->  drivers/gpu/drm/vc4/vc4_drv.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/gpu/drm/vc4/vc4_drv.c b/drivers/gpu/drm/vc4/vc4_drv.c
-> index 2027063fdc30..2e53d7f8ad44 100644
-> --- a/drivers/gpu/drm/vc4/vc4_drv.c
-> +++ b/drivers/gpu/drm/vc4/vc4_drv.c
-> @@ -437,6 +437,9 @@ static int vc4_platform_drm_probe(struct platform_device *pdev)
->         vc4_match_add_drivers(dev, &match,
->                               component_drivers, ARRAY_SIZE(component_drivers));
->
-> +       if (!match)
-> +               return -ENODEV;
-> +
->         return component_master_add_with_match(dev, &vc4_drm_ops, match);
->  }
->
->
-> base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
-> --
-> 2.36.1
->
