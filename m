@@ -2,216 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0C1632C3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 19:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445D5632C40
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 19:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiKUSnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 13:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        id S229652AbiKUSov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 13:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiKUSnp (ORCPT
+        with ESMTP id S229482AbiKUSor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 13:43:45 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71063C6D36
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 10:43:40 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id i12-20020a5d840c000000b006de8b8c5746so5330868ion.22
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 10:43:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0FUJFxLBlQCBs69/0FAENpTM4j7iOUMfMikefBqpRUw=;
-        b=V38Q5pKhKv3mb79MHum+vw+n6ZMGMbxTX04vao/U8vDr+MDceYx1OOPITkJaViQKvb
-         y39OGCqO6D+jOHjz5x/uskGBtnVp2s24IFq0khVbjt4U9nxXfDdlPfWxO+mQXd1VojR0
-         WsgmCEkO/BribC5Rw0hbn5eOKxR4wdBtoQ1Ing65voiycFGOX66tdtmx2qhXARR4iVuL
-         8NoS402r6uhmadkyQ4ElHLiDAKH8GUAuKGvZJKm1dZD46jdWLWtrAqOrGAR1coY0OsTC
-         7A0L+mHcAq9fW1keo7lgZGSrIO8TmowhtWm+YGbUpyuANYDldVR6R2IrpB2CCQNqWoH2
-         3hoQ==
-X-Gm-Message-State: ANoB5pl5tsG29gnswLO8v8aG84j8Rd5gSZ/Wo3w50ygfhtbu7BJoIdcQ
-        ZMY2rSwRWgmyGeQTw5zc7iW1wCkiYA0RLuifOhtj5AhXLt9I
-X-Google-Smtp-Source: AA0mqf7b77Bj/XWNQmzZ87izvboC1kHE9ihLCeFu8/9F2RV1ms/Wgmt/QNWCvRjWUlbLhwILcZX9agxoh49o0A0m+cfTENrYa2pc
+        Mon, 21 Nov 2022 13:44:47 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FC4C7222;
+        Mon, 21 Nov 2022 10:44:46 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ALIiaPB076276;
+        Mon, 21 Nov 2022 12:44:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669056276;
+        bh=5+bNkHsySG+rb1AP+yg51q/RLBAyiDbcqwjFZQT0DQQ=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=iGowHcm6I28WpVfVdVbeXNFGSWoCOhoY5IypmUPGAmaQF3exQvGTTSiN0Vt8RpVIw
+         udTCZB5/kUA5ye7FFvbsZCDTBg0MxzTYp5PY8u/1aqne/q6E4dOo21MfcNj5lOTk6p
+         SB0P2vyMpV1Il5ilXxOxd0To5nX7ZRggTuBwzRBc=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ALIiaNU075329
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Nov 2022 12:44:36 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 21
+ Nov 2022 12:44:35 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 21 Nov 2022 12:44:35 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ALIiZRq019261;
+        Mon, 21 Nov 2022 12:44:35 -0600
+Date:   Mon, 21 Nov 2022 12:44:35 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Georgi Vlaev <g-vlaev@ti.com>
+CC:     Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Vibhore Vardhan <vibhore@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: Re: [PATCH v4 3/5] firmware: ti_sci: Allocate memory for the LPM
+ modes
+Message-ID: <20221121184435.btehz6dzliz3lizk@scuba>
+References: <20221116181307.198209-1-g-vlaev@ti.com>
+ <20221116181307.198209-4-g-vlaev@ti.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:cc09:0:b0:302:58d0:24fe with SMTP id
- s9-20020a92cc09000000b0030258d024femr259928ilp.79.1669056219814; Mon, 21 Nov
- 2022 10:43:39 -0800 (PST)
-Date:   Mon, 21 Nov 2022 10:43:39 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000017a21a05edff6f07@google.com>
-Subject: [syzbot] WARNING: locking bug in netdev_unregister_kobject
-From:   syzbot <syzbot+079faa8639c56206a713@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        wangyufen@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221116181307.198209-4-g-vlaev@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 20:13-20221116, Georgi Vlaev wrote:
+[...]
 
-syzbot found the following issue on:
+> +static int ti_sci_init_suspend(struct platform_device *pdev,
+> +			       struct ti_sci_info *info)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	int ret;
+> +
+> +	dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+> +	info->ctx_mem_buf = dma_alloc_coherent(info->dev, LPM_CTX_MEM_SIZE,
+> +					       &info->ctx_mem_addr,
+> +					       GFP_KERNEL);
+> +	if (!info->ctx_mem_buf) {
+> +		dev_err(info->dev, "Failed to allocate LPM context memory\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	/*
+> +	 * Attempt to call prepare_sleep, this will be NAK'd if suspend is not
+> +	 * supported by firmware in use, in which case we will not attempt to
+> +	 * init suspend.
+> +	 */
+> +	ret = ti_sci_cmd_prepare_sleep(&info->handle, 0,
+> +				       (u32)(info->ctx_mem_addr & 0xffffffff),
+> +				       (u32)((u64)info->ctx_mem_addr >> 32), 0);
+> +
+> +	if (ret)
+> +		goto err;
+> +
+> +	return 0;
+> +err:
+> +	dma_free_coherent(info->dev, LPM_CTX_MEM_SIZE,
+> +			  info->ctx_mem_buf,
+> +			  info->ctx_mem_addr);
+> +	return ret;
+> +}
+> +
+>  /* Description for K2G */
+>  static const struct ti_sci_desc ti_sci_pmmc_k2g_desc = {
+>  	.default_host_id = 2,
+> @@ -3639,6 +3682,14 @@ static int ti_sci_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +	ret = ti_sci_init_suspend(pdev, info);
+> +	if (ret)
+> +		dev_warn(dev,
+> +			 "ti_sci_init_suspend failed, mem suspend will be non-functional.\n");
+> +
+> +	/* Suspend is an optional feature, reset return value and continue. */
+> +	ret = 0;
 
-HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13d5f501880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
-dashboard link: https://syzkaller.appspot.com/bug?extid=079faa8639c56206a713
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+We end up getting this warning on all platforms with TISCI - even if
+LPM sequence is capable or not - what does the message mean? firmware is
+not capable of supporting sleep or it is a firmware capable of
+supporting, but failed to allocate LPM context memory?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+If it is optional (since it is probing to see if it has functionality),
+then do we need a dev_warn - maybe a softer of form?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
+[...]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+079faa8639c56206a713@syzkaller.appspotmail.com
-
-bond5 (unregistering): Released all slaves
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(1)
-WARNING: CPU: 1 PID: 3637 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4729 [inline]
-WARNING: CPU: 1 PID: 3637 at kernel/locking/lockdep.c:231 __lock_acquire+0x2b0/0x3084 kernel/locking/lockdep.c:5005
-Modules linked in:
-CPU: 1 PID: 3637 Comm: kworker/u4:12 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Workqueue: netns cleanup_net
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_wait_context kernel/locking/lockdep.c:4729 [inline]
-pc : __lock_acquire+0x2b0/0x3084 kernel/locking/lockdep.c:5005
-lr : hlock_class kernel/locking/lockdep.c:231 [inline]
-lr : check_wait_context kernel/locking/lockdep.c:4729 [inline]
-lr : __lock_acquire+0x298/0x3084 kernel/locking/lockdep.c:5005
-sp : ffff800013ac38d0
-x29: ffff800013ac39b0 x28: 0000000000000004 x27: ffff000105793520
-x26: ffff000100eab228 x25: ffff000105793f28 x24: 0000000000000000
-x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
-x20: 0000000000000000 x19: aac6ab555542fdfe x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80000dc18158 x15: ffff000105793480
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d96cfd0
-x11: ff808000081c6510 x10: ffff80000ddda198 x9 : 9396706c2ea69400
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000c0b2b74
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
-Call trace:
- check_wait_context kernel/locking/lockdep.c:4729 [inline]
- __lock_acquire+0x2b0/0x3084 kernel/locking/lockdep.c:5005
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- kobj_kset_leave lib/kobject.c:174 [inline]
- __kobject_del+0x9c/0x1f8 lib/kobject.c:592
- kobject_cleanup+0xfc/0x280 lib/kobject.c:664
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x94/0xf8 lib/kobject.c:721
- net_rx_queue_update_kobjects net/core/net-sysfs.c:1128 [inline]
- remove_queue_kobjects net/core/net-sysfs.c:1829 [inline]
- netdev_unregister_kobject+0x168/0x1d4 net/core/net-sysfs.c:1983
- unregister_netdevice_many+0x730/0xa0c net/core/dev.c:10874
- default_device_exit_batch+0x3c0/0x424 net/core/dev.c:11341
- ops_exit_list net/core/net_namespace.c:174 [inline]
- cleanup_net+0x3cc/0x648 net/core/net_namespace.c:601
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 8362613
-hardirqs last  enabled at (8362613): [<ffff80000c0b7c04>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (8362613): [<ffff80000c0b7c04>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (8362612): [<ffff80000c0b7a40>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (8362612): [<ffff80000c0b7a40>] _raw_spin_lock_irqsave+0xa4/0xb4 kernel/locking/spinlock.c:162
-softirqs last  enabled at (8362594): [<ffff80000b2a05fc>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
-softirqs last  enabled at (8362594): [<ffff80000b2a05fc>] netif_addr_unlock_bh include/linux/netdevice.h:4454 [inline]
-softirqs last  enabled at (8362594): [<ffff80000b2a05fc>] dev_mc_flush+0xd4/0xec net/core/dev_addr_lists.c:1036
-softirqs last disabled at (8362592): [<ffff80000b2a0660>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000000000b8
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000107c45000
-[00000000000000b8] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 3637 Comm: kworker/u4:12 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Workqueue: netns cleanup_net
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_wait_context kernel/locking/lockdep.c:4729 [inline]
-pc : __lock_acquire+0x2d0/0x3084 kernel/locking/lockdep.c:5005
-lr : hlock_class kernel/locking/lockdep.c:231 [inline]
-lr : check_wait_context kernel/locking/lockdep.c:4729 [inline]
-lr : __lock_acquire+0x298/0x3084 kernel/locking/lockdep.c:5005
-sp : ffff800013ac38d0
-x29: ffff800013ac39b0 x28: 0000000000000004 x27: ffff000105793520
-x26: ffff000100eab228 x25: ffff000105793f28 x24: 0000000000000000
-x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
-x20: 0000000000000000 x19: aac6ab555542fdfe x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80000dc18158 x15: ffff000105793480
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d96cfd0
-x11: ff808000081c6510 x10: ffff80000ddda198 x9 : 0000000000041dfe
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000c0b2b74
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
-Call trace:
- hlock_class kernel/locking/lockdep.c:222 [inline]
- check_wait_context kernel/locking/lockdep.c:4730 [inline]
- __lock_acquire+0x2d0/0x3084 kernel/locking/lockdep.c:5005
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- kobj_kset_leave lib/kobject.c:174 [inline]
- __kobject_del+0x9c/0x1f8 lib/kobject.c:592
- kobject_cleanup+0xfc/0x280 lib/kobject.c:664
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x94/0xf8 lib/kobject.c:721
- net_rx_queue_update_kobjects net/core/net-sysfs.c:1128 [inline]
- remove_queue_kobjects net/core/net-sysfs.c:1829 [inline]
- netdev_unregister_kobject+0x168/0x1d4 net/core/net-sysfs.c:1983
- unregister_netdevice_many+0x730/0xa0c net/core/dev.c:10874
- default_device_exit_batch+0x3c0/0x424 net/core/dev.c:11341
- ops_exit_list net/core/net_namespace.c:174 [inline]
- cleanup_net+0x3cc/0x648 net/core/net_namespace.c:601
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-Code: d002e1ca 91056210 9106614a b9400329 (3942e114) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	d002e1ca 	adrp	x10, 0x5c3a000
-   4:	91056210 	add	x16, x16, #0x158
-   8:	9106614a 	add	x10, x10, #0x198
-   c:	b9400329 	ldr	w9, [x25]
-* 10:	3942e114 	ldrb	w20, [x8, #184] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
