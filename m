@@ -2,172 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5949E6330DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F37CC6330DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiKUXm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:42:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S232040AbiKUXni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbiKUXmR (ORCPT
+        with ESMTP id S232017AbiKUXmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:42:17 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A6FE0B75
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:41:34 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id z26so12775789pff.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:41:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zZc5xOP0xJFdkWXLW4Eh/g4pOZDZTjhdnyoqBFnt7HE=;
-        b=jNx+HyVlbe/WRUrPdLAtxuIfOIMsgVI4ZaDCOO44XHmIolfTb+INLlJKz8tdLq+nqS
-         J3IbGMH3IFSwq4Dfs85xCc21Gz7CgRkDgfNjLpcRUm8YIKFId9K0951jzYNemy+bY0vU
-         mfTMwsOnG1epdDm84gswuKxBCblcJcAf0GlElKhqMJExgupt3aFgNAur5R2ocPLXScin
-         mcNPmdUUpm2ikx4BJjBRMAfD1LOiJz7utyg5AmNvJnnXDpBcrfp40W23Nq5rR4IlofYo
-         AfUEPweAnBMqsGrsakOiWUSPQ+ZL1mUlmsG+WX0OXoi8VI30SMj10JY2V8Fm4SAlmI/1
-         uvDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zZc5xOP0xJFdkWXLW4Eh/g4pOZDZTjhdnyoqBFnt7HE=;
-        b=UCuTFF5B5VS/c0oSgGKAvGJJ7U9eHGTA7fFudDenZJvmMZrhQjhPc9Rv3Hj2ZyAi35
-         N9QpOGd8hUFdmvwPQr/MWJwdVLalSgBDc1rxFuZ0BRxqM/VAdwh+cdAvMqP5VRYiKPc/
-         ATV4Y9Q4j6UYWesRQOHEapvRhb6VpgLpRCztYLUUfpBUOrOCrvMplCBPBJaikPGXWd6/
-         /AmHNdgf8JyFtUKzp1GXlE3QTnEulSf8R2JFerq46iUMDnOgKV0/GndvmLsc8/CsJHGD
-         WargnlpI9HCXnX2F5YLFMnVshoGIN/wU/31jGO+RIkCHHWfFST73UHlnO91Oux/jPvxy
-         XbAQ==
-X-Gm-Message-State: ANoB5pm2f3c+4vc6Nq4La+fdnKXjisNdLXb95eBKc+7uYnwgacCVAqXA
-        psi1h0pFE3iHATjBxt5qchj5Dj0azLjvdUpPdULo
-X-Google-Smtp-Source: AA0mqf5sBQNs28sOBqrnhm1swUcszLklYtHexIa7tffAXM23323DKBFj1U6ylewxwYn+kM0hFFlZjc7knH3ByZlnilU=
-X-Received: by 2002:a63:1f63:0:b0:460:ec46:3645 with SMTP id
- q35-20020a631f63000000b00460ec463645mr20336089pgm.92.1669074088835; Mon, 21
- Nov 2022 15:41:28 -0800 (PST)
+        Mon, 21 Nov 2022 18:42:42 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0600AE0DC9;
+        Mon, 21 Nov 2022 15:41:46 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2322788F;
+        Tue, 22 Nov 2022 00:41:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669074096;
+        bh=OsNzWOxt+1Uz9pblEiTC7lBWE1dWJGL9cCym66ao+hA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BSYxu68Bxi+i6zA2IBtJTdyNSgC0QbSR4M/jE4FDeatfguQNWpW/e5l8ysyKLwagi
+         qm4CIZU/Dt1P7hV3Wzymz4NWWtinO9DHg33OD5e+dVVePLMzJH/58FnjkXkH7t9jRS
+         zb8qd3rPQ3qx2kNM42eps2A/QcP3kQeRt66HXCdg=
+Date:   Tue, 22 Nov 2022 01:41:21 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        David Plowman <david.plowman@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH 13/14] docs: admin-guide: media: bcm2835-isp: Add
+ documentation for bcm2835-isp
+Message-ID: <Y3wMof/ERK7ZBINW@pendragon.ideasonboard.com>
+References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
+ <20221121214722.22563-14-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com> <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 21 Nov 2022 18:41:17 -0500
-Message-ID: <CAHC9VhQ9WftDrF1R--ZYJXOv-YbVU-Pr1Ob_deDwEWm8OcQ-TA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] reiserfs: Add missing calls to reiserfs_security_free()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221121214722.22563-14-umang.jain@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 4:47 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
-> during inode creation") defined reiserfs_security_free() to free the name
-> and value of a security xattr allocated by the active LSM through
-> security_old_inode_init_security(). However, this function is not called
-> in the reiserfs code.
->
-> Thus, add a call to reiserfs_security_free() whenever
-> reiserfs_security_init() is called, and initialize value to NULL, to avoid
-> to call kfree() on an uninitialized pointer.
->
-> Finally, remove the kfree() for the xattr name, as it is not allocated
-> anymore.
->
-> Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
-> Cc: stable@vger.kernel.org
-> Cc: Jeff Mahoney <jeffm@suse.com>
-> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Hi Umang and Naush,
+
+Thank you for the patch.
+
+On Tue, Nov 22, 2022 at 03:17:21AM +0530, Umang Jain wrote:
+> From: Naushir Patuck <naush@raspberrypi.com>
+> 
+> Document device nodes, frame buffer formats and initial set of
+> configuraiton that can be set from userspace to configure the pipeline.
+
+s/configuraiton/configuration/
+
+> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 > ---
->  fs/reiserfs/namei.c          | 4 ++++
->  fs/reiserfs/xattr_security.c | 2 +-
->  2 files changed, 5 insertions(+), 1 deletion(-)
+>  .../admin-guide/media/bcm2835-isp.rst         | 127 ++++++++++++++++++
+>  .../userspace-api/media/drivers/index.rst     |   1 +
+>  2 files changed, 128 insertions(+)
+>  create mode 100644 Documentation/admin-guide/media/bcm2835-isp.rst
+> 
+> diff --git a/Documentation/admin-guide/media/bcm2835-isp.rst b/Documentation/admin-guide/media/bcm2835-isp.rst
+> new file mode 100644
+> index 000000000000..e1c19f78435e
+> --- /dev/null
+> +++ b/Documentation/admin-guide/media/bcm2835-isp.rst
+> @@ -0,0 +1,127 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +BCM2835 ISP Driver
+> +==================
+> +
+> +Introduction
+> +------------
+> +
+> +The BCM2835 Image Sensor Pipeline (ISP) is a fixed function hardware pipeline
+> +for performing image processing operations.  Images are fed to the input
+> +of the ISP through memory frame buffers.  These images may be in various YUV,
+> +RGB, or Bayer formats.
 
-If I'm understanding this patch correctly, this is a standalone
-bugfix, right?  Any reason this shouldn't be merged now, independent
-of the rest of patches in this patchset?
+Does the ISP really support RGB or YUV input images ? Is this supported
+by the driver ?
 
-> diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-> index 3d7a35d6a18b..b916859992ec 100644
-> --- a/fs/reiserfs/namei.c
-> +++ b/fs/reiserfs/namei.c
-> @@ -696,6 +696,7 @@ static int reiserfs_create(struct user_namespace *mnt_userns, struct inode *dir,
->
->  out_failed:
->         reiserfs_write_unlock(dir->i_sb);
-> +       reiserfs_security_free(&security);
->         return retval;
->  }
->
-> @@ -779,6 +780,7 @@ static int reiserfs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
->
->  out_failed:
->         reiserfs_write_unlock(dir->i_sb);
-> +       reiserfs_security_free(&security);
->         return retval;
->  }
->
-> @@ -878,6 +880,7 @@ static int reiserfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
->         retval = journal_end(&th);
->  out_failed:
->         reiserfs_write_unlock(dir->i_sb);
-> +       reiserfs_security_free(&security);
->         return retval;
->  }
->
-> @@ -1194,6 +1197,7 @@ static int reiserfs_symlink(struct user_namespace *mnt_userns,
->         retval = journal_end(&th);
->  out_failed:
->         reiserfs_write_unlock(parent_dir->i_sb);
-> +       reiserfs_security_free(&security);
->         return retval;
->  }
->
-> diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
-> index 8965c8e5e172..857a65b05726 100644
-> --- a/fs/reiserfs/xattr_security.c
-> +++ b/fs/reiserfs/xattr_security.c
-> @@ -50,6 +50,7 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
->         int error;
->
->         sec->name = NULL;
-> +       sec->value = NULL;
->
->         /* Don't add selinux attributes on xattrs - they'll never get used */
->         if (IS_PRIVATE(dir))
-> @@ -95,7 +96,6 @@ int reiserfs_security_write(struct reiserfs_transaction_handle *th,
->
->  void reiserfs_security_free(struct reiserfs_security_handle *sec)
->  {
-> -       kfree(sec->name);
->         kfree(sec->value);
->         sec->name = NULL;
->         sec->value = NULL;
-> --
-> 2.25.1
->
+> A typical use case would have Bayer images obtained from
+> +an image sensor by the BCM2835 Unicam peripheral, written to a memory
+> +frame buffer, and finally fed into the input of the ISP.  Two concurrent output
+> +images may be generated in YUV or RGB format at different resolutions.
+> +Statistics output is also generated for Bayer input images.
+> +
+> +The bcm2835-isp driver exposes the following media pads as V4L2 device nodes:
 
+This sounds weird. Pads are not video nodes, are they ? Or are those
+MMAL pads ?
+
+> +
+> +.. tabularcolumns:: |l|l|l|l|
+> +
+> +.. cssclass: longtable
+> +
+> +.. flat-table::
+> +
+> +    * - *Pad*
+> +      - *Direction*
+> +      - *Purpose*
+> +      - *Formats*
+> +
+> +    * - "bcm2835-isp0-output0"
+> +      - sink
+> +      - Accepts Bayer, RGB or YUV format frame buffers as input to the ISP HW
+> +        pipeline.
+> +      - :ref:`RAW8 <V4L2-PIX-FMT-SRGGB8>`,
+> +        :ref:`RAW10P <V4L2-PIX-FMT-SRGGB10P>`,
+> +        :ref:`RAW12P <V4L2-PIX-FMT-SRGGB12P>`,
+> +        :ref:`RAW14P <V4L2-PIX-FMT-SRGGB14P>`,
+> +        :ref:`RAW16 <V4L2-PIX-FMT-SRGGB16>`,
+> +        :ref:`RGB24/BGR24 <V4L2-PIX-FMT-RGB24>`,
+> +        :ref:`YUYV <V4L2-PIX-FMT-YUYV>`,
+> +        :ref:`YVYU <V4L2-PIX-FMT-YVYU>`,
+> +        :ref:`UYVY <V4L2-PIX-FMT-UYVY>`,
+> +        :ref:`VYUY <V4L2-PIX-FMT-VYUY>`,
+> +        :ref:`YUV420/YVU420 <V4L2-PIX-FMT-YUV420>`
+> +
+> +    * - "bcm2835-isp0-capture1"
+> +      - source
+> +      - High resolution YUV or RGB processed output from the ISP.
+> +      - :ref:`RGB565 <V4L2-PIX-FMT-RGB565>`,
+> +        :ref:`RGB24/BGR24 <V4L2-PIX-FMT-RGB24>`,
+> +        :ref:`ABGR32 <V4L2-PIX-FMT-ABGR32>`,
+> +        :ref:`YUYV <V4L2-PIX-FMT-YUYV>`,
+> +        :ref:`YVYU <V4L2-PIX-FMT-YVYU>`,
+> +        :ref:`UYVY <V4L2-PIX-FMT-UYVY>`,
+> +        :ref:`VYUY <V4L2-PIX-FMT-VYUY>`.
+> +        :ref:`YUV420/YVU420 <V4L2-PIX-FMT-YUV420>`,
+> +        :ref:`NV12/NV21 <V4L2-PIX-FMT-NV12>`,
+> +
+> +    * - "bcm2835-isp0-capture2"
+> +      - source
+> +      - Low resolution YUV processed output from the ISP. The output of
+> +        this pad cannot have a resolution larger than the "bcm2835-isp0-capture1" pad in any dimension.
+> +      - :ref:`YUYV <V4L2-PIX-FMT-YUYV>`,
+> +        :ref:`YVYU <V4L2-PIX-FMT-YVYU>`,
+> +        :ref:`UYVY <V4L2-PIX-FMT-UYVY>`,
+> +        :ref:`VYUY <V4L2-PIX-FMT-VYUY>`.
+> +        :ref:`YUV420/YVU420 <V4L2-PIX-FMT-YUV420>`,
+> +        :ref:`NV12/NV21 <V4L2-PIX-FMT-NV12>`,
+> +
+> +    * - "bcm2835-isp0-capture1"
+
+Is that capture3 ?
+
+Maybe the video nodes should be renamed to make their purpose clearer ?
+
+> +      - source
+> +      - Image statistics calculated from the input image provided on the
+> +        "bcm2835-isp0-output0" pad.  Statistics are only available for Bayer
+> +        format input images.
+> +      - :ref:`v4l2-meta-fmt-bcm2835-isp-stats`.
+> +
+> +Pipeline Configuration
+> +----------------------
+> +
+> +The ISP pipeline can be configure through user-space by calling
+> +:ref:`VIDIOC_S_EXT_CTRLS <VIDIOC_G_EXT_CTRLS>` on the “bcm2835-isp0-output0”
+> +node with the appropriate parameters as shown in the table below.
+> +
+> +.. tabularcolumns:: |p{2cm}|p{5.0cm}|
+> +
+> +.. cssclass: longtable
+> +
+> +.. flat-table::
+> +
+> +    * - *id*
+> +      - *Parameter*
+> +
+> +    * - ``V4L2_CID_USER_BCM2835_ISP_CC_MATRIX``
+> +      - struct :c:type:`bcm2835_isp_custom_ccm`
+> +
+> +    * - ``V4L2_CID_USER_BCM2835_ISP_LENS_SHADING``
+> +      - struct :c:type:`bcm2835_isp_lens_shading`
+> +
+> +    * - ``V4L2_CID_USER_BCM2835_ISP_BLACK_LEVEL``
+> +      - struct :c:type:`bcm2835_isp_black_level`
+> +
+> +    * - ``V4L2_CID_USER_BCM2835_ISP_GEQ``
+> +      - struct :c:type:`bcm2835_isp_geq`
+> +
+> +    * - ``V4L2_CID_USER_BCM2835_ISP_GAMMA``
+> +      - struct :c:type:`bcm2835_isp_gamma`
+> +
+> +    * - ``V4L2_CID_USER_BCM2835_ISP_DENOISE``
+> +      - struct :c:type:`bcm2835_isp_denoise`
+> +
+> +    * - ``V4L2_CID_USER_BCM2835_ISP_SHARPEN``
+> +      - struct :c:type:`bcm2835_isp_sharpen`
+> +
+> +    * - ``V4L2_CID_USER_BCM2835_ISP_DPC``
+> +      - struct :c:type:`bcm2835_isp_dpc`
+> +
+> +++++++++++++++++++++++++
+> +Configuration Parameters
+> +++++++++++++++++++++++++
+> +
+> +.. kernel-doc:: include/uapi/linux/bcm2835-isp.h
+> +   :functions: bcm2835_isp_rational bcm2835_isp_ccm bcm2835_isp_custom_ccm
+> +                bcm2835_isp_gain_format bcm2835_isp_lens_shading
+> +                bcm2835_isp_black_level bcm2835_isp_geq bcm2835_isp_gamma
+> +                bcm2835_isp_denoise bcm2835_isp_sharpen
+> +                bcm2835_isp_dpc_mode bcm2835_isp_dpc
+> diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
+> index 32f82aed47d9..34e0d7102ef0 100644
+> --- a/Documentation/userspace-api/media/drivers/index.rst
+> +++ b/Documentation/userspace-api/media/drivers/index.rst
+> @@ -31,6 +31,7 @@ For more details see the file COPYING in the source distribution of Linux.
+>  	:maxdepth: 5
+>  	:numbered:
+>  
+> +	bcm2835-isp
+>  	ccs
+>  	cx2341x-uapi
+>  	dw100
 
 -- 
-paul-moore.com
+Regards,
+
+Laurent Pinchart
