@@ -2,219 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9AF631D37
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF74631D3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiKUJrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S230421AbiKUJra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiKUJqx (ORCPT
+        with ESMTP id S230419AbiKUJrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:46:53 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED4697A9F;
-        Mon, 21 Nov 2022 01:46:52 -0800 (PST)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL9aloI022022;
-        Mon, 21 Nov 2022 04:46:43 -0500
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kxsvaub8q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 04:46:43 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nm5fqVb64i0cYLUxamF2qECVhXJCshZbDqbhn42Dq6h0wtlzMfAc2VgY9eBHpUsDRF1oBhh0fohe4ZwzU/lS2ltWEIcVI/Y/cJCh1BjqnTQEcHijkdsIandWoxCXwB+B60xOzahrVMtADm2iSbaC9dP+Dqwh9de0h7hHD1l5jFkD0Dk2EoTX0O144bjsGJjRRZFC9yUEgpxDc2YFwk6JXLg5VzKP0Nievntry6jzm6cu5xFIyEXIAfyDoHUQBPOuhKrj4+ewpRzFGebm92NXAkQ3hKGPpi3yMzI0+JxpZrC0b+s6Gm2P+EaGqtvvopLTccB7PB8NQDlfEiITSgjfXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0/nPnompThzwwG50NA6AIkHWAQDwegkEmkiSiEgv/vQ=;
- b=Q8Mkq/2jzDnVksSp7cWQde6iZ0gDcM6BBNQt+Jl/cKY74d/lmqkqyRM6v3bIEy+5h5MaxhTQlQK+XfnaWGeULZk9emTGhLt0A+5zuu3IxnzfSgysdIbGMyCc5Qd4VfAGS/Gg7evrirxzjOoepxZUYvaBMYVZd+AmESidXUR4i8EZmVZENyc8+WKFVjYXD1wPeqwrnWJeTTgsB0h0ox0h2nci5Uvmmlf/3ek0c8qeK/uJKp10+ljgSsdkjDNkW1zZmAho3ARdqfYD17T90XzzAGQzGCAlYhqZP6C4RqldHouRT9via5xyYCAIWTHS0sNKh79qdpHyXM1i8kCjM1yEuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0/nPnompThzwwG50NA6AIkHWAQDwegkEmkiSiEgv/vQ=;
- b=fGLEwxVmGUlt1tneJ6MkvTUV+2XOBW70PdxLovcmt9EwORYz3M9ReWBTlO6ViRWgu59qfazczFF0xtN5L+jhJLkGvNJj+TVWODOqI94PD4zNg40czENAw9saeoxfmwbPKYgDAzDwYs5OcDB3FJRtnkeXtMSiOL9llNynKVkQzk4=
-Received: from SJ0PR03MB6253.namprd03.prod.outlook.com (2603:10b6:a03:3b8::19)
- by SJ0PR03MB5870.namprd03.prod.outlook.com (2603:10b6:a03:2de::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.11; Mon, 21 Nov
- 2022 09:46:42 +0000
-Received: from SJ0PR03MB6253.namprd03.prod.outlook.com
- ([fe80::1ebb:3664:c148:f2a0]) by SJ0PR03MB6253.namprd03.prod.outlook.com
- ([fe80::1ebb:3664:c148:f2a0%6]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
- 09:46:42 +0000
-From:   "Hennerich, Michael" <Michael.Hennerich@analog.com>
-To:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= <uwe@kleine-koenig.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 417/606] mfd: adp5520: Convert to i2c's .probe_new()
-Thread-Topic: [PATCH 417/606] mfd: adp5520: Convert to i2c's .probe_new()
-Thread-Index: AQHY+5/NunaB+X1HA0Kt7eUmCsmO0q5JJQTA
-Date:   Mon, 21 Nov 2022 09:46:42 +0000
-Message-ID: <SJ0PR03MB6253ED58BC0D35B188E08F4B8E0A9@SJ0PR03MB6253.namprd03.prod.outlook.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-418-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-418-uwe@kleine-koenig.org>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jYldobGJtNWxjbWxjWVhCd1pHRjBZVnh5YjJGdGFXNW5YREE1WkRnME9X?=
- =?utf-8?B?STJMVE15WkRNdE5HRTBNQzA0TldWbExUWmlPRFJpWVRJNVpUTTFZbHh0YzJk?=
- =?utf-8?B?elhHMXpaeTAyTldOaVlUTmxPUzAyT1RneExURXhaV1F0WWpjeE1pMWlZMll4?=
- =?utf-8?B?TnpGak5EYzJNVGxjWVcxbExYUmxjM1JjTmpWalltRXpaV0l0TmprNE1TMHhN?=
- =?utf-8?B?V1ZrTFdJM01USXRZbU5tTVRjeFl6UTNOakU1WW05a2VTNTBlSFFpSUhONlBT?=
- =?utf-8?B?SXlNVEE0SWlCMFBTSXhNek14TXpRNU56WXdNRGd3TlRneE16RWlJR2c5SW1n?=
- =?utf-8?B?NVFWTlFaM2xxYVhWdmFtdDNkMjVHTVRsQ1dVSTVhSFptWnowaUlHbGtQU0lp?=
- =?utf-8?B?SUdKc1BTSXdJaUJpYnowaU1TSWdZMms5SW1OQlFVRkJSVkpJVlRGU1UxSlZS?=
- =?utf-8?B?azVEWjFWQlFVVnZRMEZCUVZRNVUwMXZhbll6V1VGalRsRkNPVzkyV2l0cU9I?=
- =?utf-8?B?Y3hRVWd5YVRsdU5sQjNSRUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRklRVUZCUVVSaFFWRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGRlFVRlJRVUpCUVVGQldEVnNNa3QzUVVGQlFVRkJRVUZCUVVGQlFVRkJT?=
- =?utf-8?B?alJCUVVGQ2FFRkhVVUZoVVVKbVFVaE5RVnBSUW1wQlNGVkJZMmRDYkVGR09F?=
- =?utf-8?B?RmpRVUo1UVVjNFFXRm5RbXhCUjAxQlpFRkNla0ZHT0VGYVowSm9RVWQzUVdO?=
- =?utf-8?B?M1FteEJSamhCV21kQ2RrRklUVUZoVVVJd1FVZHJRV1JuUW14QlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVWQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlowRkJRVUZCUVc1blFVRkJSMFZCV2tGQ2NFRkdPRUZqZDBKc1FVZE5RV1JS?=
- =?utf-8?B?UW5sQlIxVkJXSGRDZDBGSVNVRmlkMEp4UVVkVlFWbDNRakJCU0UxQldIZENN?=
- =?utf-8?B?RUZIYTBGYVVVSjVRVVJGUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRlJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRMEZCUVVGQlFVTmxRVUZCUVZsUlFtdEJSMnRCV0hkQ2Vr?=
- =?utf-8?B?RkhWVUZaZDBJeFFVaEpRVnBSUW1aQlNFRkJZMmRDZGtGSGIwRmFVVUpxUVVo?=
- =?utf-8?B?UlFXTjNRbVpCU0ZGQllWRkNiRUZJU1VGTlowRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZDUVVGQlFVRkJRVUZCUVVsQlFVRkJRVUZCUFQwaUx6NDhMMjFs?=
- =?utf-8?Q?dGE+?=
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR03MB6253:EE_|SJ0PR03MB5870:EE_
-x-ms-office365-filtering-correlation-id: 96ad571e-2606-4a5c-5b04-08dacba54b9b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lROq8lgfCA2DAMtp9fNaAT9J4Z0ftAQZ6OnP3Jipx8ZO8Sn7WwYeM4V1WH715+IyZ3XsUp7SYePN2I+Mib86YkeKiF+6IageDDnxDgCwvvRI1k8Yx3ZcsGCWFrU5bbdRpqrKLvdenqyvc8K7dgMwA+xLCuBz9iauPeW4TsH7b/EtKpWHfTlhj9gNwQZvwnIf0wFe5HFw01mGn/yqs/py+B4ASGz+IrNhhs9aOMNtMtv/TQc3pV7ite2GWxmbJ7wS36OpExFmlsvMvTFOdrWpYMmriPZJlFC7CFgSdn80RePGuSZm5Ls1uoC8f6Hyupi9jqZ2rOEYYy0/L46iFzfLStxKye2bA6A1n6Ca7GjZzb2Ha8oyXB3wVKNoFE9K0LH0gwwbsHzXHXhrViiox4l4yJu19+HDa/ziPMWXM6CZ9l9yf2C7TeW98ffv97+lr0Q7PWoEGWUQdy5yygS8/nRNabmnmwMb96MxO0CIctTwX8aWz3Dz52OxJkIqGvf5sAOyEilPZBWSjgvYH+pwiFXuWhjf1BKw09OjNnWu9S5w0I/ahMLgFuOQQOhqjXfH+ZtpPlXmNGJRlO83XWbdrrldtW3Q8aNE3/LhRs6/+IPDZN1IxY4VweIWDin4RUH8YG4Px/4eEgDzhh6EcVfIXzo2XKrEwMe1ts7iQoLaU3BQPY0yINAMOZFnOpRgTJI/8enosxUr+IWx9YUO8Hsf+k7z8x2qD5nFTU/ke+AJCEHPUsw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6253.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199015)(6506007)(186003)(7696005)(9686003)(53546011)(110136005)(2906002)(478600001)(71200400001)(122000001)(38100700002)(38070700005)(55016003)(83380400001)(33656002)(86362001)(26005)(7416002)(8936002)(41300700001)(66946007)(76116006)(64756008)(66556008)(66446008)(8676002)(66476007)(52536014)(4326008)(5660300002)(316002)(54906003)(142923001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YjJ0MG5hbGNoRnM4cDRMTURoU3dVb1Ywb3RqRzg5SU1WRTVUSFdHbUhtbElN?=
- =?utf-8?B?S1dUWVNtaFpiV3RKaXBGZ2VmRG9kS2VqdVRVRDFzR1FGb1l5SkphNnRvamdm?=
- =?utf-8?B?UUFuVUNmN3FNSjQ1b3NoblVpTEVJa1ErbkVuMmMrL1hjeGIwMjJibFFoZFlX?=
- =?utf-8?B?N0x0NUc2V0FqTCtHZjEyanNZV1g4d1h5aVZEUDVzWmo3TXBxcXlxV0Z3aVZS?=
- =?utf-8?B?blNkN3RSb200Y2pnOGZrd1RGdDVOelRJYnRBR3BPbUdpMkN1NTRSUFlwNWFQ?=
- =?utf-8?B?eGZlN2F5dTdqeWREWUZlN0FiNm9QQzhUc3lGNHU3b2V0R2JyejJxdzdNdnlR?=
- =?utf-8?B?RU1TVFl2UEYzSmhCSXp1Z2dLaFhpTm4vTG5DbzUzalBXb1hZKzFTN1Y3aVQv?=
- =?utf-8?B?SHRJa3A5STRwM0Foc1lvMWd0TDJLWHhxUjJyMXFpc3pra1VGdkUzWUJvSmkx?=
- =?utf-8?B?N1N4dTR5N1BmQVhKMHdHN2kzSDZsbm5ocSsyb2JjNCtrd09wUjJrbDRmNjRU?=
- =?utf-8?B?VS9vQXRFcTBLN0ZibzVodjROdVpSdEtjM2tGRFozazE1N1hZRnVHemVYTEpp?=
- =?utf-8?B?SlpkcDVjeHE4V1RNTm5WeHg2bkJReEVhNVpZQW9Nd2Z0Q3AvNXN5ZTRoTjRs?=
- =?utf-8?B?UlFNakVpVWxoWXVkMTlDdTY4L2hXOXByZWJUT29raWlNdUM2YkljclpadTM2?=
- =?utf-8?B?NGYyRlZXcUhzNEVrcmtXZjgzenVXRUFZSVY2aURVS1NtOTBVYTB2WGtlYm9k?=
- =?utf-8?B?RFRHNU5oSTIwSjdVUzI5cVM2UU5tQUMxdWxLYVgvQUk5Zjh0MWtmTCtCYVBW?=
- =?utf-8?B?Njd3dXRNcDl5c1JFM3pIQXdwb2FnZithMkNtZGs0K05CbmhCWk84SEl0bE1H?=
- =?utf-8?B?SHN3Zmg0bFp3Mmk5cDBZc1pmenFGNm9vSjllS3RHNW1ZUVU1aW91UlRDeWtr?=
- =?utf-8?B?SlQ3ZVd1SndPUGZnZEV4M0hkVXNCaWlBMnlRUk5vNEpWcU1JNGxqanJTclVt?=
- =?utf-8?B?VlU4UCtMMnFsTUplL2lYenZSYnhWZ0dIcVJSb0crT2Vyd3BibGhrcVExREVm?=
- =?utf-8?B?bEhKcSszekV3bStQQzJpa0Jla0JUcVJnbU9BZGtFSkNCaFRsSW9xaGdjZWtQ?=
- =?utf-8?B?eEY5UmlWSnIyT3FOT21HL0FlNjFkcjZ4M2ZaZEhEYU5BWmY4bXdzTkRqOWo3?=
- =?utf-8?B?eTlVOFdOdFUxdTUrditwYWtCV1NjT2pYRGNaNHhXczk2eWpDNGRLN0R6ZjFV?=
- =?utf-8?B?QjE0YUVmUTRYc1hqdGJLZFl2cGM5ZHRJM25oVFlvTG9WRVowY05aTHZ2M1Zt?=
- =?utf-8?B?RzlWSWVMUTVzbVR2UVJsNFlRT3NRbTF2ZmVLT2FGSEJydWtJcFZ6SmowOElQ?=
- =?utf-8?B?eTBrek0wUW9veHB5bzBzK2NCa0tIRGtvUENYR1JXVkJ2RHNzY2M3aHZ4RjJz?=
- =?utf-8?B?K0p1YU1rRTlrakNNcmVqWFNsN1FVNXc4MU95enBCbVZ2MXB2UFZzMXRua05C?=
- =?utf-8?B?Vy9aT0o5MCtHTi9tcm1RZW9BUkg5WmNiVVF0VnhWRUhsTXRrSFRrdnR2R1RE?=
- =?utf-8?B?M20yajFJMDgvTk5qWmtXcE1ybXBBbUVRRlk3elBTblpOMDZ0dkR0SDFuMlox?=
- =?utf-8?B?VzdzaWgxNitCbCtrS0JJR0cxVjNvRlVqVURSb2xZeUdFRmhnRVp4anpqMmVN?=
- =?utf-8?B?N3lOdC9KYkdrWm5QUytyL01sR1pOeHZlR2VoMGpiQzBkQVFCUHZaL2MrMVdv?=
- =?utf-8?B?YXdtS3JiUGZPeThrZWcwRUYwb2ZmUzBLdTlETERRMjkrbDd1K3o1T2N4WVZ5?=
- =?utf-8?B?bnBhS3k4QVNRWllzeFl3T29aNHE5ejhCalVWQkxGenk3R0xVN3ZLcFAwSHVW?=
- =?utf-8?B?T05ZWnBmK0duMkUzTmQ2NUR2a2pRaTQ4L2NpQTRIY2xPbnRiU0N4ajlMeXJJ?=
- =?utf-8?B?bUVlNDRnb1VXemxLbmhpN28xenovV2hrQnhuVjl5d0lVU1Bqa2V3bjRrYndE?=
- =?utf-8?B?NGxSVnA0anVQaGwrNlhsNVRtaHBuZkxYQ0tIekdkb29KWXdiSkxsK0kzMzNU?=
- =?utf-8?B?b1F6NWxRM0tFcW9KRDNGM091dGUzdVZNSFY4NnBab2l4UWZuN0xXZjY3Z2xQ?=
- =?utf-8?B?dWE3M1NueUl0N040WkJ0R2MvTk5udGxLZ3ZKbytla0lITHFTb3hMUlNLR1Z0?=
- =?utf-8?B?ZHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 21 Nov 2022 04:47:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D320697362;
+        Mon, 21 Nov 2022 01:47:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 924D6B80DB8;
+        Mon, 21 Nov 2022 09:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D55D0C433D6;
+        Mon, 21 Nov 2022 09:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669024023;
+        bh=HIQ2aiXqHffXudy5bIIYyTtVPp45N10Zp+on4Ytbzt0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kRtjkGLcpaTdluA3MPqMp/OBRucZ44PHfZF34mfgf17QHkP/8YR46Hx5a1OmHu3Qw
+         g0wIN1z30f2VFu1U77SsQhX9sJ2xbc06dCKwkdmPZpStPUOS68E68yqUjdgcz/w2cT
+         pe6PY7zlJEOK+AXvuPmP0FqRNQkYwoLnGxO2KQIQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org
+Subject: [PATCH 1/5] kobject: make kobject_get_ownership() take a constant kobject *
+Date:   Mon, 21 Nov 2022 10:46:45 +0100
+Message-Id: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6253.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96ad571e-2606-4a5c-5b04-08dacba54b9b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2022 09:46:42.4236
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TmY7FEF9Wuii1+LJPk9yFh3g5UEKeAGorGOih37qz6vIvDHdCMPwnv2WhnIon+wLQomqbOND70HDUdblulfTivqOVTrscu+lqaqcjVRvX/s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB5870
-X-Proofpoint-GUID: Obqn0Qjgy5DemKbrxs8Yle_4RBp6QUEz
-X-Proofpoint-ORIG-GUID: Obqn0Qjgy5DemKbrxs8Yle_4RBp6QUEz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_06,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
- impostorscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210076
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9144; i=gregkh@linuxfoundation.org; h=from:subject; bh=HIQ2aiXqHffXudy5bIIYyTtVPp45N10Zp+on4Ytbzt0=; b=owGbwMvMwCRo6H6F97bub03G02pJDMnVnuw5ldPS6tKre1+vkzhzoFdmhsH6vHieSzff35Fs1svn eKzSEcvCIMjEICumyPJlG8/R/RWHFL0MbU/DzGFlAhnCwMUpABNJMGCY73nXbtrMz9Mbph3mjDrW6H 6W8biNIcOCpR4Jy/NfcTjI9PU2vu+58azV6uJDAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVXdlIEtsZWluZS1Lw7Zu
-aWcgPHV3ZUBrbGVpbmUta29lbmlnLm9yZz4NCj4gU2VudDogRnJlaXRhZywgMTguIE5vdmVtYmVy
-IDIwMjIgMjM6NDMNCj4gVG86IEFuZ2VsIElnbGVzaWFzIDxhbmcuaWdsZXNpYXNnQGdtYWlsLmNv
-bT47IExlZSBKb25lcw0KPiA8bGVlLmpvbmVzQGxpbmFyby5vcmc+OyBHcmFudCBMaWtlbHkgPGdy
-YW50Lmxpa2VseUBsaW5hcm8ub3JnPjsgV29sZnJhbQ0KPiBTYW5nIDx3c2FAa2VybmVsLm9yZz47
-IEhlbm5lcmljaCwgTWljaGFlbA0KPiA8TWljaGFlbC5IZW5uZXJpY2hAYW5hbG9nLmNvbT47IExl
-ZSBKb25lcyA8bGVlQGtlcm5lbC5vcmc+DQo+IENjOiBsaW51eC1pMmNAdmdlci5rZXJuZWwub3Jn
-OyBrZXJuZWxAcGVuZ3V0cm9uaXguZGU7IFV3ZSBLbGVpbmUtS8O2bmlnDQo+IDx1LmtsZWluZS1r
-b2VuaWdAcGVuZ3V0cm9uaXguZGU+OyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1
-YmplY3Q6IFtQQVRDSCA0MTcvNjA2XSBtZmQ6IGFkcDU1MjA6IENvbnZlcnQgdG8gaTJjJ3MgLnBy
-b2JlX25ldygpDQo+IA0KPiANCj4gRnJvbTogVXdlIEtsZWluZS1Lw7ZuaWcgPHUua2xlaW5lLWtv
-ZW5pZ0BwZW5ndXRyb25peC5kZT4NCj4gDQo+IC5wcm9iZV9uZXcoKSBkb2Vzbid0IGdldCB0aGUg
-aTJjX2RldmljZV9pZCAqIHBhcmFtZXRlciwgc28gZGV0ZXJtaW5lIHRoYXQNCj4gZXhwbGljaXRs
-eSBpbiB0aGUgcHJvYmUgZnVuY3Rpb24uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBVd2UgS2xlaW5l
-LUvDtm5pZyA8dS5rbGVpbmUta29lbmlnQHBlbmd1dHJvbml4LmRlPg0KDQpBY2tlZC1ieTogTWlj
-aGFlbCBIZW5uZXJpY2ggPG1pY2hhZWwuaGVubmVyaWNoQGFuYWxvZy5jb20+DQoNCj4gLS0tDQo+
-ICBkcml2ZXJzL21mZC9hZHA1NTIwLmMgfCA2ICsrKy0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDMg
-aW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L21mZC9hZHA1NTIwLmMgYi9kcml2ZXJzL21mZC9hZHA1NTIwLmMgaW5kZXgNCj4gODgyZWRkYzMy
-ZjhlLi5jYjE2OGVmZGJhZmUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbWZkL2FkcDU1MjAuYw0K
-PiArKysgYi9kcml2ZXJzL21mZC9hZHA1NTIwLmMNCj4gQEAgLTIwNCw5ICsyMDQsOSBAQCBzdGF0
-aWMgaW50IGFkcDU1MjBfcmVtb3ZlX3N1YmRldnMoc3RydWN0DQo+IGFkcDU1MjBfY2hpcCAqY2hp
-cCkNCj4gIAlyZXR1cm4gZGV2aWNlX2Zvcl9lYWNoX2NoaWxkKGNoaXAtPmRldiwgTlVMTCwgX19y
-ZW1vdmVfc3ViZGV2KTsgIH0NCj4gDQo+IC1zdGF0aWMgaW50IGFkcDU1MjBfcHJvYmUoc3RydWN0
-IGkyY19jbGllbnQgKmNsaWVudCwNCj4gLQkJCQkJY29uc3Qgc3RydWN0IGkyY19kZXZpY2VfaWQg
-KmlkKQ0KPiArc3RhdGljIGludCBhZHA1NTIwX3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGll
-bnQpDQo+ICB7DQo+ICsJY29uc3Qgc3RydWN0IGkyY19kZXZpY2VfaWQgKmlkID0gaTJjX2NsaWVu
-dF9nZXRfZGV2aWNlX2lkKGNsaWVudCk7DQo+ICAJc3RydWN0IGFkcDU1MjBfcGxhdGZvcm1fZGF0
-YSAqcGRhdGEgPSBkZXZfZ2V0X3BsYXRkYXRhKCZjbGllbnQtDQo+ID5kZXYpOw0KPiAgCXN0cnVj
-dCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXY7DQo+ICAJc3RydWN0IGFkcDU1MjBfY2hpcCAqY2hpcDsN
-Cj4gQEAgLTM0MCw3ICszNDAsNyBAQCBzdGF0aWMgc3RydWN0IGkyY19kcml2ZXIgYWRwNTUyMF9k
-cml2ZXIgPSB7DQo+ICAJCS5wbQkJCT0gcG1fc2xlZXBfcHRyKCZhZHA1NTIwX3BtKSwNCj4gIAkJ
-LnN1cHByZXNzX2JpbmRfYXR0cnMJPSB0cnVlLA0KPiAgCX0sDQo+IC0JLnByb2JlCQk9IGFkcDU1
-MjBfcHJvYmUsDQo+ICsJLnByb2JlX25ldwk9IGFkcDU1MjBfcHJvYmUsDQo+ICAJLmlkX3RhYmxl
-CT0gYWRwNTUyMF9pZCwNCj4gIH07DQo+ICBidWlsdGluX2kyY19kcml2ZXIoYWRwNTUyMF9kcml2
-ZXIpOw0KPiAtLQ0KPiAyLjM4LjENCg0K
+The call, kobject_get_ownership(), does not modify the kobject passed
+into it, so make it const.  This propagates down into the kobj_type
+function callbacks so make the kobject passed into them also const,
+ensuring that nothing in the kobject is being changed here.
+
+This helps make it more obvious what calls and callbacks do, and do not,
+modify structures passed to them.
+
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc: Anna Schumaker <anna@kernel.org>
+Cc: Roopa Prabhu <roopa@nvidia.com>
+Cc: Nikolay Aleksandrov <razor@blackwall.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Chuck Lever <chuck.lever@oracle.com>
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: linux-nfs@vger.kernel.org
+Cc: bridge@lists.linux-foundation.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/base/class.c    | 2 +-
+ drivers/base/core.c     | 8 ++++----
+ fs/nfs/sysfs.c          | 4 ++--
+ include/linux/kobject.h | 8 ++++----
+ lib/kobject.c           | 4 ++--
+ net/bridge/br_if.c      | 2 +-
+ net/core/net-sysfs.c    | 8 ++++----
+ net/sunrpc/sysfs.c      | 8 ++++----
+ 8 files changed, 22 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/base/class.c b/drivers/base/class.c
+index 8ceafb7d0203..86ec554cfe60 100644
+--- a/drivers/base/class.c
++++ b/drivers/base/class.c
+@@ -62,7 +62,7 @@ static void class_release(struct kobject *kobj)
+ 	kfree(cp);
+ }
+ 
+-static const struct kobj_ns_type_operations *class_child_ns_type(struct kobject *kobj)
++static const struct kobj_ns_type_operations *class_child_ns_type(const struct kobject *kobj)
+ {
+ 	struct subsys_private *cp = to_subsys_private(kobj);
+ 	struct class *class = cp->class;
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index ab01828fe6c1..a79b99ecf4d8 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2335,7 +2335,7 @@ static void device_release(struct kobject *kobj)
+ 	kfree(p);
+ }
+ 
+-static const void *device_namespace(struct kobject *kobj)
++static const void *device_namespace(const struct kobject *kobj)
+ {
+ 	const struct device *dev = kobj_to_dev(kobj);
+ 	const void *ns = NULL;
+@@ -2346,7 +2346,7 @@ static const void *device_namespace(struct kobject *kobj)
+ 	return ns;
+ }
+ 
+-static void device_get_ownership(struct kobject *kobj, kuid_t *uid, kgid_t *gid)
++static void device_get_ownership(const struct kobject *kobj, kuid_t *uid, kgid_t *gid)
+ {
+ 	const struct device *dev = kobj_to_dev(kobj);
+ 
+@@ -2986,9 +2986,9 @@ static void class_dir_release(struct kobject *kobj)
+ }
+ 
+ static const
+-struct kobj_ns_type_operations *class_dir_child_ns_type(struct kobject *kobj)
++struct kobj_ns_type_operations *class_dir_child_ns_type(const struct kobject *kobj)
+ {
+-	struct class_dir *dir = to_class_dir(kobj);
++	const struct class_dir *dir = to_class_dir(kobj);
+ 	return dir->class->ns_type;
+ }
+ 
+diff --git a/fs/nfs/sysfs.c b/fs/nfs/sysfs.c
+index a6f740366963..67a87800b3a9 100644
+--- a/fs/nfs/sysfs.c
++++ b/fs/nfs/sysfs.c
+@@ -26,7 +26,7 @@ static void nfs_netns_object_release(struct kobject *kobj)
+ }
+ 
+ static const struct kobj_ns_type_operations *nfs_netns_object_child_ns_type(
+-		struct kobject *kobj)
++		const struct kobject *kobj)
+ {
+ 	return &net_ns_type_operations;
+ }
+@@ -130,7 +130,7 @@ static void nfs_netns_client_release(struct kobject *kobj)
+ 	kfree(c);
+ }
+ 
+-static const void *nfs_netns_client_namespace(struct kobject *kobj)
++static const void *nfs_netns_client_namespace(const struct kobject *kobj)
+ {
+ 	return container_of(kobj, struct nfs_netns_client, kobject)->net;
+ }
+diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+index fc40fc81aeb1..d978dbceb50d 100644
+--- a/include/linux/kobject.h
++++ b/include/linux/kobject.h
+@@ -113,7 +113,7 @@ extern struct kobject * __must_check kobject_get_unless_zero(
+ extern void kobject_put(struct kobject *kobj);
+ 
+ extern const void *kobject_namespace(struct kobject *kobj);
+-extern void kobject_get_ownership(struct kobject *kobj,
++extern void kobject_get_ownership(const struct kobject *kobj,
+ 				  kuid_t *uid, kgid_t *gid);
+ extern char *kobject_get_path(const struct kobject *kobj, gfp_t flag);
+ 
+@@ -121,9 +121,9 @@ struct kobj_type {
+ 	void (*release)(struct kobject *kobj);
+ 	const struct sysfs_ops *sysfs_ops;
+ 	const struct attribute_group **default_groups;
+-	const struct kobj_ns_type_operations *(*child_ns_type)(struct kobject *kobj);
+-	const void *(*namespace)(struct kobject *kobj);
+-	void (*get_ownership)(struct kobject *kobj, kuid_t *uid, kgid_t *gid);
++	const struct kobj_ns_type_operations *(*child_ns_type)(const struct kobject *kobj);
++	const void *(*namespace)(const struct kobject *kobj);
++	void (*get_ownership)(const struct kobject *kobj, kuid_t *uid, kgid_t *gid);
+ };
+ 
+ struct kobj_uevent_env {
+diff --git a/lib/kobject.c b/lib/kobject.c
+index ba1017cd67d1..26e744a46d24 100644
+--- a/lib/kobject.c
++++ b/lib/kobject.c
+@@ -45,7 +45,7 @@ const void *kobject_namespace(struct kobject *kobj)
+  * representation of given kobject. Normally used to adjust ownership of
+  * objects in a container.
+  */
+-void kobject_get_ownership(struct kobject *kobj, kuid_t *uid, kgid_t *gid)
++void kobject_get_ownership(const struct kobject *kobj, kuid_t *uid, kgid_t *gid)
+ {
+ 	*uid = GLOBAL_ROOT_UID;
+ 	*gid = GLOBAL_ROOT_GID;
+@@ -907,7 +907,7 @@ static void kset_release(struct kobject *kobj)
+ 	kfree(kset);
+ }
+ 
+-static void kset_get_ownership(struct kobject *kobj, kuid_t *uid, kgid_t *gid)
++static void kset_get_ownership(const struct kobject *kobj, kuid_t *uid, kgid_t *gid)
+ {
+ 	if (kobj->parent)
+ 		kobject_get_ownership(kobj->parent, uid, gid);
+diff --git a/net/bridge/br_if.c b/net/bridge/br_if.c
+index 228fd5b20f10..ad13b48e3e08 100644
+--- a/net/bridge/br_if.c
++++ b/net/bridge/br_if.c
+@@ -262,7 +262,7 @@ static void release_nbp(struct kobject *kobj)
+ 	kfree(p);
+ }
+ 
+-static void brport_get_ownership(struct kobject *kobj, kuid_t *uid, kgid_t *gid)
++static void brport_get_ownership(const struct kobject *kobj, kuid_t *uid, kgid_t *gid)
+ {
+ 	struct net_bridge_port *p = kobj_to_brport(kobj);
+ 
+diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
+index a8c5a7cd9701..9cfc80b8ed25 100644
+--- a/net/core/net-sysfs.c
++++ b/net/core/net-sysfs.c
+@@ -1020,7 +1020,7 @@ static void rx_queue_release(struct kobject *kobj)
+ 	netdev_put(queue->dev, &queue->dev_tracker);
+ }
+ 
+-static const void *rx_queue_namespace(struct kobject *kobj)
++static const void *rx_queue_namespace(const struct kobject *kobj)
+ {
+ 	struct netdev_rx_queue *queue = to_rx_queue(kobj);
+ 	struct device *dev = &queue->dev->dev;
+@@ -1032,7 +1032,7 @@ static const void *rx_queue_namespace(struct kobject *kobj)
+ 	return ns;
+ }
+ 
+-static void rx_queue_get_ownership(struct kobject *kobj,
++static void rx_queue_get_ownership(const struct kobject *kobj,
+ 				   kuid_t *uid, kgid_t *gid)
+ {
+ 	const struct net *net = rx_queue_namespace(kobj);
+@@ -1623,7 +1623,7 @@ static void netdev_queue_release(struct kobject *kobj)
+ 	netdev_put(queue->dev, &queue->dev_tracker);
+ }
+ 
+-static const void *netdev_queue_namespace(struct kobject *kobj)
++static const void *netdev_queue_namespace(const struct kobject *kobj)
+ {
+ 	struct netdev_queue *queue = to_netdev_queue(kobj);
+ 	struct device *dev = &queue->dev->dev;
+@@ -1635,7 +1635,7 @@ static const void *netdev_queue_namespace(struct kobject *kobj)
+ 	return ns;
+ }
+ 
+-static void netdev_queue_get_ownership(struct kobject *kobj,
++static void netdev_queue_get_ownership(const struct kobject *kobj,
+ 				       kuid_t *uid, kgid_t *gid)
+ {
+ 	const struct net *net = netdev_queue_namespace(kobj);
+diff --git a/net/sunrpc/sysfs.c b/net/sunrpc/sysfs.c
+index c1f559892ae8..1e05a2d723f4 100644
+--- a/net/sunrpc/sysfs.c
++++ b/net/sunrpc/sysfs.c
+@@ -31,7 +31,7 @@ static void rpc_sysfs_object_release(struct kobject *kobj)
+ }
+ 
+ static const struct kobj_ns_type_operations *
+-rpc_sysfs_object_child_ns_type(struct kobject *kobj)
++rpc_sysfs_object_child_ns_type(const struct kobject *kobj)
+ {
+ 	return &net_ns_type_operations;
+ }
+@@ -381,17 +381,17 @@ static void rpc_sysfs_xprt_release(struct kobject *kobj)
+ 	kfree(xprt);
+ }
+ 
+-static const void *rpc_sysfs_client_namespace(struct kobject *kobj)
++static const void *rpc_sysfs_client_namespace(const struct kobject *kobj)
+ {
+ 	return container_of(kobj, struct rpc_sysfs_client, kobject)->net;
+ }
+ 
+-static const void *rpc_sysfs_xprt_switch_namespace(struct kobject *kobj)
++static const void *rpc_sysfs_xprt_switch_namespace(const struct kobject *kobj)
+ {
+ 	return container_of(kobj, struct rpc_sysfs_xprt_switch, kobject)->net;
+ }
+ 
+-static const void *rpc_sysfs_xprt_namespace(struct kobject *kobj)
++static const void *rpc_sysfs_xprt_namespace(const struct kobject *kobj)
+ {
+ 	return container_of(kobj, struct rpc_sysfs_xprt,
+ 			    kobject)->xprt->xprt_net;
+-- 
+2.38.1
+
