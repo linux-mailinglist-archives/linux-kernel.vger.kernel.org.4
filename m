@@ -2,115 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C23D63238D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7886632397
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiKUNak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S230465AbiKUNbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiKUNaW (ORCPT
+        with ESMTP id S230333AbiKUNaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:30:22 -0500
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F49C9CF4D;
-        Mon, 21 Nov 2022 05:30:21 -0800 (PST)
-Date:   Mon, 21 Nov 2022 13:30:08 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1669037419; x=1669296619;
-        bh=mKT0b3j/bY3j0Y2khrfg5ryVKfOy6kNma6mcjHf4UFk=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=uxKHFg5qink059OjMX5SBp5hgDzBD22x0sYk2ao+/WDipzCBmreMpMXqc3q/wJU9t
-         LDU32gPDgQ/4ly/zd7aaiKZKBf24InB/nbig9XfOfbpAULpYEz0OcGHZZy+nfrKKdB
-         lNY9VecwuawXJOPpv+9VGDqUPp1p6xPtDpXWyT0KS1RSL7K/7H/JHiANHc8ztFitEw
-         7zjeQLuKD06nKaiNKIO24dcZZkxiAI7CWIV8Br3Jy2AXEBiPkkZ5oLXCZN5JHOPG8E
-         bkBRgBmzjxES8FrBYjNBkt0bo+FjXpY+99QY6BPn8sY+/chO8KuJYeva/BSpRudZBw
-         WuHPwZJHVRXVA==
-To:     linux-kernel@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mon, 21 Nov 2022 08:30:46 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA765BFF6D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:30:42 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id i131so13556502ybc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GrD43smjCY3nWkLYSNjoj38of5EV+w5nYaqRZQqu6Z8=;
+        b=TUNYh4I3FrTN2Qk4H0EaCgVdh6VtCUkHQrl7IF/WS7A8JSbSrytMpvO9LkK9Chb/uQ
+         h9GLIhg4dMaSzvngUjH18KAVt1yZoCFimILjVFl+dkm1tcVzFl4XBl55R+EfA4twK5Ke
+         gYoxXpoho+NKdd3nXtxHF6h0GjlyIWZ0OAKcvzgF0MIpF6dOinFEk36siwVhJValvUyc
+         pueO/pGQ7t8JbKNXg4JSPMLpASYMygIVKHIG8S7hscoi39Di4OM/PV1uTKa10eaeqj5R
+         UQRz5lOvq6w2vbh0ZmtgIp+lsq0Y3AkQwctNRFuHzu8YKxkvctDEQvbADmqbEAxKtIVt
+         Kocw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GrD43smjCY3nWkLYSNjoj38of5EV+w5nYaqRZQqu6Z8=;
+        b=K5/M5TXe3Joo7g8Pu1GBfBY9Lm8JCB9Fw5riKKc9xcXWS/eL1/yMUdBjNq2P+3IT5j
+         SJOzwsqnI56OCDl2NCqqyTj+dTS9SOGX46iQ/1uuzQVVGL4ffMx82gfTahicOITXulM2
+         GBmAqsbGS2tK9SCvcu1hP7eKn2oiFFIplappB5fmq8EUwnC5DHfbGrLG4gfIJcjShCvD
+         8wlE1XapODxIUzrNcRE9W47tISMRWcGzbb0AtZNCq1uQOAjJwzD+xvLg8Ie9a4eO+mJL
+         E+OmNo6fhfzQtOrMSOewKdelDSTHhZ/qp7WL8qYicytkbZ3uwA/807TXBaFuay5WxooE
+         jYWg==
+X-Gm-Message-State: ANoB5plLmt9oJK04Efz7AlsUjAN7Tc7wMCjeHBC+FqdZjoqMSiH3U+Nc
+        IEgiOuCiQlun27QeVexggIGauo1wgo4P6xvyzFxtuw==
+X-Google-Smtp-Source: AA0mqf534R8JnjgMAXUcVtn2pda2CXoOXsQXeOnwXivkvGmMe/kxz+dylSUO0uREdlZBWzAUitBn5prW6/5teaSJXAg=
+X-Received: by 2002:a25:1843:0:b0:6dc:b9ec:7c87 with SMTP id
+ 64-20020a251843000000b006dcb9ec7c87mr563702yby.322.1669037441964; Mon, 21 Nov
+ 2022 05:30:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20221121123803.3786-1-zhuyinbo@loongson.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 21 Nov 2022 14:30:30 +0100
+Message-ID: <CACRpkdbZS1HCvnTPnEHS6WSBvHUHmHOHs1YejuMcN9STn0+uPA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] gpio: loongson2ef: move driver to original location
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v3 5/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add flash LED
-Message-ID: <20221121132838.207107-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20221121132139.206581-1-linmengbo0689@protonmail.com>
-References: <20221121132139.206581-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FL8005A uses SGM3140 Flash LED driver. Add it to the device tree.
+On Mon, Nov 21, 2022 at 1:38 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+> This gpio driver doesn't cover CPU_LOONGSON64 platforms, because
+> of gpio address was wrong and I don't plan to support it thus
+> move this driver to arch/mips/loongson2ef/ so that I can drop the
+> shackles of the legacy driver and add a new driver that supports
+> dts/acpi to support LoongArch platforms.
+>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm6=
-4/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-index 2cac99e3e52c..b28d7d0f1ed5 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-@@ -21,6 +21,21 @@ chosen {
- =09=09stdout-path =3D "serial0";
- =09};
-=20
-+=09flash-led-controller {
-+=09=09compatible =3D "sgmicro,sgm3140";
-+=09=09enable-gpios =3D <&msmgpio 31 GPIO_ACTIVE_HIGH>;
-+=09=09flash-gpios =3D <&msmgpio 32 GPIO_ACTIVE_HIGH>;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&camera_flash_default>;
-+
-+=09=09flash_led: led {
-+=09=09=09function =3D LED_FUNCTION_FLASH;
-+=09=09=09color =3D <LED_COLOR_ID_WHITE>;
-+=09=09=09flash-max-timeout-us =3D <250000>;
-+=09=09};
-+=09};
-+
- =09gpio-keys {
- =09=09compatible =3D "gpio-keys";
-=20
-@@ -239,6 +254,14 @@ l18 {
- };
-=20
- &msmgpio {
-+=09camera_flash_default: camera-flash-default-state {
-+=09=09pins =3D "gpio31", "gpio32";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
-+
- =09gpio_keys_default: gpio-keys-default-state {
- =09=09pins =3D "gpio107";
- =09=09function =3D "gpio";
---=20
-2.30.2
+Don't do this, we spent a lot of time to collect drivers in
+in drivers/gpio this is counter to our ambitions to have the
+drivers under drivers/* and only arch code under arch/*.
 
+Create a new file named loongson2-64bit.c or so and just
+ignore that this one exist is an option, as is actually
+integrating this driver properly.
 
+Yours,
+Linus Walleij
