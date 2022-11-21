@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D233632D45
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53B9632D48
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbiKUTu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 14:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S231644AbiKUTuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiKUTu1 (ORCPT
+        with ESMTP id S231646AbiKUTuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:50:27 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FDDC663F;
-        Mon, 21 Nov 2022 11:50:26 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e725329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e725:329c:23ff:fea6:a903])
+        Mon, 21 Nov 2022 14:50:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4B9D5A2E;
+        Mon, 21 Nov 2022 11:50:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1F4DC1EC03EA;
-        Mon, 21 Nov 2022 20:50:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669060225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=vS6hQXXKdamlj388PigRtgSnQnMEFa/3mJnTXAFDmmM=;
-        b=AipnRmCdTmNC+wFMuqXonf3nPbXeQH0DHrna+LeyNPM9zCA0Yb07Q7wTTf8IcjSkNk+ZZG
-        3enb3NU7maDMdBf0LsWARczui1ZjmgbziA1Acq3ffiVbsfAv8elHvEZkmqDC9/A7bad3RT
-        YI5eIHDyPY0dGtKYSJ/Gtz1CLFIltCg=
-Date:   Mon, 21 Nov 2022 20:50:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com,
-        ndesaulniers@google.com, alexandre.belloni@bootlin.com,
-        peterz@infradead.org, jpoimboe@kernel.org,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        babu.moger@amd.com, jmattson@google.com, sandipan.das@amd.com,
-        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        fenghua.yu@intel.com, keescook@chromium.org, nathan@kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAFDDB815E0;
+        Mon, 21 Nov 2022 19:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92931C433C1;
+        Mon, 21 Nov 2022 19:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669060236;
+        bh=QKobMZ1J3q+8zOnwrL3k1c3KPx7Ojyo1PDazC7Em/to=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SHes+vxwS659gFfBWwaqXZPSbiRkkrN/bA+6vJRz0eIKx923+vUM8MedFwHED34Lw
+         bqVxReLBFEDtnBV1wN/R2u1V1KPstL2vdPWa4SYv9W76GJg1ylsI2B7pCz10n7e+t4
+         t5BugGchbvRhoceR4B90Nhp5FpvlZVVPH7rzLnzHylrgORb6UfXjp7sWVobVpp7Icc
+         QkOdxQQM+x0aXsSpUstTO+2e9SIs7wg+kRgVYIMBj0h2HExYjRNnUcwzKlQLrF0hs4
+         Xt6ugGeCHY8JfV1REAhgG3MVyWv9aPIavnpLu+GlG0QK8y+VkhsnS6zXIz/8gVk27A
+         s88r0ji6xvYxg==
+Date:   Mon, 21 Nov 2022 11:50:34 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] x86: KVM: Advertise CMPccXADD CPUID to user space
-Message-ID: <Y3vWgK/Vr94zGS3S@zn.tnic>
-References: <20221118141509.489359-1-jiaxi.chen@linux.intel.com>
- <20221118141509.489359-2-jiaxi.chen@linux.intel.com>
- <efb55727-f8bd-815c-ddfc-a8432ae5af4e@intel.com>
- <f04c2e74-87e4-5d50-579a-0a60554b83d3@linux.intel.com>
- <6d7fae50-ef3c-dc1e-336c-691095007117@intel.com>
- <Y3udtm6oC7k41kaR@google.com>
- <Y3ue4PoJD7EGC5dV@zn.tnic>
- <Y3u1Rx/kFjE5/FFR@google.com>
+Subject: Re: [PATCH 00/18] treewide: fix object files shared between several
+ modules
+Message-ID: <20221121115034.03fe007e@kernel.org>
+In-Reply-To: <20221119225650.1044591-1-alobakin@pm.me>
+References: <20221119225650.1044591-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y3u1Rx/kFjE5/FFR@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 05:28:39PM +0000, Sean Christopherson wrote:
-> Yes.  Most userspace VMMs sanitize their CPUID models based on KVM_GET_SUPPORTED_CPUID,
-> e.g. by default, QEMU will refuse to enable features in guest CPUID that aren't
-> reported as supported by KVM.
-> 
-> Another use case is for userspace to blindly use the result of KVM_GET_SUPPORTED_CPUID
-> as the guest's CPUID model, e.g. for using KVM to isolate code as opposed to standing
-> up a traditional virtual machine.  For that use case, userspace again relies on KVM to
-> enumerate support.
+On Sat, 19 Nov 2022 23:03:57 +0000 Alexander Lobakin wrote:
+> Subject: [PATCH 00/18] treewide: fix object files shared between several modules
 
-Ah ok, thx.
+Could you repost the networking changes separately in v2?
+I'm not seeing any reason why this would have to be a treewide
+series when merging.
 
-/me makes a mental note.
+> monotonic
 
-> What I was trying to call out in the above is that the KVM "enabling" technically
-> doesn't expose the feature to the guest.  E.g. a clever guest could ignore CPUID
-> and probe the relevant instructions manually by seeing whether or not they #UD.
-
-As can a nasty userspace on baremetal. That's why /proc/cpuinfo is not
-really the authority of what's supported and we're going away from
-treating it that way.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+monotonous, unless you mean steady progress ;)
