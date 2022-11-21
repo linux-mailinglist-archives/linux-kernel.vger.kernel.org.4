@@ -2,100 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676856321CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946966321A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiKUMWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S230050AbiKUMLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKUMWH (ORCPT
+        with ESMTP id S229379AbiKUMLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:22:07 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9AB2C114
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:22:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669033326; x=1700569326;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YKC4AsIBlrcJzc9V2jYLZIn6QS66e188H3uD5Ifr8GA=;
-  b=TmTkW2jjcfuScsOGlioXPUz7WKbMppNFOCmO2dAww0SFXMob0YqZdhqu
-   wqLbXMTEFdTqFAo+z2JsmQB39KYYpV86BwIklt1S1tywTKoHJiG0qAUZC
-   nu9B25X5NrM306pBKI0M3s7oiW0M83Gm7G/DA/PlS96o/6HZcJbalQKme
-   eRZGr0IDO1hVbGvouBpkTxiZqMsHT7nZi/+YrvJ9MLYH0JarDqZoTYL8J
-   Cv3/jbA8PmvWEkd8LbYQ3lGwvmM2ydzXs9aT4ltFTFcg1onFY/04ZCqEW
-   KKsKf1045gIRibPO9fwxitsozTpEk0Pq0lRXvGGUxVazeofawfoPyrWK5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="399832375"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="399832375"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 04:22:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="618806451"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="618806451"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga006.jf.intel.com with ESMTP; 21 Nov 2022 04:22:03 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2ALCM2sq004950;
-        Mon, 21 Nov 2022 12:22:02 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] x86/boot: fix relying on link order
-Date:   Mon, 21 Nov 2022 13:09:18 +0100
-Message-Id: <20221121120918.388035-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <2993a60c-edaa-a29a-2644-3ee86c622847@intel.com>
-References: <20221101161529.1634188-1-alexandr.lobakin@intel.com> <20221107125528.543764-1-alexandr.lobakin@intel.com> <2993a60c-edaa-a29a-2644-3ee86c622847@intel.com>
+        Mon, 21 Nov 2022 07:11:38 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762A76710E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:11:37 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id d6so18513390lfs.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:11:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7qhOMct1HtHorGbIWxyZEdTxvsTx5R3VBHmP3l2woMg=;
+        b=rOgOeCRWpjxZg5nXP82q7tc9S0QzvizVoefqoQzE2Q7H86DBuFTopuoD1mNZ5sPC4w
+         92LR2HCe2f0niGUYjXVAgkj3CgjHkIIJP4c/FaNkPVIYy1kwyTkuXSkoLygGnmvi/jst
+         imcQn5rkWlnFProwvMfFtxz5Hy9UDchjTMZGqJdQcNGdSkPZCzKKueQiMuiUhbuzPyKj
+         DTJLiye9/PufyxJsnjqipi7wyoayFR5DAInUve/lu0v07p92+EvTAYJMpWwk/7ImGKK/
+         MwIant5rN7BDSi0jJdmn094NsfnOvSb7KBWDqtHLQYrNl06EDQK81HZhMyEoOVgry0Xm
+         A6lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7qhOMct1HtHorGbIWxyZEdTxvsTx5R3VBHmP3l2woMg=;
+        b=gun5szivRYi9vMcXqoJtVd522+3cLdRmPXEreP8HkACPjGj8zeabrwC5jUtto3CM0V
+         ecV/Nob8uMyv/V8xR4a6AvmjtxBdAFZkCUVgj5p8nUHGhKXdvVROz3wmRpX5aH4g2tGH
+         EWqujybVh+jPrWgWhRp0qjPtft5kyfx1FYn6ZcVAfWoq/QKCuBNxkLyNEGL39e/BAWPS
+         oopOV80vk5GJ9u4Y6pm8Rq1A0nhuoLOp0qBul11EfmDyj9Hn/Fx6E4HhDBfxTtyrtwXN
+         QoQNCpjF4T6m3kDySPwDB3hW0tqzUZvFxmxOEPPJirZ/u84udgM7t6+TTOb8alyVuwsp
+         HvsQ==
+X-Gm-Message-State: ANoB5pkpiqPbMDQONkN0Z3jO1MUaArOMai7qVCr5GPnZX5FQv38vJKr9
+        mCOrhgBOURbqJuR/HQseqEFTQw==
+X-Google-Smtp-Source: AA0mqf7xZ0mWUdJCN+6VFR2cUJVKZcxOD17BCaNQ2fbAP6LUKcuL2AlNDQkkD7XCO/YE1IbrdhUIRw==
+X-Received: by 2002:ac2:58ca:0:b0:4b4:eed:ec3e with SMTP id u10-20020ac258ca000000b004b40eedec3emr5710487lfo.446.1669032695820;
+        Mon, 21 Nov 2022 04:11:35 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w2-20020a19c502000000b004a05767bc07sm1996327lfe.28.2022.11.21.04.11.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 04:11:35 -0800 (PST)
+Message-ID: <0149c0e5-f3d6-1e15-cadb-5b88ed4b3dbf@linaro.org>
+Date:   Mon, 21 Nov 2022 13:11:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5/6] arm64: dts: fsd: Add PCIe support for Tesla FSD SoC
+Content-Language: en-US
+To:     Shradha Todi <shradha.t@samsung.com>, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kishon@ti.com, vkoul@kernel.org, lpieralisi@kernel.org,
+        kw@linux.com, mani@kernel.org, arnd@arndb.de,
+        gregkh@linuxfoundation.org, alim.akhtar@samsung.com,
+        ajaykumar.rs@samsung.com, rcsekar@samsung.com,
+        sriranjani.p@samsung.com, bharat.uppal@samsung.com,
+        s.prashar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com, p.rajanbabu@samsung.com,
+        niyas.ahmed@samsung.com, chanho61.park@samsung.com
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
+References: <20221121105210.68596-1-shradha.t@samsung.com>
+ <CGME20221121104741epcas5p31e1320bc4c0912485c1fabe52ea19988@epcas5p3.samsung.com>
+ <20221121105210.68596-6-shradha.t@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221121105210.68596-6-shradha.t@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Hansen <dave.hansen@intel.com>
-Date: Tue, 8 Nov 2022 15:09:07 -0800
-
-> On 11/7/22 04:55, Alexander Lobakin wrote:
-> > Ping?
-> > 
-> > Also, I managed to remove .head.text at all from x86. Would it be
-> > better to respin this series with the third patch or send a
-> > follow-up later?
-> > 
+On 21/11/2022 11:52, Shradha Todi wrote:
+> Add the support for PCIe controller driver and phy driver
+> for Tesla FSD. It includes support for both RC and EP.
 > 
-> Hi Alexander,
-
-Hey,
-
+> Signed-off-by: Niyas Ahmed S T <niyas.ahmed@samsung.com>
+> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
+> ---
+>  arch/arm64/boot/dts/tesla/fsd-evb.dts      |  48 ++++++
+>  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi |  65 ++++++++
+>  arch/arm64/boot/dts/tesla/fsd.dtsi         | 171 +++++++++++++++++++++
+>  3 files changed, 284 insertions(+)
 > 
-> Things are a bit busy in the review queue at the moment.  As always,
-> we'd love help reviewing stuff.  So, while you're waiting for us to
-> review this, could you perhaps look around and find a series that's also
-> hurting for review tags?
+> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> index 1db6ddf03f01..cda72b0f76f8 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> @@ -41,3 +41,51 @@
+>  &ufs {
+>  	status = "okay";
+>  };
+> +
+> +&pcie_phy0 {
+> +	status = "disabled";
 
-I've got Reviewed-by and Tested-by from Jiri, isn't that enough? Or
-I need also some other group to get tags from?
+It's a double disable, isn't it?
 
-Thanks,
-Olek
+> +};
+> +
+> +&pcie_phy1 {
+> +	status = "disabled";
+> +};
+> +
+> +&pcie4_rc {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pcie1_clkreq>, <&pcie1_wake>, <&pcie1_preset>,
+> +			<&pcie0_slot1>;
+> +	status = "disabled";
+
+???
+
+> +};
+> +
+> +&pcie4_ep {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pcie1_clkreq>, <&pcie1_wake>, <&pcie1_preset>,
+> +			<&pcie0_slot1>;
+> +	status = "disabled";
+> +};
+> +
+> +&pcie0_rc {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pcie0_clkreq>, <&pcie0_wake0>, <&pcie0_preset0>,
+> +			 <&pcie0_slot0>;
+> +	status = "disabled";
+> +};
+> +
+> +&pcie0_ep {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pcie0_clkreq>, <&pcie0_wake0>, <&pcie0_preset0>,
+> +			 <&pcie0_slot0>;
+> +	status = "disabled";
+> +};
+> +
+> +&pcie1_rc {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pcie0_clkreq>, <&pcie0_wake1>, <&pcie0_preset0>;
+> +	status = "disabled";
+> +};
+> +
+> +&pcie1_ep {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pcie0_clkreq>, <&pcie0_wake1>, <&pcie0_preset0>;
+> +	status = "disabled";
+
+Ordering is broken. All overrides/extends are ordered by label name.
+
+> +};
+> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> index d0abb9aa0e9e..edae62dfa987 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> @@ -64,6 +64,27 @@
+>  		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
+>  		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
+>  	};
+> +
+> +	pcie1_clkreq: pcie1-clkreq {
+
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+(...)
+
+>  
+>  &pinctrl_pmu {
+> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> index f35bc5a288c2..2177f6964553 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
+> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> @@ -32,6 +32,14 @@
+>  		spi0 = &spi_0;
+>  		spi1 = &spi_1;
+>  		spi2 = &spi_2;
+> +		pciephy0 = &pcie_phy0;
+> +		pciephy1 = &pcie_phy1;
+> +		pcierc0 = &pcie0_rc;
+> +		pcieep0 = &pcie0_ep;
+> +		pcierc1 = &pcie1_rc;
+> +		pcieep1 = &pcie1_ep;
+> +		pcierc2 = &pcie4_rc;
+> +		pcieep2 = &pcie4_ep;
+
+Since these are disabled, aliases do not belong to DTSI, but to board.
+
+Also, explain why do you need them.
+
+>  	};
+>  
+>  	cpus {
+> @@ -860,6 +868,169 @@
+>  			clocks = <&clock_fsys0 UFS0_MPHY_REFCLK_IXTAL26>;
+>  			clock-names = "ref_clk";
+>  		};
+> +
+> +		pcie_phy0: pcie-phy@15080000 {
+> +			compatible = "tesla,fsd-pcie-phy";
+> +			#phy-cells = <0>;
+> +			reg = <0x0 0x15080000 0x0 0x2000>,
+> +			      <0x0 0x150A0000 0x0 0x1000>;
+> +			reg-names = "phy", "pcs";
+> +			samsung,pmureg-phandle = <&pmu_system_controller>;
+> +			tesla,pcie-sysreg = <&sysreg_fsys0>;
+> +			phy-mode = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		pcie_phy1: pcie-phy@16880000 {
+> +			compatible = "tesla,fsd-pcie-phy";
+> +			#phy-cells = <0>;
+> +			reg = <0x0 0x16880000 0x0 0x2000>,
+> +			      <0x0 0x16860000 0x0 0x1000>;
+> +			reg-names = "phy", "pcs";
+> +			samsung,pmureg-phandle = <&pmu_system_controller>;
+> +			tesla,pcie-sysreg = <&sysreg_fsys1>;
+> +			phy-mode = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		pcie4_rc: pcie@15400000 {
+
+Not ordered. Keep nodes sorted by unit address, at least within the
+group of devices you add.
+
+> +			compatible = "tesla,fsd-pcie";
+
+reg is second property. reg-names and ranges follow.
+
+> +			clocks = <&clock_fsys0 PCIE_SUBCTRL_INST0_AUX_CLK_SOC>,
+> +				 <&clock_fsys0 PCIE_SUBCTRL_INST0_DBI_ACLK_SOC>,
+> +				 <&clock_fsys0 PCIE_SUBCTRL_INST0_MSTR_ACLK_SOC>,
+> +				 <&clock_fsys0 PCIE_SUBCTRL_INST0_SLV_ACLK_SOC>;
+> +			clock-names = "aux_clk", "dbi_clk", "mstr_clk", "slv_clk";
+> +			#address-cells = <3>;
+> +			#size-cells = <2>;
+
+Best regards,
+Krzysztof
+
