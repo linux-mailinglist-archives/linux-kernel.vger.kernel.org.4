@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FF7631DA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF34631DAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiKUKDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:03:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
+        id S231181AbiKUKGa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Nov 2022 05:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiKUKDo (ORCPT
+        with ESMTP id S229690AbiKUKGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:03:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E458E2BE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:03:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7AC560FA7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 10:03:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23413C433C1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 10:03:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669025022;
-        bh=voyOtzVSQJWTMBmIautuhoF+w0ydSWMPpFHG1TdIRoc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dLE4FSTo5gfWwj745MsZJb/i9i8NSHZuiX27Yho/BTMbQpONvq3HhVlNxtlKAW2Fc
-         s0RNrRZX5e0CAK2BcbnNd4D0Cw1l1K74rF5Fb+GwS/B713VmN3w/Qbg1X97M4f10vJ
-         toAjqdIm0htYhDvRh5/Fz6o0PF7RIyj553rtsQ2Px7UzXqKUd87Q2tx0INUhwKdasg
-         H/1QbVzJfnalmtVNYIwyebeEMtsVeNQHUGNIqnoJlDwf9EyhjszRhe2knmQPM4Vc+P
-         Tgv4cvm9FSgaSvhZTa0FCsMyizqaxr7xfQYWH/NHKd5siXhPZR3Khd3da9aKj0nq6Z
-         a9Zc4k0u4vW+A==
-Received: by mail-ed1-f43.google.com with SMTP id e13so15494647edj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:03:42 -0800 (PST)
-X-Gm-Message-State: ANoB5pnGA+HHWwmy6QZY98lOsxYPh4Vb24WN9E6v02vLbwr4rFm3Ldr+
-        196GBp4i1lZh1WFSObQaBhqSDvdjiirUlpFOltQ=
-X-Google-Smtp-Source: AA0mqf79yrSmnttgU/v91zhk/XWnSN+yH2+oxfA92MwbFwMMv40y4zrateqifULHcO2A1QB3Lr2MyxA+VjEb9MAPYAs=
-X-Received: by 2002:aa7:cc04:0:b0:463:1a0c:4dd1 with SMTP id
- q4-20020aa7cc04000000b004631a0c4dd1mr6287783edt.137.1669025020334; Mon, 21
- Nov 2022 02:03:40 -0800 (PST)
+        Mon, 21 Nov 2022 05:06:23 -0500
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 02:06:20 PST
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 905228FB06
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:06:20 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.96,181,1665417600"; 
+   d="scan'208";a="38178246"
+Received: from hk-mbx13.mioffice.cn (HELO xiaomi.com) ([10.56.21.123])
+  by outboundhk.mxmail.xiaomi.com with ESMTP; 21 Nov 2022 18:05:16 +0800
+Received: from BJ-MBX04.mioffice.cn (10.237.8.124) by HK-MBX13.mioffice.cn
+ (10.56.21.123) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 21 Nov
+ 2022 18:05:15 +0800
+Received: from mi-OptiPlex-7060.mioffice.cn (10.237.8.11) by
+ BJ-MBX04.mioffice.cn (10.237.8.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 21 Nov 2022 18:05:14 +0800
+From:   <wangbiao3@xiaomi.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <brauner@kernel.org>, <bsegall@google.com>
+CC:     <linux-kernel@vger.kernel.org>, <wangbiao3@xiaomi.com>,
+        <wenjieli@qti.qualcomm.com>, <chenguanyou@xiaomi.com>
+Subject: [PATCH 0/1] sched: fix user_mask double free
+Date:   Mon, 21 Nov 2022 18:04:19 +0800
+Message-ID: <cover.1669020858.git.wangbiao3@xiaomi.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221121064826.2115193-1-chenhuacai@loongson.cn>
-In-Reply-To: <20221121064826.2115193-1-chenhuacai@loongson.cn>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 21 Nov 2022 18:03:28 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQpWqL_5n=5dScxrXaquUd6hpp_a9=9DQnR2wdjAJOM6A@mail.gmail.com>
-Message-ID: <CAJF2gTQpWqL_5n=5dScxrXaquUd6hpp_a9=9DQnR2wdjAJOM6A@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Set _PAGE_DIRTY only if _PAGE_MODIFIED is set
- in {pmd,pte}_mkwrite()
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-Originating-IP: [10.237.8.11]
+X-ClientProxiedBy: BJ-MBX10.mioffice.cn (10.237.8.130) To BJ-MBX04.mioffice.cn
+ (10.237.8.124)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_SOFTFAIL,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 2:51 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> Set _PAGE_DIRTY only if _PAGE_MODIFIED is set in {pmd,pte}_mkwrite().
-> Otherwise, _PAGE_DIRTY silences the TLB modify exception and make us
-> have no chance to mark a pmd/pte dirty (_PAGE_MODIFIED) for software.
-Yes, the "VALID/DIRTY"  is a bad hardware pgtable-bit design. It
-caused the software to waste more bits in PTE.  We need hardware
-P/R/W/A/D definitions. It seems from MIPS in history, C-SKY also
-follows that :P.
+From: wangbiao3 <wangbiao3@xiaomi.com>
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+    Clone/Fork a new task,call dup_task_struct->arch_dup_task_struct(tsk,orig)
+    which copy the data of parent/sibling task inclding p->user_cpus_ptr,so
+    the user_cpus_ptr of newtask is the same with orig task's.When
+    dup_task_struct call dup_user_cpus_ptr(tsk, orig, node),it return 0
+    dircetly if src->user_cpus_ptris free by other task,in this case ,
+    the newtask's address of user_cpus_ptr is not changed. Finally,
+    wakup newtask to execute, call task_cpu_possible_mask-->
+    do_set_cpus_allowed to set new task's user_cpus_ptr(user_mask) which
+    call kfree user_mask at the end. So cause a slub double free panic.
 
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/loongarch/include/asm/pgtable.h | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> index debbe116f105..aa0e0e0d4ee5 100644
-> --- a/arch/loongarch/include/asm/pgtable.h
-> +++ b/arch/loongarch/include/asm/pgtable.h
-> @@ -357,7 +357,9 @@ static inline pte_t pte_mkdirty(pte_t pte)
->
->  static inline pte_t pte_mkwrite(pte_t pte)
->  {
-> -       pte_val(pte) |= (_PAGE_WRITE | _PAGE_DIRTY);
-> +       pte_val(pte) |= _PAGE_WRITE;
-> +       if (pte_val(pte) & _PAGE_MODIFIED)
-> +               pte_val(pte) |= _PAGE_DIRTY;
->         return pte;
->  }
->
-> @@ -457,7 +459,9 @@ static inline int pmd_write(pmd_t pmd)
->
->  static inline pmd_t pmd_mkwrite(pmd_t pmd)
->  {
-> -       pmd_val(pmd) |= (_PAGE_WRITE | _PAGE_DIRTY);
-> +       pmd_val(pmd) |= _PAGE_WRITE;
-> +       if (pmd_val(pmd) & _PAGE_MODIFIED)
-> +               pmd_val(pmd) |= _PAGE_DIRTY;
->         return pmd;
->  }
->
-> --
-> 2.31.1
->
+    Use pi_lock to protect content of user_cpus_ptr in dup_user_cpus_ptr and
+    clear dst->user_cpus_ptr when found src->user_cpus_ptr is null
 
+    kernel BUG at mm/slub.c:363!
+    Call trace:
+     __slab_free+0x230/0x28c
+     kfree+0x220/0x2cc
+     do_set_cpus_allowed+0x74/0xa4
+     select_fallback_rq+0x12c/0x200
+     wake_up_new_task+0x26c/0x304
+     kernel_clone+0x2c0/0x470
+     __arm64_sys_clone+0x5c/0x8c
+     invoke_syscall+0x60/0x150
+     el0_svc_common.llvm.13030543509303927816+0x98/0x114
+     do_el0_svc_compat+0x20/0x30
+     el0_svc_compat+0x28/0x90
+     el0t_32_sync_handler+0x7c/0xbc
+     el0t_32_sync+0x1b8/0x1bc
+
+
+wangbiao3 (1):
+  sched: fix user_mask double free
+
+ kernel/sched/core.c | 31 ++++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 11 deletions(-)
 
 --
-Best Regards
- Guo Ren
+2.38.1
+
+#/******本邮件及其附件含有小米公司的保密信息，仅限于发送给上面地址中列出的个人或群组。禁止任何其他人以任何形式使用（包括但不限于全部或部分地泄露、复制、或散发）本邮件中的信息。如果您错收了本邮件，请您立即电话或邮件通知发件人并删除本邮件！ This e-mail and its attachments contain confidential information from XIAOMI, which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction, or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this e-mail in error, please notify the sender by phone or email immediately and delete it!******/#
