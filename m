@@ -2,86 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48741632058
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C5763205B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiKULWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S230218AbiKULW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiKULVn (ORCPT
+        with ESMTP id S231163AbiKULVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:21:43 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9962261
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:16:44 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id be13so18336358lfb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:16:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lrfG9YCdHt66hbYqu0OShiByN9Q+Ix/FBWGfahZIGTw=;
-        b=xnbCMedvtEU3dsFJUuZuBxNphjIJrx2tlNtlRW2TMqS5/MONSHB7fRdDdxFWJ1gDpl
-         m5o6YkZhUWqu9rutHH5jJfs9LVHB4SUAn/GbmeviiWK3HBkgddAs5HuXVg+qEU8SYinT
-         yUIeYgaK7Tjscr9NpeismG0KbddLgiqsndWqlVVWhTXYhVC4ubWwHkGLZ1LmVlxIkG64
-         Ykuv71VIOllchEaTsO8IxfEXLok/CN+JLWGaZ1ccv+NznR3EjfCc6aRH7PyisBmmqdK8
-         UUF/LKRQ0HIaSRpq6bi11X4Z4FSM5twuSGj5RmZunG4XFm4k5p7vuKSQrWI1zwSvj9zQ
-         WQqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lrfG9YCdHt66hbYqu0OShiByN9Q+Ix/FBWGfahZIGTw=;
-        b=oGByP2XcU2EuC2WyrSOA92IInKQxwogeKszE/PGX6vvSowqf4GKGxdDQE5SiubHQL5
-         8HpNnkk14nJ/5FIWc8O2NwKrWOLbfMVlXHxjYchF8dQb35UEa9PbxK4sjsFwWeeDNVkv
-         GEb0v4CeKg/CCWCyGGQnJR2Q62lx7jxanxf8tXL+RKMdse4jjxTy1hmlhzcku61LM0ft
-         rxU6G0nbQhYBzTMqcQQjVcaA1/qQXS4eD3TDkAJsEUzp0XJYFTLUtJY/9B6NTZvRGJad
-         TwqQitNveP8Otfo8Zk9dyR2gpLcoi77VLVx6esJ1wZEw7UOp8hvKjKRAYdoRgifF+vpG
-         5q3Q==
-X-Gm-Message-State: ANoB5pkie96/ao9ax+qywFXtYuHXQosmJQPFfOMoCXNWJEHPs2x+Ah97
-        GeMGfVKpnkcW6rdNQFrX0LRsm+XRQQZav+D5
-X-Google-Smtp-Source: AA0mqf7XTsi+DRaW0EjX/SWzCsh6OLHKxJQ5nOhQBp07hY+otYz+Pmy3TNDQk343ejimX6B5i8Je2A==
-X-Received: by 2002:ac2:58f6:0:b0:4a2:7692:3a0a with SMTP id v22-20020ac258f6000000b004a276923a0amr5989466lfo.71.1669029403043;
-        Mon, 21 Nov 2022 03:16:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y22-20020a196416000000b004a25bb4494fsm2000785lfb.178.2022.11.21.03.16.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 03:16:42 -0800 (PST)
-Message-ID: <9389201b-22d4-1229-7e26-5f046d18e15f@linaro.org>
-Date:   Mon, 21 Nov 2022 12:16:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 02/14] dt-bindings: media: rkisp1: Add i.MX8MP ISP
- example
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Paul Elder <paul.elder@ideasonboard.com>,
-        linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 21 Nov 2022 06:21:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66C4BCF;
+        Mon, 21 Nov 2022 03:17:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8750EB80E67;
+        Mon, 21 Nov 2022 11:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FA8CC433D6;
+        Mon, 21 Nov 2022 11:17:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669029438;
+        bh=20eHod9+LKqinzyklLfNuMaBJMnRT6ZSBVaGJSuFWFM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xb41IYLaWLfLIWIarzzEUIzhTAKVERZ7VJaelCNFJYcVGm1Ko2vKxdkUqU9Thu4I9
+         O9iJdHVwP3rg0xMYEQi1TlHrjkA5sUZndcyCE34TEKSXP0R/hHIrm1ZmSZQoSHOfJI
+         evH0ZPb0m6s3Oc4iHPKUHKgXgnHnGuvoDrZtMnI1RseOZBPFpDkHHPRpwweM4ptaZy
+         SOO4kBYyBpOq45010BTTGmwH4Cz235xdWYYi8T3P04k8y8x0vL304l1LiCJ2OxLmL/
+         yAH9bWhrDsnUHvIQH3x0Ch7ma75gjMoeOTFiqzffpEvhimuin58fERanqbKr/GrNCQ
+         wQ5wZACB4OhEg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ox4n9-0001Pz-Vt; Mon, 21 Nov 2022 12:16:48 +0100
+Date:   Mon, 21 Nov 2022 12:16:47 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Helen Koike <helen.koike@collabora.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
- <20221118093931.1284465-3-paul.elder@ideasonboard.com>
- <ca8a6070-3888-8d42-5974-d7c2adc62417@linaro.org>
- <Y3h93cLdEvMzInXe@pyrite.rasen.tech>
- <238f7bf8-578c-5bb4-9f00-50f36334c5cf@linaro.org>
- <Y3sIAHqd8Kd/XBB/@pyrite.rasen.tech>
- <50024f2e-4820-ef78-d54d-5bfe53ccac7e@linaro.org>
- <Y3tVKOEfxdZ+Klnh@pendragon.ideasonboard.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y3tVKOEfxdZ+Klnh@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux Input <linux-input@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Second-source devices and interrupt-mapping race
+Message-ID: <Y3teH14YduOQQkNn@hovoldconsulting.com>
+References: <YuJXMHoT4ijUxnRb@hovoldconsulting.com>
+ <CAL_JsqJJdEFspgJkJnC4jmeq+qaQjkRQU2-WTRmYVOzWrnKifQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqJJdEFspgJkJnC4jmeq+qaQjkRQU2-WTRmYVOzWrnKifQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,45 +64,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 11:38, Laurent Pinchart wrote:
-> On Mon, Nov 21, 2022 at 09:04:29AM +0100, Krzysztof Kozlowski wrote:
->> On 21/11/2022 06:09, Paul Elder wrote:
->>> On Sun, Nov 20, 2022 at 11:36:31AM +0100, Krzysztof Kozlowski wrote:
->>>> On 19/11/2022 07:55, Paul Elder wrote:
->>>>> On Fri, Nov 18, 2022 at 02:06:14PM +0100, Krzysztof Kozlowski wrote:
->>>>>> On 18/11/2022 10:39, Paul Elder wrote:
->>>>>>> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>>>>>>
->>>>>>> Add an example to the rockchip-isp1 DT binding that showcases usage of
->>>>>>> the parallel input of the ISP, connected to the CSI-2 receiver internal
->>>>>>> to the i.MX8MP.
->>>>>>>
->>>>>>> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>>>>>
->>>>>> Missing SoB.
->>>>>
->>>>> I don't quite understand. I see an SoB right there.
->>>>
->>>> Laurent did not sent it. Did you run checkpatch before sending?
->>>
->>> That's why he's on the "From:" in the beginning. checkpatch says it's
->>> fine.
->>
->> Ah, indeed, checkpatch misses that feature (it's part of Greg's
->> verify_signedoff.sh). Anyway, your SoB is missing, as Laurent did not
->> send the patch.
+Hi Rob,
+
+and sorry about the late follow up. I received your reply just before my
+holiday and then ended up in a bit of a rabbit hole with the Qualcomm
+PHY drivers so this got put on the back burner.
+
+On Thu, Aug 04, 2022 at 09:42:01AM -0600, Rob Herring wrote:
+> On Thu, Jul 28, 2022 at 3:30 AM Johan Hovold <johan@kernel.org> wrote:
+
+> > 2. Rob, Krzysztof, I assume that handling second-source devices by
+> > enabling multiple variants in the devicetree can not be considered
+> > correct?
 > 
-> I thought adding an SoB was only required either when making changes or
-> when pushing commits through git, not when forwarding patches on mailing
-> lists ?
+> Probably not, but there's not really any defined policy there. What
+> that looks like in DT depends on the component. Displays are a common
+> one and don't lend well to populating multiple in the DT. For those,
+> the only solution so far is we require the 2nd source to be compatible
+> with the default/1st. I think that was QCom chromebooks...
+> 
+> The easy answer is firmware should deal with figuring out what's
+> actually there and update the DT accordingly.
 
-Anyone touching the file should signed it off. You cannot send it
-without touching (e.g. git format-patch).
+Right.
+ 
+> > What about the related case of simply non-populated devices (e.g. laptop
+> > variants without a touchscreen)?
+> 
+> Shouldn't that just be a case of the driver not screaming if there's
+> no device?
 
-https://elixir.bootlin.com/linux/v5.19-rc5/source/Documentation/process/submitting-patches.rst#L397
+Right, that's simple, but what I'm getting at is that this is also a
+case of the devicetree not describing the actual hardware. If we allow
+that, does that imply that we should also allow having second-source
+devices in the devicetree even if we know that at least one of them will
+be non-populated?
 
-https://elixir.bootlin.com/linux/v5.19-rc5/source/Documentation/process/submitting-patches.rst#L420
+The big difference is dealing with any "shared" resources, such has the
+pinconfig and interrupt in my HID example, which would now appear to be
+claimed by more than one device.
 
-Best regards,
-Krzysztof
+It seems we'd need some way to describe the devices as mutually
+exclusive, and perhaps that's reason enough not to try to generalise the
+single-non-populated-device case.
 
+> > Note that we have at least two cases of "second-source" nodes in mainline
+> > ("rtc" and "trackpad", respectively):
+> >
+> >         85a9efcd4e29 ("ARM: mvebu: add DT support for Seagate NAS 2 and 4-Bay")
+> >         689b937bedde ("arm64: dts: mediatek: add mt8173 elm and hana board")
+> >
+> > and that, for example, the i2c-hid driver explicitly supports
+> > non-populated devices:
+> >
+> >         b3a81b6c4fc6 ("HID: i2c-hid: check if device is there before really probing")
+> >
+> > and the commit message indicates that this is something that Chromebooks
+> > rely on.
+> >
+> > For the X13s, I'm not sure how we would go about to tell the variants
+> > apart (the ACPI tables that Windows use include both touchpads and an
+> > optional touchscreen). In the end, the boot firmware might need to
+> > resort to a similar kind of probing if we don't allow the kernel to do
+> > it.
+> >
+> > Finally, note that while disabling async probing for "second-source"
+> > nodes (e.g. if we could mark them as requiring that) would take care of
+> > the irq-mapping race, we'd still currently also need to move any
+> > pinconfig handles to the parent bus node (as is also done in one of the
+> > in-tree examples above) to suppress the corresponding pinctrl errors in
+> > case the populated device is probed and bound first:
+> >
+> > [  +0.010217] sc8280xp-tlmm f100000.pinctrl: pin GPIO_182 already requested by 0-0015; cannot claim for 0-002c
+> 
+> If the config is the same for both we could suppress that warning. If
+> not the same, seems a bit dangerous to configure the wrong config...
+
+Indeed, the pin configs would need to be at least compatible.
+
+I'm sure this has the potential to mess things up with respect to other
+resources too. And even if it may be possible to get this to work in
+many cases it seems firmware needs to be involved for it to work
+generally.
+
+Johan
