@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6921A6324E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D17D6324F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiKUOEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S231621AbiKUOE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:04:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiKUOCR (ORCPT
+        with ESMTP id S231605AbiKUOCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:02:17 -0500
+        Mon, 21 Nov 2022 09:02:20 -0500
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360242EF53;
-        Mon, 21 Nov 2022 06:02:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33B686A63;
+        Mon, 21 Nov 2022 06:02:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1669039335; x=1700575335;
+  t=1669039340; x=1700575340;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qy6zLlRt58JzjnAnjZx0E210Sky1kDaCzk1olERIjGA=;
-  b=GtK3PqbbD3BmCUPb550lB/G6QPxm4Da7BWe0G6mllY3emKjUbyrMfD9t
-   yx2jxRk89w0+ebdoFQG3dO7ZSQyFuo/XcbZzGOv3Inl35B7aZSDWpbJP4
-   l510ooPXiKVJGQ1ChGvIQ5m1s+33g0hx7Rv1y+WyMZlaE9ou2veFPS3SW
-   M=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Nov 2022 06:02:14 -0800
+  bh=7FbkFUUwW8f1lkbeYVGTNASH9BSWg8uSE/T9xxdn1m8=;
+  b=po4MhVFNoVYDDKELfqhwa63yF6eYA8n1IT6Zjo8kd133Tg3RsidnC7PX
+   6npulL0M7PFMyyFqRSMULEjXOZ3qvrseDjTotQ4oaDrqBuFK0TTaj3cgL
+   v5N6ABEJTQU+cr0h1A+2jNHg6QstCXkczf7UAmboZqp4g0UfXz5Q5789+
+   s=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Nov 2022 06:02:19 -0800
 X-QCInternal: smtphost
 Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 06:02:14 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 06:02:18 -0800
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 21 Nov 2022 06:02:12 -0800
+ 15.2.986.36; Mon, 21 Nov 2022 06:02:15 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>
-CC:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         Sudeep Holla <sudeep.holla@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-acpi@vger.kernel.org>
-Subject: [PATCH v7 17/20] gunyah: rsc_mgr: Add platform ops on mem_lend/mem_reclaim
-Date:   Mon, 21 Nov 2022 06:00:06 -0800
-Message-ID: <20221121140009.2353512-18-quic_eberman@quicinc.com>
+        <linux-acpi@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+Subject: [PATCH v7 18/20] firmware: qcom_scm: Use fixed width src vm bitmap
+Date:   Mon, 21 Nov 2022 06:00:07 -0800
+Message-ID: <20221121140009.2353512-19-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221121140009.2353512-1-quic_eberman@quicinc.com>
 References: <20221121140009.2353512-1-quic_eberman@quicinc.com>
@@ -78,191 +92,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Qualcomm platforms, there is a firmware entity which controls access
-to physical pages. In order to share memory with another VM, this entity
-needs to be informed that the guest VM should have access to the memory.
+The maximum VMID for assign_mem is 63. Use a u64 to represent this
+bitmap instead of architecture-dependent "unsigned int" which varies in
+size on 32-bit and 64-bit platforms.
 
-Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- drivers/virt/gunyah/Kconfig                 |  4 ++
- drivers/virt/gunyah/Makefile                |  1 +
- drivers/virt/gunyah/gunyah_platform_hooks.c | 63 +++++++++++++++++++++
- drivers/virt/gunyah/gunyah_rm_rpc.c         |  7 ++-
- drivers/virt/gunyah/rsc_mgr.h               |  3 +
- include/linux/gunyah_rsc_mgr.h              | 14 +++++
- 6 files changed, 91 insertions(+), 1 deletion(-)
- create mode 100644 drivers/virt/gunyah/gunyah_platform_hooks.c
 
-diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
-index 5856b7c5157b..41e619128b3d 100644
---- a/drivers/virt/gunyah/Kconfig
-+++ b/drivers/virt/gunyah/Kconfig
-@@ -11,11 +11,15 @@ config GUNYAH
- 	  Say Y/M here to enable the drivers needed to interact in a Gunyah
- 	  virtual environment.
+Note this will have build conflicts with
+https://lore.kernel.org/all/20221114-narmstrong-sm8550-upstream-mpss_dsm-v2-2-f7c65d6f0e55@linaro.org/
+which would also need an "unsigned int" -> "u64" in struct qcom_mpss_dsm_mem:perms.
+
+ drivers/firmware/qcom_scm.c           | 12 +++++++-----
+ drivers/misc/fastrpc.c                |  6 ++++--
+ drivers/net/wireless/ath/ath10k/qmi.c |  4 ++--
+ drivers/remoteproc/qcom_q6v5_mss.c    |  8 ++++----
+ drivers/soc/qcom/rmtfs_mem.c          |  2 +-
+ include/linux/qcom_scm.h              |  2 +-
+ 6 files changed, 19 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index cdbfe54c8146..92763dce6477 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -898,7 +898,7 @@ static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
+  * Return negative errno on failure or 0 on success with @srcvm updated.
+  */
+ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+-			unsigned int *srcvm,
++			u64 *srcvm,
+ 			const struct qcom_scm_vmperm *newvm,
+ 			unsigned int dest_cnt)
+ {
+@@ -915,9 +915,9 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+ 	__le32 *src;
+ 	void *ptr;
+ 	int ret, i, b;
+-	unsigned long srcvm_bits = *srcvm;
++	u64 srcvm_bits = *srcvm;
  
-+config GUNYAH_PLATFORM_HOOKS
-+	tristate
-+
- if GUNYAH
- config GUNYAH_RESOURCE_MANAGER
- 	tristate
- 	depends on MAILBOX
- 	select GUNYAH_MESSAGE_QUEUES
-+	select GUNYAH_PLATFORM_HOOKS
+-	src_sz = hweight_long(srcvm_bits) * sizeof(*src);
++	src_sz = hweight64(srcvm_bits) * sizeof(*src);
+ 	mem_to_map_sz = sizeof(*mem_to_map);
+ 	dest_sz = dest_cnt * sizeof(*destvm);
+ 	ptr_sz = ALIGN(src_sz, SZ_64) + ALIGN(mem_to_map_sz, SZ_64) +
+@@ -930,8 +930,10 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+ 	/* Fill source vmid detail */
+ 	src = ptr;
+ 	i = 0;
+-	for_each_set_bit(b, &srcvm_bits, BITS_PER_LONG)
+-		src[i++] = cpu_to_le32(b);
++	for (b = 0; b < BITS_PER_TYPE(u64); b++) {
++		if (srcvm_bits & BIT(b))
++			src[i++] = cpu_to_le32(b);
++	}
  
- config GUNYAH_VM_MANAGER
- 	tristate "Gunyah VM Manager"
-diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-index 82fd18d518d1..90d589ce1f44 100644
---- a/drivers/virt/gunyah/Makefile
-+++ b/drivers/virt/gunyah/Makefile
-@@ -1,4 +1,5 @@
- obj-$(CONFIG_GUNYAH) += gunyah.o
-+obj-$(CONFIG_GUNYAH_PLATFORM_HOOKS) += gunyah_platform_hooks.o
+ 	/* Fill details of mem buff to map */
+ 	mem_to_map = ptr + ALIGN(src_sz, SZ_64);
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 7ff0b63c25e3..2ad388f99fe1 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -299,11 +299,13 @@ static void fastrpc_free_map(struct kref *ref)
+ 		if (map->attr & FASTRPC_ATTR_SECUREMAP) {
+ 			struct qcom_scm_vmperm perm;
+ 			int err = 0;
++			u64 src;
  
- obj-$(CONFIG_GUNYAH_RESOURCE_MANAGER) += gunyah_rsc_mgr.o gunyah_rm_rpc.o
++			src = BIT(map->fl->cctx->vmperms[0].vmid);
+ 			perm.vmid = QCOM_SCM_VMID_HLOS;
+ 			perm.perm = QCOM_SCM_PERM_RWX;
+ 			err = qcom_scm_assign_mem(map->phys, map->size,
+-				&(map->fl->cctx->vmperms[0].vmid), &perm, 1);
++				&src, &perm, 1);
+ 			if (err) {
+ 				dev_err(map->fl->sctx->dev, "Failed to assign memory phys 0x%llx size 0x%llx err %d",
+ 						map->phys, map->size, err);
+@@ -744,7 +746,7 @@ static int fastrpc_map_create(struct fastrpc_user *fl, int fd,
+ 		 * If subsystem VMIDs are defined in DTSI, then do
+ 		 * hyp_assign from HLOS to those VM(s)
+ 		 */
+-		unsigned int perms = BIT(QCOM_SCM_VMID_HLOS);
++		u64 perms = BIT(QCOM_SCM_VMID_HLOS);
  
-diff --git a/drivers/virt/gunyah/gunyah_platform_hooks.c b/drivers/virt/gunyah/gunyah_platform_hooks.c
-new file mode 100644
-index 000000000000..36cc02c75963
---- /dev/null
-+++ b/drivers/virt/gunyah/gunyah_platform_hooks.c
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/rwsem.h>
-+#include <linux/gunyah_rsc_mgr.h>
-+
-+#include "rsc_mgr.h"
-+
-+static struct gunyah_rm_platform_ops *rm_platform_ops;
-+static DECLARE_RWSEM(rm_platform_ops_lock);
-+
-+int gh_rm_platform_pre_mem_share(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel)
-+{
-+	int ret = 0;
-+
-+	down_read(&rm_platform_ops_lock);
-+	if (rm_platform_ops && rm_platform_ops->pre_mem_share)
-+		ret = rm_platform_ops->pre_mem_share(rm, mem_parcel);
-+	up_read(&rm_platform_ops_lock);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(gh_rm_platform_pre_mem_share);
-+
-+int gh_rm_platform_post_mem_reclaim(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel)
-+{
-+	int ret = 0;
-+
-+	down_read(&rm_platform_ops_lock);
-+	if (rm_platform_ops && rm_platform_ops->post_mem_reclaim)
-+		ret = rm_platform_ops->post_mem_reclaim(rm, mem_parcel);
-+	up_read(&rm_platform_ops_lock);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(gh_rm_platform_post_mem_reclaim);
-+
-+int gh_rm_register_platform_ops(struct gunyah_rm_platform_ops *platform_ops)
-+{
-+	int ret = 0;
-+
-+	down_write(&rm_platform_ops_lock);
-+	if (!rm_platform_ops)
-+		rm_platform_ops = platform_ops;
-+	else
-+		ret = -EEXIST;
-+	up_write(&rm_platform_ops_lock);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(gh_rm_register_platform_ops);
-+
-+void gh_rm_unregister_platform_ops(struct gunyah_rm_platform_ops *platform_ops)
-+{
-+	down_write(&rm_platform_ops_lock);
-+	if (rm_platform_ops == platform_ops)
-+		rm_platform_ops = NULL;
-+	up_write(&rm_platform_ops_lock);
-+}
-+EXPORT_SYMBOL_GPL(gh_rm_unregister_platform_ops);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Gunyah Platform Hooks");
-diff --git a/drivers/virt/gunyah/gunyah_rm_rpc.c b/drivers/virt/gunyah/gunyah_rm_rpc.c
-index 544ec8022104..f81c7b55e7d7 100644
---- a/drivers/virt/gunyah/gunyah_rm_rpc.c
-+++ b/drivers/virt/gunyah/gunyah_rm_rpc.c
-@@ -671,6 +671,10 @@ static int gh_rm_mem_lend_common(struct gh_rm_rpc *rm, u32 message_id, struct gh
- 	if (initial_n_mem_entries > GH_RM_MAX_MEM_ENTRIES)
- 		initial_n_mem_entries = GH_RM_MAX_MEM_ENTRIES;
+ 		map->attr = attr;
+ 		err = qcom_scm_assign_mem(map->phys, (u64)map->size, &perms,
+diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
+index 66cb7a1e628a..6d1d87e1cdde 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi.c
++++ b/drivers/net/wireless/ath/ath10k/qmi.c
+@@ -28,7 +28,7 @@ static int ath10k_qmi_map_msa_permission(struct ath10k_qmi *qmi,
+ {
+ 	struct qcom_scm_vmperm dst_perms[3];
+ 	struct ath10k *ar = qmi->ar;
+-	unsigned int src_perms;
++	u64 src_perms;
+ 	u32 perm_count;
+ 	int ret;
  
-+	ret = gh_rm_platform_pre_mem_share(rm, p);
-+	if (ret)
-+		return ret;
-+
- 	/* The format of the message goes:
- 	 * request header
- 	 * ACL entries (which VMs get what kind of access to this memory parcel)
-@@ -714,6 +718,7 @@ static int gh_rm_mem_lend_common(struct gh_rm_rpc *rm, u32 message_id, struct gh
+@@ -60,7 +60,7 @@ static int ath10k_qmi_unmap_msa_permission(struct ath10k_qmi *qmi,
+ {
+ 	struct qcom_scm_vmperm dst_perms;
+ 	struct ath10k *ar = qmi->ar;
+-	unsigned int src_perms;
++	u64 src_perms;
+ 	int ret;
  
- 	if (resp_size != sizeof(u32)) {
- 		ret = -EIO;
-+		gh_rm_platform_post_mem_reclaim(rm, p);
- 		goto out;
+ 	src_perms = BIT(QCOM_SCM_VMID_MSS_MSA) | BIT(QCOM_SCM_VMID_WLAN);
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index fddb63cffee0..9e8bde7a7ec4 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -227,8 +227,8 @@ struct q6v5 {
+ 	bool has_qaccept_regs;
+ 	bool has_ext_cntl_regs;
+ 	bool has_vq6;
+-	int mpss_perm;
+-	int mba_perm;
++	u64 mpss_perm;
++	u64 mba_perm;
+ 	const char *hexagon_mdt_image;
+ 	int version;
+ };
+@@ -404,7 +404,7 @@ static void q6v5_pds_disable(struct q6v5 *qproc, struct device **pds,
  	}
- 
-@@ -783,7 +788,7 @@ int gh_rm_mem_reclaim(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *parcel)
- 		return ret;
- 	kfree(resp);
- 
--	return ret;
-+	return gh_rm_platform_post_mem_reclaim(rm, parcel);
  }
- EXPORT_SYMBOL_GPL(gh_rm_mem_reclaim);
  
-diff --git a/drivers/virt/gunyah/rsc_mgr.h b/drivers/virt/gunyah/rsc_mgr.h
-index 4712405a3486..3a7f171a7416 100644
---- a/drivers/virt/gunyah/rsc_mgr.h
-+++ b/drivers/virt/gunyah/rsc_mgr.h
-@@ -34,6 +34,9 @@ struct platform_device;
- struct gh_rm_rpc *gh_rm_rpc_init(struct platform_device *pdev);
- void gh_rm_rpc_remove(struct gh_rm_rpc *rm);
+-static int q6v5_xfer_mem_ownership(struct q6v5 *qproc, int *current_perm,
++static int q6v5_xfer_mem_ownership(struct q6v5 *qproc, u64 *current_perm,
+ 				   bool local, bool remote, phys_addr_t addr,
+ 				   size_t size)
+ {
+@@ -939,7 +939,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+ 	struct page *page;
+ 	dma_addr_t phys;
+ 	void *metadata;
+-	int mdata_perm;
++	u64 mdata_perm;
+ 	int xferop_ret;
+ 	size_t size;
+ 	void *vaddr;
+diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
+index 0feaae357821..69991e47aa23 100644
+--- a/drivers/soc/qcom/rmtfs_mem.c
++++ b/drivers/soc/qcom/rmtfs_mem.c
+@@ -30,7 +30,7 @@ struct qcom_rmtfs_mem {
  
-+int gh_rm_platform_pre_mem_share(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel);
-+int gh_rm_platform_post_mem_reclaim(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel);
-+
- /* Message IDs: Memory Management */
- #define GH_RM_RPC_MEM_LEND			0x51000012
- #define GH_RM_RPC_MEM_SHARE			0x51000013
-diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
-index c0f5c04c64dc..7cdb736f7054 100644
---- a/include/linux/gunyah_rsc_mgr.h
-+++ b/include/linux/gunyah_rsc_mgr.h
-@@ -120,4 +120,18 @@ int gh_rm_get_vmid(struct gh_rm_rpc *rm, u16 *vmid);
- #define GH_RM_BOOT_CONTEXT_REG_SET_SP_ELx	2
- int gh_rm_set_boot_context(struct gh_rm_rpc *rm, u16 vmid, u8 reg_set, u8 reg_idx, u64 value);
+ 	unsigned int client_id;
  
-+struct gunyah_rm_platform_ops {
-+	int (*pre_mem_share)(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel);
-+	int (*post_mem_reclaim)(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel);
-+};
-+
-+#if IS_ENABLED(CONFIG_GUNYAH)
-+int gh_rm_register_platform_ops(struct gunyah_rm_platform_ops *platform_ops);
-+void gh_rm_unregister_platform_ops(struct gunyah_rm_platform_ops *platform_ops);
-+#else
-+static inline int gh_rm_register_platform_ops(struct gunyah_rm_platform_ops *platform_ops)
-+	{ return 0; }
-+static inline void gh_rm_unregister_platform_ops(struct gunyah_rm_platform_ops *platform_ops) { }
-+#endif
-+
- #endif
+-	unsigned int perms;
++	u64 perms;
+ };
+ 
+ static ssize_t qcom_rmtfs_mem_show(struct device *dev,
+diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+index f8335644a01a..77f7b5837216 100644
+--- a/include/linux/qcom_scm.h
++++ b/include/linux/qcom_scm.h
+@@ -96,7 +96,7 @@ extern int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+ 					  u32 cp_nonpixel_start,
+ 					  u32 cp_nonpixel_size);
+ extern int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+-			       unsigned int *src,
++			       u64 *src,
+ 			       const struct qcom_scm_vmperm *newvm,
+ 			       unsigned int dest_cnt);
+ 
 -- 
 2.25.1
 
