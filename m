@@ -2,164 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911CF632FE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE51632FE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiKUWcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 17:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S229919AbiKUWcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 17:32:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiKUWcH (ORCPT
+        with ESMTP id S231960AbiKUWcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 17:32:07 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB73DEAD4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 14:32:06 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id q21so9717914iod.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 14:32:06 -0800 (PST)
+        Mon, 21 Nov 2022 17:32:33 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A41DDFAF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 14:32:25 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id x21so16004688ljg.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 14:32:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=C14m+5yBrv+u7QhAN78BFentZAFfnah8l0PUC4om7m8=;
-        b=Hffgzad5MotJq5EstTpwFVQ55zJ2m4sb3dYfhAhqq6QB33wEMcRLHmm2P2eeaxcyl7
-         AuWzz1/l9u/1PZyxMCWxsiA0Q6e5fRCsSvqJb8QkirXxS7f+WkWGHtcgrG5qSrXeSLS7
-         dJYa3L0ToHNG/CDOCknNOKSmu/izuTLa+EFwY=
+        bh=72FmKroozXGXFSVLROV37Pyi3BIUygUiEj+6BEtiieE=;
+        b=VzpwF/89nL23FzIZrtNY0j/sND6WP6P4LEOFXwtY6GDuh87OXSBK1wbA+TlZW+Q62S
+         7h7EOU+lgbtfZgWhZNjE4yA3rOWmw9u+ES/TAGBWgJxqRkoh0sXCXeGJ9n2whom5Pr57
+         IOrGgMwjVCniSQy5l+R7MPQa+Zs7kgDG1jhee83rMVoIDoSHfos/DtUJgy0E3sqc99pi
+         Li+hkC7cU2XzECQhlBphW/KloGC10GgBsYOQ7fqV5xXhc9MaPZSCseXAzj/vq1DmmNzu
+         SUIBdqyyjGv3mBk2IDfaCE9AyWHqGXg4Fb8bZsFpW1FjaKPTuN8ZAp0Tsi0tYD1A6Na1
+         k26Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C14m+5yBrv+u7QhAN78BFentZAFfnah8l0PUC4om7m8=;
-        b=46ta7knz5o5ErC8F4pSwvGkI+cmM8jY3H87wETcG/AeO24wbfu/H30kdKtWtbZEuUF
-         RMpZ1XEbFUwc2rGjh/okfDTHQe2OZwvAttMV8Gv0damUWznYcNk3riWcN2UAglP86fp6
-         ZNPML4kQEj8D+FPobIlIlU7HVOTSvKqSU0u/hKEYCsbtwj7U9l/ncaCGmXO425z6yz4F
-         FpCyece/LeW2l/fqKa6egGSCChbzsFbPgRWiFKiicrNs0r7jTgE5OobdAuc0FCVkk6GX
-         OeCyg9BBGH6swj4lu95W0xuyGTQ+kx5i5SOxwjYo/Q1J+VKubmozybNkmQQo+7nWKMeh
-         5EVw==
-X-Gm-Message-State: ANoB5pkjYLnVLoFNK1Qc32GWEk8ekWQv+CJ44INain0ctCqSggMoc89z
-        FWKA4DlWyHbua9rEnsscB+aOUw==
-X-Google-Smtp-Source: AA0mqf7LzJaZLZ7BN/ieedWyHJVfNYy1D/3fvJQ9uHDra09xLMDQnM+TgsskrmQ988UMBIXzYDc/Wg==
-X-Received: by 2002:a02:cba6:0:b0:375:a360:a130 with SMTP id v6-20020a02cba6000000b00375a360a130mr9477313jap.307.1669069925449;
-        Mon, 21 Nov 2022 14:32:05 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056638112f00b0037502ffac71sm4612316jar.18.2022.11.21.14.32.02
+        bh=72FmKroozXGXFSVLROV37Pyi3BIUygUiEj+6BEtiieE=;
+        b=iEFM51E1ifOf1traVtF7O6VkFKCD/jbS9BFKm88zBThJ2r+xrMW30ijg4fNJQ9vZOy
+         /UZTomOT2kARHltIj7ukkWAXx6ykx8os/V/bzvrl6PT5ckEg/yImKe0icGvpBiOVs5jT
+         9DMsS6PTo9EPs3LVLtzkiY8/uuTAkBWbNFIGpND8Cabb2m54OqJyrGukC6X8aVOGcWFb
+         gvZb1Ue51gEj+ZW51llP8+ecmnP7YDhZPR6gHIV4lYZ3kF3yXyCx1ZkcYjm8ZOBc7qzW
+         p+eLcGVKOY9MsnErsvtRweQGUTHH2Aswm4x9PMOm2Jh7ZoTwGCk0641GWBbNSuCZX1Hv
+         LlaQ==
+X-Gm-Message-State: ANoB5plKR2ugrWXp0F+G0DoXRGy3X9+27HYpvGtev9m2OneaH48/ePqy
+        x1NqgJ6iB0Frbam9zdiKhGhU1A==
+X-Google-Smtp-Source: AA0mqf4eOQvprEGtE4HcBGCWu5pBQWUfsa1hwG9jDC5PPbV7mAO6uruXGJQJNbhDE08533P3egx25w==
+X-Received: by 2002:a05:651c:c8b:b0:277:f8b:bb4f with SMTP id bz11-20020a05651c0c8b00b002770f8bbb4fmr724534ljb.161.1669069944003;
+        Mon, 21 Nov 2022 14:32:24 -0800 (PST)
+Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
+        by smtp.gmail.com with ESMTPSA id e15-20020ac24e0f000000b00498fc3d4d15sm2186894lfr.190.2022.11.21.14.32.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 14:32:04 -0800 (PST)
-Message-ID: <96114bec-1df7-0dcb-ec99-4f907587658d@linuxfoundation.org>
-Date:   Mon, 21 Nov 2022 15:32:02 -0700
+        Mon, 21 Nov 2022 14:32:23 -0800 (PST)
+Message-ID: <c6f52e13-3692-5739-eabd-550936f34bed@linaro.org>
+Date:   Mon, 21 Nov 2022 23:32:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/2] ARM: dts: msm8974: castor: Define pm8841
+ regulators
 Content-Language: en-US
-To:     Benjamin Coddington <bcodding@redhat.com>
-Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Steve French <sfrench@samba.org>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, cluster-devel@redhat.com,
-        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
-        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
- <cover.1669036433.git.bcodding@redhat.com>
- <382872.1669039019@warthog.procyon.org.uk>
- <51B5418D-34FB-4E87-B87A-6C3FCDF8B21C@redhat.com>
- <4585e331-03ad-959f-e715-29af15f63712@linuxfoundation.org>
- <26d98c8f-372b-b9c8-c29f-096cddaff149@linuxfoundation.org>
- <A860595D-5BAB-461B-B449-8975C0424311@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <A860595D-5BAB-461B-B449-8975C0424311@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221121212226.321514-1-luca@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221121212226.321514-1-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 15:01, Benjamin Coddington wrote:
-> On 21 Nov 2022, at 16:43, Shuah Khan wrote:
-> 
->> On 11/21/22 14:40, Shuah Khan wrote:
->>> On 11/21/22 07:34, Benjamin Coddington wrote:
->>>> On 21 Nov 2022, at 8:56, David Howells wrote:
->>>>
->>>>> Benjamin Coddington <bcodding@redhat.com> wrote:
->>>>>
->>>>>> Since moving to memalloc_nofs_save/restore, SUNRPC has stopped setting the
->>>>>> GFP_NOIO flag on sk_allocation which the networking system uses to decide
->>>>>> when it is safe to use current->task_frag.
->>>>>
->>>>> Um, what's task_frag?
->>>>
->>>> Its a per-task page_frag used to coalesce small writes for networking -- see:
->>>>
->>>> 5640f7685831 net: use a per task frag allocator
->>>>
->>>> Ben
->>>>
->>>>
->>>
->>> I am not seeing this in the mainline. Where can find this commit?
->>>
->>
->> Okay. I see this commit in the mainline. However, I don't see the
->> sk_use_task_frag in mainline.
-> 
-> sk_use_task_frag is in patch 1/3 in this posting.
-> 
-> https://lore.kernel.org/netdev/26d98c8f-372b-b9c8-c29f-096cddaff149@linuxfoundation.org/T/#m3271959c4cf8dcff1c0c6ba023b2b3821d9e7e99
-> 
 
-Aha. I don't have 1/3 in my Inbox - I think it would make
-sense to cc people on the first patch so we can understand
-the premise for the change.
 
-thanks,
--- Shuah
-  
+On 21.11.2022 22:22, Luca Weiss wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Define the pm8841 regulators under SMD/RPM, to allow the modem
+> remoteproc to set the voltage during boot of the remote processor.
+> 
+> Entries are just copied from the Honami dts.
+I hope it was supposed to be "identical to" and not "copied and hoped it
+would be ok" :/
 
+Maybe I'm a bit picky, but I suppose this is said in a misleading way..
+
+Konrad
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+> Changes in v2:
+> * new patch in this series
+> 
+>  ...-msm8974pro-sony-xperia-shinano-castor.dts | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> index 3f45f5c5d37b..2c33f84a6e4e 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> +++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> @@ -319,6 +319,30 @@ led@7 {
+>  };
+>  
+>  &rpm_requests {
+> +	pm8841-regulators {
+> +		compatible = "qcom,rpm-pm8841-regulators";
+> +
+> +		pm8841_s1: s1 {
+> +			regulator-min-microvolt = <675000>;
+> +			regulator-max-microvolt = <1050000>;
+> +		};
+> +
+> +		pm8841_s2: s2 {
+> +			regulator-min-microvolt = <500000>;
+> +			regulator-max-microvolt = <1050000>;
+> +		};
+> +
+> +		pm8841_s3: s3 {
+> +			regulator-min-microvolt = <500000>;
+> +			regulator-max-microvolt = <1050000>;
+> +		};
+> +
+> +		pm8841_s4: s4 {
+> +			regulator-min-microvolt = <500000>;
+> +			regulator-max-microvolt = <1050000>;
+> +		};
+> +	};
+> +
+>  	pm8941-regulators {
+>  		compatible = "qcom,rpm-pm8941-regulators";
+>  
