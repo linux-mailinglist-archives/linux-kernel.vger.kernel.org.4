@@ -2,60 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A256318D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0982E6318DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiKUDQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S229826AbiKUDUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 22:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKUDQA (ORCPT
+        with ESMTP id S229498AbiKUDUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:16:00 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DFF317FE
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 19:15:57 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NFsrp2QnvzFqRk;
-        Mon, 21 Nov 2022 11:12:42 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 11:15:50 +0800
-Received: from [10.174.179.24] (10.174.179.24) by
- dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 11:15:49 +0800
-Subject: Re: [PATCH v2 2/2] arm64/mm: fix incorrect file_map_count for invalid
- pmd/pud
-To:     Will Deacon <will@kernel.org>
-References: <20221117075602.2904324-1-liushixin2@huawei.com>
- <20221117075602.2904324-3-liushixin2@huawei.com>
- <20221118143414.GG4046@willie-the-truck>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Denys Vlasenko <dvlasenk@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Anshuman Khandual" <anshuman.khandual@arm.com>,
-        David Hildenbrand <dhildenb@redhat.com>,
-        Rafael Aquini <raquini@redhat.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-From:   Liu Shixin <liushixin2@huawei.com>
-Message-ID: <10cecbdf-eb06-873d-6b79-bfdb3197d2ec@huawei.com>
-Date:   Mon, 21 Nov 2022 11:15:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Sun, 20 Nov 2022 22:20:19 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F7632BA0;
+        Sun, 20 Nov 2022 19:20:18 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NFt1X0DJkz4x1D;
+        Mon, 21 Nov 2022 14:20:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669000816;
+        bh=16AM/+wdJvZHFRUEDz16oCj710GWv8k0bxYD89hl7Wc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RnTUiXYOVBgjEIHUwcg5rhoYt5O0EchLUWOcegIlLhmEkllm3T/OWeCVhPyXPuZx+
+         b6AoFVMYK8jnGKwTWuy1bMyE/Rax/r8LaGJKAVjU15SRFJlIFKcF5UCf8ftHzCx/en
+         o+wWU3113uUB1dn46Y2fSkvh3m+UW8nRJNlk81FsomNzNDjcHJAY4I+XeKs5kjmuj3
+         YKgcgXVRo9Q4l6fYH0SZDnm0VrtfNGLpp5U18QmJx7y/sU8Sjtf0JuDS/yrKfYiBGU
+         zQXjJ6bE+XZGuHn+St5pMy0UcapVgwPJHyJA4lOwQLLnGgsvq4KCDKDFx+VO5IJe3H
+         eCax7c7Td+plg==
+Date:   Mon, 21 Nov 2022 14:20:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the security tree with Linus' tree
+Message-ID: <20221121142014.0ae7c8ff@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20221118143414.GG4046@willie-the-truck>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.24]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/2QCuX=a+BnI3/e5VWm+HwLb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,88 +51,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/18 22:34, Will Deacon wrote:
-> On Thu, Nov 17, 2022 at 03:56:02PM +0800, Liu Shixin wrote:
->> The page table check trigger BUG_ON() unexpectedly when split hugepage:
->>
->>  ------------[ cut here ]------------
->>  kernel BUG at mm/page_table_check.c:119!
->>  Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
->>  Dumping ftrace buffer:
->>     (ftrace buffer empty)
->>  Modules linked in:
->>  CPU: 7 PID: 210 Comm: transhuge-stres Not tainted 6.1.0-rc3+ #748
->>  Hardware name: linux,dummy-virt (DT)
->>  pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>  pc : page_table_check_set.isra.0+0x398/0x468
->>  lr : page_table_check_set.isra.0+0x1c0/0x468
->> [...]
->>  Call trace:
->>   page_table_check_set.isra.0+0x398/0x468
->>   __page_table_check_pte_set+0x160/0x1c0
->>   __split_huge_pmd_locked+0x900/0x1648
->>   __split_huge_pmd+0x28c/0x3b8
->>   unmap_page_range+0x428/0x858
->>   unmap_single_vma+0xf4/0x1c8
->>   zap_page_range+0x2b0/0x410
->>   madvise_vma_behavior+0xc44/0xe78
->>   do_madvise+0x280/0x698
->>   __arm64_sys_madvise+0x90/0xe8
->>   invoke_syscall.constprop.0+0xdc/0x1d8
->>   do_el0_svc+0xf4/0x3f8
->>   el0_svc+0x58/0x120
->>   el0t_64_sync_handler+0xb8/0xc0
->>   el0t_64_sync+0x19c/0x1a0
->> [...]
->>
->> On arm64, pmd_leaf() will return true even if the pmd is invalid due to
->> pmd_present_invalid() check. So in pmdp_invalidate() the file_map_count
->> will not only decrease once but also increase once. Then in set_pte_at(),
->> the file_map_count increase again, and so trigger BUG_ON() unexpectedly.
->>
->> Fix this problem by adding pmd_valid() in pmd_user_accessible_page().
->> Moreover, add pud_valid() for pud_user_accessible_page() too.
->>
->> Fixes: 42b2547137f5 ("arm64/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
->> Reported-by: Denys Vlasenko <dvlasenk@redhat.com>
->> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
->> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
->> ---
->>  arch/arm64/include/asm/pgtable.h | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->> index edf6625ce965..3bc64199aa2e 100644
->> --- a/arch/arm64/include/asm/pgtable.h
->> +++ b/arch/arm64/include/asm/pgtable.h
->> @@ -863,12 +863,12 @@ static inline bool pte_user_accessible_page(pte_t pte)
->>  
->>  static inline bool pmd_user_accessible_page(pmd_t pmd)
->>  {
->> -	return pmd_leaf(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
->> +	return pmd_valid(pmd) && pmd_leaf(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-> Hmm, doesn't this have a funny interaction with PROT_NONE where the pmd is
-> invalid but present? If you don't care about PROT_NONE, then you could just
-> do:
->
->   pmd_valid(pmd) && !pmd_table(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd))
->
-> but if you do care then you could do:
->
->   pmd_leaf(pmd) && !pmd_present_invalid(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd))
-I prefer the latter. I will fix and resend later.
->>  static inline bool pud_user_accessible_page(pud_t pud)
->>  {
->> -	return pud_leaf(pud) && pud_user(pud);
->> +	return pud_valid(pud) && pud_leaf(pud) && pud_user(pud);
-> Not caused by this patch, but why don't we have something like a
-> pud_user_exec() check here like we do for the pte and pmd levels?
-As far as I know, there is no user use the user executable pud on arm64, so didn't define pud_user_exec().
+--Sig_/2QCuX=a+BnI3/e5VWm+HwLb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+Hi all,
 
->
-> Will
-> .
->
+Today's linux-next merge of the security tree got a conflict in:
 
+  security/commoncap.c
+
+between commit:
+
+  8cf0a1bc1287 ("capabilities: fix potential memleak on error path from vfs=
+_getxattr_alloc()")
+
+from Linus' tree and commit:
+
+  f6fbd8cbf3ed ("lsm,fs: fix vfs_getxattr_alloc() return type and caller er=
+ror paths")
+
+from the security tree.
+
+I fixed it up (I just used the latter) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2QCuX=a+BnI3/e5VWm+HwLb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN67m8ACgkQAVBC80lX
+0Gyhawf/U5EJj+aylv5HycPOhAsEkOSpqqT+bNZWLLKp0mmpeOYseEorogQYxseV
+/Zj0DNKu9EYXWPXicoRRsTomxzKoH5sbGBLfWggLd8sJNQsFethQPzuZWzC/bANq
+VGMNHKRKwo47LvBoMdyVg/0SsLmJeaWl0Bh5gd9guAYEe22fkO7xYfR5gRBB3CAJ
+61sILPDicluX4ewGXSzLANAhTRHu+Af/LzP4WG1Ao+62JVB14jIQpvj/+8ih2i+k
+ivnKDJbvyr6RmUluLJ89NCHe29TryIdeXWlNwzyKn3NN+mTvrWl/OTdXC6EhUoxV
+KIOc3jx6zYF1EhS/Mc/0tHcCnEEnlw==
+=fCSw
+-----END PGP SIGNATURE-----
+
+--Sig_/2QCuX=a+BnI3/e5VWm+HwLb--
