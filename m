@@ -2,189 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642846330A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2426330AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiKUXSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S231322AbiKUXWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:22:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiKUXSx (ORCPT
+        with ESMTP id S229676AbiKUXWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:18:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A02C67F7;
-        Mon, 21 Nov 2022 15:18:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7156614FD;
-        Mon, 21 Nov 2022 23:18:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02B5C433D6;
-        Mon, 21 Nov 2022 23:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669072729;
-        bh=4habRl7EWY7Q2b/7QkEy7kBg7npss/byERgceP+MyTo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Mkq5WKle3ER8xnEodSsXb1DUDoRujLzzH9a2OxVc4x4V37xNqqtK7BHJEPPvce76e
-         aaawRGgi3jW8PYFzTMRKU3yl1UC9iMfPWiSI7Xm/G6pj11RSVtf4WY5K/DlsmX0gFP
-         mIzqxDiro+Q7WuTVW4fROCNDnEOwOSCH4XMoOdeYHy6ijp+/zONbUi81GFmDTYXMIx
-         jECDROG8WMyoC+giltpQiR7HwhgA4sGW6/MJh9JHEiDHczdDKx/PJSA1qUBlidOXaZ
-         QA1Gjs4BNTzhLGDH/XHijxXjIWd08garnjmVK1yXEGZxIwTkxzBDn/uqJkITRK2gBC
-         Uoe3+qeU7HmnQ==
-Date:   Mon, 21 Nov 2022 17:18:47 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Shradha Todi <shradha.t@samsung.com>
-Cc:     bhelgaas@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com, vkoul@kernel.org,
-        lpieralisi@kernel.org, kw@linux.com, mani@kernel.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org, alim.akhtar@samsung.com,
-        ajaykumar.rs@samsung.com, rcsekar@samsung.com,
-        sriranjani.p@samsung.com, bharat.uppal@samsung.com,
-        s.prashar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, p.rajanbabu@samsung.com,
-        niyas.ahmed@samsung.com, chanho61.park@samsung.com,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-Subject: Re: [PATCH 3/6] PCI: dwc: fsd: Add FSD PCIe Controller driver support
-Message-ID: <20221121231847.GA141229@bhelgaas>
+        Mon, 21 Nov 2022 18:22:14 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22F4C6628;
+        Mon, 21 Nov 2022 15:22:13 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4B12388F;
+        Tue, 22 Nov 2022 00:22:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669072931;
+        bh=4rD0mH/nQMz3jhYfYvSCQW+AjpQxc5wuB3zU0+3GzBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pYMdMiPl5IrORg/CnguFQwPxjYBCJXu3p5rszsx4+nBwcHfMtcZvG4QwzXlP8mU2a
+         jhexLoWbFLy+osr9fnKJT1ly2Zz8LEiUvYL+Qb0Z/UUW3E7zpR4geuQbqUnNpOyF8u
+         y/ctkgREjNe4OrG1xkTGPbURlsuP6zPNvV/Hk90E=
+Date:   Tue, 22 Nov 2022 01:21:56 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        David Plowman <david.plowman@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH 06/14] staging: mmal_vchiq: Add image formats to be used
+ by bcm2835-isp
+Message-ID: <Y3wIFNGQst623Se4@pendragon.ideasonboard.com>
+References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
+ <20221121214722.22563-7-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221121105210.68596-4-shradha.t@samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221121214722.22563-7-umang.jain@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 04:22:07PM +0530, Shradha Todi wrote:
-> Add PCIe controller driver file for PCIe controller
-> found in fsd SoC family. This driver adds support for both RC
-> and EP mode.
+Hi Umang and Dave,
+
+Thank you for the patch.
+
+On Tue, Nov 22, 2022 at 03:17:14AM +0530, Umang Jain wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 > 
-> Signed-off-by: Niyas Ahmed S T <niyas.ahmed@samsung.com>
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
+> The bcm2835-isp supports Bayer, so add in the encodings for them.
+> Also, Add support for monochrome image formats in the various MIPI
+> packings.
+> 
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>  .../vc04_services/vchiq-mmal/mmal-encodings.h | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+> 
+> diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h
+> index e15ae7b24f73..4711877a9711 100644
+> --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h
+> +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h
+> @@ -69,6 +69,68 @@
+>   */
+>  #define MMAL_ENCODING_OPAQUE           MMAL_FOURCC('O', 'P', 'Q', 'V')
+>  
+> +/* Bayer formats
 
-Would be much, much better if drivers can be combined as Krzysztof
-suggests.  Superficial comments below if not.
+/*
+ * Bayer formats
 
-> +config PCIE_FSD
-> +	bool "Samsung FSD PCIe Controller"
-> +	default n
+> + * FourCC values copied from V4L2 where defined.
+> + */
+> +/* 8 bit per pixel Bayer formats. */
+> +#define MMAL_ENCODING_BAYER_SBGGR8     MMAL_FOURCC('B', 'A', '8', '1')
+> +#define MMAL_ENCODING_BAYER_SGBRG8     MMAL_FOURCC('G', 'B', 'R', 'G')
+> +#define MMAL_ENCODING_BAYER_SGRBG8     MMAL_FOURCC('G', 'R', 'B', 'G')
+> +#define MMAL_ENCODING_BAYER_SRGGB8     MMAL_FOURCC('R', 'G', 'G', 'B')
+> +
+> +/* 10 bit per pixel packed Bayer formats. */
+> +#define MMAL_ENCODING_BAYER_SBGGR10P   MMAL_FOURCC('p', 'B', 'A', 'A')
+> +#define MMAL_ENCODING_BAYER_SGRBG10P   MMAL_FOURCC('p', 'g', 'A', 'A')
+> +#define MMAL_ENCODING_BAYER_SGBRG10P   MMAL_FOURCC('p', 'G', 'A', 'A')
 
-Unnecessary since "default n" is the default.  Please read and learn
-from the existing Kconfig for other drivers.
+SGBRG should go before SGRBG, like for the raw 8 formats. Same below for
+the 12P, 10 and 12 formats.
 
-> +config PCIE_FSD_HOST
-> +	bool "PCIe FSD Host Mode"
-> +	depends on PCI
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Shouldn't be necessary because the entire menu depends on PCI:
+> +#define MMAL_ENCODING_BAYER_SRGGB10P   MMAL_FOURCC('p', 'R', 'A', 'A')
+> +
+> +/* 12 bit per pixel packed Bayer formats. */
+> +#define MMAL_ENCODING_BAYER_SBGGR12P   MMAL_FOURCC('p', 'B', '1', '2')
+> +#define MMAL_ENCODING_BAYER_SGRBG12P   MMAL_FOURCC('p', 'g', '1', '2')
+> +#define MMAL_ENCODING_BAYER_SGBRG12P   MMAL_FOURCC('p', 'G', '1', '2')
+> +#define MMAL_ENCODING_BAYER_SRGGB12P   MMAL_FOURCC('p', 'R', '1', '2')
+> +
+> +/* 14 bit per pixel Bayer formats. */
+> +#define MMAL_ENCODING_BAYER_SBGGR14P   MMAL_FOURCC('p', 'B', 'E', 'E')
+> +#define MMAL_ENCODING_BAYER_SGBRG14P   MMAL_FOURCC('p', 'G', 'E', 'E')
+> +#define MMAL_ENCODING_BAYER_SGRBG14P   MMAL_FOURCC('p', 'g', 'E', 'E')
+> +#define MMAL_ENCODING_BAYER_SRGGB14P   MMAL_FOURCC('p', 'R', 'E', 'E')
+> +
+> +/* 16 bit per pixel Bayer formats. */
+> +#define MMAL_ENCODING_BAYER_SBGGR16    MMAL_FOURCC('B', 'G', '1', '6')
+> +#define MMAL_ENCODING_BAYER_SGBRG16    MMAL_FOURCC('G', 'B', '1', '6')
+> +#define MMAL_ENCODING_BAYER_SGRBG16    MMAL_FOURCC('G', 'R', '1', '6')
+> +#define MMAL_ENCODING_BAYER_SRGGB16    MMAL_FOURCC('R', 'G', '1', '6')
+> +
+> +/* 10 bit per pixel unpacked (16bit) Bayer formats. */
+> +#define MMAL_ENCODING_BAYER_SBGGR10    MMAL_FOURCC('B', 'G', '1', '0')
+> +#define MMAL_ENCODING_BAYER_SGRBG10    MMAL_FOURCC('B', 'A', '1', '0')
+> +#define MMAL_ENCODING_BAYER_SGBRG10    MMAL_FOURCC('G', 'B', '1', '0')
+> +#define MMAL_ENCODING_BAYER_SRGGB10    MMAL_FOURCC('R', 'G', '1', '0')
+> +
+> +/* 12 bit per pixel unpacked (16bit) Bayer formats */
+> +#define MMAL_ENCODING_BAYER_SBGGR12    MMAL_FOURCC('B', 'G', '1', '2')
+> +#define MMAL_ENCODING_BAYER_SGRBG12    MMAL_FOURCC('B', 'A', '1', '2')
+> +#define MMAL_ENCODING_BAYER_SGBRG12    MMAL_FOURCC('G', 'B', '1', '2')
+> +#define MMAL_ENCODING_BAYER_SRGGB12    MMAL_FOURCC('R', 'G', '1', '2')
+> +
+> +/* 14 bit per pixel unpacked (16bit) Bayer formats */
+> +#define MMAL_ENCODING_BAYER_SBGGR14    MMAL_FOURCC('B', 'G', '1', '4')
+> +#define MMAL_ENCODING_BAYER_SGBRG14    MMAL_FOURCC('G', 'B', '1', '4')
+> +#define MMAL_ENCODING_BAYER_SGRBG14    MMAL_FOURCC('G', 'R', '1', '4')
+> +#define MMAL_ENCODING_BAYER_SRGGB14    MMAL_FOURCC('R', 'G', '1', '4')
+> +
+> +/* MIPI packed monochrome images */
+> +#define MMAL_ENCODING_GREY    MMAL_FOURCC('G', 'R', 'E', 'Y')
+> +#define MMAL_ENCODING_Y10P    MMAL_FOURCC('Y', '1', '0', 'P')
+> +#define MMAL_ENCODING_Y12P    MMAL_FOURCC('Y', '1', '2', 'P')
+> +#define MMAL_ENCODING_Y14P    MMAL_FOURCC('Y', '1', '4', 'P')
+> +#define MMAL_ENCODING_Y16     MMAL_FOURCC('Y', '1', '6', ' ')
+> +/* Unpacked monochrome formats (16bit per sample, but only N LSBs used) */
+> +#define MMAL_ENCODING_Y10     MMAL_FOURCC('Y', '1', '0', ' ')
+> +#define MMAL_ENCODING_Y12     MMAL_FOURCC('Y', '1', '2', ' ')
+> +#define MMAL_ENCODING_Y14     MMAL_FOURCC('Y', '1', '4', ' ')
+> +
+>  /** An EGL image handle
+>   */
+>  #define MMAL_ENCODING_EGL_IMAGE        MMAL_FOURCC('E', 'G', 'L', 'I')
 
-  menu "DesignWare PCI Core Support"
-	  depends on PCI
+-- 
+Regards,
 
-> +	depends on PCI_MSI_IRQ_DOMAIN || PCI_DOMAIN
-> +	select PCIE_DW_HOST
-> +	select PCIE_FSD
-> +	default n
-
-Unnecessary.
-
-> +config PCIE_FSD_EP
-> +	bool "PCIe FSD Endpoint Mode"
-> +	depends on PCI_ENDPOINT
-> +	select PCIE_DW_EP
-> +	select PCIE_FSD
-> +	default n
-
-Unnecessary.
-
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * PCIe host controller driver for Tesla fsd SoC
-> + *
-> + * Copyright (C) 2017-2022 Samsung Electronics Co., Ltd. http://www.samsung.com
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-
-Unnecessary copyright text since you have SPDX at the top.
-
-> + * struct fsd_pcie - representation of the pci controller
-
-s/pci/PCI/ in English text (you do it inconsistently)
-s/pcie/PCIe/ same
-
-> + * @pci: representation of dwc pcie device structure
-> + * @pdata: private data to determine the oprations supported by device
-
-s/oprations/operations/
-
-> + * @appl_base: represent the appl base
-> + * @sysreg: represent the system register base
-> + * @sysreg_base: represents the offset of the system register required
-
-"representation", "represent", "represents"?  Pick one.
-
-> + * @phy: represents the phy device associated for the controller
-
-s/phy/PHY/ in English text
-
-> +	/* External Local Bus interface(ELBI) Register */
-
-Space before "(" in English text.
-
-> +		dev_err(dev, "failed to map dbi_base\n");
-> +		dev_err(dev, "Sysreg regmap lookup failed.\n");
-> +		dev_err(dev, "Couldn't get the register offset for syscon!\n");
-> +		dev_err(dev, "couldn't get aux clock\n");
-
-Random capitalization of driver messages.  Pick one.
-
-> +	/* assert LTSSM enable */
-> +		/* Return success as link might come up later */
-
-Random capitalization of comments.  Pick one.
-
-> +			case RADM_VENDOR_MSG:
-> +				pr_info("Interrupt received for\n");
-
-Must include device identification.  This one also looks incomplete
-("for ..."?)
-
-> +			/* To indicate that controller has accepted to send
-> +			 * Latency Tolerance reporting message
-
-Use standard multi-line comment format.
-
-> +			dev_err(dev, "failed to get msi irq\n");
-
-s/msi/MSI/ in English text.
-s/irq/IRQ/ also
-
-> +	.start_link	= fsd_pcie_establish_link,
-
-fsd_pcie_start_link() to match function pointer name.
-
-> +	pci->dbi_base2 = NULL;
-> +	pci->dbi_base = NULL;
-> +	pci->atu_base = NULL;
-
-Unnecessary since you used kzalloc().
-
-> +	dev_info(dev, "FSD PCIe probe completed successfully\n");
-
-Questionable utility.  Most drivers don't emit this, or if they do,
-they include some useful information like address, IRQ, etc.
-
-> +	dev_err(dev, "PCIe Failed to set 36 bit dma mask\n");
-
-s/dma/DMA/ in English text.
+Laurent Pinchart
