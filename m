@@ -2,151 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DBB6328C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417936328D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiKUP5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S231434AbiKUP6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKUP5t (ORCPT
+        with ESMTP id S231339AbiKUP6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:57:49 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90486AA45B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:57:48 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id h132so12967357oif.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:57:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ik+O2yFhiDkDp3RkLBc5Rnv+Co0LOibULw9gEY7U8T0=;
-        b=JN//ENGvlRn+Adk9i9dEqbgbYOd1F8XKs2vSvWxb4UvltkdIPUpjJi+gas/8glOu5j
-         Opu4z7SYkrFCk4VBXajZ5KB5IwF+wHvPRwttDADAXbUF0Gxy2YAIqAPK2ROgVDdz13jU
-         XAgGciFflBGnt/DrBshokkAa/IngSYsGTH0yOrDcrlahZps0PNQRcwEpDHHFLYwGdOBt
-         ty9kKiyjibB/zgI7JjOvmR158NiOZBXVoaDTB/3/4qPrLSmSSBgqM4XGjmlU18ikyTcq
-         eXer+0mr5qMZhxjmuKNWFj16lZyy7xCJSKiw1cNyar92H8iZjwuLV38RelhzJYGwTPrF
-         t+AQ==
+        Mon, 21 Nov 2022 10:58:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A519854B26
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:57:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669046262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fSrlQMIuLLb408AYq73wGHaQitblZLzVnKNYWxZfL9g=;
+        b=VowR4wfR8UHqKXIe1WJHXg6weJBt+Vo/zCLu79AvuQFUoRTlFXd1OUoJV71lhbQ+A2sH0H
+        jXEqXyIMJu8GGum2ilJGJlFcIVI6POlIVhZcgF6lzT3qpHLupMnPrVsBKTKyDqKWh2o+np
+        omwjq37W+Gb7rrGAI+SS1cf66pBFVlM=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-632-OnAlqkleNDaT4EXkB4Sm5Q-1; Mon, 21 Nov 2022 10:57:41 -0500
+X-MC-Unique: OnAlqkleNDaT4EXkB4Sm5Q-1
+Received: by mail-ej1-f71.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso6787860ejb.14
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:57:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ik+O2yFhiDkDp3RkLBc5Rnv+Co0LOibULw9gEY7U8T0=;
-        b=O60ERDJiabYciT1Y9dgNfCaUefPFFY1ZjU5kklOBq3k1DzVEKaJyYeuifojTVz6SpH
-         rRDclrAfochvGyjf2DHQbLFQghlpP1uyqcOzRAMZMPZU7zI6O1v7YZJthmG0wKoA07a0
-         WuE+atfxpoCquwbGf8xUigFtjYfOyrej9Y3vGFVW8duscOnSkaOf8EJCrXrHjA4aksEJ
-         XToR2eTg3tdRcI+3CIe/xx4X8cFMA0TyloRivDM7VzJJlAzlLCcenyqtuyJROI1RjmzN
-         tjQxAg36Gc4jd0LrwYElOohOrj66qduZ+vbWnSjYgjMSZ/6RQcUBko8j70qkwJpItwBE
-         BJsQ==
-X-Gm-Message-State: ANoB5pllxYULgiVaEMfpyd3pN+XRnISeV/CL5tpszRvKpYPxogB5zrzB
-        vjrBcyMW7cB1mYYa1cKo1h1nlQ425tBS3DCgQP4=
-X-Google-Smtp-Source: AA0mqf7B3UhZryQX9jOhaPL639OMvZw+mGDaYvFySZZA3OASotQiSxDe9JLWFat9fZ59veXeogwiQ6KhlqPmnfMRgbA=
-X-Received: by 2002:a05:6808:9b8:b0:34f:97ea:14d with SMTP id
- e24-20020a05680809b800b0034f97ea014dmr9344853oig.96.1669046267882; Mon, 21
- Nov 2022 07:57:47 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fSrlQMIuLLb408AYq73wGHaQitblZLzVnKNYWxZfL9g=;
+        b=XXNEnskTauaeWJwgsye96rJU/uH7e63iIkDOu+buMru63kKsQEq76At1uEm73teOfx
+         Fuu1YxA3d7sh9Qs77IZkIZT+vRiwApD1Nk42EJjlKQyG5rWQ1rkk3Z05oIwluXzXeZ1T
+         f5DhXU4hGnaXxTvMHAslgjLBMj+krYygZXtOcmn/oCmnAb4ZjqEvF50DfVn/SDBV6sc9
+         uaoCSZ0qqkj/zeVpuBKRDbWmWHZ+kqJlFaKPTZjNks8k8DxRbVMjQho6nF6B6l+K5fM7
+         szaJstArfmdlnBeXVHF1pzFsznpL58v99/sp1Fggo9YLCxbrqDTC6fA09fRsXTscATSM
+         ZNPw==
+X-Gm-Message-State: ANoB5plckYtpHNl5MFv3qS4Plmbzm+MtVQlTSi/23XymHa3hY2KAejPH
+        pTeER0a8KWZ3whuMoHptS9TCiIGVwdMXNJZG4M7A2H5iLZ7Z0zahjQ0EgfBQc9Fy7bUlVdY8YJe
+        UFjHkDeW9201Q59gjS6wCAi8X
+X-Received: by 2002:a17:906:3155:b0:7ad:90db:c241 with SMTP id e21-20020a170906315500b007ad90dbc241mr16094428eje.284.1669046259204;
+        Mon, 21 Nov 2022 07:57:39 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4/y8bb1kzSiZCC9luT4L+ZHOKAD7cRl9fZuGVQyKNvIyOfHUXVykJkl23EkrRlztWFizx4Sg==
+X-Received: by 2002:a17:906:3155:b0:7ad:90db:c241 with SMTP id e21-20020a170906315500b007ad90dbc241mr16094411eje.284.1669046259014;
+        Mon, 21 Nov 2022 07:57:39 -0800 (PST)
+Received: from [10.43.17.4] (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id s8-20020aa7cb08000000b00461b169c02csm5283198edt.91.2022.11.21.07.57.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 07:57:38 -0800 (PST)
+Message-ID: <aa2c354f-b7d1-6b97-ddff-762f7fec8431@redhat.com>
+Date:   Mon, 21 Nov 2022 16:57:37 +0100
 MIME-Version: 1.0
-References: <20221119204435.97113-1-ogabbay@kernel.org>
-In-Reply-To: <20221119204435.97113-1-ogabbay@kernel.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 21 Nov 2022 10:57:36 -0500
-Message-ID: <CADnq5_MimkbzXXs+kwNTLSzLrcqpm+-7w3gZA8UiJVxQ8aapOg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] new subsystem for compute accelerator devices
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jiho Chu <jiho.chu@samsung.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Christopher Friedt <chrisfriedt@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/2] arm64/mm: fix incorrect file_map_count for non-leaf
+ pmd/pud
+Content-Language: en-US
+To:     Liu Shixin <liushixin2@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221116083811.464678-1-liushixin2@huawei.com>
+ <20221116083811.464678-2-liushixin2@huawei.com>
+From:   Denys Vlasenko <dvlasenk@redhat.com>
+In-Reply-To: <20221116083811.464678-2-liushixin2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 3:44 PM Oded Gabbay <ogabbay@kernel.org> wrote:
->
-> This is the fourth (and hopefully last) version of the patch-set to add the
-> new subsystem for compute accelerators. I removed the RFC headline as
-> I believe it is now ready for merging.
->
-> Compare to v3, this patch-set contains one additional patch that adds
-> documentation regarding the accel subsystem. I hope it's good enough for
-> this stage. In addition, there were few very minor fixes according to
-> comments received on v3.
->
-> The patches are in the following repo:
-> https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git/log/?h=accel_v4
->
-> As in v3, The HEAD of that branch is a commit adding a dummy driver that
-> registers an accel device using the new framework. This can be served
-> as a simple reference.
->
-> v1 cover letter:
-> https://lkml.org/lkml/2022/10/22/544
->
-> v2 cover letter:
-> https://lore.kernel.org/lkml/20221102203405.1797491-1-ogabbay@kernel.org/T/
->
-> v3 cover letter:
-> https://lore.kernel.org/lkml/20221106210225.2065371-1-ogabbay@kernel.org/T/
->
+On 11/16/22 09:38, Liu Shixin wrote:
+> The page table check trigger BUG_ON() unexpectedly when collapse hugepage:
+> 
+>   ------------[ cut here ]------------
+>   kernel BUG at mm/page_table_check.c:82!
+>   Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+>   Dumping ftrace buffer:
+>      (ftrace buffer empty)
+>   Modules linked in:
+>   CPU: 6 PID: 68 Comm: khugepaged Not tainted 6.1.0-rc3+ #750
+>   Hardware name: linux,dummy-virt (DT)
+>   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   pc : page_table_check_clear.isra.0+0x258/0x3f0
+>   lr : page_table_check_clear.isra.0+0x240/0x3f0
+> [...]
+>   Call trace:
+>    page_table_check_clear.isra.0+0x258/0x3f0
+>    __page_table_check_pmd_clear+0xbc/0x108
+>    pmdp_collapse_flush+0xb0/0x160
+>    collapse_huge_page+0xa08/0x1080
+>    hpage_collapse_scan_pmd+0xf30/0x1590
+>    khugepaged_scan_mm_slot.constprop.0+0x52c/0xac8
+>    khugepaged+0x338/0x518
+>    kthread+0x278/0x2f8
+>    ret_from_fork+0x10/0x20
+> [...]
+> 
+> Since pmd_user_accessible_page() doesn't check if a pmd is leaf, it
+> decrease file_map_count for a non-leaf pmd comes from collapse_huge_page().
+> and so trigger BUG_ON() unexpectedly.
+> 
+> Fix this problem by using pmd_leaf() insteal of pmd_present() in
+> pmd_user_accessible_page(). Moreover, use pud_leaf() for
+> pud_user_accessible_page() too.
+> 
+> Fixes: 42b2547137f5 ("arm64/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
+> Reported-by: Denys Vlasenko <dvlasenk@redhat.com>
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 
-With the understanding that individual drivers can choose to use
-either classic drm or accel, whichever makes the most sense to them,
-this series is:
-Acked-by: Alex Deucher <alexander.deucer@amd.com>
 
-> Thanks,
-> Oded.
->
-> Oded Gabbay (4):
->   drivers/accel: define kconfig and register a new major
->   accel: add dedicated minor for accelerator devices
->   drm: initialize accel framework
->   doc: add documentation for accel subsystem
->
->  Documentation/accel/index.rst         |  17 ++
->  Documentation/accel/introduction.rst  | 109 +++++++++
->  Documentation/admin-guide/devices.txt |   5 +
->  Documentation/subsystem-apis.rst      |   1 +
->  MAINTAINERS                           |   9 +
->  drivers/Kconfig                       |   2 +
->  drivers/accel/Kconfig                 |  24 ++
->  drivers/accel/drm_accel.c             | 323 ++++++++++++++++++++++++++
->  drivers/gpu/drm/Makefile              |   1 +
->  drivers/gpu/drm/drm_drv.c             | 102 +++++---
->  drivers/gpu/drm/drm_file.c            |   2 +-
->  drivers/gpu/drm/drm_sysfs.c           |  24 +-
->  include/drm/drm_accel.h               |  97 ++++++++
->  include/drm/drm_device.h              |   3 +
->  include/drm/drm_drv.h                 |   8 +
->  include/drm/drm_file.h                |  21 +-
->  16 files changed, 711 insertions(+), 37 deletions(-)
->  create mode 100644 Documentation/accel/index.rst
->  create mode 100644 Documentation/accel/introduction.rst
->  create mode 100644 drivers/accel/Kconfig
->  create mode 100644 drivers/accel/drm_accel.c
->  create mode 100644 include/drm/drm_accel.h
->
-> --
-> 2.25.1
->
+Tested on 6.0.6 kernel, no oopses anymore.
+
