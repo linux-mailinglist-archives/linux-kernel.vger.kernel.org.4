@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A4D632367
+	by mail.lfdr.de (Postfix) with ESMTP id C0AA9632368
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiKUN0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
+        id S229899AbiKUN0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiKUN0X (ORCPT
+        with ESMTP id S230003AbiKUN0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:26:23 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FEB45A10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:26:21 -0800 (PST)
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CD7883F32C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 13:26:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1669037178;
-        bh=gKvc2U8eYwANZy7lOYZ9bdcI/4BdKXI/Fb2/9a8b3sg=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=pBt7RGBH6J/q3c81rZpw64rPhg3DsT18UHDCaJdpWPDBk4lEFXio727t8KDMajjmn
-         gpzyl3QP3gMGXse6kyZrYxFal5vFROswppgvhWexN1+wMYPtaAGxv40MG8EcvVs5pO
-         dda5J40gQZg4L0XVNq4VCx7MS8WpqFnzIRhd6fb/1FiAIs9RTdyvGl3rDTk0Fe46b9
-         tikx9hTLBB9zfGCYY16uov3QAn6ksAEqCphRb9LOQZUhs1y8BXAuI63LS46zalp7aQ
-         /N7aR0kg6gySRd/Qw95ngOF7dpLG543AKIKILcZ/C1vcX/GISuUrsbLo38nMiZlsh3
-         nW7fhP5D1Nc8A==
-Received: by mail-wr1-f70.google.com with SMTP id x8-20020adfbb48000000b00241c6e4f72eso1720528wrg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:26:18 -0800 (PST)
+        Mon, 21 Nov 2022 08:26:46 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814D240467;
+        Mon, 21 Nov 2022 05:26:45 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id h10so7959207qvq.7;
+        Mon, 21 Nov 2022 05:26:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sMCxxZGsTl/DsHAlAb9K2gPcoa3rE0jXnKHh3JJXIr8=;
+        b=YS13pQXfSZuXWTGtO2JghNNEnLBIXl4GpzkpYe0Pxnvv2NdwvzQf9BmmPV9YUoA84A
+         DcLlGdVbJ2YGxAATGLowLxrBrQr7Wvz5fwP63cEtYjZdADMpASzvPLCMiwU5X6pyXdBt
+         d67j6jBLOd+W1P5szjuDer2zUivmDGK4UyNrge4VJVsCjZI22jmi1FO2VfqEo7kLcWLB
+         4CSRqeufeOizAliuLeLWJxsGVvM2g2G/zykbNSmUO/ddlWmYVLPDETbA5uMMpSKMhTIv
+         VrabeN29s3ftXACqPgrHj/wymebD0sj4RQunmrtJjIyFmYyxNDLSGbU2auTkROgOgPlH
+         z6HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gKvc2U8eYwANZy7lOYZ9bdcI/4BdKXI/Fb2/9a8b3sg=;
-        b=NeVBq/uwDdpZutqL24k+4JsKNkihGp7teVvsmXgK+CuZQSSgow6GhtxSwywcqHmwdM
-         Kqc4IBa2EYNSwnG93mPa2vcNqnYw+wSY+iPwIGrEwaaJX446X4dbLS/xQIr6EbneG7kv
-         MFq/almujQhDWB1R+uCjQgYpIdiRa4ZHJ1OqXxlydt7kLkdUKKHa+AedQGwtmnmcsD3L
-         2f0sOg5gQartEeYTyUH4fsfnPDiwfFsnrvSMZ7wa/scJyj6wYxn010b0jL/KfRydjsi9
-         ERBlaAWyLEbKLH36XXn4TFgy3bsoajD7AZ1oXBrHN/HpdWJuz9zOtcIHjvSOt1VC0w3q
-         5fZg==
-X-Gm-Message-State: ANoB5plTAw6CuFMnrQuhTJt5oxlShhdZkmawNE1g2nhDOkFEr5eejuLR
-        8xMVY0e7rqwsavaHK7rE59UnutlQiAUX9GmbuwdDDLx3IpJ3QF+yZcAIBaOGN3s8v9yNxFc1whk
-        jMtdSuIBZBqtETZOErvM7YVWS9weWy7OeobNjwfH9CQ==
-X-Received: by 2002:a05:600c:21d2:b0:3cf:b2b1:3c7 with SMTP id x18-20020a05600c21d200b003cfb2b103c7mr15969456wmj.176.1669037178441;
-        Mon, 21 Nov 2022 05:26:18 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7kdRd3Y+KTXQIY484oaUn0CAkZUThqp6PNDTrZnQyVCgacPzv3epYied5sqcoxsPFb7WkujA==
-X-Received: by 2002:a05:600c:21d2:b0:3cf:b2b1:3c7 with SMTP id x18-20020a05600c21d200b003cfb2b103c7mr15969436wmj.176.1669037178149;
-        Mon, 21 Nov 2022 05:26:18 -0800 (PST)
-Received: from localhost ([137.220.91.195])
-        by smtp.gmail.com with ESMTPSA id hn3-20020a05600ca38300b003c6c1686b10sm17452624wmb.7.2022.11.21.05.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 05:26:17 -0800 (PST)
-From:   Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] Bluetooth: btintel: Correctly declare all module firmware files
-Date:   Mon, 21 Nov 2022 13:26:04 +0000
-Message-Id: <20221121132604.1298992-1-dimitri.ledkov@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        bh=sMCxxZGsTl/DsHAlAb9K2gPcoa3rE0jXnKHh3JJXIr8=;
+        b=WGXtbz1oOML7NU5au4EEc6z1CmmgESDp4wcmcAzbFGz7djSzO6/S7Sf2+pvnUsxdix
+         BMplXOnm5Rl84Qxsz/uz1FahOxbz4/Vho0ewG+YqZeyMD0HbbfedjA/XH7pHzRS2+oWc
+         N3sNPstyWSoraMDN3NxWPEAO/sK0l2F6UqWwqBr1Y48pGcY84MKWsAjO2Zrl7aSlQtka
+         4GKM9T9RakPhoyjR7NP9v9h21EY1uZiV1zKCVwBcDcin77IodGwjEnfsrtg8WiSjSXXi
+         mW8n1dvDe2jDY38e069+L4gmd1jwdF27uHfa9hI9skxeoGsl8bTO9fHS7JEAPc05XnAO
+         dMDw==
+X-Gm-Message-State: ANoB5pkvg5N+AqryGRbJ6T+SZn2aVVgLjlGHE8864NzB3HCvWussqah+
+        CLgWBucxcZ2pw7JaWKp3agwgnuGmoVdfIKAngu8=
+X-Google-Smtp-Source: AA0mqf6VSCttlMDQ4ePrIMuuWUop9z+BTcjYAUHqsQZ33364ZUGwjrt/1mDKwx6Oi5wu+AkigSoems+jlC80zO3rZM0=
+X-Received: by 2002:a0c:ef51:0:b0:4bb:7f7a:2a62 with SMTP id
+ t17-20020a0cef51000000b004bb7f7a2a62mr2557030qvs.82.1669037204617; Mon, 21
+ Nov 2022 05:26:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221121123833.164614-1-mmkurbanov@sberdevices.ru> <20221121123833.164614-3-mmkurbanov@sberdevices.ru>
+In-Reply-To: <20221121123833.164614-3-mmkurbanov@sberdevices.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 21 Nov 2022 15:26:08 +0200
+Message-ID: <CAHp75VfgxHo7YEtfrvvC=yGL28v8-tK4f6Y4ZMnqnw=fj5Q1ew@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] leds: trigger: pattern: notify usespace if pattern finished
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Raphael Teysseyre <rteysseyre@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        kernel@sberdevices.ru
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Strictly encode patterns of supported hw_variants of firmware files
-the kernel driver supports requesting. This now includes many missing
-and previously undeclared module firmware files for 0x07, 0x08,
-0x11-0x14, 0x17-0x1b hw_variants.
+On Mon, Nov 21, 2022 at 2:39 PM Martin Kurbanov
+<mmkurbanov@sberdevices.ru> wrote:
+>
+> In the current moment, userspace caller can schedule LED pattern with
 
-This especially affects environments that only install firmware files
-declared and referenced by the kernel modules. In such environments,
-only the declared firmware files are copied resulting in most Intel
-Bluetooth devices not working. I.e. host-only dracut-install initrds,
-or Ubuntu Core kernel snaps.
+a LED pattern
 
-BugLink: https://bugs.launchpad.net/bugs/1970819
-Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
----
- Changes since v2:
- - encode patterns for 0x17 0x18 0x19 0x1b hw_variants
- - rebase on top of latest rc tag
- 
- Changes since v1:
- - encode strict patterns of supported firmware files for each of the
-   supported hw_variant generations.
+> appropriate parameters, but it doesn't have ability to listen to any
+> events indicated pattern finished. This patch implements such an event
+> using sysfs node and sysfs_notify_dirent() call.
 
- drivers/bluetooth/btintel.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+...
 
-diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-index a657e9a3e96a..55efc4a067db 100644
---- a/drivers/bluetooth/btintel.c
-+++ b/drivers/bluetooth/btintel.c
-@@ -2656,7 +2656,25 @@ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
- MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSION);
- MODULE_VERSION(VERSION);
- MODULE_LICENSE("GPL");
--MODULE_FIRMWARE("intel/ibt-11-5.sfi");
--MODULE_FIRMWARE("intel/ibt-11-5.ddc");
--MODULE_FIRMWARE("intel/ibt-12-16.sfi");
--MODULE_FIRMWARE("intel/ibt-12-16.ddc");
-+/* hw_variant 0x07 0x08 */
-+MODULE_FIRMWARE("intel/ibt-hw-37.7.*-fw-*.*.*.*.*.bseq");
-+MODULE_FIRMWARE("intel/ibt-hw-37.7.bseq");
-+MODULE_FIRMWARE("intel/ibt-hw-37.8.*-fw-*.*.*.*.*.bseq");
-+MODULE_FIRMWARE("intel/ibt-hw-37.8.bseq");
-+/* hw_variant 0x0b 0x0c */
-+MODULE_FIRMWARE("intel/ibt-11-*.sfi");
-+MODULE_FIRMWARE("intel/ibt-12-*.sfi");
-+MODULE_FIRMWARE("intel/ibt-11-*.ddc");
-+MODULE_FIRMWARE("intel/ibt-12-*.ddc");
-+/* hw_variant 0x11 0x12 0x13 0x14 */
-+MODULE_FIRMWARE("intel/ibt-17-*-*.sfi");
-+MODULE_FIRMWARE("intel/ibt-18-*-*.sfi");
-+MODULE_FIRMWARE("intel/ibt-19-*-*.sfi");
-+MODULE_FIRMWARE("intel/ibt-20-*-*.sfi");
-+MODULE_FIRMWARE("intel/ibt-17-*-*.ddc");
-+MODULE_FIRMWARE("intel/ibt-18-*-*.ddc");
-+MODULE_FIRMWARE("intel/ibt-19-*-*.ddc");
-+MODULE_FIRMWARE("intel/ibt-20-*-*.ddc");
-+/* hw_variant 0x17 0x18 0x19 0x1b, read and use cnvi/cnvr */
-+MODULE_FIRMWARE("ibt-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9].sfi");
-+MODULE_FIRMWARE("ibt-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9].ddc");
+> +Date:          October 2022
+> +KernelVersion: 6.1
+
+It can't be. Have you read my previous comments?
+
+...
+
+> +               1 means pattern is running and number 0 are finish or not run.
+
+are finished
+
+...
+
+> +static void pattern_trig_remove_is_running(struct led_classdev *led_cdev)
+> +{
+> +       struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
+> +
+> +       sysfs_put(data->is_running_kn);
+> +       device_remove_file(led_cdev->dev, &dev_attr_is_running);
+> +}
+
+If the file is opened at this time, what would happen during execution
+of this function?
+
 -- 
-2.34.1
-
+With Best Regards,
+Andy Shevchenko
