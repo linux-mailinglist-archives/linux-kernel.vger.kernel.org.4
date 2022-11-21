@@ -2,129 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0546327B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4316327B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbiKUPTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S232057AbiKUPTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiKUPTD (ORCPT
+        with ESMTP id S232017AbiKUPTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:19:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66509C903C;
-        Mon, 21 Nov 2022 07:15:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 21 Nov 2022 10:19:34 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5CAC4956
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:16:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01081612BC;
-        Mon, 21 Nov 2022 15:15:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B49C433D6;
-        Mon, 21 Nov 2022 15:15:40 +0000 (UTC)
-Date:   Mon, 21 Nov 2022 10:15:37 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Chris Mason <clm@meta.com>, Mark Rutland <mark.rutland@arm.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
-Message-ID: <20221121101537.674f5aca@gandalf.local.home>
-In-Reply-To: <CACYkzJ613nhXViBpDuGWeEWzjfSJjbB1=KNpYtNDC6Xn7yizbw@mail.gmail.com>
-References: <20221108220651.24492-1-revest@chromium.org>
-        <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
-        <20221117121617.4e1529d3@gandalf.local.home>
-        <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
-        <20221117174030.0170cd36@gandalf.local.home>
-        <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
-        <20221118114519.2711d890@gandalf.local.home>
-        <43d5d1f5-c01d-c0db-b421-386331c2b8c1@meta.com>
-        <20221118130608.5ba89bd8@gandalf.local.home>
-        <2ab2b854-723a-5f15-8c18-0b5730d1b535@meta.com>
-        <CACYkzJ613nhXViBpDuGWeEWzjfSJjbB1=KNpYtNDC6Xn7yizbw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0F93121F27;
+        Mon, 21 Nov 2022 15:16:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669043784; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vHc0JxpY9yELhVEGHl1FGW0cCpd91Wd+NyLrvggT+k8=;
+        b=dhq4gIQ2lWK1r5hIaAEBkZkfoMBjGo5wgCG22y07yK7V7/+Nu6sgyuaNLrQfxW1JpPOTtS
+        9lF9CyuFh13eA9MG19imYMYyUQbMfHpV8h150OBO7TAhpD4cS6MES03W0El6X7Zm423CNa
+        bbDukUEgi+HyS24cqunsx4kBkDyNSOw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669043784;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vHc0JxpY9yELhVEGHl1FGW0cCpd91Wd+NyLrvggT+k8=;
+        b=cIfaTiv4MWMJzs4reAEHh9lP8Jt6NBnBcWNvOFr3+WeTnBgLpTxxnXqrLUmCzW0nQJ0fSt
+        cizf00GhLcNruzDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D7B0F1376E;
+        Mon, 21 Nov 2022 15:16:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 56ACM0eWe2NAOQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 21 Nov 2022 15:16:23 +0000
+Date:   Mon, 21 Nov 2022 16:16:22 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Talel Shenhar <talel@amazon.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] irqchip/al-fic: Drop obsolete dependency on COMPILE_TEST
+Message-ID: <20221121161622.6294a899@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 14:47:10 +0100
-KP Singh <kpsingh@kernel.org> wrote:
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-> This annotation already exists, i.e. ALLOW_ERROR_INJECTION
-> 
-> Users, with CONFIG_FUNCTION_ERROR_INJECTION, can already modify return
-> values of kernel functions using kprobes and the failure injection
-> framework [1] for functions annotated with ALLOW_ERROR_INJECTION.
-> 
-> BPF just provides another way to do the same thing with "modify
-> return" programs and this also respects the error injection list [2]
-> and users can *only* attach these programs to the functions annotated
-> with ALLOW_ERROR_INJECTION.
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-WAIT!
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Talel Shenhar <talel@amazon.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>
+---
+ drivers/irqchip/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Looking at the Kconfigs, I see
-
-CONFIG_FUNCTION_ERROR_INJECTION is set when
-CONFIG_HAVE_FUNCTION_ERROR_INJECTION is set, and when CONFIG_KPROBES is set.
-
-And ALLOW_ERROR_INJECTION() is set when CONFIG_FUNCTION_ERROR_INJECTION is.
-
-There's no way to turn it off on x86 except by disabling kprobes!
-
-WTF!
-
-I don't want a kernel that can add error injection just because kprobes is
-enabled. There's two kinds of kprobes. One that is for visibility only (for
-tracing) and one that can be used for functional changes. I want the
-visibility without the ability to change the kernel. The visibility portion
-is very useful for security, where as the modifying one can be used to
-circumvent security.
-
-As kprobes are set in most production environments, so is error injection.
-Do we really want error injection enabled on production environments?
-I don't.
-
-I think we need this patch ASAP!
-
--- Steve
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index c3c0b077ade3..9ee72d8860c3 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1874,8 +1874,14 @@ config NETDEV_NOTIFIER_ERROR_INJECT
- 	  If unsure, say N.
+--- linux-6.0.orig/drivers/irqchip/Kconfig
++++ linux-6.0/drivers/irqchip/Kconfig
+@@ -86,7 +86,7 @@ config ALPINE_MSI
  
- config FUNCTION_ERROR_INJECTION
--	def_bool y
-+	bool "Fault-injections of functions"
- 	depends on HAVE_FUNCTION_ERROR_INJECTION && KPROBES
-+	help
-+	  Add fault injections into various functions that are annotated with
-+	  ALLOW_ERROR_INJECTION() in the kernel. BPF may also modify the return
-+	  value of theses functions. This is useful to test error paths of code.
-+
-+	  If unsure, say N
- 
- config FAULT_INJECTION
- 	bool "Fault-injection framework"
+ config AL_FIC
+ 	bool "Amazon's Annapurna Labs Fabric Interrupt Controller"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select GENERIC_IRQ_CHIP
+ 	select IRQ_DOMAIN
+ 	help
+
+
+-- 
+Jean Delvare
+SUSE L3 Support
