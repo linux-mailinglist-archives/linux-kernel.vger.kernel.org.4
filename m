@@ -2,307 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66051632E2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FE2632E31
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiKUUvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 15:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        id S230437AbiKUUwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 15:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiKUUvs (ORCPT
+        with ESMTP id S229658AbiKUUwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:51:48 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CF5C9A92
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:51:47 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id c15so15015433ybf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rzk/OoHldFb62sgZsjulPSkjrNjPl5Xo51StZUIwQR4=;
-        b=oOb+iJxhz4nONMEq0oTcLXm8I9REhxu1SiJRcnUJH7TOoXnCjFr79nrjXAE7cviCER
-         Ll0T/+g62FhTyFnCmhqx9eX3zkv17IvbNRamtQWw7FMBltzjTeTCakJdFjH3GywilbEq
-         QYQvGOqFh+gVdHCta3PorKTg1qb5x9MjMhnNXfugdZMg0T1psFSGnlucv+zgcFXGv3AX
-         Xq2lFsyZGy9EyfFMSKVn9ytYXqDwEAwETzocYb1Oed56RHUxDY+6Pvw9h5P2BoMaOpSN
-         +RlzFrBx0NvME3Tp/7LQ9rrMuVswfWUdzpyQ7R5aqDPWA9/ReSI8O9sJWXR16VSsM3Ge
-         ArQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rzk/OoHldFb62sgZsjulPSkjrNjPl5Xo51StZUIwQR4=;
-        b=h50TB+tucLf7sZrsdW90omSvCiv02hvFzn7/4K30TfUccn4Wbn3kJPL/yG3N7+Jxi0
-         sBzCs4Jumvo7i0MatXk4FRLVDzJ7Wgxzc1SAt+8HLF1Zaf4GJ5Pe+H8mMITTh5czW9z6
-         /T/Itrkb123om3ex5MMiku3KZ71nI7HWygVWbG7uWxPDonelYruQTJxKTZ9NaP6mMI9t
-         IXhY0kbL9SFBYnqguFU2ZJZTML3WP/plhSQXO1Tse+iCRHg2sKo2sLS/31p1rQdbSIvd
-         lVEubDS0CqlWo3P0lAc4ZBrjikH7vl8yw2mY7+N1g0i/H2IuQgleoEKllTYInNcpk9pL
-         A9Lw==
-X-Gm-Message-State: ANoB5pndwmgcK0bRPdrvJRnBj027zDjYJXhh38GJgZ5VY/vAbcE7lJ8C
-        cM8foA2COp/X1z/OVUydB1fG8WeY2ewZCMxsR5g2S8vI+91Acw==
-X-Google-Smtp-Source: AA0mqf6ipoHwUmZz4HXsVS/RR8mpYN5nWwxKgxevEBxAvKonZJL6DGgCWM5ht34hS6ztC7I7xVU41WAU0zwvBgEtg6g=
-X-Received: by 2002:a25:4289:0:b0:6ca:e43:d9ff with SMTP id
- p131-20020a254289000000b006ca0e43d9ffmr18347709yba.543.1669063906174; Mon, 21
- Nov 2022 12:51:46 -0800 (PST)
+        Mon, 21 Nov 2022 15:52:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C275C9A92;
+        Mon, 21 Nov 2022 12:52:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E77C5B81613;
+        Mon, 21 Nov 2022 20:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F06C433C1;
+        Mon, 21 Nov 2022 20:52:17 +0000 (UTC)
+Date:   Mon, 21 Nov 2022 15:52:15 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [patch 08/15] timers: Rename del_timer_sync() to
+ timer_delete_sync()
+Message-ID: <20221121155215.62a9b41b@gandalf.local.home>
+In-Reply-To: <20221115202117.438013991@linutronix.de>
+References: <20221115195802.415956561@linutronix.de>
+        <20221115202117.438013991@linutronix.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221121184743.1123556-1-rmoar@google.com>
-In-Reply-To: <20221121184743.1123556-1-rmoar@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 21 Nov 2022 12:51:35 -0800
-Message-ID: <CAGS_qxp1U4rR_g72YX1MEk+oHVda2sLFBjYVQqkD0jkzEG765A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kunit: tool: parse KTAP compliant test output
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, isabbasso@riseup.net,
-        anders.roxell@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:48 AM Rae Moar <rmoar@google.com> wrote:
->
-> Change the KUnit parser to be able to parse test output that complies wit=
-h
-> the KTAP version 1 specification format found here:
-> https://kernel.org/doc/html/latest/dev-tools/ktap.html. Ensure the parser
-> is able to parse tests with the original KUnit test output format as
-> well.
->
-> KUnit parser now accepts any of the following test output formats:
->
-> Original KUnit test output format:
->
->  TAP version 14
->  1..1
->    # Subtest: kunit-test-suite
->    1..3
->    ok 1 - kunit_test_1
->    ok 2 - kunit_test_2
->    ok 3 - kunit_test_3
->  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
->  # Totals: pass:3 fail:0 skip:0 total:3
->  ok 1 - kunit-test-suite
->
-> KTAP version 1 test output format:
->
->  KTAP version 1
->  1..1
->    KTAP version 1
->    1..3
->    ok 1 kunit_test_1
->    ok 2 kunit_test_2
->    ok 3 kunit_test_3
->  ok 1 kunit-test-suite
->
-> New KUnit test output format (changes made in the next patch of
-> this series):
->
->  KTAP version 1
->  1..1
->    KTAP version 1
->    # Subtest: kunit-test-suite
->    1..3
->    ok 1 kunit_test_1
->    ok 2 kunit_test_2
->    ok 3 kunit_test_3
->  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
->  # Totals: pass:3 fail:0 skip:0 total:3
->  ok 1 kunit-test-suite
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+On Tue, 15 Nov 2022 21:28:46 +0100 (CET)
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-Still looks good to me overall.
-As noted offline, this sadly has a conflict with another recent patch,
-so it won't apply to the kunit branch right now.
-That's my fault:
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/c=
-ommit/?h=3Dkunit&id=3D2a883a9f5c1f1c7bb9d9116da68e2ef2faeae5b8
-
-I found a few optional nits down below that we could also address in
-the rebased v3.
-
-> Reviewed-by: David Gow <davidgow@google.com>
+> The timer related functions do not have a strict timer_ prefixed namespace
+> which is really annoying.
+> 
+> Rename del_timer_sync() to timer_delete_sync() and provide del_timer_sync()
+> as a wrapper. Document that del_timer_sync() is not for new code.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->
-> Changes since v1:
-> https://lore.kernel.org/all/20221104194705.3245738-2-rmoar@google.com/
-> - Switch order of patches to make changes to the parser before making
->   changes to the test output
-> - Change placeholder label for test header from =E2=80=9CTest suite=E2=80=
-=9D to empty
->   string
-> - Change parser to approve the new KTAP version line in the subtest heade=
-r
->   to be before the subtest header line rather than after.
+>  include/linux/timer.h |   15 ++++++++++++++-
+>  kernel/time/timer.c   |   18 +++++++++---------
+>  2 files changed, 23 insertions(+), 10 deletions(-)
+> 
 
-Thanks, as noted on the child patch, I think this will make our lives
-easier in the future, even if it technically violates the v1 spec
-(which requires the test plan right after the KTAP header IIUC).
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Given the wording
-  Diagnostic lines can be anywhere in the test output.
-I assume most implementations would likely ignore unexpected lines
-beginning with "# " already.
-
-> - Note: Considered changing parser to allow for the top-level of testing
->   to have a '# Subtest' line as discussed in v1 but this breaks the
->   missing test plan test. So I think it would be best to add this ability
->   at a later time or after top-level test name and result lines are
->   discussed for KTAP v2.
-
-Makes sense to me.
-
->         message =3D test.name
-> +       if message !=3D "":
-> +               # Add a leading space before the subtest counts only if a=
- test name
-> +               # is provided using a "# Subtest" header line.
-> +               message +=3D " "
->         if test.expected_count:
->                 if test.expected_count =3D=3D 1:
-> -                       message +=3D ' (1 subtest)'
-> +                       message +=3D '(1 subtest)'
-
-Thanks, I like this output a lot better than having "Test suite" as a
-placeholder name.
-Tested this out by tweaking some kunit output locally and I get
-
-[12:39:11] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D (4 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-[12:39:11] [PASSED] parse_filter_test
-[12:39:11] [PASSED] filter_suites_test
-[12:39:11] [PASSED] filter_suites_test_glob_test
-[12:39:11] [PASSED] filter_suites_to_empty_test
-[12:39:11] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] kunit_exe=
-cutor_test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
->                 else:
-> -                       message +=3D f' ({test.expected_count} subtests)'
-> +                       message +=3D f'({test.expected_count} subtests)'
->         stdout.print_with_timestamp(format_test_divider(message, len(mess=
-age)))
->
->  def print_log(log: Iterable[str]) -> None:
-> @@ -647,7 +653,7 @@ def bubble_up_test_results(test: Test) -> None:
->         elif test.counts.get_status() =3D=3D TestStatus.TEST_CRASHED:
->                 test.status =3D TestStatus.TEST_CRASHED
->
-> -def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> =
-Test:
-> +def parse_test(lines: LineStream, expected_num: int, log: List[str], is_=
-subtest: bool) -> Test:
->         """
->         Finds next test to parse in LineStream, creates new Test object,
->         parses any subtests of the test, populates Test object with all
-> @@ -665,15 +671,32 @@ def parse_test(lines: LineStream, expected_num: int=
-, log: List[str]) -> Test:
->         1..4
->         [subtests]
->
-> -       - Subtest header line
-> +       - Subtest header (must include either the KTAP version line or
-> +         "# Subtest" header line)
->
-> -       Example:
-> +       Example (preferred format with both KTAP version line and
-> +       "# Subtest" line):
-> +
-> +       KTAP version 1
-> +       # Subtest: name
-> +       1..3
-> +       [subtests]
-> +       ok 1 name
-> +
-> +       Example (only "# Subtest" line):
->
->         # Subtest: name
->         1..3
->         [subtests]
->         ok 1 name
->
-> +       Example (only KTAP version line, compliant with KTAP v1 spec):
-> +
-> +       KTAP version 1
-> +       1..3
-> +       [subtests]
-> +       ok 1 name
-> +
->         - Test result line
->
->         Example:
-> @@ -685,28 +708,29 @@ def parse_test(lines: LineStream, expected_num: int=
-, log: List[str]) -> Test:
->         expected_num - expected test number for test to be parsed
->         log - list of strings containing any preceding diagnostic lines
->                 corresponding to the current test
-> +       is_subtest - boolean indicating whether test is a subtest
->
->         Return:
->         Test object populated with characteristics and any subtests
->         """
->         test =3D Test()
->         test.log.extend(log)
-> -       parent_test =3D False
-> -       main =3D parse_ktap_header(lines, test)
-> -       if main:
-> -               # If KTAP/TAP header is found, attempt to parse
-> +       if not is_subtest:
-> +               # If parsing the main/top-level test, parse KTAP version =
-line and
->                 # test plan
->                 test.name =3D "main"
-> +               ktap_line =3D parse_ktap_header(lines, test)
->                 parse_test_plan(lines, test)
->                 parent_test =3D True
->         else:
-> -               # If KTAP/TAP header is not found, test must be subtest
-> -               # header or test result line so parse attempt to parser
-> -               # subtest header
-> -               parent_test =3D parse_test_header(lines, test)
-> +               # If not the main test, attempt to parse a test header co=
-ntatining
-
-typo: contatin =3D> contain
-
-> +               # the KTAP version line and/or subtest header line
-> +               ktap_line =3D parse_ktap_header(lines, test)
-> +               subtest_line =3D parse_test_header(lines, test)
-> +               parent_test =3D (ktap_line or subtest_line)
-
-LGTM (this is where we changed to parse the KTAP header before " # Subtest"=
-).
-
-Optional: do we want to extend kunit_tool_test.py to validate this logic to=
-o?
-E.g. given input like
-
-KTAP version 1
-1..1
-  KTAP version 1
-  # Subtest: suite
-  1..1
-  ok 1 - test
-ok 1 - subtest
-
-we could assert that the parsed output contains "suite (1 subtest)"
-
-i.e.
-self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
-
-Daniel
+-- Steve
