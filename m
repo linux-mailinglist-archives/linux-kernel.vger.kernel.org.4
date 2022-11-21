@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142CB631D07
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F62631D0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiKUJle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S230290AbiKUJlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiKUJld (ORCPT
+        with ESMTP id S230289AbiKUJlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:41:33 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9AD92B45
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:41:32 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id g5so1453605pjp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BBmVpxWlFwz71LnJc5cnHgJ90wlsg+VB/8BW+pshAAQ=;
-        b=WYZMKxVd3zy9KIZ5y7QKsE3uZWM/MBJlzwhyRuKczyyggckB+9stzIpBloyceL6div
-         CmB/N4imuF/AaV8oJEPGA1iMEGfWxgVaHVtXL/ibE/IROiHxrwjzX8rYUkHxkYbUkK1y
-         a3Plf6lJLD49kOlPnZTXz7pl/zSU1ATNf5t747SyeWAwQlTPdusIJlxIFQRrvGh9xIwu
-         61C+KfY4pMkCXfFf4EnIuGBb8c7ZckHLfTjJ/Tr62t8pEjrIwJ+C+SasoS9U6toK+qe6
-         29mjxV5ewwxPE+1BEjs4pRutVE2SYde52WPt4BryPRD+rNvNdORjnq0Rhgc59i3IE2ax
-         3WnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BBmVpxWlFwz71LnJc5cnHgJ90wlsg+VB/8BW+pshAAQ=;
-        b=nqzAOezEmRXGnQ5JtQgLbil9YwDo5mvkC1uHFw+sJSTIQ7nSxY6jrbZhflJtAzssZy
-         Pwn2NaGjhLTnmJ7O2iLPXoLhqGJDXj3sEsUr2Xtt86TIljPSCSe8GWYNb81z3fKcNgcb
-         1+xidFoqx2KkoXS8YuAUAOVETH4dtD2cNsBwGSIyXyUHWf1A+G9CJx8VgnErv3UHmCHK
-         M6iJ+gvU7LPI+9oLlvqJ09WrfpT3BVos4z3+ZDqD/kMyvmycR64iGQ7Gzp4rOwQaAuc4
-         K+m0ZwqxAajkfkXQKnzpDNx1S8Ksmf3NhEMMRwXytLK4gu1kBwFf2FUh7F61bJlrvapl
-         41oA==
-X-Gm-Message-State: ANoB5pmppDjP6Yq+mGiDVVdzfFw9D3cB5YN/FuHXExkzrIFCgKdLP9vE
-        QC0ppe0wbkI2pRrBLcscquHe/BqI80F4OqX1aN8=
-X-Google-Smtp-Source: AA0mqf6Jsa1q3CgbiW2pFvROdLHLGKRKGCohX+6V6jDAfK398xzIQ5QEML2QVNcw/NIR2eoZt2ty16WNSQm1ZCBk7Yg=
-X-Received: by 2002:a17:902:7683:b0:186:9fc8:6672 with SMTP id
- m3-20020a170902768300b001869fc86672mr1402450pll.65.1669023692141; Mon, 21 Nov
- 2022 01:41:32 -0800 (PST)
+        Mon, 21 Nov 2022 04:41:44 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA454920B2;
+        Mon, 21 Nov 2022 01:41:43 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NG2T53wvgz15Mmv;
+        Mon, 21 Nov 2022 17:41:13 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
+ 2022 17:41:41 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <s.shtylyov@omp.ru>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <yoshihiro.shimoda.uh@renesas.com>
+CC:     <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH net-next] net: ethernet: renesas: Add missing slash in rswitch_init
+Date:   Mon, 21 Nov 2022 17:41:38 +0800
+Message-ID: <20221121094138.21028-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Received: by 2002:a05:7022:323:b0:46:da2f:f579 with HTTP; Mon, 21 Nov 2022
- 01:41:31 -0800 (PST)
-Reply-To: sgtkaylla202@gmail.com
-From:   Kayla Manthey <gnidignonvalentin7@gmail.com>
-Date:   Mon, 21 Nov 2022 09:41:31 +0000
-Message-ID: <CAOcq9doJZdaj9YOWy5QjGeaiMHF322+926YXJ_sRS1=T4h1_jQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo schat, heb je mijn vorige bericht ontvangen, dank je.
+Fix smatch warning:
+
+drivers/net/ethernet/renesas/rswitch.c:1717
+ rswitch_init() warn: '%pM' cannot be followed by 'n'
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/net/ethernet/renesas/rswitch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/renesas/rswitch.c b/drivers/net/ethernet/renesas/rswitch.c
+index c098b27093ea..e42ceaa0099f 100644
+--- a/drivers/net/ethernet/renesas/rswitch.c
++++ b/drivers/net/ethernet/renesas/rswitch.c
+@@ -1714,7 +1714,7 @@ static int rswitch_init(struct rswitch_private *priv)
+ 	}
+ 
+ 	for (i = 0; i < RSWITCH_NUM_PORTS; i++)
+-		netdev_info(priv->rdev[i]->ndev, "MAC address %pMn",
++		netdev_info(priv->rdev[i]->ndev, "MAC address %pM\n",
+ 			    priv->rdev[i]->ndev->dev_addr);
+ 
+ 	return 0;
+-- 
+2.20.1
+
