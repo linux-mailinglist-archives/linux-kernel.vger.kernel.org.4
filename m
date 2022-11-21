@@ -2,104 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31A9632C7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 19:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC070632C84
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbiKUS7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 13:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S230451AbiKUTBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:01:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiKUS73 (ORCPT
+        with ESMTP id S229604AbiKUTA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 13:59:29 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACEB61B96;
-        Mon, 21 Nov 2022 10:59:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669057168; x=1700593168;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PdQeEPQACxdtbMm4JoWuf4jaaBJQPj9l5dZd+iPVQdo=;
-  b=NzjW5/C97Dw8ZRmlwlBiP60Kwi+fMD6RsUXNSX3LO0/BjWi4+SqRjOvf
-   XToJgfsXGOsaISKBq+b9ITGxfFcHT4ZetNH4OvW+6WFXPx5aHcuZbrNM4
-   E6grQ53x8UZi3ue62UPwHv47gPq3vbgyxJJzfhfRBHCGwefKBGQxw9wgJ
-   5Kb8pcitSUHtfllw8Nk/zIFZ6h9uaShBrCw9L2nWRI94OiNF+tIkBAP8F
-   xW6gAJVZFLVda0D2CDqNbjKDXEHpoSE53Ki07tx1wte6ouIX2ui8vWUSO
-   tdsgp3gfpx3GbzFLsC5bSp7CeMri5/NNpd1wdI4tHEgioFZc8SA39aar8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="312340354"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="312340354"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 10:59:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="747025469"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="747025469"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Nov 2022 10:59:21 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxC0k-00FQw3-2E;
-        Mon, 21 Nov 2022 20:59:18 +0200
-Date:   Mon, 21 Nov 2022 20:59:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/18] dsa: ocelot: fix mixed module-builtin object
-Message-ID: <Y3vKhpTk9XCFYNLN@smile.fi.intel.com>
-References: <20221119225650.1044591-1-alobakin@pm.me>
- <20221119225650.1044591-15-alobakin@pm.me>
- <20221121175504.qwuoyditr4xl6oew@skbuf>
+        Mon, 21 Nov 2022 14:00:58 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C794DD0DDA
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:00:54 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id B44275FD02;
+        Mon, 21 Nov 2022 22:00:51 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1669057251;
+        bh=94J4V6Ls316AqryyMZmBCDT4NIvXDUVp2JtOV9OlzRc=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=aYIyuMIboz0W6DJ6i8lYtxkJL5XEoZPiVXv6TDGwRe7BzvLhJnaPeVxSrAxpc+MIk
+         HzSAFVWWLMqmJaPRxAIeiW3PHoB3vDtsT5/8wukhP9lgr+avn50xU61LvkAMUs+QSE
+         4QhQF0B4RYPFY7Y2zL+eQHwC6j/2wrRHrJ86WXODWvYxvRQOWqbOcKSFvvU9JdoF2q
+         SAcemz3So2nX20e61dSmi78IdOxrdP74YiFXvEGSKec/5GyHXNNq51cmkUrRu151Zd
+         Cd2Qcm15t/QPFRqwTIDI0K2eGRt/5Hg8iLjlSYwSj6NSQ1neryIKjwGHNexl6llh9L
+         o6ze4UScdUArA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 21 Nov 2022 22:00:49 +0300 (MSK)
+From:   Alexey Romanov <avromanov@sberdevices.ru>
+To:     <minchan@kernel.org>, <senozhatsky@chromium.org>,
+        <ngupta@vflare.org>, <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <ddrokosov@sberdevices.ru>,
+        Alexey Romanov <avromanov@sberdevices.ru>
+Subject: [RFC PATCH v1 0/4] Introduce merge identical pages mechanism
+Date:   Mon, 21 Nov 2022 22:00:16 +0300
+Message-ID: <20221121190020.66548-1-avromanov@sberdevices.ru>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121175504.qwuoyditr4xl6oew@skbuf>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/11/21 16:41:00 #20594217
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 07:55:04PM +0200, Vladimir Oltean wrote:
-> On Sat, Nov 19, 2022 at 11:09:28PM +0000, Alexander Lobakin wrote:
+Hello!
 
-...
+This RFC series adds feature which allows merge identical
+compressed pages into a single one. The main idea is that
+zram only stores object references, which store the compressed
+content of the pages. Thus, the contents of the zsmalloc objects
+don't change in any way.
 
-> > +EXPORT_SYMBOL_NS_GPL(felix_switch_ops, NET_DSA_MSCC_CORE);
-> 
-> What do we gain practically with the symbol namespacing?
+For simplicity, let's imagine that 3 pages with the same content
+got into zram:
 
-I guess this wrap-up can possibly answer this:
-https://lwn.net/Articles/760045/
++----------------+   +----------------+   +----------------+
+|zram_table_entry|   |zram_table_entry|   |zram_table_entry|
++-------+--------+   +-------+--------+   +--------+-------+
+        |                    |                     |
+        | handle (1)         | handle (2)          | handle (3)
++-------v--------+   +-------v---------+  +--------v-------+
+|zsmalloc  object|   |zsmalloc  object |  |zsmalloc  object|
+++--------------++   +-+-------------+-+  ++--------------++
+ +--------------+      +-------------+     +--------------+
+ | buffer: "abc"|      |buffer: "abc"|     | buffer: "abc"|
+ +--------------+      +-------------+     +--------------+
+
+As you can see, the data is duplicated. Merge mechanism saves
+(after scanning objects) only one zsmalloc object. Here's
+what happens ater the scan and merge:
+
++----------------+   +----------------+   +----------------+
+|zram_table_entry|   |zram_table_entry|   |zram_tabl _entry|
++-------+--------+   +-------+--------+   +--------+-------+
+        |                    |                     |
+        | handle (1)         | handle (1)          | handle (1)
+        |           +--------v---------+           |
+        +-----------> zsmalloc  object <-----------+
+                    +--+-------------+-+
+                       +-------------+
+                       |buffer: "abc"|
+                       +-------------+
+
+Thus, we reduced the amount of memory occupied by 3 times.
+
+This mechanism doesn't affect the perf of the zram itself in
+any way (maybe just a little bit on the zram_free_page function).
+In order to describe each such identical object, we (constantly)
+need sizeof(zram_rbtree_node) bytes. So, for example, if the system
+has 20 identical buffers with a size of 1024, the memory gain will be
+(20 * 1024) - (1 * 1024 + sizeof(zram_rbtree_node)) = 19456 -
+sizeof(zram_rbtree_node) bytes. But, it should be understood, these are
+counts without zsmalloc data structures overhead.
+
+Testing on my system (8GB ram + 1 gb zram swap) showed that at high 
+loads, on average, when calling the merge mechanism, we can save 
+up to 15-20% of the memory usage.
+
+This patch serices adds a new sysfs node (trigger merging) and new 
+field in mm_stat (how many pages are merged in zram at the moment):
+
+  $ cat /sys/block/zram/mm_stat
+    431452160 332984392 339894272 0 339894272 282 0 51374 51374 0
+
+  $ echo 1 > /sys/block/zram/merge
+
+  $ cat /sys/block/zram/mm_stat
+    431452160 270376848 287301504 0 339894272 282 0 51374 51374 6593
+
+Alexey Romanov (4):
+  zram: introduce merge identical pages mechanism
+  zram: add merge sysfs knob
+  zram: add pages_merged counter to mm_stat
+  zram: recompression: add ZRAM_MERGED check
+
+ Documentation/admin-guide/blockdev/zram.rst |   2 +
+ drivers/block/zram/zram_drv.c               | 315 +++++++++++++++++++-
+ drivers/block/zram/zram_drv.h               |   7 +
+ 3 files changed, 320 insertions(+), 4 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
