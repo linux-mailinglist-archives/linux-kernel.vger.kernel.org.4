@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB68A6321F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AFC632209
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiKUM3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S231318AbiKUM37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiKUM2k (ORCPT
+        with ESMTP id S230218AbiKUM3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:28:40 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132C9B7017
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:27:58 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id r8so3719539ljn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:27:57 -0800 (PST)
+        Mon, 21 Nov 2022 07:29:44 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349B971F03
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:29:43 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id b12so5819603wrn.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:29:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kqDoQW+ExRlQ4XcuipMt388Vx0gMl1yxHscCBvvs+7o=;
-        b=pr05XG2eWSBxVvSLCqaaVVwSgfwOaVveoWIpfJzVw19EWKfDOybsheosmVGpOb3WOU
-         L0ADbk2CeR3dGIO/FmPBHNNNiy5mHmyGW0qeGmeRB8OlCkWVrwOCMvbvX0A4tNv8LtAd
-         +CBiRXgL5wEhw3/w3D00vL8JVBiv1nEVN3UYPw2bx5nQQhDN4eGSvkt+81MtZzMWfMGe
-         avuHKo98CVhE0FPDPb1lrgw4Q1oHaPdghSfGia/d83luI/NxdGBaGOPRHtgwXEmCTwxC
-         YAG3ou9WIlHXDeedTnlXAUq9Hg1YjXh8yntmTlxvAbeb5YXTAqS8m7BIiOcGqcKVHnwP
-         staw==
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qjSeS005UQ5ZO0KT6/w85LwsSdKiXAQUVmbgaFh4T/E=;
+        b=MII8aOSKSfsTMEl4KK2fh0Pgr6CSyuNNO7aIUnsX2QMqGSVUJR2AJlf3i0Twu6rLHt
+         YdpMg07od2c9W0bHpumvhjz5DltfE2xcJKERPiMj7bJrYbLn5qMixCydeQPrHE3rdqRv
+         VVx1uUmKtZ3SbZs5z0vnTBB2ZSsESe+37D72ts+cMTha0+pA7spU7Qc9N9ipLem/BCmu
+         j5bXJI7Q/AMuIKPZc5rL14URMogUaecESoLpJcgqr6JunvLZumr+STRYqGLc2c17X8tm
+         R61g2+QMyO+mCWBYWzgXQL0VaQH+mj/CiZtbms3B5YAfVpi+HK/Vly6NKOp8EFLBpC0C
+         JMjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kqDoQW+ExRlQ4XcuipMt388Vx0gMl1yxHscCBvvs+7o=;
-        b=p4vo6XckmmDyGqDF0E5Wa7PVct+8ccCIulktPDwyZB5PGkS7nKS6m7rkUbLb9I5xlQ
-         Oo0IbAwg0AcMPBF+CwIaJ+qPHyB/FqfmEMwfeLtw0WuOHaey/FbP/1f9TBLDxrnjJd+E
-         7K9JHqiQ8O5pnoklsfRq6KfL03P5xGzxYpcmS9niEEJko2PMUEAzo9tr1NZMben8dSm9
-         Mokx3lbCiT7Tn0Tcefo1rgwaj2WhMmBawWgf83Ih6xVQAUevRIlZmZMBXvhiUqHcvMHq
-         9AJRolewM/JIkuPk93RerMoLluoAa5MW0U3wbBTc60DENedeTqHvEDB6M4FZC94riMoF
-         Qf+A==
-X-Gm-Message-State: ANoB5pmZvjoIp2LiqREQC/jCVZq/kB3QXOBuX6rdlX2GpJU172hcApf8
-        fWa2gYGJkLbC04QCcaQ6dE+URA==
-X-Google-Smtp-Source: AA0mqf42gSqmzNNg4zoEvk7V5m7MWD4mxlEGtv42sHmh2Lq/P18eCvmKmMD3G2Ote6b1rjdD0sojzA==
-X-Received: by 2002:a2e:b538:0:b0:26d:cfc6:d6f7 with SMTP id z24-20020a2eb538000000b0026dcfc6d6f7mr5883956ljm.34.1669033676306;
-        Mon, 21 Nov 2022 04:27:56 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w2-20020a19c502000000b004a05767bc07sm2001896lfe.28.2022.11.21.04.27.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 04:27:55 -0800 (PST)
-Message-ID: <a98ac5d7-0c0e-110e-5405-83a09c77ceac@linaro.org>
-Date:   Mon, 21 Nov 2022 13:27:54 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qjSeS005UQ5ZO0KT6/w85LwsSdKiXAQUVmbgaFh4T/E=;
+        b=T+FPKsAv5o3iGg6TrrbVOrEIndpM1bJy5y/juanh9CTnve6SpQLlVaideR1+P8B/Nx
+         IMrqk6ttO6Pq/ZVOYWOmgj+2i+Gli9K3yIzYzdXBR4zPp6GJ0SnYPi0cx0BPSCeAjIgS
+         JT14WK45Ane8HjbI9a+tl8GptNSAsaY7bxZtvRbJSoxNf2WBZl31rMIhqd5siCBGIqIH
+         MEhvGhtdinkdfUpS//2P4GjubAxtnbRl54Qoj/me+8eVsTOfTV7G6odspEYLXa38vPZ7
+         okJ7+I0gFgmAQZvvyqI3n8ITCLiOVUHtdLmy9ZtCsrv2cVTHR/PEoZ2rsATUwMBQnUaA
+         UEeA==
+X-Gm-Message-State: ANoB5plo2wbwjypVTmKGoQ9ZLq8zBfP5beqpOt9iebyyPWi7bzkw/Ujt
+        ZvYL8r/KzE40Pnh/7DJj4BTePg==
+X-Google-Smtp-Source: AA0mqf48P4Gsc00ilVeHi7rZ+7eqT+DPFSgIIq7gyuFeWpxsDaQkpcwKUKcA6SFXvqcrsKDa5QrnQA==
+X-Received: by 2002:adf:ed4b:0:b0:241:d4c2:e741 with SMTP id u11-20020adfed4b000000b00241d4c2e741mr3046832wro.628.1669033781714;
+        Mon, 21 Nov 2022 04:29:41 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id dn12-20020a05600c654c00b003cf6c2f9513sm13929015wmb.2.2022.11.21.04.29.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 04:29:41 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v7 0/4] Add devicetree support for max6639
+Date:   Mon, 21 Nov 2022 13:29:28 +0100
+Message-Id: <20221121122932.2493174-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/2] arm64: dts: fsd: add sysreg device node
-Content-Language: en-US
-To:     Sriranjani P <sriranjani.p@samsung.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        devicetree@vger.kernel.org, alim.akhtar@samsung.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20221121091118.48628-1-sriranjani.p@samsung.com>
- <CGME20221121090647epcas5p439dc84f0c4f435a703a1f8396a11202f@epcas5p4.samsung.com>
- <20221121091118.48628-3-sriranjani.p@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221121091118.48628-3-sriranjani.p@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,35 +72,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 10:11, Sriranjani P wrote:
-> Add SYSREG controller device node, which is available in PERIC, FSYS0 and
-> FSYS1 block of FSD SoC.
-> 
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-> ---
->  arch/arm64/boot/dts/tesla/fsd.dtsi | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> index f35bc5a288c2..db78816ba0bf 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> @@ -518,6 +518,21 @@
->  				"dout_cmu_fsys1_shared0div4";
->  		};
->  
-> +		sysreg_peric: syscon@14030000 {
+These patches adds devicetree support for MAX6639.
 
-Node name system-controller
-and either put it next to existing one or next to functional block
-(peric clocks?) ordered by unit address.
+Changes in V7:
+- Split the patch into
+ 1. add dt support for max6639
+ 2. Add pwm support
+- Ad DT property min-rpm in fan-common.yaml
+Changes in V6:
+- Remove unused header file
+- minor cleanup 
+Changes in V5:
+- Add pwms support
+Changes V4:
+- Fix dt error
+- update comment
+Changes V3:
+- correct fan dt property name
+- remove unrelevent changes
+Changes V2:
+- Fix dt schema error.
+Changes:
+- Add fan-common dt schema.
+- add dt-binding support for max6639
+- add max6639 specific property
 
-> +			compatible = "tesla,fsd-sysreg", "syscon";
-> +			reg = <0x0 0x14030000 0x0 0x1000>;
-> +		};
+Marcello Sylvester Bauer (1):
+  dt-bindings: hwmon: Add binding for max6639
 
-Best regards,
-Krzysztof
+Naresh Solanki (3):
+  dt-bindings: hwmon: fan: Add fan binding to schema
+  hwmon: (max6639) Change from pdata to dt configuration
+  hwmon: (max6639) Add pwm support
+
+ .../devicetree/bindings/hwmon/fan-common.yaml |  47 ++
+ .../bindings/hwmon/maxim,max6639.yaml         |  93 ++++
+ drivers/hwmon/Kconfig                         |   1 +
+ drivers/hwmon/max6639.c                       | 460 +++++++++++++++---
+ include/linux/platform_data/max6639.h         |  15 -
+ 5 files changed, 527 insertions(+), 89 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+ delete mode 100644 include/linux/platform_data/max6639.h
+
+
+base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
+-- 
+2.37.3
 
