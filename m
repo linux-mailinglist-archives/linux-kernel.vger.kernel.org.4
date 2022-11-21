@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1975B632FFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFD3632FFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiKUWvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 17:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S231879AbiKUWwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 17:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiKUWvQ (ORCPT
+        with ESMTP id S229648AbiKUWwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 17:51:16 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DC676169;
-        Mon, 21 Nov 2022 14:51:14 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id ft34so31766030ejc.12;
-        Mon, 21 Nov 2022 14:51:14 -0800 (PST)
+        Mon, 21 Nov 2022 17:52:09 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9684C786E8;
+        Mon, 21 Nov 2022 14:52:07 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id bj12so31769978ejb.13;
+        Mon, 21 Nov 2022 14:52:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LfUGZj1LCxAemKpNc6YCN31EZ8nKAkPT8bKBKtlXg9Q=;
-        b=NVADdeQo3QZsyTMk9oPpYOLNxrRcwPkuz+nFNqW7inCIdNIqL12Fup0SHIJC+/0ihu
-         21KwHDtgZIizr6KRd/h6h8+lG9fa7ymjOj2kyqsjvKkoej9IFYdalli2R0/ZebnnqSlx
-         WTiHcI2RDJBKE8oFXf6uVkUfT6euh1ts49BFeg99IBmhgctU3YgdKlDEqXnFAXv0nyP2
-         w6hecYnI62NXUOX4/LB7C5J+xPBe+2XKrj35Edsnzbv2mZUzuc1o3Z4hHg+DL4Bk9dyJ
-         f6KPW94gFJ7hesfoOu0N+hDDQcpmjRjKtxmGDMrFO6ClOe+ME/ixS/Ccsm2kawbGX0Yf
-         wGNQ==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NGPJoGgEf7UilkDf7rSI+x9NQwnpZsCCeFTrbXEasDc=;
+        b=OwNcrxDRAmcQHMo9wTgynMmwAIRBuCsrD3KspfMDRMphTsKqByctGClHVT+KoyeXGA
+         y78uoy9R3NCzMwSDIgQIP6He3AFAaGEH76DCk1EuGIMmyth5vV7QglQl/LCRm0jqas5P
+         w3a/xkkRcbQqsEhyI3fTvKMx0p65zHOJfC72Nc2a1X7Lz+5rpWlwzCLqiHOhV933mB/h
+         kAyGYEeK2IfJnQqOtOrs+EX95fQ5o7+OZQby75E17scPZ68/Owxeei5k64EE5IcT7o5S
+         sulDKG4Eh5/SNFJs4BgyQZn37fc/knirDuMEa0BhfNsfHUJDx8djGTvk9qRRhkvkeNc+
+         WY+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LfUGZj1LCxAemKpNc6YCN31EZ8nKAkPT8bKBKtlXg9Q=;
-        b=s/hqW3e7jakETejedpC91G800lc+sRYeEJGftSlAUprXxiS4JJ9GNaCT2zQzlDMpFA
-         iraNJswV797Um+fBFiUgTeYQHbGhs4qfaglbbI6m7efXUt/1XfYA1ebvuAfcaoXpcad7
-         g+1mRnKfMUDw+ZSfpaCKFyY+CupTHfJ6X5/yWCOLcOyYJYLI7vEE3p/he3tkWWwK9ZSP
-         BmzohqtDsEWmCYFSVyaYjUr/owmu6GWpJIuqtQuux9CDsnKY0/2C28vNqYKtwEg0ym/e
-         yjEWWu0hPlzzYyc0nJ2JVHNo1FWbyY+CDofbNzE5G1+4wIEj5AuPx4EDaNxdmjPwGoL0
-         wmTA==
-X-Gm-Message-State: ANoB5pmch6Czg5WY80AZTcAUBzbx0BktqNz0YHUO4pDZr2Y+15p2+LBi
-        huYivmmIVHG4vsDuQRSnbGE=
-X-Google-Smtp-Source: AA0mqf79/Ke1CW43MqT3oV1ujLcAWxalv4dNSorq8mkwB5GJwzbT0B7uwue9GHc3r30glZG69OJ2Fw==
-X-Received: by 2002:a17:906:a2d1:b0:781:bc28:f455 with SMTP id by17-20020a170906a2d100b00781bc28f455mr17021624ejb.170.1669071072818;
-        Mon, 21 Nov 2022 14:51:12 -0800 (PST)
-Received: from skbuf ([188.26.57.184])
-        by smtp.gmail.com with ESMTPSA id cq17-20020a056402221100b0045ce419ecffsm5757437edb.58.2022.11.21.14.51.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 14:51:12 -0800 (PST)
-Date:   Tue, 22 Nov 2022 00:51:09 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com
-Subject: Re: [RFC Patch net-next v2 7/8] net: dsa: microchip: add the
- transmission tstamp logic
-Message-ID: <20221121225109.5j5g5yubqgzukloh@skbuf>
-References: <20221121154150.9573-1-arun.ramadoss@microchip.com>
- <20221121154150.9573-8-arun.ramadoss@microchip.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NGPJoGgEf7UilkDf7rSI+x9NQwnpZsCCeFTrbXEasDc=;
+        b=nvkrrowz0apfCz2K4N7jXCtWSJ6DmBAY9c1diBFyy1VrHhM5okjn35z7a0dmvzAr56
+         +dvbETKHZrwXL5TKyqxfObuMncaBwTKTco2tyU3aFXYBUrotRta3TxNRILgIEp7c3WWh
+         j3eXcJOf/ae2GpjXT/+sK92EcwNyM5Ep1nGjSnG/74wYCgITmBqbZ6qdxxFilHSZPl4X
+         G0vGpFbLogEWOMm/MMN55UUTbE1z0VBWLLRe0uD/KI+/nWgnCvAuFrEVIes5wxK+wVKE
+         HoVgJ2qyoixn/7IM/qXY8s+u7mOH+le8Ne5qH0eLIKl3A1zXsYuNwhZ0KyHTv68971Gu
+         HIDA==
+X-Gm-Message-State: ANoB5pl0yM4JBg9K8vBmIKTtrrtbfOt0tFkyfdc0Cbttw83EOBqb25dX
+        YZCSUng1zjRY/G6L9KB8D8ZPG3e74/NOf7uuf3oggakwYXAdsg==
+X-Google-Smtp-Source: AA0mqf6n9ijZrSMSuLDDEU2b+4Sc2H56X4iXT7tpuHy2HAO64Z8INcpLQs6KxHhnRFvg9RE0e2nOlbkOHWhmfRGD+Y4=
+X-Received: by 2002:a17:907:208d:b0:7ad:d662:f568 with SMTP id
+ pv13-20020a170907208d00b007add662f568mr16734609ejb.616.1669071126105; Mon, 21
+ Nov 2022 14:52:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121154150.9573-8-arun.ramadoss@microchip.com>
+References: <20221110164152.26136-1-ojeda@kernel.org> <20221110164152.26136-5-ojeda@kernel.org>
+In-Reply-To: <20221110164152.26136-5-ojeda@kernel.org>
+From:   =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>
+Date:   Mon, 21 Nov 2022 23:51:29 +0100
+Message-ID: <CAA76j93O=a32EOT0vkxf6SGb9qypNpOjDC-dUMOuUPuujPkzOQ@mail.gmail.com>
+Subject: Re: [PATCH v1 04/28] rust: samples: add `rust_print` example
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,266 +73,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arun,
-
-On Mon, Nov 21, 2022 at 09:11:49PM +0530, Arun Ramadoss wrote:
-> This patch adds the routines for transmission of ptp packets. When the
-> ptp packets(sync, pdelay_req, pdelay_rsp) to be transmitted, the skb is
-> copied to global skb through port_txtstamp ioctl.
-> After the packet is transmitted, ISR is triggered. The time at which
-> packet transmitted is recorded to separate register available for each
-> message. This value is reconstructed to absolute time and posted to the
-> user application through skb complete.
-
-"skb complete" is not a thing. "socket error queue" is.
-
-> 
-> Signed-off-by: Christian Eggers <ceggers@arri.de>
-> Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+On Thu, 10 Nov 2022 at 17:43, Miguel Ojeda <ojeda@kernel.org> wrote:
+>
+> Add example to exercise the printing macros (`pr_*!`) introduced
+> in the previous patches.
+>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > ---
-> +static void ksz_ptp_txtstamp_skb(struct ksz_device *dev,
-> +				 struct ksz_port *prt, struct sk_buff *skb)
-> +{
-> +	struct skb_shared_hwtstamps hwtstamps = {};
-> +	int ret;
+>  samples/rust/Kconfig       | 10 +++++++
+>  samples/rust/Makefile      |  1 +
+>  samples/rust/rust_print.rs | 54 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 65 insertions(+)
+>  create mode 100644 samples/rust/rust_print.rs
+>
+> diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
+> index 841e0906e943..b0f74a81c8f9 100644
+> --- a/samples/rust/Kconfig
+> +++ b/samples/rust/Kconfig
+> @@ -20,6 +20,16 @@ config SAMPLE_RUST_MINIMAL
+>
+>           If unsure, say N.
+>
+> +config SAMPLE_RUST_PRINT
+> +       tristate "Printing macros"
+> +       help
+> +         This option builds the Rust printing macros sample.
 > +
-> +	skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
+> +         To compile this as a module, choose M here:
+> +         the module will be called rust_print.
 > +
-> +	/* timeout must include tstamp latency, IRQ latency and time for
-> +	 * reading the time stamp.
-> +	 */
-> +	ret = wait_for_completion_timeout(&prt->tstamp_msg_comp,
-> +					  msecs_to_jiffies(100));
-> +	if (!ret)
-> +		return;
+> +         If unsure, say N.
 > +
-> +	hwtstamps.hwtstamp = prt->tstamp_msg;
-> +	skb_complete_tx_timestamp(skb, &hwtstamps);
+>  config SAMPLE_RUST_HOSTPROGS
+>         bool "Host programs"
+>         help
+> diff --git a/samples/rust/Makefile b/samples/rust/Makefile
+> index 1daba5f8658a..03086dabbea4 100644
+> --- a/samples/rust/Makefile
+> +++ b/samples/rust/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>
+>  obj-$(CONFIG_SAMPLE_RUST_MINIMAL)              +=3D rust_minimal.o
+> +obj-$(CONFIG_SAMPLE_RUST_PRINT)                        +=3D rust_print.o
+>
+>  subdir-$(CONFIG_SAMPLE_RUST_HOSTPROGS)         +=3D hostprogs
+> diff --git a/samples/rust/rust_print.rs b/samples/rust/rust_print.rs
+> new file mode 100644
+> index 000000000000..09f737790f3f
+> --- /dev/null
+> +++ b/samples/rust/rust_print.rs
+> @@ -0,0 +1,54 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Rust printing macros sample.
+> +
+> +use kernel::pr_cont;
+> +use kernel::prelude::*;
+> +
+> +module! {
+> +    type: RustPrint,
+> +    name: b"rust_print",
+> +    author: b"Rust for Linux Contributors",
+> +    description: b"Rust printing macros sample",
+> +    license: b"GPL",
 > +}
 > +
-> +#define work_to_xmit_work(w) \
-> +		container_of((w), struct ksz_deferred_xmit_work, work)
-> +void ksz_port_deferred_xmit(struct kthread_work *work)
-> +{
-> +	struct ksz_deferred_xmit_work *xmit_work = work_to_xmit_work(work);
-> +	struct sk_buff *clone, *skb = xmit_work->skb;
-> +	struct dsa_switch *ds = xmit_work->dp->ds;
-> +	struct ksz_device *dev = ds->priv;
-> +	struct ksz_port *prt;
+> +struct RustPrint;
 > +
-> +	prt = &dev->ports[xmit_work->dp->index];
+> +impl kernel::Module for RustPrint {
+> +    fn init(_module: &'static ThisModule) -> Result<Self> {
+> +        pr_info!("Rust printing macros sample (init)\n");
 > +
-> +	clone = KSZ_SKB_CB(skb)->clone;
+> +        pr_emerg!("Emergency message (level 0) without args\n");
+> +        pr_alert!("Alert message (level 1) without args\n");
+> +        pr_crit!("Critical message (level 2) without args\n");
+> +        pr_err!("Error message (level 3) without args\n");
+> +        pr_warn!("Warning message (level 4) without args\n");
+> +        pr_notice!("Notice message (level 5) without args\n");
+> +        pr_info!("Info message (level 6) without args\n");
 > +
-> +	reinit_completion(&prt->tstamp_msg_comp);
+> +        pr_info!("A line that");
+> +        pr_cont!(" is continued");
+> +        pr_cont!(" without args\n");
 > +
-> +	/* Transfer skb to the host port. */
-> +	dsa_enqueue_skb(skb, skb->dev);
+> +        pr_emerg!("{} message (level {}) with args\n", "Emergency", 0);
+> +        pr_alert!("{} message (level {}) with args\n", "Alert", 1);
+> +        pr_crit!("{} message (level {}) with args\n", "Critical", 2);
+> +        pr_err!("{} message (level {}) with args\n", "Error", 3);
+> +        pr_warn!("{} message (level {}) with args\n", "Warning", 4);
+> +        pr_notice!("{} message (level {}) with args\n", "Notice", 5);
+> +        pr_info!("{} message (level {}) with args\n", "Info", 6);
 > +
-> +	ksz_ptp_txtstamp_skb(dev, prt, clone);
+> +        pr_info!("A {} that", "line");
+> +        pr_cont!(" is {}", "continued");
+> +        pr_cont!(" with {}\n", "args");
 > +
-> +	kfree(xmit_work);
+> +        Ok(RustPrint)
+> +    }
 > +}
 > +
->  static const struct ptp_clock_info ksz_ptp_caps = {
->  	.owner		= THIS_MODULE,
->  	.name		= "Microchip Clock",
-> @@ -514,7 +568,29 @@ void ksz_ptp_clock_unregister(struct dsa_switch *ds)
->  
->  static irqreturn_t ksz_ptp_msg_thread_fn(int irq, void *dev_id)
->  {
-> -	return IRQ_NONE;
-> +	struct ksz_ptp_irq *ptpmsg_irq = dev_id;
-> +	struct ksz_device *dev;
-> +	struct ksz_port *port;
-> +	u32 tstamp_raw;
-> +	ktime_t tstamp;
-> +	int ret;
-> +
-> +	port = ptpmsg_irq->port;
-> +	dev = port->ksz_dev;
-> +
-> +	if (ptpmsg_irq->ts_en) {
-> +		ret = ksz_read32(dev, ptpmsg_irq->ts_reg, &tstamp_raw);
-> +		if (ret)
-> +			return IRQ_NONE;
-> +
-> +		tstamp = ksz_decode_tstamp(tstamp_raw);
-> +
-> +		port->tstamp_msg = ksz_tstamp_reconstruct(dev->ds, tstamp);
-> +
-> +		complete(&port->tstamp_msg_comp);
-> +	}
-> +
-> +	return IRQ_HANDLED;
->  }
-
-I dug out some notes I had taken while reviewing a previous patch set
-from Christian. There was a race condition which caused rare TX timestamping
-timeouts, and the issue seems very much still present here. See below my
-notes, luckily they resulted in a patch which solved the problem at the time.
-
-From 97ad5ac1541349584fc63f1d28ce12a6675dcff0 Mon Sep 17 00:00:00 2001
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-Date: Wed, 20 Oct 2021 00:39:37 +0300
-Subject: [PATCH] net: dsa: ksz9477_ptp: fix race condition between IRQ thread
- and deferred xmit kthread
-
-Two-step PTP TX timestamping for the ksz9477 driver works as follows:
-
-1. ksz9477_port_deferred_xmit() initializes a completion structure and
-   queues the PTP skb to the DSA master
-
-2. DSA master sends the packet to the switch, which forwards it to the
-   egress port and the TX timestamp is taken.
-
-3. Switch raises its PTP IRQ and the ksz9477_ptp_port_interrupt()
-   handler is run.
-
-4. The PTP timestamp is read, and the completion structure is signaled.
-
-5. PTP interrupts are rearmed for the next timestampable skb.
-
-6. The deferred xmit kthread is woken up by the completion. It collects
-   the TX timestamp from the irq kthread, it annotates the skb clone
-   with that timestamp, delivers it to the socket error queue, and
-   exits.
-
-7. The deferred xmit kthread gets rescheduled with the next
-   timestampable PTP packet and the steps from 1 are executed again,
-   identically.
-
-There is an issue in the fact that steps 5 and 6 might not actually run
-in this exact order. Step 6, the deferred xmit kthread getting woken up
-by the completion, might happen as soon as the completion is signaled at
-step 4. In that case, the deferred xmit kthread might run to completion
-and we might reach step 7, while step 5 (write-1-to-clear to the IRQ
-status register, to rearm the interrupt, has _not_ yet run).
-
-If the deferred xmit kthread makes enough progress with the _next_ PTP
-skb, such that it actually manages to enqueue it to the DSA master, and
-that makes it all the way to the hardware, which takes another TX
-timestamp, we have a problem if the IRQ kthread has not cleared the PTP
-TX timestamp status yet.
-
-If it clears the PTP status register now, it has effectively eaten a TX
-timestamp.
-
-The implication is that the completion for this second PTP skb will time
-out, but otherwise, the system will keep chugging on, it will not be
-forever stuck. The IRQ kthread does not get rearmed because it has no
-reason to (the PTP IRQ is cleared), and the deferred xmit kthread will
-free the skb for the completion that timed out, and carry on with its
-life. The next skb can go through the cycle 1-6 just fine.
-
-The problem which makes the above scenario possible is that we clear the
-interrupt status after we signal the completion. Do it before, and the
-interrupt handler is free to do whatever it wishes until it returns.
-
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
- drivers/net/dsa/microchip/ksz9477_ptp.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/dsa/microchip/ksz9477_ptp.c b/drivers/net/dsa/microchip/ksz9477_ptp.c
-index c646689cb71e..bc3f0283859a 100644
---- a/drivers/net/dsa/microchip/ksz9477_ptp.c
-+++ b/drivers/net/dsa/microchip/ksz9477_ptp.c
-@@ -1106,6 +1106,11 @@ irqreturn_t ksz9477_ptp_port_interrupt(struct ksz_device *dev, int port)
- 	if (ret)
- 		return IRQ_NONE;
- 
-+	/* Clear interrupt(s) (W1C) */
-+	ret = ksz_write16(dev, addr, data);
-+	if (ret)
-+		return IRQ_NONE;
-+
- 	if (data & PTP_PORT_XDELAY_REQ_INT) {
- 		/* Timestamp for Pdelay_Req / Delay_Req */
- 		struct ksz_device_ptp_shared *ptp_shared = &dev->ptp_shared;
-@@ -1128,11 +1133,6 @@ irqreturn_t ksz9477_ptp_port_interrupt(struct ksz_device *dev, int port)
- 		complete(&prt->tstamp_completion);
- 	}
- 
--	/* Clear interrupt(s) (W1C) */
--	ret = ksz_write16(dev, addr, data);
--	if (ret)
--		return IRQ_NONE;
--
- 	return IRQ_HANDLED;
- }
- 
-
-About the only difference seems to be that ACK-ing the interrupt is done
-at the end of ksz_ptp_irq_thread_fn(), while complete(&port->tstamp_msg_comp)
-is called from ksz_ptp_msg_thread_fn() - which is called by handle_nested_irq()
-IIUC.
-
->  
-> +/* Time stamp tag is only inserted if PTP is enabled in hardware. */
-> +static void ksz_xmit_timestamp(struct dsa_switch *ds, struct sk_buff *skb,
-> +			       unsigned int port)
-> +{
-> +	struct sk_buff *clone = KSZ_SKB_CB(skb)->clone;
-> +	struct ksz_tagger_data *tagger_data;
-> +	struct ptp_header *ptp_hdr;
-> +	unsigned int ptp_type;
-> +	u32 tstamp_raw = 0;
-> +	u8 ptp_msg_type;
-> +	s64 correction;
-> +
-> +	if (!clone)
-> +		goto out_put_tag;
-> +
-> +	/* Use cached PTP type from ksz_ptp_port_txtstamp().  */
-> +	ptp_type = KSZ_SKB_CB(clone)->ptp_type;
-> +	if (ptp_type == PTP_CLASS_NONE)
-> +		goto out_put_tag;
-> +
-> +	ptp_hdr = ptp_parse_header(skb, ptp_type);
-> +	if (!ptp_hdr)
-> +		goto out_put_tag;
-> +
-> +	tagger_data = ksz_tagger_data(ds);
-> +	if (!tagger_data->is_ptp_twostep)
-> +		goto out_put_tag;
-> +
-> +	if (tagger_data->is_ptp_twostep(ds, port))
-> +		goto out_put_tag;
-> +
-> +	ptp_msg_type = KSZ_SKB_CB(clone)->ptp_msg_type;
-> +	if (ptp_msg_type != PTP_MSGTYPE_PDELAY_RESP)
-> +		goto out_put_tag;
-> +
-> +	correction = (s64)get_unaligned_be64(&ptp_hdr->correction);
-> +
-> +	/* For PDelay_Resp messages we will likely have a negative value in the
-> +	 * correction field (see ksz9477_rcv()). The switch hardware cannot
-> +	 * correctly update such values (produces an off by one error in the UDP
-> +	 * checksum), so it must be moved to the time stamp field in the tail
-> +	 * tag.
-> +	 */
-> +	if (correction < 0) {
-> +		struct timespec64 ts;
-> +
-> +		/* Move ingress time stamp from PTP header's correction field to
-> +		 * tail tag. Format of the correction filed is 48 bit ns + 16
-> +		 * bit fractional ns.
-> +		 */
-> +		ts = ns_to_timespec64(-correction >> 16);
-> +		tstamp_raw = ((ts.tv_sec & 3) << 30) | ts.tv_nsec;
-> +
-> +		/* Set correction field to 0 and update UDP checksum.  */
-> +		ptp_header_update_correction(skb, ptp_type, ptp_hdr, 0);
-> +	}
-> +
-> +	/* For PDelay_Resp messages, the clone is not required in
-> +	 * skb_complete_tx_timestamp() and should be freed here.
-> +	 */
-> +	kfree_skb(clone);
-> +	KSZ_SKB_CB(skb)->clone = NULL;
-> +
-> +out_put_tag:
-> +	put_unaligned_be32(tstamp_raw, skb_put(skb, KSZ9477_PTP_TAG_LEN));
+> +impl Drop for RustPrint {
+> +    fn drop(&mut self) {
+> +        pr_info!("Rust printing macros sample (exit)\n");
+> +    }
 > +}
+> --
+> 2.38.1
+>
+
+Tested-by: Sergio Gonz=C3=A1lez Collado <sergio.collado@gmail.com>
