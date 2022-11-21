@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B13632276
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E98632274
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiKUMkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S231538AbiKUMj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:39:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbiKUMjk (ORCPT
+        with ESMTP id S231576AbiKUMjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:39:40 -0500
+        Mon, 21 Nov 2022 07:39:41 -0500
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80F629C9E;
-        Mon, 21 Nov 2022 04:39:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267FC1C412;
+        Mon, 21 Nov 2022 04:39:33 -0800 (PST)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 793355FD0A;
-        Mon, 21 Nov 2022 15:39:30 +0300 (MSK)
+        by mx.sberdevices.ru (Postfix) with ESMTP id 721865FD0B;
+        Mon, 21 Nov 2022 15:39:31 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669034370;
-        bh=Rj/rYCPzREnMvfpm/+WyfOnp58T9LOfDCyiLf96HgW8=;
+        s=mail; t=1669034371;
+        bh=DUvu+YKp1hu6pdL6wHkphNXlL3BTh1Kqk0H1tPtLv58=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=Tc+QqEUNAGf3MphsbdlqbV7Kf1uvvSL8AcCZCm1Lg/kCHMuCzY2sV/IrJDSXlPHkn
-         cA0JSrnMCMBzj77wHzH3gcpEzbGCb8mwZQQa9nc54BXlBLwEd7lFzNUeHclclylw0Q
-         dl1q2f4IMIhbElj8UVu8dVqv846svZHSNa7NsCYfqSHAISQZRt6aRu+h0aKz+vSsiv
-         zBbISmm5uT5jcyNislHdUXlm1AGduBnUM5iRCysuobvPSAY6d8JBiQp2NeCcm2sECd
-         LJ3vnOznTHhj4mq5AO68hOLAOHcluWsDT/N6FPBAu7vDc7Dkq1w3g/l+5k3QRXwieo
-         XqGnPcQqe3c0w==
+        b=nq2oAr7XLtOOyJIHjGIg273R7HJyGriAS+nJKSg87sTFIFt10dptkhBo7lA4w7QB7
+         M8kL5F+VUAWVsk0IsKS50G53c+6wjjRPZtuvwmlfKEOxqjFnMrk+2i9jOJaHlM1MXE
+         s0iQdr8yt+B9UZ2X1AoymTGVkpg1mKE6SKqJAiwNzupijmBJ0Wj9vzBh30OrVa2ZCN
+         skT39m4hziy1wg8dsZF+A3wKnXNBCJMy6xBHH+TEnvg37TCvL/h027cmxy7V2n19d7
+         yDKRz3eV6yS7GPgJ9n+xVp2shgcKbs8QQRrCROmNFwNEX7PnUae1GoY8cbOpYU+qMt
+         pRE7PC4d5PIWg==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 21 Nov 2022 15:39:30 +0300 (MSK)
+        Mon, 21 Nov 2022 15:39:31 +0300 (MSK)
 From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
 To:     Pavel Machek <pavel@ucw.cz>,
         Raphael Teysseyre <rteysseyre@gmail.com>,
@@ -38,9 +38,9 @@ To:     Pavel Machek <pavel@ucw.cz>,
 CC:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
         <kernel@sberdevices.ru>,
         Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Subject: [PATCH v2 1/2] leds: trigger: pattern: minor code style changes
-Date:   Mon, 21 Nov 2022 15:38:32 +0300
-Message-ID: <20221121123833.164614-2-mmkurbanov@sberdevices.ru>
+Subject: [PATCH v2 2/2] leds: trigger: pattern: notify usespace if pattern finished
+Date:   Mon, 21 Nov 2022 15:38:33 +0300
+Message-ID: <20221121123833.164614-3-mmkurbanov@sberdevices.ru>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221121123833.164614-1-mmkurbanov@sberdevices.ru>
 References: <20221121123833.164614-1-mmkurbanov@sberdevices.ru>
@@ -66,93 +66,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds some minor code style changes:
-    - remove a blank line before DEVICE_ATTR_RW declarations
-    - convert sysfs scnprintf() to sysfs_emit()/sysfs_emit_at()
-    - use module_led_trigger instead of pattern_trig_init/exit
+In the current moment, userspace caller can schedule LED pattern with
+appropriate parameters, but it doesn't have ability to listen to any
+events indicated pattern finished. This patch implements such an event
+using sysfs node and sysfs_notify_dirent() call.
 
 Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
 ---
- drivers/leds/trigger/ledtrig-pattern.c | 29 +++++++-------------------
- 1 file changed, 7 insertions(+), 22 deletions(-)
+ .../testing/sysfs-class-led-trigger-pattern   | 11 ++++
+ drivers/leds/trigger/ledtrig-pattern.c        | 63 ++++++++++++++++++-
+ 2 files changed, 73 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-pattern b/Documentation/ABI/testing/sysfs-class-led-trigger-pattern
+index 8c57d2780554..b2564123b54b 100644
+--- a/Documentation/ABI/testing/sysfs-class-led-trigger-pattern
++++ b/Documentation/ABI/testing/sysfs-class-led-trigger-pattern
+@@ -38,3 +38,14 @@ Description:
+ 
+ 		It should be noticed that some leds, like EL15203000 may
+ 		only support indefinitely patterns, so they always store -1.
++
++What:		/sys/class/leds/<led>/is_running
++Date:		October 2022
++KernelVersion:	6.1
++Description:
++		Indicates running of a software pattern for the LED.
++
++		This file is read only and supports poll() to detect when the
++		software pattern ended.
++
++		1 means pattern is running and number 0 are finish or not run.
 diff --git a/drivers/leds/trigger/ledtrig-pattern.c b/drivers/leds/trigger/ledtrig-pattern.c
-index 43a265dc4696..354304b404aa 100644
+index 354304b404aa..19a6b5dcd7af 100644
 --- a/drivers/leds/trigger/ledtrig-pattern.c
 +++ b/drivers/leds/trigger/ledtrig-pattern.c
-@@ -155,7 +155,7 @@ static ssize_t repeat_show(struct device *dev, struct device_attribute *attr,
+@@ -33,7 +33,9 @@ struct pattern_trig_data {
+ 	int delta_t;
+ 	bool is_indefinite;
+ 	bool is_hw_pattern;
++	bool is_running;
+ 	struct timer_list timer;
++	struct kernfs_node *is_running_kn;
+ };
  
- 	mutex_unlock(&data->lock);
+ static void pattern_trig_update_patterns(struct pattern_trig_data *data)
+@@ -76,8 +78,14 @@ static void pattern_trig_timer_function(struct timer_list *t)
+ 	struct pattern_trig_data *data = from_timer(data, t, timer);
  
--	return scnprintf(buf, PAGE_SIZE, "%d\n", repeat);
-+	return sysfs_emit(buf, "%d\n", repeat);
+ 	for (;;) {
+-		if (!data->is_indefinite && !data->repeat)
++		if (!data->is_indefinite && !data->repeat) {
++			data->is_running = false;
++
++			if (data->is_running_kn)
++				sysfs_notify_dirent(data->is_running_kn);
++
+ 			break;
++		}
+ 
+ 		if (data->curr->brightness == data->next->brightness) {
+ 			/* Step change of brightness */
+@@ -137,6 +145,7 @@ static int pattern_trig_start_pattern(struct led_classdev *led_cdev)
+ 	data->curr = data->patterns;
+ 	data->next = data->patterns + 1;
+ 	data->timer.expires = jiffies;
++	data->is_running = true;
+ 	add_timer(&data->timer);
+ 
+ 	return 0;
+@@ -176,6 +185,7 @@ static ssize_t repeat_store(struct device *dev, struct device_attribute *attr,
+ 	mutex_lock(&data->lock);
+ 
+ 	del_timer_sync(&data->timer);
++	data->is_running = false;
+ 
+ 	if (data->is_hw_pattern)
+ 		led_cdev->pattern_clear(led_cdev);
+@@ -267,6 +277,7 @@ static ssize_t pattern_trig_store_patterns(struct led_classdev *led_cdev,
+ 	mutex_lock(&data->lock);
+ 
+ 	del_timer_sync(&data->timer);
++	data->is_running = false;
+ 
+ 	if (data->is_hw_pattern)
+ 		led_cdev->pattern_clear(led_cdev);
+@@ -327,6 +338,16 @@ static ssize_t hw_pattern_store(struct device *dev,
  }
- 
- static ssize_t repeat_store(struct device *dev, struct device_attribute *attr,
-@@ -192,7 +192,6 @@ static ssize_t repeat_store(struct device *dev, struct device_attribute *attr,
- 	mutex_unlock(&data->lock);
- 	return err < 0 ? err : count;
- }
--
- static DEVICE_ATTR_RW(repeat);
- 
- static ssize_t pattern_trig_show_patterns(struct pattern_trig_data *data,
-@@ -207,13 +206,13 @@ static ssize_t pattern_trig_show_patterns(struct pattern_trig_data *data,
- 		goto out;
- 
- 	for (i = 0; i < data->npatterns; i++) {
--		count += scnprintf(buf + count, PAGE_SIZE - count,
--				   "%d %u ",
--				   data->patterns[i].brightness,
--				   data->patterns[i].delta_t);
-+		count += sysfs_emit_at(buf, count,
-+				       "%d %u ",
-+				       data->patterns[i].brightness,
-+				       data->patterns[i].delta_t);
- 	}
- 
--	buf[count - 1] = '\n';
-+	sysfs_emit_at(buf, count - 1, "\n");
- 
- out:
- 	mutex_unlock(&data->lock);
-@@ -307,7 +306,6 @@ static ssize_t pattern_store(struct device *dev, struct device_attribute *attr,
- 
- 	return pattern_trig_store_patterns(led_cdev, buf, NULL, count, false);
- }
--
- static DEVICE_ATTR_RW(pattern);
- 
- static ssize_t hw_pattern_show(struct device *dev,
-@@ -327,7 +325,6 @@ static ssize_t hw_pattern_store(struct device *dev,
- 
- 	return pattern_trig_store_patterns(led_cdev, buf, NULL, count, true);
- }
--
  static DEVICE_ATTR_RW(hw_pattern);
  
++static ssize_t is_running_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct led_classdev *led_cdev = dev_get_drvdata(dev);
++	struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
++
++	return sysfs_emit(buf, "%d\n", data->is_running);
++}
++static DEVICE_ATTR_RO(is_running);
++
  static umode_t pattern_trig_attrs_mode(struct kobject *kobj,
-@@ -443,19 +440,7 @@ static struct led_trigger pattern_led_trigger = {
- 	.deactivate = pattern_trig_deactivate,
- 	.groups = pattern_trig_groups,
- };
--
--static int __init pattern_trig_init(void)
--{
--	return led_trigger_register(&pattern_led_trigger);
--}
--
--static void __exit pattern_trig_exit(void)
--{
--	led_trigger_unregister(&pattern_led_trigger);
--}
--
--module_init(pattern_trig_init);
--module_exit(pattern_trig_exit);
-+module_led_trigger(pattern_led_trigger);
+ 				       struct attribute *attr, int index)
+ {
+@@ -382,9 +403,41 @@ static void pattern_init(struct led_classdev *led_cdev)
+ 	kfree(pattern);
+ }
  
- MODULE_AUTHOR("Raphael Teysseyre <rteysseyre@gmail.com>");
- MODULE_AUTHOR("Baolin Wang <baolin.wang@linaro.org>");
++static int pattern_trig_add_is_running(struct led_classdev *led_cdev)
++{
++	struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
++	struct device *dev = led_cdev->dev;
++	int ret;
++
++	ret = device_create_file(dev, &dev_attr_is_running);
++	if (ret) {
++		dev_err(dev,
++			"Error creating is_running (%pe)\n", ERR_PTR(ret));
++		return ret;
++	}
++
++	data->is_running_kn = sysfs_get_dirent(dev->kobj.sd, "is_running");
++	if (!data->is_running_kn) {
++		dev_err(dev, "Error getting is_running kernelfs\n");
++		device_remove_file(dev, &dev_attr_is_running);
++		return -ENXIO;
++	}
++
++	return 0;
++}
++
++static void pattern_trig_remove_is_running(struct led_classdev *led_cdev)
++{
++	struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
++
++	sysfs_put(data->is_running_kn);
++	device_remove_file(led_cdev->dev, &dev_attr_is_running);
++}
++
+ static int pattern_trig_activate(struct led_classdev *led_cdev)
+ {
+ 	struct pattern_trig_data *data;
++	int err;
+ 
+ 	data = kzalloc(sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -403,6 +456,13 @@ static int pattern_trig_activate(struct led_classdev *led_cdev)
+ 	data->led_cdev = led_cdev;
+ 	led_set_trigger_data(led_cdev, data);
+ 	timer_setup(&data->timer, pattern_trig_timer_function, 0);
++
++	err = pattern_trig_add_is_running(led_cdev);
++	if (err)
++		dev_warn(led_cdev->dev,
++			 "pattern ended notifications disabled (%pe)\n",
++			 ERR_PTR(err));
++
+ 	led_cdev->activated = true;
+ 
+ 	if (led_cdev->flags & LED_INIT_DEFAULT_TRIGGER) {
+@@ -428,6 +488,7 @@ static void pattern_trig_deactivate(struct led_classdev *led_cdev)
+ 		led_cdev->pattern_clear(led_cdev);
+ 
+ 	del_timer_sync(&data->timer);
++	pattern_trig_remove_is_running(led_cdev);
+ 
+ 	led_set_brightness(led_cdev, LED_OFF);
+ 	kfree(data);
 -- 
 2.38.1
 
