@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD35631C91
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8A3631C9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiKUJOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S230020AbiKUJPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiKUJOC (ORCPT
+        with ESMTP id S229689AbiKUJPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:14:02 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCEB71198
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:14:00 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id g7so17892754lfv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:14:00 -0800 (PST)
+        Mon, 21 Nov 2022 04:15:39 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93121532E0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:15:38 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id bp15so17844590lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:15:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KzJ1Wp+0Y1BV5FI5ALPYO3ykaQyEtvnk1yBBPpwmu2k=;
-        b=MY2ZMsvAOIUWpv95uOKNW6RZvGBkO6P4O7pJxf+QWNCVKvCPJ145yjyVAUbuYmBn8b
-         oU6gBohmHFUdG07x6n2J8CrhD3SITPX3MUfjvL1iRod6zLQaAWW11QrKVH7kGg8ilLeE
-         robaC3v13YDu3jUEzxAE6pknR+aTYym1e+0TrGG2elX+74u5NdetMKcLoMA2DvwASg/E
-         SwRPz32w7pUuJHc0j9AOCQzPtfqHBumQr/deLliEIaZsoXOsx8Gri2TwUr9rWEE5PmCS
-         /2GwO1QHxOPtqvg+YZgHNYCgIyCEJkHUvbjF47T/CEfc6LWF1NbvdMYm3ONK/m2nX/zI
-         usjQ==
+        bh=edGTmU1jMBO60TkSFZa7W5D8f6ttu0/8Kyu/xHgBnxc=;
+        b=sDNFLcT38brmo4xJZO980qL17IOrn3ecWr/mJPLysHzcsbd2N9OOoOV4Gf+Xt66/Vt
+         gmF95Pu1f0vn+MtdlHkq7oZdHDmQvk8M/mASCQE7JhWmEO+86kChBdLrpymgabkLbdWj
+         ll+x70ykq6NUrI0NeuVUzgAn2n6lxIT016TogWD1ysioOaOLqppe/3ZcXchl77Pdcjbn
+         n7LOCWyIWHIgKmNSkI/YP+f+mBQdgPRwu/kmDWSHw6k4rEpc0eUWkbRV5157EMVwh1rr
+         2bhz4vxRVu8pqTF/nO0PD2f94s06H2FbpV0b7NWQm9LMq1rC1C5OBqKeEwPCNAyVNlxa
+         YzVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KzJ1Wp+0Y1BV5FI5ALPYO3ykaQyEtvnk1yBBPpwmu2k=;
-        b=y83qe3UyjIBK59QFY/B9wYgg28KWlYfmrFWtCykNLFpg3G9+AfkkyNNFRfjWOZDx6j
-         rbvtwTsaDTstsNcah+jiMMuClwveB2oNqi9K6YkLWcgdVKARsreu4aHKlBSgRaT4tvYU
-         krwes/k02+HJts4cTVWP6dA36pxIqUEzdHqJZR6lnm9Gdj2iCKDisT8ImF71b1X259UW
-         YGrJOHefC09R06Qh7h/MZhHNmYn/UWiU8XyjnFQOMM2Np3+8MLPwF60zIKh5Y9tBmA81
-         LoFQ+SqjkWFuH3L90k8szcTdFs6QrF/Sly6c4BddhqO8iNhoSIV1gxpzYCLIHcrEo5R3
-         ggbQ==
-X-Gm-Message-State: ANoB5plhjmAZTv9BB/Z6VStmkJHhE2AZ/Y71thqzzVJcO6QhsgEvKLbt
-        3M93x7185LgYNc8J4KRaqqcpoA==
-X-Google-Smtp-Source: AA0mqf66WvuXOvvEgmjWbFNbdtend+6s+HRKZkNnVe5YBS4XvYhP3v3obghSZgzSgUT+GR7d0mkgag==
-X-Received: by 2002:ac2:5e23:0:b0:4a6:fd95:a0a4 with SMTP id o3-20020ac25e23000000b004a6fd95a0a4mr5940005lfg.485.1669022039057;
-        Mon, 21 Nov 2022 01:13:59 -0800 (PST)
+        bh=edGTmU1jMBO60TkSFZa7W5D8f6ttu0/8Kyu/xHgBnxc=;
+        b=M6jT5HSK3IxnerMGfBTjgc65aONlNO2ZJscqjkK8j8axFpPxMn4jnAYdxDlrFqlDAr
+         q3clKJmxsxMqcshJnVDWbthZQJg+VHbdDz9Np5jcwIEXwr8ic/dkm5alB+b1tIOlRwdc
+         Y1GQV8VKV8pNmC3eRIspKyvzrW4szWS6uzxUSinP/AgqbcWYScO+X1ZyaB5CJuFcgLGm
+         Hy8L2HierWG3E8RO3LpDag0ewsoLWKo90NGavsNaXiOJHzTqYYGoV8rsskvTDNclGWyu
+         pLNZgGg5clR2XKfyxcHiaWipciO3XMHUkx5acGk9dcHiCpKTXztUMqkEOggExNgv1q70
+         GQYA==
+X-Gm-Message-State: ANoB5pm/y/Uek3vn/g2uvXqrXbI0CvTtd6BPxipCq6azpINt99fqIvaX
+        RljRoRvjyHzZiyuCbhztKL71iQ==
+X-Google-Smtp-Source: AA0mqf7X74FVmnUcC8FTUQTvF39/oyLCQR97ZwpZL+K4q7KohKadZDBpN1MMAue4vWvn3ows6jt+/g==
+X-Received: by 2002:ac2:4209:0:b0:499:f8e4:6dd0 with SMTP id y9-20020ac24209000000b00499f8e46dd0mr5881644lfh.162.1669022136906;
+        Mon, 21 Nov 2022 01:15:36 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g2-20020a2eb5c2000000b0025ebaef9570sm1385005ljn.40.2022.11.21.01.13.58
+        by smtp.gmail.com with ESMTPSA id dw7-20020a0565122c8700b004a91df49508sm1952179lfb.177.2022.11.21.01.15.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 01:13:58 -0800 (PST)
-Message-ID: <d83e9a3d-2482-4342-03c1-818a38bd4b7b@linaro.org>
-Date:   Mon, 21 Nov 2022 10:13:57 +0100
+        Mon, 21 Nov 2022 01:15:36 -0800 (PST)
+Message-ID: <9d2dfd82-88f4-3c41-fe0f-ab38ac2760dd@linaro.org>
+Date:   Mon, 21 Nov 2022 10:15:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v3] dt-bindings: iio: adc: ad7923: adjust documentation
+Subject: Re: [PATCH v2 1/9] dt-bindings: arm: qcom: document new
+ msm8953-family devices
 Content-Language: en-US
-To:     Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221120153419.GA3094349-robh@kernel.org>
- <20221120170630.29354-1-edmund.berenson@emlix.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221119203758.888207-1-luca@z3ntu.xyz>
+ <20221119203758.888207-2-luca@z3ntu.xyz>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221120170630.29354-1-edmund.berenson@emlix.com>
+In-Reply-To: <20221119203758.888207-2-luca@z3ntu.xyz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,81 +82,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/11/2022 18:06, Edmund Berenson wrote:
-> - Add the ad7927 compatibility string, with fallback compatibility
-> to ad7928.
-> - ad7923 and ad7924 are treated the same in the driver, show
-> the relationship in the documentation.
+On 19/11/2022 21:37, Luca Weiss wrote:
+> Document the various phones added in upcoming patches. Also allow
+> qcom,msm-id and qcom,board-id for msm8953 and sdm450.
 > 
-> Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
-> ---
->  .../bindings/iio/adc/adi,ad7923.yaml          | 26 ++++++++++++-------
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-Do not respond with new patch to some old thread. Each patchset starts a
-new thread.
 
->  1 file changed, 17 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> index 07f9d1c09c7d..e553853e25d5 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> @@ -11,7 +11,7 @@ maintainers:
->  
->  description: |
->    Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
-> -   AD7918, AD7928 8 Channels ADCs.
-> +   AD7918, AD7927, AD7928 8 Channels ADCs.
->  
->    Specifications about the part can be found at:
->      https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
-> @@ -20,14 +20,22 @@ description: |
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - adi,ad7904
-> -      - adi,ad7914
-> -      - adi,ad7923
-> -      - adi,ad7924
-> -      - adi,ad7908
-> -      - adi,ad7918
-> -      - adi,ad7928
-> +    oneOf:
-> +      - enum:
-> +          - adi,ad7904
-> +          - adi,ad7914
-> +          - adi,ad7908
-
-You already started shuffling the entries, so make them ordered. What's
-the point of changing the order from one non-sorted to another non-sorted?
-
-> +          - adi,ad7918
-> +          - adi,ad7923
-> +          - adi,ad7924
-
-Then deprecate this as alone compatible.
-
-> +          - adi,ad7927> +          - adi,ad7928
-
-Ditto
-
-> +      - items:
-> +          - const: adi,ad7923
-> +          - const: adi,ad7924
-
-I would expect lower number as fallback.
-
-> +      - items:
-> +          - const: adi,ad7927
-> +          - const: adi,ad7928
-
-Ditto.
-
->  
->    reg:
->      maxItems: 1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
