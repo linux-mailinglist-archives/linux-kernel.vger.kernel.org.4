@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A60631B18
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC40631B1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiKUIPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S229910AbiKUISq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiKUIPl (ORCPT
+        with ESMTP id S229576AbiKUISm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:15:41 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6118FF5A7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:15:40 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NG0Yp3nGXz15MmH;
-        Mon, 21 Nov 2022 16:15:10 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 16:15:38 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 16:15:38 +0800
-Subject: Re: [PATCH] tracing: Fix infinite loop in tracing_read_pipe on
- overflowed print_trace_line
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221114022946.66255-1-yangjihong1@huawei.com>
- <20221117164003.6e655615@gandalf.local.home>
- <188a48b7-f426-6348-086e-22e56bb07206@huawei.com>
- <20221120144956.30bb1725@rorschach.local.home>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <f4094266-fce6-b548-67cc-f0d5cdfdbcba@huawei.com>
-Date:   Mon, 21 Nov 2022 16:15:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Mon, 21 Nov 2022 03:18:42 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F088D193CE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:18:39 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id p4so10465926vsa.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:18:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5FNLqZ3+KdQjzm7Sx3mBq4NxeuMTkAwBYeRYu3X/hpw=;
+        b=ZT1IBXqXR8n7CAGsZwETJtXB5s+32HQ0WfDf9ELFM7TnqZKlgWOeBc/bChoGMeTXZI
+         DBw5IgWzhYRwwB8q2PlTYpDsgp/Xn0faD8qlQqeqGTzK+LtA5bO4pTSl6VhvOF3XjuUB
+         v7cQhUjxPdiSW4o/cUm4GMGrYxkl6E57CDG+DeRbt7ONLQ4PRpM51bw/quQN3Qeh/nRb
+         JOozyTr672VPCmMVeXPM/Pap3nqPGUKwDDQvfOazKh7eIRlTkGXUgXoNOSeHNoDkShnQ
+         BYjmuzxMjI4p4EU4gVYY8/BJb9B8jMg9lMMiMnAoeTTtQL0QVNNx19/DQH0TeRn3a1mM
+         HCZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5FNLqZ3+KdQjzm7Sx3mBq4NxeuMTkAwBYeRYu3X/hpw=;
+        b=Gwx6PrVAYafMoMhKM/6vGBkNxQTz2+x6V7lCa5bx9X/BJHsCB8mUWT/cyr4//8+2Lr
+         NDXja82Gmc6jw1GvD7BBm6caSyZPjBaGkj32Ql6q8A4LnU+D5pQdNJMUuuf/JtX51p2J
+         aE1GPYXdMIQ2wuazyUTapeWiB+g+705TfKg1yKrZRukzxIaQL1+yTy7ZQEWC5KwvzEh5
+         di774cfEHoKB33NqP7rxHW62sn0EJyx3Gvqaz0Yw2/bm5BKYzgomDjAF1ej4dLR5hpK0
+         xhLEIRDzwKsJwqnROEHfbEtL3bcITljFXOmoSK1fa27bvCPCAYvkRdD1zTPYkgroHebG
+         RDag==
+X-Gm-Message-State: ANoB5pkceRhRbhtjp+UF+UEcmHNZ+q/lHpcVDFnBZl3mSdQjIevrY3A2
+        blm/48WOAgapEjT6uqYpyW8qXofuxbN8FzHssnqjWKUH45s=
+X-Google-Smtp-Source: AA0mqf6QG/XZV0N6cp0tywJ1b6hLNvJyyPYmMjylRsqJ9dVG67YrNCJaKMIbcALAv7PxmXvGlzEcAkmgNqBCPxSecSs=
+X-Received: by 2002:a67:c98e:0:b0:3ad:3d65:22b with SMTP id
+ y14-20020a67c98e000000b003ad3d65022bmr3275421vsk.65.1669018718896; Mon, 21
+ Nov 2022 00:18:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20221120144956.30bb1725@rorschach.local.home>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <42579618-f8e2-9fd2-0b6c-f2c87f7c57a6@eikelenboom.it> <99178e0a-ff6a-9bfa-4ade-b4bf6fdc306f@suse.com>
+In-Reply-To: <99178e0a-ff6a-9bfa-4ade-b4bf6fdc306f@suse.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 21 Nov 2022 01:18:02 -0700
+Message-ID: <CAOUHufY8it25rBbV1QeO3-wF3g32VkDwrsT6mL4fQUNZsMGkKw@mail.gmail.com>
+Subject: Re: Xen-unstable Linux-6.1.0-rc5 BUG: unable to handle page fault for
+ address: ffff8880083374d0
+To:     Juergen Gross <jgross@suse.com>,
+        Sander Eikelenboom <linux@eikelenboom.it>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Xen-devel <xen-devel@lists.xen.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,95 +70,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Nov 21, 2022 at 12:10 AM Juergen Gross <jgross@suse.com> wrote:
+>
+> On 19.11.22 09:28, Sander Eikelenboom wrote:
+> > Hi Yu / Juergen,
 
-On 2022/11/21 3:49, Steven Rostedt wrote:
-> On Fri, 18 Nov 2022 18:21:12 +0800
-> Yang Jihong <yangjihong1@huawei.com> wrote:
-> 
->>> That way we can see the broken trace event and not just silently drop it.
->>>    
->> Ok, will change in next version.(Because iter->seq.seq.len may be
->> smaller than strlen(dots), direct subtraction here may not be appropriate.)
-> 
-> We should only need to do this if the len is maxed out.
-> 
-> Hmm, len is only updated if it did actually copy it.
-> 
-> Perhaps we could just add:
-> 
-> 	trace_seq_puts(&iter->seq, "[LINE TOO BIG]\n");
-> 
-> And perhaps that will work?
-> 
-Yes, as you mentioned in the v2 patch:
+Hi Sander / Juergen,
 
-"The case I believe you are fixing, is the case were one 
-print_trace_line() actually fills the entire trace_seq in one shot."
-The problem I'm having is exactly that.
+Thanks for the report and the analysis.
 
-Just add "trace_seq_puts(&iter->seq, "[LINE TOO BIG]\n"); " can solve 
-this problem.
+> > This night I got a dom0 kernel crash on my new Ryzen box running Xen-unstable
+> > and a Linux-6.1.0-rc5 kernel.
+> > I did enable the new and shiny MGLRU, could this be related ?
+>
+> It might be related, but I think it could happen independently from it.
 
-But I thought it might happen. (Not yet. Is it possible to support new 
-tracers in the future?)
+Yes, I think it's related.
 
-   print_one_line {
-     char buf[4090];                          // there's some data in 
-the buf.
-     trace_seq_puts(s, buf);                  // trace_seq buffer write 
-successfully
-     trace_seq_puts(s, "test, test, test\n"); // trace_seq buffer overflow
-   }
+> > Nov 19 06:30:11 serveerstertje kernel: [68959.647371] BUG: unable to handle page
+> > fault for address: ffff8880083374d0
+> > Nov 19 06:30:11 serveerstertje kernel: [68959.663555] #PF: supervisor write
+> > access in kernel mode
+> > Nov 19 06:30:11 serveerstertje kernel: [68959.677542] #PF: error_code(0x0003) -
+> > permissions violation
+> > Nov 19 06:30:11 serveerstertje kernel: [68959.691181] PGD 3026067 P4D 3026067
+> > PUD 3027067 PMD 7fee5067 PTE 8010000008337065
+> > Nov 19 06:30:11 serveerstertje kernel: [68959.705084] Oops: 0003 [#1] PREEMPT
+> > SMP NOPTI
+> > Nov 19 06:30:11 serveerstertje kernel: [68959.718710] CPU: 7 PID: 158 Comm:
+> > kswapd0 Not tainted 6.1.0-rc5-20221118-doflr-mac80211debug+ #1
+> > Nov 19 06:30:11 serveerstertje kernel: [68959.732457] Hardware name: To Be
+> > Filled By O.E.M. To Be Filled By O.E.M./B450 Pro4 R2.0, BIOS P5.60 10/20/2022
+> > Nov 19 06:30:11 serveerstertje kernel: [68959.746391] RIP:
+> > e030:pmdp_test_and_clear_young+0x25/0x40
+>
+> The kernel tired to reset the "accessed" bit in the pmd entry.
 
-If we want to print out the boken event (buf[4090]), we may need to 
-reserve space as we did before.
-If we don't consider this situation, we can just add 
-"trace_seq_puts(&iter->seq, "[LINE TOO BIG]\n");", it's fine.
+Correct.
 
-> Anyway, what is triggering this?
-In my environment, this problem may be triggered in the following ways:
-   # echo 1 > /sys/kernel/debug/tracing/options/blk_classic
-   # echo 1 > /sys/kernel/debug/tracing/options/blk_cgroup
-   # echo 1 > /sys/kernel/debug/tracing/events/enable
-   # echo blk > /sys/kernel/debug/tracing/current_tracer
-   # cat /sys/kernel/debug/tracing/trace_pipe > /dev/null
+> It does so only since commit eed9a328aa1ae. Before that
+> pmdp_test_and_clear_young() could be called only for huge pages, which are
+> disabled in Xen PV guests.
 
-trace_pipe enter the blk_log_dump_pdu function through the following 
-call stack:
+Correct. After that commit, we also can clear the accessed bit in
+non-leaf PMD entries (pointing to PTE tables).
 
-tracing_read_pipe
-   -> print_trace_line
-     -> iter->trace->print_line (current_trace == blk)
-	  -> blk_tracer_print_line
-	    -> print_one_line
-		  -> blk_log_generic
-		    -> blk_log_dump_pdu
+> pmdp_test_and_clear_young() does a test_and_clear_bit() of the pmd entry, which
+> is failing since the hypervisor is emulating pte entry modifications only (pmd
+> and pud entries can be set via hypercalls only).
+>
+> Could you please test the attached patch whether it fixes the issue for you?
 
-static void blk_log_dump_pdu(struct trace_seq *s,
-         const struct trace_entry *ent, bool has_cg)
-{
-...
-         for (i = 0; i < pdu_len; i++) {
+There is a runtime kill switch for ARCH_HAS_NONLEAF_PMD_YOUNG, since I
+wasn't able to verify this capability on all x86 varieties. The following
+should do it:
 
-                 trace_seq_printf(s, "%s%02x",
-                                  i == 0 ? "" : " ", pdu_buf[i]);
+  # cat /sys/kernel/mm/lru_gen/enabled
+  0x0007
+  # echo 3 >/sys/kernel/mm/lru_gen/enabled
 
-                 /*
-                  * stop when the rest is just zeros and indicate so
-                  * with a ".." appended
-                  */
-                 if (i == end && end != pdu_len - 1) {
-                         trace_seq_puts(s, " ..) ");
-                         return;
-                 }
-         }
-...
-}
-After the blk_classic option is enabled, blktrace writes all events in 
-the ring buffer to the trace_seq buffer through blk_log_dump_pdu.
-If the value of pdu_len is too large, the buffer overflow may occur.
-(This problem may be caused by improper processing of blktrace.)
+Details are in Documentation/admin-guide/mm/multigen_lru.rst.
 
-Thanks,
-Yang
+Alternatively, we could make ARCH_HAS_NONLEAF_PMD_YOUNG a runtime
+check similar to arch_has_hw_pte_young() on arm64.
