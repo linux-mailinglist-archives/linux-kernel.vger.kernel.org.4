@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05314631EB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BCC631EB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiKUKsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S229828AbiKUKsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiKUKsC (ORCPT
+        with ESMTP id S229711AbiKUKsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 05:48:02 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 645FEDD8;
-        Mon, 21 Nov 2022 02:47:28 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CB671FB;
-        Mon, 21 Nov 2022 02:47:34 -0800 (PST)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 29C4D3F73B;
-        Mon, 21 Nov 2022 02:47:26 -0800 (PST)
-Message-ID: <1c8da30c-d798-729d-c8e5-73a07f8b9f18@arm.com>
-Date:   Mon, 21 Nov 2022 10:47:24 +0000
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E84F1001
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:47:31 -0800 (PST)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NG3sq0dvDzFqSg;
+        Mon, 21 Nov 2022 18:44:15 +0800 (CST)
+Received: from [10.174.178.197] (10.174.178.197) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 18:47:28 +0800
+Message-ID: <8e6ba5d1-ed34-1a17-35cb-4b80f1cdb38e@huawei.com>
+Date:   Mon, 21 Nov 2022 18:47:27 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH v13 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-Content-Language: en-US
-To:     hejunhao <hejunhao3@huawei.com>, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        jonathan.cameron@huawei.com, john.garry@huawei.com
-Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        lpieralisi@kernel.org, linuxarm@huawei.com, yangyicong@huawei.com,
-        liuqi115@huawei.com, f.fangjian@huawei.com,
-        prime.zeng@hisilicon.com
-References: <20221114090316.63157-1-hejunhao3@huawei.com>
- <20221114090316.63157-2-hejunhao3@huawei.com>
- <92291cb2-859c-a994-b05d-806def431376@arm.com>
- <c07e6417-7a37-3cf5-d3dd-b3ce7b3c20b1@huawei.com>
-From:   Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <c07e6417-7a37-3cf5-d3dd-b3ce7b3c20b1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH -next] ALSA: pcm: fix undefined behavior in bit shift for
+ SNDRV_PCM_RATE_KNOT
+To:     Takashi Iwai <tiwai@suse.de>
+CC:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <perex@perex.cz>, <tiwai@suse.com>, <broonie@kernel.org>,
+        <kuninori.morimoto.gx@renesas.com>
+References: <20221121023329.2423665-1-zhongbaisong@huawei.com>
+ <87h6yswq7c.wl-tiwai@suse.de>
+From:   zhongbaisong <zhongbaisong@huawei.com>
+Organization: huawei
+In-Reply-To: <87h6yswq7c.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.197]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,37 +53,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 12:45, hejunhao wrote:
-> Hi Suzuki ,
+
+
+在 2022/11/21 18:35, Takashi Iwai 写道:
+> On Mon, 21 Nov 2022 03:33:29 +0100,
+> Baisong Zhong wrote:
+>>
+>> Shifting signed 32-bit value by 31 bits is undefined, so changing
+>> significant bit to unsigned. The UBSAN warning calltrace like below:
+>>
+>> UBSAN: shift-out-of-bounds in sound/core/pcm_native.c:2676:21
+>> left shift of 1 by 31 places cannot be represented in type 'int'
+>> ...
+>> Call Trace:
+>>   <TASK>
+>>   dump_stack_lvl+0x8d/0xcf
+>>   ubsan_epilogue+0xa/0x44
+>>   __ubsan_handle_shift_out_of_bounds+0x1e7/0x208
+>>   snd_pcm_open_substream+0x9f0/0xa90
+>>   snd_pcm_oss_open.part.26+0x313/0x670
+>>   snd_pcm_oss_open+0x30/0x40
+>>   soundcore_open+0x18b/0x2e0
+>>   chrdev_open+0xe2/0x270
+>>   do_dentry_open+0x2f7/0x620
+>>   path_openat+0xd66/0xe70
+>>   do_filp_open+0xe3/0x170
+>>   do_sys_openat2+0x357/0x4a0
+>>   do_sys_open+0x87/0xd0
+>>   do_syscall_64+0x34/0x80
+>>
+>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
+>> ---
+>>   include/sound/pcm.h | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/include/sound/pcm.h b/include/sound/pcm.h
+>> index 7b1a022910e8..ec28c2ec89de 100644
+>> --- a/include/sound/pcm.h
+>> +++ b/include/sound/pcm.h
+>> @@ -123,7 +123,7 @@ struct snd_pcm_ops {
+>>   #define SNDRV_PCM_RATE_384000		(1<<14)		/* 384000Hz */
+>>   
+>>   #define SNDRV_PCM_RATE_CONTINUOUS	(1<<30)		/* continuous range */
+>> -#define SNDRV_PCM_RATE_KNOT		(1<<31)		/* supports more non-continuos rates */
+>> +#define SNDRV_PCM_RATE_KNOT		(1U<<31)	/* supports more non-continuos rates */
+> 
+> Could you rather update all SNDRV_PCM_RATE_* to 1U?
+> Otherwise it'll look inconsistent.
 > 
 > 
-> On 2022/11/15 19:06, Suzuki K Poulose wrote:
->> On 14/11/2022 09:03, Junhao He wrote:
->>> From: Qi Liu <liuqi115@huawei.com>
->>>
+> thanks,
+> 
+> Takashi
 
->>> +static void smb_init_hw(struct smb_drv_data *drvdata)
->>> +{
->>> +    /* First disable SMB and clear the status of SMB buffer */
->>> +    smb_reset_buffer_status(drvdata);
->>> +    smb_disable_hw(drvdata);
->>> +    smb_purge_data(drvdata);
->>> +
->>> +    writel(SMB_LB_CFG_LO_DEFAULT, drvdata->base + SMB_LB_CFG_LO_REG);
->>> +    writel(SMB_LB_CFG_HI_DEFAULT, drvdata->base + SMB_LB_CFG_HI_REG);
->>> +    writel(SMB_GLB_CFG_DEFAULT, drvdata->base + SMB_GLB_CFG_REG);
->>> +    writel(SMB_GLB_INT_CFG, drvdata->base + SMB_GLB_INT_REG);
->>> +    writel(SMB_LB_INT_CTRL_CFG, drvdata->base + SMB_LB_INT_CTRL_REG);
->>
->> Does this come with interrupt on overflow ? Do we not use this ?
->>
-> When the buffer overflow, no interrupt will come.
-> Interrupt will upgrade SMB_LB_INT_STS_REG register status if start trace.
-> Thanks.
->> Rest looks fine to me.
+Hi, Takashi
+Thank you for your suggestion. I will update all
+SNDRV_PCM_RATE_* to 1U for consistency in v2.
 
-What is the purpose of the "Interrupt" on the SMB ? It is not clear to
-me.
-
-Suzuki
-
+Baisong Zhong
+.
