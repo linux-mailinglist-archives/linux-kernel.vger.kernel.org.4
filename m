@@ -2,292 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018A6632414
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5302D632418
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiKUNmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
+        id S231299AbiKUNmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiKUNl7 (ORCPT
+        with ESMTP id S231381AbiKUNmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:41:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4FCF598
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:41:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669038064;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mstaiqrhDRaNCkxszggzoCeLFwAnlZ3Qbi9NAf/xX+o=;
-        b=P8vwTBb5OI4F7nxgQthYjBRY+l901779Ck2rewtWbxRf9wbHBvp5gdrOS8dzgaC7LazD2D
-        LYhZfjkU4Khtnheu+z7DcgGTXZtlW8Q9rAzHsqjFsJm6RjIAh+xp+IDmSptn62dKbAhwqc
-        ro0gOJQnFPRw8QR7+nyxd36W+Pb5Rqo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-197-XF89ZpFiPBGR4tCoKsFYmQ-1; Mon, 21 Nov 2022 08:41:03 -0500
-X-MC-Unique: XF89ZpFiPBGR4tCoKsFYmQ-1
-Received: by mail-wr1-f69.google.com with SMTP id i12-20020adfaacc000000b0023cd08e3b56so3235376wrc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:41:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mstaiqrhDRaNCkxszggzoCeLFwAnlZ3Qbi9NAf/xX+o=;
-        b=fMnCP7vYyWlKSOCRUmbgjK49ZWlNO/DDH7STdBVgPAqFsFGRzmuPCcv9UaTLKrLFJR
-         VryD/YiSZbi6ddN8eAa00N/75I+4v+ZbmgTRu0Gu0mZhotOBfnwNbsIqSKystf9NCMB+
-         svdF7qngKlZL5O6dVICsPXqVIsHxnoa/pVD5A5RuEmRuRm6GFZlpGRhFvT+6KiPnw2Rr
-         1aNxmrld7Y5kUlr+ypFPAHKrgaE/FV2UkOaQiQaabR2xQlZCsEy18R8Cb+B4grL36qOw
-         bAKWFXUU7fWJ02Xl6qFzsWYTXRqDepbfZfm/tHLt8RHJV34o3K0PUwU8FEmxCy88xKg6
-         GHXw==
-X-Gm-Message-State: ANoB5pmcY8X8dd02r4EOmSm35Pb4ov4cn8W968aTZfqb+ErO/nmQLkQz
-        jmf4xF6i0u1VpiH5Q93al0NX1MjW6E4Lt7c/K6VqlJzds6c90Klt1GS070mAH1lvRySZO/nUEfA
-        Jfr6DomZfvRCJrGBNtniEN9Rj
-X-Received: by 2002:a1c:29c5:0:b0:3cf:6263:bfc5 with SMTP id p188-20020a1c29c5000000b003cf6263bfc5mr16840734wmp.137.1669038061867;
-        Mon, 21 Nov 2022 05:41:01 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4WV7JN+rssL98oRF8ZCxgUq/vOaL5AFdYaeeGmoGE+5KsLLOZKuzdeHPXfX7wytIhDCmYRdg==
-X-Received: by 2002:a1c:29c5:0:b0:3cf:6263:bfc5 with SMTP id p188-20020a1c29c5000000b003cf6263bfc5mr16840705wmp.137.1669038061537;
-        Mon, 21 Nov 2022 05:41:01 -0800 (PST)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id c20-20020adfa314000000b00241d21d4652sm4469994wrb.21.2022.11.21.05.40.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 05:41:01 -0800 (PST)
-Message-ID: <5b6f1df705804c78c518371a73b2f9db340a9546.camel@redhat.com>
-Subject: Re: [PATCH 09/13] KVM: SVM: allow NMI window with vNMI
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Babu Moger <babu.moger@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org
-Date:   Mon, 21 Nov 2022 15:40:59 +0200
-In-Reply-To: <Y3Z7sq42Ao/qRn0u@google.com>
-References: <20221117143242.102721-1-mlevitsk@redhat.com>
-         <20221117143242.102721-10-mlevitsk@redhat.com>
-         <Y3Z7sq42Ao/qRn0u@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Mon, 21 Nov 2022 08:42:23 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B431ACE9B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:42:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669038143; x=1700574143;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vW6UpyDIJ4lErImes9hQg9f4W5M1m5/Y7NR0Nm54Jb0=;
+  b=bBig0DL5K/+cI8f2rLSuwZoAjhplqT00VNaub4W/EbGQbbmqdEPTPZ0U
+   fw6JvGIYVqpd7ubpqVGRcIUX/1WE8yOmylzwRHrVT0XIW8/3E4AiYDNnH
+   y37DOZqO3OYeiTVDwn2x6cVw2+mRUqFNxXSfI016e9RVzohP/z4orXbE7
+   jX7TINlAc3YFedbtArgTRpytxwBrGauNFeTUmhHC26ktrgnB6L5hCSUqg
+   LNwwTpiyJvohV5JTnmgisulX/JFhb14pXvY+pE76C3IpGTMLeZ4DI0g6X
+   3dw9/owGpgIwyzgxMKhchypAwJQv0dLPU7g/dQK1rngWqy7KHqgcisOHT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="375702673"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="375702673"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 05:42:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="746913669"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="746913669"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Nov 2022 05:42:21 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ox740-0000T8-1t;
+        Mon, 21 Nov 2022 13:42:20 +0000
+Date:   Mon, 21 Nov 2022 21:41:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.11.16a] BUILD SUCCESS
+ bc5b4c8070cc9f937197bc66d87e29dcbd5eabec
+Message-ID: <637b8009.kwBmWhK8JBIzlwEv%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 18:21 +0000, Sean Christopherson wrote:
-> On Thu, Nov 17, 2022, Maxim Levitsky wrote:
-> > When the vNMI is enabled, the only case when the KVM will use an NMI
-> > window is when the vNMI injection is pending.
-> > 
-> > In this case on next IRET/RSM/STGI, the injection has to be complete
-> > and a new NMI can be injected.
-> > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/kvm/svm/svm.c | 19 ++++++++++++-------
-> >  1 file changed, 12 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index cfec4c98bb589b..eaa30f8ace518d 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -2477,7 +2477,10 @@ static int iret_interception(struct kvm_vcpu *vcpu)
-> >         struct vcpu_svm *svm = to_svm(vcpu);
-> >  
-> >         ++vcpu->stat.nmi_window_exits;
-> > -       vcpu->arch.hflags |= HF_IRET_MASK;
-> > +
-> > +       if (!is_vnmi_enabled(svm))
-> > +               vcpu->arch.hflags |= HF_IRET_MASK;
-> 
-> Ugh, HF_IRET_MASK is such a terrible name/flag.  Given that it lives with GIF
-> and NMI, one would naturally think that it means "IRET is intercepted", but it
-> really means "KVM just intercepted an IRET and is waiting for NMIs to become
-> unblocked".
-> 
-> And on a related topic, why on earth are GIF, NMI, and IRET tracked in hflags?
-> They are 100% SVM concepts.  IMO, this code would be much easier to follow if
-> by making them bools in vcpu_svm with more descriptive names.
-> 
-> > +
-> >         if (!sev_es_guest(vcpu->kvm)) {
-> >                 svm_clr_intercept(svm, INTERCEPT_IRET);
-> >                 svm->nmi_iret_rip = kvm_rip_read(vcpu);
-> 
-> The vNMI interaction with this logic is confusing, as nmi_iret_rip doesn't need
-> to be captured for the vNMI case.  SEV-ES actually has unrelated reasons for not
-> reading RIP vs. not intercepting IRET, they just got bundled together here for
-> convenience.
-Yes, this can be cleaned up, again I didn't want to change too much of the code.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.11.16a
+branch HEAD: bc5b4c8070cc9f937197bc66d87e29dcbd5eabec  tools: memory-model: Add rmw-sequences to the LKMM
 
+elapsed time: 5236m
 
-> 
-> This is also an opportunity to clean up the SEV-ES interaction with IRET interception,
-> which is splattered all over the place and isn't documented anywhere.
-> 
-> E.g. (with an HF_IRET_MASK => awaiting_iret_completion change)
-> 
-> /*
->  * For SEV-ES guests, KVM must not rely on IRET to detect NMI unblocking as
->  * #VC->IRET in the guest will result in KVM thinking NMIs are unblocked before
->  * the guest is ready for a new NMI.  Architecturally, KVM is 100% correct to
->  * treat NMIs as unblocked on IRET, but the guest-host ABI for SEV-ES guests is
->  * that KVM must wait for an explicit "NMI Complete" from the guest.
->  */
-> static void svm_disable_iret_interception(struct vcpu_svm *svm)
-> {
->         if (!sev_es_guest(svm->vcpu.kvm))
->                 svm_clr_intercept(svm, INTERCEPT_IRET);
-> }
-> 
-> static void svm_enable_iret_interception(struct vcpu_svm *svm)
-> {
->         if (!sev_es_guest(svm->vcpu.kvm))
->                 svm_set_intercept(svm, INTERCEPT_IRET);
-> }
+configs tested: 77
+configs skipped: 3
 
-This makes sense, but doesn't have to be done in this patch series IMHO.
-> 
-> static int iret_interception(struct kvm_vcpu *vcpu)
-> {
->         struct vcpu_svm *svm = to_svm(vcpu);
-> 
->         ++vcpu->stat.nmi_window_exits;
-> 
->         /*
->          * No need to wait for the IRET to complete if vNMIs are enabled as
->          * hardware will automatically process the pending NMI when NMIs are
->          * unblocked from the guest's perspective.
->          */
->         if (!is_vnmi_enabled(svm)) {
->                 svm->awaiting_iret_completion = true;
-> 
->                 /*
->                  * The guest's RIP is inaccessible for SEV-ES guests, just
->                  * assume forward progress was made on the next VM-Exit.
->                  */
->                 if (!sev_es_guest(vcpu->kvm))
->                         svm->nmi_iret_rip = kvm_rip_read(vcpu);
->         }
-> 
->         svm_disable_iret_interception(svm);
-> 
->         kvm_make_request(KVM_REQ_EVENT, vcpu);
->         return 1;
-> }
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> > @@ -3735,9 +3738,6 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
-> >  {
-> >         struct vcpu_svm *svm = to_svm(vcpu);
-> >  
-> > -       if (is_vnmi_enabled(svm))
-> > -               return;
-> > -
-> >         if ((vcpu->arch.hflags & (HF_NMI_MASK | HF_IRET_MASK)) == HF_NMI_MASK)
-> >                 return; /* IRET will cause a vm exit */
-> 
-> As much as I like incremental patches, in this case I'm having a hell of a time
-> reviewing the code as the vNMI logic ends up being split across four patches.
-> E.g. in this particular case, the above requires knowing that svm_inject_nmi()
-> never sets HF_NMI_MASK when vNMI is enabled.
-> 
-> In the next version, any objection to squashing patches 7-10 into a single "Add
-> non-nested vNMI support" patch?
+gcc tested configs:
+i386                                defconfig
+i386                             allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                                defconfig
+i386                 randconfig-a011-20221121
+i386                 randconfig-a013-20221121
+um                             i386_defconfig
+i386                 randconfig-a012-20221121
+ia64                             allmodconfig
+um                           x86_64_defconfig
+i386                 randconfig-a016-20221121
+s390                             allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a015-20221121
+i386                 randconfig-a014-20221121
+x86_64               randconfig-a012-20221121
+arc                  randconfig-r043-20221120
+x86_64               randconfig-a011-20221121
+x86_64               randconfig-a015-20221121
+x86_64               randconfig-a013-20221121
+mips                             allyesconfig
+x86_64               randconfig-a014-20221121
+s390                             allyesconfig
+x86_64               randconfig-a016-20221121
+powerpc                          allmodconfig
+sh                               allmodconfig
+arc                  randconfig-r043-20221121
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                            allnoconfig
+s390                 randconfig-r044-20221121
+x86_64                           rhel-8.3-syz
+riscv                randconfig-r042-20221121
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+sh                            migor_defconfig
+sh                          urquell_defconfig
+arc                              allyesconfig
+i386                          randconfig-c001
+alpha                            allyesconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+m68k                             allmodconfig
+mips                      loongson3_defconfig
+csky                                defconfig
+powerpc                      ppc6xx_defconfig
+sh                             espt_defconfig
+arm                              allmodconfig
+arm                           corgi_defconfig
+m68k                             allyesconfig
 
-No objection at all - again since this is not my patch series, I didn't want
-to make too many invasive changes to it.
+clang tested configs:
+i386                 randconfig-a004-20221121
+i386                 randconfig-a001-20221121
+i386                 randconfig-a003-20221121
+i386                 randconfig-a005-20221121
+i386                 randconfig-a002-20221121
+i386                 randconfig-a006-20221121
+x86_64               randconfig-a001-20221121
+x86_64               randconfig-a002-20221121
+x86_64               randconfig-a004-20221121
+x86_64               randconfig-a003-20221121
+x86_64               randconfig-a005-20221121
+x86_64               randconfig-a006-20221121
+hexagon              randconfig-r041-20221120
+hexagon              randconfig-r041-20221121
+hexagon              randconfig-r045-20221120
+hexagon              randconfig-r045-20221121
+riscv                randconfig-r042-20221120
+s390                 randconfig-r044-20221120
+x86_64                        randconfig-k001
 
-
-> 
-> As for this code, IMO some pre-work to change the flow would help with the vNMI
-> case.  The GIF=0 logic overrides legacy NMI blocking, and so can be handled first.
-> And I vote to explicitly set INTERCEPT_IRET in the above case instead of relying
-> on INTERCEPT_IRET to already be set by svm_inject_nmi().
-> 
-> That would yield this as a final result:
-> 
-> static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
-> {
->         struct vcpu_svm *svm = to_svm(vcpu);
-> 
->         /*
->          * GIF=0 blocks NMIs irrespective of legacy NMI blocking.  No need to
->          * intercept or single-step IRET if GIF=0, just intercept STGI.
->          */
->         if (!gif_set(svm)) {
->                 if (vgif)
->                         svm_set_intercept(svm, INTERCEPT_STGI);
->                 return;
->         }
-> 
->         /*
->          * NMI is blocked, either because an NMI is in service or because KVM
->          * just injected an NMI.  If KVM is waiting for an intercepted IRET to
->          * complete, single-step the IRET to wait for NMIs to become unblocked.
->          * Otherwise, intercept the guest's next IRET.
->          */
->         if (svm->awaiting_iret_completion) {
->                 svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
->                 svm->nmi_singlestep = true;
->                 svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
->         } else {
->                 svm_set_intercept(svm, INTERCEPT_IRET);
->         }
-> }
-> 
-> >  
-> > @@ -3751,9 +3751,14 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
-> >          * Something prevents NMI from been injected. Single step over possible
-> >          * problem (IRET or exception injection or interrupt shadow)
-> >          */
-> > -       svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
-> > -       svm->nmi_singlestep = true;
-> > -       svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
-> > +
-> > +       if (is_vnmi_enabled(svm)) {
-> > +               svm_set_intercept(svm, INTERCEPT_IRET);
-> 
-> This will break SEV-ES.  Per commit 4444dfe4050b ("KVM: SVM: Add NMI support for
-> an SEV-ES guest"), the hypervisor must not rely on IRET interception to detect
-> NMI unblocking for SEV-ES guests.  As above, I think we should provide helpers to
-> toggle NMI interception to reduce the probability of breaking SEV-ES.
-Yes, one more reason for the helpers, I didn't notice that I missed that 'if'.
-
-
-> 
-> > +       } else {
-> > +               svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
-> > +               svm->nmi_singlestep = true;
-> > +               svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
-> > +       }
-> >  }
-> >  
-> >  static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
-> > -- 
-> > 2.34.3
-> > 
-> 
-Best regards,
-	Maxim Levitsky
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
