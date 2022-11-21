@@ -2,238 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777ED631C78
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013B1631C7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiKUJIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        id S230163AbiKUJJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:09:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiKUJId (ORCPT
+        with ESMTP id S230042AbiKUJIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:08:33 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA47A13DC6;
-        Mon, 21 Nov 2022 01:08:31 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL8OpoL031133;
-        Mon, 21 Nov 2022 09:08:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=1W1f8UH9EqIeBJHNQLHw8+dLhtc7tyzQLYpRIB2TrhE=;
- b=gtJqlXuWt6/bIyNlD9RDZINPErMmqOsY/mblppoPyzwPmjYTKTF9KlVij3dJl8XUz47E
- vlgBRYsIi/6FjPHQMjIWEM/zjYn2B6AOCXhNHR/zH7leshMVRlQ1H+gY5qPug62jV1E7
- /Vf6jcvHq4bH4BdZofFxkiUhzYliRXeqZ8ioTrdYQsOIu2nvBJ0Q9wwLyPxc+otKtHjo
- usjYZTOLm2gYE4Q9Y4wjSzCmZsfI7SQXvISEzJEuc141aecLOxk7abGXUrmWtWv2X1MC
- CyzMNmqeH/k1tvlmTaYCPLGEVu+HeyRmZapz2eeX+MQv73azJ1iuapptCGGtCiyG24Ch qw== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrf0v07e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 09:08:27 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AL98LMm032757;
-        Mon, 21 Nov 2022 09:08:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3kxr7k3t86-1;
-        Mon, 21 Nov 2022 09:08:24 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AL98OKZ000310;
-        Mon, 21 Nov 2022 09:08:24 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2AL98Nmp000309;
-        Mon, 21 Nov 2022 09:08:24 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id B1F28349C; Mon, 21 Nov 2022 01:08:22 -0800 (PST)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com
-Subject: [PATCH v4 3/3] drm/msm/disp/dpu1: add color management support for the crtc
-Date:   Mon, 21 Nov 2022 01:08:15 -0800
-Message-Id: <1669021695-4397-4-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1669021695-4397-1-git-send-email-quic_kalyant@quicinc.com>
-References: <1669021695-4397-1-git-send-email-quic_kalyant@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RpsPe8h3JH9O6sJxPTI8EVIBViL9TLt5
-X-Proofpoint-ORIG-GUID: RpsPe8h3JH9O6sJxPTI8EVIBViL9TLt5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_06,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 spamscore=0 suspectscore=0 phishscore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210071
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 04:08:51 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18BA8A173;
+        Mon, 21 Nov 2022 01:08:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669021730; x=1700557730;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Rnum/f98DCwepSy1xWkxPybQGGhC/aG2W+0RQ/lwNn0=;
+  b=AMwnbn5/2bULEtjmHhH6bGaU5TOxWfhS7pYD4VJDmoFvSDYb9h7T8Vtv
+   DO0wv/b8xiNHkbxwscFpvszJyspvP8oPNk2V2GWQXwxP5Wu/4Ld8HsaM9
+   GvQDFVi5e+uv5bkmxa1vHXD9auGR+EPJ0a2GFxhX3fD7ls5blvaeqGnAt
+   ClagtTOL86d5BTvmDmTT6EpX1nJvBGiD8P8VCTveTSYBT95QVbCGtVcwC
+   3FI5EPvWn8OlHWD95r0WVXRdaXeE1NYPf5TdVuaNI/aISuIt7QrpMXsC6
+   RLe46pFqY0oJV7g+K2iFF2RAs9sKru5NFYhMIstk6BywtUkADm4cPNtVp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="315332804"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="315332804"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 01:08:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="783377604"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="783377604"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 21 Nov 2022 01:08:46 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Nov 2022 11:08:45 +0200
+Date:   Mon, 21 Nov 2022 11:08:45 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 582/606] usb: typec: tcpm/tcpci_rt1711h: Convert to i2c's
+ .probe_new()
+Message-ID: <Y3tAHd9wzPNqpIzd@kuha.fi.intel.com>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-583-uwe@kleine-koenig.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221118224540.619276-583-uwe@kleine-koenig.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add color management support for the crtc provided there are
-enough dspps that can be allocated from the catalog.
+On Fri, Nov 18, 2022 at 11:45:16PM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Changes in v1:
-- cache color enabled state in the dpu crtc obj (Dmitry)
-- simplify dspp allocation while creating crtc (Dmitry)
-- register for color when crtc is created (Dmitry)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Changes in v2:
-- avoid primary encoders in the documentation (Dmitry)
+> ---
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index 7b217c712c11..a0e9e3fe8564 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -327,8 +327,7 @@ static int rt1711h_check_revision(struct i2c_client *i2c, struct rt1711h_chip *c
+>  	return ret;
+>  }
+>  
+> -static int rt1711h_probe(struct i2c_client *client,
+> -			 const struct i2c_device_id *i2c_id)
+> +static int rt1711h_probe(struct i2c_client *client)
+>  {
+>  	int ret;
+>  	struct rt1711h_chip *chip;
+> @@ -413,7 +412,7 @@ static struct i2c_driver rt1711h_i2c_driver = {
+>  		.name = "rt1711h",
+>  		.of_match_table = of_match_ptr(rt1711h_of_match),
+>  	},
+> -	.probe = rt1711h_probe,
+> +	.probe_new = rt1711h_probe,
+>  	.remove = rt1711h_remove,
+>  	.id_table = rt1711h_id,
+>  };
 
-Changes in v3:
-- add ctm for builtin encoders (Dmitry)
+thanks,
 
-Changes in v4:
-- few nits (Dmitry)
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 5 +++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    | 5 ++++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 7 +++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     | 6 +++++-
- 4 files changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 4170fbe..6cacaaf 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -1571,7 +1571,7 @@ static const struct drm_crtc_helper_funcs dpu_crtc_helper_funcs = {
- 
- /* initialize crtc */
- struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
--				struct drm_plane *cursor)
-+				struct drm_plane *cursor, bool ctm)
- {
- 	struct drm_crtc *crtc = NULL;
- 	struct dpu_crtc *dpu_crtc = NULL;
-@@ -1583,6 +1583,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
- 
- 	crtc = &dpu_crtc->base;
- 	crtc->dev = dev;
-+	dpu_crtc->color_enabled = ctm;
- 
- 	spin_lock_init(&dpu_crtc->spin_lock);
- 	atomic_set(&dpu_crtc->frame_pending, 0);
-@@ -1604,7 +1605,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
- 
- 	drm_crtc_helper_add(crtc, &dpu_crtc_helper_funcs);
- 
--	drm_crtc_enable_color_mgmt(crtc, 0, true, 0);
-+	drm_crtc_enable_color_mgmt(crtc, 0, dpu_crtc->color_enabled, 0);
- 
- 	/* save user friendly CRTC name for later */
- 	snprintf(dpu_crtc->name, DPU_CRTC_NAME_SIZE, "crtc%u", crtc->base.id);
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-index 539b68b..792b4f0 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-@@ -136,6 +136,7 @@ struct dpu_crtc_frame_event {
-  * @enabled       : whether the DPU CRTC is currently enabled. updated in the
-  *                  commit-thread, not state-swap time which is earlier, so
-  *                  safe to make decisions on during VBLANK on/off work
-+ * @color_enabled : whether crtc supports color management
-  * @feature_list  : list of color processing features supported on a crtc
-  * @active_list   : list of color processing features are active
-  * @dirty_list    : list of color processing features are dirty
-@@ -164,6 +165,7 @@ struct dpu_crtc {
- 	u64 play_count;
- 	ktime_t vblank_cb_time;
- 	bool enabled;
-+	bool color_enabled;
- 
- 	struct list_head feature_list;
- 	struct list_head active_list;
-@@ -269,10 +271,11 @@ void dpu_crtc_complete_commit(struct drm_crtc *crtc);
-  * @dev: dpu device
-  * @plane: base plane
-  * @cursor: cursor plane
-+ * @ctm: ctm flag
-  * @Return: new crtc object or error
-  */
- struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
--			       struct drm_plane *cursor);
-+			       struct drm_plane *cursor, bool ctm);
- 
- /**
-  * dpu_crtc_register_custom_event - api for enabling/disabling crtc event
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 96db7fb..a585036 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -571,6 +571,7 @@ bool dpu_encoder_use_dsc_merge(struct drm_encoder *drm_enc)
- static struct msm_display_topology dpu_encoder_get_topology(
- 			struct dpu_encoder_virt *dpu_enc,
- 			struct dpu_kms *dpu_kms,
-+			struct dpu_crtc *dpu_crtc,
- 			struct drm_display_mode *mode)
- {
- 	struct msm_display_topology topology = {0};
-@@ -599,7 +600,7 @@ static struct msm_display_topology dpu_encoder_get_topology(
- 	else
- 		topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? 2 : 1;
- 
--	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
-+	if (dpu_crtc->color_enabled) {
- 		if (dpu_kms->catalog->dspp &&
- 			(dpu_kms->catalog->dspp_count >= topology.num_lm))
- 			topology.num_dspp = topology.num_lm;
-@@ -634,6 +635,7 @@ static int dpu_encoder_virt_atomic_check(
- 	struct drm_display_mode *adj_mode;
- 	struct msm_display_topology topology;
- 	struct dpu_global_state *global_state;
-+	struct dpu_crtc *dpu_crtc;
- 	int i = 0;
- 	int ret = 0;
- 
-@@ -644,6 +646,7 @@ static int dpu_encoder_virt_atomic_check(
- 	}
- 
- 	dpu_enc = to_dpu_encoder_virt(drm_enc);
-+	dpu_crtc = to_dpu_crtc(crtc_state->crtc);
- 	DPU_DEBUG_ENC(dpu_enc, "\n");
- 
- 	priv = drm_enc->dev->dev_private;
-@@ -669,7 +672,7 @@ static int dpu_encoder_virt_atomic_check(
- 		}
- 	}
- 
--	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode);
-+	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, dpu_crtc, adj_mode);
- 
- 	/* Reserve dynamic resources now. */
- 	if (!ret) {
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index d967eef..53e0163 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -805,7 +805,11 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
- 	/* Create one CRTC per encoder */
- 	i = 0;
- 	drm_for_each_encoder(encoder, dev) {
--		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
-+		bool _ctm = false;
-+
-+		if (catalog->dspp_count && dpu_encoder_is_builtin(encoder))
-+			_ctm = true;
-+		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i], _ctm);
- 		if (IS_ERR(crtc)) {
- 			ret = PTR_ERR(crtc);
- 			return ret;
 -- 
-2.7.4
-
+heikki
