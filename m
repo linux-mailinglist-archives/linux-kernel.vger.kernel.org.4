@@ -2,221 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A494963217E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A052E632180
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiKUMAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
+        id S231417AbiKUMAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiKUMAB (ORCPT
+        with ESMTP id S231325AbiKUMAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:00:01 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA98C4E42A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:00:00 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id k19so14264108lji.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:00:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gAe96EUQJW/t2YfQOYFjoHjjiIW4hHrPPaKyPCc7BE4=;
-        b=UVduBhk3PJQZkKzEskUrpKs00z1z4r/O7LnJCkT22HInQOeMTGaNIiUeqIGHvlHNel
-         8VqMPfMXtV6tMv9ea7G6sbKvzE3Fm/DlG1E+g8NcPhYe8kgMQ604qRLIDomYKgkO4nJm
-         nNM0oOsRVkJDTr9ybiWyVEr8r6WawaItHr7qHt8Sbx4Ok3kdRHr2SR9GXJjMcjqAyue3
-         iOGkflLwOC1bOY41x6zbbYbq9oqoBTN30Z/aCEk3crJLxYULIxr+CRUxsV3WKHgXoVok
-         yHMtfO5pYc15hhPs6wnzHYeNYaUln8nxRvBy6UGnsaaprdi+rLUUBCYXS1isltaJirK1
-         YmLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gAe96EUQJW/t2YfQOYFjoHjjiIW4hHrPPaKyPCc7BE4=;
-        b=uGug/xO6iezNT2emj/ZW2V66Ry6e77LoXPuGjTVZ3sHyS1UElzeDSMQOR4MWCV4okO
-         CuU5w2SiAByEMQl8sTCzt2MXaiDGIXs4aO9a/1QnVxOvivbtHfLj6F0H8N1AO331oCHI
-         RZP0vrSU9UXIdn4+rrlnTxK2gaPYkH/7BNsch2QJcWWTeob4Wvprv55UxaEVbpgK66LD
-         0fzOCApuWpXOJOVVnVa6cdEyAPIqG2VeE+T0Kbk5bgHk4zhab/Ct5W6MAqf4W6NF/EFm
-         6G/N2B4TZuhfVuGvEZn21Wu7dFw0WRzweuzq3u0qG2qmgNpKYk5diOkHqLBPvvlLgh/K
-         W9fw==
-X-Gm-Message-State: ANoB5pmNL5PpvreTngmiSNFALmuSDRJH9XeFv3qVlKTxqUfImZa6RTkG
-        uXnVstSOEeDFcf6ocexESo78lw==
-X-Google-Smtp-Source: AA0mqf6lo8pDgZCEf5cpGQ6TpOYX19afdgtwbFTqg3DuazhEzItnWlNNkGFC2exRFsAu0oB9C2ARJA==
-X-Received: by 2002:a05:651c:160f:b0:278:d847:1a8b with SMTP id f15-20020a05651c160f00b00278d8471a8bmr5107958ljq.17.1669031999150;
-        Mon, 21 Nov 2022 03:59:59 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p3-20020ac24ec3000000b00492e3a8366esm2005053lfr.9.2022.11.21.03.59.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 03:59:58 -0800 (PST)
-Message-ID: <856449f3-6341-78d8-28db-3d4b8a0a25ad@linaro.org>
-Date:   Mon, 21 Nov 2022 12:59:57 +0100
+        Mon, 21 Nov 2022 07:00:15 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C1951309;
+        Mon, 21 Nov 2022 04:00:14 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NG5Xv5FzGzmW5v;
+        Mon, 21 Nov 2022 19:59:43 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 20:00:12 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 20:00:11 +0800
+Subject: Re: [PATCH v4 2/2] arm64: kdump: Support crashkernel=X fall back to
+ reserve region above DMA zones
+To:     Baoquan He <bhe@redhat.com>
+CC:     Dave Young <dyoung@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        "Dave Kleikamp" <dave.kleikamp@oracle.com>
+References: <20221116121044.1690-1-thunder.leizhen@huawei.com>
+ <20221116121044.1690-3-thunder.leizhen@huawei.com>
+ <Y3s3ZCYj+ZbI3whB@MiWiFi-R3L-srv>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <0c3358aa-251f-cd47-e6d6-6408abacdea5@huawei.com>
+Date:   Mon, 21 Nov 2022 20:00:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/6] dt-bindings: phy: Add PCIe PHY bindings for FSD
+In-Reply-To: <Y3s3ZCYj+ZbI3whB@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Shradha Todi <shradha.t@samsung.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kishon@ti.com, vkoul@kernel.org, lpieralisi@kernel.org,
-        kw@linux.com, mani@kernel.org, arnd@arndb.de,
-        gregkh@linuxfoundation.org, alim.akhtar@samsung.com,
-        ajaykumar.rs@samsung.com, rcsekar@samsung.com,
-        sriranjani.p@samsung.com, bharat.uppal@samsung.com,
-        s.prashar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, p.rajanbabu@samsung.com,
-        niyas.ahmed@samsung.com, chanho61.park@samsung.com
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-References: <20221121105210.68596-1-shradha.t@samsung.com>
- <CGME20221121104719epcas5p2f87febfba74a4ca6807b3095acf507d0@epcas5p2.samsung.com>
- <20221121105210.68596-2-shradha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221121105210.68596-2-shradha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 11:52, Shradha Todi wrote:
-> Document the PCIe PHY device tree bindings for Tesla
-> FSD SoC
 
-Subject: drop second, redundant "bindings".
+
+On 2022/11/21 16:31, Baoquan He wrote:
+> On 11/16/22 at 08:10pm, Zhen Lei wrote:
+>> For crashkernel=X without '@offset', select a region within DMA zones
+>> first, and fall back to reserve region above DMA zones. This allows
+>> users to use the same configuration on multiple platforms.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> Acked-by: Baoquan He <bhe@redhat.com>
+>> ---
+>>  Documentation/admin-guide/kernel-parameters.txt |  2 +-
+>>  arch/arm64/mm/init.c                            | 17 ++++++++++++++++-
+>>  2 files changed, 17 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index a7b7147447b8bf8..ef6d922ed26b9dc 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -842,7 +842,7 @@
+>>  			memory region [offset, offset + size] for that kernel
+>>  			image. If '@offset' is omitted, then a suitable offset
+>>  			is selected automatically.
+>> -			[KNL, X86-64] Select a region under 4G first, and
+>> +			[KNL, X86-64, ARM64] Select a region under 4G first, and
+>>  			fall back to reserve region above 4G when '@offset'
+>>  			hasn't been specified.
+>>  			See Documentation/admin-guide/kdump/kdump.rst for further details.
+>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+>> index ba7227179822d10..58a0bb2c17f18cf 100644
+>> --- a/arch/arm64/mm/init.c
+>> +++ b/arch/arm64/mm/init.c
+>> @@ -132,6 +132,7 @@ static void __init reserve_crashkernel(void)
+>>  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>>  	char *cmdline = boot_command_line;
+>>  	int ret;
+>> +	bool fixed_base = false;
+>>  
+>>  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
+>>  		return;
+>> @@ -163,12 +164,26 @@ static void __init reserve_crashkernel(void)
+>>  	crash_size = PAGE_ALIGN(crash_size);
+>>  
+>>  	/* User specifies base address explicitly. */
+>> -	if (crash_base)
+>> +	if (crash_base) {
+>> +		fixed_base = true;
+>>  		crash_max = crash_base + crash_size;
+>> +	}
+>>  
+>> +retry:
+>>  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>>  					       crash_base, crash_max);
+> 
+> This pachset looks good to me. While we observed a unexpected case,
+> where a reserved region cross the high and low meomry region. I noticed
+> Catalin has pointed that out. Even with the suggested code, we could
+> have the kernel parameters like: crashkernel=512M,high
+> crashkernel=128M,low, we finally have [4G-126M, 4G+386M], [1G, 1G+128M]
+> regions in running kernel. This looks strange.
+
+Is high-end memory fragmented? Add boot option memblock=debug and watch?
 
 > 
-> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
-> ---
->  .../bindings/phy/phy-tesla-pcie.yaml          | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/phy-tesla-pcie.yaml
+> I am wondering if we can specify explicit search_base in
+> memblock_phys_alloc_range() to avoid above case. Like this,
+> crashkernel,high region will only exist in high memory, crashkernel,low
+> region only exists in low memory region. I made a draft patch based on
+> this patchset to present what the code looks like.
+
+Looks good to me.
+
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/phy-tesla-pcie.yaml b/Documentation/devicetree/bindings/phy/phy-tesla-pcie.yaml
-> new file mode 100644
-> index 000000000000..8fa9a050af7a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/phy-tesla-pcie.yaml
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 58a0bb2c17f1..fd9d35e17a62 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -127,7 +127,7 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
+>   */
+>  static void __init reserve_crashkernel(void)
+>  {
+> -	unsigned long long crash_base, crash_size;
+> +	unsigned long long crash_base, crash_size, search_base;
 
-Filename based on compatible.
+search_base needs to be initialized to 0.
 
-> @@ -0,0 +1,75 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/phy-tesla-pcie.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Tesla FSD SoC PCIe PHY
-> +
-> +maintainers:
-> +  - Shradha Todi <shradha.t@samsung.com>
-> +
-> +properties:
-> +  "#phy-cells":
-> +    const: 0
+>  	unsigned long long crash_low_size = 0;
+>  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>  	char *cmdline = boot_command_line;
+> @@ -155,6 +155,7 @@ static void __init reserve_crashkernel(void)
+>  		else if (ret)
+>  			return;
+>  
+> +		search_base = CRASH_ADDR_LOW_MAX;
+>  		crash_max = CRASH_ADDR_HIGH_MAX;
+>  	} else if (ret || !crash_size) {
+>  		/* The specified value is invalid */
+> @@ -166,12 +167,13 @@ static void __init reserve_crashkernel(void)
+>  	/* User specifies base address explicitly. */
+>  	if (crash_base) {
+>  		fixed_base = true;
+> +		search_base = crash_base;
+>  		crash_max = crash_base + crash_size;
+>  	}
+>  
+>  retry:
+>  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+> -					       crash_base, crash_max);
+> +					       search_base, crash_max);
+>  	if (!crash_base) {
+>  		/*
+>  		 * If the first attempt was for low memory, fall back to
+> @@ -180,6 +182,7 @@ static void __init reserve_crashkernel(void)
+>  		 */
+>  		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
+>  			crash_max = CRASH_ADDR_HIGH_MAX;
+> +			search_base = CRASH_ADDR_LOW_MAX;
+>  			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+>  			goto retry;
+>  		}
+> @@ -189,7 +192,7 @@ static void __init reserve_crashkernel(void)
+>  		return;
+>  	}
+>  
+> -	if ((crash_base > CRASH_ADDR_LOW_MAX - crash_low_size) &&
+> +	if ((crash_base > CRASH_ADDR_LOW_MAX) &&
+>  	     crash_low_size && reserve_crashkernel_low(crash_low_size)) {
+>  		memblock_phys_free(crash_base, crash_size);
+>  		return;
+> 
+> .
+> 
 
-Put compatible as first.
-
-> +
-> +  compatible:
-> +    enum:
-> +      - tesla,fsd-pcie-phy
-> +
-> +  reg:
-> +    minItems: 2
-
-Drop minItems
-
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    minItems: 2
-> +    maxItems: 2
-
-Drop both.
-
-> +    items:
-> +      enum: [phy, pcs]
-
-Instead list items one after another.
-
-> +    description: |
-> +      phy is the register access to PMA layer
-> +      pcs is the register access to PCS layer
-
-These go to describing items in 'reg:'
-
-> +
-> +  phy-mode:
-> +    description: |
-> +      Defines the bifurcation mode of the PHY
-
-enum, probably type as well... phy-mode is usually a string. Is it here?
-
-> +
-> +  tesla,pmureg-phandle:
-
-Drop phandle, so tesla,pmu-syscon
-
-> +    $ref: '/schemas/types.yaml#/definitions/phandle'
-
-Drop quotes
-
-> +    description: phandle for PMU system controller interface used to
-> +                 control PMU register bits for PCIe PHY
-> +
-> +  tesla,pcie-sysreg:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle'
-
-Drop quotes
-
-> +    description: phandle for system control registers, used to
-> +                 control phy signals at system level
-> +
-> +required:
-> +  - "#phy-cells"
-> +  - compatible
-
-compatible first.
-
-> +  - reg
-> +  - reg-names
-> +  - phy-mode
-> +  - tesla,pmureg-phandle
-> +  - tesla,pcie-sysreg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    bus {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      pcie_phy0: pcie-phy@15080000 {
-> +        compatible = "tesla,fsd-pcie-phy";
-> +        #phy-cells = <0>;
-> +        reg = <0x0 0x15080000 0x0 0x2000>, <0x0 0x150A0000 0x0 0x1000>;
-> +        reg-names = "phy", "pcs";
-> +        tesla,pmureg-phandle = <&pmu_system_controller>;
-> +        tesla,pcie-sysreg = <&sysreg_fsys0>;
-> +        phy-mode = <0>;
-> +        status = "disabled";
-
-Drop status
-
-> +      };
-> +    };
-> +...
-
-Best regards,
-Krzysztof
-
+-- 
+Regards,
+  Zhen Lei
