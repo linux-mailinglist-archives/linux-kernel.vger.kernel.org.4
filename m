@@ -2,77 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7806329E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D496329ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiKUQop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S229985AbiKUQrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiKUQoe (ORCPT
+        with ESMTP id S229840AbiKUQq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:44:34 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418C315734;
-        Mon, 21 Nov 2022 08:44:33 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id d18so4834452qvs.6;
-        Mon, 21 Nov 2022 08:44:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lc2AiilXzsJ4srtdqUbRnjiRFuaullWUwryQV98QYlw=;
-        b=ErUDbKbZDArACkJm04zLdU6+XehiahbA4EnNpZfoat672z9DlpCqhcCN8MmWm1mUWz
-         C7x0Oudsri6s61pyuKH6DH5f2ykHuOyrRDawEjsZT72LDnHDt0sAXuPFU/5D7QRHmFEa
-         QPXKcB6s09VmjbBsFFASyo/UWdQe7z7lYwn3c5uE135oOcj4llQskttnIBNy4kVZD8/D
-         a2lm6G2QwazsKtZqt44BGC0pt0oo3K8IVqjxNeaJWsJjhr/oJ1F7YQITVmN0JHB5PI8p
-         bD2pugquGKB/LWw0tvr19EvsUBPTFdicWEfTBFQ2ADlYRIhylzj79/xALl89PL/ZukI5
-         tomQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lc2AiilXzsJ4srtdqUbRnjiRFuaullWUwryQV98QYlw=;
-        b=VRmmarNZBHdlAmsv9SDiI89mI3UpcjFvkbPIX6amJsmdeTXKdZDa4lKrt/5/9c1iuo
-         eJUhIwXHt+hFSJOpgbAEPlYdrKlNAbpE+rod4y6LoHlNRZ2c2Uyass3KCtENql/QXxch
-         ZAmmjKwhBkvj8L7Wy3C9RbIuMpXHN0bw/PAvgE0O8iFb26Be5hXLagkNcaYktOMxArZy
-         sAhHtuZ3ZvX9ytDIQYNqy78Gp4jIUcdOQ408B7ZgCSKolG3Kp00z6OJ7oI0A2ZXbV2QA
-         96WzwKH6Lnle/+DkG0aabqNCq/2z8APd4dHayVJr9/E+uqJ9yppka/HmNx8FlXoB7+TY
-         RI3Q==
-X-Gm-Message-State: ANoB5pmhtQF9d45EayNVjASHh2vDrKVhvhAKzmwlRviEieYWDN8TjYk8
-        W5TTjUABeCniDZUDZgibRHY=
-X-Google-Smtp-Source: AA0mqf4N/CvzY8UKKr5r/ZzANZZ8+P3Pm6Z/y0X6zpXor51VaPrfSZtHU+wVhGOM0BAL4T81Zsb6+w==
-X-Received: by 2002:a0c:c582:0:b0:4af:b750:b569 with SMTP id a2-20020a0cc582000000b004afb750b569mr1334123qvj.83.1669049072221;
-        Mon, 21 Nov 2022 08:44:32 -0800 (PST)
-Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
-        by smtp.gmail.com with ESMTPSA id ga17-20020a05622a591100b003a6328ee7acsm5227384qtb.87.2022.11.21.08.44.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 08:44:31 -0800 (PST)
-Date:   Mon, 21 Nov 2022 11:44:29 -0500
-From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        kgugala@antmicro.com, mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        ilpo.jarvinen@linux.intel.com
-Subject: Re: [PATCH v5 10/14] serial: liteuart: separate rx loop from poll
- timer
-Message-ID: <Y3uq7fDycHuanwkP@errol.ini.cmu.edu>
-References: <20221118145512.509950-1-gsomlo@gmail.com>
- <20221118145512.509950-11-gsomlo@gmail.com>
- <CAMuHMdVCc5xtnRoprtdgt_ZH42j=+ivS4aD+Uceg9pny-FpzYQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Mon, 21 Nov 2022 11:46:56 -0500
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140085.outbound.protection.outlook.com [40.107.14.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073AA15734;
+        Mon, 21 Nov 2022 08:46:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bKFRNU1LBCaqHv1tKP5kEpxKEtgGEdGWpbXSqxlQFHtIh39n6NxHCT7laU2zd61A6b88EPd0mD/WTUXcAQhdWRSdOVg0U/oOxwdYp/05qfkmTri4jc2Ebei4hf2uRYAshajjsYgR0ibyaOf+lC3uFQELb3CXi2T8TsFMYdbvLi7JlYIminD3P3ErMb/i+isNdExVUbPAz+hYJDsZW+cvKluD0A40eyx4Kcq2tl5uthdjA8Rky02KN+6X96HrFPvvgc+detk+xIM3e6jWU42pblI6yANb5dMtgA7zWJxZ1oNwEMxQ2IGRMerzbm1ot7S25szCPU23yhZZl1zlP/Nn8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=drt2CZbHDv2IFie6pLz/rPjd4XNuu0hM3WjY7RoNinY=;
+ b=XcrD37OiZaWnlXPMeoNdZIETqEGhgQwfPQghkM206ncQ1sK7CAav2LUIBQn8YLYxXLCcf029fpJzqjTY+USqAVXDYSj5U4JoqlsIOUT1BvoXAoS/C7Qwn6qLxWUZizi1nzNDKOLSG5BGMg4FJAnd6xCT2KpHdXBdJcwntLlj0Pl8DUt67iaadVBxmTS5pW14WxApLFb9xNlpwJ+c+dA+h/xkPww5yK2+MLwXzUliRhUh8gDRcPqhz5dRoDjAN+pIk2U7o+h+k1Gs7T+S94jl2NkJeW405TBak8qQxRd2Eqqc1MZ2ofPVGGtd0HOi8qZWwhnZzzHi+ZF9cUEU8RAi0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=drt2CZbHDv2IFie6pLz/rPjd4XNuu0hM3WjY7RoNinY=;
+ b=WGxjG3T9dn15GL/B1jhi61OzmSFZZWyWS2ctDTu4c199TMB45DKc0ffn2Tsbkx6eR6Nwz2/ZBXXVkIt49DCA3qT2LKVppykAg/5WWEjb9J+hPzAutjTrhtC7xJsKYmnuwwuo2TaTFsd9GD30e47laGaxFec2NEwltwHPsOBtPfc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PR3PR04MB7356.eurprd04.prod.outlook.com (2603:10a6:102:8d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.11; Mon, 21 Nov
+ 2022 16:46:51 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::9317:77dc:9be2:63b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::9317:77dc:9be2:63b%7]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
+ 16:46:51 +0000
+Date:   Mon, 21 Nov 2022 18:46:48 +0200
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH v2 net-next 1/3] net: mscc: ocelot: remove redundant
+ stats_layout pointers
+Message-ID: <20221121164632.zfbqka5i3haelmou@skbuf>
+References: <20221119231406.3167852-1-colin.foster@in-advantage.com>
+ <20221119231406.3167852-1-colin.foster@in-advantage.com>
+ <20221119231406.3167852-2-colin.foster@in-advantage.com>
+ <20221119231406.3167852-2-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdVCc5xtnRoprtdgt_ZH42j=+ivS4aD+Uceg9pny-FpzYQ@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
+In-Reply-To: <20221119231406.3167852-2-colin.foster@in-advantage.com>
+ <20221119231406.3167852-2-colin.foster@in-advantage.com>
+X-ClientProxiedBy: AM0PR03CA0103.eurprd03.prod.outlook.com
+ (2603:10a6:208:69::44) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PR3PR04MB7356:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb499f6e-b4a3-4437-3ea8-08dacbdffd69
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UfBDRdPyG1Wl3kXF97hRu/qvg2kL5pU3lg5GNlxQCO16x3RyIsiUE2qhqYdY8VpdSqxU0mNJsxlyNzWajVxGGlCCYZTjEjRbgTMqyNi3AYSWncGcc2BysA/wYqP0e/N0Gu0XRPi+8sqyxXIzWmclQRSyAa+Gdn+XvWpX/hmQMjnpTEC89JKBz3LS2nXVZyXEUkAqi2ALcSOayodsgG3t5ssfeKjwEXaWsxRc4Vdzt5PnwDLR9FwPix0PCTGAbvxHeVt7c0skC26xKlCXnJu2eEWJowqKW+SeAFjyFDCNjaSQbGd0Ifwr4rmSU7gWNOw9YLJGbYNKiF826DkMXuwCX8Nafh0d4KnX+Al5qOegzuTve3hjSm1rqZecxr9J9g8DWLcLcraB0q2P/+mnF7A/jRs3qxLHPTi7zSrKVw/lySh9tCwFjNoGv/f/cZ8PWI+ZkuXOhL0LZ1dvE+Px3qenuz/CYGvhOFVKqC2tnoGi8HXvjL5gdwDsxm8HwTulWz0fkNs2vSRo7wLutLao0KMsFKd3Vx/sLnlLqNZFI035vgQiFvdn8aygtGfE52Gx8UA9SsloKCDsG2fN72YiRjqcMbNnG3kguKdnXLcR8hblsvrLMOu6HzMQYbwbZMk5G6ge97ZE87mmnz5uoP/LOauwSA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199015)(38100700002)(33716001)(26005)(86362001)(6506007)(478600001)(6486002)(7416002)(6666004)(5660300002)(8936002)(4326008)(66556008)(8676002)(66946007)(66476007)(41300700001)(316002)(186003)(1076003)(4744005)(2906002)(54906003)(44832011)(6512007)(6916009)(83380400001)(9686003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fBtNR1ARGhxglxuq+N2I7f1zYznvsVSnJXd5ho3SuqejwGLKoN3tjYM5TdTJ?=
+ =?us-ascii?Q?L14/wkISRd2HXmodIGELQopiEGTLPrejDoL7esAHfGol176jjt8QfM7kstwJ?=
+ =?us-ascii?Q?NvsPOi9IdAnd9oKmpd2iJbouaWOgmu1ehnTFM/Y9QgObTPK8fflORgHzsW3i?=
+ =?us-ascii?Q?AABhrtQWvq84UK5M/hpSXvCsOvjVDlUB71WYHrFq+rQW2tla/Knfa/1X7GSm?=
+ =?us-ascii?Q?cdlTE2xUxtyeDMvmz+DSBLmWs6Pu2vJXp6ZGaxIuMMITYwoV/Feq03Ym6RCb?=
+ =?us-ascii?Q?hBCN+nHO06oJ6A5sdHSQA/b5Yzf/GS6xTiPOxJYj8JBnGR4BEu6rV81XAY2B?=
+ =?us-ascii?Q?PErOmh32wTKiSdhEujSB1YrLlZ/pGe2E4UshXSeRKqUIvQHjXhYAFVp5mbfd?=
+ =?us-ascii?Q?PlgF+7D94ltRw4pKNXy9SejDXD/7iQNlPI4RfVUk1Hxdy2udIJLmpoyAETou?=
+ =?us-ascii?Q?nVx9MDfBfXjBFR+eV5MxN7G3PFwPm953ZY0je7dyJJp3NmlVQ+OcOdPr1pBf?=
+ =?us-ascii?Q?9UYp0+5L9FkvdWnzFqaFm3CRnLYyicF6ZiWhvsiEzUQh5lE7K2yFfJjrdz6h?=
+ =?us-ascii?Q?/I8nTuHNLvCk2tFIyyI49Zk4zEBwKfnGJW+ZR7g3J2Zoc5+CiU+m/4PwSN8V?=
+ =?us-ascii?Q?fxalXpdK9s9O5vbpDKNBaQJ2OhDAnsT0FZmL+lBJ19XB4ZXVTAoj0Ja7hwXN?=
+ =?us-ascii?Q?Y8UMIEZo6y7Jw1ncjxXdW+xYPlobi+a3MZrVnlPnThdF9pg+gItsakzmKR4X?=
+ =?us-ascii?Q?DvZOhx7eMfPOVi0ynhBiyhYoEtCQVeBgGkbkzjrLROST+hiAAYcXpnfZ5wQf?=
+ =?us-ascii?Q?upLbvK3RXJv4993Zp9eedPFVaVZWupjjphq1JoVe8of6A82zPQa5Si1WxirH?=
+ =?us-ascii?Q?KZBSWJJWwi00ut72UsgDj1Dbpp+naOa3zwXwB5GiGmbCNW9BHVKZGJMmzR8+?=
+ =?us-ascii?Q?9wa4ZYu7wYT5nT1mLYdRp3Zd8kNm0FWYUS6nVi3CX43FuJYiMraEZgqVixm9?=
+ =?us-ascii?Q?tP+NYVH4oMa7EgDRuNfZVSEBIbpdOy/8Vqn/MVZdYVnj+C9Y144efOG0RcxQ?=
+ =?us-ascii?Q?x5c7yg4ia6HJ16dll8UukVNsNTzU25W6a/gvhCuI+iou9Q1xVs6YjCVkVD/7?=
+ =?us-ascii?Q?l9djW/e4xkubvsvu8WfdeKVje8jTWJPdPSHhvxRGawVGOyAofBM9yXZlo900?=
+ =?us-ascii?Q?063oSuUq+4jZRRKmWDQHQrzUCNXkIf9mx7rhAIGNLt9nuQRNv4xbTDt6znt6?=
+ =?us-ascii?Q?00XnUeTGU1s1FyBgJ/LdsEq0vmt5ArKrh3n4hzbCiRNzeNksgSMU1l2+G1Ph?=
+ =?us-ascii?Q?iLl6EA86hoU5+KIKejLlSsl0q1Vwl4pL7oEKKOA3IBjBbRc5BmUurDFJMyn9?=
+ =?us-ascii?Q?IOXYw7YZ0LaiG2SuGVnVwmjso7mR+W/hdKQdgfnDZLBT5g4uuNpRxRasJkUG?=
+ =?us-ascii?Q?NP7NhLq0BILY5TLL1WpQngiGguj3Y1VFs1IoOh3GCjWt7zJC7Kcb/kV+N5bT?=
+ =?us-ascii?Q?TnsHOSGCD1B7WKOSIXeLGLB6MhPwxaqtWvKkDK1189CQX7S8XAM+8ztmRkPA?=
+ =?us-ascii?Q?wV12/opeeG4/wak9nR2QBA63EqpO1nTXDmDSD3XofYfVP0qPNvVExeUR4eBH?=
+ =?us-ascii?Q?Ew=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb499f6e-b4a3-4437-3ea8-08dacbdffd69
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 16:46:51.7587
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9vLTATdfuFYJYgkpFSGDi2MoljSP9L89NWqJvwCkT2N7Xrjl4PUgqV28CP+9MJ3SCzcCe3mkcSZ5fGIZMVdR5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7356
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,75 +125,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:16:14AM +0100, Geert Uytterhoeven wrote:
-> Hi Gabriel,
+On Sat, Nov 19, 2022 at 03:14:04PM -0800, Colin Foster wrote:
+> Ever since commit 4d1d157fb6a4 ("net: mscc: ocelot: share the common stat
+> definitions between all drivers") the stats_layout entry in ocelot and
+> felix drivers have become redundant. Remove the unnecessary code.
 > 
-> On Fri, Nov 18, 2022 at 3:57 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
-> > Convert the rx loop into its own dedicated function, and (for now)
-> > call it from the poll timer. This is in preparation for adding irq
-> > support to the receive path.
-> >
-> > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> > Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
 > 
-> Thanks for your patch!
-> 
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> 
-> > --- a/drivers/tty/serial/liteuart.c
-> > +++ b/drivers/tty/serial/liteuart.c
-> > @@ -68,10 +68,8 @@ static struct uart_driver liteuart_driver = {
-> >  #endif
-> >  };
-> >
-> > -static void liteuart_timer(struct timer_list *t)
-> > +static void liteuart_rx_chars(struct uart_port *port)
-> 
-> So first you spin this off into a separate function, so it can be
-> called from both the interrupt and polling paths.
-> Later, in "[PATCH v5 12/14] serial: liteuart: add IRQ support for the
-> RX path", you remove the call from the polling path...
- 
-That's right -- the polling path now calls the IRQ handler,
-which, in turn, calls `liteuart_rx_chars()` (and later `*_tx_chars()`
-as well).
+> v1->v2
+>     * Fix unused variable build warning in v1
 
-The polling timer becomes just an alternative way to invoke the irq
-handler, giving it a chance to take care of any pending transfers in
-either/both directions.
-
-Thanks,
---Gabriel
- 
-> >  {
-> > -       struct liteuart_port *uart = from_timer(uart, t, timer);
-> > -       struct uart_port *port = &uart->port;
-> >         unsigned char __iomem *membase = port->membase;
-> >         unsigned int status, ch;
-> >
-> > @@ -88,6 +86,14 @@ static void liteuart_timer(struct timer_list *t)
-> >         }
-> >
-> >         tty_flip_buffer_push(&port->state->port);
-> > +}
-> > +
-> > +static void liteuart_timer(struct timer_list *t)
-> > +{
-> > +       struct liteuart_port *uart = from_timer(uart, t, timer);
-> > +       struct uart_port *port = &uart->port;
-> > +
-> > +       liteuart_rx_chars(port);
-> >
-> >         mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
-> >  }
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
