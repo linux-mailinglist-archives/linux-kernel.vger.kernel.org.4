@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53F0632955
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41ADE632956
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiKUQYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S229777AbiKUQZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiKUQYi (ORCPT
+        with ESMTP id S229456AbiKUQZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:24:38 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99ED6C8462
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:24:36 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3D348220D0;
-        Mon, 21 Nov 2022 16:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669047875; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=vM7lsk8RXRK5rWKi3euFrZN65JTSYYzeLkaycP3+980=;
-        b=lQb73XmuRm9cAtopvVxw3SQmWht21QY4S171ZrLyfYCA9szFaF5WMaLQoFaaJ7cHRQwR3n
-        nsupt0qTscoP313sDisopDmfcapC9h30V/Qz5P7dBh9GK3Kz6Px3C35142ZP3aWnXcYh2X
-        VVD2FPS4NvnIK8XoAlO0pYandrnMQXg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EB2E51377F;
-        Mon, 21 Nov 2022 16:24:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5E3SN0Kme2NIYAAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 21 Nov 2022 16:24:34 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH] x86/boot: skip realmode init code when running as Xen PV guest
-Date:   Mon, 21 Nov 2022 17:24:33 +0100
-Message-Id: <20221121162433.28070-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Mon, 21 Nov 2022 11:25:03 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD975C8462
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:25:02 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALCRK4S019971;
+        Mon, 21 Nov 2022 10:24:55 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=4UMzaT3FllzN9o30ghlwgUoU6Qf25HeCEVnbg8A8Ecc=;
+ b=UoERFtE3WImezBAOkahdFI0yZOiLurMH8OXIlr2qhr7IWM+PC4xsTX5xw3ad9HqsDfuC
+ orLmJI/VVvuPfL7sd5NuZ9WMpqsAyEQVneimhgXMPlYWzgIi00Fj7zNTPysWbuSsVBIM
+ dExSx/RoRhw5ec7eIOzGlulOf8JI7rbw4F1JibvzKjIKxIRlKv9eqmm095YQaes9fZn7
+ CuFJa45j4mO9M/Mgb/E/+3TP828EMkly6PmjgntZbS6NPIUlin+TMCmXONIAFADVlCKn
+ Nlligg05A4ZDu6waBAlmYMTUV/Gsm8AennGD3aoMkZ0Mdf4mKByKWykMAxzlnQHMkc6a Hg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3kxwe6tcmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 10:24:55 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 21 Nov
+ 2022 10:24:53 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Mon, 21 Nov 2022 10:24:53 -0600
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 06496468;
+        Mon, 21 Nov 2022 16:24:53 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
+        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH] soundwire: bus_type: Avoid lockdep assert in sdw_drv_probe()
+Date:   Mon, 21 Nov 2022 16:24:52 +0000
+Message-ID: <20221121162453.1834170-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 9e45ZdA9sZUWEGKY2jXQmLpCGetehFOp
+X-Proofpoint-GUID: 9e45ZdA9sZUWEGKY2jXQmLpCGetehFOp
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running as a Xen PV guest there is no need for setting up the
-realmode trampoline, as realmode isn't supported in this environment.
+Don't hold sdw_dev_lock while calling the peripheral driver
+probe() and remove() callbacks.
 
-Trying to setup the trampoline has been proven to be problematic in
-some cases, especially when trying to debug early boot problems with
-Xen requiring to keep the EFI boot-services memory mapped (some
-firmware variants seem to claim basically all memory below 1M for boot
-services).
+Holding sdw_dev_lock around the probe() and remove() calls
+causes a theoretical mutex inversion which lockdep will
+assert on. The peripheral driver probe will probably register
+a soundcard, which will take ALSA and ASoC locks. During
+normal operation a runtime resume suspend can be triggered
+while these locks are held and will then take sdw_dev_lock.
 
-Skip the trampoline setup code for Xen PV guests.
+It's not necessary to hold sdw_dev_lock when calling the
+probe() and remove(), it is only used to prevent the bus core
+calling the driver callbacks if there isn't a driver or the
+driver is removing.
 
-Fixes: 084ee1c641a0 ("x86, realmode: Relocator for realmode code")
-Signed-off-by: Juergen Gross <jgross@suse.com>
+If sdw_dev_lock is held while setting and clearing the
+'probed' flag this is sufficient to guarantee the safety of
+callback functions.
+
+The potential race of a bus event happening while probe() is
+executing is the same as the existing race of the bus event
+handler taking the mutex first and processing the event
+before probe() can run. In both cases the event has already
+happened before the driver is probed and ready to accept
+callbacks.
+
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 ---
- arch/x86/include/asm/realmode.h | 4 ++--
- arch/x86/realmode/init.c        | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ drivers/soundwire/bus_type.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
-index fd6f6e5b755a..5bfce58f1bab 100644
---- a/arch/x86/include/asm/realmode.h
-+++ b/arch/x86/include/asm/realmode.h
-@@ -78,8 +78,8 @@ extern unsigned char secondary_startup_64_no_verify[];
+diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
+index 04b3529f8929..963498db0fd2 100644
+--- a/drivers/soundwire/bus_type.c
++++ b/drivers/soundwire/bus_type.c
+@@ -105,20 +105,19 @@ static int sdw_drv_probe(struct device *dev)
+ 	if (ret)
+ 		return ret;
  
- static inline size_t real_mode_size_needed(void)
- {
--	if (real_mode_header)
--		return 0;	/* already allocated. */
-+	if (real_mode_header || cpu_feature_enabled(X86_FEATURE_XENPV))
-+		return 0;	/* already allocated or not needed. */
+-	mutex_lock(&slave->sdw_dev_lock);
+-
+ 	ret = drv->probe(slave, id);
+ 	if (ret) {
+ 		name = drv->name;
+ 		if (!name)
+ 			name = drv->driver.name;
+-		mutex_unlock(&slave->sdw_dev_lock);
  
- 	return ALIGN(real_mode_blob_end - real_mode_blob, PAGE_SIZE);
- }
-diff --git a/arch/x86/realmode/init.c b/arch/x86/realmode/init.c
-index 41d7669a97ad..1826700b156e 100644
---- a/arch/x86/realmode/init.c
-+++ b/arch/x86/realmode/init.c
-@@ -202,6 +202,9 @@ static void __init set_real_mode_permissions(void)
+ 		dev_err(dev, "Probe of %s failed: %d\n", name, ret);
+ 		dev_pm_domain_detach(dev, false);
+ 		return ret;
+ 	}
  
- static int __init init_real_mode(void)
- {
-+	if (cpu_feature_enabled(X86_FEATURE_XENPV))
-+		return 0;
++	mutex_lock(&slave->sdw_dev_lock);
 +
- 	if (!real_mode_header)
- 		panic("Real mode trampoline was not allocated");
+ 	/* device is probed so let's read the properties now */
+ 	if (drv->ops && drv->ops->read_prop)
+ 		drv->ops->read_prop(slave);
+@@ -167,14 +166,12 @@ static int sdw_drv_remove(struct device *dev)
+ 	int ret = 0;
  
+ 	mutex_lock(&slave->sdw_dev_lock);
+-
+ 	slave->probed = false;
++	mutex_unlock(&slave->sdw_dev_lock);
+ 
+ 	if (drv->remove)
+ 		ret = drv->remove(slave);
+ 
+-	mutex_unlock(&slave->sdw_dev_lock);
+-
+ 	dev_pm_domain_detach(dev, false);
+ 
+ 	return ret;
 -- 
-2.35.3
+2.30.2
 
