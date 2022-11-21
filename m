@@ -2,178 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9071D6330C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5488B6330C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiKUXjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S231671AbiKUXkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbiKUXjS (ORCPT
+        with ESMTP id S229723AbiKUXka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:39:18 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5756B4F01
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:39:17 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id vv4so22755302ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:39:17 -0800 (PST)
+        Mon, 21 Nov 2022 18:40:30 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0B5B703B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:40:29 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id b13-20020a056a000a8d00b0057348c50123so5393319pfl.18
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:40:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4ehabT/SWyuxZAFQVGOlc3gf5GNfQZBfPsZlMRjNRcE=;
-        b=Z9Ppn1iS94cKQXbFfqIKO6UCL8nYmxAOoDhKQaH/HqikOla9W1FmIIM4OUciRY+9PW
-         mMLQ9BgPKROkY8OtqIgLH3EuQ0onG+GmXdwbnejEZFay+OVzsJ3bKl9OaLj4FsBvW+iZ
-         bUjdMT4NzMxTDubjC4llZsxWCuMD+Iad7Q1vI=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zFCg8eQyxJ3YiwHQJTueCjvpRWd24CEedZt1FgDbs2A=;
+        b=c3e7dEfzyHyyb2tymFn9lfTQ7lWoHc+TnQZBFgbp6eHBJ/M9ppJj1ZVo0YqrNdnsgg
+         ioCId1IFXcAJJJHKX7CVtomhNqR071qP367AZjRFHxlSnGtENoI6znHuhT+AgIpRPdDJ
+         Qxt/GW5+d0cPRh1nlhM6opcCifMSoAVLIBUWoydKUAeqsKUUXItmNxuk2W1NmReVP9yT
+         ajekZU0yAt5c2Iffh3jq+ftXKOzKqBcWCNQ+d5FqAjEs6tZTwXl2aaKCFAZjRwxsaq5S
+         8hfzg98BUZrT5TFaHuo3cXz8DK1Y9COBbhYa2cv4IXd4CFs+6mN4LM/pqBd49qAhbWEn
+         55BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ehabT/SWyuxZAFQVGOlc3gf5GNfQZBfPsZlMRjNRcE=;
-        b=h5xJB8R5SjcxrSZvaqv4shu2t+cG4aw9ZqPl/6ikq1QbCjv3arMUMZEMY54roDfGRI
-         +ssgDinKDeGX8JFB04XuKBzOPb/0NlihsKVx7k9A3xHQ14+9+1ezp9gp/E+jfn9GFdgD
-         gluAZDb8pGOqYms52laFAu6rIb3hmsYWA+M2xC/dnBDV9QesgBD9SrLqKoWbMwrzhiPL
-         DbZKIWJnmprOEe18OWSSnuw8xCb91gUYu2BwlB8S91UMCS4FU9phB8SNXGf3DZsGSP8o
-         kElC+K40xCDxsQTmVF9GZQDggzIhmyBOuV0Id6Ey32G/XwRu6DaArOcKbgoNsfkOU/5+
-         TpXw==
-X-Gm-Message-State: ANoB5pmAz4ho/m8N0HhwwPtJQLDtY8pVXkvShslBGrPsAjwmCm7l5bC4
-        HRGC2qRKkEAFJmiITorjxEoZfQ==
-X-Google-Smtp-Source: AA0mqf6BvPDUi/dw2PVwPuhGcem2sPVKE+0SnBNbp3pnF6iT+L/QymDwd4laUxejvVIIaoQj+R5yXg==
-X-Received: by 2002:a17:907:8c0d:b0:7ae:70f9:114 with SMTP id ta13-20020a1709078c0d00b007ae70f90114mr17121024ejc.44.1669073956335;
-        Mon, 21 Nov 2022 15:39:16 -0800 (PST)
-Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id f26-20020a17090631da00b007b27aefc578sm5411835ejf.126.2022.11.21.15.39.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 15:39:15 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 22 Nov 2022 00:38:55 +0100
-Subject: [PATCH v1 1/1] pinctrl: meditatek: Startup with the IRQs disabled
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221122-mtk-pinctrl-v1-1-bedf5655a3d2@chromium.org>
-References: <20221122-mtk-pinctrl-v1-0-bedf5655a3d2@chromium.org>
-In-Reply-To: <20221122-mtk-pinctrl-v1-0-bedf5655a3d2@chromium.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ross Zwisler <zwisler@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3212; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=ULSRbYzh0w9ZAWNFdOlTTU/M16f8fiyJqpNG4+AGQnI=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjfAwfzhyYWIqnakB+IO0fgl8p763kk9dDJ1yT//Eb
- pC9/5NqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY3wMHwAKCRDRN9E+zzrEiHr7D/
- 9lpg4m76+Y9UreH5QlwV4hPqKvzA2p1T6cb5XqoDvEv108OZStLOpQa+Nv/TFqLJuDLKz7GsRFn1AU
- rtiCLFLurNf7a8PNQkaPb2nYISiYS4uNl73QVNWwgpcBXNBGoiHPV9yvTpKb1f258JXu6Ek4Hov1OL
- u4/Wb9GwRWzd3UoJWQljRwjqpDlLtKFba4f//3Tx1OOTYHcM2VNuTbaAtFqNp6GNRYVv4b2yp3mM46
- k2Fvsgzu9XL0LamP0PDkWUZqncRQtgnCOiNptvMRZEYrRbiiPihfbxl2K2gZJ7fXv6PmQr+CT/IAas
- 9yWZT/xcjbt+Z9eq8vwQadAIRF3R4x82DWyMtVx1IkSNVqMzjODmdTYh9ak3YKOsV86lO+A/UnHgmi
- O++6IdmC/MELcw17t7E29N+ci2hnzqCLRmj83MlMlSV9syAyO9mY6Eleqg2+NItBpRNIjsMYZhivWx
- Qp5a2g8i2HSip7CY/AWrYkSeYerruih+K6rHB5cRsUguSb4I9bUiH0qg2X5dxhugBBIQ1D+WSxHfT2
- RnYSvamJXiiTR8SmAXzGv14j6p+3RvQJltlzZyAtdSmhU1c02dvSEGBUi7C8CQGpezwuB+sgGRXogT
- oO2SbXKlaHSKpyJIZJXiMsLtD5YtZ8V2YOtZoQFLpRmrK3FcoCHpdTM+7+Qg==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zFCg8eQyxJ3YiwHQJTueCjvpRWd24CEedZt1FgDbs2A=;
+        b=HHBTW3qWIN/qbJia/fZyTzgRRVqZvjifgjP/AVZp3mpQE/O/XXGaAxKu4Ojq1ZVbhZ
+         GctfNokxe/Vhj52NEb3OSzATXM2VcmbuxTkUBNjglsWzmzVRzoMRI943LLS/8xpvr0cI
+         eRblf0YMk9Xjr19f+G6AKY/H013cQEnYTDxqm0dQVeLywKtDRee7lxXNXJ0A5URkGFQt
+         3kEb5VXiLSXechVYl+6JYfVTUfBW6jFeR7WCVoRxNmrac3/fVfD7a75GKDXKmQhKguzn
+         hzm8uspKYvGybKWUG8v+BjxwYMN7MnAIE0jO5oxYMLJZhYu3xHJqs/+NSxg/iqDVAEuV
+         NXiA==
+X-Gm-Message-State: ANoB5pn5H2lah1h8/H95HyT+1hf68NBG6Or5EWgV0e9CbVetfKycDu4V
+        DADnlAM+ulMYLp7DVbt75B+TjO0EAClJ
+X-Google-Smtp-Source: AA0mqf43ZnvPS3T3OgvIZVEV8SrAehRfExGRAijdCF4ppQi8XcXG2CrGAAiXoX2EIOpResh4wRnE+KtSrf85
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a17:90a:460b:b0:218:8a84:aeca with SMTP id
+ w11-20020a17090a460b00b002188a84aecamr16961664pjg.63.1669074029391; Mon, 21
+ Nov 2022 15:40:29 -0800 (PST)
+Date:   Mon, 21 Nov 2022 15:40:20 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221121234026.3037083-1-vipinsh@google.com>
+Subject: [PATCH v2 0/6] Add Hyper-v extended hypercall support in KVM
+From:   Vipin Sharma <vipinsh@google.com>
+To:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        dmatlack@google.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the system is restarted via kexec(), the peripherals do not start
-with a known state.
+This patch series adds Hyper-V extended hypercall support. All
+hypercalls will exit to userspace if CPUID.0x40000003.EBX BIT(20) is
+set.
 
-If the previous system had enabled an IRQs we will receive unexected
-IRQs that can lock the system.
+v2:
+- Intorduced ASSERT_EXIT_REASON macro and replaced all occurences of
+  TEST_ASSERT for vcpu exit reason.
+- Skip hyperv_extended_hypercalls test if extended hypercalls are not
+  supported by the kernel.
+- Rebased with latest KVM queue.
+- Addressed all of the comments in patch 6 of v1.
 
-[   28.109251] watchdog: BUG: soft lockup - CPU#0 stuck for 26s!
-[swapper/0:0]
-[   28.109263] Modules linked in:
-[   28.109273] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
-5.15.79-14458-g4b9edf7b1ac6 #1 9f2e76613148af94acccd64c609a552fb4b4354b
-[   28.109284] Hardware name: Google Elm (DT)
-[   28.109290] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS
-		BTYPE=--)
-[   28.109298] pc : __do_softirq+0xa0/0x388
-[   28.109309] lr : __do_softirq+0x70/0x388
-[   28.109316] sp : ffffffc008003ee0
-[   28.109321] x29: ffffffc008003f00 x28: 000000000000000a x27:
-0000000000000080
-[   28.109334] x26: 0000000000000001 x25: ffffffefa7b350c0 x24:
-ffffffefa7b47480
-[   28.109346] x23: ffffffefa7b3d000 x22: 0000000000000000 x21:
-ffffffefa7b0fa40
-[   28.109358] x20: ffffffefa7b005b0 x19: ffffffefa7b47480 x18:
-0000000000065b6b
-[   28.109370] x17: ffffffefa749c8b0 x16: 000000000000018c x15:
-00000000000001b8
-[   28.109382] x14: 00000000000d3b6b x13: 0000000000000006 x12:
-0000000000057e91
-[   28.109394] x11: 0000000000000000 x10: 0000000000000000 x9 :
-ffffffefa7b47480
-[   28.109406] x8 : 00000000000000e0 x7 : 000000000f424000 x6 :
-0000000000000000
-[   28.109418] x5 : ffffffefa7dfaca0 x4 : ffffffefa7dfadf0 x3 :
-000000000000000f
-[   28.109429] x2 : 0000000000000000 x1 : 0000000000000100 x0 :
-0000000001ac65c5
-[   28.109441] Call trace:
-[   28.109447]  __do_softirq+0xa0/0x388
-[   28.109454]  irq_exit+0xc0/0xe0
-[   28.109464]  handle_domain_irq+0x68/0x90
-[   28.109473]  gic_handle_irq+0xac/0xf0
-[   28.109480]  call_on_irq_stack+0x28/0x50
-[   28.109488]  do_interrupt_handler+0x44/0x58
-[   28.109496]  el1_interrupt+0x30/0x58
-[   28.109506]  el1h_64_irq_handler+0x18/0x24
-[   28.109512]  el1h_64_irq+0x7c/0x80
-[   28.109519]  arch_local_irq_enable+0xc/0x18
-[   28.109529]  default_idle_call+0x40/0x140
-[   28.109539]  do_idle+0x108/0x290
-[   28.109547]  cpu_startup_entry+0x2c/0x30
-[   28.109554]  rest_init+0xe8/0xf8
-[   28.109562]  arch_call_rest_init+0x18/0x24
-[   28.109571]  start_kernel+0x338/0x42c
-[   28.109578]  __primary_switched+0xbc/0xc4
-[   28.109588] Kernel panic - not syncing: softlockup: hung tasks
+v1: https://lore.kernel.org/lkml/20221105045704.2315186-1-vipinsh@google.com/
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+RFC: https://lore.kernel.org/lkml/20221021185916.1494314-1-vipinsh@google.com/
 
-diff --git a/drivers/pinctrl/mediatek/mtk-eint.c b/drivers/pinctrl/mediatek/mtk-eint.c
-index 65d312967619..27f0a54e12bf 100644
---- a/drivers/pinctrl/mediatek/mtk-eint.c
-+++ b/drivers/pinctrl/mediatek/mtk-eint.c
-@@ -303,12 +303,15 @@ static struct irq_chip mtk_eint_irq_chip = {
- 
- static unsigned int mtk_eint_hw_init(struct mtk_eint *eint)
- {
--	void __iomem *reg = eint->base + eint->regs->dom_en;
-+	void __iomem *dom_en = eint->base + eint->regs->dom_en;
-+	void __iomem *mask_set = eint->base + eint->regs->mask_set;
- 	unsigned int i;
- 
- 	for (i = 0; i < eint->hw->ap_num; i += 32) {
--		writel(0xffffffff, reg);
--		reg += 4;
-+		writel(0xffffffff, dom_en);
-+		writel(0xffffffff, mask_set);
-+		dom_en += 4;
-+		mask_set += 4;
- 	}
- 
- 	return 0;
+Vipin Sharma (6):
+  KVM: x86: hyper-v: Use common code for hypercall userspace exit
+  KVM: x86: hyper-v: Add extended hypercall support in Hyper-v
+  KVM: selftests: Test Hyper-V extended hypercall enablement
+  KVM: selftests: Replace hardcoded Linux OS id with HYPERV_LINUX_OS_ID
+  KVM: selftests: Make vCPU exit reason test assertion common.
+  KVM: selftests: Test Hyper-V extended hypercall exit to userspace
+
+ arch/x86/kvm/hyperv.c                         | 43 +++++----
+ tools/testing/selftests/kvm/.gitignore        |  1 +
+ tools/testing/selftests/kvm/Makefile          |  1 +
+ .../testing/selftests/kvm/aarch64/psci_test.c |  4 +-
+ .../testing/selftests/kvm/include/test_util.h | 10 ++
+ .../selftests/kvm/include/x86_64/hyperv.h     |  4 +
+ .../selftests/kvm/include/x86_64/processor.h  |  3 +
+ .../kvm/lib/s390x/diag318_test_handler.c      |  3 +-
+ .../selftests/kvm/s390x/sync_regs_test.c      | 15 +--
+ .../selftests/kvm/set_memory_region_test.c    |  6 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |  8 +-
+ .../kvm/x86_64/cr4_cpuid_sync_test.c          |  8 +-
+ .../testing/selftests/kvm/x86_64/debug_regs.c |  2 +-
+ .../selftests/kvm/x86_64/flds_emulation.h     |  5 +-
+ .../selftests/kvm/x86_64/hyperv_clock.c       |  9 +-
+ .../selftests/kvm/x86_64/hyperv_evmcs.c       |  8 +-
+ .../kvm/x86_64/hyperv_extended_hypercalls.c   | 94 +++++++++++++++++++
+ .../selftests/kvm/x86_64/hyperv_features.c    | 23 +++--
+ .../testing/selftests/kvm/x86_64/hyperv_ipi.c |  6 +-
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  7 +-
+ .../selftests/kvm/x86_64/hyperv_tlb_flush.c   | 14 +--
+ .../selftests/kvm/x86_64/kvm_clock_test.c     |  5 +-
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |  5 +-
+ .../selftests/kvm/x86_64/monitor_mwait_test.c |  9 +-
+ .../kvm/x86_64/nested_exceptions_test.c       |  5 +-
+ .../selftests/kvm/x86_64/platform_info_test.c | 14 +--
+ .../kvm/x86_64/pmu_event_filter_test.c        |  6 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |  9 +-
+ .../testing/selftests/kvm/x86_64/state_test.c |  8 +-
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c   |  8 +-
+ .../kvm/x86_64/svm_nested_shutdown_test.c     |  7 +-
+ .../kvm/x86_64/svm_nested_soft_inject_test.c  |  6 +-
+ .../selftests/kvm/x86_64/svm_vmcall_test.c    |  6 +-
+ .../selftests/kvm/x86_64/sync_regs_test.c     | 25 +----
+ .../kvm/x86_64/triple_fault_event_test.c      |  9 +-
+ .../selftests/kvm/x86_64/tsc_scaling_sync.c   |  6 +-
+ .../kvm/x86_64/ucna_injection_test.c          | 22 +----
+ .../selftests/kvm/x86_64/userspace_io_test.c  |  6 +-
+ .../kvm/x86_64/userspace_msr_exit_test.c      | 22 +----
+ .../kvm/x86_64/vmx_apic_access_test.c         | 11 +--
+ .../kvm/x86_64/vmx_close_while_nested_test.c  |  5 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |  7 +-
+ .../vmx_exception_with_invalid_guest_state.c  |  4 +-
+ .../x86_64/vmx_invalid_nested_guest_state.c   |  4 +-
+ .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |  6 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |  8 +-
+ .../kvm/x86_64/vmx_tsc_adjust_test.c          |  6 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |  6 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |  7 +-
+ .../selftests/kvm/x86_64/xen_vmcall_test.c    |  5 +-
+ 50 files changed, 211 insertions(+), 310 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c
 
 -- 
-b4 0.11.0-dev-d93f8
+2.38.1.584.g0f3c55d4c2-goog
+
