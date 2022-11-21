@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DD4631B9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBE3631BA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiKUIhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S230171AbiKUIhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiKUIhO (ORCPT
+        with ESMTP id S230158AbiKUIhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:37:14 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955981EEF4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:37:12 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id z18so15174793edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/twC/ha76jEiNVmOM5ygah60xUtG/ONv2QvD8LyUHR8=;
-        b=nSBCI7qcEXZMZy9n5XsZR2PvEFCeEWDrLwXXhHO23PsKyEBwla0aK8X/4NJvK6SGIv
-         BBm2SDyRt9Nas/brh3CNJSdtC5xDv4fKs45a++pe9cp1gcQGsnC48HDou5lbgTALzH+C
-         M7k8eulHknrjylWM83S5hPEIf7zce7oRkopuXJJ+OmuTzIst21IZIxp+1sJbs3NOKghK
-         NfgX5txuH4aqusDYCFM9Kzjik6vuVV/v/dhliPgLay8MplwUZW6WbEt9YViL3SISBGZT
-         pCbkB7vzr5ixcQ8isnnglqA/OQAt9nJVOA5Yqq8ZOLipS7MXzaRLkX0F6HO14Vr3A27r
-         8bjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/twC/ha76jEiNVmOM5ygah60xUtG/ONv2QvD8LyUHR8=;
-        b=YOTehgJGFlQzz+hXQAqe19nV15dLLZk9ICGqNcz79tl3zaCVMRbwp+EEdiD1tXsw8l
-         DvQaG/3wV4LVwVnz5dvpcZwunYFz1nVb0v9XlASxnw/HVS19xyeaqjik7+cWzTW8qf6C
-         DmqOKKcL7axP+pj0lp/xo/S22EqLk/MvmujN01Q5ERXZBNSUGlRZnsYFRw4ampO1ICf3
-         PjHC3iG3yrzh836ft1GIDePIgxOBF23+Edgtf2W7A+715aVfo/3AND5+W/TSAYS5XhjO
-         +V+i971OLEJrvJUEK6TlMcUcDTNap0odIlG2+9fwc+O/cg1wM4T5L1waRQLcoCPI7Ram
-         YJHg==
-X-Gm-Message-State: ANoB5pk/dRc5gBPKiD7hQpVEXSxIjpzR87a099LpMLuA/cgYoj8g1jEl
-        B9cEusrx7RXeyNwqMeCTnN7eDeVd4RYYaaMOP5SO0Q==
-X-Google-Smtp-Source: AA0mqf7H05bbHloVzMxMtfy6zpSK99wVNqcrzskS8PJRKysYmp6Z7Pu0/HvsVmzHLEI38tBbIW2VC0XE4rHZ6ihWALU=
-X-Received: by 2002:aa7:d555:0:b0:464:6485:419b with SMTP id
- u21-20020aa7d555000000b004646485419bmr803045edr.382.1669019830478; Mon, 21
- Nov 2022 00:37:10 -0800 (PST)
+        Mon, 21 Nov 2022 03:37:36 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A9B120A8;
+        Mon, 21 Nov 2022 00:37:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669019850; x=1700555850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ONVx5JUDDrdY/F0j8BvBpBwoBCSINvKCjtNVzmScM5k=;
+  b=Bq0/coA4qOPVib4ZO7riUzYMGY/rscjOiCa4hhGN4pEq/V0irkwx7tXL
+   ul5aBEd8dvYlTywtgCCWJVbq8Q2M8mvE4VDEWCUCz3NsIHpEq2FaM3uwO
+   GDMR9xrH9ejlRKULMfSZnUmvakA5e4jNRypxP5/JXfjW/8EcixdPuhrIJ
+   BI6BXi/1JiWxMXW7H0miaV/FbVB5lv2FMyH9VFaMlL4xGqqbDLrvrq6fh
+   pOaPs4D8QH4BFDvUTZMUmzIaAWN6ZT0KuYrP4EbfubPKjporvniF4Pd6r
+   DQEnpNw+jl/81Uayo4NH0vQYNN3JfICDppgds5MIWAkrTnERr5ZtPofdW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="293894511"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="293894511"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 00:37:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="643235256"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="643235256"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Nov 2022 00:37:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ox2Ii-00FBOw-0B;
+        Mon, 21 Nov 2022 10:37:12 +0200
+Date:   Mon, 21 Nov 2022 10:37:11 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ferry Toth <ftoth@exalondelft.nl>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] usb: dwc3: core: defer probe on ulpi_read_id
+ timeout
+Message-ID: <Y3s4t2veOe78Emnt@smile.fi.intel.com>
+References: <20221120153704.9090-1-ftoth@exalondelft.nl>
+ <20221120153704.9090-3-ftoth@exalondelft.nl>
 MIME-Version: 1.0
-References: <20220905145555.674800-1-etienne.carriere@linaro.org> <b7ee82ac-1e64-45d9-8b30-5b697e36ad1f@app.fastmail.com>
-In-Reply-To: <b7ee82ac-1e64-45d9-8b30-5b697e36ad1f@app.fastmail.com>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Mon, 21 Nov 2022 09:36:59 +0100
-Message-ID: <CAN5uoS90ONkgZSsyP-dPHyO6SMCxH0yJ2vHaQ82G8jv0Og12rQ@mail.gmail.com>
-Subject: Re: [PATCH v3] dt-binding: gpio: publish binding IDs under dual license
-To:     Andrew Jeffery <andrew@aj.id.au>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Stephen Warren <swarren@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221120153704.9090-3-ftoth@exalondelft.nl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andrew and all,
+On Sun, Nov 20, 2022 at 04:37:04PM +0100, Ferry Toth wrote:
+> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present"),
+> Dual Role support on Intel Merrifield platform broke due to rearranging
+> the call to dwc3_get_extcon().
+> 
+> It appears to be caused by ulpi_read_id() masking the timeout on the first
+> test write. In the past dwc3 probe continued by calling dwc3_core_soft_reset()
+> followed by dwc3_get_extcon() which happend to return -EPROBE_DEFER.
+> On deferred probe ulpi_read_id() finally succeeded. Due to above mentioned
+> rearranging -EPROBE_DEFER is not returned and probe completes without phy.
+> 
+> As we now changed ulpi_read_id() to return -ETIMEDOUT in this case, we
+> need to handle the error by calling dwc3_core_soft_reset() and request
+> -EPROBE_DEFER. On deferred probe ulpi_read_id() is retried and succeeds.
+> 
+> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+> Cc: stable@vger.kernel.org
+> 
+> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
 
-On Mon, 21 Nov 2022 at 01:24, Andrew Jeffery <andrew@aj.id.au> wrote:
->
->
->
-> On Tue, 6 Sep 2022, at 00:25, Etienne Carriere wrote:
-> > Changes gpio.h DT binding header file to be published under GPLv2 or
-> > BSD-2-Clause license terms. This change allows this GPIO generic
-> > bindings header file to be used in software components as bootloaders
-> > and OSes that are not published under GPLv2 terms.
-> >
-> > All contributors to gpio.h file in copy.
-> >
-> > Cc: Stephen Warren <swarren@nvidia.com>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Laxman Dewangan <ldewangan@nvidia.com>
-> > Cc: Andrew Jeffery <andrew@aj.id.au>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
->
-> Acked-by: Andrew Jeffery <andrew@aj.id.au>
->
-> Apologies for the delay, it took me a bit to find the right people to tal=
-k to.
+Same comments as per patch 1.
 
-Thanks a lot for closing looking at this change.
-I think all contributors now have acked it.
+But before sending v5, let give a chance to others to review the code and other
+aspects of the changes.
 
-Regards,
-Etienne
+-- 
+With Best Regards,
+Andy Shevchenko
 
->
-> Andrew
+
