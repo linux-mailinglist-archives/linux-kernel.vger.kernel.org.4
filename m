@@ -2,290 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D688632098
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC9863208F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiKUL3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S230378AbiKUL26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiKUL3X (ORCPT
+        with ESMTP id S230309AbiKUL21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:29:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D976376
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:22:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669029774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0fohpyxuh1ulUvSg7HMOO2E0zOAUAiDTJW4VYjB54wc=;
-        b=NkUzRwPUEqENcwE1Q7AS+/oIikJr8H/lZpQwhXUXrOeNoP0bVeqL6mLGC5eae3w01ilGUg
-        U2r6mo2HI0mkduMtNQFqHLmtmjlu90Vrkbpu6SWHTRBDUPrN5WenE0KvlqN+FnezDgk5GT
-        eZ6KWLDWPEHEFqg8CRm5TPO41SIGu1A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-96-7lrjSWXmPIiiYovDaCpmag-1; Mon, 21 Nov 2022 06:22:51 -0500
-X-MC-Unique: 7lrjSWXmPIiiYovDaCpmag-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D6E632A5954B;
-        Mon, 21 Nov 2022 11:22:50 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DD4A82024CB7;
-        Mon, 21 Nov 2022 11:22:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [RFC PATCH v2] afs: Stop implementing ->writepage()
-From:   David Howells <dhowells@redhat.com>
-To:     linux-afs@lists.infradead.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>, dhowells@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 21 Nov 2022 11:22:47 +0000
-Message-ID: <166902976709.269117.16991162776475572981.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Mon, 21 Nov 2022 06:28:27 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692E218B0D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:22:54 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b3so18363014lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:22:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K36rHttUXqipmCdXq23O2OGPfeZt634/W4wWM3JG2Lk=;
+        b=mXt0M2zct1dnVh3lcPxi7UmGqsWD3dg/a8w+svjsbPEs9i88Wf1d3HwAKk/lCzqp2l
+         cvwW2YfXDGwyxeFNVfWqldpGFSRLuvdTzcicHU601RiMnWBxllSu9V3pnQbZ89YmVxJS
+         oQOh6FH8c7UpgnCtCHSnk+9tNWYeGkkLuq60FmxEGqJkPBY+V4McNvE69gWhqUvEAJuV
+         baoLsm37VkP+iHvukHQhH6vpVC5iGqV7jW4xkoHrMtLff/wCrn1cSdfL2nkEfAXxNx/F
+         skci3RtTZyvjuZIGKitBkybyxuf17kstjrR/ov/sLdbJbZpuz5fmevbp0iIr0oVp8Lmf
+         N18Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K36rHttUXqipmCdXq23O2OGPfeZt634/W4wWM3JG2Lk=;
+        b=fs93GQbCaMFe/DW5uRJD0BbE9e+6N8YjjHDf6c7tgXziIBjYMwY0AF/RHrBbotwMPg
+         6/8PSUG2IFP2ibOfq0FBZJ2jaAp0NzUrXovbbbKmPnASExiWRyrdEixbs4LhMeElUf07
+         13G5IHhkdz/UX8Yk+qeN62+J4ZQFdGFT4/hs9UCghIk0diQ+PriEmoPuSnh2hL+bqw4z
+         soyvMliB2hWZFNFsps08LL0UEjA80gBDuYancZq31Q3kqLFNqJi1EVPP0mXMrq2WwPnR
+         OMlo2/BYZOuEJoAuQwQxy7642DPcW+LhUGs+dMiS5h4gIYgqhpX7sQAjKOw74rgR98XW
+         CO+Q==
+X-Gm-Message-State: ANoB5pk4NzD21LzOrDU0IHUQilcumhxaWh5INB/oYQ3xS8GkMAK//9/k
+        5wdtzCDmMn4eg7A0qfUL5xS8LA==
+X-Google-Smtp-Source: AA0mqf61tQmfKjVq8RvAAStA86Nq8poqfJTtaBWzYwXodyJF0I7qJtagWsotr2qvZR3relWeiewZ8w==
+X-Received: by 2002:a05:6512:3d8c:b0:497:a160:ed29 with SMTP id k12-20020a0565123d8c00b00497a160ed29mr5431720lfv.423.1669029772854;
+        Mon, 21 Nov 2022 03:22:52 -0800 (PST)
+Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
+        by smtp.gmail.com with ESMTPSA id u24-20020a2e9b18000000b002637c04b472sm1439005lji.83.2022.11.21.03.22.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 03:22:52 -0800 (PST)
+Message-ID: <ca7f36e2-e53e-db2b-bb0b-28de649bcb70@linaro.org>
+Date:   Mon, 21 Nov 2022 12:22:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 3/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add initial
+ device tree
+Content-Language: en-US
+To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20221119202316.93142-1-linmengbo0689@protonmail.com>
+ <20221119202639.93559-1-linmengbo0689@protonmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221119202639.93559-1-linmengbo0689@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're trying to get rid of the ->writepage() hook[1].  Stop afs from using
-it by unlocking the page and calling afs_writepages_region() rather than
-folio_write_one().
-
-A flag is passed to afs_writepages_region() to indicate that it should only
-write a single region so that we don't flush the entire file in
-->write_begin(), but do add other dirty data to the region being written to
-try and reduce the number of RPC ops.
-
-This requires ->migrate_folio() to be implemented, so point that at
-filemap_migrate_folio() for files and also for symlinks and directories.
-
-This can be tested by turning on the afs_folio_dirty tracepoint and then
-doing something like:
-
-   xfs_io -c "w 2223 7000" -c "w 15000 22222" -c "w 23 7" /afs/my/test/foo
-
-and then looking in the trace to see if the write at position 15000 gets
-stored before page 0 gets dirtied for the write at position 23.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/r/20221113162902.883850-1-hch@lst.de/ [1]
-Link: https://lore.kernel.org/r/166876785552.222254.4403222906022558715.stgit@warthog.procyon.org.uk/ # v1
----
-
- fs/afs/dir.c   |    1 +
- fs/afs/file.c  |    3 +-
- fs/afs/write.c |   83 ++++++++++++++++++++++++++++++++------------------------
- 3 files changed, 50 insertions(+), 37 deletions(-)
-
-diff --git a/fs/afs/dir.c b/fs/afs/dir.c
-index 230c2d19116d..baed7b095087 100644
---- a/fs/afs/dir.c
-+++ b/fs/afs/dir.c
-@@ -77,6 +77,7 @@ const struct address_space_operations afs_dir_aops = {
- 	.dirty_folio	= afs_dir_dirty_folio,
- 	.release_folio	= afs_dir_release_folio,
- 	.invalidate_folio = afs_dir_invalidate_folio,
-+	.migrate_folio	= filemap_migrate_folio,
- };
- 
- const struct dentry_operations afs_fs_dentry_operations = {
-diff --git a/fs/afs/file.c b/fs/afs/file.c
-index d1cfb235c4b9..a2325e0b9d38 100644
---- a/fs/afs/file.c
-+++ b/fs/afs/file.c
-@@ -58,14 +58,15 @@ const struct address_space_operations afs_file_aops = {
- 	.invalidate_folio = afs_invalidate_folio,
- 	.write_begin	= afs_write_begin,
- 	.write_end	= afs_write_end,
--	.writepage	= afs_writepage,
- 	.writepages	= afs_writepages,
-+	.migrate_folio	= filemap_migrate_folio,
- };
- 
- const struct address_space_operations afs_symlink_aops = {
- 	.read_folio	= afs_symlink_read_folio,
- 	.release_folio	= afs_release_folio,
- 	.invalidate_folio = afs_invalidate_folio,
-+	.migrate_folio	= filemap_migrate_folio,
- };
- 
- static const struct vm_operations_struct afs_vm_ops = {
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 9ebdd36eaf2f..197753181116 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -14,6 +14,11 @@
- #include <linux/netfs.h>
- #include "internal.h"
- 
-+static int afs_writepages_region(struct address_space *mapping,
-+				 struct writeback_control *wbc,
-+				 loff_t start, loff_t end, loff_t *_next,
-+				 bool max_one_loop);
-+
- static void afs_write_to_cache(struct afs_vnode *vnode, loff_t start, size_t len,
- 			       loff_t i_size, bool caching);
- 
-@@ -38,6 +43,25 @@ static void afs_folio_start_fscache(bool caching, struct folio *folio)
- }
- #endif
- 
-+/*
-+ * Flush out a conflicting write.  This may extend the write to the surrounding
-+ * pages if also dirty and contiguous to the conflicting region..
-+ */
-+static int afs_flush_conflicting_write(struct address_space *mapping,
-+				       struct folio *folio)
-+{
-+	struct writeback_control wbc = {
-+		.sync_mode	= WB_SYNC_ALL,
-+		.nr_to_write	= LONG_MAX,
-+		.range_start	= folio_pos(folio),
-+		.range_end	= LLONG_MAX,
-+	};
-+	loff_t next;
-+
-+	return afs_writepages_region(mapping, &wbc, folio_pos(folio), LLONG_MAX,
-+				     &next, true);
-+}
-+
- /*
-  * prepare to perform part of a write to a page
-  */
-@@ -80,7 +104,8 @@ int afs_write_begin(struct file *file, struct address_space *mapping,
- 
- 		if (folio_test_writeback(folio)) {
- 			trace_afs_folio_dirty(vnode, tracepoint_string("alrdy"), folio);
--			goto flush_conflicting_write;
-+			folio_unlock(folio);
-+			goto wait_for_writeback;
- 		}
- 		/* If the file is being filled locally, allow inter-write
- 		 * spaces to be merged into writes.  If it's not, only write
-@@ -99,8 +124,15 @@ int afs_write_begin(struct file *file, struct address_space *mapping,
- 	 * flush the page out.
- 	 */
- flush_conflicting_write:
--	_debug("flush conflict");
--	ret = folio_write_one(folio);
-+	trace_afs_folio_dirty(vnode, tracepoint_string("confl"), folio);
-+	folio_unlock(folio);
-+
-+	ret = afs_flush_conflicting_write(mapping, folio);
-+	if (ret < 0)
-+		goto error;
-+
-+wait_for_writeback:
-+	ret = folio_wait_writeback_killable(folio);
- 	if (ret < 0)
- 		goto error;
- 
-@@ -663,40 +695,13 @@ static ssize_t afs_write_back_from_locked_folio(struct address_space *mapping,
- 	return ret;
- }
- 
--/*
-- * write a page back to the server
-- * - the caller locked the page for us
-- */
--int afs_writepage(struct page *subpage, struct writeback_control *wbc)
--{
--	struct folio *folio = page_folio(subpage);
--	ssize_t ret;
--	loff_t start;
--
--	_enter("{%lx},", folio_index(folio));
--
--#ifdef CONFIG_AFS_FSCACHE
--	folio_wait_fscache(folio);
--#endif
--
--	start = folio_index(folio) * PAGE_SIZE;
--	ret = afs_write_back_from_locked_folio(folio_mapping(folio), wbc,
--					       folio, start, LLONG_MAX - start);
--	if (ret < 0) {
--		_leave(" = %zd", ret);
--		return ret;
--	}
--
--	_leave(" = 0");
--	return 0;
--}
--
- /*
-  * write a region of pages back to the server
-  */
- static int afs_writepages_region(struct address_space *mapping,
- 				 struct writeback_control *wbc,
--				 loff_t start, loff_t end, loff_t *_next)
-+				 loff_t start, loff_t end, loff_t *_next,
-+				 bool max_one_loop)
- {
- 	struct folio *folio;
- 	struct page *head_page;
-@@ -775,6 +780,9 @@ static int afs_writepages_region(struct address_space *mapping,
- 
- 		start += ret;
- 
-+		if (max_one_loop)
-+			break;
-+
- 		cond_resched();
- 	} while (wbc->nr_to_write > 0);
- 
-@@ -806,24 +814,27 @@ int afs_writepages(struct address_space *mapping,
- 
- 	if (wbc->range_cyclic) {
- 		start = mapping->writeback_index * PAGE_SIZE;
--		ret = afs_writepages_region(mapping, wbc, start, LLONG_MAX, &next);
-+		ret = afs_writepages_region(mapping, wbc, start, LLONG_MAX,
-+					    &next, false);
- 		if (ret == 0) {
- 			mapping->writeback_index = next / PAGE_SIZE;
- 			if (start > 0 && wbc->nr_to_write > 0) {
- 				ret = afs_writepages_region(mapping, wbc, 0,
--							    start, &next);
-+							    start, &next, false);
- 				if (ret == 0)
- 					mapping->writeback_index =
- 						next / PAGE_SIZE;
- 			}
- 		}
- 	} else if (wbc->range_start == 0 && wbc->range_end == LLONG_MAX) {
--		ret = afs_writepages_region(mapping, wbc, 0, LLONG_MAX, &next);
-+		ret = afs_writepages_region(mapping, wbc, 0, LLONG_MAX,
-+					    &next, false);
- 		if (wbc->nr_to_write > 0 && ret == 0)
- 			mapping->writeback_index = next / PAGE_SIZE;
- 	} else {
- 		ret = afs_writepages_region(mapping, wbc,
--					    wbc->range_start, wbc->range_end, &next);
-+					    wbc->range_start, wbc->range_end,
-+					    &next, false);
- 	}
- 
- 	up_read(&vnode->validate_lock);
 
 
+On 19.11.2022 21:27, Lin, Meng-Bo wrote:
+> GPLUS FL8005A is a tablet using the MSM8916 SoC released in 2015.
+> 
+> Add a device tree for with initial support for:
+> 
+> - GPIO keys
+> - GPIO LEDs
+> - pm8916-vibrator
+> - SDHCI (internal and external storage)
+> - USB Device Mode
+> - UART
+> - WCNSS (WiFi/BT)
+> - Regulators
+> 
+> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 239 ++++++++++++++++++
+>  2 files changed, 240 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index afe496a93f94..5a2dcf726159 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -9,6 +9,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-gplus-fl8005a.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-huawei-g7.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-longcheer-l8150.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-longcheer-l8910.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
+> new file mode 100644
+> index 000000000000..bed1fe984287
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
+> @@ -0,0 +1,239 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/dts-v1/;
+> +
+> +#include "msm8916-pm8916.dtsi"
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/leds/common.h>
+> +
+> +/ {
+> +	model = "GPLUS FL8005A";
+> +	compatible = "gplus,fl8005a", "qcom,msm8916";
+> +	chassis-type = "tablet";
+> +
+> +	aliases {
+> +		serial0 = &blsp1_uart2;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0";
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&gpio_keys_default>;
+> +
+> +		label = "GPIO Buttons";
+> +
+> +		button-volume-up {
+> +			label = "Volume Up";
+> +			gpios = <&msmgpio 107 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_VOLUMEUP>;
+> +		};
+> +	};
+> +
+> +	gpio-leds {
+> +		compatible = "gpio-leds";
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&gpio_leds_default>;
+> +
+> +		led-red {
+> +			function = LED_FUNCTION_CHARGING;
+> +			color = <LED_COLOR_ID_RED>;
+> +			gpios = <&msmgpio 117 GPIO_ACTIVE_HIGH>;
+> +			retain-state-suspended;
+> +		};
+> +
+> +		led-green {
+> +			function = LED_FUNCTION_CHARGING;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			gpios = <&msmgpio 118 GPIO_ACTIVE_HIGH>;
+> +			retain-state-suspended;
+> +		};
+> +	};
+> +
+> +	usb_id: usb-id {
+> +		compatible = "linux,extcon-usb-gpio";
+> +		id-gpio = <&msmgpio 110 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&usb_id_default>;
+> +	};
+> +};
+> +
+> +&blsp1_uart2 {
+> +	status = "okay";
+> +};
+> +
+> +&pm8916_resin {
+> +	status = "okay";
+> +	linux,code = <KEY_VOLUMEDOWN>;
+Status should go last, everywhere.
+
+> +};
+> +
+> +&pm8916_vib {
+> +	status = "okay";
+> +};
+> +
+> +&pronto {
+> +	status = "okay";
+> +};
+> +
+> +&sdhc_1 {
+> +	status = "okay";
+> +
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+> +	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+> +};
+> +
+> +&sdhc_2 {
+> +	status = "okay";
+> +
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
+> +	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
+> +
+> +	cd-gpios = <&msmgpio 38 GPIO_ACTIVE_LOW>;
+> +};
+> +
+> +&usb {
+> +	status = "okay";
+> +	extcon = <&usb_id>, <&usb_id>;
+> +};
+> +
+> +&usb_hs_phy {
+> +	extcon = <&usb_id>;
+> +};
+These two usb properties are not sorted properly.
+
+> +
+> +&smd_rpm_regulators {
+> +	vdd_l1_l2_l3-supply = <&pm8916_s3>;
+> +	vdd_l4_l5_l6-supply = <&pm8916_s4>;
+> +	vdd_l7-supply = <&pm8916_s4>;
+> +
+> +	s3 {
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1300000>;
+> +	};
+> +
+> +	s4 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <2100000>;
+> +	};
+> +
+> +	l1 {
+> +		regulator-min-microvolt = <1225000>;
+> +		regulator-max-microvolt = <1225000>;
+> +	};
+> +
+> +	l2 {
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1200000>;
+> +	};
+> +
+> +	l4 {
+> +		regulator-min-microvolt = <2050000>;
+> +		regulator-max-microvolt = <2050000>;
+> +	};
+> +
+> +	l5 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+> +	l6 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+> +	l7 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+> +	l8 {
+> +		regulator-min-microvolt = <2850000>;
+> +		regulator-max-microvolt = <2900000>;
+> +	};
+> +
+> +	l9 {
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	l10 {
+> +		regulator-min-microvolt = <2700000>;
+> +		regulator-max-microvolt = <2800000>;
+> +	};
+> +
+> +	l11 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <2950000>;
+> +		regulator-allow-set-load;
+> +		regulator-system-load = <200000>;
+Please swap the two properties.
+
+Other than that, LGTM
+
+Konrad
+> +	};
+> +
+> +	l12 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <2950000>;
+> +	};
+> +
+> +	l13 {
+> +		regulator-min-microvolt = <3075000>;
+> +		regulator-max-microvolt = <3075000>;
+> +	};
+> +
+> +	l14 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	l15 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	l16 {
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	l17 {
+> +		regulator-min-microvolt = <2850000>;
+> +		regulator-max-microvolt = <2850000>;
+> +	};
+> +
+> +	l18 {
+> +		regulator-min-microvolt = <2700000>;
+> +		regulator-max-microvolt = <2700000>;
+> +	};
+> +};
+> +
+> +&msmgpio {
+> +	gpio_keys_default: gpio-keys-default-state {
+> +		pins = "gpio107";
+> +		function = "gpio";
+> +
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	gpio_leds_default: gpio-led-default-state {
+> +		pins = "gpio117", "gpio118";
+> +		function = "gpio";
+> +
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	usb_id_default: usb-id-default-state {
+> +		pins = "gpio110";
+> +		function = "gpio";
+> +
+> +		drive-strength = <8>;
+> +		bias-pull-up;
+> +	};
+> +};
