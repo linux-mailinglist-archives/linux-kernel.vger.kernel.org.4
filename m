@@ -2,171 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22216325EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE216325F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiKUOdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S230505AbiKUOdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:33:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiKUOc4 (ORCPT
+        with ESMTP id S230376AbiKUOdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:32:56 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E817A12093;
-        Mon, 21 Nov 2022 06:32:53 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id cl5so20144931wrb.9;
-        Mon, 21 Nov 2022 06:32:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oMxdVkeJC7Qwe+UUVslk9eQ8uzs6tVkGa4HBt7gnyb4=;
-        b=ZOjpOzhQo2ic2GJnJkbCH5xkCL0Sdr8XTsqnc9P1S69AWNxuW8W32NyDAWWIeRCJ7r
-         /40w2NhsNbLANSx2XQepOwvXjNZkqof8uynIDVGTElF+zTlFpvMs9Hk1aCiZkw+//hnc
-         e/5tazEjfXiQ17cLxZ12U4YIZhleuHgBGpv+sAQgHLa+0kYgpc2Wzp1xuE4t1npC7iMx
-         anm/z7kT08j8Bo941QLRZ4D7MuaBPu4P26wEXsH9Pe7NOG+UWnKL+BuJnHRcwFvP2UEj
-         mH7bp5SsfQcTZUOEdur0iy25nwlBsbqbev+ykA5TnQeBaOC24DRo86K355Vs1+MKec0t
-         Odgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oMxdVkeJC7Qwe+UUVslk9eQ8uzs6tVkGa4HBt7gnyb4=;
-        b=w0Is6LSjGMW8c+z6IbwV+QA3VI7vtBPkUaMWwI7GTa6p6fcfgY+pBartOXYrtA55ar
-         m1vkufv5Qya8/yKj8M98f/scZW0OCfc6t4kYlA170ZnebU2xOSlZBV/pVf6JJM3MUJ1c
-         L5HsAjNc+XBBAHR8P+6NkgULZ+Kf2ZBAGtU4Hl1LAH55EPeKsqDiR9lRHj3gO2PvYC/V
-         IWB2eLdaMonmUKqX/myCRnFaKHxMciFtpH8xX+gVP6hUyt7c0t+8F8qNv869njgDGU36
-         4miQBAktfbdVzRQzrORjF0uSd5Y6mEFxhz91LTN8rItd9CqtSJLg/dmut3pKhsVy941o
-         T/NQ==
-X-Gm-Message-State: ANoB5pnDldJtSih/o0WtAIOBXWweJJsmjvwOAreAHFpQQXNJNxb0RQDd
-        F7lm3YLqi7enZt/L1UAxUWU=
-X-Google-Smtp-Source: AA0mqf76+QGXGrfSvNDhsW0eKQIaujeQqyDpknKfxZrImyFR+63eC+B87mOQlqZFTqTF/e12bEN8ow==
-X-Received: by 2002:a5d:6a08:0:b0:241:da26:bddf with SMTP id m8-20020a5d6a08000000b00241da26bddfmr2160381wru.591.1669041172361;
-        Mon, 21 Nov 2022 06:32:52 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b003c6f1732f65sm20663146wmp.38.2022.11.21.06.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 06:32:51 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 21 Nov 2022 15:32:49 +0100
-To:     Chen Hu <hu1.chen@intel.com>
-Cc:     jpoimboe@kernel.org, memxor@gmail.com, bpf@vger.kernel.org,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH bpf] selftests/bpf: Fix "missing ENDBR" BUG for
- destructor kfunc
-Message-ID: <Y3uMEdvKVl7nSrgD@krava>
-References: <20221121085113.611504-1-hu1.chen@intel.com>
+        Mon, 21 Nov 2022 09:33:07 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE22A1124;
+        Mon, 21 Nov 2022 06:33:04 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id db77ae704526c705; Mon, 21 Nov 2022 15:33:00 +0100
+Received: from kreacher.localnet (unknown [213.134.163.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 6AE42780F18;
+        Mon, 21 Nov 2022 15:32:59 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power resources support D3
+Date:   Mon, 21 Nov 2022 15:33:00 +0100
+Message-ID: <4448186.LvFx2qVVIh@kreacher>
+In-Reply-To: <CAJZ5v0i8K4Uss4KgbzdRyocTKYu10eCCm8UZ=QtEFJ4_WZYciw@mail.gmail.com>
+References: <CAJZ5v0i3LyfMLx8cuYMdRzJagW-d0Vz3PBVEtFGpDBD6+7VZHQ@mail.gmail.com> <20221118202336.GA1271811@bhelgaas> <CAJZ5v0i8K4Uss4KgbzdRyocTKYu10eCCm8UZ=QtEFJ4_WZYciw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121085113.611504-1-hu1.chen@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.140
+X-CLIENT-HOSTNAME: 213.134.163.140
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrheeigdeihecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeifedrudegtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddugedtpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlvghnsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdp
+ rhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepufgrnhhjuhdrofgvhhhtrgesrghmugdrtghomhdprhgtphhtthhopehluhhkrghsseifuhhnnhgvrhdruggvpdhrtghpthhtoheprhgrfhgrvghlrdhjrdifhihsohgtkhhisehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 12:51:13AM -0800, Chen Hu wrote:
-> With CONFIG_X86_KERNEL_IBT enabled, the test_verifier triggers the
-> following BUG:
+On Friday, November 18, 2022 10:13:39 PM CET Rafael J. Wysocki wrote:
+> On Fri, Nov 18, 2022 at 9:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > Hi Rafael,
+> >
+> > Sorry, I'm still confused (my perpetual state :)).
 > 
->   traps: Missing ENDBR: bpf_kfunc_call_test_release+0x0/0x30
->   ------------[ cut here ]------------
->   kernel BUG at arch/x86/kernel/traps.c:254!
->   invalid opcode: 0000 [#1] PREEMPT SMP
->   <TASK>
->    asm_exc_control_protection+0x26/0x50
->   RIP: 0010:bpf_kfunc_call_test_release+0x0/0x30
->   Code: 00 48 c7 c7 18 f2 e1 b4 e8 0d ca 8c ff 48 c7 c0 00 f2 e1 b4 c3
-> 	0f 1f 44 00 00 66 0f 1f 00 0f 1f 44 00 00 0f 0b 31 c0 c3 66 90
->        <66> 0f 1f 00 0f 1f 44 00 00 48 85 ff 74 13 4c 8d 47 18 b8 ff ff ff
->    bpf_map_free_kptrs+0x2e/0x70
->    array_map_free+0x57/0x140
->    process_one_work+0x194/0x3a0
->    worker_thread+0x54/0x3a0
->    ? rescuer_thread+0x390/0x390
->    kthread+0xe9/0x110
->    ? kthread_complete_and_exit+0x20/0x20
+> No worries, doing my best to address that.
 > 
-> This is because there are no compile-time references to the destructor
-> kfuncs, bpf_kfunc_call_test_release() for example. So objtool marked
-> them sealable and ENDBR in the functions were sealed (converted to NOP)
-> by apply_ibt_endbr().
-
-nice :) thanks for the fix, some suggestions below
-
+> > On Fri, Nov 18, 2022 at 02:16:17PM +0100, Rafael J. Wysocki wrote:
+> > > On Thu, Nov 17, 2022 at 11:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > On Thu, Nov 17, 2022 at 06:01:26PM +0100, Rafael J. Wysocki wrote:
+> > > > > On Thu, Nov 17, 2022 at 12:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > On Wed, Nov 16, 2022 at 01:00:36PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > > On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
+> > > > > > > > > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
+> > > > > > > > > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
+> > > > > > > > > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
+> > > > > > > > > > > > > Firmware typically advertises that ACPI devices that represent PCIe
+> > > > > > > > > > > > > devices can support D3 by a combination of the value returned by
+> > > > > > > > > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
+> > > > > > > > > > > > > an assumption that if an ACPI device contains power resources the PCIe
+> > > > > > > > > > > > > device it's associated with can support D3.  This was introduced
+> > > > > > > > > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
+> > > > > > > > > > > > > D3 if power managed by ACPI").
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
+> > > > > > > > > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
+> > > > > > > > > > > > > port used for tunneling. The PCIe device will still be opted into
+> > > > > > > > > > > > > runtime PM in the kernel [2] because of the logic within
+> > > > > > > > > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
+> > > > > > > > > > > > > device contains power resources.
+> > > > > > > > > >
+> > > > > > > > > > Wait.  Is this as simple as just recognizing that:
+> > > > > > > > > >
+> > > > > > > > > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
+> > > > > > > > > >   mean the device can wake itself from a low-power state.  The OS has
+> > > > > > > > > >   to use _S0W to learn the device's ability to wake itself.
+> > > > > > > > >
+> > > > > > > > > It is.
+> > > > > > > >
+> > > > > > > > Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
+> > > > > > > > web page [1] says it identifies Root Ports capable of handling hot
+> > > > > > > > plug events while in D3.  That sounds kind of related to _S0W: If _S0W
+> > > > > > > > says "I can wake myself from D3hot and D3cold", how is that different
+> > > > > > > > from "I can handle hotplug events in D3"?
+> > > > > > >
+> > > > > > > For native PME/hot-plug signaling there is no difference.  This is the
+> > > > > > > same interrupt by the spec after all IIRC.
+> > > > > > >
+> > > > > > > For GPE-based signaling, though, there is a difference, because GPEs
+> > > > > > > can only be used directly for wake signaling (this is related to
+> > > > > > > _PRW).  In particular, the only provision in the ACPI spec for device
+> > > > > > > hot-add are the Bus Check and Device Check notification values (0 and
+> > > > > > > 1) which require AML to run and evaluate Notify() on specific AML
+> > > > > > > objects.
+> > > > > > >
+> > > > > > > Hence, there is no spec-defined way to tell the OS that "something can
+> > > > > > > be hot-added under this device while in D3 and you will get notified
+> > > > > > > about that".
+> > > > > >
+> > > > > > So I guess acpi_pci_bridge_d3() looks for:
+> > > > > >
+> > > > > >   - "wake signaling while in D3" (_S0W) and
+> > > > > >   - "notification of hotplug while in D3" ("HotPlugSupportInD3")
+> > > > > >
+> > > > > > For Root Ports with both those abilities (or bridges below such Root
+> > > > > > Ports), we allow D3, and this patch doesn't change that.
+> > > > > >
+> > > > > > What this patch *does* change is that all bridges with _PS0 or _PR0
+> > > > > > previously could use D3, but now will only be able to use D3 if they
+> > > > > > are also (or are below) a Root Port that can signal wakeup
+> > > > > > (wakeup.flags.valid) and can wakeup from D3hot or D3cold (_S0W).
+> > > > > >
+> > > > > > And this fixes the Pink Sardine because it has Root Ports that do
+> > > > > > Thunderbolt tunneling, and they have _PS0 or _PR0 but their _S0W says
+> > > > > > they cannot wake from D3.  Previously we put those in D3, but they
+> > > > > > couldn't wake up.  Now we won't put them in D3.
+> > > > > >
+> > > > > > I guess there's a possibility that this could break or cause higher
+> > > > > > power consumption on systems that were fixed by c6e331312ebf
+> > > > > > ("PCI/ACPI: Whitelist hotplug ports for D3 if power managed by ACPI").
+> > > > > > I don't know enough about that scenario.  Maybe Lukas will chime in.
+> > > > >
+> > > > > Well, it is possible that some of these systems will be affected.
+> > > > >
+> > > > > One of such cases is when the port in question has _S0W which says
+> > > > > that wakeup from D3 is not supported.  In that case I think the kernel
+> > > > > should honor the _S0W input, because there may be a good reason known
+> > > > > to the platform integrator for it.
+> > > > >
+> > > > > The other case is when wakeup.flags.valid is unset for the port's ACPI
+> > > > > companion which means that the port cannot signal wakeup through
+> > > > > ACPI-related means at all and this may be problematic, especially in
+> > > > > the system-wide suspend case in which the wakeup capability is not too
+> > > > > relevant unless there is a system wakeup device under the port.
+> > > > >
+> > > > > I don't think that the adev->wakeup.flags.valid check has any bearing
+> > > > > on the _S0W check - if there is _S0W and it says "no wakeup from D3",
+> > > > > it should still be taken into account - so that check can be moved
+> > > > > past the _S0W check.
+> > > >
+> > > > So if _S0W says it can wake from D3, but wakeup.flags is not valid,
+> > > > it's still OK to use D3?
+> > >
+> > > No, it isn't, as per the code today and I don't think that this
+> > > particular part should be changed now.
+> >
+> > But the current upstream code checks acpi_pci_power_manageable(dev)
+> > first, so if "dev" has _PR0 or _PS0, we'll use D3 even if _S0W says it
+> > can wake from D3 and wakeup.flags is not valid.
 > 
-> This fix creates dummy compile-time references to destructor kfuncs so
-> ENDBR stay there.
+> Yes, the current code will return 'true' if _PR0 or _PS0 is present
+> for dev regardless of anything else.
 > 
-> Signed-off-by: Chen Hu <hu1.chen@intel.com>
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> ---
->  include/linux/btf_ids.h | 7 +++++++
->  net/bpf/test_run.c      | 2 ++
->  2 files changed, 9 insertions(+)
+> The proposed change is to make that conditional on whether or not _S0W
+> for the root port says that wakeup from D3 is supported (or it is not
+> present or unusable).
 > 
-> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> index 2aea877d644f..6c6b520ea58f 100644
-> --- a/include/linux/btf_ids.h
-> +++ b/include/linux/btf_ids.h
-> @@ -266,4 +266,11 @@ MAX_BTF_TRACING_TYPE,
->  
->  extern u32 btf_tracing_ids[];
->  
-> +#if defined(CONFIG_X86_KERNEL_IBT) && !defined(__DISABLE_EXPORTS)
-> +#define BTF_IBT_NOSEAL(name)					\
-> +	asm(IBT_NOSEAL(#name));
-> +#else
-> +#define BTF_IBT_NOSEAL(name)
-> +#endif /* CONFIG_X86_KERNEL_IBT */
+> I see that I've missed one point now which is when the root port
+> doesn't have an ACPI companion, in which case we should go straight
+> for the "dev is power manageable" check.
 
-this is not BTF or BTF ID specific, instead should we add some generic macro like:
+Moreover, it is possible that the bridge passed to acpi_pci_bridge_d3() has its
+own _S0W or a wakeup GPE if it is power-manageable via ACPI.  In those cases
+it is not necessary to ask the Root Port's _S0W about wakeup from D3, so overall
+I would go for the patch like the below (not really tested).
 
-  FUNC_IBT_NOSEAL(...)
+This works in the same way as the current code (unless I have missed anything)
+except for the case when the "target" bridge is power-manageable via ACPI, but
+it cannot signal wakeup via ACPI and has no _S0W.  In that case it will consult
+the upstream Root Port's _S0W to check whether or not wakeup from D3 is
+supported.
 
-> +
->  #endif
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 13d578ce2a09..465952e5de11 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -1653,6 +1653,8 @@ BTF_ID(struct, prog_test_ref_kfunc)
->  BTF_ID(func, bpf_kfunc_call_test_release)
->  BTF_ID(struct, prog_test_member)
->  BTF_ID(func, bpf_kfunc_call_memb_release)
-> +BTF_IBT_NOSEAL(bpf_kfunc_call_test_release)
-> +BTF_IBT_NOSEAL(bpf_kfunc_call_memb_release)
+[Note that if dev_has_acpi_pm is 'true', it is kind of pointless to look for the
+"HotPlugSupportInD3" property of the Root Port, because the function is going to
+return 'true' regardless, but I'm not sure if adding an extra if () for handling
+this particular case is worth the hassle.]
 
-same here, it looks like it's part of the list above, I think this would be better
-after function body like:
+---
+ drivers/pci/pci-acpi.c |   32 +++++++++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 7 deletions(-)
 
-  noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
-  {
-  }
-  FUNC_IBT_NOSEAL(bpf_kfunc_call_memb_release)
+Index: linux-pm/drivers/pci/pci-acpi.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-acpi.c
++++ linux-pm/drivers/pci/pci-acpi.c
+@@ -975,6 +975,7 @@ bool acpi_pci_power_manageable(struct pc
+ 
+ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+ {
++	bool dev_has_acpi_pm = false;
+ 	struct pci_dev *rpdev;
+ 	struct acpi_device *adev;
+ 	acpi_status status;
+@@ -984,17 +985,34 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+ 		return false;
+ 
+-	/* Assume D3 support if the bridge is power-manageable by ACPI. */
+-	if (acpi_pci_power_manageable(dev))
+-		return true;
++	adev = ACPI_COMPANION(&dev->dev);
++	if (adev && acpi_device_power_manageable(adev)) {
++		/*
++		 * Let the bridge go into D3 if it can signal wakeup from these
++		 * states (i.e. it has _S0W which says so or it can signal
++		 * wakeup via ACPI).
++		 */
++		status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
++		if (ACPI_SUCCESS(status)) {
++			if (state >= ACPI_STATE_D3_HOT)
++				return true;
++		} else if (adev->wakeup.flags.valid) {
++			return true;
++		}
++		/*
++		 * If the bridge is power-manageable by ACPI, let it go into D3
++		 * by default.
++		 */
++		dev_has_acpi_pm = true;
++	}
+ 
+ 	rpdev = pcie_find_root_port(dev);
+ 	if (!rpdev)
+-		return false;
++		return dev_has_acpi_pm;
+ 
+ 	adev = ACPI_COMPANION(&rpdev->dev);
+ 	if (!adev)
+-		return false;
++		return dev_has_acpi_pm;
+ 
+ 	/*
+ 	 * If the Root Port cannot signal wakeup signals at all, i.e., it
+@@ -1002,7 +1020,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 	 * events from low-power states including D3hot and D3cold.
+ 	 */
+ 	if (!adev->wakeup.flags.valid)
+-		return false;
++		return dev_has_acpi_pm;
+ 
+ 	/*
+ 	 * If the Root Port cannot wake itself from D3hot or D3cold, we
+@@ -1023,7 +1041,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 	    obj->integer.value == 1)
+ 		return true;
+ 
+-	return false;
++	return dev_has_acpi_pm;
+ }
+ 
+ int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
 
 
-thanks,
-jirka
+
