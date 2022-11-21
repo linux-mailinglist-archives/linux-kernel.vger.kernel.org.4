@@ -2,156 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763316320F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3986320FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbiKULn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S231426AbiKULoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:44:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiKULn1 (ORCPT
+        with ESMTP id S231420AbiKULnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:43:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8DC1C111
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:42:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669030941;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f0yfsdol+yJgmcL0Jiq/hqGtRju0QVsHN+RKjYJPQas=;
-        b=gEOnELvplYAcYoop+/Jgazv41Hwc0vV30l3YGM+RyIWR2GZ42SaW43CdTocKMXv5REgmO5
-        R6F0trFkD7iYyxRZ6SteRDY0SCcUiwpwRmHNuu7H5zbO4V+uoDw9LaEV5hTciKsyPtUocY
-        /Ii5LKrXaHZDSJQSC3UxWFojt7I3mkI=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-66-lXs-on3ANIC09UCGABNV9Q-1; Mon, 21 Nov 2022 06:42:19 -0500
-X-MC-Unique: lXs-on3ANIC09UCGABNV9Q-1
-Received: by mail-qv1-f71.google.com with SMTP id z18-20020a0cfed2000000b004bc28af6f7dso11133002qvs.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:42:19 -0800 (PST)
+        Mon, 21 Nov 2022 06:43:55 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2FCEB
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:43:19 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bp15so18384934lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:43:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eJjIdqBUf7mCDkNqH+fJaGpki5XNddXN56C3IGVthfs=;
+        b=jvsDyTDvEEvKahs+I0jRYw1UOVoegcSDrbK5OOi8YXXwsq7VNyteHXOyXn21Pzxhw+
+         KzPhlop/Xi6XvvE7NiGQF2tTJBNxJmsTGPdk1SmEsQBqzYxMv2JN6+4mQiApfNguPDZO
+         x+QS1bxhl3JqlppiKfBywx/sSkjPDhYlMdiKAZ+FyqVQ85ozSoGDVDo0M26XxpeGnJdm
+         z87SAjvU26Ysw0pnSMJ4+50pu2CXUnDK5W6GG0uI0Bu4hxYZyBULp+dOQoxuDHkvpget
+         o0Ugqy/QRTYMfIKglRY4b82MR6O+SZBgKCTSQBvLTuUD9UCrkSPI0m462w77WLmtxTAu
+         XsXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f0yfsdol+yJgmcL0Jiq/hqGtRju0QVsHN+RKjYJPQas=;
-        b=X58TaR9jrcoyytwU0pKsluhpXU7wXV1TOihlFhPMJNwBqu0bLVb0+fuN4l0orHuU5l
-         5+1ltzAo7G6Cdwd6wlgAKLZ0n+3zLha5cfMNYt6hI+GmxHSFR8ameXYURyjFc1mNZ8mK
-         43wyYFFL5mtQbVmvgTJZ8EVeioztyJRSgIrGf+/Ym4T6J/pP3Y5cN63F/AZiWVssRH9x
-         0QA4ZB1KGogj5P5y7lUhGqtaQO3Ul5L5sfjnUo/QbnN3BgFgIssuVe6ka2Je/wmnK1h7
-         uOVsZ2TSESP+TksH8r0iYmzxjZUt3OMMDoSym/MVhCPJafGyTQZSQA0VPC2MywTvVVe5
-         cVwg==
-X-Gm-Message-State: ANoB5pn2OJ8/ks19Gzqs+0NqZUejig4rVfpan3Xntu0fEP/fdo0Pljrz
-        paZOlw2TAfqVjCiOeIBVtSjXw01t1xP2l4IcmwLVoUnUnNc3eVfBy29/oVfNsY8CqoKzMaHphk4
-        deQZFVFK8QvKRDskxcylwKAqd
-X-Received: by 2002:a0c:ec04:0:b0:4c6:7622:3107 with SMTP id y4-20020a0cec04000000b004c676223107mr16719993qvo.118.1669030939405;
-        Mon, 21 Nov 2022 03:42:19 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf51P27yIXUDAMmN95CLRvQJ7pjzSqYkeXwmwj4+39MZ+JkgZotPJ6c+McvaUeb1FfoXdaTT2A==
-X-Received: by 2002:a0c:ec04:0:b0:4c6:7622:3107 with SMTP id y4-20020a0cec04000000b004c676223107mr16719984qvo.118.1669030939203;
-        Mon, 21 Nov 2022 03:42:19 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05620a084c00b006ee949b8051sm7773590qku.51.2022.11.21.03.42.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 03:42:18 -0800 (PST)
-Date:   Mon, 21 Nov 2022 06:42:24 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Ivan Babrou <ivan@cloudflare.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        David Laight <David.Laight@aculab.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Mike Rapoport <rppt@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Subject: Re: [PATCH v4] proc: report open files as size in stat() for
- /proc/pid/fd
-Message-ID: <Y3tkIFOk78O5A47X@bfoster>
-References: <20221024173140.30673-1-ivan@cloudflare.com>
- <Y3fYu2VCBgREBBau@bfoster>
- <CABWYdi3csS3BpoMd8xO=ZXFeBH7KtuLkxzQ8VE5+rO5wrx-yQQ@mail.gmail.com>
- <Y3feB8wHdfx48uCl@bfoster>
- <20221119120111.2dh3tomoawwpyjrg@wittgenstein>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eJjIdqBUf7mCDkNqH+fJaGpki5XNddXN56C3IGVthfs=;
+        b=ZjCW20WqY24jIEnNTMKPds2O8we2upjcPUX/zhF/Y1vygz9cax1XoHqPx2dSAwdLH2
+         P+u3SJbs4l6Blok8J79CPb5ljVYK6HDeXndptOsxCXv31wZyFdqxi7YLVlYWQk3m9c9K
+         a204bffiBmO96dtrP8GiZBBPWyAdhMoL/zNccOH6RV4/NW7VdpFcPDpb8CcrfMGEoluJ
+         15BJcuXze6HW4i210MNzacBLaYvYrFOQmdYfD37bkQB7qEOPKzg9dsKVnTA6XSzqf4Qv
+         g4Io4+Ls9csi1koOJ18ShZX1muhM7jgfqKHOfD6VcBLxltoE5szzYQJOchlC5tdyJTHB
+         a7HQ==
+X-Gm-Message-State: ANoB5pnOm5apaRGAgTJ1/QZ2uVIZyNNB47MA7D4kpjUFe2vULBmSAhOz
+        ENiN03vGHpfEN6DBgJko9JyoFg==
+X-Google-Smtp-Source: AA0mqf4LUV1uVk6m74MISW9MOGRH7u8VqLFXDuWZECSkhQDyJLDgHXZotMMipUi7nB4QWKNPRWlPrQ==
+X-Received: by 2002:a05:6512:b17:b0:4b4:b90a:69a1 with SMTP id w23-20020a0565120b1700b004b4b90a69a1mr5108694lfu.76.1669030997603;
+        Mon, 21 Nov 2022 03:43:17 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w23-20020ac24437000000b0049480c8e7bcsm2001366lfl.176.2022.11.21.03.43.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 03:43:17 -0800 (PST)
+Message-ID: <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
+Date:   Mon, 21 Nov 2022 12:43:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119120111.2dh3tomoawwpyjrg@wittgenstein>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
+Content-Language: en-US
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-3-herve.codina@bootlin.com>
+ <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+ <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
+ <20221115150417.513955a7@bootlin.com> <20221118112349.7f09eefb@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118112349.7f09eefb@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 01:01:11PM +0100, Christian Brauner wrote:
-> On Fri, Nov 18, 2022 at 02:33:27PM -0500, Brian Foster wrote:
-> > On Fri, Nov 18, 2022 at 11:18:36AM -0800, Ivan Babrou wrote:
-> > > On Fri, Nov 18, 2022 at 11:10 AM Brian Foster <bfoster@redhat.com> wrote:
-> > > > > +static int proc_fd_getattr(struct user_namespace *mnt_userns,
-> > > > > +                     const struct path *path, struct kstat *stat,
-> > > > > +                     u32 request_mask, unsigned int query_flags)
-> > > > > +{
-> > > > > +     struct inode *inode = d_inode(path->dentry);
-> > > > > +     int rv = 0;
-> > > > > +
-> > > > > +     generic_fillattr(&init_user_ns, inode, stat);
-> > > > > +
-> > > >
-> > > > Sorry I missed this on v3, but shouldn't this pass through the
-> > > > mnt_userns parameter?
-> > > 
-> > > The mnt_userns parameter was added in 549c729 (fs: make helpers idmap
-> > > mount aware), and it's not passed anywhere in fs/proc.
-> > > 
-> > > Looking at other uses of generic_fillattr, all of them use "init_user_ns":
-> > > 
-> > 
-> > Interesting. It looks like this would have used mnt_userns from
-> > vfs_getattr_nosec() before proc_fd_getattr() is wired up, right? I'm not
-> > familiar enough with that change to say whether /proc should use one
-> > value or the other, or perhaps it just doesn't matter.?
-> > 
-> > Christian?
+On 18/11/2022 11:23, Herve Codina wrote:
+> Hi Krzysztof, Geert,
 > 
-> Hey Brian,
+> On Tue, 15 Nov 2022 15:04:17 +0100
+> Herve Codina <herve.codina@bootlin.com> wrote:
 > 
-> This should pass init_user_ns. So it is correct the way it is done now.
-> The init_user_ns is used to indicate that no idmappings are used and
-> since procfs doesn't support the creation of idmapped mounts and doesn't
-> need to, passing it here makes the most sense. Technically passing down
-> mnt_userns would work too but that would make it look like procfs could
-> support idmapped mounts which isn't the case and so we don't do it this
-> way.
+>> Hi Krzysztof,
+>>
+>> On Tue, 15 Nov 2022 14:07:52 +0100
+>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>>> On 15/11/2022 14:05, Krzysztof Kozlowski wrote:  
+>>>> On 14/11/2022 12:15, Herve Codina wrote:    
+>>>>> Add the h2mode property to force the USBs mode ie:
+>>>>>  - 2 hosts
+>>>>> or
+>>>>>  - 1 host and 1 device
+>>>>>
+>>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>>>>> ---
+>>>>>  .../bindings/clock/renesas,r9a06g032-sysctrl.yaml      | 10 ++++++++++
+>>>>>  1 file changed, 10 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+>>>>> index 95bf485c6cec..f9e0a58aa4fb 100644
+>>>>> --- a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+>>>>> @@ -39,6 +39,16 @@ properties:
+>>>>>    '#power-domain-cells':
+>>>>>      const: 0
+>>>>>  
+>>>>> +  renesas,h2mode:
+>>>>> +    description: |
+>>>>> +      Configure the USBs mode.
+>>>>> +        - <0> : the USBs are in 1 host and 1 device mode.
+>>>>> +        - <1> : the USBs are in 2 host mode.
+>>>>> +      If the property is not present, the value used is the one already present
+>>>>> +      in the CFG_USB register (from reset or set by the bootloader).
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +    enum: [0, 1]    
+>>>>
+>>>> 0/1 are quite cryptic. Why not making it a string which is easy to read
+>>>> and understand? Can be something like "two-hosts" and "one-host". Or
+>>>> anything you find more readable...    
+>>>
+>>> ...but actually you should rather make it a property of your USB
+>>> controller, not clock controller. You have two controllers and we have a
+>>> generic property for them - dr_mode.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>   
+>>
+>> IMHO, this property in the USB controllers does not make sense.
+>> Indeed each controller cannot have a different 'mode'.
+>> Some controllers are USB host only (EHCI and OHCI) and the USBF
+>> controller I worked on is device only.
+>> 'h2mode' allows to choose between host or device on one of the USB
+>> but not at the USB controller level.
+>>
+>> This property should be handle outside the USB controller nodes.
+>>
+>> Currently, this node (declared as a clock node) is in fact a sysctrl
+>> node and can do some configuration not related to clocks.
+>>
+>> I agree with you something related to choosing USB Host/Device in
+>> a clock node seems strange.
+>>
+>> Some discussion were already opened related to this property and how
+>> to handle it:
+>>   https://lore.kernel.org/all/20221107182642.05a09f2f@bootlin.com/
+>>   https://lore.kernel.org/all/20221107173614.474707d7@bootlin.com/
+>>
 > 
+> We advanced on this topic.
+> 
+> First, even if 'renesas,r9a06g032-sysctrl.yaml' is present in
+> the devicetree/bindings/clock/ directory, this node is really
+> a 'system controller' node:
+> - title: Renesas RZ/N1D (R9A06G032) System Controller
+> - compatible: renesas,r9a06g032-sysctrl
+> 
+> It handles clocks, power domains, some DMA routing, ...
+> 
+> Now, the property 'h2mode' allows to choose between:
+>   - 2 USB hosts
+> or
+>   - 1 USB host and 1 USB device.
+> 
+> This switching is system wide and has no reason to be done in
+> one specific USB controller. It can impact multiple devices and
+> PLL settings.
+> 
+> The 'renesas,r9a06g032-sysctrl' node, as the system control
+> node of our system, is the best candidate to handle the property.
 
-Got it, thanks for the context.
+Not necessarily. IIUC, you have:
 
-Ivan,
+1. sysctrl with some register(s) for choosing device mode
+2. usb device or host at one address
+3. usb host at separate address
 
-Sorry for the noise. FWIW, for this version of the patch:
+If so then:
+A. Pretty often we have wrapper nodes for this purpose (USB, phy
+wrappers or glues) which are usually needed to configure something for a
+generic block (like Synopsys etc).
 
-Reviewed-by: Brian Foster <bfoster@redhat.com>
+B. Pretty often the device (so your USB host or device) needs to poke
+something in system controller registers, e.g. for power or some other
+setup.
 
-> Starting soon this will be a lot clearer too since we're about to
-> introduce struct mnt_idmap and replace passing around userns here.
-> That'll make things also safer as the helpers that currently could be
-> passed a mnt_userns - which could be any userns - will now only be able
-> to take mnt_idmap which is a different type.
+Your case looks a lot like (B). We have many, many of such examples
+already. Actually it is exactly like that, except that it affects
+possibility of another device (e.g. choosing USB device blocks having
+host there).
+
+C. It looks a bit like a multi-serial-protocol interfaces (so
+UART+I2C+SPI). The difference is that such cases have all these nodes
+defined as a children of the protocol-wrapping device. Not here.
+
+I would propose to go with (B) unless of course it's causes some crazy
+architecture/code choices. Why? Because with exception of (C) we should
+not define properties which represent DT node choices. IOW, Choosing a
+node and compatible (e.g. usb controller as device) is enough to
+describe the hardware. No need for other properties to control some
+register in other block.
+
+
 > 
-> Long story short, the way your patch does it is correct.
+> In order to be less cryptic in the property value, what do you
+> think about:
+>   renesas,h2mode:
+>     - one-dev : the USBs are in 1 host and 1 device mode.
+>     - only-hosts : the USBs are in 2 hosts mode.
+
+Name looks better, if we go this path.
+
 > 
-> Thanks!
-> Christian
-> 
+> With these details and change on the property value,
+> Is it ok for you to have the 'renesas,h2mode' property
+> in the 'renesas,r9a06g032-sysctrl' node ?
+
+
+Best regards,
+Krzysztof
 
