@@ -2,165 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10D56320BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD356320BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiKULeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S231299AbiKULfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiKULdn (ORCPT
+        with ESMTP id S229908AbiKULeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:33:43 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2483A3057F;
-        Mon, 21 Nov 2022 03:29:29 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id n20so27929508ejh.0;
-        Mon, 21 Nov 2022 03:29:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p5wAGqxHFekK2a3K2dnGtE+wgtyOKfjyzcWPwOBM3e4=;
-        b=hHGRc+ErTgVBmDvQpU9tTYMO6uC7Unl0nVAMHyEK7UY8zQO8787ASrZ0ZInLZL0MqD
-         ETbvZNNr4I18qonBpjwUxchDp8HAgYQQiqj2+3lPzCvImGmWb7PNdoWHBw5qlDqjqiNT
-         L9zkXLA0djixZGILG9S5CIFJVzu0oWe8tK6aPtghfpec9Rl66sl71Jw3rEE0dkG/5SPY
-         +TJVnLtXjpGleHAzfeUOtulCSRF/+fGEvgYhEZLUSEmBOxx+gV2DvmyWhMlzhiaJfhvU
-         +MJGAfMQy8drTOWd7pv2mx3fXv1YiJkUda64YVsR+pO8wtngAsRk/Rpwm5uDkxoCW+0p
-         flxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=p5wAGqxHFekK2a3K2dnGtE+wgtyOKfjyzcWPwOBM3e4=;
-        b=ZRTAEikTBvLEsGJfna5/HK7TlNbG7MguzzXEt6OrmxkJjxTeCFQoo4vRLS4acXRuzZ
-         lj/r6fjJSoFLKees/ddw+3X2TA3ZCpx4NsMoS5O4OS5OvVHs6RhDBEFBkIlTRvibP9m7
-         d4jqY7laFUgrCeJAosC5ys1QkLq+KH58AWrKj07GNRoEh12c/9qIrSdoGs2dzfMqRXBn
-         W9h0ImhBnCZK7V+Qzv+eoldIDCSyovN1IY+iEjPMa2bV8PjoGoe1UEEUNuUAumcJbbF7
-         XAj7CZxUElIWQwJTCo99VgD3TalkTGhQhwEIkWvZ1l/gRTV0Cvl1vCiJqDHtsbSKpoLx
-         9bRQ==
-X-Gm-Message-State: ANoB5pmqdEno/g+c28FzrJihzg6Q/okfjZFzngZult4kDTPxRMuvSX6L
-        CIUfKzeIJQvus06drvhLhP0=
-X-Google-Smtp-Source: AA0mqf4yRlIfdY/MUfL3UoaCa7+S+Ok0mR2+dPe7bQkvja+lPtuJ4zId7zkYJDriUe88r4sgje+z6A==
-X-Received: by 2002:a17:906:a8a:b0:7ae:6cdd:9bc9 with SMTP id y10-20020a1709060a8a00b007ae6cdd9bc9mr14614529ejf.619.1669030167659;
-        Mon, 21 Nov 2022 03:29:27 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id o13-20020a170906768d00b0073dc4385d3bsm4857902ejm.105.2022.11.21.03.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 03:29:27 -0800 (PST)
-Message-ID: <36b1389a-f08c-96df-47d5-e8ca93b9f8ab@gmail.com>
-Date:   Mon, 21 Nov 2022 12:29:25 +0100
+        Mon, 21 Nov 2022 06:34:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD891C1F6B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:30:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fZlVpl9vCeaK6U7Z7MahRQ+/uNq3FYPecQFtqw0ZqJA=; b=jeKMRORqkRQYm4N9cBg+1WE148
+        kbhs/jDDkufSwKY2xI41Jk2ICPyGblnnDvgaoyTE7XRgIbagB+I6mrLPGh0Uzz7YXAf8Q6jx2/s6i
+        hLzLIZWxAl7PVO9rC8d1wwkLtdCLXvfpP2875+iqtM9K5QiUzWa0Kf5e7jQ7hZAL9PAz1AhmuOq21
+        YyXCSXrvTFeXUjz8qictA9iU4yYfZDyJTOyXIjJFoRAaevFoH+jFdltw2KzpSu245FPylP3JDZhcC
+        ScWwmQEo+AFpTWRuOBCm7KvQGwBJXaA9lm+jnB7rau+3LLjpatZAMIZjTuOPrp1wmwO0LuMk++Nux
+        XDN5OhxQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ox501-0059zl-7f; Mon, 21 Nov 2022 11:30:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3EB2A30062A;
+        Mon, 21 Nov 2022 12:29:57 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EBD72203A8995; Mon, 21 Nov 2022 12:29:56 +0100 (CET)
+Date:   Mon, 21 Nov 2022 12:29:56 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        Dave Hansen <dave.hansen@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [tip:x86/mm] [x86/mm]  127960a055:
+ WARNING:at_arch/x86/include/asm/kfence.h:#kfence_protect
+Message-ID: <Y3thNAR4AV8Lp1qZ@hirez.programming.kicks-ass.net>
+References: <202211201642.b65c9d2f-oliver.sang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH dt-schema.git] schemas: add NVMEM cell with
- #nvmem-cell-cells
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Michael Walle <michael@walle.cc>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20221121105830.7411-1-zajec5@gmail.com>
- <259ad74e-ec86-34e6-661f-7b7b172c4ddd@linaro.org>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <259ad74e-ec86-34e6-661f-7b7b172c4ddd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202211201642.b65c9d2f-oliver.sang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.11.2022 12:25, Krzysztof Kozlowski wrote:
-> On 21/11/2022 11:58, Rafał Miłecki wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> Some NVMEM cells may provide more than 1 value. An example can be base
->> MAC address that is used for calculating multiple MACs (for few
->> different devices). For specifying value to read phandle needs to be
->> used with an argument.
->>
->> Cc: Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>
->> Cc: Michael Walle <michael@walle.cc>
->> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->> ---
->> This bit is required for moving forward with the
->> [PATCH v2 00/20] nvmem: core: introduce NVMEM layouts
->> https://lore.kernel.org/linux-arm-kernel/20220901221857.2600340-1-michael@walle.cc/
->>
->> As pointed out by Rob #nvmem-cell-cells should be added to the dt-schema
->> and not a Linux binding:
->> Re: [PATCH v2 15/20] dt-bindings: nvmem: add YAML schema for the sl28 vpd layout
->> https://lore.kernel.org/linux-arm-kernel/20220912192038.GA1661550-robh@kernel.org/
->>
->> sl28 is one example that needs #nvmem-cell-cells
->> u-boot,env is another one
->>
->> Please let me know if I got this binding right at all.
->> ---
->>   dtschema/schemas/nvmem/nvmem-cell.yaml | 23 +++++++++++++++++++++++
->>   1 file changed, 23 insertions(+)
->>   create mode 100644 dtschema/schemas/nvmem/nvmem-cell.yaml
->>
->> diff --git a/dtschema/schemas/nvmem/nvmem-cell.yaml b/dtschema/schemas/nvmem/nvmem-cell.yaml
->> new file mode 100644
->> index 0000000..dfa99b8
->> --- /dev/null
->> +++ b/dtschema/schemas/nvmem/nvmem-cell.yaml
->> @@ -0,0 +1,23 @@
->> +# SPDX-License-Identifier: BSD-2-Clause
->> +$id: "http://devicetree.org/schemas/nvmem/nvmem-cell.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/base.yaml#"
+On Sun, Nov 20, 2022 at 04:40:51PM +0800, kernel test robot wrote:
 > 
-> Drop quotes from both.
+> hi, PeterZ,
 > 
->> +
->> +title: NVMEM Cell Common Properties
->> +description: "Schema for NVMEM cell devicetree bindings"
+> we noticed this is a fix for
+> "[tip:x86/mm] [x86/mm]  b389949485: WARNING:at_arch/x86/mm/pat/set_memory.c:#__change_page_attr"
+> we reported before on
+> https://lore.kernel.org/all/202211061748.eb591682-oliver.sang@intel.com/
+> we noticed it brought below issue which is persistent in our tests. FYI
 > 
-> Drop quotes.
 > 
->> +maintainers:
->> +  - Rafał Miłecki <rafal@milecki.pl>
->> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> +
->> +# always select the core schema
->> +select: true
->> +
->> +properties:
->> +  "#nvmem-cell-cells":
->> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> Greeting,
 > 
-> Drop quotes.
+> FYI, we noticed WARNING:at_arch/x86/include/asm/kfence.h:#kfence_protect due to commit (built with gcc-11):
 > 
-> Rest looks fine to me, except a bit funny cell-cell name, but that's
-> just life. :)
+> commit: 127960a05548ea699a95791669e8112552eb2452 ("x86/mm: Inhibit _PAGE_NX changes from cpa_process_alias()")
+> https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git x86/mm
+> 
+> in testcase: boot
+> 
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> +----------------------------------------------------------+------------+------------+
+> |                                                          | 5ab815e377 | 127960a055 |
+> +----------------------------------------------------------+------------+------------+
+> | WARNING:at_arch/x86/include/asm/kfence.h:#kfence_protect | 0          | 15         |
+> | RIP:kfence_protect                                       | 0          | 15         |
+> | WARNING:at_mm/kfence/core.c:#kfence_protect              | 0          | 15         |
+> +----------------------------------------------------------+------------+------------+
+> 
+> 
+> If you fix the issue, kindly add following tag
+> | Reported-by: kernel test robot <oliver.sang@intel.com>
+> | Link: https://lore.kernel.org/oe-lkp/202211201642.b65c9d2f-oliver.sang@intel.com
+> 
+> 
+> [    1.269844][    T0] ------------[ cut here ]------------
+> [ 1.270843][ T0] WARNING: CPU: 0 PID: 0 at arch/x86/include/asm/kfence.h:46 kfence_protect (arch/x86/include/asm/kfence.h:46 mm/kfence/core.c:235) 
 
-Bothers me a bit too, I was even thinking about renaming NVMEM cells to
-NVMEM entries but I'm not sure if it's not too late for that.
+Should be fixed by:
 
-We already have "nvmem-cells" and "nvmem-cell-names" properties so
-adding "entries" not would be probably confusing.
+  https://lkml.kernel.org/r/41ac24c4-6c95-d946-2679-c1be2cb20536@intel.com
 
-
->> +    description: >
->> +      Some NVMEM cells may consist of raw data that requires some extra
->> +      processing. They may provide more than 1 value.
->> +
->> +      Passing extra argument(s) allows selecting data to access.
->> +
->> +additionalProperties: true
+I think.
 
