@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBE3631BA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7A7631B9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiKUIhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
+        id S229995AbiKUIhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiKUIhg (ORCPT
+        with ESMTP id S229635AbiKUIhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:37:36 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A9B120A8;
-        Mon, 21 Nov 2022 00:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669019850; x=1700555850;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ONVx5JUDDrdY/F0j8BvBpBwoBCSINvKCjtNVzmScM5k=;
-  b=Bq0/coA4qOPVib4ZO7riUzYMGY/rscjOiCa4hhGN4pEq/V0irkwx7tXL
-   ul5aBEd8dvYlTywtgCCWJVbq8Q2M8mvE4VDEWCUCz3NsIHpEq2FaM3uwO
-   GDMR9xrH9ejlRKULMfSZnUmvakA5e4jNRypxP5/JXfjW/8EcixdPuhrIJ
-   BI6BXi/1JiWxMXW7H0miaV/FbVB5lv2FMyH9VFaMlL4xGqqbDLrvrq6fh
-   pOaPs4D8QH4BFDvUTZMUmzIaAWN6ZT0KuYrP4EbfubPKjporvniF4Pd6r
-   DQEnpNw+jl/81Uayo4NH0vQYNN3JfICDppgds5MIWAkrTnERr5ZtPofdW
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="293894511"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="293894511"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 00:37:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="643235256"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="643235256"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Nov 2022 00:37:14 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ox2Ii-00FBOw-0B;
-        Mon, 21 Nov 2022 10:37:12 +0200
-Date:   Mon, 21 Nov 2022 10:37:11 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ferry Toth <ftoth@exalondelft.nl>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] usb: dwc3: core: defer probe on ulpi_read_id
- timeout
-Message-ID: <Y3s4t2veOe78Emnt@smile.fi.intel.com>
-References: <20221120153704.9090-1-ftoth@exalondelft.nl>
- <20221120153704.9090-3-ftoth@exalondelft.nl>
+        Mon, 21 Nov 2022 03:37:16 -0500
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A8A1F2FE;
+        Mon, 21 Nov 2022 00:37:15 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id bj12so26695726ejb.13;
+        Mon, 21 Nov 2022 00:37:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ahq+G/QJAtYi82jQX9f+cluF1LoI7Ep3P6ooqImmzio=;
+        b=7LfECugByeuj80xcnDAHP4rwoDr0y970L+DFRrFr/TV2X7d3CmdOFtzEhtb1H2tA5C
+         ivnZM2c1UaGRAtMGzX52ZADBmuZnsJ59VbQ4H1a1SqcY8oeVQZ+YBbReJgJ1yD1eRNnR
+         91/sx/zzq8lChSn785GeWah/KbK2xza0XCYreukCLqzc3e/cNNYa4Af+krfFEpAr2no0
+         4Ed3JcOvbpjATlPLDj1TF+2KehpIGf6WmGnwMS22s0tsiG+qmqM40cCNhL1kmajGQkJk
+         jgOzWbg2WQCP5wReUzekx2MwCYuo/jpWisU3uhwAbyvVcJ/p/JFUD2JB+S7bQIQp8nO5
+         jlvg==
+X-Gm-Message-State: ANoB5pkSUxm3w8sC1LeoLEwfIuRXYO0leDJoOWjbT9mqPYYTVSkz0ZZP
+        xN9ffMRAyBN5PFDV6FS9h10=
+X-Google-Smtp-Source: AA0mqf41/ue7ZZt1+gcLSpO14efqLI+hlYnYIbCKKeHwcs15FjtqWJOIsTULd/kWAjyTSzy1uKpieg==
+X-Received: by 2002:a17:906:eb04:b0:7ae:77ef:d048 with SMTP id mb4-20020a170906eb0400b007ae77efd048mr14659303ejb.740.1669019833844;
+        Mon, 21 Nov 2022 00:37:13 -0800 (PST)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id 9-20020a170906328900b0078df3b4464fsm4803199ejw.19.2022.11.21.00.37.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 00:37:13 -0800 (PST)
+Message-ID: <44bf21b6-cbe4-4d73-0883-a9bcbd7d5971@kernel.org>
+Date:   Mon, 21 Nov 2022 09:37:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221120153704.9090-3-ftoth@exalondelft.nl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v5 09/14] serial: liteuart: fix rx loop variable types
+Content-Language: en-US
+To:     Gabriel Somlo <gsomlo@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        kgugala@antmicro.com, mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org, ilpo.jarvinen@linux.intel.com
+References: <20221118145512.509950-1-gsomlo@gmail.com>
+ <20221118145512.509950-10-gsomlo@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221118145512.509950-10-gsomlo@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 04:37:04PM +0100, Ferry Toth wrote:
-> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present"),
-> Dual Role support on Intel Merrifield platform broke due to rearranging
-> the call to dwc3_get_extcon().
+On 18. 11. 22, 15:55, Gabriel Somlo wrote:
+> Update variable types to match the signature of uart_insert_char()
+> which consumes them.
 > 
-> It appears to be caused by ulpi_read_id() masking the timeout on the first
-> test write. In the past dwc3 probe continued by calling dwc3_core_soft_reset()
-> followed by dwc3_get_extcon() which happend to return -EPROBE_DEFER.
-> On deferred probe ulpi_read_id() finally succeeded. Due to above mentioned
-> rearranging -EPROBE_DEFER is not returned and probe completes without phy.
+> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>   drivers/tty/serial/liteuart.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> As we now changed ulpi_read_id() to return -ETIMEDOUT in this case, we
-> need to handle the error by calling dwc3_core_soft_reset() and request
-> -EPROBE_DEFER. On deferred probe ulpi_read_id() is retried and succeeds.
-> 
-> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
-> Cc: stable@vger.kernel.org
-> 
-> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> index 81aa7c1da73c..42ac9aee050a 100644
+> --- a/drivers/tty/serial/liteuart.c
+> +++ b/drivers/tty/serial/liteuart.c
+> @@ -73,8 +73,7 @@ static void liteuart_timer(struct timer_list *t)
+>   	struct liteuart_port *uart = from_timer(uart, t, timer);
+>   	struct uart_port *port = &uart->port;
+>   	unsigned char __iomem *membase = port->membase;
+> -	int ch;
+> -	unsigned long status;
+> +	unsigned int status, ch;
 
-Same comments as per patch 1.
+These should be u8 after all, right?
 
-But before sending v5, let give a chance to others to review the code and other
-aspects of the changes.
+Wait, status is a bool in the end:
 
+>   	while ((status = !litex_read8(membase + OFF_RXEMPTY)) == 1) {
+
+But why is it passed to uart_insert_char() as such? That's ugly. Maybe 
+drop all of this "status" and pass LSR_RXC directly. The while's 
+condition would simply look like (!litex_read8(membase + OFF_RXEMPTY)) then.
+
+>   		ch = litex_read8(membase + OFF_RXTX);
+
+thanks,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+js
+suse labs
 
