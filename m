@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651B46330C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9071D6330C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiKUXj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S231697AbiKUXjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiKUXjU (ORCPT
+        with ESMTP id S231587AbiKUXjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:39:20 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5426BB703B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:39:19 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id x2so18447672edd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:39:19 -0800 (PST)
+        Mon, 21 Nov 2022 18:39:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5756B4F01
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:39:17 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id vv4so22755302ejc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:39:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=GjSP03i5E+KwTrECfe197N4xDzu4tuLBSVRRI01rBMQ=;
-        b=QXSA76hdXZXcn9UdshKVDU0yThYtOyFkiR3HDr57mFWmwkVoXF42Qfg/fxQ1MBSfHt
-         OgbMbxtiwf89wUzPWECvGrMi3CnI+eVy8cMo/4FPD7QgPniZnd5bh87yulpN58sxglBf
-         Bv2CFxQDKHP0oWmjo9oW5IksJHWmQNl+8uKIY=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4ehabT/SWyuxZAFQVGOlc3gf5GNfQZBfPsZlMRjNRcE=;
+        b=Z9Ppn1iS94cKQXbFfqIKO6UCL8nYmxAOoDhKQaH/HqikOla9W1FmIIM4OUciRY+9PW
+         mMLQ9BgPKROkY8OtqIgLH3EuQ0onG+GmXdwbnejEZFay+OVzsJ3bKl9OaLj4FsBvW+iZ
+         bUjdMT4NzMxTDubjC4llZsxWCuMD+Iad7Q1vI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GjSP03i5E+KwTrECfe197N4xDzu4tuLBSVRRI01rBMQ=;
-        b=JqvQOb34zJWNGL5ID7vc1sXOc2CL4pOChVcieBAfM4aIuZ9e1GJR7jpbggtXhOREgH
-         /Xim7PQ59OJMVyRXt95n6qfdSEz0aXOzrUXzhPuDmhxdvIqEeQ9cpkZOdZnfqXGV3s5R
-         pUf4tfDYB4I0rbk908ZxowfsiQZCnNEQTJXnTttzixdm8Ae4mtqs327NR4v5sYtZa5sV
-         EskHPP0mNAltGF0uWvoj3Gk69pf6abSDN92aPQcY5EtkoUhH3cT8eAdu8C6FHsykIoCb
-         Ld6/PxxJf+RGcwcKivMnE+l86RWD7iDkjxI/OOtFUemAPWyhG4eMrSa1gKHZXpaAFiJx
-         ynNw==
-X-Gm-Message-State: ANoB5pn6Z/0FTD5o6xP9tHWrEeUZRpB/FKt5Awk/wmW7YHwN0YIqJnxc
-        e6j3+nFMiqu1wQWx4YFKH6PAeA==
-X-Google-Smtp-Source: AA0mqf6V5GFB4dXvA8p8kldaIpbW/jfD8piqrykZbR4GJ7Wn74QuOAC+rscqT0nkqo4HRwFv4yPJ7Q==
-X-Received: by 2002:aa7:cb96:0:b0:461:bacd:c85d with SMTP id r22-20020aa7cb96000000b00461bacdc85dmr17914295edt.278.1669073955298;
-        Mon, 21 Nov 2022 15:39:15 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4ehabT/SWyuxZAFQVGOlc3gf5GNfQZBfPsZlMRjNRcE=;
+        b=h5xJB8R5SjcxrSZvaqv4shu2t+cG4aw9ZqPl/6ikq1QbCjv3arMUMZEMY54roDfGRI
+         +ssgDinKDeGX8JFB04XuKBzOPb/0NlihsKVx7k9A3xHQ14+9+1ezp9gp/E+jfn9GFdgD
+         gluAZDb8pGOqYms52laFAu6rIb3hmsYWA+M2xC/dnBDV9QesgBD9SrLqKoWbMwrzhiPL
+         DbZKIWJnmprOEe18OWSSnuw8xCb91gUYu2BwlB8S91UMCS4FU9phB8SNXGf3DZsGSP8o
+         kElC+K40xCDxsQTmVF9GZQDggzIhmyBOuV0Id6Ey32G/XwRu6DaArOcKbgoNsfkOU/5+
+         TpXw==
+X-Gm-Message-State: ANoB5pmAz4ho/m8N0HhwwPtJQLDtY8pVXkvShslBGrPsAjwmCm7l5bC4
+        HRGC2qRKkEAFJmiITorjxEoZfQ==
+X-Google-Smtp-Source: AA0mqf6BvPDUi/dw2PVwPuhGcem2sPVKE+0SnBNbp3pnF6iT+L/QymDwd4laUxejvVIIaoQj+R5yXg==
+X-Received: by 2002:a17:907:8c0d:b0:7ae:70f9:114 with SMTP id ta13-20020a1709078c0d00b007ae70f90114mr17121024ejc.44.1669073956335;
+        Mon, 21 Nov 2022 15:39:16 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id f26-20020a17090631da00b007b27aefc578sm5411835ejf.126.2022.11.21.15.39.14
+        by smtp.gmail.com with ESMTPSA id f26-20020a17090631da00b007b27aefc578sm5411835ejf.126.2022.11.21.15.39.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 15:39:14 -0800 (PST)
-Subject: [PATCH v1 0/1] pinctrl:mtk: Fix kexec() initialization
+        Mon, 21 Nov 2022 15:39:15 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 22 Nov 2022 00:38:55 +0100
+Subject: [PATCH v1 1/1] pinctrl: meditatek: Startup with the IRQs disabled
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIAA4MfGMC/w3LOw6AIAwA0KuYzjaBxoF4Gz6NNGI1gC7Gu8v4hvdC4yrcYJ1eqPxIk1MH7DxBzF
- 43RknDQIbIWiI8+o6XaOy1oHeUDC0musXBGME3xlC9xjyO3qV83w9UtaZFYgAAAA==
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 22 Nov 2022 00:38:54 +0100
-Message-Id: <20221122-mtk-pinctrl-v1-0-bedf5655a3d2@chromium.org>
+Message-Id: <20221122-mtk-pinctrl-v1-1-bedf5655a3d2@chromium.org>
+References: <20221122-mtk-pinctrl-v1-0-bedf5655a3d2@chromium.org>
+In-Reply-To: <20221122-mtk-pinctrl-v1-0-bedf5655a3d2@chromium.org>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Sean Wang <sean.wang@kernel.org>
@@ -67,61 +68,112 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1062; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=bze2KnrOlEBNmpaBvmtcoShIvqWrNXhh8LxDvF3j3lA=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjfAwPMbbIUgdoq6PrZ9H2Kcpi0lz+5E0bJsMoV/K5
- KgRiS/CJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY3wMDwAKCRDRN9E+zzrEiLqID/
- 9oBrfZhi/1JSkdEHdfWPAOktZbLqpryc8Q/EgZlPFLFD+zy5jkF4RdFcQhOe6bq5ebZ5bq20K6itfc
- ybvJV0ssS+Kx8tkWkBdYsbnVXvLMTtD3N441IoT1JVO4JMqMWZUkZJd3hKR4bJ6Spq2HPVF2qPB0C3
- TMrlYXwvPk2hwxkVBhmjUyEto3xk9Os0l6f2sNLVboDjMdgirx8mUk4D32Xnt1dMesNEdLShDLHCVg
- XVZzZDQzwaVq1vPFRNxBBL2LkTJISv5rbzhXOPoL4ngDWtmoxEkbSy7TCFlDluyQPE7uYUZlOtVbgY
- zvcFwLY6MGUcQin4BfqH6Zol8JvE5eEvFPnRU/dbo+Pbh+dlMq/TNorTEujBQnB0Gb75AmfLHrLiVI
- Xfj6r6/+NyWbXW+DsV1k33TMQGxr1nc0UiYdqb9fA13m8Cu/irMnxIno0iClxFO+9+C525N3aeJ97E
- xF9n6YBWFpSTDFxwGythbbSvhBB6wlpu5YmoDkCIB3zArLVMf1h1hMfAhZCYVEHWlYCZYP2zy+TjhN
- BbwGuJvHCTO4W6Ivn92WQr0GwaPeaae415K8Emt1rFUKpWf7w/eK1sR6LEdFfJ6PDfRQEsGWUhqrF1
- KzAVEGUjuMjr9BUY9atEy7DWYP7CmxnEXpvuiOjo1cD8yjEDSDyFuIHhINJQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3212; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=ULSRbYzh0w9ZAWNFdOlTTU/M16f8fiyJqpNG4+AGQnI=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjfAwfzhyYWIqnakB+IO0fgl8p763kk9dDJ1yT//Eb
+ pC9/5NqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY3wMHwAKCRDRN9E+zzrEiHr7D/
+ 9lpg4m76+Y9UreH5QlwV4hPqKvzA2p1T6cb5XqoDvEv108OZStLOpQa+Nv/TFqLJuDLKz7GsRFn1AU
+ rtiCLFLurNf7a8PNQkaPb2nYISiYS4uNl73QVNWwgpcBXNBGoiHPV9yvTpKb1f258JXu6Ek4Hov1OL
+ u4/Wb9GwRWzd3UoJWQljRwjqpDlLtKFba4f//3Tx1OOTYHcM2VNuTbaAtFqNp6GNRYVv4b2yp3mM46
+ k2Fvsgzu9XL0LamP0PDkWUZqncRQtgnCOiNptvMRZEYrRbiiPihfbxl2K2gZJ7fXv6PmQr+CT/IAas
+ 9yWZT/xcjbt+Z9eq8vwQadAIRF3R4x82DWyMtVx1IkSNVqMzjODmdTYh9ak3YKOsV86lO+A/UnHgmi
+ O++6IdmC/MELcw17t7E29N+ci2hnzqCLRmj83MlMlSV9syAyO9mY6Eleqg2+NItBpRNIjsMYZhivWx
+ Qp5a2g8i2HSip7CY/AWrYkSeYerruih+K6rHB5cRsUguSb4I9bUiH0qg2X5dxhugBBIQ1D+WSxHfT2
+ RnYSvamJXiiTR8SmAXzGv14j6p+3RvQJltlzZyAtdSmhU1c02dvSEGBUi7C8CQGpezwuB+sgGRXogT
+ oO2SbXKlaHSKpyJIZJXiMsLtD5YtZ8V2YOtZoQFLpRmrK3FcoCHpdTM+7+Qg==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we use kexec to reboot a system, the hardware keeps its
-old state.
+If the system is restarted via kexec(), the peripherals do not start
+with a known state.
 
-This can be problematic for interrupt controllers.
+If the previous system had enabled an IRQs we will receive unexected
+IRQs that can lock the system.
 
-Lets initialise the controller with a know state.
+[   28.109251] watchdog: BUG: soft lockup - CPU#0 stuck for 26s!
+[swapper/0:0]
+[   28.109263] Modules linked in:
+[   28.109273] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+5.15.79-14458-g4b9edf7b1ac6 #1 9f2e76613148af94acccd64c609a552fb4b4354b
+[   28.109284] Hardware name: Google Elm (DT)
+[   28.109290] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS
+		BTYPE=--)
+[   28.109298] pc : __do_softirq+0xa0/0x388
+[   28.109309] lr : __do_softirq+0x70/0x388
+[   28.109316] sp : ffffffc008003ee0
+[   28.109321] x29: ffffffc008003f00 x28: 000000000000000a x27:
+0000000000000080
+[   28.109334] x26: 0000000000000001 x25: ffffffefa7b350c0 x24:
+ffffffefa7b47480
+[   28.109346] x23: ffffffefa7b3d000 x22: 0000000000000000 x21:
+ffffffefa7b0fa40
+[   28.109358] x20: ffffffefa7b005b0 x19: ffffffefa7b47480 x18:
+0000000000065b6b
+[   28.109370] x17: ffffffefa749c8b0 x16: 000000000000018c x15:
+00000000000001b8
+[   28.109382] x14: 00000000000d3b6b x13: 0000000000000006 x12:
+0000000000057e91
+[   28.109394] x11: 0000000000000000 x10: 0000000000000000 x9 :
+ffffffefa7b47480
+[   28.109406] x8 : 00000000000000e0 x7 : 000000000f424000 x6 :
+0000000000000000
+[   28.109418] x5 : ffffffefa7dfaca0 x4 : ffffffefa7dfadf0 x3 :
+000000000000000f
+[   28.109429] x2 : 0000000000000000 x1 : 0000000000000100 x0 :
+0000000001ac65c5
+[   28.109441] Call trace:
+[   28.109447]  __do_softirq+0xa0/0x388
+[   28.109454]  irq_exit+0xc0/0xe0
+[   28.109464]  handle_domain_irq+0x68/0x90
+[   28.109473]  gic_handle_irq+0xac/0xf0
+[   28.109480]  call_on_irq_stack+0x28/0x50
+[   28.109488]  do_interrupt_handler+0x44/0x58
+[   28.109496]  el1_interrupt+0x30/0x58
+[   28.109506]  el1h_64_irq_handler+0x18/0x24
+[   28.109512]  el1h_64_irq+0x7c/0x80
+[   28.109519]  arch_local_irq_enable+0xc/0x18
+[   28.109529]  default_idle_call+0x40/0x140
+[   28.109539]  do_idle+0x108/0x290
+[   28.109547]  cpu_startup_entry+0x2c/0x30
+[   28.109554]  rest_init+0xe8/0xf8
+[   28.109562]  arch_call_rest_init+0x18/0x24
+[   28.109571]  start_kernel+0x338/0x42c
+[   28.109578]  __primary_switched+0xbc/0xc4
+[   28.109588] Kernel panic - not syncing: softlockup: hung tasks
 
-To: Sean Wang <sean.wang@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-mediatek@lists.infradead.org
-Cc: linux-gpio@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ross Zwisler <zwisler@kernel.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
----
-Ricardo Ribalda (1):
-      pinctrl: meditatek: Startup with the IRQs disabled
+diff --git a/drivers/pinctrl/mediatek/mtk-eint.c b/drivers/pinctrl/mediatek/mtk-eint.c
+index 65d312967619..27f0a54e12bf 100644
+--- a/drivers/pinctrl/mediatek/mtk-eint.c
++++ b/drivers/pinctrl/mediatek/mtk-eint.c
+@@ -303,12 +303,15 @@ static struct irq_chip mtk_eint_irq_chip = {
+ 
+ static unsigned int mtk_eint_hw_init(struct mtk_eint *eint)
+ {
+-	void __iomem *reg = eint->base + eint->regs->dom_en;
++	void __iomem *dom_en = eint->base + eint->regs->dom_en;
++	void __iomem *mask_set = eint->base + eint->regs->mask_set;
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < eint->hw->ap_num; i += 32) {
+-		writel(0xffffffff, reg);
+-		reg += 4;
++		writel(0xffffffff, dom_en);
++		writel(0xffffffff, mask_set);
++		dom_en += 4;
++		mask_set += 4;
+ 	}
+ 
+ 	return 0;
 
- drivers/pinctrl/mediatek/mtk-eint.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
----
-base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
-change-id: 20221122-mtk-pinctrl-a82d0240c848
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+b4 0.11.0-dev-d93f8
