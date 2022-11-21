@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69DA63307D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8334D63307F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiKUXHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:07:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
+        id S229919AbiKUXJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiKUXHV (ORCPT
+        with ESMTP id S230203AbiKUXJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:07:21 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FE8D39D5;
-        Mon, 21 Nov 2022 15:07:20 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BD79188F;
-        Tue, 22 Nov 2022 00:07:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669072039;
-        bh=sbEIXdMpmY1oTe55o+FSsZLPrYLr+FsHdEDQECa5wfY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vrLr0tsRblY1ISuYN5mNXXYSS1/ISPVEdQrWDRQS5dW9Bonn7xJvX/0w613sWZ9kQ
-         O+niTIteloFGGNXWqqQt16B7fz3sNi2z8jlT3xchNUI5m5LwxAp3RLRIDpYPif3N3K
-         SKOE3m5MLAzUsV1gA8feeMUISPDj2YucG/jnZu+w=
-Date:   Tue, 22 Nov 2022 01:07:03 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Umang Jain <umang.jain@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Naushir Patuck <naush@raspberrypi.com>,
-        David Plowman <david.plowman@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: Re: [PATCH 02/14] staging: vchiq_arm: Register vcsm-cma as a
- platform driver
-Message-ID: <Y3wElxCCVxTq53QD@pendragon.ideasonboard.com>
-References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
- <20221121214722.22563-3-umang.jain@ideasonboard.com>
+        Mon, 21 Nov 2022 18:09:23 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E83ED06FF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:09:21 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id a22-20020a17090a6d9600b0021896eb5554so6661314pjk.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=thMZF7GVx7htOzAN9ugFbTafPjK5gmEMHGomXo9SsGA=;
+        b=Jcy6AooXlRh0hEsSFf1DzNkliYQhfAcewcnAqdPxaNmwOLi+I71GyB7VvrVtG8Jwk1
+         vsREUbqnknfyTaePyzfqgt1S2IjNBr+xj6dyf1A7P7JPwfBj+BplBOmMxzhDVp44ZXbA
+         s9jnCQV+cpYLOp5fTWU1tbyQqeAhtbkSRysxY2pq77VOGUH+XSxe/S5vE5fzXGGNcV1c
+         nyE2MWeyuoaP03Vws9ogt9uFCn/5CwspPm8msEUThHISfETU2pNjdJ9PsPXmMGIn5V2J
+         k3bqs6eIo6cL8454Rg/2AGtUomM/CrdXOvQjFSeYb3sv0ma+KvpnDTzmi1WuL4dLfHv4
+         jKOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=thMZF7GVx7htOzAN9ugFbTafPjK5gmEMHGomXo9SsGA=;
+        b=GTR9aCulw5D2dy5bqozdhkEIfNnKcfbmw9ZfJkle7m3bfZo/YCa7lRRA4w5KNzf9R3
+         C7B3fzRGdXUc0sAEiEiLQL+8+5MFn98G/Uf0KumcX/N0dDUMyaL3VO6xi2x38MPKcIP8
+         +qC52X7gsp45Bsfrn9pCZwpjL3rQvfyiDLEO5yPDHSg9eSKQdacVSR3o0ox3RSD+sD/3
+         6hujNdLMsQOBkK39Yeynl9I5MQMiAJaAcdFIRoeH7fjgrk54BbmMmo8t8l53tcLELNbd
+         AGgm7o6ilE6Nv/UJGoze5PocsVOI5iYtjVJBcg81zPX7NMswhGyP3ky0XhmZ+xqAB/b5
+         XvpQ==
+X-Gm-Message-State: ANoB5pnILmht31EkgBllmxuvR/p9ZmGAhGU/5J6kjQeChBLPWpqJbyB4
+        TEnE4l+Nx6HKNbuVQyCcSybKBq2J08HYmkmcYYGH
+X-Google-Smtp-Source: AA0mqf4ly1vQzytQGDiPTYJYTJc+VcaLXE8b1ssQBwtsMnU4IisxFSoxDoCOzXIfCJtqk1Q58KczuQutbb2oiIG62cY=
+X-Received: by 2002:a17:90b:3d0d:b0:1fd:5b5d:f09d with SMTP id
+ pt13-20020a17090b3d0d00b001fd5b5df09dmr23052926pjb.69.1669072160948; Mon, 21
+ Nov 2022 15:09:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221121214722.22563-3-umang.jain@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221121142014.0ae7c8ff@canb.auug.org.au> <CAHC9VhSTLnEX58gGFCEDHo8K3CBkU33b2oqVKUvDhRyz33ibmw@mail.gmail.com>
+ <20221122085550.3b8bdef9@oak.ozlabs.ibm.com>
+In-Reply-To: <20221122085550.3b8bdef9@oak.ozlabs.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 21 Nov 2022 18:09:09 -0500
+Message-ID: <CAHC9VhQcxSJHM-mM--EFY9tJKDr-8x-B2__QV10vw7t1ShqQWA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the security tree with Linus' tree
+To:     Stephen Rothwell <sfr@rothwell.id.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang and Dave,
+On Mon, Nov 21, 2022 at 4:56 PM Stephen Rothwell <sfr@rothwell.id.au> wrote:
+>
+> Hi Paul,
+>
+> On Mon, 21 Nov 2022 13:47:18 -0500 Paul Moore <paul@paul-moore.com> wrote:
+> >
+> > I asked this on a previous conflict but never received an answer so
+> > I'll ask it one more time: is there a recommended way to notify
+> > linux-next of an upcoming conflict?  I generally notice the merge
+> > conflict within a few minutes of merging the patches into a -next
+> > branch, and fix it shortly afterwards.  I'm happy to provide a
+> > heads-up, and a merge example, but I'm not sure what the process is
+> > for that, if any.  Or, would you simply prefer to notice it yourself?
+> > I'm not bothered either way, I just thought you might appreciate the
+> > heads-up.
+>
+> Sorry about that.  Some maintainers will just send a "heads up" email
+> with a suggested resolution patch (but I don't get very many).  That
+> can be very helpful for complicated (or non obvious) conflicts.  I
+> still generally look at how to fix them myself (and report them), but
+> it can save me considerable time in particularly obscure cases.
 
-Thank you for the patch.
-
-On Tue, Nov 22, 2022 at 03:17:10AM +0530, Umang Jain wrote:
-> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> 
-> Following the same pattern as bcm2835-camera and bcm2835-audio,
-> register the vcsm-cma driver as a platform driver.
-> 
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index dc33490ba7fb..642fdbc0d654 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -67,6 +67,7 @@ struct vchiq_state g_state;
->  
->  static struct platform_device *bcm2835_camera;
->  static struct platform_device *bcm2835_audio;
-> +static struct platform_device *vcsm_cma;
->  
->  struct vchiq_drvdata {
->  	const unsigned int cache_line_size;
-> @@ -1832,6 +1833,7 @@ static int vchiq_probe(struct platform_device *pdev)
->  		goto error_exit;
->  	}
->  
-> +	vcsm_cma = vchiq_register_child(pdev, "vcsm-cma");
->  	bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
->  	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
->  
-> @@ -1847,6 +1849,7 @@ static int vchiq_remove(struct platform_device *pdev)
->  {
->  	platform_device_unregister(bcm2835_audio);
->  	platform_device_unregister(bcm2835_camera);
-> +	platform_device_unregister(vcsm_cma);
->  	vchiq_debugfs_deinit();
->  	vchiq_deregister_chrdev();
->  
+Okay, I'll make a mental note to send a FYI to the linux-next list
+next time I notice a merge conflict.  The real trick will be to see if
+I actually manage to remember the next time I see one ;)
 
 -- 
-Regards,
-
-Laurent Pinchart
+paul-moore.com
