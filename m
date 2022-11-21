@@ -2,199 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A2C631DD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3F9631DDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiKUKLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        id S231269AbiKUKLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiKUKLX (ORCPT
+        with ESMTP id S229843AbiKUKL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:11:23 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15624E0DD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:11:21 -0800 (PST)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2ALAAwo4005126;
-        Mon, 21 Nov 2022 19:10:59 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Mon, 21 Nov 2022 19:10:58 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2ALAAwFf005123
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 21 Nov 2022 19:10:58 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <41f43b27-d910-78e0-c0b3-f2885fe1cd22@I-love.SAKURA.ne.jp>
-Date:   Mon, 21 Nov 2022 19:10:58 +0900
+        Mon, 21 Nov 2022 05:11:26 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A83FC3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:11:25 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id b9so13957640ljr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:11:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vkbm4Bxn5eLnjPj3/tOUOnl04OhPLdTSTUnYDiGnDgo=;
+        b=bR/nvBGSZjElA8QI/+tH/765a4y1M2Z+4n0UDqntO79EVlF1v7gSzOkFqB0mmLdDNj
+         hOt6Kx6yDqk6TdNyNxegPDA45Yx0nzjaOTEyfn5KrZCMGNutG2of+2wV6Dms1L1GqR8N
+         pmkSNKO4mEJkwD+7YrtKCJ5mpfGXgV+ccv4g3F1JKKPsYfFBwyubXPB9b6pFq8f2suft
+         VlfBiXfLZpUvsDkWsrN/6JOKGF8TgBap+757VGyxsw8qk/HjB/ML/O8tXBfwYxkKj5CS
+         JselQKZ24Kxskv+/m9hOFQjCXcc6/YfJexxtCPLux/6+Cd1+bYWrzG1aIIRgzzmb/fsw
+         axJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vkbm4Bxn5eLnjPj3/tOUOnl04OhPLdTSTUnYDiGnDgo=;
+        b=IjrgRsEq5Z2OKG2G8MAwmEpmBWXEQQrXzvBJjlNQW1A+JqEZUjpC4f+mDvQ7L35dFl
+         EgjDlRVTTevFgJzBWEClVLt6BN/c1Zd9noK9c/xCwi0eGU4FX5vPfOIUs6HrX6cpchAd
+         SDrUc3MdqUCh1ygoLkM3naWVwrJWhaHIiQVw51UzYEREHbgGhbTF6SKNBnN70BCXmgN9
+         ZjzJdBiGi/cU4ZqNbQj5IUQm7iefsH5dxUCp4+L5N/of3eXJg8HwXjkXmqB32WobaSkr
+         RyMfUm/VooWT0hANaHuBDZj2ZCWC9OYzSY5NImwKVd85FHAdWO9p76zm2PZpcSXUlaD3
+         hbMg==
+X-Gm-Message-State: ANoB5pnBHwjqX41OGyJXMX2LOMzEeepDHmu2AnahT57gZ/G77tK8yzz3
+        FxckaQebEA57IdraBZZFvYl5SSRwqLgLfnCm
+X-Google-Smtp-Source: AA0mqf68/n19Rjf7V+oTQiueK1njPoKnq0nXUA6E151V5mffE88KckL4M3G268YOmAXtMqrcnqK5hQ==
+X-Received: by 2002:a05:651c:1510:b0:277:75fb:1fc5 with SMTP id e16-20020a05651c151000b0027775fb1fc5mr5398278ljf.405.1669025483901;
+        Mon, 21 Nov 2022 02:11:23 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v4-20020a056512348400b0048af397c827sm1974128lfr.218.2022.11.21.02.11.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 02:11:23 -0800 (PST)
+Message-ID: <9cc705dd-191d-ddf9-9e26-403d5124c77c@linaro.org>
+Date:   Mon, 21 Nov 2022 11:11:22 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 7/7] MAINTAINERS: add myself as Bouffalolab SoC entry
+ maintainer
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH v2 (repost)] locking/lockdep: add
- debug_show_all_lock_holders()
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20221120082114.3030-1-jszhang@kernel.org>
+ <20221120082114.3030-8-jszhang@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221120082114.3030-8-jszhang@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, check_hung_uninterruptible_tasks() reports details of locks
-held in the system. Also, lockdep_print_held_locks() does not report
-details of locks held by a thread if that thread is in TASK_RUNNING state.
-Several years of experience of debugging without vmcore tells me that
-these limitations have been a barrier for understanding what went wrong
-in syzbot's "INFO: task hung in" reports.
+On 20/11/2022 09:21, Jisheng Zhang wrote:
+> I want to maintain this Bouffalolab riscv SoC entry from now on.
 
-I initially thought that the cause of "INFO: task hung in" reports is
-due to over-stressing. But I understood that over-stressing is unlikely.
-I now consider that there likely is a deadlock/livelock bug where lockdep
-cannot report as a deadlock when "INFO: task hung in" is reported.
+Use 3rd person narrative, so:
+1. Subject: MAINTAINERS: riscv: add entry for Bouffalolab SoC
+2. Commit: Add Jisheng Zhang as Bouffalolab SoC maintainer.
 
-A typical case is that thread-1 is waiting for something to happen (e.g.
-wait_event_*()) with a lock held. When thread-2 tries to hold that lock
-using e.g. mutex_lock(), check_hung_uninterruptible_tasks() reports that
-thread-2 is hung and thread-1 is holding a lock which thread-2 is trying
-to hold. But currently check_hung_uninterruptible_tasks() cannot report
-the exact location of thread-1 which gives us an important hint for
-understanding why thread-1 is holding that lock for so long period.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  MAINTAINERS | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 92451834b940..3564b27d7da4 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17738,6 +17738,12 @@ F:	arch/riscv/
+>  N:	riscv
+>  K:	riscv
+>  
+> +RISC-V BOUFFALOLAB SOC SUPPORT
+> +M:	Jisheng Zhang <jszhang@kernel.org>
+> +L:	linux-riscv@lists.infradead.org
+> +S:	Maintained
+> +F:	arch/riscv/boot/dts/bouffalolab/
+> +
+>  RISC-V MICROCHIP FPGA SUPPORT
+>  M:	Conor Dooley <conor.dooley@microchip.com>
+>  M:	Daire McNamara <daire.mcnamara@microchip.com>
 
-When check_hung_uninterruptible_tasks() reports a thread waiting for a
-lock, it is important to report backtrace of threads which already held
-that lock. Therefore, allow check_hung_uninterruptible_tasks() to report
-the exact location of threads which is holding any lock.
-
-To deduplicate code, share debug_show_all_{locks,lock_holders}() using
-a flag. As a side effect of sharing, __debug_show_all_locks() skips
-current thread if the caller is holding no lock, for reporting RCU lock
-taken inside __debug_show_all_locks() is generally useless.
-
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Acked-by: Waiman Long <longman@redhat.com>
----
-Changes in v2:
-  Share debug_show_all_lock_holders() and debug_show_all_locks(),
-  suggested by Waiman Long <longman@redhat.com>.
-
- include/linux/debug_locks.h | 17 ++++++++++++++++-
- kernel/hung_task.c          |  2 +-
- kernel/locking/lockdep.c    | 14 +++++++++++---
- 3 files changed, 28 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/debug_locks.h b/include/linux/debug_locks.h
-index dbb409d77d4f..b45c89fadfe4 100644
---- a/include/linux/debug_locks.h
-+++ b/include/linux/debug_locks.h
-@@ -48,7 +48,18 @@ extern int debug_locks_off(void);
- #endif
- 
- #ifdef CONFIG_LOCKDEP
--extern void debug_show_all_locks(void);
-+extern void __debug_show_all_locks(bool show_stack);
-+
-+static inline void debug_show_all_locks(void)
-+{
-+	__debug_show_all_locks(false);
-+}
-+
-+static inline void debug_show_all_lock_holders(void)
-+{
-+	__debug_show_all_locks(true);
-+}
-+
- extern void debug_show_held_locks(struct task_struct *task);
- extern void debug_check_no_locks_freed(const void *from, unsigned long len);
- extern void debug_check_no_locks_held(void);
-@@ -61,6 +72,10 @@ static inline void debug_show_held_locks(struct task_struct *task)
- {
- }
- 
-+static inline void debug_show_all_lock_holders(void)
-+{
-+}
-+
- static inline void
- debug_check_no_locks_freed(const void *from, unsigned long len)
- {
-diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-index c71889f3f3fc..5fba784258b7 100644
---- a/kernel/hung_task.c
-+++ b/kernel/hung_task.c
-@@ -213,7 +213,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
-  unlock:
- 	rcu_read_unlock();
- 	if (hung_task_show_lock)
--		debug_show_all_locks();
-+		debug_show_all_lock_holders();
- 
- 	if (hung_task_show_all_bt) {
- 		hung_task_show_all_bt = false;
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index e3375bc40dad..b3da133825cc 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -55,6 +55,7 @@
- #include <linux/rcupdate.h>
- #include <linux/kprobes.h>
- #include <linux/lockdep.h>
-+#include <linux/sched/debug.h>
- 
- #include <asm/sections.h>
- 
-@@ -6487,7 +6488,7 @@ void debug_check_no_locks_held(void)
- EXPORT_SYMBOL_GPL(debug_check_no_locks_held);
- 
- #ifdef __KERNEL__
--void debug_show_all_locks(void)
-+void __debug_show_all_locks(bool show_stack)
- {
- 	struct task_struct *g, *p;
- 
-@@ -6495,12 +6496,19 @@ void debug_show_all_locks(void)
- 		pr_warn("INFO: lockdep is turned off.\n");
- 		return;
- 	}
--	pr_warn("\nShowing all locks held in the system:\n");
-+	if (show_stack)
-+		pr_warn("\nShowing all threads with locks held in the system:\n");
-+	else
-+		pr_warn("\nShowing all locks held in the system:\n");
- 
- 	rcu_read_lock();
- 	for_each_process_thread(g, p) {
- 		if (!p->lockdep_depth)
- 			continue;
-+		if (p == current && p->lockdep_depth == 1)
-+			continue;
-+		if (show_stack)
-+			sched_show_task(p);
- 		lockdep_print_held_locks(p);
- 		touch_nmi_watchdog();
- 		touch_all_softlockup_watchdogs();
-@@ -6510,7 +6518,7 @@ void debug_show_all_locks(void)
- 	pr_warn("\n");
- 	pr_warn("=============================================\n\n");
- }
--EXPORT_SYMBOL_GPL(debug_show_all_locks);
-+EXPORT_SYMBOL_GPL(__debug_show_all_locks);
- #endif
- 
- /*
--- 
-2.18.4
+Best regards,
+Krzysztof
 
