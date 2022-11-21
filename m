@@ -2,119 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33572631D04
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 142CB631D07
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiKUJlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
+        id S230285AbiKUJle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiKUJlR (ORCPT
+        with ESMTP id S229460AbiKUJld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:41:17 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F4F51C08;
-        Mon, 21 Nov 2022 01:41:16 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 89EBD21AC3;
-        Mon, 21 Nov 2022 09:41:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669023675;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x4svcpQifmjNQouc72E4WUVyl0JmTYJ7FIcleg5VVfk=;
-        b=Za0f7AJe52OAjDc+cUdFIv/Y3rnSPBO8l20gpsDrU1H93th+sbNje4hWKKXjRqFXYV3YrY
-        RqVP7Mcm/stCzCkCyaKDEXv1yAc9FnowwdBJbI8KnQ9J4peC3pcY/zvjV41XJ1jrL4svS/
-        gyMG0jMUz7BfWw+tSp9ZGPMdecMJuTg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669023675;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x4svcpQifmjNQouc72E4WUVyl0JmTYJ7FIcleg5VVfk=;
-        b=NFMaWY01+uSO0f1Y0Zr7QgM+Cnj/KWqdg9BIFqEYLqsVklQOuUf4c23ApJ7B9VcYgP5ynm
-        +M8hE/zF9aNf0vCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26C491377F;
-        Mon, 21 Nov 2022 09:41:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fMYECLtHe2MkdAAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Mon, 21 Nov 2022 09:41:15 +0000
-Date:   Mon, 21 Nov 2022 10:41:13 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Martin Doucha <mdoucha@suse.cz>, Minchan Kim <minchan@kernel.org>,
-        ltp@lists.linux.it, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Nitin Gupta <ngupta@vflare.org>, Jens Axboe <axboe@kernel.dk>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>
-Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
-Message-ID: <Y3tHuWygsBqmmpwV@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20221107191136.18048-1-pvorel@suse.cz>
- <Y2l3vJb1y2Jynf50@google.com>
- <3ac740c0-954b-5e68-b413-0adc7bc5a2b5@suse.cz>
- <Y22b3wWs2QfMjJHi@google.com>
+        Mon, 21 Nov 2022 04:41:33 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9AD92B45
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:41:32 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id g5so1453605pjp.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:41:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BBmVpxWlFwz71LnJc5cnHgJ90wlsg+VB/8BW+pshAAQ=;
+        b=WYZMKxVd3zy9KIZ5y7QKsE3uZWM/MBJlzwhyRuKczyyggckB+9stzIpBloyceL6div
+         CmB/N4imuF/AaV8oJEPGA1iMEGfWxgVaHVtXL/ibE/IROiHxrwjzX8rYUkHxkYbUkK1y
+         a3Plf6lJLD49kOlPnZTXz7pl/zSU1ATNf5t747SyeWAwQlTPdusIJlxIFQRrvGh9xIwu
+         61C+KfY4pMkCXfFf4EnIuGBb8c7ZckHLfTjJ/Tr62t8pEjrIwJ+C+SasoS9U6toK+qe6
+         29mjxV5ewwxPE+1BEjs4pRutVE2SYde52WPt4BryPRD+rNvNdORjnq0Rhgc59i3IE2ax
+         3WnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BBmVpxWlFwz71LnJc5cnHgJ90wlsg+VB/8BW+pshAAQ=;
+        b=nqzAOezEmRXGnQ5JtQgLbil9YwDo5mvkC1uHFw+sJSTIQ7nSxY6jrbZhflJtAzssZy
+         Pwn2NaGjhLTnmJ7O2iLPXoLhqGJDXj3sEsUr2Xtt86TIljPSCSe8GWYNb81z3fKcNgcb
+         1+xidFoqx2KkoXS8YuAUAOVETH4dtD2cNsBwGSIyXyUHWf1A+G9CJx8VgnErv3UHmCHK
+         M6iJ+gvU7LPI+9oLlvqJ09WrfpT3BVos4z3+ZDqD/kMyvmycR64iGQ7Gzp4rOwQaAuc4
+         K+m0ZwqxAajkfkXQKnzpDNx1S8Ksmf3NhEMMRwXytLK4gu1kBwFf2FUh7F61bJlrvapl
+         41oA==
+X-Gm-Message-State: ANoB5pmppDjP6Yq+mGiDVVdzfFw9D3cB5YN/FuHXExkzrIFCgKdLP9vE
+        QC0ppe0wbkI2pRrBLcscquHe/BqI80F4OqX1aN8=
+X-Google-Smtp-Source: AA0mqf6Jsa1q3CgbiW2pFvROdLHLGKRKGCohX+6V6jDAfK398xzIQ5QEML2QVNcw/NIR2eoZt2ty16WNSQm1ZCBk7Yg=
+X-Received: by 2002:a17:902:7683:b0:186:9fc8:6672 with SMTP id
+ m3-20020a170902768300b001869fc86672mr1402450pll.65.1669023692141; Mon, 21 Nov
+ 2022 01:41:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y22b3wWs2QfMjJHi@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:323:b0:46:da2f:f579 with HTTP; Mon, 21 Nov 2022
+ 01:41:31 -0800 (PST)
+Reply-To: sgtkaylla202@gmail.com
+From:   Kayla Manthey <gnidignonvalentin7@gmail.com>
+Date:   Mon, 21 Nov 2022 09:41:31 +0000
+Message-ID: <CAOcq9doJZdaj9YOWy5QjGeaiMHF322+926YXJ_sRS1=T4h1_jQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
-
-> On (22/11/10 15:29), Martin Doucha wrote:
-> > New version of LTP test zram01 found a sysfile issue with zram devices
-> > mounted using VFAT filesystem. When when all available space is filled, e.g.
-> > by `dd if=/dev/zero of=/mnt/zram0/file`, the corresponding sysfile
-> > /sys/block/zram0/mm_stat will report that the compressed data size on the
-> > device is 0 and total memory usage is also 0. LTP test zram01 uses these
-> > values to calculate compression ratio, which results in division by zero.
-
-> > The issue is specific to PPC64LE architecture and the VFAT filesystem. No
-> > other tested filesystem has this issue and I could not reproduce it on other
-> > archs (s390 not tested). The issue appears randomly about every 3 test runs
-> > on SLE-15SP2 and 15SP3 (kernel 5.3). It appears less frequently on SLE-12SP5
-> > (kernel 4.12). Other SLE version were not tested with the new test version
-> > yet. The previous version of the test did not check the VFAT filesystem on
-> > zram devices.
-
-> Whoooaa...
-
-> > I've tried to debug the issue and collected some interesting data (all
-> > values come from zram device with 25M size limit and zstd compression
-> > algorithm):
-> > - mm_stat values are correct after mkfs.vfat:
-> > 65536      220    65536 26214400    65536        0        0        0
-
-> > - mm_stat values stay correct after mount:
-> > 65536      220    65536 26214400    65536        0        0        0
-
-> > - the bug is triggered by filling the filesystem to capacity (using dd):
-> > 4194304        0        0 26214400   327680       64        0        0
-
-> Can you try using /dev/urandom for dd, not /dev/zero?
-> Do you still see zeroes in sysfs output or some random values?
-
-I'm not sure if Martin had time to rerun the test. I was not able to reproduce
-the problem any more on machine where the test was failing. But I'll have look
-into this during this week.
-
-Kind regards,
-Petr
+Hallo schat, heb je mijn vorige bericht ontvangen, dank je.
