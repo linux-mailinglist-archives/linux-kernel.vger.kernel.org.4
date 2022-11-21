@@ -2,138 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0733631E41
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2142631E49
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiKUK0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S229697AbiKUK1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKUK0G (ORCPT
+        with ESMTP id S229764AbiKUK1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:26:06 -0500
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F10A65B7;
-        Mon, 21 Nov 2022 02:26:02 -0800 (PST)
-Received: from mailer.emlix.com (unknown [81.20.119.6])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id C1B545FB8C;
-        Mon, 21 Nov 2022 11:26:00 +0100 (CET)
-Date:   Mon, 21 Nov 2022 11:26:00 +0100
-From:   Edmund Berenson <edmund.berenson@emlix.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: iio: adc: ad7923: adjust documentation
-Message-ID: <20221121102600.uwmgivssgy7oakxf@emlix.com>
-References: <20221120153419.GA3094349-robh@kernel.org>
- <20221120170630.29354-1-edmund.berenson@emlix.com>
- <d83e9a3d-2482-4342-03c1-818a38bd4b7b@linaro.org>
+        Mon, 21 Nov 2022 05:27:10 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F1CAFE6D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:27:09 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id k19so14016084lji.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:27:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2yh63wmYAOV6Yufp8sh5swfAKqvT4hncuecFR721Mu4=;
+        b=VxnhELu4pGQ1RyCo+9eN3SRfsWlCbHMwyeKJiGJD+wM+6Va0p5X8qhj3cFSD6j1nQS
+         YI2m2l2ba2LzyDHCRWxTUQ7n/AxqKs9kPFV0+4yw40iDgaIWrZ5+bkcxMN/cTQLVz9X1
+         nu8WZ1M1nasDb3QHzfrflMgDB0WPlntYg4HAVNOjBhykCtUTSYF7FPPqixzKQVX2fGVG
+         2putf6nuN1zbMtFtTYDzUBrqQVSefgmSClCQ9SFcKYAAJwPmjHMEpjNhf3vi4eJpLcYp
+         7dgBgd/q8qs0ge2fSfNrcsmBYKEmQ25aSubVWdrjf8Jq3lQhZcFcPTYcVVLXABIzJ3BK
+         tNzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2yh63wmYAOV6Yufp8sh5swfAKqvT4hncuecFR721Mu4=;
+        b=RCr6tgn7loLIYEcej5BaChBfByGjRXD845lX9HOe4t0scB8hHs2cpHPzXR17DKYoS9
+         gbc/PcoZDWT5lki+qbCKE6wcokiXK5uMnJ76BxEvA63Fv7Pze8uAsntt5j6u43A0DCtp
+         fynp74jYCgWCds8NtO+Arzehatbx1XBqJmZFKAquJaeCGdyEkn30SSEDr1hSZZtrpu08
+         iia7DRcfnVYBnquSuy2JwgJNB9Q+u130mwdNLcjvsp6DqBIrK+o6EiRGhI3a/5JlkncP
+         eu70g10fbQRFBxGfJWk8ki0wbsr/E9J1ogADyruj7YiPNCuEKcWdAgs9Jx5ehvMYD3Mi
+         A5nQ==
+X-Gm-Message-State: ANoB5pni0SIby94eCWpPdrUGO31AYr+sdrUyGHxcIe7Twam54PzNkmyk
+        BsM2+P3wd1CUpTccCw1lyF3x1g==
+X-Google-Smtp-Source: AA0mqf5esehd32lDb/nglaxifEmQG433RI51QfkXxHsjTLHQa1rUrpt9WreNY1bUIZVZgYGAVn8OwA==
+X-Received: by 2002:a2e:b63b:0:b0:277:56d:fcfb with SMTP id s27-20020a2eb63b000000b00277056dfcfbmr5050434ljn.264.1669026427499;
+        Mon, 21 Nov 2022 02:27:07 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z8-20020a056512370800b00497a3e11608sm1947893lfr.303.2022.11.21.02.27.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 02:27:07 -0800 (PST)
+Message-ID: <41010ea4-68f4-b0e2-ab30-8ca6223417cf@linaro.org>
+Date:   Mon, 21 Nov 2022 11:27:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d83e9a3d-2482-4342-03c1-818a38bd4b7b@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dt-bindings: soc: qcom,rpmh-rsc: Update to allow for
+ generic nodes
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221118182535.11156-1-quic_molvera@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118182535.11156-1-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:13:57AM +0100, Krzysztof Kozlowski wrote:
-> On 20/11/2022 18:06, Edmund Berenson wrote:
-> > - Add the ad7927 compatibility string, with fallback compatibility
-> > to ad7928.
-> > - ad7923 and ad7924 are treated the same in the driver, show
-> > the relationship in the documentation.
-> > 
-> > Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> > Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
-> > ---
-> >  .../bindings/iio/adc/adi,ad7923.yaml          | 26 ++++++++++++-------
+On 18/11/2022 19:25, Melody Olvera wrote:
+> Update the bindings to allow for generic regulator nodes instead of
+> device-specific node names.
 > 
-> Do not respond with new patch to some old thread. Each patchset starts a
-> new thread.
-> 
-Sorry I didn't know this is the preferred way. I will send new patch
-version as new thread in the future.
-> >  1 file changed, 17 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> > index 07f9d1c09c7d..e553853e25d5 100644
-> > --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> > +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> > @@ -11,7 +11,7 @@ maintainers:
-> >  
-> >  description: |
-> >    Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
-> > -   AD7918, AD7928 8 Channels ADCs.
-> > +   AD7918, AD7927, AD7928 8 Channels ADCs.
-> >  
-> >    Specifications about the part can be found at:
-> >      https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
-> > @@ -20,14 +20,22 @@ description: |
-> >  
-> >  properties:
-> >    compatible:
-> > -    enum:
-> > -      - adi,ad7904
-> > -      - adi,ad7914
-> > -      - adi,ad7923
-> > -      - adi,ad7924
-> > -      - adi,ad7908
-> > -      - adi,ad7918
-> > -      - adi,ad7928
-> > +    oneOf:
-> > +      - enum:
-> > +          - adi,ad7904
-> > +          - adi,ad7914
-> > +          - adi,ad7908
-> 
-> You already started shuffling the entries, so make them ordered. What's
-> the point of changing the order from one non-sorted to another non-sorted?
-> 
-> > +          - adi,ad7918
-> > +          - adi,ad7923
-> > +          - adi,ad7924
-> 
-> Then deprecate this as alone compatible.
-> 
-> > +          - adi,ad7927> +          - adi,ad7928
-> 
-> Ditto
-> 
-> > +      - items:
-> > +          - const: adi,ad7923
-> > +          - const: adi,ad7924
-> 
-> I would expect lower number as fallback.
-If I remove alone compatibility of 7924 and 7927 in the documentation,
-I will have to remove explicit compatibility match on the driver side,
-correct?
-Just want to make sure I don't misunderstand you.
-> 
-> > +      - items:
-> > +          - const: adi,ad7927
-> > +          - const: adi,ad7928
-> 
-> Ditto.
-> 
-> >  
-> >    reg:
-> >      maxItems: 1
-> 
-> Best regards,
-> Krzysztof
-> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
 
-Thank you and best regards,
-Edmund
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
