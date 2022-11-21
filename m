@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1ED6327B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56B46327C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiKUPUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S232362AbiKUPV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiKUPUO (ORCPT
+        with ESMTP id S232256AbiKUPV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:20:14 -0500
-Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251C6175B6;
-        Mon, 21 Nov 2022 07:17:18 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VVOOPHM_1669043831;
-Received: from 30.120.171.189(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VVOOPHM_1669043831)
-          by smtp.aliyun-inc.com;
-          Mon, 21 Nov 2022 23:17:13 +0800
-Message-ID: <d904734a-e7c1-ca8e-7705-63fc4864ac4f@linux.alibaba.com>
-Date:   Mon, 21 Nov 2022 23:17:11 +0800
+        Mon, 21 Nov 2022 10:21:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CBA9DBA3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669043892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mWzLboUVaaSQBKudGWmScz/emJJTGhEhKaSsizNUtHA=;
+        b=JCzhrYckysBgYTmxhkes0awgEv3wAtWirHgqctp1N8qxL0yVBVh8jU+80PAyvCCkh8aMiV
+        vRVFEDp8Tb1h70vzBdfPGk2z4AEj5voTc6TT3pzZM5d+3GaxbWvuHASMBYzehP3eRWVLyG
+        9sSGseZoa1PpB07mznCV2QcTr/Q31HM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-466-MErn0cdCOWqYUJUR4NFRjg-1; Mon, 21 Nov 2022 10:18:09 -0500
+X-MC-Unique: MErn0cdCOWqYUJUR4NFRjg-1
+Received: by mail-wr1-f71.google.com with SMTP id e21-20020adfa455000000b00241daf5b9b2so836658wra.18
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:18:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mWzLboUVaaSQBKudGWmScz/emJJTGhEhKaSsizNUtHA=;
+        b=Zm6t/B+ZZmZ1Cw0L6/S37z6HrsgelW+RFR4nCVa1vOpIiy4Tn3jHViKdmvjfe9pL1l
+         bwdcHSRvrjOGzoIu+cds7sHotu7oQK6MGYmnPSIQoXQlbmEGYR/Z7AunwKC6wBTQROqj
+         hx+/H2ewEmDi/X0O4ZAI/1QyhgwJ2qgjrcs74SNvc89Sx2wJdvk7ctQpT8z/fkxyRSnA
+         7cDj/sLWWi5gRmCjV3ub8K6I1hdi0qoEK0kKKQShfrOcljsXNNhv1V26Ykm8Git/y7uB
+         41iYGyFzvVU3P/Pte6m7NQjrUImlEq3eTQyEDvm4lTHGWKJMOx6FUk1qyo9fcvXLrmQL
+         ankA==
+X-Gm-Message-State: ANoB5pljn235W2LUVEzRiqutDlBvbB83yiu1hFH236pGh4WlAiQVi0Dv
+        +wCu3R2yug5dM48WCEnPdp/x8SQ0nDmJstbeEnpGbdhzsKXMeWIXtU6YXeEWgGeuZAfu3zjeR7r
+        rXC899uj3q6YKuUH4HkZYw0xZ
+X-Received: by 2002:a5d:4d8b:0:b0:241:bf7b:db5b with SMTP id b11-20020a5d4d8b000000b00241bf7bdb5bmr9361002wru.267.1669043887447;
+        Mon, 21 Nov 2022 07:18:07 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7W7hS2PAbvhVoDxfYm/gMb2yAVzOuUX6eEt4DhS4ID1WqyLI65K8a6qYqLBb7rTEfgcLWUEA==
+X-Received: by 2002:a5d:4d8b:0:b0:241:bf7b:db5b with SMTP id b11-20020a5d4d8b000000b00241bf7bdb5bmr9360983wru.267.1669043887169;
+        Mon, 21 Nov 2022 07:18:07 -0800 (PST)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id o7-20020a056000010700b002366f9bd717sm13805064wrx.45.2022.11.21.07.18.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 07:18:06 -0800 (PST)
+Message-ID: <984a2c3f4ace0c2f48ee8d19f20d52d9f2fba8ba.camel@redhat.com>
+Subject: Re: [PATCH v3] KVM: x86: Allow APICv APIC ID inhibit to be cleared
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Greg Edwards <gedwards@ddn.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Mon, 21 Nov 2022 17:18:05 +0200
+In-Reply-To: <20221117183247.94314-1-gedwards@ddn.com>
+References: <20221114202037.254176-1-gedwards@ddn.com>
+         <20221117183247.94314-1-gedwards@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [External] : [RFC PATCH v2 1/6] perf vendor events arm64: Add
- topdown L1 metrics for neoverse-n2
-To:     John Garry <john.g.garry@oracle.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1668411720-3581-2-git-send-email-renyu.zj@linux.alibaba.com>
- <590ff032-d271-48ee-a4d8-141cc070c335@oracle.com>
- <f3823c3e-d45e-40ce-1981-e726b4b6be62@linux.alibaba.com>
- <f6e26e2d-2f10-e973-6c9f-47594da2fc99@oracle.com>
- <cd016aa9-d43d-c585-0b77-a2e112777ec1@linux.alibaba.com>
- <abebb42b-62c1-30d7-ad9a-5fbf6c0edce1@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <abebb42b-62c1-30d7-ad9a-5fbf6c0edce1@oracle.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,87 +81,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/11/21 下午6:22, John Garry 写道:
+On Thu, 2022-11-17 at 11:33 -0700, Greg Edwards wrote:
+> Legacy kernels prior to commit 4399c03c6780 ("x86/apic: Remove
+> verify_local_APIC()") write the APIC ID of the boot CPU twice to verify
+> a functioning local APIC.  This results in APIC acceleration inhibited
+> on these kernels for reason APICV_INHIBIT_REASON_APIC_ID_MODIFIED.
 > 
->>
->>
->> #./perf stat -e FRONTEND_BOUND sleep 1
->> event syntax error: 'FRONTEND_BOUND'
+> Allow the APICV_INHIBIT_REASON_APIC_ID_MODIFIED inhibit reason to be
+> cleared if/when all APICs in xAPIC mode set their APIC ID back to the
+> expected vcpu_id value.
 > 
-> For metrics, use -M, not -e
+> Fold the functionality previously in kvm_lapic_xapic_id_updated() into
+> kvm_recalculate_apic_map(), as this allows examining all APICs in one
+> pass.
 > 
-> If this doesn't help, verify generated pmu-events/pmu-events.c is same after you make the change to try to use std arch events for metrics. Note that I never tested running my change.
+> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
+> Signed-off-by: Greg Edwards <gedwards@ddn.com>
+> ---
+> Changes from v2:
+>   * Comment and variable name tweaks.  [Sean]
 > 
-> Thanks,
-> John
+> Changes from v1:
+>   * Fold kvm_lapic_xapic_id_updated() into kvm_recalculate_apic_map() and
+>     verify no APICs in xAPIC mode have a modified APIC ID before clearing
+>     APICV_INHIBIT_REASON_APIC_ID_MODIFIED.  [Sean]
+>   * Rebase on top of Sean's APIC fixes+cleanups series.  [Sean]
+>     https://lore.kernel.org/all/20221001005915.2041642-1-seanjc@google.com/
 > 
->>                       \___ parser error
->> Run 'perf list' for a list of valid events
->>
->>   Usage: perf stat [<options>] [<command>]
->>
->>      -e, --event <event>   event selector. use 'perf list' to list available events
->>
->>
->>
->> diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeli
->> index f9fae15..1089ca0 100644
->> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json
->> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json
->> @@ -6,18 +6,24 @@
->>           "ArchStdEvent": "STALL_BACKEND"
->>       },
->>       {
->> -        "ArchStdEvent": "STALL_SLOT_FRONTEND"
->> +        "ArchStdEvent": "STALL_SLOT_FRONTEND",
->> +        "MetricExpr": "STALL_SLOT_FRONTEND - CPU_CYCLES"
->>       },
->>       {
->>
+>  arch/x86/kvm/lapic.c | 41 +++++++++++++++--------------------------
+>  1 file changed, 15 insertions(+), 26 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 9b3af49d2524..5224d73cd84a 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -236,6 +236,7 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>         struct kvm_vcpu *vcpu;
+>         unsigned long i;
+>         u32 max_id = 255; /* enough space for any xAPIC ID */
+> +       bool xapic_id_mismatch = false;
+>  
+>         /* Read kvm->arch.apic_map_dirty before kvm->arch.apic_map.  */
+>         if (atomic_read_acquire(&kvm->arch.apic_map_dirty) == CLEAN)
+> @@ -285,6 +286,15 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>                 xapic_id = kvm_xapic_id(apic);
+>                 x2apic_id = kvm_x2apic_id(apic);
+>  
+> +               /*
+> +                * Deliberately truncate the vCPU ID when detecting a mismatched
+> +                * APIC ID to avoid false positives if the vCPU ID, i.e. x2APIC
+> +                * ID, is a 32-bit value.  Any unwanted aliasing due to
+> +                * truncation results will be detected below.
+> +                */
+> +               if (!apic_x2apic_mode(apic) && xapic_id != (u8)vcpu->vcpu_id)
+> +                       xapic_id_mismatch = true;
+> +
+>                 /*
+>                  * Apply KVM's hotplug hack if userspace has enable 32-bit APIC
+>                  * IDs.  Allow sending events to vCPUs by their x2APIC ID even
+> @@ -396,6 +406,11 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>         else
+>                 kvm_clear_apicv_inhibit(kvm, APICV_INHIBIT_REASON_LOGICAL_ID_ALIASED);
+>  
+> +       if (xapic_id_mismatch)
+> +               kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
+> +       else
+> +               kvm_clear_apicv_inhibit(kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
+> +
+>         old = rcu_dereference_protected(kvm->arch.apic_map,
+>                         lockdep_is_held(&kvm->arch.apic_map_lock));
+>         rcu_assign_pointer(kvm->arch.apic_map, new);
+> @@ -2155,28 +2170,6 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
+>         }
+>  }
+>  
+> -static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
+> -{
+> -       struct kvm *kvm = apic->vcpu->kvm;
+> -
+> -       if (!kvm_apic_hw_enabled(apic))
+> -               return;
+> -
+> -       if (KVM_BUG_ON(apic_x2apic_mode(apic), kvm))
+> -               return;
+> -
+> -       /*
+> -        * Deliberately truncate the vCPU ID when detecting a modified APIC ID
+> -        * to avoid false positives if the vCPU ID, i.e. x2APIC ID, is a 32-bit
+> -        * value.  If the wrap/truncation results in unwatned aliasing, APICv
+> -        * will be inhibited as part of updating KVM's optimized APIC maps.
+> -        */
+> -       if (kvm_xapic_id(apic) == (u8)apic->vcpu->vcpu_id)
+> -               return;
+> -
+> -       kvm_set_apicv_inhibit(apic->vcpu->kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
+> -}
+> -
+>  static int get_lvt_index(u32 reg)
+>  {
+>         if (reg == APIC_LVTCMCI)
+> @@ -2197,7 +2190,6 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+>         case APIC_ID:           /* Local APIC ID */
+>                 if (!apic_x2apic_mode(apic)) {
+>                         kvm_apic_set_xapic_id(apic, val >> 24);
+> -                       kvm_lapic_xapic_id_updated(apic);
+>                 } else {
+>                         ret = 1;
+>                 }
+> @@ -2919,9 +2911,6 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
+>         }
+>         memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
+>  
+> -       if (!apic_x2apic_mode(vcpu->arch.apic))
+> -               kvm_lapic_xapic_id_updated(vcpu->arch.apic);
+> -
+>         atomic_set_release(&apic->vcpu->kvm->arch.apic_map_dirty, DIRTY);
+>         kvm_recalculate_apic_map(vcpu->kvm);
+>         kvm_apic_set_version(vcpu);
 
 
-I'm sorry that I misunderstood the purpose of putting metric as arch_std_event at first,
-and now it works after the modification over your suggestion.
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-But there are also a few questions:
+Best regards,
+	Maxim Levitsky
 
-1. The value of the slot in the topdownL1 is various in different architectures, for example,
-the slot is 5 on neoverse-n2. If I put topdownL1 metric as arch_std_event, then I need to
-specify the slot to 5 in n2. I can specify slot values in metric like below, but is there any
-other concise way to do this?
-
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-index 8ff1dfe..b473baf 100644
---- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-@@ -1,4 +1,23 @@
-[
-+       {
-+               "MetricExpr": "5",
-+               "PublicDescription": "A pipeline slot represents the hardware resources needed to process one uOp",
-+               "BriefDescription": "A pipeline slot represents the hardware resources needed to process one uOp",
-+               "MetricName": "slot"
-+       },
-+       {
-+               "ArchStdEvent": "FRONTEND_BOUND"
-+       },
-+       {
-+               "ArchStdEvent": "BACKEND_BOUND"
-+       },
-+       {
-+               "ArchStdEvent": "WASTED"
-+       },
-+       {
-+               "ArchStdEvent": "RETIRING"
-+       },
-
-
-2. Should I add the topdownL1 metric to tools/perf/pmu-event/recommended.json,
-or create a new json file to place the general metric?
-
-Looking forward to your reply.
-
-Thanks,
-Jing
