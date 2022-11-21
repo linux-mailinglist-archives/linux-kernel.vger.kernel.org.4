@@ -2,134 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFB56320DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FA86320E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbiKULkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S231423AbiKULlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiKULkD (ORCPT
+        with ESMTP id S231168AbiKULkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:40:03 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81D2AB7F5;
-        Mon, 21 Nov 2022 03:39:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEC231FB;
-        Mon, 21 Nov 2022 03:39:56 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.25.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D8613F587;
-        Mon, 21 Nov 2022 03:39:48 -0800 (PST)
-Date:   Mon, 21 Nov 2022 11:39:42 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH V5 4/7] driver/perf/arm_pmu_platform: Add support for
- BRBE attributes detection
-Message-ID: <Y3tjfg/aPIixPTbs@FVFF77S0Q05N.cambridge.arm.com>
-References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
- <20221107062514.2851047-5-anshuman.khandual@arm.com>
- <Y3fIYjGtoXPSX9JQ@FVFF77S0Q05N.cambridge.arm.com>
- <fa55fccc-455c-828a-b5fb-de5cb269e35b@arm.com>
+        Mon, 21 Nov 2022 06:40:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4DE0B3;
+        Mon, 21 Nov 2022 03:40:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BA98B80ED2;
+        Mon, 21 Nov 2022 11:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2886CC4347C;
+        Mon, 21 Nov 2022 11:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669030817;
+        bh=YghOUJYQ52Xd0RISjGIJDByNTDYaKlkQluQrntT5wjU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eMffXQFSCOGQezJS4xRMYbazl+1yFlAik/RWH7pT2Y4/wMYnrbHtfFGr4c4P2l3B0
+         /Ou49ZIZiCHeRE2WBY282GE3LWFkiMXP+xSX7oyeZ9BVBMrtBIxA/E/LstU1T0nX+1
+         lLvc6xDEs02slJ2WfnTOSpgdg0kEpOs5pifYQnPXRbKR8ix/SaWBff7B5BDNk8t4cS
+         62jF7Kh1NcyUhqAkciomIQrZf5RF26Nx0Z64e7kbqzhPFxNMlTi/oEYzCtJ93iNjy3
+         Yw58LlDjar+loe2NfybQLQEnyR32jRYMGiVgpvBsWcRTYrdChZzipII2GVv7+/JN16
+         s4XWeDBzZ99hQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 11436C395FF;
+        Mon, 21 Nov 2022 11:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa55fccc-455c-828a-b5fb-de5cb269e35b@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/8] Add support for VCAP debugFS in Sparx5
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166903081706.14617.12205489004712356542.git-patchwork-notify@kernel.org>
+Date:   Mon, 21 Nov 2022 11:40:17 +0000
+References: <20221117213114.699375-1-steen.hegelund@microchip.com>
+In-Reply-To: <20221117213114.699375-1-steen.hegelund@microchip.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
+        rdunlap@infradead.org, casper.casan@gmail.com,
+        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, horatiu.vultur@microchip.com,
+        lars.povlsen@microchip.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 12:06:31PM +0530, Anshuman Khandual wrote:
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 17 Nov 2022 22:31:06 +0100 you wrote:
+> This provides support for getting VCAP instance, VCAP rule and VCAP port
+> keyset configuration information via the debug file system.
 > 
+> It builds on top of the initial IS2 VCAP support found in these series:
 > 
-> On 11/18/22 23:31, Mark Rutland wrote:
-> > On Mon, Nov 07, 2022 at 11:55:11AM +0530, Anshuman Khandual wrote:
-> >> This adds arm pmu infrastrure to probe BRBE implementation's attributes via
-> >> driver exported callbacks later. The actual BRBE feature detection will be
-> >> added by the driver itself.
-> >>
-> >> CPU specific BRBE entries, cycle count, format support gets detected during
-> >> PMU init. This information gets saved in per-cpu struct pmu_hw_events which
-> >> later helps in operating BRBE during a perf event context.
-> > 
-> > Do we expect this to vary between CPUs handled by the same struct arm_pmu ?
+> https://lore.kernel.org/all/20221020130904.1215072-1-steen.hegelund@microchip.com/
+> https://lore.kernel.org/all/20221109114116.3612477-1-steen.hegelund@microchip.com/
+> https://lore.kernel.org/all/20221111130519.1459549-1-steen.hegelund@microchip.com/
 > 
-> BRBE registers are per CPU, and the spec does not assert about BRBE properties
-> being the same across the system, served via same the struct arm_pmu.
+> [...]
 
-The same is true of the PMU, and struct arm_pmu does not cover the whole
-system, it covers each *micro-architecture* within the system.
+Here is the summary with links:
+  - [net-next,v2,1/8] net: microchip: sparx5: Ensure L3 protocol has a default value
+    https://git.kernel.org/netdev/net-next/c/bcddc196d481
+  - [net-next,v2,2/8] net: microchip: sparx5: Ensure VCAP last_used_addr is set back to default
+    https://git.kernel.org/netdev/net-next/c/277e9179efe5
+  - [net-next,v2,3/8] net: microchip: sparx5: Add VCAP debugFS support
+    https://git.kernel.org/netdev/net-next/c/e0305cc1d125
+  - [net-next,v2,4/8] net: microchip: sparx5: Add raw VCAP debugFS support for the VCAP API
+    https://git.kernel.org/netdev/net-next/c/d4134d41e3cb
+  - [net-next,v2,5/8] net: microchip: sparx5: Add VCAP rule debugFS support for the VCAP API
+    https://git.kernel.org/netdev/net-next/c/3a7921560d2f
+  - [net-next,v2,6/8] net: microchip: sparx5: Add VCAP debugFS key/action support for the VCAP API
+    https://git.kernel.org/netdev/net-next/c/72d84dd609be
+  - [net-next,v2,7/8] net: microchip: sparx5: Add VCAP locking to protect rules
+    https://git.kernel.org/netdev/net-next/c/71c9de995260
+  - [net-next,v2,8/8] net: microchip: sparx5: Add VCAP debugfs KUNIT test
+    https://git.kernel.org/netdev/net-next/c/552b7d131aa0
 
-I think BRBE should be treated the same, i.e. uniform *within* a struct
-arm_pmu.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> Hence it would be inaccurate to make that assumption, which might have just
-> avoided all these IPI based probes during boot.
 
-FWIW, I would be happy to IPI all CPUs during boot to verify uniformity of CPUs
-within an arm_pmu; I just don't think that BRBE should be treated differently
-from the rest of the PMU features.
-
-[...]
-
-> >> +	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
-> >> +	armpmu->brbe_probe(hw_events);
-> >> +}
-> >> +
-> >> +static int armpmu_request_brbe(struct arm_pmu *armpmu)
-> >> +{
-> >> +	int cpu, err = 0;
-> >> +
-> >> +	for_each_cpu(cpu, &armpmu->supported_cpus) {
-> >> +		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
-> > 
-> > Why does this need to be called on each CPU in the supported_cpus mask?
-> 
-> Is not supported_cpus derived after partitioning the IRQ in pmu_parse_percpu_irq().
-> The idea is to fill up BRBE buffer attributes, on all such supported cpus which could
-> trigger PMU interrupt. Is the concern, that not all cpus in supported_cpus mask might
-> not be online during boot, hence IPIs could not be served, hence BRBE attributed for
-> them could not be fetched ?
-
-As above, I think this is solvable if we mandate that BRBE must be uniform
-*within* an arm_pmu's supported CPUs; then we only need one CPU in the
-supported_cpus mask to be present at boot time, as with the rest of the PMU
-code.
-
-We could *verify* that when onlining a CPU.
-
-> > I don't see anything here to handle late hotplug, so this looks suspicious.
-> 
-> Right, I should add cpu hotplug handling, otherwise risk loosing BRBE support on cpus
-> which might have been offline during boot i.e when above IPI based probe happened ?
-> 
-> > Either we're missing something, or it's redundant at boot time.
-> 
-> Should we add cpu hotplug online-offline handlers like some other PMU drivers ? Let
-> me know if there are some other concerns.
-> 
-> cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN, DRVNAME,
-> 			arm_brbe_cpu_startup,
-> 		        arm_brbe_cpu_teardown)
-
-We *could* add that, but that's going to require ordering against the existing
-hooks for probing arm_pmu.
-
-Why can't this hang off the exising hooks for arm_pmu? We're treating this as
-part of the PMU anyway, so I don't understand why we should probe it
-separately.
-
-Thanks,
-Mark.
