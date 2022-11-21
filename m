@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B626323E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 903C16323E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiKUNhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S231149AbiKUNhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiKUNgr (ORCPT
+        with ESMTP id S231179AbiKUNgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:36:47 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F5CC4956;
-        Mon, 21 Nov 2022 05:36:43 -0800 (PST)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8FEA860012;
-        Mon, 21 Nov 2022 13:36:37 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     carnil@debian.org
-Cc:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linuxwwan@intel.com,
-        loic.poulain@linaro.org, m.chetan.kumar@intel.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, ryazanov.s.a@gmail.com
-Subject: Re: drivers/net/wwan/iosm/iosm_ipc_protocol.c:244:36: error: passing argument 3 of 'dma_alloc_coherent' from incompatible pointer type [-Werror=incompatible-pointer-types]
-Date:   Mon, 21 Nov 2022 14:36:36 +0100
-Message-ID: <2951107.mvXUDI8C0e@bagend>
-Organization: Connecting Knowledge
-In-Reply-To: <Y3aKqZ5E8VVIZ6jh@eldamar.lan>
+        Mon, 21 Nov 2022 08:36:48 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB01C287F;
+        Mon, 21 Nov 2022 05:36:45 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0A55B6602A03;
+        Mon, 21 Nov 2022 13:36:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669037804;
+        bh=jCj7p/2m5lxy7d9NG/YjgHLCUygY93EdQ0KK5hgNvZA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mAX2f8bUlgLnVsyJ4enAhMsz7tlnEUuGxUf25RPImr+HA5ujwyDYZOI70p0AczD7v
+         aQezIl/lWk90rKclG/R4aRjhEcNc0kPu2Wtgx18+/u6tFOx+aDch7W69Xol1xgea56
+         /yP3bIuRFOUv0CdorDNpMfNQqwbobWV7tP4eno/8yd4+EMgR0j8G3mlQNCrLls6q4s
+         yHRJAaNsZ0oEDP7QvZsWUtArgshvknj5cLWDe1JJsl5R9raD+1459ZxJSOxZrO1Kqq
+         pb9T38wq2e5WtzWOi3tetUZQmQrAGuUq+QEnPOpk5fR6YwxkBdmt0k3UGFZj2U1mnS
+         rKKQcac3aIn/w==
+Message-ID: <fa456fcc-5252-27e9-ebb9-afe360edabfb@collabora.com>
+Date:   Mon, 21 Nov 2022 14:36:41 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart12392105.O9o76ZdvQC"; micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 2/7] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
+ Improve pinctrl subnode and property descriptions
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221118113028.145348-1-y.oudjana@protonmail.com>
+ <20221118113028.145348-3-y.oudjana@protonmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221118113028.145348-3-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart12392105.O9o76ZdvQC
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Diederik de Haas <didi.debian@cknow.org>
-To: carnil@debian.org
-Date: Mon, 21 Nov 2022 14:36:36 +0100
-Message-ID: <2951107.mvXUDI8C0e@bagend>
-Organization: Connecting Knowledge
-In-Reply-To: <Y3aKqZ5E8VVIZ6jh@eldamar.lan>
-MIME-Version: 1.0
+Il 18/11/22 12:30, Yassine Oudjana ha scritto:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Change "subnodes" to "subnode" in subnode description for better grammatical
+> accuracy, capitalize pinmux description, wrap all descriptions at 80 characters,
+> and remove literal style indicators from descriptions that don't need their new
+> lines preserved.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-The same error occurred with 6.1-rc6, again on armhf.
-
-Cheers,
-  Diederik
---nextPart12392105.O9o76ZdvQC
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCY3t+5AAKCRDXblvOeH7b
-bt4ZAQCNn+JFvtlRmgVSibbCZPs8CVNPFaZo1/G6LLqi46Oj+gD+LZnF/iyKuu9d
-vCBFWOtAT5r3gRfAjWUqjLEeux7QAA8=
-=1WJr
------END PGP SIGNATURE-----
-
---nextPart12392105.O9o76ZdvQC--
-
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
