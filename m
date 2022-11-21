@@ -2,256 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1BD631CE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30807631CE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiKUJfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:35:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
+        id S229977AbiKUJeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiKUJfR (ORCPT
+        with ESMTP id S229693AbiKUJen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:35:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5993F108D
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:34:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669023256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hSL7iPhqzb6BVRuHX/pf0VlrJ6CrPEm/cfGHRQ6j144=;
-        b=OGkpS6l4O9P0o+JcoEd2qYbUFo0F5DPQWGWdcW+qj2gCFCnS8V8n5BQznVHxwLauDQOzKC
-        wszU+JT+ZSsDJrJKt576f84P0Nj8c75x1eCt5ASofPYk/qrJVHbnbCH4pCxUOzBE5MiLyn
-        j3vGRABt7Yf1HOKbwDf+w6iA/zvleGo=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-615-NJxCkd_CMDyXoVBZXkcZpg-1; Mon, 21 Nov 2022 04:34:14 -0500
-X-MC-Unique: NJxCkd_CMDyXoVBZXkcZpg-1
-Received: by mail-ej1-f72.google.com with SMTP id hb35-20020a170907162300b007ae6746f240so6239440ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:34:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hSL7iPhqzb6BVRuHX/pf0VlrJ6CrPEm/cfGHRQ6j144=;
-        b=UEg3HIoubpH2r0Uk9I7S0cMnJ5c+t9o2aTUxIc8FdTWw06c2gtUIoJJbiRLkzRZjJI
-         oqaRoD68dtxwkZP62ecwsmdwgLUb4FAPlDh7Mr6aRDMIwVxGVn237g05Nr3xjrOF+I5B
-         xwMa9kDMeJ+M/6tVnhS1ZfWukOVkrLZ7frXihmpW5UXd1p1YUa6cEhYnDwMF1/WVQu69
-         soYn6cRkIHgkdYyqdbRhmSRewkLgZ9hEQ898hnMmaUux7IdODIcCp9jEnPeLgorkbyPv
-         eRfyKD+qCjKcxoQhKN8qG5zgvuF+hFKuH5fAJIGH6mf5gA84yyZFl5mCrCL0GuW7F8ag
-         yZAQ==
-X-Gm-Message-State: ANoB5pmswncbHZbShXwoTS0kmr4zBbGWUXL7j0dyy+/SF6VHIqeK4sFm
-        LEuIz9nyt2KW2Q9nHbIAyisRc145CKpUhbz7+imM8eEgVdqzRoSSxaPFbzzUK5yLtHLgAj8oA+3
-        57I9wkkp5rPMlKAjsXinm3u6J
-X-Received: by 2002:a17:906:eb19:b0:7ad:d7a5:6c2a with SMTP id mb25-20020a170906eb1900b007add7a56c2amr14673258ejb.138.1669023252974;
-        Mon, 21 Nov 2022 01:34:12 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7C/uVEbWPp12RRd1YGX6i9XmBAbrhXrKc/BzE2qEe4hDLf7UlkmcgimNxwOAMjxpgnAS83kQ==
-X-Received: by 2002:a17:906:eb19:b0:7ad:d7a5:6c2a with SMTP id mb25-20020a170906eb1900b007add7a56c2amr14673238ejb.138.1669023252731;
-        Mon, 21 Nov 2022 01:34:12 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id ch28-20020a0564021bdc00b0045d74aa401fsm4993698edb.60.2022.11.21.01.34.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 01:34:12 -0800 (PST)
-Message-ID: <a1f611fd-28ad-83ef-5d17-94fe2c4a6a7f@redhat.com>
-Date:   Mon, 21 Nov 2022 10:34:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 11/18] platform/x86: int3472: fix object shared between
- several modules
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        linux-kbuild@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221119225650.1044591-1-alobakin@pm.me>
- <20221119225650.1044591-12-alobakin@pm.me>
- <Y3oxyUx0UkWVjGvn@smile.fi.intel.com>
- <961a7d7e-c917-86a8-097b-5961428e9ddc@redhat.com>
- <CAK7LNASxxzA1OEGuJR=BU=6G8XaatGx+gDCMe2s9Y3MRcwptYw@mail.gmail.com>
- <87852fc9-0757-7e58-35a2-90cccf970f5c@redhat.com>
- <CAK7LNAROUV6Z6L6yn4WiigfPRJTGU4+j0ujLt6nsxVp9+aCUzw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAK7LNAROUV6Z6L6yn4WiigfPRJTGU4+j0ujLt6nsxVp9+aCUzw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 04:34:43 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5327213CC5;
+        Mon, 21 Nov 2022 01:34:43 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL8OfjJ020302;
+        Mon, 21 Nov 2022 09:34:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=1g+/NvOojCm5ORZk0Of68tqHGjtQ7DzUQncn3xYRqdI=;
+ b=kui3l0jVo0X27upPv3QGtfk3aM7nM1ncP/EkZBzRepxGyu6el0UfYu2up4eLFfUvhNCO
+ O/pBHUk5pFeafYx0VjPrDG6/FJUCurorLRz9ayz2/OT3tnXzy9f5DjgaiYbY1r0krCyc
+ Qu5qaNL92AV6M1UJiecL8yuA+xkDb6lg8h6Blet8ZTf1CIAK7ZCoENDPmTUTorwAXet3
+ 3fc0lTqa764pzUq6KrtCWmyrBlRlS6KY4Fo7ScUytxHM4rkUObgMBVI54NdngMlHpwWt
+ 8GSb8wgD7L39wuZQX7KiwiHiJV9BYqL2um74eVSbPxewQqUnJSCUMhdB2hS1JCx9W+Fj 8Q== 
+Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrfbv0se-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 09:34:31 +0000
+Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AL9YSIW014860;
+        Mon, 21 Nov 2022 09:34:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 3kxr7nebf7-1;
+        Mon, 21 Nov 2022 09:34:28 +0000
+Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AL9YSFo014854;
+        Mon, 21 Nov 2022 09:34:28 GMT
+Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 2AL9YRrW014851;
+        Mon, 21 Nov 2022 09:34:28 +0000
+Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 4098150)
+        id 531B23A3D; Mon, 21 Nov 2022 17:34:26 +0800 (CST)
+From:   Qiang Yu <quic_qianyu@quicinc.com>
+To:     mani@kernel.org, loic.poulain@linaro.org
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
+        mrana@quicinc.com, Qiang Yu <quic_qianyu@quicinc.com>
+Subject: [PATCH v4] bus: mhi: host: Disable preemption while processing data events
+Date:   Mon, 21 Nov 2022 17:34:24 +0800
+Message-Id: <1669023264-84125-1-git-send-email-quic_qianyu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ROqEnf6bKpIWBVofBuHScnuHzup_6-VB
+X-Proofpoint-ORIG-GUID: ROqEnf6bKpIWBVofBuHScnuHzup_6-VB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_06,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=762 malwarescore=0 suspectscore=0
+ phishscore=0 priorityscore=1501 clxscore=1011 impostorscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211210075
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+If data processing of an event is scheduled out because core
+is busy handling multiple irqs, this can starve the processing
+of MHI M0 state change event on another core. Fix this issue by
+disabling irq on the core processing data events.
 
-On 11/21/22 10:06, Masahiro Yamada wrote:
-> On Mon, Nov 21, 2022 at 5:12 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi,
->>
->> On 11/21/22 00:45, Masahiro Yamada wrote:
->>> On Mon, Nov 21, 2022 at 5:55 AM Hans de Goede <hdegoede@redhat.com> wrote:
->>>>
->>>> Hi,
->>>>
->>>> On 11/20/22 14:55, Andy Shevchenko wrote:
->>>>> On Sat, Nov 19, 2022 at 11:08:17PM +0000, Alexander Lobakin wrote:
->>>>>> common.o is linked to both intel_skl_int3472_{discrete,tps68470}:
->>>>>>
->>>>>>> scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile:
->>>>>>> common.o is added to multiple modules: intel_skl_int3472_discrete
->>>>>>> intel_skl_int3472_tps68470
->>>>>>
->>>>>> Although both drivers share one Kconfig option
->>>>>> (CONFIG_INTEL_SKL_INT3472), it's better to not link one object file
->>>>>> into several modules (and/or vmlinux).
->>>>>> Under certain circumstances, such can lead to the situation fixed by
->>>>>> commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
->>>>>>
->>>>>> Introduce the new module, intel_skl_int3472_common, to provide the
->>>>>> functions from common.o to both discrete and tps68470 drivers. This
->>>>>> adds only 3 exports and doesn't provide any changes to the actual
->>>>>> code.
->>>>
->>>> Replying to Andy's reply here since I never saw the original submission
->>>> which was not Cc-ed to platform-driver-x86@vger.kernel.org .
->>>>
->>>> As you mention already in the commit msg, the issue from:
->>>>
->>>> commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects")
->>>>
->>>> is not an issue here since both modules sharing the .o file are
->>>> behind the same Kconfig option.
->>>>
->>>> So there is not really an issue here and common.o is tiny, so
->>>> small chances are it does not ever increase the .ko size
->>>> when looking a the .ko size rounded up to a multiple of
->>>> the filesystem size.
->>>>
->>>> At the same time adding an extra module does come with significant
->>>> costs, it will eat up at least 1 possibly more then 1 fs blocks
->>>> (I don't know what the module header size overhead is).
->>>>
->>>> And it needs to be loaded separately and module loading is slow;
->>>> and it will grow the /lib/modules/<kver>/modules.* sizes.
->>>>
->>>> So nack from me for this patch, since I really don't see
->>>> it adding any value.
->>>
->>>
->>>
->>>
->>> This does have a value.
->>>
->>> This clarifies the ownership of the common.o,
->>> in other words, makes KBUILD_MODNAME deterministic.
->>>
->>>
->>> If an object belongs to a module,
->>> KBUILD_MODNAME is defined as the module name.
->>>
->>> If an object is always built-in,
->>> KBUILD_MODNAME is defined as the basename of the object.
->>>
->>>
->>>
->>> Here is a question:
->>> if common.o is shared by two modules intel_skl_int3472_discrete
->>> and intel_skl_int3472_tps68470, what should KBUILD_MODNAME be?
->>>
->>>
->>> I see some patch submissions relying on the assumption that
->>> KBUILD_MODNAME is unique.
->>> We cannot determine KBUILD_MODNAME correctly if an object is shared
->>> by multiple modules.
->>>
->>>
->>>
->>>
->>>
->>>
->>> BTW, this patch is not the way I suggested.
->>> The Suggested-by should not have been there
->>> (or at least Reported-by)
->>>
->>>
->>> You argued "common.o is tiny", so I would vote for
->>> making them inline functions, like
->>>
->>>
->>> https://lore.kernel.org/linux-kbuild/20221119225650.1044591-2-alobakin@pm.me/T/#u
->>
->> Yes just moving the contents of common.c to static inline helpers in common.h
->> would be much better.
->>
->> If someone creates such a patch, please do not forget to Cc
->> platform-driver-x86@vger.kernel.org
-> 
-> 
-> 
-> I think this patch series should be split
-> and sent to each sub-system instead of kbuild.
+Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+---
+v3->v4: modify the comment
+v2->v3: modify the comment
+v1->v2: add comments about why we disable local irq
 
-Yes definitely, the changes are big enough that not merging
-this through the subsystem trees is going to cause conflicts.
+ drivers/bus/mhi/host/main.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Regards,
-
-Hans
-
-
-
-
-
->>>>> ...
->>>>>
->>>>>> +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
->>>>>> +
->>>>>
->>>>> Redundant blank line. You may put it to be last MODULE_*() in the file, if you
->>>>> think it would be more visible.
->>>>>
->>>>>>  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI Discrete Device Driver");
->>>>>>  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
->>>>>>  MODULE_LICENSE("GPL v2");
->>>>>
->>>>> ...
->>>>>
->>>>>> +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
->>>>>> +
->>>>>>  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI TPS68470 Device Driver");
->>>>>>  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
->>>>>>  MODULE_LICENSE("GPL v2");
->>>>>
->>>>> Ditto. And the same to all your patches.
->>>>>
->>>>
->>>
->>>
->>
-> 
-> 
+diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+index f3aef77a..6c804c3 100644
+--- a/drivers/bus/mhi/host/main.c
++++ b/drivers/bus/mhi/host/main.c
+@@ -1029,11 +1029,17 @@ void mhi_ev_task(unsigned long data)
+ {
+ 	struct mhi_event *mhi_event = (struct mhi_event *)data;
+ 	struct mhi_controller *mhi_cntrl = mhi_event->mhi_cntrl;
++	unsigned long flags;
+ 
++	/*
++	 * When multiple IRQs arrive, the tasklet will be scheduled out with event ring lock
++	 * acquired, causing other high priority events like M0 state transition getting stuck
++	 * while trying to acquire the same event ring lock. Thus, let's disable local IRQs here.
++	 */
++	spin_lock_irqsave(&mhi_event->lock, flags);
+ 	/* process all pending events */
+-	spin_lock_bh(&mhi_event->lock);
+ 	mhi_event->process_event(mhi_cntrl, mhi_event, U32_MAX);
+-	spin_unlock_bh(&mhi_event->lock);
++	spin_unlock_irqrestore(&mhi_event->lock, flags);
+ }
+ 
+ void mhi_ctrl_ev_task(unsigned long data)
+-- 
+2.7.4
 
