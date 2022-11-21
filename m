@@ -2,312 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BB5631969
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 06:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1DA63196C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 06:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiKUFQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 00:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S229502AbiKUFR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 00:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKUFQA (ORCPT
+        with ESMTP id S229436AbiKUFRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 00:16:00 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2044.outbound.protection.outlook.com [40.107.244.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994102E9E5
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 21:15:58 -0800 (PST)
+        Mon, 21 Nov 2022 00:17:24 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F7912620;
+        Sun, 20 Nov 2022 21:17:16 -0800 (PST)
+X-UUID: c363a48abc3345a39a32f36420fa6d08-20221121
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=n109LRgXB85JQKNz4YiWZG1SNhXjxBmpyjCkvN3/fdw=;
+        b=FfxvWBAM25hQwpo45x1Uf/e/wFadfr+oCAQcma/9ZnpBD3tG9IuWZIQ+ZhIm7L+e59IM9NroIMn+xWBo27Pzd4ApFca0Bb2CJz1D5EkwymxkAaTqb7NlarlKxL8euMkvKWcXqVQFYXSXduJ0dznQ5+ZOupwlWo+Mf8J9kKtXco8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:c5f3b500-20c7-4694-9324-8cefe977b950,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:f00dd2f8-3a34-4838-abcf-dfedf9dd068e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c363a48abc3345a39a32f36420fa6d08-20221121
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 910843348; Mon, 21 Nov 2022 13:17:12 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 21 Nov 2022 13:17:11 +0800
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
+ by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 21 Nov 2022 13:17:11 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=clwOzOtFnfTvWQDsqIw/QTmCwtPOshNAwpkaSGO4CbCrmEF2l/n8xyyMbrOgBkj7cEQ9Q842/PO8TpVtYZPNqcguMJ0m/FtAypwhUnapOlqK2Eary3z+3/ToQra8KPxMqD7WzXOvmWkdM/nYcRCoIeU2NaYO8439IHGcJU78NTg6r6tiRPcA2LXII+Ak2YLh1yeoDO/nublRpnCtnvsQ51KGVsVYlfo4F4ivWiYL96wl/yT0wkQrhhW+c0P7+xW1CIwClHbzUO17rShKRMUVLg/s1Y/L99f0Q150GMBVzeY1PGKj+eXAioWBv3/OlueB5ZufIa9gHxEUzNU43ep6kw==
+ b=eTOUM1yPWkcH+g/jlAD7wdhWgD1Fcel8SqMGVlWmnnxylbiZ2g+TFzFC/iiOs19R2Q/g2hjYy8Mc2JPMkW0qdmIpXKGyI44d86hcLyj2TJwP7zWO9kVqd+1ner/9+wp6tJPUWNAddYrvaBz0jXjvgP5TP6SOluk+qNBt6l0F0cU6FsaThr1TQcKY5DgXgO/YBqU4GJ+JA6/sPhHhQzOQ9w+SFYKTY63vknvLFSOucrSecZmFVEHKusFDhpesUM9M6GPiGj59TZ/y4yTyCZrRlpLXuX0w2y8IPaRJIdtGDFzE7aflzQaxXgh2LaS2lI8DSQQBtUwmPBAmtgRZrQz+ow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wBNuI6lTrvrdyMS5QAItBD4nb5WPi5v/1vfTB9RZiTA=;
- b=WSl7cS13E0vQJL94bmLFBgYMNafRR6fzHgqslWBU8D6Vob9c19O4hVpWQz1T1pHFv8lNGo1MvZUkmQk/hecYRkfhEWxip64tZswuOb34OPp1NPiGlNWOW5gYir+f8iHzo3kTV+tp2brThZ3Ha7FIbGv4BuLvnDESKZDBJu4Ii1ZAHCKOkhIuqlvcZiv01vWWmJl523exzh4N5WGP4YOcPLp2h6jatiCVtHIgqzkt9Hv4CTlLgkhD7IvDOaLKUkxuncVwegxqaFyqTEzT5hVDv61VaNBRGCjCibMXkTFqNVSx7+K1DWHbmM7PGaDiGkoRpjvSXcnzMcnGIJA3GDaGxQ==
+ bh=n109LRgXB85JQKNz4YiWZG1SNhXjxBmpyjCkvN3/fdw=;
+ b=Y+ebwzi87/+c+sMcmvpR2VTvmPVjdvI2dL3H8FLveyMxTpN2qJ/JPCM5bn8/9MZrzzGi61hY39w93/ROO1oeBN8R5D3/zqg3vyximqC16r8It1F7rmuA11eKH44GOROF0HzW5MGGGUoFExX33yNKWrB66gmo94jperxTFYdyOQpPCYxN210XiQ0dPZJjnrk9k9UHcfC/ozePJHDNqUKw6vslJND3G/TBk8I89qgcMRvOBnNcEN6LOcCUDTrkjlYfahapIOjTtFly4j4rw7ZjP9bHI1p1deuEyi5Vs+3dw+cH7tOhncr4RFdZ5locmLpyewNDdJAqE2gjOdKm2wCYWA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wBNuI6lTrvrdyMS5QAItBD4nb5WPi5v/1vfTB9RZiTA=;
- b=GGb4muDJbT32mArCkCwPgE17LmnIT99I4yBE/rvsJGPSYQHV8SFFW8npp3x2Cj3V/BN1cBVxiYpHj6RbnHcTWng6JSQ4MqqDZYnowhWHe6tbngGBrYEEKFynWSzyzYRdkUXcNx7xzsBYy8vkPDK9kB+QI7GcTRR4OL/GkmrAxCA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3008.namprd12.prod.outlook.com (2603:10b6:208:c8::17)
- by DS0PR12MB6558.namprd12.prod.outlook.com (2603:10b6:8:d2::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.11; Mon, 21 Nov
- 2022 05:15:56 +0000
-Received: from MN2PR12MB3008.namprd12.prod.outlook.com
- ([fe80::fba4:3934:b658:d058]) by MN2PR12MB3008.namprd12.prod.outlook.com
- ([fe80::fba4:3934:b658:d058%5]) with mapi id 15.20.5834.009; Mon, 21 Nov 2022
- 05:15:56 +0000
-Message-ID: <dfc6bdde-7e5d-44e8-8549-7d61a0f18bb5@amd.com>
-Date:   Mon, 21 Nov 2022 10:45:45 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-From:   Raghavendra K T <raghavendra.kt@amd.com>
-Subject: Re: [PATCH v4 0/7] mm: Remember a/d bits for migration entries
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Hugh Dickins <hughd@google.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Alistair Popple <apopple@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20220811161331.37055-1-peterx@redhat.com>
-X-Mozilla-News-Host: news://nntp.lore.kernel.org
+ bh=n109LRgXB85JQKNz4YiWZG1SNhXjxBmpyjCkvN3/fdw=;
+ b=YbKthvJXNFOF9SVcjwdfi5PjlhrhI+2LVTrzVx0zbki5f5WPsPvkDKcSd0yLWCEGbERPYN3qYzjvBfNCfM44oyYheSBd/MbXPWLvW+nfYP/MZK8l88yfPWrLPhlMC57lhyCpyCPOn5zafIVJSoLorCTG3PehD2sqkul1tMSZfdQ=
+Received: from SI2PR03MB5885.apcprd03.prod.outlook.com (2603:1096:4:142::7) by
+ TYZPR03MB5296.apcprd03.prod.outlook.com (2603:1096:400:3a::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5834.15; Mon, 21 Nov 2022 05:17:09 +0000
+Received: from SI2PR03MB5885.apcprd03.prod.outlook.com
+ ([fe80::be04:b90a:e582:9b0b]) by SI2PR03MB5885.apcprd03.prod.outlook.com
+ ([fe80::be04:b90a:e582:9b0b%3]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
+ 05:17:08 +0000
+From:   =?utf-8?B?WW9uZyBXdSAo5ZC05YuHKQ==?= <Yong.Wu@mediatek.com>
+To:     "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        =?utf-8?B?Q2hlbmdjaSBYdSAo6K645om/6LWQKQ==?= 
+        <Chengci.Xu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: mt8188: Add binding for MM
+ & INFRA IOMMU
+Thread-Topic: [PATCH v4 1/4] dt-bindings: mediatek: mt8188: Add binding for MM
+ & INFRA IOMMU
+Thread-Index: AQHY4r0Bs+Wvn4yFEEW+yA6HstpMCK5JC4YA
+Date:   Mon, 21 Nov 2022 05:17:08 +0000
+Message-ID: <0b5b1d9e302f70df2e6ea207a88e7483eabd469c.camel@mediatek.com>
+References: <20221018064239.13391-1-chengci.xu@mediatek.com>
+         <20221018064239.13391-2-chengci.xu@mediatek.com>
+In-Reply-To: <20221018064239.13391-2-chengci.xu@mediatek.com>
+Accept-Language: en-US
 Content-Language: en-US
-In-Reply-To: <20220811161331.37055-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0227.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::14) To MN2PR12MB3008.namprd12.prod.outlook.com
- (2603:10b6:208:c8::17)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SI2PR03MB5885:EE_|TYZPR03MB5296:EE_
+x-ms-office365-filtering-correlation-id: adba95f0-f0e6-4af8-da3a-08dacb7fa35d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: k4kR8PRfXzkS4PanpautsyE2sVpoCqACTe0brrVjiUtG7wjczVWyr5WEbUsKXN887UDbhutIk7kHzx7si/BqGFmkbUY9mcWeBrBTPxLth3eiIxq7YS9XykJhK1hkdljoaH2HjVNp9En2o0Vwo4oUR2b/gINZ/eKZ5klTK289OVt8DO7kwczpqqD25hEEQftf8v4mOndJAEn1k6UImP5/pLUUzeIxeiAmkd7O8w74P97eRBbvo+FusqcIu5LMxofzeX5jqMVcO8RlmT6kGIVOPaXmQ+1u87Dl11AZFNAfk/J+PzLJtBLI09OoQAeecblppTInYUFLUak3bjeEDwK5D/YimUtJeUJFwxkPECQAQIwkUaoslknb5khQW31zhAdHtw5StpqbDTSs5C0DRA8Vcxbd8PN4qIBSG1m/igDROxW5J9UJ9tQpbwr/ecKEb30LfyQLEyMomVw/YMZqvOn8p1CRE7o0PBvMQBf7suFYoM1/truqRq8h8Fq5D8FU54Fhw5Ht8BVDEFapmroky2gaDIFOJt2+2JSl6qRzjHOTNeC+SfxYYWBQ7oayn5P+8LzHfDMW1NiVio/I+BcBLa2MqNuY1lNQDfjSzILG/Ba4em3Lqw0dzUeelJOqPTYVK6AFQvasuS1iUsPmZIgCQ0j/JOOs+5IsUDSLI/O73WKmaEd0Ex0bs09XkfOJAqEqVkd1gov5YKJctlSYbuObeipW0TV7xEJI0uIN805YMvE/D1w=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB5885.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(346002)(366004)(39860400002)(451199015)(85182001)(36756003)(86362001)(122000001)(38070700005)(66476007)(66946007)(76116006)(66556008)(316002)(66446008)(41300700001)(64756008)(8676002)(4326008)(38100700002)(478600001)(71200400001)(54906003)(6486002)(110136005)(4744005)(5660300002)(8936002)(2906002)(4001150100001)(7416002)(186003)(2616005)(26005)(6506007)(6512007)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WjVqYlk2UFlDQU5CQkduMDBrOUJIZmcyaG91dk13cDE3clkxN0ZtUmN5SnN2?=
+ =?utf-8?B?NThKYXhvVFQwL3dQRkxvUkIyNkVWSXhZQlBYOWZGL2dWRndXeWRYUVJHQU02?=
+ =?utf-8?B?bjN5S2FOd0VzcHZzRHBrWnltTlJPRVhpYjRLczNvMkNwODJuK2FWdnVxQlVV?=
+ =?utf-8?B?S3ZWSHRINkh0cWpRWisxanJUU0dpeXNxQ1JRQjBKWFlwVGlSVVVuKzRCcWJK?=
+ =?utf-8?B?QklnQUZHQkJBRDNFN0k5TWp4RkpEOHNCV1g5cWdPRHR3NjdYNmw4REt3OFV4?=
+ =?utf-8?B?MXl2dytremtJWlJPVHNwQTE4VVdqZmUvakpTSkhoc05MUDkxNVVYRWZBNm9q?=
+ =?utf-8?B?V25vK2x5NnFBNU14MmNWVFNlRkNCSTZodWJIQlhTMXBPNW5DQWZlOHdSekRB?=
+ =?utf-8?B?aUMxcXpoSHpCVjJ5VTczU2haRldBdVRjK0RLWnBlSHdiQWNIenlDOVI0MW00?=
+ =?utf-8?B?RDRCNDNkRFBNOEg2aFUxUHFvSFU5V0k1Y3FSRG5IVnlLTENNSHcwWFZybTNH?=
+ =?utf-8?B?d0R6MzRCK3JjM25xaTNQVTA2K2lQMVJQU1VIbGUyK2JHZlh6U2ZxdFhPQUV3?=
+ =?utf-8?B?bFQ3czZjSm8yZWRrRmJyOXpnQitGVVBxeW9YNllzY05ZcHBoU2IwTnRaWGJs?=
+ =?utf-8?B?NUVsd0E1TVR5ZEhzQUNzVnE0cmFGeXlqNFQrd0l5UTVVbnhpdDBiOURxZ0gw?=
+ =?utf-8?B?L3FyVEVKOEE5T0hETlU3ZjVUcUlMc0ZBNDJmc1crTzk3U2Y5RzhyVTBoZmo2?=
+ =?utf-8?B?elJ5cFlOTk9qQy9hT3FtSy8vZUxOQ3VvMmcrZnorR2xFZ2xSc0xid21ua1Vi?=
+ =?utf-8?B?OFpONDFwQW9GS2Ewc0F5Vis3Njh2ZDZWSC9xVzl4dE1NSjlmZW1QMEkxanli?=
+ =?utf-8?B?WkNMWFlzL0dxNFdnTFp1YTFQdmllMmRzais0TFc4RGVLV1V2YWV0WkZsclRk?=
+ =?utf-8?B?c0UxdU52bDFQeitJNVhpUUZOdC9IR0JLdWN6ZVFaNUZxUWxJVmMzdG40MUxN?=
+ =?utf-8?B?TWUvVnN6Ulc3QjVRYVVUTVYvUDFNODJZWTB1R0lwNVBCK29hRkRhak1xZDFX?=
+ =?utf-8?B?ajBXL1ZYeUhxYjZPd2lzQVphb3RtaUEySTVKb0dObktzUUJSQkJCT0hDaWRR?=
+ =?utf-8?B?a0dCRitheVBXaHpiQzlxZFV4QXFOVXJDNWNiWGlIZHQzQ29qRmdkKzF0M0ZF?=
+ =?utf-8?B?cy9XUWd3NlhUT09kcVhPZ1BHR1FZOFVmNkE1ZVlLRmZ3QW4rNE9TemNQWWlY?=
+ =?utf-8?B?N2NrTmM5a3haeG1Lak1FVjIyWlBmNmFzZ1dyVDhaMWNSYkVncSttdTlNSndu?=
+ =?utf-8?B?UE45ajcrYXVtVEw2ZFAzb3MzVS9NZkU5VXRIYSs1NHhHRGM0Q2NpMEF4Tity?=
+ =?utf-8?B?SWZWN0lJRktZMlpzazlDRXBKSm1yVzZZWHlMVlBaUGxmOEs5eHpKK2JkcGJN?=
+ =?utf-8?B?aUViMGFLcE5mcHVQd1M2ZzV6ZTBPcGtBSE9KQmZ1dUo2U1M5V2VBR2w5b1cr?=
+ =?utf-8?B?UkFnZWRwZHFNMksrT3lnZUpMMjJBdFhNT0dqTnlsVGtYQjgyRXE2NUlKeHdz?=
+ =?utf-8?B?RTRVT0MrYTVxem13aHBKQTgyTUltakVsTXZ3UkQ2UDYwM253amVPRlBlSE5s?=
+ =?utf-8?B?d2tkdnAzS0ZkamVkR3ZqenRUNHZuWHFlUE4rajVGbGNvNHVjMXVUSzhVWEMx?=
+ =?utf-8?B?OXRJSVJXT3dMeG05K3lBejlXczVacllpQ3JDUHErL0lweitIU1h4bXU1OHRs?=
+ =?utf-8?B?eVNESWJmTkt6cFlCQnQxQkdHSEZZMXJVRkRRQm5Mdi9rMk1DT2ZsZkVWb3NF?=
+ =?utf-8?B?T1ROc3kvaDJ2L05nRm9hR0w4cDM2aUY1ZkVOR2NJbnB4REp2c3E3UlVCbS91?=
+ =?utf-8?B?UjBOVk1SOUdlN1RTTnh5VVFqMEhUTEQ4YlFEUXFKU1NFa0p0VTlJTXp0ZzJ0?=
+ =?utf-8?B?Tk82MTJGWDhLK2VmM2hBNlpzY2FjYyttaThIQ2RtQlFCMWFoZUJkaElaVm9t?=
+ =?utf-8?B?Z1hmd2ZUMlpFN1pkMU9mSFNYazlRZEY3MW44NTFiemFwRHdvVFpFYmdQalcz?=
+ =?utf-8?B?Wmt3YVNRem1ydlJ2YWNVZHBtQTc3MjhvZXJlcDNtNTh4UEk4UUxXWkJRK3oz?=
+ =?utf-8?B?ck1JQjdqakdVNUNTVnQyc2J0QmdqeUpPVDc5NzFLM0VMZ1VDdVZ3bHJiSmZk?=
+ =?utf-8?B?c1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A91B6EBEB7B38C45BA5F759FD00A8E17@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3008:EE_|DS0PR12MB6558:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0959f570-9612-4cbe-defb-08dacb7f77f2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BZOSMr0i0/hyhG1JgfHL9QfVnZWnH94s09tFIJd4CdJK8z8sS8ek1TqpcHt8E8SeLYTpPFZdjqbJWlckvW3VxckIkO4T9nhhRsJxkoDfEIseXv9yu9+T/P2xVIekQXCIuhNXKhh7GFMIVE/FPgU+Ml85i3zgyW4XPQ75QeCBY1i2+SFCERj7WjWfSMviq9e1dRUHAYQ8p9sLe00HVlYw4xjQsyMvGbyyQE16BqldnjBMGB7VPT5sd5EOEZYXOtUDUXkgK82B79f8BGRZPZKY+W21N2O4hHzwmXFtJ7llwnQYVvXqMjQhYN9cptoLfZRH63F764nSsUfkHddI6eLcrvA5xsH9bNcRfkTRe50GUE4BdFgYrYmpYiIKidyayp5MKj6gtVydMO12nXLUqVjYDffuxRZM14uOAwS1/tNdMHcyE2pYqgrgaNiIeF6jgpDVL9O7Mp52/kf0Gna/7aHpj9EtwIu574E69eyMmMM/aqh64PZkVgsLvlPlE7N1h2yDi0106rmetNQHNfIPYseiKyrc9HDrNKPE/bLwzwIuFCTsgdqY0dtrDPKVOuliWmknxkKLdcBly5T4p6SaWqJCT/jzjgFiG1XwGfUBBp/c58PQdWnHdLAUnxJsCxJynO6aJQp7ZP8fbUbT7iD3wgEDoSG2psUnu6ekHhSzgMJv3CDwJQWxwQ+3VQlQ9VkWyafHIkVtPCAlGBzDW2JTCs+0hJhR3opmV2DmT9MF7xP4dlU7VWAsv1ecWTyc9aKpha/Fa+EHGPD+nqXvIgkG7RCwLpcE5Vku6OzGYf2MNI7UdGU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3008.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(39860400002)(136003)(346002)(396003)(451199015)(6512007)(478600001)(53546011)(8936002)(6666004)(7416002)(36756003)(41300700001)(966005)(6506007)(6486002)(26005)(2906002)(5660300002)(186003)(38100700002)(2616005)(31696002)(83380400001)(66946007)(66476007)(66556008)(31686004)(316002)(54906003)(8676002)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bUpPb0NIWjlVbCtNbHdIVjJWakFEaUZHTENzbGpONG80bXZhKzI0bG9qai9E?=
- =?utf-8?B?ZnRpNi9tQlJVQTY0TWh4cWp0MXE3Vjg2a3JnNVZrNEVOckFBcXUvNDNWclBS?=
- =?utf-8?B?ZHVIWmVnS1c2d0pMMjA0Slc1RTV3bEFOUHNDQ3IvSDRoLzNDaWN4dzAxNEww?=
- =?utf-8?B?UHc1UWw2UUoxdDdlODNrckF2YkdFTnFuQjU5T2NXNzZTMGk2TEVaeHFFV2JL?=
- =?utf-8?B?bDlER2c4VlVYS0xUQ25ibWt4U243cVVNQkw2cFRnSXROVWlZcjY3eVJzd21x?=
- =?utf-8?B?aWxUN2tVNGVkUnIrNHVDQjR5bXZUQllObnhmR0pDNVEwWjd6TzhocnFVV0Ur?=
- =?utf-8?B?SVZsQ1FoNkcxK2dXRFp4V0VaTkx1NDRCdjBrUGFHdU15SWthak4yUmZDODlr?=
- =?utf-8?B?T2hUWFlVRFlLd1RQMUprVUNVLzk5Zy9hRnlvNWpXWEhzUzVTVFlsTHJweFBM?=
- =?utf-8?B?bFRmTllpd3ZKRnZnZVlyYzVQcFExaVNFaEc5cm5LWWxJUmVXUy9helFaLzFB?=
- =?utf-8?B?Ung0azNGWHNkd0lCN2g4ZkZpcmdOSmE1a2R0ZzdzY056R3Bva3prS3hDNXNY?=
- =?utf-8?B?eUZFa3BZV2ZlYWsvcHN4cDZ5SVl3dVpuK2RuMTVmaEhkVFFXVTZWMzRDMWo0?=
- =?utf-8?B?MlJSY2lLUkxVSHd2TnZTa0lZMWtwY1FHR2QrUUEwZHpXR1loWmFkNVc4aGNL?=
- =?utf-8?B?Z3FXRUJhUHdVN3lyWDhZYU5zWThKWHkyenFtRThoTGpodXRuMWlEUmtJck5y?=
- =?utf-8?B?K3V4dXNHM0VGNU5sMDNUdzIrai9oaTlxaUZ0allzNkoxVWlZcUNlOWJyZUM1?=
- =?utf-8?B?bFFqbFdmUThoWHBtKzVESHJkZ1FMcG94ZzZQdEQ4aHdGTnZvaGJtdFV1RlZs?=
- =?utf-8?B?YUFONCtkN3MzaGhac3pXU1BtQktnbGRKUHVodWE1S1RrdTAyL2VyT29zOXlv?=
- =?utf-8?B?UXZNTUFYNC9wdFpuWVRmTlgvMEZUNEc3d2VlVnRDU3RCRmQ0bzNJUmlOWHhE?=
- =?utf-8?B?S3kvaG1iRVdTZXJvU1puRHJlM2djMWpYMjRWYVdaNlgyOTVXeFNrNUt1N0Iw?=
- =?utf-8?B?NGgxQUpuODF6ZWdKMjE4YjBNMC82SjE2VlBDVExQOFg1MmtLNlBLMTlwbFl1?=
- =?utf-8?B?Q3RyQmwrSmRKWndoUjRiV2ppZGozVWlMTWdvcnB5b1I0YWFYcmF3bFpFODho?=
- =?utf-8?B?NFB4SUFhYm5qaHltNGNxOXdQZUlBVHI0MEw0NnhxbXp1UHhWWjY1bHFoZlhJ?=
- =?utf-8?B?L0JlSWpvOHRRVnh1Q0NYRWhqdUdCRWZJdGF0SWgrU21GQ2NYRW91dUxTbnhM?=
- =?utf-8?B?a0ZkSjNkM1kzUjdYM1NkSGFxYWppWUZ6ak9KR0s3dFVPS3UyY3FBVDg0c1My?=
- =?utf-8?B?Y2FuNUZXTWhVQkJhNDc3WkQxS1FPdlgweFZsUUZwWEJYaXpKbkIzYlVMVWJL?=
- =?utf-8?B?c0Z3aTQyM0dMSTdtV3VjQW91UktzbUxSWHAzL2w1WjVWTnU5OGpnS1ozME5u?=
- =?utf-8?B?QVoxOWp0SnhIRHI2K29OWFFFMlBvcnRrYlk3aDJadjFTd1NiaUZtVkluSklZ?=
- =?utf-8?B?WmF5VHJuV0YyUDl1RGZPN1VDUy85b29Fa3VBb1Mva05ZQlFueGpOMXVuNS81?=
- =?utf-8?B?aUZMMzhwQnphOCtxOEpUWU5xdG5hTm5aSzVNUktYaHJtRlVQTFNUZFdMcUh5?=
- =?utf-8?B?ZFBFK2dTMXN0TFZmWE1ZQjJDcnhhYlRmKzFlS1dIcG9xQUEwazRNNlhPdEl2?=
- =?utf-8?B?NjNXVnhEYWcrT1BxeHV6eThDQnVOSHA2UmZSRHA2YVd3Tmd6aDVuaG1lSG9i?=
- =?utf-8?B?Vm9JS1piVTNyZ1RTTlBWSTlGQmdvSDBzSi9mR2xBN0huYjA3cVRIb0tqenVh?=
- =?utf-8?B?cDVWV0pIUUtORE84S2Iwd3R3dDJiVmE4ZS9MQ1Bld0RHNXlyVGFuL3I1bUMr?=
- =?utf-8?B?anE0SjhOeHFYdnRUeHduSHZLeTJsdllRU28vY1ZyQ2QvYU05YlpyT0U0Zmxt?=
- =?utf-8?B?M2JPTEpTZXhwUzBybUtEZmpxeC9LcGk3Q0NMdzM4QlUwYmZwTUw0WHE2UVBx?=
- =?utf-8?B?RUJSdlh1SU44NitocWdhQ2VnZ3RrNTJjT2lTWk5KRHN2enJ5ekRIYTdGbDd3?=
- =?utf-8?Q?WaYMeqlroODEbtFSAgChbE2vQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0959f570-9612-4cbe-defb-08dacb7f77f2
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3008.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 05:15:56.3318
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB5885.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: adba95f0-f0e6-4af8-da3a-08dacb7fa35d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2022 05:17:08.7832
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1KhdFc0FiRvyhyh1D+xuPFX1n68/C6hAmpJ6HdkuhByBW5ee547xzEjgoxDjQia2vbzfZqryNx2qAyUVbdHUqw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6558
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dc18ID58PrHP3WLC9Kf8JiSzdvvNiz4vKHZ1ZpC5/Uqu3knKeaiG72ExLty2vDNDwSb53/CGw9wPjHHuU73sFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5296
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/11/2022 9:43 PM, Peter Xu wrote:
-> v4:
-> - Added r-bs for Ying
-> - Some cosmetic changes here and there [Ying]
-> - Fix smaps to only dump PFN for pfn swap entries for both pte/pmd [Ying]
-> - Remove max_swapfile_size(), export swapfile_maximum_size variable [Ying]
-> - In migrate_vma_collect_pmd() only read A/D if pte_present()
-> 
-> rfc: https://lore.kernel.org/all/20220729014041.21292-1-peterx@redhat.com
-> v1:  https://lore.kernel.org/all/20220803012159.36551-1-peterx@redhat.com
-> v2:  https://lore.kernel.org/all/20220804203952.53665-1-peterx@redhat.com
-> v3:  https://lore.kernel.org/all/20220809220100.20033-1-peterx@redhat.com
-> 
-> Problem
-> =======
-> 
-> When migrate a page, right now we always mark the migrated page as old &
-> clean.
-> 
-> However that could lead to at least two problems:
-> 
->    (1) We lost the real hot/cold information while we could have persisted.
->        That information shouldn't change even if the backing page is changed
->        after the migration,
-> 
->    (2) There can be always extra overhead on the immediate next access to
->        any migrated page, because hardware MMU needs cycles to set the young
->        bit again for reads, and dirty bits for write, as long as the
->        hardware MMU supports these bits.
-> 
-> Many of the recent upstream works showed that (2) is not something trivial
-> and actually very measurable.  In my test case, reading 1G chunk of memory
-> - jumping in page size intervals - could take 99ms just because of the
-> extra setting on the young bit on a generic x86_64 system, comparing to 4ms
-> if young set.
-> 
-> This issue is originally reported by Andrea Arcangeli.
-> 
-> Solution
-> ========
-> 
-> To solve this problem, this patchset tries to remember the young/dirty bits
-> in the migration entries and carry them over when recovering the ptes.
-> 
-> We have the chance to do so because in many systems the swap offset is not
-> really fully used.  Migration entries use swp offset to store PFN only,
-> while the PFN is normally not as large as swp offset and normally smaller.
-> It means we do have some free bits in swp offset that we can use to store
-> things like A/D bits, and that's how this series tried to approach this
-> problem.
-> 
-> max_swapfile_size() is used here to detect per-arch offset length in swp
-> entries.  We'll automatically remember the A/D bits when we find that we
-> have enough swp offset field to keep both the PFN and the extra bits.
-> 
-> Since max_swapfile_size() can be slow, the last two patches cache the
-> results for it and also swap_migration_ad_supported as a whole.
-> 
-> Known Issues / TODOs
-> ====================
-> 
-> We still haven't taught madvise() to recognize the new A/D bits in
-> migration entries, namely MADV_COLD/MADV_FREE.  E.g. when MADV_COLD upon a
-> migration entry.  It's not clear yet on whether we should clear the A bit,
-> or we should just drop the entry directly.
-> 
-> We didn't teach idle page tracking on the new migration entries, because
-> it'll need larger rework on the tree on rmap pgtable walk.  However it
-> should make it already better because before this patchset page will be old
-> page after migration, so the series will fix potential false negative of
-> idle page tracking when pages were migrated before observing.
-> 
-> The other thing is migration A/D bits will not start to working for private
-> device swap entries.  The code is there for completeness but since private
-> device swap entries do not yet have fields to store A/D bits, even if we'll
-> persistent A/D across present pte switching to migration entry, we'll lose
-> it again when the migration entry converted to private device swap entry.
-> 
-> Tests
-> =====
-> 
-> After the patchset applied, the immediate read access test [1] of above 1G
-> chunk after migration can shrink from 99ms to 4ms.  The test is done by
-> moving 1G pages from node 0->1->0 then read it in page size jumps.  The
-> test is with Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz.
-> 
-> Similar effect can also be measured when writting the memory the 1st time
-> after migration.
-> 
-> After applying the patchset, both initial immediate read/write after page
-> migrated will perform similarly like before migration happened.
-
-I was able to test on AMD EPYC 64 core 2 numa node (Milan) 3.72 GHz 
-clocked system
-
-am seeing the similar improvement for the test mentioned above (swap-young)
-
-base: (6.0)
---------------
-Write (node 0) took 562202 (us)
-Read (node 0) took 7790 (us)
-Move to node 1 took 474876(us)
-Move to node 0 took 642805(us)
-Read (node 0) took 81364 (us)
-Write (node 0) took 12887 (us)
-Read (node 0) took 5202 (us)
-Write (node 0) took 4533 (us)
-Read (node 0) took 5229 (us)
-Write (node 0) took 4558 (us)
-Read (node 0) took 5198 (us)
-Write (node 0) took 4551 (us)
-Read (node 0) took 5218 (us)
-Write (node 0) took 4534 (us)
-
-patched
--------------
-Write (node 0) took 250232 (us)
-Read (node 0) took 3262 (us)
-Move to node 1 took 640636(us)
-Move to node 0 took 449051(us)
-Read (node 0) took 2966 (us)
-Write (node 0) took 2720 (us)
-Read (node 0) took 2891 (us)
-Write (node 0) took 2560 (us)
-Read (node 0) took 2899 (us)
-Write (node 0) took 2568 (us)
-Read (node 0) took 2890 (us)
-Write (node 0) took 2568 (us)
-Read (node 0) took 2897 (us)
-Write (node 0) took 2563 (us)
-
-Please feel free to add FWIW
-Tested-by: Raghavendra K T <raghavendra.kt@amd.com>
-
-> 
-> Patch Layout
-> ============
-> 
-> Patch 1-2:  Cleanups from either previous versions or on swapops.h macros.
-> 
-> Patch 3-4:  Prepare for the introduction of migration A/D bits
-> 
-> Patch 5:    The core patch to remember young/dirty bit in swap offsets.
-> 
-> Patch 6-7:  Cache relevant fields to make migration_entry_supports_ad() fast.
-> 
-> Please review, thanks.
-> 
-> [1] https://github.com/xzpeter/clibs/blob/master/misc/swap-young.c
-> 
-> Peter Xu (7):
->    mm/x86: Use SWP_TYPE_BITS in 3-level swap macros
->    mm/swap: Comment all the ifdef in swapops.h
->    mm/swap: Add swp_offset_pfn() to fetch PFN from swap entry
->    mm/thp: Carry over dirty bit when thp splits on pmd
->    mm: Remember young/dirty bit for page migrations
->    mm/swap: Cache maximum swapfile size when init swap
->    mm/swap: Cache swap migration A/D bits support
-> 
->   arch/arm64/mm/hugetlbpage.c           |   2 +-
->   arch/x86/include/asm/pgtable-3level.h |   8 +-
->   arch/x86/mm/init.c                    |   2 +-
->   fs/proc/task_mmu.c                    |  20 +++-
->   include/linux/swapfile.h              |   5 +-
->   include/linux/swapops.h               | 145 +++++++++++++++++++++++---
->   mm/hmm.c                              |   2 +-
->   mm/huge_memory.c                      |  27 ++++-
->   mm/memory-failure.c                   |   2 +-
->   mm/migrate.c                          |   6 +-
->   mm/migrate_device.c                   |   6 ++
->   mm/page_vma_mapped.c                  |   6 +-
->   mm/rmap.c                             |   5 +-
->   mm/swapfile.c                         |  15 ++-
->   14 files changed, 214 insertions(+), 37 deletions(-)
-> 
-
+T24gVHVlLCAyMDIyLTEwLTE4IGF0IDE0OjQyICswODAwLCBDaGVuZ2NpLlh1IHdyb3RlOg0KPiBB
+ZGRzIGRlc2NyaXB0aW9ucyBmb3IgbXQ4MTg4IElPTU1VIHdoaWNoIGFsc28gdXNlIEFSTSBTaG9y
+dC0NCj4gRGVzY3JpcHRvcg0KPiB0cmFuc2xhdGlvbiB0YWJsZSBmb3JtYXQuDQo+IA0KPiBJbiBt
+dDgxODgsIHRoZXJlIGFyZSB0d28gc21pLWNvbW1vbiBIVyBhbmQgSU9NTVUsIG9uZSBpcyBmb3IN
+Cj4gdmRvKHZpZGVvDQo+IG91dHB1dCksIHRoZSBvdGhlciBpcyBmb3IgdnBwKHZpZGVvIHByb2Nl
+c3NpbmcgcGlwZSkuIFRoZXkgY29ubmVjdHMNCj4gd2l0aCBkaWZmZXJlbnQgc21pLWxhcmJzLCB0
+aGVuIHNvbWUgc2V0dGluZyhsYXJiaWRfcmVtYXApIGlzDQo+IGRpZmZlcmVudC4NCj4gRGlmZmVy
+ZW50aWF0ZSB0aGVtIHdpdGggdGhlIGNvbXBhdGlibGUgc3RyaW5nLg0KPiANCj4gU29tZXRoaW5n
+IGxpa2UgdGhpczoNCj4gDQo+ICAgSU9NTVUoVkRPKSAgICAgICAgICBJT01NVShWUFApDQo+ICAg
+ICAgIHwgICAgICAgICAgICAgICAgICAgfA0KPiBTTUlfQ09NTU9OX1ZETyAgICAgIFNNSV9DT01N
+T05fVlBQDQo+IC0tLS0tLS0tLS0tLS0tLSAgICAgLS0tLS0tLS0tLS0tLS0tLQ0KPiAgIHwgICAg
+IHwgICAgLi4uICAgICAgfCAgICAgfCAgICAuLi4NCj4gbGFyYjAgbGFyYjIgIC4uLiAgICBsYXJi
+MSBsYXJiMyAgLi4uDQo+IA0KPiBXZSBhbHNvIGhhdmUgYW4gSU9NTVUgdGhhdCBpcyBmb3IgaW5m
+cmEgbWFzdGVyIGxpa2UgUENJZS4NCj4gQW5kIGluZnJhIG1hc3RlciBkb24ndCBoYXZlIHRoZSBs
+YXJiIGFuZCBwb3J0cy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IENoZW5nY2kuWHUgPGNoZW5nY2ku
+eHVAbWVkaWF0ZWsuY29tPg0KPiBBY2tlZC1ieTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6
+dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiAtLS0NCj4gIC4uLi9iaW5kaW5ncy9pb21tdS9t
+ZWRpYXRlayxpb21tdS55YW1sICAgICAgICB8ICAxMiArLQ0KPiAgLi4uL21lbW9yeS9tZWRpYXRl
+ayxtdDgxODgtbWVtb3J5LXBvcnQuaCAgICAgIHwgNDgyDQo+ICsrKysrKysrKysrKysrKysrKw0K
+DQpSZXZpZXdlZC1ieTogWW9uZyBXdSA8eW9uZy53dUBtZWRpYXRlay5jb20+DQoNCg==
