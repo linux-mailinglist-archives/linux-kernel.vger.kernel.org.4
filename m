@@ -2,141 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DD5631C10
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB71631C28
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiKUIwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S229712AbiKUI4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiKUIwE (ORCPT
+        with ESMTP id S230046AbiKUIzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:52:04 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755F782217;
-        Mon, 21 Nov 2022 00:52:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669020721; x=1700556721;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PRZcPQKEh9lZYS6k17IpBGFrKOu26GUNvPvApWrz/lc=;
-  b=h2xPBvv6bNCoJlna2SRRXh4LmTgnNuMLJpOaf4C5CFsEB0R3LlCjLEuc
-   mvmP20HCxKj8XCDEXAOA6Bf2/DSMBcc5q8e1RDsjaC1GKKKbqiNYJgxem
-   ZJpNX5HVpxWB1VNYzrjjViQatWXIpn6CjoXqRPcdTtmGznZvQF3cf2+tP
-   d2F+hsOsPPsER7e0QmYBluGc13V57JEbkyMAaJWruJGiVXzIz3NbPQUbT
-   OoMN2BAiuSqKv1PgyCCUKKwkp9c6vlPI3uYCL/KEvr+NFaRlhkAJtvUAj
-   HcmSPApBanNPWXwz8h0sKqqqNadrVrTQ34Z+KbDZIznFn7Gma4BGfdTLx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="313536858"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="313536858"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 00:52:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="709730243"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="709730243"
-Received: from a0cec8d9c8fc.jf.intel.com ([10.45.77.137])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Nov 2022 00:51:46 -0800
-From:   Chen Hu <hu1.chen@intel.com>
-Cc:     hu1.chen@intel.com, jpoimboe@kernel.org, memxor@gmail.com,
-        bpf@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH bpf] selftests/bpf: Fix "missing ENDBR" BUG for destructor kfunc
-Date:   Mon, 21 Nov 2022 00:51:13 -0800
-Message-Id: <20221121085113.611504-1-hu1.chen@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 21 Nov 2022 03:55:54 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403208CF13;
+        Mon, 21 Nov 2022 00:54:38 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id ud5so26881771ejc.4;
+        Mon, 21 Nov 2022 00:54:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zHnEp5FbFvmb3QyLSn3I57RXTnQLn/CFzXwFULZoeMg=;
+        b=Vj0U12xbWCZoKyJot67nB0PfE8EE6tZyG1QgXJK9uveeLpLQM+geA0rF00mADEEhru
+         5g5Wbn1K7SHbb9uygrRK4k53jO+9KJd2YiU1e2m4T1ralnom58q8Dk2faGbIu2ULkRuw
+         HPFOI3BXwESTWjG5aqzyeQZFYQHen0CHloC9Tvsh2qFTgrrn+APs3dD2dgoKvL9E/4OE
+         u7lnfD4fHwus0Aokj9UjFAzZ3oSdAZ8HCDNu3uyQtcVHZFxLXzVF91+fzSELyBQqza12
+         glf2KWfVqmiDLeFY9Jf0u8rofGH4oR/ojm3UA1h4MgwByvdYorz+ofC1wbe895QE6QDL
+         W3Xw==
+X-Gm-Message-State: ANoB5pnhzEuGPmQ38cdVEmRrxC4/8yrfFkNNiLIW56onCAfUD08Bk4Dx
+        rPGDCzGWieA2yO9mZHULmZU=
+X-Google-Smtp-Source: AA0mqf6Q9Jzp3dJ3tKc3OoOGy0S+3Z9QoJDCj50IAiUbDlwuBIZrpHW6WjiqRomRSbA77fQNd9RdRw==
+X-Received: by 2002:a17:906:1412:b0:7a0:3313:a775 with SMTP id p18-20020a170906141200b007a03313a775mr3833703ejc.474.1669020876784;
+        Mon, 21 Nov 2022 00:54:36 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id f16-20020a17090631d000b0073d81b0882asm4725365ejf.7.2022.11.21.00.54.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 00:54:36 -0800 (PST)
+Message-ID: <abb7d87a-46c7-fe7f-f943-4287d15a537f@kernel.org>
+Date:   Mon, 21 Nov 2022 09:54:34 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: en-US
+To:     Gabriel Somlo <gsomlo@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        kgugala@antmicro.com, mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org, ilpo.jarvinen@linux.intel.com
+References: <20221118145512.509950-1-gsomlo@gmail.com>
+ <20221118145512.509950-13-gsomlo@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v5 12/14] serial: liteuart: add IRQ support for the RX
+ path
+In-Reply-To: <20221118145512.509950-13-gsomlo@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_X86_KERNEL_IBT enabled, the test_verifier triggers the
-following BUG:
+On 18. 11. 22, 15:55, Gabriel Somlo wrote:
+> Add support for IRQ-driven RX. Support for the TX path will be added
+> in a separate commit.
+> 
+> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+> 
+> Changes from v4:
+>    - using dev_err() instead of a combo of pr_err() and pr_fmt()
+>    - dropped "get irq" comment in probe()
+> 
+>> Changes from v3:
+>>    - add shadow irq register to support polling mode and avoid reading
+>>      hardware mmio irq register to learn which irq flags are enabled
+>>      - this also simplifies both liteuart_interrupt() and liteuart_startup()
+> 
+>   drivers/tty/serial/liteuart.c | 76 +++++++++++++++++++++++++++++++----
+>   1 file changed, 69 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> index 8a6e176be08e..678c37c952cf 100644
+> --- a/drivers/tty/serial/liteuart.c
+> +++ b/drivers/tty/serial/liteuart.c
+> @@ -7,6 +7,7 @@
+>   
+>   #include <linux/bits.h>
+>   #include <linux/console.h>
+> +#include <linux/interrupt.h>
+>   #include <linux/litex.h>
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+> @@ -46,6 +47,7 @@ struct liteuart_port {
+>   	struct uart_port port;
+>   	struct timer_list timer;
+>   	u32 id;
+> +	u8 irq_reg;
+>   };
+>   
+>   #define to_liteuart_port(port)	container_of(port, struct liteuart_port, port)
+> @@ -76,6 +78,19 @@ static void liteuart_putchar(struct uart_port *port, unsigned char ch)
+>   	litex_write8(port->membase + OFF_RXTX, ch);
+>   }
+>   
+> +static void liteuart_update_irq_reg(struct uart_port *port, bool set, u8 mask)
+> +{
+> +	struct liteuart_port *uart = to_liteuart_port(port);
+> +
+> +	if (set)
+> +		uart->irq_reg |= mask;
+> +	else
+> +		uart->irq_reg &= ~mask;
+> +
+> +	if (port->irq)
+> +		litex_write8(port->membase + OFF_EV_ENABLE, uart->irq_reg);
+> +}
+> +
+>   static void liteuart_stop_tx(struct uart_port *port)
+>   {
+>   }
+> @@ -129,13 +144,27 @@ static void liteuart_rx_chars(struct uart_port *port)
+>   	tty_flip_buffer_push(&port->state->port);
+>   }
+>   
+> +static irqreturn_t liteuart_interrupt(int irq, void *data)
+> +{
+> +	struct liteuart_port *uart = data;
+> +	struct uart_port *port = &uart->port;
+> +	u8 isr;
+> +
+> +	spin_lock(&port->lock);
+> +	isr = litex_read8(port->membase + OFF_EV_PENDING) & uart->irq_reg;
+> +	if (isr & EV_RX)
+> +		liteuart_rx_chars(port);
+> +	spin_unlock(&port->lock);
+> +
+> +	return IRQ_RETVAL(isr);
+> +}
+> +
+>   static void liteuart_timer(struct timer_list *t)
+>   {
+>   	struct liteuart_port *uart = from_timer(uart, t, timer);
+>   	struct uart_port *port = &uart->port;
+>   
+> -	liteuart_rx_chars(port);
+> -
+> +	liteuart_interrupt(0, port);
 
-  traps: Missing ENDBR: bpf_kfunc_call_test_release+0x0/0x30
-  ------------[ cut here ]------------
-  kernel BUG at arch/x86/kernel/traps.c:254!
-  invalid opcode: 0000 [#1] PREEMPT SMP
-  <TASK>
-   asm_exc_control_protection+0x26/0x50
-  RIP: 0010:bpf_kfunc_call_test_release+0x0/0x30
-  Code: 00 48 c7 c7 18 f2 e1 b4 e8 0d ca 8c ff 48 c7 c0 00 f2 e1 b4 c3
-	0f 1f 44 00 00 66 0f 1f 00 0f 1f 44 00 00 0f 0b 31 c0 c3 66 90
-       <66> 0f 1f 00 0f 1f 44 00 00 48 85 ff 74 13 4c 8d 47 18 b8 ff ff ff
-   bpf_map_free_kptrs+0x2e/0x70
-   array_map_free+0x57/0x140
-   process_one_work+0x194/0x3a0
-   worker_thread+0x54/0x3a0
-   ? rescuer_thread+0x390/0x390
-   kthread+0xe9/0x110
-   ? kthread_complete_and_exit+0x20/0x20
+Are you sure spin_lock() is safe from this path? I assume so, but have 
+you thought about it?
 
-This is because there are no compile-time references to the destructor
-kfuncs, bpf_kfunc_call_test_release() for example. So objtool marked
-them sealable and ENDBR in the functions were sealed (converted to NOP)
-by apply_ibt_endbr().
+>   	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
+>   }
+>   
+> @@ -161,19 +190,46 @@ static unsigned int liteuart_get_mctrl(struct uart_port *port)
+>   static int liteuart_startup(struct uart_port *port)
+>   {
+>   	struct liteuart_port *uart = to_liteuart_port(port);
+> +	unsigned long flags;
+> +	int ret;
+>   
+> -	/* disable events */
+> -	litex_write8(port->membase + OFF_EV_ENABLE, 0);
+> +	if (port->irq) {
+> +		ret = request_irq(port->irq, liteuart_interrupt, 0,
+> +				  KBUILD_MODNAME, uart);
 
-This fix creates dummy compile-time references to destructor kfuncs so
-ENDBR stay there.
+Just asking: cannot the irq be shared?
 
-Signed-off-by: Chen Hu <hu1.chen@intel.com>
-Tested-by: Pengfei Xu <pengfei.xu@intel.com>
----
- include/linux/btf_ids.h | 7 +++++++
- net/bpf/test_run.c      | 2 ++
- 2 files changed, 9 insertions(+)
+> +		if (ret) {
+> +			dev_err(port->dev,
+> +				"line %d irq %d failed: switch to polling\n",
+> +				port->line, port->irq);
 
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 2aea877d644f..6c6b520ea58f 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -266,4 +266,11 @@ MAX_BTF_TRACING_TYPE,
- 
- extern u32 btf_tracing_ids[];
- 
-+#if defined(CONFIG_X86_KERNEL_IBT) && !defined(__DISABLE_EXPORTS)
-+#define BTF_IBT_NOSEAL(name)					\
-+	asm(IBT_NOSEAL(#name));
-+#else
-+#define BTF_IBT_NOSEAL(name)
-+#endif /* CONFIG_X86_KERNEL_IBT */
-+
- #endif
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 13d578ce2a09..465952e5de11 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1653,6 +1653,8 @@ BTF_ID(struct, prog_test_ref_kfunc)
- BTF_ID(func, bpf_kfunc_call_test_release)
- BTF_ID(struct, prog_test_member)
- BTF_ID(func, bpf_kfunc_call_memb_release)
-+BTF_IBT_NOSEAL(bpf_kfunc_call_test_release)
-+BTF_IBT_NOSEAL(bpf_kfunc_call_memb_release)
- 
- static int __init bpf_prog_test_run_init(void)
- {
+That is, it should be only dev_warn(), or?
+
+> +			port->irq = 0;
+> +		}
+> +	}
+
+thanks,
 -- 
-2.34.1
+js
+suse labs
 
