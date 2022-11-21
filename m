@@ -2,115 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70959632187
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A88363218F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiKUMDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S230302AbiKUMF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiKUMDc (ORCPT
+        with ESMTP id S230129AbiKUMFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:03:32 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FE113DF9;
-        Mon, 21 Nov 2022 04:03:31 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id d1so7399456wrs.12;
-        Mon, 21 Nov 2022 04:03:31 -0800 (PST)
+        Mon, 21 Nov 2022 07:05:53 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D934251309
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:05:50 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id g7so18523501lfv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:05:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5XQKcVJbCKdPNL3r284+FMGZ1NmD17SxEaB1YH/7mOI=;
-        b=HS4vlJyCkWEfvsMOQSvAWS+nanJLMMyJYUkeOp9QiSi5pcTW25aPdUB4POvsIUg42S
-         U2pw9eI2yOW3OJ0EDFEnKkYe3whh+ZB3hEdVMCoOg7gB+HkjsWWlcaNmC4emBztTdWMH
-         Fs6yFRbnD1oeutuPcrsEa0gQeC41VuSb9lMiuBe4qH8iwnCnvVYXik3aOtGdKGEnpqyC
-         HIma+9c42zoh9IyN7ATszGdxjlHsMqod7Vw/BIX9D8eKrL+h4xO3ucJqEYSPGaVubbV3
-         3EHcHVkaTf57RWC20Zz/AeNtQGoX6LFcmsgVkxHBMIAg8c+oiXqsYk0I3Nvo2c9Z+/H9
-         mlFQ==
+        bh=U8lk1yGk+k1jHpBFenfM0E1QDY7dO/CdbSlBNPwvv7M=;
+        b=LL2WCbIR4i1mBwmicLqdPhaaBHpYS/pB5qx+cDvQyMuNImKhaeHSKN4omMeoJ5yVs0
+         Bc0qnjoCinSjOLLI+Xz69fG8Y9IZywlwyuMXExxYZJKUIOZgUU3ga/ksFGy97ZdaSqGs
+         uyimQZEaLtBUPrQKUpf3phHBqqo5DFqD+PppswTgSXfomx3jmkzvzkq3yA3/WKi4Q0TU
+         sDuS0pkMc0jZpteQBU2Oere/jW1quENeLtv1tXGyFB1wNMkht39QMzrUditBGZLQDfyS
+         cZY02SjnAiKrfdlRVHWVXkrFybqik6oM1Dm0+3G8Oh5xRtUP7ri0zrxYeqCGvtoUxpot
+         QQnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5XQKcVJbCKdPNL3r284+FMGZ1NmD17SxEaB1YH/7mOI=;
-        b=voeVrHUmMK0HbOtThIwleYod0S+JDW74smH+cDkRkqxzY5AfThF4H8px9tCKMOglHk
-         PM1rCY3YNGRAAxzhu2tI7vBPfAFrIRD8f1wt8Y5G0djiV9XO4BMPZuRs68BNnKXAvID3
-         qqghvxt+7UpepKzNTDyNtUvAMOYhJFsnemAFoHB+Bfa3Fyvg8zClyqrQJsrRjZYQuoLU
-         QvclnWaT0D3j+OBnEiUyUEymu1haWSMveKQCA6jEoap5S1XruSYspvyzqxFi4AyK15M+
-         UDBLWdnRySAEHCA/HLob7GBbIbGei4z5+TE6HjKxOEZLwpStaNJWMNa4kA1eh0Hv+IiP
-         OM4g==
-X-Gm-Message-State: ANoB5pmQEFHdrX7kVy9BHNdrwUQmHqFDHcRPk6YwwRKJY7Vl2pzWI9Sa
-        E4OiA88c/OlMOO8PF2jASrg=
-X-Google-Smtp-Source: AA0mqf47dsNMrYKK7mFgXn4kWq2UQ8QtuBdL10SrDfVoUPuHM0hhxm2Q3t5E/IRwQgQzWf+z0J0ydQ==
-X-Received: by 2002:a05:6000:1181:b0:22e:53c0:ead8 with SMTP id g1-20020a056000118100b0022e53c0ead8mr10898826wrx.210.1669032210282;
-        Mon, 21 Nov 2022 04:03:30 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id z2-20020a1c4c02000000b003cfe1376f68sm13335036wmf.9.2022.11.21.04.03.28
+        bh=U8lk1yGk+k1jHpBFenfM0E1QDY7dO/CdbSlBNPwvv7M=;
+        b=y8WASoyBMyr2WV5XwQqGVcT/FlhAajjaxnLk1wBGLhwwkEXh9whV8zDOBYhSnitGPU
+         B820VmDt8eDqM6Xx15VCM2dSd8V53m1oGBLRW4wLsDRJcbAX5UNnL+05EZ1QqQaY8xyf
+         YWMtfWonlnVvRF3LeqOhVWOhAV6RyntMlgjkrJjLTD2UfxFCacGMtVEU7f6aKQOguI05
+         pNnKwCB4HMIbPUD4wEtmOYSHSayf5IgPFzEV6ErdOsv4ukTQRzU64ng8fR6zQW/bEGGc
+         SLgK/iFuTMVarwwCVqlwakJ886pDgpO/xEn+ZGWr6MtdqEFUdY/sfqT7Xm5SwBN6GMaV
+         IcOQ==
+X-Gm-Message-State: ANoB5pkKxx14g5WT/ZjGr1gAHMu88iaJqtMZjDHKtvlLE2ZWi1ar9YMp
+        W5Bci17c0B2LakVNUxabCE9LjQ==
+X-Google-Smtp-Source: AA0mqf4A51rPoijgjuQKSdOsv/cU3hGnDdJXXaLypfldqje/5jUfbTIYx0C/yihusXwzzxxaT054kw==
+X-Received: by 2002:ac2:5dea:0:b0:4b2:2cff:8446 with SMTP id z10-20020ac25dea000000b004b22cff8446mr5881122lfq.572.1669032348998;
+        Mon, 21 Nov 2022 04:05:48 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id y3-20020a197503000000b004b4b5bd8d02sm1981733lfe.78.2022.11.21.04.05.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 04:03:28 -0800 (PST)
-Message-ID: <89ceb49a-edfc-2d55-ebf5-cc5ff6d2d52f@gmail.com>
-Date:   Mon, 21 Nov 2022 13:03:27 +0100
+        Mon, 21 Nov 2022 04:05:48 -0800 (PST)
+Message-ID: <d728bb46-558c-67e8-c93b-96f2a6ab77a3@linaro.org>
+Date:   Mon, 21 Nov 2022 13:05:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 0/8] ARM64 MediaTek devicetree fixes - Part 1
+Subject: Re: [PATCH 2/6] dt-bindings: PCI: Add PCIe controller bindings for
+ FSD
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sam.shih@mediatek.com, hanks.chen@mediatek.com,
-        weiyi.lu@mediatek.com, zhiyong.tao@mediatek.com,
-        andrew-sh.cheng@mediatek.com, viresh.kumar@linaro.org,
-        chunfeng.yun@mediatek.com, fparent@baylibre.com,
-        mars.cheng@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221013152212.416661-1-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221013152212.416661-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Shradha Todi <shradha.t@samsung.com>, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kishon@ti.com, vkoul@kernel.org, lpieralisi@kernel.org,
+        kw@linux.com, mani@kernel.org, arnd@arndb.de,
+        gregkh@linuxfoundation.org, alim.akhtar@samsung.com,
+        ajaykumar.rs@samsung.com, rcsekar@samsung.com,
+        sriranjani.p@samsung.com, bharat.uppal@samsung.com,
+        s.prashar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com, p.rajanbabu@samsung.com,
+        niyas.ahmed@samsung.com, chanho61.park@samsung.com
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
+References: <20221121105210.68596-1-shradha.t@samsung.com>
+ <CGME20221121104725epcas5p3af00b0c717f2132f5c1ba7fd4e903e26@epcas5p3.samsung.com>
+ <20221121105210.68596-3-shradha.t@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221121105210.68596-3-shradha.t@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/11/2022 11:52, Shradha Todi wrote:
+> Document the PCIe controller device tree bindings for
 
+Subject: drop second, redundant "bindings".
 
-On 13/10/2022 17:22, AngeloGioacchino Del Regno wrote:
-> This series fixes devicetree warnings for some MediaTek DTs.
+> Tesla FSD SoC for both RC and EP
+
+Full stop.
+
 > 
-> Since there's a lot to be done and since not all fixes are trivial,
-> I decided to do this in more than one step, as to ease work for
-> reviewers, maintainers and for .. me.
-> This being part 1 means that there's more to come... a bit later :-)
+> Signed-off-by: Shradha Todi  <shradha.t@samsung.com>
+> ---
+>  .../bindings/pci/tesla,pcie-fsd-ep.yaml       | 107 ++++++++++++++++
+>  .../bindings/pci/tesla,pcie-fsd.yaml          | 117 ++++++++++++++++++
+>  2 files changed, 224 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pci/tesla,pcie-fsd-ep.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pci/tesla,pcie-fsd.yaml
 > 
-> AngeloGioacchino Del Regno (8):
->    arm64: dts: mt7896a: Fix unit_address_vs_reg warning for oscillator
->    arm64: dts: mt6779: Fix devicetree build warnings
->    arm64: dts: mt2712e: Fix unit_address_vs_reg warning for oscillators
->    arm64: dts: mt2712e: Fix unit address for pinctrl node
->    arm64: dts: mt2712-evb: Fix vproc fixed regulators unit names
->    arm64: dts: mt2712-evb: Fix usb vbus regulators unit names
->    arm64: dts: mediatek: pumpkin-common: Fix devicetree warnings
->    arm64: dts: mediatek: mt6797: Fix 26M oscillator unit name
-> 
+> diff --git a/Documentation/devicetree/bindings/pci/tesla,pcie-fsd-ep.yaml b/Documentation/devicetree/bindings/pci/tesla,pcie-fsd-ep.yaml
+> new file mode 100644
+> index 000000000000..07308cb9a35c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/tesla,pcie-fsd-ep.yaml
 
-Whole series applied, thanks!
+Filename based on compatible.
+
+> @@ -0,0 +1,107 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/tesla,pcie-fsd-ep.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Synopsys DesignWare based PCIe EP controller on FSD SoCs
+> +
+> +maintainers:
+> +  - Shradha Todi <shradha.t@samsung.com>
+> +
+> +description: |
+> +  FSD PCIe EP controller is based on Synopsys DesignWare PCIe IP
+> +  and thus inherits all the common properties defined in
+> +  snps,dw-pcie-ep.yaml. The controller instance is dual mode and
+> +  can work in Root port mode or Endpoint mode at a time.
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - tesla,fsd-pcie-ep
+> +
+> +  reg:
+> +    items:
+> +      - description: controller's application logic registers
+> +      - description: controller's own configuration registers
+> +                     are available.
+> +      - description: controller's own configuration shadow registers
+> +                     are available.
+> +      - description: Map the remote Root Complex slave address space
+> +
+> +  reg-names:
+> +    items:
+> +      - const: appl
+> +      - const: dbi
+> +      - const: dbi2
+> +      - const: addr_space
+> +
+> +  clocks:
+> +    items:
+> +      - description: Auxiliary clock for PCIe
+> +      - description: AHB clock for PCIe dbi
+> +      - description: AHB clock for PCIe master
+> +      - description: AHB clock for PCIe slave
+> +
+> +  clock-names:
+> +    items:
+> +      - const: aux_clk
+> +      - const: dbi_clk
+> +      - const: mstr_clk
+> +      - const: slv_clk
+
+Drop "_clk" everywhere.
+
+> +
+> +  interrupts:
+> +    items:
+> +      - description: Controller interrupt
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: sub_ctrl_intr
+
+Drop entire property.
+
+> +
+> +  tesla,pcie-sysreg:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+
+Drop quotes.
+
+In the PHY patch you said it is one phandle. Here it is an array. If it
+is an array, then define it  properly:
+https://elixir.bootlin.com/linux/v5.18-rc1/source/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml#L42
+
+> +    description: phandle for system control registers, used to
+> +                 control signals at system level
+> +
+> +required:
+> +
+
+Drop blank line.
+
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - ranges
+> +  - num-lanes
+> +  - tesla,pcie-sysreg
+> +
+> +additionalProperties: true
+
+This must be false. Did you see such code anywhere in existing bindings?
+Maybe you meant unevaluatedProperties?
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/fsd-clk.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    pcie4_ep: pcie-ep@15400000 {
+> +      compatible = "tesla,fsd-pcie-ep";
+> +      clocks = <&clock_fsys0 PCIE_SUBCTRL_INST0_AUX_CLK_SOC>,
+> +               <&clock_fsys0 PCIE_SUBCTRL_INST0_DBI_ACLK_SOC>,
+> +               <&clock_fsys0 PCIE_SUBCTRL_INST0_MSTR_ACLK_SOC>,
+> +               <&clock_fsys0 PCIE_SUBCTRL_INST0_SLV_ACLK_SOC>;
+> +      clock-names = "aux_clk", "dbi_clk", "mstr_clk", "slv_clk";
+> +      interrupts = <GIC_SPI 93 IRQ_TYPE_EDGE_RISING>;
+> +      interrupt-names = "sub_ctrl_intr";
+> +      reg = <0x15090000 0x1000>,
+
+reg is a second property.
+
+> +            <0x15400000 0x1000>,
+> +            <0x15401000 0x80>,
+> +            <0x15800000 0xFF0000>;
+
+Lowercase hex.
+
+> +      reg-names = "appl", "dbi", "dbi2", "addr_space";
+> +      num-lanes = <4>;
+> +      tesla,pcie-sysreg = <&sysreg_fsys0 0x434>;
+> +      phys = <&pcie_phy0>;
+> +      phy-names = "pcie_phy0";
+> +      status = "disabled";
+
+No status.
+
+> +    };
+> +...
+> diff --git a/Documentation/devicetree/bindings/pci/tesla,pcie-fsd.yaml b/Documentation/devicetree/bindings/pci/tesla,pcie-fsd.yaml
+> new file mode 100644
+> index 000000000000..85648e5c7d27
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/tesla,pcie-fsd.yaml
+
+All comments apply here as well.
+
+> @@ -0,0 +1,117 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/pci/tesla,pcie-fsd.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Synopsys DesignWare based PCIe controller on FSD SoCs
+> +
+> +maintainers:
+> +  - Shradha Todi <shradha.t@samsung.com>
+> +
+> +description: |
+> +  FSD PCIe controller is based on Synopsys DesignWare PCIe IP
+> +  and thus inherits all the common properties defined in
+> +  designware-pcie.txt.
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: tesla,fsd-pcie
+> +
+> +  reg:
+> +    items:
+> +      - description: controller's application logic registers
+> +      - description: controller's own configuration registers
+> +                     are available.
+> +      - description: configuration registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: appl
+> +      - const: dbi
+> +      - const: config
+> +
+> +  clocks:
+> +    items:
+> +      - description: Auxiliary clock for PCIe
+> +      - description: AHB clock for PCIe dbi
+> +      - description: AHB clock for PCIe master
+> +      - description: AHB clock for PCIe slave
+> +
+> +  clock-names:
+> +    items:
+> +      - const: aux_clk
+> +      - const: dbi_clk
+> +      - const: mstr_clk
+> +      - const: slv_clk
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description: MSI interrupt
+> +      - description: Controller interrupt
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: msi
+> +      - const: sub_ctrl_intr
+
+Drop "_intr"
+
+> +
+> +  tesla,pcie-sysreg:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> +    description: phandle for system control registers, used to
+> +                 control signals at system level
+> +
+> +required:
+> +
+
+?
+
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - ranges
+> +  - num-lanes
+> +  - tesla,pcie-sysreg
+> +
+> +additionalProperties: true
+
+false
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/fsd-clk.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    bus {
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+> +
+> +      pcie4_rc: pcie@15400000 {
+> +        compatible = "tesla,fsd-pcie";
+> +        clocks = <&clock_fsys0 PCIE_SUBCTRL_INST0_AUX_CLK_SOC>,
+> +                 <&clock_fsys0 PCIE_SUBCTRL_INST0_DBI_ACLK_SOC>,
+> +                 <&clock_fsys0 PCIE_SUBCTRL_INST0_MSTR_ACLK_SOC>,
+> +                 <&clock_fsys0 PCIE_SUBCTRL_INST0_SLV_ACLK_SOC>;
+> +        clock-names = "aux_clk", "dbi_clk", "mstr_clk", "slv_clk";
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +        dma-coherent;
+> +        interrupts = <GIC_SPI 93 IRQ_TYPE_EDGE_RISING>;
+> +        interrupt-names = "msi";
+> +        num-lanes = <4>;
+> +        reg = <0x0 0x15090000 0x0 0x1000>,
+> +              <0x0 0x15400000 0x0 0x1000>,
+> +              <0x0 0x15800000 0x0 0x1000>;
+
+reg is always second. reg-names in such case third. ranges fourth.
+
+> +        reg-names = "appl", "dbi", "config";
 
 
->   arch/arm64/boot/dts/mediatek/mt2712-evb.dts   | 12 +++++-----
->   arch/arm64/boot/dts/mediatek/mt2712e.dtsi     | 22 +++++++++----------
->   arch/arm64/boot/dts/mediatek/mt6779.dtsi      |  8 +++----
->   arch/arm64/boot/dts/mediatek/mt6797.dtsi      |  2 +-
->   arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  2 +-
->   .../boot/dts/mediatek/pumpkin-common.dtsi     |  6 ++---
->   6 files changed, 26 insertions(+), 26 deletions(-)
-> 
+Best regards,
+Krzysztof
+
