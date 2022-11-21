@@ -2,377 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E74B631916
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 05:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3FD631919
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 05:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiKUEAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 23:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
+        id S229586AbiKUEEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 23:04:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKUEAB (ORCPT
+        with ESMTP id S229446AbiKUEEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 23:00:01 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65112D1C4
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 20:00:00 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id k4so7286471qkj.8
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 20:00:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dFbITUzntAVYAcjWtRWDusrK/MIuoB6XSOMzVB+txkA=;
-        b=QcSWHAKXBCkk8kPmKraRJTW2m9aKhQN/vyFSacAD1zmDLpEJwaqgsQgeUkjUc1TVE7
-         A5BY6OFudbC+6AF0KHC0ZYM9bV65bpmkl32O9Hcd9bp/EH7Wu07lTSW/80su9hZ81fpS
-         vc0N4EW7dRgA7LAhalhJqnIqTsYvrE62ydtls=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dFbITUzntAVYAcjWtRWDusrK/MIuoB6XSOMzVB+txkA=;
-        b=mOEvsjcCKjWf1hJdQkBmIhy5aQMK+upRIs/s/ZtMuLa3UTlNidd/oFTcrfDY7ZHPdk
-         0sphgOGzCjgfo62fmqO7D6r26fDtYVBkDDT3OU6S4Tk0JlzxMfZ9PkZdED+ET5A+cCGf
-         0q/eBtaGFexvvBwpZkXjJzIvgySKdxjc7FHzAEgMjD4SuTNKypJgfjuOI1atyBKQifwh
-         jo4LHDFt3DzSn2xg31V51vacnNBsveBrEr/wKocCN9pQbLuhpODuZXkFJwiIaJzOxDOd
-         eBYojeaYFnEPfrnKrW9ChkQA+fTU/mKtyCcr+YRTbTRIHnTecBOG06j4qOyHtmWxAcpg
-         Okuw==
-X-Gm-Message-State: ANoB5plRl5U7JhqPTKWXV2VGdBryPx6tv8S7Mt7k2BPG5IAlRVWtYE1w
-        SRTbvn8tDXvub8RkRQtm1mqymdtCZayXlw==
-X-Google-Smtp-Source: AA0mqf4I+7jFRRf8IN0aAPj+ALIMWcfRrvaK8BHdl22QTepNIlRjP4HWYzZypM4SehQlrqb4aI7T9w==
-X-Received: by 2002:a37:bb06:0:b0:6fa:7d46:33b5 with SMTP id l6-20020a37bb06000000b006fa7d4633b5mr685928qkf.397.1669003199726;
-        Sun, 20 Nov 2022 19:59:59 -0800 (PST)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id dt18-20020a05620a479200b006ea7f9d8644sm7478163qkb.96.2022.11.20.19.59.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 19:59:59 -0800 (PST)
-Date:   Mon, 21 Nov 2022 03:59:58 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [RFC PATCH 07/11] sched: Add proxy execution
-Message-ID: <Y3r3vvzfONR2sY9V@google.com>
-References: <dab347c1-3724-8ac6-c051-9d2caea20101@arm.com>
- <34B2D8B9-A0C1-4280-944D-17224FB24339@joelfernandes.org>
- <4e396924-c3be-1932-91a3-5f458cc843fe@arm.com>
- <Y2ANPi7y5HhHvelr@google.com>
- <4ec6ab79-9f0f-e14b-dd06-d2840a1bf71a@arm.com>
- <Y3rEq7IFKjYA+/bj@google.com>
- <CAEXW_YRwwiq=ZquiMqSvaTEDw=07H-GSaZKV2rrO9wv_TRyBHQ@mail.gmail.com>
+        Sun, 20 Nov 2022 23:04:45 -0500
+Received: from domac.alu.hr (domac.alu.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A724526111
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 20:04:43 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 576A0604F0;
+        Mon, 21 Nov 2022 05:04:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1669003481; bh=1MW333K3VDN0Co8XYMSRHiHHGVR2b/CHRQ8hKCJmTtQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Kpk/NqjBkgxazdd7tjp6tmGIkEAQWXIgC3DUiiX7jzEFy6z7pmv4hOpjVs8/f1d2m
+         WUEyWVGIrsZu7oRxK/kqliGtkkAEzN8iHK/qHtGAmqg0F6TaqU5ahthotBRoLSMTHt
+         FqUz5R4FerXVjoPHbE8jGl58xa3G+LkVUr4Ya8/YuklupGNR0TsH0/AekGMiXNjTjs
+         5sfiUiK82mZT7RlU6UMDMnshec+hUwdteMcvGYi5u69tG7F1zTl2YYcyCTNxE6iOvu
+         gVbgKgIoJiwoLfaY2Cf1Zd1Bk3Y2WwWTWGe6R/NMZ6Cx5sJSsvzV6KcTJ+L5r7Lnj2
+         Bjjgg/72V3DtQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dnE-pQNgxT5p; Mon, 21 Nov 2022 05:04:38 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.198.198])
+        by domac.alu.hr (Postfix) with ESMTPSA id 7CF9F604ED;
+        Mon, 21 Nov 2022 05:04:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1669003478; bh=1MW333K3VDN0Co8XYMSRHiHHGVR2b/CHRQ8hKCJmTtQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aJv09ULiXx7q/8DU017t8ZI9elSegSenpdFhQJkg7iluUNHxzee4gkgUyNEdOh5cp
+         TfPIUCu951t1GXRAoEVBGR1Ybts4uRk215uMk0jZRXsGwF7RZN+U7VLN0pnE7vFKcz
+         GIW7dzmOD7RiJcJl2KX9KX/8VDgQGZa5ldLzozSR3vxOceJrNkjXr5WWjoZdYPh+NX
+         a2BiySMJ5aRbvss8lbscr86igbTJKf3+tDR1t2MSF6brAIhFY2L/HL+heehC8Vkbg0
+         0y53j4fKtJ5krkNVvgqyNIv9u35zwZCaPzDxnhuWm0Msnvn+CeVkAwrjrUlcktAmuX
+         BLdS8+0tJC/2g==
+Message-ID: <8c9eb87b-5623-730a-5cf6-72d831ef797a@alu.unizg.hr>
+Date:   Mon, 21 Nov 2022 05:04:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: BUG: BISECTED: in squashfs_xz_uncompress() (Was: RCU stalls in
+ squashfs_readahead())
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
+        LKML <linux-kernel@vger.kernel.org>, phillip.lougher@gmail.com,
+        Thorsten Leemhuis <regressions@leemhuis.info>, elliott@hpe.com
+References: <9697fcf5-4213-3d5e-176a-e82d4bd07870@alu.unizg.hr>
+ <eac8af79-8936-f845-c8dd-c63ebf0d5e81@alu.unizg.hr>
+ <02877aee-8c05-6534-8a91-94ba366d0276@squashfs.org.uk>
+ <20221118155534.GJ4001@paulmck-ThinkPad-P17-Gen-1>
+ <dd430080-774b-1cba-1758-2bf92cb1acac@alu.unizg.hr>
+ <20221120175016.GC4001@paulmck-ThinkPad-P17-Gen-1>
+ <8e62a31f-3ef8-71ec-6181-2afa56eeb5db@alu.unizg.hr>
+ <20221120192150.GE4001@paulmck-ThinkPad-P17-Gen-1>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20221120192150.GE4001@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YRwwiq=ZquiMqSvaTEDw=07H-GSaZKV2rrO9wv_TRyBHQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 08:49:22PM -0500, Joel Fernandes wrote:
-> On Sun, Nov 20, 2022 at 7:22 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> >
-> > Hello Dietmar,
-> >
-> > On Fri, Nov 04, 2022 at 06:09:26PM +0100, Dietmar Eggemann wrote:
-> > > On 31/10/2022 19:00, Joel Fernandes wrote:
-> > > > On Mon, Oct 31, 2022 at 05:39:45PM +0100, Dietmar Eggemann wrote:
-> > > >> On 29/10/2022 05:31, Joel Fernandes wrote:
-> > > >>> Hello Dietmar,
-> > > >>>
-> > > >>>> On Oct 24, 2022, at 6:13 AM, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> > > >>>>
-> > > >>>> ﻿On 03/10/2022 23:44, Connor O'Brien wrote:
-> > > >>>>> From: Peter Zijlstra <peterz@infradead.org>
-> > >
-> > > [...]
-> > >
-> > > >>>>> +    rq_unpin_lock(rq, rf);
-> > > >>>>> +    raw_spin_rq_unlock(rq);
-> > > >>>>
-> > > >>>> Don't we run into rq_pin_lock()'s:
-> > > >>>>
-> > > >>>> SCHED_WARN_ON(rq->balance_callback && rq->balance_callback !=
-> > > >>>> &balance_push_callback)
-> > > >>>>
-> > > >>>> by releasing rq lock between queue_balance_callback(, push_rt/dl_tasks)
-> > > >>>> and __balance_callbacks()?
-> > > >>>
-> > > >>> Apologies, I’m a bit lost here. The code you are responding to inline does not call rq_pin_lock, it calls rq_unpin_lock.  So what scenario does the warning trigger according to you?
-> > > >>
-> > > >> True, but the code which sneaks in between proxy()'s
-> > > >> raw_spin_rq_unlock(rq) and raw_spin_rq_lock(rq) does.
-> > > >>
-> > > >
-> > > > Got it now, thanks a lot for clarifying. Can this be fixed by do a
-> > > > __balance_callbacks() at:
-> > >
-> > > I tried the:
-> > >
-> > >    head = splice_balance_callbacks(rq)
-> > >    task_rq_unlock(rq, p, &rf);
-> > >    ...
-> > >    balance_callbacks(rq, head);
-> > >
-> > > separation known from __sched_setscheduler() in __schedule() (right
-> > > after pick_next_task()) but it doesn't work. Lot of `BUG: scheduling
-> > > while atomic:`
-> >
-> > How about something like the following? This should exclude concurrent
-> > balance callback queues from other CPUs and let us release the rq lock early
-> > in proxy(). I ran locktorture with your diff to make writer threads RT, and I
-> > cannot reproduce any crash with it:
-> >
-> > ---8<-----------------------
-> >
-> > From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-> > Subject: [PATCH] Exclude balance callback queuing during proxy's migrate
-> >
-> > In commit 565790d28b1e ("sched: Fix balance_callback()"), it is clear that rq
-> > lock needs to be held when __balance_callbacks() in schedule() is called.
-> > However, it is possible that because rq lock is dropped in proxy(), another
-> > CPU, say in __sched_setscheduler() can queue balancing callbacks and cause
-> > issues.
-> >
-> > To remedy this, exclude balance callback queuing on other CPUs, during the
-> > proxy().
-> >
-> > Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > ---
-> >  kernel/sched/core.c  | 15 +++++++++++++++
-> >  kernel/sched/sched.h |  3 +++
-> >  2 files changed, 18 insertions(+)
-> >
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 88a5fa34dc06..f1dac21fcd90 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -6739,6 +6739,10 @@ proxy(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
-> >                 p->wake_cpu = wake_cpu;
-> >         }
-> >
-> > +       // Prevent other CPUs from queuing balance callbacks while we migrate
-> > +       // tasks in the migrate_list with the rq lock released.
-> > +       raw_spin_lock(&rq->balance_lock);
-> > +
-> >         rq_unpin_lock(rq, rf);
-> >         raw_spin_rq_unlock(rq);
-> >         raw_spin_rq_lock(that_rq);
-> > @@ -6758,7 +6762,18 @@ proxy(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
-> >         }
-> >
-> >         raw_spin_rq_unlock(that_rq);
-> > +
-> > +       // This may make lockdep unhappy as we acquire rq->lock with balance_lock
-> > +       // held. But that should be a false positive, as the following pattern
-> > +       // happens only on the current CPU with interrupts disabled:
-> > +       // rq_lock()
-> > +       // balance_lock();
-> > +       // rq_unlock();
-> > +       // rq_lock();
-> >         raw_spin_rq_lock(rq);
+On 20. 11. 2022. 20:21, Paul E. McKenney wrote:
+
+>> And what about the Mr. Robert Elliott's observation about calling conf_recshed()?
+>>
+>>> How big can these readahead sizes be? Should one of the loops include
+>>> cond_resched() calls?
+>>
+>> That is IMHO better than allowing 21000 milisecond stalls on a core (or more of them).
+>>
+>> I don't think it is correct to stay in kernel mode for more than an timer unit
+>> without yielding the CPU. It creates stalls in multimedia and audio (chirps like on scratched
+>> CD-ROMs). This is especially noticeable with a KASAN build.
+>>
+>> Since Firefox and most snaps are using squashfs as compressed ROFS, the Firefox appears
+>> to perform poorer since snaps are introduced than Chrome.
+>>
+>> IMHO, if we want something like realtime and multimedia processing (which is the specific
+>> area of my research), it seems that anything trying to hold processor for 21000 ms (21 secs)
+>> is either buggy or deliberately malicious. 20 ms is quite enough of work for a threat
+>> in one allotted timeslot.
+>>
+>> I do not agree with Mr. Lougher's observation that I am thrashing my laptop. I think that
+>> a system has to endure stress and torture testing. I was raised on Digital MicroVAX systems
+>> on Ultrix which compiled lab at a time in memory that would today sound funny. :)
 > 
-> Hmm, I think there's still a chance of deadlock here. I need to
-> rethink it a bit, but that's the idea I was going for.
+> I personally think that it would be great if you were to work to decrease
+> the Linux kernel's latency.  Doing so would not be fixing a regression,
+> but I personally would welcome it.  Others might have different opinions,
+> but please do CC me on any resulting patches.
+> 
+> And I will see your MicroVAX and raise you a videogame written on a
+> PDP-12 whose fastest instruction executed in 1.6 microseconds (-not-
+> nanoseconds!).  ;-)
 
-Took care of that, and came up with the below. Tested with locktorture and it
-survives. Thoughts?
+I'm afraid that I would lose in Far Cry miserably if my cores
+decided to all lock up for 21 secs. :-(
 
----8<-----------------------
+> You can can see a couple of people playing the game on a PDP-12 in
+> a computer museum: https://www.rcsri.org/collection/pdp-12/
+> 
+>> Besides, this is the very idea behind the MG-LRU algorithm commit, to test eviction of
+>> memory pages in the system with heavy load and low on memory.
+>>
+>> I will probably test your commits, but now I have to do my own evening ritual, unwinding,
+>> and knowledge and memory consolidation (called "sleep").
+> 
+> And yes, sleep is often one of the best debugging tools available.
+> 
+>> I appreciate your lots of commits on the kernel.org and I hope I do not sound like
+>> I am thinking you are a village idiot :(
+>>
+>> I am trying to adhere to the Code of Conduct with mutual respect and politeness.
+> 
+> Skepticism is not necessarily a bad thing, especially given that I
+> am not immune from errors and confusion.  Me, I just thought you were
+> forcefully reporting the regression, so I forcefully pointed you at the
+> fix for that regression.
+> 
+> Again, I have absolutely no objection to your improving the kernel's
+> response time.
 
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH v2] Exclude balance callback queuing during proxy's migrate
+This is at present just the wishful thinking, as I lack your 30 years of
+experience with the kernel and RCU update system. I am only beginning to realise
+why it is more efficient than the traditional locking, and IMHO it should
+avoid locking up cores instead of increasing the number of complaints.
 
-In commit 565790d28b1e ("sched: Fix balance_callback()"), it is clear that rq
-lock needs to be held when __balance_callbacks() in schedule() is called.
-However, it is possible that because rq lock is dropped in proxy(), another
-CPU, say in __sched_setscheduler() can queue balancing callbacks and cause
-issues.
+But even if the Linux kernel source is magically "memory mapped" into my
+mind, I still do not see how it could be done. My Linux kernel learning curve
+had not yet got that up, but I have no doubts that it is designed by
+Intelligent Designers who are very witty people, and not village idiots ;-)
 
-To remedy this, exclude balance callback queuing on other CPUs, during the
-proxy().
+>> I know that the Linux kernel is about 30 million lines by now, and by the security experts
+>> we should expect 30,000 bugs in such a solid piece of written code (one per thousand of
+>> lines). Only Mr. Thorsten mentioned 950 unresolved in the "open" list.
+> 
+> At least 30,000 bugs, of which we know of maybe 950.  ;-)
 
-Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- kernel/sched/core.c  | 72 ++++++++++++++++++++++++++++++++++++++++++--
- kernel/sched/sched.h |  3 ++
- 2 files changed, 73 insertions(+), 2 deletions(-)
+So I need no point in banning the kernel from screaming to logs that it had
+core stalls that needed a physical NMI to recover from, or they would potentially
+last much longer.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 88a5fa34dc06..aba90b3dc3ef 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -633,6 +633,29 @@ struct rq *__task_rq_lock(struct task_struct *p, struct rq_flags *rf)
- 	}
- }
- 
-+/*
-+ * Helper to call __task_rq_lock safely, in scenarios where we might be about to
-+ * queue a balance callback on a remote CPU. That CPU might be in proxy(), and
-+ * could have released its rq lock while holding balance_lock. So release rq
-+ * lock in such a situation to avoid deadlock, and retry.
-+ */
-+struct rq *__task_rq_lock_balance(struct task_struct *p, struct rq_flags *rf)
-+{
-+	struct rq *rq;
-+	bool locked = false;
-+
-+	do {
-+		if (locked) {
-+			__task_rq_unlock(rq, rf);
-+			cpu_relax();
-+		}
-+		rq = __task_rq_lock(p, rf);
-+		locked = true;
-+	} while (raw_spin_is_locked(&rq->balance_lock));
-+
-+	return rq;
-+}
-+
- /*
-  * task_rq_lock - lock p->pi_lock and lock the rq @p resides on.
-  */
-@@ -675,6 +698,29 @@ struct rq *task_rq_lock(struct task_struct *p, struct rq_flags *rf)
- 	}
- }
- 
-+/*
-+ * Helper to call task_rq_lock safely, in scenarios where we might be about to
-+ * queue a balance callback on a remote CPU. That CPU might be in proxy(), and
-+ * could have released its rq lock while holding balance_lock. So release rq
-+ * lock in such a situation to avoid deadlock, and retry.
-+ */
-+struct rq *task_rq_lock_balance(struct task_struct *p, struct rq_flags *rf)
-+{
-+	struct rq *rq;
-+	bool locked = false;
-+
-+	do {
-+		if (locked) {
-+			task_rq_unlock(rq, p, rf);
-+			cpu_relax();
-+		}
-+		rq = task_rq_lock(p, rf);
-+		locked = true;
-+	} while (raw_spin_is_locked(&rq->balance_lock));
-+
-+	return rq;
-+}
-+
- /*
-  * RQ-clock updating methods:
-  */
-@@ -6739,6 +6785,12 @@ proxy(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
- 		p->wake_cpu = wake_cpu;
- 	}
- 
-+	/*
-+	 * Prevent other CPUs from queuing balance callbacks while we migrate
-+	 * tasks in the migrate_list with the rq lock released.
-+	 */
-+	raw_spin_lock(&rq->balance_lock);
-+
- 	rq_unpin_lock(rq, rf);
- 	raw_spin_rq_unlock(rq);
- 	raw_spin_rq_lock(that_rq);
-@@ -6758,7 +6810,21 @@ proxy(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
- 	}
- 
- 	raw_spin_rq_unlock(that_rq);
-+
-+	/*
-+	 * This may make lockdep unhappy as we acquire rq->lock with
-+	 * balance_lock held. But that should be a false positive, as the
-+	 * following pattern happens only on the current CPU with interrupts
-+	 * disabled:
-+	 * rq_lock()
-+	 * balance_lock();
-+	 * rq_unlock();
-+	 * rq_lock();
-+	 */
- 	raw_spin_rq_lock(rq);
-+
-+	raw_spin_unlock(&rq->balance_lock);
-+
- 	rq_repin_lock(rq, rf);
- 
- 	return NULL; /* Retry task selection on _this_ CPU. */
-@@ -7489,7 +7555,7 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- 	if (p->pi_top_task == pi_task && prio == p->prio && !dl_prio(prio))
- 		return;
- 
--	rq = __task_rq_lock(p, &rf);
-+	rq = __task_rq_lock_balance(p, &rf);
- 	update_rq_clock(rq);
- 	/*
- 	 * Set under pi_lock && rq->lock, such that the value can be used under
-@@ -8093,7 +8159,8 @@ static int __sched_setscheduler(struct task_struct *p,
- 	 * To be able to change p->policy safely, the appropriate
- 	 * runqueue lock must be held.
- 	 */
--	rq = task_rq_lock(p, &rf);
-+	rq = task_rq_lock_balance(p, &rf);
-+
- 	update_rq_clock(rq);
- 
- 	/*
-@@ -10312,6 +10379,7 @@ void __init sched_init(void)
- 
- 		rq = cpu_rq(i);
- 		raw_spin_lock_init(&rq->__lock);
-+		raw_spin_lock_init(&rq->balance_lock);
- 		rq->nr_running = 0;
- 		rq->calc_load_active = 0;
- 		rq->calc_load_update = jiffies + LOAD_FREQ;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 354e75587fed..932d32bf9571 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1057,6 +1057,7 @@ struct rq {
- 	unsigned long		cpu_capacity_orig;
- 
- 	struct callback_head	*balance_callback;
-+	raw_spinlock_t		balance_lock;
- 
- 	unsigned char		nohz_idle_balance;
- 	unsigned char		idle_balance;
-@@ -1748,6 +1749,7 @@ queue_balance_callback(struct rq *rq,
- 		       void (*func)(struct rq *rq))
- {
- 	lockdep_assert_rq_held(rq);
-+	raw_spin_lock(&rq->balance_lock);
- 
- 	/*
- 	 * Don't (re)queue an already queued item; nor queue anything when
-@@ -1760,6 +1762,7 @@ queue_balance_callback(struct rq *rq,
- 	head->func = (void (*)(struct callback_head *))func;
- 	head->next = rq->balance_callback;
- 	rq->balance_callback = head;
-+	raw_spin_unlock(&rq->balance_lock);
- }
- 
- #define rcu_dereference_check_sched_domain(p) \
+>> Knowing all of this is difficult, but I still believe in open source and open systems
+>> interconnected.
+> 
+> If it was easy, where would be the challenge?
+
+AFAIK, the point I was taught in life was obedience, not overcoming challenges.
+
+>> Of course, I always remember a proverb "Who hath despised the day of the small beginnings?"
+>>
+>> Hope this helps. My $0.02.
+> 
+> I think we are good.   ;-)
+
+Yes, you guys do an amasing job of keeping 30 million lines of code organised
+and making some sense. I will cut the smalltalk as I know you are a busy man.
+If I make a progress to actually produce any patches fixing these lockups and
+stalls, I will be sure to include you into CC: as you requested.
+
+Have a nice day!
+
+Mirsad
+
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 -- 
-2.38.1.584.g0f3c55d4c2-goog
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
