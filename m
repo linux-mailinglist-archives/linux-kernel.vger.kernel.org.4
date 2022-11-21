@@ -2,104 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4665E632906
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632AF632907
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiKUQJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S230032AbiKUQJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiKUQJR (ORCPT
+        with ESMTP id S229831AbiKUQJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 11:09:17 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB51C6043
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:09:15 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id 5so8810851wmo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:09:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ndp9pCENyU3E4kYpzWJmUyLiPz4xKgo+kLDz3SBfds0=;
-        b=RuHGAabA4hXPn3XQZEVESTm6Zxg8aPGVZevPgWPfcBQWmIc0bR+GmdVIRs6EqWggsb
-         vTBlf6Jg+gTq3hXIwtn5VlJ4d5fjMAQTncxa02bh+1PgjTFgkCQ4bZmC0IGprWjBGrmD
-         e6B8V1tRdc73kMfiv46H88IpUaJowwsGOIL6hOw2hvJUQH9ZoQf9DLfq3OKAF5ip1xF2
-         /D9vXSD2k8IZy33VLFpwLC3GulH6DwT48m4xC5ifzDvejPWdSvyx2Uluxr1POSsN3KVW
-         T0ik0MTRHhigZP9kuw3rzH2wnlFl2KYG45tLLxFxIXxkOTF1F9EY8KhWJmIscwz5L0yu
-         GmqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ndp9pCENyU3E4kYpzWJmUyLiPz4xKgo+kLDz3SBfds0=;
-        b=TmtlBzPCox5s1i9YOu32ghfenardrA8kJjokMQ3T6VwIOFEzORnMUE7wiJRl7knnSq
-         HaBUy1Uva2TLkEMdLD3B9huk2tT7U7yDfofz5Am0gIfttS6Rl3qYaKjLAzJsrbM27AsE
-         TK0s8ZLQss60MWw+eFPmIBQdTxSX1yRY9aXMOTo+JBAGUibOOEtE3299BbCShPtbdNW9
-         839zq4sLUc+WXv0Y6RPWTFvR/9Y+1zei0/BK4dyfRmDDPz5xvzU6m3noQv4Fof12gTgG
-         JeAysGGDhWAdht1wPNpeb4Yqlm3YNleylu/J6v5XGAMegibXOCy8SRIXhLbsWV1lcaJ0
-         0tMA==
-X-Gm-Message-State: ANoB5pkMkm00nJTr6SMqMnIIv/Q9x2xd+CEcSS0MVt0GujNc3fT4q3eh
-        sdG1PaaDa6rhLvLA/rRFs+HufQ==
-X-Google-Smtp-Source: AA0mqf5XhJAinBijJRnm3g7NsHsk+2UOjaTXO9W0Sj4/cUjCh+dc3ZFbNaI4+bdvwhSR2ws7hvn5wA==
-X-Received: by 2002:a05:600c:3514:b0:3cf:e0ef:1f6c with SMTP id h20-20020a05600c351400b003cfe0ef1f6cmr6411633wmq.75.1669046954280;
-        Mon, 21 Nov 2022 08:09:14 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id m16-20020adffe50000000b00241bee11825sm10474963wrs.103.2022.11.21.08.09.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 08:09:13 -0800 (PST)
-Date:   Mon, 21 Nov 2022 18:09:11 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     shengjiu.wang@gmail.com, abelvesa@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, marex@denx.de
-Subject: Re: [PATCH v5 0/2] clk: imx8mp: Add audio shared gate
-Message-ID: <Y3uip2mPNkx+KLWG@linaro.org>
-References: <1667811007-19222-1-git-send-email-shengjiu.wang@nxp.com>
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291DCC72F0;
+        Mon, 21 Nov 2022 08:09:16 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CE8B91F899;
+        Mon, 21 Nov 2022 16:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669046954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KyfNmcPz42geDnL1EI62RbwuzIIJ0tLz64n6CtQSE5I=;
+        b=AxHbtyPn8fCOhgK03LCj+hsL1iGrhbOLg2ykdln3BBS3q2x7elr/R6Wkj8m8fCJB79AUQP
+        TOo27oxKLH65LRjtrQ+L6EdBKjjw3ZmyOpQm4+8uuLj7DX6fpb/ELJR+mmOP/hLjP7zDe3
+        sAjsRdxOJVrHnS/UvbnGwyl80SfCkSo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669046954;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KyfNmcPz42geDnL1EI62RbwuzIIJ0tLz64n6CtQSE5I=;
+        b=ko02FeoOF0N1Xxryj1kDA6bduoJiMktnvqb0DEqehmw5HBSDGM7KzAbEwQVMazZJ/tynFq
+        BVT6DLS1yOOHlECw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8EBD21377F;
+        Mon, 21 Nov 2022 16:09:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id y0E0Iaqie2N7VwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 21 Nov 2022 16:09:14 +0000
+Date:   Mon, 21 Nov 2022 17:09:11 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Sean Young <sean@mess.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=" 
+        <u.kleine-koenig@pengutronix.de>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: [PATCH] media: rc: Drop obsolete dependencies on COMPILE_TEST
+Message-ID: <20221121170911.7cd72bfc@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1667811007-19222-1-git-send-email-shengjiu.wang@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-07 16:50:05, Shengjiu Wang wrote:
-> changes in v5:
-> - define IMX8MP_CLK_AUDIO_AHB_ROOT as IMX8MP_CLK_AUDIO_ROOT
-> 
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-Applied both. Thanks!
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-> changes in v4:
-> - don't remove IMX8MP_CLK_AUDIO_ROOT, to avoid any break
-> 
-> changes in v3:
-> - remove IMX8MP_CLK_AUDIO_ROOT
-> 
-> changes in v2:
-> - split dt-binding to separate patch
-> 
-> Abel Vesa (2):
->   dt-bindings: clock: imx8mp: Add ids for the audio shared gate
->   clk: imx8mp: Add audio shared gate
-> 
->  drivers/clk/imx/clk-imx8mp.c             | 12 +++++++++++-
->  include/dt-bindings/clock/imx8mp-clock.h | 11 ++++++++++-
->  2 files changed, 21 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+As a minor optimization, this also lets us drop of_match_ptr(), as we
+now know what it will resolve to, we might as well save cpp some work.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Sean Young <sean@mess.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: "Uwe Kleine-K=C3=B6nig" <u.kleine-koenig@pengutronix.de>
+---
+ drivers/media/rc/Kconfig     |    4 ++--
+ drivers/media/rc/pwm-ir-tx.c |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+--- linux-6.0.orig/drivers/media/rc/Kconfig
++++ linux-6.0/drivers/media/rc/Kconfig
+@@ -314,7 +314,7 @@ config IR_PWM_TX
+ 	tristate "PWM IR transmitter"
+ 	depends on LIRC
+ 	depends on PWM
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	help
+ 	   Say Y if you want to use a PWM based IR transmitter. This is
+ 	   more power efficient than the bit banging gpio driver.
+@@ -361,7 +361,7 @@ config IR_SERIAL_TRANSMITTER
+ config IR_SPI
+ 	tristate "SPI connected IR LED"
+ 	depends on SPI && LIRC
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	help
+ 	  Say Y if you want to use an IR LED connected through SPI bus.
+=20
+--- linux-6.0.orig/drivers/media/rc/pwm-ir-tx.c
++++ linux-6.0/drivers/media/rc/pwm-ir-tx.c
+@@ -120,7 +120,7 @@ static struct platform_driver pwm_ir_dri
+ 	.probe =3D pwm_ir_probe,
+ 	.driver =3D {
+ 		.name	=3D DRIVER_NAME,
+-		.of_match_table =3D of_match_ptr(pwm_ir_of_match),
++		.of_match_table =3D pwm_ir_of_match,
+ 	},
+ };
+ module_platform_driver(pwm_ir_driver);
+
+
+--=20
+Jean Delvare
+SUSE L3 Support
