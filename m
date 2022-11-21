@@ -2,125 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D65632724
+	by mail.lfdr.de (Postfix) with ESMTP id 17D9B632723
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbiKUO6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        id S229541AbiKUO6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231908AbiKUO4V (ORCPT
+        with ESMTP id S231550AbiKUO4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:56:21 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD43D14D7;
-        Mon, 21 Nov 2022 06:46:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669042009; x=1700578009;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9W9R6jj2B8mlqU0oXc8ufbjgICy2DcEoaRvZ9VRKl7Q=;
-  b=B57G2qcoTH359KQ7kFQUSu1jsqYx2pt8AmuGgY6mJnEvRgwd4UQNF04b
-   28GBAGUkQ8ndJe4PD1t+CTa6xXloiwk63aVv0PBB7p1gGv8xZ4BjWe9m8
-   l8JdRodMDxIc5HTPW649HWirIG3WarN0MlBMSDE+l2ricwBz5wrciaUna
-   m31YrvLCeVRlEDUso6aSazvkEyixhuNy20SFSbKSLXO+eHbnOp6wr3jP9
-   SoG2KAQcIHEnHZ4sqXYb814qI3d5cBDgoUuYdjD715o3gQKaZrl32xp3z
-   4/yaI0kWyrMUEj1nmx09lvVaK3eDQRTWLmwM4vodqLFYwfZKEqQtQPyC7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="293961838"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="293961838"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 06:46:41 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="709829545"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="709829545"
-Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.254.209.33]) ([10.254.209.33])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 06:46:36 -0800
-Message-ID: <66ac6be5-9b2b-fb9e-3ccd-0a56ec2851c4@linux.intel.com>
-Date:   Mon, 21 Nov 2022 22:46:35 +0800
+        Mon, 21 Nov 2022 09:56:23 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727C5CE9F0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:46:56 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-39ce6773248so45454647b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:46:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ulFUKCXAc9aqxzSy5N0/HB1Zcs+rWuap2uwJAvIalXY=;
+        b=E3+Ab5ymBjhRv+mPQJsnLPZIUqlEY50RqereQhANaVN+0Uf8zUE9qEmhkyFg9YbgoY
+         XZrxBVNnHIRsdUXCq51HwP1XE6ayGuVklfNJYVwT//yxtQug++UxpjUooF4W44/qx95V
+         R+yBMfLpKu4xjrTWEoOwbSbuVSG+N7aurs6ZL/GUG/A28VS3hELpuowlVQyDWD/dBavW
+         GQKf+r7C0FoIZdlMNhUnosu/gXKKDjns/oL77HkDRCIb9kI6yTLyFshfHzRbC53DpmCV
+         7Nf/SszYnGjcR/YcmjjPH290oLtMTo22A5B+/WTpl/RZZMLCXAjN3OAijwajceDzv7mQ
+         GMKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ulFUKCXAc9aqxzSy5N0/HB1Zcs+rWuap2uwJAvIalXY=;
+        b=X0+Q/WlXb7cI7yeoUESD1s+pWnb3sr/a05lMOMgsuxxmpdZ/dmmqy5roCFPv4G8amq
+         9J/K3slZzVqm/ZcSYLcmC6SuPSuS2774pCB3vAK4Jwt2KKmFPQE3zZFSwXqY9nnxh7Ze
+         gc83OpXvIIMf6zeorPqqB/Qaz9XGrM9gvwVonVfgS/XnU7dx/RY290GaePVB5z3PXMlL
+         eAuL3BhnU90trO9DoHusuKOeEm8RV46hPzlIdE2+MZIUNXqLUWR1rwDJqYD7wa6+/raw
+         EqUHNDi0lAUkIb7osvo0bvFu+HT+QQOYRtwLmXdZu1nouq11T67cLdLe+yX5jpOMZDvi
+         kYFQ==
+X-Gm-Message-State: ANoB5pmD7TKi4kRovhAfnqEchaKi2bP4pHq7TSQ43vRhdO9nTuCu46ME
+        jxW96YvkTLwkiNWHxaLU/BFpS07D0vhEjVHw40Ub1g==
+X-Google-Smtp-Source: AA0mqf67GSNoHFtEMWoa7PQwZkXnx8oBOgaiP3Qk0ae9QNXF+lKDNVeKAdZ++WEoIc1A7cDg/0qXZF55lJEASemST8M=
+X-Received: by 2002:a81:520a:0:b0:38e:3015:b4cd with SMTP id
+ g10-20020a81520a000000b0038e3015b4cdmr17831033ywb.87.1669042015544; Mon, 21
+ Nov 2022 06:46:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 3/6] x86: KVM: Advertise AVX-IFMA CPUID to user space
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221118141509.489359-1-jiaxi.chen@linux.intel.com>
- <20221118141509.489359-4-jiaxi.chen@linux.intel.com>
- <Y3et+VpYh+L7N8SL@google.com>
-From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
-In-Reply-To: <Y3et+VpYh+L7N8SL@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221117215557.1277033-1-miquel.raynal@bootlin.com>
+ <20221117215557.1277033-7-miquel.raynal@bootlin.com> <CAPv3WKdZ+tsW-jRJt_n=KqT+oEe+5QAEFOWKrXsTjHCBBzEh0A@mail.gmail.com>
+ <20221121102928.7b190296@xps-13>
+In-Reply-To: <20221121102928.7b190296@xps-13>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Mon, 21 Nov 2022 15:46:44 +0100
+Message-ID: <CAPv3WKds1gUN1V-AkdhPJ7W_G285Q4PmAbS0_nApPgU+3RK+fA@mail.gmail.com>
+Subject: Re: [PATCH net-next 6/6] net: mvpp2: Consider NVMEM cells as possible
+ MAC address source
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        linux-kernel@vger.kernel.org,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Michael Walle <michael@walle.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+pon., 21 lis 2022 o 10:29 Miquel Raynal <miquel.raynal@bootlin.com> napisa=
+=C5=82(a):
+>
+> Hi Marcin,
+>
+> mw@semihalf.com wrote on Sat, 19 Nov 2022 09:18:34 +0100:
+>
+> > Hi Miquel,
+> >
+> >
+> > czw., 17 lis 2022 o 22:56 Miquel Raynal <miquel.raynal@bootlin.com> nap=
+isa=C5=82(a):
+> > >
+> > > The ONIE standard describes the organization of tlv (type-length-valu=
+e)
+> > > arrays commonly stored within NVMEM devices on common networking
+> > > hardware.
+> > >
+> > > Several drivers already make use of NVMEM cells for purposes like
+> > > retrieving a default MAC address provided by the manufacturer.
+> > >
+> > > What made ONIE tables unusable so far was the fact that the informati=
+on
+> > > where "dynamically" located within the table depending on the
+> > > manufacturer wishes, while Linux NVMEM support only allowed staticall=
+y
+> > > defined NVMEM cells. Fortunately, this limitation was eventually tack=
+led
+> > > with the introduction of discoverable cells through the use of NVMEM
+> > > layouts, making it possible to extract and consistently use the conte=
+nt
+> > > of tables like ONIE's tlv arrays.
+> > >
+> > > Parsing this table at runtime in order to get various information is =
+now
+> > > possible. So, because many Marvell networking switches already follow
+> > > this standard, let's consider using NVMEM cells as a new valid source=
+ of
+> > > information when looking for a base MAC address, which is one of the
+> > > primary uses of these new fields. Indeed, manufacturers following the
+> > > ONIE standard are encouraged to provide a default MAC address there, =
+so
+> > > let's eventually use it if no other MAC address has been found using =
+the
+> > > existing methods.
+> > >
+> > > Link: https://opencomputeproject.github.io/onie/design-spec/hw_requir=
+ements.html
+> >
+> > Thanks for the patch. Did you manage to test in on a real HW? I am curi=
+ous about
+>
+> Yes, I have a Replica switch on which the commercial ports use the
+> replica PCI IP while the config "OOB" port is running with mvpp2:
+> [   16.737759] mvpp2 f2000000.ethernet eth52: Using nvmem cell mac addres=
+s 18:be:92:13:9a:00
+>
 
+Nice. Do you have a DT snippet that can possibly be shared? I'd like
+to recreate this locally and eventually leverage EDK2 firmware to
+expose that.
 
-On 11/19/2022 12:08 AM, Sean Christopherson wrote:
-> On Fri, Nov 18, 2022, Jiaxi Chen wrote:
->> AVX-IFMA is a new instruction in the latest Intel platform Sierra
->> Forest. This instruction packed multiplies unsigned 52-bit integers and
->> adds the low/high 52-bit products to Qword Accumulators.
->>
->> The bit definition:
->> CPUID.(EAX=7,ECX=1):EAX[bit 23]
->>
->> This CPUID is exposed to user space. Besides, there is no other VMX
->> control for this instruction.
->>
->> Signed-off-by: Jiaxi Chen <jiaxi.chen@linux.intel.com>
->> ---
->>  arch/x86/include/asm/cpufeatures.h | 1 +
->>  arch/x86/kvm/cpuid.c               | 4 ++--
->>  2 files changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
->> index df4a7f7505a9..159f8b9898bf 100644
->> --- a/arch/x86/include/asm/cpufeatures.h
->> +++ b/arch/x86/include/asm/cpufeatures.h
->> @@ -310,6 +310,7 @@
->>  #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
->>  #define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* CMPccXADD instructions */
->>  #define X86_FEATURE_AMX_FP16		(12*32+21) /* AMX fp16 Support */
->> +#define X86_FEATURE_AVX_IFMA            (12*32+23) /* Support for VPMADD52[H,L]UQ */
->>  
->>  /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
->>  #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index 2a334d4cd04e..5726afb2d14c 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -657,8 +657,8 @@ void kvm_set_cpu_caps(void)
->>  		kvm_cpu_cap_set(X86_FEATURE_SPEC_CTRL_SSBD);
->>  
->>  	kvm_cpu_cap_mask(CPUID_7_1_EAX,
->> -		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) | F(AMX_FP16)
->> -	);
->> +		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) | F(AMX_FP16) |
->> +		F(AVX_IFMA));
-> 
-> Please keep the terminating paranthesis+semicolon on a separate line.  KVM isn't
-> 100% consistent (as usual), but I would rather "fix" the cases that don't put
-> the terminators on their own line. 
+> > > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > > ---
+> > >  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > >
+> > > diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/driver=
+s/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > > index eb0fb8128096..7c8c323f4411 100644
+> > > --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > > +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > > @@ -6104,6 +6104,12 @@ static void mvpp2_port_copy_mac_addr(struct ne=
+t_device *dev, struct mvpp2 *priv,
+> > >                 }
+> > >         }
+> > >
+> > > +       if (!of_get_mac_address(to_of_node(fwnode), hw_mac_addr)) {
+> >
+> > Unfortunately, nvmem cells seem to be not supported with ACPI yet, so
+> > we cannot extend fwnode_get_mac_address - I think it should be,
+> > however, an end solution.
+>
+> Agreed.
+>
+> > As of now, I'd prefer to use of_get_mac_addr_nvmem directly, to avoid
+> > parsing the DT again (after fwnode_get_mac_address) and relying
+> > implicitly on falling back to nvmem stuff (currently, without any
+> > comment it is not obvious).
+>
+> I did not do that in the first place because of_get_mac_addr_nvmem()
+> was not exported, but I agree it would be the cleanest (and quickest)
+> approach, so I'll attempt to export the function first, and then use it
+> directly from the driver.
+>
 
-That's very careful. Thank you~
--- 
-Regards,
-Jiaxi
+That would be great, thank you. Please add one-comment in the
+mvpp2_main.c, that this is valid for now only in DT world.
+
+Best regards,
+Marcin
