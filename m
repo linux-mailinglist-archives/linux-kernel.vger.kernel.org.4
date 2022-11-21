@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84049631DFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB5A631E0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiKUKQb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Nov 2022 05:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S229475AbiKUKQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:16:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiKUKQ3 (ORCPT
+        with ESMTP id S231252AbiKUKQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:16:29 -0500
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5800831ECA;
-        Mon, 21 Nov 2022 02:16:28 -0800 (PST)
-Received: by mail-qk1-f170.google.com with SMTP id k4so7649664qkj.8;
-        Mon, 21 Nov 2022 02:16:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AH7J2YAbJJnliv8tRtEf0xlMhNlRGV7PPaAW6p6F+x8=;
-        b=iLW1NUG3h4ORAFxZ84wzc5LbPyJ6kpB9cPrZdF6eKlS2wNBOIkbzjBAPIN0QLn6x4C
-         9mjjsjVrSLrf7XPczPicXBrU71xJlivC7Q55IY77y/LhQmAvmjuaXwiHvk3Tf0bFCv/E
-         9/tK0zcm8sCVnpjIDGVO11Gdnvqu1eH745cl0leApnHvPoAIQhUvpx5/BRyeAMONOySJ
-         Py2aokjIBYyIIYfW3Ga8x1ZvGZzjCdvn06+pYA6j3z8OnuZ50VaJKPhom6uuOICtMnVO
-         6RENidr8dMoftJtMAbwCCphRBjuSPw4lY+r2C0hIsgLdZ1WXSuvFbnMUvoZwnXpbR8Ee
-         gIiQ==
-X-Gm-Message-State: ANoB5pkkDOz/SraxhFJXbjbNhoXq6W/jYnMIqNnR90C2a+16hmGpAvj6
-        LVc+37VvKfRU/dfdKpHd08c+XIdul/TRdw==
-X-Google-Smtp-Source: AA0mqf4EH63l2/yPwScD+AaqSL244ZfXdSlfGBBidsVgK56zipAgMRiiUFZXMw/lnFZeFr/3FTW59A==
-X-Received: by 2002:a37:e20d:0:b0:6fa:8e8e:1ee5 with SMTP id g13-20020a37e20d000000b006fa8e8e1ee5mr15451922qki.45.1669025787304;
-        Mon, 21 Nov 2022 02:16:27 -0800 (PST)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id s6-20020a05620a254600b006e07228ed53sm8094014qko.18.2022.11.21.02.16.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 02:16:26 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3704852322fso108795307b3.8;
-        Mon, 21 Nov 2022 02:16:25 -0800 (PST)
-X-Received: by 2002:a81:6cd2:0:b0:38d:5807:4b9b with SMTP id
- h201-20020a816cd2000000b0038d58074b9bmr6623722ywc.358.1669025785217; Mon, 21
- Nov 2022 02:16:25 -0800 (PST)
+        Mon, 21 Nov 2022 05:16:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ADD8EB56
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:16:43 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ox3qd-0007SP-E5; Mon, 21 Nov 2022 11:16:19 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ox3qa-005dO4-AS; Mon, 21 Nov 2022 11:16:17 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ox3qa-000YEj-92; Mon, 21 Nov 2022 11:16:16 +0100
+Date:   Mon, 21 Nov 2022 11:16:16 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 166/606] iio: pressure: bmp280-i2c: Convert to i2c's
+ .probe_new()
+Message-ID: <20221121101616.bdiufw4inflvee5s@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-167-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-References: <20221118145512.509950-1-gsomlo@gmail.com> <20221118145512.509950-11-gsomlo@gmail.com>
-In-Reply-To: <20221118145512.509950-11-gsomlo@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Nov 2022 11:16:14 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVCc5xtnRoprtdgt_ZH42j=+ivS4aD+Uceg9pny-FpzYQ@mail.gmail.com>
-Message-ID: <CAMuHMdVCc5xtnRoprtdgt_ZH42j=+ivS4aD+Uceg9pny-FpzYQ@mail.gmail.com>
-Subject: Re: [PATCH v5 10/14] serial: liteuart: separate rx loop from poll timer
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        kgugala@antmicro.com, mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        ilpo.jarvinen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zqml5kqykog6t3x7"
+Content-Disposition: inline
+In-Reply-To: <20221118224540.619276-167-uwe@kleine-koenig.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gabriel,
 
-On Fri, Nov 18, 2022 at 3:57 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
-> Convert the rx loop into its own dedicated function, and (for now)
-> call it from the poll timer. This is in preparation for adding irq
-> support to the receive path.
->
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+--zqml5kqykog6t3x7
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your patch!
+Hello,
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-> --- a/drivers/tty/serial/liteuart.c
-> +++ b/drivers/tty/serial/liteuart.c
-> @@ -68,10 +68,8 @@ static struct uart_driver liteuart_driver = {
->  #endif
->  };
->
-> -static void liteuart_timer(struct timer_list *t)
-> +static void liteuart_rx_chars(struct uart_port *port)
-
-So first you spin this off into a separate function, so it can be
-called from both the interrupt and polling paths.
-Later, in "[PATCH v5 12/14] serial: liteuart: add IRQ support for the
-RX path", you remove the call from the polling path...
-
-
+On Fri, Nov 18, 2022 at 11:38:20PM +0100, Uwe Kleine-K=F6nig wrote:
+> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/iio/pressure/bmp280-i2c.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp=
+280-i2c.c
+> index 14eab086d24a..4da014b158c8 100644
+> --- a/drivers/iio/pressure/bmp280-i2c.c
+> +++ b/drivers/iio/pressure/bmp280-i2c.c
+> @@ -7,6 +7,7 @@
+> =20
+>  static int bmp280_i2c_probe(struct i2c_client *client)
 >  {
-> -       struct liteuart_port *uart = from_timer(uart, t, timer);
-> -       struct uart_port *port = &uart->port;
->         unsigned char __iomem *membase = port->membase;
->         unsigned int status, ch;
->
-> @@ -88,6 +86,14 @@ static void liteuart_timer(struct timer_list *t)
->         }
->
->         tty_flip_buffer_push(&port->state->port);
-> +}
-> +
-> +static void liteuart_timer(struct timer_list *t)
-> +{
-> +       struct liteuart_port *uart = from_timer(uart, t, timer);
-> +       struct uart_port *port = &uart->port;
-> +
-> +       liteuart_rx_chars(port);
->
->         mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
->  }
+> +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
+>  	struct regmap *regmap;
+>  	const struct regmap_config *regmap_config;
+>  	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
 
-Gr{oetje,eeting}s,
+This patch is bogus, it degraded by rebasing on top of Angel Iglesias's
+conversion (021882de1a48cffaa405aa8014bd1d48ca6d5c19 in today's next).
 
-                        Geert
+I dropped it from my queue, please don't apply.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Best regards
+Uwe
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zqml5kqykog6t3x7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN7T+0ACgkQwfwUeK3K
+7AnBgwgAjHrQRMd25irDTEifnbsKDLWp71dfzJck/YvStil4SygA0j4gpUpDafL6
+cK44nNFkhAhwm0wyYq6h4l4yvhjf2g5v/2EVILPO0BuqBfPYc4Exog//835Wgs1z
+1vZamb59YzbfFatawRxhgGPgMZ2ZCcUwsc9v9VX9OWQ0hICM17oMK56YyCdTvw1K
+Ji7e1Y8BYe1mjKja79Q1/P5mo2GHF5xDfOmdt9ffi6E3CwruVVshP46aVgPO93/O
+fj2N/ZbpMDycjfefB8knuhBj9pGCQLrN6jgOyMfdk9b+06AHXSkcpcuMrBirp9Ew
+bd69sPAoZobcKGcHBRCW+I4+m8RBbw==
+=k5Rx
+-----END PGP SIGNATURE-----
+
+--zqml5kqykog6t3x7--
