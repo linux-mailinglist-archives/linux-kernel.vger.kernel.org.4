@@ -2,109 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD066321F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419F16321F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiKUM2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S231314AbiKUM24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiKUM1h (ORCPT
+        with ESMTP id S230101AbiKUM2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:27:37 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AC4C768;
-        Mon, 21 Nov 2022 04:27:34 -0800 (PST)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALALF1w021981;
-        Mon, 21 Nov 2022 07:27:32 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kxsvav426-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 07:27:31 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2ALCRUPs004996
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Nov 2022 07:27:30 -0500
-Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 21 Nov 2022 07:27:29 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 21 Nov 2022 07:27:29 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 21 Nov 2022 07:27:29 -0500
-Received: from rbolboac.ad.analog.com ([10.48.65.139])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2ALCR74x020739;
-        Mon, 21 Nov 2022 07:27:25 -0500
-From:   Ramona Bolboaca <ramona.bolboaca@analog.com>
-To:     <jic23@kernel.org>, <nuno.sa@analog.com>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Ramona Bolboaca <ramona.bolboaca@analog.com>
-Subject: [PATCH v4 9/9] iio: imu: adis: Remove adis_initial_startup function
-Date:   Mon, 21 Nov 2022 14:26:55 +0200
-Message-ID: <20221121122655.48268-10-ramona.bolboaca@analog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221121122655.48268-1-ramona.bolboaca@analog.com>
-References: <20221121122655.48268-1-ramona.bolboaca@analog.com>
+        Mon, 21 Nov 2022 07:28:36 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A57965FDF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:27:55 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8ACB23A;
+        Mon, 21 Nov 2022 04:28:01 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.25.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 299953F7D8;
+        Mon, 21 Nov 2022 04:27:54 -0800 (PST)
+Date:   Mon, 21 Nov 2022 12:27:51 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
+Message-ID: <Y3tuxzl54BvG406t@FVFF77S0Q05N.cambridge.arm.com>
+References: <20221118053102.500216-1-anshuman.khandual@arm.com>
+ <Y3pS5fdZ3MdLZ00t@dev-arch.thelio-3990X>
+ <fd67eca3-59f4-4455-e3db-ba853c3f949b@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: wwIKFKtk5DIoqmi9gb0P0fbcee220HRm
-X-Proofpoint-ORIG-GUID: wwIKFKtk5DIoqmi9gb0P0fbcee220HRm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_13,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
- impostorscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210097
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd67eca3-59f4-4455-e3db-ba853c3f949b@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove adis_initial_startup function since it is not used
-anymore.
+On Mon, Nov 21, 2022 at 11:00:42AM +0530, Anshuman Khandual wrote:
+> Hello Nathan,
+> 
+> Thanks for the report.
+> 
+> On 11/20/22 21:46, Nathan Chancellor wrote:
+> > Hi Anshuman,
 
-Signed-off-by: Ramona Bolboaca <ramona.bolboaca@analog.com>
-Reviewed-by: Nuno Sá <nuno.sa@analog.com>
----
- include/linux/iio/imu/adis.h | 12 ------------
- 1 file changed, 12 deletions(-)
+> > I just bisected a boot failure in our QEMU-based continuous integration
+> > setup to this change as commit 9ed2b4616d4e ("arm64/mm: Drop redundant
+> > BUG_ON(!pgtable_alloc)") in the arm64 tree. There is no output so the
+> > panic clearly happens early at boot. If I move back to the previous
+> > commit and add a WARN_ON() like so:
+> > 
+> > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> > index d386033a074c..9280a92ff920 100644
+> > --- a/arch/arm64/mm/mmu.c
+> > +++ b/arch/arm64/mm/mmu.c
+> > @@ -383,6 +383,7 @@ static void __create_pgd_mapping_locked(pgd_t *pgdir, phys_addr_t phys,
+> >  	phys &= PAGE_MASK;
+> >  	addr = virt & PAGE_MASK;
+> >  	end = PAGE_ALIGN(virt + size);
+> > +	WARN_ON(!pgtable_alloc);
+> >  
+> >  	do {
+> >  		next = pgd_addr_end(addr, end);
+> > 
+> > I do see some stacktraces. I have attached the boot log from QEMU.
+> > 
+> > If there is any additional information I can provide or patches I can
+> > test, I am more than happy to do so.
+> 
+> There are couple of instances, where __create_pgd_mapping() function gets called
+> without a valid pgtable alloc function (NULL is passed on instead), as it is not
+> expected to allocate page table pages, during the mapping process. The following
+> change after this patch should solve the reported problem.
+> 
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 9ea8e9039992..a00563122fcb 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -42,6 +42,7 @@
+>  #define NO_BLOCK_MAPPINGS      BIT(0)
+>  #define NO_CONT_MAPPINGS       BIT(1)
+>  #define NO_EXEC_MAPPINGS       BIT(2)  /* assumes FEAT_HPDS is not used */
+> +#define NO_ALLOC_MAPPINGS      BIT(3)  /* does not allocate page table pages */
+>  
+>  int idmap_t0sz __ro_after_init;
+>  
+> @@ -380,7 +381,7 @@ static void __create_pgd_mapping_locked(pgd_t *pgdir, phys_addr_t phys,
+>         phys &= PAGE_MASK;
+>         addr = virt & PAGE_MASK;
+>         end = PAGE_ALIGN(virt + size);
+> -       BUG_ON(!pgtable_alloc);
+> +       BUG_ON(!(flags & NO_ALLOC_MAPPINGS) && !pgtable_alloc);
+>  
+>         do {
+>                 next = pgd_addr_end(addr, end);
+> @@ -453,7 +454,7 @@ static void __init create_mapping_noalloc(phys_addr_t phys, unsigned long virt,
+>                 return;
+>         }
+>         __create_pgd_mapping(init_mm.pgd, phys, virt, size, prot, NULL,
+> -                            NO_CONT_MAPPINGS);
+> +                            NO_CONT_MAPPINGS | NO_ALLOC_MAPPINGS);
+>  }
+>  
+>  void __init create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+> @@ -481,7 +482,7 @@ static void update_mapping_prot(phys_addr_t phys, unsigned long virt,
+>         }
+>  
+>         __create_pgd_mapping(init_mm.pgd, phys, virt, size, prot, NULL,
+> -                            NO_CONT_MAPPINGS);
+> +                            NO_CONT_MAPPINGS | NO_ALLOC_MAPPINGS);
+>  
+>         /* flush the TLBs after updating live kernel mappings */
+>         flush_tlb_kernel_range(virt, virt + size);
 
-diff --git a/include/linux/iio/imu/adis.h b/include/linux/iio/imu/adis.h
-index f5432f3b2b22..e39092ab6683 100644
---- a/include/linux/iio/imu/adis.h
-+++ b/include/linux/iio/imu/adis.h
-@@ -427,18 +427,6 @@ static inline int adis_check_status(struct adis *adis)
- 	return ret;
- }
- 
--/* locked version of __adis_initial_startup() */
--static inline int adis_initial_startup(struct adis *adis)
--{
--	int ret;
--
--	mutex_lock(&adis->state_lock);
--	ret = __adis_initial_startup(adis);
--	mutex_unlock(&adis->state_lock);
--
--	return ret;
--}
--
- static inline void adis_dev_lock(struct adis *adis)
- {
- 	mutex_lock(&adis->state_lock);
--- 
-2.25.1
+This is now more complicated than what we had originally, and it doesn't catch
+the case where the caller sets NO_ALLOC_MAPPINGS but the callee ends up needing
+to perform an allocation, which the old code would have caught.
 
+This is clearly more subtle than we thought initially; for now could we please
+just drop the patch?
+
+Thanks,
+Mark.
