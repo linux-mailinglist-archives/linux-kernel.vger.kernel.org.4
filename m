@@ -2,126 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3883B631ECF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DF0631ED0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiKUKxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S229795AbiKUKxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:53:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiKUKxb (ORCPT
+        with ESMTP id S229772AbiKUKxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:53:31 -0500
+        Mon, 21 Nov 2022 05:53:36 -0500
 Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C45A1F2FC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:53:30 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id i10so27549305ejg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:53:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F52C756
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:53:35 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id i10so27549839ejg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:53:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oVR9zxWFI/yiTfyZ4zmDueQDkqj32nHPs9Uh0PG4vPE=;
-        b=KOwk43K2prxMCTWU5zSDoD7OjmzMBpZe59DoyncDt6F+Tc+Qtsvgf+G5R0i17IT+Nj
-         3gvfVY0T0UI3OCVP31Cq8Ar0xgsEjJD4bJn5jEFhuvh0dEd7Z0nFgvwKuA6na0brxsD4
-         YoLyr+iMi5GVBqKJsZYB1KlyEU41+29Va65MF/LNUJq3dEJA2A0PSFCdO1UnYKiKH8TK
-         A1o6q7JMNuSS3kDcOWAHOUt3HLy6qmD3lSiknCa1sZtShQ0PMymnlJxVg1/gfvzGsVIs
-         kCydES3mx6bQxzdRK2QcZgTLQLu68suH5cg2TxcFPmrtS7oFhHTx4ZIoeyyF9xHVJA7E
-         1yMg==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dIXltM9CwIEJBW31n6qcOnoQuAF0SYx/10yh0pflqpw=;
+        b=A54emkiJ8d6mOzX4CHxA7liwacxc6I+kXhc8muuDfztTsk5k1uMLeT9qmRHKHj7sAS
+         68Z9FCGJJnhe4rKCXyw4A3k9UegtNH0fo6wV4/aZDoKa+PnwIzU9gXuwmryHp5I9+OPm
+         0v6yDSf82LOR5TncBiHERECtXv5zjVEMnqoNRkM9TXaHpE3MVOqo1O2cSHqjkXyCWXQw
+         JtpH+AcHcP0rv1HdeWHHaaXzzHIIr9oVjxoAENs086nIwSA8823hsjlPG1OHCVO5cPXV
+         cJ/6KQezs19JNBcUSBL7fn9xb3IdEetBQm1zZwA+Sdyxu+2grADwX/Px4Kc6AlNgo58N
+         Gqug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVR9zxWFI/yiTfyZ4zmDueQDkqj32nHPs9Uh0PG4vPE=;
-        b=aHSkKgBbUfQH1Jqvn7u0IVhK7i1+0DWfwAbIVSff9BF1PLCWAS6G3M3BZcJxMq0FJV
-         2Vs3qycXkjtwuYlL7pUiYHadE51DSiF3SXLmHKYeNmUvw6IyTKYoiK/87iklg9p2KbSf
-         GwqV0sIjWUhP+MZnru0Ls61tv3+AUmlqgIpTObICo2hCQXR1BgMMS0Jz+GmKFWAV8jXS
-         9gdezftE95gbDjbn4eytq4StH9/rNG/6o5pDtfjZ7xFfmHHh7/s7kfsr9TGQCaV/ekA4
-         Uaqv8JXPaMpjQNDJX//ZHbv/8ACRmokO5jg8BTlKWF9IAy18UK9hKLbA0Ez71pNvXuSJ
-         PdiA==
-X-Gm-Message-State: ANoB5pkUExkNi2FAKDbmuLQqIWkRVp1jEZpmlk3R3e7VO5Siw59Jxu0w
-        7wWraOoS7SQ+8+a8qVCrkzSbvQ==
-X-Google-Smtp-Source: AA0mqf70BnFvfvb0IuSIgQsK2SzIyUkBrZLyuZoXrSWjPOnvQcHmbXrvzYpC3wtlID8hDdv5F+6kMg==
-X-Received: by 2002:a17:906:81c4:b0:78d:9858:e538 with SMTP id e4-20020a17090681c400b0078d9858e538mr15153542ejx.502.1669028008557;
-        Mon, 21 Nov 2022 02:53:28 -0800 (PST)
-Received: from [192.168.0.161] (79-100-144-200.ip.btc-net.bg. [79.100.144.200])
-        by smtp.gmail.com with ESMTPSA id i17-20020aa7c9d1000000b004638ba0ea96sm4962888edt.97.2022.11.21.02.53.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 02:53:25 -0800 (PST)
-Message-ID: <a153b239-26f4-9813-beb8-bf74d19808ef@blackwall.org>
-Date:   Mon, 21 Nov 2022 12:53:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 1/5] kobject: make kobject_get_ownership() take a constant
- kobject *
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dIXltM9CwIEJBW31n6qcOnoQuAF0SYx/10yh0pflqpw=;
+        b=qBHOT9Jg0j4tK1LF7KwNgWkZHwxahBl5E2mH921+04QblxQ59NXvk2SU2q4RyW9duv
+         KaICakAVUUc+JFDNuSlayVXHqfwvMLg3xLl2K+gbQU3MhDE7aDxd1hRsz9s/6zGFwZP1
+         hDxP61XzEewc22f0MQTNo96qqAGfxmsRNNALfiqG5cCj1JVJpilk3gD2TW9827YQYOYD
+         wQ4NDTItBvJB7SoE50DFDpM2YJIcSbq2yBw9ej+DwnqHGB+g/UBMt8qc/p9g5/koA7jb
+         cGODQDLG1Uv0JVFa50w4ew4nxsZtXkKql/ZQZu0PC84dxX4TlwxkYKN3eT6pqwpMpHb1
+         vJqw==
+X-Gm-Message-State: ANoB5pkBxswyCb07JzOJMxV3TQAzpIoZgfZ3nsnLKTtc12oAibtISUWQ
+        owPe7SWitm6tfow7y2OJ8lViiQ==
+X-Google-Smtp-Source: AA0mqf6dWp3Wpc0Ov+iHZfb7e76FT+vzBR/MkIgZsC+2m3i5woHAUQ20TzzBrzWK50sy5/WbjwaUjw==
+X-Received: by 2002:a17:906:1495:b0:7ad:d250:b904 with SMTP id x21-20020a170906149500b007add250b904mr14898663ejc.633.1669028014848;
+        Mon, 21 Nov 2022 02:53:34 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b0074136cac2e7sm1716343ejh.81.2022.11.21.02.53.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 02:53:34 -0800 (PST)
+Date:   Mon, 21 Nov 2022 11:53:33 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Chen Lifu <chenlifu@huawei.com>
+Cc:     anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netdev@vger.kernel.org
-References: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH -next] RISC-V: KVM: optimize kvm_arch_hardware_enable()
+Message-ID: <20221121105333.rap67cpmst3odiid@kamzik>
+References: <20221121003915.2817102-1-chenlifu@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121003915.2817102-1-chenlifu@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 11:46, Greg Kroah-Hartman wrote:
-> The call, kobject_get_ownership(), does not modify the kobject passed
-> into it, so make it const.  This propagates down into the kobj_type
-> function callbacks so make the kobject passed into them also const,
-> ensuring that nothing in the kobject is being changed here.
+On Mon, Nov 21, 2022 at 08:39:15AM +0800, Chen Lifu wrote:
+> The values of CSR_HEDELEG and CSR_HIDELEG registers are constants,
+> so change them from variables to macros.
 > 
-> This helps make it more obvious what calls and callbacks do, and do not,
-> modify structures passed to them.
-> 
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-> Cc: Anna Schumaker <anna@kernel.org>
-> Cc: Roopa Prabhu <roopa@nvidia.com>
-> Cc: Nikolay Aleksandrov <razor@blackwall.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Chuck Lever <chuck.lever@oracle.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: linux-nfs@vger.kernel.org
-> Cc: bridge@lists.linux-foundation.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Chen Lifu <chenlifu@huawei.com>
 > ---
->  drivers/base/class.c    | 2 +-
->  drivers/base/core.c     | 8 ++++----
->  fs/nfs/sysfs.c          | 4 ++--
->  include/linux/kobject.h | 8 ++++----
->  lib/kobject.c           | 4 ++--
->  net/bridge/br_if.c      | 2 +-
->  net/core/net-sysfs.c    | 8 ++++----
->  net/sunrpc/sysfs.c      | 8 ++++----
->  8 files changed, 22 insertions(+), 22 deletions(-)
+>  arch/riscv/kvm/main.c | 31 +++++++++++++------------------
+>  1 file changed, 13 insertions(+), 18 deletions(-)
 > 
+> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+> index df2d8716851f..70196b03b6f9 100644
+> --- a/arch/riscv/kvm/main.c
+> +++ b/arch/riscv/kvm/main.c
+> @@ -12,10 +12,21 @@
+>  #include <linux/kvm_host.h>
+>  #include <asm/csr.h>
+>  #include <asm/hwcap.h>
+>  #include <asm/sbi.h>
+>  
+> +#define EXC_HEDELEG ((1UL << EXC_INST_MISALIGNED) | \
+> +		     (1UL << EXC_BREAKPOINT)      | \
+> +		     (1UL << EXC_SYSCALL)         | \
+> +		     (1UL << EXC_INST_PAGE_FAULT) | \
+> +		     (1UL << EXC_LOAD_PAGE_FAULT) | \
+> +		     (1UL << EXC_STORE_PAGE_FAULT))
+> +
+> +#define IRQ_HIDELEG ((1UL << IRQ_VS_SOFT)  | \
+> +		     (1UL << IRQ_VS_TIMER) | \
+> +		     (1UL << IRQ_VS_EXT))
+> +
+>  long kvm_arch_dev_ioctl(struct file *filp,
+>  			unsigned int ioctl, unsigned long arg)
+>  {
+>  	return -EINVAL;
+>  }
+> @@ -30,29 +41,13 @@ int kvm_arch_hardware_setup(void *opaque)
+>  	return 0;
+>  }
+>  
+>  int kvm_arch_hardware_enable(void)
+>  {
+> -	unsigned long hideleg, hedeleg;
+> -
+> -	hedeleg = 0;
+> -	hedeleg |= (1UL << EXC_INST_MISALIGNED);
+> -	hedeleg |= (1UL << EXC_BREAKPOINT);
+> -	hedeleg |= (1UL << EXC_SYSCALL);
+> -	hedeleg |= (1UL << EXC_INST_PAGE_FAULT);
+> -	hedeleg |= (1UL << EXC_LOAD_PAGE_FAULT);
+> -	hedeleg |= (1UL << EXC_STORE_PAGE_FAULT);
+> -	csr_write(CSR_HEDELEG, hedeleg);
+> -
+> -	hideleg = 0;
+> -	hideleg |= (1UL << IRQ_VS_SOFT);
+> -	hideleg |= (1UL << IRQ_VS_TIMER);
+> -	hideleg |= (1UL << IRQ_VS_EXT);
+> -	csr_write(CSR_HIDELEG, hideleg);
+> -
+> +	csr_write(CSR_HEDELEG, EXC_HEDELEG);
+> +	csr_write(CSR_HIDELEG, IRQ_HIDELEG);
+>  	csr_write(CSR_HCOUNTEREN, -1UL);
+> -
+>  	csr_write(CSR_HVIP, 0);
+>  
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.37.1
+>
 
-For the bridge:
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+I don't think this optimizes anything. I'm pretty sure the compiler will
+load the input to csr_write() in the most efficient way it can, regardless
+of using a constant or building the input out of constants. This could
+maybe be considered a code cleanup, but, in this case, it's really in the
+eye of the beholder.
 
-
+Thanks,
+drew
