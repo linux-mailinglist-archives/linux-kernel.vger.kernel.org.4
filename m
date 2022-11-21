@@ -2,101 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E6D63291D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61313632929
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiKUQNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S229937AbiKUQPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiKUQNB (ORCPT
+        with ESMTP id S229541AbiKUQPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:13:01 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5C3D2371
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:12:59 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-79-JCNmq6zLOMy4J3wKzwty6A-1; Mon, 21 Nov 2022 16:12:56 +0000
-X-MC-Unique: JCNmq6zLOMy4J3wKzwty6A-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 21 Nov
- 2022 16:12:53 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Mon, 21 Nov 2022 16:12:53 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'James Bottomley' <James.Bottomley@HansenPartnership.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        Nayna <nayna@linux.vnet.ibm.com>,
-        "Andrew Donnellan" <ajd@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "George Wilson" <gcwilson@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: RE: [PATCH 2/4] fs: define a firmware security filesystem named
- fwsecurityfs
-Thread-Topic: [PATCH 2/4] fs: define a firmware security filesystem named
- fwsecurityfs
-Thread-Index: AQHY/bIc6g2ldzgOWEG38iaI8ZLls65JjEcA
-Date:   Mon, 21 Nov 2022 16:12:53 +0000
-Message-ID: <010cbb5d1c7944aba628a15774bef941@AcuMS.aculab.com>
-References: <20221106210744.603240-1-nayna@linux.ibm.com>
-         <20221106210744.603240-3-nayna@linux.ibm.com> <Y2uvUFQ9S2oaefSY@kroah.com>
-         <8447a726-c45d-8ebb-2a74-a4d759631e64@linux.vnet.ibm.com>
-         <Y2zLRw/TzV/sWgqO@kroah.com>
-         <44191f02-7360-bca3-be8f-7809c1562e68@linux.vnet.ibm.com>
-         <Y3anQukokMcQr+iE@kroah.com>
-         <d615180d-6fe5-d977-da6a-e88fd8bf5345@linux.vnet.ibm.com>
-         <Y3pSF2MRIXd6aH14@kroah.com>
-         <88111914afc6204b2a3fb82ded5d9bfb6420bca6.camel@HansenPartnership.com>
-         <Y3tbhmL4oG1YTyT/@kroah.com>
- <10c85b8f4779700b82596c4a968daead65a29801.camel@HansenPartnership.com>
-In-Reply-To: <10c85b8f4779700b82596c4a968daead65a29801.camel@HansenPartnership.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 21 Nov 2022 11:15:01 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33DAD32BA;
+        Mon, 21 Nov 2022 08:15:00 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e725329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e725:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 37C0B1EC072D;
+        Mon, 21 Nov 2022 17:14:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669047299;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=xS9RbzkZ1j+3agijHPw89UTLp+Ah5M/Hztpd3/8xgBg=;
+        b=pGMq56pITX/Vz6B5Vtn4pOJ0ZnfV6yvarzcjPzxxiR16Tp5+jPUZXF0wRskEm13kHLXbUl
+        j2z9D7yHvJ3zfCpqgsdstglB7fNfkD7znw+FJHhxnan2Dgrz1jT9KR5cnbltM19sVp2Ly2
+        jIk3LtBD+EFjteLH/pZHClSzDjRb0lg=
+Date:   Mon, 21 Nov 2022 17:14:54 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        mingo@redhat.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
+        seanjc@google.com, pbonzini@redhat.com, thomas.lendacky@amd.com,
+        michael.roth@amd.com, stable@kernel.org,
+        "Rao, Bharata Bhasker" <bharata@amd.com>
+Subject: Re: [PATCH] x86/sev: Add SEV-SNP guest feature negotiation support
+Message-ID: <Y3uj/gb8i4koG6Jv@zn.tnic>
+References: <20221117044433.244656-1-nikunj@amd.com>
+ <Y3YP5FQ6OHzVFKbp@zn.tnic>
+ <7e224da6-6b02-2972-1334-bc8e7894cdab@amd.com>
+ <Y3YuxGO8Kycymxg3@zn.tnic>
+ <4ea6e1c3-fae5-a64a-9bd3-f9ea0821fc67@amd.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4ea6e1c3-fae5-a64a-9bd3-f9ea0821fc67@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogSmFtZXMgQm90dG9tbGV5DQo+IFNlbnQ6IDIxIE5vdmVtYmVyIDIwMjIgMTQ6MDMNCi4u
-Lg0KPiA+IFRoZW4gaG93IGRvZXMgdGhlIG5ldHdvcmtpbmcgY29kZSBoYW5kbGUgdGhlIG5hbWVz
-cGFjZSBzdHVmZiBpbg0KPiA+IHN5c2ZzPw0KPiA+IFRoYXQgc2VlbXMgdG8gd29yayB0b2RheSwg
-b3IgYW0gSSBtaXNzaW5nIHNvbWV0aGluZz8NCj4gDQo+IGhhdmUgeW91IGFjdHVhbGx5IHRyaWVk
-Pw0KPiANCj4gamVqYkBsaW5ncm93On4+IHN1ZG8gdW5zaGFyZSAtLW5ldCBiYXNoDQo+IGxpbmdy
-b3c6L2hvbWUvamVqYiAjIGxzIC9zeXMvY2xhc3MvbmV0Lw0KPiBsbyAgdHVuMCAgdHVuMTAgIHds
-YW4wDQo+IGxpbmdyb3c6L2hvbWUvamVqYiAjIGlwIGxpbmsgc2hvdw0KPiAxOiBsbzogPExPT1BC
-QUNLPiBtdHUgNjU1MzYgcWRpc2Mgbm9vcCBzdGF0ZSBET1dOIG1vZGUgREVGQVVMVCBncm91cA0K
-PiBkZWZhdWx0IHFsZW4gMTAwMA0KPiAgICAgbGluay9sb29wYmFjayAwMDowMDowMDowMDowMDow
-MCBicmQgMDA6MDA6MDA6MDA6MDA6MDANCj4gDQo+IFNvLCBhcyB5b3Ugc2VlLCBJJ3ZlIGVudGVy
-ZWQgYSBuZXR3b3JrIG5hbWVzcGFjZSBhbmQgaXAgbGluayBzaG93cyBtZQ0KPiB0aGUgb25seSBp
-bnRlcmZhY2UgSSBjYW4gc2VlIGluIHRoYXQgbmFtZXNwYWNlIChhIGRvd24gbG9vcGJhY2spIGJ1
-dA0KPiBzeXNmcyBzaG93cyBtZSBldmVyeSBpbnRlcmZhY2Ugb24gdGhlIHN5c3RlbSBvdXRzaWRl
-IHRoZSBuYW1lc3BhY2UuDQoNCllvdSBoYXZlIHRvIHJlbW91bnQgL3N5cyB0byBnZXQgdGhlIHJl
-c3RyaWN0ZWQgY29weS4NCmVnIGJ5IHJ1bm5pbmcgJ2lwIG5ldG5zIGV4ZWMgbmFtZXNwYWNlIGNv
-bW1hbmQnLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
-bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3Ry
-YXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Fri, Nov 18, 2022 at 06:58:07PM +0530, Nikunj A. Dadhania wrote:
+> No: For feature flags that need an enlightened guest, older guests
+> should detect and fail booting on any hypervisor that sets this
+> feature flag.
 
+What would happen with such old guests nowadays? Wouldn't they explode
+anyway?
+
+And how is this supposed to work in practice?
+
+I'm guessing this is supposed to address a case where guest owner goes
+to a cloud provider, boots an old guest and it magically survives
+booting and then it runs with some false sense of security.
+
+But isn't that part of the whole attestation dance where the guest owner
+checks for a minimum set of features it expects to be present?
+
+Because if you do this and the cloud provider updates the hypervisor,
+all the guest owner images might stop working all of a sudden because of
+this check.
+
+So what is the actual, real-life example where this helps? At all?
+
+> The hypervisor can enable various new features flags(in
+> SEV_FEATURES[1:63]) and start the guest. The hypervisor does not know
+> beforehand that the guest kernel supports the feature that is being
+> enabled.
+
+This is not the right criterion: it should be more like: can a guest
+still continue booting with a new feature it doesn't know about and
+still provide the same security.
+
+But see above - you need to think very practically here before even
+considering such a thing.
+
+> While booting, SNP guests can discover the hypervisor-enabled features
+> by looking at SEV_STATUS MSR. At this point, the SNP guest needs to
+> decide either to continue boot or terminate depending on the feature
+> support in the guest kernel. Otherwise, if we let the guest continue
+> booting with an unsupported feature, the guest can fail in non-obvious
+> manner.
+
+How can an old guest decide when it doesn't even have the intelligence
+to do so?
+
+What you're doing is, have old guests immediately stop booting when they
+encounter a new feature - even if that new feature doesn't impair their
+security.
+
+> +-------------------+----------+-------------+----------+
+> | HypervisorEnabled | Required | Available   |   Boot   |
+> +-------------------+----------+-------------+----------+
+> | Y                 |  Y       |  N          | N (Fail) |
+
+This means that you need to know those features which would fail an old
+guest *upfront*. Like right now. And I hardly doubt that.
+
+> PREVENT_HOST_IBS will be defined but shouldn't be part of the 
+> "Required" mask.
+
+So it doesn't need to be mentioned at all.
+
+> SECURE_TSC should be part of "Required" mask and once secure tsc 
+> support is up-streamed it should be added to "Available" mask.
+
+So when a guest owner gets a new guest which supports SECURE_TSC and
+tries to boot it on an older HV - which is very much pretty everywhere
+the case - cloud providers won't update their HV kernel whenever - that
+new guest won't boot at all.
+
+Which is a bad bad idea. I don't think you want that.
+
+What you want, rather, is to say in the SECURE_TSC enablement code
+
+	pr_warn("HV doesn't support secure TSC - your guest won't be 100% secure\n");
+
+or so.
+
+> Guests need to check for features enabled by the hypervisor that is not 
+> supported as well, so that we can terminate the guest right there.
+
+That needs to be done in the feature enablement code of each feature but
+not wholesale like this.
+
+Anyway, I think you get my point.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
