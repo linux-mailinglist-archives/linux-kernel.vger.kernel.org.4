@@ -2,102 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C76632014
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AC5632026
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiKULPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S230526AbiKULQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiKULOo (ORCPT
+        with ESMTP id S230092AbiKULQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:14:44 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5D7BF839
+        Mon, 21 Nov 2022 06:16:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C468C1F43
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669029011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6HFE5ckJ+/PkEEqbEDcxeM6P1Mra4LAFsLM3EpugvmI=;
+        b=EMLCOBkxKS6v25xXjAdge+Br8hPYZtath284xFs7yuod9WiH8RVTF1Ic+W7o2XkHu+7hPs
+        0RXnqqN9HzSIDt34fTUsmbCNliMEjbGfyL3802sP/+kN4OkZwd7Qv60QwXMFqXQm6UN1M/
+        sdpVVEH1M+yZFp/HwNmul0ksAIYwcHk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-466-xv_SHqDjOyCtG3CN1of28g-1; Mon, 21 Nov 2022 06:10:10 -0500
+X-MC-Unique: xv_SHqDjOyCtG3CN1of28g-1
+Received: by mail-wr1-f71.google.com with SMTP id d11-20020adfa40b000000b00241db65ec27so568665wra.10
         for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:10:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8F66ECE11BE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:10:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D001C433D6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669028998;
-        bh=SrnoE2ZwKMFebu9vJWEZ+n28lkE0/B5i1gCPufLzeR4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UcjU7Cm1TKWDiiorJEj+aOA12ktOV1UNiOGeqrq6GCAxfFEr9NwuekUhbOTrRTdGm
-         UgU7HRT4Z5KXL/BQ1bHVABkwR1gjEWVSq6vmKwpcXeDMrNNZAvXM9D8CC562TUCRWW
-         tfuOtpOe2qi4Z+SaaosZKdeZxx3ikCj99w2y855LOry+DDYlsYebPc+LxKVpS970ds
-         Z28EfkrPlqQ9TCyaYesIi076ye2luMetISph/zcfPYfM85190shKwEyxJdXR9HZEej
-         iLEGr6u0/Qdc7WnU0EAcQl5QkdParo3YqJXAVumEg2wYl4BZGw38oJmq2PxG6wn9zG
-         8JxdoRG37mYlA==
-Received: by mail-ej1-f42.google.com with SMTP id n20so27815191ejh.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:09:58 -0800 (PST)
-X-Gm-Message-State: ANoB5plX/2YQisTGZ/4gkHuexkvYgLR17fvHSvMnR8SkbB14DWAwYczs
-        /pRREY1Nz1Vu+yDp1NmWTld/rob5mx8nMqFGxcM=
-X-Google-Smtp-Source: AA0mqf7PWo/LXdMWM/qVMzfD6xXZltpTRX4XN8uDfabhE0uSKX3rmuH6/A0Wd1z0JVyxGzoC+SvQcoEZSyTztwNaEFI=
-X-Received: by 2002:a17:906:6a8e:b0:78d:a136:7332 with SMTP id
- p14-20020a1709066a8e00b0078da1367332mr14856897ejr.355.1669028996847; Mon, 21
- Nov 2022 03:09:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20221120101049.2078117-1-guoren@kernel.org> <Y3tPEDvM3aVJmVxF@wendy>
-In-Reply-To: <Y3tPEDvM3aVJmVxF@wendy>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 21 Nov 2022 19:09:45 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTS0FDgV3toa9wZxPhK2G+f4vCtrru7q3R4FXnMkxYmu-w@mail.gmail.com>
-Message-ID: <CAJF2gTS0FDgV3toa9wZxPhK2G+f4vCtrru7q3R4FXnMkxYmu-w@mail.gmail.com>
-Subject: Re: [PATCH V2] riscv: patch: Fixup lockdep warning in stop_machine
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, mhiramat@kernel.org, changbin.du@intel.com,
-        zong.li@sifive.com, rostedt@goodmis.org, boqun.feng@gmail.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Changbin Du <changbin.du@gmail.com>
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6HFE5ckJ+/PkEEqbEDcxeM6P1Mra4LAFsLM3EpugvmI=;
+        b=Gp0htfvZfVetRojAnOFNzYIW3McilcgV2ZW9EorVvVQM1dLdw4EilXTnw9g3jHhoHo
+         X/jgRPiXOPYmlTMKlJ7NIKQcWY7aMuTfGwqWZRumDpd5K1BxjgLjJyup8Ig0pG/DHCVo
+         Z7/wBiytdA6cRhNb9xkPx1J1h9IWHYU1gnabwPKepUAJjAMHWu8gfT11IhBMIFPuvdYq
+         oeM+RWe6O+fo0KefsmYnlXv6+ROF12FvHNGR1YpAGQv6eOVLUED9MPOnz9D0/v4aNka1
+         EvQULVcixLi2IEWwsUeFiVfUPs78Xr86WnXM8jEoH6jS6y4PPqrYkdvU1Yc65EXdunFK
+         SUsQ==
+X-Gm-Message-State: ANoB5pk097wjG9rE2O5ov+1PiMy+Ncs5fXxCiOlOt3qXgVnWu4yNMlkU
+        brtyDhlr9Q/MVtyBcTyU/v+WcjzxwwS5dT5s1UV33mqMPVK6kTSKaCU6Hf/Z2mdlW7aNkl95vO9
+        YNh800oHzo7/b+A/9dNVtxNtC
+X-Received: by 2002:a05:600c:3587:b0:3cf:a9c2:2b04 with SMTP id p7-20020a05600c358700b003cfa9c22b04mr12126016wmq.152.1669029008897;
+        Mon, 21 Nov 2022 03:10:08 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6qmkAtqZngrYlpX3LaYVMHNRMoKYxTdVMdo3Sx7bg+dmQB/Sga7GdUCdrPFwBUtw6/peox+w==
+X-Received: by 2002:a05:600c:3587:b0:3cf:a9c2:2b04 with SMTP id p7-20020a05600c358700b003cfa9c22b04mr12125983wmq.152.1669029008603;
+        Mon, 21 Nov 2022 03:10:08 -0800 (PST)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b003c6f1732f65sm19940702wmp.38.2022.11.21.03.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 03:10:08 -0800 (PST)
+Message-ID: <2ead7655dbb90d15b883c5d31f582ed87d4e8737.camel@redhat.com>
+Subject: Re: [PATCH 04/13] KVM: nSVM: clean up copying of int_ctl fields
+ back to vmcb01/vmcb12
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Babu Moger <babu.moger@amd.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org
+Date:   Mon, 21 Nov 2022 13:10:06 +0200
+In-Reply-To: <Y3aWZJo8M2li/7BB@google.com>
+References: <20221117143242.102721-1-mlevitsk@redhat.com>
+         <20221117143242.102721-5-mlevitsk@redhat.com> <Y3aWZJo8M2li/7BB@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 6:13 PM Conor Dooley <conor.dooley@microchip.com> wrote:
->
-> On Sun, Nov 20, 2022 at 05:10:49AM -0500, guoren@kernel.org wrote:
-> > From: Changbin Du <changbin.du@gmail.com>
->
-> > Fixes: 0ff7c3b33127 ("riscv: Use text_mutex instead of patch_lock")
-> > Cc: Changbin Du <changbin.du@gmail.com>
-> > Co-developed-by: Guo Ren <guoren@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Zong Li <zong.li@sifive.com>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+On Thu, 2022-11-17 at 20:15 +0000, Sean Christopherson wrote:
+> On Thu, Nov 17, 2022, Maxim Levitsky wrote:
+> > Clean up the nested_sync_int_ctl_from_vmcb02:
+> > 
+> > 1. The comment about preservation of V_IRQ is wrong: when the L2 doesn't
+> >    use virtual interrupt masking, then the field just doesn't exist in
+> >    vmcb12 thus it should not be touched at all.
+> >    Since it is unused in this case, touching it doesn't matter that much,
+> >    so the bug is theoretical.
+> > 
+> > 2. When the L2 doesn't use virtual interrupt masking, then in the *theory*
+> >    if KVM uses the feature, it should copy the changes to V_IRQ* bits from
+> >    vmcb02 to vmcb01.
+> > 
+> >    In practise, KVM only uses it for detection of the interrupt window,
+> >    and it happens to re-open it on each nested VM exit because
+> >    kvm_set_rflags happens to raise the KVM_REQ_EVENT.
+> >    Do this explicitly.
+> > 
+> > 3. Add comment on why we don't need to copy V_GIF from vmcb02 to vmcb01
+> >    when nested guest doesn't use nested V_GIF (and thus L1's GIF is in
+> >    vmcb02 while nested), even though it can in theory affect L1's GIF.
+> > 
+> > 4. Add support code to also copy some bits of int_ctl from
+> >    vmcb02 to vmcb01.
+> >    Currently there are none.
+> 
+> Unless it's impossible for whatever reason, this patch should be split into
+> multiple patches.  IIUC, there are at least 2 different functional changes being
+> made, they just happen to not have any actual impact on things.
+
+No objection to this.
+
+> 
+> > No (visible) functional change is intended.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 > > ---
->
-> Hey Guo Ren,
->
-> FYI you're missing a SoB from Chanbin on this patch. They gave one in
-> their v1 though so you should be able to re-use that?
-I'm waiting for his SoB. I don't think I could directly use his SoB in
-v1. I need him to confirm my rewritten commit log for lockdep
-analysis.
+> >  arch/x86/kvm/svm/nested.c | 47 ++++++++++++++++++++++++++-------------
+> >  1 file changed, 32 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> > index 54eb152e2b60b6..1f2b8492c8782f 100644
+> > --- a/arch/x86/kvm/svm/nested.c
+> > +++ b/arch/x86/kvm/svm/nested.c
+> > @@ -410,28 +410,45 @@ void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
+> >  static void nested_sync_int_ctl_from_vmcb02(struct vcpu_svm *svm,
+> >                                             struct vmcb *vmcb12)
+> >  {
+> > -       u32 mask;
+> > +       struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
+> > +       struct vmcb *vmcb01 = svm->vmcb01.ptr;
+> > +
+> > +       /* bitmask of bits of int_ctl that we copy from vmcb02 to vmcb12*/
+> > +       u32 l2_to_l1_mask = 0;
+> > +       /* bitmask of bits of int_ctl that we copy from vmcb02 to vmcb01*/
+> > +       u32 l2_to_l0_mask = 0;
+> >  
+> > -       /* Only a few fields of int_ctl are written by the processor.  */
+> 
+> Can this comment be kept in some form?  I found it super useful when reading this
+> code just now.
 
->
-> Thanks,
-> Conor.
->
-> > Changes in v2:
-> >  - Rewrite commit log with lockdep explanation [Guo Ren]
-> >  - Rebase on v6.1 [Guo Ren]
-> >
-> > v1:
-> > https://lore.kernel.org/linux-riscv/20210417023532.354714-1-changbin.du@gmail.com/
->
+No problem.
+
+> 
+> > -       mask = V_IRQ_MASK | V_TPR_MASK;
+> > -       if (!(svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK) &&
+> > -           svm_is_intercept(svm, INTERCEPT_VINTR)) {
+> > +       if (svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK)
+> > +               l2_to_l1_mask |= V_IRQ_MASK | V_TPR_MASK;
+> > +       else {
+> >                 /*
+> > -                * In order to request an interrupt window, L0 is usurping
+> > -                * svm->vmcb->control.int_ctl and possibly setting V_IRQ
+> > -                * even if it was clear in L1's VMCB.  Restoring it would be
+> > -                * wrong.  However, in this case V_IRQ will remain true until
+> > -                * interrupt_window_interception calls svm_clear_vintr and
+> > -                * restores int_ctl.  We can just leave it aside.
+> > +                * If IRQ window was opened while in L2, it must be reopened
+> > +                * after the VM exit
+> > +                *
+> > +                * vTPR value doesn't need to be copied from vmcb02 to vmcb01
+> > +                * because it is synced from/to apic registers on each VM exit
+> >                  */
+> > -               mask &= ~V_IRQ_MASK;
+> > +               if (vmcb02->control.int_ctl & V_IRQ_MASK)
+> > +                       kvm_make_request(KVM_REQ_EVENT, &svm->vcpu);
+> >         }
+> >  
+> >         if (nested_vgif_enabled(svm))
+> > -               mask |= V_GIF_MASK;
+> > +               l2_to_l1_mask |= V_GIF_MASK;
+> > +       else
+> > +               /* There is no need to sync V_GIF from vmcb02 to vmcb01
+> > +                * because GIF is cleared on VMexit, thus even though
+> > +                * nested guest can control host's GIF, on VM exit
+> > +                * its set value is lost
+> > +                */
+> > +               ;
+> 
+> The "else ... ;" is unnecessary, just throw the block comment above the nested
+> vGIF if-statment, e.g. if I'm understanding everything, this?
+Yes.
+
+> 
+>         /*
+>          * If nested vGIF is not enabled, L2 has access to L1's "real" GIF.  In
+>          * this case, there's no need to sync V_GIF from vmcb02 to vmcb01
+>          * because GIF is cleared on VM-Exit, thus any changes made by L2 are
+>          * overwritten on VM-Exit to L1.
+>          */
+>         if (nested_vgif_enabled(svm))
+>                 l2_to_l1_mask |= V_GIF_MASK;
+> 
+> > +
+> > +       vmcb12->control.int_ctl =
+> > +               (svm->nested.ctl.int_ctl & ~l2_to_l1_mask) |
+> > +               (vmcb02->control.int_ctl & l2_to_l1_mask);
+> >  
+> > -       vmcb12->control.int_ctl        &= ~mask;
+> > -       vmcb12->control.int_ctl        |= svm->vmcb->control.int_ctl & mask;
+> > +       vmcb01->control.int_ctl =
+> > +               (vmcb01->control.int_ctl & ~l2_to_l0_mask) |
+> > +               (vmcb02->control.int_ctl & l2_to_l0_mask);
+> 
+> No need for wrapping immediately after the "=", these all fit under the soft limit:
+> 
+>         vmcb12->control.int_ctl = (svm->nested.ctl.int_ctl & ~l2_to_l1_mask) |
+>                                   (vmcb02->control.int_ctl & l2_to_l1_mask);
+> 
+>         vmcb01->control.int_ctl = (vmcb01->control.int_ctl & ~l2_to_l0_mask) |
+>                                   (vmcb02->control.int_ctl & l2_to_l0_mask);
+
+OK.
 
 
--- 
-Best Regards
- Guo Ren
+Best regards,
+	Maxim Levitsky
+
+> 
+
+
