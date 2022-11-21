@@ -2,243 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37CC6330DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D09C6330DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiKUXni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S231888AbiKUXnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:43:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbiKUXmm (ORCPT
+        with ESMTP id S232070AbiKUXm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:42:42 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0600AE0DC9;
+        Mon, 21 Nov 2022 18:42:57 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4348DEACD;
         Mon, 21 Nov 2022 15:41:46 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2322788F;
-        Tue, 22 Nov 2022 00:41:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669074096;
-        bh=OsNzWOxt+1Uz9pblEiTC7lBWE1dWJGL9cCym66ao+hA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BSYxu68Bxi+i6zA2IBtJTdyNSgC0QbSR4M/jE4FDeatfguQNWpW/e5l8ysyKLwagi
-         qm4CIZU/Dt1P7hV3Wzymz4NWWtinO9DHg33OD5e+dVVePLMzJH/58FnjkXkH7t9jRS
-         zb8qd3rPQ3qx2kNM42eps2A/QcP3kQeRt66HXCdg=
-Date:   Tue, 22 Nov 2022 01:41:21 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Umang Jain <umang.jain@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Naushir Patuck <naush@raspberrypi.com>,
-        David Plowman <david.plowman@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: Re: [PATCH 13/14] docs: admin-guide: media: bcm2835-isp: Add
- documentation for bcm2835-isp
-Message-ID: <Y3wMof/ERK7ZBINW@pendragon.ideasonboard.com>
-References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
- <20221121214722.22563-14-umang.jain@ideasonboard.com>
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGP6n6G0tz4wgv;
+        Tue, 22 Nov 2022 10:41:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669074098;
+        bh=6ACU4lm6mckyP2bUnEllUx7Xslx2xTIp6EMN9eZfHWI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kp41VEGGQPiZn/s0bNVHyyrknq2tOy6cdMpBY58QuZtVGrN1Y3m/3WviT6dnaQZuE
+         eSs5pOhSsulgKJn1CPtyBFrId2OdOUH/A+Ix4plKC2s4+zcZ63OGOYsJmdCFPc0uVE
+         WwWHzRckjs9Ggp+zizVh6HUARPO/DBfVmpiX9f61o9YMT96a6n7A2Cp4vOLAs2MehJ
+         9F4E1DKzNVTlgeF/WbnJDLBTFQfLeQw0/oYCOEbdqk6Q79VVi0efcZItaLUylyrJ4v
+         XS+ivXaUUVG2U7zJvBWg+LROniJk+5tJEh1rDIt9OEHya/cgHQTWJRHuYHBGQDt5lv
+         ffWBjJx45jCdw==
+Date:   Tue, 22 Nov 2022 10:41:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        Chris Healy <healych@amazon.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the arm64 tree
+Message-ID: <20221122104136.601ba45e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221121214722.22563-14-umang.jain@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Z7W22ZE_9kW+JiUxp1pPYkX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang and Naush,
+--Sig_/Z7W22ZE_9kW+JiUxp1pPYkX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch.
+Hi all,
 
-On Tue, Nov 22, 2022 at 03:17:21AM +0530, Umang Jain wrote:
-> From: Naushir Patuck <naush@raspberrypi.com>
-> 
-> Document device nodes, frame buffer formats and initial set of
-> configuraiton that can be set from userspace to configure the pipeline.
+After merging the arm64 tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-s/configuraiton/configuration/
+drivers/perf/amlogic/meson_g12_ddr_pmu.c: In function 'dmc_g12_get_freq_qui=
+ck':
+drivers/perf/amlogic/meson_g12_ddr_pmu.c:135:15: error: implicit declaratio=
+n of function 'readl' [-Werror=3Dimplicit-function-declaration]
+  135 |         val =3D readl(info->pll_reg);
+      |               ^~~~~
+drivers/perf/amlogic/meson_g12_ddr_pmu.c: In function 'dmc_g12_counter_enab=
+le':
+drivers/perf/amlogic/meson_g12_ddr_pmu.c:204:9: error: implicit declaration=
+ of function 'writel' [-Werror=3Dimplicit-function-declaration]
+  204 |         writel(clock_count, info->ddr_reg[0] + DMC_MON_G12_TIMER);
+      |         ^~~~~~
 
-> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
->  .../admin-guide/media/bcm2835-isp.rst         | 127 ++++++++++++++++++
->  .../userspace-api/media/drivers/index.rst     |   1 +
->  2 files changed, 128 insertions(+)
->  create mode 100644 Documentation/admin-guide/media/bcm2835-isp.rst
-> 
-> diff --git a/Documentation/admin-guide/media/bcm2835-isp.rst b/Documentation/admin-guide/media/bcm2835-isp.rst
-> new file mode 100644
-> index 000000000000..e1c19f78435e
-> --- /dev/null
-> +++ b/Documentation/admin-guide/media/bcm2835-isp.rst
-> @@ -0,0 +1,127 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +BCM2835 ISP Driver
-> +==================
-> +
-> +Introduction
-> +------------
-> +
-> +The BCM2835 Image Sensor Pipeline (ISP) is a fixed function hardware pipeline
-> +for performing image processing operations.  Images are fed to the input
-> +of the ISP through memory frame buffers.  These images may be in various YUV,
-> +RGB, or Bayer formats.
+Caused by commit
 
-Does the ISP really support RGB or YUV input images ? Is this supported
-by the driver ?
+  2016e2113d35 ("perf/amlogic: Add support for Amlogic meson G12 SoC DDR PM=
+U driver")
 
-> A typical use case would have Bayer images obtained from
-> +an image sensor by the BCM2835 Unicam peripheral, written to a memory
-> +frame buffer, and finally fed into the input of the ISP.  Two concurrent output
-> +images may be generated in YUV or RGB format at different resolutions.
-> +Statistics output is also generated for Bayer input images.
-> +
-> +The bcm2835-isp driver exposes the following media pads as V4L2 device nodes:
+I have used the arm64 tree from next-20221121 for today.
 
-This sounds weird. Pads are not video nodes, are they ? Or are those
-MMAL pads ?
+--=20
+Cheers,
+Stephen Rothwell
 
-> +
-> +.. tabularcolumns:: |l|l|l|l|
-> +
-> +.. cssclass: longtable
-> +
-> +.. flat-table::
-> +
-> +    * - *Pad*
-> +      - *Direction*
-> +      - *Purpose*
-> +      - *Formats*
-> +
-> +    * - "bcm2835-isp0-output0"
-> +      - sink
-> +      - Accepts Bayer, RGB or YUV format frame buffers as input to the ISP HW
-> +        pipeline.
-> +      - :ref:`RAW8 <V4L2-PIX-FMT-SRGGB8>`,
-> +        :ref:`RAW10P <V4L2-PIX-FMT-SRGGB10P>`,
-> +        :ref:`RAW12P <V4L2-PIX-FMT-SRGGB12P>`,
-> +        :ref:`RAW14P <V4L2-PIX-FMT-SRGGB14P>`,
-> +        :ref:`RAW16 <V4L2-PIX-FMT-SRGGB16>`,
-> +        :ref:`RGB24/BGR24 <V4L2-PIX-FMT-RGB24>`,
-> +        :ref:`YUYV <V4L2-PIX-FMT-YUYV>`,
-> +        :ref:`YVYU <V4L2-PIX-FMT-YVYU>`,
-> +        :ref:`UYVY <V4L2-PIX-FMT-UYVY>`,
-> +        :ref:`VYUY <V4L2-PIX-FMT-VYUY>`,
-> +        :ref:`YUV420/YVU420 <V4L2-PIX-FMT-YUV420>`
-> +
-> +    * - "bcm2835-isp0-capture1"
-> +      - source
-> +      - High resolution YUV or RGB processed output from the ISP.
-> +      - :ref:`RGB565 <V4L2-PIX-FMT-RGB565>`,
-> +        :ref:`RGB24/BGR24 <V4L2-PIX-FMT-RGB24>`,
-> +        :ref:`ABGR32 <V4L2-PIX-FMT-ABGR32>`,
-> +        :ref:`YUYV <V4L2-PIX-FMT-YUYV>`,
-> +        :ref:`YVYU <V4L2-PIX-FMT-YVYU>`,
-> +        :ref:`UYVY <V4L2-PIX-FMT-UYVY>`,
-> +        :ref:`VYUY <V4L2-PIX-FMT-VYUY>`.
-> +        :ref:`YUV420/YVU420 <V4L2-PIX-FMT-YUV420>`,
-> +        :ref:`NV12/NV21 <V4L2-PIX-FMT-NV12>`,
-> +
-> +    * - "bcm2835-isp0-capture2"
-> +      - source
-> +      - Low resolution YUV processed output from the ISP. The output of
-> +        this pad cannot have a resolution larger than the "bcm2835-isp0-capture1" pad in any dimension.
-> +      - :ref:`YUYV <V4L2-PIX-FMT-YUYV>`,
-> +        :ref:`YVYU <V4L2-PIX-FMT-YVYU>`,
-> +        :ref:`UYVY <V4L2-PIX-FMT-UYVY>`,
-> +        :ref:`VYUY <V4L2-PIX-FMT-VYUY>`.
-> +        :ref:`YUV420/YVU420 <V4L2-PIX-FMT-YUV420>`,
-> +        :ref:`NV12/NV21 <V4L2-PIX-FMT-NV12>`,
-> +
-> +    * - "bcm2835-isp0-capture1"
+--Sig_/Z7W22ZE_9kW+JiUxp1pPYkX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Is that capture3 ?
+-----BEGIN PGP SIGNATURE-----
 
-Maybe the video nodes should be renamed to make their purpose clearer ?
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN8DLAACgkQAVBC80lX
+0GyKYgf/QP3u/VIkEa9VD1Jgu1khhOP2XTSA0Jyd/JPSN8vFenRGp+2/eVclwPT3
+yFsxrIdaSNXc7rEZ/QyEPu68kTJNDc4rtQZ3yhCDFaG3wsvIzOWDIYhySNlAoXMa
+uAR/uKbKtz2Xtxawir0dWMr6l6qdoi9gRqL7E0A5s4+G3wjAF+J3PuLBnyH2Z0Z/
+zqMwPvP5KEmUz31CIfSKHv1Mb6j+fE+oehameaJO7G/2vCCkX36qPwActndMWjEp
+a9SdPaMlJpYXyDX5QRiQUTEY5xYKJN1UnwRSotZ14hpFPjKAQVBtI8jj7A88lH9F
+JGEjO7Qh4fogg45pQjcNDsIZ95/eKQ==
+=01Fu
+-----END PGP SIGNATURE-----
 
-> +      - source
-> +      - Image statistics calculated from the input image provided on the
-> +        "bcm2835-isp0-output0" pad.  Statistics are only available for Bayer
-> +        format input images.
-> +      - :ref:`v4l2-meta-fmt-bcm2835-isp-stats`.
-> +
-> +Pipeline Configuration
-> +----------------------
-> +
-> +The ISP pipeline can be configure through user-space by calling
-> +:ref:`VIDIOC_S_EXT_CTRLS <VIDIOC_G_EXT_CTRLS>` on the “bcm2835-isp0-output0”
-> +node with the appropriate parameters as shown in the table below.
-> +
-> +.. tabularcolumns:: |p{2cm}|p{5.0cm}|
-> +
-> +.. cssclass: longtable
-> +
-> +.. flat-table::
-> +
-> +    * - *id*
-> +      - *Parameter*
-> +
-> +    * - ``V4L2_CID_USER_BCM2835_ISP_CC_MATRIX``
-> +      - struct :c:type:`bcm2835_isp_custom_ccm`
-> +
-> +    * - ``V4L2_CID_USER_BCM2835_ISP_LENS_SHADING``
-> +      - struct :c:type:`bcm2835_isp_lens_shading`
-> +
-> +    * - ``V4L2_CID_USER_BCM2835_ISP_BLACK_LEVEL``
-> +      - struct :c:type:`bcm2835_isp_black_level`
-> +
-> +    * - ``V4L2_CID_USER_BCM2835_ISP_GEQ``
-> +      - struct :c:type:`bcm2835_isp_geq`
-> +
-> +    * - ``V4L2_CID_USER_BCM2835_ISP_GAMMA``
-> +      - struct :c:type:`bcm2835_isp_gamma`
-> +
-> +    * - ``V4L2_CID_USER_BCM2835_ISP_DENOISE``
-> +      - struct :c:type:`bcm2835_isp_denoise`
-> +
-> +    * - ``V4L2_CID_USER_BCM2835_ISP_SHARPEN``
-> +      - struct :c:type:`bcm2835_isp_sharpen`
-> +
-> +    * - ``V4L2_CID_USER_BCM2835_ISP_DPC``
-> +      - struct :c:type:`bcm2835_isp_dpc`
-> +
-> +++++++++++++++++++++++++
-> +Configuration Parameters
-> +++++++++++++++++++++++++
-> +
-> +.. kernel-doc:: include/uapi/linux/bcm2835-isp.h
-> +   :functions: bcm2835_isp_rational bcm2835_isp_ccm bcm2835_isp_custom_ccm
-> +                bcm2835_isp_gain_format bcm2835_isp_lens_shading
-> +                bcm2835_isp_black_level bcm2835_isp_geq bcm2835_isp_gamma
-> +                bcm2835_isp_denoise bcm2835_isp_sharpen
-> +                bcm2835_isp_dpc_mode bcm2835_isp_dpc
-> diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
-> index 32f82aed47d9..34e0d7102ef0 100644
-> --- a/Documentation/userspace-api/media/drivers/index.rst
-> +++ b/Documentation/userspace-api/media/drivers/index.rst
-> @@ -31,6 +31,7 @@ For more details see the file COPYING in the source distribution of Linux.
->  	:maxdepth: 5
->  	:numbered:
->  
-> +	bcm2835-isp
->  	ccs
->  	cx2341x-uapi
->  	dw100
-
--- 
-Regards,
-
-Laurent Pinchart
+--Sig_/Z7W22ZE_9kW+JiUxp1pPYkX--
