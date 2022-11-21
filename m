@@ -2,56 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CC4631AE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DD0631AEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiKUIDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
+        id S229575AbiKUIEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiKUIDA (ORCPT
+        with ESMTP id S229552AbiKUIEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:03:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E77713F85;
-        Mon, 21 Nov 2022 00:02:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAA49B80D3B;
-        Mon, 21 Nov 2022 08:02:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73340C433D7;
-        Mon, 21 Nov 2022 08:02:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669017776;
-        bh=rJDFKSgtFpseJQA/59FVR4oauwkHIQq4kXze0Mr9n8k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J19qVXGOOMSWolIgOh3avBgI7O+jrt8dVrfwRFjO5UptlGQyyMNkUWVsgjsdPIxiH
-         RWVQqfym8HR2gC9s0+1yLQ8Ycb/540j4RpK5ZFP41rNjepIx3Qa5AkbHXR9Pkj8RQW
-         9KpUYya5W6zd6dlRTCafDSJH9TK4US6IjvRdRpVf9ZRJQG0UaKlZ1Y0u3PHtbGJikc
-         H8ZSoGw5e0NHO43c0Boe14RjsFqpjnBuShgA/+3CD7s52aLXcqgrE5SVLMZ+TDsvs2
-         wvL7ih842rC4EcqAnlrZ9R0iptUP30TotQBONiKr/hkI5uKk1pm0BsQq9DGYDl8flM
-         uGBLUGI4W953Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ox1l4-0006Kw-Fk; Mon, 21 Nov 2022 09:02:26 +0100
-Date:   Mon, 21 Nov 2022 09:02:26 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc8280xp: Add soundcard support
-Message-ID: <Y3swkpNTE2EaNqDq@hovoldconsulting.com>
-References: <20221119164425.86014-1-srinivas.kandagatla@linaro.org>
- <20221119164425.86014-4-srinivas.kandagatla@linaro.org>
+        Mon, 21 Nov 2022 03:04:33 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAA723391
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:04:32 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id s8so17623501lfc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:04:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SQXNwXriyENMBxcRvt5HwJj1BFFBn/vx8r8A40oB0Tc=;
+        b=DQqLRI7fYzNORFBvv3pu5HOUzWXdPDA+z+U4wFKW7mEn7VdJgPVSFdvA5APdkvf4mg
+         NJMOqaVt5aDPidpqNOcibQCfzw8GMcitQtUQN4bInHcEEoaKCkG2HXe8d4Sie1MSQ454
+         ibIbQ1JLCApYS1yvVIGhiY8hziX/Gv54o7RsymuCfL8je8yiiB+gjPhH1pK228inL3/Z
+         /GAaZOzBgLNcfqZX4UZ6uoJXuTAaStZAa7+fMaZiwMDh4C6Jp10AoCF3UPUFHThxnpoa
+         GeRskEkYHojOa6Y2jjTAG6J+aXj5BRbRUv6n2lQNpNKsOMKSRR+QLsvP4Y6EndzVeNdd
+         wtDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SQXNwXriyENMBxcRvt5HwJj1BFFBn/vx8r8A40oB0Tc=;
+        b=vD6tKKJFAMiFRHWOY1XZvVxwAU2K/djNrCvXdxe2djkoSOhZzNT/tCmsa/z/tZtMB8
+         NbHoEZi4ON7cRUIZ45xyHF+yozwJF73RWOX4uQaWhtxKdjRZvOrNKGLJs4isYlIEF4dw
+         dp3EYz3w4P2km862qxsr27FauSDjJSOLy8Jk79w6QV6RpPv5NJd08Dl3PdBh3gZxkNeP
+         JqJxPk6BFExPbZB+7SGCeCrY5gyyQLKfulAdVneez0+HAycYcofXv/w1V9Sk9DLxZrtg
+         SCMY3THuNaMk3PxpPs/YvR3tmo9Nn4rXKusMxa5KueXyduFvcZGwtJmyEi5rI4VKdgma
+         6HEw==
+X-Gm-Message-State: ANoB5plGvi2S3hVTvt7rnEqK8N5GP2nmdazKdPYM3IBIh+Vnb9ezvQAs
+        r8ZdW6l5vtJG8P2rzfcPc6pZUg==
+X-Google-Smtp-Source: AA0mqf4+Zek9Tov+SKx3s7/VKFuRhbRwGPPf2pj6BxCr9D6CuqD2m1NUJkKSuVjJ1ijnEZQWQbp+qA==
+X-Received: by 2002:a19:f010:0:b0:4a2:2e81:9be5 with SMTP id p16-20020a19f010000000b004a22e819be5mr5860494lfc.486.1669017870905;
+        Mon, 21 Nov 2022 00:04:30 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a25-20020a056512201900b00492dbf809e8sm1908442lfb.118.2022.11.21.00.04.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 00:04:30 -0800 (PST)
+Message-ID: <50024f2e-4820-ef78-d54d-5bfe53ccac7e@linaro.org>
+Date:   Mon, 21 Nov 2022 09:04:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119164425.86014-4-srinivas.kandagatla@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 02/14] dt-bindings: media: rkisp1: Add i.MX8MP ISP
+ example
+Content-Language: en-US
+To:     Paul Elder <paul.elder@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
+ <20221118093931.1284465-3-paul.elder@ideasonboard.com>
+ <ca8a6070-3888-8d42-5974-d7c2adc62417@linaro.org>
+ <Y3h93cLdEvMzInXe@pyrite.rasen.tech>
+ <238f7bf8-578c-5bb4-9f00-50f36334c5cf@linaro.org>
+ <Y3sIAHqd8Kd/XBB/@pyrite.rasen.tech>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y3sIAHqd8Kd/XBB/@pyrite.rasen.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,171 +88,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 04:44:25PM +0000, Srinivas Kandagatla wrote:
-> Add support for SoundCard on X13s. This patch adds support for Headset
-> Playback, record and 2 DMICs on the Panel along with the regulators
-> required for powering up the LPASS codecs.
-
-Subject prefix should include "x13s":
-
-	arm64: dts: qcom: sc8280xp-x13s: ...
-
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 217 ++++++++++++++++++
->  1 file changed, 217 insertions(+)
+On 21/11/2022 06:09, Paul Elder wrote:
+> On Sun, Nov 20, 2022 at 11:36:31AM +0100, Krzysztof Kozlowski wrote:
+>> On 19/11/2022 07:55, Paul Elder wrote:
+>>> On Fri, Nov 18, 2022 at 02:06:14PM +0100, Krzysztof Kozlowski wrote:
+>>>> On 18/11/2022 10:39, Paul Elder wrote:
+>>>>> From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>>>>>
+>>>>> Add an example to the rockchip-isp1 DT binding that showcases usage of
+>>>>> the parallel input of the ISP, connected to the CSI-2 receiver internal
+>>>>> to the i.MX8MP.
+>>>>>
+>>>>> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>>>>
+>>>> Missing SoB.
+>>>
+>>> I don't quite understand. I see an SoB right there.
+>>
+>> Laurent did not sent it. Did you run checkpatch before sending?
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index b2b744bb8a53..f1f93fc4fa2d 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> That's why he's on the "From:" in the beginning. checkpatch says it's
+> fine.
 
-> @@ -346,6 +378,163 @@ edp_bl_pwm: edp-bl-pwm-state {
->  	};
->  };
->  
-> +&soc {
-> +	wcd938x: codec {
-> +		compatible = "qcom,wcd9380-codec";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&wcd_default>;
-> +		reset-gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
-> +		#sound-dai-cells = <1>;
-> +
-> +		vdd-buck-supply = <&vreg_s10b>;
-> +		vdd-rxtx-supply = <&vreg_s10b>;
-> +		vdd-io-supply = <&vreg_s10b>;
-> +		vdd-mic-bias-supply = <&vreg_bob>;
-> +		qcom,micbias1-microvolt = <1800000>;
-> +		qcom,micbias2-microvolt = <1800000>;
-> +		qcom,micbias3-microvolt = <1800000>;
-> +		qcom,micbias4-microvolt = <1800000>;
-> +		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
-> +		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
-> +		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-> +		qcom,rx-device = <&wcd_rx>;
-> +		qcom,tx-device = <&wcd_tx>;
-> +	};
-> +};
+Ah, indeed, checkpatch misses that feature (it's part of Greg's
+verify_signedoff.sh). Anyway, your SoB is missing, as Laurent did not
+send the patch.
 
-Please move all the sound nodes above the "/* PINCTRL */" marker and try
-to maintain the sort order (by node name).
+Best regards,
+Krzysztof
 
-> +
-> +&sound {
-
-...
-
-> +};
-> +
-> +&swr0 {
-> +	left_spkr: wsa8830-left@0,1 {
-> +		compatible = "sdw10217020200";
-> +		reg = <0 1>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&spkr_1_sd_n_default>;
-> +		powerdown-gpios = <&tlmm 178 GPIO_ACTIVE_LOW>;
-> +		#thermal-sensor-cells = <0>;
-> +		sound-name-prefix = "SpkrLeft";
-> +		#sound-dai-cells = <0>;
-> +		vdd-supply = <&vreg_s10b>;
-> +	};
-> +
-> +	right_spkr: wsa8830-right@0,2{
-> +		compatible = "sdw10217020200";
-> +		reg = <0 2>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&spkr_2_sd_n_default>;
-> +		powerdown-gpios = <&tlmm 179 GPIO_ACTIVE_LOW>;
-> +		#thermal-sensor-cells = <0>;
-> +		sound-name-prefix = "SpkrRight";
-> +		#sound-dai-cells = <0>;
-> +		vdd-supply = <&vreg_s10b>;
-> +	};
-> +};
-> +
-> +
-
-Stray newline.
-
-> +&swr1 {
-> +	status = "okay";
-> +
-> +	wcd_rx: wcd9380-rx@0,4 {
-> +		compatible = "sdw20217010d00";
-> +		reg = <0 4>;
-> +		qcom,rx-port-mapping = <1 2 3 4 5 6>;
-> +
-
-Stray newline.
-
-> +	};
-> +};
-> +
-> +&swr2 {
-> +	status = "okay";
-> +
-> +	wcd_tx: wcd9380-tx@0,3 {
-> +		compatible = "sdw20217010d00";
-> +		reg = <0 3>;
-> +		qcom,tx-port-mapping = <1 1 2 3>;
-> +	};
-> +};
-> +
-> +&vamacro {
-> +	pinctrl-0 = <&dmic01_default>, <&dmic02_default>;
-> +	pinctrl-names = "default";
-> +	vdd-micb-supply = <&vreg_s10b>;
-> +	qcom,dmic-sample-rate = <600000>;
-> +};
-> +
->  &tlmm {
->  	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
->  
-> @@ -369,6 +558,14 @@ reset {
->  		};
->  	};
->  
-> +	wcd_default: wcd-default-state {
-> +		reset-pins {
-> +			pins = "gpio106";
-> +			function = "gpio";
-> +			bias-disable;
-> +		};
-> +	};
-> +
-
-Please try to keep the nodes sorted by name (i.e. move it last).
-
->  	qup0_i2c4_default: qup0-i2c4-default-state {
->  		pins = "gpio171", "gpio172";
->  		function = "qup4";
-> @@ -383,6 +580,26 @@ qup2_i2c5_default: qup2-i2c5-default-state {
->  		drive-strength = <16>;
->  	};
->  
-> +	spkr_1_sd_n_default: spkr-1-sd-n-default-state {
-> +		perst-n-pins {
-> +			pins = "gpio178";
-> +			function = "gpio";
-> +			drive-strength = <16>;
-> +			bias-disable;
-> +			output-high;
-> +		};
-> +	};
-> +
-> +	spkr_2_sd_n_default: spkr-2-sd-n-default-state {
-> +		perst-n-pins {
-> +			pins = "gpio179";
-> +			function = "gpio";
-> +			drive-strength = <16>;
-> +			bias-disable;
-> +			output-high;
-> +		};
-> +	};
-> +
->  	tpad_default: tpad-default-state {
->  		int-n {
->  			pins = "gpio182";
-
-Johan
