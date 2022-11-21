@@ -2,336 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F8C632182
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA8D632183
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiKUMBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
+        id S231438AbiKUMBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiKUMBJ (ORCPT
+        with ESMTP id S231436AbiKUMB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:01:09 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7908217E2C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:01:06 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 911C56601DEA;
-        Mon, 21 Nov 2022 12:01:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669032065;
-        bh=NG4/5IZyY1SjaNQIs07uOPi5SzQEZBoAwoUix43JLXs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LSI7kAIwIu50oezePtCjqfxfuIvevXPcNXKDyuI9AY4GQ8FgHigIbZJ1+JVWGceT+
-         3goVHzSb8N52oAF7e7DhODUzHfmnP2XppXjR89IBL8Ybcv0t+JYz7qsMqhmNFfABai
-         AUtnJWjme+rJP3J2McXymBiFYY0xsn2cSfcOKA9Q1aETredpw0XVbiXRMkl+0r00wK
-         jKO/YgKA01vBiNS8+Viihnr2hFAeDmuUYjOsQ+k+tKz3/q7Xwg/JB6PbrAZm2ObnDw
-         bIfp3i/vm2PQ9g7E+s1ToJgeS8QUJES+HkL8WsF4hcGEdJX+SfpHFrXF1U9+hN9i/j
-         fenV9NvXxM0Cw==
-Message-ID: <fe236ad5-c4e0-1649-6521-ab7c14a1ff15@collabora.com>
-Date:   Mon, 21 Nov 2022 13:01:02 +0100
+        Mon, 21 Nov 2022 07:01:27 -0500
+Received: from outbound-smtp35.blacknight.com (outbound-smtp35.blacknight.com [46.22.139.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60BC769D2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:01:24 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp35.blacknight.com (Postfix) with ESMTPS id 4B5491C05
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:01:23 +0000 (GMT)
+Received: (qmail 8046 invoked from network); 21 Nov 2022 12:01:23 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Nov 2022 12:01:22 -0000
+Date:   Mon, 21 Nov 2022 12:01:21 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 2/2] mm/page_alloc: Leave IRQs enabled for per-cpu page
+ allocations
+Message-ID: <20221121120121.djgvgm5bsklgfx7c@techsingularity.net>
+References: <20221118101714.19590-1-mgorman@techsingularity.net>
+ <20221118101714.19590-3-mgorman@techsingularity.net>
+ <f9acd363-bf53-c582-78ec-347fd7ec5c37@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RESEND PATCH v3] soc: mediatek: Introduce
- mediatek-regulator-coupler driver
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wenst@chromium.org,
-        alyssa.rosenzweig@collabora.com, nfraprado@collabora.com,
-        dmitry.osipenko@collabora.com
-References: <20221006115816.66853-1-angelogioacchino.delregno@collabora.com>
- <e04d15ee-9570-c919-5218-91109a88c0cb@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <e04d15ee-9570-c919-5218-91109a88c0cb@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <f9acd363-bf53-c582-78ec-347fd7ec5c37@suse.cz>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/11/22 12:44, Matthias Brugger ha scritto:
+On Fri, Nov 18, 2022 at 03:30:57PM +0100, Vlastimil Babka wrote:
+> On 11/18/22 11:17, Mel Gorman wrote:
+> > The pcp_spin_lock_irqsave protecting the PCP lists is IRQ-safe as a task
+> > allocating from the PCP must not re-enter the allocator from IRQ context.
+> > In each instance where IRQ-reentrancy is possible, the lock is acquired
+> > using pcp_spin_trylock_irqsave() even though IRQs are disabled and
+> > re-entrancy is impossible.
+> > 
+> > Demote the lock to pcp_spin_lock avoids an IRQ disable/enable in the common
+> > case at the cost of some IRQ allocations taking a slower path. If the PCP
+> > lists need to be refilled, the zone lock still needs to disable IRQs but
+> > that will only happen on PCP refill and drain. If an IRQ is raised when
+> > a PCP allocation is in progress, the trylock will fail and fallback to
+> > using the buddy lists directly. Note that this may not be a universal win
+> > if an interrupt-intensive workload also allocates heavily from interrupt
+> > context and contends heavily on the zone->lock as a result.
+> > 
+> > [yuzhao@google.com: Reported lockdep issue on IO completion from softirq]
+> > [hughd@google.com: Fix list corruption, lock improvements, micro-optimsations]
+> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 > 
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 > 
-> On 06/10/2022 13:58, AngeloGioacchino Del Regno wrote:
->> This driver currently deals with GPU-SRAM regulator coupling, ensuring
->> that the SRAM voltage is always between a specific range of distance to
->> the GPU voltage, depending on the SoC, necessary in order to achieve
->> system stability across the full range of supported GPU frequencies.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->> ---
->>
->> This driver was successfully tested for more than 3 months.
->> GPU DVFS works correctly with no stability issues.
->>
->> Changes in RESEND,v3:
->>   Rebased over next-20221005
->>
->> Changes in v3:
->>   - Added braces to else-if branch
->>
->> Changes in v2:
->>   - Added check for n_coupled
->>   - Added check for vgpu to enforce attaching to vgpu<->sram coupling only
->>
->> Context:
->> This driver is the last of the pieces of a bigger puzzle, aiming to finally
->> enable Dynamic Voltage/Frequency Scaling for Mali GPUs found on MediaTek
->> SoCs on the fully open source graphics stack (Panfrost driver).
->>
->> No devicetree bindings are provided because this does not require any
->> driver-specific binding at all.
->>
->> Last but not least: it was chosen to have this driver enabled for
->> ( ARCH_MEDIATEK && REGULATOR ) without really giving a free configuration
->> choice because, once the DVFS mechanism will be fully working, using one
->> of the listed MediaTek SoCs *without* this coupling mechanism *will* lead
->> to unstabilities and system crashes.
->> For COMPILE_TEST, choice is given for obvious reasons.
->>
->>   drivers/soc/mediatek/Kconfig                 |   5 +
->>   drivers/soc/mediatek/Makefile                |   1 +
->>   drivers/soc/mediatek/mtk-regulator-coupler.c | 159 +++++++++++++++++++
->>   3 files changed, 165 insertions(+)
->>   create mode 100644 drivers/soc/mediatek/mtk-regulator-coupler.c
->>
->> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
->> index 40d0cc600cae..30b5afc0e51d 100644
->> --- a/drivers/soc/mediatek/Kconfig
->> +++ b/drivers/soc/mediatek/Kconfig
->> @@ -44,6 +44,11 @@ config MTK_PMIC_WRAP
->>         on different MediaTek SoCs. The PMIC wrapper is a proprietary
->>         hardware to connect the PMIC.
->> +config MTK_REGULATOR_COUPLER
->> +    bool "MediaTek SoC Regulator Coupler" if COMPILE_TEST
->> +    default ARCH_MEDIATEK
->> +    depends on REGULATOR
->> +
->>   config MTK_SCPSYS
->>       bool "MediaTek SCPSYS Support"
->>       default ARCH_MEDIATEK
->> diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
->> index 0e9e703c931a..8c0ddacbcde8 100644
->> --- a/drivers/soc/mediatek/Makefile
->> +++ b/drivers/soc/mediatek/Makefile
->> @@ -3,6 +3,7 @@ obj-$(CONFIG_MTK_CMDQ) += mtk-cmdq-helper.o
->>   obj-$(CONFIG_MTK_DEVAPC) += mtk-devapc.o
->>   obj-$(CONFIG_MTK_INFRACFG) += mtk-infracfg.o
->>   obj-$(CONFIG_MTK_PMIC_WRAP) += mtk-pmic-wrap.o
->> +obj-$(CONFIG_MTK_REGULATOR_COUPLER) += mtk-regulator-coupler.o
->>   obj-$(CONFIG_MTK_SCPSYS) += mtk-scpsys.o
->>   obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) += mtk-pm-domains.o
->>   obj-$(CONFIG_MTK_MMSYS) += mtk-mmsys.o
->> diff --git a/drivers/soc/mediatek/mtk-regulator-coupler.c 
->> b/drivers/soc/mediatek/mtk-regulator-coupler.c
->> new file mode 100644
->> index 000000000000..ad2ed42aa697
->> --- /dev/null
->> +++ b/drivers/soc/mediatek/mtk-regulator-coupler.c
->> @@ -0,0 +1,159 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Voltage regulators coupler for MediaTek SoCs
->> + *
->> + * Copyright (C) 2022 Collabora, Ltd.
->> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> + */
->> +
->> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->> +
->> +#include <linux/init.h>
->> +#include <linux/kernel.h>
->> +#include <linux/of.h>
->> +#include <linux/regulator/coupler.h>
->> +#include <linux/regulator/driver.h>
->> +#include <linux/regulator/machine.h>
->> +#include <linux/suspend.h>
->> +
->> +#define to_mediatek_coupler(x)    container_of(x, struct 
->> mediatek_regulator_coupler, coupler)
->> +
->> +struct mediatek_regulator_coupler {
->> +    struct regulator_coupler coupler;
->> +    struct regulator_dev *vsram_rdev;
->> +};
->> +
->> +/*
->> + * We currently support only couples of not more than two vregs and
->> + * modify the vsram voltage only when changing voltage of vgpu.
->> + *
->> + * This function is limited to the GPU<->SRAM voltages relationships.
->> + */
->> +static int mediatek_regulator_balance_voltage(struct regulator_coupler *coupler,
->> +                          struct regulator_dev *rdev,
->> +                          suspend_state_t state)
->> +{
->> +    struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
->> +    int max_spread = rdev->constraints->max_spread[0];
->> +    int vsram_min_uV = mrc->vsram_rdev->constraints->min_uV;
->> +    int vsram_max_uV = mrc->vsram_rdev->constraints->max_uV;
->> +    int vsram_target_min_uV, vsram_target_max_uV;
->> +    int min_uV = 0;
->> +    int max_uV = INT_MAX;
->> +    int ret;
->> +
->> +    /*
->> +     * If the target device is on, setting the SRAM voltage directly
->> +     * is not supported as it scales through its coupled supply voltage.
->> +     *
->> +     * An exception is made in case the use_count is zero: this means
->> +     * that this is the first time we power up the SRAM regulator, which
->> +     * implies that the target device has yet to perform initialization
->> +     * and setting a voltage at that time is harmless.
->> +     */
->> +    if (rdev == mrc->vsram_rdev) {
->> +        if (rdev->use_count == 0)
->> +            return regulator_do_balance_voltage(rdev, state, true);
->> +
->> +        return -EPERM;
->> +    }
->> +
->> +    ret = regulator_check_consumers(rdev, &min_uV, &max_uV, state);
->> +    if (ret < 0)
->> +        return ret;
->> +
->> +    if (min_uV == 0) {
->> +        ret = regulator_get_voltage_rdev(rdev);
->> +        if (ret < 0)
->> +            return ret;
->> +        min_uV = ret;
->> +    }
->> +
->> +    ret = regulator_check_voltage(rdev, &min_uV, &max_uV);
->> +    if (ret < 0)
->> +        return ret;
->> +
->> +    /*
->> +     * If we're asked to set a voltage less than VSRAM min_uV, set
->> +     * the minimum allowed voltage on VSRAM, as in this case it is
->> +     * safe to ignore the max_spread parameter.
->> +     */
->> +    vsram_target_min_uV = max(vsram_min_uV, min_uV + max_spread);
->> +    vsram_target_max_uV = min(vsram_max_uV, vsram_target_min_uV + max_spread);
->> +
->> +    /* Make sure we're not out of range */
->> +    vsram_target_min_uV = min(vsram_target_min_uV, vsram_max_uV);
->> +
->> +    pr_debug("Setting voltage %d-%duV on %s (minuV %d)\n",
->> +         vsram_target_min_uV, vsram_target_max_uV,
->> +         rdev_get_name(mrc->vsram_rdev), min_uV);
->> +
->> +    ret = regulator_set_voltage_rdev(mrc->vsram_rdev, vsram_target_min_uV,
->> +                     vsram_target_max_uV, state);
->> +    if (ret)
->> +        return ret;
->> +
->> +    /* The sram voltage is now balanced: update the target vreg voltage */
->> +    return regulator_do_balance_voltage(rdev, state, true);
->> +}
->> +
->> +static int mediatek_regulator_attach(struct regulator_coupler *coupler,
->> +                     struct regulator_dev *rdev)
->> +{
->> +    struct mediatek_regulator_coupler *mrc = to_mediatek_coupler(coupler);
->> +    const char *rdev_name = rdev_get_name(rdev);
->> +
->> +    /*
->> +     * If we're getting a coupling of more than two regulators here and
->> +     * this means that this is surely not a GPU<->SRAM couple: in that
->> +     * case, we may want to use another coupler implementation, if any,
->> +     * or the generic one: the regulator core will keep walking through
->> +     * the list of couplers when any .attach_regulator() cb returns 1.
->> +     */
->> +    if (rdev->coupling_desc.n_coupled > 2)
->> +        return 1;
->> +
->> +    if (strstr(rdev_name, "sram")) {
-> 
-> My understanding is, that we have to have either a DT node with regulator-name = 
-> "sram" property to pollute rdev->constraints->name or some regulator_desc->name 
-> populated in the drivers/regulator/mt*.c
+> Some nits below:
 > 
 
-No, it's not trying to find a regulator named "sram", but any regulator that
-*contains* the "sram" string in its name, but checks only regulators that are
-coupled to others. This is the same for the "Vgpu" / "vgpu".
+Thanks.
 
-Example:
-
-Regulator A, coupled to Regulator B.
-
-Regulator A name = "Vgpu" or "vgpu", or *vgpu*, or *Vgpu*
-                    (name must contain either Vgpu or vgpu)
-
-Regulator B name = "vsram" or "sram_gpu" or *sram*
-                    (name must contain "sram").
-
-mrc->vsram_rdev = rdev
-
-rdev == our Regulator B.
-
-We hence return 0 to the coupling API: this will produce the effect of making
-it use this driver's .balance_voltage() callback instead of the generic one
-on vgpu<->vsram.
-
-
-> I wasn't able to find either of this, so I wonder how this is supposed to work. 
-> Please provide pointers to a working and complete implementation of this, so that 
-> I'm able to judge what is going on and if the approach is the correct one.
+> > @@ -3516,10 +3485,10 @@ void free_unref_page(struct page *page, unsigned int order)
+> >   */
+> >  void free_unref_page_list(struct list_head *list)
+> >  {
+> > +	unsigned long __maybe_unused UP_flags;
+> >  	struct page *page, *next;
+> >  	struct per_cpu_pages *pcp = NULL;
+> >  	struct zone *locked_zone = NULL;
+> > -	unsigned long flags;
+> >  	int batch_count = 0;
+> >  	int migratetype;
+> >  
+> > @@ -3550,11 +3519,26 @@ void free_unref_page_list(struct list_head *list)
+> >  
+> >  		/* Different zone, different pcp lock. */
+> >  		if (zone != locked_zone) {
+> > -			if (pcp)
+> > -				pcp_spin_unlock_irqrestore(pcp, flags);
+> > +			if (pcp) {
+> > +				pcp_spin_unlock(pcp);
+> > +				pcp_trylock_finish(UP_flags);
+> > +			}
+> >  
+> > +			/*
+> > +			 * trylock is necessary as pages may be getting freed
+> > +			 * from IRQ or SoftIRQ context after an IO completion.
+> > +			 */
+> > +			pcp_trylock_prepare(UP_flags);
+> > +			pcp = pcp_spin_trylock(zone->per_cpu_pageset);
+> > +			if (!pcp) {
 > 
-> I tried to figure out using mt8195-tracking-master-rolling
+> Perhaps use unlikely() here?
+> 
 
-That's the right branch.
+Sure, I'm less convinced these days that unlikely makes a big difference
+with improvements to branch prediction but there is no harm in annotating
+it. It's probably time to do a round of PROFILE_ALL_BRANCHES checking.
 
-Let's take MT8192 Asurada as an example of how this works....
+> > +				pcp_trylock_finish(UP_flags);
+> > +				free_one_page(zone, page, page_to_pfn(page),
+> > +					      0, migratetype, FPI_NONE);
+> 
+> Not critical for correctness, but the migratepage here might be stale and we
+> should do get_pcppage_migratetype(page);
+> 
 
-`mt6359_vsram_others_ldo_reg´ is the SRAM regulator for the GPU:
-https://gitlab.collabora.com/google/chromeos-kernel/-/blob/mt8195-tracking-master-rolling/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi#L551
+Yes, the call should move up. Isolated pages should already have been
+removed and while it's possible there would still be a race, it's unlikely
+and no worse than the existing isolated page checks.
 
-`mt6359_vsram_others_ldo_reg` regulator-name = "vsram_others";
-                                                  ^^^^
-Contains "sram", and this regulator is also
+> > +				locked_zone = NULL;
+> > +				continue;
+> > +			}
+> >  			locked_zone = zone;
+> > -			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
+> > +			batch_count = 0;
+> >  		}
+> >  
+> >  		/*
+> > @@ -3569,18 +3553,23 @@ void free_unref_page_list(struct list_head *list)
+> >  		free_unref_page_commit(zone, pcp, page, migratetype, 0);
+> >  
+> >  		/*
+> > -		 * Guard against excessive IRQ disabled times when we get
+> > -		 * a large list of pages to free.
+> > +		 * Guard against excessive lock hold times when freeing
+> > +		 * a large list of pages. Lock will be reacquired if
+> > +		 * necessary on the next iteration.
+> >  		 */
+> >  		if (++batch_count == SWAP_CLUSTER_MAX) {
+> > -			pcp_spin_unlock_irqrestore(pcp, flags);
+> > +			pcp_spin_unlock(pcp);
+> > +			pcp_trylock_finish(UP_flags);
+> >  			batch_count = 0;
+> > -			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
+> > +			pcp = NULL;
+> > +			locked_zone = NULL;
+> 
+> AFAICS if this block was just "locked_zone = NULL;" then the existing code
+> would do the right thing.
+> Or maybe to have simpler code, just do batch_count++ here and
+> make the relocking check do
+> if (zone != locked_zone || batch_count == SWAP_CLUSTER_MAX)
+> 
 
-	regulator-coupled-with = <&mt6315_7_vbuck1>;
+While I think you're right, I think it's a bit subtle, the batch reset would
+need to move, rechecked within the "Different zone, different pcp lock."
+block and it would be easy to forget exactly why it's structured like
+that in the future.  Rather than being a fix, it could be a standalone
+patch so it would be obvious in git blame but I don't feel particularly
+strongly about it.
 
-`mt6315_7_vbuck1` regulator-name = "Vgpu";
-                                     ^^^^
-Contains "Vgpu", and this regulator is also
+For the actual fixes to the patch, how about this? It's boot-tested only
+as I find it hard to believe it would make a difference to performance.
 
-	regulator-coupled-with = <&mt6359_vsram_others_ldo_reg>;
+--8<--
+mm/page_alloc: Leave IRQs enabled for per-cpu page allocations -fix
 
-That's how the coupling works in this case.
+As noted by Vlastimil Babka, the migratetype might be wrong if a PCP
+fails to lock so check the migrate type early. Similarly the !pcp check
+is generally unlikely so explicitly tagging it makes sense.
 
+This is a fix for the mm-unstable patch
+mm-page_alloc-leave-irqs-enabled-for-per-cpu-page-allocations.patch
 
-Now, looking at case exclusions:
-In MT8192 Asurada (or, actually, mt6359.dtsi) we have other regulators that do
-actually contain "sram" in their name, like "vsram_proc1" and "vsram_others_sshub".
+Reported-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+---
+ mm/page_alloc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-These regulators will be ignored, as they are *not* coupled with Vgpu.
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 323fec05c4c6..445066617204 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3516,6 +3516,7 @@ void free_unref_page_list(struct list_head *list)
+ 		struct zone *zone = page_zone(page);
+ 
+ 		list_del(&page->lru);
++		migratetype = get_pcppage_migratetype(page);
+ 
+ 		/* Different zone, different pcp lock. */
+ 		if (zone != locked_zone) {
+@@ -3530,7 +3531,7 @@ void free_unref_page_list(struct list_head *list)
+ 			 */
+ 			pcp_trylock_prepare(UP_flags);
+ 			pcp = pcp_spin_trylock(zone->per_cpu_pageset);
+-			if (!pcp) {
++			if (unlikely(!pcp)) {
+ 				pcp_trylock_finish(UP_flags);
+ 				free_one_page(zone, page, page_to_pfn(page),
+ 					      0, migratetype, FPI_NONE);
+@@ -3545,7 +3546,6 @@ void free_unref_page_list(struct list_head *list)
+ 		 * Non-isolated types over MIGRATE_PCPTYPES get added
+ 		 * to the MIGRATE_MOVABLE pcp list.
+ 		 */
+-		migratetype = get_pcppage_migratetype(page);
+ 		if (unlikely(migratetype >= MIGRATE_PCPTYPES))
+ 			migratetype = MIGRATE_MOVABLE;
+ 
 
-
-What this driver currently does in this regard is:
-1. Regulator attach is called only on *coupled* regulators, not on the others
-2. If the regulator contains name "vgpu" or "Vgpu" or "sram" we're good,
-    otherwise we don't attach the balance_voltage logic of this driver to
-    the unmatched regulators.
-
-
-Does this explanation clarify your doubts?
-
-Regards,
-Angelo
-
+-- 
+Mel Gorman
+SUSE Labs
