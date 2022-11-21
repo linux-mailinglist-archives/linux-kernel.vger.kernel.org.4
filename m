@@ -2,157 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DFC63278F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E507D632793
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiKUPON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:14:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S232195AbiKUPO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:14:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbiKUPNr (ORCPT
+        with ESMTP id S231904AbiKUPN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:13:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E690C68AE;
-        Mon, 21 Nov 2022 07:08:05 -0800 (PST)
-Date:   Mon, 21 Nov 2022 15:08:02 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669043283;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 21 Nov 2022 10:13:59 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823DBC5621
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:08:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1CEAE22050;
+        Mon, 21 Nov 2022 15:08:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669043297; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3zpF293Xpb7hIE7qRypmxo8y68aTytICJY5A2Ecegdw=;
-        b=PgiWo0S6xD9BH70LrjHvg5GV7A8twZdSSy4NKAREw/12JyDOD5RNhx6NrAwuOqC6oYbWTv
-        nx4dsYgEjL9qSUMfoPjaziL7lnJJDNx5qRCXwtmaaxiL98tM0zXctNkVqtQxDdGBHTfveb
-        SbjfXL3Fj3Gdcs+6pMuHIUwmrVjH6lvCikR8E1G1xvLnMYZzsZCwyQI9QfdM9IjCCEN5uz
-        nBFOyEPx7QwK/xuCIxNsdmoOc32XDemDNviVeahiYPnnpPQpyzUv9pxfhbrxwMsikvXv8L
-        7rqzVROvqn5lxJTkm3SQ2FYAWWSGMoCHZqkax7AAiNsJ+bYnM9/xvVG6XGa6Dw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669043283;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        bh=XZPs4RonxgREwk1cTKoTtvUSq1E7IKXuqLg1SevEyNo=;
+        b=sw5SZiIoqsKc8+foAiRvyDoTlFj41LbmXrVFePmdq+vRr1k3hK0oMZC8cnLNUxWSzGeYzX
+        aXF/zfsdvANtxQxGxMIspelwheP9v5ivqNIXAxQ7bUytH8q1V7dhujQg9bzgdIXQoPHGpm
+        vfxwZ5SDEpYKDN3/CcPUElq2keua9yU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669043297;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3zpF293Xpb7hIE7qRypmxo8y68aTytICJY5A2Ecegdw=;
-        b=RzKT1lqsFcNODbUbO1UPa0SX9OBj6rxz0/WyK3/IAH3K9/Of2+0Yzc5glmPZScPF6BooRn
-        IzPknonxlDPUP7BA==
-From:   "tip-bot2 for Joe Korty" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/urgent] clocksource/drivers/arm_arch_timer: Fix XGene-1
- TVAL register math error
-Cc:     Joe Korty <joe.korty@concurrent-rt.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221024165422.GA51107@zipoli.concurrent-rt.com>
-References: <20221024165422.GA51107@zipoli.concurrent-rt.com>
+        bh=XZPs4RonxgREwk1cTKoTtvUSq1E7IKXuqLg1SevEyNo=;
+        b=3wwZ+oewpUC2xX0Ic+lgI/CtfxeIp1PVOnWXWn81N8uGeg+gUAhqGB60hRs6F+wMD5SuH+
+        bxVa5qSbAvec8KDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B19821376E;
+        Mon, 21 Nov 2022 15:08:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ViRFKmCUe2NFNAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 21 Nov 2022 15:08:16 +0000
+Message-ID: <c321ba29-4de1-5517-514a-bb489d3c792b@suse.de>
+Date:   Mon, 21 Nov 2022 16:08:16 +0100
 MIME-Version: 1.0
-Message-ID: <166904328202.4906.4328519083119189817.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 0/4] new subsystem for compute accelerator devices
+Content-Language: en-US
+To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jiho Chu <jiho.chu@samsung.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Christopher Friedt <chrisfriedt@gmail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+References: <20221119204435.97113-1-ogabbay@kernel.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221119204435.97113-1-ogabbay@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------s5qUTgzlpoZ0MGGPNB4LCMlC"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/urgent branch of tip:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------s5qUTgzlpoZ0MGGPNB4LCMlC
+Content-Type: multipart/mixed; boundary="------------tXBKNrT2VYONmyy5XAPNe002";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+ Jeffrey Hugo <quic_jhugo@quicinc.com>, Jason Gunthorpe <jgg@nvidia.com>,
+ Arnd Bergmann <arnd@arndb.de>, Jiho Chu <jiho.chu@samsung.com>,
+ John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Christoph Hellwig <hch@infradead.org>,
+ Christopher Friedt <chrisfriedt@gmail.com>,
+ Kevin Hilman <khilman@baylibre.com>, Alex Deucher
+ <alexander.deucher@amd.com>, Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+ Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+ Jagan Teki <jagan@amarulasolutions.com>
+Message-ID: <c321ba29-4de1-5517-514a-bb489d3c792b@suse.de>
+Subject: Re: [PATCH v4 0/4] new subsystem for compute accelerator devices
+References: <20221119204435.97113-1-ogabbay@kernel.org>
+In-Reply-To: <20221119204435.97113-1-ogabbay@kernel.org>
 
-Commit-ID:     839a973988a94c15002cbd81536e4af6ced2bd30
-Gitweb:        https://git.kernel.org/tip/839a973988a94c15002cbd81536e4af6ced2bd30
-Author:        Joe Korty <joe.korty@concurrent-rt.com>
-AuthorDate:    Mon, 21 Nov 2022 14:53:43 
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 21 Nov 2022 16:01:56 +01:00
+--------------tXBKNrT2VYONmyy5XAPNe002
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-clocksource/drivers/arm_arch_timer: Fix XGene-1 TVAL register math error
+DQpBY2tlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoN
+CkFtIDE5LjExLjIyIHVtIDIxOjQ0IHNjaHJpZWIgT2RlZCBHYWJiYXk6DQo+IFRoaXMgaXMg
+dGhlIGZvdXJ0aCAoYW5kIGhvcGVmdWxseSBsYXN0KSB2ZXJzaW9uIG9mIHRoZSBwYXRjaC1z
+ZXQgdG8gYWRkIHRoZQ0KPiBuZXcgc3Vic3lzdGVtIGZvciBjb21wdXRlIGFjY2VsZXJhdG9y
+cy4gSSByZW1vdmVkIHRoZSBSRkMgaGVhZGxpbmUgYXMNCj4gSSBiZWxpZXZlIGl0IGlzIG5v
+dyByZWFkeSBmb3IgbWVyZ2luZy4NCj4gDQo+IENvbXBhcmUgdG8gdjMsIHRoaXMgcGF0Y2gt
+c2V0IGNvbnRhaW5zIG9uZSBhZGRpdGlvbmFsIHBhdGNoIHRoYXQgYWRkcw0KPiBkb2N1bWVu
+dGF0aW9uIHJlZ2FyZGluZyB0aGUgYWNjZWwgc3Vic3lzdGVtLiBJIGhvcGUgaXQncyBnb29k
+IGVub3VnaCBmb3INCj4gdGhpcyBzdGFnZS4gSW4gYWRkaXRpb24sIHRoZXJlIHdlcmUgZmV3
+IHZlcnkgbWlub3IgZml4ZXMgYWNjb3JkaW5nIHRvDQo+IGNvbW1lbnRzIHJlY2VpdmVkIG9u
+IHYzLg0KPiANCj4gVGhlIHBhdGNoZXMgYXJlIGluIHRoZSBmb2xsb3dpbmcgcmVwbzoNCj4g
+aHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvb2dhYmJh
+eS9hY2NlbC5naXQvbG9nLz9oPWFjY2VsX3Y0DQo+IA0KPiBBcyBpbiB2MywgVGhlIEhFQUQg
+b2YgdGhhdCBicmFuY2ggaXMgYSBjb21taXQgYWRkaW5nIGEgZHVtbXkgZHJpdmVyIHRoYXQN
+Cj4gcmVnaXN0ZXJzIGFuIGFjY2VsIGRldmljZSB1c2luZyB0aGUgbmV3IGZyYW1ld29yay4g
+VGhpcyBjYW4gYmUgc2VydmVkDQo+IGFzIGEgc2ltcGxlIHJlZmVyZW5jZS4NCj4gDQo+IHYx
+IGNvdmVyIGxldHRlcjoNCj4gaHR0cHM6Ly9sa21sLm9yZy9sa21sLzIwMjIvMTAvMjIvNTQ0
+DQo+IA0KPiB2MiBjb3ZlciBsZXR0ZXI6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xr
+bWwvMjAyMjExMDIyMDM0MDUuMTc5NzQ5MS0xLW9nYWJiYXlAa2VybmVsLm9yZy9ULw0KPiAN
+Cj4gdjMgY292ZXIgbGV0dGVyOg0KPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzIw
+MjIxMTA2MjEwMjI1LjIwNjUzNzEtMS1vZ2FiYmF5QGtlcm5lbC5vcmcvVC8NCj4gDQo+IFRo
+YW5rcywNCj4gT2RlZC4NCj4gDQo+IE9kZWQgR2FiYmF5ICg0KToNCj4gICAgZHJpdmVycy9h
+Y2NlbDogZGVmaW5lIGtjb25maWcgYW5kIHJlZ2lzdGVyIGEgbmV3IG1ham9yDQo+ICAgIGFj
+Y2VsOiBhZGQgZGVkaWNhdGVkIG1pbm9yIGZvciBhY2NlbGVyYXRvciBkZXZpY2VzDQo+ICAg
+IGRybTogaW5pdGlhbGl6ZSBhY2NlbCBmcmFtZXdvcmsNCj4gICAgZG9jOiBhZGQgZG9jdW1l
+bnRhdGlvbiBmb3IgYWNjZWwgc3Vic3lzdGVtDQo+IA0KPiAgIERvY3VtZW50YXRpb24vYWNj
+ZWwvaW5kZXgucnN0ICAgICAgICAgfCAgMTcgKysNCj4gICBEb2N1bWVudGF0aW9uL2FjY2Vs
+L2ludHJvZHVjdGlvbi5yc3QgIHwgMTA5ICsrKysrKysrKw0KPiAgIERvY3VtZW50YXRpb24v
+YWRtaW4tZ3VpZGUvZGV2aWNlcy50eHQgfCAgIDUgKw0KPiAgIERvY3VtZW50YXRpb24vc3Vi
+c3lzdGVtLWFwaXMucnN0ICAgICAgfCAgIDEgKw0KPiAgIE1BSU5UQUlORVJTICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgfCAgIDkgKw0KPiAgIGRyaXZlcnMvS2NvbmZpZyAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgIDIgKw0KPiAgIGRyaXZlcnMvYWNjZWwvS2NvbmZpZyAgICAg
+ICAgICAgICAgICAgfCAgMjQgKysNCj4gICBkcml2ZXJzL2FjY2VsL2RybV9hY2NlbC5jICAg
+ICAgICAgICAgIHwgMzIzICsrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ICAgZHJpdmVy
+cy9ncHUvZHJtL01ha2VmaWxlICAgICAgICAgICAgICB8ICAgMSArDQo+ICAgZHJpdmVycy9n
+cHUvZHJtL2RybV9kcnYuYyAgICAgICAgICAgICB8IDEwMiArKysrKy0tLQ0KPiAgIGRyaXZl
+cnMvZ3B1L2RybS9kcm1fZmlsZS5jICAgICAgICAgICAgfCAgIDIgKy0NCj4gICBkcml2ZXJz
+L2dwdS9kcm0vZHJtX3N5c2ZzLmMgICAgICAgICAgIHwgIDI0ICstDQo+ICAgaW5jbHVkZS9k
+cm0vZHJtX2FjY2VsLmggICAgICAgICAgICAgICB8ICA5NyArKysrKysrKw0KPiAgIGluY2x1
+ZGUvZHJtL2RybV9kZXZpY2UuaCAgICAgICAgICAgICAgfCAgIDMgKw0KPiAgIGluY2x1ZGUv
+ZHJtL2RybV9kcnYuaCAgICAgICAgICAgICAgICAgfCAgIDggKw0KPiAgIGluY2x1ZGUvZHJt
+L2RybV9maWxlLmggICAgICAgICAgICAgICAgfCAgMjEgKy0NCj4gICAxNiBmaWxlcyBjaGFu
+Z2VkLCA3MTEgaW5zZXJ0aW9ucygrKSwgMzcgZGVsZXRpb25zKC0pDQo+ICAgY3JlYXRlIG1v
+ZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vYWNjZWwvaW5kZXgucnN0DQo+ICAgY3JlYXRlIG1v
+ZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vYWNjZWwvaW50cm9kdWN0aW9uLnJzdA0KPiAgIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2FjY2VsL0tjb25maWcNCj4gICBjcmVhdGUgbW9k
+ZSAxMDA2NDQgZHJpdmVycy9hY2NlbC9kcm1fYWNjZWwuYw0KPiAgIGNyZWF0ZSBtb2RlIDEw
+MDY0NCBpbmNsdWRlL2RybS9kcm1fYWNjZWwuaA0KPiANCj4gLS0NCj4gMi4yNS4xDQo+IA0K
+DQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpT
+VVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkw
+NDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2Vz
+Y2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-The TVAL register is 32 bit signed.  Thus only the lower 31 bits are
-available to specify when an interrupt is to occur at some time in the
-near future.  Attempting to specify a larger interval with TVAL results
-in a negative time delta which means the timer fires immediately upon
-being programmed, rather than firing at that expected future time.
+--------------tXBKNrT2VYONmyy5XAPNe002--
 
-The solution is for Linux to declare that TVAL is a 31 bit register rather
-than give its true size of 32 bits.  This prevents Linux from programming
-TVAL with a too-large value.  Note that, prior to 5.16, this little trick
-was the standard way to handle TVAL in Linux, so there is nothing new
-happening here on that front.
+--------------s5qUTgzlpoZ0MGGPNB4LCMlC
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-The softlockup detector hides the issue, because it keeps generating
-short timer deadlines that are within the scope of the broken timer.
+-----BEGIN PGP SIGNATURE-----
 
-Disabling it, it starts using NO_HZ with much longer timer deadlines, which
-turns into an interrupt flood:
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmN7lGAFAwAAAAAACgkQlh/E3EQov+D5
+jBAAwqCLFHp0hEtV6wSvRuEM6pdANaYCsJNrs9tSrCkEqr4zr8/RDikat6bF8GOxkYR2748Kk1bV
+8B2lCBp2vWb7af/zeORyzHSoxPOycxiid7X4IFOuJ0W8zZ33fBLU0OQ1uJ5XfGz+8Nx1Z1B9pvow
+x/ssXhviKzwvSvKi0uXuEXT0IOucjuBvBp6hXeHKh2TOzplt3+ns1K+lYOokzWfLfxuBoRGzaCEw
+OgmozMBT9tdsgEAn0Ek1JG6dWqk5hVYMvfcRiQRX9y6A0IYkyFmX4F7pE/cBJSRylSTZJf23KQ8a
+PgjFuUDHJlNeJZ9jSYyP6mzKquy2gx3XYwvJR7wcdnqo0aRWRD6EzeqSOeHMpdrAkMAjQUD8w+Y3
+uS6H/Hcn7tRqTB2e/yJL+sJC4LRCwK3dmNi9DNoJlwhMju3t4W3vILwNPe0j4DlnZBh9T1He82md
+yhiBXagxPKfXF0+FtcBiV3tZX4IGi0YGPR35FUkwgZYhYJnT6JwPn+os2ISh7lsiRknz0ePTjqnL
+zcaz5BkK0AXsuCFw47GddVDyXtJQaHn1PLMC6T3dJle/zDG8Ct/pCoS+K2e/n3qOwRvuQ/CHoYPh
+2VVPgnO15CPUdEpO0/MJ2czsG5kQkqz92/YzPIjz4V2eNKx9AyE07kAzrTlNzXhy/SsY0xOuKgU9
+cM8=
+=hrN2
+-----END PGP SIGNATURE-----
 
- 11: 1124855130  949168462  758009394   76417474  104782230   30210281
-         310890 1734323687     GICv2  29 Level     arch_timer
-
-And "much longer" isn't that long: it takes less than 43s to underflow
-TVAL at 50MHz (the frequency of the counter on XGene-1).
-
-Some comments on the v1 version of this patch by Marc Zyngier:
-
-  XGene implements CVAL (a 64bit comparator) in terms of TVAL (a countdown
-  register) instead of the other way around. TVAL being a 32bit register,
-  the width of the counter should equally be 32.  However, TVAL is a
-  *signed* value, and keeps counting down in the negative range once the
-  timer fires.
-
-  It means that any TVAL value with bit 31 set will fire immediately,
-  as it cannot be distinguished from an already expired timer. Reducing
-  the timer range back to a paltry 31 bits papers over the issue.
-
-  Another problem cannot be fixed though, which is that the timer interrupt
-  *must* be handled within the negative countdown period, or the interrupt
-  will be lost (TVAL will rollover to a positive value, indicative of a
-  new timer deadline).
-
-Fixes: 012f18850452 ("clocksource/drivers/arm_arch_timer: Work around broken CVAL implementations")
-Signed-off-by: Joe Korty <joe.korty@concurrent-rt.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221024165422.GA51107@zipoli.concurrent-rt.com
-Link: https://lore.kernel.org/r/20221121145343.896018-1-maz@kernel.org
-
-[maz: revamped the commit message]
----
- drivers/clocksource/arm_arch_timer.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-index a7ff775..933bb96 100644
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -806,6 +806,9 @@ static u64 __arch_timer_check_delta(void)
- 		/*
- 		 * XGene-1 implements CVAL in terms of TVAL, meaning
- 		 * that the maximum timer range is 32bit. Shame on them.
-+		 *
-+		 * Note that TVAL is signed, thus has only 31 of its
-+		 * 32 bits to express magnitude.
- 		 */
- 		MIDR_ALL_VERSIONS(MIDR_CPU_MODEL(ARM_CPU_IMP_APM,
- 						 APM_CPU_PART_POTENZA)),
-@@ -813,8 +816,8 @@ static u64 __arch_timer_check_delta(void)
- 	};
- 
- 	if (is_midr_in_range_list(read_cpuid_id(), broken_cval_midrs)) {
--		pr_warn_once("Broken CNTx_CVAL_EL1, limiting width to 32bits");
--		return CLOCKSOURCE_MASK(32);
-+		pr_warn_once("Broken CNTx_CVAL_EL1, using 31 bit TVAL instead.\n");
-+		return CLOCKSOURCE_MASK(31);
- 	}
- #endif
- 	return CLOCKSOURCE_MASK(arch_counter_get_width());
+--------------s5qUTgzlpoZ0MGGPNB4LCMlC--
