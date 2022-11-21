@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EDB1632DC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4215C632DCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiKUUTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 15:19:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
+        id S231720AbiKUUTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 15:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKUUTA (ORCPT
+        with ESMTP id S231892AbiKUUTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:19:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B81BF5AA;
-        Mon, 21 Nov 2022 12:18:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98D51B81233;
-        Mon, 21 Nov 2022 20:18:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 448C6C433C1;
-        Mon, 21 Nov 2022 20:18:55 +0000 (UTC)
-Date:   Mon, 21 Nov 2022 15:18:50 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Mon, 21 Nov 2022 15:19:13 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B97CB696
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:19:11 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id t1so9268429wmi.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:19:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i2YssgXesKzDDqTy+l2rOE6j9dPCuISGfB3qINrW5NY=;
+        b=DDKxtQ/4PQQ82eX2FE2Bvql6KWZbbrka2EcphaRV5wFLOTJrhk+uG4+f6TOc46kBcM
+         85NZIurnpnl5IROuuvrND2pI0OFFrc0TBdAUrgJDqDyzQJu56VuPCIW95+cXmh64HaRk
+         QBObzvAMYeGkT0N7Dec6175IQPLuuKdK6bn5gd6eVNtfaQG0uAiXmTd+Xv4TSEgNz4+X
+         XGsPTafMhV4XV7e/QfuSZROM7SJ4YUYleAfKPthap4LcSkOTyqGDd66KzH51Fm2qdspG
+         sdB1owBEaCiJJOyfOx5nujuQq/aIi2MQo6E20L/OV06TGYyy44pLoIGnJSKfN4lIdbSh
+         1POA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i2YssgXesKzDDqTy+l2rOE6j9dPCuISGfB3qINrW5NY=;
+        b=URi/c7zliHX5JD5LPq25IkeQkZwfn8QVmaNYHFoC1sfLsQrfCqecalCdGUHGWulkKg
+         7wCnhBlvI3jR0qgEksnM4ZcieYOHO6uMdT60S7cIA4VSaYmP5a74ldDd29wKXUQpnBz8
+         X7zg6ZYSrOQPdwlHyjo1TXgEkvPY89SeLxIh6rAW1mCoThn66bnWIjbpJEBhO9+iLbx2
+         EvPrHaZe+o21vLZJEK1+SP0/0FJXHdC0BMnfttEqyuGJ6NIa/ihDFjKw1TR1DqnFsIsL
+         VIy/yCvRika0ltAUbgy8LZQyenvhJZKSYsn4sISFUBxjU3cl4dVYiEuic2QZufQuJ1rl
+         4JqA==
+X-Gm-Message-State: ANoB5pmDr1z/8dQTRdTBaBHJYKbvf1shEGt/GmzHVZ59lBP3y/OXYNg0
+        Syal4ODRxoTnruxNuMKZW7U7ZA==
+X-Google-Smtp-Source: AA0mqf6rbDf37PjcFTBtQWSwtpm/6LMyjwaNmBZSC2ZVhhi7/ShjxpuRoTcJGE5/LcQMeCNhKqOiAA==
+X-Received: by 2002:a05:600c:1f0c:b0:3cf:a41d:8418 with SMTP id bd12-20020a05600c1f0c00b003cfa41d8418mr6267451wmb.190.1669061949631;
+        Mon, 21 Nov 2022 12:19:09 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id o18-20020a05600c4fd200b003cfa26c410asm21561537wmq.20.2022.11.21.12.19.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 12:19:09 -0800 (PST)
+Date:   Mon, 21 Nov 2022 22:19:07 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com,
+        michael@amarulasolutions.com, Abel Vesa <abelvesa@kernel.org>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: Re: [patch 05/15] timers: Replace BUG_ON()s
-Message-ID: <20221121151850.635d3883@gandalf.local.home>
-In-Reply-To: <20221115202117.267934419@linutronix.de>
-References: <20221115195802.415956561@linutronix.de>
-        <20221115202117.267934419@linutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] clk: imx8mn: fix imx8mn_sai2_sels clocks list
+Message-ID: <Y3vdO6Kh47dH+C/u@linaro.org>
+References: <20221117113637.1978703-1-dario.binacchi@amarulasolutions.com>
+ <20221117113637.1978703-5-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117113637.1978703-5-dario.binacchi@amarulasolutions.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 21:28:41 +0100 (CET)
-Thomas Gleixner <tglx@linutronix.de> wrote:
+On 22-11-17 12:36:36, Dario Binacchi wrote:
+> According to the "Clock Root" table of the reference manual (document
+> IMX8MNRM Rev 2, 07/2022):
+> 
+>      Clock Root     offset     Source Select (CCM_TARGET_ROOTn[MUX])
+>         ...          ...                    ...
+>    SAI2_CLK_ROOT    0xA600            000 - 24M_REF_CLK
+>                                       001 - AUDIO_PLL1_CLK
+>                                       010 - AUDIO_PLL2_CLK
+>                                       011 - VIDEO_PLL_CLK
+>                                       100 - SYSTEM_PLL1_DIV6
+>                                       110 - EXT_CLK_2
+>                                       111 - EXT_CLK_3
+>         ...          ...                    ...
+> 
+> while the imx8mn_sai2_sels list contained clk_ext3 and clk_ext4 for
+> source select bits 110b and 111b.
+> 
+> Fixes: 96d6392b54dbb ("clk: imx: Add support for i.MX8MN clock driver")
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-> The timer code still has a few BUG_ON()s left which are crashing the kernel
-> in situations where it still can recover or simply refuse to take an
-> action.
-> 
-> Remove the one in the hotplug callback which checks for the CPU being
-> offline. If that happens then the whole hotplug machinery will explode in
-> colourful ways.
-> 
-> Replace the rest with WARN_ON_ONCE() and conditional returns where
-> appropriate.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+
 > ---
->  kernel/time/timer.c |   11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
-> --- a/kernel/time/timer.c
-> +++ b/kernel/time/timer.c
-> @@ -1193,7 +1193,8 @@ EXPORT_SYMBOL(timer_reduce);
->   */
->  void add_timer(struct timer_list *timer)
->  {
-> -	BUG_ON(timer_pending(timer));
-> +	if (WARN_ON_ONCE(timer_pending(timer)))
-> +		return;
->  	__mod_timer(timer, timer->expires, MOD_TIMER_NOTPENDING);
->  }
->  EXPORT_SYMBOL(add_timer);
-> @@ -1210,7 +1211,8 @@ void add_timer_on(struct timer_list *tim
->  	struct timer_base *new_base, *base;
->  	unsigned long flags;
+> (no changes since v1)
+> 
+>  drivers/clk/imx/clk-imx8mn.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
+> index b80af5d1ef46..37128c35198d 100644
+> --- a/drivers/clk/imx/clk-imx8mn.c
+> +++ b/drivers/clk/imx/clk-imx8mn.c
+> @@ -109,7 +109,7 @@ static const char * const imx8mn_disp_pixel_sels[] = {"osc_24m", "video_pll_out"
 >  
-> -	BUG_ON(timer_pending(timer) || !timer->function);
-> +	if (WARN_ON_ONCE(timer_pending(timer) || !timer->function))
-> +		return;
+>  static const char * const imx8mn_sai2_sels[] = {"osc_24m", "audio_pll1_out", "audio_pll2_out",
+>  						"video_pll_out", "sys_pll1_133m", "dummy",
+> -						"clk_ext3", "clk_ext4", };
+> +						"clk_ext2", "clk_ext3", };
 >  
->  	new_base = get_timer_cpu_base(timer->flags, cpu);
->  
-
-I wonder if this patch should be split up into two patches, as the above is
-trivial and the below is a bit more "complex". Although it's probably moot
-as none of these should ever trigger.
-
-> @@ -2017,8 +2019,6 @@ int timers_dead_cpu(unsigned int cpu)
->  	struct timer_base *new_base;
->  	int b, i;
->  
-> -	BUG_ON(cpu_online(cpu));
-> -
->  	for (b = 0; b < NR_BASES; b++) {
->  		old_base = per_cpu_ptr(&timer_bases[b], cpu);
->  		new_base = get_cpu_ptr(&timer_bases[b]);
-> @@ -2035,7 +2035,8 @@ int timers_dead_cpu(unsigned int cpu)
->  		 */
->  		forward_timer_base(new_base);
->  
-> -		BUG_ON(old_base->running_timer);
-> +		WARN_ON_ONCE(old_base->running_timer);
-> +		old_base->running_timer = NULL;
-
-I guess interesting things could happen if running_timer was not NULL, but
-again, WARN_ON_ONCE() should never be triggered in a correctly running
-kernel.
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
->  
->  		for (i = 0; i < WHEEL_SIZE; i++)
->  			migrate_timer_list(new_base, old_base->vectors + i);
-
+>  static const char * const imx8mn_sai3_sels[] = {"osc_24m", "audio_pll1_out", "audio_pll2_out",
+>  						"video_pll_out", "sys_pll1_133m", "dummy",
+> -- 
+> 2.32.0
+> 
