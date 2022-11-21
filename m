@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E99F632F58
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B616632F5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbiKUVui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 16:50:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        id S232097AbiKUVvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 16:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbiKUVuH (ORCPT
+        with ESMTP id S232002AbiKUVuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:50:07 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B33DB85E;
-        Mon, 21 Nov 2022 13:50:06 -0800 (PST)
+        Mon, 21 Nov 2022 16:50:14 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353DEDDFBB;
+        Mon, 21 Nov 2022 13:50:12 -0800 (PST)
 Received: from umang.jainideasonboard.com (unknown [103.86.18.138])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DA9C2E61;
-        Mon, 21 Nov 2022 22:50:00 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BDBA174C;
+        Mon, 21 Nov 2022 22:50:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669067405;
-        bh=oSxZ1uW81ySYSzLce6c6BF+DwUMI/z4Wsarl5TIz+i4=;
+        s=mail; t=1669067410;
+        bh=htuzsCjo2x6ULFR7bLoW8GPfSx+imW25FBjXo1ReDtM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vPgU8M8OY314oDDivcL/h5E3oyv9hwoE+J369HMhl64dvtSEOSu7TQe9PMwGYQdJD
-         KyqknS4lEzzjGIsiqRIGphc96v9sSwDArbblLReH36A4eZ3r62iggVgQqmunm3Ugki
-         Dk2jHJO4saPsIDHP8IBFwZAnnCsBsS0a2idofNAQ=
+        b=ZxnExgSdyZOP5iRLFAfGeQ9Od0cD9KTlvhLhHqWszWZO+RrpWjk31fvqhikuXjz5z
+         yF/3fv2Fn3b9sbgroSpLclSWmerMilncVuADCNESO00ro2cWExsEsvJRkPbDwWPGoq
+         gbxSDrY5uh6GzvpgrvaYmSn1Ou+K1TMiLBZH4y+g=
 From:   Umang Jain <umang.jain@ideasonboard.com>
 To:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
         linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
@@ -39,9 +39,9 @@ Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH 11/14] WIP: vc04_services: bcm2835-isp: Permit all sRGB colour spaces on ISP outputs
-Date:   Tue, 22 Nov 2022 03:17:19 +0530
-Message-Id: <20221121214722.22563-12-umang.jain@ideasonboard.com>
+Subject: [PATCH 12/14] staging: vc04_services: bcm2835_isp: Allow multiple users
+Date:   Tue, 22 Nov 2022 03:17:20 +0530
+Message-Id: <20221121214722.22563-13-umang.jain@ideasonboard.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221121214722.22563-1-umang.jain@ideasonboard.com>
 References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
@@ -56,166 +56,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Plowman <david.plowman@raspberrypi.com>
+From: Naushir Patuck <naush@raspberrypi.com>
 
-bcm2835-isp outputs actually support all colour spaces that are
-fundamentally sRGB underneath, regardless of whether an RGB or YUV output
-format is actually requested.
+Add a second (identical) set of device nodes to allow concurrent use of
+the bcm2835-isp hardware by another user. This change effectively
+creates a second state structure (struct bcm2835_isp_dev) to maintain
+independent state for the second user. Node and media entity names are
+appened with the instance index appropriately.
 
-Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
+Further users can be added by changing the BCM2835_ISP_NUM_INSTANCES
+define.
+
+Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
 Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 ---
- .../bcm2835-isp/bcm2835-isp-fmts.h            | 45 ++++++++++---------
- 1 file changed, 25 insertions(+), 20 deletions(-)
+ .../bcm2835-isp/bcm2835-v4l2-isp.c            | 77 +++++++++++++++----
+ 1 file changed, 61 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h b/drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h
-index a545dbf2b5dd..5ab232ff9bd9 100644
---- a/drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h
-+++ b/drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h
-@@ -34,14 +34,19 @@ struct bcm2835_isp_fmt {
- #define V4L2_COLORSPACE_MASK_RAW V4L2_COLORSPACE_MASK(V4L2_COLORSPACE_RAW)
+diff --git a/drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c b/drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c
+index cb7cdba76682..0dbcb25595e7 100644
+--- a/drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c
++++ b/drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c
+@@ -28,13 +28,19 @@
  
- /*
-- * The colour spaces we support for YUV outputs. SRGB features here because,
-- * once you assign the default transfer func and so on, it and JPEG effectively
-- * mean the same.
-+ * All three colour spaces JPEG, SMPTE170M and REC709 are fundamentally sRGB
-+ * underneath (as near as makes no difference to us), just with different YCbCr
-+ * encodings. Therefore the ISP can generate sRGB on its main output and any of
-+ * the others on its low resolution output. Applications should, when using both
-+ * outputs, program the colour spaces on them to be the same, matching whatever
-+ * is requested for the low resolution output, even if the main output is
-+ * producing an RGB format. In turn this requires us to allow all these colour
-+ * spaces for every YUV/RGB output format.
+ MODULE_IMPORT_NS(DMA_BUF);
+ 
++/*
++ * We want to instantiate 2 independent instances allowing 2 simultaneous users
++ * of the ISP hardware.
++ */
++#define BCM2835_ISP_NUM_INSTANCES 2
++
+ static unsigned int debug;
+ module_param(debug, uint, 0644);
+ MODULE_PARM_DESC(debug, "activates debug info");
+ 
+-static unsigned int video_nr = 13;
+-module_param(video_nr, uint, 0644);
+-MODULE_PARM_DESC(video_nr, "base video device number");
++static unsigned int video_nr[BCM2835_ISP_NUM_INSTANCES] = { 13, 20 };
++module_param_array(video_nr, uint, NULL, 0644);
++MODULE_PARM_DESC(video_nr, "base video device numbers");
+ 
+ #define BCM2835_ISP_NAME "bcm2835-isp"
+ #define BCM2835_ISP_ENTITY_NAME_LEN 32
+@@ -1286,6 +1292,7 @@ static int bcm2835_isp_get_supported_fmts(struct bcm2835_isp_node *node)
+  * or output nodes.
   */
--#define V4L2_COLORSPACE_MASK_YUV (V4L2_COLORSPACE_MASK_JPEG | \
--				  V4L2_COLORSPACE_MASK_SRGB | \
--				  V4L2_COLORSPACE_MASK_SMPTE170M | \
--				  V4L2_COLORSPACE_MASK_REC709)
-+#define V4L2_COLORSPACE_MASK_ALL_SRGB (V4L2_COLORSPACE_MASK_JPEG |	\
-+				       V4L2_COLORSPACE_MASK_SRGB |	\
-+				       V4L2_COLORSPACE_MASK_SMPTE170M |	\
-+				       V4L2_COLORSPACE_MASK_REC709)
+ static int register_node(struct bcm2835_isp_dev *dev,
++			 unsigned int instance,
+ 			 struct bcm2835_isp_node *node,
+ 			 int index)
+ {
+@@ -1447,7 +1454,7 @@ static int register_node(struct bcm2835_isp_dev *dev,
+ 	snprintf(vfd->name, sizeof(node->vfd.name), "%s-%s%d", BCM2835_ISP_NAME,
+ 		 node->name, node->id);
  
- static const struct bcm2835_isp_fmt supported_formats[] = {
- 	{
-@@ -51,7 +56,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 64,
- 		.mmal_fmt	    = MMAL_ENCODING_I420,
- 		.size_multiplier_x2 = 3,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_JPEG,
- 		.step_size	    = 2,
- 	}, {
-@@ -60,7 +65,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 64,
- 		.mmal_fmt	    = MMAL_ENCODING_YV12,
- 		.size_multiplier_x2 = 3,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
- 		.step_size	    = 2,
- 	}, {
-@@ -69,7 +74,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 32,
- 		.mmal_fmt	    = MMAL_ENCODING_NV12,
- 		.size_multiplier_x2 = 3,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
- 		.step_size	    = 2,
- 	}, {
-@@ -78,7 +83,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 32,
- 		.mmal_fmt	    = MMAL_ENCODING_NV21,
- 		.size_multiplier_x2 = 3,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
- 		.step_size	    = 2,
- 	}, {
-@@ -87,7 +92,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 64,
- 		.mmal_fmt	    = MMAL_ENCODING_YUYV,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
- 		.step_size	    = 2,
- 	}, {
-@@ -96,7 +101,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 64,
- 		.mmal_fmt	    = MMAL_ENCODING_UYVY,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
- 		.step_size	    = 2,
- 	}, {
-@@ -105,7 +110,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 64,
- 		.mmal_fmt	    = MMAL_ENCODING_YVYU,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
- 		.step_size	    = 2,
- 	}, {
-@@ -114,7 +119,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 64,
- 		.mmal_fmt	    = MMAL_ENCODING_VYUY,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_YUV,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SMPTE170M,
- 		.step_size	    = 2,
- 	}, {
-@@ -124,7 +129,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 32,
- 		.mmal_fmt	    = MMAL_ENCODING_RGB24,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SRGB,
- 		.step_size	    = 1,
- 	}, {
-@@ -133,7 +138,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 32,
- 		.mmal_fmt	    = MMAL_ENCODING_RGB16,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SRGB,
- 		.step_size	    = 1,
- 	}, {
-@@ -142,7 +147,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 32,
- 		.mmal_fmt	    = MMAL_ENCODING_BGR24,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SRGB,
- 		.step_size	    = 1,
- 	}, {
-@@ -151,7 +156,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 64,
- 		.mmal_fmt	    = MMAL_ENCODING_BGRA,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SRGB,
- 		.step_size	    = 1,
- 	}, {
-@@ -160,7 +165,7 @@ static const struct bcm2835_isp_fmt supported_formats[] = {
- 		.bytesperline_align = 64,
- 		.mmal_fmt	    = MMAL_ENCODING_RGBA,
- 		.size_multiplier_x2 = 2,
--		.colorspace_mask    = V4L2_COLORSPACE_MASK_SRGB,
-+		.colorspace_mask    = V4L2_COLORSPACE_MASK_ALL_SRGB,
- 		.colorspace_default = V4L2_COLORSPACE_SRGB,
- 		.step_size	    = 1,
- 	}, {
+-	ret = video_register_device(vfd, VFL_TYPE_VIDEO, video_nr + index);
++	ret = video_register_device(vfd, VFL_TYPE_VIDEO, video_nr[instance]);
+ 	if (ret) {
+ 		v4l2_err(&dev->v4l2_dev,
+ 			 "Failed to register video %s[%d] device node\n",
+@@ -1668,9 +1675,8 @@ static int media_controller_register(struct bcm2835_isp_dev *dev)
+ 	return ret;
+ }
+ 
+-static int bcm2835_isp_remove(struct platform_device *pdev)
++static void bcm2835_isp_remove_instance(struct bcm2835_isp_dev *dev)
+ {
+-	struct bcm2835_isp_dev *dev = platform_get_drvdata(pdev);
+ 	unsigned int i;
+ 
+ 	media_controller_unregister(dev);
+@@ -1685,11 +1691,11 @@ static int bcm2835_isp_remove(struct platform_device *pdev)
+ 					      dev->component);
+ 
+ 	vchiq_mmal_finalise(dev->mmal_instance);
+-
+-	return 0;
+ }
+ 
+-static int bcm2835_isp_probe(struct platform_device *pdev)
++static int bcm2835_isp_probe_instance(struct platform_device *pdev,
++				      struct bcm2835_isp_dev **dev_int,
++				      unsigned int instance)
+ {
+ 	struct bcm2835_isp_dev *dev;
+ 	unsigned int i;
+@@ -1699,6 +1705,7 @@ static int bcm2835_isp_probe(struct platform_device *pdev)
+ 	if (!dev)
+ 		return -ENOMEM;
+ 
++	*dev_int = dev;
+ 	dev->dev = &pdev->dev;
+ 
+ 	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
+@@ -1716,7 +1723,7 @@ static int bcm2835_isp_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		v4l2_err(&dev->v4l2_dev,
+ 			 "%s: failed to create ril.isp component\n", __func__);
+-		goto error;
++		return ret;
+ 	}
+ 
+ 	if (dev->component->inputs < BCM2835_ISP_NUM_OUTPUTS ||
+@@ -1728,7 +1735,7 @@ static int bcm2835_isp_probe(struct platform_device *pdev)
+ 			  BCM2835_ISP_NUM_OUTPUTS,
+ 			  dev->component->outputs,
+ 			  BCM2835_ISP_NUM_CAPTURES + BCM2835_ISP_NUM_METADATA);
+-		goto error;
++		return -EINVAL;
+ 	}
+ 
+ 	atomic_set(&dev->num_streaming, 0);
+@@ -1736,17 +1743,55 @@ static int bcm2835_isp_probe(struct platform_device *pdev)
+ 	for (i = 0; i < BCM2835_ISP_NUM_NODES; i++) {
+ 		struct bcm2835_isp_node *node = &dev->node[i];
+ 
+-		ret = register_node(dev, node, i);
++		ret = register_node(dev, instance, node, i);
+ 		if (ret)
+-			goto error;
++			return ret;
+ 	}
+ 
+ 	ret = media_controller_register(dev);
+ 	if (ret)
+-		goto error;
++		return ret;
++
++	return 0;
++}
++
++static int bcm2835_isp_remove(struct platform_device *pdev)
++{
++	struct bcm2835_isp_dev **bcm2835_isp_instances;
++	unsigned int i;
++
++	bcm2835_isp_instances = platform_get_drvdata(pdev);
++	for (i = 0; i < BCM2835_ISP_NUM_INSTANCES; i++) {
++		if (bcm2835_isp_instances[i])
++			bcm2835_isp_remove_instance(bcm2835_isp_instances[i]);
++	}
++
++	return 0;
++}
++
++static int bcm2835_isp_probe(struct platform_device *pdev)
++{
++	struct bcm2835_isp_dev **bcm2835_isp_instances;
++	unsigned int i;
++	int ret;
++
++	bcm2835_isp_instances = devm_kzalloc(&pdev->dev,
++					     sizeof(bcm2835_isp_instances) *
++						      BCM2835_ISP_NUM_INSTANCES,
++					     GFP_KERNEL);
++	if (!bcm2835_isp_instances)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, bcm2835_isp_instances);
++
++	for (i = 0; i < BCM2835_ISP_NUM_INSTANCES; i++) {
++		ret = bcm2835_isp_probe_instance(pdev,
++						 &bcm2835_isp_instances[i], i);
++		if (ret)
++			goto error;
++	}
+ 
+-	platform_set_drvdata(pdev, dev);
+-	v4l2_info(&dev->v4l2_dev, "Loaded V4L2 %s\n", BCM2835_ISP_NAME);
++	dev_info(&pdev->dev, "Loaded V4L2 %s\n", BCM2835_ISP_NAME);
+ 	return 0;
+ 
+ error:
 -- 
 2.37.3
 
