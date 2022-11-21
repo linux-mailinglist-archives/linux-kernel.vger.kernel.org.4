@@ -2,203 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB78C631A71
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 08:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1AD631AE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiKUHjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 02:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S229883AbiKUICI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiKUHjj (ORCPT
+        with ESMTP id S229490AbiKUICG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 02:39:39 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAFC13DC4;
-        Sun, 20 Nov 2022 23:39:38 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NFzmj33PDz4f3v7Z;
-        Mon, 21 Nov 2022 15:39:33 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgC329g0K3tj2M2XAw--.53628S9;
-        Mon, 21 Nov 2022 15:39:36 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
-        linux_oss@crudebyte.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, yebin10@huawei.com
-Subject: [PATCH 5/5] 9p: refactor 'post_recv()'
-Date:   Mon, 21 Nov 2022 16:00:49 +0800
-Message-Id: <20221121080049.3850133-6-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221121080049.3850133-1-yebin@huaweicloud.com>
-References: <20221121080049.3850133-1-yebin@huaweicloud.com>
+        Mon, 21 Nov 2022 03:02:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3AED65
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:01:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669017665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0AQyYFfo+9gxGliawJp4LGdOeDV+4qepnwYb6KBjwmI=;
+        b=OIJKTikzlC7Jh0SFK50q+prNKV8ajOtQkNvL+62QBxZj1PoYytVACuGQFqxbMuGGgIWh7x
+        3M3Mjap/KIjz4oiuTDQepMndYWSpbim20ZpsH/Wt972iRDHMOt1j+vfkv7hSAlU9ll9pLW
+        T7R/sip4FLgXv1euoW96c2LBwiOCGhg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-639-wqSqx7G3NSKKskZSqr7vIw-1; Mon, 21 Nov 2022 03:01:03 -0500
+X-MC-Unique: wqSqx7G3NSKKskZSqr7vIw-1
+Received: by mail-wr1-f72.google.com with SMTP id u24-20020adfa198000000b00241da98e057so427002wru.22
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:01:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0AQyYFfo+9gxGliawJp4LGdOeDV+4qepnwYb6KBjwmI=;
+        b=gfWWPwOpsZBaCOV1JxCMi4o8q65qQZenk8J14PNAlazdNj9TQ9GafzAzB0WJEEZxz3
+         Kr0jsqSWc7cZH03hQmBBAHWvskerboaQkz0pSnb5ghpxyOql6z3bsOmtRVw70GR0U4q4
+         5f/Bo1yWeZ7EyZDMNjwfJyYZhvw2tImhi0B0tb0JpfrQQJMRPWWBBiTdLtLoH5lqXI9i
+         f4vAVtkBO8mSAyhAtGMBv8wI5yefc2OwG3AuEtF+yTi7w6tPXCyqIF3hiI2o6U0FnUIH
+         PnBOOCcxcS0lKjJsvq/OVWJA6SMT0b/55Hg6AArmcTymHjS45KMWrPXzo9Q6BG2C8Kl6
+         CAuA==
+X-Gm-Message-State: ANoB5pmbNgDjokeGUKTzHzX6XYU5s/za14wntFEotWqvvsrse0JjEnPx
+        0MNiCRH6PV8dpQ2EL5B09eefGKm+qRzvnhCoL0php6cpq0mUJwOCCHvJqflX2XgTfCXMS5JbMhK
+        m9aAb/QR/Bcynmdr7+FF5cQGG
+X-Received: by 2002:adf:eb0c:0:b0:236:6deb:4498 with SMTP id s12-20020adfeb0c000000b002366deb4498mr10407214wrn.52.1669017661951;
+        Mon, 21 Nov 2022 00:01:01 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf77j1WiPf/k1EzdHh95eZGoSHc+IIaDgk6glybs/fguxmE2Lp2ljuzCpa/dLBDvV3elHKQL7A==
+X-Received: by 2002:adf:eb0c:0:b0:236:6deb:4498 with SMTP id s12-20020adfeb0c000000b002366deb4498mr10407175wrn.52.1669017661507;
+        Mon, 21 Nov 2022 00:01:01 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:dc00:2571:c3c2:c6ea:84ef? (p200300cbc702dc002571c3c2c6ea84ef.dip0.t-ipconnect.de. [2003:cb:c702:dc00:2571:c3c2:c6ea:84ef])
+        by smtp.gmail.com with ESMTPSA id l24-20020a05600c1d1800b003cf878c4468sm19240074wms.5.2022.11.21.00.00.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 00:01:01 -0800 (PST)
+Message-ID: <7b2055f2-f5ce-be01-7c39-edcc4be6a7aa@redhat.com>
+Date:   Mon, 21 Nov 2022 09:00:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgC329g0K3tj2M2XAw--.53628S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF4fGr1rKF1fJFykAFyUAwb_yoWrXr1fpF
-        4fuwsIyrZ0qF17Cw4kKa4UZF12kr4rCa1rG3y8Kws3JFn8trn5KF4jyryFgFWxuFZ7J3WF
-        yr1DKFWruF1UZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
-        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
-        CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+References: <202211211037.2b2e5e1f-yujie.liu@intel.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [linus:master] [mm] 088b8aa537: vm-scalability.throughput -6.5%
+ regression
+In-Reply-To: <202211211037.2b2e5e1f-yujie.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+On 21.11.22 04:03, kernel test robot wrote:
+> Greeting,
+> 
+> FYI, we noticed a -6.5% regression of vm-scalability.throughput due to commit:
+> 
+> commit: 088b8aa537c2c767765f1c19b555f21ffe555786 ("mm: fix PageAnonExclusive clearing racing with concurrent RCU GUP-fast")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> in testcase: vm-scalability
+> on test machine: 88 threads 2 sockets Intel(R) Xeon(R) Gold 6238M CPU @ 2.10GHz (Cascade Lake) with 128G memory
+> with following parameters:
+> 
+> 	thp_enabled: never
+> 	thp_defrag: never
+> 	nr_task: 1
+> 	nr_pmem: 2
+> 	priority: 1
+> 	test: swap-w-seq
+> 	cpufreq_governor: performance
+> 
+> test-description: The motivation behind this suite is to exercise functions and regions of the mm/ of the Linux kernel which are of interest to us.
+> test-url: https://git.kernel.org/cgit/linux/kernel/git/wfg/vm-scalability.git/
+> 
 
-Refactor 'post_recv()', move receive resource request from 'rdma_request()' to
-'post_recv()'.
+Yes, page_try_share_anon_rmap() might now be a bit more expensive now, 
+turning try_to_unmap_one() a bit more expensive. However, that patch 
+also changes the unconditional TLB flush into a conditional TLB flush, 
+so results might vary heavily between machines/architectures.
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- net/9p/trans_rdma.c | 77 +++++++++++++++++++++++----------------------
- 1 file changed, 39 insertions(+), 38 deletions(-)
+smp_mb__after_atomic() is a NOP on x86, so the smp_mb() before the 
+page_maybe_dma_pinned() check would have to be responsible.
 
-diff --git a/net/9p/trans_rdma.c b/net/9p/trans_rdma.c
-index bb917389adc9..78452c289f35 100644
---- a/net/9p/trans_rdma.c
-+++ b/net/9p/trans_rdma.c
-@@ -380,19 +380,40 @@ static void rdma_destroy_trans(struct p9_trans_rdma *rdma)
- 	kfree(rdma);
- }
- 
--static int
--post_recv(struct p9_client *client, struct p9_rdma_context *c)
-+static int post_recv(struct p9_client *client, struct p9_req_t *req)
- {
- 	struct p9_trans_rdma *rdma = client->trans;
-+	struct p9_rdma_context *c = NULL;
- 	struct ib_recv_wr wr;
- 	struct ib_sge sge;
--	int err = -EIO;
-+	int err;
-+
-+	c = kmalloc(sizeof *c, GFP_NOFS);
-+	if (!c) {
-+		err = -ENOMEM;
-+		goto error;
-+	}
-+	c->rc.sdata = req->rc.sdata;
-+
-+	/*
-+	 * Post a receive buffer for this request. We need to ensure
-+	 * there is a reply buffer available for every outstanding
-+	 * request. A flushed request can result in no reply for an
-+	 * outstanding request, so we must keep a count to avoid
-+	 * overflowing the RQ.
-+	 */
-+	if (down_interruptible(&rdma->rq_sem)) {
-+		err = -EINTR;
-+		goto error;
-+	}
- 
- 	c->busa = ib_dma_map_single(rdma->cm_id->device,
- 				    c->rc.sdata, client->msize,
- 				    DMA_FROM_DEVICE);
--	if (ib_dma_mapping_error(rdma->cm_id->device, c->busa))
--		goto error;
-+	if (ib_dma_mapping_error(rdma->cm_id->device, c->busa)) {
-+		err = -EIO;
-+		goto sem_error;
-+	}
- 
- 	c->cqe.done = recv_done;
- 
-@@ -405,15 +426,18 @@ post_recv(struct p9_client *client, struct p9_rdma_context *c)
- 	wr.sg_list = &sge;
- 	wr.num_sge = 1;
- 	err = ib_post_recv(rdma->qp, &wr, NULL);
--	if (err) {
--		ib_dma_unmap_single(rdma->cm_id->device, c->busa,
--				    client->msize, DMA_FROM_DEVICE);
--		goto error;
--	}
-+	if (err)
-+		goto mapping_error;
-+
- 	return 0;
-- error:
-+
-+mapping_error:
-+	ib_dma_unmap_single(rdma->cm_id->device, c->busa,
-+			    client->msize, DMA_FROM_DEVICE);
-+sem_error:
- 	up(&rdma->rq_sem);
--	p9_debug(P9_DEBUG_ERROR, "EIO\n");
-+error:
-+	kfree(c);
- 	return err;
- }
- 
-@@ -481,9 +505,8 @@ static int post_send(struct p9_client *client, struct p9_req_t *req)
- static int rdma_request(struct p9_client *client, struct p9_req_t *req)
- {
- 	struct p9_trans_rdma *rdma = client->trans;
--	int err = 0;
- 	unsigned long flags;
--	struct p9_rdma_context *rpl_context = NULL;
-+	int err;
- 
- 	/* When an error occurs between posting the recv and the send,
- 	 * there will be a receive context posted without a pending request.
-@@ -505,27 +528,7 @@ static int rdma_request(struct p9_client *client, struct p9_req_t *req)
- 		}
- 	}
- 
--	/* Allocate an fcall for the reply */
--	rpl_context = kmalloc(sizeof *rpl_context, GFP_NOFS);
--	if (!rpl_context) {
--		err = -ENOMEM;
--		goto recv_error;
--	}
--	rpl_context->rc.sdata = req->rc.sdata;
--
--	/*
--	 * Post a receive buffer for this request. We need to ensure
--	 * there is a reply buffer available for every outstanding
--	 * request. A flushed request can result in no reply for an
--	 * outstanding request, so we must keep a count to avoid
--	 * overflowing the RQ.
--	 */
--	if (down_interruptible(&rdma->rq_sem)) {
--		err = -EINTR;
--		goto recv_error;
--	}
--
--	err = post_recv(client, rpl_context);
-+	err = post_recv(client, req);
- 	if (err) {
- 		p9_debug(P9_DEBUG_ERROR, "POST RECV failed: %d\n", err);
- 		goto recv_error;
-@@ -547,9 +550,7 @@ static int rdma_request(struct p9_client *client, struct p9_req_t *req)
- 	}
- 	return err;
- 
-- /* Handle errors that happened during or while preparing post_recv(): */
-- recv_error:
--	kfree(rpl_context);
-+recv_error:
- 	spin_lock_irqsave(&rdma->req_lock, flags);
- 	if (err != -EINTR && rdma->state < P9_RDMA_CLOSING) {
- 		rdma->state = P9_RDMA_CLOSING;
+While there might certainly be ways for optimizing that further (e.g., 
+if the ptep_get_and_clear() already implies a smp_mb()), the facts that:
+
+(1) It's a swap micro-benchmark
+(2) We have 3% stddev
+
+Don't make me get active now ;)
+
 -- 
-2.31.1
+Thanks,
+
+David / dhildenb
 
