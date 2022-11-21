@@ -2,119 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7E1631B52
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3B4631B5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiKUIZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
+        id S229886AbiKUI1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiKUIZw (ORCPT
+        with ESMTP id S229632AbiKUI1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:25:52 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A496563FB;
-        Mon, 21 Nov 2022 00:25:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669019151; x=1700555151;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tRC91gf0tMNQxTUnM2kVX03iZwsnDeqc3G8jXCJ98P4=;
-  b=FTJoKZdYqC73wBb5/oFkoikhGuAFAu1DDJfA0ljAXI6KQeSoeiCUWW/C
-   IH3b6HJhZiXpkM0kZ750gAvu1J4g3919b8XqB9OVcdrTyPP7Bx4xJcbIx
-   oB1VLt/bUIAUP/XCoa4R93VMK0k9xNGjjJzt++RAYvZ/es1MFu/xGtSv9
-   HIMpt1TSnCAJkASjTCyC42GyHcC2ID42BqpK9WGQREPzgEv5ezESv2qL8
-   wzWtLobjjnTVTdkBismYbCLaJzsI6xd5S+H+I3h7EGXBVNKF0iJgW3CWp
-   0+v+1undo/S+5F0FGgRBr5zKKshBztdXhV0rCw2HXxVqfGsmccJYFSAOA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="301046507"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="301046507"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 00:25:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="635104678"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="635104678"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.94])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 00:25:48 -0800
-Message-ID: <5df2c4d5-f426-e3ea-8e6d-f772ec7091b6@intel.com>
-Date:   Mon, 21 Nov 2022 10:25:44 +0200
+        Mon, 21 Nov 2022 03:27:03 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545406253
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:27:02 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id l8so13640408ljh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wYa6qiy8lMPys5blH9J/G1eMKnRjWk2O1ZKygOJRkTQ=;
+        b=Cj2/VIzR/21o/tDbTWZPg8AGCS4nhfSg7B+uN9/AR/5LGg0FRaKRyalpThYZxC53mJ
+         pnbm+WJ9fCqM1NC8ka3B5R0z2fGv7B3oc/AMH+IuYEistzWxn6NkPDevW0qDkJLQuXyZ
+         bYo8jbLfTX6skcVDVIqtgCNxIT6bzhM3f/7GortQZEwVdTwtRwQF/6vEMDST+ioPEA0v
+         kxFNTuOyCF++tItPtJImlhbwQy9qjFTkL4RnpKEPpzwir3xS3iBMNqf4BFRCi3tSOt+T
+         CjEGYpiI5z3UAwO7fSltILV2sIZ0weSNBtrk2EW++azDJJtPkoBgb0OV6y5E0LEU+c3k
+         qCaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wYa6qiy8lMPys5blH9J/G1eMKnRjWk2O1ZKygOJRkTQ=;
+        b=Vg+mwksbaXIk5W0WL6aUIJ5Q4fZVW1dXFnSFBWpOAkWXr1YZaljTiSHvjsyoN0lxad
+         lNLzhnXJ9WNWJR1hQGbkjaN02Vg9KBca/QgVviXCSskr/5VuMWHHJF2ekV7+qJidfQkw
+         SU9lR8eRDmdUn8jZHEpFbzeKS1A20H8bc0PpVg2xan9LD3O+BGlspsN/LceYeIAus9zZ
+         JEqjkaHyD8xKLeN4Z07BMLxQLOHLpFTPuKbt+Nd+jKjBuXg8rab7WxiedH9EDEECwbIP
+         ilonAZcsciEm5DagU5Wo/7g0N6XpQWGgyGjKAChnjIISlkJf73jBQiyGt7zFSAl/mm3C
+         esWg==
+X-Gm-Message-State: ANoB5pnzV7bMKqpOvkIrcxYktTOyiS9jBwdNhLK5DN+vCmDI+7Lk0BtC
+        lmRDBu2mx7blrATADNhIgEr9Aw==
+X-Google-Smtp-Source: AA0mqf5RPWYa6p3CjzIW6ePaZSL0+GAKbQbFHq0c225RFkodYWsPwYzdEjwB8RTo/+JQghTXRFRFow==
+X-Received: by 2002:a2e:b5ae:0:b0:277:3df:90d0 with SMTP id f14-20020a2eb5ae000000b0027703df90d0mr384156ljn.234.1669019220719;
+        Mon, 21 Nov 2022 00:27:00 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 9-20020a2eb949000000b0026dcf0cbb97sm1379191ljs.137.2022.11.21.00.26.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 00:27:00 -0800 (PST)
+Message-ID: <795deac4-71fe-d40b-a3b6-855eb3875ad1@linaro.org>
+Date:   Mon, 21 Nov 2022 09:26:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH 0/3] mmc: Improve block layer requeueing behavior
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/8] dt-bindings: power: supply: Add DT schema for
+ Qualcomm SMBCHG
 Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        "vincent.whitchurch@axis.com" <vincent.whitchurch@axis.com>
-References: <f30ec7fe7d834c1d8e116508500110cf@hyperstone.com>
- <c1e1281e-0977-cbf7-041e-db911ee722a7@intel.com>
- <d1a1340a-f5f8-6953-e066-b8c6095d63fd@acm.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <d1a1340a-f5f8-6953-e066-b8c6095d63fd@acm.org>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alejandro Tafalla <atafalla@dnyon.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+References: <20221120154625.57095-1-y.oudjana@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221120154625.57095-1-y.oudjana@protonmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/22 19:27, Bart Van Assche wrote:
-> On 11/18/22 02:47, Adrian Hunter wrote:
->> On 26/10/22 10:30, Christian Löhle wrote:
->>> Mmcblk relies on block layer requeueing to fulfill some requests under
->>> certain conditions. Improve the handling to get nicely ordered requests.
->>>
->>> Using the terms a bit loosely to get a point across:
->>> Current behavior for 512 blksz and max_blk_count = 1 the scenario would
->>> be as follows:
->>>
->>> - request for page 0 lba 0 to 7
->>> - request for page 1 lba 8 to 15
->>> - request for page 2 lba 16 to 23
->>> - request for page 3 lba 24 to 31
->>>
->>> mmcblk modifies data->blocks = 1 for each and requeues,
->>> this leads to:
->>>
->>> Access lba 0
->>> Access lba 8
->>> Access lba 16
->>> Access lba 24
->>> Access lba 1 (1. Requeue for page 0)
->>> Access lba 9 (1. Requeue for page 1)
->>> Access lba 17 (1. Requeue for page 2)
->>> Access lba 25 (1. Requeue for page 3)
->>> Access lba 2 (2. Requeue for page 0)
->>> ...
->>>
->>> Of course we would rather have lbas consecutive.
+On 20/11/2022 16:46, Yassine Oudjana wrote:
+>>> +  interrupts:
+>>> +    items:
+>>> +      - description: Charger error
+>>> +      - description: Charger inhibited
+>>> +      - description: Charger precharge safety timer timeout
+>>> +      - description: Charger charge safety timer timeout
+>>> +      - description: Charger pre to fast charging switch threshold reached
+>>> +      - description: Charger recharge threshold reached
+>>> +      - description: Charger taper threshold reached
+>>> +      - description: Charger charge termination threshold reached
+>>> +      - description: Battery hot
+>>> +      - description: Battery warm
+>>> +      - description: Battery cold
+>>> +      - description: Battery cool
+>>> +      - description: Battery overvoltage
+>>> +      - description: Battery low
+>>> +      - description: Battery missing
+>>> +      - description: Battery thermistor missing # unconfirmed
+>>> +      - description: USB input undervolt
+>>> +      - description: USB input overvolt
+>>> +      - description: USB input source detected
+>>> +      - description: OTG regulator failure
+>>> +      - description: OTG regulator overcurrent
+>>> +      - description: Automatic input current limiting done
+>>> +      - description: USB ID pin changed
+>>> +      - description: DC input undervolt
+>>> +      - description: DC input overvolt
+>>> +      - description: Power OK
+>>> +      - description: Temperature shutdown
+>>> +      - description: Watchdog timeout
+>>> +      - description: Flash failure
+>>> +      - description: OTST2 # unknown
+>>> +      - description: OTST3 # unknown
 >>
->> Does anyone know why the block layer does not support
->> (max_hw_sectors << 9) < PAGE_SIZE ?
+>> It seems you listed register interrupts, not physical pins. This should
+>> be interrupt lines.
 > 
-> Hi Adrian,
-> 
-> Does this mean that the following patch series would not only be
-> useful for UFS but also for MMC? "[PATCH 00/10] Support DMA segments
-> smaller than the page size"
-> (https://lore.kernel.org/linux-block/20221019222324.362705-1-bvanassche@acm.org/).
+> I'm not sure what I'm supposed to do here. I couldn't find an interrupt-lines
+> property used anywhere so that's not what you meant, right?
 
-That patchset still does not allow max_hw_sectors = 1 which is
-what Christian's case needs.
+Are these physical interrupt lines this device has, register offsets or
+virtual interrupts (e.g. passed via irq_chip)? Definitely not the first
+and rather offsets for qpnpint_irq_domain_translate. Devicetree is not
+for describing register layout of devices. IOW, register layout does not
+change on different boards, because the device is exactly the same, so
+there is no point to put it into DTS.
+
+Best regards,
+Krzysztof
 
