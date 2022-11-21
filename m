@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F99631C17
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4027F631C0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiKUIxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S230303AbiKUIwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiKUIwE (ORCPT
+        with ESMTP id S230216AbiKUIwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:52:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38620233B6;
-        Mon, 21 Nov 2022 00:52:01 -0800 (PST)
+        Mon, 21 Nov 2022 03:52:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA087FF03;
+        Mon, 21 Nov 2022 00:52:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2617960F4A;
-        Mon, 21 Nov 2022 08:51:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E50DBC4FF10;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03B02B80D65;
+        Mon, 21 Nov 2022 08:51:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E52E6C4FF11;
         Mon, 21 Nov 2022 08:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1669020715;
-        bh=ewU3Baa1QStipHyL7o/oq4pVac9NfkbMr787am7ssUM=;
+        bh=WRo1qWVdZ75SVsnLQEiddVe0DwiPcNXnEMSF6iU/Sdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QjICcxtaPHELm2D3hTQp8A+rlBZ28Jjtv6j2RXQNosHp1iZ5UpznDUoDB1m4nY3JO
-         JpE+FAC/qaevwWNvc3ecqsnWBP7Gb71AXIU6+y/gFW+yiWGUDFc5uUcATb6H5Qk2Ck
-         yjKIPtTJI6s/kDCAAr2hXjz0p2Bgn9oo7mi4d1vXdXKUEH1JayNkCKxcks0Nt3XJJ6
-         zzTKPBnKfGET6ex/b4gvNRmBen5ER7a8k2idsDhvy+j2BBQvz0x0INlpWtELdh5d21
-         5j+eRVpT2EGZrZo7Oe29AjEwiEIpqCW1S+Y5E3eb3EWmP64HSr3gzB8LAsD3rBu73h
-         vc9ZPGeSZTh+w==
+        b=cUcY+2pY4YgHnR3Vup7rOWmkPos2SnXGxV43i9sHwxRr8MKjyu/J/TJ9hdJfkR2WO
+         Ef/tBlpWf6Vhz7UOLvfxqNpBsLfjK/wj3J18rKLZzItZeVCBS/22Hq26wEF6FAAOSF
+         FWZLbl5fSdJhr6tLV11WeWkTkmSGdw8CDVcJdfTj/qtwmjpFrDU5pBo4FlaXv7aQvm
+         rMPVmxflTdKbEIlxVd7Dhhyol5BjpeHI9JuHNVSRxy433mYfLOXjz70buuRkoZ7EQs
+         BhqNSfPZS0vHjCZHb/mIjlSwHCoKAIT1YHhmcXqHSUb34G2VhfsjveMNPGhVEypghd
+         fsMSk9POf038w==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ox2WT-00088h-ES; Mon, 21 Nov 2022 09:51:25 +0100
+        id 1ox2WT-00088m-Hg; Mon, 21 Nov 2022 09:51:25 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v3 12/15] phy: qcom-qmp-combo: rename DP_PHY register pointer
-Date:   Mon, 21 Nov 2022 09:50:55 +0100
-Message-Id: <20221121085058.31213-13-johan+linaro@kernel.org>
+Subject: [PATCH v3 13/15] phy: qcom-qmp-combo: add support for updated sc8280xp binding
+Date:   Mon, 21 Nov 2022 09:50:56 +0100
+Message-Id: <20221121085058.31213-14-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221121085058.31213-1-johan+linaro@kernel.org>
 References: <20221121085058.31213-1-johan+linaro@kernel.org>
@@ -64,348 +64,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DP_PHY registers have erroneously been referred to as "PCS"
-registers since DisplayPort support was added to the QMP drivers
-(including in the devicetree binding).
+Add support for the new SC8280XP binding.
 
-Rename the corresponding pointer to match the register names.
+Note that the binding does not try to describe every register subregion
+and instead the driver holds the corresponding offsets.
 
-Note that the repeated "dp" in the field name is intentional and this DP
-register block is called "DP_PHY" (not just "PHY").
+Also note that (possibly) unlike on earlier platforms, the TX registers
+are used by both the USB and DP implementation.
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 139 +++++++++++-----------
- 1 file changed, 70 insertions(+), 69 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 145 ++++++++++++++++++++--
+ 1 file changed, 134 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 5777bd1f76b3..b82bd0a221d6 100644
+index b82bd0a221d6..77052c66cf70 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -878,7 +878,7 @@ struct qmp_combo {
- 	void __iomem *dp_serdes;
- 	void __iomem *dp_tx;
- 	void __iomem *dp_tx2;
--	void __iomem *dp_pcs;
-+	void __iomem *dp_dp_phy;
+@@ -20,7 +20,7 @@
+ #include <linux/reset.h>
+ #include <linux/slab.h>
  
- 	struct clk *pipe_clk;
- 	struct clk_bulk_data *clks;
-@@ -1252,20 +1252,20 @@ static void qmp_v3_dp_aux_init(struct qmp_combo *qmp)
+-#include <dt-bindings/phy/phy.h>
++#include <dt-bindings/phy/phy-qcom-qmp.h>
+ 
+ #include "phy-qcom-qmp.h"
+ 
+@@ -798,7 +798,23 @@ static const u8 qmp_dp_v5_voltage_swing_hbr_rbr[4][4] = {
+ 
+ struct qmp_combo;
+ 
++struct qmp_combo_offsets {
++	u16 com;
++	u16 txa;
++	u16 rxa;
++	u16 txb;
++	u16 rxb;
++	u16 usb3_serdes;
++	u16 usb3_pcs_misc;
++	u16 usb3_pcs;
++	u16 usb3_pcs_usb;
++	u16 dp_serdes;
++	u16 dp_dp_phy;
++};
++
+ struct qmp_phy_cfg {
++	const struct qmp_combo_offsets *offsets;
++
+ 	/* Init sequence for PHY blocks - serdes, tx, rx, pcs */
+ 	const struct qmp_phy_init_tbl *serdes_tbl;
+ 	int serdes_tbl_num;
+@@ -959,6 +975,20 @@ static const char * const sc7180_usb3phy_reset_l[] = {
+ 	"phy",
+ };
+ 
++static const struct qmp_combo_offsets qmp_combo_offsets_v5 = {
++	.com		= 0x0000,
++	.txa		= 0x0400,
++	.rxa		= 0x0600,
++	.txb		= 0x0a00,
++	.rxb		= 0x0c00,
++	.usb3_serdes	= 0x1000,
++	.usb3_pcs_misc	= 0x1200,
++	.usb3_pcs	= 0x1400,
++	.usb3_pcs_usb	= 0x1700,
++	.dp_serdes	= 0x2000,
++	.dp_dp_phy	= 0x2200,
++};
++
+ static const struct qmp_phy_cfg sc7180_usb3dpphy_cfg = {
+ 	.serdes_tbl		= qmp_v3_usb3_serdes_tbl,
+ 	.serdes_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_serdes_tbl),
+@@ -1098,6 +1128,8 @@ static const struct qmp_phy_cfg sc8180x_usb3dpphy_cfg = {
+ };
+ 
+ static const struct qmp_phy_cfg sc8280xp_usb43dpphy_cfg = {
++	.offsets		= &qmp_combo_offsets_v5,
++
+ 	.serdes_tbl		= sc8280xp_usb43dp_serdes_tbl,
+ 	.serdes_tbl_num		= ARRAY_SIZE(sc8280xp_usb43dp_serdes_tbl),
+ 	.tx_tbl			= sc8280xp_usb43dp_tx_tbl,
+@@ -1138,7 +1170,6 @@ static const struct qmp_phy_cfg sc8280xp_usb43dpphy_cfg = {
+ 	.vreg_list		= qmp_phy_vreg_l,
+ 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+ 	.regs			= qmp_v4_usb3phy_regs_layout,
+-	.pcs_usb_offset		= 0x300,
+ };
+ 
+ static const struct qmp_phy_cfg sm8250_usb3dpphy_cfg = {
+@@ -2421,6 +2452,22 @@ static int phy_dp_clks_register(struct qmp_combo *qmp, struct device_node *np)
+ 	return 0;
+ }
+ 
++static struct clk_hw *qmp_combo_clk_hw_get(struct of_phandle_args *clkspec, void *data)
++{
++	struct qmp_combo *qmp = data;
++
++	switch (clkspec->args[0]) {
++	case QMP_USB43DP_USB3_PIPE_CLK:
++		return &qmp->pipe_clk_fixed.hw;
++	case QMP_USB43DP_DP_LINK_CLK:
++		return &qmp->dp_link_hw;
++	case QMP_USB43DP_DP_VCO_DIV_CLK:
++		return &qmp->dp_pixel_hw;
++	}
++
++	return ERR_PTR(-EINVAL);
++}
++
+ static int qmp_combo_register_clocks(struct qmp_combo *qmp, struct device_node *usb_np,
+ 					struct device_node *dp_np)
  {
- 	writel(DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
- 	       DP_PHY_PD_CTL_PLL_PWRDN | DP_PHY_PD_CTL_DP_CLAMP_EN,
--	       qmp->dp_pcs + QSERDES_DP_PHY_PD_CTL);
-+	       qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
+@@ -2434,6 +2481,15 @@ static int qmp_combo_register_clocks(struct qmp_combo *qmp, struct device_node *
+ 	if (ret)
+ 		return ret;
  
- 	/* Turn on BIAS current for PHY/PLL */
- 	writel(QSERDES_V3_COM_BIAS_EN | QSERDES_V3_COM_BIAS_EN_MUX |
- 	       QSERDES_V3_COM_CLKBUF_L_EN | QSERDES_V3_COM_EN_SYSCLK_TX_SEL,
- 	       qmp->dp_serdes + QSERDES_V3_COM_BIAS_EN_CLKBUFLR_EN);
- 
--	writel(DP_PHY_PD_CTL_PSR_PWRDN, qmp->dp_pcs + QSERDES_DP_PHY_PD_CTL);
-+	writel(DP_PHY_PD_CTL_PSR_PWRDN, qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
- 
- 	writel(DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
- 	       DP_PHY_PD_CTL_LANE_0_1_PWRDN |
- 	       DP_PHY_PD_CTL_LANE_2_3_PWRDN | DP_PHY_PD_CTL_PLL_PWRDN |
- 	       DP_PHY_PD_CTL_DP_CLAMP_EN,
--	       qmp->dp_pcs + QSERDES_DP_PHY_PD_CTL);
-+	       qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
- 
- 	writel(QSERDES_V3_COM_BIAS_EN |
- 	       QSERDES_V3_COM_BIAS_EN_MUX | QSERDES_V3_COM_CLKBUF_R_EN |
-@@ -1273,22 +1273,22 @@ static void qmp_v3_dp_aux_init(struct qmp_combo *qmp)
- 	       QSERDES_V3_COM_CLKBUF_RX_DRIVE_L,
- 	       qmp->dp_serdes + QSERDES_V3_COM_BIAS_EN_CLKBUFLR_EN);
- 
--	writel(0x00, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG0);
--	writel(0x13, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG1);
--	writel(0x24, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG2);
--	writel(0x00, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG3);
--	writel(0x0a, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG4);
--	writel(0x26, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG5);
--	writel(0x0a, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG6);
--	writel(0x03, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG7);
--	writel(0xbb, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG8);
--	writel(0x03, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG9);
-+	writel(0x00, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG0);
-+	writel(0x13, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG1);
-+	writel(0x24, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG2);
-+	writel(0x00, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG3);
-+	writel(0x0a, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG4);
-+	writel(0x26, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG5);
-+	writel(0x0a, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG6);
-+	writel(0x03, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG7);
-+	writel(0xbb, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG8);
-+	writel(0x03, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG9);
- 	qmp->dp_aux_cfg = 0;
- 
- 	writel(PHY_AUX_STOP_ERR_MASK | PHY_AUX_DEC_ERR_MASK |
- 	       PHY_AUX_SYNC_ERR_MASK | PHY_AUX_ALIGN_ERR_MASK |
- 	       PHY_AUX_REQ_ERR_MASK,
--	       qmp->dp_pcs + QSERDES_V3_DP_PHY_AUX_INTERRUPT_MASK);
-+	       qmp->dp_dp_phy + QSERDES_V3_DP_PHY_AUX_INTERRUPT_MASK);
- }
- 
- static int qmp_combo_configure_dp_swing(struct qmp_combo *qmp,
-@@ -1372,12 +1372,12 @@ static bool qmp_combo_configure_dp_mode(struct qmp_combo *qmp)
- 	 * if (lane_cnt == 4 || orientation == ORIENTATION_CC1)
- 	 *	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
- 	 * if (orientation == ORIENTATION_CC2)
--	 *	writel(0x4c, qmp->dp_pcs + QSERDES_V3_DP_PHY_MODE);
-+	 *	writel(0x4c, qmp->dp_dp_phy + QSERDES_V3_DP_PHY_MODE);
- 	 */
- 	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
--	writel(val, qmp->dp_pcs + QSERDES_DP_PHY_PD_CTL);
-+	writel(val, qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
- 
--	writel(0x5c, qmp->dp_pcs + QSERDES_DP_PHY_MODE);
-+	writel(0x5c, qmp->dp_dp_phy + QSERDES_DP_PHY_MODE);
- 
- 	return reverse;
- }
-@@ -1390,8 +1390,8 @@ static int qmp_v3_configure_dp_phy(struct qmp_combo *qmp)
- 
- 	qmp_combo_configure_dp_mode(qmp);
- 
--	writel(0x05, qmp->dp_pcs + QSERDES_V3_DP_PHY_TX0_TX1_LANE_CTL);
--	writel(0x05, qmp->dp_pcs + QSERDES_V3_DP_PHY_TX2_TX3_LANE_CTL);
-+	writel(0x05, qmp->dp_dp_phy + QSERDES_V3_DP_PHY_TX0_TX1_LANE_CTL);
-+	writel(0x05, qmp->dp_dp_phy + QSERDES_V3_DP_PHY_TX2_TX3_LANE_CTL);
- 
- 	switch (dp_opts->link_rate) {
- 	case 1620:
-@@ -1414,16 +1414,16 @@ static int qmp_v3_configure_dp_phy(struct qmp_combo *qmp)
- 		/* Other link rates aren't supported */
- 		return -EINVAL;
- 	}
--	writel(phy_vco_div, qmp->dp_pcs + QSERDES_V3_DP_PHY_VCO_DIV);
-+	writel(phy_vco_div, qmp->dp_dp_phy + QSERDES_V3_DP_PHY_VCO_DIV);
- 
- 	clk_set_rate(qmp->dp_link_hw.clk, dp_opts->link_rate * 100000);
- 	clk_set_rate(qmp->dp_pixel_hw.clk, pixel_freq);
- 
--	writel(0x04, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG2);
--	writel(0x01, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
--	writel(0x05, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
--	writel(0x01, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
--	writel(0x09, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x04, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG2);
-+	writel(0x01, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
-+	writel(0x05, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
-+	writel(0x01, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
-+	writel(0x09, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 
- 	writel(0x20, qmp->dp_serdes + QSERDES_V3_COM_RESETSM_CNTRL);
- 
-@@ -1434,20 +1434,20 @@ static int qmp_v3_configure_dp_phy(struct qmp_combo *qmp)
- 			10000))
- 		return -ETIMEDOUT;
- 
--	writel(0x19, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x19, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 
--	if (readl_poll_timeout(qmp->dp_pcs + QSERDES_V3_DP_PHY_STATUS,
-+	if (readl_poll_timeout(qmp->dp_dp_phy + QSERDES_V3_DP_PHY_STATUS,
- 			status,
- 			((status & BIT(1)) > 0),
- 			500,
- 			10000))
- 		return -ETIMEDOUT;
- 
--	writel(0x18, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x18, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 	udelay(2000);
--	writel(0x19, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x19, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 
--	return readl_poll_timeout(qmp->dp_pcs + QSERDES_V3_DP_PHY_STATUS,
-+	return readl_poll_timeout(qmp->dp_dp_phy + QSERDES_V3_DP_PHY_STATUS,
- 			status,
- 			((status & BIT(1)) > 0),
- 			500,
-@@ -1467,7 +1467,7 @@ static int qmp_v3_calibrate_dp_phy(struct qmp_combo *qmp)
- 	qmp->dp_aux_cfg %= ARRAY_SIZE(cfg1_settings);
- 	val = cfg1_settings[qmp->dp_aux_cfg];
- 
--	writel(val, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG1);
-+	writel(val, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG1);
- 
++	/*
++	 * Register a single provider for bindings without child nodes.
++	 */
++	if (usb_np == qmp->dev->of_node)
++		return devm_of_clk_add_hw_provider(qmp->dev, qmp_combo_clk_hw_get, qmp);
++
++	/*
++	 * Register multiple providers for legacy bindings with child nodes.
++	 */
+ 	ret = of_clk_add_hw_provider(usb_np, of_clk_hw_simple_get,
+ 					&qmp->pipe_clk_fixed.hw);
+ 	if (ret)
+@@ -2558,6 +2614,63 @@ static int qmp_combo_parse_dt_legacy(struct qmp_combo *qmp, struct device_node *
  	return 0;
  }
-@@ -1476,27 +1476,27 @@ static void qmp_v4_dp_aux_init(struct qmp_combo *qmp)
+ 
++static int qmp_combo_parse_dt(struct qmp_combo *qmp)
++{
++	struct platform_device *pdev = to_platform_device(qmp->dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	const struct qmp_combo_offsets *offs = cfg->offsets;
++	struct device *dev = qmp->dev;
++	void __iomem *base;
++
++	if (!offs)
++		return -EINVAL;
++
++	base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
++
++	qmp->com = base + offs->com;
++	qmp->tx = base + offs->txa;
++	qmp->rx = base + offs->rxa;
++	qmp->tx2 = base + offs->txb;
++	qmp->rx2 = base + offs->rxb;
++
++	qmp->serdes = base + offs->usb3_serdes;
++	qmp->pcs_misc = base + offs->usb3_pcs_misc;
++	qmp->pcs = base + offs->usb3_pcs;
++	qmp->pcs_usb = base + offs->usb3_pcs_usb;
++
++	qmp->dp_serdes = base + offs->dp_serdes;
++	qmp->dp_tx = base + offs->txa;
++	qmp->dp_tx2 = base + offs->txb;
++	qmp->dp_dp_phy = base + offs->dp_dp_phy;
++
++	qmp->pipe_clk = devm_clk_get(dev, "usb3_pipe");
++	if (IS_ERR(qmp->pipe_clk)) {
++		return dev_err_probe(dev, PTR_ERR(qmp->pipe_clk),
++				"failed to get usb3_pipe clock\n");
++	}
++
++	return 0;
++}
++
++static struct phy *qmp_combo_phy_xlate(struct device *dev, struct of_phandle_args *args)
++{
++	struct qmp_combo *qmp = dev_get_drvdata(dev);
++
++	if (args->args_count == 0)
++		return ERR_PTR(-EINVAL);
++
++	switch (args->args[0]) {
++	case QMP_USB43DP_USB3_PHY:
++		return qmp->usb_phy;
++	case QMP_USB43DP_DP_PHY:
++		return qmp->dp_phy;
++	}
++
++	return ERR_PTR(-EINVAL);
++}
++
+ static int qmp_combo_probe(struct platform_device *pdev)
  {
- 	writel(DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_PSR_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
- 	       DP_PHY_PD_CTL_PLL_PWRDN | DP_PHY_PD_CTL_DP_CLAMP_EN,
--	       qmp->dp_pcs + QSERDES_DP_PHY_PD_CTL);
-+	       qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
+ 	struct qmp_combo *qmp;
+@@ -2590,17 +2703,22 @@ static int qmp_combo_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
- 	/* Turn on BIAS current for PHY/PLL */
- 	writel(0x17, qmp->dp_serdes + QSERDES_V4_COM_BIAS_EN_CLKBUFLR_EN);
++	/* Check for legacy binding with child nodes. */
+ 	usb_np = of_get_child_by_name(dev->of_node, "usb3-phy");
+-	if (!usb_np)
+-		return -EINVAL;
++	if (usb_np) {
++		dp_np = of_get_child_by_name(dev->of_node, "dp-phy");
++		if (!dp_np) {
++			of_node_put(usb_np);
++			return -EINVAL;
++		}
  
--	writel(0x00, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG0);
--	writel(0x13, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG1);
--	writel(0xa4, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG2);
--	writel(0x00, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG3);
--	writel(0x0a, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG4);
--	writel(0x26, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG5);
--	writel(0x0a, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG6);
--	writel(0x03, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG7);
--	writel(0xb7, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG8);
--	writel(0x03, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG9);
-+	writel(0x00, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG0);
-+	writel(0x13, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG1);
-+	writel(0xa4, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG2);
-+	writel(0x00, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG3);
-+	writel(0x0a, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG4);
-+	writel(0x26, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG5);
-+	writel(0x0a, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG6);
-+	writel(0x03, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG7);
-+	writel(0xb7, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG8);
-+	writel(0x03, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG9);
- 	qmp->dp_aux_cfg = 0;
+-	dp_np = of_get_child_by_name(dev->of_node, "dp-phy");
+-	if (!dp_np) {
+-		of_node_put(usb_np);
+-		return -EINVAL;
+-	}
++		ret = qmp_combo_parse_dt_legacy(qmp, usb_np, dp_np);
++	} else {
++		usb_np = of_node_get(dev->of_node);
++		dp_np = of_node_get(dev->of_node);
  
- 	writel(PHY_AUX_STOP_ERR_MASK | PHY_AUX_DEC_ERR_MASK |
- 	       PHY_AUX_SYNC_ERR_MASK | PHY_AUX_ALIGN_ERR_MASK |
- 	       PHY_AUX_REQ_ERR_MASK,
--	       qmp->dp_pcs + QSERDES_V4_DP_PHY_AUX_INTERRUPT_MASK);
-+	       qmp->dp_dp_phy + QSERDES_V4_DP_PHY_AUX_INTERRUPT_MASK);
- }
+-	ret = qmp_combo_parse_dt_legacy(qmp, usb_np, dp_np);
++		ret = qmp_combo_parse_dt(qmp);
++	}
+ 	if (ret)
+ 		goto err_node_put;
  
- static void qmp_v4_configure_dp_tx(struct qmp_combo *qmp)
-@@ -1518,15 +1518,15 @@ static int qmp_v45_configure_dp_phy(struct qmp_combo *qmp)
- 	u32 phy_vco_div, status;
- 	unsigned long pixel_freq;
+@@ -2636,7 +2754,12 @@ static int qmp_combo_probe(struct platform_device *pdev)
  
--	writel(0x0f, qmp->dp_pcs + QSERDES_V4_DP_PHY_CFG_1);
-+	writel(0x0f, qmp->dp_dp_phy + QSERDES_V4_DP_PHY_CFG_1);
+ 	phy_set_drvdata(qmp->dp_phy, qmp);
  
- 	qmp_combo_configure_dp_mode(qmp);
+-	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
++	dev_set_drvdata(dev, qmp);
++
++	if (usb_np == dev->of_node)
++		phy_provider = devm_of_phy_provider_register(dev, qmp_combo_phy_xlate);
++	else
++		phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
  
--	writel(0x13, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG1);
--	writel(0xa4, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG2);
-+	writel(0x13, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG1);
-+	writel(0xa4, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG2);
- 
--	writel(0x05, qmp->dp_pcs + QSERDES_V4_DP_PHY_TX0_TX1_LANE_CTL);
--	writel(0x05, qmp->dp_pcs + QSERDES_V4_DP_PHY_TX2_TX3_LANE_CTL);
-+	writel(0x05, qmp->dp_dp_phy + QSERDES_V4_DP_PHY_TX0_TX1_LANE_CTL);
-+	writel(0x05, qmp->dp_dp_phy + QSERDES_V4_DP_PHY_TX2_TX3_LANE_CTL);
- 
- 	switch (dp_opts->link_rate) {
- 	case 1620:
-@@ -1549,15 +1549,15 @@ static int qmp_v45_configure_dp_phy(struct qmp_combo *qmp)
- 		/* Other link rates aren't supported */
- 		return -EINVAL;
- 	}
--	writel(phy_vco_div, qmp->dp_pcs + QSERDES_V4_DP_PHY_VCO_DIV);
-+	writel(phy_vco_div, qmp->dp_dp_phy + QSERDES_V4_DP_PHY_VCO_DIV);
- 
- 	clk_set_rate(qmp->dp_link_hw.clk, dp_opts->link_rate * 100000);
- 	clk_set_rate(qmp->dp_pixel_hw.clk, pixel_freq);
- 
--	writel(0x01, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
--	writel(0x05, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
--	writel(0x01, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
--	writel(0x09, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x01, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
-+	writel(0x05, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
-+	writel(0x01, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
-+	writel(0x09, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 
- 	writel(0x20, qmp->dp_serdes + QSERDES_V4_COM_RESETSM_CNTRL);
- 
-@@ -1582,16 +1582,16 @@ static int qmp_v45_configure_dp_phy(struct qmp_combo *qmp)
- 			10000))
- 		return -ETIMEDOUT;
- 
--	writel(0x19, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x19, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 
--	if (readl_poll_timeout(qmp->dp_pcs + QSERDES_V4_DP_PHY_STATUS,
-+	if (readl_poll_timeout(qmp->dp_dp_phy + QSERDES_V4_DP_PHY_STATUS,
- 			status,
- 			((status & BIT(0)) > 0),
- 			500,
- 			10000))
- 		return -ETIMEDOUT;
- 
--	if (readl_poll_timeout(qmp->dp_pcs + QSERDES_V4_DP_PHY_STATUS,
-+	if (readl_poll_timeout(qmp->dp_dp_phy + QSERDES_V4_DP_PHY_STATUS,
- 			status,
- 			((status & BIT(1)) > 0),
- 			500,
-@@ -1640,11 +1640,11 @@ static int qmp_v4_configure_dp_phy(struct qmp_combo *qmp)
- 	writel(drvr1_en, qmp->dp_tx2 + QSERDES_V4_TX_HIGHZ_DRVR_EN);
- 	writel(bias1_en, qmp->dp_tx2 + QSERDES_V4_TX_TRANSCEIVER_BIAS_EN);
- 
--	writel(0x18, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x18, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 	udelay(2000);
--	writel(0x19, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x19, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 
--	if (readl_poll_timeout(qmp->dp_pcs + QSERDES_V4_DP_PHY_STATUS,
-+	if (readl_poll_timeout(qmp->dp_dp_phy + QSERDES_V4_DP_PHY_STATUS,
- 			status,
- 			((status & BIT(1)) > 0),
- 			500,
-@@ -1697,11 +1697,11 @@ static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp)
- 	writel(drvr1_en, qmp->dp_tx2 + QSERDES_V5_5NM_TX_HIGHZ_DRVR_EN);
- 	writel(bias1_en, qmp->dp_tx2 + QSERDES_V5_5NM_TX_TRANSCEIVER_BIAS_EN);
- 
--	writel(0x18, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x18, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 	udelay(2000);
--	writel(0x19, qmp->dp_pcs + QSERDES_DP_PHY_CFG);
-+	writel(0x19, qmp->dp_dp_phy + QSERDES_DP_PHY_CFG);
- 
--	if (readl_poll_timeout(qmp->dp_pcs + QSERDES_V4_DP_PHY_STATUS,
-+	if (readl_poll_timeout(qmp->dp_dp_phy + QSERDES_V4_DP_PHY_STATUS,
- 			status,
- 			((status & BIT(1)) > 0),
- 			500,
-@@ -1733,7 +1733,7 @@ static int qmp_v4_calibrate_dp_phy(struct qmp_combo *qmp)
- 	qmp->dp_aux_cfg %= ARRAY_SIZE(cfg1_settings);
- 	val = cfg1_settings[qmp->dp_aux_cfg];
- 
--	writel(val, qmp->dp_pcs + QSERDES_DP_PHY_AUX_CFG1);
-+	writel(val, qmp->dp_dp_phy + QSERDES_DP_PHY_AUX_CFG1);
- 
- 	return 0;
- }
-@@ -1906,7 +1906,7 @@ static int qmp_combo_dp_power_off(struct phy *phy)
- 	struct qmp_combo *qmp = phy_get_drvdata(phy);
- 
- 	/* Assert DP PHY power down */
--	writel(DP_PHY_PD_CTL_PSR_PWRDN, qmp->dp_pcs + QSERDES_DP_PHY_PD_CTL);
-+	writel(DP_PHY_PD_CTL_PSR_PWRDN, qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
- 
- 	return 0;
- }
-@@ -2463,15 +2463,16 @@ static int qmp_combo_parse_dt_lecacy_dp(struct qmp_combo *qmp, struct device_nod
- 	 * Resources are indexed as: tx -> 0; rx -> 1; pcs -> 2;
- 	 * tx2 -> 3; rx2 -> 4
- 	 *
--	 * Note that only tx/tx2 and pcs are used by the DP implementation.
-+	 * Note that only tx/tx2 and pcs (dp_phy) are used by the DP
-+	 * implementation.
- 	 */
- 	qmp->dp_tx = devm_of_iomap(dev, np, 0, NULL);
- 	if (IS_ERR(qmp->dp_tx))
- 		return PTR_ERR(qmp->dp_tx);
- 
--	qmp->dp_pcs = devm_of_iomap(dev, np, 2, NULL);
--	if (IS_ERR(qmp->dp_pcs))
--		return PTR_ERR(qmp->dp_pcs);
-+	qmp->dp_dp_phy = devm_of_iomap(dev, np, 2, NULL);
-+	if (IS_ERR(qmp->dp_dp_phy))
-+		return PTR_ERR(qmp->dp_dp_phy);
- 
- 	qmp->dp_tx2 = devm_of_iomap(dev, np, 3, NULL);
- 	if (IS_ERR(qmp->dp_tx2))
+ 	of_node_put(usb_np);
+ 	of_node_put(dp_np);
 -- 
 2.37.4
 
