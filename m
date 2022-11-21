@@ -2,82 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4AA632E46
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54488632E52
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiKUU6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 15:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S229684AbiKUVA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 16:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiKUU6K (ORCPT
+        with ESMTP id S229489AbiKUVAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:58:10 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F92FC6BE0;
-        Mon, 21 Nov 2022 12:58:08 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 6F170377;
-        Mon, 21 Nov 2022 20:58:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6F170377
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1669064288; bh=0Y5tJr46hEduzSZqIT6mT8bVO6wGD5twAYsqE34sHA0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=kd1w4jN5fSAddXUgstqgCLIDtwUZGYQ9v07Kf/lupnhNL0kG7mRU6v0wNL2mz+bHC
-         sLVCpecopH00dEYM28PAiEKAi34XMBuGdZGokYkevv/yPNAxIKF1iiMRTcvZI2eLpn
-         l3pmolATFkRj1T5MirW6/UdMcdyPUt7wPxBC2Jf/51rqZrcEQDWqpLn3h7SMLsJlAH
-         ynQRL6hsmm2tOYVPeP1uX66CA+lmdB3Dc3oMNB/8AzlCbY9TiCXQyghqSBW13cEyFB
-         rgu7OdFAmNnpUwFsxMYrSXYiPEMdkPSsy5EjMka8uFGdhd/HLUVTJmpIKNPsCvw1xb
-         1XzCnqxxWdpBQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, lukas.bulwahn@gmail.com
-Cc:     Dhaval.Giani@amd.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, bilbao@vt.edu, ojeda@kernel.org,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: Re: [PATCH 0/2] kernel-docs: New maintainer and Spanish translation
-In-Reply-To: <20221118170942.2588412-1-carlos.bilbao@amd.com>
-References: <20221118170942.2588412-1-carlos.bilbao@amd.com>
-Date:   Mon, 21 Nov 2022 13:58:07 -0700
-Message-ID: <87wn7o9g9s.fsf@meer.lwn.net>
+        Mon, 21 Nov 2022 16:00:54 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE18CE9DC;
+        Mon, 21 Nov 2022 13:00:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669064453; x=1700600453;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wjfARnG71fsJHl7savTpEsBWA10xYLnS3ZDT8xUWyJA=;
+  b=Os47vSkeOYjXAig5aprJanLsfmzkfg+YmYMzcwZg+WicLl+wYIBZymJ3
+   3wTiZDeH85ju7bsX7fmBpXpWrxY79TTy9DzVFNvcGIvALEFFW6uAuf0A/
+   RFlancpQEis+JpZkY+Ru19xlVFFstpyBS4L2HOmXJ+VFlpZWhS3QKs3pR
+   moIu7zpT7RkKX3rVQi029okiu0SrPvePZDIxftYvcRz1ymn0MwvfPbTyl
+   tnZE89MhW0gJSNpJeTeEWaUO+qf2OKWMAlISLNVYQXGyPP74bELt4Dfq5
+   XwC9Ivy/fX12JwNwg6F3Kel6n6+IQ5nBWLZW9EGKbeLY+x7m2nPfkypBU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="313690577"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="313690577"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 13:00:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="766101463"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="766101463"
+Received: from ticela-or-327.amr.corp.intel.com (HELO [10.209.6.63]) ([10.209.6.63])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 13:00:36 -0800
+Message-ID: <8d3ac4ca-055a-5d54-602c-e378643ad9cd@intel.com>
+Date:   Mon, 21 Nov 2022 13:00:35 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 3/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Content-Language: en-US
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        wei.liu@kernel.org, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20221121195151.21812-1-decui@microsoft.com>
+ <20221121195151.21812-4-decui@microsoft.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221121195151.21812-4-decui@microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Carlos Bilbao <carlos.bilbao@amd.com> writes:
+On 11/21/22 11:51, Dexuan Cui wrote:
+> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +static bool tdx_enc_status_changed_for_contiguous_pages(unsigned long vaddr,
+> +							int numpages, bool enc)
 
-> This cover letter is also a call for anyone interested in adding new, more
-> up to date references to kernel-docs.rst. The document has been abandoned
-> for a while but its original goal is still important.
+That naming is unfortunate.
 
-FWIW, I made an attempt to update this document a few years back and
-concluded that it was pretty much hopeless.  What is there is
-ancient...what do you replace it with?  There is a vast amount of
-content out there that will go obsolete just as quickly.
+First, it's getting way too long.
 
-I'm certainly not going to stand in the way of anybody who wants to
-update and maintain this document, though; I'd love to be proven wrong
-on its value.
+Second, you don't need two of these functions because it's contiguous or
+not.  It's because tdx_enc_status_changed() only works on the direct map.
 
-> By the way, Jon, I read in kernel-docs.rst, regarding LWN.net:
->
-> ":Description: The title says it all. There's a fixed kernel section
->   summarizing developers' work, bug fixes, new features and versions
->   produced during the week. Published every Thursday."
->
-> but I don't think LWN.net is published every Thursday anymore. Let me know
-> if you want a third patch updating this as well.
+>  {
+>  	phys_addr_t start = __pa(vaddr);
+>  	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> @@ -798,6 +800,47 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  	return true;
+>  }
+>  
+> +static bool tdx_enc_status_changed_for_vmalloc(unsigned long vaddr,
+> +					       int numpages, bool enc)
+> +{
+> +	void *start_va = (void *)vaddr;
+> +	void *end_va = start_va + numpages * PAGE_SIZE;
+> +	phys_addr_t pa;
+> +
+> +	if (offset_in_page(vaddr) != 0)
+> +		return false;
+> +
+> +	while (start_va < end_va) {
+> +		pa = slow_virt_to_phys(start_va);
+> +		if (!enc)
+> +			pa |= cc_mkdec(0);
+> +
+> +		if (!tdx_map_gpa(pa, pa + PAGE_SIZE, enc))
+> +			return false;
+> +
+> +		/*
+> +		 * private->shared conversion requires only MapGPA call.
+> +		 *
+> +		 * For shared->private conversion, accept the page using
+> +		 * TDX_ACCEPT_PAGE TDX module call.
+> +		 */
+> +		if (enc && !try_accept_one(&pa, PAGE_SIZE, PG_LEVEL_4K))
+> +			return false;
 
-Well, we do still put out an edition every Thursday, so it's not
-entirely wrong...
+Don't we support large vmalloc() mappings these days?
 
-Thanks,
+> +		start_va += PAGE_SIZE;
+> +	}
+> +
+> +	return true;
+> +}
 
-jon
+I really don't like the copy-and-paste fork here.
+
+I'd almost just rather have this *one* "vmalloc" copy that does
+slow_virt_to_phys() on direct map addresses than have two copies.
+
+Can you please look into making *one* function that works on either kind
+of mapping?
+
+> +static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +{
+> +	if (is_vmalloc_addr((void *)vaddr))
+> +		return tdx_enc_status_changed_for_vmalloc(vaddr, numpages, enc);
+> +
+> +	return tdx_enc_status_changed_for_contiguous_pages(vaddr, numpages, enc);
+> +}
+> +
+>  void __init tdx_early_init(void)
+>  {
+>  	u64 cc_mask;
+
