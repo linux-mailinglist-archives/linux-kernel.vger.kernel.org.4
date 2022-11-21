@@ -2,385 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B030C6328FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B90632901
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiKUQHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:07:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S230038AbiKUQJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiKUQHN (ORCPT
+        with ESMTP id S229831AbiKUQIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:07:13 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751EDD32B6;
-        Mon, 21 Nov 2022 08:07:12 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id a1-20020a17090abe0100b00218a7df7789so3662242pjs.5;
-        Mon, 21 Nov 2022 08:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=12IB05adsxX8CJs3b6PCnumGBT4Eimnh0WnqM7bGwYg=;
-        b=P+DEh7tBJQQkV14hRp/wab/zPxn38VE1gcMgfdRhww8UovHKyq4/hK+RyP7nsLPif5
-         447/d+m9Do0U6XD2isO+PrtVPwsg9WUnEIlBVSpVsvuokXX/BsUGD1S3C+CDRZqDfaDm
-         yqRCrgGEXzICuN88FHyUdb2I3uxHr2VMl+pltIzvQigP3IA+bTS+LUjbr7PVuRPId8+Q
-         aPvlE4WiXSO8v6dAHmn2EVzpdtY4Gkm2iu1ppavAh3Qi6BHWe5Nh6CtKF/uNfORkqXxZ
-         dJM0nSFoBJ891guMYqaby5ZcwlG4d0uGCby+nCUEZ9PCFw3bPBC004tUnuO9U4IfTQhF
-         SXZg==
+        Mon, 21 Nov 2022 11:08:51 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514BBC5B5E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:08:50 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so8869979ila.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:08:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=12IB05adsxX8CJs3b6PCnumGBT4Eimnh0WnqM7bGwYg=;
-        b=59mn2txIpkCZGHzQiClAjseIvoXnIUA5pSA3boc2ikiD4urmuKsua2I+x6JaTbPvsi
-         UqlMdRP+D9GPXiKbypFmKD2BKtUlBO5q+/nJY2hfW2FjgVDg+S6l0di4H/XXonHGGkQl
-         hJwb15pY36iof6bCaVl+oC5KYbqbHuZUos3FHHNwUmhWlo8z8KrgpkGZEQaI6CPJPqcD
-         o7xZ1hWGnGwUr3F5mdoXnatpMd44KuO3HfCYyVfuo1mkGn6ESnTNkGvFts/Oatn0w10R
-         9gCQCDXdVKDy/U6GZUtq2ZJsifCTxfHzvCSkOLk7tzuG7Hdgn/MMLxp5wGMY+99NRrDM
-         yC3g==
-X-Gm-Message-State: ANoB5pnGH9bl26tURZ8oYGl2dAz8tz4nJX4atQgX/7AxGy7iCRHaWOTW
-        LoBum95/qAsbxRHFA7DbIi4=
-X-Google-Smtp-Source: AA0mqf7xT4oQ0gfiwr3ea4Fft5sNAkEffVnTRCQCiVFqdGwF0mJectww7aXAo+6budvJmrzHJ//7Dw==
-X-Received: by 2002:a17:902:6505:b0:189:30f:64d8 with SMTP id b5-20020a170902650500b00189030f64d8mr2693129plk.39.1669046831524;
-        Mon, 21 Nov 2022 08:07:11 -0800 (PST)
-Received: from localhost ([103.4.221.252])
-        by smtp.gmail.com with ESMTPSA id d14-20020a170903230e00b001782a6fbcacsm10129040plh.101.2022.11.21.08.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 08:07:11 -0800 (PST)
-Date:   Mon, 21 Nov 2022 21:36:57 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     David Vernet <void@manifault.com>
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, yhs@fb.com, song@kernel.org, sdf@google.com,
-        john.fastabend@gmail.com, haoluo@google.com, jolsa@kernel.org,
-        kpsingh@kernel.org, tj@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH bpf-next v9 2/4] bpf: Allow trusted pointers to be passed
- to KF_TRUSTED_ARGS kfuncs
-Message-ID: <20221121160657.h6z7xuvedybp5y7s@apollo>
-References: <20221120051004.3605026-1-void@manifault.com>
- <20221120051004.3605026-3-void@manifault.com>
- <20221120194548.g76fytbyxhi7xqcu@apollo>
- <Y3uZxDcEw0TzZDo7@maniforge.lan>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sGxC+usgv6yhaYnFxXwjDdn0RrDa3glghs/ovAtSB9g=;
+        b=nUJqAKtSsY5mU0QmVFUwaUxdYHQVdBG3Hx+Gq5TXi6G8o5kdNGhAiIcp2cbTETpIA2
+         9JXkhatdj6W/LHJ+PUdx0ccw4JXUQkMfcbzgeVNWs52uwj0rIxr8iPYqRqS0WnDgZCLt
+         NahBjPuUbJP2bpKySGFOq5ESOHds+2rkltaPznbOOfDNHIj947ekp+MnCdQQRGqedoXO
+         JV71UPiRI7XG/9AqWaTXTPwECawqauz1e8WofS8O1lsF8brxqhj9pRn28LHXzw8H55IP
+         eil13fPsDAqYCMsEnM1oKabnLXThnBn8qBWNuBMm1PxtX8hqqra58CtZEYnwvoJUP26s
+         8Egw==
+X-Gm-Message-State: ANoB5plpKMHYbmTQYzF3LJ83Y8n8/vtkQj6ddIZGAVoZOBH4+q34DI7T
+        J0GZNb5chmO9TM6a9PErt2S/4C/gZ2j4q6k6VeaEhdZWqCL+
+X-Google-Smtp-Source: AA0mqf70BOA7Lv3gZLuaNYLcF2q/pv/fvXJAuVjgSJKrqz3GpgF3Ws8bc/fgOVjymiHhg3b1Dzqr/+kRsKgolZXMrnN/TMz3j9K2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3uZxDcEw0TzZDo7@maniforge.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cc50:0:b0:302:ad5b:a728 with SMTP id
+ t16-20020a92cc50000000b00302ad5ba728mr304996ilq.110.1669046929695; Mon, 21
+ Nov 2022 08:08:49 -0800 (PST)
+Date:   Mon, 21 Nov 2022 08:08:49 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005bab1105edfd4565@google.com>
+Subject: [syzbot] WARNING in kfree_rcu_work
+From:   syzbot <syzbot+f6ec2d932b89616d83c7@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 09:01:16PM IST, David Vernet wrote:
-> On Mon, Nov 21, 2022 at 01:15:48AM +0530, Kumar Kartikeya Dwivedi wrote:
-> > On Sun, Nov 20, 2022 at 10:40:02AM IST, David Vernet wrote:
-> > > Kfuncs currently support specifying the KF_TRUSTED_ARGS flag to signal
-> > > to the verifier that it should enforce that a BPF program passes it a
-> > > "safe", trusted pointer. Currently, "safe" means that the pointer is
-> > > either PTR_TO_CTX, or is refcounted. There may be cases, however, where
-> > > the kernel passes a BPF program a safe / trusted pointer to an object
-> > > that the BPF program wishes to use as a kptr, but because the object
-> > > does not yet have a ref_obj_id from the perspective of the verifier, the
-> > > program would be unable to pass it to a KF_ACQUIRE | KF_TRUSTED_ARGS
-> > > kfunc.
-> > >
-> > > The solution is to expand the set of pointers that are considered
-> > > trusted according to KF_TRUSTED_ARGS, so that programs can invoke kfuncs
-> > > with these pointers without getting rejected by the verifier.
-> > >
-> > > There is already a PTR_UNTRUSTED flag that is set in some scenarios,
-> > > such as when a BPF program reads a kptr directly from a map
-> > > without performing a bpf_kptr_xchg() call. These pointers of course can
-> > > and should be rejected by the verifier. Unfortunately, however,
-> > > PTR_UNTRUSTED does not cover all the cases for safety that need to
-> > > be addressed to adequately protect kfuncs. Specifically, pointers
-> > > obtained by a BPF program "walking" a struct are _not_ considered
-> > > PTR_UNTRUSTED according to BPF. For example, say that we were to add a
-> > > kfunc called bpf_task_acquire(), with KF_ACQUIRE | KF_TRUSTED_ARGS, to
-> > > acquire a struct task_struct *. If we only used PTR_UNTRUSTED to signal
-> > > that a task was unsafe to pass to a kfunc, the verifier would mistakenly
-> > > allow the following unsafe BPF program to be loaded:
-> > >
-> > > SEC("tp_btf/task_newtask")
-> > > int BPF_PROG(unsafe_acquire_task,
-> > >              struct task_struct *task,
-> > >              u64 clone_flags)
-> > > {
-> > >         struct task_struct *acquired, *nested;
-> > >
-> > >         nested = task->last_wakee;
-> > >
-> > >         /* Would not be rejected by the verifier. */
-> > >         acquired = bpf_task_acquire(nested);
-> > >         if (!acquired)
-> > >                 return 0;
-> > >
-> > >         bpf_task_release(acquired);
-> > >         return 0;
-> > > }
-> > >
-> > > To address this, this patch defines a new type flag called PTR_TRUSTED
-> > > which tracks whether a PTR_TO_BTF_ID pointer is safe to pass to a
-> > > KF_TRUSTED_ARGS kfunc or a BPF helper function. PTR_TRUSTED pointers are
-> > > passed directly from the kernel as a tracepoint or struct_ops callback
-> > > argument. Any nested pointer that is obtained from walking a PTR_TRUSTED
-> > > pointer is no longer PTR_TRUSTED. From the example above, the struct
-> > > task_struct *task argument is PTR_TRUSTED, but the 'nested' pointer
-> > > obtained from 'task->last_wakee' is not PTR_TRUSTED.
-> > >
-> > > A subsequent patch will add kfuncs for storing a task kfunc as a kptr,
-> > > and then another patch will add selftests to validate.
-> > >
-> > > Signed-off-by: David Vernet <void@manifault.com>
-> > > ---
-> >
-> > Sorry that I couldn't look at it earlier.
-> >
-> > > [...]
-> > > @@ -5884,8 +5889,18 @@ static const struct bpf_reg_types scalar_types = { .types = { SCALAR_VALUE } };
-> > >  static const struct bpf_reg_types context_types = { .types = { PTR_TO_CTX } };
-> > >  static const struct bpf_reg_types ringbuf_mem_types = { .types = { PTR_TO_MEM | MEM_RINGBUF } };
-> > >  static const struct bpf_reg_types const_map_ptr_types = { .types = { CONST_PTR_TO_MAP } };
-> > > -static const struct bpf_reg_types btf_ptr_types = { .types = { PTR_TO_BTF_ID } };
-> > > -static const struct bpf_reg_types percpu_btf_ptr_types = { .types = { PTR_TO_BTF_ID | MEM_PERCPU } };
-> > > +static const struct bpf_reg_types btf_ptr_types = {
-> > > +	.types = {
-> > > +		PTR_TO_BTF_ID,
-> > > +		PTR_TO_BTF_ID | PTR_TRUSTED,
-> > > +	},
-> > > +};
-> > > +static const struct bpf_reg_types percpu_btf_ptr_types = {
-> > > +	.types = {
-> > > +		PTR_TO_BTF_ID | MEM_PERCPU,
-> > > +		PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED,
-> >
-> > Where is PTR_TRUSTED set for MEM_PERCPU?
->
-> We set PTR_TRUSTED in btf_ctx_access() for all PTR_TO_BTF_ID regs for
-> BPF_PROG_TYPE_TRACING and BPF_PROG_TYPE_STRUCT_OPS. See [0]. Let me know
-> if I've misunderstood anything.
->
-> [0]: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/kernel/bpf/btf.c#n5972
->
+Hello,
 
-Ah, I see. Makes sense.
+syzbot found the following issue on:
 
-> > > +	}
-> > > +};
-> > >  static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
-> > >  static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
-> > >  static const struct bpf_reg_types const_str_ptr_types = { .types = { PTR_TO_MAP_VALUE } };
-> > > @@ -5973,7 +5988,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
-> > >  	return -EACCES;
-> > >
-> > >  found:
-> > > -	if (reg->type == PTR_TO_BTF_ID) {
-> > > +	if (reg->type == PTR_TO_BTF_ID || reg->type & PTR_TRUSTED) {
-> >
-> > Now, earlier MEM_ALLOC was supposed to not enter this branch. If your patch
-> > allows MEM_ALLOC | PTR_TRUSTED (but I don't think it does), it will enter this
-> > branch. I think it is better to just be explicit and say PTR_TO_BTF_ID ||
-> > PTR_TO_BTF_ID | PTR_TRUSTED.
->
-> Currently I don't believe we set PTR_TRUSTED | MEM_ALLOC, so this won't
-> happen. I originally had this code doing:
->
-> 	if (reg->type == PTR_TO_BTF_ID || reg->type & BPF_REG_TRUSTED_MODIFIERS) {
->
-> and it caused a bunch of the linked list tests to fail with:
->
-> verifier internal error: R0 has non-overwritten BPF_PTR_POISON type
->
+HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=121adaf9880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
+dashboard link: https://syzkaller.appspot.com/bug?extid=f6ec2d932b89616d83c7
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1538c909880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16e5ce19880000
 
-Yes, because that will make MEM_ALLOC enter this branch for
-bpf_spin_lock/bpf_spin_unlock, which is what shouldn't be happening. The else if
-(type_is_alloc) is precisely to handle MEM_ALLOC case.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
 
-> Checking just PTR_TRUSTED avoids this (which I assume is what you were
-> worried about?). I'm happy to respin a patch that applies your
-> suggestion to do || PTR_TO_BTF_ID | PTR_TRUSTED, but to be honest I
-> don't think it buys us anything. That whole codepath where we take it
-> only in the event of no modifiers is kind of sketchy. Consider, e.g.,
-> that we're skipping this check if we don't take that path:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f6ec2d932b89616d83c7@syzkaller.appspotmail.com
 
-It should be taken for PTR_TO_BTF_ID | PTR_TRUSTED, but not those with
-MEM_ALLOC.
->
-> 	if (!btf_struct_ids_match(&env->log, reg->btf, reg->btf_id, reg->off,
-> 				  btf_vmlinux, *arg_btf_id,
-> 				  strict_type_match)) {
-> 		verbose(env, "R%d is of type %s but %s is expected\n",
-> 			regno, kernel_type_name(reg->btf, reg->btf_id),
-> 			kernel_type_name(btf_vmlinux, *arg_btf_id));
-> 		return -EACCES;
-> 	}
->
+------------[ cut here ]------------
+ODEBUG: active_state not available (active state 0) object type: rcu_head hint: 0x0
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+Modules linked in:
+CPU: 1 PID: 21 Comm: kworker/1:0 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Workqueue: events kfree_rcu_work
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : debug_print_object lib/debugobjects.c:502 [inline]
+pc : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+lr : debug_print_object lib/debugobjects.c:502 [inline]
+lr : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+sp : ffff80000f33bcc0
+x29: ffff80000f33bcc0 x28: 0000000000000150 x27: 0000000000000000
+x26: 0000000000000000 x25: ffff0001fefde3e8 x24: 0000000000000000
+x23: 0000000000000001 x22: 0000000000000000 x21: ffff80000f175000
+x20: ffff0000cc581000 x19: ffff80000c0eec40 x18: 0000000000000225
+x17: ffff80000c0ed83c x16: ffff80000dc18158 x15: ffff0000c0331a40
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c0331a40
+x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
+x8 : e93e9ee3facb8300 x7 : ffff800008165f54 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000006 x1 : 0000000100000000 x0 : 0000000000000053
+Call trace:
+ debug_print_object lib/debugobjects.c:502 [inline]
+ debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+ debug_rcu_head_unqueue kernel/rcu/rcu.h:198 [inline]
+ debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
+ kfree_rcu_work+0xa8/0x31c kernel/rcu/tree.c:3032
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+irq event stamp: 109630
+hardirqs last  enabled at (109629): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (109629): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
+hardirqs last disabled at (109630): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (97456): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (96913): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+ODEBUG: deactivate not available (active state 0) object type: rcu_head hint: 0x0
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
+Modules linked in:
+CPU: 1 PID: 21 Comm: kworker/1:0 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Workqueue: events kfree_rcu_work
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : debug_print_object lib/debugobjects.c:502 [inline]
+pc : debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
+lr : debug_print_object lib/debugobjects.c:502 [inline]
+lr : debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
+sp : ffff80000f33bcd0
+x29: ffff80000f33bcd0 x28: 0000000000000150 x27: 0000000000000000
+x26: 0000000000000000 x25: ffff0001fefde3e8 x24: 0000000000000000
+x23: ffff0000cc581000 x22: 0000000000000000 x21: ffff80000f175000
+x20: ffff0000cc581000 x19: ffff80000c0eec40 x18: 0000000000000313
+x17: 72203a6570797420 x16: ffff80000dc18158 x15: ffff0000c0331a40
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c0331a40
+x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
+x8 : e93e9ee3facb8300 x7 : ffff800008165f54 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000006 x1 : 0000000100000000 x0 : 0000000000000051
+Call trace:
+ debug_print_object lib/debugobjects.c:502 [inline]
+ debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
+ debug_rcu_head_unqueue kernel/rcu/rcu.h:201 [inline]
+ debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
+ kfree_rcu_work+0xb4/0x31c kernel/rcu/tree.c:3032
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+irq event stamp: 109762
+hardirqs last  enabled at (109761): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (109761): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
+hardirqs last disabled at (109762): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (109754): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (109737): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+ODEBUG: active_state not available (active state 0) object type: rcu_head hint: 0x0
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+Modules linked in:
+CPU: 1 PID: 21 Comm: kworker/1:0 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Workqueue: events kfree_rcu_work
 
-That's because we shouldn't take that path. MEM_ALLOC is for prog BTF
-PTR_TO_BTF_ID, matching with btf_vmlinux types is incorrect.
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : debug_print_object lib/debugobjects.c:502 [inline]
+pc : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+lr : debug_print_object lib/debugobjects.c:502 [inline]
+lr : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+sp : ffff80000f33bcc0
+x29: ffff80000f33bcc0
+ x28: 0000000000000151
+ x27: 0000000000000000
 
-You won't see errors now because that case of MEM_ALLOC | PTR_TRUSTED is not
-happening.
+x26: 0000000000000000
+ x25: ffff0001fefde3e8
+ x24: 0000000000000000
 
-> I know we check it elsewhere such as in map_kptr_match_type() and
-> process_kf_arg_ptr_to_list_node(), but it feels pretty brittle to say:
-> "Check it only if there are no modifiers set, else check it later in
-> some helper-specific logic". I'd prefer to keep the check as broad as
-> possible for now, and then refactor and clean this up. Lmk if you
-> disagree.
->
+x23: 0000000000000001
+ x22: 0000000000000000
+ x21: ffff80000f175000
+x20: ffff0000cc581100
+ x19: ffff80000c0eec40 x18: 0000000000000313
+x17: 2020202020205720 x16: 2020202020202047 x15: 203a6465746e6961
+x14: 5420353331726f74 x13: 205d383734335420 x12: 5b5d373438373031
+x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
+x8 : e93e9ee3facb8300 x7 : 205b5d3734383730 x6 : ffff8000081c880c
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0000c0331a40 x1 : 0000000100000000 x0 : 0000000000000053
+Call trace:
+ debug_print_object lib/debugobjects.c:502 [inline]
+ debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+ debug_rcu_head_unqueue kernel/rcu/rcu.h:198 [inline]
+ debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
+ kfree_rcu_work+0xa8/0x31c kernel/rcu/tree.c:3032
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+irq event stamp: 109762
+hardirqs last  enabled at (109761): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (109761): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
+hardirqs last disabled at (109762): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (109754): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (109737): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+ODEBUG: deactivate not available (active state 0) object type: rcu_head hint: 0x0
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
+Modules linked in:
+CPU: 1 PID: 21 Comm: kworker/1:0 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Workqueue: events kfree_rcu_work
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : debug_print_object lib/debugobjects.c:502 [inline]
+pc : debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
+lr : debug_print_object lib/debugobjects.c:502 [inline]
+lr : debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
+sp : ffff80000f33bcd0
+x29: ffff80000f33bcd0 x28: 0000000000000151 x27: 0000000000000000
+x26: 0000000000000000 x25: ffff0001fefde3e8 x24: 0000000000000000
+x23: ffff0000cc581100 x22: 0000000000000000 x21: ffff80000f175000
+x20: ffff0000cc581100 x19: ffff80000c0eec40 x18: 00000000000000ff
+x17: 0000000000000000 x16: 0000000000000117 x15: 0000000000000018
+x14: 0000000002d879f3 x13: 0000000000000120 x12: 0000000000000000
+x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
+x8 : e93e9ee3facb8300 x7 : 00000000000f4240 x6 : ffff800008165f54
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0000c0331a40 x1 : 0000000100000000 x0 : 0000000000000051
+Call trace:
+ debug_print_object lib/debugobjects.c:502 [inline]
+ debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
+ debug_rcu_head_unqueue kernel/rcu/rcu.h:201 [inline]
+ debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
+ kfree_rcu_work+0xb4/0x31c kernel/rcu/tree.c:3032
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+irq event stamp: 109762
+hardirqs last  enabled at (109761): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (109761): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
+hardirqs last disabled at (109762): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (109754): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (109737): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+ODEBUG: active_state not available (active state 0) object type: rcu_head hint: 0x0
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
+WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+Modules linked in:
+CPU: 1 PID: 21 Comm: kworker/1:0 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Workqueue: events kfree_rcu_work
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : debug_print_object lib/debugobjects.c:502 [inline]
+pc : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+lr : debug_print_object lib/debugobjects.c:502 [inline]
+lr : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+sp : ffff80000f33bcc0
+x29: ffff80000f33bcc0 x28: 0000000000000152 x27: 0000000000000000
+x26: 0000000000000000 x25: ffff0001fefde3e8 x24: 0000000000000000
+x23: 0000000000000001 x22: 0000000000000000 x21: ffff80000f175000
+x20: ffff0000cc581280 x19: ffff80000c0eec40 x18: 00000000000000ff
+x17: 3a65707974207463 x16: 656a626f20293020 x15: 6574617473206576
+x14: 697463612820656c x13: 205d313254202020 x12: 5b5d373733313732
+x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
+x8 : e93e9ee3facb8300 x7 : 205b5d3737333137 x6 : ffff80000c0b2b74
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000053
+Call trace:
+ debug_print_object lib/debugobjects.c:502 [inline]
+ debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+ debug_rcu_head_unqueue kernel/rcu/rcu.h:198 [inline]
+ debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
+ kfree_rcu_work+0xa8/0x31c kernel/rcu/tree.c:3032
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+irq event stamp: 109762
+hardirqs last  enabled at (109761): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (109761): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
+hardirqs last disabled at (109762): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (109754): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (109737): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+---[ end trace 0000000000000000 ]---
 
-I think this one needs to be fixed, both MEM_ALLOC and MEM_ALLOC | PTR_TRUSTED
-should go to that else if branch. This should only be taken for PTR_TO_BTF_ID
-and PTR_TO_BTF_ID | PTR_TRUSTED.
 
-> >
-> > >  		/* For bpf_sk_release, it needs to match against first member
-> > >  		 * 'struct sock_common', hence make an exception for it. This
-> > >  		 * allows bpf_sk_release to work for multiple socket types.
-> > > @@ -6055,6 +6070,8 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
-> > >  	 */
-> > >  	case PTR_TO_BTF_ID:
-> > >  	case PTR_TO_BTF_ID | MEM_ALLOC:
-> > > +	case PTR_TO_BTF_ID | PTR_TRUSTED:
-> > > +	case PTR_TO_BTF_ID | MEM_ALLOC | PTR_TRUSTED:
-> >
-> > This and the one below:
-> >
-> > > @@ -8366,6 +8402,7 @@ static int check_reg_allocation_locked(struct bpf_verifier_env *env, struct bpf_
-> > >  		ptr = reg->map_ptr;
-> > >  		break;
-> > >  	case PTR_TO_BTF_ID | MEM_ALLOC:
-> > > +	case PTR_TO_BTF_ID | MEM_ALLOC | PTR_TRUSTED:
-> >
-> > I think this will never be set, based on my reading of the code.
-> > Is the case with MEM_ALLOC | PTR_TRUSTED ever possible?
-> > And if this is needed here, why not update btf_struct_access?
-> > And KF_ARG_PTR_TO_ALLOC_BTF_ID is not updated either?
-> > Let me know if I missed something.
->
-> These are all reasonable observations, but we went into them
-> intentionally. Eventually the goal is to have PTR_TRUSTED be the single
-> source of truth for whether a pointer is trusted or not. See [1] for the
-> thread with the discussions.
->
-> I agree that I don't believe that MEM_ALLOC | PTR_TRUSTED can be set
-> together yet, but eventually they should and will be. Conceptually, the
-> behavior of check_func_arg_reg_off() should be the same for
-> PTR_TO_BTF_ID, PTR_TO_BTF_ID | MEM_ALLOC | PTR_TRUSTED, PTR_TO_BTF_ID |
-> PTR_TRUSTED, etc, so IMO it's correct to add that case to
-> check_func_arg_reg_off() even if it's not yet used. Not adding it
-> because no callers currently happen to require it is IMO a bit brittle.
->
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-I don't have a problem with PTR_TRUSTED being the source of truth. I think it's
-fine.
-
-I was just pointing out that the checks are there in some places but not all,
-even if there are no users, you should be accounting for MEM_ALLOC | PTR_TRUSTED
-either everywhere or nowhere. It was a bit confusing to see it in
-check_reg_allocation_locked right now but not in check_ptr_to_btf_access (e.g.
-it would disallow writes for MEM_ALLOC | PTR_TRUSTED), or in kfunc handling.
-
-But I guess you plan to address that in a follow up, so it's not a big deal.
-It would be a great improvement over the status quo if we can make this work
-properly, and then finally flip KF_TRUSTED_ARGS eventually to default on.
-
-> [1]: https://lore.kernel.org/all/20221119164855.qvhgdpg5axa7kzey@macbook-pro-5.dhcp.thefacebook.com/
->
-> > >  		/* When referenced PTR_TO_BTF_ID is passed to release function,
-> > >  		 * it's fixed offset must be 0.	In the other cases, fixed offset
-> > >  		 * can be non-zero.
-> > > @@ -7939,6 +7956,25 @@ static bool is_kfunc_arg_kptr_get(struct bpf_kfunc_call_arg_meta *meta, int arg)
-> > >  	return arg == 0 && (meta->kfunc_flags & KF_KPTR_GET);
-> > >  }
-> > >
-> > > +static bool is_trusted_reg(const struct bpf_reg_state *reg)
-> > > +{
-> > > +	/* A referenced register is always trusted. */
-> > > +	if (reg->ref_obj_id)
-> > > +		return true;
-> > > +
-> > > +	/* If a register is not referenced, it is trusted if it has either the
-> > > +	 * MEM_ALLOC or PTR_TRUSTED type modifiers, and no others. Some of the
-> > > +	 * other type modifiers may be safe, but we elect to take an opt-in
-> > > +	 * approach here as some (e.g. PTR_UNTRUSTED and PTR_MAYBE_NULL) are
-> > > +	 * not.
-> > > +	 *
-> > > +	 * Eventually, we should make PTR_TRUSTED the single source of truth
-> > > +	 * for whether a register is trusted.
-> > > +	 */
-> > > +	return type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS &&
-> > > +	       !bpf_type_has_unsafe_modifiers(reg->type);
-> > > +}
-> > > +
-> > >  static bool __kfunc_param_match_suffix(const struct btf *btf,
-> > >  				       const struct btf_param *arg,
-> > >  				       const char *suffix)
-> > > @@ -8220,7 +8256,7 @@ static int process_kf_arg_ptr_to_btf_id(struct bpf_verifier_env *env,
-> > >  	const char *reg_ref_tname;
-> > >  	u32 reg_ref_id;
-> > >
-> > > -	if (reg->type == PTR_TO_BTF_ID) {
-> > > +	if (base_type(reg->type) == PTR_TO_BTF_ID) {
-> > >  		reg_btf = reg->btf;
-> > >  		reg_ref_id = reg->btf_id;
-> > >  	} else {
-> > >  		ptr = reg->btf;
-> > >  		break;
-> > >  	default:
-> > > @@ -8596,8 +8633,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
-> > >  		case KF_ARG_PTR_TO_BTF_ID:
-> > >  			if (!is_kfunc_trusted_args(meta))
-> > >  				break;
-> > > -			if (!reg->ref_obj_id) {
-> > > -				verbose(env, "R%d must be referenced\n", regno);
-> > > +
-> > > +			if (!is_trusted_reg(reg)) {
-> > > +				verbose(env, "R%d must be referenced or trusted\n", regno);
-> > >  				return -EINVAL;
-> > >  			}
-> > >  			fallthrough;
-> > > @@ -8702,9 +8740,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
-> > >  			break;
-> > >  		case KF_ARG_PTR_TO_BTF_ID:
-> > >  			/* Only base_type is checked, further checks are done here */
-> > > -			if (reg->type != PTR_TO_BTF_ID &&
-> > > -			    (!reg2btf_ids[base_type(reg->type)] || type_flag(reg->type))) {
-> > > -				verbose(env, "arg#%d expected pointer to btf or socket\n", i);
-> > > +			if ((base_type(reg->type) != PTR_TO_BTF_ID ||
-> > > +			     bpf_type_has_unsafe_modifiers(reg->type)) &&
-> > > +			    !reg2btf_ids[base_type(reg->type)]) {
-> > > +				verbose(env, "arg#%d is %s ", i, reg_type_str(env, reg->type));
-> > > +				verbose(env, "expected %s or socket\n",
-> > > +					reg_type_str(env, base_type(reg->type) |
-> > > +							  (type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS)));
-> > >  				return -EINVAL;
-> > >  			}
-> > >  			ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i);
-> > > @@ -14713,6 +14755,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
-> > >  			break;
-> > >  		case PTR_TO_BTF_ID:
-> > >  		case PTR_TO_BTF_ID | PTR_UNTRUSTED:
-> > > +		case PTR_TO_BTF_ID | PTR_TRUSTED:
-> > >  		/* PTR_TO_BTF_ID | MEM_ALLOC always has a valid lifetime, unlike
-> > >  		 * PTR_TO_BTF_ID, and an active ref_obj_id, but the same cannot
-> > >  		 * be said once it is marked PTR_UNTRUSTED, hence we must handle
-> > > @@ -14720,6 +14763,8 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
-> > >  		 * for this case.
-> > >  		 */
-> > >  		case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
-> > > +		case PTR_TO_BTF_ID | PTR_UNTRUSTED | PTR_TRUSTED:
-> >
-> > I feel this is confusing. What do we mean with PTR_UNTRUSTED | PTR_TRUSTED?
->
-> 100% agreed. There are plans to clean this up, see the link above.
-
-Great, looking forward.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
