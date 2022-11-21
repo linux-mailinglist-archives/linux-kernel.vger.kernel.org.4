@@ -2,67 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2C5632A30
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65370632A57
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiKURDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S229613AbiKURGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiKURDK (ORCPT
+        with ESMTP id S229568AbiKURGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:03:10 -0500
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38D168689
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:03:08 -0800 (PST)
-Date:   Mon, 21 Nov 2022 17:02:59 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail3; t=1669050183; x=1669309383;
-        bh=jIwhtVqiPBD1rHokp4VDGo3ANO+jasGNytDOydWD1NA=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=FxzWR6n2hgvy2nlcNngrgmpUJlAYby24mS11f5lwUXxq7UuQHcZyE1BRPjDWxKbRO
-         G2savClyLGnLMRvnPv/kZIj9G6EhQLaRezRiZOPtHBhs7WT6T5N0evAXWdeImovLaR
-         2qbeq37MwmBDjPojiKdB5ihawkKN5xWByRBIH/8Z9IRlfdsoq+ymGO0EI3iZ5ckYg8
-         t850sdBtbSLdCAKPtQVsJU3olMx5IKOUrl3kBWzs1oTJz8V/y0SsxBjO9NqsNWrjlu
-         JNSxcyQ6fmJRpa6+7I2mhdb7ZNQybJqa1UU5tQc9GpgVwuoyl7whHVY+kKebo6qez6
-         n4sizTBV8TgHg==
-To:     =?utf-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     dri-devel@lists.freedesktop.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: git send-email friendly smtp provider anyone?
-Message-ID: <29wzxSbEeYmXyru0ObDIAEG_W_4Wh0qj77Y6zMgmfT6UbaftflIVKCcAdEuSsmsIoK-85IvhTC73Yh8UDm6et4EK5JZZbeeByj_j0spUc9Y=@emersion.fr>
-In-Reply-To: <72e873e9-d4df-895b-2531-30168b8a4d64@tronnes.org>
-References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org> <9-qCHLoI7vMtVX2UmZbrcDSyMIJRqoWx6G2sZEn08RP15vYjPwng_fInDkKYPvllUddwXshfYs_fIpPH3_TeFLat2MQx_LT5Hfb0dxb1vGA=@emersion.fr> <72e873e9-d4df-895b-2531-30168b8a4d64@tronnes.org>
-Feedback-ID: 1358184:user:proton
+        Mon, 21 Nov 2022 12:06:45 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB8DCC78F2;
+        Mon, 21 Nov 2022 09:06:43 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oxAFl-00041n-00; Mon, 21 Nov 2022 18:06:41 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id C2930C1B8B; Mon, 21 Nov 2022 18:03:52 +0100 (CET)
+Date:   Mon, 21 Nov 2022 18:03:52 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: DTS: CI20: fix reset line polarity of the ethernet
+ controller
+Message-ID: <20221121170352.GA3200@alpha.franken.de>
+References: <Y3e2Q9jeGotRlwqV@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3e2Q9jeGotRlwqV@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, November 21st, 2022 at 17:52, Noralf Tr=C3=B8nnes <noralf@tronne=
-s.org> wrote:
+On Fri, Nov 18, 2022 at 08:43:47AM -0800, Dmitry Torokhov wrote:
+> The reset line is called PWRST#, annotated as "active low" in the
+> binding documentation, and is driven low and then high by the driver to
+> reset the chip. However in device tree for CI20 board it was incorrectly
+> marked as "active high". Fix it.
+> 
+> Because (as far as I know) the ci20.dts is always built in the kernel I
+> elected not to also add a quirk to gpiolib to force the polarity there.
+> 
+> Fixes: db49ca38579d ("net: davicom: dm9000: switch to using gpiod API")
+> Reported-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>  arch/mips/boot/dts/ingenic/ci20.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+> index 37c46720c719..f38c39572a9e 100644
+> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+> @@ -438,7 +438,7 @@ dm9000@6 {
+>  		ingenic,nemc-tAW = <50>;
+>  		ingenic,nemc-tSTRV = <100>;
+>  
+> -		reset-gpios = <&gpf 12 GPIO_ACTIVE_HIGH>;
+> +		reset-gpios = <&gpf 12 GPIO_ACTIVE_LOW>;
+>  		vcc-supply = <&eth0_power>;
+>  
+>  		interrupt-parent = <&gpe>;
+> -- 
+> 2.38.1.584.g0f3c55d4c2-goog
 
-> Den 21.11.2022 14.33, skrev Simon Ser:
->=20
-> > I think you can apply for a linux.dev mailbox 1.
->=20
-> Yeah you're right, I didn't know about that possibility.
-> But it depends on whether or not I can just use their smtp server and
-> keep my current email address. This looks like what's the problem with
-> my current ISP, I need to use the email account I have in their email
-> service (that I've never used) for sending through their smtp server,
-> but I want to send From: another email address.
+applied to mips-next.
 
-That's not possible. It breaks DKIM, so your emails will end up in Spam
-folders or be rejected. You need to use the SMTP server tied to your
-email address.
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
