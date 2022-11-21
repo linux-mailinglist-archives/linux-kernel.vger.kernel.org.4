@@ -2,179 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFCA631894
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 03:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27C663188F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 03:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiKUCRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 21:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S229816AbiKUCQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 21:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiKUCRd (ORCPT
+        with ESMTP id S229498AbiKUCQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 21:17:33 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8779627DE9;
-        Sun, 20 Nov 2022 18:16:38 -0800 (PST)
-Received: from droid01-xa.amlogic.com (10.88.11.200) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Mon, 21 Nov 2022
- 10:16:35 +0800
-From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Chris Healy <healych@amazon.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v12 3/3] dt-binding: perf: Add Amlogic DDR PMU
-Date:   Mon, 21 Nov 2022 10:16:00 +0800
-Message-ID: <20221121021602.3306998-3-jiucheng.xu@amlogic.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221121021602.3306998-1-jiucheng.xu@amlogic.com>
-References: <20221121021602.3306998-1-jiucheng.xu@amlogic.com>
+        Sun, 20 Nov 2022 21:16:46 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8712B286DD;
+        Sun, 20 Nov 2022 18:16:43 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NFrXS1C1vzFqRV;
+        Mon, 21 Nov 2022 10:13:28 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 10:16:41 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
+ 2022 10:16:41 +0800
+Message-ID: <db11fe6a-356b-a522-f275-9b8ce8ab3b4a@huawei.com>
+Date:   Mon, 21 Nov 2022 10:16:41 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.88.11.200]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH v2] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment
+ usage as dirty
+Content-Language: en-US
+To:     Ryusuke Konishi <konishi.ryusuke@gmail.com>
+CC:     <linux-nilfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, <akpm@linux-foundation.org>
+References: <20221119093424.193145-1-chenzhongjin@huawei.com>
+ <CAKFNMokEHD4FfPRcuRB4GrVquiT_RkWkNGKgb+ZPLPSGwfbDHQ@mail.gmail.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <CAKFNMokEHD4FfPRcuRB4GrVquiT_RkWkNGKgb+ZPLPSGwfbDHQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding documentation for the Amlogic G12 series DDR
-performance monitor unit.
+Hi,
 
-Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Changes v11 -> v12:
-  - No change
+On 2022/11/19 22:09, Ryusuke Konishi wrote:
+> On Sat, Nov 19, 2022 at 6:37 PM Chen Zhongjin wrote:
+>> In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
+>> nilfs_segment_usage is not set dirty, which makes it can be found by
+>> nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
+> The body of the patch looks OK, but this part of the commit log is a
+> bit misleading.
+> Could you please modify the expression so that we can understand this
+> patch fixes the issue when the disk image is corrupted and the leak
+> wasn't always there ?
 
-Changes v10 -> v11:
-  - No change
+Makes sense. I'm going to fix the message as this:
 
-Changes v9 -> v10:
-  - No change
+When extending segment, the current segment is allocated and set dirty 
+by previous nilfs_sufile_alloc().
+But for some special cases such as corrupted image it can be unreliable, 
+so nilfs_sufile_mark_dirty()
+is called to promise that current segment is dirty.
 
-Changes v8 -> v9:
-  - No change
+However, nilfs_sufile_mark_dirty() only sets buffer and inode dirty 
+while nilfs_segment_usage can
+still be clean an used by following nilfs_sufile_alloc() because it 
+checks nilfs_segment_usage_clean(su).
 
-Changes v7 -> v8:
-  - No change
+This will cause the problem reported...
 
-Changes v6 -> v7:
-  - No change
+Could you please have a check? Thanks!
 
-Changes v5 -> v6:
-  - remove blank line
-
-Changes v4 -> v5:
-  - Remove "items" in compatible since have only one item
-  - Condense description of reg
-  - Rename node
-  - Split one reg into two reg items.
-  - Binding go first
- 
-Changes v3 -> v4:
-  - Fix "$id: relative path/filename doesn't match actual path or
-    filename" warning
-
-Changes v2 -> v3:
-  - Remove oneOf
-  - Add descriptions
-  - Fix compiling warning
-
-Changes v1 -> v2:
-  - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
-  - Delete "model", "dmc_nr", "chann_nr" new properties
-  - Fix compiling error
----
- .../bindings/perf/amlogic,g12-ddr-pmu.yaml    | 54 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 55 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
-
-diff --git a/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml b/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
-new file mode 100644
-index 000000000000..50f46a6898b1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
-@@ -0,0 +1,54 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/perf/amlogic,g12-ddr-pmu.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Amlogic G12 DDR performance monitor
-+
-+maintainers:
-+  - Jiucheng Xu <jiucheng.xu@amlogic.com>
-+
-+description: |
-+  Amlogic G12 series SoC integrate DDR bandwidth monitor.
-+  A timer is inside and can generate interrupt when timeout.
-+  The bandwidth is counted in the timer ISR. Different platform
-+  has different subset of event format attribute.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - amlogic,g12a-ddr-pmu
-+      - amlogic,g12b-ddr-pmu
-+      - amlogic,sm1-ddr-pmu
-+
-+  reg:
-+    items:
-+      - description: DMC bandwidth register space.
-+      - description: DMC PLL register space.
-+
-+  interrupts:
-+    items:
-+      - description: The IRQ of the inside timer timeout.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    pmu {
-+        #address-cells=<2>;
-+        #size-cells=<2>;
-+
-+        pmu@ff638000 {
-+            compatible = "amlogic,g12a-ddr-pmu";
-+            reg = <0x0 0xff638000 0x0 0x100>,
-+                  <0x0 0xff638c00 0x0 0x100>;
-+            interrupts = <GIC_SPI 52 IRQ_TYPE_EDGE_RISING>;
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b76c4deddf22..8b102a928081 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1099,6 +1099,7 @@ L:	linux-amlogic@lists.infradead.org
- S:	Supported
- W:	http://www.amlogic.com
- F:	Documentation/admin-guide/perf/meson-ddr-pmu.rst
-+F:	Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
- F:	drivers/perf/amlogic/
- F:	include/soc/amlogic/
- 
--- 
-2.25.1
-
+Best,
+Chen
+> Originally, the assumption was that the current and next segments
+> pointed to by log headers had been made dirty, and in fact mkfs.nilfs2
+> and nilfs2 itself had created metadata that way, so it wasn't really a
+> problem.  Usually the segment usage that this patch tries to dirty is
+> already marked dirty and usually results in duplicate processing.
+> nilfs_sufile_mark_dirty() is really only supposed to dirty that buffer
+> and inode, and this patch changes the role.
+>
+> However, that assumption was incomplete in the sense that it does not
+> assume broken metadata (whether intentionally or as a result of
+> device/media failure), and lacked checks or protection from it.  In
+> the meantime, you showed the simple and safe workaround even though it
+> duplicates in almost all cases and even changes the semantics of the
+> function.
+> In terms of the stability and safety, your patch is good that we can
+> ignore the inefficiency, so I am pushing for this change.
+>
+> Thanks,
+> Ryusuke Konishi
+>
+>> This will cause the problem reported by syzkaller:
+>> https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
+>>
+>> It's because the case starts with segbuf1.segnum = 3, nextnum = 4, and
+>> nilfs_sufile_alloc() not called to allocate a new segment.
+>>
+>> The first time nilfs_segctor_extend_segments() allocated segment
+>> segbuf2.segnum = segbuf1.nextnum = 4, then nilfs_sufile_alloc() found
+>> nextnextnum = 4 segment because its su is not set dirty.
+>> So segbuf2.nextnum = 4, which causes next segbuf3.segnum = 4.
+>>
+>> sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
+>> added to both buffer lists of two segbuf.
+>> It makes the list head of second list linked to the first one. When
+>> iterating the first one, it will access and deref the head of second,
+>> which causes NULL pointer dereference.
+>>
+>> Fix this by setting usage as dirty in nilfs_sufile_mark_dirty(),
+>> and add lock in it to protect the usage modification.
+>>
+>> Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
+>> Cc: stable@vger.kernel.org
+>> Reported-by: syzbot+77e4f005cb899d4268d1@syzkaller.appspotmail.com
+>> Reported-by: Liu Shixin <liushixin2@huawei.com>
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>> Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+>> Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+>> ---
+>> v1 -> v2:
+>> 1) Add lock protection as Ryusuke suggested and slightly fix commit
+>> message.
+>> 2) Fix and add tags.
+>> ---
+>>   fs/nilfs2/sufile.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/fs/nilfs2/sufile.c b/fs/nilfs2/sufile.c
+>> index 77ff8e95421f..dc359b56fdfa 100644
+>> --- a/fs/nilfs2/sufile.c
+>> +++ b/fs/nilfs2/sufile.c
+>> @@ -495,14 +495,22 @@ void nilfs_sufile_do_free(struct inode *sufile, __u64 segnum,
+>>   int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
+>>   {
+>>          struct buffer_head *bh;
+>> +       void *kaddr;
+>> +       struct nilfs_segment_usage *su;
+>>          int ret;
+>>
+>> +       down_write(&NILFS_MDT(sufile)->mi_sem);
+>>          ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
+>>          if (!ret) {
+>>                  mark_buffer_dirty(bh);
+>>                  nilfs_mdt_mark_dirty(sufile);
+>> +               kaddr = kmap_atomic(bh->b_page);
+>> +               su = nilfs_sufile_block_get_segment_usage(sufile, segnum, bh, kaddr);
+>> +               nilfs_segment_usage_set_dirty(su);
+>> +               kunmap_atomic(kaddr);
+>>                  brelse(bh);
+>>          }
+>> +       up_write(&NILFS_MDT(sufile)->mi_sem);
+>>          return ret;
+>>   }
+>>
+>> --
+>> 2.17.1
+>>
