@@ -2,507 +2,711 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC63631835
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 02:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78366631840
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 02:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiKUBjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 20:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S229926AbiKUBoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 20:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiKUBjV (ORCPT
+        with ESMTP id S229551AbiKUBoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 20:39:21 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241702D744;
-        Sun, 20 Nov 2022 17:39:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668994760; x=1700530760;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Ira0VMqCPGyvWtysOgWxerXJj0u8FLzD4AqwNdpMKMs=;
-  b=ORnbjD4artsQVuPCSugtXvnU5JSVu/2LMycmV09WkiHvXRSo6kX4iXRr
-   UN1u1r1DxH16FvDSb+E+SnZ9lYQL4BfoY4uHW3s3Qx2lwdqym+PbZZgAP
-   kgY4Z0exP4mHfD15Onye02VeQNNhZPT3kTB0Pz7CzKY5+IbH20jny2r44
-   /g633EBxraOom3m2FOlub0d5gdvFPKCbdSoTsX7G5BzS8tHtsBTcEobT6
-   1bkIVt5SinvByfkeiCjhXLdgdfE+Hp8megaWP4lwiAb4R8jaQqI6jYjWd
-   NYSbxhXQFlIppLAF4Kl/X9t5AL2Z+bl3tcsnxg1aN8PslirEFhtdiZCw4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="293162044"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="293162044"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 17:39:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="969894743"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="969894743"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Nov 2022 17:39:19 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 20 Nov 2022 17:39:19 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Sun, 20 Nov 2022 17:39:19 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Sun, 20 Nov 2022 17:39:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N9NZUsujMDHIon8a2YZldjBWK6B4Hk24O13cboQbnChOXkMYJw4QZAFujD92odkgCFtxb4A6oi1WLk7ow2+o9H37s4B043EqrDEw19ZKB+PyRbae0fJ5Cusb5u732fxaIfyG4qtqlrwzYCi6uhDDVVu79jZeqT2ywJL8kdopHrrIXwKIlTsXguGFUxRNjUZnG14H4PXiz+raDA9u+wkanoO61HQYnd2sFVF6wgOD98I7oDP80OkEUbV2cOk/YoWXw48VehQm0w6+z1tjyBwXx9iggSA/0XKl4OGVaXzR+bHCO+D9/d+cAaZ2uqchR1TthRkjzR856V/HRZv/rFjFRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EX9n+Tdi2oR/o5YkdJeltLiNihwAbDCG8+Rr4zTyEtc=;
- b=GErXhD5DM1nJfo8wRzsRnglf8BrNZY5ufBz/axyWntFOTm2e4eJkiiAf8S8aqkQ1J9L58mKVvhKn5bPwmHWQDVSDtYUzo68ge5zKAKuhsLCIYre8LqpIdEE0fP8qZIbNrBAezWH3RVcPoBnNaDNZ6JWG0mcWYCEoFEl7ycPdr+8/kxZug28bOGKwLLrbQlChvLQum/6v7+d8BPu73Pj5Y+SqDX6MeTtZStPfcwpRUV2LL/UTEN+QbISiVp/1NH/HwMSPTYybbsYgbEVtebg+HXPl5rsyvaYfTio3jjlsME3TQUTC9p9Y6Cu3Droe6fkN4lBQ/r6EK9nDh1Kt1ZtR0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN6PR11MB3956.namprd11.prod.outlook.com (2603:10b6:405:77::10)
- by PH7PR11MB5914.namprd11.prod.outlook.com (2603:10b6:510:138::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
- 2022 01:39:12 +0000
-Received: from BN6PR11MB3956.namprd11.prod.outlook.com
- ([fe80::7ac:fe96:566:65e]) by BN6PR11MB3956.namprd11.prod.outlook.com
- ([fe80::7ac:fe96:566:65e%3]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
- 01:39:11 +0000
-Message-ID: <750c2096-fe2f-0597-a635-78cbe6b0ee0d@intel.com>
-Date:   Mon, 21 Nov 2022 09:39:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] PCI/DOE: Remove asynchronous task support
-To:     <ira.weiny@intel.com>
-CC:     Gregory Price <gregory.price@memverge.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Lukas Wunner" <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>
-References: <20221119222527.1799836-1-ira.weiny@intel.com>
-Content-Language: en-US
-From:   "Li, Ming" <ming4.li@intel.com>
-Organization: Intel
-In-Reply-To: <20221119222527.1799836-1-ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG3P274CA0011.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::23)
- To BN6PR11MB3956.namprd11.prod.outlook.com (2603:10b6:405:77::10)
+        Sun, 20 Nov 2022 20:44:12 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB332FFD5;
+        Sun, 20 Nov 2022 17:44:09 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL0WcEH013023;
+        Mon, 21 Nov 2022 01:44:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bZ+7d0j+7D4FCvZWrxlqFn+SpDuvTOejHoWCDqFetwY=;
+ b=I1wZWwuTzKASo9iG8bTdSEAZ7n2GfOYEVzbj6eqUGROzBvKdOSrdutOi0JUnmMFgJMub
+ UNpWt+1wvo/YFlosrnq1fNj4ChigPA4QDzmKKMNkLavx5/c+DKphXObFlO3EIp7FnrN2
+ TIFocgHy+4y4KAkv5eKVCdgJ2k+QY9YvcQ4PHuS24r/FZ4gRToep9WyjU2cdffCxJvaK
+ ActNftXw6OwBRKai547nrGtg1Uzp7g72O2XTbdJIBujrI0Chd4xhcx6TbYz+IoJj5zSy
+ b9TCo1R6LB2cCFZq+XoizVz+3+M3Nm1q4ECP2EmfNfRY/2J8y7dFxRDwXwFOBldEwanu ig== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxreak42q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 01:44:04 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AL1i3UK001513
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 01:44:03 GMT
+Received: from [10.239.133.73] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 20 Nov
+ 2022 17:44:01 -0800
+Message-ID: <1893e6b5-1182-a986-775b-ea9522a38621@quicinc.com>
+Date:   Mon, 21 Nov 2022 09:43:59 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PR11MB3956:EE_|PH7PR11MB5914:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7dc1852d-cb71-479e-1835-08dacb613065
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bzt4al8Xba86Uzzdlj7h2k4gM8M80iNyu19gz0TRT8jKMeoeflXXrZNMO3E6khLYtxy0xTbAMaoNJ8RjdDh7FM290cePmxzYyJP9sLfiNihzOPjs7RVKyulnNpqzxP7KPGdxxJ56NQwFydeRneItjYFT3uE/k75lExDNuMOkSBNONjiuRjEqr1yyRQyUdB47e6Wz+aAt0BibI+INVhLRxy+qHr0P9FBnLiLzmKuAo7q4aDLEGdZBT2g5BvY7we80WWD8Z0O7XFjh5KAmIGK5KFplKKJu3hWEE8neTvOFAxEXGEFwNCsWg6SrkJGDRZqR8EMUdG6J6bR1mSO1hzN9BMNYLFJNGR0i+rs/pNMuP+YOBoYXG69+gM0c/1dRuWNYErkCy2a6P+CIIJMZ+nZXAprGHs10JqdMduPHGncJedypXg2yvDK73kKiNEo1X5sKsZDOwJMRUnXiV78e4hDBaa4UBO3LEzSEuZaPaOcfOFeXph8aAWOMTzskfRajl5lig0oIo7nrX/n0AMUz5Gtru1JWAL+KJ0pjTMNOM5vDpTeXMYjFaBXIe7CvRBxyLxnnGPmzZcidKzkmvnMZriJqRkdAVx09V6maQAFJBJjxiJ1qRoDjYL84nrFPbI0PO26TX4w61OwqCIc8e801DeAqOj3limsQRnCkcZjbpfpQIOb9Qpspaj95Obilb6CnEvkyQMhN/Ytx17btGIcpBonfpxRj1PBdEYtrkT5JliCnSLNrta9AstiRwPhVWTM59PRE7T5alQCeeyrEvxVkI3vuRXEMEqaXGbPZFcYyv60WLGE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB3956.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(346002)(366004)(376002)(396003)(136003)(451199015)(41300700001)(8936002)(37006003)(5660300002)(4326008)(316002)(6636002)(54906003)(66556008)(66946007)(66476007)(31686004)(8676002)(34206002)(30864003)(478600001)(36916002)(36756003)(2906002)(2616005)(53546011)(966005)(6512007)(6666004)(6506007)(6486002)(186003)(26005)(38100700002)(83380400001)(82960400001)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHRhanFEbkJWRndtd21LMkhlTUZUTC9Famw3TGlXeldGMjhIdFBJNGM5Q0ky?=
- =?utf-8?B?dXp3a0p2MlRDcm9lb0NVSWZtM1FZdGF3QnNVZU5XQVVkRVR0ZkxSVUcwNjdX?=
- =?utf-8?B?TVNNdHBCY1lDenlaL05QSU50QndkWDRSWklac0cxYlVRUVlVQ0g1NFRVYVRl?=
- =?utf-8?B?RjdHWktoS1hKSnZDWEZwOHRsNmdCK2xpNFE0TXgvdEpUVE85dzdoR3Fzdm1q?=
- =?utf-8?B?S09yQ3lqQ29WaklsUlphVEh0TExtUEVzRVR3eXViUklabW90TGVDWUhzS0ZC?=
- =?utf-8?B?bmMyZDhLcVpLVjZhTUNYNWllWUI2cWFQOUZEU0p6eEJ0U09hOFZtbzVXL2Vh?=
- =?utf-8?B?WlZoTVM2d0ZTM3FyQ0J0MkwrMmZQRnR5eHdzTGpUajIxdnBrOTVsdG40TGIv?=
- =?utf-8?B?bjh3TFRPZ3FZc29DckExTVBFNFlCVGhOS3BuRFJtanlhTnpidENUMnMxTDJM?=
- =?utf-8?B?U2JSL3JBZ0ZJQ3VHQ3BCVVFyOWFXZTFDUzBZWlIzdXJEOURhQVF4YndsSjJj?=
- =?utf-8?B?ZHY3RS92blRIcnBTSEtBS2JyMFdtK2NkNUxLbGo5U0xadjlTMVlpZ09CN2My?=
- =?utf-8?B?cW5GMytpRHRnWVFabHVZeDhXV0pFNFcxL09TOXQwTGdPdENhTnRBUWlKSGNx?=
- =?utf-8?B?UDRrRk9sVUtZa3dDcnM0bG9ZbDBlWWcxTGFPZGdRcnJkc2I2UjFyeERzWHF2?=
- =?utf-8?B?MVVpYXBoZ2pocGM2MU9EdFh0V0tKUzBDd3V6SW1jOUp0TXYyY3lKS0ZPS09u?=
- =?utf-8?B?WEJwNE10V09mOC9qaElyaGNzakJZWlFmdnRidXdLamxoa0ZSM3E5UVRMeXlE?=
- =?utf-8?B?N2J4R2IzSis1OU5CQVhWYlE4L0NpZjJtclFyT1IzQXN3R2ViczRxN3FuWjJh?=
- =?utf-8?B?d0hXdE1hTm9tMjcxUHFISG1KZkg2ajkzWjBYWlFHY1hHTlorSzZwZjB6RXVz?=
- =?utf-8?B?QWJWVExQNU85alFuajNGMjh1djRZT1U2S1lUeFpRRzVWMlZDdmFtaFFqMXZ6?=
- =?utf-8?B?ZCsvOWFqcGJ3ZmlXckNCMXVCODlpclZRKzgyVmViczJhbUtvcVMrL3U2RTJ0?=
- =?utf-8?B?a0N4SUNFeGN3aysxVnBQcGsydndBbmxvN3dCb21zaUVzWCtFUitVZE5rSVBk?=
- =?utf-8?B?cUVKVWZxaWNuN213MnYzNk5vLzVoY3NlbWV3dlkydXBjMEt4aHVvenhDU0FY?=
- =?utf-8?B?bzdEN3hVN3JRNzJBTk1obEtIRlYxelFHekpGaFN1aE0zbi9xdkdoeFE1OEky?=
- =?utf-8?B?WmIza29EbmtIYjhkRXA0RVFUWm9EM1YwMFNGSGZzMWo2WFArajVlUnFZcUJr?=
- =?utf-8?B?RFVqbFR3aURQd29nWEJVdDBQSllpZk9BRjhqZ2FPRHVtODFMdlZaNjN2Yi83?=
- =?utf-8?B?Z3hscVl6LzRMUHZQUzFQRkRoU2FYUDJacE9nNlkrd0hNWmx0Z09YNW5jdzVw?=
- =?utf-8?B?WXFzc2NscTZicmZ3RiswZmNmQ3lid3h5aVgzVytYekVQYTNrenphWGpOcHE1?=
- =?utf-8?B?TzB6aUtpMll0RWQ1b0k4ME83MlhGNnlWS0xlUkFQVWcrUmZaaWhVZEI4cGZJ?=
- =?utf-8?B?VzkvVUxEOVcyVlJwdDFBWUJCUlQyNVhBSDQzOU1PNlZYM0k1ekNYY2RPbnFO?=
- =?utf-8?B?MDdMRnpoVGtEVDVSV3grcHFrVDlNVWtwTlBzdEJXOWRySmJTNStYZnNSaUtx?=
- =?utf-8?B?ci9wRm5yNFpQR09CTnYrVDVZaE40ZXQ0S1hEUi9LZ09VNjRCVDBEWk4ycld6?=
- =?utf-8?B?TEZhNmJqU29Wa0xZWXBDU1k5eEYvL3JKNk5ZTUt0ZHBxTE51TnQwSHk0SkVG?=
- =?utf-8?B?OHFhdkFselZKT0U5YlpqbGl1ZU1JZVBQUTkzZjFjZUZyaklhQ2Ixb0JjSkJl?=
- =?utf-8?B?VmFZbTQ2Ni9hQkpPOVNTbUpadjRDL3pKMGZuZjg5ZVdPa09ZZlR5V2t0UVY0?=
- =?utf-8?B?eTNJTlJzRE8yYTlMNnRrRmNKSUQ1QlZZRXZOalBVTEpieXJqOWhPdDFTUFZ5?=
- =?utf-8?B?V051eU5PSzlNbHVIYUN1dUR0KzVyalRJK3dOa1RtdXRLMUtrTFFaazhiQWJy?=
- =?utf-8?B?RjFSdnZvdm9zZHBUNGtLekZ4ZWJod0wyMVUrSUVkL2JuYmNlNUgrTkduS3Bw?=
- =?utf-8?Q?NPYlOV6LU2KcJ1St0/OHAHQqw?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7dc1852d-cb71-479e-1835-08dacb613065
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB3956.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 01:39:11.4450
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sZJNIwTAJpkABGda8cauKrLKxx7p7eHT0j4BNVd3DTZlI9sqZniQI8VutkvdaHvEqr6KirKrQuzKJMH2nHXqTQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5914
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4] remoteproc: core: do pm relax when in RPROC_OFFLINE
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_clew@quicinc.com>
+References: <CANLsYkw1Ex0TfmG-tRhHJgn3LsdvNhS_6HjJXn=ogwcCOWbH_A@mail.gmail.com>
+ <414aacb1-e68b-a9a7-3b99-12bc56494f6f@quicinc.com>
+ <20221102180350.GA1733006@p14s>
+ <4c3d38c9-a43e-97bd-c7f9-3d21240e9d0e@quicinc.com>
+ <20221104155915.GC1873068@p14s>
+ <0f2b805c-5b01-138d-3e76-f6ed866be7ef@quicinc.com>
+ <CANLsYkwxY_UPw4552XdM=jcGS7NGC1L9OsVYG_D9C4JFHXSE=Q@mail.gmail.com>
+ <18baf686-ab5f-3d5b-fb9e-c8edb8e2ca4e@quicinc.com>
+ <20221114211830.GB8042@p14s>
+ <9a64696f-5cd1-56af-3a1f-19d0b3420f46@quicinc.com>
+ <20221118185246.GB262671@p14s>
+From:   "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+In-Reply-To: <20221118185246.GB262671@p14s>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: d93278zV9GxS5hZoEnu9WMJNKcaFIZDM
+X-Proofpoint-ORIG-GUID: d93278zV9GxS5hZoEnu9WMJNKcaFIZDM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_02,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ suspectscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0
+ phishscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211210012
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/20/2022 6:25 AM, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+On 11/19/2022 2:52 AM, Mathieu Poirier wrote:
+> On Tue, Nov 15, 2022 at 09:30:58AM +0800, Aiqun(Maria) Yu wrote:
+>> Hi,
+>>
+>> On 11/15/2022 5:18 AM, Mathieu Poirier wrote:
+>>> On Fri, Nov 11, 2022 at 08:52:11AM +0800, Aiqun(Maria) Yu wrote:
+>>>> On 11/11/2022 4:50 AM, Mathieu Poirier wrote:
+>>>>> I had a couple of good discussions with our power management expert
+>>>>> and even then, the way forward isn't as clear as I would have liked.
+>>>>> I am currently travelling and as such don't have the required time to
+>>>>> go into greater details, something I will be doing next week.
+>>>>>
+>>>> Thx Mathieu for the info updated.
+>>>> I'll wait for your update next week then.
+>>>> let me know any initial questions that you have, perhaps I can also discuss
+>>>> that with our power team at the same time.
+>>>
+>>> The problem is to determine exactly what the WQ_FREEZABLE flag does to the
+>>> rproc_recovery_wq workueue.  The documentation [1] indicate that work items on the WQ are
+>>> drained before the system is suspended.  What I understand from this is that if
+>>> two work items are queued and one is executing at the time a system suspend is
+>>> initiated, all three items will be executed before the system is allowed to be
+>>> suspended.  _If_ that is the case, there would not be a need to call
+>>> pm_stay_awake() and pm_relax() at all.
+>>>
+>>> On the other hand, the PM resource I spoke to thought that in reality things
+>>> don't happen that way.  Taking the same above scenario where 2 work items are
+>>> queued and one is executing at the time of the suspend, only the work item that
+>>> is executing will be allowed to execute to completion before the system is
+>>> suspended.  The remaining two items that were queued will not execute.
+>>>
+>>> If that is the case then we do need to call pm_stay_awake() and pm_relax(), and
+>>> find another strategy to fix this situation.
+>>>
+>>> Until we have a clear view of how the WQ_FREEZABLE flag works, we won't be able
+>>> to move forward with this patchset.  Unfortunately, I currently do not have the
+>>> time to look into this.
+>> I had a check on the WQ_FREEZABLE flag, here is my understanding:
+>>
+>> when the interrupt happened, it still need pm_stay_awake to make sure
+>> queue_work action can active the work instead of susepend the device.
+>>
+>> 1. If  WQ_FREEZABLE, pwq->max_active = 0; // maximum number of in-flight
+>> work items is set to 0.
+>>
+>> [1].
+>> https://elixir.bootlin.com/linux/v6.1-rc4/source/kernel/workqueue.c#L3748
+>>
+>> 2. If  WQ_FREEZABLE, will only check pwq->nr_active to see if there is still
+>> freeze_workqueues_busy.
+>> [2].
+>> https://elixir.bootlin.com/linux/v6.1-rc4/source/kernel/workqueue.c#L5270
+>>
+>> 3. When in queue_work, if max_active is 0, when do queue_work it will not
+>> actually active the work.
+>> [3].
+>> https://elixir.bootlin.com/linux/v6.1-rc4/source/kernel/workqueue.c#L1418
+>>
+>> for the current issue, the work is already complete and forget to set
+>> pm_relax in some condition that make the system cannot be suspended.
 > 
-> Gregory Price and Jonathan Cameron reported a bug within
-> pci_doe_submit_task().[1]  The issue was that work item initialization
-> needs to be done with either INIT_WORK_ONSTACK() or INIT_WORK()
-> depending on how the work item is allocated.
+> What you have above does not describe what happens to work already queue to a
+> WQ_FREEZABLE workqueue when the system gets suspended, and that is the most
+> important thing.
 > 
-> Initially, it was anticipated that DOE tasks were going to need to be
-> submitted asynchronously and the code was designed thusly.  Many
-> alternatives were discussed to fix the work initialization issue.[2]
+> I ended up doing that investigation myself and found the documentation on
+> WQ_FREEZABLE seems to be accurate.  I am still discussing this with the Linaro
+> power management team and will get back to you when we reach a conclusion.
 > 
-> However, all current users submit tasks synchronously and this has
-> therefore become an unneeded maintenance burden.  Remove the extra
-> maintenance burden by replacing asynchronous task submission with
-> a synchronous wait function.[3]
-> 
-> [1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
-> [2] https://lore.kernel.org/linux-cxl/Y3kSDQDur+IUDs2O@iweiny-mobl/T/#m0f057773d9c75432fcfcc54a2604483fe82abe92
-> [3] https://lore.kernel.org/linux-cxl/Y3kSDQDur+IUDs2O@iweiny-mobl/T/#m32d3f9b208ef7486bc148d94a326b26b2d3e69ff
-> 
-> Reported-by: Gregory Price <gregory.price@memverge.com>
-> Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> Suggested-by: "Li, Ming" <ming4.li@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Thanks to Dan for the bulk of the patch.
-> Thanks to Ming for pointing out the need for a lock to prevent more
-> than 1 task from being processed at a time.
-> ---
->  drivers/cxl/core/pci.c  | 16 ++------
->  drivers/pci/doe.c       | 83 ++++++++++++++---------------------------
->  include/linux/pci-doe.h | 10 +----
->  3 files changed, 32 insertions(+), 77 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index 9240df53ed87..58977e0712b6 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -490,21 +490,14 @@ static struct pci_doe_mb *find_cdat_doe(struct device *uport)
->  		    CXL_DOE_TABLE_ACCESS_TABLE_TYPE_CDATA) |		\
->  	 FIELD_PREP(CXL_DOE_TABLE_ACCESS_ENTRY_HANDLE, (entry_handle)))
->  
-> -static void cxl_doe_task_complete(struct pci_doe_task *task)
-> -{
-> -	complete(task->private);
-> -}
-> -
->  struct cdat_doe_task {
->  	u32 request_pl;
->  	u32 response_pl[32];
-> -	struct completion c;
->  	struct pci_doe_task task;
->  };
->  
->  #define DECLARE_CDAT_DOE_TASK(req, cdt)                       \
->  struct cdat_doe_task cdt = {                                  \
-> -	.c = COMPLETION_INITIALIZER_ONSTACK(cdt.c),           \
->  	.request_pl = req,				      \
->  	.task = {                                             \
->  		.prot.vid = PCI_DVSEC_VENDOR_ID_CXL,        \
-> @@ -513,8 +506,6 @@ struct cdat_doe_task cdt = {                                  \
->  		.request_pl_sz = sizeof(cdt.request_pl),      \
->  		.response_pl = cdt.response_pl,               \
->  		.response_pl_sz = sizeof(cdt.response_pl),    \
-> -		.complete = cxl_doe_task_complete,            \
-> -		.private = &cdt.c,                            \
->  	}                                                     \
->  }
->  
-> @@ -525,12 +516,12 @@ static int cxl_cdat_get_length(struct device *dev,
->  	DECLARE_CDAT_DOE_TASK(CDAT_DOE_REQ(0), t);
->  	int rc;
->  
-> -	rc = pci_doe_submit_task(cdat_doe, &t.task);
-> +	rc = pci_doe_submit_task_wait(cdat_doe, &t.task);
->  	if (rc < 0) {
->  		dev_err(dev, "DOE submit failed: %d", rc);
->  		return rc;
->  	}
-> -	wait_for_completion(&t.c);
-> +
->  	if (t.task.rv < sizeof(u32))
->  		return -EIO;
->  
-> @@ -554,12 +545,11 @@ static int cxl_cdat_read_table(struct device *dev,
->  		u32 *entry;
->  		int rc;
->  
-> -		rc = pci_doe_submit_task(cdat_doe, &t.task);
-> +		rc = pci_doe_submit_task_wait(cdat_doe, &t.task);
->  		if (rc < 0) {
->  			dev_err(dev, "DOE submit failed: %d", rc);
->  			return rc;
->  		}
-> -		wait_for_completion(&t.c);
->  		/* 1 DW header + 1 DW data min */
->  		if (t.task.rv < (2 * sizeof(u32)))
->  			return -EIO;
-> diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
-> index e402f05068a5..41a75112b39b 100644
-> --- a/drivers/pci/doe.c
-> +++ b/drivers/pci/doe.c
-> @@ -18,7 +18,6 @@
->  #include <linux/mutex.h>
->  #include <linux/pci.h>
->  #include <linux/pci-doe.h>
-> -#include <linux/workqueue.h>
->  
->  #define PCI_DOE_PROTOCOL_DISCOVERY 0
->  
-> @@ -40,7 +39,7 @@
->   * @cap_offset: Capability offset
->   * @prots: Array of protocols supported (encoded as long values)
->   * @wq: Wait queue for work item
-> - * @work_queue: Queue of pci_doe_work items
-> + * @exec_lock: Lock to ensure 1 task is processed at a time
->   * @flags: Bit array of PCI_DOE_FLAG_* flags
->   */
->  struct pci_doe_mb {
-> @@ -49,7 +48,7 @@ struct pci_doe_mb {
->  	struct xarray prots;
->  
->  	wait_queue_head_t wq;
-> -	struct workqueue_struct *work_queue;
-> +	struct mutex exec_lock;
->  	unsigned long flags;
->  };
->  
-> @@ -211,7 +210,6 @@ static int pci_doe_recv_resp(struct pci_doe_mb *doe_mb, struct pci_doe_task *tas
->  static void signal_task_complete(struct pci_doe_task *task, int rv)
->  {
->  	task->rv = rv;
-> -	task->complete(task);
->  }
->  
->  static void signal_task_abort(struct pci_doe_task *task, int rv)
-> @@ -231,10 +229,8 @@ static void signal_task_abort(struct pci_doe_task *task, int rv)
->  	signal_task_complete(task, rv);
->  }
->  
-> -static void doe_statemachine_work(struct work_struct *work)
-> +static void exec_task(struct pci_doe_task *task)
->  {
-> -	struct pci_doe_task *task = container_of(work, struct pci_doe_task,
-> -						 work);
->  	struct pci_doe_mb *doe_mb = task->doe_mb;
->  	struct pci_dev *pdev = doe_mb->pdev;
->  	int offset = doe_mb->cap_offset;
-> @@ -295,18 +291,12 @@ static void doe_statemachine_work(struct work_struct *work)
->  	signal_task_complete(task, rc);
->  }
->  
-> -static void pci_doe_task_complete(struct pci_doe_task *task)
-> -{
-> -	complete(task->private);
-> -}
-> -
->  static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
->  			     u8 *protocol)
->  {
->  	u32 request_pl = FIELD_PREP(PCI_DOE_DATA_OBJECT_DISC_REQ_3_INDEX,
->  				    *index);
->  	u32 response_pl;
-> -	DECLARE_COMPLETION_ONSTACK(c);
->  	struct pci_doe_task task = {
->  		.prot.vid = PCI_VENDOR_ID_PCI_SIG,
->  		.prot.type = PCI_DOE_PROTOCOL_DISCOVERY,
-> @@ -314,17 +304,13 @@ static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
->  		.request_pl_sz = sizeof(request_pl),
->  		.response_pl = &response_pl,
->  		.response_pl_sz = sizeof(response_pl),
-> -		.complete = pci_doe_task_complete,
-> -		.private = &c,
->  	};
->  	int rc;
->  
-> -	rc = pci_doe_submit_task(doe_mb, &task);
-> +	rc = pci_doe_submit_task_wait(doe_mb, &task);
->  	if (rc < 0)
->  		return rc;
->  
-> -	wait_for_completion(&c);
-> -
->  	if (task.rv != sizeof(response_pl))
->  		return -EIO;
->  
-> @@ -376,13 +362,6 @@ static void pci_doe_xa_destroy(void *mb)
->  	xa_destroy(&doe_mb->prots);
->  }
->  
-> -static void pci_doe_destroy_workqueue(void *mb)
-> -{
-> -	struct pci_doe_mb *doe_mb = mb;
-> -
-> -	destroy_workqueue(doe_mb->work_queue);
-> -}
-> -
->  static void pci_doe_flush_mb(void *mb)
->  {
->  	struct pci_doe_mb *doe_mb = mb;
-> @@ -390,12 +369,9 @@ static void pci_doe_flush_mb(void *mb)
->  	/* Stop all pending work items from starting */
->  	set_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags);
->  
-> -	/* Cancel an in progress work item, if necessary */
-> +	/* Cancel the in progress task and waiting tasks, if necessary */
->  	set_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags);
->  	wake_up(&doe_mb->wq);
-should use wake_up_all() to wake up all waiting tasks here?
+Glad that you have it clear.
+And wait for your update on this.
 
-> -
-> -	/* Flush all work items */
-> -	flush_workqueue(doe_mb->work_queue);
->  }
->  
->  /**
-> @@ -423,25 +399,13 @@ struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset)
->  	doe_mb->pdev = pdev;
->  	doe_mb->cap_offset = cap_offset;
->  	init_waitqueue_head(&doe_mb->wq);
-> +	mutex_init(&doe_mb->exec_lock);
->  
->  	xa_init(&doe_mb->prots);
->  	rc = devm_add_action(dev, pci_doe_xa_destroy, doe_mb);
->  	if (rc)
->  		return ERR_PTR(rc);
->  
-> -	doe_mb->work_queue = alloc_ordered_workqueue("%s %s DOE [%x]", 0,
-> -						dev_driver_string(&pdev->dev),
-> -						pci_name(pdev),
-> -						doe_mb->cap_offset);
-> -	if (!doe_mb->work_queue) {
-> -		pci_err(pdev, "[%x] failed to allocate work queue\n",
-> -			doe_mb->cap_offset);
-> -		return ERR_PTR(-ENOMEM);
-> -	}
-> -	rc = devm_add_action_or_reset(dev, pci_doe_destroy_workqueue, doe_mb);
-> -	if (rc)
-> -		return ERR_PTR(rc);
-> -
->  	/* Reset the mailbox by issuing an abort */
->  	rc = pci_doe_abort(doe_mb);
->  	if (rc) {
-> @@ -496,23 +460,22 @@ bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
->  EXPORT_SYMBOL_GPL(pci_doe_supports_prot);
->  
->  /**
-> - * pci_doe_submit_task() - Submit a task to be processed by the state machine
-> + * pci_doe_submit_task_wait() - Submit and execute a task
->   *
->   * @doe_mb: DOE mailbox capability to submit to
-> - * @task: task to be queued
-> - *
-> - * Submit a DOE task (request/response) to the DOE mailbox to be processed.
-> - * Returns upon queueing the task object.  If the queue is full this function
-> - * will sleep until there is room in the queue.
-> + * @task: task to be run
->   *
-> - * task->complete will be called when the state machine is done processing this
-> - * task.
-> + * Submit and run DOE task (request/response) to the DOE mailbox to be
-> + * processed.
->   *
->   * Excess data will be discarded.
->   *
-> - * RETURNS: 0 when task has been successfully queued, -ERRNO on error
-> + * Context: non-interrupt
-> + *
-> + * RETURNS: 0 when task was executed, the @task->rv holds the status
-> + * result of the executed opertion, -ERRNO on failure to submit.
->   */
-> -int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
-> +int pci_doe_submit_task_wait(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
->  {
->  	if (!pci_doe_supports_prot(doe_mb, task->prot.vid, task->prot.type))
->  		return -EINVAL;
-> @@ -529,8 +492,18 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
->  		return -EIO;
->  
->  	task->doe_mb = doe_mb;
-> -	INIT_WORK(&task->work, doe_statemachine_work);
-> -	queue_work(doe_mb->work_queue, &task->work);
-> +
-> +again:
-> +	if (!mutex_trylock(&doe_mb->exec_lock)) {
-> +		if (wait_event_timeout(task->doe_mb->wq,
-> +				test_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags),
-> +				PCI_DOE_POLL_INTERVAL))
-> +			return -EIO;
+here is my understandings maybe you can reference when to discuss with 
+power teams:
 
-We already implemented a pci_doe_wait(), I think we can use it to instead of this wait_event_timeout.
+1. pm_stay_awake in interrupt handler is needed.
+when there is a subsystem crash interrupt, the remote proc driver want 
+to keep the system awake until the crash is handled with subysystem 
+state transfered to shutdown/restarted.
 
-Thanks
-Ming
+2. as long as the subsystem state is changed to RPROC_CRASHED or 
+RPROC_OFFLINE state, it will be safe to do pm_relax and release the 
+driver's wakelock at that point.
 
-> +		goto again;
-> +	}
-> +	exec_task(task);
-> +	mutex_unlock(&doe_mb->exec_lock);
-> +
->  	return 0;
->  }
-> -EXPORT_SYMBOL_GPL(pci_doe_submit_task);
-> +EXPORT_SYMBOL_GPL(pci_doe_submit_task_wait);
-> diff --git a/include/linux/pci-doe.h b/include/linux/pci-doe.h
-> index ed9b4df792b8..c94122a66221 100644
-> --- a/include/linux/pci-doe.h
-> +++ b/include/linux/pci-doe.h
-> @@ -30,8 +30,6 @@ struct pci_doe_mb;
->   * @response_pl_sz: Size of the response payload (bytes)
->   * @rv: Return value.  Length of received response or error (bytes)
->   * @complete: Called when task is complete
-> - * @private: Private data for the consumer
-> - * @work: Used internally by the mailbox
->   * @doe_mb: Used internally by the mailbox
->   *
->   * The payload sizes and rv are specified in bytes with the following
-> @@ -50,11 +48,6 @@ struct pci_doe_task {
->  	u32 *response_pl;
->  	size_t response_pl_sz;
->  	int rv;
-> -	void (*complete)(struct pci_doe_task *task);
-> -	void *private;
-> -
-> -	/* No need for the user to initialize these fields */
-> -	struct work_struct work;
->  	struct pci_doe_mb *doe_mb;
->  };
->  
-> @@ -72,6 +65,5 @@ struct pci_doe_task {
->  
->  struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset);
->  bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type);
-> -int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task);
-> -
-> +int pci_doe_submit_task_wait(struct pci_doe_mb *doe_mb, struct pci_doe_task *task);
->  #endif
-> 
-> base-commit: b6e7fdfd6f6a8bf88fcdb4a45da52c42ba238c25
+because 2 conditions can be met:
+a. inactive work exist:
+if there is an inactive work triggered by other crash interrupt, even if 
+it become active again, it will bail out because of the subsystem state 
+and not try to do any actual recovery work.
+So no wakelock needed to be hold at this condition.
+
+And if the subsystem resume again, and the inactive work become active 
+and do the pm_relax, it will be fine if the device resumed with the 
+state, the extra pm_relax won't make any difference. Or even if there is 
+another crash handler happened at that time, the inactive work will try 
+to do the recovery work directly.
+
+b. active work exist:
+WQ_FREEZABLE flag will ensure the active work being finished before 
+going to suspend.
+
+
+3. pm_relax can be called multi times. even if there is no pm_stay_awake 
+called before this.
+
+
+Feel free to comment if there is any understanding not correct.
+
+>>
+>>>
+>>> If you want to take on this investigation, keep in mind that any conclusion will
+>>> need to be backed by a proof.  That can be debug messages on a console output or
+>>> a code reference in the workqueue core.
+>>>
+>>> [1]. https://elixir.bootlin.com/linux/v6.1-rc4/source/Documentation/core-api/workqueue.rst#L184
+>>>
+>>>
+>>>>> On Sun, 6 Nov 2022 at 18:14, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+>>>>>>
+>>>>>> Hi,
+>>>>>> On 11/4/2022 11:59 PM, Mathieu Poirier wrote:
+>>>>>>> On Thu, Nov 03, 2022 at 10:03:49AM +0800, Aiqun(Maria) Yu wrote:
+>>>>>>>> On 11/3/2022 2:03 AM, Mathieu Poirier wrote:
+>>>>>>>>> On Wed, Nov 02, 2022 at 06:53:49PM +0800, Aiqun(Maria) Yu wrote:
+>>>>>>>>>> Hi,
+>>>>>>>>>>
+>>>>>>>>>> Let me think about this carefully.
+>>>>>>>>>>
+>>>>>>>>>> When in RPROC_RECOVERY_FAIL case we want to re-do the recovery process again
+>>>>>>>>>> or just leave the pm_relax?
+>>>>>>>>>
+>>>>>>>>> Neither.
+>>>>>>>>>
+>>>>>>>>> When a recovery fail we don't want to call pm_relax().  The code in
+>>>>>>>>> rproc_crash_handler_work() becomes:
+>>>>>>>>>
+>>>>>>>>>        if (rproc->state == RPROC_OFFLINE) {
+>>>>>>>>>                      /* We have raced with rproc_shutdown() */
+>>>>>>>>>                      pm_relax()
+>>>>>>>>>                mutex_unlock(&rproc->lock);
+>>>>>>>>>                return;
+>>>>>>>>>              }
+>>>>>>>>>
+>>>>>>>>>        if (rproc->state == RPROC_CRASHED ||
+>>>>>>>>>                  rproc->state == RPROC_RECOVERY_FAILED) {
+>>>>>>>>>                /* handle only the first crash detected */
+>>>>>>>>>                mutex_unlock(&rproc->lock);
+>>>>>>>>>                return;
+>>>>>>>>>        }
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> RPROC_RECOVERY_FAILED gets set in rproc_boot_recovery() if request_firmware() or
+>>>>>>>>> rproc_start() fail.  Function rproc_trigger_recovery() needs to allow for the
+>>>>>>>>> recovery the the remote processor is in RPROC_RECOVERY_FAILED state.  As such
+>>>>>>>>> the condition becomes:
+>>>>>>>>>
+>>>>>>>>>              /* State could have changed before we got the mutex */
+>>>>>>>>>        if (rproc->state != RPROC_CRASHED &&
+>>>>>>>>>                  rproc->state != RPROC_RECOVERY_FAILED)
+>>>>>>>>>                goto unlock_mutex;
+>>>>>>>>>
+>>>>>>>>> Start with that and we can look at corner cases (if some exists) with a fresh
+>>>>>>>>> patchset.  Note that I have not addressed the attach/detach() scenario in the
+>>>>>>>>> above.
+>>>>>>>>
+>>>>>>>> If we didn't deal with the recovery failed case with correct pm_relax call,
+>>>>>>>> it may left the device in a state that cannot enter to suspend state.
+>>>>>>>
+>>>>>>> That is what I am looking for.  We don't want to give the impression that
+>>>>>>> everything is fine by allowing the device to suspend.  If the remote processor
+>>>>>>> can't be recovered than it needs to be dealth with.
+>>>>>> For the normal recovery failed case, it still need to do pm_relax to not
+>>>>>> prevent the device goes to suspend. It is what in normal recovery failed
+>>>>>> case we do in rproc_crash_handler_work as well.
+>>>>>> rproc_crash_handler_work will not check the result of the
+>>>>>> rproc_trigger_recovery return value, and will always do pm_relax.
+>>>>>>
+>>>>>> For current conconrency cornor case as well, it is better to consistant
+>>>>>> with the current design of recovery fail senarios in normal cases.
+>>>>>>
+>>>>>> I personally agree that we shouldn't do nothing when it is a
+>>>>>> RPROC_RECOVERY_FAILED senario when it is in rproc_crash_handler_work
+>>>>>> check, because it maybe crash happened when it is trying to do the recovery.
+>>>>>> So I suggested to do a continue try of trigger recovery again instead of
+>>>>>> doing nothing and bail out if it is a RPROC_RECOVERY_FAILED state.
+>>>>>>
+>>>>>>>
+>>>>>>>> Because first PROC_RECOVERY_FAIL case cannot ensure it have pm_relax called
+>>>>>>>> before the second crash handler call pm_stay_awake or not.
+>>>>>>>>
+>>>>>>>
+>>>>>>> I've been thinking about that part.  I don't think adding a wake_count to
+>>>>>>> control calls to pm_stay_awake()/pm_relax() is the best way to go.  There is a
+>>>>>>> similar count happening in the PM runtime subsystem and that is what we should
+>>>>>>> be using.  I have asked a power management expert at Linaro for guidance with
+>>>>>>> this matter.  I should be able to get back to you with a way forward by the end
+>>>>>>> of next week.
+>>>>>>>
+>>>>>> Thx for the specific date provided as well. I will wait until your reply
+>>>>>> for next patchset then.
+>>>>>>
+>>>>>>>> So, What about the atomic count along with pm_relax and pm_stay_awake ?
+>>>>>>>>
+>>>>>>>> struct rproc{
+>>>>>>>> ...
+>>>>>>>> atomic_t wake_count;
+>>>>>>>> ...
+>>>>>>>> }
+>>>>>>>>
+>>>>>>>> rproc_pm_stay_awake()
+>>>>>>>> {
+>>>>>>>>         atomic_inc(&wake_count);
+>>>>>>>>         pm_stay_awake();
+>>>>>>>> }
+>>>>>>>>
+>>>>>>>> rproc_pm_relax()
+>>>>>>>> {
+>>>>>>>>         if (atomic_dec_return(&wake_count) == 0)
+>>>>>>>>                 pm_stay_awake();
+>>>>>>>> }
+>>>>>>>>
+>>>>>>>> can refer code like:
+>>>>>>>>
+>>>>>>>> rproc_report_crash()
+>>>>>>>> {
+>>>>>>>>         ...
+>>>>>>>>         rproc_pm_stay_awake();
+>>>>>>>>         queue_work();
+>>>>>>>>         ...
+>>>>>>>> }
+>>>>>>>>
+>>>>>>>> rproc_crash_handler_work()
+>>>>>>>> {
+>>>>>>>>         ...
+>>>>>>>>         if (rproc->state == RPROC_OFFLINE || rproc->state == RPROC_CRASHED) {
+>>>>>>>>                       /* We have raced with rproc_shutdown() */
+>>>>>>>>                       rproc_pm_relax();
+>>>>>>>>                 mutex_unlock(&rproc->lock);
+>>>>>>>>                 return;
+>>>>>>>>               }
+>>>>>>>>         ...
+>>>>>>>> }
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Thanks,
+>>>>>>>>> Mathieu
+>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> recovery fail case 1:
+>>>>>>>>>> |                                      |firstcrash interrupt issued
+>>>>>>>>>> | second crashed interrupt issued      | rproc_report_crash()
+>>>>>>>>>> | rproc_report_crash()                 |          pm_stay_awake()
+>>>>>>>>>> |          pm_stay_awake()             |          queue_work()
+>>>>>>>>>> |          queue_work()                |rproc_crash_handler_work()
+>>>>>>>>>> |                                      |mutex_lock(&rproc->lock);
+>>>>>>>>>> |                                      |rproc_stop()
+>>>>>>>>>> |rproc_crash_handler_work()            |rproc->state = RPROC_OFFLINE;
+>>>>>>>>>> |                                      |RPROC_RECOVERY_FAIL //new
+>>>>>>>>>> |                                      |mutex_unlock(&rproc->lock);
+>>>>>>>>>> |mutex_lock(&rproc->lock);             |pm_relax()
+>>>>>>>>>> |if (rproc->state == RPROC_OFFLINE)    |
+>>>>>>>>>> |return // shouldn't do pm_relax if RPROC_RECOVERY_FAIL?  |
+>>>>>>>>>> |mutex_unlock(&rproc->lock);           |
+>>>>>>>>>> |                                      |
+>>>>>>>>>> |                                      |
+>>>>>>>>>> |                                      |
+>>>>>>>>>>
+>>>>>>>>>> recovery fail case 2:
+>>>>>>>>>> |                                      |firstcrash interrupt issued
+>>>>>>>>>> |                                      | rproc_report_crash()
+>>>>>>>>>> |                                      |          pm_stay_awake()
+>>>>>>>>>> |                                      |          queue_work()
+>>>>>>>>>> |                                      |rproc_crash_handler_work()
+>>>>>>>>>> |                                      |mutex_lock(&rproc->lock);
+>>>>>>>>>> |                                      |rproc_stop()
+>>>>>>>>>> |                                      |rproc->state = RPROC_OFFLINE;
+>>>>>>>>>> |                                      |RPROC_RECOVERY_FAIL //new
+>>>>>>>>>> |                                      |mutex_unlock(&rproc->lock);
+>>>>>>>>>> |                                      |pm_relax()
+>>>>>>>>>> |
+>>>>>>>>>> | second crashed interrupt issued      |
+>>>>>>>>>> | rproc_report_crash()                 |
+>>>>>>>>>> |          pm_stay_awake()             |
+>>>>>>>>>> |          queue_work()                |
+>>>>>>>>>> |pm_stay_awake()
+>>>>>>>>>> |mutex_lock(&rproc->lock);
+>>>>>>>>>> |if (rproc->state == RPROC_OFFLINE)    |
+>>>>>>>>>> |return // still need do pm_relax if RPROC_RECOVERY_FAIL?  |
+>>>>>>>>>> |mutex_unlock(&rproc->lock);           |
+>>>>>>>>>> |                                      |
+>>>>>>>>>> |                                      |
+>>>>>>>>>> |                                      |
+>>>>>>>>>>
+>>>>>>>>>> Maybe I can have:
+>>>>>>>>>> 1. the pm_stay_awake and pm_relax with count based and call with paired for
+>>>>>>>>>> fix current concurency issue.
+>>>>>>>>>> 2. RPROC_RECOVERY_FAIL can be another patch for continue try to do recovery
+>>>>>>>>>> work.
+>>>>>>>>>> 3. handle RPROC_DETACHED case.
+>>>>>>>>>>
+>>>>>>>>>> On 11/2/2022 4:11 AM, Mathieu Poirier wrote:
+>>>>>>>>>>> On Fri, 28 Oct 2022 at 09:31, Arnaud POULIQUEN
+>>>>>>>>>>> <arnaud.pouliquen@foss.st.com> wrote:
+>>>>>>>>>>>>
+>>>>>>>>>>>> Hi,
+>>>>>>>>>>>>
+>>>>>>>>>>>> On 10/24/22 05:17, Aiqun(Maria) Yu wrote:
+>>>>>>>>>>>>> On 10/22/2022 3:34 AM, Mathieu Poirier wrote:
+>>>>>>>>>>>>>> On Wed, 19 Oct 2022 at 23:52, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> On 10/14/2022 2:03 AM, Mathieu Poirier wrote:
+>>>>>>>>>>>>>>>> On Thu, Oct 13, 2022 at 11:34:42AM -0600, Mathieu Poirier wrote:
+>>>>>>>>>>>>>>>>> On Thu, Oct 13, 2022 at 09:40:09AM +0800, Aiqun(Maria) Yu wrote:
+>>>>>>>>>>>>>>>>>> Hi Mathieu,
+>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>> On 10/13/2022 4:43 AM, Mathieu Poirier wrote:
+>>>>>>>>>>>>>>>>>>> Please add what has changed from one version to another, either in a cover
+>>>>>>>>>>>>>>>>>>> letter or after the "Signed-off-by".  There are many examples on how to
+>>>>>>>>>>>>>>>>>>> do that
+>>>>>>>>>>>>>>>>>>> on the mailing list.
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>> Thx for the information, will take a note and benefit for next time.
+>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>> On Fri, Sep 16, 2022 at 03:12:31PM +0800, Maria Yu wrote:
+>>>>>>>>>>>>>>>>>>>> RPROC_OFFLINE state indicate there is no recovery process
+>>>>>>>>>>>>>>>>>>>> is in progress and no chance to do the pm_relax.
+>>>>>>>>>>>>>>>>>>>> Because when recovering from crash, rproc->lock is held and
+>>>>>>>>>>>>>>>>>>>> state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+>>>>>>>>>>>>>>>>>>>> and then unlock rproc->lock.
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>> You are correct - because the lock is held rproc->state should be set to
+>>>>>>>>>>>>>>>>>>> RPROC_RUNNING
+>>>>>>>>>>>>>>>>>>> when rproc_trigger_recovery() returns.  If that is not the case then
+>>>>>>>>>>>>>>>>>>> something
+>>>>>>>>>>>>>>>>>>> went wrong.
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>> Function rproc_stop() sets rproc->state to RPROC_OFFLINE just before
+>>>>>>>>>>>>>>>>>>> returning,
+>>>>>>>>>>>>>>>>>>> so we know the remote processor was stopped.  Therefore if rproc->state
+>>>>>>>>>>>>>>>>>>> is set
+>>>>>>>>>>>>>>>>>>> to RPROC_OFFLINE something went wrong in either request_firmware() or
+>>>>>>>>>>>>>>>>>>> rproc_start().  Either way the remote processor is offline and the system
+>>>>>>>>>>>>>>>>>>> probably
+>>>>>>>>>>>>>>>>>>> in an unknown/unstable.  As such I don't see how calling pm_relax() can help
+>>>>>>>>>>>>>>>>>>> things along.
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>> PROC_OFFLINE is possible that rproc_shutdown is triggered and successfully
+>>>>>>>>>>>>>>>>>> finished.
+>>>>>>>>>>>>>>>>>> Even if it is multi crash rproc_crash_handler_work contention issue, and
+>>>>>>>>>>>>>>>>>> last rproc_trigger_recovery bailed out with only
+>>>>>>>>>>>>>>>>>> rproc->state==RPROC_OFFLINE, it is still worth to do pm_relax in pair.
+>>>>>>>>>>>>>>>>>> Since the subsystem may still can be recovered with customer's next trigger
+>>>>>>>>>>>>>>>>>> of rproc_start, and we can make each error out path clean with pm resources.
+>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>> I suggest spending time understanding what leads to the failure when
+>>>>>>>>>>>>>>>>>>> recovering
+>>>>>>>>>>>>>>>>>>> from a crash and address that problem(s).
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>> In current case, the customer's information is that the issue happened when
+>>>>>>>>>>>>>>>>>> rproc_shutdown is triggered at similar time. So not an issue from error out
+>>>>>>>>>>>>>>>>>> of rproc_trigger_recovery.
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> That is a very important element to consider and should have been mentioned
+>>>>>>>>>>>>>>>>> from
+>>>>>>>>>>>>>>>>> the beginning.  What I see happening is the following:
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> rproc_report_crash()
+>>>>>>>>>>>>>>>>>                 pm_stay_awake()
+>>>>>>>>>>>>>>>>>                 queue_work() // current thread is suspended
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> rproc_shutdown()
+>>>>>>>>>>>>>>>>>                 rproc_stop()
+>>>>>>>>>>>>>>>>>                         rproc->state = RPROC_OFFLINE;
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> rproc_crash_handler_work()
+>>>>>>>>>>>>>>>>>                 if (rproc->state == RPROC_OFFLINE)
+>>>>>>>>>>>>>>>>>                         return // pm_relax() is not called
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> The right way to fix this is to add a pm_relax() in rproc_shutdown() and
+>>>>>>>>>>>>>>>>> rproc_detach(), along with a very descriptive comment as to why it is needed.
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>> Thinking about this further there are more ramifications to consider.  Please
+>>>>>>>>>>>>>>>> confirm the above scenario is what you are facing.  I will advise on how to
+>>>>>>>>>>>>>>>> move
+>>>>>>>>>>>>>>>> forward if that is the case.
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> Not sure if the situation is clear or not. So resend the email again.
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> The above senario is what customer is facing. crash hanppened while at
+>>>>>>>>>>>>>>> the same time shutdown is triggered.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Unfortunately this is not enough details to address a problem as
+>>>>>>>>>>>>>> complex as this one.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> And the device cannto goes to suspend state after that.
+>>>>>>>>>>>>>>> the subsystem can still be start normally after this.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> If the code flow I pasted above reflects the problem at hand, the
+>>>>>>>>>>>>>> current patch will not be sufficient to address the issue.  If Arnaud
+>>>>>>>>>>>>>> confirms my suspicions we will have to think about a better solution.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Hi Mathiew,
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Could you pls have more details of any side effects other then power issue of
+>>>>>>>>>>>>> the current senario?
+>>>>>>>>>>>>> Why the current patch is not sufficient pls?
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Have the current senario in details with rproc->lock information in details:
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> | subsystem crashed interrupt issued      | user trigger shutdown
+>>>>>>>>>>>>> | rproc_report_crash()                    |
+>>>>>>>>>>>>> |          pm_stay_awake()                |
+>>>>>>>>>>>>> |          queue_work()                   |
+>>>>>>>>>>>>> |                                         |rproc_shutdown
+>>>>>>>>>>>>> |                                         |mutex_lock(&rproc->lock);
+>>>>>>>>>>>>> |                                         |rproc_stop()
+>>>>>>>>>>>>> |rproc_crash_handler_work()               |rproc->state = RPROC_OFFLINE;
+>>>>>>>>>>>>> |                                         |mutex_unlock(&rproc->lock);
+>>>>>>>>>>>>> |mutex_lock(&rproc->lock);                |
+>>>>>>>>>>>>> |if (rproc->state == RPROC_OFFLINE)       |
+>>>>>>>>>>>>> |return // pm_relax() is not called       |rproc_boot
+>>>>>>>>>>>>> |mutex_unlock(&rproc->lock);              |
+>>>>>>>>>>>>> |                                         |mutex_lock(&rproc->lock);
+>>>>>>>>>>>>> |                                         |rproc_start()
+>>>>>>>>>>>>> |                                         |mutex_unlock(&rproc->lock);
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> Agree with Mathieu, this is not so simple.
+>>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> Thanks for looking into this.
+>>>>>>>>>>>
+>>>>>>>>>>>> Here is my view  hoping I haven't missed a point in your discussion or
+>>>>>>>>>>>> an other corner cases.
+>>>>>>>>>>>>
+>>>>>>>>>>>> I tried to analyze the issues (in what follows, the term "condition" means
+>>>>>>>>>>>> the "if" condition in which Aiqun proposes to add the fix) :
+>>>>>>>>>>>>
+>>>>>>>>>>>> I can see 4 use cases with race condition
+>>>>>>>>>>>>
+>>>>>>>>>>>> 1) crash report while already one is treated (rproc_boot_recovery called)
+>>>>>>>>>>>>            => not a real use case as if the remote processor is crashed we
+>>>>>>>>>>>>                     should not have a second crash report
+>>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> That part is of great concern to me.  *Theoretically* we should not
+>>>>>>>>>>> get a new crash report while one has already been dispatched but the
+>>>>>>>>>>> current code accounts for this scenario and as such the possibility
+>>>>>>>>>>> can't be dismissed.  Therefore we need to expect rproc_report_crash()
+>>>>>>>>>>> to be called multiple times before a single instance of
+>>>>>>>>>>> rproc_boot_recovery() is scheduled.
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>> 2) rproc_stop executed between the queuing of the crash work and the call of
+>>>>>>>>>>>>         rproc_crash_handler_work
+>>>>>>>>>>>>          => rproc->state = RPROC_OFFLINE
+>>>>>>>>>>>>          => we enter in the "condition" and the pm_relax has to be called
+>>>>>>>>>>>>          => This commit fix should solve this use case
+>>>>>>>>>>>>
+>>>>>>>>>>>> 3) rproc_detach executed between the queue of the crash work and the call of
+>>>>>>>>>>>>         rproc_crash_handler_work
+>>>>>>>>>>>>          => rproc->state = RPROC_DETACHED;
+>>>>>>>>>>>>          => we don't go in "the condition" and issue because the recovery reattach
+>>>>>>>>>>>>             to the remote processor
+>>>>>>>>>>>>          => but pm_relax is called
+>>>>>>>>>>>>          => probably need an extra fix to avoid to re-attach
+>>>>>>>>>>>>
+>>>>>>>>>>>> 4) crash report while already one is treated (rproc_attach_recovery called)
+>>>>>>>>>>>>          this one corresponds to an auto reboot of the remote processor, with a
+>>>>>>>>>>>>          new crash
+>>>>>>>>>>>>          => rproc->state = RPROC_CRASHED or rproc->state = RPROC_DETACHED;
+>>>>>>>>>>>>          4)a) rproc->state = RPROC_CRASHED if rproc->recovery_disabled = true
+>>>>>>>>>>>>               => should call pm_relax if rproc->recovery_disabled = true
+>>>>>>>>>>>>               => commit does not work for this use case
+>>>>>>>>>>>>
+>>>>>>>>>>>>          4)b) rproc->state = RPROC_DETACHED if recovery fails
+>>>>>>>>>>>>              => error case with an unstable state
+>>>>>>>>>>>>              => how to differentiate it from the use case 3) ?
+>>>>>>>>>>>>              => introduce a RPROC_RECOVERY_FAIL state?
+>>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> The case where a recovery fails needs to be considered and is the
+>>>>>>>>>>> reason the original patch doesn't work.  Right now in
+>>>>>>>>>>> rproc_crash_handler_work(), it is not possible to differentiate
+>>>>>>>>>>> between a legitimate shutdown request (scenario #2 above) and a
+>>>>>>>>>>> recovery that went wrong.  I think introducing RPROC_RECOVERY_FAIL
+>>>>>>>>>>> would greatly simplify things.
+>>>>>>>>>>>
+>>>>>>>>>>> My initial evaluation had not considered the attach/detach scenarios -
+>>>>>>>>>>> thanks for adding that in the mix.
+>>>>>>>>>>>
+>>>>>>>>>>> Aiqun, please send a new patchset that adds a new remote processor
+>>>>>>>>>>> state, i.e RPROC_RECOVERY_FAIL.  There should also be another patch in
+>>>>>>>>>>> that set that takes attach/detach scenarios into account.  The code
+>>>>>>>>>>> between the v6.0 and v6.1 cycle has changed a lot in that area so make
+>>>>>>>>>>> sure to properly rebase.
+>>>>>>>>>>>
+>>>>>>>>>> I will try.
+>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> Then pm_stay_awake is called when the crash work is queued.
+>>>>>>>>>>>> It seems to me coherent to call the pm_relax in the work handler.
+>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> Here is a quick and dirty patch (not tested) that should take into account the
+>>>>>>>>>>>> main use cases ( except 1) and 4)b) )
+>>>>>>>>>>>>
+>>>>>>>>>>>> @@ -2009,8 +2009,18 @@ static void rproc_crash_handler_work(struct work_struct *work)
+>>>>>>>>>>>>
+>>>>>>>>>>>>               mutex_lock(&rproc->lock);
+>>>>>>>>>>>>
+>>>>>>>>>>>> -       if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
+>>>>>>>>>>>> +       if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE ||
+>>>>>>>>>>>> +           rproc->state == RPROC_DETACHED) {
+>>>>>>>>>>>>                       /* handle only the first crash detected */
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +               /*
+>>>>>>>>>>>> +                * call pm-relax in following use cases:
+>>>>>>>>>>>> +                * - the remote processor has been stopped by the user
+>>>>>>>>>>>> +                * - the remote processor is detached
+>>>>>>>>>>>> +                + - the remote proc has an autonomous reset but recovery_disabled is true.
+>>>>>>>>>>>> +                */
+>>>>>>>>>>>> +               if(rproc->state != RPROC_CRASHED || rproc->recovery_disabled)
+>>>>>>>>>>>> +                       pm_relax(rproc->dev.parent);
+>>>>>>>>>>>>                       mutex_unlock(&rproc->lock);
+>>>>>>>>>>>>                       return;
+>>>>>>>>>>>>               }
+>>>>>>>>>>>>
+>>>>>>>>>>>> Regards,
+>>>>>>>>>>>> Arnaud
+>>>>>>>>>>>>
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>> Thanks,
+>>>>>>>>>>>>>>>>>>> Mathieu
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>> When the state is in RPROC_OFFLINE it means separate request
+>>>>>>>>>>>>>>>>>>>> of rproc_stop was done and no need to hold the wakeup source
+>>>>>>>>>>>>>>>>>>>> in crash handler to recover any more.
+>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
+>>>>>>>>>>>>>>>>>>>> ---
+>>>>>>>>>>>>>>>>>>>>           drivers/remoteproc/remoteproc_core.c | 11 +++++++++++
+>>>>>>>>>>>>>>>>>>>>           1 file changed, 11 insertions(+)
+>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>> diff --git a/drivers/remoteproc/remoteproc_core.c
+>>>>>>>>>>>>>>>>>>>> b/drivers/remoteproc/remoteproc_core.c
+>>>>>>>>>>>>>>>>>>>> index e5279ed9a8d7..6bc7b8b7d01e 100644
+>>>>>>>>>>>>>>>>>>>> --- a/drivers/remoteproc/remoteproc_core.c
+>>>>>>>>>>>>>>>>>>>> +++ b/drivers/remoteproc/remoteproc_core.c
+>>>>>>>>>>>>>>>>>>>> @@ -1956,6 +1956,17 @@ static void rproc_crash_handler_work(struct
+>>>>>>>>>>>>>>>>>>>> work_struct *work)
+>>>>>>>>>>>>>>>>>>>>                  if (rproc->state == RPROC_CRASHED || rproc->state ==
+>>>>>>>>>>>>>>>>>>>> RPROC_OFFLINE) {
+>>>>>>>>>>>>>>>>>>>>                          /* handle only the first crash detected */
+>>>>>>>>>>>>>>>>>>>>                          mutex_unlock(&rproc->lock);
+>>>>>>>>>>>>>>>>>>>> +         /*
+>>>>>>>>>>>>>>>>>>>> +          * RPROC_OFFLINE state indicate there is no recovery process
+>>>>>>>>>>>>>>>>>>>> +          * is in progress and no chance to have pm_relax in place.
+>>>>>>>>>>>>>>>>>>>> +          * Because when recovering from crash, rproc->lock is held and
+>>>>>>>>>>>>>>>>>>>> +          * state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+>>>>>>>>>>>>>>>>>>>> +          * and then unlock rproc->lock.
+>>>>>>>>>>>>>>>>>>>> +          * RPROC_OFFLINE is only an intermediate state in recovery
+>>>>>>>>>>>>>>>>>>>> +          * process.
+>>>>>>>>>>>>>>>>>>>> +          */
+>>>>>>>>>>>>>>>>>>>> +         if (rproc->state == RPROC_OFFLINE)
+>>>>>>>>>>>>>>>>>>>> +                 pm_relax(rproc->dev.parent);
+>>>>>>>>>>>>>>>>>>>>                          return;
+>>>>>>>>>>>>>>>>>>>>                  }
+>>>>>>>>>>>>>>>>>>>> --
+>>>>>>>>>>>>>>>>>>>> 2.7.4
+>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>> --
+>>>>>>>>>>>>>>>>>> Thx and BRs,
+>>>>>>>>>>>>>>>>>> Aiqun(Maria) Yu
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> --
+>>>>>>>>>>>>>>> Thx and BRs,
+>>>>>>>>>>>>>>> Aiqun(Maria) Yu
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> --
+>>>>>>>>>> Thx and BRs,
+>>>>>>>>>> Aiqun(Maria) Yu
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> --
+>>>>>>>> Thx and BRs,
+>>>>>>>> Aiqun(Maria) Yu
+>>>>>>
+>>>>>>
+>>>>>> --
+>>>>>> Thx and BRs,
+>>>>>> Aiqun(Maria) Yu
+>>>>
+>>>>
+>>>> -- 
+>>>> Thx and BRs,
+>>>> Aiqun(Maria) Yu
+>>
+>>
+>> -- 
+>> Thx and BRs,
+>> Aiqun(Maria) Yu
+
+
+-- 
+Thx and BRs,
+Aiqun(Maria) Yu
