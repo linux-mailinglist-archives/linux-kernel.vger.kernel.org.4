@@ -2,526 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842FF631790
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 01:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D650663179B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 01:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiKUAZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 19:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S229816AbiKUA0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 19:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiKUAZD (ORCPT
+        with ESMTP id S229708AbiKUAZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 19:25:03 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E718920F47
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 16:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1668990301; x=1700526301;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=R4+tON5zVpIFLrMqzwE1JpewvZsCKpABmNelC+vfl+8=;
-  b=RDbCLvVgor44c0zxSnNVH+qI//CWCVoeEySlS+PgfPI5lm9XwosX3lDe
-   hhw2fOUQB+HG/N/KSLZSt3e5rp0zHLN3FIWkTEFD6RTo4b0o/Ji8aaN1N
-   QUuETIIB5hIOl7EKlEmSfEI0eWxdb6hu3Zmv+yJLB86rNAc+enaaVbmyg
-   LJy1ij1gqvmt460Yn1cezL1svzbhjUMFvykfNk7wvxjTdx1enBwZpQWsw
-   Zbib4ZLwkFDswRbgwuZmiNxQUBAXe1sL67TPyqCwC9zNPxzfmHKbGM+qg
-   QbEgx5i/5oW0S7sdA8i43t7qchXPQNQnY7V+L7+MSRsdHMtKb/9aGdJ81
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,180,1665417600"; 
-   d="scan'208";a="221896477"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Nov 2022 08:25:01 +0800
-IronPort-SDR: IiWt0W1hIyjYp6J6eP30/7xR2emTbsXOf03h++MKo521uX2gxlx5eNblVLNOwVoToUzLqlelNc
- i4Im3t69SvSF45ujdVj/pCNcrSpY+PKUadzlByG0rpLT8ju729fGFnIht059JokqjJvZypViAs
- IbEh3BXTU0zbJAZAcbKJ/zDOG3iBfgFNHa22OGcN75K4W7ZCzTBSOZUVXhhFyc/Tn2JyQwfULo
- 8VWglsyjbBZcPgfW1UFKvj6orPJfg/T0DqXsu5DR+caYzovxcaHBNdBJlTfd2bYYLe6yh9t+j8
- SKI=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 15:38:07 -0800
-IronPort-SDR: 1aY+mSoIPkl8Kj9z5a57vB35uC1pGl7qPFi4BfD3wKGOcnx16aIfnW6YHexNj68Tj/intOqQ/b
- +oyqUaFscYMwulbbqqg7xFEdEBNcnlwdFdf8OEKkvjInQ+Ot50g1gibwkv0LPmKVa+N3ESn9y4
- FqZgyNlDxuu1krL3GsL1zFpJqAQ678pje/hBDEfeZLV62ocGe7k0+jWYa+MWD1YQOqdSiZ0dyZ
- 8OCiQITETrxMt1zWhphG22vdfakCtHMRWnjp1DNMCBFjVRy1a/ItXI/dwoZxNnv7bpb/1EDWqc
- CG4=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 16:25:01 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NFp7J4KRYz1RvTr
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 16:25:00 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1668990298; x=1671582299; bh=R4+tON5zVpIFLrMqzwE1JpewvZsCKpABmNe
-        lC+vfl+8=; b=ILBy/fvh/gj6TQPuT8uTPjyeef/RCmHuRIzaDV84BVkTg7ielem
-        cABVe9yhFVtg/vHzHzu3hnzQcT15SfASEUd7MdbB3Fo/fkEbpwieZ1OwX2iC1wiJ
-        P/8kCUZkAZlOrJpZnjXkLuBoRKUHYAakgllHSMKPAYXsq+g6WTvf99ee6KfV0Ihx
-        D54prEGyiypoxoutq83HDkksNkvg7suvL1NUBGhnyuy1eHGNRtCHmlbYRY95c330
-        lKPkFGm7+98sl7mxcJKxXRmW7R/ti8Hu4CsdSa3pTNVIQzFs/YOu62Fym/LRPsah
-        dzaRnD/vwLEzwnBQRZFCDT4+ky0kt66pw2Q==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id jk6OaX3Mnqcn for <linux-kernel@vger.kernel.org>;
-        Sun, 20 Nov 2022 16:24:58 -0800 (PST)
-Received: from [10.225.163.53] (unknown [10.225.163.53])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NFp7D3W0kz1RvLy;
-        Sun, 20 Nov 2022 16:24:56 -0800 (PST)
-Message-ID: <e046c4dd-9090-6f5a-b28d-717821cba632@opensource.wdc.com>
-Date:   Mon, 21 Nov 2022 09:24:54 +0900
+        Sun, 20 Nov 2022 19:25:57 -0500
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2120.outbound.protection.outlook.com [40.107.114.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08E720F47;
+        Sun, 20 Nov 2022 16:25:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bZpJFgqe8VBIqpZBjYZZBiu70M0e872u259g5I7Y7YuKHdJ50q3D1/9j7a5KFjR6swqUvXCPrAKiwn8+DaVOMTZLGMcgJIpBNMeK/ofhQloHfhYlZGR8vKv96Kg2NmTBSWUOL+gcaNwUS7WHFmA3YWwZscF5ES/y2CATsxlOZyFexBex8r/klb+2ykgZcvogoT7mxo4vCLSKdKM0Nkk3+UPR5iOxaHrXrc/MXNMneyvkNHzq504n2yOZxeBMbTYdoAEHQRnImWpSqOI1gCSjJ2XTZFWZdidouKUsQmw0Ln3JRcYuTbi1jbrRvsnsUJdEKeMkaecm4VSxo34b3vzw8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YqJlfBDTfAAeQn0nYl5/qpcSiOchA+pQ+TQI6hJnY/E=;
+ b=NE4d3udQSuTEM425g2Z37/xLGXHK/SXqUOFuGwDIY1MQ5TnHwz+5ekS4i2iCfgZCLOCML45n7xJhA7v2MlW4HshM38aYgyMKgVOR4ziiWEE5J9qHbjoqsH1cgNiqrCiGtdnCxk7vP0M61DAlS1AIKms5aVxnNaT4Tuy+qIMGhTHRhEQFWmAIAcSJqguWy91YQd6VhhulvCMr9zxiemIegkWCoK6X3PNJ3ZqMSjOI4Io8T0jfYJGLUS3i/rMYIRd+GChANCZhRoJwmOHcj7gi4L0HhOlX5IgPSilCVjS8qPYPAZkrxDh9FVye3I8uxXMynIufCZEcCy5CUgeGBPWOpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YqJlfBDTfAAeQn0nYl5/qpcSiOchA+pQ+TQI6hJnY/E=;
+ b=da/RP4YH6OcstbDPr+ECwt2Rtt5FQYu1T06hwEoPJ98UfygNRElPSNyi8yRgaC6Aecb9OWTjkGDQ3cU1WccErxvpAPW4PlHQTzSD1dq9nvGEedBRkk1eQ/BN17mAGVkpif0EqOwssbqB+8SR2xKkE/19ZOUa4zIVQUeNMZ20DHk=
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ (2603:1096:404:8028::13) by TYWPR01MB9407.jpnprd01.prod.outlook.com
+ (2603:1096:400:1a2::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
+ 2022 00:25:52 +0000
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::cd89:4a4b:161e:b78d]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::cd89:4a4b:161e:b78d%9]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
+ 00:25:52 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Rob Herring <robh@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yangtao Li <tiny.windzz@gmail.com>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Daniel Mack <zonque@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+CC:     Krzysztof Kozlowski <krzk@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: RE: [PATCH] dt-bindings: Add missing start and/or end of line regex
+ anchors
+Thread-Topic: [PATCH] dt-bindings: Add missing start and/or end of line regex
+ anchors
+Thread-Index: AQHY+55sqHJJZXHHEUGv/qPttLIYU65Ih+IA
+Date:   Mon, 21 Nov 2022 00:25:52 +0000
+Message-ID: <TYBPR01MB5341D75C3C139DEAFAA599EDD80A9@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+References: <20221118223728.1721589-1-robh@kernel.org>
+In-Reply-To: <20221118223728.1721589-1-robh@kernel.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|TYWPR01MB9407:EE_
+x-ms-office365-filtering-correlation-id: ce582612-997f-4390-e5f5-08dacb56f29e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xiULpy+xv0GaeT+uC/cVHMJdfDztyRubeh/MOVrfkimUNsovV8NZYpnFb6B+IjWw5EnqJrLykjeo2C4L7rPsuZfVMOYBAc9ZMMQE2+bS/SX+hvx1tcqO9k8ngk7Wyi51tGHmQZof7sNzcoIbfwHXBnGf20Tm5SkwJu40EFlrCkB5tjEKf3TbdYO+ZsoRLYYDRc8/Ah/sqQcsxRvR4W4mozD1KJX6e3gN7X7lOb243jQH3zmpCNz4S2PA+CWbGeldYflqT57M/o2dRe3Z6LlgQEk1CIHnkmjDb2Ek2BJRGt1nmZttnhJ62ir78aLP1PNbGKbXd+Mx0ZRFqcCIszZKVBOTeswfirsrLM4vWR7+otQwN33Ln1OHtlKQItKRPeZy/C/9ygaXbCOCqbYBCmX00Zkj3KV/0Vbm6J+LItOeihTUMVJdKLKO03h/KnkEbr2pZQxEmyIxtoRHIhV2ATi1g2L8nOZ35b7bJknGK6BnpY+OLPysXox2o4zae395rkIhfDc7j09qrPlFgjAhAwxq/T6nU8bzugqnxCnbGfWqj9G6E1oPjPzLf4nFpYBHpJXDqBrWGcLw+B1q0m9JrjIOsh+fLA2t1EvsjvNJWRkWvusJg/Yp9065Ja8cBwt7+XHypKBA6KEZ8x2eiqw77PQDjCEjkd27AIASwKLZLe4Ji6ctJQc0qdpE0qFJq69DqmHNq1sGN6ODINIv4iA+oVQYzCWmBKc+8TItDIP5pBTB/Jw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(39860400002)(366004)(396003)(451199015)(6506007)(38070700005)(110136005)(921005)(2906002)(71200400001)(478600001)(86362001)(55016003)(38100700002)(122000001)(7696005)(9686003)(33656002)(186003)(4744005)(52536014)(7406005)(8936002)(7416002)(41300700001)(66446008)(4326008)(8676002)(66476007)(76116006)(66946007)(66556008)(5660300002)(316002)(64756008)(54906003)(6636002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Lo9iqX0dXJcYY1aDnJE359K66hPEIQHEwjljLdFufIxr3skSSZ5ZfospLQqi?=
+ =?us-ascii?Q?RJHhIaqMmaKXPTkLJfK8SuCP7+pqqhrqU5UH1B/5I3xRQVbBqiNY60FKzeUd?=
+ =?us-ascii?Q?KIf6fKLG9kV004OjV/uqHQvARjZJ4eeBn9uuWHXBFtrfzY8C/e+e/DibtLyY?=
+ =?us-ascii?Q?j5khT/rX8s7uJSFP52Nnvcec6cYVldukO4pGCDAJrb/m0uHUZZ/pmCEBFHW4?=
+ =?us-ascii?Q?lVsQAtFhkef5g1a8KtJw7xMOwbXKIWlSbZQJEYEJ6wPvf8XiofpZdFXYkiou?=
+ =?us-ascii?Q?dnpKMkN5nm4B76LSBrvEUxBzsGQxFjJW+dqkx6T3Wgq41RX93mw2aZfBc4DQ?=
+ =?us-ascii?Q?g2eS8/eFkCZZKLVB3RAjdZCMk7RbCzJs7Oe5CHYzrGxIdrKm/CWVC/cnu+er?=
+ =?us-ascii?Q?tvjmuQ0hgFr9CvwCfrwKSad+V10uZ0dWii+AsoSbDWZiuQfi4mt69pZ++dGt?=
+ =?us-ascii?Q?H/wqwVu9ZVoLZt6NWlWdCJvK++wXVRWy6ud6JfidpEOO7mawgfY2OBarvBrR?=
+ =?us-ascii?Q?DP9s/Qtas+Rpya98atXl4p1KnsDPoTEUjNHHoAKm7OJKsTYdxnHJ3Vymyh8d?=
+ =?us-ascii?Q?oSgilU1Tw23Jt3f4Vt5mDaBqNWnppB+nv8X5msi3ay3DzTg85Di3arC8GQ0D?=
+ =?us-ascii?Q?quQfsA0/Zn6/cpUb4jm61TatOnhxgHFgUNbO22dL3I43FVwFQkCVAq/g/CuN?=
+ =?us-ascii?Q?llhhpr9bsrJEccKVioKwF/DAkRyg86cRJudds8i2mblVb+DOx5cVxDjS1aH3?=
+ =?us-ascii?Q?tmN+MZswAgqFje4BN57Lj0+taogSRFw1VxcHbtqpxw3IYv1uP6P0CkzICyge?=
+ =?us-ascii?Q?cFh2URokZY2p5u18o28ViuaM6EZr8VXyhwTbigYID6TEa6i0IGt/e33GOr0m?=
+ =?us-ascii?Q?FfmskgF4sS7zDqlMiPSDeRBrc/mKyfmXQ8CRAsRqDuFp9YLIErF0vYpQz+Ix?=
+ =?us-ascii?Q?qTXQM0aMZP1ksXGLcJPzrKvDDOuYzfYNYLbvzxYLTxehRfWiKrvlrSlgM/pX?=
+ =?us-ascii?Q?al6OrRXNf/7151STn7Y1O7rDKLR2ip7dGP0NjTrHNtsG68iSF1at61Hnllil?=
+ =?us-ascii?Q?+FUYcePCLRLTSNTCXglaqOs5VEp15RUWhXTlr+Rr/gpfGdWDXZTX30ptLOgf?=
+ =?us-ascii?Q?qb1iVFR5uvZgjISY6y2CBeBcz52ZFGW9yKeNBw5rS7oGuhSLSzhW7WKy7ziK?=
+ =?us-ascii?Q?bpB4WYqcKXQVPgHT0l8XnZgvL1CAQXK4iYl5qtndCQcYbSwN9/nCCDNkY7MR?=
+ =?us-ascii?Q?mZPcbkqzJ0OQDLV0IMDBo3sAuXAK541oWYQLWdOnV3K8XgkkgntsQvluB8Qg?=
+ =?us-ascii?Q?vdrXGu8b84hSHn+TonWh1/Lr4BuIIupp5MdEepGLg1eXuWc33AK0hr5fJHu2?=
+ =?us-ascii?Q?JZc6iReLz8FdI4wZGn+00vBi0Ww4krfHOkZo+LTsHbEXhe2b454vhWndnrXM?=
+ =?us-ascii?Q?sVWsh2j1z2cqt5SmVjPM256CG1hMYSCAaxFus/5TUbO3OKYHpSpq6SpmzGDj?=
+ =?us-ascii?Q?Gvzhqe/J7O5owekDI7OdNFWXr7g/yE4XUT4P8BIEwvn3IBJFzoWlvuz+tsN9?=
+ =?us-ascii?Q?7myrAw/ioUUAjn9U5JJi6T/8kbiiXlf/cxRgzjxdtLQJdZoj25W9NRVAUSdt?=
+ =?us-ascii?Q?aWKegdS3U6Hc+HjujpeVk6YMj3NJ76fZECQZEpvnJhk4l6UfgRv7ilqaTg7E?=
+ =?us-ascii?Q?MaTMhQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH V6 3/8] block, bfq: move io_cq-persistent bfqq data into a
- dedicated struct
-Content-Language: en-US
-To:     Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
-        Gianmarco Lusvardi <glusvardi@posteo.net>,
-        Giulio Barabino <giuliobarabino99@gmail.com>,
-        Emiliano Maccaferri <inbox@emilianomaccaferri.com>
-References: <20221103162623.10286-1-paolo.valente@linaro.org>
- <20221103162623.10286-4-paolo.valente@linaro.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20221103162623.10286-4-paolo.valente@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce582612-997f-4390-e5f5-08dacb56f29e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2022 00:25:52.3847
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5MOsZdQW+2Yww1wsWAMJmrRrUwSCHQ7U8dNi5IielUC0CPYtj/QzZfXJDpFoC7SGVjqEbtT0JIWm5v94gIyVxFPhyGazBxAyrG7cnz8pMPqrkRfAOqONf/Q0PbT3kzKu
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9407
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 01:26, Paolo Valente wrote:
-> With a multi-actuator drive, a process may get associated with multiple
-> bfq_queues: one queue for each of the N actuators. So, the bfq_io_cq
-> data structure must be able to accommodate its per-queue persistent
-> information for N queues. Currently it stores this information for
-> just one queue, in several scalar fields.
-> 
-> This is a preparatory commit for moving to accommodating persistent
-> information for N queues. In particular, this commit packs all the
-> above scalar fields into a single data structure. Then there is now
-> only one fieldi, in bfq_io_cq, that stores all the above information. This
+Hi Rob,
 
-s/fieldi/field
-
-Other than that, looks OK to me.
-
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> scalar field will then be turned into an array by a following commit.
-> 
-> Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Signed-off-by: Gianmarco Lusvardi <glusvardi@posteo.net>
-> Signed-off-by: Giulio Barabino <giuliobarabino99@gmail.com>
-> Signed-off-by: Emiliano Maccaferri <inbox@emilianomaccaferri.com>
-> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+> From: Rob Herring, Sent: Saturday, November 19, 2022 7:37 AM
+>=20
+> json-schema patterns by default will match anywhere in a string, so
+> typically we want at least the start or end anchored. Fix the obvious
+> cases where the anchors were forgotten.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  block/bfq-iosched.c | 129 +++++++++++++++++++++++++-------------------
->  block/bfq-iosched.h |  52 ++++++++++--------
->  2 files changed, 105 insertions(+), 76 deletions(-)
-> 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index ec4b0e70265f..01528182c0c5 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -404,9 +404,10 @@ void bic_set_bfqq(struct bfq_io_cq *bic,
->  	 * we cancel the stable merge if
->  	 * bic->stable_merge_bfqq == bfqq.
->  	 */
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  	bic->bfqq[is_sync][actuator_idx] = bfqq;
->  
-> -	if (bfqq && bic->stable_merge_bfqq == bfqq) {
-> +	if (bfqq && bfqq_data->stable_merge_bfqq == bfqq) {
->  		/*
->  		 * Actually, these same instructions are executed also
->  		 * in bfq_setup_cooperator, in case of abort or actual
-> @@ -415,9 +416,9 @@ void bic_set_bfqq(struct bfq_io_cq *bic,
->  		 * did so, we would nest even more complexity in this
->  		 * function.
->  		 */
-> -		bfq_put_stable_ref(bic->stable_merge_bfqq);
-> +		bfq_put_stable_ref(bfqq_data->stable_merge_bfqq);
->  
-> -		bic->stable_merge_bfqq = NULL;
-> +		bfqq_data->stable_merge_bfqq = NULL;
->  	}
->  }
->  
-> @@ -1174,38 +1175,40 @@ static void
->  bfq_bfqq_resume_state(struct bfq_queue *bfqq, struct bfq_data *bfqd,
->  		      struct bfq_io_cq *bic, bool bfq_already_existing)
->  {
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  	unsigned int old_wr_coeff = 1;
->  	bool busy = bfq_already_existing && bfq_bfqq_busy(bfqq);
->  
-> -	if (bic->saved_has_short_ttime)
-> +	if (bfqq_data->saved_has_short_ttime)
->  		bfq_mark_bfqq_has_short_ttime(bfqq);
->  	else
->  		bfq_clear_bfqq_has_short_ttime(bfqq);
->  
-> -	if (bic->saved_IO_bound)
-> +	if (bfqq_data->saved_IO_bound)
->  		bfq_mark_bfqq_IO_bound(bfqq);
->  	else
->  		bfq_clear_bfqq_IO_bound(bfqq);
->  
-> -	bfqq->last_serv_time_ns = bic->saved_last_serv_time_ns;
-> -	bfqq->inject_limit = bic->saved_inject_limit;
-> -	bfqq->decrease_time_jif = bic->saved_decrease_time_jif;
-> +	bfqq->last_serv_time_ns = bfqq_data->saved_last_serv_time_ns;
-> +	bfqq->inject_limit = bfqq_data->saved_inject_limit;
-> +	bfqq->decrease_time_jif = bfqq_data->saved_decrease_time_jif;
->  
-> -	bfqq->entity.new_weight = bic->saved_weight;
-> -	bfqq->ttime = bic->saved_ttime;
-> -	bfqq->io_start_time = bic->saved_io_start_time;
-> -	bfqq->tot_idle_time = bic->saved_tot_idle_time;
-> +	bfqq->entity.new_weight = bfqq_data->saved_weight;
-> +	bfqq->ttime = bfqq_data->saved_ttime;
-> +	bfqq->io_start_time = bfqq_data->saved_io_start_time;
-> +	bfqq->tot_idle_time = bfqq_data->saved_tot_idle_time;
->  	/*
->  	 * Restore weight coefficient only if low_latency is on
->  	 */
->  	if (bfqd->low_latency) {
->  		old_wr_coeff = bfqq->wr_coeff;
-> -		bfqq->wr_coeff = bic->saved_wr_coeff;
-> +		bfqq->wr_coeff = bfqq_data->saved_wr_coeff;
->  	}
-> -	bfqq->service_from_wr = bic->saved_service_from_wr;
-> -	bfqq->wr_start_at_switch_to_srt = bic->saved_wr_start_at_switch_to_srt;
-> -	bfqq->last_wr_start_finish = bic->saved_last_wr_start_finish;
-> -	bfqq->wr_cur_max_time = bic->saved_wr_cur_max_time;
-> +	bfqq->service_from_wr = bfqq_data->saved_service_from_wr;
-> +	bfqq->wr_start_at_switch_to_srt =
-> +		bfqq_data->saved_wr_start_at_switch_to_srt;
-> +	bfqq->last_wr_start_finish = bfqq_data->saved_last_wr_start_finish;
-> +	bfqq->wr_cur_max_time = bfqq_data->saved_wr_cur_max_time;
->  
->  	if (bfqq->wr_coeff > 1 && (bfq_bfqq_in_large_burst(bfqq) ||
->  	    time_is_before_jiffies(bfqq->last_wr_start_finish +
-> @@ -1878,7 +1881,7 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
->  	wr_or_deserves_wr = bfqd->low_latency &&
->  		(bfqq->wr_coeff > 1 ||
->  		 (bfq_bfqq_sync(bfqq) &&
-> -		  (bfqq->bic || RQ_BIC(rq)->stably_merged) &&
-> +		  (bfqq->bic || RQ_BIC(rq)->bfqq_data.stably_merged) &&
->  		   (*interactive || soft_rt)));
->  
->  	/*
-> @@ -2902,6 +2905,7 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  		     void *io_struct, bool request, struct bfq_io_cq *bic)
->  {
->  	struct bfq_queue *in_service_bfqq, *new_bfqq;
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  
->  	/* if a merge has already been setup, then proceed with that first */
->  	if (bfqq->new_bfqq)
-> @@ -2923,21 +2927,21 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  		 * stable merging) also if bic is associated with a
->  		 * sync queue, but this bfqq is async
->  		 */
-> -		if (bfq_bfqq_sync(bfqq) && bic->stable_merge_bfqq &&
-> +		if (bfq_bfqq_sync(bfqq) && bfqq_data->stable_merge_bfqq &&
->  		    !bfq_bfqq_just_created(bfqq) &&
->  		    time_is_before_jiffies(bfqq->split_time +
->  					  msecs_to_jiffies(bfq_late_stable_merging)) &&
->  		    time_is_before_jiffies(bfqq->creation_time +
->  					   msecs_to_jiffies(bfq_late_stable_merging))) {
->  			struct bfq_queue *stable_merge_bfqq =
-> -				bic->stable_merge_bfqq;
-> +				bfqq_data->stable_merge_bfqq;
->  			int proc_ref = min(bfqq_process_refs(bfqq),
->  					   bfqq_process_refs(stable_merge_bfqq));
->  
->  			/* deschedule stable merge, because done or aborted here */
->  			bfq_put_stable_ref(stable_merge_bfqq);
->  
-> -			bic->stable_merge_bfqq = NULL;
-> +			bfqq_data->stable_merge_bfqq = NULL;
->  
->  			if (!idling_boosts_thr_without_issues(bfqd, bfqq) &&
->  			    proc_ref > 0) {
-> @@ -2946,10 +2950,10 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  					bfq_setup_merge(bfqq, stable_merge_bfqq);
->  
->  				if (new_bfqq) {
-> -					bic->stably_merged = true;
-> +					bfqq_data->stably_merged = true;
->  					if (new_bfqq->bic)
-> -						new_bfqq->bic->stably_merged =
-> -									true;
-> +						new_bfqq->bic->bfqq_data.stably_merged =
-> +							true;
->  				}
->  				return new_bfqq;
->  			} else
-> @@ -3048,6 +3052,7 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  static void bfq_bfqq_save_state(struct bfq_queue *bfqq)
->  {
->  	struct bfq_io_cq *bic = bfqq->bic;
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  
->  	/*
->  	 * If !bfqq->bic, the queue is already shared or its requests
-> @@ -3057,18 +3062,21 @@ static void bfq_bfqq_save_state(struct bfq_queue *bfqq)
->  	if (!bic)
->  		return;
->  
-> -	bic->saved_last_serv_time_ns = bfqq->last_serv_time_ns;
-> -	bic->saved_inject_limit = bfqq->inject_limit;
-> -	bic->saved_decrease_time_jif = bfqq->decrease_time_jif;
-> -
-> -	bic->saved_weight = bfqq->entity.orig_weight;
-> -	bic->saved_ttime = bfqq->ttime;
-> -	bic->saved_has_short_ttime = bfq_bfqq_has_short_ttime(bfqq);
-> -	bic->saved_IO_bound = bfq_bfqq_IO_bound(bfqq);
-> -	bic->saved_io_start_time = bfqq->io_start_time;
-> -	bic->saved_tot_idle_time = bfqq->tot_idle_time;
-> -	bic->saved_in_large_burst = bfq_bfqq_in_large_burst(bfqq);
-> -	bic->was_in_burst_list = !hlist_unhashed(&bfqq->burst_list_node);
-> +	bfqq_data->saved_last_serv_time_ns = bfqq->last_serv_time_ns;
-> +	bfqq_data->saved_inject_limit = bfqq->inject_limit;
-> +	bfqq_data->saved_decrease_time_jif = bfqq->decrease_time_jif;
-> +
-> +	bfqq_data->saved_weight = bfqq->entity.orig_weight;
-> +	bfqq_data->saved_ttime = bfqq->ttime;
-> +	bfqq_data->saved_has_short_ttime =
-> +		bfq_bfqq_has_short_ttime(bfqq);
-> +	bfqq_data->saved_IO_bound = bfq_bfqq_IO_bound(bfqq);
-> +	bfqq_data->saved_io_start_time = bfqq->io_start_time;
-> +	bfqq_data->saved_tot_idle_time = bfqq->tot_idle_time;
-> +	bfqq_data->saved_in_large_burst = bfq_bfqq_in_large_burst(bfqq);
-> +	bfqq_data->was_in_burst_list =
-> +		!hlist_unhashed(&bfqq->burst_list_node);
-> +
->  	if (unlikely(bfq_bfqq_just_created(bfqq) &&
->  		     !bfq_bfqq_in_large_burst(bfqq) &&
->  		     bfqq->bfqd->low_latency)) {
-> @@ -3081,17 +3089,21 @@ static void bfq_bfqq_save_state(struct bfq_queue *bfqq)
->  		 * to bfqq, so that to avoid that bfqq unjustly fails
->  		 * to enjoy weight raising if split soon.
->  		 */
-> -		bic->saved_wr_coeff = bfqq->bfqd->bfq_wr_coeff;
-> -		bic->saved_wr_start_at_switch_to_srt = bfq_smallest_from_now();
-> -		bic->saved_wr_cur_max_time = bfq_wr_duration(bfqq->bfqd);
-> -		bic->saved_last_wr_start_finish = jiffies;
-> +		bfqq_data->saved_wr_coeff = bfqq->bfqd->bfq_wr_coeff;
-> +		bfqq_data->saved_wr_start_at_switch_to_srt =
-> +			bfq_smallest_from_now();
-> +		bfqq_data->saved_wr_cur_max_time =
-> +			bfq_wr_duration(bfqq->bfqd);
-> +		bfqq_data->saved_last_wr_start_finish = jiffies;
->  	} else {
-> -		bic->saved_wr_coeff = bfqq->wr_coeff;
-> -		bic->saved_wr_start_at_switch_to_srt =
-> +		bfqq_data->saved_wr_coeff = bfqq->wr_coeff;
-> +		bfqq_data->saved_wr_start_at_switch_to_srt =
->  			bfqq->wr_start_at_switch_to_srt;
-> -		bic->saved_service_from_wr = bfqq->service_from_wr;
-> -		bic->saved_last_wr_start_finish = bfqq->last_wr_start_finish;
-> -		bic->saved_wr_cur_max_time = bfqq->wr_cur_max_time;
-> +		bfqq_data->saved_service_from_wr =
-> +			bfqq->service_from_wr;
-> +		bfqq_data->saved_last_wr_start_finish =
-> +			bfqq->last_wr_start_finish;
-> +		bfqq_data->saved_wr_cur_max_time = bfqq->wr_cur_max_time;
->  	}
->  }
->  
-> @@ -5413,6 +5425,7 @@ static void bfq_exit_icq(struct io_cq *icq)
->  	unsigned long flags;
->  	unsigned int act_idx;
->  	unsigned int num_actuators;
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  
->  	/*
->  	 * bfqd is NULL if scheduler already exited, and in that case
-> @@ -5432,8 +5445,8 @@ static void bfq_exit_icq(struct io_cq *icq)
->  		num_actuators = BFQ_MAX_ACTUATORS;
->  	}
->  
-> -	if (bic->stable_merge_bfqq)
-> -		bfq_put_stable_ref(bic->stable_merge_bfqq);
-> +	if (bfqq_data->stable_merge_bfqq)
-> +		bfq_put_stable_ref(bfqq_data->stable_merge_bfqq);
->  
->  	for (act_idx = 0; act_idx < num_actuators; act_idx++) {
->  		bfq_exit_icq_bfqq(bic, true, act_idx);
-> @@ -5624,13 +5637,14 @@ bfq_do_early_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  {
->  	struct bfq_queue *new_bfqq =
->  		bfq_setup_merge(bfqq, last_bfqq_created);
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  
->  	if (!new_bfqq)
->  		return bfqq;
->  
->  	if (new_bfqq->bic)
-> -		new_bfqq->bic->stably_merged = true;
-> -	bic->stably_merged = true;
-> +		new_bfqq->bic->bfqq_data.stably_merged = true;
-> +	bfqq_data->stably_merged = true;
->  
->  	/*
->  	 * Reusing merge functions. This implies that
-> @@ -5699,6 +5713,7 @@ static struct bfq_queue *bfq_do_or_sched_stable_merge(struct bfq_data *bfqd,
->  		&bfqd->last_bfqq_created;
->  
->  	struct bfq_queue *last_bfqq_created = *source_bfqq;
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  
->  	/*
->  	 * If last_bfqq_created has not been set yet, then init it. If
-> @@ -5760,7 +5775,7 @@ static struct bfq_queue *bfq_do_or_sched_stable_merge(struct bfq_data *bfqd,
->  			/*
->  			 * Record the bfqq to merge to.
->  			 */
-> -			bic->stable_merge_bfqq = last_bfqq_created;
-> +			bfqq_data->stable_merge_bfqq = last_bfqq_created;
->  		}
->  	}
->  
-> @@ -6681,6 +6696,7 @@ static struct bfq_queue *bfq_get_bfqq_handle_split(struct bfq_data *bfqd,
->  {
->  	unsigned int act_idx = bfq_actuator_index(bfqd, bio);
->  	struct bfq_queue *bfqq = bic_to_bfqq(bic, is_sync, act_idx);
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  
->  	if (likely(bfqq && bfqq != &bfqd->oom_bfqq))
->  		return bfqq;
-> @@ -6694,12 +6710,12 @@ static struct bfq_queue *bfq_get_bfqq_handle_split(struct bfq_data *bfqd,
->  
->  	bic_set_bfqq(bic, bfqq, is_sync, act_idx);
->  	if (split && is_sync) {
-> -		if ((bic->was_in_burst_list && bfqd->large_burst) ||
-> -		    bic->saved_in_large_burst)
-> +		if ((bfqq_data->was_in_burst_list && bfqd->large_burst) ||
-> +		    bfqq_data->saved_in_large_burst)
->  			bfq_mark_bfqq_in_large_burst(bfqq);
->  		else {
->  			bfq_clear_bfqq_in_large_burst(bfqq);
-> -			if (bic->was_in_burst_list)
-> +			if (bfqq_data->was_in_burst_list)
->  				/*
->  				 * If bfqq was in the current
->  				 * burst list before being
-> @@ -6788,6 +6804,7 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
->  	struct bfq_queue *bfqq;
->  	bool new_queue = false;
->  	bool bfqq_already_existing = false, split = false;
-> +	struct bfq_iocq_bfqq_data *bfqq_data;
->  
->  	if (unlikely(!rq->elv.icq))
->  		return NULL;
-> @@ -6811,15 +6828,17 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
->  	bfqq = bfq_get_bfqq_handle_split(bfqd, bic, bio, false, is_sync,
->  					 &new_queue);
->  
-> +	bfqq_data = &bic->bfqq_data;
-> +
->  	if (likely(!new_queue)) {
->  		/* If the queue was seeky for too long, break it apart. */
->  		if (bfq_bfqq_coop(bfqq) && bfq_bfqq_split_coop(bfqq) &&
-> -			!bic->stably_merged) {
-> +			!bfqq_data->stably_merged) {
->  			struct bfq_queue *old_bfqq = bfqq;
->  
->  			/* Update bic before losing reference to bfqq */
->  			if (bfq_bfqq_in_large_burst(bfqq))
-> -				bic->saved_in_large_burst = true;
-> +				bfqq_data->saved_in_large_burst = true;
->  
->  			bfqq = bfq_split_bfqq(bic, bfqq);
->  			split = true;
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index bfcbd8ea9000..f2e8ab91951c 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -411,27 +411,9 @@ struct bfq_queue {
->  };
->  
->  /**
-> - * struct bfq_io_cq - per (request_queue, io_context) structure.
-> - */
-> -struct bfq_io_cq {
-> -	/* associated io_cq structure */
-> -	struct io_cq icq; /* must be the first member */
-> -	/*
-> -	 * Matrix of associated process queues: first row for async
-> -	 * queues, second row sync queues. Each row contains one
-> -	 * column for each actuator. An I/O request generated by the
-> -	 * process is inserted into the queue pointed by bfqq[i][j] if
-> -	 * the request is to be served by the j-th actuator of the
-> -	 * drive, where i==0 or i==1, depending on whether the request
-> -	 * is async or sync. So there is a distinct queue for each
-> -	 * actuator.
-> -	 */
-> -	struct bfq_queue *bfqq[2][BFQ_MAX_ACTUATORS];
-> -	/* per (request_queue, blkcg) ioprio */
-> -	int ioprio;
-> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
-> -	uint64_t blkcg_serial_nr; /* the current blkcg serial */
-> -#endif
-> +* struct bfq_data - bfqq data unique and persistent for associated bfq_io_cq
-> +*/
-> +struct bfq_iocq_bfqq_data {
->  	/*
->  	 * Snapshot of the has_short_time flag before merging; taken
->  	 * to remember its value while the queue is merged, so as to
-> @@ -486,6 +468,34 @@ struct bfq_io_cq {
->  	struct bfq_queue *stable_merge_bfqq;
->  
->  	bool stably_merged;	/* non splittable if true */
-> +};
-> +
-> +/**
-> + * struct bfq_io_cq - per (request_queue, io_context) structure.
-> + */
-> +struct bfq_io_cq {
-> +	/* associated io_cq structure */
-> +	struct io_cq icq; /* must be the first member */
-> +	/*
-> +	 * Matrix of associated process queues: first row for async
-> +	 * queues, second row sync queues. Each row contains one
-> +	 * column for each actuator. An I/O request generated by the
-> +	 * process is inserted into the queue pointed by bfqq[i][j] if
-> +	 * the request is to be served by the j-th actuator of the
-> +	 * drive, where i==0 or i==1, depending on whether the request
-> +	 * is async or sync. So there is a distinct queue for each
-> +	 * actuator.
-> +	 */
-> +	struct bfq_queue *bfqq[2][BFQ_MAX_ACTUATORS];
-> +	/* per (request_queue, blkcg) ioprio */
-> +	int ioprio;
-> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
-> +	uint64_t blkcg_serial_nr; /* the current blkcg serial */
-> +#endif
-> +
-> +	/* persistent data for associated synchronous process queue */
-> +	struct bfq_iocq_bfqq_data bfqq_data;
-> +
->  	unsigned int requests;	/* Number of requests this process has in flight */
->  };
->  
+>  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml       | 2 +-
+>  Documentation/devicetree/bindings/hwmon/adt7475.yaml          | 4 ++--
+>  .../bindings/opp/allwinner,sun50i-h6-operating-points.yaml    | 4 ++--
+>  .../devicetree/bindings/pci/mediatek,mt7621-pcie.yaml         | 2 +-
+>  .../devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml        | 2 +-
 
--- 
-Damien Le Moal
-Western Digital Research
+Thank you for the patch! For R-Car PCI,
+
+Acked-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+
+Best regards,
+Yoshihiro Shimoda
 
