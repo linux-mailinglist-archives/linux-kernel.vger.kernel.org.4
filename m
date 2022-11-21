@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5442F6319B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C246319B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiKUGZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 01:25:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S229734AbiKUG0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 01:26:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiKUGZn (ORCPT
+        with ESMTP id S229490AbiKUG0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 01:25:43 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1C926571;
-        Sun, 20 Nov 2022 22:25:38 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id AA67B24E205;
-        Mon, 21 Nov 2022 14:25:35 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 21 Nov
- 2022 14:25:35 +0800
-Received: from [192.168.50.235] (113.72.144.23) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 21 Nov
- 2022 14:25:34 +0800
-Message-ID: <7cf9be4a-6ef2-f1f9-07a3-4801fd2833a8@starfivetech.com>
-Date:   Mon, 21 Nov 2022 14:25:21 +0800
+        Mon, 21 Nov 2022 01:26:04 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B90A26571
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:26:02 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id cg5so6715246qtb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:26:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EOs0qwxAH2/pioGUQjAqQZCo5hozuq4moR5tVBbEUtg=;
+        b=KfOTHl7grc1+6ZofGZsTdaxAlmOrRNoG6BfBMqSr8xX4NIhIqXAva2jAsFnxYEkdkS
+         Ee1Zgia2BPvpj4cOA6FtPSgT7119UG5yKsQdECWZj+M32SeyC9RtXIhWjM4Y6c+rogP+
+         IupooRNF5leuyXXUTOqGEBswe0AdgqCvZHERasju3qalsZmMIIMJxFdXiYGCzMeexGSI
+         YL49rQ0fwc42sA0G9WcDi2jlbQyUwB7ZYuR5uNrllf2n9LwJe5HE/2EJ6Ow25nR9ZMOa
+         Lv4Ux0oYjcysVysviLeqSLSw8pHzabg4Dmc3qwxyOG1Kzavve2uh6WZFC9U5n7QFZ4/l
+         tKPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EOs0qwxAH2/pioGUQjAqQZCo5hozuq4moR5tVBbEUtg=;
+        b=craIOr/lAkR6IwN8zs+u4L/Am8oDjg+su9HslxRGcquwmg2P8kQAU4RJsr8qeZmhuo
+         +0UiNV0alKRFoffnVfVybiXwHv3mU9wz+6OnzzkHsbHlXNh2mNDfNKqAOnq99ooNjLvy
+         woAAmnMjQwXDFI566W5Z/mzXtIwMZKAjIaKNrPwyOAjL6KGo2jZdblLv9+jjBKQ7RziW
+         RNE4HVdztdLI0saczHn1CaMVZpB1jqFCukcwbNeT+/iNIpwufvPlwjtOPc7TUBGk/WLJ
+         LbnEX+RdhjdkSOb950TGWK6S+ty1DMePJ87pHEELZDKLzhUabcK7BxqlsOcyfzY6I3rs
+         W36g==
+X-Gm-Message-State: ANoB5pkCrpdQLbcVnMKI0fR8VDLqpPt3EIGiH7jGouEqIr4PlaByhJdi
+        u0jKWe8/mgJKxmA5WqqkNRWvPIeGmp3h9k3XvAI=
+X-Google-Smtp-Source: AA0mqf7sF2jElD5/SyliGDaozdhgYHqQGtqU+cPqD/Zifqs5evBzkXqDWE3qE0hFQZ7/1dUasxI0NMx8R3/eYeqbVUw=
+X-Received: by 2002:ac8:7cbb:0:b0:399:83a8:c28b with SMTP id
+ z27-20020ac87cbb000000b0039983a8c28bmr4786015qtv.447.1669011961658; Sun, 20
+ Nov 2022 22:26:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 01/14] clk: starfive: Factor out common JH7100 and
- JH7110 code
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221118010627.70576-1-hal.feng@starfivetech.com>
- <20221118010627.70576-2-hal.feng@starfivetech.com>
- <CAJM55Z8nGNm_TrTsw0HZnAVehWrFU9-MtAj0ngRRx_E8jFapGg@mail.gmail.com>
-Content-Language: en-US
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <CAJM55Z8nGNm_TrTsw0HZnAVehWrFU9-MtAj0ngRRx_E8jFapGg@mail.gmail.com>
+References: <20221119204435.97113-1-ogabbay@kernel.org>
+In-Reply-To: <20221119204435.97113-1-ogabbay@kernel.org>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Mon, 21 Nov 2022 16:25:50 +1000
+Message-ID: <CAPM=9twtQry6S=+Gy2NiUDzX8vrkqHgxCNm8o9UDK8oHtNUZSw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] new subsystem for compute accelerator devices
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Christopher Friedt <chrisfriedt@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.144.23]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Nov 2022 00:22:10 +0800, Emil Renner Berthing wrote:
-> On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
-> >
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> >
-> > The clock control registers on the StarFive JH7100 and JH7110 work
-> > identically, so factor out the code then drivers for the two SoCs
-> > can share it without depending on each other. No functional change.
-> >
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > ---
-> >  MAINTAINERS                                |   2 +-
-> >  drivers/clk/starfive/Kconfig               |   5 +
-> >  drivers/clk/starfive/Makefile              |   3 +-
-> >  drivers/clk/starfive/clk-starfive-jh7100.c | 325 --------------------
-> >  drivers/clk/starfive/clk-starfive-jh7100.h |   2 +
-> >  drivers/clk/starfive/clk-starfive-jh71x0.c | 333 +++++++++++++++++++++
-> >  6 files changed, 343 insertions(+), 327 deletions(-)
-> >  create mode 100644 drivers/clk/starfive/clk-starfive-jh71x0.c
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 256f03904987..d43daa89d5f1 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -19602,7 +19602,7 @@ STARFIVE JH7100 CLOCK DRIVERS
-> >  M:     Emil Renner Berthing <kernel@esmil.dk>
-> >  S:     Maintained
-> >  F:     Documentation/devicetree/bindings/clock/starfive,jh7100-*.yaml
-> > -F:     drivers/clk/starfive/clk-starfive-jh7100*
-> > +F:     drivers/clk/starfive/
-> 
-> When this entry cover all the starfive clock drivers the header should
-> also match. Eg.
-> STARFIVE CLOCK DRIVERS
+On Sun, 20 Nov 2022 at 06:44, Oded Gabbay <ogabbay@kernel.org> wrote:
+>
+> This is the fourth (and hopefully last) version of the patch-set to add the
+> new subsystem for compute accelerators. I removed the RFC headline as
+> I believe it is now ready for merging.
+>
+> Compare to v3, this patch-set contains one additional patch that adds
+> documentation regarding the accel subsystem. I hope it's good enough for
+> this stage. In addition, there were few very minor fixes according to
+> comments received on v3.
+>
+> The patches are in the following repo:
+> https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git/log/?h=accel_v4
+>
+> As in v3, The HEAD of that branch is a commit adding a dummy driver that
+> registers an accel device using the new framework. This can be served
+> as a simple reference.
+>
 
-OK, will fix it. Ditto for the reset driver.
+FIx the nits Jeffery raised and the one I brought up and I think we
+should be good for this to be in a PR.
 
-Best regards,
-Hal
+Reviewed-by: Dave Airlie <airlied@redhat.com>
