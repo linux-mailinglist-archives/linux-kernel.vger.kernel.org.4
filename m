@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FFA6327AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B292F6327AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiKUPRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S232000AbiKUPSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiKUPR1 (ORCPT
+        with ESMTP id S231324AbiKUPSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:17:27 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55FD1D70;
-        Mon, 21 Nov 2022 07:13:48 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34DF91FB;
-        Mon, 21 Nov 2022 07:13:54 -0800 (PST)
-Received: from [10.57.71.118] (unknown [10.57.71.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF31F3F73B;
-        Mon, 21 Nov 2022 07:13:43 -0800 (PST)
-Message-ID: <4a2836d6-3088-c513-7541-be7c8a0464a5@arm.com>
-Date:   Mon, 21 Nov 2022 15:13:38 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [patch V2 02/40] ACPI/IORT: Make prototype of
- iort_pmsi_get_dev_id() always available
-Content-Language: en-GB
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Mon, 21 Nov 2022 10:18:25 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AEBC9004;
+        Mon, 21 Nov 2022 07:15:03 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669043701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lQs41vOGOvnHYar/SBs/fIZbe2lCGZcidC+QpnC5+YA=;
+        b=XgZX/EawdUnHd2MXtEoy87d6nt+KM389bWtRrqoe0XFZHtITdDNk4hVa5QwgIBOuehV0Sz
+        lQht1CKPRzB/l4FD4+xLb5StknGESbNfWg2Dm9KazLmvnr3ed/JI4zN39kfgPCGxYB8okH
+        grNhg0KAbltwcAsSTLsvIhJZ0BxohXGTbIB9ne9OnAjLrNfRA0ZX4ULQr2wPoT36+cZnKO
+        4SGTwJDocHdyyD/Auq7blBlhbtVsf/0QPszag7uI39CPfavtspZhsfrlpWcyfyCtBBJFTj
+        x/Ek32HhUuWYUEi4hYeMOguUeIGIUMCjLgDTRjpnyYXLL/I2jh8VZODfaojb3g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669043701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lQs41vOGOvnHYar/SBs/fIZbe2lCGZcidC+QpnC5+YA=;
+        b=7KRj+LiX/2jRIeYeQzj84IQ0G08p2TBQ3wjPtKuSvCYPFz5aHUno33L+nDPus4CvCeeNAK
+        XbrEhVyN27ccJIDA==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, Sinan Kaya <okaya@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-References: <20221121135653.208611233@linutronix.de>
- <20221121140048.408064684@linutronix.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20221121140048.408064684@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [patch 00/15] timers: Provide timer_shutdown[_sync]()
+In-Reply-To: <20221115195802.415956561@linutronix.de>
+References: <20221115195802.415956561@linutronix.de>
+Date:   Mon, 21 Nov 2022 16:15:00 +0100
+Message-ID: <87mt8kibkb.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-21 14:39, Thomas Gleixner wrote:
-> W=1 build complains:
-> 
-> drivers/irqchip/irq-gic-v3-its-msi-parent.c:110:12: warning: no previous prototype for function 'iort_pmsi_get_dev_id' [-Wmissing-prototypes]
->     int __weak iort_pmsi_get_dev_id(struct device *dev, u32 *dev_id)
-> 
-> Reported-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> ---
->   include/linux/acpi_iort.h |    4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> --- a/include/linux/acpi_iort.h
-> +++ b/include/linux/acpi_iort.h
-> @@ -26,13 +26,15 @@ int iort_register_domain_token(int trans
->   			       struct fwnode_handle *fw_node);
->   void iort_deregister_domain_token(int trans_id);
->   struct fwnode_handle *iort_find_domain_token(int trans_id);
-> +
-> +int iort_pmsi_get_dev_id(struct device *dev, u32 *dev_id);
-> +
->   #ifdef CONFIG_ACPI_IORT
->   void acpi_iort_init(void);
->   u32 iort_msi_map_id(struct device *dev, u32 id);
->   struct irq_domain *iort_get_device_domain(struct device *dev, u32 id,
->   					  enum irq_domain_bus_token bus_token);
->   void acpi_configure_pmsi_domain(struct device *dev);
-> -int iort_pmsi_get_dev_id(struct device *dev, u32 *dev_id);
+On Tue, Nov 15 2022 at 21:28, Thomas Gleixner wrote:
+>
+> As Steven is short of cycles, I made some spare cycles available and
+> reworked the patch series to follow the new semantics and plugged the races
+> which were discovered during review.
 
-FWIW I'd prefer to add a "return -ENODEV" stub in the #else section to 
-match the others.
-
-<wonders why this was inconsistent to begin with, goes off to dig 
-through Git history...>
-
-Oh hey, then we could also finally make good on that 6-year-old promise 
-that "The weak function will be removed when the ACPI counterpart is 
-merged." :)
+Any opinions on this pile or should I just declare it's perfect and
+queue it for 6.2?
 
 Thanks,
-Robin.
 
->   void iort_get_rmr_sids(struct fwnode_handle *iommu_fwnode,
->   		       struct list_head *head);
->   void iort_put_rmr_sids(struct fwnode_handle *iommu_fwnode,
-> 
+        tglx
