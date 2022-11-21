@@ -2,99 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB17B63203E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9157C632044
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiKULTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:19:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S229902AbiKULUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:20:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiKULTA (ORCPT
+        with ESMTP id S229664AbiKULTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:19:00 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D43BEB45;
-        Mon, 21 Nov 2022 03:14:18 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NG4Sk4j0xzFqSS;
-        Mon, 21 Nov 2022 19:11:02 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 19:14:16 +0800
-Subject: Re: [PATCH 2/3] ext4: WANR_ON when detect abnormal
- 'i_reserved_data_blocks'
-To:     Jan Kara <jack@suse.cz>, Ye Bin <yebin10@huawei.com>
-References: <20221117014246.610202-1-yebin@huaweicloud.com>
- <20221117014246.610202-3-yebin@huaweicloud.com>
- <20221121094715.gpha7rkijbwr5r47@quack3>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   "yebin (H)" <yebin10@huawei.com>
-Message-ID: <637B5D87.4000806@huawei.com>
-Date:   Mon, 21 Nov 2022 19:14:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Mon, 21 Nov 2022 06:19:41 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB7FBF80B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:15:05 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id z24so14135455ljn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:15:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vGZVXroNko2LYkXX2d1H5176dslCLRw4/wVpm6c8VeI=;
+        b=qEhchM3MgppYSIBV1XnWkiC7NbnASNfljGkSnGQOviQ+f0Wj968PjRIOGWuwMkqy2H
+         jnb/GrzRQEIWgQs4+DiD1ktBBoqtC3N9eHWLjhajHw6PC+nEbPkKeDKrB/aVeNbVUXpG
+         cGw2bRIILy4ngROjKJ1kSJotNrl5rHhOba9aahn42csyn8ZgjDOnLO8vshyGtu1cGOIE
+         IRy3cIs6G25oghlRT8mBK5NRTj6L3AdJ8fElCY8s2cuDPPI7RQZkdccjmxLt7/tgKl1r
+         TMdnYki1lDOnEA/JcDFNRHWGED7LjPoFRhViaUizrraKvPOmNe9CPGs8NZozapePeAvV
+         5TkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vGZVXroNko2LYkXX2d1H5176dslCLRw4/wVpm6c8VeI=;
+        b=F+Xpxn0eEh4hEJVczIhRbPxHQhaodwUce8NirjcB238sUI1PowfLYxH6YWQUChBVul
+         xbd3pDfZ6/zVi6IFSq64b6dJ6prmYYIbY/s1McqOPxS5mbYM6U/gx8aaSOmEmXrt2JE+
+         S8QSj31frJohKuEGSpD8IHwI0OmQ546RkD7iGnr4GG4uNA944Ne7Exe7tNFgUoR9+DFD
+         U6jP3ZOBLAwaveSQj8/JHMo2e5iya39d+1MNQyjgULncuf3qdOuYV5a3wlbASAq0WhNA
+         o/BAqOZTOvJ8Jle4luv+BLXaaVoE3lAdasaIOH9jsmp6FGVT7n6BEm2p9pUpU736oxST
+         cr5Q==
+X-Gm-Message-State: ANoB5pkpq8gdeq/fJX+3lvJpklDXyLX/shX3hvT/O2mveEfIMIhylc5m
+        349TeYTUP1syvCyyxwMWSrsHHQ==
+X-Google-Smtp-Source: AA0mqf6ix/+IvbUURLngZVLZxzFONWcQeQ1FwEpxAM4PSx9ITjsMwk+U4Vc3uWLeua7FmQaNss7j9w==
+X-Received: by 2002:a2e:a265:0:b0:26d:ee99:93b4 with SMTP id k5-20020a2ea265000000b0026dee9993b4mr540887ljm.329.1669029303825;
+        Mon, 21 Nov 2022 03:15:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b0049e9122bd0esm1178039lfr.114.2022.11.21.03.15.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 03:15:03 -0800 (PST)
+Message-ID: <3847c997-6f66-4595-6352-7ed3f4dd3f6d@linaro.org>
+Date:   Mon, 21 Nov 2022 12:15:02 +0100
 MIME-Version: 1.0
-In-Reply-To: <20221121094715.gpha7rkijbwr5r47@quack3>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] dt-bindings: iio: adc: ad7923: adjust documentation
+Content-Language: en-US
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221120153419.GA3094349-robh@kernel.org>
+ <20221120170630.29354-1-edmund.berenson@emlix.com>
+ <d83e9a3d-2482-4342-03c1-818a38bd4b7b@linaro.org>
+ <20221121102600.uwmgivssgy7oakxf@emlix.com>
+ <3a50ba73-aab7-f6db-5e42-beb7e193c5bf@linaro.org>
+ <20221121104532.dibxead6kiv3xqzw@emlix.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221121104532.dibxead6kiv3xqzw@emlix.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/11/2022 11:45, Edmund Berenson wrote:
+
+>>>> I would expect lower number as fallback.
+>>> If I remove alone compatibility of 7924 and 7927 in the documentation,
+>>
+>> I don't understand. 7924 and 7927 are not compatible with each other -
+>> neither in old code nor in new - so what do you want to remove?
+>>
+>>> I will have to remove explicit compatibility match on the driver side,
+>>> correct?
+>>> Just want to make sure I don't misunderstand you.
+>>
+>> My comment to which you responded was about order of items. Usually
+>> lower number means older device and usually older device is the fallback.
+> My response was meant to respond to both your comment to "deprecate
+> alone compatibility" and "lower number should be fallback"
+> Which I understood in the following way: because 7923, 7924 for one and
+> 7927, 7928 are compatible with each other I will remove
+> 7924 compatible string from driver and not add 7927 to the driver and
+> only add it to the documentation.
+
+That's not what I suggested. I said nothing about driver, I did not even
+look there. I *only* asked to mark old variants as "deprecated: true".
+Not remove anything from drivers as this would be obvious ABI break.
 
 
-On 2022/11/21 17:47, Jan Kara wrote:
-> On Thu 17-11-22 09:42:45, Ye Bin wrote:
->> From: Ye Bin <yebin10@huawei.com>
->>
->> If 'i_reserved_data_blocks' is not cleared which mean something wrong
->> with code, so emit WARN_ON to capture this abnormal closer to the first
->> scene.
->>
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
->> ---
->>   fs/ext4/super.c | 13 ++++++++-----
->>   1 file changed, 8 insertions(+), 5 deletions(-)
->>
->> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
->> index 63ef74eb8091..30885a6fe18b 100644
->> --- a/fs/ext4/super.c
->> +++ b/fs/ext4/super.c
->> @@ -1385,11 +1385,14 @@ static void ext4_destroy_inode(struct inode *inode)
->>   		dump_stack();
->>   	}
->>   
->> -	if (EXT4_I(inode)->i_reserved_data_blocks)
->> -		ext4_msg(inode->i_sb, KERN_ERR,
->> -			 "Inode %lu (%p): i_reserved_data_blocks (%u) not cleared!",
->> -			 inode->i_ino, EXT4_I(inode),
->> -			 EXT4_I(inode)->i_reserved_data_blocks);
->> +	if (EXT4_I(inode)->i_reserved_data_blocks) {
->> +		ext4_warning(inode->i_sb, "Inode %lu (%p): "
->> +			    "i_reserved_data_blocks (%u) not cleared!",
->> +			     inode->i_ino, EXT4_I(inode),
->> +			     EXT4_I(inode)->i_reserved_data_blocks);
->> +
->> +		WARN_ON(1);
->> +	}
-> Hum, so I'd think that if this happens, the free space accounting is likely
-> wrong so we might as well just force the filesystem to error mode with
-> ext4_error() to force fsck?  I also gives a good chance to various test
-> systems to detect there is some problem so we don't need the WARN_ON then?
-> What do others think?
->
-> 								Honza
-Thanks for your advice, use ext4_error() maybe is suitable and also 
-testable.
+Best regards,
+Krzysztof
 
