@@ -2,68 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A04D631905
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FF0631908
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKUDrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:47:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
+        id S229543AbiKUDuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 22:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKUDrF (ORCPT
+        with ESMTP id S229446AbiKUDuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:47:05 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564151788C;
-        Sun, 20 Nov 2022 19:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669002424; x=1700538424;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=R+pxjHRXikHGKHlpOCaKvahGOxHzcOR5T1v3IDt7RxE=;
-  b=aePBd0VRWukdlpzrvtsrQ1h+7HUqHdXQtTrOcRdpYe34lnyKyAtIcYdf
-   kAKC2IsBdgaT2C1scAMaETeZZLVtI7CaU0MKWXtnatay67mGNqYh/fRN+
-   Ri9rD/wR/0PGm81Igce/S3lKCyQQ9uGhYK5dV0nZOQkFFIMoUaBO8sSRz
-   YpBLhoNXp+gwV9oce3bn2+XVaRg2Pgk2qJNcwr/73+wfB01VVVSdyn4dR
-   1tOocd6zY9G8moL5/DqgHlcwUWPbYEy5xL2rrOZGsO9wkIZ/Y7QjfG6Ws
-   8d1MFgKl2UU3m4N+j2L9WegMYtLuK5CO9t0EOSGrfXswhVn95d/JXpyki
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="315285434"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="315285434"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 19:47:03 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="643164700"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="643164700"
-Received: from mjcardon-mobl.amr.corp.intel.com (HELO [10.209.57.10]) ([10.209.57.10])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 19:47:03 -0800
-Message-ID: <a21d9795-6404-4fc2-3af1-5ddb35e58494@linux.intel.com>
-Date:   Sun, 20 Nov 2022 19:47:02 -0800
+        Sun, 20 Nov 2022 22:50:02 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183D51EEF0;
+        Sun, 20 Nov 2022 19:50:00 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NFtgF5wHNzmVxP;
+        Mon, 21 Nov 2022 11:49:29 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 11:49:58 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 11:49:57 +0800
+Subject: Re: [PATCH] btrfs: fix a resource leak in btrfs_init_sysfs()
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, <linux-btrfs@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221119064348.1743-1-thunder.leizhen@huawei.com>
+ <a076e281-022f-1f49-b70d-513272ca86cf@gmx.com>
+ <afa7552c-d673-b387-d516-38024f417137@gmx.com>
+ <c3b20a4b-bb32-27a3-b8a0-2b0b7388a335@gmx.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <d017edb7-e2ab-72f8-aa6b-e6671d18f373@huawei.com>
+Date:   Mon, 21 Nov 2022 11:49:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH V8 RESEND 4/4] PCI: vmd: Add quirk to configure PCIe ASPM
- and LTR
+In-Reply-To: <c3b20a4b-bb32-27a3-b8a0-2b0b7388a335@gmx.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     david.e.box@linux.intel.com, nirmal.patel@linux.intel.com,
-        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
-        hch@infradead.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org, me@adhityamohan.in
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221119021411.1383248-1-david.e.box@linux.intel.com>
- <20221119021411.1383248-5-david.e.box@linux.intel.com>
- <cddb4c3d-cbaa-06fb-0edc-e0a1d8bf9ff2@linux.intel.com>
- <d46a9aa805d740979b9ae0a89984d43231757bb5.camel@linux.intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <d46a9aa805d740979b9ae0a89984d43231757bb5.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,52 +60,84 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 11/20/22 7:30 PM, David E. Box wrote:
->>> +
->>>  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->>>  {
->>>         struct pci_sysdata *sd = &vmd->sysdata;
->>> @@ -867,6 +917,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd,
->>> unsigned long features)
->>>                 pci_reset_bus(child->self);
->>>         pci_assign_unassigned_bus_resources(vmd->bus);
->>>  
->>> +       pci_walk_bus(vmd->bus, vmd_pm_enable_quirk, &features);
->>> +
->>>         /*
->>>          * VMD root buses are virtual and don't return true on pci_is_pcie()
->>>          * and will fail pcie_bus_configure_settings() early. It can instead
->>> be
->>> @@ -1005,17 +1057,17 @@ static const struct pci_device_id vmd_ids[] = {
->>>                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
->>>                                 VMD_FEAT_CAN_BYPASS_MSI_REMAP,},
->>>         {PCI_VDEVICE(INTEL, 0x467f),
->>> -               .driver_data = VMD_FEATS_CLIENT,},
->>> +               .driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
->>>         {PCI_VDEVICE(INTEL, 0x4c3d),
->>> -               .driver_data = VMD_FEATS_CLIENT,},
->>> +               .driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
->>>         {PCI_VDEVICE(INTEL, 0xa77f),
->>> -               .driver_data = VMD_FEATS_CLIENT,},
->>> +               .driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
->>>         {PCI_VDEVICE(INTEL, 0x7d0b),
->>> -               .driver_data = VMD_FEATS_CLIENT,},
->>> +               .driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
->>>         {PCI_VDEVICE(INTEL, 0xad0b),
->>> -               .driver_data = VMD_FEATS_CLIENT,},
->>> +               .driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
->>>         {PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
->>> -               .driver_data = VMD_FEATS_CLIENT,},
->>> +               .driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
->> Why not add VMD_FEAT_BIOS_PM_QUIRK part of VMD_FEATS_CLIENT?
-> Because our VMD team is in the middle of removing the need for the current on
-> next gen.
+On 2022/11/20 11:29, Qu Wenruo wrote:
+> 
+> 
+> On 2022/11/20 11:11, Qu Wenruo wrote:
+>>
+>>
+>> On 2022/11/19 14:53, Qu Wenruo wrote:
+>>>
+>>>
+>>> On 2022/11/19 14:43, Zhen Lei wrote:
+>>>> When btrfs_debug_feature_attr_group fails to be created,
+>>>> btrfs_feature_attr_group is not removed.
+>>>>
+>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>
+>>> Reviewed-by: Qu Wenruo <wqu@suse.com>
+>>
+>> Wait for a minute, should we call sysfs_unmerge_group() first before calling sysfs_remove_group()?
+>>
+>> As the sysfs_remove_group() will only remove the btrfs_feature_attr_group, and kset_unregister() will only free btrfs_kset, without removing the added btrfs_static_feature_attr_group.
+>>
+>> I haven't yet find a function that will remove all children attrs in just one go, or did I miss something?
+> 
+> Oh, indeed I missed something.
+> 
+> The following call chain would properly handle every child of a kobj:
+> 
+> kset_unregister()
+> |- kobject_del()
+>    |- __kobject_del()
+>       |- sysfs_remove_dir()
+>          |- kernfs_remove()
+>             |- __kernfs_remove()
+>                |- do { kernfs_leftmost_descendant(); } while (pos != kn)
+> 
+> The final do {} while () loop will unlink each child kernel_node and free it.
+> 
+> This means, as long as we call kset_unregister(), we should be able to free every child of it.
 
-You mean you may not need this quirk support from next gen? 
+OK, thanks.
 
-It looks like you are adding this quirk to all occurances of
-VMD_FEATS_CLIENT. So I am still not clear why we can't add it directly to that macro?
+> 
+> 
+> So with or without this patch, the error handling should be fine.
+> 
+> Although personally speaking, I'd prefer a more explicit cleanup (with extra sysfs_unmerge_group() call) as going through the above call chain is not that straightforward.
+
+Yes, with sysfs_unmerge_group(), the code logic is clearer.
+
+> 
+> Thanks,
+> Qu
+> 
+>>
+>> Thanks,
+>> Qu
+>>>
+>>> Thanks,
+>>> Qu
+>>>> ---
+>>>>   fs/btrfs/sysfs.c | 2 +-
+>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
+>>>> index 699b54b3acaae0b..947125f2ceaaf96 100644
+>>>> --- a/fs/btrfs/sysfs.c
+>>>> +++ b/fs/btrfs/sysfs.c
+>>>> @@ -2322,7 +2322,7 @@ int __init btrfs_init_sysfs(void)
+>>>>   #ifdef CONFIG_BTRFS_DEBUG
+>>>>       ret = sysfs_create_group(&btrfs_kset->kobj, &btrfs_debug_feature_attr_group);
+>>>>       if (ret)
+>>>> -        goto out2;
+>>>> +        goto out_remove_group;
+>>>>   #endif
+>>>>       return 0;
+> .
+> 
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Regards,
+  Zhen Lei
