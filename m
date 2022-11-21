@@ -2,84 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B876322D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248726322D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiKUMso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:48:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S229662AbiKUMtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKUMsl (ORCPT
+        with ESMTP id S229379AbiKUMtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:48:41 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09720B4830;
-        Mon, 21 Nov 2022 04:48:41 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id g5so1853946pjp.4;
-        Mon, 21 Nov 2022 04:48:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CD45poBiHioVMndl+YIuWBdAcu+6EbHvtR808B7LZEA=;
-        b=ayhywpp3ObtSZJBjbSWWRNUB+ZrQKYX85wWBoa8L8/KZmJ3imMPMbtsQt0V+gdkhyO
-         zEc3ZfUZ+h+w4DWst+Jno/WqlIkqOQJR5sK38JANjx1etim/f56svAgBBnK3CR2vXgzz
-         dUZtr3rGcJsq+1RDkJKUofWcWuOw82hEeG3p0+fBfr4aV4D5Wdn7CPWEN0O1Y9J5JLf3
-         iQzAhpr3BSZh3V7iKOzrJA7YO4Y3xSJoXCpAhHfBDwbQezZFDi0qqtLQV0EN2Me3u6Z0
-         DiWOmbw66PDfiYs36Pe3iNIR4KWdvdTiLE1Ie43QQbWlkCjOvaN6NmM+G79GEsCvEJvU
-         uvVg==
+        Mon, 21 Nov 2022 07:49:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E816B6B07
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:48:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669034929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aHf92GqKpS09QwwfFT9qcxPp2ZW8/6FXVgc85jLdYtQ=;
+        b=cNaFqOLn20NZ0PeXcLNpY3D7lRmy//VvsQEwIceD8vTH8D+7imL7oRUjrc9d/pRDxHG00n
+        9HpDeHP96guQaV2t/63MR/CGI8rLu8IZ7cyJSZ6HGlyg9xzBGa4eCS7b3ZiJIn1scvr3A8
+        IkYisTIXQT3i5MlJT3rVotEblb1boI0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-596-fJHa28yzNQWgY7AJDLoQKg-1; Mon, 21 Nov 2022 07:48:47 -0500
+X-MC-Unique: fJHa28yzNQWgY7AJDLoQKg-1
+Received: by mail-wm1-f72.google.com with SMTP id m34-20020a05600c3b2200b003cf549cb32bso9242379wms.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:48:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CD45poBiHioVMndl+YIuWBdAcu+6EbHvtR808B7LZEA=;
-        b=HvJ2o8iGjnvT5fvdfxVZ4Qd8SIXcxaPAt9QYNWxPABkZ+H+xgE0pAQgbaddJSg3Kq+
-         WgTznYvLWg8+l1bN136lkcq7GH6Dfx9DjjLO4N2NH1D4g+JYF5bejEzP0qClFiQ99uvX
-         gV/0aWorlJsZPwx2zPSOXPM/NMyZGE8SSSgSEvDvRjqewr+wZP71hpS5Vfy+TxBes6Lf
-         VONQPKG8Xy6qP6u2a+UeT7fwcW15p3lEQbgWIOO6dkyZFOkk9J50y3LYQm7cjDF7YbjC
-         pIkf+1GCbNJ2wWCJroKRa0ik3vVDT/sEucTMVqNfbJu2WHtWF0C3pr4XJrzWb3G9+qB5
-         VHRw==
-X-Gm-Message-State: ANoB5pklqJDv9XC+nMwIfv2MsZt0meVaLSEumv7L5NDeoM4x+9WAsnad
-        v/Ib6eL6lfy4pQQZnn1oz0/h3BSJn5P7KU7y7+g=
-X-Google-Smtp-Source: AA0mqf53o7pOYJpWpVTHWLgvW6H1ruUOInM0L/OZwG8IRQCU6lpPMnugC/MRaHpXsAIf5Jf9WAh2WQMJi/3FC3Te4/M=
-X-Received: by 2002:a17:90a:7004:b0:218:ab86:3acb with SMTP id
- f4-20020a17090a700400b00218ab863acbmr6195776pjk.195.1669034920365; Mon, 21
- Nov 2022 04:48:40 -0800 (PST)
+        bh=aHf92GqKpS09QwwfFT9qcxPp2ZW8/6FXVgc85jLdYtQ=;
+        b=P5sbaHOd/7Ol+JQHQD/L8c9n86PZaWtt3s2tEqUSqMtRIUi87Week0mRsYuUn0ozZZ
+         W6CO2sgbyu7E5vPYE9WJ5Ymqoz4+b7v/KI5rpWidCR+UYeV+17PS6jbCZggzH5K34P7T
+         nNB06zO1sJ7x0pdwv3pGnuL3rhXc6T1oWUynQ67+1ChE1eWkBBLVRYW0LzJ3eQBATFf5
+         KNi55YXmeJ4XnbPTP0Em6iK3c9saz5s3SDNet8B1QMQ5EhK68o+KPWpjORFR3czDSrMg
+         IJ5K9ytPwJuDQJOYcgeUzw22N3U7k05Dsp+TtM3wpFtDtTyJvOw/wdMVx5eSHSq52BJh
+         Mrew==
+X-Gm-Message-State: ANoB5pnrcqwrprt2+3vcB8SVNifyTxna2+Rz0xxUHsfbJdaB3M3FKTpE
+        vXs4aIo4kMV95N8pPwjpoHAouc+3srLrGF/dcYVn3mGuDklLKHaY4vptgO8Qkm+/jgkrAOvwOrz
+        Rx2uv4eMcPDdh/j0UVGDvXUkV
+X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id d9-20020adfe2c9000000b00241db86176dmr1463205wrj.40.1669034926684;
+        Mon, 21 Nov 2022 04:48:46 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4P9jvmww0P1quzMMscjBvUsyD5TxdE1CgpVjmHjZzvQrrZef/mUpNWvrKeTlgogAZ2QpjMAA==
+X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id d9-20020adfe2c9000000b00241db86176dmr1463185wrj.40.1669034926351;
+        Mon, 21 Nov 2022 04:48:46 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:dc00:2571:c3c2:c6ea:84ef? (p200300cbc702dc002571c3c2c6ea84ef.dip0.t-ipconnect.de. [2003:cb:c702:dc00:2571:c3c2:c6ea:84ef])
+        by smtp.gmail.com with ESMTPSA id q2-20020adffec2000000b00241d544c9b1sm3880875wrs.90.2022.11.21.04.48.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 04:48:45 -0800 (PST)
+Message-ID: <208d4106-97e9-79b7-4077-788cdafa1b16@redhat.com>
+Date:   Mon, 21 Nov 2022 13:48:45 +0100
 MIME-Version: 1.0
-References: <20220928124108.500369-1-linux@rasmusvillemoes.dk>
- <CAOMZO5BPtEU6VCZXRk5FTHXDad6cegF=+oHTTA0wgjBuoh9-rQ@mail.gmail.com>
- <09611b2d-096e-058b-5349-627684e3a13c@rasmusvillemoes.dk> <CAOMZO5AXSSkHpeuHNRQ6qkFoe2uiFLVxndz1u7_y7s9cLD9ppw@mail.gmail.com>
- <8cce4dae-c653-515b-1a5d-024986afbabf@rasmusvillemoes.dk> <CAOMZO5CpFXjm1a2C01=uiHLjcNSe4MzgLUyfDvK0LCdQ8+KNEw@mail.gmail.com>
- <2cb72f22-3e9d-c146-734a-ec0b306bdeb1@rasmusvillemoes.dk>
-In-Reply-To: <2cb72f22-3e9d-c146-734a-ec0b306bdeb1@rasmusvillemoes.dk>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 21 Nov 2022 09:48:22 -0300
-Message-ID: <CAOMZO5DZwFq_g4PCdAUNnwFGyvMFsEb3pBFbnSAJFVdYACf5UQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: imx8mp: register driver at arch_initcall time
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH -next] mm/hugetlb: stop using 0 as NULL pointer
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, mike.kravetz@oracle.com
+Cc:     songmuchun@bytedance.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20221121102037.75307-1-yang.lee@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221121102037.75307-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 9:29 AM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
+On 21.11.22 11:20, Yang Li wrote:
+> mm/hugetlb.c:1531:37: warning: Using plain integer as NULL pointer
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3224
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   mm/hugetlb.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 222937d512c4..b6c2fc882f21 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -1528,7 +1528,7 @@ static void add_hugetlb_folio(struct hstate *h, struct folio *folio,
+>   	}
+>   
+>   	folio_set_compound_dtor(folio, HUGETLB_PAGE_DTOR);
+> -	folio_change_private(folio, 0);
+> +	folio_change_private(folio, NULL);
+>   	/*
+>   	 * We have to set HPageVmemmapOptimized again as above
+>   	 * folio_change_private(folio, 0) cleared it.
 
-> Thanks. Does that mean I can keep your R-b for the patch as-is?
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Yes, please keep it. Thanks
+-- 
+Thanks,
+
+David / dhildenb
+
