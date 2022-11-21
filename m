@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789F7631E83
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96264631E86
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiKUKfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:35:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S230295AbiKUKfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiKUKfN (ORCPT
+        with ESMTP id S229853AbiKUKfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:35:13 -0500
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3C7AFE71;
-        Mon, 21 Nov 2022 02:35:08 -0800 (PST)
-Date:   Mon, 21 Nov 2022 11:35:04 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1669026906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 21 Nov 2022 05:35:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FE5AEBFE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:35:43 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C3506220C8;
+        Mon, 21 Nov 2022 10:35:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669026941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=0NQOBu14uyzB45RriwXl3gZNCccf6P2os1r/foz+LNA=;
-        b=I9eLI0KYgDHZURWPfXR5VGa1PsBHdLh+rSuS2KVlbWhV7CFrSZrHzKlDmGmGDejmbFAqLE
-        g/FNqR/7fXe/1Ci4b6p+yI81fCUP7ovaykYm5ZuVVZpb0TWYptmBe38bJYNnVcrguB/ZqP
-        Tc3w6uFD+OB63egzeIAQaHTqzEht7i0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Richard Leitner <richard.leitner@linux.dev>
-To:     "David R. Piegdon" <lkml@p23q.org>
-Cc:     linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial8250 on tegra hsuart: recover from spurious
- interrupts due to tegra2 silicon bug
-Message-ID: <Y3tUWPCVnauLeuG2@skidata.com>
-References: <4676ea34-69ce-5422-1ded-94218b89f7d9@p23q.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4676ea34-69ce-5422-1ded-94218b89f7d9@p23q.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        bh=dDc3A34ZNQMnuC56bsGRqp1Nz34SK07+svCjUl5Hs1A=;
+        b=aehWRd7CYYHc/5yWJDyKtF1Ld5quSLNn1h+UBd9ZnqTgL/Wy5342b1D/7S16OmWw98M9yC
+        KZaGwT97j9av4qE80lwutydBD3iB9uR2X/O82tYW+Yrvc/Rth9g7GxyI2zugNYpWu1/xcZ
+        V43oMIJ2o8LqZ71vr14tSwYP0oXsLgw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669026941;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dDc3A34ZNQMnuC56bsGRqp1Nz34SK07+svCjUl5Hs1A=;
+        b=2kuXU/hZf3DDLRB0Dn68AJBWjM2hInKg8VvbMnutBJji9lBrAQ6RPuz/Oh5KaEFN4OBAzk
+        goEP6b3aUbatK2DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A030C1376E;
+        Mon, 21 Nov 2022 10:35:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6yRTJn1Ue2OoEwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 21 Nov 2022 10:35:41 +0000
+Date:   Mon, 21 Nov 2022 11:35:41 +0100
+Message-ID: <87fsecwq6a.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Baisong Zhong <zhongbaisong@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <perex@perex.cz>, <tiwai@suse.com>
+Subject: Re: [PATCH -next] ALSA: seq: fix undefined behavior in bit shift for SNDRV_SEQ_FILTER_USE_EVENT
+In-Reply-To: <20221121043625.2910001-1-zhongbaisong@huawei.com>
+References: <20221121043625.2910001-1-zhongbaisong@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,87 +68,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Jul 13, 2018 at 11:32:42AM +0000, David R. Piegdon wrote:
-> Hi,
-> a while back I sent a few mails regarding spurious interrupts in the
-> UARTA (hsuart) block of the Tegra2 SoC, when using the 8250 driver for
-> it instead of the hsuart driver. After going down a pretty deep
-> debugging/testing hole, I think I found a patch that fixes the issue. So
-> far testing in a reboot-cycle suggests that the error frequency dropped
-> from >3% of all reboots to at least <0.05% of all reboots. Tests
-> continue to run over the weekend.
+On Mon, 21 Nov 2022 05:36:25 +0100,
+Baisong Zhong wrote:
 > 
-> The patch below already is a second iteration; the first did not reset
-> the MCR or contain the lines below '// clear interrupts'. This resulted
-> in no more spurious interrupts, but in a few % of spurious interrupts
-> that were recovered the UART block did not receive any characters any
-> more. So further resetting was required to fully reacquire operational
-> state of the UART block.
+> Shifting signed 32-bit value by 31 bits is undefined, so changing
+> significant bit to unsigned. The UBSAN warning calltrace like below:
 > 
-> I'd love any comments/suggestions on this!
-
-I'd like to follow up on this ancient patch as we are using it
-successfully for a few years with different kernel versions on a
-tegra20 SOM (tamonten) now and I'm currently cleaning up our tree.
-
-David, have you done any work in regarding this issue since 2018?
-
-What would be needed to get this solution mainline?
-
-The recipient of this mail are from the initial thread [1] and
-a current get_maintainers.pl run.
-
-regards;rl
-
-[1] https://patchwork.ozlabs.org/project/linux-tegra/patch/4676ea34-69ce-5422-1ded-94218b89f7d9@p23q.org/
-
+> UBSAN: shift-out-of-bounds in sound/core/seq/seq_clientmgr.c:509:22
+> left shift of 1 by 31 places cannot be represented in type 'int'
+> ...
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x8d/0xcf
+>  ubsan_epilogue+0xa/0x44
+>  __ubsan_handle_shift_out_of_bounds+0x1e7/0x208
+>  snd_seq_deliver_single_event.constprop.21+0x191/0x2f0
+>  snd_seq_deliver_event+0x1a2/0x350
+>  snd_seq_kernel_client_dispatch+0x8b/0xb0
+>  snd_seq_client_notify_subscription+0x72/0xa0
+>  snd_seq_ioctl_subscribe_port+0x128/0x160
+>  snd_seq_kernel_client_ctl+0xce/0xf0
+>  snd_seq_oss_create_client+0x109/0x15b
+>  alsa_seq_oss_init+0x11c/0x1aa
+>  do_one_initcall+0x80/0x440
+>  kernel_init_freeable+0x370/0x3c3
+>  kernel_init+0x1b/0x190
+>  ret_from_fork+0x1f/0x30
+>  </TASK>
 > 
-> Cheers,
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
+> ---
+>  include/uapi/sound/asequencer.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> David
-> 
-> diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-> index e8819aa20415..1d76eebefd4e 100644
-> --- a/drivers/tty/serial/8250/8250_core.c
-> +++ b/drivers/tty/serial/8250/8250_core.c
-> @@ -140,6 +140,38 @@ static irqreturn_t serial8250_interrupt(int irq, void *dev_id)
->  				"serial8250: too much work for irq%d\n", irq);
->  			break;
->  		}
-> +
-> +#ifdef CONFIG_ARCH_TEGRA_2x_SOC
-> +		if (!handled && (port->type == PORT_TEGRA)) {
-> +			/*
-> +			 * Fix Tegra 2 CPU silicon bug where sometimes
-> +			 * "TX holding register empty" interrupts result in a
-> +			 * bad (metastable?) state in Tegras HSUART IP core.
-> +			 * Only way to recover seems to be to reset all
-> +			 * interrupts as well as the TX queue and the MCR.
-> +			 * But we don't want to loose any outgoing characters,
-> +			 * so only do it if the RX and TX queues are empty.
-> +			 */
-> +			unsigned char lsr = port->serial_in(port, UART_LSR);
-> +			const unsigned char fifo_empty_mask =
-> +						(UART_LSR_TEMT | UART_LSR_THRE);
-> +			if (((lsr & (UART_LSR_DR | fifo_empty_mask)) ==
-> +							fifo_empty_mask)) {
-> +				port->serial_out(port, UART_IER, 0);
-> +				port->serial_out(port, UART_MCR, 0);
-> +				serial8250_clear_and_reinit_fifos(up);
-> +				port->serial_out(port, UART_MCR, up->mcr);
-> +				port->serial_out(port, UART_IER, up->ier);
-> +				// clear interrupts
-> +				serial_port_in(port, UART_LSR);
-> +				serial_port_in(port, UART_RX);
-> +				serial_port_in(port, UART_IIR);
-> +				serial_port_in(port, UART_MSR);
-> +				up->lsr_saved_flags = 0;
-> +				up->msr_saved_flags = 0;
-> +			}
-> +		}
-> +#endif
->  	} while (l != end);
->  
->  	spin_unlock(&i->lock);
+> diff --git a/include/uapi/sound/asequencer.h b/include/uapi/sound/asequencer.h
+> index 6d4a2c60808d..4c5c4dd15d02 100644
+> --- a/include/uapi/sound/asequencer.h
+> +++ b/include/uapi/sound/asequencer.h
+> @@ -331,7 +331,7 @@ typedef int __bitwise snd_seq_client_type_t;
+>  #define SNDRV_SEQ_FILTER_BROADCAST	(1<<0)	/* accept broadcast messages */
+>  #define SNDRV_SEQ_FILTER_MULTICAST	(1<<1)	/* accept multicast messages */
+>  #define SNDRV_SEQ_FILTER_BOUNCE		(1<<2)	/* accept bounce event in error */
+> -#define SNDRV_SEQ_FILTER_USE_EVENT	(1<<31)	/* use event filter */
+> +#define SNDRV_SEQ_FILTER_USE_EVENT	(1U<<31)	/* use event filter */
+
+Similarly like the previous patch for PCM, could you update all
+SNDRV_SEQ_FILTER_* to 1U for consistency?
+
+
+thanks,
+
+Takashi
