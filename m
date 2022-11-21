@@ -2,84 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B292F6327AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9E56327B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbiKUPSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S231149AbiKUPTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiKUPSZ (ORCPT
+        with ESMTP id S230110AbiKUPTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:18:25 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AEBC9004;
-        Mon, 21 Nov 2022 07:15:03 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669043701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lQs41vOGOvnHYar/SBs/fIZbe2lCGZcidC+QpnC5+YA=;
-        b=XgZX/EawdUnHd2MXtEoy87d6nt+KM389bWtRrqoe0XFZHtITdDNk4hVa5QwgIBOuehV0Sz
-        lQht1CKPRzB/l4FD4+xLb5StknGESbNfWg2Dm9KazLmvnr3ed/JI4zN39kfgPCGxYB8okH
-        grNhg0KAbltwcAsSTLsvIhJZ0BxohXGTbIB9ne9OnAjLrNfRA0ZX4ULQr2wPoT36+cZnKO
-        4SGTwJDocHdyyD/Auq7blBlhbtVsf/0QPszag7uI39CPfavtspZhsfrlpWcyfyCtBBJFTj
-        x/Ek32HhUuWYUEi4hYeMOguUeIGIUMCjLgDTRjpnyYXLL/I2jh8VZODfaojb3g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669043701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lQs41vOGOvnHYar/SBs/fIZbe2lCGZcidC+QpnC5+YA=;
-        b=7KRj+LiX/2jRIeYeQzj84IQ0G08p2TBQ3wjPtKuSvCYPFz5aHUno33L+nDPus4CvCeeNAK
-        XbrEhVyN27ccJIDA==
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: Re: [patch 00/15] timers: Provide timer_shutdown[_sync]()
-In-Reply-To: <20221115195802.415956561@linutronix.de>
-References: <20221115195802.415956561@linutronix.de>
-Date:   Mon, 21 Nov 2022 16:15:00 +0100
-Message-ID: <87mt8kibkb.ffs@tglx>
+        Mon, 21 Nov 2022 10:19:03 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDB6CFEAB
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:15:44 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w3-20020a17090a460300b00218524e8877so12232495pjg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:15:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j4iomL/SuFm2qP/FaY1uaLFvnC19GQTDr6IrFZRdHZA=;
+        b=RFEzHslJIPr3wKkoXOuVeTeiw7UtPt5iy5zU7+rfoTjUVr5qRjm/PWz/WqsxtxgOPj
+         OPeYqCwIyS8doJX7QqnN8iDuTn2mDni7CkcEQerTHSevzpnozoEU2JEeGuiKLQrx8cd5
+         85Fp6Y18uvvpYhRlVgLTipbyHch+XnBQFxiEt2A2uhAU9Xu+qu22MrbmoDg6+WsSn/wt
+         xliA6Zt2TEqaGoXTAM+0xFRuJavVmM6B5YCmKiYZovnJQoNY5X1KOEnTOltkKGd2vsc+
+         dddElnLPRCpen9DrgzTCdahGQhI94ZDiQm6KX7pmHCEjowj05LW7E/EoNKT4a3CqjLiQ
+         GZxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j4iomL/SuFm2qP/FaY1uaLFvnC19GQTDr6IrFZRdHZA=;
+        b=mmmEXIybaDeSmqXXppn+542ivv8Ovvil8pZzcQjc2A5C4JiOBU5J8dpZyPGtHykfVq
+         fmX3iXe8YJz6jQRHG/uuBDQyizZHn1UcWpLj1KXAAGWYvYIvzgKsEY8qRyLsNIXcJRxE
+         52clZ4TAbR3LgK1YkEyauUvTIe0z8Fro6XR+v2OZCiX47rM/+LjagXN3yfNQ/BRUCCG0
+         uHRjrLx6nk38jpgyZnX31AD8k36txP5jDXsChqqfH+TYq0ksbdLFpjWJA2IFSf2nZCqt
+         j9lMpTSfNQZWCfFqNerPu361FsdnkLNR8jwV/LEQRohhuaRwqapZkuQpEFb/BbolEyGm
+         mXDA==
+X-Gm-Message-State: ANoB5pkq63p6lZ3CsxUl48q0Iul3DF6s4PLcNdTTqW5KTGvOo/ksJV3b
+        uNWbbBj7x102CiqWl13fWWinZKdq3v0sTi/vbQQ9StW3WBQ=
+X-Google-Smtp-Source: AA0mqf71Kf/jCN7y1nl4PTcH28Uk6BtNQuC8mgTZ5dEqhq85VBIEuAvTzuT7TBYPlZmTLUdoBJeQryGeNjISQ9MLVhg=
+X-Received: by 2002:a17:90a:5883:b0:218:f84:3f98 with SMTP id
+ j3-20020a17090a588300b002180f843f98mr27389810pji.238.1669043743578; Mon, 21
+ Nov 2022 07:15:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221121135024.1655240-1-feng.tang@intel.com> <20221121135024.1655240-2-feng.tang@intel.com>
+In-Reply-To: <20221121135024.1655240-2-feng.tang@intel.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 21 Nov 2022 16:15:32 +0100
+Message-ID: <CA+fCnZenKqb9_a2e5b25-DQ3uAKPgm=+tTDOP+D9c6wbDSjMNA@mail.gmail.com>
+Subject: Re: [PATCH -next 2/2] mm/kasan: simplify is_kmalloc check
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15 2022 at 21:28, Thomas Gleixner wrote:
+On Mon, Nov 21, 2022 at 2:53 PM Feng Tang <feng.tang@intel.com> wrote:
 >
-> As Steven is short of cycles, I made some spare cycles available and
-> reworked the patch series to follow the new semantics and plugged the races
-> which were discovered during review.
+> Use new is_kmalloc_cache() to simplify the code of checking whether
+> a kmem_cache is a kmalloc cache.
+>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
 
-Any opinions on this pile or should I just declare it's perfect and
-queue it for 6.2?
+Hi Feng,
 
-Thanks,
+Nice simplification!
 
-        tglx
+> ---
+>  include/linux/kasan.h | 9 ---------
+>  mm/kasan/common.c     | 9 ++-------
+>  mm/slab_common.c      | 1 -
+>  3 files changed, 2 insertions(+), 17 deletions(-)
+>
+> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+> index dff604912687..fc46f5d6f404 100644
+> --- a/include/linux/kasan.h
+> +++ b/include/linux/kasan.h
+> @@ -102,7 +102,6 @@ struct kasan_cache {
+>         int alloc_meta_offset;
+>         int free_meta_offset;
+>  #endif
+> -       bool is_kmalloc;
+>  };
+
+We can go even further here, and only define the kasan_cache struct
+and add the kasan_info field to kmem_cache when CONFIG_KASAN_GENERIC
+is enabled.
+
+>
+>  void __kasan_unpoison_range(const void *addr, size_t size);
+> @@ -129,13 +128,6 @@ static __always_inline bool kasan_unpoison_pages(struct page *page,
+>         return false;
+>  }
+>
+> -void __kasan_cache_create_kmalloc(struct kmem_cache *cache);
+> -static __always_inline void kasan_cache_create_kmalloc(struct kmem_cache *cache)
+> -{
+> -       if (kasan_enabled())
+> -               __kasan_cache_create_kmalloc(cache);
+> -}
+> -
+>  void __kasan_poison_slab(struct slab *slab);
+>  static __always_inline void kasan_poison_slab(struct slab *slab)
+>  {
+> @@ -252,7 +244,6 @@ static inline void kasan_poison_pages(struct page *page, unsigned int order,
+>                                       bool init) {}
+>  static inline bool kasan_unpoison_pages(struct page *page, unsigned int order,
+>                                         bool init) { return false; }
+> -static inline void kasan_cache_create_kmalloc(struct kmem_cache *cache) {}
+>  static inline void kasan_poison_slab(struct slab *slab) {}
+>  static inline void kasan_unpoison_object_data(struct kmem_cache *cache,
+>                                         void *object) {}
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index 1f30080a7a4c..f7e0e5067e7a 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -122,11 +122,6 @@ void __kasan_poison_pages(struct page *page, unsigned int order, bool init)
+>                              KASAN_PAGE_FREE, init);
+>  }
+>
+> -void __kasan_cache_create_kmalloc(struct kmem_cache *cache)
+> -{
+> -       cache->kasan_info.is_kmalloc = true;
+> -}
+> -
+>  void __kasan_poison_slab(struct slab *slab)
+>  {
+>         struct page *page = slab_page(slab);
+> @@ -326,7 +321,7 @@ void * __must_check __kasan_slab_alloc(struct kmem_cache *cache,
+>         kasan_unpoison(tagged_object, cache->object_size, init);
+>
+>         /* Save alloc info (if possible) for non-kmalloc() allocations. */
+> -       if (kasan_stack_collection_enabled() && !cache->kasan_info.is_kmalloc)
+> +       if (kasan_stack_collection_enabled() && is_kmalloc_cache(cache))
+>                 kasan_save_alloc_info(cache, tagged_object, flags);
+>
+>         return tagged_object;
+> @@ -372,7 +367,7 @@ static inline void *____kasan_kmalloc(struct kmem_cache *cache,
+>          * Save alloc info (if possible) for kmalloc() allocations.
+>          * This also rewrites the alloc info when called from kasan_krealloc().
+>          */
+> -       if (kasan_stack_collection_enabled() && cache->kasan_info.is_kmalloc)
+> +       if (kasan_stack_collection_enabled() && is_kmalloc_cache(cache))
+>                 kasan_save_alloc_info(cache, (void *)object, flags);
+>
+>         /* Keep the tag that was set by kasan_slab_alloc(). */
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 8276022f0da4..a5480d67f391 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -663,7 +663,6 @@ struct kmem_cache *__init create_kmalloc_cache(const char *name,
+>
+>         create_boot_cache(s, name, size, flags | SLAB_KMALLOC, useroffset,
+>                                                                 usersize);
+> -       kasan_cache_create_kmalloc(s);
+>         list_add(&s->list, &slab_caches);
+>         s->refcount = 1;
+>         return s;
+> --
+> 2.34.1
+>
