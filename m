@@ -2,169 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A068B632A84
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E49FF632A98
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiKURNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:13:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
+        id S230017AbiKURP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbiKURMT (ORCPT
+        with ESMTP id S230428AbiKUROy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:12:19 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2249CDFF8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:12:15 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id j12so11165250plj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:12:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mWrsUVH7dB6OSSMZm6MOoJV9MHEspgOy930qIPoKKBU=;
-        b=nHp+7HQ7Hr+KZQIQsMsn4/3cncaHAMY8Ki9hQ2xw2SxkZxV69l+PCAhgXFVwmgiNcM
-         XzAn5pLa5L6/i8pR5KBaiADZaAVH7eF4HWxsbK0INyDgNbC6AUVspDoUTOfwPbIjiXK7
-         RN/FoaUMoOgTzrZJjIO83cbPFcd5VsUOOr0Tn0dzmkwhFns80JI++azwSpx/wR1rkLRb
-         izv5/HBebWCjSg48U45Sfk09fvoyoCvZ4b+4up5A3KBo9rTpIxcbgtkW7tvAaOVeiawC
-         cmGYidS0yK6uSi5KBxtgFsctkeAYneIvKPRZzAPpz1gsPhQ8plJg0CqGbTyNPztY2o9C
-         0rVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mWrsUVH7dB6OSSMZm6MOoJV9MHEspgOy930qIPoKKBU=;
-        b=ZfMxh/xn5ECNONcwP2Re+X7QUSnjr5VLMeOgXZHUmgAw+lNg1KfGBS+nGL6pqUNkDb
-         upPFt2mbfQp0DjnQCMPAJiggoayROrVIHbXMiG3x0kY8rXgVfaQfZee/lIEAApaIBXjo
-         XgruFi+Sk1fC+5FOoLBSQcUrSh0+6FWV2S9IB3Hwmniy47ZtjZSl/NxoBYDnXaUqYWPk
-         E3rZQfVdSdiuSv710WTGgNt4jhIUNqK2Xm4ULcuPg3NPo/9Oz0e18UxbFyx3Yd5togzb
-         1OMxsqwtASpLWGGs1cN7QxOScPFvtCF55SaaHLu9Bjj+vQmTKq2yZrvq16WtXMBPGFWx
-         m6Lg==
-X-Gm-Message-State: ANoB5plpw3vwMHJF0k43/kKZ5eHn7N0Its5dmEFXSNn3Ijb0A+QrWyNR
-        pqnhODIrsKPrZSE8hhvrMu0oYQ==
-X-Google-Smtp-Source: AA0mqf6Ioi1CJekynbdlPwx6GlnejsWldK1j3vkzo+1CxAM/E78HDtXyDPw56G4NFYskwpjburptYw==
-X-Received: by 2002:a17:90b:48c8:b0:20b:16bc:8493 with SMTP id li8-20020a17090b48c800b0020b16bc8493mr21644639pjb.210.1669050735117;
-        Mon, 21 Nov 2022 09:12:15 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y15-20020aa79e0f000000b005672daedc8fsm8913951pfq.81.2022.11.21.09.12.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 09:12:14 -0800 (PST)
-Date:   Mon, 21 Nov 2022 17:12:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Babu Moger <babu.moger@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Santosh Shukla <santosh.shukla@amd.com>
-Subject: Re: [PATCH 10/13] KVM: SVM: Add VNMI support in inject_nmi
-Message-ID: <Y3uxayZrhvahkzJt@google.com>
-References: <20221117143242.102721-1-mlevitsk@redhat.com>
- <20221117143242.102721-11-mlevitsk@redhat.com>
+        Mon, 21 Nov 2022 12:14:54 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AA63D5A24;
+        Mon, 21 Nov 2022 09:13:16 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDA7D1FB;
+        Mon, 21 Nov 2022 09:13:17 -0800 (PST)
+Received: from pierre123.arm.com (unknown [10.57.7.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A8B753F587;
+        Mon, 21 Nov 2022 09:13:06 -0800 (PST)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ionela.Voinescu@arm.com, Rob.Herring@arm.com,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Gavin Shan <gshan@redhat.com>, SeongJae Park <sj@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
+Subject: [PATCH v2 3/5] ACPI: PPTT: Remove acpi_find_cache_levels()
+Date:   Mon, 21 Nov 2022 18:12:11 +0100
+Message-Id: <20221121171217.3581004-4-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221121171217.3581004-1-pierre.gondois@arm.com>
+References: <20221121171217.3581004-1-pierre.gondois@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117143242.102721-11-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022, Maxim Levitsky wrote:
-> From: Santosh Shukla <santosh.shukla@amd.com>
-> 
-> Inject the NMI by setting V_NMI in the VMCB interrupt control. processor
-> will clear V_NMI to acknowledge processing has started and will keep the
-> V_NMI_MASK set until the processor is done with processing the NMI event.
-> 
-> Also, handle the nmi_l1_to_l2 case such that when it is true then
-> NMI to be injected originally comes from L1's VMCB12 EVENTINJ field.
-> So adding a check for that case.
-> 
-> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index eaa30f8ace518d..9ebfbd0d4b467e 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3479,7 +3479,14 @@ static void pre_svm_run(struct kvm_vcpu *vcpu)
->  static void svm_inject_nmi(struct kvm_vcpu *vcpu)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
-> +	struct vmcb *vmcb = NULL;
+acpi_find_cache_levels() is used at a single place and is short
+enough to be merged into the calling function. The removal allows
+an easier renaming of the calling function in the next patch.
 
-As written, no need to initialize vmcb.  Might be a moot point depending on the
-final form of the code.
-  
-> +	if (is_vnmi_enabled(svm) && !svm->nmi_l1_to_l2) {
+Also reorder the local variables in the 'reversed Christmas tree'
+order.
 
-Checking nmi_l1_to_l2 is wrong.  KVM should directly re-inject any NMI that was
-already recognized by hardware, not just those that were originally injected by
-L1.
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Jeremy Linton <jeremy.linton@arm.com>
+---
+ drivers/acpi/pptt.c | 21 ++++++---------------
+ 1 file changed, 6 insertions(+), 15 deletions(-)
 
-If another event comes along, e.g. SMI, because an event (NMI) is already injected,
-KVM will send a hardware IRQ to interrupt the guest and forcea a VM-Exit so that
-the SMI can be injected.  If hardware does the (IMO) sane thing and prioritizes
-"real" IRQs over virtual NMIs, the IRQ VM-Exit will occur before the virtual NMI
-is processed and KVM will incorrectly service the SMI before the NMI.
+diff --git a/drivers/acpi/pptt.c b/drivers/acpi/pptt.c
+index c91342dcbcd6..97c1d33822d1 100644
+--- a/drivers/acpi/pptt.c
++++ b/drivers/acpi/pptt.c
+@@ -281,19 +281,6 @@ static struct acpi_pptt_processor *acpi_find_processor_node(struct acpi_table_he
+ 	return NULL;
+ }
+ 
+-static int acpi_find_cache_levels(struct acpi_table_header *table_hdr,
+-				  u32 acpi_cpu_id)
+-{
+-	int number_of_levels = 0;
+-	struct acpi_pptt_processor *cpu;
+-
+-	cpu = acpi_find_processor_node(table_hdr, acpi_cpu_id);
+-	if (cpu)
+-		number_of_levels = acpi_count_levels(table_hdr, cpu);
+-
+-	return number_of_levels;
+-}
+-
+ static u8 acpi_cache_type(enum cache_type type)
+ {
+ 	switch (type) {
+@@ -613,9 +600,10 @@ static int check_acpi_cpu_flag(unsigned int cpu, int rev, u32 flag)
+  */
+ int acpi_find_last_cache_level(unsigned int cpu)
+ {
+-	u32 acpi_cpu_id;
++	struct acpi_pptt_processor *cpu_node;
+ 	struct acpi_table_header *table;
+ 	int number_of_levels = 0;
++	u32 acpi_cpu_id;
+ 
+ 	table = acpi_get_pptt();
+ 	if (!table)
+@@ -624,7 +612,10 @@ int acpi_find_last_cache_level(unsigned int cpu)
+ 	pr_debug("Cache Setup find last level CPU=%d\n", cpu);
+ 
+ 	acpi_cpu_id = get_acpi_id_for_cpu(cpu);
+-	number_of_levels = acpi_find_cache_levels(table, acpi_cpu_id);
++	cpu_node = acpi_find_processor_node(table, acpi_cpu_id);
++	if (cpu_node)
++		number_of_levels = acpi_count_levels(table, cpu_node);
++
+ 	pr_debug("Cache Setup find last level level=%d\n", number_of_levels);
+ 
+ 	return number_of_levels;
+-- 
+2.25.1
 
-I believe the correct way to handle this is to add a @reinjected param to
-->inject_nmi(), a la ->inject_irq().  That would also allow adding a sanity check
-that KVM never attempts to inject an NMI into L2 if NMIs are supposed to trigger
-VM-Exit.
-
-This is the least ugly code I could come up with.  Note, if vNMI is enabled,
-hardare sets V_NMI_MASKED if an NMI is injected through event_inj.
-
-static void svm_inject_nmi(struct kvm_vcpu *vcpu, bool reinjected)
-{
-	struct vcpu_svm *svm = to_svm(vcpu);
-
-	/*
-	 * Except for re-injection, KVM should never inject an NMI into L2 if
-	 * NMIs are supposed to exit from L2 to L1.
-	 */
-	WARN_ON_ONCE(!reinjected && is_guest_mode(vcpu) && nested_exit_on_nmi(svm));
-
-	if (is_vnmi_enabled(svm)) {
-		if (!reinjected)
-			svm->vmcb->control.int_ctl |= V_NMI_PENDING;
-		else
-			svm->vmcb->control.event_inj = SVM_EVTINJ_VALID |
-						       SVM_EVTINJ_TYPE_NMI;
-		++vcpu->stat.nmi_injections;
-		return;
-	}
-
-	svm->vmcb->control.event_inj = SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_NMI;
-
-	if (svm->nmi_l1_to_l2)
-		return;
-
-	vcpu->arch.hflags |= HF_NMI_MASK;
-	if (!sev_es_guest(vcpu->kvm))
-		svm_set_intercept(svm, INTERCEPT_IRET);
-	++vcpu->stat.nmi_injections;
-}
