@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BADB631B21
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC49631B23
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiKUIT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S229986AbiKUITe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiKUITR (ORCPT
+        with ESMTP id S229972AbiKUITY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:19:17 -0500
+        Mon, 21 Nov 2022 03:19:24 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBDD20199;
-        Mon, 21 Nov 2022 00:19:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7B56DFC0;
+        Mon, 21 Nov 2022 00:19:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669018756; x=1700554756;
+  t=1669018761; x=1700554761;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=v4pncwkeHXjxTzhY7WnzuK4+Ho6EcQPP3PB4TQlyc64=;
-  b=LReJ59cimikqwclyPVIqovJeroj3OkVO+oW4M0scdhQfxZ2euNCHAdaR
-   Tg8q9ilxgfK01Lunl3/qtC5baURs5L6tYNHhWljMcSTu9NIqcaPk6cESL
-   ahv2SU/TOtS3kBxnmzomdDRiEndflSUb0uBDchi8MR1WD3DU5AcTuBk35
-   /gMxpit0OH8d9XmqUia2jtWSLkZUgTCpHyzx8drNi/4tbzdpsnhSV1ufk
-   jXZp4Uj43LHjd+g44SBxC09K/Pa3hWNaZvfTPh7JmkPWWgJYYfo7U/Xy/
-   0YZStj9l9qJRKVhlrwgLiIIqQmMuTOsHIjKRAUXHzQ9SBrYzCh4Ydyt+z
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="314649217"
+  bh=U/r/bpCf69zjKYJ5U+lIOO8VDhnEyNZw19hpru82elo=;
+  b=H4UDCreVbxugLcpTtRy4xYWTPKy/pkCwMEicdAW+e7dBo/mOs67kPkgV
+   RJ8pDqA7LTOzCLqhhSQDxB1Mi/MT4GFVVmO+ugpyRYrzYizX00WEiq8tl
+   9Qeo/DdfVed6wf9M1uKhsXyFf/RgV6IL7n1zsSHqbn+rovk98VrmjjNV6
+   pgrSPIqin7u1GZJfAnjMNjXXY5N1732409FyZAtY8IZwAq3BS1hE5da7a
+   Y+5Fq5zRdZTwpuoK1r0MUx0INAyvmrQ/EpBTdG8B9IpPoHp0L4Ak6o/a6
+   6gSh4TiWy51yyRmJtI5BYowv+b+kPyNPEFSjsFDpBiFRIx5FWret/Rajt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="314649236"
 X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="314649217"
+   d="scan'208";a="314649236"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 00:19:13 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 00:19:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="704471789"
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="704471802"
 X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="704471789"
+   d="scan'208";a="704471802"
 Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Nov 2022 00:19:10 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 21 Nov 2022 00:19:15 -0800
 From:   zhengjun.xing@linux.intel.com
 To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
         alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
         zhengjun.xing@linux.intel.com
-Subject: [PATCH v2 2/5] perf vendor events intel: Add uncore event list for Alderlake-N
-Date:   Mon, 21 Nov 2022 16:20:55 +0800
-Message-Id: <20221121082058.64578-2-zhengjun.xing@linux.intel.com>
+Subject: [PATCH v2 3/5] perf vendor events intel: Add metrics for Alderlake-N
+Date:   Mon, 21 Nov 2022 16:20:56 +0800
+Message-Id: <20221121082058.64578-3-zhengjun.xing@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221121082058.64578-1-zhengjun.xing@linux.intel.com>
 References: <20221121082058.64578-1-zhengjun.xing@linux.intel.com>
@@ -65,244 +65,614 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-Add JSON uncore events for Alderlake-N
+Add JSON metrics for Alderlake-N to perf.
 
-Based on JSON list v1.16:
+It only included E-core metrics.
 
-https://github.com/intel/perfmon/tree/main/ADL/events/
+E-core metrics based on E-core TMA v2.2 (E-core_TMA_Metrics.csv)
+
+It is downloaded from:
+  https://github.com/intel/perfmon/
 
 Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
 Change log:
   v2:
-    * Regenerate the uncore event list with the new converter scripts.
+    * Regenerate the metrics with the new converter scripts.
       (https://github.com/intel/perfmon/pull/32 and add the ADL-N fix)
 
- .../arch/x86/alderlaken/uncore-memory.json    | 175 ++++++++++++++++++
- .../arch/x86/alderlaken/uncore-other.json     |  33 ++++
- 2 files changed, 208 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
- create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/uncore-other.json
+ .../arch/x86/alderlaken/adln-metrics.json     | 583 ++++++++++++++++++
+ 1 file changed, 583 insertions(+)
+ create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
 
-diff --git a/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json b/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
+diff --git a/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json b/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
 new file mode 100644
-index 000000000000..2ccd9cf96957
+index 000000000000..c57e9f325fb0
 --- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
-@@ -0,0 +1,175 @@
++++ b/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
+@@ -0,0 +1,583 @@
 +[
 +    {
-+        "BriefDescription": "Counts every 64B read  request entering the Memory Controller 0 to DRAM (sum of all channels).",
-+        "EventName": "UNC_MC0_RDCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "PublicDescription": "Counts every 64B read request entering the Memory Controller 0 to DRAM (sum of all channels).",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to frontend stalls.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.ALL / SLOTS",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_frontend_bound",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Counts every 64B write request entering the Memory Controller 0 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM.",
-+        "EventName": "UNC_MC0_WRCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to frontend bandwidth restrictions due to decode, predecode, cisc, and other limitations.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.FRONTEND_LATENCY / SLOTS",
++        "MetricGroup": "TopdownL2;tma_frontend_bound_group",
++        "MetricName": "tma_frontend_latency",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Counts every 64B read request entering the Memory Controller 1 to DRAM (sum of all channels).",
-+        "EventName": "UNC_MC1_RDCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "PublicDescription": "Counts every 64B read entering the Memory Controller 1 to DRAM (sum of all channels).",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to instruction cache misses.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.ICACHE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_latency_group",
++        "MetricName": "tma_icache",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Counts every 64B write request entering the Memory Controller 1 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM.",
-+        "EventName": "UNC_MC1_WRCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to Instruction Table Lookaside Buffer (ITLB) misses.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.ITLB / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_latency_group",
++        "MetricName": "tma_itlb",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "ACT command for a read request sent to DRAM",
-+        "EventCode": "0x24",
-+        "EventName": "UNC_M_ACT_COUNT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to BACLEARS, which occurs when the Branch Target Buffer (BTB) prediction or lack thereof, was corrected by a later branch predictor in the frontend",
++        "MetricExpr": "TOPDOWN_FE_BOUND.BRANCH_DETECT / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_latency_group",
++        "MetricName": "tma_branch_detect",
++        "PublicDescription": "Counts the number of issue slots  that were not delivered by the frontend due to BACLEARS, which occurs when the Branch Target Buffer (BTB) prediction or lack thereof, was corrected by a later branch predictor in the frontend. Includes BACLEARS due to all branch types including conditional and unconditional jumps, returns, and indirect branches.",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "ACT command sent to DRAM",
-+        "EventCode": "0x26",
-+        "EventName": "UNC_M_ACT_COUNT_TOTAL",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to BTCLEARS, which occurs when the Branch Target Buffer (BTB) predicts a taken branch.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.BRANCH_RESTEER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_latency_group",
++        "MetricName": "tma_branch_resteer",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "ACT command for a write request sent to DRAM",
-+        "EventCode": "0x25",
-+        "EventName": "UNC_M_ACT_COUNT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to frontend bandwidth restrictions due to decode, predecode, cisc, and other limitations.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.FRONTEND_BANDWIDTH / SLOTS",
++        "MetricGroup": "TopdownL2;tma_frontend_bound_group",
++        "MetricName": "tma_frontend_bandwidth",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Read CAS command sent to DRAM",
-+        "EventCode": "0x22",
-+        "EventName": "UNC_M_CAS_COUNT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to the microcode sequencer (MS).",
++        "MetricExpr": "TOPDOWN_FE_BOUND.CISC / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_bandwidth_group",
++        "MetricName": "tma_cisc",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Write CAS command sent to DRAM",
-+        "EventCode": "0x23",
-+        "EventName": "UNC_M_CAS_COUNT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to decode stalls.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.DECODE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_bandwidth_group",
++        "MetricName": "tma_decode",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Number of clocks",
-+        "EventCode": "0x01",
-+        "EventName": "UNC_M_CLOCKTICKS",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to wrong predecodes.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.PREDECODE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_bandwidth_group",
++        "MetricName": "tma_predecode",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "incoming read request page status is Page Empty",
-+        "EventCode": "0x1D",
-+        "EventName": "UNC_M_DRAM_PAGE_EMPTY_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not delivered by the frontend due to other common frontend stalls not categorized.",
++        "MetricExpr": "TOPDOWN_FE_BOUND.OTHER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_frontend_bandwidth_group",
++        "MetricName": "tma_other_fb",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "incoming write request page status is Page Empty",
-+        "EventCode": "0x20",
-+        "EventName": "UNC_M_DRAM_PAGE_EMPTY_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the total number of issue slots that were not consumed by the backend because allocation is stalled due to a mispredicted jump or a machine clear",
++        "MetricExpr": "(SLOTS - (TOPDOWN_FE_BOUND.ALL + TOPDOWN_BE_BOUND.ALL + TOPDOWN_RETIRING.ALL)) / SLOTS",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_bad_speculation",
++        "PublicDescription": "Counts the total number of issue slots that were not consumed by the backend because allocation is stalled due to a mispredicted jump or a machine clear. Only issue slots wasted due to fast nukes such as memory ordering nukes are counted. Other nukes are not accounted for. Counts all issue slots blocked during this recovery window including relevant microcode flows and while uops are not yet available in the instruction queue (IQ). Also includes the issue slots that were consumed by the backend but were thrown away because they were younger than the mispredict or machine clear.",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "incoming read request page status is Page Hit",
-+        "EventCode": "0x1C",
-+        "EventName": "UNC_M_DRAM_PAGE_HIT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to branch mispredicts.",
++        "MetricExpr": "TOPDOWN_BAD_SPECULATION.MISPREDICT / SLOTS",
++        "MetricGroup": "TopdownL2;tma_bad_speculation_group",
++        "MetricName": "tma_branch_mispredicts",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "incoming write request page status is Page Hit",
-+        "EventCode": "0x1F",
-+        "EventName": "UNC_M_DRAM_PAGE_HIT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the total number of issue slots that were not consumed by the backend because allocation is stalled due to a machine clear (nuke) of any kind including memory ordering and memory disambiguation.",
++        "MetricExpr": "TOPDOWN_BAD_SPECULATION.MACHINE_CLEARS / SLOTS",
++        "MetricGroup": "TopdownL2;tma_bad_speculation_group",
++        "MetricName": "tma_machine_clears",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "incoming read request page status is Page Miss",
-+        "EventCode": "0x1E",
-+        "EventName": "UNC_M_DRAM_PAGE_MISS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to a machine clear (slow nuke).",
++        "MetricExpr": "TOPDOWN_BAD_SPECULATION.NUKE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_machine_clears_group",
++        "MetricName": "tma_nuke",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "incoming write request page status is Page Miss",
-+        "EventCode": "0x21",
-+        "EventName": "UNC_M_DRAM_PAGE_MISS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to SMC. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.SMC / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_smc",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Any Rank at Hot state",
-+        "EventCode": "0x19",
-+        "EventName": "UNC_M_DRAM_THERMAL_HOT",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to memory ordering. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.MEMORY_ORDERING / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_memory_ordering",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Any Rank at Warm state",
-+        "EventCode": "0x1A",
-+        "EventName": "UNC_M_DRAM_THERMAL_WARM",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to FP assists. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.FP_ASSIST / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_fp_assist",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Incoming read prefetch request from IA.",
-+        "EventCode": "0x0A",
-+        "EventName": "UNC_M_PREFETCH_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to memory disambiguation. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.DISAMBIGUATION / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_disambiguation",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "PRE command sent to DRAM due to page table idle timer expiration",
-+        "EventCode": "0x28",
-+        "EventName": "UNC_M_PRE_COUNT_IDLE",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of machine clears relative to the number of nuke slots due to page faults. ",
++        "MetricExpr": "tma_nuke * (MACHINE_CLEARS.PAGE_FAULT / MACHINE_CLEARS.SLOW)",
++        "MetricGroup": "TopdownL4;tma_nuke_group",
++        "MetricName": "tma_page_fault",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "PRE command sent to DRAM for a read/write request",
-+        "EventCode": "0x27",
-+        "EventName": "UNC_M_PRE_COUNT_PAGE_MISS",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to a machine clear classified as a fast nuke due to memory ordering, memory disambiguation and memory renaming.",
++        "MetricExpr": "TOPDOWN_BAD_SPECULATION.FASTNUKE / SLOTS",
++        "MetricGroup": "TopdownL3;tma_machine_clears_group",
++        "MetricName": "tma_fast_nuke",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Incoming VC0 read request",
-+        "EventCode": "0x02",
-+        "EventName": "UNC_M_VC0_REQUESTS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls",
++        "MetricExpr": "TOPDOWN_BE_BOUND.ALL / SLOTS",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_backend_bound",
++        "PublicDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls.  Note that uops must be available for consumption in order for this event to count.  If a uop is not available (IQ is empty), this event will not count.   The rest of these subevents count backend stalls, in cycles, due to an outstanding request which is memory bound vs core bound.   The subevents are not slot based events and therefore can not be precisely added or subtracted from the Backend_Bound_Aux subevents which are slot based.",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Incoming VC0 write request",
-+        "EventCode": "0x03",
-+        "EventName": "UNC_M_VC0_REQUESTS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of cycles due to backend bound stalls that are core execution bound and not attributed to outstanding demand load or store stalls. ",
++        "MetricExpr": "max(0, tma_backend_bound - tma_load_store_bound)",
++        "MetricGroup": "TopdownL2;tma_backend_bound_group",
++        "MetricName": "tma_core_bound",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Incoming VC1 read request",
-+        "EventCode": "0x04",
-+        "EventName": "UNC_M_VC1_REQUESTS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
++        "BriefDescription": "Counts the number of cycles the core is stalled due to stores or loads. ",
++        "MetricExpr": "min((TOPDOWN_BE_BOUND.ALL / SLOTS), (LD_HEAD.ANY_AT_RET / CLKS) + tma_store_bound)",
++        "MetricGroup": "TopdownL2;tma_backend_bound_group",
++        "MetricName": "tma_load_store_bound",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Incoming VC1 write request",
-+        "EventCode": "0x05",
-+        "EventName": "UNC_M_VC1_REQUESTS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/alderlaken/uncore-other.json b/tools/perf/pmu-events/arch/x86/alderlaken/uncore-other.json
-new file mode 100644
-index 000000000000..f9e7777cd2be
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/alderlaken/uncore-other.json
-@@ -0,0 +1,33 @@
-+[
-+    {
-+        "BriefDescription": "Number of requests allocated in Coherency Tracker.",
-+        "EventCode": "0x84",
-+        "EventName": "UNC_ARB_COH_TRK_REQUESTS.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x1",
-+        "Unit": "ARB"
++        "BriefDescription": "Counts the number of cycles the core is stalled due to store buffer full.",
++        "MetricExpr": "tma_mem_scheduler * (MEM_SCHEDULER_BLOCK.ST_BUF / MEM_SCHEDULER_BLOCK.ALL)",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_store_bound",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Each cycle counts number of all outgoing valid entries in ReqTrk. Such entry is defined as valid from its allocation in ReqTrk till deallocation. Accounts for Coherent and non-coherent traffic.",
-+        "EventCode": "0x80",
-+        "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x1",
-+        "Unit": "ARB"
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a load block.",
++        "MetricExpr": "LD_HEAD.L1_BOUND_AT_RET / CLKS",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_l1_bound",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "Counts the number of coherent and in-coherent requests initiated by IA cores, processor graphic units, or LLC.",
-+        "EventCode": "0x81",
-+        "EventName": "UNC_ARB_TRK_REQUESTS.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x1",
-+        "Unit": "ARB"
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a store forward block.",
++        "MetricExpr": "LD_HEAD.ST_ADDR_AT_RET / CLKS",
++        "MetricGroup": "TopdownL4;tma_l1_bound_group",
++        "MetricName": "tma_store_fwd",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "BriefDescription": "This 48-bit fixed counter counts the UCLK cycles.",
-+        "EventCode": "0xff",
-+        "EventName": "UNC_CLOCK.SOCKET",
-+        "PerPkg": "1",
-+        "Unit": "CLOCK"
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a first level TLB miss.",
++        "MetricExpr": "LD_HEAD.DTLB_MISS_AT_RET / CLKS",
++        "MetricGroup": "TopdownL4;tma_l1_bound_group",
++        "MetricName": "tma_stlb_hit",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a second level TLB miss requiring a page walk.",
++        "MetricExpr": "LD_HEAD.PGWALK_AT_RET / CLKS",
++        "MetricGroup": "TopdownL4;tma_l1_bound_group",
++        "MetricName": "tma_stlb_miss",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles that the oldest load of the load buffer is stalled at retirement due to a number of other load blocks.",
++        "MetricExpr": "LD_HEAD.OTHER_AT_RET / CLKS",
++        "MetricGroup": "TopdownL4;tma_l1_bound_group",
++        "MetricName": "tma_other_l1",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles a core is stalled due to a demand load which hit in the L2 Cache.",
++        "MetricExpr": "(MEM_BOUND_STALLS.LOAD_L2_HIT / CLKS) - (MEM_BOUND_STALLS_AT_RET_CORRECTION * MEM_BOUND_STALLS.LOAD_L2_HIT / MEM_BOUND_STALLS.LOAD)",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_l2_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles a core is stalled due to a demand load which hit in the Last Level Cache (LLC) or other core with HITE/F/M.",
++        "MetricExpr": "(MEM_BOUND_STALLS.LOAD_LLC_HIT / CLKS) - (MEM_BOUND_STALLS_AT_RET_CORRECTION * MEM_BOUND_STALLS.LOAD_LLC_HIT / MEM_BOUND_STALLS.LOAD)",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_l3_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles the core is stalled due to a demand load miss which hit in DRAM or MMIO (Non-DRAM).",
++        "MetricExpr": "(MEM_BOUND_STALLS.LOAD_DRAM_HIT / CLKS) - (MEM_BOUND_STALLS_AT_RET_CORRECTION * MEM_BOUND_STALLS.LOAD_DRAM_HIT / MEM_BOUND_STALLS.LOAD)",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_dram_bound",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles the core is stalled due to a demand load miss which hits in the L2, LLC, DRAM or MMIO (Non-DRAM) but could not be correctly attributed or cycles in which the load miss is waiting on a request buffer.",
++        "MetricExpr": "max(0, tma_load_store_bound - (tma_store_bound + tma_l1_bound + tma_l2_bound + tma_l3_bound + tma_dram_bound))",
++        "MetricGroup": "TopdownL3;tma_load_store_bound_group",
++        "MetricName": "tma_other_load_store",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls",
++        "MetricExpr": "tma_backend_bound",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_backend_bound_aux",
++        "PublicDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls.  Note that UOPS must be available for consumption in order for this event to count.  If a uop is not available (IQ is empty), this event will not count.  All of these subevents count backend stalls, in slots, due to a resource limitation.   These are not cycle based events and therefore can not be precisely added or subtracted from the Backend_Bound subevents which are cycle based.  These subevents are supplementary to Backend_Bound and can be used to analyze results from a resource perspective at allocation.  ",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls",
++        "MetricExpr": "tma_backend_bound",
++        "MetricGroup": "TopdownL2;tma_backend_bound_aux_group",
++        "MetricName": "tma_resource_bound",
++        "PublicDescription": "Counts the total number of issue slots  that were not consumed by the backend due to backend stalls.  Note that uops must be available for consumption in order for this event to count.  If a uop is not available (IQ is empty), this event will not count. ",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to memory reservation stalls in which a scheduler is not able to accept uops.",
++        "MetricExpr": "TOPDOWN_BE_BOUND.MEM_SCHEDULER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_mem_scheduler",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles, relative to the number of mem_scheduler slots, in which uops are blocked due to store buffer full",
++        "MetricExpr": "tma_mem_scheduler * (MEM_SCHEDULER_BLOCK.ST_BUF / MEM_SCHEDULER_BLOCK.ALL)",
++        "MetricGroup": "TopdownL4;tma_mem_scheduler_group",
++        "MetricName": "tma_st_buffer",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles, relative to the number of mem_scheduler slots, in which uops are blocked due to load buffer full",
++        "MetricExpr": "tma_mem_scheduler * MEM_SCHEDULER_BLOCK.LD_BUF / MEM_SCHEDULER_BLOCK.ALL",
++        "MetricGroup": "TopdownL4;tma_mem_scheduler_group",
++        "MetricName": "tma_ld_buffer",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of cycles, relative to the number of mem_scheduler slots, in which uops are blocked due to RSV full relative ",
++        "MetricExpr": "tma_mem_scheduler * MEM_SCHEDULER_BLOCK.RSV / MEM_SCHEDULER_BLOCK.ALL",
++        "MetricGroup": "TopdownL4;tma_mem_scheduler_group",
++        "MetricName": "tma_rsv",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to IEC or FPC RAT stalls, which can be due to FIQ or IEC reservation stalls in which the integer, floating point or SIMD scheduler is not able to accept uops.",
++        "MetricExpr": "TOPDOWN_BE_BOUND.NON_MEM_SCHEDULER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_non_mem_scheduler",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to the physical register file unable to accept an entry (marble stalls).",
++        "MetricExpr": "TOPDOWN_BE_BOUND.REGISTER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_register",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to the reorder buffer being full (ROB stalls).",
++        "MetricExpr": "TOPDOWN_BE_BOUND.REORDER_BUFFER / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_reorder_buffer",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to certain allocation restrictions.",
++        "MetricExpr": "TOPDOWN_BE_BOUND.ALLOC_RESTRICTIONS / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_alloc_restriction",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of issue slots  that were not consumed by the backend due to scoreboards from the instruction queue (IQ), jump execution unit (JEU), or microcode sequencer (MS).",
++        "MetricExpr": "TOPDOWN_BE_BOUND.SERIALIZATION / SLOTS",
++        "MetricGroup": "TopdownL3;tma_resource_bound_group",
++        "MetricName": "tma_serialization",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the numer of issue slots  that result in retirement slots. ",
++        "MetricExpr": "TOPDOWN_RETIRING.ALL / SLOTS",
++        "MetricGroup": "TopdownL1",
++        "MetricName": "tma_retiring",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of uops that are not from the microsequencer. ",
++        "MetricExpr": "(TOPDOWN_RETIRING.ALL - UOPS_RETIRED.MS) / SLOTS",
++        "MetricGroup": "TopdownL2;tma_retiring_group",
++        "MetricName": "tma_base",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of floating point operations per uop with all default weighting.",
++        "MetricExpr": "UOPS_RETIRED.FPDIV / SLOTS",
++        "MetricGroup": "TopdownL3;tma_base_group",
++        "MetricName": "tma_fp_uops",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of uops retired excluding ms and fp div uops.",
++        "MetricExpr": "(TOPDOWN_RETIRING.ALL - UOPS_RETIRED.MS - UOPS_RETIRED.FPDIV) / SLOTS",
++        "MetricGroup": "TopdownL3;tma_base_group",
++        "MetricName": "tma_other_ret",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "Counts the number of uops that are from the complex flows issued by the micro-sequencer (MS)",
++        "MetricExpr": "UOPS_RETIRED.MS / SLOTS",
++        "MetricGroup": "TopdownL2;tma_retiring_group",
++        "MetricName": "tma_ms_uops",
++        "PublicDescription": "Counts the number of uops that are from the complex flows issued by the micro-sequencer (MS).  This includes uops from flows due to complex instructions, faults, assists, and inserted flows.",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "",
++        "MetricExpr": "CPU_CLK_UNHALTED.CORE",
++        "MetricName": "CLKS"
++    },
++    {
++        "BriefDescription": "",
++        "MetricExpr": "CPU_CLK_UNHALTED.CORE_P",
++        "MetricName": "CLKS_P"
++    },
++    {
++        "BriefDescription": "",
++        "MetricExpr": "5 * CLKS",
++        "MetricName": "SLOTS"
++    },
++    {
++        "BriefDescription": "Instructions Per Cycle",
++        "MetricExpr": "INST_RETIRED.ANY / CLKS",
++        "MetricName": "IPC"
++    },
++    {
++        "BriefDescription": "Cycles Per Instruction",
++        "MetricExpr": "CLKS / INST_RETIRED.ANY",
++        "MetricName": "CPI"
++    },
++    {
++        "BriefDescription": "Uops Per Instruction",
++        "MetricExpr": "UOPS_RETIRED.ALL / INST_RETIRED.ANY",
++        "MetricName": "UPI"
++    },
++    {
++        "BriefDescription": "Percentage of total non-speculative loads with a store forward or unknown store address block",
++        "MetricExpr": "100 * LD_BLOCKS.DATA_UNKNOWN / MEM_UOPS_RETIRED.ALL_LOADS",
++        "MetricName": "Store_Fwd_Blocks"
++    },
++    {
++        "BriefDescription": "Percentage of total non-speculative loads with a address aliasing block",
++        "MetricExpr": "100 * LD_BLOCKS.4K_ALIAS / MEM_UOPS_RETIRED.ALL_LOADS",
++        "MetricName": "Address_Alias_Blocks"
++    },
++    {
++        "BriefDescription": "Percentage of total non-speculative loads that are splits",
++        "MetricExpr": "100 * MEM_UOPS_RETIRED.SPLIT_LOADS / MEM_UOPS_RETIRED.ALL_LOADS",
++        "MetricName": "Load_Splits"
++    },
++    {
++        "BriefDescription": "Instructions per Branch (lower number means higher occurrence rate)",
++        "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.ALL_BRANCHES",
++        "MetricName": "IpBranch"
++    },
++    {
++        "BriefDescription": "Instruction per (near) call (lower number means higher occurrence rate)",
++        "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.CALL",
++        "MetricName": "IpCall"
++    },
++    {
++        "BriefDescription": "Instructions per Load",
++        "MetricExpr": "INST_RETIRED.ANY / MEM_UOPS_RETIRED.ALL_LOADS",
++        "MetricName": "IpLoad"
++    },
++    {
++        "BriefDescription": "Instructions per Store",
++        "MetricExpr": "INST_RETIRED.ANY / MEM_UOPS_RETIRED.ALL_STORES",
++        "MetricName": "IpStore"
++    },
++    {
++        "BriefDescription": "Number of Instructions per non-speculative Branch Misprediction",
++        "MetricExpr": "INST_RETIRED.ANY / BR_MISP_RETIRED.ALL_BRANCHES",
++        "MetricName": "IpMispredict"
++    },
++    {
++        "BriefDescription": "Instructions per Far Branch",
++        "MetricExpr": "INST_RETIRED.ANY / (BR_INST_RETIRED.FAR_BRANCH / 2)",
++        "MetricName": "IpFarBranch"
++    },
++    {
++        "BriefDescription": "Ratio of all branches which mispredict",
++        "MetricExpr": "BR_MISP_RETIRED.ALL_BRANCHES / BR_INST_RETIRED.ALL_BRANCHES",
++        "MetricName": "Branch_Mispredict_Ratio"
++    },
++    {
++        "BriefDescription": "Ratio between Mispredicted branches and unknown branches",
++        "MetricExpr": "BR_MISP_RETIRED.ALL_BRANCHES / BACLEARS.ANY",
++        "MetricName": "Branch_Mispredict_to_Unknown_Branch_Ratio"
++    },
++    {
++        "BriefDescription": "Percentage of all uops which are ucode ops",
++        "MetricExpr": "100 * UOPS_RETIRED.MS / UOPS_RETIRED.ALL",
++        "MetricName": "Microcode_Uop_Ratio"
++    },
++    {
++        "BriefDescription": "Percentage of all uops which are FPDiv uops",
++        "MetricExpr": "100 * UOPS_RETIRED.FPDIV / UOPS_RETIRED.ALL",
++        "MetricName": "FPDiv_Uop_Ratio"
++    },
++    {
++        "BriefDescription": "Percentage of all uops which are IDiv uops",
++        "MetricExpr": "100 * UOPS_RETIRED.IDIV / UOPS_RETIRED.ALL",
++        "MetricName": "IDiv_Uop_Ratio"
++    },
++    {
++        "BriefDescription": "Percentage of all uops which are x87 uops",
++        "MetricExpr": "100 * UOPS_RETIRED.X87 / UOPS_RETIRED.ALL",
++        "MetricName": "X87_Uop_Ratio"
++    },
++    {
++        "BriefDescription": "Average Frequency Utilization relative nominal frequency",
++        "MetricExpr": "CLKS / CPU_CLK_UNHALTED.REF_TSC",
++        "MetricName": "Turbo_Utilization"
++    },
++    {
++        "BriefDescription": "Fraction of cycles spent in Kernel mode",
++        "MetricExpr": "cpu@CPU_CLK_UNHALTED.CORE@k / CPU_CLK_UNHALTED.CORE",
++        "MetricName": "Kernel_Utilization"
++    },
++    {
++        "BriefDescription": "Average CPU Utilization",
++        "MetricExpr": "CPU_CLK_UNHALTED.REF_TSC / TSC",
++        "MetricName": "CPU_Utilization"
++    },
++    {
++        "BriefDescription": "Cycle cost per L2 hit",
++        "MetricExpr": "MEM_BOUND_STALLS.LOAD_L2_HIT / MEM_LOAD_UOPS_RETIRED.L2_HIT",
++        "MetricName": "Cycles_per_Demand_Load_L2_Hit"
++    },
++    {
++        "BriefDescription": "Cycle cost per LLC hit",
++        "MetricExpr": "MEM_BOUND_STALLS.LOAD_LLC_HIT / MEM_LOAD_UOPS_RETIRED.L3_HIT",
++        "MetricName": "Cycles_per_Demand_Load_L3_Hit"
++    },
++    {
++        "BriefDescription": "Cycle cost per DRAM hit",
++        "MetricExpr": "MEM_BOUND_STALLS.LOAD_DRAM_HIT / MEM_LOAD_UOPS_RETIRED.DRAM_HIT",
++        "MetricName": "Cycles_per_Demand_Load_DRAM_Hit"
++    },
++    {
++        "BriefDescription": "Percent of instruction miss cost that hit in the L2",
++        "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_L2_HIT / (MEM_BOUND_STALLS.IFETCH)",
++        "MetricName": "Inst_Miss_Cost_L2Hit_Percent"
++    },
++    {
++        "BriefDescription": "Percent of instruction miss cost that hit in the L3",
++        "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_LLC_HIT / (MEM_BOUND_STALLS.IFETCH)",
++        "MetricName": "Inst_Miss_Cost_L3Hit_Percent"
++    },
++    {
++        "BriefDescription": "Percent of instruction miss cost that hit in DRAM",
++        "MetricExpr": "100 * MEM_BOUND_STALLS.IFETCH_DRAM_HIT / (MEM_BOUND_STALLS.IFETCH)",
++        "MetricName": "Inst_Miss_Cost_DRAMHit_Percent"
++    },
++    {
++        "BriefDescription": "load ops retired per 1000 instruction",
++        "MetricExpr": "1000 * MEM_UOPS_RETIRED.ALL_LOADS / INST_RETIRED.ANY",
++        "MetricName": "MemLoadPKI"
++    },
++    {
++        "BriefDescription": "C1 residency percent per core",
++        "MetricExpr": "cstate_core@c1\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C1_Core_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C6 residency percent per core",
++        "MetricExpr": "cstate_core@c6\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C6_Core_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C7 residency percent per core",
++        "MetricExpr": "cstate_core@c7\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C7_Core_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C2 residency percent per package",
++        "MetricExpr": "cstate_pkg@c2\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C2_Pkg_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C3 residency percent per package",
++        "MetricExpr": "cstate_pkg@c3\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C3_Pkg_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C6 residency percent per package",
++        "MetricExpr": "cstate_pkg@c6\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C6_Pkg_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C7 residency percent per package",
++        "MetricExpr": "cstate_pkg@c7\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C7_Pkg_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C8 residency percent per package",
++        "MetricExpr": "cstate_pkg@c8\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C8_Pkg_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C9 residency percent per package",
++        "MetricExpr": "cstate_pkg@c9\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C9_Pkg_Residency",
++        "ScaleUnit": "100%"
++    },
++    {
++        "BriefDescription": "C10 residency percent per package",
++        "MetricExpr": "cstate_pkg@c10\\-residency@ / TSC",
++        "MetricGroup": "Power",
++        "MetricName": "C10_Pkg_Residency",
++        "ScaleUnit": "100%"
 +    }
 +]
 -- 
