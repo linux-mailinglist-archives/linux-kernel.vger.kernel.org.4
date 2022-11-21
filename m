@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B90632901
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DDF632900
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiKUQJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
+        id S231587AbiKUQIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiKUQIv (ORCPT
+        with ESMTP id S230095AbiKUQIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 11:08:51 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514BBC5B5E
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B9FC5B61
         for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:08:50 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so8869979ila.3
+Received: by mail-il1-f200.google.com with SMTP id w9-20020a056e021c8900b0030247910269so8701578ill.4
         for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:08:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sGxC+usgv6yhaYnFxXwjDdn0RrDa3glghs/ovAtSB9g=;
-        b=nUJqAKtSsY5mU0QmVFUwaUxdYHQVdBG3Hx+Gq5TXi6G8o5kdNGhAiIcp2cbTETpIA2
-         9JXkhatdj6W/LHJ+PUdx0ccw4JXUQkMfcbzgeVNWs52uwj0rIxr8iPYqRqS0WnDgZCLt
-         NahBjPuUbJP2bpKySGFOq5ESOHds+2rkltaPznbOOfDNHIj947ekp+MnCdQQRGqedoXO
-         JV71UPiRI7XG/9AqWaTXTPwECawqauz1e8WofS8O1lsF8brxqhj9pRn28LHXzw8H55IP
-         eil13fPsDAqYCMsEnM1oKabnLXThnBn8qBWNuBMm1PxtX8hqqra58CtZEYnwvoJUP26s
-         8Egw==
-X-Gm-Message-State: ANoB5plpKMHYbmTQYzF3LJ83Y8n8/vtkQj6ddIZGAVoZOBH4+q34DI7T
-        J0GZNb5chmO9TM6a9PErt2S/4C/gZ2j4q6k6VeaEhdZWqCL+
-X-Google-Smtp-Source: AA0mqf70BOA7Lv3gZLuaNYLcF2q/pv/fvXJAuVjgSJKrqz3GpgF3Ws8bc/fgOVjymiHhg3b1Dzqr/+kRsKgolZXMrnN/TMz3j9K2
+        bh=cRtF/7G+l7epFRHts1bcn9egmT7R8SSB4Y+ewG7hPuc=;
+        b=4hAyPB8K4H1Ihp6IQPmMXG10u+d1h10xDhvjGS8VwgDZf8W5NudiQEdq12xr/P+Iwi
+         AkiuVRd/0LrmXII5TMt9gBveJ19lXFvQay40+o8ChWFMKB+N4r3/yTRY9mtMJf5m6w2w
+         f1xAI9WLeQxeRYZbH/PEzft0auS4baMlyqkAYvOQhVfeGflQiQAD1eIpBMUnhR3zknaR
+         EfyLgQqDI2Wwq0w6/iXpFyb8hU/lZ0zCkXanv1CBfLL2Pkal+69JMVq5K3I23RK5VQ6x
+         ygJDdiB7sg/DoC0Irnr1kPyzOzV66UsAKZGXgrb6aeQb9VeUTotKaMGLt+cHoMrfXUA3
+         gDeQ==
+X-Gm-Message-State: ANoB5plLMarVMBAtjc0oGs5MorFG9+wn+WclEAV/pK90otBm40zFXaim
+        KdlGsrjbQVPWmRWvrMnMPvA8a7umQGJh5NZT0m67YaHEXOKj
+X-Google-Smtp-Source: AA0mqf75ZfOjsU8OI3y+wawtTrScE+Uvt6LleEz39iHh+6x6XAkzYqCeiGVl1bisjjoKNgV6BfvFixWeANz2HuHb99EEvi8rRx3z
 MIME-Version: 1.0
-X-Received: by 2002:a92:cc50:0:b0:302:ad5b:a728 with SMTP id
- t16-20020a92cc50000000b00302ad5ba728mr304996ilq.110.1669046929695; Mon, 21
+X-Received: by 2002:a02:9627:0:b0:375:1998:9e4f with SMTP id
+ c36-20020a029627000000b0037519989e4fmr1816061jai.136.1669046929469; Mon, 21
  Nov 2022 08:08:49 -0800 (PST)
 Date:   Mon, 21 Nov 2022 08:08:49 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005bab1105edfd4565@google.com>
-Subject: [syzbot] WARNING in kfree_rcu_work
-From:   syzbot <syzbot+f6ec2d932b89616d83c7@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
+Message-ID: <00000000000058348b05edfd45ff@google.com>
+Subject: [syzbot] WARNING: refcount bug in p9_client_walk
+From:   syzbot <syzbot+2600f43a81c05675a9ae@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, davem@davemloft.net, edumazet@google.com,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,13 +63,13 @@ syzbot found the following issue on:
 
 HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
 git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=121adaf9880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1519526e880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
-dashboard link: https://syzkaller.appspot.com/bug?extid=f6ec2d932b89616d83c7
+dashboard link: https://syzkaller.appspot.com/bug?extid=2600f43a81c05675a9ae
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1538c909880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16e5ce19880000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15ff2aed880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13b38365880000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
@@ -73,222 +77,61 @@ vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500f
 kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f6ec2d932b89616d83c7@syzkaller.appspotmail.com
+Reported-by: syzbot+2600f43a81c05675a9ae@syzkaller.appspotmail.com
 
 ------------[ cut here ]------------
-ODEBUG: active_state not available (active state 0) object type: rcu_head hint: 0x0
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
+refcount_t: underflow; use-after-free.
+WARNING: CPU: 1 PID: 3083 at lib/refcount.c:28 refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
 Modules linked in:
-CPU: 1 PID: 21 Comm: kworker/1:0 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+CPU: 1 PID: 3083 Comm: syz-executor181 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Workqueue: events kfree_rcu_work
 pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : debug_print_object lib/debugobjects.c:502 [inline]
-pc : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
-lr : debug_print_object lib/debugobjects.c:502 [inline]
-lr : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
-sp : ffff80000f33bcc0
-x29: ffff80000f33bcc0 x28: 0000000000000150 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff0001fefde3e8 x24: 0000000000000000
-x23: 0000000000000001 x22: 0000000000000000 x21: ffff80000f175000
-x20: ffff0000cc581000 x19: ffff80000c0eec40 x18: 0000000000000225
-x17: ffff80000c0ed83c x16: ffff80000dc18158 x15: ffff0000c0331a40
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c0331a40
-x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
-x8 : e93e9ee3facb8300 x7 : ffff800008165f54 x6 : 0000000000000000
+pc : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+lr : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+sp : ffff800012e7b9b0
+x29: ffff800012e7b9b0 x28: ffff0000c6b51a40 x27: 0000000020000040
+x26: 0000000000010002 x25: 0000000000000000 x24: ffff0000cd574088
+x23: 0000000000000000 x22: 0000000000000000 x21: ffff0000ca9ffc0c
+x20: 0000000000000003 x19: ffff80000d98f000 x18: 00000000000001cc
+x17: 0000000000000000 x16: ffff80000dc18158 x15: ffff0000c6b51a40
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c6b51a40
+x11: ff808000081c6510 x10: 0000000000000000 x9 : 2060ebe174811d00
+x8 : 2060ebe174811d00 x7 : ffff800008165f54 x6 : 0000000000000000
 x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000006 x1 : 0000000100000000 x0 : 0000000000000053
+x2 : ffff0001fefddcc8 x1 : 0000000100000000 x0 : 0000000000000026
 Call trace:
- debug_print_object lib/debugobjects.c:502 [inline]
- debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
- debug_rcu_head_unqueue kernel/rcu/rcu.h:198 [inline]
- debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
- kfree_rcu_work+0xa8/0x31c kernel/rcu/tree.c:3032
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 109630
-hardirqs last  enabled at (109629): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
-hardirqs last  enabled at (109629): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
-hardirqs last disabled at (109630): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (97456): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (96913): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-ODEBUG: deactivate not available (active state 0) object type: rcu_head hint: 0x0
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
-Modules linked in:
-CPU: 1 PID: 21 Comm: kworker/1:0 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Workqueue: events kfree_rcu_work
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : debug_print_object lib/debugobjects.c:502 [inline]
-pc : debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
-lr : debug_print_object lib/debugobjects.c:502 [inline]
-lr : debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
-sp : ffff80000f33bcd0
-x29: ffff80000f33bcd0 x28: 0000000000000150 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff0001fefde3e8 x24: 0000000000000000
-x23: ffff0000cc581000 x22: 0000000000000000 x21: ffff80000f175000
-x20: ffff0000cc581000 x19: ffff80000c0eec40 x18: 0000000000000313
-x17: 72203a6570797420 x16: ffff80000dc18158 x15: ffff0000c0331a40
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c0331a40
-x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
-x8 : e93e9ee3facb8300 x7 : ffff800008165f54 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000006 x1 : 0000000100000000 x0 : 0000000000000051
-Call trace:
- debug_print_object lib/debugobjects.c:502 [inline]
- debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
- debug_rcu_head_unqueue kernel/rcu/rcu.h:201 [inline]
- debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
- kfree_rcu_work+0xb4/0x31c kernel/rcu/tree.c:3032
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 109762
-hardirqs last  enabled at (109761): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
-hardirqs last  enabled at (109761): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
-hardirqs last disabled at (109762): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (109754): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (109737): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-ODEBUG: active_state not available (active state 0) object type: rcu_head hint: 0x0
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
-Modules linked in:
-CPU: 1 PID: 21 Comm: kworker/1:0 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Workqueue: events kfree_rcu_work
-
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : debug_print_object lib/debugobjects.c:502 [inline]
-pc : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
-lr : debug_print_object lib/debugobjects.c:502 [inline]
-lr : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
-sp : ffff80000f33bcc0
-x29: ffff80000f33bcc0
- x28: 0000000000000151
- x27: 0000000000000000
-
-x26: 0000000000000000
- x25: ffff0001fefde3e8
- x24: 0000000000000000
-
-x23: 0000000000000001
- x22: 0000000000000000
- x21: ffff80000f175000
-x20: ffff0000cc581100
- x19: ffff80000c0eec40 x18: 0000000000000313
-x17: 2020202020205720 x16: 2020202020202047 x15: 203a6465746e6961
-x14: 5420353331726f74 x13: 205d383734335420 x12: 5b5d373438373031
-x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
-x8 : e93e9ee3facb8300 x7 : 205b5d3734383730 x6 : ffff8000081c880c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0000c0331a40 x1 : 0000000100000000 x0 : 0000000000000053
-Call trace:
- debug_print_object lib/debugobjects.c:502 [inline]
- debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
- debug_rcu_head_unqueue kernel/rcu/rcu.h:198 [inline]
- debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
- kfree_rcu_work+0xa8/0x31c kernel/rcu/tree.c:3032
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 109762
-hardirqs last  enabled at (109761): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
-hardirqs last  enabled at (109761): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
-hardirqs last disabled at (109762): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (109754): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (109737): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-ODEBUG: deactivate not available (active state 0) object type: rcu_head hint: 0x0
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
-Modules linked in:
-CPU: 1 PID: 21 Comm: kworker/1:0 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Workqueue: events kfree_rcu_work
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : debug_print_object lib/debugobjects.c:502 [inline]
-pc : debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
-lr : debug_print_object lib/debugobjects.c:502 [inline]
-lr : debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
-sp : ffff80000f33bcd0
-x29: ffff80000f33bcd0 x28: 0000000000000151 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff0001fefde3e8 x24: 0000000000000000
-x23: ffff0000cc581100 x22: 0000000000000000 x21: ffff80000f175000
-x20: ffff0000cc581100 x19: ffff80000c0eec40 x18: 00000000000000ff
-x17: 0000000000000000 x16: 0000000000000117 x15: 0000000000000018
-x14: 0000000002d879f3 x13: 0000000000000120 x12: 0000000000000000
-x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
-x8 : e93e9ee3facb8300 x7 : 00000000000f4240 x6 : ffff800008165f54
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0000c0331a40 x1 : 0000000100000000 x0 : 0000000000000051
-Call trace:
- debug_print_object lib/debugobjects.c:502 [inline]
- debug_object_deactivate+0x128/0x1dc lib/debugobjects.c:760
- debug_rcu_head_unqueue kernel/rcu/rcu.h:201 [inline]
- debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
- kfree_rcu_work+0xb4/0x31c kernel/rcu/tree.c:3032
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 109762
-hardirqs last  enabled at (109761): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
-hardirqs last  enabled at (109761): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
-hardirqs last disabled at (109762): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (109754): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (109737): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-ODEBUG: active_state not available (active state 0) object type: rcu_head hint: 0x0
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
-WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:505 debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
-Modules linked in:
-CPU: 1 PID: 21 Comm: kworker/1:0 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Workqueue: events kfree_rcu_work
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : debug_print_object lib/debugobjects.c:502 [inline]
-pc : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
-lr : debug_print_object lib/debugobjects.c:502 [inline]
-lr : debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
-sp : ffff80000f33bcc0
-x29: ffff80000f33bcc0 x28: 0000000000000152 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff0001fefde3e8 x24: 0000000000000000
-x23: 0000000000000001 x22: 0000000000000000 x21: ffff80000f175000
-x20: ffff0000cc581280 x19: ffff80000c0eec40 x18: 00000000000000ff
-x17: 3a65707974207463 x16: 656a626f20293020 x15: 6574617473206576
-x14: 697463612820656c x13: 205d313254202020 x12: 5b5d373733313732
-x11: ff808000081c6510 x10: 0000000000000000 x9 : e93e9ee3facb8300
-x8 : e93e9ee3facb8300 x7 : 205b5d3737333137 x6 : ffff80000c0b2b74
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000053
-Call trace:
- debug_print_object lib/debugobjects.c:502 [inline]
- debug_object_active_state+0x174/0x1dc lib/debugobjects.c:948
- debug_rcu_head_unqueue kernel/rcu/rcu.h:198 [inline]
- debug_rcu_bhead_unqueue kernel/rcu/tree.c:2933 [inline]
- kfree_rcu_work+0xa8/0x31c kernel/rcu/tree.c:3032
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 109762
-hardirqs last  enabled at (109761): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
-hardirqs last  enabled at (109761): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
-hardirqs last disabled at (109762): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (109754): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (109737): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+ refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+ __refcount_sub_and_test include/linux/refcount.h:283 [inline]
+ __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+ refcount_dec_and_test include/linux/refcount.h:333 [inline]
+ p9_fid_put include/net/9p/client.h:275 [inline]
+ p9_client_walk+0x2a4/0x2e8 net/9p/client.c:1190
+ v9fs_vfs_lookup+0xa0/0x37c fs/9p/vfs_inode.c:777
+ __lookup_slow+0x14c/0x204 fs/namei.c:1685
+ lookup_slow+0x44/0x68 fs/namei.c:1702
+ walk_component+0x178/0x1b0 fs/namei.c:1993
+ lookup_last fs/namei.c:2450 [inline]
+ path_lookupat+0xc4/0x208 fs/namei.c:2474
+ filename_lookup+0xf8/0x264 fs/namei.c:2503
+ user_path_at_empty+0x5c/0x114 fs/namei.c:2876
+ user_path_at include/linux/namei.h:57 [inline]
+ do_mount fs/namespace.c:3380 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x28c/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+irq event stamp: 1078
+hardirqs last  enabled at (1077): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (1077): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
+hardirqs last disabled at (1078): [<ffff80000c0a4f34>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (1070): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (1059): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
 ---[ end trace 0000000000000000 ]---
 
 
