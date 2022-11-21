@@ -2,137 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45ABF6318F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCDF6318FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiKUDhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S229685AbiKUDjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 22:39:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiKUDhe (ORCPT
+        with ESMTP id S229449AbiKUDjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:37:34 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABA2DF8C;
-        Sun, 20 Nov 2022 19:37:32 -0800 (PST)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NFtNl63blzHvcB;
-        Mon, 21 Nov 2022 11:36:55 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 11:37:29 +0800
-Message-ID: <f0c641ee-b20d-48dd-c65f-2b372eae0b06@huawei.com>
-Date:   Mon, 21 Nov 2022 11:37:29 +0800
+        Sun, 20 Nov 2022 22:39:09 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7730C12755
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 19:39:07 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxTLba8npj3wkJAA--.13397S3;
+        Mon, 21 Nov 2022 11:39:06 +0800 (CST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+DY8npjEWwXAA--.61576S3;
+        Mon, 21 Nov 2022 11:39:04 +0800 (CST)
+Subject: Re: [PATCH] lib/vdso: use "grep -E" instead of "egrep"
+To:     Greg KH <gregkh@linuxfoundation.org>
+References: <ad42d19d-959c-61b4-8581-02ce0990c23f@arm.com>
+ <788b5155-fef5-0e44-721a-f9183e145ae5@loongson.cn>
+ <Y3dMgfPXNMm/vaG2@kroah.com>
+ <337a9a23-436e-7f58-bfc5-600452779472@loongson.cn>
+Cc:     vincenzo.frascino@arm.com, linux-kernel@vger.kernel.org,
+        luto@kernel.org, tglx@linutronix.de,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <e66712fd-bf28-08b6-8f2f-18d8a9a3a159@loongson.cn>
+Date:   Mon, 21 Nov 2022 11:39:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-From:   Zeng Heng <zengheng4@huawei.com>
-Subject: Re: [PATCH] of: overlay: fix memory leak in add_changeset_node()
-To:     Frank Rowand <frowand.list@gmail.com>,
-        <pantelis.antoniou@konsulko.com>, <grant.likely@linaro.org>,
-        <robh+dt@kernel.org>
-CC:     <liwei391@huawei.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118105308.370474-1-zengheng4@huawei.com>
- <8c8124c1-2de6-adfd-3e4b-766c653ebe2d@gmail.com>
-Content-Language: en-US
-In-Reply-To: <8c8124c1-2de6-adfd-3e4b-766c653ebe2d@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <337a9a23-436e-7f58-bfc5-600452779472@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Dxr+DY8npjEWwXAA--.61576S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrtr1DXF1ktryDZrW8Gry7Awb_yoWDCrg_uw
+        48CFW5C348XF42ka1fKan0vrs8CayrAFyFqrWxKw1xX3sxA39Iqa1fGFyrZ3WDWwn7ZrZ5
+        AF1Yv3s5Xr12vjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        n7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
+        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
-On 2022/11/21 10:00, Frank Rowand wrote:
-> On 11/18/22 04:53, Zeng Heng wrote:
->> In of_changeset_action(), we have called of_node_get() to increase
->> refcount of a node.
->>
->> Therefore, when tchild (duplicated by __of_node_dup()) is done,
->> of_node_put() needs to call and release the device_node.
->>
->> Otherwise, there are some memory leak reported about the node:
->>
->> unreferenced object 0xffff88810cd1e800 (size 256):
->>    backtrace:
->>      kmalloc_trace
->>      __of_node_dup
->>      add_changeset_node (inlined)
->>      build_changeset_next_level
->>
->> unreferenced object 0xffff888113721240 (size 16):
->>    backtrace:
->>      __kmalloc_node_track_caller
->>      kstrdup
->>      __of_node_dup
->>      add_changeset_node (inlined)
->>      build_changeset_next_level
->>
->> unreferenced object 0xffff88810a38d400 (size 128):
->>    backtrace:
->>      kmalloc_trace
->>      __of_prop_dup
->>      add_changeset_property
->>      build_changeset_next_level
->>
->> Fixes: 7518b5890d8a ("of/overlay: Introduce DT overlay support")
->> Signed-off-by: Zeng Heng<zengheng4@huawei.com>
->> ---
->>   drivers/of/overlay.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
->> index bd8ff4df723d..a5189a0ec0a3 100644
->> --- a/drivers/of/overlay.c
->> +++ b/drivers/of/overlay.c
->> @@ -436,8 +436,10 @@ static int add_changeset_node(struct overlay_changeset *ovcs,
->>   		of_node_set_flag(tchild, OF_OVERLAY);
->>   
->>   		ret = of_changeset_attach_node(&ovcs->cset, tchild);
->> -		if (ret)
->> +		if (ret) {
->> +			of_node_put(tchild);
->>   			return ret;
->> +		}
-> By visual inspection of the code (Linux 6.1-rc1), this does not appear to be
-> correct.  For the only case where of_changeset_action(),
-> called by of_changeset_attach_node(), returns an error, of_node_get() has not
-> yet occurred on tchild.
+Just FYI.
 
-The correct explanation should be like:
-
-When of_changeset_attach_node() returns fail and tchild is over of life 
-cycle which is duplicated by
-
-__of_node_dup(), it needs to call of_node_put() to release tchild in 
-error handle route.
-
-
-The patch is fine, but feel sorry to apologize for the incorrect comment 
-of the patch.
-
-I would update the comment in the patch v2.
-
-
-With Best Regards,
-
-Zeng Heng
-
->>   
->>   		target_child.np = tchild;
->>   		target_child.in_livetree = false;
-> For which version of Linux were the memory leaks detected?  Were any additional
-> patches applied?
+On 11/19/2022 09:54 AM, Tiezhu Yang wrote:
+> Cc Andrew Morton <akpm@linux-foundation.org>
 >
-> -Frank
+> On 11/18/2022 05:12 PM, Greg KH wrote:
+>> On Fri, Nov 18, 2022 at 04:44:50PM +0800, Tiezhu Yang wrote:
+>>> Hi,
+>>>
+>>> This patch can not be found in the torvalds/linux.git or
+>>> next/linux-next.git tree, please take a look, thank you.
+>>
+>> That is because no one has applied it to their trees :(
+>>
+>
+> Maybe Andrew can pick the following two patches sent by Greg.
+>
+> [PATCH] lib/vdso: use "grep -E" instead of "egrep"
+> https://lore.kernel.org/lkml/20220920170633.3133829-1-gregkh@linuxfoundation.org/
+>
+
+AFAIK, this patch is not in any tree now.
+
+>
+> [PATCH] scripts: coccicheck: use "grep -E" instead of "egrep"
+> https://lore.kernel.org/lkml/20220921091341.217365-1-gregkh@linuxfoundation.org/
+>
+
+This patch is in the following tree, sorry for missing that.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/jlawall/linux.git/commit/?h=for-6.1&id=2d63e6a3d971
+
+Thanks,
+Tiezhu
+
