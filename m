@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FF0631908
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C03563190C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiKUDuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S229601AbiKUDve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 22:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKUDuC (ORCPT
+        with ESMTP id S229446AbiKUDvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:50:02 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183D51EEF0;
-        Sun, 20 Nov 2022 19:50:00 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NFtgF5wHNzmVxP;
-        Mon, 21 Nov 2022 11:49:29 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 11:49:58 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 11:49:57 +0800
-Subject: Re: [PATCH] btrfs: fix a resource leak in btrfs_init_sysfs()
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, <linux-btrfs@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221119064348.1743-1-thunder.leizhen@huawei.com>
- <a076e281-022f-1f49-b70d-513272ca86cf@gmx.com>
- <afa7552c-d673-b387-d516-38024f417137@gmx.com>
- <c3b20a4b-bb32-27a3-b8a0-2b0b7388a335@gmx.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <d017edb7-e2ab-72f8-aa6b-e6671d18f373@huawei.com>
-Date:   Mon, 21 Nov 2022 11:49:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Sun, 20 Nov 2022 22:51:33 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800B01EEF0;
+        Sun, 20 Nov 2022 19:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669002692; x=1700538692;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hohlFiBJb37bBIJI1v6/igX0NmrgDgUxGKaO+zYS7MY=;
+  b=P6BINSiatazXrYxSbfynfsDgqnEFlMdRzgxuED55KubyOVJ2d0qqovvg
+   l/KJCKMfqujcZ+1mbtpYvqoDoS+gZie8HxOjZwt2qtWu9GFCcgk3c+IMC
+   z5YMWn4cLtAHv5fdTKTc3cv/3dJ/g285KCUxKSTw+m+RiDSsRCThX0HjP
+   xcIkGEvobZ8TYXIn6Pzmr29nasQ6gjq6PcTOk/Q+0mBs+zbfr4tQ7yxsh
+   v7JzoifseLjW8A4a5GvmmU0FppA0qjT9H7IvVd69uDHi9ZSkR8eICouJ1
+   L3JywNdrz/xQcZzfsZFxxD9AF+/Cvxrsl51aGGfic5vbdcrvSawhmvvJ1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="315285795"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="315285795"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 19:51:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="765820331"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="765820331"
+Received: from mjcardon-mobl.amr.corp.intel.com (HELO [10.209.57.10]) ([10.209.57.10])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 19:51:31 -0800
+Message-ID: <62c67ed3-e4d1-082f-800a-b0837c9432a9@linux.intel.com>
+Date:   Sun, 20 Nov 2022 19:51:31 -0800
 MIME-Version: 1.0
-In-Reply-To: <c3b20a4b-bb32-27a3-b8a0-2b0b7388a335@gmx.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH v7 03/20] x86/virt/tdx: Disable TDX if X2APIC is not
+ enabled
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
+        dave.hansen@intel.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, peterz@infradead.org,
+        ak@linux.intel.com, isaku.yamahata@intel.com, chao.gao@intel.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <c5f484c1a87ee052597fd5f539cf021f158755b9.1668988357.git.kai.huang@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <c5f484c1a87ee052597fd5f539cf021f158755b9.1668988357.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,84 +73,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/11/20 11:29, Qu Wenruo wrote:
-> 
-> 
-> On 2022/11/20 11:11, Qu Wenruo wrote:
->>
->>
->> On 2022/11/19 14:53, Qu Wenruo wrote:
->>>
->>>
->>> On 2022/11/19 14:43, Zhen Lei wrote:
->>>> When btrfs_debug_feature_attr_group fails to be created,
->>>> btrfs_feature_attr_group is not removed.
->>>>
->>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>
->>> Reviewed-by: Qu Wenruo <wqu@suse.com>
->>
->> Wait for a minute, should we call sysfs_unmerge_group() first before calling sysfs_remove_group()?
->>
->> As the sysfs_remove_group() will only remove the btrfs_feature_attr_group, and kset_unregister() will only free btrfs_kset, without removing the added btrfs_static_feature_attr_group.
->>
->> I haven't yet find a function that will remove all children attrs in just one go, or did I miss something?
-> 
-> Oh, indeed I missed something.
-> 
-> The following call chain would properly handle every child of a kobj:
-> 
-> kset_unregister()
-> |- kobject_del()
->    |- __kobject_del()
->       |- sysfs_remove_dir()
->          |- kernfs_remove()
->             |- __kernfs_remove()
->                |- do { kernfs_leftmost_descendant(); } while (pos != kn)
-> 
-> The final do {} while () loop will unlink each child kernel_node and free it.
-> 
-> This means, as long as we call kset_unregister(), we should be able to free every child of it.
+On 11/20/22 4:26 PM, Kai Huang wrote:
+> The MMIO/xAPIC interface has some problems, most notably the APIC LEAK
 
-OK, thanks.
+"some problems" looks more generic. May be we can be specific here. Like
+it has security issues?
 
+> [1].  This bug allows an attacker to use the APIC MMIO interface to
+> extract data from the SGX enclave.
 > 
+> TDX is not immune from this either.  Early check X2APIC and disable TDX
+> if X2APIC is not enabled, and make INTEL_TDX_HOST depend on X86_X2APIC.
 > 
-> So with or without this patch, the error handling should be fine.
+> [1]: https://aepicleak.com/aepicleak.pdf
 > 
-> Although personally speaking, I'd prefer a more explicit cleanup (with extra sysfs_unmerge_group() call) as going through the above call chain is not that straightforward.
+> Link: https://lore.kernel.org/lkml/d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com/
+> Link: https://lore.kernel.org/lkml/ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com/
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+> 
+> v6 -> v7:
+>  - Changed to use "Link" for the two lore links to get rid of checkpatch
+>    warning.
+> 
+> ---
+>  arch/x86/Kconfig            |  1 +
+>  arch/x86/virt/vmx/tdx/tdx.c | 11 +++++++++++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index cced4ef3bfb2..dd333b46fafb 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1958,6 +1958,7 @@ config INTEL_TDX_HOST
+>  	depends on CPU_SUP_INTEL
+>  	depends on X86_64
+>  	depends on KVM_INTEL
+> +	depends on X86_X2APIC
+>  	help
+>  	  Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
+>  	  host and certain physical attacks.  This option enables necessary TDX
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index 982d9c453b6b..8d943bdc8335 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/printk.h>
+>  #include <asm/msr-index.h>
+>  #include <asm/msr.h>
+> +#include <asm/apic.h>
+>  #include <asm/tdx.h>
+>  #include "tdx.h"
+>  
+> @@ -81,6 +82,16 @@ static int __init tdx_init(void)
+>  		goto no_tdx;
+>  	}
+>  
+> +	/*
+> +	 * TDX requires X2APIC being enabled to prevent potential data
+> +	 * leak via APIC MMIO registers.  Just disable TDX if not using
+> +	 * X2APIC.
 
-Yes, with sysfs_unmerge_group(), the code logic is clearer.
+Remove the double space.
 
-> 
-> Thanks,
-> Qu
-> 
->>
->> Thanks,
->> Qu
->>>
->>> Thanks,
->>> Qu
->>>> ---
->>>>   fs/btrfs/sysfs.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
->>>> index 699b54b3acaae0b..947125f2ceaaf96 100644
->>>> --- a/fs/btrfs/sysfs.c
->>>> +++ b/fs/btrfs/sysfs.c
->>>> @@ -2322,7 +2322,7 @@ int __init btrfs_init_sysfs(void)
->>>>   #ifdef CONFIG_BTRFS_DEBUG
->>>>       ret = sysfs_create_group(&btrfs_kset->kobj, &btrfs_debug_feature_attr_group);
->>>>       if (ret)
->>>> -        goto out2;
->>>> +        goto out_remove_group;
->>>>   #endif
->>>>       return 0;
-> .
-> 
+> +	 */
+> +	if (!x2apic_enabled()) {
+> +		pr_info("Disable TDX as X2APIC is not enabled.\n");
+
+pr_warn()?
+
+> +		goto no_tdx;
+> +	}
+> +
+>  	return 0;
+>  no_tdx:
+>  	clear_tdx();
 
 -- 
-Regards,
-  Zhen Lei
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
