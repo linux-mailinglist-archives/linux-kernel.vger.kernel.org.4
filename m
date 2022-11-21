@@ -2,123 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5624C6329AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985576329B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiKUQhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S230165AbiKUQh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiKUQgc (ORCPT
+        with ESMTP id S230422AbiKUQgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:36:32 -0500
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716E2C8463
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:36:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=6Jdq67axWtUO34awWLIaNKXOMCvzA9J92byS0Y3jkdI=; b=Sfn/BmoyQJaLmjkFqMzo6E3ccw
-        9w8vK8RT339KYN4on2o/f89RERCq2lJXGDD6W1oc67dTSqp4n2WR9UcPOMyIJTwgGP84au8H4B1Yl
-        Fz9P0MyaGGwTKNJq4E/SZL8iWbh4m6fHfsKdmuh0i3OXHKkYoV80OMDBMyxaMy6M7EUMwYs6X3SAE
-        QVzLw/42djImpPeX9KJb3lsuRNg2hH8n/v2zjH+EGdUD93OhPcuqLkLtZMY8VdQ8uyT93Gg5zR8pH
-        FMbI2mAOgs3X+nWvKNZJn6hRaEqdDI5g7m9xVNUJcxna9wmE9T0uMnqhupuOmZF2BGA4PaCFtWZ/U
-        +2JYYWwBhz0yaxROhm2UxtEJlU2vTM01S/ruQmneuNKzGLgD4pgR4ihvUnaxNtspFIy0o4r3NgN9h
-        mmv7Otaq0dLEyW8ZlPBiI3zG7jf71TJQyKpXIuG8cJXPN3Lzs/lnQE5oiCVZ8VQ6YDIkLc6FnS6og
-        cu9re7un9iUXBdoqFrXs6PeCIcqKKQlHFrUOwKcBS8cgpArcaoXFfd+L3PsEMZJRO8n6iwN/lGZAC
-        Ic+aLgyZSh+zYrLTiVAooNlOAxIbtuNHaZcykXyUb4WZuaqyPgpPFeE072Rm4hdMPHVzzLecKUaCF
-        AUzPXci8K+yTYg5hYGclUDlp2nCrwSWFx6PYUHIxw=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Stefano Stabellini <sstabellini@kernel.org>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     GUO Zihua <guozihua@huawei.com>,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>
-Subject: Re: [PATCH 1/2] 9p/xen: check logical size for buffer size
-Date:   Mon, 21 Nov 2022 17:35:56 +0100
-Message-ID: <37091478.n1eaNAWdo1@silver>
-In-Reply-To: <20221118135542.63400-1-asmadeus@codewreck.org>
-References: <20221118135542.63400-1-asmadeus@codewreck.org>
+        Mon, 21 Nov 2022 11:36:35 -0500
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7FBC723C;
+        Mon, 21 Nov 2022 08:36:18 -0800 (PST)
+Received: by mail-qk1-f169.google.com with SMTP id j26so1229044qki.10;
+        Mon, 21 Nov 2022 08:36:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ipqo4h/cA5o5Pcu6O6H/mTx1mJVmCerOGJjrJckS4tE=;
+        b=qNt+V5k0iCdLwb6ZUx633e1xf+T6VSyu+q0yakf7H1lMS2lNqc48F8xb+xGxheMuOE
+         XjIGPQWQxHqUAzVSQhz+3ck8IZK+DsTz+OiWgZjYAmuXzJ46WLwlU3oECZfkaieIJkO1
+         uIyvZ14LgkbF3z5elvTIf01L33Z4cTQaHM2NDvscpi1UfeIBV+Wh95E8LHBa2Qa9cJ6q
+         /HoHQl6WFuQNC0OeGelTDzsXU7nW28xTuNGE5NOanygpsC4m5QyRnI38I56dhwvV0uKX
+         HbqjWD5zpab+Qp1B8NGDR1RRs+Q0nYHGsp9c/otznwSJ8cT/yDN9p+g4YBsHxe34ppum
+         YUZA==
+X-Gm-Message-State: ANoB5pkOimqcU2Wcu+K9kiE/ytyqWJJ/d/HumdUHWyqTvLwjERaYdftc
+        1cZDMQtabWklcnf7m+h0pQEbzN5y6faWBw==
+X-Google-Smtp-Source: AA0mqf5RfNxRVXSKv9JpMmQgrf5F5oNBtnRkVJgswfohNNrH+tNwmhB6Qqt9TPuLCwHW20EmcOd+hg==
+X-Received: by 2002:a05:620a:6017:b0:6fa:86cf:22a7 with SMTP id dw23-20020a05620a601700b006fa86cf22a7mr1946113qkb.525.1669048577102;
+        Mon, 21 Nov 2022 08:36:17 -0800 (PST)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id r13-20020a05620a298d00b006eee3a09ff3sm8515474qkp.69.2022.11.21.08.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 08:36:16 -0800 (PST)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3691e040abaso118595127b3.9;
+        Mon, 21 Nov 2022 08:36:16 -0800 (PST)
+X-Received: by 2002:a0d:fec2:0:b0:36b:56d3:71b8 with SMTP id
+ o185-20020a0dfec2000000b0036b56d371b8mr17585171ywf.384.1669048575865; Mon, 21
+ Nov 2022 08:36:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-3-herve.codina@bootlin.com> <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+ <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org> <20221115150417.513955a7@bootlin.com>
+ <20221118112349.7f09eefb@bootlin.com> <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
+ <20221121165921.559d6538@bootlin.com> <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
+In-Reply-To: <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 21 Nov 2022 17:36:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
+Message-ID: <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday, November 18, 2022 2:55:41 PM CET Dominique Martinet wrote:
-> trans_xen did not check the data fits into the buffer before copying
-> from the xen ring, but we probably should.
-> Add a check that just skips the request and return an error to
-> userspace if it did not fit
-> 
-> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-> ---
-> 
-> This comes more or less as a follow up of a fix for trans_fd:
-> https://lkml.kernel.org/r/20221117091159.31533-1-guozihua@huawei.com
-> Where msize should be replaced by capacity check, except trans_xen
-> did not actually use to check the size fits at all.
-> 
-> While we normally trust the hypervisor (they can probably do whatever
-> they want with our memory), a bug in the 9p server is always possible so
-> sanity checks never hurt, especially now buffers got drastically smaller
-> with a recent patch.
-> 
-> My setup for xen is unfortunately long dead so I cannot test this:
-> Stefano, you've tested v9fs xen patches in the past, would you mind
-> verifying this works as well?
-> 
->  net/9p/trans_xen.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
-> index b15c64128c3e..66ceb3b3ae30 100644
-> --- a/net/9p/trans_xen.c
-> +++ b/net/9p/trans_xen.c
-> @@ -208,6 +208,14 @@ static void p9_xen_response(struct work_struct *work)
->  			continue;
->  		}
->  
-> +		if (h.size > req->rc.capacity) {
-> +			dev_warn(&priv->dev->dev,
-> +				 "requested packet size too big: %d for tag %d with capacity %zd\n",
-> +		                 h.size, h.tag, rreq->rc.capacity);
-> +			req->status = REQ_STATUS_ERROR;
-> +			goto recv_error;
-> +		}
-> +
+Hi Krzysztof,
 
-Looks good (except of s/rreq/req/ mentioned by Stefano already).
+On Mon, Nov 21, 2022 at 5:33 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 21/11/2022 16:59, Herve Codina wrote:
+> > On Mon, 21 Nov 2022 12:43:16 +0100
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >> On 18/11/2022 11:23, Herve Codina wrote:
+> >>> On Tue, 15 Nov 2022 15:04:17 +0100
+> >>> Herve Codina <herve.codina@bootlin.com> wrote:
+> >>>> On Tue, 15 Nov 2022 14:07:52 +0100
+> >>>>> On 15/11/2022 14:05, Krzysztof Kozlowski wrote:
+> >>>>>> On 14/11/2022 12:15, Herve Codina wrote:
+> >>>>>>> Add the h2mode property to force the USBs mode ie:
+> >>>>>>>  - 2 hosts
+> >>>>>>> or
+> >>>>>>>  - 1 host and 1 device
+> >>>>>>>
+> >>>>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> >>>>>>> ---
+> >>>>>>>  .../bindings/clock/renesas,r9a06g032-sysctrl.yaml      | 10 ++++++++++
+> >>>>>>>  1 file changed, 10 insertions(+)
+> >>>>>>>
+> >>>>>>> diff --git a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+> >>>>>>> index 95bf485c6cec..f9e0a58aa4fb 100644
+> >>>>>>> --- a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+> >>>>>>> +++ b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+> >>>>>>> @@ -39,6 +39,16 @@ properties:
+> >>>>>>>    '#power-domain-cells':
+> >>>>>>>      const: 0
+> >>>>>>>
+> >>>>>>> +  renesas,h2mode:
+> >>>>>>> +    description: |
+> >>>>>>> +      Configure the USBs mode.
+> >>>>>>> +        - <0> : the USBs are in 1 host and 1 device mode.
+> >>>>>>> +        - <1> : the USBs are in 2 host mode.
+> >>>>>>> +      If the property is not present, the value used is the one already present
+> >>>>>>> +      in the CFG_USB register (from reset or set by the bootloader).
+> >>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >>>>>>> +    enum: [0, 1]
+> >>>>>>
+> >>>>>> 0/1 are quite cryptic. Why not making it a string which is easy to read
+> >>>>>> and understand? Can be something like "two-hosts" and "one-host". Or
+> >>>>>> anything you find more readable...
+> >>>>>
+> >>>>> ...but actually you should rather make it a property of your USB
+> >>>>> controller, not clock controller. You have two controllers and we have a
+> >>>>> generic property for them - dr_mode.
+> >>>>>
+> >>>>> Best regards,
+> >>>>> Krzysztof
+> >>>>>
+> >>>>
+> >>>> IMHO, this property in the USB controllers does not make sense.
+> >>>> Indeed each controller cannot have a different 'mode'.
+> >>>> Some controllers are USB host only (EHCI and OHCI) and the USBF
+> >>>> controller I worked on is device only.
+> >>>> 'h2mode' allows to choose between host or device on one of the USB
+> >>>> but not at the USB controller level.
+> >>>>
+> >>>> This property should be handle outside the USB controller nodes.
+> >>>>
+> >>>> Currently, this node (declared as a clock node) is in fact a sysctrl
+> >>>> node and can do some configuration not related to clocks.
+> >>>>
+> >>>> I agree with you something related to choosing USB Host/Device in
+> >>>> a clock node seems strange.
+> >>>>
+> >>>> Some discussion were already opened related to this property and how
+> >>>> to handle it:
+> >>>>   https://lore.kernel.org/all/20221107182642.05a09f2f@bootlin.com/
+> >>>>   https://lore.kernel.org/all/20221107173614.474707d7@bootlin.com/
+> >>>>
+> >>>
+> >>> We advanced on this topic.
+> >>>
+> >>> First, even if 'renesas,r9a06g032-sysctrl.yaml' is present in
+> >>> the devicetree/bindings/clock/ directory, this node is really
+> >>> a 'system controller' node:
+> >>> - title: Renesas RZ/N1D (R9A06G032) System Controller
+> >>> - compatible: renesas,r9a06g032-sysctrl
+> >>>
+> >>> It handles clocks, power domains, some DMA routing, ...
+> >>>
+> >>> Now, the property 'h2mode' allows to choose between:
+> >>>   - 2 USB hosts
+> >>> or
+> >>>   - 1 USB host and 1 USB device.
+> >>>
+> >>> This switching is system wide and has no reason to be done in
+> >>> one specific USB controller. It can impact multiple devices and
+> >>> PLL settings.
+> >>>
+> >>> The 'renesas,r9a06g032-sysctrl' node, as the system control
+> >>> node of our system, is the best candidate to handle the property.
+> >>
+> >> Not necessarily. IIUC, you have:
+> >>
+> >> 1. sysctrl with some register(s) for choosing device mode
+> >> 2. usb device or host at one address
+> >> 3. usb host at separate address
+> >>
+> >
+> > Just to clarify, usb device and host controller are not provided by
+> > the same IP.
+> > We have an USB host at some address range (PCI OHCI/EHCI USB host
+> > below a PCI bridge) and the USB device at some other address range
+> > (below a AHB to someting bridge).
+> > And I am not sure that only USB host or devices are affected by this
+> > property change.
+> >
+> >> If so then:
+> >> A. Pretty often we have wrapper nodes for this purpose (USB, phy
+> >> wrappers or glues) which are usually needed to configure something for a
+> >> generic block (like Synopsys etc).
+> >>
+> >> B. Pretty often the device (so your USB host or device) needs to poke
+> >> something in system controller registers, e.g. for power or some other
+> >> setup.
+> >
+> > And we did it for some items (clocks and power).
+> >
+> >>
+> >> Your case looks a lot like (B). We have many, many of such examples
+> >> already. Actually it is exactly like that, except that it affects
+> >> possibility of another device (e.g. choosing USB device blocks having
+> >> host there).
+> >>
+> >> C. It looks a bit like a multi-serial-protocol interfaces (so
+> >> UART+I2C+SPI). The difference is that such cases have all these nodes
+> >> defined as a children of the protocol-wrapping device. Not here.
+> >>
+> >> I would propose to go with (B) unless of course it's causes some crazy
+> >> architecture/code choices. Why? Because with exception of (C) we should
+> >> not define properties which represent DT node choices. IOW, Choosing a
+> >> node and compatible (e.g. usb controller as device) is enough to
+> >> describe the hardware. No need for other properties to control some
+> >> register in other block.
+> >
+> > The issue with h2mode is that it affects several devices and these
+> > devices should not be in a "running" state when the h2mode is changed.
+>
+> Why the change should happen when device is running? And why this should
+> be anyway different than your existing hsmode property - it also will
+> happen when system and device are running.
+>
+>
+> > PCI devices (host controllers) itself are not described in the DT. They
+> > are automatically enumerated.
+>
+> Aren't we talking about USB controller in a MMIO-based SoC?
+>
+> > Changing the property in USB device controller can leads to hang on
+> > other busses. Indeed, changing this property when a device affected
+> > by the property is running can lead to a bus hang.>
+> > In order to do that from the USB device controller I need to synchronize
+> > the other devices to wait for this setting before running.
+> > 1) probe sysctrl without setting h2mode
+> > 2) probe some devices (USB host and probably others)
+> >    Stop at some point and wait for the h2mode property setting.
+>
+> Why do you need to wait? Which device needs to wait? There are no such
+> devices... if they are then please bring entire DTS, not some pieces in
+> this patchset.
+>
+> > 3) probe usb device -> Set h2mode property
+> > 4) allow devices waiting for the property setting to continue.
+>
+> I don't get why do you need such order. Your sysctrl also probes any
+> time so old solution has exactly the same problem, doesn't it?
+>
+> > This synchronization seems pretty tricky and what to do if nobody
+> > set the property (USB device controller not present or status="disabled"
+> > for instance) ?
+> >
+> > Setting this property in sysctrl probe avoid the need for all of this
+> > synchronization:
+> > 1) probe sysctrl and set h2mode.
+> > 2) probe other devices (no need to wait for the setting as it is already done)
+>
+> No, because other devices probe before sysctrl. If you bring here any
+> manual ordering, you are doing it wrong.
+>
+> > The probing of the other devices (or the starting of they running state)
+> > is guaranteed as they all need some clocks and so cannot start without
+> > having the sysctrl node already probed.
+> > This sysctrl node handles the clocks.
+>
+> Ah, so sysctrl is a clock controller for these?
+>
+> Then still there are no other devices depending on your USB. The USB is
+> the owner of this property (specific bits in register), no one else.
 
->  		memcpy(&req->rc, &h, sizeof(h));
+1. There are two USB devices.
+2. The USB drivers can be modular, the sysctrl driver cannot, as it is
+   the main clock controller.
 
-Is that really OK?
+Gr{oetje,eeting}s,
 
-1. `h` is of type xen_9pfs_header and declared as packed, whereas `rc` is of 
-   type p9_fcall not declared as packed.
+                        Geert
 
-2. Probably a bit dangerous to assume the layout of xen_9pfs_header being in
-   sync with the starting layout of p9_fcall without any compile-time 
-   assertion?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
->  		req->rc.offset = 0;
->  
-> @@ -217,6 +225,7 @@ static void p9_xen_response(struct work_struct *work)
->  				     masked_prod, &masked_cons,
->  				     XEN_9PFS_RING_SIZE(ring));
->  
-> +recv_error:
->  		virt_mb();
->  		cons += h.size;
->  		ring->intf->in_cons = cons;
-> 
-
-
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
