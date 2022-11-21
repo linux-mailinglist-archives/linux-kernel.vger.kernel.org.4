@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2F363283D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50899632842
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiKUPbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S231687AbiKUPdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbiKUPb2 (ORCPT
+        with ESMTP id S232487AbiKUPce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:31:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3AABA59B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:30:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EE46B810A8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 247F0C4347C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669044608;
-        bh=aFTolxzt0R2H3SpbdBNTNqc5USoDLvTFgxXSFnvJ4ts=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cLN2HXPqBvynej0YnscnFIDytdgN6QcOf1rw3DvzdDg+afZGJENgxIcHdq+j4nHS0
-         3vBxF7NqUyZ7PFCcKzEW88y2zqga3L21rQS1Ox3a5Rq4CdUtzQHgR/YUFlkXrI2jF2
-         V1/F/qALui/Dfszu2aPViNJVu7shr3O1ECNK4/Ipe5wiXVXRndtRZ/DgJROdvBMa/L
-         2Tr926igsLYuzQ7GrsX2GU7nwdPqkO6khu5K5ZFsh1mYbfOH1a00lYjJ5fD09G05+e
-         9ab/vg3eOlZCUwH7+kn60/1aR0cM8L7zFC75GHFqLyPd7uSk8XdkwcxAGce8CRXWqG
-         OMZZSDD83GucA==
-Received: by mail-lf1-f41.google.com with SMTP id a29so19318526lfj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:30:08 -0800 (PST)
-X-Gm-Message-State: ANoB5pkYjIxoeaOGKmjizx2oMPeSXYsLGxXBknAKJnBwIH71tmI4zzEg
-        YlaEP2FqF5wz/IDGNAndIpH607AQFZeh+ZqpOlcsKA==
-X-Google-Smtp-Source: AA0mqf6v2VbUAN2Mjgc3JnBIdXL9SwjFTGzeZLpiteg3s5FrpXpb9Ee6tkQSyim1rWABBRXNjIsPlkQhix6mDckTWGU=
-X-Received: by 2002:a19:5049:0:b0:4b4:661a:1ce1 with SMTP id
- z9-20020a195049000000b004b4661a1ce1mr3765485lfj.136.1669044606050; Mon, 21
- Nov 2022 07:30:06 -0800 (PST)
+        Mon, 21 Nov 2022 10:32:34 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBEFD2291
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:31:10 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ALFUvHk013123;
+        Mon, 21 Nov 2022 09:30:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669044657;
+        bh=5g1XzS2P5dh9TcHt9Jaeuix3VIdx1y4RBZzK6WrvW+M=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=n5Xp1tynLzc1304e8EKLKEEK4h8yn16yvYwSSPi90DjN8+2MvtHAXFzYG5uj+FcwL
+         lkmgzVOe5x5XgBaILaePeJrXRkBF3PgQ2T/HLDY5B8R6JWU0CptLIKtVIgNsUj0StQ
+         x8koX/PXMh+LI4J9CGN2eeoCbnzMh4ADJqSN89ws=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ALFUvuT071995
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Nov 2022 09:30:57 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 21
+ Nov 2022 09:30:56 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 21 Nov 2022 09:30:56 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ALFUuDx031178;
+        Mon, 21 Nov 2022 09:30:56 -0600
+Date:   Mon, 21 Nov 2022 09:30:56 -0600
+From:   Bryan Brattlof <bb@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] soc: ti: k3-socinfo: Add AM62Ax JTAG ID
+Message-ID: <20221121153056.4b6qfuzojyqjanet@bryanbrattlof.com>
+References: <20221119152447.241166-1-vigneshr@ti.com>
 MIME-Version: 1.0
-References: <20221108220651.24492-1-revest@chromium.org> <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
- <20221117121617.4e1529d3@gandalf.local.home> <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
- <20221117174030.0170cd36@gandalf.local.home> <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
- <20221118114519.2711d890@gandalf.local.home> <43d5d1f5-c01d-c0db-b421-386331c2b8c1@meta.com>
- <20221118130608.5ba89bd8@gandalf.local.home> <2ab2b854-723a-5f15-8c18-0b5730d1b535@meta.com>
- <CACYkzJ613nhXViBpDuGWeEWzjfSJjbB1=KNpYtNDC6Xn7yizbw@mail.gmail.com> <20221121101537.674f5aca@gandalf.local.home>
-In-Reply-To: <20221121101537.674f5aca@gandalf.local.home>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 21 Nov 2022 16:29:54 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ6n-9rH7hCeFVtFYFQ9+6MOuQ+J6LwR4PJ6zUN7w3zQhA@mail.gmail.com>
-Message-ID: <CACYkzJ6n-9rH7hCeFVtFYFQ9+6MOuQ+J6LwR4PJ6zUN7w3zQhA@mail.gmail.com>
-Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Chris Mason <clm@meta.com>, Mark Rutland <mark.rutland@arm.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20221119152447.241166-1-vigneshr@ti.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,72 +66,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 4:15 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Mon, 21 Nov 2022 14:47:10 +0100
-> KP Singh <kpsingh@kernel.org> wrote:
->
-> > This annotation already exists, i.e. ALLOW_ERROR_INJECTION
-> >
-> > Users, with CONFIG_FUNCTION_ERROR_INJECTION, can already modify return
-> > values of kernel functions using kprobes and the failure injection
-> > framework [1] for functions annotated with ALLOW_ERROR_INJECTION.
-> >
-> > BPF just provides another way to do the same thing with "modify
-> > return" programs and this also respects the error injection list [2]
-> > and users can *only* attach these programs to the functions annotated
-> > with ALLOW_ERROR_INJECTION.
->
-> WAIT!
->
-> Looking at the Kconfigs, I see
->
-> CONFIG_FUNCTION_ERROR_INJECTION is set when
-> CONFIG_HAVE_FUNCTION_ERROR_INJECTION is set, and when CONFIG_KPROBES is set.
->
-> And ALLOW_ERROR_INJECTION() is set when CONFIG_FUNCTION_ERROR_INJECTION is.
->
-> There's no way to turn it off on x86 except by disabling kprobes!
->
-> WTF!
->
-> I don't want a kernel that can add error injection just because kprobes is
-> enabled. There's two kinds of kprobes. One that is for visibility only (for
-> tracing) and one that can be used for functional changes. I want the
-> visibility without the ability to change the kernel. The visibility portion
-> is very useful for security, where as the modifying one can be used to
-> circumvent security.
+On November 19, 2022 thus sayeth Vignesh Raghavendra:
+> Add JTAG ID entry to help identify AM62Ax SoC in kernel.
+> 
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>  drivers/soc/ti/k3-socinfo.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-I am not sure how they can circumvent security since this needs root /
-root equivalent permissions. Fault injection is actually a very useful
-debugging tool.
+Looks great to me!
 
->
-> As kprobes are set in most production environments, so is error injection.
-> Do we really want error injection enabled on production environments?
-> I don't.
->
-> I think we need this patch ASAP!
->
-> -- Steve
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index c3c0b077ade3..9ee72d8860c3 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1874,8 +1874,14 @@ config NETDEV_NOTIFIER_ERROR_INJECT
->           If unsure, say N.
->
->  config FUNCTION_ERROR_INJECTION
-> -       def_bool y
-> +       bool "Fault-injections of functions"
->         depends on HAVE_FUNCTION_ERROR_INJECTION && KPROBES
-> +       help
-> +         Add fault injections into various functions that are annotated with
-> +         ALLOW_ERROR_INJECTION() in the kernel. BPF may also modify the return
-> +         value of theses functions. This is useful to test error paths of code.
-> +
-> +         If unsure, say N
->
->  config FAULT_INJECTION
->         bool "Fault-injection framework"
+Reviewed-by: Bryan Brattlof <bb@ti.com>
+
+It's nice to see this list getting longer :)
+~Bryan
+
