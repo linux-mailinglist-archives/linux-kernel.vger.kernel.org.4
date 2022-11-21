@@ -2,153 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB303632B3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96179632B42
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiKURmA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Nov 2022 12:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
+        id S229476AbiKURmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiKURlx (ORCPT
+        with ESMTP id S229932AbiKURmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:41:53 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1088BC696D;
-        Mon, 21 Nov 2022 09:41:52 -0800 (PST)
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NGF4b0yPPz67PMv;
-        Tue, 22 Nov 2022 01:39:11 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 18:41:49 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
- 2022 17:41:48 +0000
-Date:   Mon, 21 Nov 2022 17:41:48 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-CC:     "Weiny, Ira" <ira.weiny@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Gregory Price" <gregory.price@memverge.com>,
-        "Li, Ming4" <ming4.li@intel.com>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH] PCI/DOE: Remove asynchronous task support
-Message-ID: <20221121174148.0000647d@Huawei.com>
-In-Reply-To: <IA1PR11MB6171444A263C4ABB216FF1F5890A9@IA1PR11MB6171.namprd11.prod.outlook.com>
-References: <20221119222527.1799836-1-ira.weiny@intel.com>
-        <IA1PR11MB6171B27750AB469AFE47CD5E890A9@IA1PR11MB6171.namprd11.prod.outlook.com>
-        <20221121110714.0000720a@Huawei.com>
-        <IA1PR11MB6171444A263C4ABB216FF1F5890A9@IA1PR11MB6171.namprd11.prod.outlook.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 21 Nov 2022 12:42:10 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62838D28B1;
+        Mon, 21 Nov 2022 09:42:08 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALGRk4V009093;
+        Mon, 21 Nov 2022 17:42:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=yty/7DiPlJ4v2j4gvgeSX7Mya9x2N/OMpJm8yIe9JO0=;
+ b=IscGch+I0rww/6u5zkNSiki3DY0BP4IIdodchGKr8w4Okr1XKABovJNgv5DuWk7VEjPW
+ z2GWbAhfhS3ZPJBAFxC4uh8O3VtIWIw+kGl/6sJAnP38hpxAFEnLCbEIGC8iXOu8y+02
+ S1B4g1XyWoNxkvfv6fi0dg3RdrJ+nsRhiwo2nkt9QiOeBAmTj2s4VTy94z47v3TZochQ
+ +3tde1b1cTM0id2P5EK5PjxSKNWscxZAVwqxrHCpsQVb6ihxCUs6c9U/esWQnQds8Nuh
+ CijZCJ5Fpcko6Z4H/69VXjXahki0FqGkJZq1vJlAxBOGq5YZJZpABg6HAFk1JjSaXPf9 ww== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cvg1qdf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 17:42:02 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ALHg2Lf017277;
+        Mon, 21 Nov 2022 17:42:02 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cvg1qcq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 17:42:02 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ALHbE1h001980;
+        Mon, 21 Nov 2022 17:42:00 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kxpdhu1e4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 17:42:00 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ALHfvsc51118506
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Nov 2022 17:41:57 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5896D5204E;
+        Mon, 21 Nov 2022 17:41:57 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.52.183])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id AD65A52050;
+        Mon, 21 Nov 2022 17:41:56 +0000 (GMT)
+Message-ID: <2bee338bddf828a735a7c66473679fd388840851.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/9] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Mon, 21 Nov 2022 18:41:56 +0100
+In-Reply-To: <Y3dalbP5yb2gflA9@osiris>
+References: <20221117221758.66326-1-scgl@linux.ibm.com>
+         <20221117221758.66326-2-scgl@linux.ibm.com> <Y3dalbP5yb2gflA9@osiris>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2aXbb6tfkp0FHum4hPbro6_tFPL2-4f-
+X-Proofpoint-ORIG-GUID: ef1HfGmyCDiEJjkutdZsunQv77TtVL-a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_14,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 phishscore=0 malwarescore=0 impostorscore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 suspectscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211210132
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 14:17:37 +0000
-"Zhuo, Qiuxu" <qiuxu.zhuo@intel.com> wrote:
-
-> > From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> > ...
-> > On Mon, 21 Nov 2022 02:01:32 +0000
-> > "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com> wrote:
-> >   
-> > > > From: Ira Weiny <ira.weiny@intel.com>  
-> > > ＞　...  
-> > > >
-> > > > @@ -423,25 +399,13 @@ struct pci_doe_mb  
-> > *pcim_doe_create_mb(struct  
-> > > > pci_dev *pdev, u16 cap_offset)
-> > > >  	doe_mb->pdev = pdev;
-> > > >  	doe_mb->cap_offset = cap_offset;
-> > > >  	init_waitqueue_head(&doe_mb->wq);
-> > > > +	mutex_init(&doe_mb->exec_lock);  
-> > >
-> > > In real world, not sure whether there is a case that
-> > > pcim_doe_create_mb() is invoked by multiple drivers to create multiple
-> > > DOE mailbox instances? If there is such a case, we may need to ensure  
-> > there is only one DOE mailbox instance for a physical DOE of pdev
-> > @cap_offset.
+On Fri, 2022-11-18 at 11:12 +0100, Heiko Carstens wrote:
+> On Thu, Nov 17, 2022 at 11:17:50PM +0100, Janis Schoetterl-Glausch wrote:
+> > User space can use the MEM_OP ioctl to make storage key checked reads
+> > and writes to the guest, however, it has no way of performing atomic,
+> > key checked, accesses to the guest.
+> > Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+> > mode. For now, support this mode for absolute accesses only.
 > > 
-> > I think if that happened we'd have a lot of mess.  The main PCI driver for a
-> > given EP, switch port etc needs to handle this part.
+> > This mode can be use, for example, to set the device-state-change
+> > indicator and the adapter-local-summary indicator atomically.
 > > 
-> > Sub drivers can then do similar to
-> > https://elixir.bootlin.com/linux/latest/source/drivers/cxl/core/pci.c#L465
-> > to find a DOE instance that supports what they need and use it.
-> > The DOE code 'should' work fine when doing this - the request/response
-> > pairs will be serialized.
+> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> > ---
+> >  include/uapi/linux/kvm.h |   5 ++
+> >  arch/s390/kvm/gaccess.h  |   3 ++
+> >  arch/s390/kvm/gaccess.c  | 101 +++++++++++++++++++++++++++++++++++++++
+> >  arch/s390/kvm/kvm-s390.c |  35 +++++++++++++-
+> >  4 files changed, 142 insertions(+), 2 deletions(-)
 > > 
-> > We have discussed moving that 'find' logic and the xarray into the PCI core
-> > and that will need to happen to support CMA etc. For the first submission it
-> > was easier to just do it in the CXL drivers..  
+> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> > index 0d5d4419139a..1f36be5493e6 100644
+> > --- a/include/uapi/linux/kvm.h
+> > +++ b/include/uapi/linux/kvm.h
+> > @@ -588,6 +588,8 @@ struct kvm_s390_mem_op {
+> >  		struct {
+> >  			__u8 ar;	/* the access register number */
+> >  			__u8 key;	/* access key, ignored if flag unset */
+> > +			__u8 pad1[6];	/* ignored */
+> > +			__u64 old_p;	/* ignored if flag unset */
 > 
-> For the 1st submission, yes, it's easier in current way.
+> Just one comment: the suffix "_p" for pointer is quite unusual within
+> the kernel. This also would be the first of its kind within kvm.h.
+> Usually there is either no suffix or "_addr".
+> So for consistency reasons I would suggest to change this to one of
+> the common variants.
 > 
-> > 
-> > Jonathan  
-> 
-> It's good that this potential issue has been noticed. I think moving the 'find' logic and the xarray 
-> from CXL to the PCI core should save a lot of such duplicated works for other drivers using DOE.
-> 
-> One more though:
-> For a driver, I think it's only interested in getting a DOE mailbox from a PCI device with specified VID+protocol and using it.
-> The driver doesn't care how is the DOE mailbox instance created and the driver also doesn't want to maintain it.
-> After using the DOE mailbox instance then the driver puts it back. 
-> A pair of get-put APIs implemented in the PCI core like below might make drivers' lives easy 😊
-> 
->          struct pci_doe_mb *mb = pci_doe_get(struct pci_dev *pdev, u16 vid, u8 protocol); 
->          // if (!mb) return;
->          // The driver uses the 'mb' to send requests and receive responses ...
->         pci_doe_put(mb);
-> 
-> The creation and all the heavy maintenance works on the 'mb' are hidden in the get-put APIs.
+Thanks, good point.
 
-It will want to look like something along those lines - I'm not 100% sure we'll ever care
-about the put, but we may do if there are resource to refcount - or we need to maintain
-per DOE access controls (maybe only one user of a given protocol at a time for example).
-Whether to have a driver call an init, or do it on first access as you suggest is an
-open question - for example we may want to expose debug info on support protocols even
-though none are currently in use.  There is also a dance around interrupts (once those
-are supported for DOEs in general).  Until the PCI driver has requested interrupts
-we can't use them for DOE, but we may want to poll it before that stage then switch
-over.
-
-There are added complexities in that the outcome of the SPDM discussion at plumbers was
-that we probably want to run some DOE stuff before probing a driver at all - to allow
-userspace to block driver probe if the attestation fails.  Not yet sure exactly what
-that will look like yet.
-
-Jonathan
-
-
-> 
-> -Qiuxu
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-
+[...]
