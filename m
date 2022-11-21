@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A43632B5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBEB632B44
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiKURp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:45:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        id S229864AbiKURnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiKURpV (ORCPT
+        with ESMTP id S229604AbiKURnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:45:21 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6B057B69;
-        Mon, 21 Nov 2022 09:45:19 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id v8so6285261edi.3;
-        Mon, 21 Nov 2022 09:45:19 -0800 (PST)
+        Mon, 21 Nov 2022 12:43:39 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F0C2C122;
+        Mon, 21 Nov 2022 09:43:38 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1322d768ba7so14517646fac.5;
+        Mon, 21 Nov 2022 09:43:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WNL6IfTe0wzPq8NWBK/D96/5y8l3oPapGeg3sP1iP80=;
-        b=dLhwAvRFJe9dchF5SlF7ogMjH13Pn6iK4bxfoIQiE97ocKlAgrKq3Ar3GgtgtJKfGJ
-         s/O72OTVsNvv/EiYuci7viuu6cDSVg22gjpQLhVYJHIlvsVhHPTbmiber2ea9U9GrLb3
-         JsVBE1OojpPa1oX3NA0Bk1bmjuH/4QGz35S4ErMgIwB7uRJ8VKuFHWGECFZOB1dM6QcM
-         u8P32EeuImZq7VHnVYE0Ity0o12rE81sECLWAV5Z+2oKSbokt9Rxkn/lq8ymXNoZORno
-         RA/kd0GE//5CNTFYaKh0Ox/dgx1dQYtgjQN1ilhQil8pIApqLdb6WEkjdYHpG+p36LzT
-         TogQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RVYmRlCIWUFfeVnOV5mudLBiIVI6uJJnon3FBZNLLUI=;
+        b=jcz1PMWg/P6eUBxRDkxKc0yQD7GP7vplwKzu1inK0mhWJoI8/LloPny5bXkEwBymN5
+         DE81ekBRjKVErsWjLKQIKkswXFOZa5bvoPUbkqafrlIq6oxhq6VQfXSUpSMoVBvgPJhu
+         H/VFqb2KjN2B7qnEk/Xb9WoeNPDQiWVKGN4k9glKFGm56FT10T3L+0XhXw+y8E6X6vUq
+         0tu2oeQYspe06D815oLeil6BWq1FGQ/ZliZhLtVcUuJjmYdwoXBDVO50HCGOwCbfIaOF
+         8w7HZGRzCVQ3FAwz0vSJYuwzGAnJXKKtM4S5xKxO5rpbnC+9IQR3Q/uIGgWdXVhYcJev
+         mBpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WNL6IfTe0wzPq8NWBK/D96/5y8l3oPapGeg3sP1iP80=;
-        b=AbaM6D/ukKbftvZX0twQfL93er2P7ivN+I/aqDDWCMLJpesLJTCE+C7J4lJL7fgCeW
-         JWjqbz5A+358e8SMEex+rrCWPEzrOJO4WBF72LhTXCWiniCedc6tS9GvS0qV+556vzSY
-         6IpScXvekBSrrZnUzZT0iikf3mw53tr3eY0ByLH0xObpddsrdZb+5L4GhDIZOEN3mRsw
-         YCBAwUFih/4/qesZGTGAVBnPbCMbTOE+xsTYUPeqQKBYZFWsVilDB52RoI4LN9nWV+kX
-         jy+vJ4QXWUnid3Qh5AqRD1xcWPjUVmQSTHkpKP5kko6UYdeURd3KU2QFlMnuomYPsUdt
-         NCtw==
-X-Gm-Message-State: ANoB5plmhIqrGY+lTY1g9k7kliHu167TIWNfZsinmMnuHic4bLnPC8D+
-        MTSBLdSrNKuzgnglBmtj/Xg=
-X-Google-Smtp-Source: AA0mqf5tktH45X/K7WSst1WSDXG6NCTfMsMwbFnE94eu773Cg61+GPcdMqm0ADWd+wNyEsvR1EuCxg==
-X-Received: by 2002:aa7:db90:0:b0:459:aa70:d4fd with SMTP id u16-20020aa7db90000000b00459aa70d4fdmr16907330edt.162.1669052717948;
-        Mon, 21 Nov 2022 09:45:17 -0800 (PST)
-Received: from localhost ([217.131.81.52])
-        by smtp.gmail.com with UTF8SMTPSA id g2-20020a056402428200b0046146c730easm5464345edc.75.2022.11.21.09.45.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 09:45:17 -0800 (PST)
-From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
-To:     thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sasha Finkelstein <fnkl.kernel@gmail.com>
-Subject: [PATCH RESEND v3 4/4] MAINTAINERS: Add entries for Apple PWM driver
-Date:   Mon, 21 Nov 2022 20:42:28 +0300
-Message-Id: <20221121174228.93670-5-fnkl.kernel@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221121174228.93670-1-fnkl.kernel@gmail.com>
-References: <20221121174228.93670-1-fnkl.kernel@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RVYmRlCIWUFfeVnOV5mudLBiIVI6uJJnon3FBZNLLUI=;
+        b=vQdu379wv0eIS6YWT+Bi1sXTXVt+H7sxdhUomdCl06XLrm0Fv4FfCF88jNFlVZ7epT
+         7zYQq7CrhbUYMRomVQW/Chbp6Jf3+1swAUbnHSbj/Ll3jxPQF0DALWxyC6IFgoPTzDPy
+         ASAsYn5D4LkvnKD531IK+gC7Iifubd6U1B2XLTJysAEUpRAfbhwnfmuJKYdTz4DOg2dh
+         +kPI0I+RQClG9HwivgY9zuWESBysmI+FekJfMMrvoeRi3nwbPTYrL9o7WjzjzoSXotS4
+         h457nJ6tSV4FHgA6zk8yPpSJz0npArMCFrQtg948j82vE9sqBbybkOz4pt4kU+LgVi0N
+         aIDA==
+X-Gm-Message-State: ANoB5pltUhQqTSCoY+X1bivVEmQhs8XIcIFA7wTYb/Ouml/NBMVyl19b
+        jKttzjyZPbFb2CPEbHDOJg1c7yUDB1XA7X1xpJs=
+X-Google-Smtp-Source: AA0mqf74KkrNkY8BdaZc8j5XcGxfP6V3NbT9q1EO2RMtGv3fnMb3YyW9WSIaGDRpu2Sazq4MO0bHaAxzARnC7vzHCpg=
+X-Received: by 2002:a05:6870:b07:b0:13b:d07f:f29d with SMTP id
+ lh7-20020a0568700b0700b0013bd07ff29dmr2050631oab.96.1669052617328; Mon, 21
+ Nov 2022 09:43:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <Y3soBt1jmXHUKhW9@mail.google.com>
+In-Reply-To: <Y3soBt1jmXHUKhW9@mail.google.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 21 Nov 2022 12:43:25 -0500
+Message-ID: <CADnq5_NAaX6t3r+J8qcEfL1-8SOunU9YR3HqohmuGTm_xBow+g@mail.gmail.com>
+Subject: Re: [PATCH] [next] drm/amdgpu: Replace remaining 1-element array with flex-array
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        Slark Xiao <slark_xiao@163.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,34 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the MAINTAINERS entries for the driver
+Applied.  Thanks!
 
-Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
-Acked-by: Sven Peter <sven@svenpeter.dev>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Alex
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 046ff06ff97f..69f56f7cf907 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1908,6 +1908,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
- F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
- F:	Documentation/devicetree/bindings/power/apple*
-+F:	Documentation/devicetree/bindings/pwm/pwm-apple.yaml
- F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
- F:	arch/arm64/boot/dts/apple/
- F:	drivers/clk/clk-apple-nco.c
-@@ -1921,6 +1922,7 @@ F:	drivers/mailbox/apple-mailbox.c
- F:	drivers/nvme/host/apple.c
- F:	drivers/nvmem/apple-efuses.c
- F:	drivers/pinctrl/pinctrl-apple-gpio.c
-+F:	drivers/pwm/pwm-apple.c
- F:	drivers/soc/apple/*
- F:	drivers/watchdog/apple_wdt.c
- F:	include/dt-bindings/interrupt-controller/apple-aic.h
--- 
-2.38.1
-
+On Mon, Nov 21, 2022 at 2:26 AM Paulo Miguel Almeida
+<paulo.miguel.almeida.rodenas@gmail.com> wrote:
+>
+> One-element arrays are deprecated, and we are replacing them with
+> flexible array members instead. So, replace one-element array with
+> flexible-array member in struct GOP_VBIOS_CONTENT and refactor the
+> rest of the code accordingly.
+>
+> Important to mention is that doing a build before/after this patch
+> results in no functional binary output differences.
+>
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+>
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/238
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+>
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> ---
+> This should be the last one-element array that had references in source
+> code. Given the way it was used, no *.c code change was required.
+>
+> I will move on to the atombios.h in the radeon driver.
+> ---
+>  drivers/gpu/drm/amd/include/atombios.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
+> index 4dc738c51771..b78360a71bc9 100644
+> --- a/drivers/gpu/drm/amd/include/atombios.h
+> +++ b/drivers/gpu/drm/amd/include/atombios.h
+> @@ -9292,7 +9292,7 @@ typedef struct {
+>
+>  typedef struct {
+>    VFCT_IMAGE_HEADER   VbiosHeader;
+> -  UCHAR   VbiosContent[1];
+> +  UCHAR   VbiosContent[];
+>  }GOP_VBIOS_CONTENT;
+>
+>  typedef struct {
+> --
+> 2.37.3
+>
