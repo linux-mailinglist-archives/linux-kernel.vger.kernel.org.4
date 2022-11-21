@@ -2,136 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952DA632EAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80833632EC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbiKUVXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 16:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
+        id S231664AbiKUVZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 16:25:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiKUVXJ (ORCPT
+        with ESMTP id S229604AbiKUVYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:23:09 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D2C627C8;
-        Mon, 21 Nov 2022 13:23:08 -0800 (PST)
-Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C3425D04E7;
-        Mon, 21 Nov 2022 21:22:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1669065757; bh=SjJ1/BOuKvdYofR75HAG8ro+NKLiwQoEBC7P8NdaGYA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=aQpgYgCXhJjOYFv6GnDNMz1w1sAEfxK00aTRkN50Kw/CZD8uaqpeb/mA4yxgtKd5S
-         k//djHs6BE3PdqQ3xA/1WveGxYXs8IC2XoZiU3C1hbj5ZZPDFnJgyhfAlKjxbD3nzC
-         Hgrv2Klhq3SbApgOrYmq5Na1mhxE77VT0jc2EW08=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] ARM: dts: qcom: msm8974-*: re-add remoteproc supplies
-Date:   Mon, 21 Nov 2022 22:22:26 +0100
-Message-Id: <20221121212226.321514-2-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221121212226.321514-1-luca@z3ntu.xyz>
-References: <20221121212226.321514-1-luca@z3ntu.xyz>
+        Mon, 21 Nov 2022 16:24:49 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92E4A6A11;
+        Mon, 21 Nov 2022 13:24:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669065885; x=1700601885;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=k5GRNaDhj4ibRaeT11hc9R8Nx0FyYSnxC5yTXXL3pBQ=;
+  b=nP6McflAQEAUWtiy+KVE0p5rK5MeB5BxnjcEUIIdVNGn83/ONYh16p2X
+   9Os2xwsgpzlk1+v8Gyj5H7o5m8TW46SdUL8wllf0HK2iJcLA86CEF9KMY
+   Pc3sZP5abjfz2LtLbim1g+5vK+/3MgK/Qp7SNzEk6fwLGjEMLMI3Shvdh
+   nb23F4cMU8dWsKlFH0jw1p7UKzDbsH7T4dGHkdqt51q0uwW4A9Varei8j
+   9NI0KP1vvE6LOqfmGTkUFA5k9F7Vo4EqlN2uU7vTTUtga5ykz9PxJh139
+   qzW5z08JQsiOeqmFFaynGcGvtJSKyJ8fx6BD1qAxbbeLyLMjxWWjpeaww
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="124468632"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Nov 2022 14:24:44 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 21 Nov 2022 14:24:33 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 21 Nov 2022 14:24:30 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v3 0/7] net: lan966x: Extend xdp support
+Date:   Mon, 21 Nov 2022 22:28:43 +0100
+Message-ID: <20221121212850.3212649-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of a recent cleanup commit, the remoteproc supplies for adsp and
-modem were removed from msm8974.dtsi and now need to be set in the
-device dts. Do so.
+Extend the current support of XDP in lan966x with the action XDP_TX and
+XDP_REDIRECT.
+The first patches just prepare the things such that it would be easier
+to add XDP_TX and XDP_REDIRECT actions. Like adding XDP_PACKET_HEADROOM,
+introduce helper functions, use the correct dma_dir for the page pool
+The last 2 patches introduce the XDP actions XDP_TX and XDP_REDIRECT.
 
-Fixes: f300826d27be ("ARM: dts: qcom-msm8974: Sort and clean up nodes")
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-Changes in v2:
-* rebase, should compile now due to added previous patch
+v2->v3:
+- make sure to update rxq memory model
+- update the page pool direction if there is any xdp program
+- in case of action XDP_TX give back to reuse the page
+- in case of action XDP_REDIRECT, remap the frame and make sure to
+  unmap it when is transmitted.
 
- .../boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts   | 11 +++++++++++
- arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi | 11 +++++++++++
- .../qcom-msm8974pro-sony-xperia-shinano-castor.dts    | 11 +++++++++++
- 3 files changed, 33 insertions(+)
+v1->v2:
+- use skb_reserve of using skb_put and skb_pull
+- make sure that data_len doesn't include XDP_PACKET_HEADROOM
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-index 6daceaa87802..c8e91985fbec 100644
---- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-@@ -343,6 +343,17 @@ led@5 {
- 	};
- };
- 
-+&remoteproc_adsp {
-+	cx-supply = <&pm8841_s2>;
-+};
-+
-+&remoteproc_mss {
-+	cx-supply = <&pm8841_s2>;
-+	mss-supply = <&pm8841_s3>;
-+	mx-supply = <&pm8841_s1>;
-+	pll-supply = <&pm8941_l12>;
-+};
-+
- &rpm_requests {
- 	pm8841-regulators {
- 		compatible = "qcom,rpm-pm8841-regulators";
-diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-index 5a70683d9103..d4a1708117a1 100644
---- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-@@ -213,6 +213,17 @@ &pm8941_wled {
- 	qcom,num-strings = <2>;
- };
- 
-+&remoteproc_adsp {
-+	cx-supply = <&pm8841_s2>;
-+};
-+
-+&remoteproc_mss {
-+	cx-supply = <&pm8841_s2>;
-+	mss-supply = <&pm8841_s3>;
-+	mx-supply = <&pm8841_s1>;
-+	pll-supply = <&pm8941_l12>;
-+};
-+
- &rpm_requests {
- 	pm8841-regulators {
- 		compatible = "qcom,rpm-pm8841-regulators";
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-index 2c33f84a6e4e..36044130a739 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-@@ -318,6 +318,17 @@ led@7 {
- 	};
- };
- 
-+&remoteproc_adsp {
-+	cx-supply = <&pm8841_s2>;
-+};
-+
-+&remoteproc_mss {
-+	cx-supply = <&pm8841_s2>;
-+	mss-supply = <&pm8841_s3>;
-+	mx-supply = <&pm8841_s1>;
-+	pll-supply = <&pm8941_l12>;
-+};
-+
- &rpm_requests {
- 	pm8841-regulators {
- 		compatible = "qcom,rpm-pm8841-regulators";
+Horatiu Vultur (7):
+  net: lan966x: Add XDP_PACKET_HEADROOM
+  net: lan966x: Introduce helper functions
+  net: lan966x: Add len field to lan966x_tx_dcb_buf
+  net: lan966x: Update rxq memory model
+  net: lan966x: Update dma_dir of page_pool_params
+  net: lan966x: Add support for XDP_TX
+  net: lan966x: Add support for XDP_REDIRECT
+
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 266 +++++++++++++++---
+ .../ethernet/microchip/lan966x/lan966x_main.c |   5 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  19 ++
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  |  70 ++++-
+ 4 files changed, 312 insertions(+), 48 deletions(-)
+
 -- 
-2.38.1
+2.38.0
 
