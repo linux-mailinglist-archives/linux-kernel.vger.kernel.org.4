@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597C5632BA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E520632BA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiKUR7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S231136AbiKUR7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiKUR6b (ORCPT
+        with ESMTP id S230471AbiKUR6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 12:58:31 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF6E10B71;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65529140AB;
         Mon, 21 Nov 2022 09:58:29 -0800 (PST)
 Received: from jupiter.universe (dyndsl-037-138-187-016.ewe-ip-backbone.de [37.138.187.16])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B8B7F6602AB7;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C1AED6602AC7;
         Mon, 21 Nov 2022 17:58:27 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1669053507;
-        bh=VS54BJBr7CpfX1Bw9N+wQYidwoy1K3sOV7Z1lbUTSOI=;
+        bh=ASKiqbUGK6OeP8tAoM8DA0LQu24xmUO6m/UZrw3PEcI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W+V+3hAWZLmVkfIuwGgHRNP4RYljuLK+7NuH8bBP1uhFiHnv3o3eamD3l/73Djk/9
-         21IdpiTdX6Qa5A8ffaxGTP1TtIERmPgnKz1lixi3A6FEiVyTe///fj2Suh1je6vmJc
-         7ErGkJvB4NxfmLqWP/vBatQ/WPAZdlkyAO0vilSgTkPTN+BUpryGHaJPXzbv0Jyfoj
-         94JZ/URA9vLF/A6/qsLQxrbRIXlJQaQvI71ztHJZmU3cRx8G4X6VIDaUDXkgglNkiF
-         8g/puSmlKvXqFfllz19wqgp0GsahmSCam5sevZUi9UjA68kesWQ0CXdFq+Sp6yVL20
-         ojGzx29flb2Lw==
+        b=AbsEYCHcton9DeItmJ8Oj940G+GhuAFmsvTCEAKcKZhk/9iOE4flRD5EcBXenFWiM
+         ZruYpnHh/2ekrCytRzXg/51WWjpy1uXvnL0cmz2AxXyoMlEWGeLOQ9FVAzMqqE0Gzl
+         iEKqUC0QjkDCyyVPu+Bbrl+diYt1Oot5T1oP0Qlyt5giJ27C6IwQ8xrzUMERUKt1+o
+         M1C0t38NWgRks2ug3AS0tJa9uOTjHV/6jXHyvAwHfYgc+rlLDnHEkPyKz+rzvMbPzI
+         9Fj+Yg/18/qnvdx7FDOd+iKgZD8pM1WQTCDZPEzBhxY6D81aGZJTROkNATFua/PxZH
+         sN0roKgJBGSvg==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 1CAF8480122; Mon, 21 Nov 2022 18:58:23 +0100 (CET)
+        id 1E897480126; Mon, 21 Nov 2022 18:58:23 +0100 (CET)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -42,12 +42,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Christopher Obbard <chris.obbard@collabora.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCHv3 8/9] arm64: dts: rockchip: Add rock-5a board
-Date:   Mon, 21 Nov 2022 18:58:13 +0100
-Message-Id: <20221121175814.68927-9-sebastian.reichel@collabora.com>
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCHv3 9/9] arm64: dts: rockchip: Add rock-5b board
+Date:   Mon, 21 Nov 2022 18:58:14 +0100
+Message-Id: <20221121175814.68927-10-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221121175814.68927-1-sebastian.reichel@collabora.com>
 References: <20221121175814.68927-1-sebastian.reichel@collabora.com>
@@ -62,45 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add board file for the RK3588s Rock 5A board. While the hardware
-offers plenty of peripherals and connectivity this basic implementation
-just handles things required to access eMMC, UART and Ethernet (i.e.
-enough to successfully boot Linux).
+From: Christopher Obbard <chris.obbard@collabora.com>
 
-Tested-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Add board file for the RK3588 Rock 5B board. This is a basic
+implementation which just brings up the eMMC and UART which is
+enough to successfully boot Linux.
+
+The ethernet controller is connected via PCIe so support will
+come in a follow-up patch.
+
+Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../boot/dts/rockchip/rk3588s-rock-5a.dts     | 66 +++++++++++++++++++
- 2 files changed, 67 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
+ .../boot/dts/rockchip/rk3588-rock-5b.dts      | 43 +++++++++++++++++++
+ 2 files changed, 44 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
 
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 12ed53de11eb..31fa55750a0f 100644
+index 31fa55750a0f..b31aa1b0e9e3 100644
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -73,3 +73,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+@@ -73,4 +73,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-rock-5b.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
 new file mode 100644
-index 000000000000..62d81e1add2d
+index 000000000000..2a55659bab41
 --- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
-@@ -0,0 +1,66 @@
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+@@ -0,0 +1,43 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +
 +/dts-v1/;
 +
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/rockchip.h>
-+#include "rk3588s.dtsi"
++#include "rk3588.dtsi"
 +
 +/ {
-+	model = "Radxa Rock 5A Board";
-+	compatible = "radxa,rock-5a", "rockchip,rk3588s";
++	model = "Radxa Rock 5B Board";
++	compatible = "radxa,rock-5b", "rockchip,rk3588";
 +
 +	aliases {
 +		mmc1 = &sdhci;
@@ -109,35 +111,14 @@ index 000000000000..62d81e1add2d
 +	chosen {
 +		stdout-path = "serial2:1500000n8";
 +	};
-+};
 +
-+&gmac1 {
-+	phy-mode = "rgmii-rxid";
-+	clock_in_out = "output";
-+
-+	snps,reset-gpio = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
-+	snps,reset-active-low;
-+	/* Reset time is 20ms, 100ms for rtl8211f */
-+	snps,reset-delays-us = <0 20000 100000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&gmac1_miim
-+		     &gmac1_tx_bus2
-+		     &gmac1_rx_bus2
-+		     &gmac1_rgmii_clk
-+		     &gmac1_rgmii_bus>;
-+
-+	tx_delay = <0x3a>;
-+	rx_delay = <0x3e>;
-+
-+	phy-handle = <&rgmii_phy1>;
-+	status = "okay";
-+};
-+
-+&mdio1 {
-+	rgmii_phy1: ethernet-phy@1 {
-+		compatible = "ethernet-phy-ieee802.3-c22";
-+		reg = <0x1>;
++	vcc5v0_sys: regulator-vcc5v0-sys {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_sys";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
 +	};
 +};
 +
