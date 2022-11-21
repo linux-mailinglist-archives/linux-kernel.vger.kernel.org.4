@@ -2,103 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7348632CAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D45632CAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiKUTLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 14:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S231264AbiKUTLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiKUTLf (ORCPT
+        with ESMTP id S230522AbiKUTLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:11:35 -0500
+        Mon, 21 Nov 2022 14:11:40 -0500
 Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F27D3293
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:11:34 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id b11so11264078pjp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:11:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4350ED2F78
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:11:40 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so11778621pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:11:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hdSzcHhKeQkatk8bqFSxlstBSa5XO6OBdkERXfzMdrQ=;
-        b=YGs7CAMjf7UgX7lcenztkRFgVOI230bleLaIy5LovzqlyiR9XCz4k2qMKO0sygpFJe
-         Bf2agTCFLpf3NxaMMQ5s0NqqhvdD1k4HXKYcz8sWgLeL8VRFnqI37ka/iRNPeYEvIjf/
-         PHnBZ/FMt7rwbh/N/an8dqadyk6OTNqU5JM8I=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=v2Tj+w1DK8LzPuOuQoc7i/E26OtlkqVwU1PKRQe1Ni0=;
+        b=M3aSxUpAsJMXxU8yivBjDMrlMJcpIiq425+atpkOgbWR/Srr8X29PKgSpW4IxkzKNg
+         ewf5/JwYRixaslsd4JQoOIKZqbsQJFSigskMReMy8pZJR6nhELzqYwTA5s4bxNRAQQnH
+         bmc6s79eYPqgaIiHN/n6zmjornz4trJkFxpFVp1yUEN5g5k/SS82n1KYUTaBpcdSsdT+
+         mPG8WQ8ROZlG2+qm9aEfA/F8HVkhETefHfIlWAi3/o+197UZEY60m0ufKUR8gb5Nms0K
+         6c0Jgkw3u95k9zFOkcPlJTsrbLJIjwY4DsrUDOTZetslhOgCDXY6uWcMxm7DB3SpiYXe
+         il6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hdSzcHhKeQkatk8bqFSxlstBSa5XO6OBdkERXfzMdrQ=;
-        b=7STZcEb13xfYskweG/1JcmUHBEk6SyNdQ84ztRtuEJ7sw25WKYipFo6aX8blMOSm9m
-         dKX4SI6qL/QuYp3ayjcivViuPrSWHh1lgF4Yx+KQLlJ4M1MGp6m8ReErIt44k3HR6EPc
-         pRNWgBB6+PGA10YeXDCmZryU8ncIUwm3UrsQ3a129z97rT0RaDhQ1euu0S9UfNFEfs9L
-         HdZGthTZdnraU5qIzM9kdS8dZWGZHWDyBVJ8YrkMmPOUZdxzIJtaoNAOuFekj1ihgSVk
-         5DpYd+IUbT7+Bn6iqXngElBtiSeJKgg+Url2Dfjupn9zmGnVQNmbznilP8UdTnaKdzms
-         2Qbw==
-X-Gm-Message-State: ANoB5pmQdMT6XbsXPTP/wYz8vjTF1xRLFr3NwmfB0PZdItkQHvJNcMmW
-        13x3foEQqc+HOj9e2kVb3abifw==
-X-Google-Smtp-Source: AA0mqf5EX/WmGikAtKQZ7TRWlLI1OtFhz/Ihzv88CGw0ULQ27zs1mj0qbxCz+yyj4AXj3lwlwGyO3w==
-X-Received: by 2002:a17:902:ce04:b0:187:3a54:9b93 with SMTP id k4-20020a170902ce0400b001873a549b93mr8785475plg.2.1669057894040;
-        Mon, 21 Nov 2022 11:11:34 -0800 (PST)
-Received: from chromium.org (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902e54f00b0017f73dc1549sm10176867plf.263.2022.11.21.11.11.33
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v2Tj+w1DK8LzPuOuQoc7i/E26OtlkqVwU1PKRQe1Ni0=;
+        b=wKbMj9IgMBb/QXWJrjtGrDYaS13VBEbHH3J2PFMKB9Bv1QybbJBtv47SyiJ0qxxSoh
+         GjZbCMcIVBH7MZ7GwfUcPR/yQceAlqzF4ESD742yb+RzSM1lfhFTxBXHMcjPDWyKzKac
+         iIieJvIlkWTF3MpAnHx53NxdzBR9bcDNbJhHitGJDGGYdmNEDYapbHm0nH3jWZ3OWAgE
+         8raNCUmgPF42NKCTOYgqOOrAlcL25FbwP4IJnTg3CL5zEBwTtd+bv4s18s0jfZxMswr4
+         /2XgH4QfPvHgE1/BKSsDdUjMKXUS4tJgijyb+2z/y9BI/TYyRq312lpZ/QqbSxsHZICJ
+         zZnQ==
+X-Gm-Message-State: ANoB5pnI2ATuP7Ygq6eEfkjNlZD7aEbSdxTzwX4od8ue/elgixYXtueu
+        vnPmjC2oxV9NFPAOVQ61VEcH2g==
+X-Google-Smtp-Source: AA0mqf7qJf7sYKlhoHjG1tMtPadxw8549sEA70wKdvO4mpzVKH27W7yLZ29aUHy2SsEDVgksqoycWg==
+X-Received: by 2002:a17:90a:ff84:b0:213:1e05:f992 with SMTP id hf4-20020a17090aff8400b002131e05f992mr696789pjb.191.1669057899654;
+        Mon, 21 Nov 2022 11:11:39 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170903228c00b001811a197797sm10160998plh.194.2022.11.21.11.11.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 11:11:33 -0800 (PST)
-Date:   Mon, 21 Nov 2022 19:11:32 +0000
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>
-Subject: Re: [PATCH] usb: typec: pd: Add symlink to linked device
-Message-ID: <Y3vNZEuNI3CWzZ0L@chromium.org>
-References: <20221121062106.2569297-1-pmalani@chromium.org>
- <Y3scND+8DVe8SGeD@kroah.com>
- <Y3sls9+NcQrdjb9y@chromium.org>
- <Y3sql/3xgXvre6rT@kroah.com>
+        Mon, 21 Nov 2022 11:11:39 -0800 (PST)
+Date:   Mon, 21 Nov 2022 19:11:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH v2 07/16] KVM: Store gfn_to_pfn_cache length as an
+ immutable property
+Message-ID: <Y3vNZ0Y3KUVsrFcM@google.com>
+References: <20221013211234.1318131-1-seanjc@google.com>
+ <20221013211234.1318131-8-seanjc@google.com>
+ <f80338c90d90fcd2ae3c592c55a591b1d46e6678.camel@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y3sql/3xgXvre6rT@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f80338c90d90fcd2ae3c592c55a591b1d46e6678.camel@infradead.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Nov 21 08:36, Greg Kroah-Hartman wrote:
-> On Mon, Nov 21, 2022 at 07:16:03AM +0000, Prashant Malani wrote:
-> > On Nov 21 07:35, Greg Kroah-Hartman wrote:
-> > > On Mon, Nov 21, 2022 at 06:20:39AM +0000, Prashant Malani wrote:
-> 
-> Why either?  What exactly is this "device" that you are trying to link
-> to?  And why not just use the real device symlink instead?
-
-It's the Type-C port partner device, created here [1]
-
+On Mon, Nov 21, 2022, David Woodhouse wrote:
+> On Thu, 2022-10-13 at 21:12 +0000, Sean Christopherson wrote:
+> > From: Michal Luczaj <mhal@rbox.co>
 > > 
-> > > 
-> > > What in userspace wants to see this symlink?
-> > 
-> > ChromeOS's userspace Type-C daemon. It listens for Type-C partner uevents, but the PD objects
-> > can be created later (and destroyed and then recreated again, for PD chargers which dynamically
-> > change their source caps), and this helps determine which partner does those events apply to.
+> > Make the length of a gfn=>pfn cache an immutable property of the cache
+> > to cleanup the APIs and avoid potential bugs, e.g calling check() with a
+> > larger size than refresh() could put KVM into an infinite loop.
 > 
-> Then set up the proper device symlink like the driver model supports,
-> then you don't have to create a new one, and you don't have to add the
-> documentation entry as it's implied.
+> Hm, that's a strange hypothetical bug to be worried about, given the
+> pattern is usually to have the check() and refresh() within a few lines
+> of each other with just atomicity/locking stuff in between them.
 
-Sounds good. I'll submit a new series (or single patch) which follows this approach.
+Why do you say it's strange to be worried about?  The GPC and Xen code is all quite
+complex and has had multiple bugs, several of which are not exactly edge cases.
+I don't think it's at all strange to want to make it difficult to introduce a bug
+that would in many ways be worse than panicking the kernel.
 
-Thanks again!
+But as Paolo said, the APIs themselves are to blame[*], check() and refresh()
+shouldn't be split for the common case, i.e. this particular concern should largely
+be a non-issue in the long run.
 
--Prashant
+[*] https://lore.kernel.org/all/c61f6089-57b7-e00f-d5ed-68e62237eab0@redhat.com
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/tree/drivers/usb/typec/class.c?h=usb-next#n885
+> I won't fight for it, but I quite liked the idea that each user of a
+> GPC would know how much space *it* is going to access, and provide that
+> length as a required parameter. I do note you've added a WARN_ON to one
+> such user, and that's great — but overall, this patch makes that
+> checking *optional* instead of mandatory.
+
+I honestly don't see a meaningful difference in this case.  The only practical
+difference is that shoving @len into the cache makes the check a one-time thing.
+The "mandatory" check at use time still relies on a human to not make a mistake.
+If the check were derived from the actual access, a la get_user(), then I would
+feel differently.
+
+Case in point, the mandatory check didn't prevent KVM from screwing up bounds
+checking in kvm_xen_schedop_poll().  The PAGE_SIZE passed in for @len is in no
+way tied to actual access that's being performed, the code is simply regurgitating
+the size of the cache.
+
+> > All current (and anticipated future) users access the cache with a
+> > predetermined size, which isn't a coincidence as using a dedicated cache
+> > really only make sense when the access pattern is "fixed".
+> 
+> In fixing up the runstate area, I've made that not true. Not only does
+> the runstate area change size at runtime if the guest changes between
+> 32-bit and 64-bit mode, but it also now uses *two* GPCs to cope with a
+> region that crosses a page boundary, and the size of the first
+> therefore changes according to how much fits on the tail of the page.
+> 
+> > Add a WARN in kvm_setup_guest_pvclock() to assert that the offset+size
+> > matches the length of the cache, both to make it more obvious that the
+> > length really is immutable in that case, and to detect future bugs.
+> ...
+> > @@ -3031,13 +3030,13 @@ static void kvm_setup_guest_pvclock(struct kvm_vcpu *v,
+> >  	struct pvclock_vcpu_time_info *guest_hv_clock;
+> >  	unsigned long flags;
+> >  
+> > +	WARN_ON_ONCE(gpc->len != offset + sizeof(*guest_hv_clock));
+> > +
+> 
+> That ought to be 'gpc->len < offset + sizeof(*guest_hv_clock)' I think?
+> 
+> In the case where we are writing a clock *within* a mapped Xen
+> vcpu_info structure, it doesn't have to be at the *end* of that
+> structure. I think the xen_shinfo_test should have caught that?
+
+The WARN doesn't get false positive because "struct pvclock_vcpu_time_info" is
+placed at the end of "struct vcpu_info" and "struct compat_vcpu_info".
+ 
+I don't have a strong opinion on whether it's "!=" of "<", my goal in adding the
+WARN was primarily to show that @len really is immutable in this case.  Guarding
+against future overrun bugs was a bonus.
