@@ -2,112 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5A563252F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936D6632535
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiKUOLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S229850AbiKUOMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiKUOKz (ORCPT
+        with ESMTP id S229888AbiKUOL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:10:55 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9CCD119;
-        Mon, 21 Nov 2022 06:07:41 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id x18so8028335qki.4;
-        Mon, 21 Nov 2022 06:07:41 -0800 (PST)
+        Mon, 21 Nov 2022 09:11:26 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B841C43C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:08:40 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id l8so14590448ljh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:08:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nCp6eJnEVzWDEtPCziQPCYGKd6IyiDKcam0fNT4ySd8=;
-        b=ZFrvdWBICMrI5FQi8GfrxZhCAuhDV5oMZdAuWOWdqN6VHCQsFvk0xTjeiBi1Q/PfRQ
-         6obNkfIpD4pGSUZV42QtpkU3eRCbkt7dK4Mg431hyKkYre4DHZJpeDP8+rb9WfSgxm2m
-         cGxKOaH8LeT1ko9x9gmUGbLWusPg0N3UvuD73wM7683eozXTKVz6iQ/Zvr/1z2aED35K
-         qAp6SYx63j87519h33cF8CkTrWoCWrwl/4pfFKSJkQUQktX7rb4floXnPrOoYxYXnVMZ
-         Ko8KxDee9/N0lS5K5+tsCwgAJQ1AN3W+xNrNlv4OfoOFE3uHudR8FUTggVXkJQypxYms
-         0Gow==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1q/66qpieV42ROuLl508/NOCtso5oX8ztxq7+MJZS74=;
+        b=aBTqybRW16+csQw2izdh0Z/Tj0Lsk9e5tDNHDVkqXxGVpi8ZGGdBefFmuZckcYvSNv
+         ccO8+0/zdZjQhZ8MdHSNKbiiuuTJjFTjrGFukfLj0UifJluWc05jb16j9SNKexFvRQE/
+         b35O3BsbViQVnWJJLT5DHrjfXxqe29OclCZHGU4/omQY8k9hXm6sJTeq7agyGviYdxK7
+         qEZnarT2xh3OChfxr2V3l6KbiAYMBdgAeNyb21DDtx1zbd0+eTf2BTey7Lz2QfOfUlcA
+         QwJ97wth0fIQCcSMT9Zi2WIyxqvK7fzJocKuMisbR1O0pX4kEYQWLu5iCl6hcNIlFrNg
+         YXGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nCp6eJnEVzWDEtPCziQPCYGKd6IyiDKcam0fNT4ySd8=;
-        b=c5KqHHW4kPCqyiP1fvEW55t/km2HM/ZaReQjWQ6Y/O0nRXy/BuO48d/EBDi8I3MAKU
-         hlHsvmtpIDJGtYua3SktgE5HBHVe/RZ94UgXRo9a98s/XDN3xaAIkOyRw7VfPwSPnGYU
-         6Yx8Fp07X8mDdP1uH2qK7tbI+kkh0ooNkjTVtyDoDarlMp69kTqxBkFuGQn6wBfe/Nr0
-         iFEEwXmz/c9oDnDPQh7u+QPpiaAm1TzLP2f0JBc3n+KcXmNZ9cN3dwQgMx9h4G+hD2ZK
-         lxUgdIBheqb/MW3RM7Qi+pBEbHqaH1s50qwheXZBr7OPJZ94vyKG1C936L12FUEwPAFu
-         ZmEA==
-X-Gm-Message-State: ANoB5plLDoXyYVyqTRM+7x+XhyMs185EpGHc3CUuFaiSdChLi1zTD90Y
-        TOk0LS8eiRexD6alLFeGHvY=
-X-Google-Smtp-Source: AA0mqf5DB27OwbiHThtWOcpu43UNLe8yZQ0Ii1NmM+LUpg4jVu8h8dTp1s40do5Ovmudf1pROsfQqg==
-X-Received: by 2002:a37:444b:0:b0:6fa:389e:7228 with SMTP id r72-20020a37444b000000b006fa389e7228mr16525237qka.141.1669039657938;
-        Mon, 21 Nov 2022 06:07:37 -0800 (PST)
-Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
-        by smtp.gmail.com with ESMTPSA id fa9-20020a05622a4cc900b0039cc944ebdasm6731297qtb.54.2022.11.21.06.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 06:07:37 -0800 (PST)
-Date:   Mon, 21 Nov 2022 09:07:35 -0500
-From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, kgugala@antmicro.com,
-        mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        geert@linux-m68k.org, ilpo.jarvinen@linux.intel.com
-Subject: Re: [PATCH v5 13/14] serial: liteuart: add IRQ support for the TX
- path
-Message-ID: <Y3uGJ3D4OH0vPLqj@errol.ini.cmu.edu>
-References: <20221118145512.509950-1-gsomlo@gmail.com>
- <20221118145512.509950-14-gsomlo@gmail.com>
- <7e2e76f8-5d88-4df4-2335-9f7b129b2e26@kernel.org>
+        bh=1q/66qpieV42ROuLl508/NOCtso5oX8ztxq7+MJZS74=;
+        b=zsKWqvxWE4NPmtqFABh5Z8tX/7JiDtqE2gSbAEAWgmXSI6gbOdSZToQ2LOzDsGs9qj
+         QsWzqPoZCFmXq2dolwFDUSGdnOgYHEJc+IrcOcGRRDrAhYD7dXr6E1pVknatnjWo3FG1
+         2siMdx9Uzhr3MgxoQZEgk6MJXXZk14oPPRMBgXfAVWbZ2qznTEYK0X3MIuk2XlT5QEo4
+         VMVhMTnyYlvd2CrfRkNjpykvpmKhEfSylaxY7x9Q6K5n5gs/e51q2AovCFW9csFryxoJ
+         BGSUd7yNCvVHHY2QJ3ax/3TNY3UXCBk2KXa6HJrTQiRtXAumqeB0R9M4et11DfRPZOZy
+         yNbw==
+X-Gm-Message-State: ANoB5pmNQVD9dK60CdaZmjbI7zbtXguBdnoMIJ7Fpp60aMoJUx1eStKx
+        P3sF6dEnIY1Ko6+vidtWnElUHw==
+X-Google-Smtp-Source: AA0mqf6VveqNQ+m62AwB2rm6lHLBMfChSDcetgHGdiA1oaAB9sTaZG6t8MzhfxeZbmzwa2IBQ42MSw==
+X-Received: by 2002:a2e:aa25:0:b0:277:4a17:be66 with SMTP id bf37-20020a2eaa25000000b002774a17be66mr6572661ljb.232.1669039718755;
+        Mon, 21 Nov 2022 06:08:38 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f24-20020a193818000000b00492ceda336fsm2022674lfa.278.2022.11.21.06.08.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 06:08:38 -0800 (PST)
+Message-ID: <c397969d-0f6c-42c2-cf08-3be81257cc22@linaro.org>
+Date:   Mon, 21 Nov 2022 15:08:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: magnetometer: add ti tmag5273
+ documentation file
+Content-Language: en-US
+To:     Gerald Loacker <gerald.loacker@wolfvision.net>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Jakob Hauser <jahau@rocketmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+References: <20221121123542.1322367-1-gerald.loacker@wolfvision.net>
+ <20221121123542.1322367-2-gerald.loacker@wolfvision.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221121123542.1322367-2-gerald.loacker@wolfvision.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7e2e76f8-5d88-4df4-2335-9f7b129b2e26@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 09:58:41AM +0100, Jiri Slaby wrote:
-> On 18. 11. 22, 15:55, Gabriel Somlo wrote:
-> > Switch the TX path to IRQ-driven operation, while maintaining support
-> > for polling mode via the poll timer.
-> > 
-> > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> > Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ...
-> > @@ -154,6 +148,8 @@ static irqreturn_t liteuart_interrupt(int irq, void *data)
-> >   	isr = litex_read8(port->membase + OFF_EV_PENDING) & uart->irq_reg;
-> >   	if (isr & EV_RX)
-> >   		liteuart_rx_chars(port);
-> > +	if (isr & EV_TX)
-> > +		liteuart_tx_chars(port);
+On 21/11/2022 13:35, Gerald Loacker wrote:
+> Add bindings for TI TMAG5273.
 > 
-> Wait, how do you ensure the OFF_EV_PENDING reg contains EV_RX and/or EV_TX
-> in the polling mode?
+> Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
+> ---
+> Changes in v2:
+>  - Removed nodename
+>  - Changed angle-enable to angle-measurement and used strings
+>  - Added interrupts
+>  - Removed vcc-supply from required properties
+>  - Changed i2c-0 to i2c in examples
+>  .../iio/magnetometer/ti,tmag5273.yaml         | 75 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml b/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
+> new file mode 100644
+> index 000000000000..b2ecd7054a34
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/magnetometer/ti,tmag5273.yaml
+> @@ -0,0 +1,75 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/magnetometer/ti,tmag5273.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor
+> +
+> +maintainers:
+> +  - Gerald Loacker <gerald.loacker@wolfvision.net>
+> +
+> +description:
+> +  The TI TMAG5273 is a low-power linear 3D Hall-effect sensor. This device
+> +  integrates three independent Hall-effect sensors in the X, Y, and Z axes.
+> +  The device has an integrated temperature sensor available. The TMAG5273
+> +  can be configured through the I2C interface to enable any combination of
+> +  magnetic axes and temperature measurements. An integrated angle calculation
+> +  engine (CORDIC) provides full 360Â° angular position information for both
+> +  on-axis and off-axis angle measurement topologies. The angle calculation is
+> +  performed using two user-selected magnetic axes.
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,tmag5273
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#io-channel-cells":
+> +    const: 1
+> +
+> +  ti,angle-measurement:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      Enables angle measurement in the selected plane.
+> +      If not specified, "x-y" will be anables as default.
+> +    enum:
+> +      - "off"
+> +      - "x-y"
+> +      - "y-z"
+> +      - "x-z"
 
-The hardware (well, *gateware*) is coded to populate the EV_PENDING
-register regardless of whether IRQs are enabled via the EV_ENABLE
-register (or indeed, whether IRQs are even "wired into" the design at
-all). See
+Drop quotes from all these.
 
-https://github.com/enjoy-digital/litex/blob/master/litex/soc/cores/uart.py
-and
-https://github.com/enjoy-digital/litex/blob/master/litex/soc/interconnect/csr_eventmanager.py
+With this:
 
-for a starting point on why it's OK to just assume that...
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks,
---Gabriel
+Best regards,
+Krzysztof
+
