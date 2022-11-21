@@ -2,148 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28660631DAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9FC631DB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiKUKGl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Nov 2022 05:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
+        id S231129AbiKUKGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiKUKGb (ORCPT
+        with ESMTP id S229500AbiKUKGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:06:31 -0500
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A79C9DB94
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:06:29 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="5.96,181,1665417600"; 
-   d="scan'208";a="38178262"
-Received: from hk-mbx01.mioffice.cn (HELO xiaomi.com) ([10.56.8.121])
-  by outboundhk.mxmail.xiaomi.com with ESMTP; 21 Nov 2022 18:05:24 +0800
-Received: from BJ-MBX04.mioffice.cn (10.237.8.124) by HK-MBX01.mioffice.cn
- (10.56.8.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 21 Nov
- 2022 18:05:22 +0800
-Received: from mi-OptiPlex-7060.mioffice.cn (10.237.8.11) by
- BJ-MBX04.mioffice.cn (10.237.8.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 21 Nov 2022 18:05:21 +0800
-From:   <wangbiao3@xiaomi.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <brauner@kernel.org>, <bsegall@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <wangbiao3@xiaomi.com>,
-        <wenjieli@qti.qualcomm.com>, <chenguanyou@xiaomi.com>
-Subject: [PATCH 1/1] sched: fix user_mask double free
-Date:   Mon, 21 Nov 2022 18:04:20 +0800
-Message-ID: <b8970a530d420109ee9fe0b268e097fb839211b0.1669020858.git.wangbiao3@xiaomi.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1669020858.git.wangbiao3@xiaomi.com>
-References: <cover.1669020858.git.wangbiao3@xiaomi.com>
+        Mon, 21 Nov 2022 05:06:11 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EC79B3AD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:06:10 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id d20so13883865ljc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:06:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ETYUju+ev/hPzpv+l4JC8044Dj0mUXTx4GlVsgZjN38=;
+        b=iYo9iX04wVOZdT5EObsUtBWobIewodTvdRf8V0NODR74jwWMed+4YuLtDriVY2mWdB
+         8IO+AP5pPJj1asjIYQUufuR4O9zo3sHPmX2vJjyDWHNoAO9ATSTIvMTac0hiGeZu2ZOP
+         6hL7dvTVnZqlZTIp3fXv3P4tlv5DOGqcgfwTq/GEd4Btr90VXLGk8Z3zw/3+OLJL6aJz
+         MGfB+yQKhpedI8h60zu4pv8j0raeb7LPTHf5cfyT3hG0ssRYHZMWOhrEix2LPQtk7h2G
+         5tJe2YL0yoCfyXfanSGkY7C9p3hC5UclJplcZ8VZEA4o/YyuoDaBgwLLg0aqXiaqujQE
+         9/jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ETYUju+ev/hPzpv+l4JC8044Dj0mUXTx4GlVsgZjN38=;
+        b=QrdLJTHtGOkPB7E3eO8Wk2sdcklyv5ZfLk5Bco87cvo7TKwUDZK3dm2nnvso6E2zmR
+         KtZUo3w+sXMI5lPOg3+8s6lsVuP0wvI7iWTUd6Ubz+Cfc/uLsk3ljjz6jHxwYk1cZZlq
+         I3mg+tOEvFlQP3HaRQCW/sC/LAv+T+Jc2Orv1mbQvtMqvrm7+I7oPhsCtJP1IF4UubFL
+         OWQJ/2O8vl5Flqfj7z9PbjxohA4EZ90C9Yzszpvf3kWza4NPRP/0olvMB4sJWIoc1PbX
+         WkktYqVl+FbABZuyEAQ2lnwMFZSXvz6Yc1iVs1pr52f8jsr17RIj6PrRfsX0cNmt1s+G
+         JDOA==
+X-Gm-Message-State: ANoB5pkPAvhvy0UgOC8M0v8Qv+0vcuZV49F/FBBS4qvIHD2hPYmC7Zye
+        zXmoZcLegKH1Lue3Pq1W5nKUUQ==
+X-Google-Smtp-Source: AA0mqf49LlvU9Pg6aP1uODsFd7BBPuYMotIvAVv05VGR/gjZCU6kQGPeu2jafd9bNMv501DNwGoAog==
+X-Received: by 2002:a2e:a263:0:b0:276:be89:5616 with SMTP id k3-20020a2ea263000000b00276be895616mr5077797ljm.347.1669025168551;
+        Mon, 21 Nov 2022 02:06:08 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a26-20020ac25e7a000000b004b4930d53b5sm1958536lfr.134.2022.11.21.02.06.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 02:06:08 -0800 (PST)
+Message-ID: <08cdf11c-b399-3f45-7dc6-0f75407128bb@linaro.org>
+Date:   Mon, 21 Nov 2022 11:06:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain
-X-Originating-IP: [10.237.8.11]
-X-ClientProxiedBy: BJ-MBX10.mioffice.cn (10.237.8.130) To BJ-MBX04.mioffice.cn
- (10.237.8.124)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_SOFTFAIL,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/3] dt-bindings: timer: sifive,clint: add comaptibles for
+ T-Head's C9xx
+To:     Icenowy Zheng <uwu@icenowy.me>, Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20221121041757.418645-1-uwu@icenowy.me>
+ <20221121041757.418645-2-uwu@icenowy.me>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221121041757.418645-2-uwu@icenowy.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wangbiao3 <wangbiao3@xiaomi.com>
+On 21/11/2022 05:17, Icenowy Zheng wrote:
+> T-Head C906/C910 CLINT is not compliant to SiFive ones (and even not
+> compliant to the newcoming ACLINT spec) because of lack of mtime
+> register.
+> 
+> Add a compatible string formatted like the C9xx-specific PLIC
+> compatible, and do not allow a SiFive one as fallback because they're
+> not really compliant.
+> 
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
 
-Clone/Fork a new task,call dup_task_struct->arch_dup_task_struct(tsk,orig)
-which copy the data of parent/sibling task inclding p->user_cpus_ptr,so
-the user_cpus_ptr of newtask is the same with orig task's.When
-dup_task_struct call dup_user_cpus_ptr(tsk, orig, node),it return 0
-dircetly if src->user_cpus_ptris free by other task,in this case ,
-the newtask's address of user_cpus_ptr is not changed. Finally,
-wakup newtask to execute, call task_cpu_possible_mask-->
-do_set_cpus_allowed to set new task's user_cpus_ptr(user_mask) which
-call kfree user_mask at the end. So cause a slub double free panic.
 
-Use pi_lock to protect content of user_cpus_ptr in dup_user_cpus_ptr and
-clear dst->user_cpus_ptr when found src->user_cpus_ptr is null
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-kernel BUG at mm/slub.c:363!
-Call trace:
- __slab_free+0x230/0x28c
- kfree+0x220/0x2cc
- do_set_cpus_allowed+0x74/0xa4
- select_fallback_rq+0x12c/0x200
- wake_up_new_task+0x26c/0x304
- kernel_clone+0x2c0/0x470
- __arm64_sys_clone+0x5c/0x8c
- invoke_syscall+0x60/0x150
- el0_svc_common.llvm.13030543509303927816+0x98/0x114
- do_el0_svc_compat+0x20/0x30
- el0_svc_compat+0x28/0x90
- el0t_32_sync_handler+0x7c/0xbc
- el0t_32_sync+0x1b8/0x1bc
+Best regards,
+Krzysztof
 
-Signed-off-by: wangbiao3 <wangbiao3@xiaomi.com>
----
- kernel/sched/core.c | 31 ++++++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 11 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index daff72f00385..b013d8b777b4 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2584,29 +2584,38 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
-        __do_set_cpus_allowed(p, new_mask, 0);
- }
-
-+static inline struct cpumask *clear_user_cpus_ptr(struct task_struct *p)
-+{
-+       struct cpumask *user_mask = NULL;
-+
-+       swap(p->user_cpus_ptr, user_mask);
-+
-+       return user_mask;
-+}
-+
- int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-                      int node)
- {
--       if (!src->user_cpus_ptr)
--               return 0;
-+       unsigned long flags;
-+       struct cpumask *user_mask = NULL;
-
-        dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
-        if (!dst->user_cpus_ptr)
-                return -ENOMEM;
-
-+       /* Use pi_lock to protect content of user_cpus_ptr */
-+       raw_spin_lock_irqsave(&src->pi_lock, flags);
-+       if (!src->user_cpus_ptr) {
-+               user_mask = clear_user_cpus_ptr(dst);
-+               raw_spin_unlock_irqrestore(&src->pi_lock, flags);
-+               kfree(user_mask);
-+               return 0;
-+       }
-        cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
-+       raw_spin_unlock_irqrestore(&src->pi_lock, flags);
-        return 0;
- }
-
--static inline struct cpumask *clear_user_cpus_ptr(struct task_struct *p)
--{
--       struct cpumask *user_mask = NULL;
--
--       swap(p->user_cpus_ptr, user_mask);
--
--       return user_mask;
--}
--
- void release_user_cpus_ptr(struct task_struct *p)
- {
-        kfree(clear_user_cpus_ptr(p));
---
-2.38.1
-
-#/******本邮件及其附件含有小米公司的保密信息，仅限于发送给上面地址中列出的个人或群组。禁止任何其他人以任何形式使用（包括但不限于全部或部分地泄露、复制、或散发）本邮件中的信息。如果您错收了本邮件，请您立即电话或邮件通知发件人并删除本邮件！ This e-mail and its attachments contain confidential information from XIAOMI, which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction, or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this e-mail in error, please notify the sender by phone or email immediately and delete it!******/#
