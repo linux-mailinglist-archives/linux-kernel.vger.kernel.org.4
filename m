@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91552632012
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C76632014
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiKULO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:14:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S230342AbiKULPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiKULO1 (ORCPT
+        with ESMTP id S230449AbiKULOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:14:27 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3B7B4F16
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:09:57 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id i12so15447753wrb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:09:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DnxhI2K7v7qSJ3sei2vOI6evZb4ItU20SUWGl/JrUF8=;
-        b=q+btIZnN7fy5J2xJ9mJzj7EjnGonxfALuWx62cKq/iaekn3WWksEUvaL7oLiCn9x2I
-         v792N8rZUV9546bvPIfp/ukOKFLDbRcx5JQaGcQaD5PRvU9aZydTw8lWFfxaCZDWUkeB
-         6u7gyHQt5wJGpBoqA4lePWbcVPqPU5agMXPV126jkXRoyHojYOv5aTRfkNYb5IGm448E
-         cJ7DikilGO47coKGCONOwrT71/XRZLx9rrZf2Ja/t7dVLkn2OA7KvgPRYrRnhqMEFbWT
-         bUxw288qvNy8sp+qY5UwtP7j61eeQ2QmMU+VFXm/pz0JMo85OLg2UdJoDOk7wBGouOfc
-         +IOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DnxhI2K7v7qSJ3sei2vOI6evZb4ItU20SUWGl/JrUF8=;
-        b=ELs5L+0BEbBHm9r5WNNGtDYDyeQFHFYYcfxjJP34jo8nsJST+Jrz+VzUvRDsPw2Qcb
-         cG6BzdONCrvNYA0DZ3mDDMfosKCFTxMf6Su1j1jB7H+OB0uUbyG8rpTtjPJdjN5NjBmz
-         bLUvI9Z/lSBsRHUe/RnId9Hwb7kRGoHhM18T0N5ko+EV6v5lNdj3GqP28lgQx7UINycT
-         s/5L9Nylv7EOQSsVl6uRG2r0QNSrNUJivcKhJrA07ir2EirMXTHqMFb0iRgghjNOfVRi
-         jYdaLkdtzJqQzj2fu64g3D+39UHcGAxQcRy6dsd3/Yv8ssubLXkCSHStkecPXmvXHPDT
-         mD2g==
-X-Gm-Message-State: ANoB5plIN6psqXX9/ZpIjeozRPvG+lWDHqNU/2TyRfx1x/O/eyE4bq+6
-        5HvzRfmnTyEzHDmtVRyfdYglHw==
-X-Google-Smtp-Source: AA0mqf5w+ji8vVQVFaaNoYdKQv16v0TqzZgCN32rFI32gp0Hh6iCyQ+D0Qy72UOYWXd+3t7vLQumgA==
-X-Received: by 2002:a5d:458c:0:b0:241:d40a:bb50 with SMTP id p12-20020a5d458c000000b00241d40abb50mr2169169wrq.39.1669028979525;
-        Mon, 21 Nov 2022 03:09:39 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id c1-20020a5d4cc1000000b002365b759b65sm10913763wrt.86.2022.11.21.03.09.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 03:09:38 -0800 (PST)
-Date:   Mon, 21 Nov 2022 11:09:37 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 591/606] backlight: lp855x: Convert to i2c's .probe_new()
-Message-ID: <Y3tccSZrm+DRVA24@maple.lan>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-592-uwe@kleine-koenig.org>
+        Mon, 21 Nov 2022 06:14:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5D7BF839
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:10:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8F66ECE11BE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:10:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D001C433D6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669028998;
+        bh=SrnoE2ZwKMFebu9vJWEZ+n28lkE0/B5i1gCPufLzeR4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UcjU7Cm1TKWDiiorJEj+aOA12ktOV1UNiOGeqrq6GCAxfFEr9NwuekUhbOTrRTdGm
+         UgU7HRT4Z5KXL/BQ1bHVABkwR1gjEWVSq6vmKwpcXeDMrNNZAvXM9D8CC562TUCRWW
+         tfuOtpOe2qi4Z+SaaosZKdeZxx3ikCj99w2y855LOry+DDYlsYebPc+LxKVpS970ds
+         Z28EfkrPlqQ9TCyaYesIi076ye2luMetISph/zcfPYfM85190shKwEyxJdXR9HZEej
+         iLEGr6u0/Qdc7WnU0EAcQl5QkdParo3YqJXAVumEg2wYl4BZGw38oJmq2PxG6wn9zG
+         8JxdoRG37mYlA==
+Received: by mail-ej1-f42.google.com with SMTP id n20so27815191ejh.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:09:58 -0800 (PST)
+X-Gm-Message-State: ANoB5plX/2YQisTGZ/4gkHuexkvYgLR17fvHSvMnR8SkbB14DWAwYczs
+        /pRREY1Nz1Vu+yDp1NmWTld/rob5mx8nMqFGxcM=
+X-Google-Smtp-Source: AA0mqf7PWo/LXdMWM/qVMzfD6xXZltpTRX4XN8uDfabhE0uSKX3rmuH6/A0Wd1z0JVyxGzoC+SvQcoEZSyTztwNaEFI=
+X-Received: by 2002:a17:906:6a8e:b0:78d:a136:7332 with SMTP id
+ p14-20020a1709066a8e00b0078da1367332mr14856897ejr.355.1669028996847; Mon, 21
+ Nov 2022 03:09:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-592-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221120101049.2078117-1-guoren@kernel.org> <Y3tPEDvM3aVJmVxF@wendy>
+In-Reply-To: <Y3tPEDvM3aVJmVxF@wendy>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 21 Nov 2022 19:09:45 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS0FDgV3toa9wZxPhK2G+f4vCtrru7q3R4FXnMkxYmu-w@mail.gmail.com>
+Message-ID: <CAJF2gTS0FDgV3toa9wZxPhK2G+f4vCtrru7q3R4FXnMkxYmu-w@mail.gmail.com>
+Subject: Re: [PATCH V2] riscv: patch: Fixup lockdep warning in stop_machine
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, mhiramat@kernel.org, changbin.du@intel.com,
+        zong.li@sifive.com, rostedt@goodmis.org, boqun.feng@gmail.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:45:25PM +0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Mon, Nov 21, 2022 at 6:13 PM Conor Dooley <conor.dooley@microchip.com> wrote:
 >
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
+> On Sun, Nov 20, 2022 at 05:10:49AM -0500, guoren@kernel.org wrote:
+> > From: Changbin Du <changbin.du@gmail.com>
 >
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > Fixes: 0ff7c3b33127 ("riscv: Use text_mutex instead of patch_lock")
+> > Cc: Changbin Du <changbin.du@gmail.com>
+> > Co-developed-by: Guo Ren <guoren@kernel.org>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Zong Li <zong.li@sifive.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > ---
+>
+> Hey Guo Ren,
+>
+> FYI you're missing a SoB from Chanbin on this patch. They gave one in
+> their v1 though so you should be able to re-use that?
+I'm waiting for his SoB. I don't think I could directly use his SoB in
+v1. I need him to confirm my rewritten commit log for lockdep
+analysis.
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+>
+> Thanks,
+> Conor.
+>
+> > Changes in v2:
+> >  - Rewrite commit log with lockdep explanation [Guo Ren]
+> >  - Rebase on v6.1 [Guo Ren]
+> >
+> > v1:
+> > https://lore.kernel.org/linux-riscv/20210417023532.354714-1-changbin.du@gmail.com/
+>
 
 
-Daniel.
+-- 
+Best Regards
+ Guo Ren
