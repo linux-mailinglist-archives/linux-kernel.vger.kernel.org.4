@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83D4631D39
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5324631D3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiKUJrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S230382AbiKUJrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiKUJq7 (ORCPT
+        with ESMTP id S230452AbiKUJrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:46:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E35C97EF7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:46:58 -0800 (PST)
+        Mon, 21 Nov 2022 04:47:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857EDE08D;
+        Mon, 21 Nov 2022 01:47:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6C18B80DA1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:46:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD76DC43470;
-        Mon, 21 Nov 2022 09:46:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24AB960F93;
+        Mon, 21 Nov 2022 09:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F77C433D6;
+        Mon, 21 Nov 2022 09:46:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669024015;
-        bh=6RxV4EYuvPy7DNNaTcdLjKBIoSdpfXyaOictufStsKc=;
+        s=korg; t=1669024019;
+        bh=VQZYBH1bhf90ko3Gyb0TeinDWhHpYreu0f9unIS25Zw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PbmKzyJAiZMH7k7Ui8IWm/NFM8pw2iSgk6LI0XsRucF7hljmIqkn4GSUwdETomb0l
-         Wg6XScVHiv7Fb+QE71vFie6vBY8Bu7iJ7yMEfLfuT+N3x4th6qIYkxSP3DVzJfF+K/
-         KO21tfF5x4P2mFlkLtCOoqmjRv0LoP5RfZjrOCQQ=
+        b=LP5Bcu/o6ov0sKBaLpR4FOMpj0KiyS6oh9p0I60JpynrFARptBhfmho4EJPJ4/m8m
+         8P/d6EM/AqaaQLCXJhqPIcFWHodFvsubWuvWx28DPgaLvAZqckMNaKwqG6/tHpp2k2
+         NhwnVwWHQ5eSkDwvMZ+zEr7bgrLiNVmVBz09kxJI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 2/5] kobject: make kobject_namespace take a const *
-Date:   Mon, 21 Nov 2022 10:46:46 +0100
-Message-Id: <20221121094649.1556002-2-gregkh@linuxfoundation.org>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 3/5] kobject: kset_uevent_ops: make filter() callback take a const *
+Date:   Mon, 21 Nov 2022 10:46:47 +0100
+Message-Id: <20221121094649.1556002-3-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
 References: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3049; i=gregkh@linuxfoundation.org; h=from:subject; bh=6RxV4EYuvPy7DNNaTcdLjKBIoSdpfXyaOictufStsKc=; b=owGbwMvMwCRo6H6F97bub03G02pJDMnVnhynp5UXFyktfsL8qoJxXdzrC3ydl/peF1YZXV7z6NK/ MO78jlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZiIzwmGBceilz0Q+lb9eNX7TT8sO/ KWLlWsXcEwv8jo8vRHv4vdjby+31SYtl3PaP7nnQA=
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3268; i=gregkh@linuxfoundation.org; h=from:subject; bh=VQZYBH1bhf90ko3Gyb0TeinDWhHpYreu0f9unIS25Zw=; b=owGbwMvMwCRo6H6F97bub03G02pJDMnVnpyPX3yeVMM/57Desw3BLcVtK7dElz68+Jj/h3hLmCLD i9stHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjAR2ViGBcs28T5zS33/Xe98772MPX fXBXVIsjIsaPjXGMjtXphX9MSuufH7/2k3/JI6AQ==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -52,78 +57,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kobject_namespace() should take a const *kobject as it does not modify
-the kobject passed to it.  Change that, and the functions
-kobj_child_ns_ops() and kobj_ns_ops() needed to also be changed to const
-*.
+The filter() callback in struct kset_uevent_ops does not modify the
+kobject passed into it, so make the pointer const to enforce this
+restriction.  When doing so, fix up all existing filter() callbacks to
+have the correct signature to preserve the build.
 
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/kobject.h    | 2 +-
- include/linux/kobject_ns.h | 4 ++--
- lib/kobject.c              | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/base/bus.c                    | 2 +-
+ drivers/base/core.c                   | 4 ++--
+ drivers/dma-buf/dma-buf-sysfs-stats.c | 2 +-
+ include/linux/kobject.h               | 2 +-
+ kernel/params.c                       | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index 7ca47e5b3c1f..4ec6dbab73be 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -163,7 +163,7 @@ static struct kobj_type bus_ktype = {
+ 	.release	= bus_release,
+ };
+ 
+-static int bus_uevent_filter(struct kobject *kobj)
++static int bus_uevent_filter(const struct kobject *kobj)
+ {
+ 	const struct kobj_type *ktype = get_ktype(kobj);
+ 
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index a79b99ecf4d8..005a2b092f3e 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2362,12 +2362,12 @@ static struct kobj_type device_ktype = {
+ };
+ 
+ 
+-static int dev_uevent_filter(struct kobject *kobj)
++static int dev_uevent_filter(const struct kobject *kobj)
+ {
+ 	const struct kobj_type *ktype = get_ktype(kobj);
+ 
+ 	if (ktype == &device_ktype) {
+-		struct device *dev = kobj_to_dev(kobj);
++		const struct device *dev = kobj_to_dev(kobj);
+ 		if (dev->bus)
+ 			return 1;
+ 		if (dev->class)
+diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
+index 2bba0babcb62..f69d68122b9b 100644
+--- a/drivers/dma-buf/dma-buf-sysfs-stats.c
++++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
+@@ -132,7 +132,7 @@ void dma_buf_stats_teardown(struct dma_buf *dmabuf)
+ 
+ 
+ /* Statistics files do not need to send uevents. */
+-static int dmabuf_sysfs_uevent_filter(struct kobject *kobj)
++static int dmabuf_sysfs_uevent_filter(const struct kobject *kobj)
+ {
+ 	return 0;
+ }
 diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index d978dbceb50d..5a2d58e10bf5 100644
+index 5a2d58e10bf5..640f59d4b3de 100644
 --- a/include/linux/kobject.h
 +++ b/include/linux/kobject.h
-@@ -112,7 +112,7 @@ extern struct kobject * __must_check kobject_get_unless_zero(
- 						struct kobject *kobj);
- extern void kobject_put(struct kobject *kobj);
+@@ -135,7 +135,7 @@ struct kobj_uevent_env {
+ };
  
--extern const void *kobject_namespace(struct kobject *kobj);
-+extern const void *kobject_namespace(const struct kobject *kobj);
- extern void kobject_get_ownership(const struct kobject *kobj,
- 				  kuid_t *uid, kgid_t *gid);
- extern char *kobject_get_path(const struct kobject *kobj, gfp_t flag);
-diff --git a/include/linux/kobject_ns.h b/include/linux/kobject_ns.h
-index 2b5b64256cf4..be707748e7ce 100644
---- a/include/linux/kobject_ns.h
-+++ b/include/linux/kobject_ns.h
-@@ -47,8 +47,8 @@ struct kobj_ns_type_operations {
+ struct kset_uevent_ops {
+-	int (* const filter)(struct kobject *kobj);
++	int (* const filter)(const struct kobject *kobj);
+ 	const char *(* const name)(struct kobject *kobj);
+ 	int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
+ };
+diff --git a/kernel/params.c b/kernel/params.c
+index 5b92310425c5..d2237209ceda 100644
+--- a/kernel/params.c
++++ b/kernel/params.c
+@@ -926,7 +926,7 @@ static const struct sysfs_ops module_sysfs_ops = {
+ 	.store = module_attr_store,
+ };
  
- int kobj_ns_type_register(const struct kobj_ns_type_operations *ops);
- int kobj_ns_type_registered(enum kobj_ns_type type);
--const struct kobj_ns_type_operations *kobj_child_ns_ops(struct kobject *parent);
--const struct kobj_ns_type_operations *kobj_ns_ops(struct kobject *kobj);
-+const struct kobj_ns_type_operations *kobj_child_ns_ops(const struct kobject *parent);
-+const struct kobj_ns_type_operations *kobj_ns_ops(const struct kobject *kobj);
- 
- bool kobj_ns_current_may_mount(enum kobj_ns_type type);
- void *kobj_ns_grab_current(enum kobj_ns_type type);
-diff --git a/lib/kobject.c b/lib/kobject.c
-index 26e744a46d24..6e0bf03f4f36 100644
---- a/lib/kobject.c
-+++ b/lib/kobject.c
-@@ -25,7 +25,7 @@
-  * and thus @kobj should have a namespace tag associated with it.  Returns
-  * %NULL otherwise.
-  */
--const void *kobject_namespace(struct kobject *kobj)
-+const void *kobject_namespace(const struct kobject *kobj)
+-static int uevent_filter(struct kobject *kobj)
++static int uevent_filter(const struct kobject *kobj)
  {
- 	const struct kobj_ns_type_operations *ns_ops = kobj_ns_ops(kobj);
+ 	const struct kobj_type *ktype = get_ktype(kobj);
  
-@@ -1039,7 +1039,7 @@ int kobj_ns_type_registered(enum kobj_ns_type type)
- 	return registered;
- }
- 
--const struct kobj_ns_type_operations *kobj_child_ns_ops(struct kobject *parent)
-+const struct kobj_ns_type_operations *kobj_child_ns_ops(const struct kobject *parent)
- {
- 	const struct kobj_ns_type_operations *ops = NULL;
- 
-@@ -1049,7 +1049,7 @@ const struct kobj_ns_type_operations *kobj_child_ns_ops(struct kobject *parent)
- 	return ops;
- }
- 
--const struct kobj_ns_type_operations *kobj_ns_ops(struct kobject *kobj)
-+const struct kobj_ns_type_operations *kobj_ns_ops(const struct kobject *kobj)
- {
- 	return kobj_child_ns_ops(kobj->parent);
- }
 -- 
 2.38.1
 
