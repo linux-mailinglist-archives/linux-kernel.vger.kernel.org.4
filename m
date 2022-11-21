@@ -2,220 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1F6632284
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B88A632288
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiKUMnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:43:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S229982AbiKUMoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKUMnR (ORCPT
+        with ESMTP id S230127AbiKUMoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:43:17 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC77EBE878;
-        Mon, 21 Nov 2022 04:43:13 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxndpfcntjxBoJAA--.25537S3;
-        Mon, 21 Nov 2022 20:43:11 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VZbcntj7pkXAA--.43255S2;
-        Mon, 21 Nov 2022 20:43:10 +0800 (CST)
-Subject: Re: [PATCH v4 1/2] gpio: loongson: add dts and acpi support
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20221117035902.13995-1-zhuyinbo@loongson.cn>
- <9aa20e9a-92b1-4268-921f-11209785acb7@app.fastmail.com>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <c11971af-a878-cd7a-7d7f-46d2934c4c6c@loongson.cn>
-Date:   Mon, 21 Nov 2022 20:43:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 21 Nov 2022 07:44:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18FFBF82F;
+        Mon, 21 Nov 2022 04:44:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 510BA6119E;
+        Mon, 21 Nov 2022 12:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC98BC433C1;
+        Mon, 21 Nov 2022 12:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669034644;
+        bh=JmPZDDOEqXd3HGUxwDMvUefeqoTTPEPAsQzOjTDrXr0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T48dQc167kphJOdUDMLXmFAr5jK6cMYYzdg6xkyrgDrInjq8qo+HycCjSR59M4FWk
+         kLmXh5KCUTJ4r0myTiHi1WNcZQuoKjkp81YHkTI3W6UIImPUMGShdiGzRAgiWH51VO
+         aDJHE89EgVDApcfYNnqDeQ+7MBXNumJx98/xXjz8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 4.19 00/34] 4.19.266-rc1 review
+Date:   Mon, 21 Nov 2022 13:43:22 +0100
+Message-Id: <20221121124150.886779344@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-In-Reply-To: <9aa20e9a-92b1-4268-921f-11209785acb7@app.fastmail.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.266-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.19.266-rc1
+X-KernelTest-Deadline: 2022-11-23T12:41+00:00
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx9VZbcntj7pkXAA--.43255S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3Xr1DAw48Kr4kAFyDWr48JFb_yoW7GFy3pF
-        W5Gay3Kr47WF1jy34kX3ykAF1Yyws3twnxJF4xG34vg34DZr95XrW7KFy5urZxArW8Zw4Y
-        vFWFgFZruF4Du37anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bq8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVW7JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIApnDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is the start of the stable review cycle for the 4.19.266 release.
+There are 34 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Hi Arnd,
+Responses should be made by Wed, 23 Nov 2022 12:41:40 +0000.
+Anything received after that time might be too late.
 
-I had adop your advice and as v5 series patch.
-and about move the legacy gpio driver to other deposition that I have
-internal talk in loongson team and think it should be okay.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.266-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+and the diffstat can be found below.
 
-BRs,
-Yinbo.
-ÔÚ 2022/11/17 ÏÂÎç5:55, Arnd Bergmann Ð´µÀ:
-> On Thu, Nov 17, 2022, at 04:59, Yinbo Zhu wrote:
->>
->>   config GPIO_LOONGSON
->> -	bool "Loongson-2/3 GPIO support"
->> -	depends on CPU_LOONGSON2EF || CPU_LOONGSON64
->> +	bool "Loongson series GPIO support"
->> +	depends on LOONGARCH || COMPILE_TEST
-> 
-> This looks like it will introduce a regression for users of the
-> older machines CPU_LOONGSON2EF and CPU_LOONGSON64 machines.
-> 
-> While the driver previously called 'platform_device_register_simple'
-> to create the platform device itself, this call is no longer
-> done anywhere, so it also cannot work here, but whatever was
-> working should not be broken. I can see two possible ways to do
-> this:
-> 
-> a) create the platform_device in the mips code in a way that
-> the driver can handle it as before
-> 
-> b) duplicate the entire driver and leave the old code untouched.
-> 
-> The second one is probably easier here, but the first one would
-> be nicer in the end, depending on how much of the original
-> code remains.
-> 
->>   	help
->> -	  Driver for GPIO functionality on Loongson-2F/3A/3B processors.
->> +	  Driver for GPIO functionality on Loongson seires processors.
-> 
-> s/seires/series/
-> 
->> +static void of_loongson_gpio_get_props(struct device_node *np,
->> +				  struct loongson_gpio_chip *lgpio)
->> +{
->> +	const char *name;
->> +
->> +	of_property_read_u32(np, "ngpios", (u32 *)&lgpio->chip.ngpio);
-> 
-> This does not work: chip.ngpio is a 16-bit field, so you
-> cannot overwrite it using a 32-bit pointer dereference. Just
-> use a local variable as an intermediate
-> 
->> +	of_property_read_string(np, "compatible", &name);
->> +	lgpio->chip.label = kstrdup(name, GFP_KERNEL);
->> +	if (!strcmp(name, "loongson,ls2k-gpio")) {
->> +		lgpio->conf_offset = 0x0;
-> 
-> This probably works, but is not reliable since "compatible"
-> is an enumeration rather than a single string. Using
-> of_device_is_compatible() would work here, or even better
-> you can have a configuration that is referenced from
-> the 'data' field of the 'of_device_id'
-> 
->> +static void acpi_loongson_gpio_get_props(struct platform_device *pdev,
->> +				  struct loongson_gpio_chip *lgpio)
->> +{
->> +
->> +	struct device *dev = &pdev->dev;
->> +	int rval;
->> +
->> +	device_property_read_u32(dev, "ngpios", (u32 *)&lgpio->chip.ngpio);
->> +	device_property_read_u32(dev, "gpio_base", (u32 *)&lgpio->chip.base);
->> +	device_property_read_u32(dev, "conf_offset",
->> +					(u32 *)&lgpio->conf_offset);
->> +	device_property_read_u32(dev, "out_offset",
->> +					(u32 *)&lgpio->out_offset);
->> +	device_property_read_u32(dev, "in_offset", (u32 *)&lgpio->in_offset);
-> 
-> This looks worrying: While you addressed the feedback in the
-> DT binding, the ACPI version still uses the old format, which
-> the binding is different depending on the firmware.
-> 
-> A modern driver should not set the "gpio_base" any more, and
-> the firmware should not care either.
-> 
-> The other fields appear to correspond to the ones that the DT
-> version decides based on the device identifier. There isn't
-> really a point in doing this differently, so pick one version
-> or the other and then use the same method for both DT and ACPI.
-> 
->> +static void platform_loongson_gpio_get_props(struct platform_device *pdev,
->> +				  struct loongson_gpio_chip *lgpio)
->> +{
->> +}
-> 
->> +	if (np)
->> +		of_loongson_gpio_get_props(np, lgpio);
->> +	else if (ACPI_COMPANION(&pdev->dev))
->> +		acpi_loongson_gpio_get_props(pdev, lgpio);
->> +	else
->> +		platform_loongson_gpio_get_props(pdev, lgpio);
-> 
-> The third branch is clearly broken now as it fails to assign
-> anything. Using device_property_read_u32() etc should really
-> work in all three cases, so if you fold the
-> of_loongson_gpio_get_props and acpi_loongson_gpio_get_props
-> functions into one, that will solve the third case as well.
-> 
->> +static const struct of_device_id loongson_gpio_dt_ids[] = {
->> +	{ .compatible = "loongson,ls2k-gpio"},
->> +	{ .compatible = "loongson,ls7a-gpio"},
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(of, loongson_gpio_dt_ids);
->> +
->> +static const struct acpi_device_id loongson_gpio_acpi_match[] = {
->> +	{"LOON0002"},
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(acpi, loongson_gpio_acpi_match);
->> +
->>   static struct platform_driver loongson_gpio_driver = {
->>   	.driver = {
->>   		.name = "loongson-gpio",
->> +		.owner = THIS_MODULE,
->> +		.of_match_table = loongson_gpio_dt_ids,
->> +		.acpi_match_table = ACPI_PTR(loongson_gpio_acpi_match),
->>   	},
-> 
-> The ACPI_PTR() macro here means that you get an "unused variable"
-> warning when the driver is build with CONFIG_ACPI disabled.
-> I think you should just reference the variable directly. If you
-> want to save a few bytes, you can keep the ACPI_PTR() here
-> and enclose the struct definition in #ifdef CONFIG_ACPI.
-> 
->      Arnd
-> 
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.19.266-rc1
+
+Daniel Sneddon <daniel.sneddon@linux.intel.com>
+    x86/speculation: Add RSB VM Exit protections
+
+Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+    x86/bugs: Warn when "ibrs" mitigation is selected on Enhanced IBRS parts
+
+Nathan Chancellor <nathan@kernel.org>
+    x86/speculation: Use DECLARE_PER_CPU for x86_spec_ctrl_current
+
+Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+    x86/speculation: Disable RRSBA behavior
+
+Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+    x86/bugs: Add Cannon lake to RETBleed affected CPU list
+
+Andrew Cooper <andrew.cooper3@citrix.com>
+    x86/cpu/amd: Enumerate BTC_NO
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/common: Stamp out the stepping madness
+
+Josh Poimboeuf <jpoimboe@kernel.org>
+    x86/speculation: Fill RSB on vmexit for IBRS
+
+Josh Poimboeuf <jpoimboe@kernel.org>
+    KVM: VMX: Fix IBRS handling after vmexit
+
+Josh Poimboeuf <jpoimboe@kernel.org>
+    KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
+
+Josh Poimboeuf <jpoimboe@kernel.org>
+    x86/speculation: Remove x86_spec_ctrl_mask
+
+Josh Poimboeuf <jpoimboe@kernel.org>
+    x86/speculation: Use cached host SPEC_CTRL value for guest entry/exit
+
+Josh Poimboeuf <jpoimboe@kernel.org>
+    x86/speculation: Fix SPEC_CTRL write on SMT state change
+
+Josh Poimboeuf <jpoimboe@kernel.org>
+    x86/speculation: Fix firmware entry SPEC_CTRL handling
+
+Josh Poimboeuf <jpoimboe@kernel.org>
+    x86/speculation: Fix RSB filling with CONFIG_RETPOLINE=n
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/speculation: Change FILL_RETURN_BUFFER to work with objtool
+
+Peter Zijlstra <peterz@infradead.org>
+    intel_idle: Disable IBRS during long idle
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/bugs: Report Intel retbleed vulnerability
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/bugs: Split spectre_v2_select_mitigation() and spectre_v2_user_select_mitigation()
+
+Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+    x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/bugs: Optimize SPEC_CTRL MSR writes
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/entry: Add kernel IBRS implementation
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/entry: Remove skip_r11rcx
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
+
+Alexandre Chartre <alexandre.chartre@oracle.com>
+    x86/bugs: Add AMD retbleed= boot parameter
+
+Alexandre Chartre <alexandre.chartre@oracle.com>
+    x86/bugs: Report AMD retbleed vulnerability
+
+Peter Zijlstra <peterz@infradead.org>
+    x86/cpufeatures: Move RETPOLINE flags to word 11
+
+Mark Gross <mgross@linux.intel.com>
+    x86/cpu: Add a steppings field to struct x86_cpu_id
+
+Thomas Gleixner <tglx@linutronix.de>
+    x86/cpu: Add consistent CPU match macros
+
+Thomas Gleixner <tglx@linutronix.de>
+    x86/devicetable: Move x86 specific macro out of generic code
+
+Ingo Molnar <mingo@kernel.org>
+    x86/cpufeature: Fix various quality problems in the <asm/cpu_device_hd.h> header
+
+Kan Liang <kan.liang@linux.intel.com>
+    x86/cpufeature: Add facility to check for min microcode revisions
+
+Suleiman Souhlal <suleiman@google.com>
+    Revert "x86/cpu: Add a steppings field to struct x86_cpu_id"
+
+Suleiman Souhlal <suleiman@google.com>
+    Revert "x86/speculation: Add RSB VM Exit protections"
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/kernel-parameters.txt |  13 +
+ Makefile                                        |   4 +-
+ arch/x86/entry/calling.h                        |  68 ++++-
+ arch/x86/entry/entry_32.S                       |   2 -
+ arch/x86/entry/entry_64.S                       |  34 ++-
+ arch/x86/entry/entry_64_compat.S                |  11 +-
+ arch/x86/include/asm/cpu_device_id.h            | 168 ++++++++++-
+ arch/x86/include/asm/cpufeatures.h              |  18 +-
+ arch/x86/include/asm/intel-family.h             |   6 +
+ arch/x86/include/asm/msr-index.h                |  10 +
+ arch/x86/include/asm/nospec-branch.h            |  53 ++--
+ arch/x86/kernel/cpu/amd.c                       |  21 +-
+ arch/x86/kernel/cpu/bugs.c                      | 368 +++++++++++++++++++-----
+ arch/x86/kernel/cpu/common.c                    |  60 ++--
+ arch/x86/kernel/cpu/match.c                     |  44 ++-
+ arch/x86/kernel/cpu/scattered.c                 |   1 +
+ arch/x86/kernel/process.c                       |   2 +-
+ arch/x86/kvm/svm.c                              |   1 +
+ arch/x86/kvm/vmx.c                              |  53 +++-
+ arch/x86/kvm/x86.c                              |   4 +-
+ drivers/base/cpu.c                              |   8 +
+ drivers/cpufreq/acpi-cpufreq.c                  |   1 +
+ drivers/cpufreq/amd_freq_sensitivity.c          |   1 +
+ drivers/idle/intel_idle.c                       |  43 ++-
+ include/linux/cpu.h                             |   2 +
+ include/linux/kvm_host.h                        |   2 +-
+ include/linux/mod_devicetable.h                 |   4 +-
+ tools/arch/x86/include/asm/cpufeatures.h        |   1 +
+ 28 files changed, 815 insertions(+), 188 deletions(-)
+
 
