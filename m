@@ -2,84 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA15A632F91
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E83632F94
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiKUWIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 17:08:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S229699AbiKUWK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 17:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiKUWIK (ORCPT
+        with ESMTP id S229624AbiKUWKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 17:08:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AA6C4B73;
-        Mon, 21 Nov 2022 14:08:08 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGM2t33nSz4wgv;
-        Tue, 22 Nov 2022 09:08:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669068486;
-        bh=2cbfU9T8uRJY4fIhXEopIzcxfcJGZJINvfcdC9ySs34=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mo4AYP/9YOUQBPoDDsYSy/8CZLZm7k5paJj/i48QizIrS7smDc5LyLTnj29DOhtFQ
-         MA3lI70xdzqLgnkvZT63cemVEp3g30IiDTPo/Cq7lwlg2bdZd+JiNNDM9m4qTA4gyF
-         fjmdACap7VL5WvemRh0xwzx3AbYynFyhsBIq437/WEa3fYoVf0H+DdC7lhUaSxhC7M
-         UVMzys4hbN/nfvPMcOhk3hZmBJUxgxHqAZmSheAhLZCYgEQskLFGF9AAOwjJuNX6jT
-         Sh8/lnZSYfQGkM+P3bnh+/lq6OKsnsfz2TRlTC6FmsymR6SBSMUT8j3JIR68FwjCWu
-         w/FegRvJk+JFg==
-Date:   Tue, 22 Nov 2022 09:08:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the pwm tree
-Message-ID: <20221122090802.66c8597f@canb.auug.org.au>
+        Mon, 21 Nov 2022 17:10:23 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC18BC80D7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 14:10:19 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id l14so3059577wrw.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 14:10:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VRR3RzwlMsl9gUPziLpbyooFq3AsphOP+PSPpJyQx+g=;
+        b=C9GzapMbOacL8zYzDWVRs3+/qYM5T0y9fqflHl2TZzs/cvYUqdRLb41zQHEiWHYCKp
+         h/bCDgG2xspXa6kEY6kohfT9DF1yYbe5d8J7D60CkfnPIqFqo8j2D8belLI8s83k3GsG
+         H+goshF4jxdAZMvznPliyUororU22VOCy8Rsyq52mArVtPE9YjYRVWg0+SB4J1pQf1mO
+         MYR0x9iV8YqUh7wutK2mzsh0TJhRyOzAPV8DSTmN/nd+gftLU56v3p2y0tRYksgsUMsA
+         Kg58RLc1/7R8n5e9SBbpOhrmsUUIDokaaWlFE7xKuPAbL6qWDHNG+d3q+LN4s9BUrTMO
+         pvlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VRR3RzwlMsl9gUPziLpbyooFq3AsphOP+PSPpJyQx+g=;
+        b=1w7rdHyAVNtd7JFwM/eqy/1zQOchA66tVkDhaKzKvMuz2afCbBELvFpAK3UEFafsPx
+         vdUDR/O0UHlpP1Jm+Wmw/F/mE4VNGNNTVp+E4eHexjL+0W9Ht91PLjOccce64yZXL5Zd
+         da4yCFuJRVp0qFVFxL+nH06IUEu3UtRcC3Q2tacVJ4Grj9OTS2eDwMMzdtlaP201JH/Z
+         +fN3Mh5P+vCOgSrdUgg9sjzdOjS46AQJyCArfBxRlFbm2as/y+hWIWEbeY6Isr3rPalM
+         t/N4u4oI6H4K8Tk9AN8Ib5lPVQIzIHXD6d35/h5PNR0pn1US1i8DP6IlYmrSA4YFZFh/
+         j0EQ==
+X-Gm-Message-State: ANoB5pn+YSxFbQe70h/A6T6slzCtmA8xZhOr4ujKuLjquwCjBvWazaJJ
+        jGNWqnI0/IhDrfcmRoWKU3S9EQ==
+X-Google-Smtp-Source: AA0mqf40nJIz/c53JTgd3rI7SoVigsjcW9HIqTgE2EGcTELGqjwqtXv0Caae2rk0B3ZgLA+eM1h+6w==
+X-Received: by 2002:adf:db4e:0:b0:241:c694:f4b9 with SMTP id f14-20020adfdb4e000000b00241c694f4b9mr8276456wrj.552.1669068618184;
+        Mon, 21 Nov 2022 14:10:18 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id n14-20020a05600c3b8e00b003b4c979e6bcsm21983306wms.10.2022.11.21.14.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 14:10:17 -0800 (PST)
+Date:   Tue, 22 Nov 2022 00:10:15 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Bough Chen <haibo.chen@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jesse Taube <mr.bossman075@gmail.com>
+Subject: Re: [PATCH 1/4] clk: imx: imxrt1050: fix IMXRT1050_CLK_LCDIF_APB
+ offsets
+Message-ID: <Y3v3R94KF8/ygnkT@linaro.org>
+References: <20221117181014.851505-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_+fOCkHy5IGQ14fy9o2MhYt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117181014.851505-1-giulio.benetti@benettiengineering.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/_+fOCkHy5IGQ14fy9o2MhYt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 22-11-17 19:10:11, Giulio Benetti wrote:
+> Fix IMXRT1050_CLK_LCDIF_APB offsets.
+> 
+> Fixes: 7154b046d8f3 ("clk: imx: Add initial support for i.MXRT1050 clock driver")
+> Cc: Jesse Taube <mr.bossman075@gmail.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Hi all,
+Applied patches #1 and #2. Thanks.
 
-Commit
+As a suggestion, next time, please send two separate patchsets,
+since there are two different subsystems involved (and the patches #3
+and #4 are not related to #1 and #2).
 
-  dd1f1da4ada5 ("pwm: tegra: Fix 32 bit build")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/_+fOCkHy5IGQ14fy9o2MhYt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN79sIACgkQAVBC80lX
-0GzeOAf/U9UPUcr77BMrp8Cb+YhEeb47XOXRA8oHhU21KRrrIof8/yQj4ubPEfT3
-qTLRMiGyqGzyZO4hONAAoxCPS/k/mYzVI58W4Dz18Xa2iPLZQPyMDM5E1qpRpTK7
-H8epFi1vwqglmgUIltC8lbscjn4D3JwddGkmNKGD4hRN4O6REI8x+GyHGYvl6/HH
-lYjE1pmJCDyHDMUl0sGoqKmx5v+PQGbYb3Z2mtzTYUpsCwakze7OO09ByJQ2/ifN
-sSiL+OqHEiofnS8UtxVrKEIDnZFIauhuCch/xCAMHNpUJjf63rOL9p2tKOR40CaY
-0ixNIt+r0xK/0OQQD1PLuCMRlONzkA==
-=hy6C
------END PGP SIGNATURE-----
-
---Sig_/_+fOCkHy5IGQ14fy9o2MhYt--
+> ---
+> V1->V2:
+> * nothing done
+> V2->V3:
+> * added commit log and not only subject as suggested by Jesse Taube
+> V3->V4:
+> * added Fixes: as suggested by Fabio Estevam
+> ---
+>  drivers/clk/imx/clk-imxrt1050.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imxrt1050.c b/drivers/clk/imx/clk-imxrt1050.c
+> index 9539d35588ee..26108e9f7e67 100644
+> --- a/drivers/clk/imx/clk-imxrt1050.c
+> +++ b/drivers/clk/imx/clk-imxrt1050.c
+> @@ -140,7 +140,7 @@ static int imxrt1050_clocks_probe(struct platform_device *pdev)
+>  	hws[IMXRT1050_CLK_USDHC1] = imx_clk_hw_gate2("usdhc1", "usdhc1_podf", ccm_base + 0x80, 2);
+>  	hws[IMXRT1050_CLK_USDHC2] = imx_clk_hw_gate2("usdhc2", "usdhc2_podf", ccm_base + 0x80, 4);
+>  	hws[IMXRT1050_CLK_LPUART1] = imx_clk_hw_gate2("lpuart1", "lpuart_podf", ccm_base + 0x7c, 24);
+> -	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x74, 10);
+> +	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x70, 28);
+>  	hws[IMXRT1050_CLK_DMA] = imx_clk_hw_gate("dma", "ipg", ccm_base + 0x7C, 6);
+>  	hws[IMXRT1050_CLK_DMA_MUX] = imx_clk_hw_gate("dmamux0", "ipg", ccm_base + 0x7C, 7);
+>  	imx_check_clk_hws(hws, IMXRT1050_CLK_END);
+> -- 
+> 2.34.1
+> 
