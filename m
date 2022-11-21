@@ -2,146 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B8A6330E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D1B6330F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbiKUXqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        id S231909AbiKUXrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:47:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbiKUXqH (ORCPT
+        with ESMTP id S232087AbiKUXqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:46:07 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEA0E0CAE;
-        Mon, 21 Nov 2022 15:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669074253; x=1700610253;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=xC7h8r9pMHIQvZ0KVo0bKZvTmlDvxidFVqPF/Ks1PH8=;
-  b=EUM5zyjsbQ2mHUazVgQmkoO3Ic8LXepuo0AU2YhOpjS3qqrgqe8yCXJ9
-   T9/KxQZhjK0Hkn/c5DXoW0p/ZDEHc1VStUbNl84Ch6eUp7v18VvL6OcmK
-   FcD7bSzLd4kp5uX6KTFtiWwo3/boJ4RXf11k9tSRbkopMfgztuvIuOzw/
-   lkdCiSK1owjxRTteyPtFSstaPgodJYJx32EC3hcGkteb4ZDAS33d6VQYK
-   0TbgHEy493QM348NTAHFupMe1KeCuqtMP1HU7BSX3nnF1FLn0fMNWu+Xp
-   aR9b5V9SImOIvYr9My3JGPuaIjyNlM43+W8a5r/QSUjshgxTmXXsR6bvK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="294077272"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="294077272"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 15:44:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="730193995"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="730193995"
-Received: from han1-mobl4.jf.intel.com (HELO [10.54.74.10]) ([10.54.74.10])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 15:44:13 -0800
-Message-ID: <1398b5489da6884d86245e4a6442575e85bf2d73.camel@linux.intel.com>
-Subject: Re: [PATCH v4] Bluetooth: btintel: Correctly declare all module
- firmware files
-From:   Tedd Ho-Jeong An <tedd.an@linux.intel.com>
-To:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 21 Nov 2022 15:44:05 -0800
-In-Reply-To: <20221121145125.1303097-1-dimitri.ledkov@canonical.com>
-References: <20221121145125.1303097-1-dimitri.ledkov@canonical.com>
-Organization: Intel Corporation
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 21 Nov 2022 18:46:35 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553BEBE29;
+        Mon, 21 Nov 2022 15:46:17 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGPD63NLgz4xGK;
+        Tue, 22 Nov 2022 10:46:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669074376;
+        bh=XCrIiWouwFyuo1bjgZkkWNb0PKGCW2XtNP0H579vNCQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KYX0AS+jsGZuxwdaR9NU7U78tqbDDuDzF5fBMSnssd/B/z2rRaduqXH18RLxK+FCC
+         SNmxLbvtRWTyZmRebzMYBpQcvFhuNGGKhIeiCvQykfYJORB01VSn8iThEGws/jK8cZ
+         MYAz4zHbEO6XlPu4x5etuCf+5OrLnxGQ71PJsTzlzh0f+AletvcyfKHbxXfA0UIhcu
+         OAHy4uekUM6Ifi3g/lzLSOx8Yx0yj6pCJPolcGnF2Z7dA9p5Alpwkib1gnq227tidA
+         9tNK3XiHRWZOtkueH7P8J7vjquZzRSXXZ089QutVvSklz9NPKFaGRPisqOep7P7knz
+         H+QWRr2InHVYA==
+Date:   Tue, 22 Nov 2022 10:46:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Andy Gross <agross@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Colin Cross <ccross@android.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: linux-next: manual merge of the tegra tree with the qcom tree
+Message-ID: <20221122104613.44ee5281@canb.auug.org.au>
+In-Reply-To: <20221114084738.73dff88c@canb.auug.org.au>
+References: <20221114084738.73dff88c@canb.auug.org.au>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/nOu1aXV6GwHDY0pNyKEr6nJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dimitri,
+--Sig_/nOu1aXV6GwHDY0pNyKEr6nJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2022-11-21 at 14:51 +0000, Dimitri John Ledkov wrote:
-> Strictly encode patterns of supported hw_variants of firmware files
-> the kernel driver supports requesting. This now includes many missing
-> and previously undeclared module firmware files for 0x07, 0x08,
-> 0x11-0x14, 0x17-0x1b hw_variants.
+Hi all,
+
+On Mon, 14 Nov 2022 08:47:38 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the tegra tree got a conflict in:
 >=20
-> This especially affects environments that only install firmware files
-> declared and referenced by the kernel modules. In such environments,
-> only the declared firmware files are copied resulting in most Intel
-> Bluetooth devices not working. I.e. host-only dracut-install initrds,
-> or Ubuntu Core kernel snaps.
+>   arch/arm64/configs/defconfig
 >=20
-> BugLink: https://bugs.launchpad.net/bugs/1970819
-> Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-> ---
-> =C2=A0Changes since v3:
-> =C2=A0- Hopefully pacify trailing whitespace from GitLint in this optiona=
-l
-> =C2=A0=C2=A0 portion of the commit.
+> between commit:
 >=20
-> =C2=A0Changes since v2:
-> =C2=A0- encode patterns for 0x17 0x18 0x19 0x1b hw_variants
-> =C2=A0- rebase on top of latest rc tag
+>   c03fa428ac6e ("arm64: defconfig: build-in Qualcomm SC7180 and SM8450 in=
+terconnects")
 >=20
-> =C2=A0Changes since v1:
-> =C2=A0- encode strict patterns of supported firmware files for each of th=
-e
-> =C2=A0=C2=A0 supported hw_variant generations.
+> from the qcom tree and commit:
 >=20
-> =C2=A0drivers/bluetooth/btintel.c | 26 ++++++++++++++++++++++----
-> =C2=A01 file changed, 22 insertions(+), 4 deletions(-)
+>   b4c8adc40f49 ("arm64: defconfig: Enable HTE config")
 >=20
-> diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-> index a657e9a3e96a..55efc4a067db 100644
-> --- a/drivers/bluetooth/btintel.c
-> +++ b/drivers/bluetooth/btintel.c
-> @@ -2656,7 +2656,25 @@ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.or=
-g>");
-> =C2=A0MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSI=
-ON);
-> =C2=A0MODULE_VERSION(VERSION);
-> =C2=A0MODULE_LICENSE("GPL");
-> -MODULE_FIRMWARE("intel/ibt-11-5.sfi");
-> -MODULE_FIRMWARE("intel/ibt-11-5.ddc");
-> -MODULE_FIRMWARE("intel/ibt-12-16.sfi");
-> -MODULE_FIRMWARE("intel/ibt-12-16.ddc");
-> +/* hw_variant 0x07 0x08 */
-> +MODULE_FIRMWARE("intel/ibt-hw-37.7.*-fw-*.*.*.*.*.bseq");
-> +MODULE_FIRMWARE("intel/ibt-hw-37.7.bseq");
-> +MODULE_FIRMWARE("intel/ibt-hw-37.8.*-fw-*.*.*.*.*.bseq");
-> +MODULE_FIRMWARE("intel/ibt-hw-37.8.bseq");
-> +/* hw_variant 0x0b 0x0c */
-> +MODULE_FIRMWARE("intel/ibt-11-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-12-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-11-*.ddc");
-> +MODULE_FIRMWARE("intel/ibt-12-*.ddc");
-> +/* hw_variant 0x11 0x12 0x13 0x14 */
-> +MODULE_FIRMWARE("intel/ibt-17-*-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-18-*-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-19-*-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-20-*-*.sfi");
-> +MODULE_FIRMWARE("intel/ibt-17-*-*.ddc");
-> +MODULE_FIRMWARE("intel/ibt-18-*-*.ddc");
-> +MODULE_FIRMWARE("intel/ibt-19-*-*.ddc");
-> +MODULE_FIRMWARE("intel/ibt-20-*-*.ddc");
+> from the tegra tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc arch/arm64/configs/defconfig
+> index f910ccaaecf9,9ccc82e180c7..000000000000
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@@ -1312,7 -1310,10 +1316,10 @@@ CONFIG_INTERCONNECT_QCOM_SDM845=3D
+>   CONFIG_INTERCONNECT_QCOM_SM8150=3Dm
+>   CONFIG_INTERCONNECT_QCOM_SM8250=3Dm
+>   CONFIG_INTERCONNECT_QCOM_SM8350=3Dm
+>  -CONFIG_INTERCONNECT_QCOM_SM8450=3Dm
+>  +CONFIG_INTERCONNECT_QCOM_SM8450=3Dy
+> + CONFIG_HTE=3Dy
+> + CONFIG_HTE_TEGRA194=3Dy
+> + CONFIG_HTE_TEGRA194_TEST=3Dm
+>   CONFIG_EXT2_FS=3Dy
+>   CONFIG_EXT3_FS=3Dy
+>   CONFIG_EXT4_FS_POSIX_ACL=3Dy
 
-There are firmware files for hw_variant 0x11 and 0x12 in an old format like
-ibt-17-*.sfi, ibt-17-*.ddc, ibt-18-*.sfi, and ibt-18-*.ddc.
+This is now a conflict between the qcom tree and the arm-soc tree.
 
-> +/* hw_variant 0x17 0x18 0x19 0x1b, read and use cnvi/cnvr */
-> +MODULE_FIRMWARE("ibt-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9].sfi");
-> +MODULE_FIRMWARE("ibt-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9].ddc");
+--=20
+Cheers,
+Stephen Rothwell
 
-I believe these are under intel/ folder.
+--Sig_/nOu1aXV6GwHDY0pNyKEr6nJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
-Tedd Ho-Jeong An
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN8DcUACgkQAVBC80lX
+0Gzd8Qf+Mm5nCMENFDRuJd1L8efVJMwaYMBZRUzHxA81pcxWKtmJkwef3DxJ5or2
+L6uRto2ybdZ4XxRfXi0ebl6Ohizzc2bCrvkaTbXgyXc5eRKL6XYl9B2yH9ASrIde
++yvN8UaZxs6SYii8dHFgvUUcrE945PJwpiytwGHNqp9dALkdCAvLTbrBAn4uMtP7
+7yR0+eEkeE9RQ6fs4aub7zTMSjkyxrre6MSYnpdmn1zoOTdO3fSS5f7rjvk1Rc1S
+vllQyuc8kj9LKWRua5ahU4UJpkhguIyu66zTJeKZnIdAXEHLvixmEcJ5P5Hj7w+5
+2XR0Hb2lyP5ybvrxE6GBLTrFeEG2og==
+=bSaG
+-----END PGP SIGNATURE-----
 
+--Sig_/nOu1aXV6GwHDY0pNyKEr6nJ--
