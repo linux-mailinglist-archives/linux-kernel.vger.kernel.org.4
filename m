@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B7E632837
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F91E63282B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbiKUPb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
+        id S232453AbiKUPaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbiKUPbB (ORCPT
+        with ESMTP id S232445AbiKUP3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:31:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC36C75B6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:29:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669044551;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T2AQIYR1dMl7tcFPXuSWHrYCKICqQrp32sBDGQ+vqYc=;
-        b=hsguyOADCjPYtXYhz8VXKp4d071km4QwfLB+QDgiqr+xs0NHT0aCAR8J61gbbMGn2ctKam
-        kHCCAgDSnLqdGgxyrCj3R/lnmTfSRkjgfu4UGcXya6N/woF16RMYGXmQRv98Rb5O97bjxK
-        J/oeZZgmJ4oqALLCWOeApzV7JRYvgjg=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-645-iyNEbyILPYinKGDJP7rJJw-1; Mon, 21 Nov 2022 10:29:10 -0500
-X-MC-Unique: iyNEbyILPYinKGDJP7rJJw-1
-Received: by mail-qt1-f197.google.com with SMTP id bb32-20020a05622a1b2000b003a56991a048so12095556qtb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:29:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T2AQIYR1dMl7tcFPXuSWHrYCKICqQrp32sBDGQ+vqYc=;
-        b=NrR3LqXEggmbqoKcZkn8MyXmpAAQNpcCe44lHmypuGDxvakPjHP/+5UGAr2o1v17SO
-         8zedmdx+/dWcGOpB6rT81IcG3Ac6BhMM4SLkD6hCZxtacHuTe1VjyvfpgwydcoPTFu+3
-         dO7pgFUiO8uAQohf5Xp0rynZifZ1uR2/e/nSwqby6e/sePSGRFv6IqNneavjX+siVVwF
-         EIhyBK6ZWgQGgv2znum0ooWwvxikhnqLLJqXJYV9fcP6WepXamby5VOKULl89g51EyAF
-         HxZju6IhtHxR/00SKPb2eoo+iy+NcTF98gLaQB4O+NBuPxDRmY1aDu6fn8rRWyGcYRfs
-         6Qgw==
-X-Gm-Message-State: ANoB5pkM89weIrmkKfNLuiaf/rQ4pUROMU6z3PdpIN0qLJ1ruGFzHXpp
-        zW1H4LIvNbTzyv+UoeP7oqk0OO7yzJSMJQ5NK9kRr1UHHHd6X6ZOislYQvKp/Xh+tgGjClujqN5
-        ZXJbe99xC2mkKzPaC/bv0A5rK
-X-Received: by 2002:ac8:74c1:0:b0:3a5:5a43:b2da with SMTP id j1-20020ac874c1000000b003a55a43b2damr17864096qtr.592.1669044549879;
-        Mon, 21 Nov 2022 07:29:09 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7jS44Xpnqx2ow2UFBq+ebl9Scja/3o91DZRLhbBnMCxshuhx8vN0fQ4b75UhGyxXYwHlgCLw==
-X-Received: by 2002:ac8:74c1:0:b0:3a5:5a43:b2da with SMTP id j1-20020ac874c1000000b003a55a43b2damr17864064qtr.592.1669044549576;
-        Mon, 21 Nov 2022 07:29:09 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id fd3-20020a05622a4d0300b003a586888a20sm6844287qtb.79.2022.11.21.07.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 07:29:09 -0800 (PST)
-Date:   Mon, 21 Nov 2022 16:28:57 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        kernel <kernel@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: Re: [RFC PATCH v1 3/3] test/vsock: vsock_perf utility
-Message-ID: <20221121152857.u7xf24vly44ov7di@sgarzare-redhat>
-References: <ba294dff-812a-bfc2-a43c-286f99aee0b8@sberdevices.ru>
- <ca655dc0-a827-c4b2-3250-8817c527bfcd@sberdevices.ru>
+        Mon, 21 Nov 2022 10:29:54 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13938DF80;
+        Mon, 21 Nov 2022 07:29:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669044547; x=1700580547;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0ocp0OORCesdWMSJVXSnmGTZ9TeQKI/Q0W1c3l/hfEc=;
+  b=RB44sEk/538mMBQfzjhVtI1ojIeGhQxQ4OQlMuEhOSbNIG6BolrypVxl
+   4Q9AB42NSNFOauk0smPNG1ADTBH6FnCPZ6fBvi5oBTlOWnApOdIr+UWbQ
+   ggfcmwtVD5id1OVsjBUVT93qHjnhqBpZG/MrS7nTetZuusAmj385581q9
+   4QdbMp/LbVjUae5Zgh9b6c41Jiq6LdzEQaqeisEICIPQ+ytER1nMacSj7
+   SYqjOc2cZq9rwjLYMW3YgnZCu5KdyiT3Dvk8+pvOvDzpBIz3Hg75PpKJK
+   Zv2+JMYfc+bsLFRjNhYzVdg5FP2PtIYTbzaNtf046/HCubKkG9YeWzbiy
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="377843943"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="377843943"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 07:29:06 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="730043155"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="730043155"
+Received: from ticela-or-327.amr.corp.intel.com (HELO [10.209.6.63]) ([10.209.6.63])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 07:29:04 -0800
+Message-ID: <6d7fae50-ef3c-dc1e-336c-691095007117@intel.com>
+Date:   Mon, 21 Nov 2022 07:29:04 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ca655dc0-a827-c4b2-3250-8817c527bfcd@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 1/6] x86: KVM: Advertise CMPccXADD CPUID to user space
+Content-Language: en-US
+To:     Jiaxi Chen <jiaxi.chen@linux.intel.com>
+Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        ndesaulniers@google.com, alexandre.belloni@bootlin.com,
+        peterz@infradead.org, jpoimboe@kernel.org,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        babu.moger@amd.com, jmattson@google.com, sandipan.das@amd.com,
+        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        fenghua.yu@intel.com, keescook@chromium.org, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221118141509.489359-1-jiaxi.chen@linux.intel.com>
+ <20221118141509.489359-2-jiaxi.chen@linux.intel.com>
+ <efb55727-f8bd-815c-ddfc-a8432ae5af4e@intel.com>
+ <f04c2e74-87e4-5d50-579a-0a60554b83d3@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <f04c2e74-87e4-5d50-579a-0a60554b83d3@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,457 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:54:05PM +0000, Arseniy Krasnov wrote:
->This adds utility to check vsock receive performance.
+On 11/21/22 06:46, Jiaxi Chen wrote:
+> Features which has been enabled in kernel usually should be added to
+> /proc/cpuinfo.
 
-A small example on how to use it here in the commit message would be 
-nice.
+Features that the kernel *itself* is actually using always get in there.
+ Things like "smep".
 
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/Makefile     |   1 +
+But, things that the kernel "enables" but that only get used by
+userspace don't generally show up in /proc/cpuinfo.
 
-Please, can you also update tools/testing/vsock/README ?
+KVM is kinda a weird case.  The kernel is making the feature available
+to guests, but it's not _using_ it in any meaningful way.  To me, this
+seems much more akin to the features that are just available to
+userspace than something that the kernel is truly using.
 
-> tools/testing/vsock/vsock_perf.c | 386 +++++++++++++++++++++++++++++++
-> 2 files changed, 387 insertions(+)
-> create mode 100644 tools/testing/vsock/vsock_perf.c
->
->diff --git a/tools/testing/vsock/Makefile b/tools/testing/vsock/Makefile
->index f8293c6910c9..d36fdd59fe2e 100644
->--- a/tools/testing/vsock/Makefile
->+++ b/tools/testing/vsock/Makefile
->@@ -3,6 +3,7 @@ all: test
-> test: vsock_test vsock_diag_test
-> vsock_test: vsock_test.o timeout.o control.o util.o
-> vsock_diag_test: vsock_diag_test.o timeout.o control.o util.o
->+vsock_perf: vsock_perf.o
->
-> CFLAGS += -g -O2 -Werror -Wall -I. -I../../include -I../../../usr/include -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -D_GNU_SOURCE
-> .PHONY: all test clean
->diff --git a/tools/testing/vsock/vsock_perf.c b/tools/testing/vsock/vsock_perf.c
->new file mode 100644
->index 000000000000..ca7af08dca46
->--- /dev/null
->+++ b/tools/testing/vsock/vsock_perf.c
->@@ -0,0 +1,386 @@
->+// SPDX-License-Identifier: GPL-2.0-only
->+/*
->+ * vsock_perf - benchmark utility for vsock.
->+ *
->+ * Copyright (C) 2022 SberDevices.
->+ *
->+ * Author: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->+ */
->+#include <getopt.h>
->+#include <stdio.h>
->+#include <stdlib.h>
->+#include <stdbool.h>
->+#include <string.h>
->+#include <errno.h>
->+#include <unistd.h>
->+#include <time.h>
->+#include <sys/mman.h>
->+#include <stdint.h>
->+#include <poll.h>
->+#include <sys/socket.h>
->+#include <linux/vm_sockets.h>
->+
->+#define DEFAULT_BUF_SIZE_BYTES	(128*1024)
->+#define DEFAULT_TO_SEND_BYTES	(64*1024)
->+#define DEFAULT_VSOCK_BUF_BYTES (256*1024)
-
-checkpatch suggests to put spaces around '*' (e.g. 128 * 1024)
-
->+#define DEFAULT_RCVLOWAT_BYTES	1
->+#define DEFAULT_PORT		1234
->+
->+#define BYTES_PER_GB		(1024 * 1024 * 1024ULL)
->+#define NSEC_PER_SEC		(1000000000ULL)
->+
->+static unsigned int port = DEFAULT_PORT;
->+static unsigned long buf_size_bytes = DEFAULT_BUF_SIZE_BYTES;
->+static unsigned long vsock_buf_bytes = DEFAULT_VSOCK_BUF_BYTES;
->+
->+static inline time_t current_nsec(void)
->+{
->+	struct timespec ts;
->+
->+	if (clock_gettime(CLOCK_REALTIME, &ts)) {
->+		perror("clock_gettime");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	return (ts.tv_sec * NSEC_PER_SEC) + ts.tv_nsec;
->+}
->+
->+/* From lib/cmdline.c. */
->+static unsigned long memparse(const char *ptr)
->+{
->+	char *endptr;
->+
->+	unsigned long long ret = strtoull(ptr, &endptr, 0);
->+
->+	switch (*endptr) {
->+	case 'E':
->+	case 'e':
->+		ret <<= 10;
->+	case 'P':
->+	case 'p':
->+		ret <<= 10;
->+	case 'T':
->+	case 't':
->+		ret <<= 10;
->+	case 'G':
->+	case 'g':
->+		ret <<= 10;
->+	case 'M':
->+	case 'm':
->+		ret <<= 10;
->+	case 'K':
->+	case 'k':
->+		ret <<= 10;
->+		endptr++;
->+	default:
->+		break;
->+	}
->+
->+	return ret;
->+}
->+
->+static void vsock_increase_buf_size(int fd)
->+{
->+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_MAX_SIZE,
->+		       &vsock_buf_bytes, sizeof(vsock_buf_bytes))) {
->+		perror("setsockopt");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
->+		       &vsock_buf_bytes, sizeof(vsock_buf_bytes))) {
->+		perror("setsockopt");
->+		exit(EXIT_FAILURE);
->+	}
->+}
->+
->+static int vsock_connect(unsigned int cid, unsigned int port)
->+{
->+	union {
->+		struct sockaddr sa;
->+		struct sockaddr_vm svm;
->+	} addr = {
->+		.svm = {
->+			.svm_family = AF_VSOCK,
->+			.svm_port = port,
->+			.svm_cid = cid,
->+		},
->+	};
->+	int fd;
->+
->+	fd = socket(AF_VSOCK, SOCK_STREAM, 0);
->+
->+	if (fd < 0)
->+		return -1;
->+
->+	vsock_increase_buf_size(fd);
->+
->+	if (connect(fd, &addr.sa, sizeof(addr.svm)) < 0) {
->+		close(fd);
->+		return -1;
->+	}
->+
->+	return fd;
->+}
->+
->+static float get_gbps(unsigned long bytes, time_t ns_delta)
->+{
->+	return ((float)bytes / BYTES_PER_GB) /
->+	       ((float)ns_delta / NSEC_PER_SEC);
->+}
->+
->+static void run_sender(unsigned long to_send_bytes)
->+{
->+	time_t tx_begin_ns;
->+	size_t total_send;
->+	int client_fd;
->+	char *data;
->+	int fd;
->+	union {
->+		struct sockaddr sa;
->+		struct sockaddr_vm svm;
->+	} addr = {
->+		.svm = {
->+			.svm_family = AF_VSOCK,
->+			.svm_port = port,
->+			.svm_cid = VMADDR_CID_ANY,
->+		},
->+	};
->+	union {
->+		struct sockaddr sa;
->+		struct sockaddr_vm svm;
->+	} clientaddr;
->+
->+	socklen_t clientaddr_len = sizeof(clientaddr.svm);
->+
->+	fprintf(stderr, "Run as sender\n");
->+	fprintf(stderr, "Listen port %u\n", port);
->+	fprintf(stderr, "Send %lu bytes\n", to_send_bytes);
->+	fprintf(stderr, "TX buffer %lu bytes\n", buf_size_bytes);
->+	fprintf(stderr, "Peer buffer %lu bytes\n", vsock_buf_bytes);
-
-Why using stderr for this prints?
-
-Also in other places, I think we can use stdout for this kind on prints.
-
->+
->+	fd = socket(AF_VSOCK, SOCK_STREAM, 0);
->+
->+	if (fd < 0) {
->+		perror("socket");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
->+		perror("bind");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (listen(fd, 1) < 0) {
->+		perror("listen");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	client_fd = accept(fd, &clientaddr.sa, &clientaddr_len);
->+
->+	if (client_fd < 0) {
->+		perror("accept");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	vsock_increase_buf_size(client_fd);
->+
->+	data = malloc(buf_size_bytes);
->+
->+	if (!data) {
->+		fprintf(stderr, "malloc failed\n");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	memset(data, 0, buf_size_bytes);
->+	total_send = 0;
->+	tx_begin_ns = current_nsec();
->+
->+	while (total_send < to_send_bytes) {
->+		ssize_t sent;
->+
->+		sent = write(client_fd, data, buf_size_bytes);
->+
->+		if (sent <= 0) {
->+			perror("write");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		total_send += sent;
->+	}
->+
->+	fprintf(stderr, "tx performance: %f Gb/s\n",
->+			get_gbps(total_send, current_nsec() - tx_begin_ns));
-
-checkpatch suggests to align get_gbps with the open parenthesis.
-
->+
->+	close(client_fd);
->+	close(fd);
->+
->+	free(data);
->+}
->+
->+static void run_receiver(int peer_cid, unsigned long rcvlowat_bytes)
->+{
->+	unsigned int read_cnt;
->+	time_t rx_begin_ns;
->+	time_t in_read_ns;
->+	size_t total_recv;
->+	void *data;
->+	int fd;
->+
->+	fprintf(stderr, "Run as receiver\n");
->+	fprintf(stderr, "Connect to %i:%u\n", peer_cid, port);
->+	fprintf(stderr, "RX buffer %lu bytes\n", buf_size_bytes);
->+	fprintf(stderr, "Peer buffer %lu bytes\n", vsock_buf_bytes);
->+	fprintf(stderr, "SO_RCVLOWAT %lu bytes\n", rcvlowat_bytes);
->+
->+	fd = vsock_connect(peer_cid, port);
->+
->+	if (fd < 0) {
->+		perror("socket");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (setsockopt(fd, SOL_SOCKET, SO_RCVLOWAT,
->+		       &rcvlowat_bytes,
->+		       sizeof(rcvlowat_bytes))) {
->+		perror("setsockopt");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	data = mmap(NULL, buf_size_bytes, PROT_READ | PROT_WRITE,
->+		    MAP_ANONYMOUS | MAP_PRIVATE | MAP_POPULATE, -1, 0);
->+
->+	if (data == MAP_FAILED) {
->+		perror("mmap");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	read_cnt = 0;
->+	in_read_ns = 0;
->+	total_recv = 0;
->+	rx_begin_ns = current_nsec();
->+
->+	while (1) {
->+		struct pollfd fds = { 0 };
->+
->+		fds.fd = fd;
->+		fds.events = POLLIN | POLLERR | POLLHUP |
->+			     POLLRDHUP | POLLNVAL;
->+
->+		if (poll(&fds, 1, -1) < 0) {
->+			perror("poll");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		if (fds.revents & POLLERR) {
->+			fprintf(stderr, "'poll()' error\n");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		if (fds.revents & POLLIN) {
->+			ssize_t bytes_read;
->+			time_t t;
->+
->+			t = current_nsec();
->+			bytes_read = read(fd, data, buf_size_bytes);
->+			in_read_ns += (current_nsec() - t);
->+			read_cnt++;
->+
->+			if (!bytes_read)
->+				break;
->+
->+			if (bytes_read < 0) {
->+				perror("recv");
->+				exit(EXIT_FAILURE);
->+			}
->+
->+			total_recv += bytes_read;
->+		}
->+
->+		if (fds.revents & (POLLHUP | POLLRDHUP))
->+			break;
->+	}
->+
->+	fprintf(stderr, "rx performance %f Gb/s\n",
->+			get_gbps(total_recv, current_nsec() - rx_begin_ns));
-
-checkpatch suggests to align get_gbps with the open parenthesis.
-
->+	fprintf(stderr, "total in 'read()' %f sec\n", (float)in_read_ns / NSEC_PER_SEC);
->+	fprintf(stderr, "POLLIN wakeups: %i\n", read_cnt);
->+	fprintf(stderr, "average in 'read()' %f ns\n", (float)in_read_ns / read_cnt);
->+
->+	munmap(data, buf_size_bytes);
->+	close(fd);
->+}
->+
->+static void usage(void)
->+{
->+	fprintf(stderr, "Help:\n"
->+			"\n"
->+			"This is benchmarking utility, to test vsock performance.\n"
->+			"It runs in two modes: sender or receiver. In sender mode, it waits\n"
->+			"connection from receiver, and when established, sender starts data\n"
-
-
-
->+			"transmission. Total size of data to send is set by '-m' option.\n"
->+			"\n"
->+			"Meaning of '-b' depends of sender or receiver mode. In sender\n"
->+			"mode, it is size of buffer, passed to 'write()'. In receiver mode,\n"
->+			"it is size of rx buffer passed to 'read()'.\n"
-
-This part is better to put near -b description.
-
->+			"\n"
->+			"Options:\n"
->+			"  -h				This help message\n"
->+			"  -s				Sender mode(receiver default)\n"
->+			"  -p <port>			Port\n"
->+			"  -c <cid>			CID of the peer\n"
->+			"  -m <bytes to send>		Megabytes to send\n"
->+			"  -b <buffer size>		Depends on sender/receiver mode\n"
->+			"  -v <peer buffer size>	Peer buffer size\n"
->+			"  -r <SO_RCVLOWAT>		SO_RCVLOWAT\n"
-
-Can you print also the default values?
-(e.g. "-p <port>  Port (%d)\n" ..., DEFAULT_PORT)
-
->+			"\n");
->+	exit(EXIT_FAILURE);
->+}
->+
->+int main(int argc, char **argv)
->+{
->+	unsigned long to_send_bytes = DEFAULT_TO_SEND_BYTES;
->+	unsigned long rcvlowat_bytes = DEFAULT_RCVLOWAT_BYTES;
->+	bool receiver_mode = true;
->+	int peer_cid = -1;
->+	int c;
->+
->+	while ((c = getopt(argc, argv, "v:r:c:p:m:b:sh")) != -1) {
->+		switch (c) {
->+		case 'v': /* Peer buffer size. */
->+			vsock_buf_bytes = memparse(optarg);
->+			break;
->+		case 'r': /* SO_RCVLOWAT value. */
->+			rcvlowat_bytes = memparse(optarg);
->+			break;
->+		case 'c': /* CID to connect to. */
->+			peer_cid = atoi(optarg);
-
-Maybe better to use strtol() to check errors.
-
->+			break;
->+		case 'p': /* Port to connect to. */
->+			port = atoi(optarg);
->+			break;
->+		case 'm': /* Bytes to send. */
->+			to_send_bytes = memparse(optarg);
->+			break;
->+		case 'b': /* Size of rx/tx buffer. */
->+			buf_size_bytes = memparse(optarg);
->+			break;
->+		case 's': /* Sender mode. */
->+			receiver_mode = false;
->+			break;
->+		case 'h': /* Help. */
->+			usage();
->+			break;
->+		default:
->+			usage();
->+
-
-checkpatch: Blank lines aren't necessary before a close brace '}
-
->+		}
->+	}
->+
->+	if (receiver_mode)
->+		run_receiver(peer_cid, rcvlowat_bytes);
->+	else
->+		run_sender(to_send_bytes);
->+
->+	return 0;
->+}
->-- 
->2.25.1
-
+Also, these feature names are just long and ugly, and the "flags" line
+is already a human-*un*readable mess.  I think we should just leave them
+out.
