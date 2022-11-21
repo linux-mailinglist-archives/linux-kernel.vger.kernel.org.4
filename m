@@ -2,137 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D049C632DFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183AE632E07
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiKUUch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 15:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S230049AbiKUUf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 15:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiKUUcf (ORCPT
+        with ESMTP id S229509AbiKUUfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:32:35 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A976CF07
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:32:33 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id b131so14951356yba.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:32:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eFlNQB0BzOryXQoC76S+j2lOLcpwit4Btksu9yTgRsY=;
-        b=emDy57bPo48C6Pc8nXPRpN4xXWiUhcEZgwTUEAzj6ewhRp0qN1po2N1NtvVbD8Qkvd
-         bHd6/Atgtf6wdsG+SThtlCsH8Prp8nmBRROWiV9ZyavVu+rlFOkqq/tXI0cGM36scvik
-         DxqxW1dquDCX5xApu/Iz5SOkfTEatLupPlX8zquR1DgsPpVXieh7I6wvAM4itzMUr7Ao
-         M3TWCEWQldxflcqhD85cXsveyqXk9LT30yXQrnAXpxqzHS8UOgmVAU2G0djVMMQ2w1Na
-         ZvYaochVDaU8jQ0lgzSu56NQ/DR2p3FVwHaZdty6ncQO6cu1xip97/dXrFdWSCElGbue
-         t7qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eFlNQB0BzOryXQoC76S+j2lOLcpwit4Btksu9yTgRsY=;
-        b=3qktzznTnjBV3/Je7QgyicEYCpqILp/fySJcgt/uhBodEQMeep4hR0y0/boyDJW7em
-         gPCAl2QoP0a4c/FAOr1KD9fdkTpiOHnNcKXYshZkfgW884VIx3aAI6/T9uRWRhtwCH6W
-         FHlaCrylnnzU56E9MoveEBBkftoQZBQ2XtUJKCaba6XHbO8RUmhyKhpBe/mhHN1zlpgo
-         PRiZlQ5q2HvrJmSm2zRKYozW8pQggulo+130l9lTTCzmAMgICECtohUqJ4r+xhFf2Vax
-         WsPg4WgS1PppY/ORUoOTVu0OCkRnYtr0qZ+PF10W727ncxIw2QLVDYWHa3GKBzGuhFO/
-         nRgQ==
-X-Gm-Message-State: ANoB5pkVNfZ4IkHls4NzEGIeHnyGlf2YdgGz3v9wLXAD3iA/84dYX3vr
-        TbImtZsAtIvrdy7Arzj9y2zyeuZAP9kqfRDb6C3MfA==
-X-Google-Smtp-Source: AA0mqf43553Sp5/0f5wm4G4NUzxC54INgVCrHxuAIlGsoqADaWZq1ZZO5ER4vUkWUnjhdpnBnrhBb94eYMBXExq3h1c=
-X-Received: by 2002:a25:d2cf:0:b0:6cf:e761:43e1 with SMTP id
- j198-20020a25d2cf000000b006cfe76143e1mr19116339ybg.650.1669062752576; Mon, 21
- Nov 2022 12:32:32 -0800 (PST)
+        Mon, 21 Nov 2022 15:35:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FE6D9B80;
+        Mon, 21 Nov 2022 12:35:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D66B761465;
+        Mon, 21 Nov 2022 20:35:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF146C433D6;
+        Mon, 21 Nov 2022 20:35:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669062954;
+        bh=uBI/+z4D892XWJGEL8Mg8igdUbmaBy3ZhQQHzB+U+wM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V4XnPYEyKLy8VWkqcBWKryJpFYf9qd6i+70Mc+f/pbEAJGgLoBi1eHYlPeoH36LbV
+         5lvYcJKHvy83VrB8g53ySbOy7tXlPLjC8bsjv4e7zJphptMpVn2jaBgRhzFVGLNcJY
+         q8Xj0+aJ2CORRaNzfgHPzibuOiyBenTlAN7oIi4tGqvdnzqTLwxnqe07dfupODDASn
+         U//nvOlxxqy2Mpx79G92Rfc2Bk3h3YT1auzWDBX7spGaoAfF6kI0Q/Rypb9AKbZ7z+
+         MCYNFEXJO2pLAgruXgs+wlQX9nalsw09SZS35ONJpPYJ9eO0ki1gSe+MiLDRIXdbuk
+         JmKC0569JAG7w==
+Date:   Mon, 21 Nov 2022 12:35:52 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        netfilter-devel@vger.kernel.org,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] netfilter: nf_flow_table: add missing locking
+Message-ID: <20221121123552.16c00373@kernel.org>
+In-Reply-To: <441bcda3-403f-0bf6-2d6f-d8c9d2ce44d6@nbd.name>
+References: <20221121182615.90843-1-nbd@nbd.name>
+        <3a9c2e94-3c45-5f83-c703-75e1cde13be1@nbd.name>
+        <CANn89iKps9pM=DPn1aWF1SDMqrr=HHkHL8VofVHThUmtqzn=tQ@mail.gmail.com>
+        <441bcda3-403f-0bf6-2d6f-d8c9d2ce44d6@nbd.name>
 MIME-Version: 1.0
-References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
-In-Reply-To: <20221121184743.1123556-2-rmoar@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 21 Nov 2022 12:32:21 -0800
-Message-ID: <CAGS_qxpDUOjQ+4H==ztZxSB1h5UjrN5cTGrMyoxmo0bFPuLixg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, isabbasso@riseup.net,
-        anders.roxell@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:48 AM Rae Moar <rmoar@google.com> wrote:
->
-> Change KUnit test output to better comply with KTAP v1 specifications
-> found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-> 1) Use "KTAP version 1" instead of "TAP version 14" as test output header
-> 2) Remove '-' between test number and test name on test result lines
-> 2) Add KTAP version lines to each subtest header as well
->
-> Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=
-=80=9D line now
-> located after the KTAP version line. This does not completely match the
-> KTAP v1 spec but since it is classified as a diagnostic line, it is not
-> expected to be disruptive or break any existing parsers. This
-> =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
-> (https://testanything.org/tap-version-14-specification.html)
-> and it is used to define the test name before the results.
->
-> Original output:
->
->  TAP version 14
->  1..1
->    # Subtest: kunit-test-suite
->    1..3
->    ok 1 - kunit_test_1
->    ok 2 - kunit_test_2
->    ok 3 - kunit_test_3
->  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
->  # Totals: pass:3 fail:0 skip:0 total:3
->  ok 1 - kunit-test-suite
->
-> New output:
->
->  KTAP version 1
->  1..1
->    KTAP version 1
->    # Subtest: kunit-test-suite
->    1..3
->    ok 1 kunit_test_1
->    ok 2 kunit_test_2
->    ok 3 kunit_test_3
->  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
->  # Totals: pass:3 fail:0 skip:0 total:3
->  ok 1 kunit-test-suite
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
->
-> Changes since v1:
-> https://lore.kernel.org/all/20221104194705.3245738-1-rmoar@google.com/
-> - Switch order of patches to make changes to the parser before making
->   changes to the test output
-> - Change location of the new KTAP version line in subtest header to be
->   before the subtest header line
+On Mon, 21 Nov 2022 21:08:12 +0100 Felix Fietkau wrote:
+> > Could you also add a Fixes: tag ?  
+> 
+> I don't know which commit to use for that tag.
 
-This patch still looks good to me. In fact, it looks better.
-
-I prefer this updated version since this works a bit better with
-debugfs. This way, kunit.py won't just skip over the subtest line when
-looking for the initial KTAP header.
-
-Daniel
+The oldest upstream commit where the problem you're solving 
+can trigger?
