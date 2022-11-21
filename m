@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D683D632BCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 19:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03FD632BDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 19:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiKUSNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 13:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
+        id S230179AbiKUSQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 13:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiKUSNe (ORCPT
+        with ESMTP id S229666AbiKUSQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 13:13:34 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A296148750
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 10:13:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EGCjxibfGRGWcHEcF05lQ7fpC6xBYzkRntZKzSQejyo=; b=k6wd1BkNuQu5gDCU/YOmA55BKW
-        8cEAGeYDEt/U+XNCmqGg3S+z431UMU3rb0Zr371Ffn5nLG/nWcNenBHGnY2ZK+wiWEi9nRzMrFEbM
-        U47XlSiQMyVqpEsBvqoDXer2dRJkLu4aVd7d0GqY80WMa6qADTD2M+yedntl5s6LoyCNOyNfgd/lG
-        7Fq/9IFym4BthrWsiIfdg7cNdSTnWpfOdson5OfGkOrtXMw67ZsdrFf+9lVIRvS1woT72SCoqFLNT
-        Ra9oGVD4gHNgWEa4XHUBBEESKsJOuHREZqURdM15iIJ4u/O0sPmy7oq6iNMYDiyAfypUQaZ7HFkB9
-        Qq5QQ/Cg==;
-Received: from [2a01:799:95e:1700:6395:ccbd:d000:d42b] (port=50424)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oxBIR-00062M-4R; Mon, 21 Nov 2022 19:13:31 +0100
-Message-ID: <de12952f-8346-8995-236d-69dcb70f19f6@tronnes.org>
-Date:   Mon, 21 Nov 2022 19:13:28 +0100
+        Mon, 21 Nov 2022 13:16:15 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F906C0514;
+        Mon, 21 Nov 2022 10:16:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669054575; x=1700590575;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=xX4/g0oio96LX1HY5otdCTZt6qmKzdQZbF++Ebk/k10=;
+  b=M99Ryvqhu+0BlN6oNZ/Zps6K3vdP3mZNFglZBqamyDtAJUqWye2GiQCI
+   3kVkyCGCDbUaj7yPoMZ20zmoND2y5vSlqonMGtDdQTD+mQWUSw6jEDXHF
+   vhxZWxHVKmxk9ZOWgjfYa6rUgX/Dr05cWyJ4Z7dlhm/Auu3mm6XGSCtel
+   rUn0O2wljt1upR7x7VYFqkyK2c/suNFDI7HfS6aOK530wdkm63Dn3YW+m
+   Q+oNegRoUHXRhhpZbedA2YZSkqYA4yj9JvrzbBNBnJHXbubo9Fl2Nv8M0
+   7TLGwHo/l1gBiABJgAvkswRVzKRXrIB62wf0JxP0of1/uK0vErmkEgz8C
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="293337899"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="293337899"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 10:14:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="709905335"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="709905335"
+Received: from ticela-or-327.amr.corp.intel.com (HELO [10.209.6.63]) ([10.209.6.63])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 10:14:28 -0800
+Message-ID: <e5f9529f-955c-fc28-5d46-c77f23a71d04@intel.com>
+Date:   Mon, 21 Nov 2022 10:14:27 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: git send-email friendly smtp provider anyone?
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     dri-devel@lists.freedesktop.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
- <20221121151922.jaal6ym7z2ejju4q@houat>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20221121151922.jaal6ym7z2ejju4q@houat>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [Patch v3 01/14] x86/ioremap: Fix page aligned size calculation
+ in __ioremap_caller()
+Content-Language: en-US
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, luto@kernel.org, peterz@infradead.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
+ <1668624097-14884-2-git-send-email-mikelley@microsoft.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <1668624097-14884-2-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 21.11.2022 16.19, skrev Maxime Ripard:
-> On Mon, Nov 21, 2022 at 12:48:52PM +0100, Noralf Trønnes wrote:
->> A couple of years ago my email provider blocked me from using git
->> send-email with their smtp server. So I switched to the one my ISP
->> provides. Now my ISP have outsourced their email service so the first 3
->> emails gets through and the rest looks like it ends up in a tar pit or
->> something, 18 hours later and 5 of 7 emails have gotten through. I have
->> asked them about this, but I fear the answer will be this is not
->> supported since they now don't have the service in-house anymore. I'm
->> waiting for a reply.
->>
->> Today I tried sendinblue.com since they have a free plan, but they
->> insert <br> in the emails so that didn't work out. They also have some
->> kind of queue, after 1 hour 6 of 7 emails have gotten through.
->>
->> Does anyone have an smtp provider to recommend that works with git
->> send-email and that sends out all the emails at once?
+On 11/16/22 10:41, Michael Kelley wrote:
+> Current code re-calculates the size after aligning the starting and
+> ending physical addresses on a page boundary. But the re-calculation
+> also embeds the masking of high order bits that exceed the size of
+> the physical address space (via PHYSICAL_PAGE_MASK). If the masking
+> removes any high order bits, the size calculation results in a huge
+> value that is likely to immediately fail.
 > 
-> I'm using fastmail and am very happy about it so far.
+> Fix this by re-calculating the page-aligned size first. Then mask any
+> high order bits using PHYSICAL_PAGE_MASK.
 > 
-> Otherwise, you might consider using:
-> https://b4.docs.kernel.org/en/latest/contributor/send.html#authenticating-with-the-web-submission-endpoint
-> 
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-That's an interesting option. I did briefly look at b4 a few months back
-but it looked like it was under heavy development so I figured I'd wait
-before trying it out. I think I'll give b4 a spin to see how it works, I
-wonder how it handles patch changelogs.
+Looks good:
 
-Noralf.
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+
+Although I do agree with Boris that this superficially looks like
+something that's important to backport.  It would be best to either beef
+up the changelog to explain why that's not the case, or to treat this as
+an actual fix and submit separately.
