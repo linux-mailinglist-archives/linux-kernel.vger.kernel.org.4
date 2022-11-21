@@ -2,150 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F54632260
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F12F632261
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiKUMiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S231499AbiKUMiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiKUMiB (ORCPT
+        with ESMTP id S231479AbiKUMiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:38:01 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A580B54F5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:37:58 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id i64-20020a1c3b43000000b003d016c21100so3057904wma.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:37:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OfJ6ReGcbvudqGx5aWnlLmh808mEmKwe4YM900G8GoU=;
-        b=bhLvzu/iY7Mjd1xlH9twYzc2DCTHHIuR6cmeB16W+qrctjI2VgehKZyGjhsb0y/s9Q
-         rb5YPfiHqcjgLHbMXVp1UA7FFBV5n7zmRJIowCr2t4gxPwYHqilNJKTuooB3QAcZFDKk
-         fZPBYxMNpqfIMW4A5i2NiTps5MXN74532w65v0P6trMHqwWrfavqhd07zEWt36odoyfn
-         4ZHkqB9bGKS91KyjTFGnfRiCUkjx9qVv3VGl8kFEL6Oy+w8gJ+FQWT1UgfYoNk4Wjtj3
-         +WY+DtEaJYy5UC5YzyvXglazmcTU9wPC4nUtmeIyCSRMxit9IPjY7hrBVMj9Kwo3Wn3C
-         1kKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OfJ6ReGcbvudqGx5aWnlLmh808mEmKwe4YM900G8GoU=;
-        b=C+2HvcOMLEQ69WUET0Px0UFf2knswV4/KCd6cBIEyfoZjdCzKVARJjq3V2J0VZFBw0
-         /cuNQ4E7k5n9ztzvKjB7jUY4tV/WTinmJHiu8dddXAdGYJoKX7N3NH3XltCjvuJOiURi
-         Vl3C9W0L4MIOlOsmAJfDeaIXluvDJN6jtMz06qW6z+65DhPgVq146vFfd3rQIKU2Tzxf
-         ivNLWqgeicgKZCIJHHCXgsEYijmOiVDQw0P93/WnhHIaYOT9f+j5j1a03K+JOPQgAL6A
-         lM0ta7yxgsW4cufHM9UUkbBd2SDdXMWuAE0pun46E0aznuTQr5WnD45xj2WWWXas42KI
-         mSMQ==
-X-Gm-Message-State: ANoB5pm6px3jeEBjIp5onxLHZarjToPsV+pwyMOa23AJCTwrSFLigQPZ
-        SAm8MBg6U4JdELjFOJXnjHSKjg==
-X-Google-Smtp-Source: AA0mqf5JngN/dT4Kr7SbrPWvWx3miCH34ldho+VQ75xmRL5193rxCxFZa4xfx0c7V+FzhXpY/pFlwQ==
-X-Received: by 2002:a1c:7401:0:b0:3cf:934b:b7ad with SMTP id p1-20020a1c7401000000b003cf934bb7admr1734188wmc.22.1669034276591;
-        Mon, 21 Nov 2022 04:37:56 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id e21-20020a05600c219500b003cf894dbc4fsm13496353wme.25.2022.11.21.04.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 04:37:56 -0800 (PST)
-Date:   Mon, 21 Nov 2022 14:37:54 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 1/2] ufs: host: ufs-qcom: Clear qunipro_g4_sel for HW
- version major 5
-Message-ID: <Y3txIoDn3hFBXt0Y@linaro.org>
-References: <20221116121732.2731448-1-abel.vesa@linaro.org>
- <20221116121732.2731448-2-abel.vesa@linaro.org>
- <57b0669c-3826-dc33-36a4-2d8220da768a@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57b0669c-3826-dc33-36a4-2d8220da768a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 21 Nov 2022 07:38:05 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C35D9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:38:04 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALARnTH010078
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=tKyahOyvv7NJSSQ3I1JSCs/ym0L7h8gpvO2DVKj+SZ0=;
+ b=buhBCLRgjCMzpNBPsoW9CKRccmSUualLAkANAUEMcKcDbIMUKRmvcUiSOpx9/z4odTCK
+ +Cfc1XG31mVZtwntfrHSyZJuMMeXedGMmdJNMdBqFe9AslGrHBi+kld9OXOHD8cD5uuI
+ k975pb3PUUbtt/VP8xxmUz9fuvbhsSManOtpFLb1Cbdvejes3f44HuwnruSJ0hOy2QOs
+ TaRytdXpas713JupWSI03sQwoNqdXyah9dw/xFt6DyvD3tpGOZ88HULTdjTkE2qfpB9a
+ xddk2B/qR220yKsuYjRjCIXNLy0TVBiEp5+PaMpLrv983WwpysBunLVr6lnDYhHhjV6/ Gw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrf5mgur-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:04 +0000
+Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2ALCc37e002007
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:03 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 3kxr7kf9fx-1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:03 +0000
+Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ALCc3Ft001998
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:03 GMT
+Received: from hu-devc-lv-u18-c.qualcomm.com (hu-vtanuku-lv.qualcomm.com [10.47.206.121])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 2ALCc386001993;
+        Mon, 21 Nov 2022 12:38:03 +0000
+Received: by hu-devc-lv-u18-c.qualcomm.com (Postfix, from userid 410733)
+        id 1A2165000A7; Mon, 21 Nov 2022 04:38:03 -0800 (PST)
+From:   Visweswara Tanuku <quic_vtanuku@quicinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     quic_vnivarth@quicinc.com,
+        Visweswara Tanuku <quic_vtanuku@quicinc.com>
+Subject: [PATCH] soc: qcom-geni-se: Update Tx and Rx fifo depth based on QUP HW version
+Date:   Mon, 21 Nov 2022 04:37:58 -0800
+Message-Id: <20221121123758.5052-1-quic_vtanuku@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aRDF680FiBSvSlxiDMWQyLYEq9ZKsdqQ
+X-Proofpoint-ORIG-GUID: aRDF680FiBSvSlxiDMWQyLYEq9ZKsdqQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_13,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=349 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 clxscore=1011
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211210098
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-16 13:28:53, Konrad Dybcio wrote:
-> 
-> 
-> On 16/11/2022 13:17, Abel Vesa wrote:
-> > On SM8550, depending on the Qunipro, we can run with G5 or G4.
-> > For now, when the major version is 5 or above, we go with G5.
-> > Therefore, we need to specifically tell UFS HC that.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >   drivers/ufs/host/ufs-qcom.c | 4 ++++
-> >   drivers/ufs/host/ufs-qcom.h | 2 ++
-> >   2 files changed, 6 insertions(+)
-> > 
-> > diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> > index ca60a5b0292b..72334aefe81c 100644
-> > --- a/drivers/ufs/host/ufs-qcom.c
-> > +++ b/drivers/ufs/host/ufs-qcom.c
-> > @@ -227,6 +227,10 @@ static void ufs_qcom_select_unipro_mode(struct ufs_qcom_host *host)
-> >   	ufshcd_rmwl(host->hba, QUNIPRO_SEL,
-> >   		   ufs_qcom_cap_qunipro(host) ? QUNIPRO_SEL : 0,
-> >   		   REG_UFS_CFG1);
-> > +
-> > +	if (host->hw_ver.major == 0x05)
-> > +		ufshcd_rmwl(host->hba, QUNIPRO_G4_SEL, 0, REG_UFS_CFG0);
-> > +
-> >   	/* make sure above configuration is applied before we return */
-> >   	mb();
-> >   }
-> > diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-> > index 751ded3e3531..10621055bf7f 100644
-> > --- a/drivers/ufs/host/ufs-qcom.h
-> > +++ b/drivers/ufs/host/ufs-qcom.h
-> > @@ -36,6 +36,7 @@ enum {
-> >   	/* On older UFS revisions, this register is called "RETRY_TIMER_REG" */
-> >   	REG_UFS_PARAM0                      = 0xD0,
-> >   	REG_UFS_PA_LINK_STARTUP_TIMER       = 0xD8,
-> > +	REG_UFS_CFG0                        = 0xD8,
-> Are you sure these two should point to the same register? Maybe it deserves
-> some kind of a comment?
+From QUP HW Version 3.10 and above the Tx and Rx
+fifo depth bits are increased to 23:16 bits from
+21:16 bits in SE_HW_PARAM registers accomodating
+256bytes of fifo depth.
 
-The REG_UFS_PA_LINK_STARTUP_TIMER is used by non qunipro variants. (UFS
-versions below 2.x)
+Updated geni_se_get_tx_fifo_depth and
+geni_se_get_rx_fifo_depth to retrieve right fifo
+depth based on QUP HW version.
 
-The REG_UFS_CFG0 is used by qunipro variants. (UFS versions above 2.x).
+Signed-off-by: Visweswara Tanuku <quic_vtanuku@quicinc.com>
+---
+ include/linux/qcom-geni-se.h | 42 ++++++++++++++++++++++++++++++------
+ 1 file changed, 36 insertions(+), 6 deletions(-)
 
-Will add a comment to the later one that would look like this:
-"/* Found on UFS versions above 2.x only */"
+diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+index f5672785c0c4..5ea5351f8818 100644
+--- a/include/linux/qcom-geni-se.h
++++ b/include/linux/qcom-geni-se.h
+@@ -242,12 +242,22 @@ struct geni_se {
+ /* SE_HW_PARAM_0 fields */
+ #define TX_FIFO_WIDTH_MSK		GENMASK(29, 24)
+ #define TX_FIFO_WIDTH_SHFT		24
++/*
++ * For QUP HW Version >= 3.10 Tx fifo depth support is increased
++ * to 256bytes and corresponding bits are 16 to 23
++ */
++#define TX_FIFO_DEPTH_MSK_256_BYTES	GENMASK(23, 16)
+ #define TX_FIFO_DEPTH_MSK		GENMASK(21, 16)
+ #define TX_FIFO_DEPTH_SHFT		16
+ 
+ /* SE_HW_PARAM_1 fields */
+ #define RX_FIFO_WIDTH_MSK		GENMASK(29, 24)
+ #define RX_FIFO_WIDTH_SHFT		24
++/*
++ * For QUP HW Version >= 3.10 Rx fifo depth support is increased
++ * to 256bytes and corresponding bits are 16 to 23
++ */
++#define RX_FIFO_DEPTH_MSK_256_BYTES	GENMASK(23, 16)
+ #define RX_FIFO_DEPTH_MSK		GENMASK(21, 16)
+ #define RX_FIFO_DEPTH_SHFT		16
+ 
+@@ -388,7 +398,8 @@ static inline void geni_se_abort_s_cmd(struct geni_se *se)
+ 
+ /**
+  * geni_se_get_tx_fifo_depth() - Get the TX fifo depth of the serial engine
+- * @se:	Pointer to the concerned serial engine.
++ * based on QUP HW version
++ * @se: Pointer to the concerned serial engine.
+  *
+  * This function is used to get the depth i.e. number of elements in the
+  * TX fifo of the serial engine.
+@@ -397,11 +408,20 @@ static inline void geni_se_abort_s_cmd(struct geni_se *se)
+  */
+ static inline u32 geni_se_get_tx_fifo_depth(struct geni_se *se)
+ {
+-	u32 val;
++	u32 val, hw_version, hw_major, hw_minor, tx_fifo_depth_mask;
++
++	hw_version = geni_se_get_qup_hw_version(se);
++	hw_major = GENI_SE_VERSION_MAJOR(hw_version);
++	hw_minor = GENI_SE_VERSION_MINOR(hw_version);
++
++	if ((hw_major == 3 && hw_minor >= 10) || hw_major > 3)
++		tx_fifo_depth_mask = TX_FIFO_DEPTH_MSK_256_BYTES;
++	else
++		tx_fifo_depth_mask = TX_FIFO_DEPTH_MSK;
+ 
+ 	val = readl_relaxed(se->base + SE_HW_PARAM_0);
+ 
+-	return (val & TX_FIFO_DEPTH_MSK) >> TX_FIFO_DEPTH_SHFT;
++	return (val & tx_fifo_depth_mask) >> TX_FIFO_DEPTH_SHFT;
+ }
+ 
+ /**
+@@ -424,7 +444,8 @@ static inline u32 geni_se_get_tx_fifo_width(struct geni_se *se)
+ 
+ /**
+  * geni_se_get_rx_fifo_depth() - Get the RX fifo depth of the serial engine
+- * @se:	Pointer to the concerned serial engine.
++ * based on QUP HW version
++ * @se: Pointer to the concerned serial engine.
+  *
+  * This function is used to get the depth i.e. number of elements in the
+  * RX fifo of the serial engine.
+@@ -433,11 +454,20 @@ static inline u32 geni_se_get_tx_fifo_width(struct geni_se *se)
+  */
+ static inline u32 geni_se_get_rx_fifo_depth(struct geni_se *se)
+ {
+-	u32 val;
++	u32 val, hw_version, hw_major, hw_minor, rx_fifo_depth_mask;
++
++	hw_version = geni_se_get_qup_hw_version(se);
++	hw_major = GENI_SE_VERSION_MAJOR(hw_version);
++	hw_minor = GENI_SE_VERSION_MINOR(hw_version);
++
++	if ((hw_major == 3 && hw_minor >= 10) || hw_major > 3)
++		rx_fifo_depth_mask = RX_FIFO_DEPTH_MSK_256_BYTES;
++	else
++		rx_fifo_depth_mask = RX_FIFO_DEPTH_MSK;
+ 
+ 	val = readl_relaxed(se->base + SE_HW_PARAM_1);
+ 
+-	return (val & RX_FIFO_DEPTH_MSK) >> RX_FIFO_DEPTH_SHFT;
++	return (val & rx_fifo_depth_mask) >> RX_FIFO_DEPTH_SHFT;
+ }
+ 
+ void geni_se_init(struct geni_se *se, u32 rx_wm, u32 rx_rfr);
+-- 
+2.17.1
 
-Thanks,
-Abel
-
-> 
-> Konrad
-> >   	REG_UFS_CFG1                        = 0xDC,
-> >   	REG_UFS_CFG2                        = 0xE0,
-> >   	REG_UFS_HW_VERSION                  = 0xE4,
-> > @@ -75,6 +76,7 @@ enum {
-> >   /* bit definitions for REG_UFS_CFG1 register */
-> >   #define QUNIPRO_SEL		BIT(0)
-> > +#define QUNIPRO_G4_SEL		BIT(5)
-> >   #define UFS_PHY_SOFT_RESET	BIT(1)
-> >   #define UTP_DBG_RAMS_EN		BIT(17)
-> >   #define TEST_BUS_EN		BIT(18)
