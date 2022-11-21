@@ -2,137 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACF163240A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 018A6632414
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbiKUNlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S229970AbiKUNmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:42:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiKUNkj (ORCPT
+        with ESMTP id S230464AbiKUNl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:40:39 -0500
-Received: from mail-40141.protonmail.ch (mail-40141.protonmail.ch [185.70.40.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52BD256
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:40:38 -0800 (PST)
-Date:   Mon, 21 Nov 2022 13:40:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1669038037; x=1669297237;
-        bh=AhqCCaLvPKm6+EzCNox2qptaiFM8dp9eaZqm0qf77Bk=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=gxiyJOuZfm/DwaSnC5aZFzEao2aHeb2XubnxJxy2gKnyTjlsg4PKPge+9wHrdwQqg
-         11d5/jiT4A7VCv35rjk/29cTfx0HP3mIrUIrx5rXkPq+0wfmHsXLFYv8oCd6McAZaN
-         To4TaDTQFqBUHldRXYNi1liN227W+wUPNaeTCBn1H/4bVagnMhgAAqdKJtHKci0VzP
-         f11ve1w3eFT98r9bOOVYZSLw864iOQ9b3JzgXyv8yeQWJOsW/bRRkDt0ST0swsG3lc
-         HAq6+OlQYsYJMdmLuLBTONQaVKkpN/q+M3vdGpyFj3qvTdEnLA4J2lnXzT2v7rf4y4
-         DzXWgqU1EaVUg==
-To:     linux-kernel@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v4 3/3] arm64: dts: qcom: msm8916-acer-a1-724: Add accelerometer/magnetometer
-Message-ID: <20221121133945.208263-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20221121133732.207820-1-linmengbo0689@protonmail.com>
-References: <20221121133732.207820-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Mon, 21 Nov 2022 08:41:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4FCF598
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:41:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669038064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mstaiqrhDRaNCkxszggzoCeLFwAnlZ3Qbi9NAf/xX+o=;
+        b=P8vwTBb5OI4F7nxgQthYjBRY+l901779Ck2rewtWbxRf9wbHBvp5gdrOS8dzgaC7LazD2D
+        LYhZfjkU4Khtnheu+z7DcgGTXZtlW8Q9rAzHsqjFsJm6RjIAh+xp+IDmSptn62dKbAhwqc
+        ro0gOJQnFPRw8QR7+nyxd36W+Pb5Rqo=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-197-XF89ZpFiPBGR4tCoKsFYmQ-1; Mon, 21 Nov 2022 08:41:03 -0500
+X-MC-Unique: XF89ZpFiPBGR4tCoKsFYmQ-1
+Received: by mail-wr1-f69.google.com with SMTP id i12-20020adfaacc000000b0023cd08e3b56so3235376wrc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:41:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mstaiqrhDRaNCkxszggzoCeLFwAnlZ3Qbi9NAf/xX+o=;
+        b=fMnCP7vYyWlKSOCRUmbgjK49ZWlNO/DDH7STdBVgPAqFsFGRzmuPCcv9UaTLKrLFJR
+         VryD/YiSZbi6ddN8eAa00N/75I+4v+ZbmgTRu0Gu0mZhotOBfnwNbsIqSKystf9NCMB+
+         svdF7qngKlZL5O6dVICsPXqVIsHxnoa/pVD5A5RuEmRuRm6GFZlpGRhFvT+6KiPnw2Rr
+         1aNxmrld7Y5kUlr+ypFPAHKrgaE/FV2UkOaQiQaabR2xQlZCsEy18R8Cb+B4grL36qOw
+         bAKWFXUU7fWJ02Xl6qFzsWYTXRqDepbfZfm/tHLt8RHJV34o3K0PUwU8FEmxCy88xKg6
+         GHXw==
+X-Gm-Message-State: ANoB5pmcY8X8dd02r4EOmSm35Pb4ov4cn8W968aTZfqb+ErO/nmQLkQz
+        jmf4xF6i0u1VpiH5Q93al0NX1MjW6E4Lt7c/K6VqlJzds6c90Klt1GS070mAH1lvRySZO/nUEfA
+        Jfr6DomZfvRCJrGBNtniEN9Rj
+X-Received: by 2002:a1c:29c5:0:b0:3cf:6263:bfc5 with SMTP id p188-20020a1c29c5000000b003cf6263bfc5mr16840734wmp.137.1669038061867;
+        Mon, 21 Nov 2022 05:41:01 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4WV7JN+rssL98oRF8ZCxgUq/vOaL5AFdYaeeGmoGE+5KsLLOZKuzdeHPXfX7wytIhDCmYRdg==
+X-Received: by 2002:a1c:29c5:0:b0:3cf:6263:bfc5 with SMTP id p188-20020a1c29c5000000b003cf6263bfc5mr16840705wmp.137.1669038061537;
+        Mon, 21 Nov 2022 05:41:01 -0800 (PST)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id c20-20020adfa314000000b00241d21d4652sm4469994wrb.21.2022.11.21.05.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 05:41:01 -0800 (PST)
+Message-ID: <5b6f1df705804c78c518371a73b2f9db340a9546.camel@redhat.com>
+Subject: Re: [PATCH 09/13] KVM: SVM: allow NMI window with vNMI
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Babu Moger <babu.moger@amd.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org
+Date:   Mon, 21 Nov 2022 15:40:59 +0200
+In-Reply-To: <Y3Z7sq42Ao/qRn0u@google.com>
+References: <20221117143242.102721-1-mlevitsk@redhat.com>
+         <20221117143242.102721-10-mlevitsk@redhat.com>
+         <Y3Z7sq42Ao/qRn0u@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Iconia Talk S uses a Bosch BMC150 accelerometer/magnetometer combo.
-The chip provides two separate I2C devices for the accelerometer
-and magnetometer that are already supported by the bmc150-accel
-and bmc150-magn driver.
+On Thu, 2022-11-17 at 18:21 +0000, Sean Christopherson wrote:
+> On Thu, Nov 17, 2022, Maxim Levitsky wrote:
+> > When the vNMI is enabled, the only case when the KVM will use an NMI
+> > window is when the vNMI injection is pending.
+> > 
+> > In this case on next IRET/RSM/STGI, the injection has to be complete
+> > and a new NMI can be injected.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/kvm/svm/svm.c | 19 ++++++++++++-------
+> >  1 file changed, 12 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index cfec4c98bb589b..eaa30f8ace518d 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -2477,7 +2477,10 @@ static int iret_interception(struct kvm_vcpu *vcpu)
+> >         struct vcpu_svm *svm = to_svm(vcpu);
+> >  
+> >         ++vcpu->stat.nmi_window_exits;
+> > -       vcpu->arch.hflags |= HF_IRET_MASK;
+> > +
+> > +       if (!is_vnmi_enabled(svm))
+> > +               vcpu->arch.hflags |= HF_IRET_MASK;
+> 
+> Ugh, HF_IRET_MASK is such a terrible name/flag.  Given that it lives with GIF
+> and NMI, one would naturally think that it means "IRET is intercepted", but it
+> really means "KVM just intercepted an IRET and is waiting for NMIs to become
+> unblocked".
+> 
+> And on a related topic, why on earth are GIF, NMI, and IRET tracked in hflags?
+> They are 100% SVM concepts.  IMO, this code would be much easier to follow if
+> by making them bools in vcpu_svm with more descriptive names.
+> 
+> > +
+> >         if (!sev_es_guest(vcpu->kvm)) {
+> >                 svm_clr_intercept(svm, INTERCEPT_IRET);
+> >                 svm->nmi_iret_rip = kvm_rip_read(vcpu);
+> 
+> The vNMI interaction with this logic is confusing, as nmi_iret_rip doesn't need
+> to be captured for the vNMI case.  SEV-ES actually has unrelated reasons for not
+> reading RIP vs. not intercepting IRET, they just got bundled together here for
+> convenience.
+Yes, this can be cleaned up, again I didn't want to change too much of the code.
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../boot/dts/qcom/msm8916-acer-a1-724.dts     | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts b/arch/arm64/=
-boot/dts/qcom/msm8916-acer-a1-724.dts
-index 593051ea92b6..bea0d022dd9a 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-@@ -6,6 +6,7 @@
-=20
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-=20
- /*
-  * NOTE: The original firmware from Acer can only boot 32-bit kernels.
-@@ -51,6 +52,35 @@ usb_id: usb-id {
- =09};
- };
-=20
-+&blsp_i2c2 {
-+=09status =3D "okay";
-+
-+=09accelerometer@10 {
-+=09=09compatible =3D "bosch,bmc150_accel";
-+=09=09reg =3D <0x10>;
-+=09=09interrupt-parent =3D <&msmgpio>;
-+=09=09interrupts =3D <115 IRQ_TYPE_EDGE_RISING>;
-+
-+=09=09vdd-supply =3D <&pm8916_l17>;
-+=09=09vddio-supply =3D <&pm8916_l6>;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&accel_int_default>;
-+
-+=09=09mount-matrix =3D "0", "-1", "0",
-+=09=09=09       "-1", "0", "0",
-+=09=09=09       "0", "0", "1";
-+=09};
-+
-+=09magnetometer@12 {
-+=09=09compatible =3D "bosch,bmc150_magn";
-+=09=09reg =3D <0x12>;
-+
-+=09=09vdd-supply =3D <&pm8916_l17>;
-+=09=09vddio-supply =3D <&pm8916_l6>;
-+=09};
-+};
-+
- &blsp1_uart2 {
- =09status =3D "okay";
- };
-@@ -199,6 +229,14 @@ l18 {
- };
-=20
- &msmgpio {
-+=09accel_int_default: accel-int-default-state {
-+=09=09pins =3D "gpio115";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
-+
- =09gpio_keys_default: gpio-keys-default-state {
- =09=09pins =3D "gpio107";
- =09=09function =3D "gpio";
---=20
-2.30.2
+> 
+> This is also an opportunity to clean up the SEV-ES interaction with IRET interception,
+> which is splattered all over the place and isn't documented anywhere.
+> 
+> E.g. (with an HF_IRET_MASK => awaiting_iret_completion change)
+> 
+> /*
+>  * For SEV-ES guests, KVM must not rely on IRET to detect NMI unblocking as
+>  * #VC->IRET in the guest will result in KVM thinking NMIs are unblocked before
+>  * the guest is ready for a new NMI.  Architecturally, KVM is 100% correct to
+>  * treat NMIs as unblocked on IRET, but the guest-host ABI for SEV-ES guests is
+>  * that KVM must wait for an explicit "NMI Complete" from the guest.
+>  */
+> static void svm_disable_iret_interception(struct vcpu_svm *svm)
+> {
+>         if (!sev_es_guest(svm->vcpu.kvm))
+>                 svm_clr_intercept(svm, INTERCEPT_IRET);
+> }
+> 
+> static void svm_enable_iret_interception(struct vcpu_svm *svm)
+> {
+>         if (!sev_es_guest(svm->vcpu.kvm))
+>                 svm_set_intercept(svm, INTERCEPT_IRET);
+> }
 
+This makes sense, but doesn't have to be done in this patch series IMHO.
+> 
+> static int iret_interception(struct kvm_vcpu *vcpu)
+> {
+>         struct vcpu_svm *svm = to_svm(vcpu);
+> 
+>         ++vcpu->stat.nmi_window_exits;
+> 
+>         /*
+>          * No need to wait for the IRET to complete if vNMIs are enabled as
+>          * hardware will automatically process the pending NMI when NMIs are
+>          * unblocked from the guest's perspective.
+>          */
+>         if (!is_vnmi_enabled(svm)) {
+>                 svm->awaiting_iret_completion = true;
+> 
+>                 /*
+>                  * The guest's RIP is inaccessible for SEV-ES guests, just
+>                  * assume forward progress was made on the next VM-Exit.
+>                  */
+>                 if (!sev_es_guest(vcpu->kvm))
+>                         svm->nmi_iret_rip = kvm_rip_read(vcpu);
+>         }
+> 
+>         svm_disable_iret_interception(svm);
+> 
+>         kvm_make_request(KVM_REQ_EVENT, vcpu);
+>         return 1;
+> }
+
+> > @@ -3735,9 +3738,6 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+> >  {
+> >         struct vcpu_svm *svm = to_svm(vcpu);
+> >  
+> > -       if (is_vnmi_enabled(svm))
+> > -               return;
+> > -
+> >         if ((vcpu->arch.hflags & (HF_NMI_MASK | HF_IRET_MASK)) == HF_NMI_MASK)
+> >                 return; /* IRET will cause a vm exit */
+> 
+> As much as I like incremental patches, in this case I'm having a hell of a time
+> reviewing the code as the vNMI logic ends up being split across four patches.
+> E.g. in this particular case, the above requires knowing that svm_inject_nmi()
+> never sets HF_NMI_MASK when vNMI is enabled.
+> 
+> In the next version, any objection to squashing patches 7-10 into a single "Add
+> non-nested vNMI support" patch?
+
+No objection at all - again since this is not my patch series, I didn't want
+to make too many invasive changes to it.
+
+
+> 
+> As for this code, IMO some pre-work to change the flow would help with the vNMI
+> case.  The GIF=0 logic overrides legacy NMI blocking, and so can be handled first.
+> And I vote to explicitly set INTERCEPT_IRET in the above case instead of relying
+> on INTERCEPT_IRET to already be set by svm_inject_nmi().
+> 
+> That would yield this as a final result:
+> 
+> static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+> {
+>         struct vcpu_svm *svm = to_svm(vcpu);
+> 
+>         /*
+>          * GIF=0 blocks NMIs irrespective of legacy NMI blocking.  No need to
+>          * intercept or single-step IRET if GIF=0, just intercept STGI.
+>          */
+>         if (!gif_set(svm)) {
+>                 if (vgif)
+>                         svm_set_intercept(svm, INTERCEPT_STGI);
+>                 return;
+>         }
+> 
+>         /*
+>          * NMI is blocked, either because an NMI is in service or because KVM
+>          * just injected an NMI.  If KVM is waiting for an intercepted IRET to
+>          * complete, single-step the IRET to wait for NMIs to become unblocked.
+>          * Otherwise, intercept the guest's next IRET.
+>          */
+>         if (svm->awaiting_iret_completion) {
+>                 svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
+>                 svm->nmi_singlestep = true;
+>                 svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+>         } else {
+>                 svm_set_intercept(svm, INTERCEPT_IRET);
+>         }
+> }
+> 
+> >  
+> > @@ -3751,9 +3751,14 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+> >          * Something prevents NMI from been injected. Single step over possible
+> >          * problem (IRET or exception injection or interrupt shadow)
+> >          */
+> > -       svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
+> > -       svm->nmi_singlestep = true;
+> > -       svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+> > +
+> > +       if (is_vnmi_enabled(svm)) {
+> > +               svm_set_intercept(svm, INTERCEPT_IRET);
+> 
+> This will break SEV-ES.  Per commit 4444dfe4050b ("KVM: SVM: Add NMI support for
+> an SEV-ES guest"), the hypervisor must not rely on IRET interception to detect
+> NMI unblocking for SEV-ES guests.  As above, I think we should provide helpers to
+> toggle NMI interception to reduce the probability of breaking SEV-ES.
+Yes, one more reason for the helpers, I didn't notice that I missed that 'if'.
+
+
+> 
+> > +       } else {
+> > +               svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
+> > +               svm->nmi_singlestep = true;
+> > +               svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+> > +       }
+> >  }
+> >  
+> >  static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
+> > -- 
+> > 2.34.3
+> > 
+> 
+Best regards,
+	Maxim Levitsky
 
