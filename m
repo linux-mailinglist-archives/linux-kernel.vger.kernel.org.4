@@ -2,43 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A336D632500
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6921A6324E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiKUOFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:05:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
+        id S231575AbiKUOEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiKUODJ (ORCPT
+        with ESMTP id S231578AbiKUOCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:03:09 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBEA38B6;
-        Mon, 21 Nov 2022 06:02:30 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL8OdTT000720;
-        Mon, 21 Nov 2022 14:02:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=gzKrfexqZKPBpWA56YB1YQ8qQNrE07Z0wCn3d46rYAw=;
- b=nXm25ub/rJZKSmfVqfJFDQi3iyGINBCweSUqAeIMqTSMRsrJnWwv37AQxGqpPtIcuYwP
- ZAVL8Bkn6jCWbrbTt+kDmXKS/zAqe3C7/c+nJ/gf628mbB4Jxvofxfud2cpMiUCpug93
- SOhxUf1ZtSMxd31NiQS1fMiDl7bpUdbgKDnQvVKOZN2JEB3DCG7A5z6j4JRqiEQHqJTO
- 0LniHgyKydwkJcSYy4m1gaj4QT82v+95ekdUy0VpmDZMlRsWcXrn0tOzxjjLk8eeHR8M
- H9dmlTwMMZy8PY4HduT+hVOLfQmUmate0S9Z2TOfsk7vPQx2fisWTajNXkCWs23vCjbY CQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrf5mpv1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 14:02:12 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ALE2Ba4016000
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 14:02:11 GMT
+        Mon, 21 Nov 2022 09:02:17 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360242EF53;
+        Mon, 21 Nov 2022 06:02:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1669039335; x=1700575335;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qy6zLlRt58JzjnAnjZx0E210Sky1kDaCzk1olERIjGA=;
+  b=GtK3PqbbD3BmCUPb550lB/G6QPxm4Da7BWe0G6mllY3emKjUbyrMfD9t
+   yx2jxRk89w0+ebdoFQG3dO7ZSQyFuo/XcbZzGOv3Inl35B7aZSDWpbJP4
+   l510ooPXiKVJGQ1ChGvIQ5m1s+33g0hx7Rv1y+WyMZlaE9ou2veFPS3SW
+   M=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Nov 2022 06:02:14 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 06:02:14 -0800
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 21 Nov 2022 06:02:09 -0800
+ 15.2.986.36; Mon, 21 Nov 2022 06:02:12 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
         Elliot Berman <quic_eberman@quicinc.com>,
@@ -62,9 +57,9 @@ CC:     Trilok Soni <quic_tsoni@quicinc.com>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-acpi@vger.kernel.org>
-Subject: [PATCH v7 16/20] samples: Add sample userspace Gunyah VM Manager
-Date:   Mon, 21 Nov 2022 06:00:05 -0800
-Message-ID: <20221121140009.2353512-17-quic_eberman@quicinc.com>
+Subject: [PATCH v7 17/20] gunyah: rsc_mgr: Add platform ops on mem_lend/mem_reclaim
+Date:   Mon, 21 Nov 2022 06:00:06 -0800
+Message-ID: <20221121140009.2353512-18-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221121140009.2353512-1-quic_eberman@quicinc.com>
 References: <20221121140009.2353512-1-quic_eberman@quicinc.com>
@@ -74,457 +69,200 @@ Content-Type: text/plain
 X-Originating-IP: [10.49.16.6]
 X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 22Ls7JAY2zPRYVjs89E7eBrDPLopD2mn
-X-Proofpoint-ORIG-GUID: 22Ls7JAY2zPRYVjs89E7eBrDPLopD2mn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_13,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210109
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a sample Gunyah VMM capable of launching a non-proxy scheduled VM.
+On Qualcomm platforms, there is a firmware entity which controls access
+to physical pages. In order to share memory with another VM, this entity
+needs to be informed that the guest VM should have access to the memory.
 
+Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- MAINTAINERS                  |   1 +
- samples/Kconfig              |  10 ++
- samples/Makefile             |   1 +
- samples/gunyah/.gitignore    |   2 +
- samples/gunyah/Makefile      |   6 +
- samples/gunyah/gunyah_vmm.c  | 270 +++++++++++++++++++++++++++++++++++
- samples/gunyah/sample_vm.dts |  69 +++++++++
- 7 files changed, 359 insertions(+)
- create mode 100644 samples/gunyah/.gitignore
- create mode 100644 samples/gunyah/Makefile
- create mode 100644 samples/gunyah/gunyah_vmm.c
- create mode 100644 samples/gunyah/sample_vm.dts
+ drivers/virt/gunyah/Kconfig                 |  4 ++
+ drivers/virt/gunyah/Makefile                |  1 +
+ drivers/virt/gunyah/gunyah_platform_hooks.c | 63 +++++++++++++++++++++
+ drivers/virt/gunyah/gunyah_rm_rpc.c         |  7 ++-
+ drivers/virt/gunyah/rsc_mgr.h               |  3 +
+ include/linux/gunyah_rsc_mgr.h              | 14 +++++
+ 6 files changed, 91 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/virt/gunyah/gunyah_platform_hooks.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b65f7ff444e5..e54c28859827 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8949,6 +8949,7 @@ F:	arch/arm64/gunyah/
- F:	drivers/mailbox/gunyah-msgq.c
- F:	drivers/virt/gunyah/
- F:	include/linux/gunyah*.h
-+F:	samples/gunyah/
+diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
+index 5856b7c5157b..41e619128b3d 100644
+--- a/drivers/virt/gunyah/Kconfig
++++ b/drivers/virt/gunyah/Kconfig
+@@ -11,11 +11,15 @@ config GUNYAH
+ 	  Say Y/M here to enable the drivers needed to interact in a Gunyah
+ 	  virtual environment.
  
- HABANALABS PCI DRIVER
- M:	Oded Gabbay <ogabbay@kernel.org>
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 0d81c00289ee..197c8a3610e7 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -263,6 +263,16 @@ config SAMPLE_CORESIGHT_SYSCFG
- 	  This demonstrates how a user may create their own CoreSight
- 	  configurations and easily load them into the system at runtime.
++config GUNYAH_PLATFORM_HOOKS
++	tristate
++
+ if GUNYAH
+ config GUNYAH_RESOURCE_MANAGER
+ 	tristate
+ 	depends on MAILBOX
+ 	select GUNYAH_MESSAGE_QUEUES
++	select GUNYAH_PLATFORM_HOOKS
  
-+config SAMPLE_GUNYAH
-+	bool "Build example Gunyah Virtual Machine Manager"
-+	depends on CC_CAN_LINK && HEADERS_INSTALL
-+	depends on GUNYAH_VM_MANAGER
-+	help
-+	  Build an example Gunyah VMM userspace program capable of launching
-+	  a basic virtual machine under the Gunyah hypervisor.
-+	  This demonstrates how to create a virtual machine under the Gunyah
-+	  hypervisor.
-+
- source "samples/rust/Kconfig"
+ config GUNYAH_VM_MANAGER
+ 	tristate "Gunyah VM Manager"
+diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+index 82fd18d518d1..90d589ce1f44 100644
+--- a/drivers/virt/gunyah/Makefile
++++ b/drivers/virt/gunyah/Makefile
+@@ -1,4 +1,5 @@
+ obj-$(CONFIG_GUNYAH) += gunyah.o
++obj-$(CONFIG_GUNYAH_PLATFORM_HOOKS) += gunyah_platform_hooks.o
  
- endif # SAMPLES
-diff --git a/samples/Makefile b/samples/Makefile
-index 9832ef3f8fcb..2600bd4b82f8 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -36,3 +36,4 @@ obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
- obj-$(CONFIG_SAMPLE_CORESIGHT_SYSCFG)	+= coresight/
- obj-$(CONFIG_SAMPLE_FPROBE)		+= fprobe/
- obj-$(CONFIG_SAMPLES_RUST)		+= rust/
-+obj-$(CONFIG_SAMPLE_GUNYAH)		+= gunyah/
-diff --git a/samples/gunyah/.gitignore b/samples/gunyah/.gitignore
+ obj-$(CONFIG_GUNYAH_RESOURCE_MANAGER) += gunyah_rsc_mgr.o gunyah_rm_rpc.o
+ 
+diff --git a/drivers/virt/gunyah/gunyah_platform_hooks.c b/drivers/virt/gunyah/gunyah_platform_hooks.c
 new file mode 100644
-index 000000000000..adc7d1589fde
+index 000000000000..36cc02c75963
 --- /dev/null
-+++ b/samples/gunyah/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+/gunyah_vmm
-diff --git a/samples/gunyah/Makefile b/samples/gunyah/Makefile
-new file mode 100644
-index 000000000000..faf14f9bb337
---- /dev/null
-+++ b/samples/gunyah/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+userprogs-always-y += gunyah_vmm
-+dtb-y += sample_vm.dtb
-+
-+userccflags += -I usr/include
-diff --git a/samples/gunyah/gunyah_vmm.c b/samples/gunyah/gunyah_vmm.c
-new file mode 100644
-index 000000000000..ec74393c864e
---- /dev/null
-+++ b/samples/gunyah/gunyah_vmm.c
-@@ -0,0 +1,270 @@
++++ b/drivers/virt/gunyah/gunyah_platform_hooks.c
+@@ -0,0 +1,63 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
 +
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include <sys/ioctl.h>
-+#include <getopt.h>
-+#include <limits.h>
-+#include <stdint.h>
-+#include <fcntl.h>
-+#include <string.h>
-+#include <sys/sysmacros.h>
-+#define __USE_GNU
-+#include <sys/mman.h>
++#include <linux/module.h>
++#include <linux/rwsem.h>
++#include <linux/gunyah_rsc_mgr.h>
 +
-+#include <linux/gunyah.h>
++#include "rsc_mgr.h"
 +
-+struct vm_config {
-+	int image_fd;
-+	int dtb_fd;
-+	int ramdisk_fd;
++static struct gunyah_rm_platform_ops *rm_platform_ops;
++static DECLARE_RWSEM(rm_platform_ops_lock);
 +
-+	uint64_t guest_base;
-+	uint64_t guest_size;
-+
-+	uint64_t image_offset;
-+	off_t image_size;
-+	uint64_t dtb_offset;
-+	off_t dtb_size;
-+	uint64_t ramdisk_offset;
-+	off_t ramdisk_size;
-+};
-+
-+static struct option options[] = {
-+	{ "help", no_argument, NULL, 'h' },
-+	{ "image", required_argument, NULL, 'i' },
-+	{ "dtb", required_argument, NULL, 'd' },
-+	{ "ramdisk", optional_argument, NULL, 'r' },
-+	{ "base", optional_argument, NULL, 'B' },
-+	{ "size", optional_argument, NULL, 'S' },
-+	{ "image_offset", optional_argument, NULL, 'I' },
-+	{ "dtb_offset", optional_argument, NULL, 'D' },
-+	{ "ramdisk_offset", optional_argument, NULL, 'R' },
-+	{ }
-+};
-+
-+static void print_help(char *cmd)
++int gh_rm_platform_pre_mem_share(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel)
 +{
-+	printf("gunyah_vmm, a sample tool to launch Gunyah VMs\n"
-+	       "Usage: %s <options>\n"
-+	       "       --help,    -h  this menu\n"
-+	       "       --image,   -i <image> VM image file to load (e.g. a kernel Image) [Required]\n"
-+	       "       --dtb,     -d <dtb>   Devicetree to load [Required]\n"
-+	       "       --ramdisk, -r <ramdisk>  Ramdisk to load\n"
-+	       "       --base,    -B <address>  Set the base address of guest's memory [Default: 0x80000000]\n"
-+	       "       --size,    -S <number>   The number of bytes large to make the guest's memory [Default: 0x6400000 (100 MB)]\n"
-+	       "       --image_offset, -I <number>  Offset into guest memory to load the VM image file [Default: 0x10000]\n"
-+	       "        --dtb_offset,  -D <number>  Offset into guest memory to load the DTB [Default: 0]\n"
-+	       "        --ramdisk_offset, -R <number>  Offset into guest memory to load a ramdisk [Default: 0x4600000]\n"
-+	       , cmd);
-+}
++	int ret = 0;
 +
-+int main(int argc, char **argv)
++	down_read(&rm_platform_ops_lock);
++	if (rm_platform_ops && rm_platform_ops->pre_mem_share)
++		ret = rm_platform_ops->pre_mem_share(rm, mem_parcel);
++	up_read(&rm_platform_ops_lock);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(gh_rm_platform_pre_mem_share);
++
++int gh_rm_platform_post_mem_reclaim(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel)
 +{
-+	int gunyah_fd, vm_fd, guest_fd;
-+	struct gh_userspace_memory_region guest_mem_desc = { 0 };
-+	struct gh_vm_dtb_config dtb_config = { 0 };
-+	char *guest_mem;
-+	struct vm_config config = {
-+		/* Defaults good enough to boot static kernel and a basic ramdisk */
-+		.ramdisk_fd = -1,
-+		.guest_base = 0x80000000,
-+		.guest_size = 104857600, /* 100 MB */
-+		.image_offset = 0,
-+		.dtb_offset = 0x45f0000,
-+		.ramdisk_offset = 0x4600000, /* put at +70MB (30MB for ramdisk) */
-+	};
-+	struct stat st;
-+	int opt, optidx, ret = 0;
-+	long int l;
++	int ret = 0;
 +
-+	while ((opt = getopt_long(argc, argv, "hi:d:r:B:S:I:D:R:c:", options, &optidx)) != -1) {
-+		switch (opt) {
-+		case 'i':
-+			config.image_fd = open(optarg, O_RDONLY | O_CLOEXEC);
-+			if (config.image_fd < 0) {
-+				perror("Failed to open image");
-+				return -1;
-+			}
-+			if (stat(optarg, &st) < 0) {
-+				perror("Failed to stat image");
-+				return -1;
-+			}
-+			config.image_size = st.st_size;
-+			break;
-+		case 'd':
-+			config.dtb_fd = open(optarg, O_RDONLY | O_CLOEXEC);
-+			if (config.dtb_fd < 0) {
-+				perror("Failed to open dtb");
-+				return -1;
-+			}
-+			if (stat(optarg, &st) < 0) {
-+				perror("Failed to stat dtb");
-+				return -1;
-+			}
-+			config.dtb_size = st.st_size;
-+			break;
-+		case 'r':
-+			config.ramdisk_fd = open(optarg, O_RDONLY | O_CLOEXEC);
-+			if (config.ramdisk_fd < 0) {
-+				perror("Failed to open ramdisk");
-+				return -1;
-+			}
-+			if (stat(optarg, &st) < 0) {
-+				perror("Failed to stat ramdisk");
-+				return -1;
-+			}
-+			config.ramdisk_size = st.st_size;
-+			break;
-+		case 'B':
-+			l = strtol(optarg, NULL, 0);
-+			if (l == LONG_MIN) {
-+				perror("Failed to parse base address");
-+				return -1;
-+			}
-+			config.guest_base = l;
-+			break;
-+		case 'S':
-+			l = strtol(optarg, NULL, 0);
-+			if (l == LONG_MIN) {
-+				perror("Failed to parse memory size");
-+				return -1;
-+			}
-+			config.guest_size = l;
-+			break;
-+		case 'I':
-+			l = strtol(optarg, NULL, 0);
-+			if (l == LONG_MIN) {
-+				perror("Failed to parse image offset");
-+				return -1;
-+			}
-+			config.image_offset = l;
-+			break;
-+		case 'D':
-+			l = strtol(optarg, NULL, 0);
-+			if (l == LONG_MIN) {
-+				perror("Failed to parse dtb offset");
-+				return -1;
-+			}
-+			config.dtb_offset = l;
-+			break;
-+		case 'R':
-+			l = strtol(optarg, NULL, 0);
-+			if (l == LONG_MIN) {
-+				perror("Failed to parse ramdisk offset");
-+				return -1;
-+			}
-+			config.ramdisk_offset = l;
-+			break;
-+		case 'h':
-+			print_help(argv[0]);
-+			return 0;
-+		default:
-+			print_help(argv[0]);
-+			return -1;
-+		}
-+	}
-+
-+	if (!config.image_fd || !config.dtb_fd) {
-+		print_help(argv[0]);
-+		return -1;
-+	}
-+
-+	if (config.image_offset + config.image_size > config.guest_size) {
-+		fprintf(stderr, "Image offset and size puts it outside guest memory. Make image smaller or increase guest memory size.\n");
-+		return -1;
-+	}
-+
-+	if (config.dtb_offset + config.dtb_size > config.guest_size) {
-+		fprintf(stderr, "DTB offset and size puts it outside guest memory. Make dtb smaller or increase guest memory size.\n");
-+		return -1;
-+	}
-+
-+	if (config.ramdisk_fd == -1 &&
-+		config.ramdisk_offset + config.ramdisk_size > config.guest_size) {
-+		fprintf(stderr, "Ramdisk offset and size puts it outside guest memory. Make ramdisk smaller or increase guest memory size.\n");
-+		return -1;
-+	}
-+
-+	gunyah_fd = open("/dev/gunyah", O_RDWR | O_CLOEXEC);
-+	if (gunyah_fd < 0) {
-+		perror("Failed to open /dev/gunyah");
-+		return -1;
-+	}
-+
-+	vm_fd = ioctl(gunyah_fd, GH_CREATE_VM, 0);
-+	if (vm_fd < 0) {
-+		perror("Failed to create vm");
-+		return -1;
-+	}
-+
-+	guest_fd = memfd_create("guest_memory", MFD_CLOEXEC);
-+	if (guest_fd < 0) {
-+		perror("Failed to create guest memfd");
-+		return -1;
-+	}
-+
-+	if (ftruncate(guest_fd, config.guest_size) < 0) {
-+		perror("Failed to grow guest memory");
-+		return -1;
-+	}
-+
-+	guest_mem = mmap(NULL, config.guest_size, PROT_READ | PROT_WRITE, MAP_SHARED, guest_fd, 0);
-+	if (guest_mem == MAP_FAILED) {
-+		perror("Not enough memory");
-+		return -1;
-+	}
-+
-+	if (read(config.image_fd, guest_mem + config.image_offset, config.image_size) < 0) {
-+		perror("Failed to read image into guest memory");
-+		return -1;
-+	}
-+
-+	if (read(config.dtb_fd, guest_mem + config.dtb_offset, config.dtb_size) < 0) {
-+		perror("Failed to read dtb into guest memory");
-+		return -1;
-+	}
-+
-+	if (config.ramdisk_fd > 0 &&
-+		read(config.ramdisk_fd, guest_mem + config.ramdisk_offset,
-+			config.ramdisk_size) < 0) {
-+		perror("Failed to read ramdisk into guest memory");
-+		return -1;
-+	}
-+
-+	guest_mem_desc.label = 0;
-+	guest_mem_desc.flags = GH_MEM_ALLOW_READ | GH_MEM_ALLOW_WRITE | GH_MEM_ALLOW_EXEC;
-+	guest_mem_desc.guest_phys_addr = config.guest_base;
-+	guest_mem_desc.memory_size = config.guest_size;
-+	guest_mem_desc.userspace_addr = (__u64)guest_mem;
-+
-+	if (ioctl(vm_fd, GH_VM_SET_USER_MEM_REGION, &guest_mem_desc) < 0) {
-+		perror("Failed to register guest memory with VM");
-+		return -1;
-+	}
-+
-+	dtb_config.gpa = config.guest_base + config.dtb_offset;
-+	dtb_config.size = config.dtb_size;
-+	if (ioctl(vm_fd, GH_VM_SET_DTB_CONFIG, &dtb_config) < 0) {
-+		perror("Failed to set DTB configuration for VM");
-+		return -1;
-+	}
-+
-+	ret = ioctl(vm_fd, GH_VM_START);
-+	if (ret) {
-+		perror("GH_VM_START failed");
-+		return -1;
-+	}
-+
-+	while (1)
-+		sleep(10);
-+
-+	return 0;
++	down_read(&rm_platform_ops_lock);
++	if (rm_platform_ops && rm_platform_ops->post_mem_reclaim)
++		ret = rm_platform_ops->post_mem_reclaim(rm, mem_parcel);
++	up_read(&rm_platform_ops_lock);
++	return ret;
 +}
-diff --git a/samples/gunyah/sample_vm.dts b/samples/gunyah/sample_vm.dts
-new file mode 100644
-index 000000000000..1c410d58c298
---- /dev/null
-+++ b/samples/gunyah/sample_vm.dts
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
++EXPORT_SYMBOL_GPL(gh_rm_platform_post_mem_reclaim);
 +
-+/dts-v1/;
++int gh_rm_register_platform_ops(struct gunyah_rm_platform_ops *platform_ops)
++{
++	int ret = 0;
 +
-+/ {
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+	interrupt-parent = <&intc>;
++	down_write(&rm_platform_ops_lock);
++	if (!rm_platform_ops)
++		rm_platform_ops = platform_ops;
++	else
++		ret = -EEXIST;
++	up_write(&rm_platform_ops_lock);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(gh_rm_register_platform_ops);
 +
-+	chosen {
-+		bootargs = "nokaslr";
-+	};
++void gh_rm_unregister_platform_ops(struct gunyah_rm_platform_ops *platform_ops)
++{
++	down_write(&rm_platform_ops_lock);
++	if (rm_platform_ops == platform_ops)
++		rm_platform_ops = NULL;
++	up_write(&rm_platform_ops_lock);
++}
++EXPORT_SYMBOL_GPL(gh_rm_unregister_platform_ops);
 +
-+	cpus {
-+		#address-cells = <0x2>;
-+		#size-cells = <0>;
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Gunyah Platform Hooks");
+diff --git a/drivers/virt/gunyah/gunyah_rm_rpc.c b/drivers/virt/gunyah/gunyah_rm_rpc.c
+index 544ec8022104..f81c7b55e7d7 100644
+--- a/drivers/virt/gunyah/gunyah_rm_rpc.c
++++ b/drivers/virt/gunyah/gunyah_rm_rpc.c
+@@ -671,6 +671,10 @@ static int gh_rm_mem_lend_common(struct gh_rm_rpc *rm, u32 message_id, struct gh
+ 	if (initial_n_mem_entries > GH_RM_MAX_MEM_ENTRIES)
+ 		initial_n_mem_entries = GH_RM_MAX_MEM_ENTRIES;
+ 
++	ret = gh_rm_platform_pre_mem_share(rm, p);
++	if (ret)
++		return ret;
 +
-+		cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,armv8";
-+			reg = <0 0>;
-+		};
-+	};
+ 	/* The format of the message goes:
+ 	 * request header
+ 	 * ACL entries (which VMs get what kind of access to this memory parcel)
+@@ -714,6 +718,7 @@ static int gh_rm_mem_lend_common(struct gh_rm_rpc *rm, u32 message_id, struct gh
+ 
+ 	if (resp_size != sizeof(u32)) {
+ 		ret = -EIO;
++		gh_rm_platform_post_mem_reclaim(rm, p);
+ 		goto out;
+ 	}
+ 
+@@ -783,7 +788,7 @@ int gh_rm_mem_reclaim(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *parcel)
+ 		return ret;
+ 	kfree(resp);
+ 
+-	return ret;
++	return gh_rm_platform_post_mem_reclaim(rm, parcel);
+ }
+ EXPORT_SYMBOL_GPL(gh_rm_mem_reclaim);
+ 
+diff --git a/drivers/virt/gunyah/rsc_mgr.h b/drivers/virt/gunyah/rsc_mgr.h
+index 4712405a3486..3a7f171a7416 100644
+--- a/drivers/virt/gunyah/rsc_mgr.h
++++ b/drivers/virt/gunyah/rsc_mgr.h
+@@ -34,6 +34,9 @@ struct platform_device;
+ struct gh_rm_rpc *gh_rm_rpc_init(struct platform_device *pdev);
+ void gh_rm_rpc_remove(struct gh_rm_rpc *rm);
+ 
++int gh_rm_platform_pre_mem_share(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel);
++int gh_rm_platform_post_mem_reclaim(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel);
 +
-+	intc: interrupt-controller@3FFF0000 {
-+		compatible = "arm,gic-v3";
-+		#interrupt-cells = <3>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		interrupt-controller;
-+		reg = <0 0x3FFF0000 0 0x10000>,
-+		      <0 0x3FFD0000 0 0x20000>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		always-on;
-+		interrupts = <1 13 0x108>,
-+			     <1 14 0x108>,
-+			     <1 11 0x108>,
-+			     <1 10 0x108>;
-+		clock-frequency = <19200000>;
-+	};
-+
-+	gunyah-vm-config {
-+		image-name = "linux_vm_0";
-+		os-type = "linux";
-+
-+		memory {
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+
-+			base-address = <0 0x80000000>;
-+		};
-+
-+		interrupts {
-+			config = <&intc>;
-+		};
-+
-+		vcpus {
-+			affinity-map = < 0 >;
-+			sched-priority = < (-1) >;
-+			sched-timeslice = < 2000 >;
-+		};
-+	};
+ /* Message IDs: Memory Management */
+ #define GH_RM_RPC_MEM_LEND			0x51000012
+ #define GH_RM_RPC_MEM_SHARE			0x51000013
+diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
+index c0f5c04c64dc..7cdb736f7054 100644
+--- a/include/linux/gunyah_rsc_mgr.h
++++ b/include/linux/gunyah_rsc_mgr.h
+@@ -120,4 +120,18 @@ int gh_rm_get_vmid(struct gh_rm_rpc *rm, u16 *vmid);
+ #define GH_RM_BOOT_CONTEXT_REG_SET_SP_ELx	2
+ int gh_rm_set_boot_context(struct gh_rm_rpc *rm, u16 vmid, u8 reg_set, u8 reg_idx, u64 value);
+ 
++struct gunyah_rm_platform_ops {
++	int (*pre_mem_share)(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel);
++	int (*post_mem_reclaim)(struct gh_rm_rpc *rm, struct gh_rm_mem_parcel *mem_parcel);
 +};
++
++#if IS_ENABLED(CONFIG_GUNYAH)
++int gh_rm_register_platform_ops(struct gunyah_rm_platform_ops *platform_ops);
++void gh_rm_unregister_platform_ops(struct gunyah_rm_platform_ops *platform_ops);
++#else
++static inline int gh_rm_register_platform_ops(struct gunyah_rm_platform_ops *platform_ops)
++	{ return 0; }
++static inline void gh_rm_unregister_platform_ops(struct gunyah_rm_platform_ops *platform_ops) { }
++#endif
++
+ #endif
 -- 
 2.25.1
 
