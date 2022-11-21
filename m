@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FF5632E9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05382632EA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiKUVRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 16:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S231463AbiKUVS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 16:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiKUVRJ (ORCPT
+        with ESMTP id S231324AbiKUVST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:17:09 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBF24C250;
-        Mon, 21 Nov 2022 13:17:05 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id f27so31523922eje.1;
-        Mon, 21 Nov 2022 13:17:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J4M9TI7AR4OgJadp3C58zz3rlNRRRueDQ1CdlwASDX4=;
-        b=pWh+ByunsuuktyLY7ubAZRWiVS0Hmwa/4eNNcAewLWhbjCEpyLjSU4cJgG9beTu4Bh
-         Rex9Zdd/mczmBS+XiFAWcoO4T6uhX5q+m2uBeQJ2+mt9WQ8Ir57pfQsx3ttsqbOwfZsE
-         oh8Rvbp53gAmanHTUlbbnKaLRVH6Knh+gMCqxaqAzEGGQHr10yrMxpgRkCxe3UBmaqAZ
-         l6zQM4aahvLmqZk5E4nfSZBS7F2TYiI4pZcElyrqsahdUlXyIU3Rg7KYYvuGjytSnTSQ
-         YBltiE5oEn9X3u0R5RDkbO84Tqu0TlHgpR8FmnTp5xKrp3+WZMDXIOrW0VpS2fp7Drq+
-         tJZQ==
+        Mon, 21 Nov 2022 16:18:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7230A67124
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 13:17:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669065435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m1VEqd8Y4SFqXLnlYYQALR4+fdttqcWq0/uqwM6HTCA=;
+        b=Mo+hi9OTVXETTvfPfuaYqSztVD3XHHdg6Ubgg5Q0oSMBt7HNh6wh0CCd1MudE9PN9OsXJT
+        X5NgDVpHcfk2vJmmH19np8u3oESih1tC49IcDcjTni8JXG7OfJ/Ye8Xmll1Fkydeo1GntN
+        8nhNWWMB3DPNtRmvV8icCKFpEKCz9ag=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-462-1FKHJ-A7M1GdVT4ojtINMA-1; Mon, 21 Nov 2022 16:17:14 -0500
+X-MC-Unique: 1FKHJ-A7M1GdVT4ojtINMA-1
+Received: by mail-qk1-f200.google.com with SMTP id x2-20020a05620a448200b006fa7dad5c1cso16915641qkp.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 13:17:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J4M9TI7AR4OgJadp3C58zz3rlNRRRueDQ1CdlwASDX4=;
-        b=rM5/36BCuEaK6sGi4ySlFkxxO/BRFYoLlcboLQ1aSV2tnPx52n2bE5dMS4ppxdhNsx
-         y7hBdMeV+89IwB046OAh7UdLuIC7PrPkGIGWIEnr6Dm9HcH3HsIbsK9JLc0U4DH8z+jF
-         CwM09UN2wmfhxqrkUhvIGyEtfk4BnC5eVnwd010+oZeVEkCbDdbOWHy78XaUYjZYzeIx
-         BTYnJFaU6HCHf6yaju7XHX+lKPo7kZW+/Wxw8H1TdSJ+V/aeZhpW4aMZn2g5uDHij6EA
-         wp569Be16JyoI4wp3/IIe586rnKhHoAdfR6CRXkPmqWpE3cFUPD2XzZcdrzM/hhzuR8+
-         OESQ==
-X-Gm-Message-State: ANoB5pmAU2Ul/mH46WMZ72hBgbUqfQD8bB0flDL/gdjrhQAVG82uiT4C
-        Fa/JtuhZzVAWQ6yAcyr7z8k=
-X-Google-Smtp-Source: AA0mqf6mAmmSnfS9SnWiU7N+ovuVP+3zzQarOCYDy/t20leR1UbHF1fOPtzC9gqkusg2YF4mv8MwHQ==
-X-Received: by 2002:a17:906:edce:b0:7ad:dd43:5d18 with SMTP id sb14-20020a170906edce00b007addd435d18mr1048608ejb.389.1669065423932;
-        Mon, 21 Nov 2022 13:17:03 -0800 (PST)
-Received: from skbuf ([188.26.57.184])
-        by smtp.gmail.com with ESMTPSA id fi13-20020a056402550d00b004580862ffdbsm5610901edb.59.2022.11.21.13.17.02
+        bh=m1VEqd8Y4SFqXLnlYYQALR4+fdttqcWq0/uqwM6HTCA=;
+        b=Xm2bF2n1U9x/xg61llefq1jz2jDpVy/gjK62692h7R88p+yTlEhM7QcNgMQLRo949d
+         27GgYUM/9UmXQiVudAr4bgVZqU6ljCohXVwiQQEMps3l3pY8bEam3BknbHlMwWe+zKJH
+         /J4eeSJoNXmstRoMNq5s2JRoIonjWe0CtlgzoRqzrT+eOv4gjYtWpXg9Xgr1o3vTxBzC
+         W8mi+H7rFsPlgCN/BYSFsvH8/c4kNvNZDSWGfQsqMs4Oq5Beaaf3mbt1qMVY4oFKntEm
+         PEYhJR1aPeOFpjhrWU9dB6ADzPd6wM8BkVhxZlIJandXiyiYO7X4/eXO3w3UtdoQbx82
+         2/HQ==
+X-Gm-Message-State: ANoB5pnOnTeJxVXM/EnWtjdxRg7iMpX7fQgBfeykcrwdwMfOjX9eMTea
+        LOj3Lt9ZXuOvZd6vdUbszIsZsY6dDUMNt2JxWdMZARcg/esWT/bA8/R6rjwcEuCXkuoZQRVc7lk
+        CXR73fKNhJLVtnzjxdVNNvbCT
+X-Received: by 2002:a05:620a:a03:b0:6fa:3f27:c1e5 with SMTP id i3-20020a05620a0a0300b006fa3f27c1e5mr17534571qka.447.1669065433512;
+        Mon, 21 Nov 2022 13:17:13 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6Z8fvyFzBAqWZMgsrv+dhtNnpC0JlC8ob+XIiAqveoOcQx2bjR42VDsoMPeI/zF9aAo4Bj3A==
+X-Received: by 2002:a05:620a:a03:b0:6fa:3f27:c1e5 with SMTP id i3-20020a05620a0a0300b006fa3f27c1e5mr17534553qka.447.1669065433252;
+        Mon, 21 Nov 2022 13:17:13 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id i9-20020ac813c9000000b003a4c3c4d2d4sm7242891qtj.49.2022.11.21.13.17.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 13:17:03 -0800 (PST)
-Date:   Mon, 21 Nov 2022 23:17:00 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com
-Subject: Re: [RFC Patch net-next v2 0/8] net: dsa: microchip: add PTP support
- for KSZ9x and LAN937x
-Message-ID: <20221121211700.egmoxcav55axeylb@skbuf>
-References: <20221121154150.9573-1-arun.ramadoss@microchip.com>
+        Mon, 21 Nov 2022 13:17:12 -0800 (PST)
+Date:   Mon, 21 Nov 2022 16:17:11 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 1/3] mm/mprotect: Fix soft-dirty check in
+ can_change_pte_writable()
+Message-ID: <Y3vq18eTOE0e7I1+@x1n>
+References: <20220725142048.30450-1-peterx@redhat.com>
+ <20220725142048.30450-2-peterx@redhat.com>
+ <b75653b8-5264-ca03-bf5c-671e07e7fdd8@collabora.com>
+ <Y3gRy8pUiYWFGqcI@x1n>
+ <a9984aa6-41bc-17c3-b564-87b997c0f2d0@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221121154150.9573-1-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <a9984aa6-41bc-17c3-b564-87b997c0f2d0@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,39 +85,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arun,
+On Mon, Nov 21, 2022 at 07:57:05PM +0500, Muhammad Usama Anjum wrote:
+> Hi Peter,
+> 
+> Thank you so much for replying.
+> 
+> On 11/19/22 4:14 AM, Peter Xu wrote:
+> > On Sat, Nov 19, 2022 at 01:16:26AM +0500, Muhammad Usama Anjum wrote:
+> >> Hi Peter and David,
+> > 
+> > Hi, Muhammad,
+> > 
+> >>
+> >> On 7/25/22 7:20 PM, Peter Xu wrote:
+> >>> The check wanted to make sure when soft-dirty tracking is enabled we won't
+> >>> grant write bit by accident, as a page fault is needed for dirty tracking.
+> >>> The intention is correct but we didn't check it right because VM_SOFTDIRTY
+> >>> set actually means soft-dirty tracking disabled.  Fix it.
+> >> [...]
+> >>> +static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
+> >>> +{
+> >>> +	/*
+> >>> +	 * NOTE: we must check this before VM_SOFTDIRTY on soft-dirty
+> >>> +	 * enablements, because when without soft-dirty being compiled in,
+> >>> +	 * VM_SOFTDIRTY is defined as 0x0, then !(vm_flags & VM_SOFTDIRTY)
+> >>> +	 * will be constantly true.
+> >>> +	 */
+> >>> +	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+> >>> +		return false;
+> >>> +
+> >>> +	/*
+> >>> +	 * Soft-dirty is kind of special: its tracking is enabled when the
+> >>> +	 * vma flags not set.
+> >>> +	 */
+> >>> +	return !(vma->vm_flags & VM_SOFTDIRTY);
+> >>> +}
+> >> I'm sorry. I'm unable to understand the inversion here.
+> >>> its tracking is enabled when the vma flags not set.
+> >> VM_SOFTDIRTY is set on the VMA when new VMA is allocated to mark is
+> >> soft-dirty. When we write to clear_refs to clear soft-dirty bit,
+> >> VM_SOFTDIRTY is cleared from the VMA as well. Then why do you say tracking
+> >> is enabled when the vma flags not set?
+> > 
+> > Because only when 4>clear_refs happens would VM_SOFTDIRTY be cleared, and
+> > only until then the real tracking starts (by removing write bits on ptes).
+> But even if the VM_SOFTDIRTY is set on the VMA, the individual pages are
+> still marked soft-dirty. Both are independent.
+> 
+> It means tracking is enabled all the time in individual pages.
 
-On Mon, Nov 21, 2022 at 09:11:42PM +0530, Arun Ramadoss wrote:
-> The LAN937x switch has capable for supporting IEEE 1588 PTP protocol. This
-> patch series add PTP support and tested using the ptp4l application.
-> LAN937x has the same PTP register set similar to KSZ9563, hence the
-> implementation has been made common for the ksz switches.
-> KSZ9563 does not support two step timestamping but LAN937x supports both.
-> Tested the 1step & 2step p2p timestamping in LAN937x and p2p1step
-> timestamping in KSZ9563.
+IMHO it depends on how we define "tracking enabled" - before clear_refs
+even if no pages written they'll also be reported as dirty, then the
+information is useless.
 
-A process-related pattern I noticed in your patches. The Author: is in
-general the same as the first Signed-off-by:. I don't know of cases
-where that's not true.
+> Only the soft-dirty bit status in individual page isn't significant if
+> VM_SOFTDIRTY already is set. Right?
 
-There can be more subsequent Signed-off-by: tags, and those are people
-through the hands of whom those patches have passed, and who might have
-made changes to them.
+Yes.  But I'd say it makes more sense to say "tracking enabled" if we
+really started tracking (by removing the write bits in ptes, otherwise we
+did nothing).  When vma created we didn't track anything.
 
-When you use Christian's patches (verbatim or with non-radical rework,
-like fixes here and there, styling rework, commit message rewrite),
-you need Christian to appear in the Author: and first Signed-off-by:
-field, and you in the second. When patches are more or less a complete
-rework (such that it no longer resembles Christian's original intentions
-and it would be misleading to put his sign off on something which he did
-not write), you can put yourself as author and first sign off, and use
-Co-developed-by: + Signed-off-by for Christian's work (the sign off
-still seems to be required for some reason). You need to use your
-judgement here, you can't always put your name on others' work.
-You can also say "based on a previous patch posted on the mailing lists
-which was heavily reworked" and provide a Link: tag with a
-lore.kernel.org or patchwork.kernel.org link. Under the "---" sign in
-the patch you can also clarify the changes you've made, if you decide to
-keep Christian's authorship but make significant but not radical changes.
-These annotations will always be visible in patchwork even if not in
-git. At least that's what I would do.
+I don't know the rational of why soft-dirty was defined like that.  I think
+it's somehow related to the fact that we allow false positive dirty pages
+not false negative.  IOW, it's a bug to leak a page being dirtied, but not
+vice versa if we report clean page dirty.
+
+-- 
+Peter Xu
+
