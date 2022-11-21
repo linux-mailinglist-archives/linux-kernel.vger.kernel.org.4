@@ -2,65 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76A263298C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD27F632988
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiKUQcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:32:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        id S229840AbiKUQci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiKUQcj (ORCPT
+        with ESMTP id S229491AbiKUQcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:32:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AA8D08B5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:31:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669048301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AdoRsC2dtNKs1Qa8jpBYbsBqJbZoSu/Gw2tBgqjEFcQ=;
-        b=gejdvw/yc2e2d6VW+KRugPC+ETYcthT7GpQT/LbjfGlb3k7XDHcKYzotPI49kfTzYvkgoq
-        KsJkqOMHuzsVqj/m5BpzikrywTCWqkLV7Wu+KRvyF4FE2rM6Y5HERZjQV0CsmAXcA46Qfd
-        0EMtFaCRPhSHtELRBBeSRW4+1Y4c4vM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-ERsPdNVHOZCRqS8BWISmQQ-1; Mon, 21 Nov 2022 11:31:39 -0500
-X-MC-Unique: ERsPdNVHOZCRqS8BWISmQQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E2E4788646E;
-        Mon, 21 Nov 2022 16:31:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 456FE17582;
-        Mon, 21 Nov 2022 16:31:37 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-To:     torvalds@linux-foundation.org
-cc:     dhowells@redhat.com, zhangpeng362@huawei.com,
-        asmadeus@codewreck.org,
-        syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com,
-        Jeff Layton <jlayton@kernel.org>, ericvh@gmail.com,
-        lucho@ionkov.net, jefflexu@linux.alibaba.com,
-        linux-cachefs@redhat.com, linux_oss@crudebyte.com,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fscache: fix OOB Read in __fscache_acquire_volume
+        Mon, 21 Nov 2022 11:32:24 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57886C6D00;
+        Mon, 21 Nov 2022 08:32:24 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALGMgoF022907;
+        Mon, 21 Nov 2022 16:32:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ from : subject : to : cc : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=LegyJzcNBdkvEkyIqXtPcDubKxu9jz1nfJSXrOlLjCs=;
+ b=F11gbAjTC8ppmzpgq+fStUfYpkRp4zSByOnPQwFlwPs55l9IibF7wdleM7FKS4ShrJ7C
+ TMvMFlsF8+wNBSK0lZJrT4gNXUjcUHFDsHbkHXCUWzjxkWXwSigMOBsvcD4R7xUpNSp6
+ jNyUtuWXxseWJR3+9jFdsPwRO2MFiPMA3FmwNAJbgGSX9wBbDUBq4SdJ/UdXo32Y6/m3
+ jb7/gBMXgN15c+tINzw0EYi0i7qsD8x+tHJmdqjU69qLVTfbPtMxosQIbOKpOAwhpe9T
+ biKTR49ADrEb9S+SYvki34VHyR9B3OCMxwhTGvAAhnTmUwjzhYUJ8g0+ZWhEOTTok192 Pw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m0ct1g14r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Nov 2022 16:32:12 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ALFfkUj008246;
+        Mon, 21 Nov 2022 16:32:12 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kxnk3euxj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Nov 2022 16:32:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a7wq57HuGI7vKRU/qejk2D6KnzY/NSVciS+0BLKHXQXfc8AgqiUblM3vAyl2bdOAGImr0OpYTJl6naWwuPXyDeKjomKAvUJUV9VBU2jAARs29cbeo+jh1e+tIoA8fF6e2nPhJ7CdbsSdr46LVf4+UQwPgzA08MdQCgrJ0Y8MhzIGopQ0FgVPg57CdLYno42OLtWdVnZ57Zbm4oyvC486gNBUhd1OlGfmOU0eB+8wArsGbg1x0W2z0hkhHEGaoDXdTEtAkijD5CoK3JtTzTvXv/+D2YsDcdQQipc8mIGKpEf5wzEsiEzuqACiGvsypvfHoHZ0TSCPNXQMhFxFHzmBOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LegyJzcNBdkvEkyIqXtPcDubKxu9jz1nfJSXrOlLjCs=;
+ b=lCyOn/B3DM93P6PtI9n/oNtHS7oLttxSBQEPDr125UDPXIUehx2qg48AeMhrEJwPVuePThkycDe0zPen/75yn/FlqUrIL0vtsigNZ4f0pROrKPEqV4+KWnVq9DyKSK6mrB+PWdyg/QbvF3Bxyr58PQna3MXmgkbco6atJxsJx9ZaiRlLj9SDihN9dqlbGB+x2VZ2HcAsrH4YaTHUnaUkhzy2bZZRBnrRNr7wXd0BK7JheLinM7VO4n/m35RElhZTGfBZ75Pmtoq+fDwaIQcS6WvPxu7UbEfbFYwmstriiaLDq7czgbmKOC+VCb7h4cD7jLyVCa1VkYMArPNTQDlktg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LegyJzcNBdkvEkyIqXtPcDubKxu9jz1nfJSXrOlLjCs=;
+ b=gZslKZ7pFQ9w8uKzy+BZT/2s7fwx0XAgdymQxocc4Xz3HxLCBXVqG2vne4suUsxqhPeH8jxPNi/ArW+4QaOaTBDnPbDZY6Br41KT4sBViZfKf8SDZhrgsxwqnO6Z5w+fk2+gUPq7TC7PFyJcYUCOR8dDa/f7h0F5lJVg5Q1WKwA=
+Received: from BN0PR10MB5030.namprd10.prod.outlook.com (2603:10b6:408:12a::18)
+ by PH0PR10MB5779.namprd10.prod.outlook.com (2603:10b6:510:146::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 21 Nov
+ 2022 16:32:02 +0000
+Received: from BN0PR10MB5030.namprd10.prod.outlook.com
+ ([fe80::c13d:dad:6a35:b25a]) by BN0PR10MB5030.namprd10.prod.outlook.com
+ ([fe80::c13d:dad:6a35:b25a%7]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
+ 16:32:02 +0000
+Message-ID: <d908d6f4-bf73-27d0-e062-19eeee874f3b@oracle.com>
+Date:   Mon, 21 Nov 2022 16:31:55 +0000
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+From:   Liam Merwick <liam.merwick@oracle.com>
+Subject: Re: [PATCH v2 4/9] KVM: x86: forcibly leave nested mode on vCPU reset
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Borislav Petkov <bp@alien8.de>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kselftest@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        David Matlack <dmatlack@google.com>, stable@vger.kernel.org,
+        Liam Merwick <liam.merwick@oracle.com>
+References: <20221103141351.50662-1-mlevitsk@redhat.com>
+ <20221103141351.50662-5-mlevitsk@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20221103141351.50662-5-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO6P123CA0027.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:313::19) To BN0PR10MB5030.namprd10.prod.outlook.com
+ (2603:10b6:408:12a::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <479289.1669048275.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-From:   David Howells <dhowells@redhat.com>
-Date:   Mon, 21 Nov 2022 16:31:34 +0000
-Message-ID: <479316.1669048294@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN0PR10MB5030:EE_|PH0PR10MB5779:EE_
+X-MS-Office365-Filtering-Correlation-Id: 261af29f-d4da-4ac5-9094-08dacbddeb38
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HOQtM60MlZJe/2dl2c7AKKZjvYPqsmhI8whaXekIRi92/1olSHFAWvBtdBBD+74HMNyJzMJRzhGgKTr5eAHvkIz0DKSVpx+2WO4kJo1AYh3qpZwn/pMMFiRKOWppLuCSoF+PlJLI0Wf4GUgijL0g6iCnnPb/zgUlSREO/TIt0/OgxuOf6iTslgQIpT2XBR8GgXv8ZgtXVQdXsLQE4Kl3lki8yVB9ANS6rm6NxNF01/g+cip1h+tChgFEaRwUPxhSExln/zQ+utp1L5UCg3fTpit/FCbXREpAp3je7jAWRqIUzp0nCwlP4nmBw0Hu9Y65x0dPfYWeSGKknAKJM9Y9zVMsEC1fWRqEu93Ll3k9cHJ/gByg6W+k+nVosgFkdBWA8cWJ+2nnI7HHZRCIZ0kv12s9zFfpjBqHhJubMP3WESzXRl42Gax3pniqa8d59nMe7c0ktGYYDc5R95F/pp5jeQ0NBBwUyA7mdAPpCCxNDmW5/I1wL+Irevyqqpzz1+tI7byvrjl4ax+sONZjMeDqV7yIAPFU0PgSUw+0RiZxN+Pt1tF9Qh86i43zf3d1iso2pCLoj/c8m02E9Dk2PFVxk+JkBaeNmb3QwUigoALV9Ks8yxwyqeXKAo6bp5/AtgAtguWQWe5SQamAAqb3q1rJEpigrzYL87sUOW2zXAuVuSaauRVTgTunTnUiAOvpkNNyX4Pj/NHBHTekwWYjmCAFP8WOhcGnoIBe1V59+Vq9FTc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5030.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(346002)(396003)(366004)(136003)(451199015)(36756003)(86362001)(31686004)(31696002)(44832011)(26005)(5660300002)(53546011)(6512007)(2906002)(7416002)(83380400001)(186003)(2616005)(8936002)(38100700002)(107886003)(54906003)(6486002)(41300700001)(6666004)(6506007)(478600001)(4326008)(66556008)(8676002)(66946007)(66476007)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?alY0YVhvSnJuYUhCd2c4eTZMNlJhYm92NmdGZEZRQU1DWkJKVHNhRzNPTXMy?=
+ =?utf-8?B?aDJ2MVo2RkxPSkxnUHZhUHNrQ3l4dGIrbENYT0k4Mk9QM1o2K1lIRmpBQ1Mr?=
+ =?utf-8?B?MlRyWmloNWpDVFZvZHlvM3BFMU5ZdXRkQU1zRHJmM0xvbC9PMlJLWjRNOHA4?=
+ =?utf-8?B?eWZMdDJnVXpPQnpOejhPSDU3d3Q2VFpmUzhjbGxBWUtZOXBlcDZTdU5sRnRx?=
+ =?utf-8?B?K29kclM3bHhlRzVXTzM4THRmakNpdlA0R2lRSC85Tkp6a25SMEFub0RlSzZ5?=
+ =?utf-8?B?aGkvcFJlOThBdWJjV2R0YkZOQUZNK01NVFM3MWFOalFBK0tWTTQ4OWkyUkpq?=
+ =?utf-8?B?dHFiWDF6MkhTM2lNeldBWXU3dm9mRTV0WVpsa0RmODV2RDZoSUNncjZ4a2Nl?=
+ =?utf-8?B?czdUZVRYdjNJeFg5T1ByelZyUzRacVY1RVUvVzVVNWhHRHZ2WW82UjhSdDhl?=
+ =?utf-8?B?Sm4yem5OVjhGUUtGRWVnc1gwdUI0N2tOT1FOS05iSjhsMWQxTFRHcTRGOU9C?=
+ =?utf-8?B?VE0wVWxDeHpGQ3dTSGk2a3ZTcVFUYngxbDFqZHowTUhHR091S2ZXREVLdk85?=
+ =?utf-8?B?ay9qKzNabkErWnM5UVdvbFp0OWY4U0Nia1g1YXhIbDhDRTMyMlZOcHNudVpP?=
+ =?utf-8?B?SCs3NUd5Ukd0aExwdUE4NjhlM245WHZpWFNCdU5NY2NoNnZvZ1NPMzA1RVB5?=
+ =?utf-8?B?LytCUVNyMDUxWXBOV3JKKyswaGV4cXVYWmRtVE1yZVpESzlPdG9ZdnAwaG4y?=
+ =?utf-8?B?NGlUWUVLZnBvVElqT1FVazM4WlhGekd5S1JCUU8yUWN5aFBHa0RjNUE1eGtG?=
+ =?utf-8?B?YWczaDdMSm5VU09STWRIeFptUkxBNHRWVm1COHRuL0hZa3dwREowalB5SVRH?=
+ =?utf-8?B?S2ZQMkhyOWs4TGdNdE45KzhLQWlnY2RqZHY3RTFGMW1hZnFWSGFuT08xOVZX?=
+ =?utf-8?B?Y3M0M2dYU20xd3RPMGdnMnYxSnRESU9xSE9jTU56L3czeDZJa0lQQlFML0RY?=
+ =?utf-8?B?NzlpU1J6K3paWU5pRFJqWlg3YkRQeUxvYm12Vlk2Um9na0srdUlscW82ODgy?=
+ =?utf-8?B?aldWZ1JqcUo4aGh5bFNLc080ZVBoM1JvSW11REpQMlJqa3ZnWDcrL1pMWmFJ?=
+ =?utf-8?B?TmV3dzZCSi9pbG44SnN3bWh2OUd4ZUt5bDdvZnoyc1Z1blVEVkQrZnJCZldH?=
+ =?utf-8?B?eGU5ekVDNFJDZmlTWk5iZGNhMks3Y004U3FwZWhtaThiUHZMeVk1ODlaUS9O?=
+ =?utf-8?B?b1RCTlNzOE5UZWZyRkcyN2h6cTk2YmlYczJaeUN4LytKdmloa1pPaHZkSS9V?=
+ =?utf-8?B?SHpzb3dpbWUwMGJEeGRTWmFFTjFuRVJEN3Y3K3NaLzJFeVJNT2VNQW94czVP?=
+ =?utf-8?B?OXRERUpEampPcXpsMGtxMkJlcXJud29mRTdoL21ZSHFuZlBodThDT0dLVnNn?=
+ =?utf-8?B?Ty9YN0xBQStwMGZFdngzdEZhU0hMVTBiR2crV1M0N2xFTVZrRDVzdGk5Ullv?=
+ =?utf-8?B?Ym5CZmVvbHVDNDNEZ1F6dmtUYXNMNERSdU9CQWc3Z245ZTZBMlhVa2NrVk54?=
+ =?utf-8?B?Ny9ZSFhHUUNKcU8zcmRvbEtER1dtNkZpbGIyRlpaMU1RUTZsNHg1Mm9qZjJp?=
+ =?utf-8?B?MUtIc1BGNk1MZGJEOFFSTjhoZWtET0NyQUhnWFVOS3hBMDlTQ3hKWTZ4Ni9j?=
+ =?utf-8?B?clZiWVhZTGZkcm1uK3dwVkRiMmMrM3oyUzZpTWRBd0VCNDdob09nWk40Tkc0?=
+ =?utf-8?B?a1J6MGdnVTBZMEw4d21YeGJWdlFYeENJY2FXbWJKSGVBSWZKNDYzeWxjS1hO?=
+ =?utf-8?B?Tk81N2NtUm8yazJuNDd2ejdkd0hvVGxrNE1CeEh6cHlKK0hVa1FROXBCbDFy?=
+ =?utf-8?B?ZFJBR3A2OVFsMU1PZzhKbTZaWnhzUWptdXQyUENQREJzNGZuV3dqWUcrTU5V?=
+ =?utf-8?B?bG1qT25XdnpRZmVHOHRlYlpMcCsxWGh1ZWlwSkY2WVdpeldvbEUyb2FxU3Qv?=
+ =?utf-8?B?blA3SkszN3NTZWxxTk1FcWNPWlZDUkRLRHQ4aGtEV0t3Zmg1cWg3OTVlQTA5?=
+ =?utf-8?B?c3JvUVdqNUk2VjZPanlycDRGSnpvMllVNmFiNUM1Y2k3cHdHZFI3U1JlTEk2?=
+ =?utf-8?Q?qH/9HOYQqvhCmbnM8penoeYFs?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?TWZFTDlHanNIMlI5dW5ybHM0RDdSdkY0QjFOLys4dFdjR0N6cThoakVsQWxL?=
+ =?utf-8?B?a29kQWpwT2ZDbkYvTDVYNkJPamdWck5wM3psV1F2ZGVVeHVkZ1RwaEpuWHVV?=
+ =?utf-8?B?RVh4RU5vb1MyV3BpN0FkOVVsaHBVU2tCSUtKWlAweGh2WHl1UXZsM0lRUE0x?=
+ =?utf-8?B?SFRKNklGTHpwRGlwM3VrcHZJcTlqaFlsb3VDeDc3N1VIek0xczRYR2NCY3pk?=
+ =?utf-8?B?cUtDK1NtSVNTTm0xTGpVNHRiZzF6Z1NOSnZyV1UvMmRJenMzemMxSWVta29n?=
+ =?utf-8?B?TVM1TlBUUkx1TnpUYUo1cWhpTE5BejE0emUvdlRVWkthVERua3J0UndUT2Nh?=
+ =?utf-8?B?clVqdDQzaStlai8yaG1rZ01qTGpwOVA3eEN1NFNPWFBkUVY3OHdmQnc5WWps?=
+ =?utf-8?B?WG5lWFpoMjNyRHVKR0x3VFozZFgwREZnR2t3b3pLLzFzMjYxOXQ5KyttYnNN?=
+ =?utf-8?B?N1BzVTk0blJuUjVLYmhIS1Q1TzJTS1ZLTHNERzN5UTFNcUIvWC80eXkzRldF?=
+ =?utf-8?B?aUFrT3c1RVNKZHRhbWwwaXA0eEx5L0wyMG1OR3JUL3VNckR3UXFDR1dKYlZF?=
+ =?utf-8?B?NzQ3VG50bzJ1RFpXYjljUlJYSzRoSlNNV2p2Tm1kbXpWbGVqMWpKNjQ1aXdO?=
+ =?utf-8?B?cjk0a0VqdWVNT0w0RlVycll3a3V2ZTV6clJRRjI3U0Z1SHNVQWV4OVBMaXRM?=
+ =?utf-8?B?Y3ZXd09XVVBLSG9mWTc2VGFudU9jS1ZVRHpvcFVmcEo3cksvS3k4OEQyTUts?=
+ =?utf-8?B?ODc4djZIRFRLWGpvRHptWHBlMzR0NVV1ZEpVRSs0eXpkVHJjVWNaVmFyWmE4?=
+ =?utf-8?B?R2JZS2w3SU92SEZLSEhpN2UvQVJRdWpWQ2dkWmgvcDA1Unc5UUF0RFBrWWsz?=
+ =?utf-8?B?RzdTRUtwQjhLSndYM241eFZCM2hqUnB6QmM5a3F2SXNWdUhDdVFJNnd0Skp5?=
+ =?utf-8?B?am9SU1dXZHBqQkVRTGVYNmxiMGswY0tIVXdMMVZSMXJ0SnhvSmRXKzhGNUI4?=
+ =?utf-8?B?MDBETTU3bUs0dUlObVB6VTZmUkQ4MndkeUgxSkxkb29iaTNuZFZNSFBJRVdU?=
+ =?utf-8?B?OG1rOGpNOXA4YkZiYkI2WFp4azBqdzF6Y01tTHIwQlpyQkZYKzFqYTlzS1Uw?=
+ =?utf-8?B?WWorUzgwdi9XKzVIcFVIZDhzYkNodzBSSkVsRnhCWURwM29PL2J3YjB1NHJM?=
+ =?utf-8?B?TFI3Y1dCdVZvYmxSeitTNVVtV1FDQ2ZsaVZndGpWdkpHaTdXZFhQYklod2hV?=
+ =?utf-8?B?eTc0Njg0ZEJCSnJIRTQ0d0hqTlo1ZG9xa1J4SnBnejdDdklBWENHTW9EV0FT?=
+ =?utf-8?B?a1c4eHI0NWc4dUZkYjNSaFlWbEtpMmQvUXBybmZBVlJwdThCNTJKWGhxYVp4?=
+ =?utf-8?B?bHV6RVhmbDcycWVrMXRnTTBBWEdScEYvRjhVd2x1RlV4cysyRFAzV05Pb1M5?=
+ =?utf-8?B?SG9lamxVOXA0OUtPSFAwN1d4c0xMdno2aWJ5eHdxMjlmQzNVamM2QnVNbzBT?=
+ =?utf-8?B?czR1Rm4yelpsbTdCUlpVQ3NjR054aE5oWkdVNmppRldrWnRLYWZocUw1Yk8x?=
+ =?utf-8?B?UjJuUklKbUEyRU81MGViU1F3M01VMkVxaExjd3gvV05VZ1AwMkJXQVZMQ2xQ?=
+ =?utf-8?B?RFpLUE1FWUs5KzA0MFFLSFBVWnR2M2hUSnBzb2ZSUjRFNlk5UlFqSGpCMnIy?=
+ =?utf-8?B?djdoZE9uaks0bHpXcE5teU5NVU14RUF1K1U2S25nekQwZE5vb0dEZFdxcG9Q?=
+ =?utf-8?B?TnhFRlR4bm9UMW5LRHJFRmJJQkozRHdIdTdGbllXRUNDcjdTL1E4SWJLemNn?=
+ =?utf-8?B?WDQ0Z3lSa2I4ZGJwQURGYUZJWXBUcHIxamJ0Zm9WNEcrcnk2RngrK2xTUHRj?=
+ =?utf-8?B?cXNTZzFnREF1U1pITVdHSk4vRktaRWExS21PbEZ4a0JsOVE9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 261af29f-d4da-4ac5-9094-08dacbddeb38
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5030.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 16:32:02.3422
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6hUO7l74rGi6D6eNL1/Yc0rO0Xqs09YJTMWZ8WzPUKVjmmvNcEcAr3u1p6LMLtkFBWpN4ck0SyCg4aO1ENRwBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5779
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_14,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211210127
+X-Proofpoint-GUID: 9xvU4R91r98NOD7CM6WY31BAsd4NDCnI
+X-Proofpoint-ORIG-GUID: 9xvU4R91r98NOD7CM6WY31BAsd4NDCnI
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,136 +203,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 03/11/2022 14:13, Maxim Levitsky wrote:
+> While not obivous, kvm_vcpu_reset() leaves the nested mode by clearing
+> 'vcpu->arch.hflags' but it does so without all the required housekeeping.
+> 
+> On SVM,	it is possible to have a vCPU reset while in guest mode because
+> unlike VMX, on SVM, INIT's are not latched in SVM non root mode and in
+> addition to that L1 doesn't have to intercept triple fault, which should
+> also trigger L1's reset if happens in L2 while L1 didn't intercept it.
+> 
+> If one of the above conditions happen, KVM will	continue to use vmcb02
+> while not having in the guest mode.
 
-Could you apply this please?
+"having" is the wrong word here - maybe "not having in the" -> "not 
+being in" ?
 
-David
----
-The type of a->key[0] is char in fscache_volume_same().  If the length of
-cache volume key is greater than 127, the value of a->key[0] is less than
-0.  In this case, klen becomes much larger than 255 after type conversion,
-because the type of klen is size_t.  As a result, memcmp() is read out of
-bounds.
+> 
+> Later the IA32_EFER will be cleared which will lead to freeing of the
+> nested guest state which will (correctly) free the vmcb02, but since
+> KVM still uses it (incorrectly) this will lead to a use after free
+> and kernel crash.
+> 
+> This issue is assigned CVE-2022-3344
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-This causes a slab-out-of-bounds Read in __fscache_acquire_volume(), as
-reported by Syzbot.
+Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
 
-Fix this by changing the type of the stored key to "u8 *" rather than "cha=
-r
-*" (it isn't a simple string anyway).  Also put in a check that the volume
-name doesn't exceed NAME_MAX.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-BUG: KASAN: slab-out-of-bounds in memcmp+0x16f/0x1c0 lib/string.c:757
-Read of size 8 at addr ffff888016f3aa90 by task syz-executor344/3613
-
-CPU: 0 PID: 3613 Comm: syz-executor344 Not tainted
-6.0.0-rc2-syzkaller-00327-g8379c0b31fbc #0
-Hardware name: Google Compute Engine/Google Compute Engine, BIOS
-Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- memcmp+0x16f/0x1c0 lib/string.c:757
- memcmp include/linux/fortify-string.h:420 [inline]
- fscache_volume_same fs/fscache/volume.c:133 [inline]
- fscache_hash_volume fs/fscache/volume.c:171 [inline]
- __fscache_acquire_volume+0x76c/0x1080 fs/fscache/volume.c:328
- fscache_acquire_volume include/linux/fscache.h:204 [inline]
- v9fs_cache_session_get_cookie+0x143/0x240 fs/9p/cache.c:34
- v9fs_session_init+0x1166/0x1810 fs/9p/v9fs.c:473
- v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7d5064b1d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89
-f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd1700c028 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffd1700c060 RCX: 00007f7d5064b1d9
-RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000020000200 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000f4240
-R13: 0000000000000000 R14: 00007ffd1700c04c R15: 00007ffd1700c050
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-Fixes: 62ab63352350 ("fscache: Implement volume registration")
-Reported-by: syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Zhang Peng <zhangpeng362@huawei.com>
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-cc: Dominique Martinet <asmadeus@codewreck.org>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: v9fs-developer@lists.sourceforge.net
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/Y3OH+Dmi0QIOK18n@codewreck.org/ # Zhang Pe=
-ng's v1 fix
-Link: https://lore.kernel.org/r/20221115140447.2971680-1-zhangpeng362@huaw=
-ei.com/ # Zhang Peng's v2 fix
-Link: https://lore.kernel.org/r/166869954095.3793579.8500020902371015443.s=
-tgit@warthog.procyon.org.uk/ # v1
----
- fs/fscache/volume.c     |    7 +++++--
- include/linux/fscache.h |    2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
-index a058e0136bfe..ab8ceddf9efa 100644
---- a/fs/fscache/volume.c
-+++ b/fs/fscache/volume.c
-@@ -203,7 +203,11 @@ static struct fscache_volume *fscache_alloc_volume(co=
-nst char *volume_key,
- 	struct fscache_volume *volume;
- 	struct fscache_cache *cache;
- 	size_t klen, hlen;
--	char *key;
-+	u8 *key;
-+
-+	klen =3D strlen(volume_key);
-+	if (klen > NAME_MAX)
-+		return NULL;
- =
-
- 	if (!coherency_data)
- 		coherency_len =3D 0;
-@@ -229,7 +233,6 @@ static struct fscache_volume *fscache_alloc_volume(con=
-st char *volume_key,
- 	/* Stick the length on the front of the key and pad it out to make
- 	 * hashing easier.
- 	 */
--	klen =3D strlen(volume_key);
- 	hlen =3D round_up(1 + klen + 1, sizeof(__le32));
- 	key =3D kzalloc(hlen, GFP_KERNEL);
- 	if (!key)
-diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-index 36e5dd84cf59..8e312c8323a8 100644
---- a/include/linux/fscache.h
-+++ b/include/linux/fscache.h
-@@ -75,7 +75,7 @@ struct fscache_volume {
- 	atomic_t			n_accesses;	/* Number of cache accesses in progress */
- 	unsigned int			debug_id;
- 	unsigned int			key_hash;	/* Hash of key string */
--	char				*key;		/* Volume ID, eg. "afs@example.com@1234" */
-+	u8				*key;		/* Volume ID, eg. "afs@example.com@1234" */
- 	struct list_head		proc_link;	/* Link in /proc/fs/fscache/volumes */
- 	struct hlist_bl_node		hash_link;	/* Link in hash table */
- 	struct work_struct		work;
+> ---
+>   arch/x86/kvm/x86.c | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 316ab1d5317f92..3fd900504e683b 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11694,8 +11694,18 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>   	WARN_ON_ONCE(!init_event &&
+>   		     (old_cr0 || kvm_read_cr3(vcpu) || kvm_read_cr4(vcpu)));
+>   
+> +	/*
+> +	 * SVM doesn't unconditionally VM-Exit on INIT and SHUTDOWN, thus it's
+> +	 * possible to INIT the vCPU while L2 is active.  Force the vCPU back
+> +	 * into L1 as EFER.SVME is cleared on INIT (along with all other EFER
+> +	 * bits), i.e. virtualization is disabled.
+> +	 */
+> +	if (is_guest_mode(vcpu))
+> +		kvm_leave_nested(vcpu);
+> +
+>   	kvm_lapic_reset(vcpu, init_event);
+>   
+> +	WARN_ON_ONCE(is_guest_mode(vcpu) || is_smm(vcpu));
+>   	vcpu->arch.hflags = 0;
+>   
+>   	vcpu->arch.smi_pending = 0;
 
