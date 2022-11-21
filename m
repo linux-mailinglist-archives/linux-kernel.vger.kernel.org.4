@@ -2,117 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5975C632FBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A81CC632FC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbiKUWWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 17:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S229527AbiKUWYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 17:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiKUWWD (ORCPT
+        with ESMTP id S229530AbiKUWYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 17:22:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038AE18B0E;
-        Mon, 21 Nov 2022 14:22:03 -0800 (PST)
+        Mon, 21 Nov 2022 17:24:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5286D178B5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 14:24:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 933A8614D7;
-        Mon, 21 Nov 2022 22:22:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2DD2C43147;
-        Mon, 21 Nov 2022 22:21:59 +0000 (UTC)
-Date:   Mon, 21 Nov 2022 17:21:57 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10FFFB816A9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 22:24:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87080C433D6;
+        Mon, 21 Nov 2022 22:24:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669069448;
+        bh=V+gaLKpyshaCkbv1WhQWvfEVZjKqakHxzq1GlH1qVKI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=booFdlr32KkvLpCHhKj1eo6PFCq1cwg7Bwslv1c3q3yp9l0IJOf1XfeTvFf8zOaJP
+         TOdA88om8Rm54iM3FrsXyg3rCVakZYWMnp0+knpxs89deCZVk1mmJrPGH+nBCW4r91
+         VnGxsuDY9xLqLvh9N1Rqh64y4fNe0gUoQ0PGcBqAZWYGt3Iq6iMVqebtcAvrGxDT1v
+         lGd7jCwOsl0JZpWRlHGEttA1PF0FaKWeN7fTlMFs/SPEAwgatTw9MasObk30YGVRUk
+         vDbSMP3jZZjjR7KVkLfxrTU13JdTG5L08Qb/S/CUYXTS9Ow809evaUrKArg8Ez3X7r
+         86Qy0W/yTd1EQ==
+Date:   Tue, 22 Nov 2022 07:24:04 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: Re: [patch 13/15] timers: Provide timer_shutdown[_sync]()
-Message-ID: <20221121172157.2457df06@gandalf.local.home>
-In-Reply-To: <20221115202117.734852797@linutronix.de>
-References: <20221115195802.415956561@linutronix.de>
-        <20221115202117.734852797@linutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>, Chris Mason <clm@meta.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] error-injection: Add prompt for function error
+ injection
+Message-Id: <20221122072404.c55c0c2070c6ebb5230f3813@kernel.org>
+In-Reply-To: <20221121104403.1545f9b5@gandalf.local.home>
+References: <20221121104403.1545f9b5@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 21:28:54 +0100 (CET)
-Thomas Gleixner <tglx@linutronix.de> wrote:
+On Mon, 21 Nov 2022 10:44:03 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> +/**
-> + * timer_shutdown_sync - Shutdown a timer and prevent rearming
-> + * @timer: The timer to be shutdown
-> + *
-> + * When the function returns it is guaranteed that:
-> + *   - @timer is not queued
-> + *   - The callback function of @timer is not running
-> + *   - @timer cannot be enqueued again. Any attempt to rearm
-> + *     @timer is silently ignored.
-> + *
-> + * See timer_delete_sync() for synchronization rules.
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> The config to be able to inject error codes into any function annotated
+> with ALLOW_ERROR_INJECTION() is enabled when CONFIG_FUNCTION_ERROR_INJECTION
+> is enabled. But unfortunately, this is always enabled on x86 when KPROBES
+> is enabled, and there's no way to turn it off.
+> 
+> As kprobes is useful for observability of the kernel, it is useful to have
+> it enabled in production environments. But error injection should be
+> avoided. Add a prompt to the config to allow it to be disabled even when
+> kprobes is enabled, and get rid of the "def_bool y".
+> 
+> This is a kernel debug feature (it's in Kconfig.debug), and should have
+> never been something enabled by default.
+> 
 
- "See timer_delete_sync() for synchronization and context rules."
+Oops, thanks for update. Yes, it should not be enabled in the production system.
 
-As where it can be executed is as important as the synchronization that is
-needed.
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
--- Steve
+Thanks,
 
-
-> + *
-> + * This function is useful for final teardown of an infrastructure where
-> + * the timer is subject to a circular dependency problem.
-> + *
-> + * A common pattern for this is a timer and a workqueue where the timer can
-> + * schedule work and work can arm the timer. On shutdown the workqueue must
-> + * be destroyed and the timer must be prevented from rearming. Unless the
-> + * code has conditionals like 'if (mything->in_shutdown)' to prevent that
-> + * there is no way to get this correct with timer_delete_sync().
-> + *
-> + * timer_shutdown_sync() is solving the problem. The correct ordering of
-> + * calls in this case is:
-> + *
-> + *	timer_shutdown_sync(&mything->timer);
-> + *	workqueue_destroy(&mything->workqueue);
-> + *
-> + * After this 'mything' can be safely freed.
-> + *
-> + * This obviously requires that the timer is not required to be functional
-> + * for the rest of the shutdown operation.
-> + *
-> + * Return:
-> + * * %0 - The timer was not pending
-> + * * %1 - The timer was pending
-> + */
-> +int timer_shutdown_sync(struct timer_list *timer)
-> +{
-> +	return __timer_delete_sync(timer, true);
-> +}
-> +EXPORT_SYMBOL_GPL(timer_shutdown_sync);
+> Cc: stable@vger.kernel.org
+> Fixes: 540adea3809f6 ("error-injection: Separate error-injection from kprobe")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  lib/Kconfig.debug | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index c3c0b077ade3..9ee72d8860c3 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1874,8 +1874,14 @@ config NETDEV_NOTIFIER_ERROR_INJECT
+>  	  If unsure, say N.
+>  
+>  config FUNCTION_ERROR_INJECTION
+> -	def_bool y
+> +	bool "Fault-injections of functions"
+>  	depends on HAVE_FUNCTION_ERROR_INJECTION && KPROBES
+> +	help
+> +	  Add fault injections into various functions that are annotated with
+> +	  ALLOW_ERROR_INJECTION() in the kernel. BPF may also modify the return
+> +	  value of theses functions. This is useful to test error paths of code.
 > +
+> +	  If unsure, say N
+>  
+>  config FAULT_INJECTION
+>  	bool "Fault-injection framework"
+> -- 
+> 2.35.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
