@@ -2,433 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60384631989
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 06:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DBA63198C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 06:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKUFir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 00:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        id S229689AbiKUFjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 00:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiKUFio (ORCPT
+        with ESMTP id S229555AbiKUFjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 00:38:44 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7723111454;
-        Sun, 20 Nov 2022 21:38:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669009123; x=1700545123;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=qpd3nZAfo6KStv73bHwgAT1o1H1/0ePZSkxU61gCiYc=;
-  b=CPC/PDj6cxUKetTRCNoA/lP0L/O6PNyUzVB81U2qDEBoHZjlWnjQ13mf
-   MIM95GMEeymwJJO5qKnTV2IRbI4+RvWz75OoC79aKXTISFF4ih6XfcuRK
-   jtkBlXPCQqHbvkV3O3GnwNCCyYVaBUXS36insz4zXefKyA4RXzCzgfFrl
-   D5KrGU83CQ3DGUEed3Jhs/HakbdMwz1PbzD/uys0qqxvjnyigBiZdLQbL
-   xXRp043OsBla0owdCXA2NrwtBJXXdrWdkrSoHtIJvws2faWjcxqwGrTg+
-   BuVXNhEAxqtyTPevji/HSOzXuo+6KMG9JnIBMNdjolNKq4jtVEF3DZ3Hb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="375620300"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="375620300"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 21:38:43 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="640896515"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="640896515"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 21:38:37 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-mm@kvack.org>, <seanjc@google.com>, <pbonzini@redhat.com>,
-        <dave.hansen@intel.com>, <dan.j.williams@intel.com>,
-        <rafael.j.wysocki@intel.com>, <kirill.shutemov@linux.intel.com>,
-        <reinette.chatre@intel.com>, <len.brown@intel.com>,
-        <tony.luck@intel.com>, <peterz@infradead.org>,
-        <ak@linux.intel.com>, <isaku.yamahata@intel.com>,
-        <chao.gao@intel.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <bagasdotme@gmail.com>, <sagis@google.com>, <imammedo@redhat.com>
-Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
- initializing TDX module as TDX memory
-In-Reply-To: <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
-        (Kai Huang's message of "Mon, 21 Nov 2022 13:26:32 +1300")
-References: <cover.1668988357.git.kai.huang@intel.com>
-        <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Mon, 21 Nov 2022 13:37:40 +0800
-Message-ID: <87cz9gvpej.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Mon, 21 Nov 2022 00:39:51 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DAB1145E
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 21:39:49 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id n21so25960983ejb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 21:39:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AdzQfZlp1+RoluiUkkU4r5IReZONbXSnbU4C7vab+r4=;
+        b=ci31+LDzfAjGgIy8ZDVokMN9P+ifFni1+VU5k3tYvAjTdN9mtK+IknG7HVUL6QFc6A
+         S4W7bBkQxbZtVljgzVfJXtLTfHhvOZTIT8awNN28aIUo9PL/oE/W2U0Whi0JmSskGi0a
+         fc5MwzU8MyvgfK2moBe4U4wDPihR0RQ7DRTeI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AdzQfZlp1+RoluiUkkU4r5IReZONbXSnbU4C7vab+r4=;
+        b=HUU91Y5OoN50oU0S4XRlXj+l7lvm5GeP3HS5RpmQMvkXf9Zjp2V2sWbK4b1Zzo169q
+         m9UAHiqjhfpaTwKZ/o3UfXOd67Mg+W3QRcO7ZzQfvWMtz/UuqfJWORuKJyF7bUFTmkHA
+         nOjYizXtcLl9miNzL/7Z3boodOFsv67a7MEmZeCKoUN8EqryemLtHE8xLFesbxyOMvnj
+         cIUo3Hn5uk0idUHVbNlytXDUF9s/cmUhvQqo1IJfzpOrK+tyAA6/tCtm97Idj0GeltPD
+         WTCdgOzbJAIWwZN0bZCh5+qWq+fNsHtIGvyokLYEyrr8VHI8UK37q3hg4QazabC90h6Y
+         nZVQ==
+X-Gm-Message-State: ANoB5plGg5DRRFFa441jVM8r2sYI05t5TV8NomjIeT0DC1qUUDiDWSGl
+        pnTUvbnLNpstF/X1hUSklnyK20ALBeXy9jU6EMBTig==
+X-Google-Smtp-Source: AA0mqf5UOnivB80YzNFYZUgA5t3eJ8fO13oj99wHpldvNTaET4eEK1djRFfsJuPPGvDXvvQKKYvfsSs1up7iJDDGC0g=
+X-Received: by 2002:a17:906:55c5:b0:78d:3862:4488 with SMTP id
+ z5-20020a17090655c500b0078d38624488mr13283858ejp.683.1669009188450; Sun, 20
+ Nov 2022 21:39:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103091243.96036-1-allen.chen@ite.com.tw> <20221103091243.96036-3-allen.chen@ite.com.tw>
+In-Reply-To: <20221103091243.96036-3-allen.chen@ite.com.tw>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Mon, 21 Nov 2022 13:39:36 +0800
+Message-ID: <CAEXTbpdLMzTP20v0RJFjFb1JyQK+AcXJDUNYnaNb5y67+V_S3g@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] drm/bridge: add it6505 driver to read data-lanes
+ and link-frequencies from dt
+To:     allen <allen.chen@ite.com.tw>
+Cc:     Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kai Huang <kai.huang@intel.com> writes:
+Hi all,
+Friendly ping on this patch.
 
-> TDX reports a list of "Convertible Memory Region" (CMR) to indicate all
-> memory regions that can possibly be used by the TDX module, but they are
-> not automatically usable to the TDX module.  As a step of initializing
-> the TDX module, the kernel needs to choose a list of memory regions (out
-> from convertible memory regions) that the TDX module can use and pass
-> those regions to the TDX module.  Once this is done, those "TDX-usable"
-> memory regions are fixed during module's lifetime.  No more TDX-usable
-> memory can be added to the TDX module after that.
+Regards,
+Pin-yen
+
+On Thu, Nov 3, 2022 at 5:13 PM allen <allen.chen@ite.com.tw> wrote:
 >
-> The initial support of TDX guests will only allocate TDX guest memory
-> from the global page allocator.  To keep things simple, this initial
-> implementation simply guarantees all pages in the page allocator are TDX
-> memory.  To achieve this, use all system memory in the core-mm at the
-> time of initializing the TDX module as TDX memory, and at the meantime,
-> refuse to add any non-TDX-memory in the memory hotplug.
+> From: allen chen <allen.chen@ite.com.tw>
 >
-> Specifically, walk through all memory regions managed by memblock and
-> add them to a global list of "TDX-usable" memory regions, which is a
-> fixed list after the module initialization (or empty if initialization
-> fails).  To reject non-TDX-memory in memory hotplug, add an additional
-> check in arch_add_memory() to check whether the new region is covered by
-> any region in the "TDX-usable" memory region list.
+> Add driver to read data-lanes and link-frequencies from dt property to
+> restrict output bandwidth.
 >
-> Note this requires all memory regions in memblock are TDX convertible
-> memory when initializing the TDX module.  This is true in practice if no
-> new memory has been hot-added before initializing the TDX module, since
-> in practice all boot-time present DIMM is TDX convertible memory.  If
-> any new memory has been hot-added, then initializing the TDX module will
-> fail due to that memory region is not covered by CMR.
->
-> This can be enhanced in the future, i.e. by allowing adding non-TDX
-> memory to a separate NUMA node.  In this case, the "TDX-capable" nodes
-> and the "non-TDX-capable" nodes can co-exist, but the kernel/userspace
-> needs to guarantee memory pages for TDX guests are always allocated from
-> the "TDX-capable" nodes.
->
-> Note TDX assumes convertible memory is always physically present during
-> machine's runtime.  A non-buggy BIOS should never support hot-removal of
-> any convertible memory.  This implementation doesn't handle ACPI memory
-> removal but depends on the BIOS to behave correctly.
->
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Signed-off-by: Allen chen <allen.chen@ite.com.tw>
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 > ---
+>  drivers/gpu/drm/bridge/ite-it6505.c | 80 +++++++++++++++++++++++++++--
+>  1 file changed, 77 insertions(+), 3 deletions(-)
 >
-> v6 -> v7:
->  - Changed to use all system memory in memblock at the time of
->    initializing the TDX module as TDX memory
->  - Added memory hotplug support
+> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+> index a4302492cf8df..ed4536cde3140 100644
+> --- a/drivers/gpu/drm/bridge/ite-it6505.c
+> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
+> @@ -437,6 +437,8 @@ struct it6505 {
+>         bool powered;
+>         bool hpd_state;
+>         u32 afe_setting;
+> +       u32 max_dpi_pixel_clock;
+> +       u32 max_lane_count;
+>         enum hdcp_state hdcp_status;
+>         struct delayed_work hdcp_work;
+>         struct work_struct hdcp_wait_ksv_list;
+> @@ -1476,7 +1478,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
+>         it6505->lane_count = link->num_lanes;
+>         DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
+>                              it6505->lane_count);
+> -       it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
+> +       it6505->lane_count = min_t(int, it6505->lane_count,
+> +                                  it6505->max_lane_count);
 >
-> ---
->  arch/x86/Kconfig            |   1 +
->  arch/x86/include/asm/tdx.h  |   3 +
->  arch/x86/mm/init_64.c       |  10 ++
->  arch/x86/virt/vmx/tdx/tdx.c | 183 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 197 insertions(+)
+>         it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
+>         DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
+> @@ -2912,7 +2915,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
+>         if (mode->flags & DRM_MODE_FLAG_INTERLACE)
+>                 return MODE_NO_INTERLACE;
 >
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index dd333b46fafb..b36129183035 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1959,6 +1959,7 @@ config INTEL_TDX_HOST
->  	depends on X86_64
->  	depends on KVM_INTEL
->  	depends on X86_X2APIC
-> +	select ARCH_KEEP_MEMBLOCK
->  	help
->  	  Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
->  	  host and certain physical attacks.  This option enables necessary TDX
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index d688228f3151..71169ecefabf 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -111,9 +111,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
->  #ifdef CONFIG_INTEL_TDX_HOST
->  bool platform_tdx_enabled(void);
->  int tdx_enable(void);
-> +bool tdx_cc_memory_compatible(unsigned long start_pfn, unsigned long end_pfn);
->  #else	/* !CONFIG_INTEL_TDX_HOST */
->  static inline bool platform_tdx_enabled(void) { return false; }
->  static inline int tdx_enable(void)  { return -ENODEV; }
-> +static inline bool tdx_cc_memory_compatible(unsigned long start_pfn,
-> +		unsigned long end_pfn) { return true; }
->  #endif	/* CONFIG_INTEL_TDX_HOST */
->  
->  #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-> index 3f040c6e5d13..900341333d7e 100644
-> --- a/arch/x86/mm/init_64.c
-> +++ b/arch/x86/mm/init_64.c
-> @@ -55,6 +55,7 @@
->  #include <asm/uv/uv.h>
->  #include <asm/setup.h>
->  #include <asm/ftrace.h>
-> +#include <asm/tdx.h>
->  
->  #include "mm_internal.h"
->  
-> @@ -968,6 +969,15 @@ int arch_add_memory(int nid, u64 start, u64 size,
->  	unsigned long start_pfn = start >> PAGE_SHIFT;
->  	unsigned long nr_pages = size >> PAGE_SHIFT;
->  
-> +	/*
-> +	 * For now if TDX is enabled, all pages in the page allocator
-> +	 * must be TDX memory, which is a fixed set of memory regions
-> +	 * that are passed to the TDX module.  Reject the new region
-> +	 * if it is not TDX memory to guarantee above is true.
-> +	 */
-> +	if (!tdx_cc_memory_compatible(start_pfn, start_pfn + nr_pages))
-> +		return -EINVAL;
-> +
->  	init_memory_mapping(start, start + size, params->pgprot);
->  
->  	return add_pages(nid, start_pfn, nr_pages, params);
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 43227af25e44..32af86e31c47 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -16,6 +16,11 @@
->  #include <linux/smp.h>
->  #include <linux/atomic.h>
->  #include <linux/align.h>
-> +#include <linux/list.h>
-> +#include <linux/slab.h>
-> +#include <linux/memblock.h>
-> +#include <linux/minmax.h>
-> +#include <linux/sizes.h>
->  #include <asm/msr-index.h>
->  #include <asm/msr.h>
->  #include <asm/apic.h>
-> @@ -34,6 +39,13 @@ enum tdx_module_status_t {
->  	TDX_MODULE_SHUTDOWN,
->  };
->  
-> +struct tdx_memblock {
-> +	struct list_head list;
-> +	unsigned long start_pfn;
-
-Why not use 'phys_addr_t'?
-
-> +	unsigned long end_pfn;
-> +	int nid;
-> +};
-> +
->  static u32 tdx_keyid_start __ro_after_init;
->  static u32 tdx_keyid_num __ro_after_init;
->  
-> @@ -46,6 +58,9 @@ static struct tdsysinfo_struct tdx_sysinfo;
->  static struct cmr_info tdx_cmr_array[MAX_CMRS] __aligned(CMR_INFO_ARRAY_ALIGNMENT);
->  static int tdx_cmr_num;
->  
-> +/* All TDX-usable memory regions */
-> +static LIST_HEAD(tdx_memlist);
-> +
->  /*
->   * Detect TDX private KeyIDs to see whether TDX has been enabled by the
->   * BIOS.  Both initializing the TDX module and running TDX guest require
-> @@ -329,6 +344,107 @@ static int tdx_get_sysinfo(void)
->  	return trim_empty_cmrs(tdx_cmr_array, &tdx_cmr_num);
+> -       if (mode->clock > DPI_PIXEL_CLK_MAX)
+> +       if (mode->clock > it6505->max_dpi_pixel_clock)
+>                 return MODE_CLOCK_HIGH;
+>
+>         it6505->video_info.clock = mode->clock;
+> @@ -3099,10 +3102,32 @@ static int it6505_init_pdata(struct it6505 *it6505)
+>         return 0;
 >  }
->  
-> +/* Check whether the given pfn range is covered by any CMR or not. */
-> +static bool pfn_range_covered_by_cmr(unsigned long start_pfn,
-> +				     unsigned long end_pfn)
+>
+> +static int it6505_get_data_lanes_count(const struct device_node *endpoint,
+> +                                      const unsigned int min,
+> +                                      const unsigned int max)
 > +{
-> +	int i;
+> +       int ret;
 > +
-> +	for (i = 0; i < tdx_cmr_num; i++) {
-> +		struct cmr_info *cmr = &tdx_cmr_array[i];
-> +		unsigned long cmr_start_pfn;
-> +		unsigned long cmr_end_pfn;
+> +       ret = of_property_count_u32_elems(endpoint, "data-lanes");
+> +       if (ret < 0)
+> +               return ret;
 > +
-> +		cmr_start_pfn = cmr->base >> PAGE_SHIFT;
-> +		cmr_end_pfn = (cmr->base + cmr->size) >> PAGE_SHIFT;
-
-Why not use PHYS_PFN() or PFN_DOWN()?  And PFN_PHYS() in reverse direction?
-
+> +       if (ret < min || ret > max)
+> +               return -EINVAL;
 > +
-> +		if (start_pfn >= cmr_start_pfn && end_pfn <= cmr_end_pfn)
-> +			return true;
-> +	}
-> +
-> +	return false;
+> +       return ret;
 > +}
 > +
-> +/*
-> + * Add a memory region on a given node as a TDX memory block.  The caller
-> + * to make sure all memory regions are added in address ascending order
-> + * and don't overlap.
-> + */
-> +static int add_tdx_memblock(unsigned long start_pfn, unsigned long end_pfn,
-> +			    int nid)
-> +{
-> +	struct tdx_memblock *tmb;
+>  static void it6505_parse_dt(struct it6505 *it6505)
+>  {
+>         struct device *dev = &it6505->client->dev;
+> +       struct device_node *np = dev->of_node, *ep = NULL;
+> +       int len;
+> +       u64 link_frequencies;
+> +       u32 data_lanes[4];
+>         u32 *afe_setting = &it6505->afe_setting;
+> +       u32 *max_lane_count = &it6505->max_lane_count;
+> +       u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
+>
+>         it6505->lane_swap_disabled =
+>                 device_property_read_bool(dev, "no-laneswap");
+> @@ -3118,7 +3143,56 @@ static void it6505_parse_dt(struct it6505 *it6505)
+>         } else {
+>                 *afe_setting = 0;
+>         }
+> -       DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
 > +
-> +	tmb = kmalloc(sizeof(*tmb), GFP_KERNEL);
-> +	if (!tmb)
-> +		return -ENOMEM;
+> +       ep = of_graph_get_endpoint_by_regs(np, 1, 0);
+> +       of_node_put(ep);
 > +
-> +	INIT_LIST_HEAD(&tmb->list);
-> +	tmb->start_pfn = start_pfn;
-> +	tmb->end_pfn = end_pfn;
-> +	tmb->nid = nid;
+> +       if (ep) {
+> +               len = it6505_get_data_lanes_count(ep, 1, 4);
 > +
-> +	list_add_tail(&tmb->list, &tdx_memlist);
-> +	return 0;
-> +}
+> +               if (len > 0 && len != 3) {
+> +                       of_property_read_u32_array(ep, "data-lanes",
+> +                                                  data_lanes, len);
+> +                       *max_lane_count = len;
+> +               } else {
+> +                       *max_lane_count = MAX_LANE_COUNT;
+> +                       dev_err(dev, "error data-lanes, use default");
+> +               }
+> +       } else {
+> +               *max_lane_count = MAX_LANE_COUNT;
+> +               dev_err(dev, "error endpoint, use default");
+> +       }
 > +
-> +static void free_tdx_memory(void)
-> +{
-> +	while (!list_empty(&tdx_memlist)) {
-> +		struct tdx_memblock *tmb = list_first_entry(&tdx_memlist,
-> +				struct tdx_memblock, list);
+> +       ep = of_graph_get_endpoint_by_regs(np, 0, 0);
+> +       of_node_put(ep);
 > +
-> +		list_del(&tmb->list);
-> +		kfree(tmb);
-> +	}
-> +}
+> +       if (ep) {
+> +               len = of_property_read_variable_u64_array(ep,
+> +                                                         "link-frequencies",
+> +                                                         &link_frequencies, 0,
+> +                                                         1);
+> +               if (len >= 0) {
+> +                       do_div(link_frequencies, 1000);
+> +                       if (link_frequencies > 297000) {
+> +                               dev_err(dev,
+> +                                       "max pixel clock error, use default");
+> +                               *max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
+> +                       } else {
+> +                               *max_dpi_pixel_clock = link_frequencies;
+> +                       }
+> +               } else {
+> +                       dev_err(dev, "error link frequencies, use default");
+> +                       *max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
+> +               }
+> +       } else {
+> +               dev_err(dev, "error endpoint, use default");
+> +               *max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
+> +       }
 > +
-> +/*
-> + * Add all memblock memory regions to the @tdx_memlist as TDX memory.
-> + * Must be called when get_online_mems() is called by the caller.
-> + */
-> +static int build_tdx_memory(void)
-> +{
-> +	unsigned long start_pfn, end_pfn;
-> +	int i, nid, ret;
-> +
-> +	for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
-> +		/*
-> +		 * The first 1MB may not be reported as TDX convertible
-> +		 * memory.  Manually exclude them as TDX memory.
-> +		 *
-> +		 * This is fine as the first 1MB is already reserved in
-> +		 * reserve_real_mode() and won't end up to ZONE_DMA as
-> +		 * free page anyway.
-> +		 */
-> +		start_pfn = max(start_pfn, (unsigned long)SZ_1M >> PAGE_SHIFT);
-> +		if (start_pfn >= end_pfn)
-> +			continue;
-
-How about check whether first 1MB is reserved instead of depending on
-the corresponding code isn't changed?  Via for_each_reserved_mem_range()?
-
-> +
-> +		/* Verify memory is truly TDX convertible memory */
-> +		if (!pfn_range_covered_by_cmr(start_pfn, end_pfn)) {
-> +			pr_info("Memory region [0x%lx, 0x%lx) is not TDX convertible memorry.\n",
-> +					start_pfn << PAGE_SHIFT,
-> +					end_pfn << PAGE_SHIFT);
-> +			return -EINVAL;
-> +		}
-> +
-> +		/*
-> +		 * Add the memory regions as TDX memory.  The regions in
-> +		 * memblock has already guaranteed they are in address
-> +		 * ascending order and don't overlap.
-> +		 */
-> +		ret = add_tdx_memblock(start_pfn, end_pfn, nid);
-> +		if (ret)
-> +			goto err;
-> +	}
-> +
-> +	return 0;
-> +err:
-> +	free_tdx_memory();
-> +	return ret;
-> +}
-> +
->  /*
->   * Detect and initialize the TDX module.
->   *
-> @@ -357,12 +473,56 @@ static int init_tdx_module(void)
->  	if (ret)
->  		goto out;
->  
-> +	/*
-> +	 * All memory regions that can be used by the TDX module must be
-> +	 * passed to the TDX module during the module initialization.
-> +	 * Once this is done, all "TDX-usable" memory regions are fixed
-> +	 * during module's runtime.
-> +	 *
-> +	 * The initial support of TDX guests only allocates memory from
-> +	 * the global page allocator.  To keep things simple, for now
-> +	 * just make sure all pages in the page allocator are TDX memory.
-> +	 *
-> +	 * To achieve this, use all system memory in the core-mm at the
-> +	 * time of initializing the TDX module as TDX memory, and at the
-> +	 * meantime, reject any new memory in memory hot-add.
-> +	 *
-> +	 * This works as in practice, all boot-time present DIMM is TDX
-> +	 * convertible memory.  However if any new memory is hot-added
-> +	 * before initializing the TDX module, the initialization will
-> +	 * fail due to that memory is not covered by CMR.
-> +	 *
-> +	 * This can be enhanced in the future, i.e. by allowing adding or
-> +	 * onlining non-TDX memory to a separate node, in which case the
-> +	 * "TDX-capable" nodes and the "non-TDX-capable" nodes can exist
-> +	 * together -- the userspace/kernel just needs to make sure pages
-> +	 * for TDX guests must come from those "TDX-capable" nodes.
-> +	 *
-> +	 * Build the list of TDX memory regions as mentioned above so
-> +	 * they can be passed to the TDX module later.
-> +	 */
-> +	get_online_mems();
-> +
-> +	ret = build_tdx_memory();
-> +	if (ret)
-> +		goto out;
->  	/*
->  	 * Return -EINVAL until all steps of TDX module initialization
->  	 * process are done.
->  	 */
->  	ret = -EINVAL;
->  out:
-> +	/*
-> +	 * Memory hotplug checks the hot-added memory region against the
-> +	 * @tdx_memlist to see if the region is TDX memory.
-> +	 *
-> +	 * Do put_online_mems() here to make sure any modification to
-> +	 * @tdx_memlist is done while holding the memory hotplug read
-> +	 * lock, so that the memory hotplug path can just check the
-> +	 * @tdx_memlist w/o holding the @tdx_module_lock which may cause
-> +	 * deadlock.
-> +	 */
-> +	put_online_mems();
->  	return ret;
+> +       DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %u, max_lane_count: %u",
+> +                            it6505->afe_setting, it6505->max_lane_count);
+> +       DRM_DEV_DEBUG_DRIVER(dev, "using max_dpi_pixel_clock: %u kHz",
+> +                            it6505->max_dpi_pixel_clock);
 >  }
->  
-> @@ -485,3 +645,26 @@ int tdx_enable(void)
->  	return ret;
->  }
->  EXPORT_SYMBOL_GPL(tdx_enable);
-> +
-> +/*
-> + * Check whether the given range is TDX memory.  Must be called between
-> + * mem_hotplug_begin()/mem_hotplug_done().
-
-Must be called with mem_hotplug_lock write-locked.
-
-> + */
-> +bool tdx_cc_memory_compatible(unsigned long start_pfn, unsigned long end_pfn)
-> +{
-> +	struct tdx_memblock *tmb;
-> +
-> +	/* Empty list means TDX isn't enabled successfully */
-> +	if (list_empty(&tdx_memlist))
-> +		return true;
-> +
-> +	list_for_each_entry(tmb, &tdx_memlist, list) {
-> +		/*
-> +		 * The new range is TDX memory if it is fully covered
-> +		 * by any TDX memory block.
-> +		 */
-> +		if (start_pfn >= tmb->start_pfn && end_pfn <= tmb->end_pfn)
-> +			return true;
-> +	}
-> +	return false;
-> +}
-
-Best Regards,
-Huang, Ying
+>
+>  static ssize_t receive_timing_debugfs_show(struct file *file, char __user *buf,
+> --
+> 2.25.1
+>
