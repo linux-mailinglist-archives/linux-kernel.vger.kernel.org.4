@@ -2,127 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6C6631C97
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD35631C91
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiKUJOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S230053AbiKUJOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiKUJOu (ORCPT
+        with ESMTP id S229689AbiKUJOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:14:50 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA27EC94;
-        Mon, 21 Nov 2022 01:14:48 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NG1p56V9qzqSZZ;
-        Mon, 21 Nov 2022 17:10:53 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 17:14:47 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 17:14:46 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-nilfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-CC:     <chenzhongjin@huawei.com>, <konishi.ryusuke@gmail.com>,
-        <akpm@linux-foundation.org>
-Subject: [PATCH v3] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment usage as dirty
-Date:   Mon, 21 Nov 2022 17:11:41 +0800
-Message-ID: <20221121091141.214703-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 21 Nov 2022 04:14:02 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCEB71198
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:14:00 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id g7so17892754lfv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:14:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KzJ1Wp+0Y1BV5FI5ALPYO3ykaQyEtvnk1yBBPpwmu2k=;
+        b=MY2ZMsvAOIUWpv95uOKNW6RZvGBkO6P4O7pJxf+QWNCVKvCPJ145yjyVAUbuYmBn8b
+         oU6gBohmHFUdG07x6n2J8CrhD3SITPX3MUfjvL1iRod6zLQaAWW11QrKVH7kGg8ilLeE
+         robaC3v13YDu3jUEzxAE6pknR+aTYym1e+0TrGG2elX+74u5NdetMKcLoMA2DvwASg/E
+         SwRPz32w7pUuJHc0j9AOCQzPtfqHBumQr/deLliEIaZsoXOsx8Gri2TwUr9rWEE5PmCS
+         /2GwO1QHxOPtqvg+YZgHNYCgIyCEJkHUvbjF47T/CEfc6LWF1NbvdMYm3ONK/m2nX/zI
+         usjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KzJ1Wp+0Y1BV5FI5ALPYO3ykaQyEtvnk1yBBPpwmu2k=;
+        b=y83qe3UyjIBK59QFY/B9wYgg28KWlYfmrFWtCykNLFpg3G9+AfkkyNNFRfjWOZDx6j
+         rbvtwTsaDTstsNcah+jiMMuClwveB2oNqi9K6YkLWcgdVKARsreu4aHKlBSgRaT4tvYU
+         krwes/k02+HJts4cTVWP6dA36pxIqUEzdHqJZR6lnm9Gdj2iCKDisT8ImF71b1X259UW
+         YGrJOHefC09R06Qh7h/MZhHNmYn/UWiU8XyjnFQOMM2Np3+8MLPwF60zIKh5Y9tBmA81
+         LoFQ+SqjkWFuH3L90k8szcTdFs6QrF/Sly6c4BddhqO8iNhoSIV1gxpzYCLIHcrEo5R3
+         ggbQ==
+X-Gm-Message-State: ANoB5plhjmAZTv9BB/Z6VStmkJHhE2AZ/Y71thqzzVJcO6QhsgEvKLbt
+        3M93x7185LgYNc8J4KRaqqcpoA==
+X-Google-Smtp-Source: AA0mqf66WvuXOvvEgmjWbFNbdtend+6s+HRKZkNnVe5YBS4XvYhP3v3obghSZgzSgUT+GR7d0mkgag==
+X-Received: by 2002:ac2:5e23:0:b0:4a6:fd95:a0a4 with SMTP id o3-20020ac25e23000000b004a6fd95a0a4mr5940005lfg.485.1669022039057;
+        Mon, 21 Nov 2022 01:13:59 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g2-20020a2eb5c2000000b0025ebaef9570sm1385005ljn.40.2022.11.21.01.13.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 01:13:58 -0800 (PST)
+Message-ID: <d83e9a3d-2482-4342-03c1-818a38bd4b7b@linaro.org>
+Date:   Mon, 21 Nov 2022 10:13:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] dt-bindings: iio: adc: ad7923: adjust documentation
+Content-Language: en-US
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221120153419.GA3094349-robh@kernel.org>
+ <20221120170630.29354-1-edmund.berenson@emlix.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221120170630.29354-1-edmund.berenson@emlix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When extending segments, nilfs_sufile_alloc() is called to get an
-unassigned segment, then mark it as dirty to avoid accidentally
-allocating the same segment in the future.
+On 20/11/2022 18:06, Edmund Berenson wrote:
+> - Add the ad7927 compatibility string, with fallback compatibility
+> to ad7928.
+> - ad7923 and ad7924 are treated the same in the driver, show
+> the relationship in the documentation.
+> 
+> Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+> ---
+>  .../bindings/iio/adc/adi,ad7923.yaml          | 26 ++++++++++++-------
 
-But for some special cases such as a corrupted image it can be
-unreliable.
-If such corruption of the dirty state of the segment occurs, nilfs2 may
-reallocate a segment that is in use and pick the same segment for
-writing twice at the same time.
+Do not respond with new patch to some old thread. Each patchset starts a
+new thread.
 
-This will cause the problem reported by syzkaller:
-https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
+>  1 file changed, 17 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+> index 07f9d1c09c7d..e553853e25d5 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+> @@ -11,7 +11,7 @@ maintainers:
+>  
+>  description: |
+>    Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
+> -   AD7918, AD7928 8 Channels ADCs.
+> +   AD7918, AD7927, AD7928 8 Channels ADCs.
+>  
+>    Specifications about the part can be found at:
+>      https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
+> @@ -20,14 +20,22 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - adi,ad7904
+> -      - adi,ad7914
+> -      - adi,ad7923
+> -      - adi,ad7924
+> -      - adi,ad7908
+> -      - adi,ad7918
+> -      - adi,ad7928
+> +    oneOf:
+> +      - enum:
+> +          - adi,ad7904
+> +          - adi,ad7914
+> +          - adi,ad7908
 
-This case started with segbuf1.segnum = 3, nextnum = 4 when constructed.
-It supposed segment 4 has already been allocated and marked as dirty.
+You already started shuffling the entries, so make them ordered. What's
+the point of changing the order from one non-sorted to another non-sorted?
 
-However the dirty state was corrupted and segment 4 usage was not dirty.
-For the first time nilfs_segctor_extend_segments() segment 4 was
-allocated again, which made segbuf2 and next segbuf3 had same segment 4.
+> +          - adi,ad7918
+> +          - adi,ad7923
+> +          - adi,ad7924
 
-sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
-added to both buffer lists of two segbuf. It makes the lists broken
-which causes NULL pointer dereference.
+Then deprecate this as alone compatible.
 
-Fix the problem by setting usage as dirty every time in
-nilfs_sufile_mark_dirty(), which is called during constructing current
-segment to be written out and before allocating next segment.
+> +          - adi,ad7927> +          - adi,ad7928
 
-Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
-Cc: stable@vger.kernel.org
-Reported-by: syzbot+77e4f005cb899d4268d1@syzkaller.appspotmail.com
-Reported-by: Liu Shixin <liushixin2@huawei.com>
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
----
-v1 -> v2:
-1) Add lock protection as Ryusuke suggested and slightly fix commit
-message.
-2) Fix and add tags.
+Ditto
 
-v2 -> v3:
-Fix commit message to make it clear.
----
- fs/nilfs2/sufile.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> +      - items:
+> +          - const: adi,ad7923
+> +          - const: adi,ad7924
 
-diff --git a/fs/nilfs2/sufile.c b/fs/nilfs2/sufile.c
-index 77ff8e95421f..dc359b56fdfa 100644
---- a/fs/nilfs2/sufile.c
-+++ b/fs/nilfs2/sufile.c
-@@ -495,14 +495,22 @@ void nilfs_sufile_do_free(struct inode *sufile, __u64 segnum,
- int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
- {
- 	struct buffer_head *bh;
-+	void *kaddr;
-+	struct nilfs_segment_usage *su;
- 	int ret;
- 
-+	down_write(&NILFS_MDT(sufile)->mi_sem);
- 	ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
- 	if (!ret) {
- 		mark_buffer_dirty(bh);
- 		nilfs_mdt_mark_dirty(sufile);
-+		kaddr = kmap_atomic(bh->b_page);
-+		su = nilfs_sufile_block_get_segment_usage(sufile, segnum, bh, kaddr);
-+		nilfs_segment_usage_set_dirty(su);
-+		kunmap_atomic(kaddr);
- 		brelse(bh);
- 	}
-+	up_write(&NILFS_MDT(sufile)->mi_sem);
- 	return ret;
- }
- 
--- 
-2.17.1
+I would expect lower number as fallback.
+
+> +      - items:
+> +          - const: adi,ad7927
+> +          - const: adi,ad7928
+
+Ditto.
+
+>  
+>    reg:
+>      maxItems: 1
+
+Best regards,
+Krzysztof
 
