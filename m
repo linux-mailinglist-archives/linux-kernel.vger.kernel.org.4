@@ -2,193 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC71633090
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 886626330A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiKUXNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S231262AbiKUXSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:18:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiKUXNU (ORCPT
+        with ESMTP id S229864AbiKUXSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:13:20 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A69EC5B4B;
-        Mon, 21 Nov 2022 15:13:19 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id b8so7557431edf.11;
-        Mon, 21 Nov 2022 15:13:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CykOkRemH/roTrEIIffpSd1XkgWDGuppCGGueEqDGWA=;
-        b=Gl/mJ8k/quImoueaUH5m15K6zL72j8qZnR8RITM7cVRVHdDKquqr9v53+7/R0mfgCL
-         GTNM9czrgtrTWvGqSxlsH2gC85cRnfDxcydg/PAD4FasG362FCGCI/AwL69+PhifMetP
-         PMsqaYeAXfmPrNHdPvaXaN9Y3xWi6mw4KlAaOsW6bHHa+wPPmnT18Jg1BMPvFzTQDF/O
-         l0Pn7zWhhZUTn8Ym1AKVGwnNT8PrCnExgmhv4PPEgEOIl4l22v5B2E+/pTQjJCWVjnsY
-         AkE3megsMez9ZLU1jj88ptl1y91+PYWVmxTc0hkPjpl0b5D+39KFee0MMJ3vHq61FRuk
-         AeRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CykOkRemH/roTrEIIffpSd1XkgWDGuppCGGueEqDGWA=;
-        b=bDdEo8bPQMeUK9dlUgQag0lTyc/krZXyhdt9sQh+8DFvlFxxMx3KQxszMiV5DG/Uq1
-         rY8SbEq6hsc331gmTN6gLOk2K4qHRIDaFd9FDXAb+xTTQMwj/+SRaJBIY+/ueDk9jS7t
-         CBsHXUt7yy34qdfvVqPa7v1KLL6LgK/ROBloDh56dZ9uhu1fwXJJ25ZHM7XXDooxDJNA
-         OXxSRdJGPo5uEPc4Z7oWLqmoGMqq6+cIDW/9B52llN8ZMAXNWG+EaltAlod+lrXISZs8
-         8oMRK3iMPMF2l8LY3pgBN9fmuNLF+xvZwxIiybVRwic16TdwTvSLfeniXQ1ENUi+bEFI
-         7IPg==
-X-Gm-Message-State: ANoB5plq1S/bSbaNiTE+Zah/GrtnyPF0P09PvI9HniSYu7ltqOZ0pGpr
-        JmztmeRt+uxll2T6IpRaibE=
-X-Google-Smtp-Source: AA0mqf7RNtVsQTUm67vGiEsV810K/fF5msaUubevLSO1lOQ5+z/pycPv+VYaMLel0DdcZJJcEqCu7w==
-X-Received: by 2002:a05:6402:4286:b0:458:7489:34ea with SMTP id g6-20020a056402428600b00458748934eamr4813395edc.264.1669072397786;
-        Mon, 21 Nov 2022 15:13:17 -0800 (PST)
-Received: from skbuf ([188.26.57.184])
-        by smtp.gmail.com with ESMTPSA id fi13-20020a056402550d00b004580862ffdbsm5702696edb.59.2022.11.21.15.13.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 15:13:17 -0800 (PST)
-Date:   Tue, 22 Nov 2022 01:13:14 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com
-Subject: Re: [RFC Patch net-next v2 3/8] net: dsa: microchip: Initial
- hardware time stamping support
-Message-ID: <20221121231314.kabhej6ae6bl3qtj@skbuf>
-References: <20221121154150.9573-1-arun.ramadoss@microchip.com>
- <20221121154150.9573-4-arun.ramadoss@microchip.com>
+        Mon, 21 Nov 2022 18:18:21 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230EFC6628;
+        Mon, 21 Nov 2022 15:18:19 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 30F8888F;
+        Tue, 22 Nov 2022 00:18:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669072696;
+        bh=HY/GKu5IoQe7GFwzazYfXrmfafSspQ3CMoXMXMsbbBc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UvEiEbw9fhgx7QWNabRaGKTVKkqM+hZ9RMuBJbRnLUrubRcX/7UFul+2i4Z9rID+T
+         9+8V7w10FOAQyPTgcdEmMrfVJlZTpK36YFsD3QXn45qaN51wqq+T0KUB3k7lvMny1z
+         FeLrcz7wN3mgZAHauYBwayeNZ323sAq2ucA99p94=
+Date:   Tue, 22 Nov 2022 01:18:01 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        David Plowman <david.plowman@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>
+Subject: Re: [PATCH 03/14] media: videobuf2: Allow exporting of a struct
+ dmabuf
+Message-ID: <Y3wHKfeNB6Fv9Xpo@pendragon.ideasonboard.com>
+References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
+ <20221121214722.22563-4-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221121154150.9573-4-arun.ramadoss@microchip.com>
+In-Reply-To: <20221121214722.22563-4-umang.jain@ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 09:11:45PM +0530, Arun Ramadoss wrote:
-> +static int ksz_ptp_enable_mode(struct ksz_device *dev, bool enable)
-> +{
-> +	u16 data = 0;
-> +
-> +	/* Enable PTP mode */
-> +	if (enable)
-> +		data = PTP_ENABLE;
-> +
-> +	return ksz_rmw16(dev, REG_PTP_MSG_CONF1, PTP_ENABLE, data);
+Hi Umang and Dave,
+
+Thank you for the patch.
+
+On Tue, Nov 22, 2022 at 03:17:11AM +0530, Umang Jain wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+> 
+> videobuf2 only allowed exporting a dmabuf as a file descriptor,
+> but there are instances where having the struct dma_buf is
+> useful within the kernel.
+> 
+> Split the current implementation into two, one step which
+> exports a struct dma_buf, and the second which converts that
+> into an fd.
+> 
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>  .../media/common/videobuf2/videobuf2-core.c   | 36 +++++++++++++------
+>  include/media/videobuf2-core.h                | 15 ++++++++
+>  2 files changed, 40 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+> index ab9697f3b5f1..32b26737cac4 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> @@ -2184,49 +2184,49 @@ static int __find_plane_by_offset(struct vb2_queue *q, unsigned long off,
+>  	return -EINVAL;
+>  }
+>  
+> -int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
+> -		unsigned int index, unsigned int plane, unsigned int flags)
+> +struct dma_buf *vb2_core_expbuf_dmabuf(struct vb2_queue *q, unsigned int type,
+> +				       unsigned int index, unsigned int plane,
+> +				       unsigned int flags)
+
+This function is used in the ISP driver, in bcm2835_isp_buf_prepare(),
+for MMAP buffers, and as far as I can tell, its only purpose is to
+create a dma_buf instance to then be imported in
+vchiq_mmal_submit_buffer() with a call to vc_sm_cma_import_dmabuf().
+That sounds like a very complicated set of operations, and quite
+inefficient :-(
+
+>  {
+>  	struct vb2_buffer *vb = NULL;
+>  	struct vb2_plane *vb_plane;
+> -	int ret;
+>  	struct dma_buf *dbuf;
+>  
+>  	if (q->memory != VB2_MEMORY_MMAP) {
+>  		dprintk(q, 1, "queue is not currently set up for mmap\n");
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	if (!q->mem_ops->get_dmabuf) {
+>  		dprintk(q, 1, "queue does not support DMA buffer exporting\n");
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	if (flags & ~(O_CLOEXEC | O_ACCMODE)) {
+>  		dprintk(q, 1, "queue does support only O_CLOEXEC and access mode flags\n");
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	if (type != q->type) {
+>  		dprintk(q, 1, "invalid buffer type\n");
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	if (index >= q->num_buffers) {
+>  		dprintk(q, 1, "buffer index out of range\n");
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	vb = q->bufs[index];
+>  
+>  	if (plane >= vb->num_planes) {
+>  		dprintk(q, 1, "buffer plane out of range\n");
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	if (vb2_fileio_is_active(q)) {
+>  		dprintk(q, 1, "expbuf: file io in progress\n");
+> -		return -EBUSY;
+> +		return ERR_PTR(-EBUSY);
+>  	}
+>  
+>  	vb_plane = &vb->planes[plane];
+> @@ -2238,9 +2238,23 @@ int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
+>  	if (IS_ERR_OR_NULL(dbuf)) {
+>  		dprintk(q, 1, "failed to export buffer %d, plane %d\n",
+>  			index, plane);
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> +	return dbuf;
 > +}
+> +EXPORT_SYMBOL_GPL(vb2_core_expbuf_dmabuf);
 > +
-> +static int ksz_set_hwtstamp_config(struct ksz_device *dev, int port,
-> +				   struct hwtstamp_config *config)
+> +int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
+> +		    unsigned int index, unsigned int plane, unsigned int flags)
 > +{
-> +	struct ksz_tagger_data *tagger_data = ksz_tagger_data(dev->ds);
-> +	struct ksz_port *prt = &dev->ports[port];
-> +	bool rx_on;
+> +	struct dma_buf *dbuf;
+> +	int ret;
 > +
-> +	/* reserved for future extensions */
-> +	if (config->flags)
-> +		return -EINVAL;
+> +	dbuf = vb2_core_expbuf_dmabuf(q, type, index, plane, flags);
+> +	if (IS_ERR(dbuf))
+> +		return PTR_ERR(dbuf);
 > +
-> +	switch (config->tx_type) {
-> +	case HWTSTAMP_TX_OFF:
-> +	case HWTSTAMP_TX_ONESTEP_P2P:
-> +		prt->hwts_tx_en = config->tx_type;
-> +		break;
-> +	case HWTSTAMP_TX_ON:
-> +		if (!is_lan937x(dev))
-> +			return -ERANGE;
-> +
-> +		prt->hwts_tx_en = config->tx_type;
-> +		break;
-> +	default:
-> +		return -ERANGE;
-> +	}
-> +
-> +	switch (config->rx_filter) {
-> +	case HWTSTAMP_FILTER_NONE:
-> +		rx_on = false;
-> +		break;
-> +	default:
-> +		rx_on = true;
-> +		break;
-> +	}
-> +
-> +	if (rx_on != tagger_data->hwtstamp_get_state(dev->ds)) {
-> +		int ret;
-> +
-> +		tagger_data->hwtstamp_set_state(dev->ds, false);
-> +
-> +		ret = ksz_ptp_enable_mode(dev, rx_on);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (rx_on)
-> +			tagger_data->hwtstamp_set_state(dev->ds, true);
-> +	}
-
-What's your excuse which such a horrible code pattern? What will happen
-so bad with the packet if it's flagged with a TX timestamp request in
-KSZ_SKB_CB(skb) at the same time as REG_PTP_MSG_CONF1 is written to?
-
-Also, doesn't dev->ports[port].hwts_tx_en serve as a guard against
-flagging packets for TX timestamps when you shouldn't?
-
-> +
-> +	return 0;
-> +}
-> diff --git a/net/dsa/tag_ksz.c b/net/dsa/tag_ksz.c
-> index 37db5156f9a3..6a909a300c13 100644
-> --- a/net/dsa/tag_ksz.c
-> +++ b/net/dsa/tag_ksz.c
-> @@ -4,6 +4,7 @@
->   * Copyright (c) 2017 Microchip Technology
+>  	ret = dma_buf_fd(dbuf, flags & ~O_ACCMODE);
+>  	if (ret < 0) {
+>  		dprintk(q, 3, "buffer %d, plane %d failed to export (%d)\n",
+> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+> index 3253bd2f6fee..33629ed2b64f 100644
+> --- a/include/media/videobuf2-core.h
+> +++ b/include/media/videobuf2-core.h
+> @@ -911,6 +911,21 @@ int vb2_core_streamon(struct vb2_queue *q, unsigned int type);
 >   */
+>  int vb2_core_streamoff(struct vb2_queue *q, unsigned int type);
 >  
-> +#include <linux/dsa/ksz_common.h>
->  #include <linux/etherdevice.h>
->  #include <linux/list.h>
->  #include <net/dsa.h>
-> @@ -18,6 +19,62 @@
->  #define KSZ_EGRESS_TAG_LEN		1
->  #define KSZ_INGRESS_TAG_LEN		1
->  
-> +#define KSZ_HWTS_EN  0
+> +/**
+> + * vb2_core_expbuf_dmabuf() - Export a buffer as a dma_buf structure
+> + * @q:         videobuf2 queue
+> + * @type:      buffer type
+> + * @index:     id number of the buffer
+> + * @plane:     index of the plane to be exported, 0 for single plane queues
+> + * @flags:     flags for newly created file, currently only O_CLOEXEC is
+> + *             supported, refer to manual of open syscall for more details
+> + *
+> + * Return: Returns the dmabuf pointer
+> + */
+> +struct dma_buf *vb2_core_expbuf_dmabuf(struct vb2_queue *q, unsigned int type,
+> +				       unsigned int index, unsigned int plane,
+> +				       unsigned int flags);
 > +
-> +struct ksz_tagger_private {
-> +	struct ksz_tagger_data data; /* Must be first */
-> +	unsigned long state;
-> +};
-> +
-> +static struct ksz_tagger_private *
-> +ksz_tagger_private(struct dsa_switch *ds)
-> +{
-> +	return ds->tagger_data;
-> +}
-> +
-> +static bool ksz_hwtstamp_get_state(struct dsa_switch *ds)
-> +{
-> +	struct ksz_tagger_private *priv = ksz_tagger_private(ds);
-> +
-> +	return test_bit(KSZ_HWTS_EN, &priv->state);
-> +}
-> +
-> +static void ksz_hwtstamp_set_state(struct dsa_switch *ds, bool on)
-> +{
-> +	struct ksz_tagger_private *priv = ksz_tagger_private(ds);
-> +
-> +	if (on)
-> +		set_bit(KSZ_HWTS_EN, &priv->state);
-> +	else
-> +		clear_bit(KSZ_HWTS_EN, &priv->state);
-> +}
+>  /**
+>   * vb2_core_expbuf() - Export a buffer as a file descriptor.
+>   * @q:		pointer to &struct vb2_queue with videobuf2 queue.
+
+-- 
+Regards,
+
+Laurent Pinchart
