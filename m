@@ -2,215 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A7663242A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919A363242C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiKUNrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:47:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
+        id S231168AbiKUNrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:47:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiKUNra (ORCPT
+        with ESMTP id S230021AbiKUNra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 08:47:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462A4B65
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:47:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C94E9B81035
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 13:47:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7678EC4314F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 13:47:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669038443;
-        bh=WLmQPieY/32ZBlobTgkPgqKa+KfkJsr19/fUw7so9Zo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SiuxS6lvR2h0XP97jZ1FO39f7sHYqOYM+A8J+wF9ePnYRxf9gKB7k6yfFmgA8vO+7
-         cLancaylCL9QPWmv94+kQlCVRsKKpdTwXyVQv4JLTysN5pC2EdJykT+D+wUiE1+trd
-         KT9olyUNURj53GfMAeECi+Q0ipgPL+LwUq9KuvUEbuMw3uXcVg78z07nInDOdPeWB9
-         TA5/Ay9BGdaxUS3cLgL3K36Le2Ah4rNYjggfcJxNPsCCID3lyzJPpeLe+F8bST04Wo
-         G2kcflT5UZgEZd6N3i5kCXWJylWYxHgiJQ5yj/GAl3GIqOg+4jvwOhSh+ikT6B4iTw
-         wezZAoaRBloUQ==
-Received: by mail-lf1-f51.google.com with SMTP id d6so18889085lfs.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:47:23 -0800 (PST)
-X-Gm-Message-State: ANoB5pltvbvWOxZ68+0YQ2HQTZtokYGkcAHeOBUc9jQEoz09bXCmfKSm
-        rZngN/0UbHnV4jngTUHZMZQAitdlbvAhO/lRe7pvnw==
-X-Google-Smtp-Source: AA0mqf7v8WCda89LXA6/tr76kH+DxPHn5svWXXAXFDeemVuyBdED8n/VqjrNbfqDB4CLgbztSqjuOR88iwMKngyi7oE=
-X-Received: by 2002:a19:6755:0:b0:4ac:3f87:151f with SMTP id
- e21-20020a196755000000b004ac3f87151fmr6553432lfj.398.1669038441285; Mon, 21
- Nov 2022 05:47:21 -0800 (PST)
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA51FD8;
+        Mon, 21 Nov 2022 05:47:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669038447; x=1700574447;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=HoSNNoRJ3pWd9sNv0yBX8V8qsAQowGXUSA9d0hKJRgQ=;
+  b=glXUdy3SqkzUWvV+/g+5EBZptMgKGGwJjxZE2DpitSf35np9CZerxiM/
+   I2WPVZH6Gs+z5IztGWLrXdgtdFQSvc34RvNb264gkuEI7KbhPMEY0tSJH
+   sieCBnhWNGdNeRxsoMv0RHWmuAiAupEwbDgUKtyK+Rrg0LGpIo+JhuukP
+   i1E8o/blPD4AaZ1x+jtd/jBytanYZg4ouo/vJ5fd+QaxQyEo6UoxlN+98
+   OWjP/rGeqSOhCabYkAeVzD2cjM9Kvq7oEniJ1gnEqSrjGs2b3QyMdMBWC
+   Zajql1aqYKqCY8SHW0ooDmfMwur8X8FrIqAeWICi/V+/WcQKKjMuyXDRC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="340418042"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="340418042"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 05:47:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="709813082"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="709813082"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Nov 2022 05:47:26 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 05:47:25 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 21 Nov 2022 05:47:25 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 21 Nov 2022 05:47:25 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R/txeyKaQV234g5TxygSyNq9kRb3ymzbBcWwzCt7AvUzfuwHUsVUlhDuM/QXwERQ7jF8AiddLk4EeYGWY4LkNhIrPoosoBQ4T2UaGwhys8WdVoiWJzVznQozYDe/m5tqGYlZtNzkEEUBgpIl28D1cMCV2hfZe/EjlNUZbw1zNbZ0rnRhxx6xkVo30Pz1IaWGI+v0LeeISwuz6XuategQq3MCp/bQAnB5J9lc23ibBsXkvABBc2Iex6Sct0SIXdO4ivgi4uLB1A3j701YeoI0CxDwtJ5p3DiI3hKe71/jYG0mlZch7ctYV+b+ALbk9iw0dmvgowEqDA4JN5u9eguqxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hTSAGdCm5Htj9+F6o5yUpsP25GuT0BkdU2HB4/RZmWM=;
+ b=a2KBbS9w51+nCyaWivxnGkLJodQwZDS6jqRWhKb1mbSWgSqk6ObJcc/DkSPaQ1FlaWO7egDXsaB8N07SEQJZXfUOvoQcHGp2pKyxzlQMR01Cwp8aGhppy/oKzxg7r1HM2t7nATpKXEKN5LONUp1CYIsBWmOCDBzWXYcaKjOnnsUUx2skbBKgO+2aSyAzZ20GV2KeqftU28pYeVNJ+mnPBIlEKePSa9/vaKKKDdk0Req2L7VvRdm1L7p6HTMtvwORSiPJ0nqZuI36Ou2RF/etF3BWLXI+kosnFESaf9nRP8cy8Tfq6N2YjH8J2of65uyDY356+Y7zCVR2OQraVoVjmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ0PR11MB5008.namprd11.prod.outlook.com (2603:10b6:a03:2d5::17)
+ by BL1PR11MB5318.namprd11.prod.outlook.com (2603:10b6:208:312::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
+ 2022 13:47:21 +0000
+Received: from SJ0PR11MB5008.namprd11.prod.outlook.com
+ ([fe80::c9b5:9859:5a54:36ee]) by SJ0PR11MB5008.namprd11.prod.outlook.com
+ ([fe80::c9b5:9859:5a54:36ee%6]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
+ 13:47:20 +0000
+From:   "Kumar, M Chetan" <m.chetan.kumar@intel.com>
+To:     Diederik de Haas <didi.debian@cknow.org>,
+        "Bonaccorso, Salvatore" <carnil@debian.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linuxwwan <linuxwwan@intel.com>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "ryazanov.s.a@gmail.com" <ryazanov.s.a@gmail.com>
+Subject: RE: drivers/net/wwan/iosm/iosm_ipc_protocol.c:244:36: error: passing
+ argument 3 of 'dma_alloc_coherent' from incompatible pointer type
+ [-Werror=incompatible-pointer-types]
+Thread-Topic: drivers/net/wwan/iosm/iosm_ipc_protocol.c:244:36: error: passing
+ argument 3 of 'dma_alloc_coherent' from incompatible pointer type
+ [-Werror=incompatible-pointer-types]
+Thread-Index: AQHY+rpr+isg4xtGiUuyoCVpo/4Cu65JZxgAgAAAtpA=
+Date:   Mon, 21 Nov 2022 13:47:20 +0000
+Message-ID: <SJ0PR11MB500875E67568132D3D4EBCB1D70A9@SJ0PR11MB5008.namprd11.prod.outlook.com>
+References: <Y3aKqZ5E8VVIZ6jh@eldamar.lan> <2951107.mvXUDI8C0e@bagend>
+In-Reply-To: <2951107.mvXUDI8C0e@bagend>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR11MB5008:EE_|BL1PR11MB5318:EE_
+x-ms-office365-filtering-correlation-id: 5c5d5858-716f-4096-2993-08dacbc6e956
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0yTqn6HVE9eAyKwhoZtkWOpOgHnYyzOWNVjqVbXd1CC/Ve2VrTHrdvjo6VC+jV7lrsZW9SJoE8RMKYdz2vPjF6JLMV9+KA1sCaLwDbUIYqK5E41ixZ03ztpTwEgvDgeZaLD82ru6yYBiNoc//Zm/INsIZ4h+nmJypF5WmZHk1CL8jooAeX+vqUDg/E7xOgIWJ3UBxBiixyEgv8xVYiKPCRs3SSBHpxKpVmO6/VtQP3icMvOZdEojo2ih2DT7cDrRXzsQYwJZUs5516c5Z7UeQDfAyU/K0Vq5VwGGsNnLu12Wh4x3+FAdmTjyDeQF5/VvOUDIhkDa3VT7qrEBqGOISgghF3oGhaBmHoGWLBEi3wIxpNP0GHmKLk5twbc7SBM6EpdGNLhzdp+zvX2t3d16hF80p48x8AyfL16Co3yHQWXSQgdVvkZfXC0FS1aLYlyhvttgLejBVFm3OrwNVuU7MFcUERsvimAK8qHj5X1evSQYlNJ4fGnwMVdhJpvv+avkqjKIGdV/I2/0E6EtwA98cs2dnuC9c33RXo76lg3ThmQBLwJ6ybtAgnxXpEA7DxaZcydterTtC4OEmFwjOZ+wGOxc4TaqFNOgafj2jnedZgoysWsflMSe3xObXgHKlVlFn/AyH0Xqdb3MgI68F0nkR0pEcPChJHHf1nPzMSo9klRiCWxdjfjcBhnpJmLHMXthrm6bDAym8Y48pvyhv+EIivNaSsQgJnHbwFxhWkEhyfI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5008.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(346002)(376002)(39860400002)(136003)(451199015)(52536014)(41300700001)(7416002)(8936002)(54906003)(64756008)(76116006)(5660300002)(4326008)(66476007)(8676002)(66556008)(316002)(66946007)(66446008)(966005)(83380400001)(82960400001)(55016003)(478600001)(38070700005)(110136005)(6506007)(26005)(71200400001)(2906002)(86362001)(33656002)(7696005)(9686003)(4744005)(186003)(122000001)(38100700002)(53546011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KKWJj1vvtLCnHeFRr7a49WUvmj27ipmN0PnjvnP3hQZ+n8lHaSiq7MZqUjUa?=
+ =?us-ascii?Q?s/qlPVJHgGnLfVRbo2I5e+Ahewh1T2sfROH5fYDk1VjI8UhsLPC5V0NqnvLl?=
+ =?us-ascii?Q?zhy9ASTDZ5S/7CQJgBQlC84IO82UoKJLP/HfVSTgAPyi5c+NTgtNQrJFq9x6?=
+ =?us-ascii?Q?iEwQhcz1A2kdVkk3q6PTFSPDAd3DG7VxWUuF3UWsSxJctYKHe1vGUkm0Wjx+?=
+ =?us-ascii?Q?0dQRcquIoPy5AIWJijMBG2tmq/VXVUkJPogBC1LWNkYjo4Ipy5DOdm9SoRUT?=
+ =?us-ascii?Q?SdpOSPRRQ7X8vR7WTh3X3MWv1YZBM2RcMV+xZTinT05uF4Ju8Cz8ZJuRhuGp?=
+ =?us-ascii?Q?wuHCY4Ux6TRKrPa20pA6f2JhkCxZPSpvMnEif8s+3hr8EghD5NVO84hJ25Cf?=
+ =?us-ascii?Q?eKpAli1TMLrAAl7jMT6UJD3LASkzvxltfVbEyp8AfD4lo9qVxUxDaPPYSmeG?=
+ =?us-ascii?Q?z/Wqksoa8A0l/nSeGKksfp//bmKRAJkxCIdsF5Q66HKcsNFT4Efuss7yJser?=
+ =?us-ascii?Q?rQxnpy4qlMcxYDwsomy9KbuB3sj0Jn7QYAC+0K+7zoN5Cn93p+jfjb73gCvj?=
+ =?us-ascii?Q?fjrjjEoTPNRck09PXUBgshsp1wKpZQBYNYc+4pGFN3hdo5Ri01sNKeZWN0ee?=
+ =?us-ascii?Q?dmQ7gRBzgY+FpStJiBdEvOFqB6ERWSdY3/TsVvdUMgDhOtTkdWVgqHwiiHR5?=
+ =?us-ascii?Q?/yL1iQ8dSzZcNMylNT+cAgDoUJJmafcfMbtk+q2ySbLag122N6tq/zWWG65M?=
+ =?us-ascii?Q?CVVMlku3wbrhk6Ol6I0OkyaUn/Uv6y9AuTzQPbJHQvjVSgwwhCWTTQV96WTm?=
+ =?us-ascii?Q?hqJI9m55xcQ8vB5wxvHIejKenGXsZ71/n6OLSjpCEjvzrumjND6bGoebFGzZ?=
+ =?us-ascii?Q?r9wXHtcRJ0cB3sXdYg07vSbOvmpqXuXzYdqu6KiIrOFvrQRwtYR+iHP3MsiD?=
+ =?us-ascii?Q?4s+2Vl4PzbZN3/kbY4Z6eSaf//aUTok8GrLgMhf5VHYjRiY3jXO3dcgUOlcU?=
+ =?us-ascii?Q?Tp0uxBFA5o7HlucGYFv++YRDbpxeHyW2EN+Jfu/TWrIcZVyidLZftWXvTiIJ?=
+ =?us-ascii?Q?Jb2MYpfcaH5c5Srsc64Swm/T645f6PXv8MTvLte4TsL+YIzHcnM8xMZi/qvg?=
+ =?us-ascii?Q?ekBvvpgobrWyYgA7msI+5F7MZtJdV6F+KKx2CoozB9Cgh5nnmZ7CAQk5/43+?=
+ =?us-ascii?Q?yCPSW4ypeXjFlk6JdOBeaFftf11TxzW0fap4nRHay7Wfl17dikxpKwiVcE6K?=
+ =?us-ascii?Q?wZa3c4U7/Kn01IiSXrgBfwHot+uCDTJLd/JjLFrk0310Q0ckBxWNFEAL5+7v?=
+ =?us-ascii?Q?M3oyByjXdN4QeE8/a9j2/z4iwI4tCWllDiCaSqWzprG+KNZyiEuQ0TQIHung?=
+ =?us-ascii?Q?JHc0h7YDvkwu5UoU2/aOjnw+XFJxCBubvZRmocSQnsfy6anBq0VI0dG3Wu4c?=
+ =?us-ascii?Q?0XXlaJiOXQJpGbrRb6grWteXuEMjSNitkKK6GPuQb+XY3BONHmod+hP22UR/?=
+ =?us-ascii?Q?C2zTPTapmtnfzm3TzvlQ1e/oHFzOdSO9AWhX1uI+8Hpbl3vsdw2UwbifSgP6?=
+ =?us-ascii?Q?7nrIoMdEM/93l6cn1xqOdM9tNuq4e2yPSeP/tSR6?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20221108220651.24492-1-revest@chromium.org> <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
- <20221117121617.4e1529d3@gandalf.local.home> <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
- <20221117174030.0170cd36@gandalf.local.home> <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
- <20221118114519.2711d890@gandalf.local.home> <43d5d1f5-c01d-c0db-b421-386331c2b8c1@meta.com>
- <20221118130608.5ba89bd8@gandalf.local.home> <2ab2b854-723a-5f15-8c18-0b5730d1b535@meta.com>
-In-Reply-To: <2ab2b854-723a-5f15-8c18-0b5730d1b535@meta.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 21 Nov 2022 14:47:10 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ613nhXViBpDuGWeEWzjfSJjbB1=KNpYtNDC6Xn7yizbw@mail.gmail.com>
-Message-ID: <CACYkzJ613nhXViBpDuGWeEWzjfSJjbB1=KNpYtNDC6Xn7yizbw@mail.gmail.com>
-Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
-To:     Chris Mason <clm@meta.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5008.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c5d5858-716f-4096-2993-08dacbc6e956
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2022 13:47:20.4422
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yBZO9264muQnxmQJ/mroM+SnJJpPeELdUqIOTWFbBO2VgozcRDfHSiFxgHPc/SRRb7Pmqh+4hfZTQjSYo+uPsmOcbOH1xxuI2VH/kwlx3UQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5318
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 7:52 PM Chris Mason <clm@meta.com> wrote:
->
-> On 11/18/22 1:06 PM, Steven Rostedt wrote:
-> > On Fri, 18 Nov 2022 12:44:00 -0500
-> > Chris Mason <clm@meta.com> wrote:
-> >
+Hi Diederik/Salvatore,
 
-(adding this back here)
+I tried reproducing it at my side by compiling kernel for armhf configurati=
+on [1] but could not reproduce it.
+Could you please share the steps and config details for reproducing it loca=
+lly so that I can take a look at it.
 
-> >>>> On Fri, 18 Nov 2022 16:34:50 +0000
-> >>>> Mark Rutland <mark.rutland@arm.com> wrote:
-> >>>> FWIW, given that the aim here seems to be to expose all kernel internals to be
-> >>>> overridden arbitrarily, I'm also concerned that there's a huge surface area for
-> >>>> issues with maintainability, robustness/correctness, and security.
-> >>>>
+[1]=20
+https://www.raspberrypi.com/documentation/computers/linux_kernel.html
 
-This is not all kernel internals, just the functions allowed for error
-injection.
+Regards,
+Chetan
 
-> >>>> I really don't want to be stuck in a position where someone argues that all
-> >>>> kernel internal functions are ABI and need to stay around as-is to be hooked by
-> >>>> eBPF, and I hope that we all agree that there are no guarantees on that front.
-> >>>>
-
-Yes, BPF provides no guarantee that kernel functions will remain
-stable (similar to tracepoints and kprobes).
-
-> >>>> Thanks,
-> >>>> Mark.
-> >>>>
-> >>> My biggest concern is changing functionality of arbitrary functions by BPF.
-> >>> I would much rather limit what functions BPF could change with some
-> >>> annotation.
-> >>>
-> >>> int __bpf_modify foo()
-> >>> {
-> >>>     ...
-> >>> }
-
-This annotation already exists, i.e. ALLOW_ERROR_INJECTION
-
-Users, with CONFIG_FUNCTION_ERROR_INJECTION, can already modify return
-values of kernel functions using kprobes and the failure injection
-framework [1] for functions annotated with ALLOW_ERROR_INJECTION.
-
-BPF just provides another way to do the same thing with "modify
-return" programs and this also respects the error injection list [2]
-and users can *only* attach these programs to the functions annotated
-with ALLOW_ERROR_INJECTION.
-
-[1] https://www.kernel.org/doc/Documentation/fault-injection/fault-injection.txt
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/bpf/verifier.c?id=f4c4ca70dedc1bce8e7b1648e652aa9be1d3fcd7#n14948
-
-> >>>
-> >>>
-> >>> That way if somethings not working, you can see directly in the code that
-> >>> the function could be modified by a BPF program, instead of getting some
-> >>> random bug report because a function returned an unexpected result that the
-> >>> code of that function could never produce.
-> >>>
-> >>
-> >> The good news is that BPF generally confines the function replacement
-> >> through struct ops interfaces.
-> >
-> > What struct ops interfaces?
->
-> https://lwn.net/Articles/811631/
->
-> >
-> >>   There are also explicit allow lists to
-> >> limit functions where you can do return value overrides etc, so I think
-> >
-> > Where are these lists.
->
-> Some of the original features:
->
-> https://lwn.net/Articles/811631/
-
-I think you meant: https://lwn.net/Articles/740146/ ?
-
->
-> It has changed and expanded since then, but hopefully you get the idea.
->
-> >
-> >> it's fair to say these concerns are already baked in.  I'm sure they can
-> >
-> > How do I know that a function return was modified by BPF? If I'm debugging
-
-You can list the BPF programs that are loaded in the kernel with
-
-# bpftool prog list
-
-Also, the BPF programs show up in call stacks when you are debugging.
-
-> > something, is it obvious to the developer that is debugging an issue
-> > (perhaps unaware of what BPF programs are loaded on the users machine),
-> > that the return of a function was tweaked by BPF and that could be the
-> > source of the bug?
-> >
-> >> be improved over the long term, but I don't think that's related to this
-> >> set of functionality on ARM.
-
-There are workloads and applications (e.g. https://kubearmor.io/) that
-already use BPF Tracing and LSM programs and are currently blocked on
-their ARM server deployments.
-
-This may be obvious, but I want to reiterate that while the attachment
-points are not UAPI and users have to tolerate kernel function
-changes, they do expect the core loading and attachment mechanisms to
-exist (i.e. the ability to use LSM and tracing programs).
-
-> >
-> > I disagree. These issues may have been added to x86, but perhaps we should
-> > take a deeper look at them again before extending them to other
-> > architectures.
->
-> Honestly, I think a large scale architecture review of every BPF feature
-> and decision over the last 10 years is just the wrong bar for this patch
-> series.
-
-+1
-
->
->  From my understanding, Mark and Florent have some changes planned
-> that'll improve ftrace, livepatching, and bpf.  Lets talk about those,
-> and tackle any long term improvements you'd like to make to BPF in other
-> patch series.
-
-+1
-
- - KP
-
->
-> -chris
->
+> -----Original Message-----
+> From: Diederik de Haas <didi.debian@cknow.org>
+> Sent: Monday, November 21, 2022 7:07 PM
+> To: Bonaccorso, Salvatore <carnil@debian.org>
+> Cc: davem@davemloft.net; edumazet@google.com;
+> johannes@sipsolutions.net; kuba@kernel.org; linux-kernel@vger.kernel.org;
+> linuxwwan <linuxwwan@intel.com>; loic.poulain@linaro.org; Kumar, M
+> Chetan <m.chetan.kumar@intel.com>; netdev@vger.kernel.org;
+> pabeni@redhat.com; ryazanov.s.a@gmail.com
+> Subject: Re: drivers/net/wwan/iosm/iosm_ipc_protocol.c:244:36: error:
+> passing argument 3 of 'dma_alloc_coherent' from incompatible pointer type
+> [-Werror=3Dincompatible-pointer-types]
+>=20
+> The same error occurred with 6.1-rc6, again on armhf.
+>=20
+> Cheers,
+>   Diederik
