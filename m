@@ -2,205 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45C1631BDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8A3631BD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiKUItK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S230169AbiKUIsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiKUItI (ORCPT
+        with ESMTP id S229868AbiKUIsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:49:08 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB12233B6;
-        Mon, 21 Nov 2022 00:49:06 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL6P494022120;
-        Mon, 21 Nov 2022 09:48:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=YN687U0kxELSCHXgysLfYlUDondN7TTlf1RFw+IfXPI=;
- b=QxieuqCz19jVxKrtPIJIwIMSIb6rtxG0/lssSSYcs+XcDYAdj0IFvDrm9GmCNednIdaj
- u4UnDhJsETw2RNIJqKMTF6ySSj+Ow0eWfPOYdKmGZqeeUQCs1aeoP/93VFQ2yXSuAtFR
- 6Wvopp+g6LSorzmxCWN0rC+VrHB9ov09ksxzjKNd0GTTvDBiEiqz0R7uQfyFaXKbUV8M
- r1rmj0aGq/bmmXFjQasstpPBDynrHqAUxGiWNmFU6elnqEd+Bl+jMYlpU+sGdYEV2tN4
- sxgfX6pdA+jXa2+9uI+WTG8yPtwn7aZ/CkGBV21XEXRu6W4zPBYWMZ9TBVePWn+zVAxu Iw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kxrcgrwgt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 09:48:41 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0D27810003A;
-        Mon, 21 Nov 2022 09:48:34 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F3C5821515A;
-        Mon, 21 Nov 2022 09:48:33 +0100 (CET)
-Received: from [10.201.20.168] (10.201.20.168) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Mon, 21 Nov
- 2022 09:48:33 +0100
-Message-ID: <7a4b85f9-8d23-57de-c09d-d586bf63fb3f@foss.st.com>
-Date:   Mon, 21 Nov 2022 09:48:05 +0100
+        Mon, 21 Nov 2022 03:48:36 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4C563EE;
+        Mon, 21 Nov 2022 00:48:35 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id e11so5835322wru.8;
+        Mon, 21 Nov 2022 00:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0xMSkrp2QCMbpWdX9ZXZNxy3sLf1xmTJq6HXuT+6fqY=;
+        b=HcsEhi7TopMkZF1xL+/iZzqn1nWtEEoh+vQqmZSFPDN24LzzVw46vI0Jej7V+cGp4a
+         ODMHsK8L7geAAIz+yRj+w0j6y4wryy/5leNYUIapwWbZ4cSXU3Z+N2akGBGdzp5y8d/I
+         6cadOcDZ/Uq/rrPXcpcIWxXWtfv4Fzd/wjUN4kPqtLBMgBrys/WbZOjeZqqk1xFiYjo2
+         zcikZJOWFJqgj3M85Hx0DSs8IvOZK6CaggjbUb0cAjc94fBBuFt5by3ST5v1VtQNZQnI
+         ej5MNqEhnwYhanI6YNHoeKuBt/ysjo6kJxynSvUsymGkJgzQj/L9qcYrMRg9YFYlm8eN
+         U8LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0xMSkrp2QCMbpWdX9ZXZNxy3sLf1xmTJq6HXuT+6fqY=;
+        b=vXlHonlFjAdA47VPgCTrqtTKJ+4y4+IyWrHByaqyi6uKzTax3d10FinBZtlnl7ef5r
+         Mz3PG5DaVSvtwC91XRE2dhMIBQuUA/hiMgHu/KivndQpexcyEQkJHUOagG3zACkXLMKb
+         ygdbkYAgv2miu/T5j/6MoW0CZvx1t/bwdEoj5LPMvpEncg//QqmeTrZPnUFSWSJ+4d+j
+         905I1YH4XjC6BQyCnsoUCEM/x+o8qf2eWSoqcF6+pY/ARnBrpX4Sa/78PjaBx2Y4Kebt
+         po/8xX0Jt7Z0Zk3kLr2zis2XqWkHVIeIdt/ggIY8sEuOgT8whaZV73EFkspw/j7zk4L1
+         61Qg==
+X-Gm-Message-State: ANoB5plF107T1RT6vn+37KtOYCcBjY14x2N9+mh/QDxglm9IFY/iQBDM
+        cAX5bP0cH5Natq2PIQAWRk5t6zQOUzmw/29LZqF4rj8g
+X-Google-Smtp-Source: AA0mqf7VxUnDzI1HPOPjBMz9bylTLSmANdy4gdhleGHwooCvFbBB91Rufzr67GaAWG47TA0FL5vonOh7EA0q/qLlBzw=
+X-Received: by 2002:a5d:5684:0:b0:236:61bb:c79d with SMTP id
+ f4-20020a5d5684000000b0023661bbc79dmr10082348wrv.632.1669020513969; Mon, 21
+ Nov 2022 00:48:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Linux-stm32] [PATCH 00/16] STM32 configure UART nodes for DMA
-Content-Language: en-US
-To:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Marek Vasut <marex@denx.de>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Erwan LE RAY <erwan.leray@foss.st.com>
-CC:     <devicetree@vger.kernel.org>,
-        Amelie DELAUNAY <amelie.delaunay@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        Marcin Sloniewski <marcin.sloniewski@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220203171114.10888-1-erwan.leray@foss.st.com>
- <cc7633c5-de5f-0abf-4ac8-64a74633dfcc@pengutronix.de>
- <f5aec360-c33c-0145-6596-541003e305b2@foss.st.com>
- <98823363-710c-6286-8e63-ba8e5dcadeba@foss.st.com>
- <20221108115916.hlmbvyrnmkxymeed@pengutronix.de>
- <230c26ea-f7c5-2688-16fd-e4a91f421833@denx.de>
- <28c5e508-6893-8ca3-88cc-487a98871722@foss.st.com>
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <28c5e508-6893-8ca3-88cc-487a98871722@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.20.168]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_05,2022-11-18_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221119093424.193145-1-chenzhongjin@huawei.com>
+ <CAKFNMokEHD4FfPRcuRB4GrVquiT_RkWkNGKgb+ZPLPSGwfbDHQ@mail.gmail.com>
+ <db11fe6a-356b-a522-f275-9b8ce8ab3b4a@huawei.com> <CAKFNMo=SsnbZxrAU-ho_37J4ZBqG+VY0kDJxDa3widrb2Gkj1g@mail.gmail.com>
+ <35670b32-1337-04be-0269-f7f0f845833c@huawei.com>
+In-Reply-To: <35670b32-1337-04be-0269-f7f0f845833c@huawei.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Mon, 21 Nov 2022 17:48:15 +0900
+Message-ID: <CAKFNMokLfPLGZQetnXzf2Q4MWVtYOcdujdyYPBMsJgWoW2AMKA@mail.gmail.com>
+Subject: Re: [PATCH v2] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment
+ usage as dirty
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Uwe,
+Hi,
 
-We found the issue, thank you to have reported it.
+On Mon, Nov 21, 2022 at 4:45 PM Chen Zhongjin wrote:
+> On 2022/11/21 14:48, Ryusuke Konishi wrote:
+> > On Mon, Nov 21, 2022 at 11:16 AM Chen Zhongjin wrote:
+> >> Hi,
+> >>
+> >> On 2022/11/19 22:09, Ryusuke Konishi wrote:
+> >>> On Sat, Nov 19, 2022 at 6:37 PM Chen Zhongjin wrote:
+> >>>> In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
+> >>>> nilfs_segment_usage is not set dirty, which makes it can be found by
+> >>>> nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
+> >>> The body of the patch looks OK, but this part of the commit log is a
+> >>> bit misleading.
+> >>> Could you please modify the expression so that we can understand this
+> >>> patch fixes the issue when the disk image is corrupted and the leak
+> >>> wasn't always there ?
+> >> Makes sense. I'm going to fix the message as this:
+> > Thank you for responding to my comment.
+> >
+> >> When extending segment, the current segment is allocated and set dirty
+> >> by previous nilfs_sufile_alloc().
+> >> But for some special cases such as corrupted image it can be unreliable,
+> >> so nilfs_sufile_mark_dirty()
+> >> is called to promise that current segment is dirty.
+> > This sentence is a little different because nilfs_sufile_mark_dirty()
+> > is originally called to dirty the buffer to include it as a part of
+> > the log of nilfs ahead, where the completed usage data will be stored
+> > later.
+> >
+> > And, unlike the dirty state of buffers and inodes, the dirty state of
+> > segments is persistent and resides on disk until it's freed by
+> > nilfs_sufile_free() unless it's destroyed on disk.
+> >
+> >> However, nilfs_sufile_mark_dirty() only sets buffer and inode dirty
+> >> while nilfs_segment_usage can
+> >> still be clean an used by following nilfs_sufile_alloc() because it
+> >> checks nilfs_segment_usage_clean(su).
+> >>
+> >> This will cause the problem reported...
+> > So, how about a description like this:
+> >
+> > When extending segments, nilfs_sufile_alloc() is called to get an
+> > unassigned segment.
+> > nilfs_sufile_alloc() then marks it as dirty to avoid accidentally
+> > allocating the same segment in the future.
+> > But for some special cases such as a corrupted image it can be unreliable.
+> >
+> > If such corruption of the dirty state of the segment occurs, nilfs2
+> > may reallocate a segment that is in use and pick the same segment for
+> > writing twice at the same time.
+> > ...
+> > This will cause the reported problem.
+> > ...
+> > Fix the problem by setting usage as dirty every time in
+> > nilfs_sufile_mark_dirty() which is called for the current segment
+> > before allocating additional segments during constructing segments to
+> > be written out.
+>
+> Thanks for your explanation!
+>
+> I made some simplification, so everything looks like:
+>
+>
+> When extending segments, nilfs_sufile_alloc() is called to get an
+> unassigned segment, then mark it as dirty to avoid accidentally
+> allocating the same segment in the future.
+>
+> But for some special cases such as a corrupted image it can be
+> unreliable.
+> If such corruption of the dirty state of the segment occurs, nilfs2 may
+> reallocate a segment that is in use and pick the same segment for
+> writing twice at the same time.
+>
+> This will cause the problem reported by syzkaller:
+> https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
+>
+> This case started with segbuf1.segnum = 3, nextnum = 4 when constructed.
+> It supposed segment 4 has already been allocated and marked as dirty.
+>
+> However the dirty state was corrupted and segment 4 usage was not dirty.
+> For the first time nilfs_segctor_extend_segments() segment 4 was
+> allocated again, which made segbuf2 and next segbuf3 had same segment 4.
+>
+> sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
+> added to both buffer lists of two segbuf. It makes the lists broken
+> which causes NULL pointer dereference.
+>
+> Fix the problem by setting usage as dirty every time in
+> nilfs_sufile_mark_dirty(), which is called during constructing current
+> segment to be written out and before allocating next segment.
+>
 
-stm32-usart driver was not tolerant to a probe defer from DMA when the 
-earlycon is active.
+> Also add lock in it to protect the usage modification.
 
-You can find the patch here:
-https://lore.kernel.org/lkml/20221118170602.1057863-1-valentin.caron@foss.st.com/
+You don't have to say this because this lock is needed to complete
+your modification and not the original.
+If you want to mention it, how about saying like this:
 
-Valentin
+Along with this change, this also adds a lock in it to protect the
+usage modification.
 
-On 11/9/22 14:48, Amelie Delaunay wrote:
-> On 11/8/22 16:28, Marek Vasut wrote:
->> On 11/8/22 12:59, Uwe Kleine-König wrote:
->>> On Fri, Feb 04, 2022 at 04:41:55PM +0100, Erwan LE RAY wrote:
->>>> On 2/4/22 2:22 PM, Alexandre TORGUE wrote:
->>>>> Hi Ahmad
->>>>>
->>>>> On 2/3/22 18:25, Ahmad Fatoum wrote:
->>>>>> Hello Erwan,
->>>>>>
->>>>>> On 03.02.22 18:10, Erwan Le Ray wrote:
->>>>>>> Add DMA configuration to UART nodes in stm32mp15x (SOC level) and
->>>>>>> remove it at board level to keep current PIO behavior when needed.
->>>>>>> For stm32-ed1 and stm32-dkx boards, UART4 (console) and UART7
->>>>>>> (no HW flow control pin available) are kept in PIO mode, while 
->>>>>>> USART3
->>>>>>> is now configured in DMA mode.
->>>>>>> UART4 (console UART) has to be kept in irq mode, as DMA support for
->>>>>>> console has been removed from the driver by commit e359b4411c28
->>>>>>> ("serial: stm32: fix threaded interrupt handling").
->>>>>>
->>>>>> Do I understand correctly that your first patch breaks consoles of
->>>>>> most/all boards, because they will briefly use DMA, which is refused
->>>>>> by the stm32-usart driver and then you add a patch for each board
->>>>>> to fix that breakage?
->>>>>
->>>>> We have two solutions and both have pro/drawbacks. The first one 
->>>>> (Erwan
->>>>> ones, can break the boot if the patch is taken "alone". Your 
->>>>> proposition
->>>>> avoids this breakage but deletes a non define property (which is a 
->>>>> bit
->>>>> weird). However I prefer to keep a functional behavior, and keep 
->>>>> Ahmad
->>>>> proposition. Ahmad, just one question, dt-bindings check doesn't
->>>>> complain about it ?
->>>>>
->>>>> Cheers
->>>>> Alex
->>>>>
->>>>>>
->>>>>> Such intermittent breakage makes bisection a hassle. 
->>>>>> /delete-property/
->>>>>> is a no-op when the property doesn't exist, so you could move the 
->>>>>> first
->>>>>> patch to the very end to avoid intermittent breakage.
->>>>>>
->>>>>> I also think that the driver's behavior is a bit harsh. I think 
->>>>>> it would
->>>>>> be better for the UART driver to print a warning and fall back to
->>>>>> PIO for console instead of outright refusing and rendering the 
->>>>>> system
->>>>>> silent. That's not mutually exclusive with your patch series here,
->>>>>> of course.
->>>>>>
->>>>>> Cheers,
->>>>>> Ahmad
->>>>>>
->>>>
->>>> The driver implementation will consider the request to probe the UART
->>>> console in DMA mode as an error (-ENODEV), and will fallback this 
->>>> UART probe
->>>> in irq mode.
->>>
->>>> Whatever the patch ordering, the boot will never be broken. The 
->>>> board dt
->>>> patches aim to get a "proper" implementation, but from functional
->>>> perspective the driver will manage a request to probe an UART 
->>>> console in DMA
->>>> mode as an error and fall it back in irq mode.
->>>
->>> I didn't debug this further yet, but my machine (with an out-of-tree
->>> dts) fails to boot 6.1-rc4 without removing the dma properties from the
->>> console UART. This is a bug isn't it? The same dts created a working
->>> setup with stm32mp157.dtsi from 5.15 + kernel 5.15.
+> If it looks good, I'll sent the v3 patch for it.
 >
-> Hi Uwe,
->
-> Could you confirm earlycon is enabled on your setup?
->
-> Without earlycon, boot is ok, even with dma properties, at least on 
-> stm32mp157c-dk2.
->
->>>
->>> I can debug this further, but maybe you know off-hand what the problem
->>> is?
->>
->> +CC Amelie, as this might be related to the DMA series that landed 
->> recently:
->>
->> $ git log --oneline v5.18..v6.0 -- drivers/dma/stm32*
->
-> Hi Marek,
->
-> We haven't yet investigated the issue, and if latest DMA updates could 
-> explain why earlycon breaks the boot.
->
->
-> +TO Valentin, as he's now in charge of UART driver.
-> Valentin and I will investigate this issue.
->
-> Regards,
-> Amelie
+> Best,
+> Chen
+
+I think the rest is OK as an overall description.
+
+Thanks,
+Ryusuke Konishi
