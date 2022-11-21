@@ -2,864 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329D363179C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 01:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238B463179F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 01:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiKUA0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 19:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S229862AbiKUA1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 19:27:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiKUA0b (ORCPT
+        with ESMTP id S229848AbiKUA1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 19:26:31 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473C320F47
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 16:26:29 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id cz18so787165qvb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 16:26:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xYUuLC7w+40o7I6wW/YgLG9LWUUeG8gRBM448aA9Jd8=;
-        b=LgiXdGj2Hlx8k+vk+dftidxbXLgiFWAt6V5aqfbFpM32D+yAswFbDXF/9ewi2OCgkA
-         2IAHJmOmcPDmRhTsxyL7buLXduvEHEMR9rZzBzxsjg/yZeSx6iQWna79pA+sUeoP7wY9
-         /0sE6XplmT4DMulm+ln8W6pZ7nVNkFE/dA1ac=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xYUuLC7w+40o7I6wW/YgLG9LWUUeG8gRBM448aA9Jd8=;
-        b=aW8wmclPiLVNBMLgFgMj6oZ+TEURBr08Wghblo/M2nE9OXl8u1ifV7Pgf2y16a22sB
-         m4uHaslm5nMQ6x27gx9rWApFTqNxe6RQM/yK5Frhk1zmmc0O8r+29Pyn8z8KVarG1PDu
-         K+0FXDcTRdPP/Mx1EX//yiBd+lyjwoitn/ZfFWDsUZFr0XN+67n4gR07GOr386tmtQ5k
-         uT2XXumF6N2jBc0F5CSmKg7Euk2W0qg5ZS0rEaH9aXXUaQhZtYvbcoJBPTqk3SP9v3Me
-         842OBIJ1TTnm1rUITcAFkm0iLc0y+H3ZblH0bE3OnjuF/9fE3cQzQWdgMBIQmdqXlp5N
-         vW4g==
-X-Gm-Message-State: ANoB5plcuOtg9miyYwgbVKb5VM/1jsNmT6m7dpfAK5y+niTN3NZGYX/F
-        6xCqNl/va+GO6ILAVpgg/ug9KTWeNJmqTQ==
-X-Google-Smtp-Source: AA0mqf65yX1UwiUUEjaaa6zQ9x/wgKT+p1UGZ6KpXnlWSIDO3N3jUsHb2vnW1Duwvv7/cO0cvWgZHg==
-X-Received: by 2002:a05:6214:310b:b0:4bb:5714:1d2e with SMTP id ks11-20020a056214310b00b004bb57141d2emr15268750qvb.42.1668990387571;
-        Sun, 20 Nov 2022 16:26:27 -0800 (PST)
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com. [209.85.222.169])
-        by smtp.gmail.com with ESMTPSA id a11-20020ac8108b000000b0035d08c1da35sm5859146qtj.45.2022.11.20.16.26.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Nov 2022 16:26:26 -0800 (PST)
-Received: by mail-qk1-f169.google.com with SMTP id s20so7121733qkg.5
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 16:26:26 -0800 (PST)
-X-Received: by 2002:a37:8883:0:b0:6fb:628a:1aea with SMTP id
- k125-20020a378883000000b006fb628a1aeamr14701933qkd.697.1668990386012; Sun, 20
- Nov 2022 16:26:26 -0800 (PST)
+        Sun, 20 Nov 2022 19:27:15 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA92E2CDD0;
+        Sun, 20 Nov 2022 16:26:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668990415; x=1700526415;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=z8KHi5qHLeHg4fpLQ2a4OUyn87poiugSdNDLU7x/06g=;
+  b=Ka5WyeiyzCCKgD9ju8uLr3Tpc7TQl47kv2mkOqKZ97D7BMjwSCQ5yaM0
+   R6xgXCjMbkqZwlPFg491atG1fraOHoOu1GqieoXrnDMC+/R1Vw+UYwB8L
+   uE58cLuB36+nIxDnDHxXOWfkSFvLrrjyLhD2vvUIiEp2CmElZVwIGDAMZ
+   qeAo7njyhpUFYHQ509BFL32dVi+xlP7sJjdZcLm9UlROWIq6FxcF3ts7W
+   vM47CNTvhPKER6gOgPEWbTcshFuULA//1sDAtHQy0bUFbYJ165BLTPOpO
+   R40wKfEPIzHQdDueo6nuClKcdDEq5t9LgjjYU4q5dUZGxiKypwKC2X5lJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="399732258"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="399732258"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 16:26:55 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="729825110"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="729825110"
+Received: from tomnavar-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.176.15])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 16:26:51 -0800
+From:   Kai Huang <kai.huang@intel.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
+        dave.hansen@intel.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, peterz@infradead.org,
+        ak@linux.intel.com, isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com, kai.huang@intel.com
+Subject: [PATCH v7 00/20] TDX host kernel support
+Date:   Mon, 21 Nov 2022 13:26:22 +1300
+Message-Id: <cover.1668988357.git.kai.huang@intel.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 20 Nov 2022 16:26:10 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjKJyzfJmOzBdEOqCFRc8Fh-rdGM4tvMXfW0WXbbHwV0w@mail.gmail.com>
-Message-ID: <CAHk-=wjKJyzfJmOzBdEOqCFRc8Fh-rdGM4tvMXfW0WXbbHwV0w@mail.gmail.com>
-Subject: Linux 6.1-rc6
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So here we are at rc6 and the story hasn't changed: this rc is still a
-bit larger than I would have preferred, but at the same time there's
-nothing that looks scary or particularly odd in here.
+Intel Trusted Domain Extensions (TDX) protects guest VMs from malicious
+host and certain physical attacks.  TDX specs are available in [1].
+
+This series is the initial support to enable TDX with minimal code to
+allow KVM to create and run TDX guests.  KVM support for TDX is being
+developed separately[2].  A new "userspace inaccessible memfd" approach
+to support TDX private memory is also being developed[3].  The KVM will
+only support the new "userspace inaccessible memfd" as TDX guest memory.
+
+This series doesn't aim to support all functionalities (i.e. exposing TDX
+module via /sysfs), and doesn't aim to resolve all things perfectly.
+Especially, the implementation to how to choose "TDX-usable" memory and
+memory hotplug handling is simple, that this series just makes sure all
+pages in the page allocator are TDX memory.
+
+A better solution, suggested by Kirill, is similar to the per-node memory
+encryption flag in this series [4].  Similarly, a per-node TDX flag can
+be added so both "TDX-capable" and "non-TDX-capable" nodes can co-exist.
+With exposing the TDX flag to userspace via /sysfs, the userspace can
+then use NUMA APIs to bind TDX guests to those "TDX-capable" nodes.
+
+For more information please refer to "Kernel policy on TDX memory" and
+"Memory hotplug" sections below.  Huang, Ying is working on this
+"per-node TDX flag" support and will post another series independently.
+
+(For memory hotplug, sorry for broadcasting widely but I cc'ed the
+linux-mm@kvack.org following Kirill's suggestion so MM experts can also
+help to provide comments.)
+
+Also, other optimizations will be posted as follow-up once this initial
+TDX support is upstreamed.
+
+Hi Dave, Dan, Kirill, Ying (and Intel reviewers),
+   
+Please kindly help to review, and I would appreciate reviewed-by or
+acked-by tags if the patches look good to you.
+
+This series has been reviewed by Isaku who is developing KVM TDX patches.
+Kirill also has reviewed couple of patches as well.
+
+Also, I highly appreciate if anyone else can help to review this series.
+
+----- Changelog history: ------
+
+- v6 -> v7:
+
+  - Added memory hotplug support.
+  - Changed how to choose the list of "TDX-usable" memory regions from at
+    kernel boot time to TDX module initialization time.
+  - Addressed comments received in previous versions. (Andi/Dave).
+  - Improved the commit message and the comments of kexec() support patch,
+    and the patch handles returnning PAMTs back to the kernel when TDX
+    module initialization fails. Please also see "kexec()" section below.
+  - Changed the documentation patch accordingly.
+  - For all others please see individual patch changelog history.
+
+- v5 -> v6:
+
+  - Removed ACPI CPU/memory hotplug patches. (Intel internal discussion)
+  - Removed patch to disable driver-managed memory hotplug (Intel
+    internal discussion).
+  - Added one patch to introduce enum type for TDX supported page size
+    level to replace the hard-coded values in TDX guest code (Dave).
+  - Added one patch to make TDX depends on X2APIC being enabled (Dave).
+  - Added one patch to build all boot-time present memory regions as TDX
+    memory during kernel boot.
+  - Added Reviewed-by from others to some patches.
+  - For all others please see individual patch changelog history.
+
+- v4 -> v5:
+
+  This is essentially a resent of v4.  Sorry I forgot to consult
+  get_maintainer.pl when sending out v4, so I forgot to add linux-acpi
+  and linux-mm mailing list and the relevant people for 4 new patches.
+
+  There are also very minor code and commit message update from v4:
+
+  - Rebased to latest tip/x86/tdx.
+  - Fixed a checkpatch issue that I missed in v4.
+  - Removed an obsoleted comment that I missed in patch 6.
+  - Very minor update to the commit message of patch 12.
+
+  For other changes to individual patches since v3, please refer to the
+  changelog histroy of individual patches (I just used v3 -> v5 since
+  there's basically no code change to v4).
+
+- v3 -> v4 (addressed Dave's comments, and other comments from others):
+
+ - Simplified SEAMRR and TDX keyID detection.
+ - Added patches to handle ACPI CPU hotplug.
+ - Added patches to handle ACPI memory hotplug and driver managed memory
+   hotplug.
+ - Removed tdx_detect() but only use single tdx_init().
+ - Removed detecting TDX module via P-SEAMLDR.
+ - Changed from using e820 to using memblock to convert system RAM to TDX
+   memory.
+ - Excluded legacy PMEM from TDX memory.
+ - Removed the boot-time command line to disable TDX patch.
+ - Addressed comments for other individual patches (please see individual
+   patches).
+ - Improved the documentation patch based on the new implementation.
 
-It's predominantly driver changes all over, with networking and gpu
-drivers (not surprisingly) leading the pack, but it's really a fairly
-mixed bag.
+- V2 -> v3:
 
-Outside of drivers you have the usual smattering of core kernel code -
-architecture updates, some filesystem work, and some core kernel and
-networking.
+ - Addressed comments from Isaku.
+  - Fixed memory leak and unnecessary function argument in the patch to
+    configure the key for the global keyid (patch 17).
+  - Enhanced a little bit to the patch to get TDX module and CMR
+    information (patch 09).
+  - Fixed an unintended change in the patch to allocate PAMT (patch 13).
+ - Addressed comments from Kevin:
+  - Slightly improvement on commit message to patch 03.
+ - Removed WARN_ON_ONCE() in the check of cpus_booted_once_mask in
+   seamrr_enabled() (patch 04).
+ - Changed documentation patch to add TDX host kernel support materials
+   to Documentation/x86/tdx.rst together with TDX guest staff, instead
+   of a standalone file (patch 21)
+ - Very minor improvement in commit messages.
 
-It's easy enough to scan through the appended shortlog and get a
-feeling for what's going on. Absolutely nothing that makes me worried,
-apart just from the fact that there's still a fair number of them. I'm
-still waffling about whether there will be an rc8 or not, leaning a
-bit towards it happening. We'll see - it will make the 6.2 merge
-window leak into the holidays, but maybe that's fine and just makes
-people make sure they have everything lined up and ready *before* the
-merge window opens, the way things _should_ work.
+- RFC (v1) -> v2:
+  - Rebased to Kirill's latest TDX guest code.
+  - Fixed two issues that are related to finding all RAM memory regions
+    based on e820.
+  - Minor improvement on comments and commit messages.
 
-So we'll see. Nothing worrisome, just 300+ small fixes in the last
-week. Please go test,
+v6:
+https://lore.kernel.org/linux-mm/cover.1666824663.git.kai.huang@intel.com/T/
 
-               Linus
+v5:
+https://lore.kernel.org/lkml/cover.1655894131.git.kai.huang@intel.com/T/
 
----
+v3:
+https://lore.kernel.org/lkml/68484e168226037c3a25b6fb983b052b26ab3ec1.camel@intel.com/T/
 
-Aashish Sharma (1):
-      tracing: Fix warning on variable 'struct trace_array'
+V2:
+https://lore.kernel.org/lkml/cover.1647167475.git.kai.huang@intel.com/T/
 
-Adam Borowski (1):
-      mtd: rawnand: placate "$VARIABLE is used uninitialized" warnings
+RFC (v1):
+https://lore.kernel.org/all/e0ff030a49b252d91c789a89c303bb4206f85e3d.1646007267.git.kai.huang@intel.com/T/
 
-Adrian Hunter (1):
-      perf/x86/intel/pt: Fix sampling using single range output
+== Background ==
 
-Aishwarya Kothari (1):
-      drm/panel: simple: set bpc field for logic technologies displays
+TDX introduces a new CPU mode called Secure Arbitration Mode (SEAM)
+and a new isolated range pointed by the SEAM Ranger Register (SEAMRR).
+A CPU-attested software module called 'the TDX module' runs in the new
+isolated region as a trusted hypervisor to create/run protected VMs.
 
-Akira Yokosawa (1):
-      docs/driver-api/miscellaneous: Remove kernel-doc of serial_core.c
+TDX also leverages Intel Multi-Key Total Memory Encryption (MKTME) to
+provide crypto-protection to the VMs.  TDX reserves part of MKTME KeyIDs
+as TDX private KeyIDs, which are only accessible within the SEAM mode.
 
-Alban Crequy (2):
-      maccess: Fix writing offset in case of fault in
-strncpy_from_kernel_nofault()
-      selftests: bpf: Add a test when bpf_probe_read_kernel_str() returns E=
-FAULT
+TDX is different from AMD SEV/SEV-ES/SEV-SNP, which uses a dedicated
+secure processor to provide crypto-protection.  The firmware runs on the
+secure processor acts a similar role as the TDX module.
 
-Alex Deucher (1):
-      drm/amdgpu: there is no vbios fb on devices with no display hw (v2)
+The host kernel communicates with SEAM software via a new SEAMCALL
+instruction.  This is conceptually similar to a guest->host hypercall,
+except it is made from the host to SEAM software instead.
 
-Alexander Potapenko (1):
-      misc/vmw_vmci: fix an infoleak in vmci_host_do_receive_datagram()
+Before being able to manage TD guests, the TDX module must be loaded
+and properly initialized.  This series assumes the TDX module is loaded
+by BIOS before the kernel boots.
+
+How to initialize the TDX module is described at TDX module 1.0
+specification, chapter "13.Intel TDX Module Lifecycle: Enumeration,
+Initialization and Shutdown".
+
+== Design Considerations ==
+
+1. Initialize the TDX module at runtime
+
+There are basically two ways the TDX module could be initialized: either
+in early boot, or at runtime before the first TDX guest is run.  This
+series implements the runtime initialization.
+
+This series adds a function tdx_enable() to allow the caller to initialize
+TDX at runtime:
+
+        if (tdx_enable())
+                goto no_tdx;
+	// TDX is ready to create TD guests.
+
+This approach has below pros:
 
-Alexander Stein (1):
-      arm64: dts: imx8mm-tqma8mqml-mba8mx: Fix USB DR
+1) Initializing the TDX module requires to reserve ~1/256th system RAM as
+metadata.  Enabling TDX on demand allows only to consume this memory when
+TDX is truly needed (i.e. when KVM wants to create TD guests).
 
-Alexandru Tachici (1):
-      net: usb: smsc95xx: fix external PHY reset
+2) SEAMCALL requires CPU being already in VMX operation (VMXON has been
+done).  So far, KVM is the only user of TDX, and it already handles VMXON.
+Letting KVM to initialize TDX avoids handling VMXON in the core kernel.
 
-Aman Dhoot (1):
-      Input: synaptics - switch touchpad on HP Laptop 15-da3001TU to RMI mo=
-de
+3) It is more flexible to support "TDX module runtime update" (not in
+this series).  After updating to the new module at runtime, kernel needs
+to go through the initialization process again.
 
-Aminuddin Jamaluddin (1):
-      net: phy: marvell: add sleep time after enabling the loopback bit
+2. CPU hotplug
+
+TDX doesn't support physical (ACPI) CPU hotplug.  A non-buggy BIOS should
+never support hotpluggable CPU devicee and/or deliver ACPI CPU hotplug
+event to the kernel.  This series doesn't handle physical (ACPI) CPU
+hotplug at all but depends on the BIOS to behave correctly.
+
+Note TDX works with CPU logical online/offline, thus this series still
+allows to do logical CPU online/offline.
+
+3. Kernel policy on TDX memory
+
+The TDX module reports a list of "Convertible Memory Region" (CMR) to
+indicate which memory regions are TDX-capable.  The TDX architecture
+allows the VMM to designate specific convertible memory regions as usable
+for TDX private memory.
+
+The initial support of TDX guests will only allocate TDX private memory
+from the global page allocator.  This series chooses to designate _all_
+system RAM in the core-mm at the time of initializing TDX module as TDX
+memory to guarantee all pages in the page allocator are TDX pages.
+
+4. Memory Hotplug
+
+After the kernel passes all "TDX-usable" memory regions to the TDX
+module, the set of "TDX-usable" memory regions are fixed during module's
+runtime.  No more "TDX-usable" memory can be added to the TDX module
+after that.
+
+To achieve above "to guarantee all pages in the page allocator are TDX
+pages", this series simply choose to reject any non-TDX-usable memory in
+memory hotplug.
+
+This _will_ be enhanced in the future after first submission.  The
+direction we are heading is to allow adding/onlining non-TDX memory to
+separate NUMA nodes so that both "TDX-capable" nodes and "TDX-capable"
+nodes can co-exist.  The TDX flag can be exposed to userspace via /sysfs
+so userspace can bind TDX guests to "TDX-capable" nodes via NUMA ABIs.
+
+Note TDX assumes convertible memory is always physically present during
+machine's runtime.  A non-buggy BIOS should never support hot-removal of
+any convertible memory.  This implementation doesn't handle ACPI memory
+removal but depends on the BIOS to behave correctly.
+
+5. Kexec()
+
+There are two problems in terms of using kexec() to boot to a new kernel
+when the old kernel has enabled TDX: 1) Part of the memory pages are
+still TDX private pages (i.e. metadata used by the TDX module, and any
+TDX guest memory if kexec() happens when there's any TDX guest alive).
+2) There might be dirty cachelines associated with TDX private pages.
+
+Just like SME, TDX hosts require special cache flushing before kexec().
+Similar to SME handling, the kernel uses wbinvd() to flush cache in
+stop_this_cpu() when TDX is enabled.
+
+This series doesn't convert all TDX private pages back to normal due to
+below considerations:
+
+1) The kernel doesn't have existing infrastructure to track which pages
+   are TDX private pages.
+2) The number of TDX private pages can be large, and converting all of
+   them (cache flush + using MOVDIR64B to clear the page) in kexec() can
+   be time consuming.
+3) The new kernel will almost only use KeyID 0 to access memory.  KeyID
+   0 doesn't support integrity-check, so it's OK.
+4) The kernel doesn't (and may never) support MKTME.  If any 3rd party
+   kernel ever supports MKTME, it should do MOVDIR64B to clear the page
+   with the new MKTME KeyID (just like TDX does) before using it.
+
+Also, if the old kernel ever enables TDX, the new kernel cannot use TDX
+again.  When the new kernel goes through the TDX module initialization
+process it will fail immediately at the first step.
+
+Ideally, it's better to shutdown the TDX module in kexec(), but there's
+no guarantee that CPUs are in VMX operation in kexec() so just leave the
+module open.
+
+== Reference ==
+
+[1]: TDX specs
+https://software.intel.com/content/www/us/en/develop/articles/intel-trust-domain-extensions.html
+
+[2]: KVM TDX basic feature support
+https://lore.kernel.org/lkml/CAAhR5DFrwP+5K8MOxz5YK7jYShhaK4A+2h1Pi31U_9+Z+cz-0A@mail.gmail.com/T/
+
+[3]: KVM: mm: fd-based approach for supporting KVM
+https://lore.kernel.org/lkml/20220915142913.2213336-1-chao.p.peng@linux.intel.com/T/
+
+[4]: per-node memory encryption flag
+https://lore.kernel.org/linux-mm/20221007155323.ue4cdthkilfy4lbd@box.shutemov.name/t/
+
+
+Kai Huang (20):
+  x86/tdx: Define TDX supported page sizes as macros
+  x86/virt/tdx: Detect TDX during kernel boot
+  x86/virt/tdx: Disable TDX if X2APIC is not enabled
+  x86/virt/tdx: Add skeleton to initialize TDX on demand
+  x86/virt/tdx: Implement functions to make SEAMCALL
+  x86/virt/tdx: Shut down TDX module in case of error
+  x86/virt/tdx: Do TDX module global initialization
+  x86/virt/tdx: Do logical-cpu scope TDX module initialization
+  x86/virt/tdx: Get information about TDX module and TDX-capable memory
+  x86/virt/tdx: Use all system memory when initializing TDX module as
+    TDX memory
+  x86/virt/tdx: Add placeholder to construct TDMRs to cover all TDX
+    memory regions
+  x86/virt/tdx: Create TDMRs to cover all TDX memory regions
+  x86/virt/tdx: Allocate and set up PAMTs for TDMRs
+  x86/virt/tdx: Set up reserved areas for all TDMRs
+  x86/virt/tdx: Reserve TDX module global KeyID
+  x86/virt/tdx: Configure TDX module with TDMRs and global KeyID
+  x86/virt/tdx: Configure global KeyID on all packages
+  x86/virt/tdx: Initialize all TDMRs
+  x86/virt/tdx: Flush cache in kexec() when TDX is enabled
+  Documentation/x86: Add documentation for TDX host support
+
+ Documentation/x86/tdx.rst        |  181 +++-
+ arch/x86/Kconfig                 |   15 +
+ arch/x86/Makefile                |    2 +
+ arch/x86/coco/tdx/tdx.c          |    6 +-
+ arch/x86/include/asm/tdx.h       |   30 +
+ arch/x86/kernel/process.c        |    8 +-
+ arch/x86/mm/init_64.c            |   10 +
+ arch/x86/virt/Makefile           |    2 +
+ arch/x86/virt/vmx/Makefile       |    2 +
+ arch/x86/virt/vmx/tdx/Makefile   |    2 +
+ arch/x86/virt/vmx/tdx/seamcall.S |   52 ++
+ arch/x86/virt/vmx/tdx/tdx.c      | 1422 ++++++++++++++++++++++++++++++
+ arch/x86/virt/vmx/tdx/tdx.h      |  118 +++
+ arch/x86/virt/vmx/tdx/tdxcall.S  |   19 +-
+ 14 files changed, 1852 insertions(+), 17 deletions(-)
+ create mode 100644 arch/x86/virt/Makefile
+ create mode 100644 arch/x86/virt/vmx/Makefile
+ create mode 100644 arch/x86/virt/vmx/tdx/Makefile
+ create mode 100644 arch/x86/virt/vmx/tdx/seamcall.S
+ create mode 100644 arch/x86/virt/vmx/tdx/tdx.c
+ create mode 100644 arch/x86/virt/vmx/tdx/tdx.h
+
+
+base-commit: 00e07cfbdf0b232f7553f0175f8f4e8d792f7e90
+-- 
+2.38.1
 
-Amit Cohen (1):
-      mlxsw: Avoid warnings when not offloaded FDB entry with IPv6 is remov=
-ed
-
-Anastasia Belova (2):
-      cifs: add check for returning value of SMB2_close_init
-      cifs: add check for returning value of SMB2_set_info_init
-
-AngeloGioacchino Del Regno (2):
-      pinctrl: mediatek: common-v2: Fix bias-disable for PULL_PU_PD_RSEL_TY=
-PE
-      pinctrl: mediatek: Fix EINT pins input debounce time configuration
-
-Anjana Hari (1):
-      pinctrl: qcom: sc8280xp: Rectify UFS reset pins
-
-Anthony DeRossi (3):
-      vfio: Fix container device registration life cycle
-      vfio: Export the device set open count
-      vfio/pci: Check the device set open count on reset
-
-Arnav Rawat (1):
-      platform/x86: ideapad-laptop: Fix interrupt storm on fn-lock
-toggle on some Yoga laptops
-
-Baisong Zhong (1):
-      bpf, test_run: Fix alignment problem in bpf_prog_test_run_skb()
-
-Bean Huo (1):
-      nvme-pci: add NVME_QUIRK_BOGUS_NID for Micron Nitro
-
-Benjamin Block (1):
-      scsi: zfcp: Fix double free of FSF request when qdio send fails
-
-Beno=C3=AEt Monin (1):
-      USB: serial: option: add Sierra Wireless EM9191
-
-Borislav Petkov (1):
-      x86/cpu: Restore AMD's DE_CFG MSR after resume
-
-Borys Pop=C5=82awski (1):
-      x86/sgx: Add overflow check in sgx_validate_offset_length()
-
-Brent Mendelsohn (1):
-      ASoC: amd: yc: Add Alienware m17 R5 AMD into DMI table
-
-Brian Masney (1):
-      arm64: dts: qcom: sc8280xp: correct ref clock for ufs_mem_phy
-
-Brian Norris (1):
-      firmware: coreboot: Register bus in module init
-
-Candice Li (1):
-      drm/amdgpu: Add psp_13_0_10_ta firmware to modinfo
-
-Carlos Llamas (1):
-      binder: validate alloc->mm in ->mmap() handler
-
-Chen Jun (1):
-      Input: i8042 - fix leaking of platform device on module removal
-
-Chen Zhongjin (2):
-      ASoC: core: Fix use-after-free in snd_soc_exit()
-      ASoC: soc-utils: Remove __exit for snd_soc_util_exit()
-
-Chevron Li (1):
-      mmc: sdhci-pci-o2micro: fix card detect fail issue caused by CD#
-debounce timeout
-
-Chris Mason (1):
-      blk-cgroup: properly pin the parent in blkcg_css_online
-
-Christian K=C3=B6nig (1):
-      drm/amdgpu: use the last IB as gang leader v2
-
-Christian Lamparter (1):
-      nvmem: u-boot-env: fix crc32_data_offset on redundant u-boot-env
-
-Christian Marangi (1):
-      mtd: rawnand: qcom: handle ret from parse with codeword_fixup
-
-Christophe JAILLET (1):
-      x86/xen: Use kstrtobool() instead of strtobool()
-
-Chuang Wang (1):
-      net: macvlan: Use built-in RCU list checking
-
-Chuck Lever (1):
-      NFSD: Fix trace_nfsd_fh_verify_err() crasher
-
-Claudiu Beznea (2):
-      iio: adc: at91-sama5d2_adc: get rid of 5 degrees Celsius adjustment
-      ARM: at91: pm: avoid soft resetting AC DLL
-
-Cong Wang (1):
-      kcm: close race conditions on sk_receive_queue
-
-Conor Dooley (4):
-      MAINTAINERS: add entries for misc. RISC-V SoC drivers and devicetrees
-      MAINTAINERS: generify the Microchip RISC-V entry name
-      MAINTAINERS: add an entry for StarFive devicetrees
-      MAINTAINERS: repair Microchip corei2c driver entry
-
-Damien Le Moal (2):
-      zonefs: fix zone report size in __zonefs_io_error()
-      zonefs: Remove to_attr() helper function
-
-Dan Carpenter (3):
-      iio: imu: bno055: uninitialized variable bug in bno055_trigger_handle=
-r()
-      ceph: fix a NULL vs IS_ERR() check when calling ceph_lookup_inode()
-      drbd: use after free in drbd_create_device()
-
-Daniil Tatianin (1):
-      ring_buffer: Do not deactivate non-existant pages
-
-David Howells (2):
-      netfs: Fix missing xas_retry() calls in xarray iteration
-      netfs: Fix dodgy maths
-
-Davide Tronchin (3):
-      USB: serial: option: remove old LARA-R6 PID
-      USB: serial: option: add u-blox LARA-R6 00B modem
-      USB: serial: option: add u-blox LARA-L6 modem
-
-Dillon Varone (3):
-      drm/amd/display: Fix prefetch calculations for dcn32
-      drm/amd/display: use uclk pstate latency for fw assisted mclk
-validation dcn32
-      drm/amd/display: Set max for prefetch lines on dcn32
-
-Dmitry Baryshkov (1):
-      Revert "arm64: dts: qcom: msm8996: add missing TCSR syscon compatible=
-"
-
-Dong Chenchen (1):
-      drm/amdgpu: Fix memory leak in amdgpu_cs_pass1
-
-Douglas Anderson (6):
-      arm64: dts: qcom: sa8155p-adp: Specify which LDO modes are allowed
-      arm64: dts: qcom: sa8295p-adp: Specify which LDO modes are allowed
-      arm64: dts: qcom: sc8280xp-crd: Specify which LDO modes are allowed
-      arm64: dts: qcom: sm8150-xperia-kumano: Specify which LDO modes
-are allowed
-      arm64: dts: qcom: sm8250-xperia-edo: Specify which LDO modes are allo=
-wed
-      arm64: dts: qcom: sm8350-hdk: Specify which LDO modes are allowed
-
-Duoming Zhou (2):
-      tty: n_gsm: fix sleep-in-atomic-context bug in gsm_control_send
-      usb: chipidea: fix deadlock in ci_otg_del_timer
-
-Emil Flink (1):
-      ALSA: hda/realtek: fix speakers for Samsung Galaxy Book Pro
-
-Enrico Sau (1):
-      net: usb: qmi_wwan: add Telit 0x103a composition
-
-Eric Huang (1):
-      drm/amdkfd: Fix a memory limit issue
-
-Erico Nunes (1):
-      drm/lima: Fix opp clkname setting in case of missing regulator
-
-Evan Quan (3):
-      drm/amd/pm: enable runpm support over BACO for SMU13.0.0
-      drm/amd/pm: enable runpm support over BACO for SMU13.0.7
-      drm/amd/pm: fix SMU13 runpm hang due to unintentional workaround
-
-Fedor Pchelkin (2):
-      Revert "tty: n_gsm: avoid call of sleeping functions from atomic cont=
-ext"
-      Revert "tty: n_gsm: replace kicktimer with delayed_work"
-
-Gaosheng Cui (2):
-      drm/vc4: kms: Fix IS_ERR() vs NULL check for vc4_kms
-      bnxt_en: Remove debugfs when pci_register_driver failed
-
-George Shen (2):
-      drm/amd/display: Support parsing VRAM info v3.0 from VBIOS
-      drm/amd/display: Fix calculation for cursor CAB allocation
-
-Gerald Schaefer (1):
-      s390/dcssblk: fix deadlock when adding a DCSS
-
-Gleb Mazovetskiy (1):
-      tcp: configurable source port perturb table size
-
-Guangbin Huang (1):
-      net: hns3: fix setting incorrect phy link ksettings for firmware
-in resetting process
-
-Guchun Chen (1):
-      drm/amdgpu: disable BACO support on more cards
-
-Guo Jin (1):
-      locking: Fix qspinlock/x86 inline asm error
-
-Hangbin Liu (1):
-      net: use struct_group to copy ip/ipv6 header addresses
-
-Hans de Goede (6):
-      ASoC: Intel: bytcht_es8316: Add quirk for the Nanote UMPC-01
-      Input: goodix - try resetting the controller when no config is set
-      Input: soc_button_array - add use_low_level_irq module parameter
-      Input: soc_button_array - add Acer Switch V 10 to dmi_use_low_level_i=
-rq[]
-      platform/x86: acer-wmi: Enable SW_TABLET_MODE on Switch V 10 (SW5-017=
-)
-      platform/x86: ideapad-laptop: Add module parameters to match DMI
-quirk tables
-
-Horatiu Vultur (2):
-      ARM: dts: lan966x: Enable sgpio on pcb8291
-      nvmem: lan9662-otp: Fix compatible string
-
-Ido Schimmel (1):
-      bridge: switchdev: Fix memory leaks when changing VLAN protocol
-
-Ilpo J=C3=A4rvinen (4):
-      serial: 8250: Fall back to non-DMA Rx if IIR_RDI occurs
-      serial: 8250_lpss: Configure DMA also w/o DMA filter
-      serial: 8250_lpss: Use 16B DMA burst with Elkhart Lake
-      serial: 8250: Flush DMA Rx on RLSI
-
-Jaco Coetzee (1):
-      nfp: change eeprom length to max length enumerators
-
-Jakub Sitnicki (1):
-      l2tp: Serialize access to sk_user_data with sk_callback_lock
-
-Janne Grunau (1):
-      usb: dwc3: Do not get extcon device when usb-role-switch is used
-
-Jason A. Donenfeld (1):
-      staging: rtl8192e: remove bogus ssid character sign test
-
-Jason Montleon (2):
-      ASoC: rt5514: fix legacy dai naming
-      ASoC: rt5677: fix legacy dai naming
-
-Jeremy Kerr (1):
-      mctp i2c: don't count unused / invalid keys for flow release
-
-Jian Shen (1):
-      net: hns3: fix incorrect hw rss hash type of rx packet
-
-Jie Wang (1):
-      net: hns3: fix return value check bug of rx copybreak
-
-Jingbo Xu (4):
-      erofs: put metabuf in error path in fscache mode
-      erofs: get correct count for unmapped range in fscache mode
-      erofs: fix use-after-free of fsid and domain_id string
-      erofs: fix missing xas_retry() in fscache mode
-
-Johan Hovold (7):
-      arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock
-      arm64: dts: qcom: sc8280xp: fix USB0 PHY PCS_MISC registers
-      arm64: dts: qcom: sc8280xp: fix USB1 PHY RX1 registers
-      arm64: dts: qcom: sc8280xp: fix USB PHY PCS registers
-      arm64: dts: qcom: sc8280xp: drop broken DP PHY nodes
-      arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
-      Revert "usb: dwc3: disable USB core PHY management"
-
-Jonathan Cameron (1):
-      iio: accel: bma400: Ensure VDDIO is enable defore reading the chip ID=
-.
-
-Juergen Gross (1):
-      xen/platform-pci: use define instead of literal number
-
-Kai Vehmanen (1):
-      ASoC: SOF: ipc3-topology: use old pipeline teardown flow with
-SOF2.1 and older
-
-Kai-Heng Feng (1):
-      platform/x86: hp-wmi: Ignore Smart Experience App event
-
-Keith Busch (5):
-      block: make dma_alignment a stacking queue_limit
-      dm-crypt: provide dma_alignment limit in io_hints
-      block: make blk_set_default_limits() private
-      dm-integrity: set dma_alignment limit in io_hints
-      dm-log-writes: set dma_alignment limit in io_hints
-
-Krzysztof Kozlowski (2):
-      mtd: onenand: omap2: add dependency on GPMC
-      slimbus: stream: correct presence rate frequencies
-
-Lennard G=C3=A4her (1):
-      platform/x86: thinkpad_acpi: Enable s2idle quirk for 21A1 machine typ=
-e
-
-Li Huafei (1):
-      kprobes: Skip clearing aggrprobe's post_handler in kprobe-on-ftrace c=
-ase
-
-Li Jun (1):
-      usb: cdns3: host: fix endless superspeed hub port reset
-
-Linus Torvalds (1):
-      Linux 6.1-rc6
-
-Linus Walleij (2):
-      USB: bcma: Make GPIO explicitly optional
-      pinctrl: mediatek: Export debounce time tables
-
-Liu Jian (1):
-      net: ag71xx: call phylink_disconnect_phy if ag71xx_hw_enable()
-fail in ag71xx_open()
-
-Liu Shixin (1):
-      arm64/mm: fix incorrect file_map_count for non-leaf pmd/pud
-
-Lukas Wunner (1):
-      serial: 8250: 8250_omap: Avoid RS485 RTS glitch on ->set_termios()
-
-Maarten Zanders (1):
-      ASoC: fsl_asrc fsl_esai fsl_sai: allow CONFIG_PM=3DN
-
-Maciej W. Rozycki (1):
-      parport_pc: Avoid FIFO port location truncation
-
-Marc Zyngier (1):
-      kbuild: Restore .version auto-increment behaviour for Debian packages
-
-Marco Elver (1):
-      perf: Improve missing SIGTRAP checking
-
-Marek Marczykowski-G=C3=B3recki (1):
-      xen-pciback: Allow setting PCI_MSIX_FLAGS_MASKALL too
-
-Marek Vasut (3):
-      ARM: dts: imx7: Fix NAND controller size-cells
-      arm64: dts: imx8mm: Fix NAND controller size-cells
-      arm64: dts: imx8mn: Fix NAND controller size-cells
-
-Mario Limonciello (1):
-      platform/x86/amd: pmc: Remove more CONFIG_DEBUG_FS checks
-
-Martin Povi=C5=A1er (3):
-      ASoC: tas2770: Fix set_tdm_slot in case of single slot
-      ASoC: tas2764: Fix set_tdm_slot in case of single slot
-      ASoC: tas2780: Fix set_tdm_slot in case of single slot
-
-Masami Hiramatsu (Google) (1):
-      tracing/eprobe: Fix eprobe filter to make a filter correctly
-
-Mathieu Desnoyers (1):
-      rseq: Use pr_warn_once() when deprecated/unknown ABI flags are encoun=
-tered
-
-Matthew Auld (1):
-      drm/i915/ttm: fix uaf with lmem_userfault_list handling
-
-Matthias Schiffer (1):
-      serial: 8250_omap: remove wait loop from Errata i202 workaround
-
-Matti Vaittinen (1):
-      tools: iio: iio_generic_buffer: Fix read size
-
-Maximilian Luz (3):
-      platform/surface: aggregator: Do not check for repeated
-unsequenced packets
-      platform/surface: aggregator_registry: Add support for Surface Pro 9
-      platform/surface: aggregator_registry: Add support for Surface Laptop=
- 5
-
-Mel Gorman (1):
-      x86/fpu: Drop fpregs lock before inheriting FPU permissions
-
-Melissa Wen (1):
-      drm/amd/display: don't enable DRM CRTC degamma property for DCE
-
-Michael Sit Wei Hong (1):
-      net: phy: dp83867: Fix SGMII FIFO depth for non OF devices
-
-Mihai Sain (1):
-      ARM: dts: at91: sama7g5: fix signal name of pin PB2
-
-Mikulas Patocka (3):
-      dm ioctl: fix misbehavior if list_versions races with module loading
-      dm integrity: flush the journal on suspend
-      dm integrity: clear the journal on suspend
-
-Mitja Spes (2):
-      iio: pressure: ms5611: fixed value compensation bug
-      iio: pressure: ms5611: changed hardcoded SPI speed to value limited
-
-Mohd Faizal Abdul Rahim (1):
-      net: stmmac: ensure tx function is not running in stmmac_xdp_release(=
-)
-
-Mushahid Hussain (1):
-      speakup: fix a segfault caused by switching consoles
-
-Nathan Chancellor (1):
-      bpf: Add explicit cast to 'void *' for __BPF_DISPATCHER_UPDATE()
-
-Nicholas Piggin (1):
-      powerpc: Fix writable sections being moved into the rodata region
-
-Nicolas Dumazet (1):
-      usb: add NO_LPM quirk for Realforce 87U Keyboard
-
-Nicolas Schier (3):
-      MAINTAINERS: Add Nathan and Nicolas to Kbuild reviewers
-      MAINTAINERS: Remove Michal Marek from Kbuild maintainers
-      MAINTAINERS: Add linux-kbuild's patchwork
-
-Olivier Moysan (1):
-      ASoC: stm32: dfsdm: manage cb buffers cleanup
-
-Palmer Dabbelt (2):
-      MAINTAINERS: git://github.com -> https://github.com for ceph
-      MAINTAINERS: git://github.com -> https://github.com for HiSilicon
-
-Paul Cercueil (1):
-      ASoC: dapm: Don't use prefix for regulator name
-
-Pavel Begunkov (5):
-      io_uring: update res mask in io_poll_check_events
-      io_uring: fix tw losing poll events
-      io_uring: fix multishot accept request leaks
-      io_uring: fix multishot recv request leaks
-      io_uring: disallow self-propelled ring polling
-
-Peng Fan (1):
-      arm64: dts: imx93-pinfunc: drop execution permission
-
-Peter Ujfalusi (1):
-      ASoC: SOF: topology: No need to assign core ID if token parsing faile=
-d
-
-Peter Zijlstra (3):
-      bpf: Revert ("Fix dispatcher patchable function entry to 5 bytes nop"=
-)
-      bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
-      sched: Fix race in task_call_func()
-
-Petr Vorel (1):
-      kernel/utsname_sysctl.c: Add missing enum uts_proc value
-
-Pierre-Louis Bossart (2):
-      ASoC: Intel: soc-acpi: add ES83x6 support to IceLake
-      ASoC: hda: intel-dsp-config: add ES83x6 quirk for IceLake
-
-Pu Lehui (1):
-      selftests/bpf: Fix casting error when cross-compiling
-test_verifier for 32-bit platforms
-
-Qiujun Huang (1):
-      tracing: Remove unused __bad_type_size() method
-
-Quentin Schulz (1):
-      pinctrl: rockchip: list all pins in a possible mux route for PX30
-
-Rafael Mendonca (2):
-      tracing/eprobe: Fix memory leak of filter string
-      tracing/eprobe: Fix warning in filter creation
-
-Rajat Khandelwal (1):
-      usb: typec: mux: Enter safe mode only when pins need to be reconfigur=
-ed
-
-Ravi Bangoria (1):
-      perf/x86/amd: Fix crash due to race between amd_pmu_enable_all,
-perf NMI and throttling
-
-Reinhard Speyerer (1):
-      USB: serial: option: add Fibocom FM160 0x0111 composition
-
-Robert Marko (1):
-      arm64: dts: qcom: ipq8074: correct APCS register space size
-
-Robin Murphy (1):
-      gpu: host1x: Avoid trying to use GART on Tegra20
-
-Rodrigo Siqueira (1):
-      drm/amd/display: Add HUBP surface flip interrupt handler
-
-Roger Pau Monn=C3=A9 (1):
-      platform/x86/intel: pmc: Don't unconditionally attach Intel PMC
-when virtualized
-
-Roman Li (1):
-      drm/amd/display: Fix optc2_configure warning on dcn314
-
-Sagi Grimberg (1):
-      nvmet: fix a memory leak in nvmet_auth_set_key
-
-Sami Tolvanen (1):
-      arm64: ftrace: Define ftrace_stub_graph only with FUNCTION_GRAPH_TRAC=
-ER
-
-Sandipan Das (1):
-      perf/x86/amd/uncore: Fix memory leak for events array
-
-Saravanan Sekar (2):
-      iio: adc: mp2629: fix wrong comparison of channel
-      iio: adc: mp2629: fix potential array out of bound access
-
-Satya Priya (1):
-      arm64: dts: qcom: sc7280: Add the reset reg for lpass audiocc on SC72=
-80
-
-Shang XiaoJing (8):
-      drm/drv: Fix potential memory leak in drm_dev_init()
-      drm: Fix potential null-ptr-deref in drm_vblank_destroy_worker()
-      net: lan966x: Fix potential null-ptr-deref in lan966x_stats_init()
-      net: microchip: sparx5: Fix potential null-ptr-deref in
-sparx_stats_init() and sparx5_start()
-      tracing: Fix memory leak in test_gen_synth_cmd() and
-test_empty_synth_event()
-      tracing: Fix wild-memory-access in register_synth_event()
-      tracing: kprobe: Fix potential null-ptr-deref on
-trace_event_file in kprobe_event_gen_test_exit()
-      tracing: kprobe: Fix potential null-ptr-deref on trace_array in
-kprobe_event_gen_test_exit()
-
-Shawn Guo (1):
-      serial: imx: Add missing .thaw_noirq hook
-
-Sheng-Liang Pan (1):
-      dt-bindings: input: touchscreen: Add compatible for Goodix GT7986U ch=
-ip
-
-Sherry Sun (1):
-      tty: serial: fsl_lpuart: don't break the on-going transfer when
-global reset
-
-Shin'ichiro Kawasaki (1):
-      scsi: mpi3mr: Suppress command reply debug prints
-
-Shuah Khan (1):
-      docs: update mediator contact information in CoC doc
-
-Shyam Sundar S K (1):
-      platform/x86/amd: pmc: Add new ACPI ID AMDI0009
-
-Simon Rettberg (1):
-      drm/display: Don't assume dual mode adaptors support i2c sub-addressi=
-ng
-
-Simon Ser (1):
-      Revert "drm: hide unregistered connectors from GETCONNECTOR IOCTL"
-
-Steven Rostedt (Google) (3):
-      tracing/ring-buffer: Have polling block on watermark
-      ring-buffer: Include dropped pages in counting dirty patches
-      tracing: Fix race where eprobes can be called before the event
-
-Stylon Wang (2):
-      drm/amd/display: Fix access timeout to DPIA AUX at boot time
-      drm/amd/display: Fix invalid DPIA AUX reply causing system hang
-
-Sven Peter (1):
-      usb: typec: tipd: Prevent uninitialized event{1,2} in IRQ handler
-
-Takashi Iwai (3):
-      Input: i8042 - apply probe defer to more ASUS ZenBook models
-      ALSA: usb-audio: Drop snd_BUG_ON() from snd_usbmidi_output_open()
-      ALSA: hda/realtek: Fix the speaker output on Samsung Galaxy Book Pro =
-360
-
-Tejun Heo (1):
-      kernfs: Fix spurious lockdep warning in kernfs_find_and_get_node_by_i=
-d()
-
-Tetsuo Handa (1):
-      Input: iforce - invert valid length check when fetching device IDs
-
-Thinh Nguyen (1):
-      usb: dwc3: gadget: Return -ESHUTDOWN on ep disable
-
-Tiago Dias Ferreira (1):
-      nvme-pci: add NVME_QUIRK_BOGUS_NID for Netac NV7000
-
-Tina Zhang (2):
-      iommu/vt-d: Preset Access bit for IOVA in FL non-leaf paging entries
-      iommu/vt-d: Set SRE bit only when hardware has SRS cap
-
-Tony Lindgren (3):
-      serial: 8250: omap: Fix missing PM runtime calls for omap8250_set_mct=
-rl()
-      serial: 8250: omap: Fix unpaired pm_runtime_put_sync() in
-omap8250_remove()
-      serial: 8250: omap: Flush PM QOS work on remove
-
-Tzung-Bi Shih (1):
-      MAINTAINERS: update Tzung-Bi's email address
-
-Ulf Hansson (1):
-      arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle =
-state
-
-Vasily Gorbik (1):
-      s390: avoid using global register for current_stack_pointer
-
-Vladimir Oltean (2):
-      net: dsa: make dsa_master_ioctl() see through port_hwtstamp_get() shi=
-ms
-      net: dsa: don't leak tagger-owned storage on switch driver unbind
-
-Wang ShaoBo (1):
-      mISDN: fix misuse of put_device() in mISDN_register_device()
-
-Wang Wensheng (2):
-      ftrace: Fix the possible incorrect kernel message
-      ftrace: Optimize the allocation for mcount entries
-
-Wang Yufen (3):
-      bpf: Fix memory leaks in __check_func_call
-      netdevsim: Fix memory leak of nsim_dev->fa_cookie
-      tracing: Fix memory leak in tracing_read_pipe()
-
-Wei Yongjun (3):
-      net: bgmac: Drop free_netdev() from bgmac_enet_remove()
-      net: mhi: Fix memory leak in mhi_net_dellink()
-      net/x25: Fix skb leak in x25_lapb_receive_frame()
-
-Xiaolei Wang (1):
-      soc: imx8m: Enable OCOTP clock before reading the register
-
-Xiongfeng Wang (2):
-      platform/x86: asus-wmi: add missing pci_dev_put() in
-asus_wmi_set_xusb2pr()
-      mmc: sdhci-pci: Fix possible memory leak caused by missing pci_dev_pu=
-t()
-
-Xiu Jianfeng (1):
-      ftrace: Fix null pointer dereference in ftrace_add_mod()
-
-Xiubo Li (2):
-      ceph: avoid putting the realm twice when decoding snaps fails
-      ceph: fix NULL pointer dereference for req->r_session
-
-Xu Kuohai (2):
-      bpf: Initialize same number of free nodes for each pcpu_freelist
-      bpf: Fix offset calculation error in __copy_map_value and zero_map_va=
-lue
-
-Yang Jihong (1):
-      selftests/bpf: Fix test_progs compilation failure in 32-bit arch
-
-Yang Yingliang (6):
-      iio: trigger: sysfs: fix possible memory leak in iio_sysfs_trig_init(=
-)
-      iio: adc: at91_adc: fix possible memory leak in
-at91_adc_allocate_trigger()
-      siox: fix possible memory leak in siox_device_add()
-      mISDN: fix possible memory leak in mISDN_dsp_element_register()
-      xen/pcpu: fix possible memory leak in register_pcpu()
-      scsi: target: tcm_loop: Fix possible name leak in tcm_loop_setup_hba_=
-bus()
-
-Yann Gautier (1):
-      mmc: core: properly select voltage range without power cycle
-
-Yassine Oudjana (1):
-      extcon: usbc-tusb320: Call the Type-C IRQ handler only if a port
-is registered
-
-Yi Yang (1):
-      rethook: fix a potential memleak in rethook_alloc()
-
-Yu Liao (1):
-      net/tls: Fix memory leak in tls_enc_skb() and tls_sw_fallback_init()
-
-Yuan Can (5):
-      net: hinic: Fix error handling in hinic_module_init()
-      net: ionic: Fix error handling in ionic_init_module()
-      net: ena: Fix error handling in ena_init()
-      net: thunderbolt: Fix error handling in tbnet_init()
-      scsi: scsi_debug: Fix possible UAF in sdebug_add_host_helper()
-
-Yue Hu (1):
-      erofs: fix general protection fault when reading fragment
-
-Zeng Heng (1):
-      pinctrl: devicetree: fix null pointer dereferencing in pinctrl_dt_to_=
-map
-
-Zhang Xiaoxu (2):
-      cifs: Fix connections leak when tlink setup failed
-      cifs: Fix wrong return value checking when GETFLAGS
-
-Zheng Bin (1):
-      slimbus: qcom-ngd: Fix build error when
-CONFIG_SLIM_QCOM_NGD_CTRL=3Dy && CONFIG_QCOM_RPROC_COMMON=3Dm
-
-Zheng Yejian (1):
-      tracing: Fix potential null-pointer-access of entry in list 'tr->err_=
-log'
-
-Zhengchao Shao (2):
-      net: liquidio: release resources when liquidio driver open failed
-      net: caif: fix double disconnect client in chnl_net_open()
-
-Zhihao Cheng (1):
-      dm bufio: Fix missing decrement of no_sleep_enabled if
-dm_bufio_client_create failed
-
-Zhou Guanghui (1):
-      scsi: iscsi: Fix possible memory leak when device_register() failed
-
-Zhu Ning (1):
-      ASoC: sof_es8336: reduce pop noise on speaker
-
-Ziyang Xuan (4):
-      octeon_ep: delete unnecessary napi rollback under set_queues_err
-in octep_open()
-      octeon_ep: ensure octep_get_link_status() successfully before
-octep_link_up()
-      octeon_ep: fix potential memory leak in octep_device_setup()
-      octeon_ep: ensure get mac address successfully before eth_hw_addr_set=
-()
-
-ruanjinjie (1):
-      xen/platform-pci: add missing free_irq() in error path
-
-=C4=90o=C3=A0n Tr=E1=BA=A7n C=C3=B4ng Danh (1):
-      speakup: replace utils' u_char with unsigned char
