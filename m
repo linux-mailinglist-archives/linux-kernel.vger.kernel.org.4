@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C36A632237
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6F463223B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiKUMel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
+        id S230526AbiKUMfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:35:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbiKUMeN (ORCPT
+        with ESMTP id S230506AbiKUMe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:34:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2A6AFE65;
-        Mon, 21 Nov 2022 04:34:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBB3461149;
-        Mon, 21 Nov 2022 12:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30172C433D6;
-        Mon, 21 Nov 2022 12:34:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669034044;
-        bh=ZwT+dnfKh4H9gTwAC+BKBYdBZ8TmrMahu5H8qVC6lZM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=oCWuS3JGmuHudj46cpvkJxWaiSA+U33wiAPA25Qf/3ZqAEF//DV1n3X7QvucNZlZv
-         RDoV4QsXb2DRY12LD3tCnxpMGsVRRaZPn5m9NrmJ+tbzLmrpmGZy4duU2DLD0JoIUN
-         EWI2AW+Wvik+JhETIYIJCXhFbbwTxPMBMwIJq1AT0nci57KknzyDiIt4tTCwxq+sXI
-         Tb2ahXPPwU5arGAlpp1ElTtiI5dWACBP8hXXKwYJ+SzUWhTZgCorFUSX0EtYEa6jjD
-         k2wRJKHq4Delqipwlk1g7/1hkt04FN5hgpwXabTYRBhiQ9qrhHVNNUSIxGmfWIcFm3
-         Vt+g5taNoojUQ==
-Date:   Mon, 21 Nov 2022 06:34:02 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-doc@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] PCI/MSI: api: Use bullet lists in kernel-doc comments
-Message-ID: <20221121123402.GA100653@bhelgaas>
+        Mon, 21 Nov 2022 07:34:56 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B99CA6A0B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZcpLHc2YCyh5+c7me4kst+L3Ex3Jlpt5gOuzGZpHuWw=; b=WCCn/uYNi8EpKuY/HvqyHeglsh
+        LNM0ytvHtQ9+fznRtFFtFHcASvqOJeddeOo+JWYXTUEjYoNoUhBO1SvNfAQ2H9KQS2O6MX4isFhG/
+        sIGF+Gt+7W4AO+VJ1b1RYuVKUnEnlap7fVQrztp9nBxux/hkvHKXv5+eEOxPidwAr3Rah8xdvLGzG
+        UDOPbC5j9V3H6lO+bTcxRSUttbino5x3VH6Jz1lI8wEclChpbjA86r5/0x9rs/AjCoq9VVhFgV7U/
+        0bWhKXKuDodS3w7k6HQx4EnNe5rY+KrRU3KnyNDx6n6EyJuwj1mj6BXQzNbkZxoAYAnQgI6j7F82Z
+        UE8N0h4g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ox60Y-005D4w-Hl; Mon, 21 Nov 2022 12:34:42 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 231CD300445;
+        Mon, 21 Nov 2022 13:34:34 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F2DFD2D2DAA9D; Mon, 21 Nov 2022 13:34:33 +0100 (CET)
+Date:   Mon, 21 Nov 2022 13:34:33 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Don <joshdon@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>
+Subject: Re: [PATCH v3] sched: async unthrottling for cfs bandwidth
+Message-ID: <Y3twWYeAW6U2/D92@hirez.programming.kicks-ass.net>
+References: <20221117005418.3499691-1-joshdon@google.com>
+ <Y3d+1a9AEnWaxFwq@hirez.programming.kicks-ass.net>
+ <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221121101245.23544-1-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
+On Fri, Nov 18, 2022 at 11:25:09AM -0800, Josh Don wrote:
 
-If you have opportunity, please update the subject line to remove
-"api: " to match previous history:
+> > Maybe have this function return false when local and save that cfs_rq in
+> > a local var to process again later, dunno, that might turn messy.
+> 
+> Maybe something like this? Apologies for inline diff formatting.
 
-  PCI/MSI: Correct 'can_mask' test in msi_add_msi_desc()
-  PCI/MSI: Remove bogus warning in pci_irq_get_affinity()
-  PCI/MSI: Prevent UAF in error path
-  PCI/MSI: Unbreak pci_irq_get_affinity()
-  PCI/MSI: Use msi_on_each_desc()
-  PCI/MSI: Let core code free MSI descriptors
-  PCI/MSI: Use msi_add_msi_desc()
-  PCI/MSI: Protect MSI operations
-  PCI/MSI: Simplify pci_irq_get_affinity()
-  ...
+That looks entirely reasonable, not nearly as horrible as I feared. Let
+me go make that happen.
 
-On Mon, Nov 21, 2022 at 05:12:45PM +0700, Bagas Sanjaya wrote:
-> Stephen Rothwell reported htmldocs warnings when merging tip tree:
+> Note that one change we definitely want is the extra setting of
+> throttled = true in the case that cfs_rq->runtime_remaining <= 0, to
+> catch the case where we run out of runtime to distribute on the last
+> entity in the list.
+
+Done.
+
+> > > +
+> > > +     /* Already enqueued */
+> > > +     if (SCHED_WARN_ON(!list_empty(&cfs_rq->throttled_csd_list)))
+> > > +             return;
+> > > +
+> > > +     list_add_tail(&cfs_rq->throttled_csd_list, &rq->cfsb_csd_list);
+> > > +
+> > > +     smp_call_function_single_async(cpu_of(rq), &rq->cfsb_csd);
+> >
+> > Hurmph.. so I was expecting something like:
+> >
+> >         first = list_empty(&rq->cfsb_csd_list);
+> >         list_add_tail(&cfs_rq->throttled_csd_list, &rq->cfsb_csd_list);
+> >         if (first)
+> >                 smp_call_function_single_async(cpu_of(rq), &rq->cfsb_csd);
+> >
+> > But I suppose I'm remembering the 'old' version. I don't think it is
+> > broken as written. There's a very narrow window where you'll end up
+> > sending a second IPI for naught, but meh.
 > 
-> Documentation/PCI/msi-howto:380: drivers/pci/msi/api.c:148: ERROR: Unexpected indentation.
-> Documentation/PCI/msi-howto:380: drivers/pci/msi/api.c:149: WARNING: Block quote ends without a blank line; unexpected unindent.
-> Documentation/PCI/msi-howto:380: drivers/pci/msi/api.c:236: ERROR: Unexpected indentation.
-> Documentation/PCI/msi-howto:380: drivers/pci/msi/api.c:259: ERROR: Unexpected indentation.
-> 
-> Use bullet lists syntax for pci_disable_msix flags and interrupt mode lists
-> to fix these warnings.
-> 
-> Link: https://lore.kernel.org/linux-next/20221121184100.0974cc35@canb.auug.org.au/
-> Fixes: 5c0997dc33ac24 ("PCI/MSI: Move pci_alloc_irq_vectors() to api.c")
-> Fixes: 017239c8db2093 ("PCI/MSI: Move pci_irq_vector() to api.c")
-> Fixes: be37b8428b7b77 ("PCI/MSI: Move pci_irq_get_affinity() to api.c")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> The CSD doesn't get  unlocked until right before we call the func().
+> But you're right that that's a (very) narrow window for an  extra IPI.
+> Please feel free to modify the patch with that diff if you like.
+
+Since I was manually editing things, I did that too.
+
+Please test the final version as found here:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=sched/core&id=4e3c1b7b489e218dfa576cd6af0680b975b8743e
