@@ -2,196 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF616631805
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 01:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD98863180D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 02:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiKUA6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 19:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
+        id S229910AbiKUBBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 20:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiKUA6g (ORCPT
+        with ESMTP id S229726AbiKUBBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 19:58:36 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF3120BC3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 16:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668992315; x=1700528315;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=imQqJKmr983NmaMD9izKiZThIwN5bupi6NI7WpEXI08=;
-  b=bJ14QI1TgVsuf9LR76objHDhbNnXbg+5g/qtVTukx6JantSKgHrtC3yW
-   Hj5GftBpZHIeiHHf8zDmPZC4xJC4jhoEldpemlAtCdvi9FnynLUXaQgu0
-   xDW3DWoPw2alIct+vIBMEO8H9bct5guNPsoBiqz0a3siB3L55HYy6NIGr
-   9smbL0jOZewgqz0rwPUHAVmcmLbJxjjh3PUtpaSzpvGMR9kYjx0OOy3Qc
-   q1lsYxzyRWRgf3rEE+bljiM7PIU+D1gXpEq5cQMxDb1cDveUyXrn2XIoB
-   5GxgdJwIa86qar6I2Kc2ox8MXbQrY6Dxwz3hPAMEcYJVr0xx8rRr+p29e
+        Sun, 20 Nov 2022 20:01:15 -0500
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A3D218BA
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 17:01:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1668992474; x=1700528474;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nqZwB4mUx5KtpzA6T+C4d6z/dqxxnpNbzXCnsfbUA04=;
+  b=j7PNdZbUFHxROliOm70wivB8xkjdGD7JXJIac5u8THPkYXadTuDtAVvg
+   N7GhGzROxKgwwsnjaq8w107DJTnDEChnBPKNWAGPtUKFJUU1rtdsd8NYe
+   DzmcKko7/7wMsvx8qM1ZjFOjRyNqH5ZMoskAnQ//xqEP7L8Ch7I/Rfec+
+   YxoJu1ACxIEkqhmaTP1o9l4PVxeLebPyiTjuQen7ksr/lFf2fZBhdgez7
+   1J2LatG3YXuU7dXbxuMmT5num5SbtKlAvrB3vVlSv34kPZpg1BY2PbvpZ
+   gqsao/IK6x4QTxL54mOVZP+gzhYJcvAFi4JA9OvSB/D66lvMaY5OjllLK
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="313476159"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="313476159"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 16:58:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="591597348"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="591597348"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP; 20 Nov 2022 16:58:34 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 20 Nov 2022 16:58:34 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Sun, 20 Nov 2022 16:58:34 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Sun, 20 Nov 2022 16:58:34 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TWtA8GEXLYTa3l5mmhQKul3d60+zlBLaFyOgm8dxUsMrbjLfnuXKCQrP6q751qT6m0Vt/lhFgJMEHnLTm6KOIz4goEW9EiSBbZjjfWCpRIHjWypzXKFjUMpi2ivPq+M3Hqa6a7KwStNAkUdC2BvGzm0IZiTBS2MeieiLSGPU7ooeMD5RdjcBDCJbPdGbxhumfoy6+DEcjIdJzhjkJyFuwUYZIPzvQKoutsQRAbF2fFW0qao1By0IwY4PIGtE0d/WWIrqGPsG8C5NoCEwaK08XN2+rhzN/U5vZBjZCov9F0LHnitylpPFKBP+VSfKIfqNgn9ynXhIKle6mpo5qA35QQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3BZTOedLyj0oMkwwerY6bOkSSdHhn6l7AG6Lua4C8fk=;
- b=cyixARV3GRJj0cYfsbjpKif+LB8VyeEGg5kKuhPo9/cp2pC4ZK8ytBdD0haNrwQZNKIg2XcQbyNmrlLLY2msgbFwAoG85NbMmhR/1HGJu73N8p7MQ2viyFnHfsSAz3aVYb7+smS1WrQR91jiXVJtXqidy2DAXyLLo5poKqRu/AHQoigg7vwzqfm8/gy/x071kOyYKASqqzjkx69OUE3bMpnDvkeagO52SZiKRj8R8UG56r1NJ/XZMBnQyHZ3zwAKoFgM5fcYQBNFaX5z5ntjQLANGqUFSLomUD6DEEhHtSAetcuXpeFtiUlmVrGGOXFSjsL/OFB53CQZr8oNfll9DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
- by PH0PR11MB4840.namprd11.prod.outlook.com (2603:10b6:510:43::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
- 2022 00:58:31 +0000
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::1564:b428:df98:96eb]) by MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::1564:b428:df98:96eb%5]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
- 00:58:31 +0000
-Date:   Mon, 21 Nov 2022 08:55:15 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        <linux-kernel@vger.kernel.org>, <john.stultz@linaro.org>,
-        <sboyd@kernel.org>, <corbet@lwn.net>, <Mark.Rutland@arm.com>,
-        <maz@kernel.org>, <kernel-team@meta.com>, <neeraju@codeaurora.org>,
-        <ak@linux.intel.com>, <zhengjun.xing@intel.com>,
-        Chris Mason <clm@meta.com>, John Stultz <jstultz@google.com>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
- clocksource measurements
-Message-ID: <Y3rMc2VbgVLHN9db@feng-clx>
-References: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
- <20221114232827.835599-1-paulmck@kernel.org>
- <87mt8pkzw1.ffs@tglx>
- <20221117230910.GI4001@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221117230910.GI4001@paulmck-ThinkPad-P17-Gen-1>
-X-ClientProxiedBy: SI2PR04CA0003.apcprd04.prod.outlook.com
- (2603:1096:4:197::23) To MN0PR11MB6304.namprd11.prod.outlook.com
- (2603:10b6:208:3c0::7)
+X-IronPort-AV: E=Sophos;i="5.96,180,1665417600"; 
+   d="scan'208";a="216740457"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Nov 2022 09:01:13 +0800
+IronPort-SDR: ULsLp6ObLZvTv5Fs/pUuitQmyoOtBePJXBnxDsUxPTMuk66GJLpaZI7XHdhQQ7hH38oW3jcFEU
+ S9sP5CwW/iIMqPMRMmFilIz3la/eyKQCx8ooT1xrWwpnYV+pNKigVZBgiCFHIzQ3zlMhuxNy1q
+ BmJ3gBhF7JnV/4vGq4sHD9HVTo7rDBmaI52N4eAuKW8n6e4+W7oJ7ckHUi+j7YsshHmFzRyBnQ
+ z1ioSg4mLju5fPUAzuWyCTLo6TrQXeSvKT5EqmGY7pTWpNX7JL0/ygP6w3cb3kVSZqk3YPClCE
+ kIY=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 16:14:19 -0800
+IronPort-SDR: HHUUiyQPFnxQ95MmhFEQ3FSY1dHWNB0ZdNTP6RIawozNnFI78Ir3pENnBZg3AmhZrm/eqQN9qJ
+ hZZVsXpholc9nVBa29G8V2sUijo5P7NFR8Bo8539UiH+IG1x37IjEm6LjDH50KOVCz59ZHMLb5
+ BQfh6f5YcluQ1kPjGQJf7e7nrAXXdCCSzLw16hLDQ54xz3awN9AodFTplFWH4oe2fk77Z7U27q
+ DEr+M6W0S40+F0XxJgljPbHWHCu4k/YwF39+kmppeZwu+5DJLjvIHYZ0r18EzcmRACx28VcinC
+ jvk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 17:01:14 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NFpx46F5Jz1Rwrq
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 17:01:12 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1668992471; x=1671584472; bh=nqZwB4mUx5KtpzA6T+C4d6z/dqxxnpNbzXC
+        nsfbUA04=; b=QRgGHXST91rVQRzoT0CMFD1RxF9sloXcoL2DuuMlEam6hYIbPMC
+        hTZg+Y8k60Dv3VPhKkCUbBJitEzP+h0VIRkIJTja3ihtjjgyPTmWUr1PMgpVe2Vm
+        D8Y1SrgUafCig8DxyhYjE3whmzRe8msWR9Q6LX77BnjfCOpWFhPRj8zwh60pFXcm
+        G3hfN/ktvct1HvDlZUhwL+JjSALlAglXhR+1dhzV4HhAf/92GUDfb09wxYq/EKgS
+        lk/3Img2NEDLoZDXkqIWP/XVU8DkdIZcEitJFgONzmPrdhu31hpPx58OaEsekrNd
+        NhDVMXGOo2NDCuIAbZn2/60u0OKr3JGHAVg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 8xPIcpLXXd6h for <linux-kernel@vger.kernel.org>;
+        Sun, 20 Nov 2022 17:01:11 -0800 (PST)
+Received: from [10.225.163.53] (unknown [10.225.163.53])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NFpx21vDGz1RvLy;
+        Sun, 20 Nov 2022 17:01:10 -0800 (PST)
+Message-ID: <5d062001-2fff-35e5-d951-a61b510727d9@opensource.wdc.com>
+Date:   Mon, 21 Nov 2022 10:01:08 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|PH0PR11MB4840:EE_
-X-MS-Office365-Filtering-Correlation-Id: a18c9cdc-eb39-4299-348b-08dacb5b8221
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tOODE6RDQiGYxkTMMRsyKdvf+gWhR85J3KGw7IHIrC1v9mZBnNI4Jv4Atq0JFsjjSvUXYP8/0Lmu/74xygj4CX+iGW/eP4OiaSczPaX7VoVRyy9GMHjurZbJC/lpG7l1VTt9SFvEq1/U0ObzTlJZlhR+sGmY2bOqzalCs8S95TgMOBZktcodFpSUs4/LFcIQ2yVWVLNETb/eX08s9JxpTLKjk1jelNQW4ld9x5vUUZ1zsB8A15XZmqgvwrs8dlDhyIU/380F56c/M6Bq07uhlITSUfZa/AKFo8ZXxPbE36XBvlrpt1Xh9IILqRXdrmZ5nMRkjtc4A3S8ZFohgG9lOGcEJ/Rf/G14A3utekl0yMHYGwUre8EoUL3tjKmPb7O6Kdsz07IC+95PnnigOu3fd0Wju/Xey64N1KwVTHWSqWfvLJCE/EFRzjeOfUMKExXL7gFhqry5t4DH/ig/y2zwzyJuZhWYt/f7WGHA/Y3iyjVCRhlPpM6yR9RkIhRUtubteCuhnJmpmEh5wG91I0xDhnZtqhkfBvmjf+ca2ZIa4QQt1nCr1rvpxzVzvX8g4uWODq0Ai88mZ8ssruBCnxuD44+UoCTp5jqN+s21s4FOe5GeURlfg4iIrU3icW0VHV3xazB73UG4EWYAJcXLUwpt6Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(376002)(39860400002)(136003)(346002)(451199015)(6916009)(44832011)(5660300002)(7416002)(316002)(6506007)(41300700001)(186003)(8936002)(26005)(8676002)(6512007)(4326008)(9686003)(66946007)(54906003)(66476007)(66556008)(38100700002)(33716001)(82960400001)(83380400001)(2906002)(86362001)(6666004)(6486002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jlYZTxr46BY+faK8IMWDCEkHMOyR16afQTYAtPk8EkzYdgxAvjqWY6/mz5Y9?=
- =?us-ascii?Q?frzq5AffcJOxD9y31n8bx/sWS9X5DagK/AsEO6WoLQxauvPy4IotCR9oHGV9?=
- =?us-ascii?Q?DWcHgmf/C3DXNYJNccK3Nw4rdls3eISp5iBW6dP51A9zi9heVvC6oVIhfMeA?=
- =?us-ascii?Q?cfUmyQEr2rHHXgYDT12EhKeX8MP+3u/Od/GoQSL+B6UK+XPsRaWZnDyZOyLf?=
- =?us-ascii?Q?fGXTG0UeXVcXPIkkfK+7UZXU4nCSpC3YeE7OXGYZ3+2b/fd+41eBi+o4hMvE?=
- =?us-ascii?Q?VF+DbbDZGnExqZHlww7pfKJ3IWtGKDlomZANswtc3WkyZcdwIo5XZw5Zg7Re?=
- =?us-ascii?Q?0CFJepdyQbbJfQ+rgchsfxZFRzvqjduqlyBR1KRlvwVA1WF++SdWbItAFnw8?=
- =?us-ascii?Q?hyyTPbxTVUma/Xfir119sj4y1ZYjkaK4InRbBVfzuRyJLPJjCx6zIZ5AUl3K?=
- =?us-ascii?Q?1Y75+pbmcWBvnT/VEMmYXdYkJGP3h/W7B4RdJR8M3QPwthiOPqdIP0FVbTLf?=
- =?us-ascii?Q?pcx4ZnTQuH4x4jRElorA22PE88BZwS0OqdsG6j9tqoEbi2jq+x4LydvsBp8K?=
- =?us-ascii?Q?ht/GGCpY/aXNyIfFdvBf1q0OUebD3A+ounb62HRFSaototnanXpSOe3uvzVM?=
- =?us-ascii?Q?jAsykDirht7qmiE8Cdlei3ROokkJcB1jrRMcZiEfcXa/916y3IJRYTc7aNYA?=
- =?us-ascii?Q?wu1tTe7onJBlmEMPU0pIkw7B3caPvUHosCHLdz9FRzKD7Q1lEHriQRMXaBK9?=
- =?us-ascii?Q?1/sLaMFR/4XQuiRk/8K4P31wZrdL7t45k9f9hJhjy+nwt8hMzHG6ISJwlGdN?=
- =?us-ascii?Q?3aLVhL0O+qEY9TLgxBMQVfD821CuQpOZHWez+6A8ufitueoiIGyaLD3o/T03?=
- =?us-ascii?Q?kQo2iOZXTkshlo3STCT81/VObAvpaCy8hdS+dB/dsjwmOt86x0s4zUwRgdio?=
- =?us-ascii?Q?3Mnk125P9yBoc6hqyp1X+IZ+3VFOVPpW7TVIKa/scOpxl1NVbNsQiSLfZtK6?=
- =?us-ascii?Q?FKg5h0fehO1NCzzeYu/D/IKqivwxrzhOh3ZxTCveuaUwL5E21RbQIXDAliJX?=
- =?us-ascii?Q?l5xa8GljOEMnKm2CRaGS+lc69u/vVYcRz+RTq8uZ+9dNJP+05GfLpuagIEO5?=
- =?us-ascii?Q?mhkS6XZ/VkLPU9rOqqJLAbhJTt7Nvtli6b+x5NL2LDohg3GIcdUgwC06dw0w?=
- =?us-ascii?Q?RPGIOA4l+RB3dHvPvZQ2FIlsaaBMFzFtJVZk/AV8iZKnvbcF8nhFfCkSsupI?=
- =?us-ascii?Q?4Uw4LkDV/TD3h1NuM/qzxQWMrgBdvW2z1VgfOV/v6q38x1+EWmlnmDyDx3YH?=
- =?us-ascii?Q?87zn0ViY8z8BhnLqGvAWiO/Nb8pdzER1nLR11g+uEtjJZRYCLe+qoy3hC+Dj?=
- =?us-ascii?Q?Ezs5M/b7oKpa5bufDi7FFPSyEOAAuY+xAi7Bfh3hECwRdoTVxnd78eWU1khO?=
- =?us-ascii?Q?yW23SvRbb5+Lej/fgL6cg/tZceMlicZoHSdvf1s/8yQa2MkRjDcXywRGFzJQ?=
- =?us-ascii?Q?seWFBOcaKeR0YikfELeLaq4v9nR8Gi+H0GClgnecW2RIGma0ud6yHnVaDDIw?=
- =?us-ascii?Q?ii5TMPMcjQ50yVW6VDeDLiZ5lXf+cUFBPnqjG/Hb?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a18c9cdc-eb39-4299-348b-08dacb5b8221
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 00:58:31.4522
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4ASeyuyHhVr/ZNjOCisc9s3m+fLRa8peim4GXWL164LqTL2o5jOHtXYnh9+ObScDwtFl23t9qvXJcRbBPu0GmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4840
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH V6 6/8] block, bfq: retrieve independent access ranges
+ from request queue
+Content-Language: en-US
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
+        Federico Gavioli <f.gavioli97@gmail.com>
+References: <20221103162623.10286-1-paolo.valente@linaro.org>
+ <20221103162623.10286-7-paolo.valente@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221103162623.10286-7-paolo.valente@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:09:10PM -0800, Paul E. McKenney wrote:
-> On Thu, Nov 17, 2022 at 10:57:34PM +0100, Thomas Gleixner wrote:
-> > Paul!
-> > 
-> > On Mon, Nov 14 2022 at 15:28, Paul E. McKenney wrote:
-> > >  
-> > > +		/* Check for bogus measurements. */
-> > > +		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
-> > > +		if (wd_nsec < (wdi >> 2)) {
-> > > +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-> > > +			continue;
-> > > +		}
-> > > +		if (wd_nsec > (wdi << 2)) {
-> > > +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
-> > > +			continue;
-> > > +		}
-> > 
-> > This is really getting ridiculous.
+On 11/4/22 01:26, Paolo Valente wrote:
+> From: Federico Gavioli <f.gavioli97@gmail.com>
 > 
-> I have absolutely no argument with this statement, and going back a
-> long time.  ;-)
+> This patch implements the code to gather the content of the
+> independent_access_ranges structure from the request_queue and copy
+> it into the queue's bfq_data. This copy is done at queue initialization.
 > 
-> But the set of systems that caused me to send this turned out to have
-> real divergence between HPET and TSC, and 40 milliseconds per second of
-> divergence at that.  So not only do you hate this series, but it is also
-> the case that this series doesn't help with the problem at hand.
+> We copy the access ranges into the bfq_data to avoid taking the queue
+> lock each time we access the ranges.
+> 
+> This implementation, however, puts a limit to the maximum independent
+> ranges supported by the scheduler. Such a limit is equal to the constant
+> BFQ_MAX_ACTUATORS. This limit was placed to avoid the allocation of
+> dynamic memory.
+> 
+> Co-developed-by: Rory Chen <rory.c.chen@seagate.com>
+> Signed-off-by: Rory Chen <rory.c.chen@seagate.com>
+> Signed-off-by: Federico Gavioli <f.gavioli97@gmail.com>
+> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+> ---
+>  block/bfq-iosched.c | 54 ++++++++++++++++++++++++++++++++++++++-------
+>  block/bfq-iosched.h |  5 +++++
+>  2 files changed, 51 insertions(+), 8 deletions(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index c94b80e3f685..106c8820cc5c 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -1831,10 +1831,26 @@ static bool bfq_bfqq_higher_class_or_weight(struct bfq_queue *bfqq,
+>  /* get the index of the actuator that will serve bio */
+>  static unsigned int bfq_actuator_index(struct bfq_data *bfqd, struct bio *bio)
+>  {
+> -	/*
+> -	 * Multi-actuator support not complete yet, so always return 0
+> -	 * for the moment.
+> -	 */
+> +	struct blk_independent_access_range *iar;
+> +	unsigned int i;
+> +	sector_t end;
+> +
+> +	/* no search needed if one or zero ranges present */
+> +	if (bfqd->num_actuators < 2)
+> +		return 0;
+> +
+> +	/* bio_end_sector(bio) gives the sector after the last one */
+> +	end = bio_end_sector(bio) - 1;
+> +
+> +	for (i = 0; i < bfqd->num_actuators; i++) {
+> +		iar = &(bfqd->ia_ranges[i]);
+> +		if (end >= iar->sector && end < iar->sector + iar->nr_sectors)
+> +			return i;
+> +	}
+> +
+> +	WARN_ONCE(true,
+> +		  "bfq_actuator_index: bio sector out of ranges: end=%llu\n",
+> +		  end);
+>  	return 0;
+>  }
+>  
+> @@ -2479,7 +2495,6 @@ static void bfq_remove_request(struct request_queue *q,
+>  
+>  	if (rq->cmd_flags & REQ_META)
+>  		bfqq->meta_pending--;
+> -
 
-The drift is about 4% which is quite big. It seems that this is
-either problem of HPET/TSC's hardware/firmware, or the problem of
-frequency calibration for HPET/TSC. TSC calibration is complex,
-as it could be done from different methods depending on hardware
-and firmware, could you share the kernel boot log related with
-tsc/hpet and clocksource? 
+whiteline change
 
-Also if your platform has acpi PM_TIMER, you may try "nohpet"
-to use PM_TIMER instead of HPET and check if there is also big
-drift between TSC and PM_TIMER.
+>  }
+>  
+>  static bool bfq_bio_merge(struct request_queue *q, struct bio *bio,
+> @@ -7144,6 +7159,8 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>  {
+>  	struct bfq_data *bfqd;
+>  	struct elevator_queue *eq;
+> +	unsigned int i;
+> +	struct blk_independent_access_ranges *ia_ranges = q->disk->ia_ranges;
+>  
+>  	eq = elevator_alloc(q, e);
+>  	if (!eq)
+> @@ -7187,10 +7204,31 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>  	bfqd->queue = q;
+>  
+>  	/*
+> -	 * Multi-actuator support not complete yet, default to single
+> -	 * actuator for the moment.
+> +	 * If the disk supports multiple actuators, we copy the independent
+> +	 * access ranges from the request queue structure.
+>  	 */
+> -	bfqd->num_actuators = 1;
+> +	spin_lock_irq(&q->queue_lock);
+> +	if (ia_ranges) {
+> +		/*
+> +		 * Check if the disk ia_ranges size exceeds the current bfq
+> +		 * actuator limit.
+> +		 */
+> +		if (ia_ranges->nr_ia_ranges > BFQ_MAX_ACTUATORS) {
+> +			pr_crit("nr_ia_ranges higher than act limit: iars=%d, max=%d.\n",
+> +				ia_ranges->nr_ia_ranges, BFQ_MAX_ACTUATORS);
+> +			pr_crit("Falling back to single actuator mode.\n");
+> +			bfqd->num_actuators = 0;
+> +		} else {
+> +			bfqd->num_actuators = ia_ranges->nr_ia_ranges;
+> +
+> +			for (i = 0; i < bfqd->num_actuators; i++)
+> +				bfqd->ia_ranges[i] = ia_ranges->ia_range[i];
+> +		}
+> +	} else {
+> +		bfqd->num_actuators = 0;
 
-Thanks,
-Feng
+That is very weird. The default should be 1 actuator.
+ia_ranges->nr_ia_ranges is 0 when the disk does not provide any range
+information, meaning it is a regular disk with a single actuator.
 
+> +	}
+> +
+> +	spin_unlock_irq(&q->queue_lock);
+>  
+>  	INIT_LIST_HEAD(&bfqd->dispatch);
+>  
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index f1c2e77cbf9a..90130a893c8f 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -811,6 +811,11 @@ struct bfq_data {
+>  	 */
+>  	unsigned int num_actuators;
+>  
+> +	/*
+> +	 * Disk independent access ranges for each actuator
+> +	 * in this device.
+> +	 */
+> +	struct blk_independent_access_range ia_ranges[BFQ_MAX_ACTUATORS];
+
+I fail to see how keeping this information is useful, especially given
+that this struct contains a kobj. Why not just copy the sector &
+nr_sectors fields into struct bfq_queue ? That would also work for the
+single actuator case as then sector will be 0 and nr_sectors will be the
+disk total capacity.
+
+I think this patch should be first in the series. That will avoid having
+the empty bfq_actuator_index() function.
+
+>  };
+>  
+>  enum bfqq_state_flags {
+
+-- 
+Damien Le Moal
+Western Digital Research
 
