@@ -2,662 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD1D631FFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D99632000
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiKULMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S230464AbiKULNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbiKULLi (ORCPT
+        with ESMTP id S230462AbiKULNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:11:38 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1071B233B5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:07:47 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id a29so18230012lfj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6p6hxbgel3Zl3rnDaE8Rz7BrvsaXOJ6kRXgbKVxVQZY=;
-        b=UnZ8onUtSogYHlZTlJXaPIEnrpdxG4Y1kXdoO6ijV1s7Cn0Rvowdwn0y2AnrpKYYFI
-         vsOdHRyh0AltgXTtb9Api6GbElPWTI5k/OVMccAsE4yGcjB1SW2JT8YnLoMgpX10hRwV
-         bObppCTCNw4OQkNPXBFZUmmfEOQKRZagIrc/NHVkVdBxlrg9mFPWL9eDStJ2j8zU69hM
-         b7Qe4mcHY2vfBzUSLsXi7FrsDIdaT18axDPPOrGeg33G65oETbsX7kkx8YiHTsj0UEeJ
-         IaFKSwZ4OGyxZHvWVX111xeyAXFfg25f/UTPisG+Szf/w728hbRDJTm9kNhhhBYAiB+e
-         LVpQ==
+        Mon, 21 Nov 2022 06:13:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B59B963B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:08:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669028863;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xNuyVgSMX/ajeMNmF/4b1DUvMDeMPy/4E3AU3e3kKQU=;
+        b=ipX7dfVkQrNyHIZyPJzsl1OXhNhqM79cDuu/CTySlamfW1JNNBwHn2JWxbwtJLEUmX5Yg6
+        dUzaeRO8NhNZgywmCWKaVAch3q1zo3wkcsUU608UF3QjeQACuOy8PdPPvCHtfzqOmPAWWH
+        WXg6Ry0wEtsU/N9uYW27D49KEilOBmo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-94-nHLK6ttdPFeWrZQUSyc9gA-1; Mon, 21 Nov 2022 06:07:42 -0500
+X-MC-Unique: nHLK6ttdPFeWrZQUSyc9gA-1
+Received: by mail-wr1-f71.google.com with SMTP id k7-20020adfc707000000b002416f2e9ad5so3090389wrg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:07:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6p6hxbgel3Zl3rnDaE8Rz7BrvsaXOJ6kRXgbKVxVQZY=;
-        b=7vjY5rUD2Th85BF7SfHR7p7zfgYK/nhDmfyBwroOYZ81Ps7aWwDv9mZJSALNn2TI50
-         UHmrVsuaXikouNgat4denSHSGNQcq5cRWbZctY+YIxL3kyQp48ekuj9rLuj/dGEG/0A0
-         ZJmieyJPVCJNL6UlfgawVsOIREcERtqFJvn/KDwmc9X8LAuc2cpS7RpUMJ3R3uvJXuJC
-         JxNSLIK/sycMy6s7UstJnRHilDlXtk3cQNCc2pa/+EXUcc6oQ5eS3Ls0zxO1vuI2z4HJ
-         Zcu4f9qk3y0tNeNNEvfsSyBfsFM5TJ9YRDVnjL7yMoNDkQKw4ONvoa2wYLu/x+n1S5uO
-         59ZA==
-X-Gm-Message-State: ANoB5pmDVp4jOiMIyh0gZMqBuHcxvo/bNx322787Aae831oWzWPnLvjf
-        yIVinRvVqGH2yQ8dkEOYvT0sIw==
-X-Google-Smtp-Source: AA0mqf4sHvDS62G2FUOiIzqtEfG1296xjYLiuyZO6zGOr5vh4J5Jw7RUbU1cZ46HdjsFZuhnic3+TA==
-X-Received: by 2002:ac2:41d4:0:b0:4af:cd2:f8d5 with SMTP id d20-20020ac241d4000000b004af0cd2f8d5mr5959364lfi.489.1669028851458;
-        Mon, 21 Nov 2022 03:07:31 -0800 (PST)
-Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
-        by smtp.gmail.com with ESMTPSA id x19-20020ac25dd3000000b00498fd423cc3sm1976715lfq.295.2022.11.21.03.07.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 03:07:30 -0800 (PST)
-Message-ID: <fed1d538-d133-6987-12d4-3f1516d519e5@linaro.org>
-Date:   Mon, 21 Nov 2022 12:07:28 +0100
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xNuyVgSMX/ajeMNmF/4b1DUvMDeMPy/4E3AU3e3kKQU=;
+        b=y9G7GW6tiKiyI7EhbNIZpHZGe0szplS/2sVwFWQmQ2ClW2K2O5tYzOMF2AxrJgwGVM
+         tI5vxlQN/K4vhU9MnUV1V0ogozIHA4Dsc3+u+JQ3YJF2K7bIXh7KzeLGUjITHK0dkN/+
+         i9GeGSjo2bAtSVBIZCWLJuNzry0VEa4Qfe7b3B78W8c4cpYSJIHd+6XHPGucAu0l12ng
+         Uv6Q97HDpLqBbJZCVOUG87kiscfszxudlcNo9UTIYnxsl8Gcqk1xwEBbXAk92JdeN/r4
+         qIsuVfjfmC7533rmEOrF6nQ7OA4vy6Extr++2DpW6OAcISsLKHEbEcaiTNh+cMWRUOQV
+         B4xw==
+X-Gm-Message-State: ANoB5plMScVt/nysL1bPnaK7RFRiYc27qrWu6o9UthznbDUXXY4GE5mu
+        rW25cvIgMbojGnFy2Tl9KXb7Fjuroo/rmjF7DBZUurs5L1RKzTPIMz0OqRtpnoemOM0GKP201nr
+        3pztBeYTyQPJqliZOMhMt1Wpr
+X-Received: by 2002:adf:fb12:0:b0:236:60e8:3cca with SMTP id c18-20020adffb12000000b0023660e83ccamr4505603wrr.471.1669028861413;
+        Mon, 21 Nov 2022 03:07:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5Tx2y2Y1smXnHRhOhJ81J74U3+HhoNnCAbQfBkdFVjvc7NuYnBWQPVlTYlY79K73/EmsGh9Q==
+X-Received: by 2002:adf:fb12:0:b0:236:60e8:3cca with SMTP id c18-20020adffb12000000b0023660e83ccamr4505590wrr.471.1669028861101;
+        Mon, 21 Nov 2022 03:07:41 -0800 (PST)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id a13-20020a5d53cd000000b002383edcde09sm10878550wrw.59.2022.11.21.03.07.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 03:07:40 -0800 (PST)
+Message-ID: <3829b20beeeed8ec2480eada30b2639b07bc579e.camel@redhat.com>
+Subject: Re: [PATCH 02/13] KVM: nSVM: don't call
+ nested_sync_control_from_vmcb02 on each VM exit
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Babu Moger <babu.moger@amd.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org
+Date:   Mon, 21 Nov 2022 13:07:38 +0200
+In-Reply-To: <Y3aT5qBgOuwsOeS/@google.com>
+References: <20221117143242.102721-1-mlevitsk@redhat.com>
+         <20221117143242.102721-3-mlevitsk@redhat.com> <Y3aT5qBgOuwsOeS/@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 2/2] arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221118192241.29384-1-quic_molvera@quicinc.com>
- <20221118192241.29384-3-quic_molvera@quicinc.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221118192241.29384-3-quic_molvera@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18.11.2022 20:22, Melody Olvera wrote:
-> Add DTs for Qualcomm IDP platforms using the QDU1000 and QRU1000
-> SoCs.
+On Thu, 2022-11-17 at 20:04 +0000, Sean Christopherson wrote:
+> On Thu, Nov 17, 2022, Maxim Levitsky wrote:
+> > Calling nested_sync_control_from_vmcb02 on each VM exit (nested or not),
+> > was an attempt to keep the int_ctl field in the vmcb12 cache
+> > up to date on each VM exit.
 > 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile        |   2 +
->  arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 266 +++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/qru1000-idp.dts | 266 +++++++++++++++++++++++
->  3 files changed, 534 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
+> This doesn't mesh with the reasoning in commit 2d8a42be0e2b ("KVM: nSVM: synchronize
+> VMCB controls updated by the processor on every vmexit"), which states that the
+> goal is to keep svm->nested.ctl.* synchronized, not vmcb12.  Or is nested.ctl the
+> cache you are referring to?
+
+Thanks for digging that commit out.
+
+My reasoning was that cache contains both control and 'save' fields, and
+we don't update 'save' fields on each VM exit.
+
+For control it indeed looks like int_ctl and eventinj are the only fields
+that are updated by the CPU, although IMHO they don't *need* to be updated
+until we do a nested VM exit, because the VM isn't supposed to look at vmcb while it
+is in use by the CPU, its state is undefined.
+
+For migration though, this does look like a problem. It can be fixed during
+reading the nested state but it is a hack as well.
+
+My idea was as you had seen in the patches it to unify int_ctl handling,
+since some bits might need to be copied to vmcb12 but some to vmcb01,
+and we happened to have none of these so far, and it "happened" to work.
+
+Do you have an idea on how to do this cleanly? I can just leave this as is
+and only sync the bits of int_ctl from vmcb02 to vmcb01 on nested VM exit.
+Ugly but would work.
+
+
+
+
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index afe496a93f94..da66d4a0a884 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -53,7 +53,9 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-maple.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-poplar.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= qdu1000-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= qru1000-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> new file mode 100644
-> index 000000000000..5aed483201fa
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> @@ -0,0 +1,266 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +#include "qdu1000.dtsi"
-> +#include "pm8150.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. QDU1000 IDP";
-> +	compatible = "qcom,qdu1000-idp", "qcom,qdu1000";
-Missing chassis-type
+> > However all other fields in the vmcb12 cache are not kept up to  date,
+> 
+> IIUC, this isn't technically true.  They are up-to-date because they're never
+> modified by hardware.
 
-> +
-> +	aliases {
-> +		serial0 = &uart7;
-> +	};
-> +
-> +	clocks {
-> +		xo_board: xo-board {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <19200000>;
-> +			clock-output-names = "xo_board";
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		sleep_clk: sleep-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <32000>;
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		pcie_0_pipe_clk: pcie-0-pipe-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			clock-output-names = "pcie_0_pipe_clk";
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		pcie_0_phy_aux_clk: pcie-0-phy-aux-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			clock-output-names = "pcie_0_phy_aux_clk";
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		usb3_phy_wrapper_pipe_clk: usb3-phy-wrapper-pipe-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			clock-output-names = "usb3_phy_wrapper_pipe_clk";
-> +			#clock-cells = <0>;
-> +		};
-Do these pipe clocks not come from QMPPHY?
+In both save and control cache. In control cache indeed looks like the
+fields are kept up to date.
 
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	ppvar_sys: ppvar-sys-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "ppvar_sys";
-Any chance you could add the voltage of this regulator here,
-so the DT can better represent the hardware?
+Best regards,
+	Maxim Levitsky
 
-Konrad
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vph_pwr: vph-pwr-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vph_pwr";
-> +		regulator-min-microvolt = <3700000>;
-> +		regulator-max-microvolt = <3700000>;
-> +
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +
-> +		vin-supply = <&ppvar_sys>;
-> +	};
-> +};
-> +
-> +&apps_rsc {
-> +	regulators {
-> +		compatible = "qcom,pm8150-rpmh-regulators";
-> +		qcom,pmic-id = "a";
-> +
-> +		vdd-s1-supply = <&vph_pwr>;
-> +		vdd-s2-supply = <&vph_pwr>;
-> +		vdd-s3-supply = <&vph_pwr>;
-> +		vdd-s4-supply = <&vph_pwr>;
-> +		vdd-s5-supply = <&vph_pwr>;
-> +		vdd-s6-supply = <&vph_pwr>;
-> +		vdd-s7-supply = <&vph_pwr>;
-> +		vdd-s8-supply = <&vph_pwr>;
-> +		vdd-s9-supply = <&vph_pwr>;
-> +		vdd-s10-supply = <&vph_pwr>;
-> +
-> +		vdd-l1-l8-l11-supply = <&vreg_s6a_0p9>;
-> +		vdd-l2-l10-supply = <&vph_pwr>;
-> +		vdd-l3-l4-l5-l18-supply = <&vreg_s5a_2p0>;
-> +		vdd-l6-l9-supply = <&vreg_s6a_0p9>;
-> +		vdd-l7-l12-l14-l15-supply = <&vreg_s4a_1p8>;
-> +		vdd-l13-l16-l17-supply = <&vph_pwr>;
-> +
-> +		vreg_s2a_0p5: smps2 {
-> +			regulator-name = "vreg_s2a_0p5";
-> +			regulator-min-microvolt = <320000>;
-> +			regulator-max-microvolt = <570000>;
-> +		};
-> +
-> +		vreg_s3a_1p05: smps3 {
-> +			regulator-name = "vreg_s3a_1p05";
-> +			regulator-min-microvolt = <950000>;
-> +			regulator-max-microvolt = <1170000>;
-> +		};
-> +
-> +		vreg_s4a_1p8: smps4 {
-> +			regulator-name = "vreg_s4a_1p8";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		vreg_s5a_2p0: smps5 {
-> +			regulator-name = "vreg_s5a_2p0";
-> +			regulator-min-microvolt = <1904000>;
-> +			regulator-max-microvolt = <2000000>;
-> +		};
-> +
-> +		vreg_s6a_0p9: smps6 {
-> +			regulator-name = "vreg_s6a_0p9";
-> +			regulator-min-microvolt = <920000>;
-> +			regulator-max-microvolt = <1128000>;
-> +		};
-> +
-> +		vreg_s7a_1p2: smps7 {
-> +			regulator-name = "vreg_s7a_1p2";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +
-> +		vreg_s8a_1p3: smps8 {
-> +			regulator-name = "vreg_s8a_1p3";
-> +			regulator-min-microvolt = <1352000>;
-> +			regulator-max-microvolt = <1352000>;
-> +		};
-> +
-> +		vreg_l1a_0p91: ldo1 {
-> +			regulator-name = "vreg_l1a_0p91";
-> +			regulator-min-microvolt = <312000>;
-> +			regulator-max-microvolt = <1304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l2a_2p3: ldo2 {
-> +			regulator-name = "vreg_l2a_2p3";
-> +			regulator-min-microvolt = <2970000>;
-> +			regulator-max-microvolt = <3300000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l3a_1p2: ldo3 {
-> +			regulator-name = "vreg_l3a_1p2";
-> +			regulator-min-microvolt = <920000>;
-> +			regulator-max-microvolt = <1260000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l5a_0p8: ldo5 {
-> +			regulator-name = "vreg_l5a_0p8";
-> +			regulator-min-microvolt = <312000>;
-> +			regulator-max-microvolt = <1304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l6a_0p91: ldo6 {
-> +			regulator-name = "vreg_l6a_0p91";
-> +			regulator-min-microvolt = <880000>;
-> +			regulator-max-microvolt = <950000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l7a_1p8: ldo7 {
-> +			regulator-name = "vreg_l7a_1p8";
-> +			regulator-min-microvolt = <1650000>;
-> +			regulator-max-microvolt = <2000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +
-> +		};
-> +
-> +		vreg_l8a_0p91: ldo8 {
-> +			regulator-name = "vreg_l8a_0p91";
-> +			regulator-min-microvolt = <888000>;
-> +			regulator-max-microvolt = <925000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l9a_0p91: ldo9 {
-> +			regulator-name = "vreg_l8a_0p91";
-> +			regulator-min-microvolt = <312000>;
-> +			regulator-max-microvolt = <1304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l10a_2p95: ldo10 {
-> +			regulator-name = "vreg_l10a_2p95";
-> +			regulator-min-microvolt = <2700000>;
-> +			regulator-max-microvolt = <3544000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l11a_0p91: ldo11 {
-> +			regulator-name = "vreg_l11a_0p91";
-> +			regulator-min-microvolt = <800000>;
-> +			regulator-max-microvolt = <1000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l12a_1p8: ldo12 {
-> +			regulator-name = "vreg_l12a_1p8";
-> +			regulator-min-microvolt = <1504000>;
-> +			regulator-max-microvolt = <1504000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l14a_1p8: ldo14 {
-> +			regulator-name = "vreg_l14a_1p8";
-> +			regulator-min-microvolt = <1650000>;
-> +			regulator-max-microvolt = <1950000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l15a_1p8: ldo15 {
-> +			regulator-name = "vreg_l15a_1p8";
-> +			regulator-min-microvolt = <1504000>;
-> +			regulator-max-microvolt = <2000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l16a_1p8: ldo16 {
-> +			regulator-name = "vreg_l16a_1p8";
-> +			regulator-min-microvolt = <1710000>;
-> +			regulator-max-microvolt = <1890000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l17a_3p3: ldo17 {
-> +			regulator-name = "vreg_l17a_3p3";
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3544000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l18a_1p2: ldo18 {
-> +			regulator-name = "vreg_l18a_1p2";
-> +			regulator-min-microvolt = <312000>;
-> +			regulator-max-microvolt = <1304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +	};
-> +};
-> +
-> +&qupv3_id_0 {
-> +	status = "okay";
-> +};
-> +
-> +&uart7 {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/qru1000-idp.dts b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-> new file mode 100644
-> index 000000000000..42eb0c33e7ba
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
-> @@ -0,0 +1,266 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +#include "qru1000.dtsi"
-> +#include "pm8150.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. QRU1000 IDP";
-> +	compatible = "qcom,qru1000-idp", "qcom,qru1000";
-> +
-> +	aliases {
-> +		serial0 = &uart7;
-> +	};
-> +
-> +	clocks {
-> +		xo_board: xo-board {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <19200000>;
-> +			clock-output-names = "xo_board";
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		sleep_clk: sleep-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <32000>;
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		pcie_0_pipe_clk: pcie-0-pipe-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			clock-output-names = "pcie_0_pipe_clk";
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		pcie_0_phy_aux_clk: pcie-0-phy-aux-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			clock-output-names = "pcie_0_phy_aux_clk";
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		usb3_phy_wrapper_pipe_clk: usb3-phy-wrapper-pipe-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <1000>;
-> +			clock-output-names = "usb3_phy_wrapper_pipe_clk";
-> +			#clock-cells = <0>;
-> +		};
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	ppvar_sys: ppvar-sys-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "ppvar_sys";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vph_pwr: vph-pwr-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vph_pwr";
-> +		regulator-min-microvolt = <3700000>;
-> +		regulator-max-microvolt = <3700000>;
-> +
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +
-> +		vin-supply = <&ppvar_sys>;
-> +	};
-> +};
-> +
-> +&apps_rsc {
-> +	regulators {
-> +		compatible = "qcom,pm8150-rpmh-regulators";
-> +		qcom,pmic-id = "a";
-> +
-> +		vdd-s1-supply = <&vph_pwr>;
-> +		vdd-s2-supply = <&vph_pwr>;
-> +		vdd-s3-supply = <&vph_pwr>;
-> +		vdd-s4-supply = <&vph_pwr>;
-> +		vdd-s5-supply = <&vph_pwr>;
-> +		vdd-s6-supply = <&vph_pwr>;
-> +		vdd-s7-supply = <&vph_pwr>;
-> +		vdd-s8-supply = <&vph_pwr>;
-> +		vdd-s9-supply = <&vph_pwr>;
-> +		vdd-s10-supply = <&vph_pwr>;
-> +
-> +		vdd-l1-l8-l11-supply = <&vreg_s6a_0p9>;
-> +		vdd-l2-l10-supply = <&vph_pwr>;
-> +		vdd-l3-l4-l5-l18-supply = <&vreg_s5a_2p0>;
-> +		vdd-l6-l9-supply = <&vreg_s6a_0p9>;
-> +		vdd-l7-l12-l14-l15-supply = <&vreg_s4a_1p8>;
-> +		vdd-l13-l16-l17-supply = <&vph_pwr>;
-> +
-> +		vreg_s2a_0p5: smps2 {
-> +			regulator-name = "vreg_s2a_0p5";
-> +			regulator-min-microvolt = <320000>;
-> +			regulator-max-microvolt = <570000>;
-> +		};
-> +
-> +		vreg_s3a_1p05: smps3 {
-> +			regulator-name = "vreg_s3a_1p05";
-> +			regulator-min-microvolt = <950000>;
-> +			regulator-max-microvolt = <1170000>;
-> +		};
-> +
-> +		vreg_s4a_1p8: smps4 {
-> +			regulator-name = "vreg_s4a_1p8";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		vreg_s5a_2p0: smps5 {
-> +			regulator-name = "vreg_s5a_2p0";
-> +			regulator-min-microvolt = <1904000>;
-> +			regulator-max-microvolt = <2000000>;
-> +		};
-> +
-> +		vreg_s6a_0p9: smps6 {
-> +			regulator-name = "vreg_s6a_0p9";
-> +			regulator-min-microvolt = <920000>;
-> +			regulator-max-microvolt = <1128000>;
-> +		};
-> +
-> +		vreg_s7a_1p2: smps7 {
-> +			regulator-name = "vreg_s7a_1p2";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +
-> +		vreg_s8a_1p3: smps8 {
-> +			regulator-name = "vreg_s8a_1p3";
-> +			regulator-min-microvolt = <1352000>;
-> +			regulator-max-microvolt = <1352000>;
-> +		};
-> +
-> +		vreg_l1a_0p91: ldo1 {
-> +			regulator-name = "vreg_l1a_0p91";
-> +			regulator-min-microvolt = <312000>;
-> +			regulator-max-microvolt = <1304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l2a_2p3: ldo2 {
-> +			regulator-name = "vreg_l2a_2p3";
-> +			regulator-min-microvolt = <2970000>;
-> +			regulator-max-microvolt = <3300000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l3a_1p2: ldo3 {
-> +			regulator-name = "vreg_l3a_1p2";
-> +			regulator-min-microvolt = <920000>;
-> +			regulator-max-microvolt = <1260000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l5a_0p8: ldo5 {
-> +			regulator-name = "vreg_l5a_0p8";
-> +			regulator-min-microvolt = <312000>;
-> +			regulator-max-microvolt = <1304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l6a_0p91: ldo6 {
-> +			regulator-name = "vreg_l6a_0p91";
-> +			regulator-min-microvolt = <880000>;
-> +			regulator-max-microvolt = <950000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l7a_1p8: ldo7 {
-> +			regulator-name = "vreg_l7a_1p8";
-> +			regulator-min-microvolt = <1650000>;
-> +			regulator-max-microvolt = <2000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +
-> +		};
-> +
-> +		vreg_l8a_0p91: ldo8 {
-> +			regulator-name = "vreg_l8a_0p91";
-> +			regulator-min-microvolt = <888000>;
-> +			regulator-max-microvolt = <925000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l9a_0p91: ldo9 {
-> +			regulator-name = "vreg_l8a_0p91";
-> +			regulator-min-microvolt = <312000>;
-> +			regulator-max-microvolt = <1304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l10a_2p95: ldo10 {
-> +			regulator-name = "vreg_l10a_2p95";
-> +			regulator-min-microvolt = <2700000>;
-> +			regulator-max-microvolt = <3544000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l11a_0p91: ldo11 {
-> +			regulator-name = "vreg_l11a_0p91";
-> +			regulator-min-microvolt = <800000>;
-> +			regulator-max-microvolt = <1000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l12a_1p8: ldo12 {
-> +			regulator-name = "vreg_l12a_1p8";
-> +			regulator-min-microvolt = <1504000>;
-> +			regulator-max-microvolt = <1504000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l14a_1p8: ldo14 {
-> +			regulator-name = "vreg_l14a_1p8";
-> +			regulator-min-microvolt = <1650000>;
-> +			regulator-max-microvolt = <1950000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l15a_1p8: ldo15 {
-> +			regulator-name = "vreg_l15a_1p8";
-> +			regulator-min-microvolt = <1504000>;
-> +			regulator-max-microvolt = <2000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l16a_1p8: ldo16 {
-> +			regulator-name = "vreg_l16a_1p8";
-> +			regulator-min-microvolt = <1710000>;
-> +			regulator-max-microvolt = <1890000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l17a_3p3: ldo17 {
-> +			regulator-name = "vreg_l17a_3p3";
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3544000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +
-> +		vreg_l18a_1p2: ldo18 {
-> +			regulator-name = "vreg_l18a_1p2";
-> +			regulator-min-microvolt = <312000>;
-> +			regulator-max-microvolt = <1304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
-> +		};
-> +	};
-> +};
-> +
-> +&qupv3_id_0 {
-> +	status = "okay";
-> +};
-> +
-> +&uart7 {
-> +	status = "okay";
-> +};
+> 
+> > therefore for consistency it is better to do this on a nested VM exit only.
+> 
+> Again, IIUC, this actually introduces an inconsistency because it leaves stale
+> state in svm->nested.ctl, whereas the existing code ensures all state in
+> svm->nested.ctl is fresh immediately after non-nested VM-Exit.
+> 
+
+
