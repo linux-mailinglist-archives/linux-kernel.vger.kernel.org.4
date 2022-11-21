@@ -2,218 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDCD631D7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C816631D7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiKUJyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
+        id S230463AbiKUJyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:54:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbiKUJxr (ORCPT
+        with ESMTP id S231184AbiKUJxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:53:47 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C7FF59B;
-        Mon, 21 Nov 2022 01:53:32 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VVKH0rx_1669024405;
-Received: from 30.221.147.226(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VVKH0rx_1669024405)
-          by smtp.aliyun-inc.com;
-          Mon, 21 Nov 2022 17:53:28 +0800
-Message-ID: <cd016aa9-d43d-c585-0b77-a2e112777ec1@linux.alibaba.com>
-Date:   Mon, 21 Nov 2022 17:53:25 +0800
+        Mon, 21 Nov 2022 04:53:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBC593;
+        Mon, 21 Nov 2022 01:53:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A67460F75;
+        Mon, 21 Nov 2022 09:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED89C433C1;
+        Mon, 21 Nov 2022 09:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669024422;
+        bh=YOu3n64Tj7XKfjexEDDMs01w9nySaXbJautW19RY7rk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EkYKBEv/JLMpETaD3fmit9KxL9w0cetRO8GDNkvFJuUPMCKe/pz5emv3c7b3XziuC
+         O4+U2B8TKt7pUlz2ACWLgGwUvyN1/cD66CLfOpEVfBLdoAdtuMG6JswDZlM0vHOKbN
+         fOy1LLDp0N7OCW/sMIUGAW+Ac67ez0t5Y/OJJbCtnTZe+uz1OOAh+MWs/suHqIUybs
+         fi3rBBDlKCDJCpWOxBHhhpcAu+DkO5fdJDkXZrjc6Zgxtd8Wq411B2Ym7p8Jfsfa2P
+         6AhLItAhgB5Dn9V4tpu+K+fCcK20A4whHREwB4V8n0MalguF80S9Euk+yPnlMhHvy0
+         yaTWF5gJuE5Eg==
+Received: by mail-ej1-f49.google.com with SMTP id gv23so27240385ejb.3;
+        Mon, 21 Nov 2022 01:53:42 -0800 (PST)
+X-Gm-Message-State: ANoB5pkDq6FfClLYK9IxPDUm46ul4RhTALaxt3QwY2bImJVnxLNKQPZO
+        7V0RXFJPI6k/zqq4m6+W6tqRJbbn0bV6KQtJCK8=
+X-Google-Smtp-Source: AA0mqf5gjyu2O31/o45ixHAU9CeNugJbqJmGKGzyyhNGh5D1oUhTne5cGDqJ4XF7f1It7xERrf5JNYGAQNOS2JGDxew=
+X-Received: by 2002:a17:906:19d7:b0:7b2:b782:e1df with SMTP id
+ h23-20020a17090619d700b007b2b782e1dfmr10699627ejd.308.1669024420821; Mon, 21
+ Nov 2022 01:53:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [External] : [RFC PATCH v2 1/6] perf vendor events arm64: Add
- topdown L1 metrics for neoverse-n2
-To:     John Garry <john.g.garry@oracle.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1668411720-3581-2-git-send-email-renyu.zj@linux.alibaba.com>
- <590ff032-d271-48ee-a4d8-141cc070c335@oracle.com>
- <f3823c3e-d45e-40ce-1981-e726b4b6be62@linux.alibaba.com>
- <f6e26e2d-2f10-e973-6c9f-47594da2fc99@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <f6e26e2d-2f10-e973-6c9f-47594da2fc99@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221109064937.3643993-1-guoren@kernel.org> <20221109064937.3643993-3-guoren@kernel.org>
+In-Reply-To: <20221109064937.3643993-3-guoren@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 21 Nov 2022 17:53:28 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTREDPrr7z-78P5MZavwQZhrgZ8+MoS07agzPMqvf86ipA@mail.gmail.com>
+Message-ID: <CAJF2gTREDPrr7z-78P5MZavwQZhrgZ8+MoS07agzPMqvf86ipA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: stacktrace: Make walk_stackframe cross pt_regs frame
+To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, peterz@infradead.org,
+        arnd@arndb.de, linux-arch@vger.kernel.org, keescook@chromium.org,
+        paulmck@kernel.org, frederic@kernel.org, nsaenzju@redhat.com,
+        changbin.du@intel.com, vincent.chen@sifive.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 9, 2022 at 2:50 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The current walk_stackframe with FRAME_POINTER would stop unwinding at
+> ret_from_exception:
+>   BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1518
+>   in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: init
+>   CPU: 0 PID: 1 Comm: init Not tainted 5.10.113-00021-g15c15974895c-dirty #192
+>   Call Trace:
+>   [<ffffffe0002038c8>] walk_stackframe+0x0/0xee
+>   [<ffffffe000aecf48>] show_stack+0x32/0x4a
+>   [<ffffffe000af1618>] dump_stack_lvl+0x72/0x8e
+>   [<ffffffe000af1648>] dump_stack+0x14/0x1c
+>   [<ffffffe000239ad2>] ___might_sleep+0x12e/0x138
+>   [<ffffffe000239aec>] __might_sleep+0x10/0x18
+>   [<ffffffe000afe3fe>] down_read+0x22/0xa4
+>   [<ffffffe000207588>] do_page_fault+0xb0/0x2fe
+>   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+>
+> The optimization would help walk_stackframe cross the pt_regs frame and
+> get more backtrace of debug info:
+>   BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1518
+>   in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: init
+>   CPU: 0 PID: 1 Comm: init Not tainted 5.10.113-00021-g15c15974895c-dirty #192
+>   Call Trace:
+>   [<ffffffe0002038c8>] walk_stackframe+0x0/0xee
+>   [<ffffffe000aecf48>] show_stack+0x32/0x4a
+>   [<ffffffe000af1618>] dump_stack_lvl+0x72/0x8e
+>   [<ffffffe000af1648>] dump_stack+0x14/0x1c
+>   [<ffffffe000239ad2>] ___might_sleep+0x12e/0x138
+>   [<ffffffe000239aec>] __might_sleep+0x10/0x18
+>   [<ffffffe000afe3fe>] down_read+0x22/0xa4
+>   [<ffffffe000207588>] do_page_fault+0xb0/0x2fe
+>   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+>   [<ffffffe000613c06>] riscv_intc_irq+0x1a/0x72
+>   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+>   [<ffffffe00033f44a>] vma_link+0x54/0x160
+>   [<ffffffe000341d7a>] mmap_region+0x2cc/0x4d0
+>   [<ffffffe000342256>] do_mmap+0x2d8/0x3ac
+>   [<ffffffe000326318>] vm_mmap_pgoff+0x70/0xb8
+>   [<ffffffe00032638a>] vm_mmap+0x2a/0x36
+>   [<ffffffe0003cfdde>] elf_map+0x72/0x84
+>   [<ffffffe0003d05f8>] load_elf_binary+0x69a/0xec8
+>   [<ffffffe000376240>] bprm_execve+0x246/0x53a
+>   [<ffffffe00037786c>] kernel_execve+0xe8/0x124
+>   [<ffffffe000aecdf2>] run_init_process+0xfa/0x10c
+>   [<ffffffe000aece16>] try_to_run_init_process+0x12/0x3c
+>   [<ffffffe000afa920>] kernel_init+0xb4/0xf8
+>   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+>
+> Here is the error injection test code for the above output:
+>  drivers/irqchip/irq-riscv-intc.c:
+>  static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
+>  {
+>         unsigned long cause = regs->cause & ~CAUSE_IRQ_FLAG;
+> +       u32 tmp; __get_user(tmp, (u32 *)0);
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> Cc: Changbin Du <changbin.du@intel.com>
+> ---
+>  arch/riscv/kernel/entry.S      | 2 +-
+>  arch/riscv/kernel/stacktrace.c | 9 +++++++++
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index b9eda3fcbd6d..329cf51fcd4d 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -248,7 +248,7 @@ ret_from_syscall_rejected:
+>         andi t0, t0, _TIF_SYSCALL_WORK
+>         bnez t0, handle_syscall_trace_exit
+>
+> -ret_from_exception:
+> +ENTRY(ret_from_exception)
+>         REG_L s0, PT_STATUS(sp)
+>         csrc CSR_STATUS, SR_IE
+>  #ifdef CONFIG_TRACE_IRQFLAGS
+> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+> index bcfe9eb55f80..75c8dd64fc48 100644
+> --- a/arch/riscv/kernel/stacktrace.c
+> +++ b/arch/riscv/kernel/stacktrace.c
+> @@ -16,6 +16,8 @@
+>
+>  #ifdef CONFIG_FRAME_POINTER
+>
+> +extern asmlinkage void ret_from_exception(void);
+> +
+>  void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+>                              bool (*fn)(void *, unsigned long), void *arg)
+>  {
+> @@ -59,6 +61,13 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+>                         fp = frame->fp;
+>                         pc = ftrace_graph_ret_addr(current, NULL, frame->ra,
+>                                                    &frame->ra);
+> +                       if (pc == (unsigned long) ret_from_exception) {
+I forgot ret_from_syscall because I tested it on the generic_entry
+series base. I would merge this patch into the generic_entry series as
+an optimization.
+
+> +                               if (unlikely(!__kernel_text_address(pc) || !fn(arg, pc)))
+> +                                       break;
+> +
+> +                               pc = ((struct pt_regs *)sp)->epc;
+> +                               fp = ((struct pt_regs *)sp)->s0;
+> +                       }
+>                 }
+>
+>         }
+> --
+> 2.36.1
+>
 
 
-在 2022/11/15 下午7:19, John Garry 写道:
-> On 15/11/2022 08:43, Jing Zhang wrote:
->> I didn't find out how to put the metric as an arch std event, it would be best if you could provide me with an example in the upstream code,
->> thank you very much.
-> 
-> As things stand, I don't think it's supported. We only support regular events for std arch events (and not metrics).
-> 
-> However we could expand support for metrics.
-> 
-> For the example of hip08 and FRONTEND_BOUND, we would have:
-> 
-> --->8---
-> 
-> diff --git a/tools/perf/pmu-events/arch/arm64/hisilicon/hip08/metrics.json b/tools/perf/pmu-events/arch/arm64/hisilicon/hip08/metrics.json
-> index 6443a061e22a..5b1ca45224de 100644
-> --- a/tools/perf/pmu-events/arch/arm64/hisilicon/hip08/metrics.json
-> +++ b/tools/perf/pmu-events/arch/arm64/hisilicon/hip08/metrics.json
-> @@ -1,10 +1,6 @@
->  [
->      {
-> -        "MetricExpr": "FETCH_BUBBLE / (4 * CPU_CYCLES)",
-> -        "PublicDescription": "Frontend bound L1 topdown metric",
-> -        "BriefDescription": "Frontend bound L1 topdown metric",
-> -        "MetricGroup": "TopDownL1",
-> -        "MetricName": "frontend_bound"
-> +        "ArchStdEvent": "FRONTEND_BOUND"
->      },
->      {
->          "MetricExpr": "(INST_SPEC - INST_RETIRED) / (4 * CPU_CYCLES)",
-> diff --git a/tools/perf/pmu-events/arch/arm64/sbsa.json b/tools/perf/pmu-events/arch/arm64/sbsa.json
-> new file mode 100644
-> index 000000000000..10b9c0cccc40
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/sbsa.json
-> @@ -0,0 +1,9 @@
-> +[
-> +    {
-> +        "MetricExpr": "FETCH_BUBBLE / (4 * CPU_CYCLES)",
-> +        "PublicDescription": "Frontend bound L1 topdown metric",
-> +        "BriefDescription": "Frontend bound L1 topdown metric",
-> +        "MetricGroup": "TopDownL1",
-> +        "MetricName": "FRONTEND_BOUND"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> index 0daa3e007528..77049853c0bf 100755
-> --- a/tools/perf/pmu-events/jevents.py
-> +++ b/tools/perf/pmu-events/jevents.py
-> @@ -352,6 +352,8 @@ def preprocess_arch_std_files(archpath: str) -> None:
->        for event in read_json_events(item.path, topic=''):
->          if event.name:
->            _arch_std_events[event.name.lower()] = event
-> +        if event.metric_name:
-> +          _arch_std_events[event.metric_name.lower()] = event
-> 
-> 
->  def print_events_table_prefix(tblname: str) -> None:
-
-
-Sorry for slow response.
-
-I tried the method you provided, but it didn't work, is there any other steps I am missing?
-Or is this method not currently supported?
-
-
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics
-index 8ff1dfe..2ad30ec 100644
---- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-@@ -1,10 +1,6 @@
- [
-     {
--        "MetricExpr": "(stall_slot_frontend - cpu_cycles) / (5 * cpu_cycles)",
--        "PublicDescription": "Frontend bound L1 topdown metric",
--        "BriefDescription": "Frontend bound L1 topdown metric",
--        "MetricGroup": "TopDownL1",
--        "MetricName": "frontend_bound"
-+        "ArchStdEvent": "FRONTEND_BOUND"
-     },
-
-
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeli
-index f9fae15..e8536e2 100644
---- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json
-@@ -6,9 +6,6 @@
-     {
-         "ArchStdEvent": "STALL_BACKEND_MEM"
--    }
-+    },
-+    {
-+        "MetricExpr": "(stall_slot_frontend - cpu_cycles) / (5 * cpu_cycles)",
-+        "PublicDescription": "Frontend bound L1 topdown metric",
-+        "BriefDescription": "Frontend bound L1 topdown metric",
-+        "MetricGroup": "TopDownL1",
-+        "MetricName": "FRONTEND_BOUND"
-+    }
- ]
-
-
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 0daa3e0..7704985 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -352,6 +352,8 @@ def preprocess_arch_std_files(archpath: str) -> None:
-       for event in read_json_events(item.path, topic=''):
-         if event.name:
-           _arch_std_events[event.name.lower()] = event
-+        if event.metric_name:
-+          _arch_std_events[event.metric_name.lower()] = event
-
-
-#./perf stat -e FRONTEND_BOUND sleep 1
-event syntax error: 'FRONTEND_BOUND'
-                     \___ parser error
-Run 'perf list' for a list of valid events
-
- Usage: perf stat [<options>] [<command>]
-
-    -e, --event <event>   event selector. use 'perf list' to list available events
-
-
-
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeli
-index f9fae15..1089ca0 100644
---- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json
-@@ -6,18 +6,24 @@
-         "ArchStdEvent": "STALL_BACKEND"
-     },
-     {
--        "ArchStdEvent": "STALL_SLOT_FRONTEND"
-+        "ArchStdEvent": "STALL_SLOT_FRONTEND",
-+        "MetricExpr": "STALL_SLOT_FRONTEND - CPU_CYCLES"
-     },
-     {
-
-#./perf stat -e stall_slot_frontend sleep 1
-Add CPU_CYCLES event to groups to get metric expression for stall_slot_frontend
-
- Performance counter stats for 'sleep 1':
-
-         5,125,457      stall_slot_frontend  //it's still the original value.
-
-       1.001017680 seconds time elapsed
-
-       0.001162000 seconds user
-       0.000000000 seconds sys
-
-
-Thanks,
-Jing
+-- 
+Best Regards
+ Guo Ren
