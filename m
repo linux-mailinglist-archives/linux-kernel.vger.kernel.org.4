@@ -2,127 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201FC6319D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FAC6319DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiKUGpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 01:45:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S229689AbiKUGs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 01:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiKUGpN (ORCPT
+        with ESMTP id S229590AbiKUGsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 01:45:13 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3CC19C0F
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:45:11 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id b185so10485239pfb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:45:11 -0800 (PST)
+        Mon, 21 Nov 2022 01:48:24 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C57711446;
+        Sun, 20 Nov 2022 22:48:23 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id k67so10317935vsk.2;
+        Sun, 20 Nov 2022 22:48:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T9z6VNHAh5buPLOQbn4DZRIbuRpf7GLAza5o2jIuncE=;
-        b=oyqKPJqV6ChsbvcTQN+xTD9PeymSUxzZ4mMliDJurfoOfDB9tEnQWdI7PQaKjC1D0T
-         LIHx/SMR/6Q/7er1lusBloufr8W4xin7Qq2hfmIpZnRdWzTrEgCcgBJA2GhjmelaXvsI
-         V7iWawCflMlMvGxfITd89DW2MG1jgB1MG167Rh5uUUwRYS17aFVz9aT+XBY/hlbLXUwY
-         CII1XP/HqWT5StaQo6HXfG3eMIcMvfjbKa9TWZCNplJ5aPb92KuZsbTfZ/2Z9JSee89L
-         mm+TGdN+02s25vkFuC/G+eQWp3OjSa/6P8LrPLB2/LUD8mcMO7Mxdimiu+/fdxahIwPo
-         NxTg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OKwZYjUpgcMpjUPaMufxFd6lTmMS5OdhYd7iJvzeHqo=;
+        b=ou4XNZbV8BAIFC9D5DIJAnNRKqiiQAfMwc79hpIFIQ1lAqnuTq6I7AypZJsNKK3m+Q
+         E9IjrHdcnOYzMSs46EIgjid2K/qu/UMdz03T83kLtzOpFB6hZGy66Ta/zz7bASNSQxby
+         I6fsyWjt6+HLB3t8Trsm8kH82MCe27JH8/vE3IfQw+XexbA/INk3ADulFY5G/u+viZvx
+         CYPhzcRyLSI5lyb2KzvrANz+q9ZQIdVJ/QfZFj+TCC2BtmNmV4U/PjFusZ/ePdfwmywc
+         RXfSAlYZQFQXYRce+U2/wwb21ZiozicmNuns2G+SRsPeolkXThOr4cGe8CwZTSI5xV4y
+         HkDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9z6VNHAh5buPLOQbn4DZRIbuRpf7GLAza5o2jIuncE=;
-        b=tk7GDuN1tv8h7A0P52FsoFe1b1fxsp2cLJhho47kl55WDU8u5h4DLie89nz40bnPmI
-         1qix6sDjdklHOaq1UtM8qW9ve9koaepLH3OmotkB9OYlSMVvRwyhpUxgHjT5fD/zGMzp
-         q8pB85cF7p72Any0+YrrLIWPAIVI9OOiWsEyJKJck7XSjqWIJU1d+N/xAc5ozZF1pORV
-         o5bzT6xzxRBkY5CMHm9FufnbI2iurhOpbtyFLGNWueGnt3Y6m9Wa3seJVApdUWg326Fo
-         1sJijUesYDiFCqR7p4asxJKCGbJx0prXJ3mwAW05PwuFXXgrZBHmNw+d+13Fo1iVL/kr
-         JJMw==
-X-Gm-Message-State: ANoB5pl+FdCRlpgttA16eryvk14kdnLHdJgf8OXF2+OiGsb65P69jJyT
-        bYZa2P0TVpuo6zJZCNG9uDd7
-X-Google-Smtp-Source: AA0mqf6ddMnQGXatGtIKDuBbyT3kbY7n1kpxrE0Vd9I/tQTaSSyurICcwD9LRXBLZlh0j9EpMLqbdA==
-X-Received: by 2002:a63:5007:0:b0:45f:beda:4116 with SMTP id e7-20020a635007000000b0045fbeda4116mr789381pgb.618.1669013110909;
-        Sun, 20 Nov 2022 22:45:10 -0800 (PST)
-Received: from thinkpad ([59.92.99.222])
-        by smtp.gmail.com with ESMTPSA id d187-20020a6236c4000000b0053e62b6fd22sm7752028pfa.126.2022.11.20.22.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 22:45:09 -0800 (PST)
-Date:   Mon, 21 Nov 2022 12:15:07 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221121064507.GC11945@thinkpad>
-References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
- <20221121051959.hphzjuaif423xwn6@vireshk-i7>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OKwZYjUpgcMpjUPaMufxFd6lTmMS5OdhYd7iJvzeHqo=;
+        b=edCIEMO4g72aZyJeoxe1mA1OxF8zyKejgs8+BmZ7KsJJODoymVO4bV//sX/MrRxjMy
+         g+vSru6dnx9Ve/s44dno1Xo++jlFNMvJAm9cGJHK+IdyGGGXNEzju5tDdm24+W4dofP7
+         U0FuYAEd+94rhnYvFd2kCpon8MME1DtdIH5n/wyy6DYIXo9Ou7GUHCaH/jT1ZU3TR7sk
+         ZTJFqN8hfO4P1CApGQBHhow6KWlxFG1WvdzC3nm6b0MulKdUFKpJ6xv4q/fP11+GGEFi
+         1FDRktSZPb39B2gtE5fxuh9tTSEuGguDwxPcOsPF5WfbUShiXuwhGeSYq6H1xvHTHeLP
+         J2gA==
+X-Gm-Message-State: ANoB5pmf8GRwMdbZAU3g7XwDLo2qMxaLygX3+xB3k7kQHyGFtq8NGYj4
+        X753gBWf+SiwsUZskJlcvo8/wLOsjHeBzmgiB2yLiTPvAT8=
+X-Google-Smtp-Source: AA0mqf6G3PAykFZVtBS6r14XOfEFcq7qcYIbz6JjXkkCDSJ5GVIS0VTtdNvPl0fTbC4a+diuW5XpnJqTCSIpB3R9t28=
+X-Received: by 2002:a67:e94e:0:b0:3a7:91c0:5915 with SMTP id
+ p14-20020a67e94e000000b003a791c05915mr31226vso.84.1669013301929; Sun, 20 Nov
+ 2022 22:48:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221121051959.hphzjuaif423xwn6@vireshk-i7>
+References: <20221119093424.193145-1-chenzhongjin@huawei.com>
+ <CAKFNMokEHD4FfPRcuRB4GrVquiT_RkWkNGKgb+ZPLPSGwfbDHQ@mail.gmail.com> <db11fe6a-356b-a522-f275-9b8ce8ab3b4a@huawei.com>
+In-Reply-To: <db11fe6a-356b-a522-f275-9b8ce8ab3b4a@huawei.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Mon, 21 Nov 2022 15:48:05 +0900
+Message-ID: <CAKFNMo=SsnbZxrAU-ho_37J4ZBqG+VY0kDJxDa3widrb2Gkj1g@mail.gmail.com>
+Subject: Re: [PATCH v2] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment
+ usage as dirty
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:49:59AM +0530, Viresh Kumar wrote:
-> On 17-11-22, 11:01, Manivannan Sadhasivam wrote:
-> > Hello,
-> > 
-> > This series adds clock provider support to the Qcom CPUFreq driver for
-> > supplying the clocks to the CPU cores in Qcom SoCs.
-> > 
-> > The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
-> > clocks to the CPU cores. But this is not represented clearly in devicetree.
-> > There is no clock coming out of the CPUFreq HW node to the CPU. This created
-> > an issue [1] with the OPP core when a recent enhancement series was submitted.
-> > Eventhough the issue got fixed in the OPP framework in the meantime, that's
-> > not a proper solution and this series aims to fix it properly.
-> > 
-> > There was also an attempt made by Viresh [2] to fix the issue by moving the
-> > clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
-> > since those clocks belong to the CPUFreq HW node only.
-> > 
-> > The proposal here is to add clock provider support to the Qcom CPUFreq HW
-> > driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
-> > This correctly reflects the hardware implementation.
-> > 
-> > The clock provider is a simple one that just provides the frequency of the
-> > clocks supplied to each frequency domain in the SoC using .recalc_rate()
-> > callback. The frequency supplied by the driver will be the actual frequency
-> > that comes out of the EPSS/OSM block after the DCVS operation. This frequency
-> > is not same as what the CPUFreq framework has set but it is the one that gets
-> > supplied to the CPUs after throttling by LMh.
-> > 
-> > This series has been tested on SM8450 based dev board with the OPP hack removed
-> > and hence there is a DTS change only for that platform. Once this series gets
-> > accepted, rest of the platform DTS can also be modified and finally the hack on
-> > the OPP core can be dropped.
-> 
-> Applied. Thanks.
-> 
-> If you get review comments later on, please send incremental patches
-> for that.
-> 
+On Mon, Nov 21, 2022 at 11:16 AM Chen Zhongjin wrote:
+>
+> Hi,
+>
+> On 2022/11/19 22:09, Ryusuke Konishi wrote:
+> > On Sat, Nov 19, 2022 at 6:37 PM Chen Zhongjin wrote:
+> >> In nilfs_sufile_mark_dirty(), the buffer and inode are set dirty, but
+> >> nilfs_segment_usage is not set dirty, which makes it can be found by
+> >> nilfs_sufile_alloc() because it checks nilfs_segment_usage_clean(su).
+> > The body of the patch looks OK, but this part of the commit log is a
+> > bit misleading.
+> > Could you please modify the expression so that we can understand this
+> > patch fixes the issue when the disk image is corrupted and the leak
+> > wasn't always there ?
+>
+> Makes sense. I'm going to fix the message as this:
 
-Sure thing.
+Thank you for responding to my comment.
 
-Thanks,
-Mani
+>
+> When extending segment, the current segment is allocated and set dirty
+> by previous nilfs_sufile_alloc().
+> But for some special cases such as corrupted image it can be unreliable,
+> so nilfs_sufile_mark_dirty()
+> is called to promise that current segment is dirty.
 
-> -- 
-> viresh
+This sentence is a little different because nilfs_sufile_mark_dirty()
+is originally called to dirty the buffer to include it as a part of
+the log of nilfs ahead, where the completed usage data will be stored
+later.
 
--- 
-மணிவண்ணன் சதாசிவம்
+And, unlike the dirty state of buffers and inodes, the dirty state of
+segments is persistent and resides on disk until it's freed by
+nilfs_sufile_free() unless it's destroyed on disk.
+
+>
+> However, nilfs_sufile_mark_dirty() only sets buffer and inode dirty
+> while nilfs_segment_usage can
+> still be clean an used by following nilfs_sufile_alloc() because it
+> checks nilfs_segment_usage_clean(su).
+>
+> This will cause the problem reported...
+
+So, how about a description like this:
+
+When extending segments, nilfs_sufile_alloc() is called to get an
+unassigned segment.
+nilfs_sufile_alloc() then marks it as dirty to avoid accidentally
+allocating the same segment in the future.
+But for some special cases such as a corrupted image it can be unreliable.
+
+If such corruption of the dirty state of the segment occurs, nilfs2
+may reallocate a segment that is in use and pick the same segment for
+writing twice at the same time.
+...
+This will cause the reported problem.
+...
+Fix the problem by setting usage as dirty every time in
+nilfs_sufile_mark_dirty() which is called for the current segment
+before allocating additional segments during constructing segments to
+be written out.
+
+Regards,
+Ryusuke Konishi
+
+>
+> Could you please have a check? Thanks!
+>
+> Best,
+> Chen
+> > Originally, the assumption was that the current and next segments
+> > pointed to by log headers had been made dirty, and in fact mkfs.nilfs2
+> > and nilfs2 itself had created metadata that way, so it wasn't really a
+> > problem.  Usually the segment usage that this patch tries to dirty is
+> > already marked dirty and usually results in duplicate processing.
+> > nilfs_sufile_mark_dirty() is really only supposed to dirty that buffer
+> > and inode, and this patch changes the role.
+> >
+> > However, that assumption was incomplete in the sense that it does not
+> > assume broken metadata (whether intentionally or as a result of
+> > device/media failure), and lacked checks or protection from it.  In
+> > the meantime, you showed the simple and safe workaround even though it
+> > duplicates in almost all cases and even changes the semantics of the
+> > function.
+> > In terms of the stability and safety, your patch is good that we can
+> > ignore the inefficiency, so I am pushing for this change.
+> >
+> > Thanks,
+> > Ryusuke Konishi
+> >
+> >> This will cause the problem reported by syzkaller:
+> >> https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
+> >>
+> >> It's because the case starts with segbuf1.segnum = 3, nextnum = 4, and
+> >> nilfs_sufile_alloc() not called to allocate a new segment.
+> >>
+> >> The first time nilfs_segctor_extend_segments() allocated segment
+> >> segbuf2.segnum = segbuf1.nextnum = 4, then nilfs_sufile_alloc() found
+> >> nextnextnum = 4 segment because its su is not set dirty.
+> >> So segbuf2.nextnum = 4, which causes next segbuf3.segnum = 4.
+> >>
+> >> sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
+> >> added to both buffer lists of two segbuf.
+> >> It makes the list head of second list linked to the first one. When
+> >> iterating the first one, it will access and deref the head of second,
+> >> which causes NULL pointer dereference.
+> >>
+> >> Fix this by setting usage as dirty in nilfs_sufile_mark_dirty(),
+> >> and add lock in it to protect the usage modification.
+> >>
+> >> Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
+> >> Cc: stable@vger.kernel.org
+> >> Reported-by: syzbot+77e4f005cb899d4268d1@syzkaller.appspotmail.com
+> >> Reported-by: Liu Shixin <liushixin2@huawei.com>
+> >> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> >> Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+> >> Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+> >> ---
+> >> v1 -> v2:
+> >> 1) Add lock protection as Ryusuke suggested and slightly fix commit
+> >> message.
+> >> 2) Fix and add tags.
+> >> ---
+> >>   fs/nilfs2/sufile.c | 8 ++++++++
+> >>   1 file changed, 8 insertions(+)
+> >>
+> >> diff --git a/fs/nilfs2/sufile.c b/fs/nilfs2/sufile.c
+> >> index 77ff8e95421f..dc359b56fdfa 100644
+> >> --- a/fs/nilfs2/sufile.c
+> >> +++ b/fs/nilfs2/sufile.c
+> >> @@ -495,14 +495,22 @@ void nilfs_sufile_do_free(struct inode *sufile, __u64 segnum,
+> >>   int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
+> >>   {
+> >>          struct buffer_head *bh;
+> >> +       void *kaddr;
+> >> +       struct nilfs_segment_usage *su;
+> >>          int ret;
+> >>
+> >> +       down_write(&NILFS_MDT(sufile)->mi_sem);
+> >>          ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
+> >>          if (!ret) {
+> >>                  mark_buffer_dirty(bh);
+> >>                  nilfs_mdt_mark_dirty(sufile);
+> >> +               kaddr = kmap_atomic(bh->b_page);
+> >> +               su = nilfs_sufile_block_get_segment_usage(sufile, segnum, bh, kaddr);
+> >> +               nilfs_segment_usage_set_dirty(su);
+> >> +               kunmap_atomic(kaddr);
+> >>                  brelse(bh);
+> >>          }
+> >> +       up_write(&NILFS_MDT(sufile)->mi_sem);
+> >>          return ret;
+> >>   }
+> >>
+> >> --
+> >> 2.17.1
+> >>
