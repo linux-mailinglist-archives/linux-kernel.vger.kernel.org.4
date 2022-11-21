@@ -2,42 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757EF631B8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFF6631B91
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiKUIgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S230001AbiKUIga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiKUIgG (ORCPT
+        with ESMTP id S229935AbiKUIgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:36:06 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075231D32E;
-        Mon, 21 Nov 2022 00:36:06 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ox2Hc-0007DG-GH; Mon, 21 Nov 2022 09:36:04 +0100
-Message-ID: <c993c91a-a839-3072-2339-d2613ef548f8@leemhuis.info>
-Date:   Mon, 21 Nov 2022 09:36:04 +0100
+        Mon, 21 Nov 2022 03:36:25 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4324A205E0;
+        Mon, 21 Nov 2022 00:36:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1669019781; x=1700555781;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Cojv73ncYBlTMqJr0ZxMpVAT6qQR4qxJuKojHO4kyGg=;
+  b=Exlgj+r+BXDuwctnlu9S/VF+ruM2BM7AvUPEvXnBD7usrSYU8GY4Saqc
+   agERQz7w8chwPQIM10L8Qa2lvl3mwFlzaKWIdGVv5ba1kAPSHrfaIdbDK
+   l2pC4fKsB0U5CDbFDqcxDb5lG610celxYs7ImZlQJJdjzGMdzuX+/gKPA
+   xFZt+0yEpeCloY2rz581w+htA4pTL1NSoB3tI4MmVr/CLtHf8DZofXiWK
+   9Z0NxQaqddiXsoLcQw1l9cL/hbd5N1Y9WI9mdcp4cYUgSemXNM4yFzeAA
+   fXhdAtc7B24OycV1yV8n5BxohvdCgNS10OWIuIIpKkgKjMyvDhBAc6Hfl
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,180,1665439200"; 
+   d="scan'208";a="27473758"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 21 Nov 2022 09:36:19 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 21 Nov 2022 09:36:19 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 21 Nov 2022 09:36:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1669019779; x=1700555779;
+  h=from:to:cc:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding:subject;
+  bh=Cojv73ncYBlTMqJr0ZxMpVAT6qQR4qxJuKojHO4kyGg=;
+  b=JAK/K/vsqDV3DaE+TvrLpDD4sYQ1RNgeYU/pWK1K0/MKvMtjHobrVnWv
+   YhCuwwD4Rer2Rm9nLlRsN/dMVUFo3t+pbNJ8ic4JSfSnIcT4OQo0wWo7Y
+   d9nPsp5fJa8jzrB/w7Y76IUeZ/3uyzQDdQbhaJ11QgWGSyEzwjASaAO3C
+   15Jq0/oJsD/C8YgTk72V9chmfe/He8kZA2QY+netMkQQw6ENDXapWXZ2g
+   tRs1r87jbQb51Is3+bfRC+Mok3pQzOmtRLaeDepQlGwFnAYHI5xn2P4v8
+   x//277kZ6aotT6G9tlt9PcuYMuTgqPOICaATUV/jqgEDR/IL7vLDj1IVf
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,180,1665439200"; 
+   d="scan'208";a="27473757"
+Subject: Re: [PATCH v4 00/10] Initial support for Cadence MHDP(HDMI/DP) for i.MX8MQ
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 21 Nov 2022 09:36:18 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 93D74280056;
+        Mon, 21 Nov 2022 09:36:17 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Sandor Yu <Sandor.yu@nxp.com>
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, kishon@ti.com,
+        vkoul@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kernel@pengutronix.de, linux-imx@nxp.com, Sandor.yu@nxp.com,
+        oliver.brown@nxp.com
+Date:   Mon, 21 Nov 2022 09:36:16 +0100
+Message-ID: <4760535.GXAFRqVoOG@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <cover.1669013346.git.Sandor.yu@nxp.com>
+References: <cover.1669013346.git.Sandor.yu@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] x86/fpu: Allow PKRU to be (once again) written by ptrace.
- #forregzbot
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220731050342.56513-1-khuey@kylehuey.com>
- <1197176f-3508-0405-fad8-3645c81f474e@leemhuis.info>
-In-Reply-To: <1197176f-3508-0405-fad8-3645c81f474e@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669019766;9fe28f17;
-X-HE-SMSGID: 1ox2Hc-0007DG-GH
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,30 +90,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Note: this mail is primarily send for documentation purposes and/or for
-regzbot, my Linux kernel regression tracking bot. That's why I removed
-most or all folks from the list of recipients, but left any that looked
-like a mailing lists. These mails usually contain '#forregzbot' in the
-subject, to make them easy to spot and filter out.]
+Hello Sandor,
 
-On 09.11.22 11:23, Thorsten Leemhuis wrote:
+thanks for the updated series.
 
-> On 31.07.22 07:03, Kyle Huey wrote:
->> From: Kyle Huey <me@kylehuey.com>
->>
->> When management of the PKRU register was moved away from XSTATE, emulation
->> of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
->> for APIs that write XSTATE. This can be seen by running gdb and executing
->> `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
->> write to the PKRU register (which gdb performs through ptrace) is ignored.
+Am Montag, 21. November 2022, 08:23:50 CET schrieb Sandor Yu:
+> The patch set initial support for Cadence MHDP(HDMI/DP) DRM bridge
+> drivers and Cadence HDP-TX PHY(HDMI/DP) drivers for iMX8MQ.
 > 
-> Seem I missed this one, but apparently it needs tracking.
+> The patch set compose of DRM bridge drivers and PHY drivers.
+> Both of them need the followed two patches to pass build.
+>   drm: bridge: cadence: convert mailbox functions to macro functions
+>   phy: Add HDMI configuration options
 > 
-> #regzbot ^introduced e84ba47e313dbc
-> #regzbot title x86/fpu: emulation of PKRU's existence in XSTATE missing
-> for APIs that write XSTATE
-> #regzbot ignore-activity
-> #regzbot monitor
-> https://lore.kernel.org/all/20221107063807.81774-1-khuey@kylehuey.com/
+> DRM bridges driver patches:
+>   dts-bingings: display: bridge: Add MHDP HDMI bindings for i.MX8MQ
+>   drm: bridge: cadence: Add MHDP DP driver for i.MX8MQ
+>   dts-bindings: display: bridge: Add MHDP DP bindings for i.MX8MQ
+>   drm: bridge: cadence: Add MHDP HDMI driver for i.MX8MQ
+> 
+> PHY driver patches:
+>   dts-bindings: phy: Add Cadence HDP-TX DP PHY bindings
+>   phy: cadence: Add driver for HDP-TX DisplyPort PHY
+>   dts-bindings: phy: Add Cadence HDP-TX HDMI PHY bindings
+>   phy: cadence: Add driver for HDP-TX HDMI PHY
+> 
+> v3->v4:
+> dt-bindings:
+> - Correct dt-bindings coding style and address review comments.
+> - Add apb_clk description.
+> - Add output port for HDMI/DP connector
+> PHY:
+> - Alphabetically sorted in Kconfig and Makefile for DP and HDMI PHY
+> - Remove unused registers define from HDMI and DP PHY drivers.
+> - More description in phy_hdmi.h.
+> - Add apb_clk to HDMI and DP phy driver.
+> HDMI/DP:
+> - Use get_unaligned_le32() to replace hardcode type conversion
+>   in HDMI AVI infoframe data fill function.
+> - Add mailbox mutex lock in HDMI/DP driver for phy functions
+>   to reslove race conditions between HDMI/DP and PHY drivers.
+> - Add apb_clk to both HDMI and DP driver.
+> - Rename some function names and add prefix with "cdns_hdmi/cdns_dp".
+> - Remove bpc 12 and 16 optional that not supported.
 
-#regzbot fixed-by: 4a804c4f83
+With the apb_clk enabled now, I can use both HDMI and PHY driver as modules 
+now. Thanks!
+
+Best regards,
+Alexander
+
+> v2->v3:
+> Address comments for dt-bindings files.
+> - Correct dts-bindings file names
+>   Rename phy-cadence-hdptx-dp.yaml to cdns,mhdp-imx8mq-dp.yaml
+>   Rename phy-cadence-hdptx-hdmi.yaml to cdns,mhdp-imx8mq-hdmi.yaml
+> - Drop redundant words and descriptions.
+> - Correct hdmi/dp node name.
+> 
+> v2 is a completely different version compared to v1.
+> Previous v1 can be available here [1].
+> 
+> v1->v2:
+> - Reuse Cadence mailbox access functions from mhdp8546 instead of
+>   rockchip DP.
+> - Mailbox access functions be convert to marco functions
+>   that will be referenced by HDP-TX PHY(HDMI/DP) driver too.
+> - Plain bridge instead of component driver.
+> - Standalone Cadence HDP-TX PHY(HDMI/DP) driver.
+> - Audio driver are removed from the patch set, it will be add in another
+>   patch set later.
+> 
+> [1]
+> https://patchwork.kernel.org/project/linux-rockchip/cover/cover.1590982881.
+> git.Sandor.yu@nxp.com/
+> 
+> Sandor Yu (10):
+>   drm: bridge: cadence: convert mailbox functions to macro functions
+>   dt-bindings: display: bridge: Add MHDP DP for i.MX8MQ
+>   drm: bridge: cadence: Add MHDP DP driver for i.MX8MQ
+>   phy: Add HDMI configuration options
+>   dt-bindings: display: bridge: Add MHDP HDMI for i.MX8MQ
+>   drm: bridge: cadence: Add MHDP HDMI driver for i.MX8MQ
+>   dt-bindings: phy: Add Cadence HDP-TX DP PHY
+>   phy: cadence: Add driver for HDP-TX DisplyPort PHY
+>   dt-bindings: phy: Add Cadence HDP-TX HDMI PHY
+>   phy: cadence: Add driver for HDP-TX HDMI PHY
+> 
+>  .../display/bridge/cdns,mhdp-imx8mq-dp.yaml   |   93 ++
+>  .../display/bridge/cdns,mhdp-imx8mq-hdmi.yaml |   93 ++
+>  .../bindings/phy/cdns,hdptx-dp-phy.yaml       |   68 ++
+>  .../bindings/phy/cdns,hdptx-hdmi-phy.yaml     |   52 +
+>  drivers/gpu/drm/bridge/cadence/Kconfig        |   25 +
+>  drivers/gpu/drm/bridge/cadence/Makefile       |    3 +
+>  drivers/gpu/drm/bridge/cadence/cdns-dp-core.c | 1071 +++++++++++++++++
+>  .../gpu/drm/bridge/cadence/cdns-hdmi-core.c   | 1018 ++++++++++++++++
+>  .../gpu/drm/bridge/cadence/cdns-mhdp-common.h |  400 ++++++
+>  .../drm/bridge/cadence/cdns-mhdp8546-core.c   |  197 +--
+>  .../drm/bridge/cadence/cdns-mhdp8546-core.h   |    1 -
+>  drivers/phy/cadence/Kconfig                   |   16 +
+>  drivers/phy/cadence/Makefile                  |    2 +
+>  drivers/phy/cadence/phy-cadence-hdptx-dp.c    |  737 ++++++++++++
+>  drivers/phy/cadence/phy-cadence-hdptx-hdmi.c  |  891 ++++++++++++++
+>  include/drm/bridge/cdns-mhdp-mailbox.h        |  240 ++++
+>  include/linux/phy/phy-hdmi.h                  |   38 +
+>  include/linux/phy/phy.h                       |    7 +-
+>  18 files changed, 4755 insertions(+), 197 deletions(-)
+>  create mode 100644
+> Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-dp.yaml
+> create mode 100644
+> Documentation/devicetree/bindings/display/bridge/cdns,mhdp-imx8mq-hdmi.yaml
+> create mode 100644
+> Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml create mode
+> 100644 Documentation/devicetree/bindings/phy/cdns,hdptx-hdmi-phy.yaml
+> create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dp-core.c
+>  create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-hdmi-core.c
+>  create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-mhdp-common.h
+>  create mode 100644 drivers/phy/cadence/phy-cadence-hdptx-dp.c
+>  create mode 100644 drivers/phy/cadence/phy-cadence-hdptx-hdmi.c
+>  create mode 100644 include/drm/bridge/cdns-mhdp-mailbox.h
+>  create mode 100644 include/linux/phy/phy-hdmi.h
+
+
+
+
