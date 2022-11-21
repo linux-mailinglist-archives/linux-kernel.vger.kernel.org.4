@@ -2,210 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0001632494
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD2F6324A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiKUOA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S230510AbiKUOBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbiKUOAG (ORCPT
+        with ESMTP id S231612AbiKUOBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:00:06 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20151C92D;
-        Mon, 21 Nov 2022 05:59:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669039159; x=1700575159;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=sj2b1TjV39Tt4i/TIED+Enb/63DlzwcLP/R2kSeUNTQ=;
-  b=dBSKhY14Z+U91e4nbkQu2ZY8JS8OTAR0YMmdKjvRKJuImC5TgMRvW2Pv
-   Vi+YxyBHfsNKLbI6k0sEOh2NWy0XEm47kkJJ9dF5bgRbBOTO7ApkcnL2R
-   oe1yk6dus25m2fFiBc9oOxtbM6r9woOkkfyGWdeH1aqPoCNli4qXq5XB2
-   gG061brKnsn5xaa+/8R7LHnuwSztz0cMFArCPdmqgjj0Wp8MJG33mFxgF
-   YF06EtTjq7gC1x8UTxkoW3jV2XhQtGEf1EKmXeTrpOsIcWS1jEykskiiS
-   rFoB3vNJeljW6GzCLPo2m6nPlHPGdEUxqj1HfSFI8k7vqNp/HEPIwhrFt
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="311189762"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="311189762"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 05:59:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="704568621"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="704568621"
-Received: from ebarboza-mobl1.amr.corp.intel.com ([10.251.209.16])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 05:59:15 -0800
-Date:   Mon, 21 Nov 2022 15:59:13 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mon, 21 Nov 2022 09:01:13 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A7AA8179;
+        Mon, 21 Nov 2022 06:01:11 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALDSXED013940;
+        Mon, 21 Nov 2022 14:00:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=ycEdT0mZ8ugwzguok8hseDtH7rFSzTZwEG8xpe1B7bk=;
+ b=hHRORwQIm6ZRsVN+bdhYl8JXd7G/Q+kvqMg753WYtY4x2Nhy3UQsj1tDdkgSRf6Bb+pV
+ bFNrD4TvmcQ+y/57wRjvH127t9CXxT+SbKOISyP1zitUqarvGIDS+Ek9HEKDKp6nagSo
+ PJDRf2IJJnb5y17OPiX4+nM9Lr4D68IchMi8dd0J9fwuTim2c/8kHYVsFTwmqb34SUVN
+ y7V+VP7wbjaeGFESiUDT7cTImNIaO0yhsGPuA23clSTJkY2iG8kBeD5JbgV1YolYUbk8
+ 2nW/em4RsUj8Fk7BONQfaXsg2lnVUOfOxYgxSKvLD/yNHSkdPRKe1YvTCwfinic/KCVM OQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrut4haf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 14:00:26 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ALE0Pxs010677
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 14:00:25 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 21 Nov 2022 06:00:24 -0800
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/7] serial: bflb_uart: add Bouffalolab UART Driver
-In-Reply-To: <20221120082114.3030-3-jszhang@kernel.org>
-Message-ID: <faa34e87-4633-31e7-144b-4fec46cb8f59@linux.intel.com>
-References: <20221120082114.3030-1-jszhang@kernel.org> <20221120082114.3030-3-jszhang@kernel.org>
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: [PATCH v7 00/20] Drivers for gunyah hypervisor
+Date:   Mon, 21 Nov 2022 05:59:49 -0800
+Message-ID: <20221121140009.2353512-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: EK8MR9eQ4DqkBd43xLrMIJXCQlX6t8vx
+X-Proofpoint-ORIG-GUID: EK8MR9eQ4DqkBd43xLrMIJXCQlX6t8vx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_13,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ spamscore=0 malwarescore=0 impostorscore=0 mlxlogscore=884 phishscore=0
+ adultscore=0 clxscore=1011 bulkscore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211210109
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 20 Nov 2022, Jisheng Zhang wrote:
+Gunyah is a Type-1 hypervisor independent of any
+high-level OS kernel, and runs in a higher CPU privilege level. It does
+not depend on any lower-privileged OS kernel/code for its core
+functionality. This increases its security and can support a much smaller
+trusted computing base than a Type-2 hypervisor.
 
-> Add the driver for Bouffalolab UART IP which is found in Bouffalolab
-> SoCs such as bl808.
-> 
-> UART driver probe will create path named "/dev/ttySx".
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Gunyah is an open source hypervisor. The source repo is available at
+https://github.com/quic/gunyah-hypervisor.
 
-> diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-> index 238a9557b487..8509cdc11d87 100644
-> --- a/drivers/tty/serial/Makefile
-> +++ b/drivers/tty/serial/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_SERIAL_8250) += 8250/
->  
->  obj-$(CONFIG_SERIAL_AMBA_PL010) += amba-pl010.o
->  obj-$(CONFIG_SERIAL_AMBA_PL011) += amba-pl011.o
-> +obj-$(CONFIG_SERIAL_BFLB) += bflb_uart.o
->  obj-$(CONFIG_SERIAL_CLPS711X) += clps711x.o
->  obj-$(CONFIG_SERIAL_PXA_NON8250) += pxa.o
->  obj-$(CONFIG_SERIAL_SA1100) += sa1100.o
-> diff --git a/drivers/tty/serial/bflb_uart.c b/drivers/tty/serial/bflb_uart.c
-> new file mode 100644
-> index 000000000000..65f98ccf8fa8
-> --- /dev/null
-> +++ b/drivers/tty/serial/bflb_uart.c
-> @@ -0,0 +1,659 @@
-> +#define UART_FIFO_CONFIG_1		(0x84)
-> +#define  UART_TX_FIFO_CNT_SFT		0
-> +#define  UART_TX_FIFO_CNT_MSK		GENMASK(5, 0)
-> +#define  UART_RX_FIFO_CNT_MSK		GENMASK(13, 8)
-> +#define  UART_TX_FIFO_TH_SFT		16
+The diagram below shows the architecture.
 
-Use FIELD_PREP() instead of adding a separate *_SFT define.
+::
 
-> +#define  UART_TX_FIFO_TH_MSK		GENMASK(20, 16)
-> +#define  UART_RX_FIFO_TH_SFT		24
-> +#define  UART_RX_FIFO_TH_MSK		GENMASK(28, 24)
-> +#define UART_FIFO_WDATA			0x88
-> +#define UART_FIFO_RDATA			0x8c
-> +#define  UART_FIFO_RDATA_MSK		GENMASK(7, 0)
+         VM A                    VM B
+     +-----+ +-----+  | +-----+ +-----+ +-----+
+     |     | |     |  | |     | |     | |     |
+ EL0 | APP | | APP |  | | APP | | APP | | APP |
+     |     | |     |  | |     | |     | |     |
+     +-----+ +-----+  | +-----+ +-----+ +-----+
+ ---------------------|-------------------------
+     +--------------+ | +----------------------+
+     |              | | |                      |
+ EL1 | Linux Kernel | | |Linux kernel/Other OS |   ...
+     |              | | |                      |
+     +--------------+ | +----------------------+
+ --------hvc/smc------|------hvc/smc------------
+     +----------------------------------------+
+     |                                        |
+ EL2 |            Gunyah Hypervisor           |
+     |                                        |
+     +----------------------------------------+
+
+Gunyah provides these following features.
+
+- Threads and Scheduling: The scheduler schedules virtual CPUs (VCPUs) on
+physical CPUs and enables time-sharing of the CPUs.
+- Memory Management: Gunyah tracks memory ownership and use of all memory
+under its control. Memory partitioning between VMs is a fundamental
+security feature.
+- Interrupt Virtualization: All interrupts are handled in the hypervisor
+and routed to the assigned VM.
+- Inter-VM Communication: There are several different mechanisms provided
+for communicating between VMs.
+- Device Virtualization: Para-virtualization of devices is supported using
+inter-VM communication. Low level system features and devices such as
+interrupt controllers are supported with emulation where required.
+
+This series adds the basic framework for detecting that Linux is running
+under Gunyah as a virtual machine, communication with the Gunyah Resource
+Manager, and a basic virtual machine manager capable of launching virtual
+machines. In a future series, I'll add more functionality to the VM Manager,
+but functionality is kept limited here to reduce the number of patches to
+review.
+
+Changes in v7:
+ - Refactor to remove gunyah RM bus
+ - Refactor allow multiple RM device instances
+ - Bump UAPI to start at 0x0
+ - Refactor QCOM SCM's platform hooks to allow CONFIG_QCOM_SCM=Y/CONFIG_GUNYAH=M combinations
+
+Changes in v6: https://lore.kernel.org/all/20221026185846.3983888-1-quic_eberman@quicinc.com/
+ - *Replace gunyah-console with gunyah VM Manager*
+ - Move include/asm-generic/gunyah.h into include/linux/gunyah.h
+ - s/gunyah_msgq/gh_msgq/
+ - Minor tweaks and documentation tidying based on comments from Jiri, Greg, Arnd, Dmitry, and Bagas.
+
+Changes in v5: https://lore.kernel.org/all/20221011000840.289033-1-quic_eberman@quicinc.com/
+ - Dropped sysfs nodes
+ - Switch from aux bus to Gunyah RM bus for the subdevices
+ - Cleaning up RM console
+
+Changes in v4: https://lore.kernel.org/all/20220928195633.2348848-1-quic_eberman@quicinc.com/
+ - Tidied up documentation throughout based on questions/feedback received
+ - Switched message queue implementation to use mailboxes
+ - Renamed "gunyah_device" as "gunyah_resource"
+
+Changes in v3: https://lore.kernel.org/all/20220811214107.1074343-1-quic_eberman@quicinc.com/
+ - /Maintained/Supported/ in MAINTAINERS
+ - Tidied up documentation throughout based on questions/feedback received
+ - Moved hypercalls into arch/arm64/gunyah/; following hyper-v's implementation
+ - Drop opaque typedefs
+ - Move sysfs nodes under /sys/hypervisor/gunyah/
+ - Moved Gunyah console driver to drivers/tty/
+ - Reworked gunyah_device design to drop the Gunyah bus.
+
+Changes in v2: https://lore.kernel.org/all/20220801211240.597859-1-quic_eberman@quicinc.com/
+ - DT bindings clean up
+ - Switch hypercalls to follow SMCCC 
+
+v1: https://lore.kernel.org/all/20220223233729.1571114-1-quic_eberman@quicinc.com/
+
+Elliot Berman (20):
+  docs: gunyah: Introduce Gunyah Hypervisor
+  dt-bindings: Add binding for gunyah hypervisor
+  gunyah: Common types and error codes for Gunyah hypercalls
+  arm64: smccc: Include alternative-macros.h
+  virt: gunyah: Add hypercalls to identify Gunyah
+  virt: gunyah: Identify hypervisor version
+  mailbox: Allow direct registration to a channel
+  virt: gunyah: msgq: Add hypercalls to send and receive messages
+  mailbox: Add Gunyah message queue mailbox
+  gunyah: rsc_mgr: Add resource manager RPC core
+  gunyah: rsc_mgr: Add VM lifecycle RPC
+  gunyah: vm_mgr: Introduce basic VM Manager
+  gunyah: rsc_mgr: Add RPC for sharing memory
+  gunyah: vm_mgr: Add/remove user memory regions
+  gunyah: vm_mgr: Add ioctls to support basic non-proxy VM boot
+  samples: Add sample userspace Gunyah VM Manager
+  gunyah: rsc_mgr: Add platform ops on mem_lend/mem_reclaim
+  firmware: qcom_scm: Use fixed width src vm bitmap
+  firmware: qcom_scm: Register Gunyah platform ops
+  docs: gunyah: Document Gunyah VM Manager
+
+ .../bindings/firmware/gunyah-hypervisor.yaml  |  82 ++
+ .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+ Documentation/virt/gunyah/index.rst           | 115 ++
+ Documentation/virt/gunyah/message-queue.rst   |  64 ++
+ Documentation/virt/gunyah/vm-manager.rst      |  91 ++
+ Documentation/virt/index.rst                  |   1 +
+ MAINTAINERS                                   |  13 +
+ arch/arm64/Kbuild                             |   1 +
+ arch/arm64/gunyah/Makefile                    |   1 +
+ arch/arm64/gunyah/gunyah_hypercall.c          | 102 ++
+ drivers/firmware/Kconfig                      |   2 +
+ drivers/firmware/qcom_scm.c                   | 107 +-
+ drivers/mailbox/Kconfig                       |  10 +
+ drivers/mailbox/Makefile                      |   2 +
+ drivers/mailbox/gunyah-msgq.c                 | 229 ++++
+ drivers/mailbox/mailbox.c                     |  96 +-
+ drivers/mailbox/omap-mailbox.c                |  18 +-
+ drivers/mailbox/pcc.c                         |  17 +-
+ drivers/misc/fastrpc.c                        |   6 +-
+ drivers/net/wireless/ath/ath10k/qmi.c         |   4 +-
+ drivers/remoteproc/qcom_q6v5_mss.c            |   8 +-
+ drivers/soc/qcom/rmtfs_mem.c                  |   2 +-
+ drivers/virt/Kconfig                          |   1 +
+ drivers/virt/Makefile                         |   1 +
+ drivers/virt/gunyah/Kconfig                   |  33 +
+ drivers/virt/gunyah/Makefile                  |   7 +
+ drivers/virt/gunyah/gunyah.c                  |  46 +
+ drivers/virt/gunyah/gunyah_platform_hooks.c   |  63 ++
+ drivers/virt/gunyah/gunyah_rm_rpc.c           | 987 ++++++++++++++++++
+ drivers/virt/gunyah/gunyah_rsc_mgr.c          |  70 ++
+ drivers/virt/gunyah/rsc_mgr.h                 | 130 +++
+ drivers/virt/gunyah/vm_mgr.c                  | 291 ++++++
+ drivers/virt/gunyah/vm_mgr.h                  |  68 ++
+ drivers/virt/gunyah/vm_mgr_mm.c               | 246 +++++
+ include/linux/arm-smccc.h                     |   1 +
+ include/linux/gunyah.h                        | 167 +++
+ include/linux/gunyah_rsc_mgr.h                | 137 +++
+ include/linux/mailbox_client.h                |   1 +
+ include/linux/qcom_scm.h                      |   2 +-
+ include/uapi/linux/gunyah.h                   |  53 +
+ samples/Kconfig                               |  10 +
+ samples/Makefile                              |   1 +
+ samples/gunyah/.gitignore                     |   2 +
+ samples/gunyah/Makefile                       |   6 +
+ samples/gunyah/gunyah_vmm.c                   | 270 +++++
+ samples/gunyah/sample_vm.dts                  |  69 ++
+ 46 files changed, 3563 insertions(+), 71 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+ create mode 100644 Documentation/virt/gunyah/index.rst
+ create mode 100644 Documentation/virt/gunyah/message-queue.rst
+ create mode 100644 Documentation/virt/gunyah/vm-manager.rst
+ create mode 100644 arch/arm64/gunyah/Makefile
+ create mode 100644 arch/arm64/gunyah/gunyah_hypercall.c
+ create mode 100644 drivers/mailbox/gunyah-msgq.c
+ create mode 100644 drivers/virt/gunyah/Kconfig
+ create mode 100644 drivers/virt/gunyah/Makefile
+ create mode 100644 drivers/virt/gunyah/gunyah.c
+ create mode 100644 drivers/virt/gunyah/gunyah_platform_hooks.c
+ create mode 100644 drivers/virt/gunyah/gunyah_rm_rpc.c
+ create mode 100644 drivers/virt/gunyah/gunyah_rsc_mgr.c
+ create mode 100644 drivers/virt/gunyah/rsc_mgr.h
+ create mode 100644 drivers/virt/gunyah/vm_mgr.c
+ create mode 100644 drivers/virt/gunyah/vm_mgr.h
+ create mode 100644 drivers/virt/gunyah/vm_mgr_mm.c
+ create mode 100644 include/linux/gunyah.h
+ create mode 100644 include/linux/gunyah_rsc_mgr.h
+ create mode 100644 include/uapi/linux/gunyah.h
+ create mode 100644 samples/gunyah/.gitignore
+ create mode 100644 samples/gunyah/Makefile
+ create mode 100644 samples/gunyah/gunyah_vmm.c
+ create mode 100644 samples/gunyah/sample_vm.dts
 
 
-> +	val = rdl(port, UART_URX_CONFIG);
-> +	val &= ~UART_CR_URX_EN;
-> +	wrl(port, UART_URX_CONFIG, val);
-> +
-> +	val = rdl(port, UART_INT_MASK);
-> +	val |= UART_URX_FIFO_INT | UART_URX_RTO_INT |
-> +	       UART_URX_FER_INT;
-
-Fits to single line.
-
-> +	port->type = PORT_BFLB;
-> +
-> +	/* Clear mask, so no surprise interrupts. */
-> +	val = rdl(port, UART_INT_MASK);
-> +	val |= UART_UTX_END_INT;
-> +	val |= UART_UTX_FIFO_INT;
-> +	val |= UART_URX_FIFO_INT;
-> +	val |= UART_URX_RTO_INT;
-> +	val |= UART_URX_FER_INT;
-
-Why to split it to this many lines?
-
-> +	spin_lock_irqsave(&port->lock, flags);
-> +
-> +	val = rdl(port, UART_INT_MASK);
-> +	val |= 0xfff;
-
-In most of the other places, the bits used with UART_INT_MASK are named, 
-but for some reason you don't do it here and the bits extend beyond the 
-ones which are defined with name.
-
-> +	wrl(port, UART_INT_MASK, val);
-> +
-> +	wrl(port, UART_DATA_CONFIG, 0);
-> +	wrl(port, UART_SW_MODE, 0);
-> +	wrl(port, UART_URX_RTO_TIMER, 0x4f);
-
-FIELD_PREP(UART_CR_URX_RTO_VALUE_MSK, 0x4f)? It would document what field
-is written explicitly.
-
-> +
-> +	val = rdl(port, UART_FIFO_CONFIG_1);
-> +	val &= ~UART_RX_FIFO_TH_MSK;
-> +	val |= BFLB_UART_RX_FIFO_TH << UART_RX_FIFO_TH_SFT;
-> +	wrl(port, UART_FIFO_CONFIG_1, val);
-> +
-> +	/* Unmask RX interrupts now */
-> +	val = rdl(port, UART_INT_MASK);
-> +	val &= ~UART_URX_FIFO_INT;
-> +	val &= ~UART_URX_RTO_INT;
-> +	val &= ~UART_URX_FER_INT;
-
-Combine to single line.
-
-> +static int bflb_uart_request_port(struct uart_port *port)
-> +{
-> +	/* UARTs always present */
-> +	return 0;
-> +}
-> +static void bflb_uart_release_port(struct uart_port *port)
-> +{
-> +	/* Nothing to release... */
-> +}
-
-Both release_port and request_port are NULL checked by the caller, there's 
-no need to provide and empty one.
-
-> +static const struct uart_ops bflb_uart_ops = {
-> +	.tx_empty = bflb_uart_tx_empty,
-> +	.get_mctrl = bflb_uart_get_mctrl,
-> +	.set_mctrl = bflb_uart_set_mctrl,
-> +	.start_tx = bflb_uart_start_tx,
-> +	.stop_tx = bflb_uart_stop_tx,
-> +	.stop_rx = bflb_uart_stop_rx,
-> +	.break_ctl = bflb_uart_break_ctl,
-> +	.startup = bflb_uart_startup,
-> +	.shutdown = bflb_uart_shutdown,
-> +	.set_termios = bflb_uart_set_termios,
-> +	.type = bflb_uart_type,
-> +	.request_port = bflb_uart_request_port,
-> +	.release_port = bflb_uart_release_port,
-> +	.config_port = bflb_uart_config_port,
-> +	.verify_port = bflb_uart_verify_port,
-> +};
-
-> +static void bflb_uart_console_write(struct console *co, const char *s,
-> +				    u_int count)
-> +{
-> +	struct uart_port *port = &bflb_uart_ports[co->index]->port;
-> +	u32 status, reg, mask;
-> +
-> +	/* save then disable interrupts */
-> +	mask = rdl(port, UART_INT_MASK);
-> +	reg = -1;
-
-Use ~0 instead. Why -1 here and 0xfff in the other place?
-
-
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
 -- 
- i.
+2.25.1
+
