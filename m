@@ -2,124 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D5D6323A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB5E6323B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiKUNdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
+        id S230383AbiKUNde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiKUNdD (ORCPT
+        with ESMTP id S230362AbiKUNdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:33:03 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFAEBFF59;
-        Mon, 21 Nov 2022 05:32:59 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e725329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e725:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C9C6B1EC053F;
-        Mon, 21 Nov 2022 14:32:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669037577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=h6QdlM3if85oKaJAXlxT1/ww0EFma2c3NtTeZN9RKM4=;
-        b=F/qey3CdoLaY63yMD4WxsH1hFqcb8XOOWthbY+Nbxn+Wmmnr5u1piaNXCGLV0Mh3LG99Pn
-        rqOSgWpLbhkeLNecWYqWX/jiQzwmnfIMO7Eb2YyHE4IM4ljndmEMt8EppBbrHJD5+8r0GA
-        BDmK9mEPeFJCTBclgIhpz+1NyntkeW8=
-Date:   Mon, 21 Nov 2022 14:32:54 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [Patch v3 01/14] x86/ioremap: Fix page aligned size calculation
- in __ioremap_caller()
-Message-ID: <Y3t+BipyGPUV3q8F@zn.tnic>
-References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
- <1668624097-14884-2-git-send-email-mikelley@microsoft.com>
+        Mon, 21 Nov 2022 08:33:24 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F6C220D4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:33:22 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id s5so2672272wru.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:33:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/AZ4ygC1zrywaVeDravJh+79FfEh+MWc17/2b5dHnFI=;
+        b=HhtboEGdl6Fk3OyjFtdSC0vRkGcOtA6lwHK46rnl7KucXpugcql4jfN/z4U3fxStX5
+         bH2McLqqFK3nsOSLPBvF+vJ3ohKVKs8lNsZH/eCMAFqxFobjfTG4JqClqhFOx4zH4zkf
+         YUieQJu9wr5pqkoiA8EApI62I7leQpVCg3C4ZDAeVktkNG6pyeP1g5XtOtoOuCYvjHoD
+         OS7b6M/xJeh+UC9q6IxqM8+ttR2lSzKHLt1mtpOWTwkX4hxwHUiN0G5+oPbdPwSJYq1j
+         2eAGJs1PBNr+DoWhcmuOy8MuQzq8E1CjjzIvnFmN6mNLdA94eNB2AWory4BsJUyv5Gzp
+         UErQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/AZ4ygC1zrywaVeDravJh+79FfEh+MWc17/2b5dHnFI=;
+        b=DzHUKEwOzy1FAtDg4TF/rBnL++bSBBwYEn8m0MYzpySa3QpkQPebhWS8u6/1A/HM7S
+         Gn/2yLH0yZx2WlBYEYUGbZK18eBa1F9dllhLKiwpd8gMAk+C0H+zETfhNFSHpic08n+l
+         5uHaDZ5ue8h87Uq05mF5ntK/LB2FZ1fsg+k9rFLAnRjQ0vuaBlvOMAdqysmvmZaAWr5i
+         YOivprtJcne1J8CofhB5M+iOdFLxVykbSLqFnSexmIFu11MRHtVMjQf+u+f6j7JxrKKi
+         WPzfpJB/B+aGt51Jb23i8OeLC++T6mbT2yzvkRcjCBZhdunbfQQ1SUz/A9T1qD8A97CU
+         2C+A==
+X-Gm-Message-State: ANoB5pmiirHETSnwtOwQkk0PzKU8EoRE6t/fHVqxqNeKfbUJEUtkHOVN
+        ZUkEyvfGW0P1x7Pr3DGERYjIog==
+X-Google-Smtp-Source: AA0mqf65U+hVaWTrA35GMU6HsufKw4fwTxCfsQNgEWiSbacZGQ1vytMt5Bep31zS425r88w5qPgkrg==
+X-Received: by 2002:a5d:4577:0:b0:241:c9fc:71bc with SMTP id a23-20020a5d4577000000b00241c9fc71bcmr5324874wrc.317.1669037601244;
+        Mon, 21 Nov 2022 05:33:21 -0800 (PST)
+Received: from localhost.localdomain (lfbn-gre-1-201-46.w90-112.abo.wanadoo.fr. [90.112.163.46])
+        by smtp.gmail.com with ESMTPSA id j18-20020a05600c191200b003c83465ccbfsm20332980wmq.35.2022.11.21.05.33.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 05:33:20 -0800 (PST)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-efi@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH] riscv: Sync efi page table's kernel mappings before switching
+Date:   Mon, 21 Nov 2022 14:33:03 +0100
+Message-Id: <20221121133303.1782246-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1668624097-14884-2-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 10:41:24AM -0800, Michael Kelley wrote:
-> Current code re-calculates the size after aligning the starting and
-> ending physical addresses on a page boundary. But the re-calculation
-> also embeds the masking of high order bits that exceed the size of
-> the physical address space (via PHYSICAL_PAGE_MASK). If the masking
-> removes any high order bits, the size calculation results in a huge
-> value that is likely to immediately fail.
-> 
-> Fix this by re-calculating the page-aligned size first. Then mask any
-> high order bits using PHYSICAL_PAGE_MASK.
-> 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> ---
->  arch/x86/mm/ioremap.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
-> index 78c5bc6..6453fba 100644
-> --- a/arch/x86/mm/ioremap.c
-> +++ b/arch/x86/mm/ioremap.c
-> @@ -217,9 +217,15 @@ static void __ioremap_check_mem(resource_size_t addr, unsigned long size,
->  	 * Mappings have to be page-aligned
->  	 */
->  	offset = phys_addr & ~PAGE_MASK;
-> -	phys_addr &= PHYSICAL_PAGE_MASK;
-> +	phys_addr &= PAGE_MASK;
->  	size = PAGE_ALIGN(last_addr+1) - phys_addr;
->  
-> +	/*
-> +	 * Mask out any bits not part of the actual physical
-> +	 * address, like memory encryption bits.
-> +	 */
-> +	phys_addr &= PHYSICAL_PAGE_MASK;
-> +
->  	retval = memtype_reserve(phys_addr, (u64)phys_addr + size,
->  						pcm, &new_pcm);
->  	if (retval) {
-> -- 
+The EFI page table is initially created as a copy of the kernel page table.
+With VMAP_STACK enabled, kernel stacks are allocated in the vmalloc area:
+if the stack is allocated in a new PGD (one that was not present at the
+moment of the efi page table creation or not synced in a previous vmalloc
+fault), the kernel will take a trap when switching to the efi page table
+when the vmalloc kernel stack is accessed, resulting in a kernel panic.
 
-This looks like a fix to me that needs to go to independently to stable.
-And it would need a Fixes tag.
+Fix that by updating the efi kernel mappings before switching to the efi
+page table.
 
-/me does some git archeology...
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+---
+ arch/riscv/include/asm/efi.h     |  6 +++++-
+ arch/riscv/include/asm/pgalloc.h | 11 ++++++++---
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-I guess this one:
-
-ffa71f33a820 ("x86, ioremap: Fix incorrect physical address handling in PAE mode")
-
-should be old enough so that it goes to all relevant stable kernels...
-
-Hmm?
-
+diff --git a/arch/riscv/include/asm/efi.h b/arch/riscv/include/asm/efi.h
+index f74879a8f1ea..e229d7be4b66 100644
+--- a/arch/riscv/include/asm/efi.h
++++ b/arch/riscv/include/asm/efi.h
+@@ -10,6 +10,7 @@
+ #include <asm/mmu_context.h>
+ #include <asm/ptrace.h>
+ #include <asm/tlbflush.h>
++#include <asm/pgalloc.h>
+ 
+ #ifdef CONFIG_EFI
+ extern void efi_init(void);
+@@ -20,7 +21,10 @@ extern void efi_init(void);
+ int efi_create_mapping(struct mm_struct *mm, efi_memory_desc_t *md);
+ int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
+ 
+-#define arch_efi_call_virt_setup()      efi_virtmap_load()
++#define arch_efi_call_virt_setup()      ({		\
++		sync_kernel_mappings(efi_mm.pgd);	\
++		efi_virtmap_load();			\
++	})
+ #define arch_efi_call_virt_teardown()   efi_virtmap_unload()
+ 
+ #define ARCH_EFI_IRQ_FLAGS_MASK (SR_IE | SR_SPIE)
+diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
+index 947f23d7b6af..59dc12b5b7e8 100644
+--- a/arch/riscv/include/asm/pgalloc.h
++++ b/arch/riscv/include/asm/pgalloc.h
+@@ -127,6 +127,13 @@ static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
+ #define __p4d_free_tlb(tlb, p4d, addr)  p4d_free((tlb)->mm, p4d)
+ #endif /* __PAGETABLE_PMD_FOLDED */
+ 
++static inline void sync_kernel_mappings(pgd_t *pgd)
++{
++	memcpy(pgd + USER_PTRS_PER_PGD,
++	       init_mm.pgd + USER_PTRS_PER_PGD,
++	       (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
++}
++
+ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+ 	pgd_t *pgd;
+@@ -135,9 +142,7 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ 	if (likely(pgd != NULL)) {
+ 		memset(pgd, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
+ 		/* Copy kernel mappings */
+-		memcpy(pgd + USER_PTRS_PER_PGD,
+-			init_mm.pgd + USER_PTRS_PER_PGD,
+-			(PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
++		sync_kernel_mappings(pgd);
+ 	}
+ 	return pgd;
+ }
 -- 
-Regards/Gruss,
-    Boris.
+2.37.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
