@@ -2,295 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B98F632FA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6706F632FAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiKUWSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 17:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S232089AbiKUWTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 17:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiKUWRr (ORCPT
+        with ESMTP id S231888AbiKUWSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 17:17:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C502DA184;
-        Mon, 21 Nov 2022 14:17:45 -0800 (PST)
+        Mon, 21 Nov 2022 17:18:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113FF657F6;
+        Mon, 21 Nov 2022 14:18:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B425614C1;
-        Mon, 21 Nov 2022 22:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CF2C433D6;
-        Mon, 21 Nov 2022 22:17:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669069064;
-        bh=YcA4HOQd/YW4DRhi+HZuV7MPBWmmAJci1dQJmfaijMc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dvFsHx+IkXfwwa2EPFunqx3FsaHNGThrwG+j1SJ7O6jecPQ4rTVIQ5BY8MUxt5VeQ
-         oSXDRvpVSP8RWxkZXlD5qiXPdH+bkJE4PjmhjRD6gR33StgcGXHuBo/0xze7RhHLrE
-         ZYJLYQ2AL1b9V8GKeuVRCcEq5Eg7ztOhKcuyOs8HXdECmmkMz9FUJqH7lwYS/yMFeF
-         Q+uhDyBQ4O+ifjPo5SmmeGnUDcmix91c8t252pETUAMT+io9MRcZDQq93XmgQqrVhe
-         qxUmrnmCr/U7htXMzOPZp6w9KMKmu6KqgPFoHMMpbnowXU1Vc37vILrc5mYSsW0Nzx
-         KtucTwTterp/w==
-Date:   Mon, 21 Nov 2022 16:17:42 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
- resources support D3
-Message-ID: <20221121221742.GA137841@bhelgaas>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8FEDB816A1;
+        Mon, 21 Nov 2022 22:18:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC7FC43152;
+        Mon, 21 Nov 2022 22:18:06 +0000 (UTC)
+Date:   Mon, 21 Nov 2022 17:18:03 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [patch 12/15] timers: Add shutdown mechanism to the internal
+ functions
+Message-ID: <20221121171803.35a1811e@gandalf.local.home>
+In-Reply-To: <20221115202117.677534558@linutronix.de>
+References: <20221115195802.415956561@linutronix.de>
+        <20221115202117.677534558@linutronix.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4448186.LvFx2qVVIh@kreacher>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 03:33:00PM +0100, Rafael J. Wysocki wrote:
-> On Friday, November 18, 2022 10:13:39 PM CET Rafael J. Wysocki wrote:
-> > On Fri, Nov 18, 2022 at 9:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >
-> > > Hi Rafael,
-> > >
-> > > Sorry, I'm still confused (my perpetual state :)).
-> > 
-> > No worries, doing my best to address that.
-> > 
-> > > On Fri, Nov 18, 2022 at 02:16:17PM +0100, Rafael J. Wysocki wrote:
-> > > > On Thu, Nov 17, 2022 at 11:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > On Thu, Nov 17, 2022 at 06:01:26PM +0100, Rafael J. Wysocki wrote:
-> > > > > > On Thu, Nov 17, 2022 at 12:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > On Wed, Nov 16, 2022 at 01:00:36PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > On Wed, Nov 16, 2022 at 1:37 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > > > On Mon, Nov 14, 2022 at 04:33:52PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > > > On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
-> > > > > > > > > > > > On 11/11/2022 11:41, Bjorn Helgaas wrote:
-> > > > > > > > > > > > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
-> > > > > > > > > > > > > > Firmware typically advertises that ACPI devices that represent PCIe
-> > > > > > > > > > > > > > devices can support D3 by a combination of the value returned by
-> > > > > > > > > > > > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > `acpi_pci_bridge_d3` looks for this combination but also contains
-> > > > > > > > > > > > > > an assumption that if an ACPI device contains power resources the PCIe
-> > > > > > > > > > > > > > device it's associated with can support D3.  This was introduced
-> > > > > > > > > > > > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
-> > > > > > > > > > > > > > D3 if power managed by ACPI").
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Some firmware configurations for "AMD Pink Sardine" do not support
-> > > > > > > > > > > > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
-> > > > > > > > > > > > > > port used for tunneling. The PCIe device will still be opted into
-> > > > > > > > > > > > > > runtime PM in the kernel [2] because of the logic within
-> > > > > > > > > > > > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
-> > > > > > > > > > > > > > device contains power resources.
-> > > > > > > > > > >
-> > > > > > > > > > > Wait.  Is this as simple as just recognizing that:
-> > > > > > > > > > >
-> > > > > > > > > > >   _PS0 means the OS has a knob to put the device in D0, but it doesn't
-> > > > > > > > > > >   mean the device can wake itself from a low-power state.  The OS has
-> > > > > > > > > > >   to use _S0W to learn the device's ability to wake itself.
-> > > > > > > > > >
-> > > > > > > > > > It is.
-> > > > > > > > >
-> > > > > > > > > Now I'm confused again about what "HotPlugSupportInD3" means.  The MS
-> > > > > > > > > web page [1] says it identifies Root Ports capable of handling hot
-> > > > > > > > > plug events while in D3.  That sounds kind of related to _S0W: If _S0W
-> > > > > > > > > says "I can wake myself from D3hot and D3cold", how is that different
-> > > > > > > > > from "I can handle hotplug events in D3"?
-> > > > > > > >
-> > > > > > > > For native PME/hot-plug signaling there is no difference.  This is the
-> > > > > > > > same interrupt by the spec after all IIRC.
-> > > > > > > >
-> > > > > > > > For GPE-based signaling, though, there is a difference, because GPEs
-> > > > > > > > can only be used directly for wake signaling (this is related to
-> > > > > > > > _PRW).  In particular, the only provision in the ACPI spec for device
-> > > > > > > > hot-add are the Bus Check and Device Check notification values (0 and
-> > > > > > > > 1) which require AML to run and evaluate Notify() on specific AML
-> > > > > > > > objects.
-> > > > > > > >
-> > > > > > > > Hence, there is no spec-defined way to tell the OS that "something can
-> > > > > > > > be hot-added under this device while in D3 and you will get notified
-> > > > > > > > about that".
-> > > > > > >
-> > > > > > > So I guess acpi_pci_bridge_d3() looks for:
-> > > > > > >
-> > > > > > >   - "wake signaling while in D3" (_S0W) and
-> > > > > > >   - "notification of hotplug while in D3" ("HotPlugSupportInD3")
-> > > > > > >
-> > > > > > > For Root Ports with both those abilities (or bridges below such Root
-> > > > > > > Ports), we allow D3, and this patch doesn't change that.
-> > > > > > >
-> > > > > > > What this patch *does* change is that all bridges with _PS0 or _PR0
-> > > > > > > previously could use D3, but now will only be able to use D3 if they
-> > > > > > > are also (or are below) a Root Port that can signal wakeup
-> > > > > > > (wakeup.flags.valid) and can wakeup from D3hot or D3cold (_S0W).
-> > > > > > >
-> > > > > > > And this fixes the Pink Sardine because it has Root Ports that do
-> > > > > > > Thunderbolt tunneling, and they have _PS0 or _PR0 but their _S0W says
-> > > > > > > they cannot wake from D3.  Previously we put those in D3, but they
-> > > > > > > couldn't wake up.  Now we won't put them in D3.
-> > > > > > >
-> > > > > > > I guess there's a possibility that this could break or cause higher
-> > > > > > > power consumption on systems that were fixed by c6e331312ebf
-> > > > > > > ("PCI/ACPI: Whitelist hotplug ports for D3 if power managed by ACPI").
-> > > > > > > I don't know enough about that scenario.  Maybe Lukas will chime in.
-> > > > > >
-> > > > > > Well, it is possible that some of these systems will be affected.
-> > > > > >
-> > > > > > One of such cases is when the port in question has _S0W which says
-> > > > > > that wakeup from D3 is not supported.  In that case I think the kernel
-> > > > > > should honor the _S0W input, because there may be a good reason known
-> > > > > > to the platform integrator for it.
-> > > > > >
-> > > > > > The other case is when wakeup.flags.valid is unset for the port's ACPI
-> > > > > > companion which means that the port cannot signal wakeup through
-> > > > > > ACPI-related means at all and this may be problematic, especially in
-> > > > > > the system-wide suspend case in which the wakeup capability is not too
-> > > > > > relevant unless there is a system wakeup device under the port.
-> > > > > >
-> > > > > > I don't think that the adev->wakeup.flags.valid check has any bearing
-> > > > > > on the _S0W check - if there is _S0W and it says "no wakeup from D3",
-> > > > > > it should still be taken into account - so that check can be moved
-> > > > > > past the _S0W check.
-> > > > >
-> > > > > So if _S0W says it can wake from D3, but wakeup.flags is not valid,
-> > > > > it's still OK to use D3?
-> > > >
-> > > > No, it isn't, as per the code today and I don't think that this
-> > > > particular part should be changed now.
-> > >
-> > > But the current upstream code checks acpi_pci_power_manageable(dev)
-> > > first, so if "dev" has _PR0 or _PS0, we'll use D3 even if _S0W says it
-> > > can wake from D3 and wakeup.flags is not valid.
-> > 
-> > Yes, the current code will return 'true' if _PR0 or _PS0 is present
-> > for dev regardless of anything else.
-> > 
-> > The proposed change is to make that conditional on whether or not _S0W
-> > for the root port says that wakeup from D3 is supported (or it is not
-> > present or unusable).
-> > 
-> > I see that I've missed one point now which is when the root port
-> > doesn't have an ACPI companion, in which case we should go straight
-> > for the "dev is power manageable" check.
-> 
-> Moreover, it is possible that the bridge passed to acpi_pci_bridge_d3() has its
-> own _S0W or a wakeup GPE if it is power-manageable via ACPI.  In those cases
-> it is not necessary to ask the Root Port's _S0W about wakeup from D3, so overall
-> I would go for the patch like the below (not really tested).
-> 
-> This works in the same way as the current code (unless I have missed anything)
-> except for the case when the "target" bridge is power-manageable via ACPI, but
-> it cannot signal wakeup via ACPI and has no _S0W.  In that case it will consult
-> the upstream Root Port's _S0W to check whether or not wakeup from D3 is
-> supported.
-> 
-> [Note that if dev_has_acpi_pm is 'true', it is kind of pointless to look for the
-> "HotPlugSupportInD3" property of the Root Port, because the function is going to
-> return 'true' regardless, but I'm not sure if adding an extra if () for handling
-> this particular case is worth the hassle.]
+On Tue, 15 Nov 2022 21:28:52 +0100 (CET)
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-I think this has a lot of potential.  I haven't tried it, but I wonder
-if splitting out the Root Port-specific parts to a separate function
-would be helpful, if only to make it more obvious that there may be
-two different devices involved.
-
-If there are two devices ("dev" is a bridge below a Root Port), I
-guess support in the Root Port is not necessarily required?  E.g.,
-could "dev" assert a wakeup GPE that's not routed through the Root
-Port?  If Root Port support *is* required, maybe it would read more
-clearly to test that first, before looking at the downstream device.
-
+> Tearing down timers which have circular dependencies to other
+> functionality, e.g. workqueues, where the timer can schedule work and work
+> can arm timers is not trivial.
+> 
+> In those cases it is desired to shutdown the timer in a way which prevents
+> rearming of the timer. The mechanism to do so it to set timer->function to
+> NULL and use this as an indicator for the timer arming functions to ignore
+> the (re)arm request.
+> 
+> Add a shutdown argument to the relevant internal functions which makes the
+> actual deactivation code set timer->function to NULL which in turn prevents
+> rearming of the timer.
+> 
+> Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
+> Link: https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
 > ---
->  drivers/pci/pci-acpi.c |   32 +++++++++++++++++++++++++-------
->  1 file changed, 25 insertions(+), 7 deletions(-)
+>  kernel/time/timer.c |   64 ++++++++++++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 55 insertions(+), 9 deletions(-)
 > 
-> Index: linux-pm/drivers/pci/pci-acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-acpi.c
-> +++ linux-pm/drivers/pci/pci-acpi.c
-> @@ -975,6 +975,7 @@ bool acpi_pci_power_manageable(struct pc
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -1293,14 +1293,21 @@ void add_timer_on(struct timer_list *tim
+>  EXPORT_SYMBOL_GPL(add_timer_on);
 >  
->  bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>  /**
+> - * __timer_delete - Internal function: Deactivate a timer.
+> + * __timer_delete - Internal function: Deactivate a timer
+>   * @timer:	The timer to be deactivated
+> + * @shutdown:	If true this indicates that the timer is about to be
+
+Nit, needs a common (or "then") after true.
+
+
+> + *		shutdown permanently.
+> + *
+> + * If @shutdown is true then @timer->function is set to NULL under the
+> + * timer base lock which prevents further rearming of the time. In that
+> + * case any attempt to rearm @timer after this function returns will be
+> + * silently ignored.
+>   *
+>   * Return:
+>   * * %0 - The timer was not pending
+>   * * %1 - The timer was pending and deactivated
+>   */
+> -static int __timer_delete(struct timer_list *timer)
+> +static int __timer_delete(struct timer_list *timer, bool shutdown)
 >  {
-> +	bool dev_has_acpi_pm = false;
->  	struct pci_dev *rpdev;
->  	struct acpi_device *adev;
->  	acpi_status status;
-> @@ -984,17 +985,34 @@ bool acpi_pci_bridge_d3(struct pci_dev *
->  	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
->  		return false;
+>  	struct timer_base *base;
+>  	unsigned long flags;
+> @@ -1308,9 +1315,22 @@ static int __timer_delete(struct timer_l
 >  
-> -	/* Assume D3 support if the bridge is power-manageable by ACPI. */
-> -	if (acpi_pci_power_manageable(dev))
-> -		return true;
-> +	adev = ACPI_COMPANION(&dev->dev);
-> +	if (adev && acpi_device_power_manageable(adev)) {
-> +		/*
-> +		 * Let the bridge go into D3 if it can signal wakeup from these
-> +		 * states (i.e. it has _S0W which says so or it can signal
-> +		 * wakeup via ACPI).
-> +		 */
-> +		status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
-> +		if (ACPI_SUCCESS(status)) {
-> +			if (state >= ACPI_STATE_D3_HOT)
-> +				return true;
-> +		} else if (adev->wakeup.flags.valid) {
-> +			return true;
-> +		}
-> +		/*
-> +		 * If the bridge is power-manageable by ACPI, let it go into D3
-> +		 * by default.
-> +		 */
-> +		dev_has_acpi_pm = true;
-> +	}
+>  	debug_assert_init(timer);
 >  
->  	rpdev = pcie_find_root_port(dev);
->  	if (!rpdev)
-> -		return false;
-> +		return dev_has_acpi_pm;
+> -	if (timer_pending(timer)) {
+> +	/*
+> +	 * If @shutdown is set then the lock has to be taken whether the
+> +	 * timer is pending or not to protect against a concurrent rearm
+> +	 * which might hit between the lockless pending check and the lock
+> +	 * aquisition. By taking the lock it is ensured that such a newly
+> +	 * enqueued timer is dequeued and cannot end up with
+> +	 * timer->function == NULL in the expiry code.
+> +	 *
+> +	 * If timer->function is currently executed, then this makes sure
+> +	 * that the callback cannot requeue the timer.
+> +	 */
+> +	if (timer_pending(timer) || shutdown) {
+>  		base = lock_timer_base(timer, &flags);
+>  		ret = detach_if_pending(timer, base, true);
+> +		if (shutdown)
+> +			timer->function = NULL;
+>  		raw_spin_unlock_irqrestore(&base->lock, flags);
+>  	}
 >  
->  	adev = ACPI_COMPANION(&rpdev->dev);
->  	if (!adev)
-> -		return false;
-> +		return dev_has_acpi_pm;
->  
->  	/*
->  	 * If the Root Port cannot signal wakeup signals at all, i.e., it
-> @@ -1002,7 +1020,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *
->  	 * events from low-power states including D3hot and D3cold.
->  	 */
->  	if (!adev->wakeup.flags.valid)
-> -		return false;
-> +		return dev_has_acpi_pm;
->  
->  	/*
->  	 * If the Root Port cannot wake itself from D3hot or D3cold, we
-> @@ -1023,7 +1041,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *
->  	    obj->integer.value == 1)
->  		return true;
->  
-> -	return false;
-> +	return dev_has_acpi_pm;
+> @@ -1332,20 +1352,31 @@ static int __timer_delete(struct timer_l
+>   */
+>  int timer_delete(struct timer_list *timer)
+>  {
+> -	return __timer_delete(timer);
+> +	return __timer_delete(timer, false);
 >  }
+>  EXPORT_SYMBOL(timer_delete);
 >  
->  int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
-> 
-> 
-> 
+>  /**
+>   * __try_to_del_timer_sync - Internal function: Try to deactivate a timer
+>   * @timer:	Timer to deactivate
+> + * @shutdown:	If true this indicates that the timer is about to be
+
+Same here.
+
+> + *		shutdown permanently.
+> + *
+> + * If @shutdown is true then @timer->function is set to NULL under the
+> + * timer base lock which prevents further rearming of the timer. Any
+> + * attempt to rearm @timer after this function returns will be silently
+> + * ignored.
+> + *
+> + * This function cannot guarantee that the timer cannot be rearmed
+> + * right after dropping the base lock if @shutdown is false. That
+> + * needs to be prevented by the calling code if necessary.
+>   *
+>   * Return:
+>   * * %0  - The timer was not pending
+>   * * %1  - The timer was pending and deactivated
+>   * * %-1 - The timer callback function is running on a different CPU
+>   */
+> -static int __try_to_del_timer_sync(struct timer_list *timer)
+> +static int __try_to_del_timer_sync(struct timer_list *timer, bool shutdown)
+>  {
+>  	struct timer_base *base;
+>  	unsigned long flags;
+> @@ -1357,6 +1388,8 @@ static int __try_to_del_timer_sync(struc
+>  
+>  	if (base->running_timer != timer)
+>  		ret = detach_if_pending(timer, base, true);
+> +	if (shutdown)
+> +		timer->function = NULL;
+>  
+>  	raw_spin_unlock_irqrestore(&base->lock, flags);
+>  
+> @@ -1379,7 +1412,7 @@ static int __try_to_del_timer_sync(struc
+>   */
+>  int try_to_del_timer_sync(struct timer_list *timer)
+>  {
+> -	return __try_to_del_timer_sync(timer);
+> +	return __try_to_del_timer_sync(timer, false);
+>  }
+>  EXPORT_SYMBOL(try_to_del_timer_sync);
+>  
+> @@ -1460,12 +1493,25 @@ static inline void del_timer_wait_runnin
+>   * __timer_delete_sync - Internal function: Deactivate a timer and wait
+>   *			 for the handler to finish.
+>   * @timer:	The timer to be deactivated
+> + * @shutdown:	If true @timer->function will be set to NULL under the
+
+Here too.
+
+-- Steve
+
+> + *		timer base lock which prevents rearming of @timer
+> + *
+> + * If @shutdown is not set the timer can be rearmed later. If the timer can
+> + * be rearmed concurrently, i.e. after dropping the base lock then the
+> + * return value is meaningless.
+> + *
+> + * If @shutdown is set then @timer->function is set to NULL under timer
+> + * base lock which prevents rearming of the timer. Any attempt to rearm
+> + * a shutdown timer is silently ignored.
+> + *
+> + * If the timer should be reused after shutdown it has to be initialized
+> + * again.
+>   *
+>   * Return:
+>   * * %0	- The timer was not pending
+>   * * %1	- The timer was pending and deactivated
+>   */
+> -static int __timer_delete_sync(struct timer_list *timer)
+> +static int __timer_delete_sync(struct timer_list *timer, bool shutdown)
+>  {
+>  	int ret;
+>  
+> @@ -1495,7 +1541,7 @@ static int __timer_delete_sync(struct ti
+>  		lockdep_assert_preemption_enabled();
+>  
+>  	do {
+> -		ret = __try_to_del_timer_sync(timer);
+> +		ret = __try_to_del_timer_sync(timer, shutdown);
+>  
+>  		if (unlikely(ret < 0)) {
+>  			del_timer_wait_running(timer);
+> @@ -1547,7 +1593,7 @@ static int __timer_delete_sync(struct ti
+>   */
+>  int timer_delete_sync(struct timer_list *timer)
+>  {
+> -	return __timer_delete_sync(timer);
+> +	return __timer_delete_sync(timer, false);
+>  }
+>  EXPORT_SYMBOL(timer_delete_sync);
+>  
+
