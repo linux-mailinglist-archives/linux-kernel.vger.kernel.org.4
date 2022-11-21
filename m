@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6258E632CA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16261632CB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiKUTI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 14:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S231294AbiKUTMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiKUTIY (ORCPT
+        with ESMTP id S231267AbiKUTMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:08:24 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC5FD28AA
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:08:23 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e725329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e725:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C30691EC03EA;
-        Mon, 21 Nov 2022 20:08:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669057701;
+        Mon, 21 Nov 2022 14:12:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76556D29AB
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:11:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669057871;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=PW/HmTfWd3KD7F9AeG0CHyci/txJYNIbKWWtUh/bG0A=;
-        b=KY/hVSo/pMHtM24iKKP8OWuqQqgIXSOiCgSokHrbPb09ujtI5tpWNpwdkF2vfLeYOGDu+q
-        MIh/+eWlfr3v792+e+VBh1CWiad8a8H7XnceWO27O7Pi+LUuJqiPOGRc4WTm8DtuycmzSC
-        IeofWwBGS3FS4JHqpbJFflIaGoppcmk=
-Date:   Mon, 21 Nov 2022 20:08:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] x86/boot: skip realmode init code when running as Xen PV
- guest
-Message-ID: <Y3vMpbsHA35VoasD@zn.tnic>
-References: <20221121162433.28070-1-jgross@suse.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pCmAWoY/E+D1EdQWKofo3IS5cplA0bKml9JOCiXWhTQ=;
+        b=P8yOsBNsJms5T9BTfHTQbcQdN5NkdVgbRcJ9HAw38mOr0lh7l5iNrTeN4QJau6EEfggqfH
+        Oxdd4YoLT8b39Y1DYa+AHBOLciS5bSCa6A7ZL1RJHffqpvZ4l8JG8XWQQecYBN2QqZ4KFf
+        5HLv0o+qNQjOZG/Tu/eknzwUhsyOgdY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656-MChxLxSOMvCXjIztijKxCw-1; Mon, 21 Nov 2022 14:11:06 -0500
+X-MC-Unique: MChxLxSOMvCXjIztijKxCw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B455D811E84;
+        Mon, 21 Nov 2022 19:11:03 +0000 (UTC)
+Received: from [10.22.33.92] (unknown [10.22.33.92])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 45FFA49BB60;
+        Mon, 21 Nov 2022 19:11:03 +0000 (UTC)
+Message-ID: <78de73b0-2a27-592b-b70b-ca209962fdef@redhat.com>
+Date:   Mon, 21 Nov 2022 14:11:03 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221121162433.28070-1-jgross@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 2/2] cgroup/cpuset: Optimize cpuset_attach() on v2
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+References: <20221112221939.1272764-1-longman@redhat.com>
+ <20221112221939.1272764-3-longman@redhat.com>
+ <20221121185042.GA15225@blackbody.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221121185042.GA15225@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,55 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 05:24:33PM +0100, Juergen Gross wrote:
-> When running as a Xen PV guest there is no need for setting up the
-> realmode trampoline, as realmode isn't supported in this environment.
-> 
-> Trying to setup the trampoline has been proven to be problematic in
-> some cases, especially when trying to debug early boot problems with
-> Xen requiring to keep the EFI boot-services memory mapped (some
-> firmware variants seem to claim basically all memory below 1M for boot
-> services).
-> 
-> Skip the trampoline setup code for Xen PV guests.
-> 
-> Fixes: 084ee1c641a0 ("x86, realmode: Relocator for realmode code")
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
->  arch/x86/include/asm/realmode.h | 4 ++--
->  arch/x86/realmode/init.c        | 3 +++
->  2 files changed, 5 insertions(+), 2 deletions(-)
- 
-> diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
-> index fd6f6e5b755a..5bfce58f1bab 100644
-> --- a/arch/x86/include/asm/realmode.h
-> +++ b/arch/x86/include/asm/realmode.h
-> @@ -78,8 +78,8 @@ extern unsigned char secondary_startup_64_no_verify[];
->  
->  static inline size_t real_mode_size_needed(void)
->  {
-> -	if (real_mode_header)
-> -		return 0;	/* already allocated. */
-> +	if (real_mode_header || cpu_feature_enabled(X86_FEATURE_XENPV))
-> +		return 0;	/* already allocated or not needed. */
->  
->  	return ALIGN(real_mode_blob_end - real_mode_blob, PAGE_SIZE);
->  }
-> diff --git a/arch/x86/realmode/init.c b/arch/x86/realmode/init.c
-> index 41d7669a97ad..1826700b156e 100644
-> --- a/arch/x86/realmode/init.c
-> +++ b/arch/x86/realmode/init.c
-> @@ -202,6 +202,9 @@ static void __init set_real_mode_permissions(void)
->  
->  static int __init init_real_mode(void)
->  {
-> +	if (cpu_feature_enabled(X86_FEATURE_XENPV))a
 
-This reminds me of the notorious if (xen) sprinkling from years ago.
-Please don't do that.
+On 11/21/22 13:50, Michal Koutný wrote:
+> On Sat, Nov 12, 2022 at 05:19:39PM -0500, Waiman Long <longman@redhat.com> wrote:
+>> +	/*
+>> +	 * In the default hierarchy, enabling cpuset in the child cgroups
+>> +	 * will trigger a number of cpuset_attach() calls with no change
+>> +	 * in effective cpus and mems. In that case, we can optimize out
+>> +	 * by skipping the task iteration and update.
+>> +	 */
+>> +	if (cgroup_subsys_on_dfl(cpuset_cgrp_subsys) &&
+>> +	    !cpus_updated && !mems_updated) {
+> I'm just wondering -- why is this limited to the default hierarchy only?
+> IOW why can't v1 skip too (when favorable constness between cpusets).
 
--- 
-Regards/Gruss,
-    Boris.
+Cpuset v1 is a bit more complex. Besides cpu and node masks, it also 
+have other flags like the spread flags that we need to looks for 
+changes. Unlike cpuset v2, I don't think it is likely that 
+cpuset_attach() will be called without changes in cpu and node masks. 
+That are the reason why this patch focuses on v2. If it is found that 
+this is not the case, we can always extend the support to v1.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Cheers,
+Longman
+
