@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D3F631E7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D08631E80
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiKUKee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
+        id S229758AbiKUKf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKUKe3 (ORCPT
+        with ESMTP id S230092AbiKUKfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:34:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05965987D;
-        Mon, 21 Nov 2022 02:34:28 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669026867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 21 Nov 2022 05:35:11 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAC8B08D6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:35:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 554F221AA1;
+        Mon, 21 Nov 2022 10:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669026904; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wgqTjLWFMbYTKP3B3JAejdIePhrfjaPRTiSq0SNLFX4=;
-        b=hzthuOHJZx7zcqf03P9EJMWfil39KpG55Fw2j07jOar5/f7qi5E2pv04xbch6uM0n+861T
-        qxbXzlbcQd3J89VNUgm91NVA/kyYLnBrIGfLWVOX49ozmnIKc3Hy0lAAKxLDXzxmjGHcoE
-        wuaVZcmM4gwloGcy9ugD5a3wy+KU2E8R1+0ozoi2vzTtv1gppzurFoSvfgeHM/K+rPwX0R
-        dGWrMJf20m9K3bZ7t/SbS7zIDB/BAbclhEpxPuIOaxVcZ+8Q79sYZBJwxsljTP8jAgxtGY
-        gqjWcUbNmoYjakGjSprwaNPseKQ43kaUgdvclGznQDtcuijNd0GLgUOeYWI5Ng==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669026867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        bh=po11InVlA78FEY3WlPUwwll4GVuOWXuBABURTMivemg=;
+        b=DCiMa5bUOpAohqg34JiBbUR40BOly2yuZc0jTYZ0NbLlDXmeU0JvXnpl6PA7e9Yta2N42a
+        LqS8DTzGSlKzNtQY3s2w+DuS6gf93UKOxjOyNH+Yk2T4c57j3QL6HtSD4biPW1SSQEIOds
+        4jM+4MG7OyUhgaFHwaC0Kfn5RE7zgL4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669026904;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wgqTjLWFMbYTKP3B3JAejdIePhrfjaPRTiSq0SNLFX4=;
-        b=lJv+UaovQnxg6vQ2zurZGWlXxKCY6W644sGEmVhWi5kROwaCsIcs+mTUwgka612A7lOIz2
-        xX+/c1fkQ8T0k/Bg==
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>
-Subject: RE: [patch 17/20] platform-msi: Switch to the domain id aware MSI
- interfaces
-In-Reply-To: <BN9PR11MB5276EB567D822DA9148BEB3A8C0A9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20221111131813.914374272@linutronix.de>
- <20221111132707.005001510@linutronix.de>
- <BN9PR11MB5276453E63A0C02A4BB386F58C099@BN9PR11MB5276.namprd11.prod.outlook.com>
- <87fsegjvn3.ffs@tglx>
- <BN9PR11MB5276EB567D822DA9148BEB3A8C0A9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Date:   Mon, 21 Nov 2022 11:34:26 +0100
-Message-ID: <87sficiojx.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
+        bh=po11InVlA78FEY3WlPUwwll4GVuOWXuBABURTMivemg=;
+        b=iZpdmIHERrm/XkNSiYgwgETqNWc2F5uoNL3+vo+fz2VPS0znkxEWoIMwNI6EXj2rxwUNE3
+        zZCXJ5b82JFXezAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2B6531376E;
+        Mon, 21 Nov 2022 10:35:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JDjZCVhUe2NOEwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 21 Nov 2022 10:35:04 +0000
+Date:   Mon, 21 Nov 2022 11:35:03 +0100
+Message-ID: <87h6yswq7c.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Baisong Zhong <zhongbaisong@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <perex@perex.cz>, <tiwai@suse.com>, <broonie@kernel.org>,
+        <kuninori.morimoto.gx@renesas.com>
+Subject: Re: [PATCH -next] ALSA: pcm: fix undefined behavior in bit shift for SNDRV_PCM_RATE_KNOT
+In-Reply-To: <20221121023329.2423665-1-zhongbaisong@huawei.com>
+References: <20221121023329.2423665-1-zhongbaisong@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,41 +69,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21 2022 at 03:42, Kevin Tian wrote:
->> From: Thomas Gleixner <tglx@linutronix.de>
->> On Fri, Nov 18 2022 at 08:53, Kevin Tian wrote:
->> > Out of curiosity. Why don't we provide an unlocked version of
->> > msi_domain_alloc_irqs_all()?
->> 
->> -ENOUSER
->
-> msi_domain_alloc_irqs() and msi_domain_alloc_irqs_descs_locked()
-> are a pair.
+On Mon, 21 Nov 2022 03:33:29 +0100,
+Baisong Zhong wrote:
+> 
+> Shifting signed 32-bit value by 31 bits is undefined, so changing
+> significant bit to unsigned. The UBSAN warning calltrace like below:
+> 
+> UBSAN: shift-out-of-bounds in sound/core/pcm_native.c:2676:21
+> left shift of 1 by 31 places cannot be represented in type 'int'
+> ...
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x8d/0xcf
+>  ubsan_epilogue+0xa/0x44
+>  __ubsan_handle_shift_out_of_bounds+0x1e7/0x208
+>  snd_pcm_open_substream+0x9f0/0xa90
+>  snd_pcm_oss_open.part.26+0x313/0x670
+>  snd_pcm_oss_open+0x30/0x40
+>  soundcore_open+0x18b/0x2e0
+>  chrdev_open+0xe2/0x270
+>  do_dentry_open+0x2f7/0x620
+>  path_openat+0xd66/0xe70
+>  do_filp_open+0xe3/0x170
+>  do_sys_openat2+0x357/0x4a0
+>  do_sys_open+0x87/0xd0
+>  do_syscall_64+0x34/0x80
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
+> ---
+>  include/sound/pcm.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/sound/pcm.h b/include/sound/pcm.h
+> index 7b1a022910e8..ec28c2ec89de 100644
+> --- a/include/sound/pcm.h
+> +++ b/include/sound/pcm.h
+> @@ -123,7 +123,7 @@ struct snd_pcm_ops {
+>  #define SNDRV_PCM_RATE_384000		(1<<14)		/* 384000Hz */
+>  
+>  #define SNDRV_PCM_RATE_CONTINUOUS	(1<<30)		/* continuous range */
+> -#define SNDRV_PCM_RATE_KNOT		(1<<31)		/* supports more non-continuos rates */
+> +#define SNDRV_PCM_RATE_KNOT		(1U<<31)	/* supports more non-continuos rates */
 
-Sure, but if there is no use case why should we provide the interface?
-
-> What I didn't get was why the unlocked invocation in this patch
-> is replaced by a range-based helper while the locked invocation
-> in previous patch16 was replaced by an all-based helper:
->
-> 	if (domain && irq_domain_is_hierarchy(domain))
-> -		return msi_domain_alloc_irqs_descs_locked(domain, &dev->dev, nvec);
-> +		return msi_domain_alloc_irqs_all_locked(&dev->dev, MSI_DEFAULT_DOMAIN, nvec);
->
-> The reason could probably be marked out in the commit msg.
-
-The point is that range based is obviously the better choice because
-it's precise. Especially for domains which let the core code allocate
-the MSI descriptors a precise range is required. The old interface was
-kinda blury there.
-
-In case of PCI/MSI[-X] the MSI descriptors are allocated by the PCI core
-upfront and there are allocations which have gaps in the indices, so the
-range is not well defined and we just keep using the existing scan all
-mechanism.
-
-Thanks,
-
-        tglx
+Could you rather update all SNDRV_PCM_RATE_* to 1U?
+Otherwise it'll look inconsistent.
 
 
+thanks,
+
+Takashi
