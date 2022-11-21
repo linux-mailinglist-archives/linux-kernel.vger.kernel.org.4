@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85C0631A74
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 08:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848B3631A78
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 08:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiKUHkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 02:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
+        id S229650AbiKUHll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 02:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiKUHk1 (ORCPT
+        with ESMTP id S229960AbiKUHlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 02:40:27 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C40F6C735
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 23:39:55 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id y10so8658486plp.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 23:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eGNnPg4qR8iodffqAnabStv1epW424yoY3sdhIzyvq8=;
-        b=Wm4nwRweHg8ft542EPEVdNFz06icI7cqsnHnm64Gx0AHwYEwNgT9NtHcvtOtP3SbPv
-         1nVzrbq148A3fggruWDcKYSGelDuLW7xXPDG5U+aCOpY4TSnnFf2WimMIhuKK0FdazOd
-         +Brxp+wC4n2nrcKk4715OqOi3hnZ9AK6Gagt2QIRgiWsNjyzDoEjwP6BEBWt9XVykdXz
-         GPpJcVCloK4IeNUFIaHkzPiV0O3Y+/JM7Qz7D9U3sO/LWGLODeglcyj7Gdrb3Kyoap1S
-         HaVsyziiKIHcU1LVAEeDr847FLXQT2B8L+kvjdAd2skFnhuI/7wNKRmV6WvXsLCWHyik
-         UqnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eGNnPg4qR8iodffqAnabStv1epW424yoY3sdhIzyvq8=;
-        b=taDfVg4QzNHSuSuB9AvfxgKgHzCTUR/QUaT/CenjWBhSaOlGlmYBGirmjItzVjDNfL
-         fIfjwGUnJ+ICFiok9GuNqvQX9lreRy8XGk1vAprgtpsE9kwgWWDjK+0SCgoO9Ptu6d2U
-         m2pBW3w2tLZ6hc+lciIrS0TOr8C0yY+UgRVUMgp6zdzXni/582u/Tn1hNFfgTYt22tgB
-         uy5KDfu+/r+3VqJrEUXOeTiop7mP55TTEZdbZ3HMnQQlbd4n0LwaMgCWhxUPuDRXeCKO
-         HEYl9lTqwAfePS6xMWb/ICN7P7nkKXlZRdFVwNPQx3Yf3fOKhJq1s9QF/sLYWtNxZIVt
-         mpQQ==
-X-Gm-Message-State: ANoB5pnwXTJJT3Fk53qRL5sqODKvfGuPiRXyuVHqBvvmWS0ErBe5/TUg
-        TZTY02rpekhVoE7zk34tTbqc
-X-Google-Smtp-Source: AA0mqf6YDKfllf5rHP7sIDrsdmi0cqKUkXFKc5JBhYUJcD+tSr648woEyMUpiPYml4VkaYWnqKG3QQ==
-X-Received: by 2002:a17:902:e385:b0:178:7040:9917 with SMTP id g5-20020a170902e38500b0017870409917mr10600763ple.109.1669016395061;
-        Sun, 20 Nov 2022 23:39:55 -0800 (PST)
-Received: from thinkpad ([59.92.99.222])
-        by smtp.gmail.com with ESMTPSA id u18-20020a170902e5d200b00186748fe6ccsm9014625plf.214.2022.11.20.23.39.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 23:39:53 -0800 (PST)
-Date:   Mon, 21 Nov 2022 13:09:46 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] OPP: Disallow "opp-hz" property without a
- corresponding clk
-Message-ID: <20221121073946.GE11945@thinkpad>
-References: <cover.1669012140.git.viresh.kumar@linaro.org>
- <c03c4f2b9d4dcc3264d1902606c6c5c464b4b043.1669012140.git.viresh.kumar@linaro.org>
- <Y3snGQet8yc7HnJK@hovoldconsulting.com>
+        Mon, 21 Nov 2022 02:41:20 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6491B303F1;
+        Sun, 20 Nov 2022 23:40:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 99ABECE0F54;
+        Mon, 21 Nov 2022 07:40:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4E3C433C1;
+        Mon, 21 Nov 2022 07:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669016426;
+        bh=ghyXIiLZQR1VJJWRY9yXFbB0NXqU+1Bza1GDza4IlCg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ON7jOHT51zmDztSDGialBKHHhuuS8etEB+bzLNnYkOPuzYN8CzSyJhiEze7ax2aBO
+         ufY0+yMDRRomJ5SnzKhYhmsL6IFNJvTPXwuvGvC4nRehqiVkfBBVAZCHUpbyuGe7zw
+         8qyR42WL6O0WdCVMdC4iY4YR8BPp6OFE19ah0VVphN7mby7bqoomsRHFPmCmvPqu1I
+         ZnoM9Oh03Xtb+zWDQzFh9M7r0kiExUA3Ljpm5yUnN42RVxbzJFiKEVzguQV+9ZzUqd
+         kosXMOvDYZShEIMFzkfzNMn4c3HLbi7MzR91+xzo1GdrseepOOBii5ghopRFO9hEbc
+         WaVzQsjgH6RiQ==
+Date:   Mon, 21 Nov 2022 09:40:03 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
+Message-ID: <Y3srU89TAwMURoEj@kernel.org>
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+ <20221104223604.29615-36-rick.p.edgecombe@intel.com>
+ <Y3Olme4Nl+VOkjAH@hirez.programming.kicks-ass.net>
+ <223bf306716f5eb68e4f9fd660414c84cddd9886.camel@intel.com>
+ <CY4PR11MB2005AD47BA1D97BC1A96A769F9069@CY4PR11MB2005.namprd11.prod.outlook.com>
+ <a2c2552fcdba1a0fce0d02aeb519d33cac83bfd2.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3snGQet8yc7HnJK@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a2c2552fcdba1a0fce0d02aeb519d33cac83bfd2.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 08:22:01AM +0100, Johan Hovold wrote:
-> On Mon, Nov 21, 2022 at 12:27:48PM +0530, Viresh Kumar wrote:
-> > This removes the special code added by the commit 2083da24eb56 ("OPP:
-> > Allow multiple clocks for a device"), to make it work for Qcom SoC.
+On Thu, Nov 17, 2022 at 07:57:59PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2022-11-17 at 12:25 +0000, Schimpe, Christina wrote:
+> > > Hmm, we definitely need to be able to set the SSP. Christina, does
+> > > GDB need
+> > > anything else? I thought maybe toggling SHSTK_EN?
 > > 
-> > In qcom-cpufreq-hw driver, we want to skip clk configuration that
-> > happens via dev_pm_opp_set_opp(), but still want the OPP core to parse
-> > the "opp-hz" property so we can use the freq based OPP helpers.
-> > 
-> > The DT for Qcom SoCs is fixed now and contain a valid clk entry, and we
-> > no longer need the special handling of the same in the OPP core.
+> > In addition to the SSP, we want to write the CET state. For instance
+> > for inferior calls,
+> > we want to reset the IBT bits.
+> > However, we won't write states that are disallowed by HW.
 > 
-> Didn't this affect also sc8280xp? Perhaps you can hold off with applying
-> this one for a bit until the needed devicetree changes are in linux-next
-> for all the affected platforms.
+> Sorry, I should have given more background. Peter is saying we should
+> split the ptrace interface so that shadow stack and IBT are separate. 
+> They would also no longer necessarily mirror the CET_U MSR format.
+> Instead the kernel would expose a kernel specific format that has the
+> needed bits of shadow stack support. And a separate one later for IBT.
 > 
-> (It looks like Mani's series only updated sm8450 and I guess Bjorn
-> hasn't picked up that one up yet either.)
-> 
-
-That's right. I have proposed to do the similar change to other SoCs as well
-once the series was completely merged. I thought of doing so for 6.3.
-
-Btw, there seems to be one more candidate:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sm8250.dtsi#n2537
-
-Looks like newer SoCs that has the GMU within the GPU block doesn't have clock
-property. This is because, GMU is the one supplying clocks to the GPU unlike the
-old SoCs where the clocks used to come from GCC itself.
-
-But we do have a GMU devicetree node, so it should be a matter of adding the
-clock provider support as done for cpufreq and represent it in devicetree.
-
-I'll ping Rob Clark and see how to get it done.
-
-Thanks,
-Mani
-
-> Johan
+> So the question is what does shadow stack need to support for ptrace
+> besides SSP? Is it only SSP? The other features are SHSTK_EN and
+> WRSS_EN. It might actually be nice to keep how these bits get flipped
+> more controlled (remove them from ptrace). It looks like CRIU didn't
+> need them.
+ 
+CRIU reads CET_U with ptrace(PTRACE_GETREGSET, NT_X86_CET). It's done
+before the injection of the parasite. The value of SHSTK_EN is used then to
+detect if shadow stack is enabled and to setup victim's shadow stack for
+sigreturn.
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Sincerely yours,
+Mike.
