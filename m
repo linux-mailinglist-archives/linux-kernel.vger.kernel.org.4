@@ -2,89 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACAF632B79
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382B1632B80
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiKURvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S229969AbiKURwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:52:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiKURvS (ORCPT
+        with ESMTP id S230436AbiKURwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:51:18 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183EFD28A3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:51:17 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id q1so11804299pgl.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:51:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RhAYFXLIQS2qzqEcnPTGyFvoB7XVIT1zAlrBiS9X3as=;
-        b=l9dgayGmBp69vNWuCME0DkDszXhtX5YuYBFfiY16JZGw6bpUAC7pOD03pf7xQY1P6E
-         LDNQDKTVqfidj8enF+srWG7HVLGFHaGkBLPVqgkQ9/4yfHoWz1U1dcAfLs8vx3xdbBDx
-         Yj9uX7QeAlpfubC8g5u86M9QrX6i9JyC+Fl9FeUMKb9BvWRnttr5lPBHSuROZJoyOkgT
-         yfD1JcGKuz4JK46/upSl0QuofIUxcsF6luxDen/MhpWsEqPg29fo0OYa3ZOSbIHPpA+U
-         xtyb0vKqyLC1hta4+sKdU0isvvEtaYEuw/wUHGjHtzSAkuZ+YYp7iRfgoZxKnuCByEoZ
-         gqIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RhAYFXLIQS2qzqEcnPTGyFvoB7XVIT1zAlrBiS9X3as=;
-        b=4hlZa0Ej0tzZV0ETMd5sjVImsIE5/vCeAIZ0pv55KZjI6GNkm4eL8HovwbJZNnDIlD
-         Mk8b75ELhHMlUbHc6sFjTpWr8rcPt59NIQWPLgWN3u3siQNgCTDy2znQKrczQDxCAqMU
-         didTyzvTO+yEMwwuWmTVxFm1Ynao9cjgw8b621rPGkir9k6IsTLAUuyA6wexp7LhzCSc
-         vcyC1x7TLpj22O2YjiWv4jXcO8sAehpElljiBy2Y1PaiTyrwzZmvqLtrl0B5yYSVFcx1
-         TSnW9KoP94v6YeWk589+n6LEzs2pGFMegO7Mob80o2WurAr43WFZBnfUiKPXpyj5toJA
-         D5Sg==
-X-Gm-Message-State: ANoB5pmFl+Da9Mbr27WNTVoZvGvqpadBbXV0D3Znc7ODXaXuIAObYAop
-        kCE8AnIHK14aUt/jTo6e8UOCIw==
-X-Google-Smtp-Source: AA0mqf4zbrRm6t9sW6mILJI3b+8h2EDBi9Wk9wnZueOJJ4cszbyjNqjD6c+83T0HSgmaYbvYqoTUgw==
-X-Received: by 2002:a63:4b16:0:b0:476:d0b8:1117 with SMTP id y22-20020a634b16000000b00476d0b81117mr18320733pga.104.1669053076443;
-        Mon, 21 Nov 2022 09:51:16 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id ms17-20020a17090b235100b00218b8f8af91sm1956111pjb.48.2022.11.21.09.51.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 09:51:16 -0800 (PST)
-Date:   Mon, 21 Nov 2022 17:51:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Babu Moger <babu.moger@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org
-Subject: Re: [PATCH 02/13] KVM: nSVM: don't call
- nested_sync_control_from_vmcb02 on each VM exit
-Message-ID: <Y3u6kCUKuq3VYUc0@google.com>
-References: <20221117143242.102721-1-mlevitsk@redhat.com>
- <20221117143242.102721-3-mlevitsk@redhat.com>
- <Y3aT5qBgOuwsOeS/@google.com>
- <3829b20beeeed8ec2480eada30b2639b07bc579e.camel@redhat.com>
+        Mon, 21 Nov 2022 12:52:34 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD3C10AB;
+        Mon, 21 Nov 2022 09:52:28 -0800 (PST)
+Received: from frapeml500001.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NGFGB636zz689Gt;
+        Tue, 22 Nov 2022 01:47:30 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml500001.china.huawei.com (7.182.85.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 18:52:26 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
+ 2022 17:52:26 +0000
+Date:   Mon, 21 Nov 2022 17:52:25 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Hillf Danton <hdanton@sina.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Li Ming <ming4.li@intel.com>,
+        "Vishal Verma" <vishal.l.verma@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] PCI/DOE: Remove asynchronous task support
+Message-ID: <20221121175225.00001b7b@Huawei.com>
+In-Reply-To: <Y3oyQhHUbYZGA80M@iweiny-mobl>
+References: <20221119222527.1799836-1-ira.weiny@intel.com>
+        <20221120022735.4671-1-hdanton@sina.com>
+        <Y3oyQhHUbYZGA80M@iweiny-mobl>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3829b20beeeed8ec2480eada30b2639b07bc579e.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,48 +61,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022, Maxim Levitsky wrote:
-> On Thu, 2022-11-17 at 20:04 +0000, Sean Christopherson wrote:
-> > On Thu, Nov 17, 2022, Maxim Levitsky wrote:
-> > > Calling nested_sync_control_from_vmcb02 on each VM exit (nested or not),
-> > > was an attempt to keep the int_ctl field in the vmcb12 cache
-> > > up to date on each VM exit.
+On Sun, 20 Nov 2022 05:57:22 -0800
+Ira Weiny <ira.weiny@intel.com> wrote:
+
+> On Sun, Nov 20, 2022 at 10:27:35AM +0800, Hillf Danton wrote:
+> > On Sat, 19 Nov 2022 14:25:27 -0800 Ira Weiny <ira.weiny@intel.com>  
+> > > @@ -529,8 +492,18 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+> > >  		return -EIO;
+> > >  
+> > >  	task->doe_mb = doe_mb;
+> > > -	INIT_WORK(&task->work, doe_statemachine_work);
+> > > -	queue_work(doe_mb->work_queue, &task->work);
+> > > +
+> > > +again:
+> > > +	if (!mutex_trylock(&doe_mb->exec_lock)) {
+> > > +		if (wait_event_timeout(task->doe_mb->wq,
+> > > +				test_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags),
+> > > +				PCI_DOE_POLL_INTERVAL))
+> > > +			return -EIO;  
 > > 
-> > This doesn't mesh with the reasoning in commit 2d8a42be0e2b ("KVM: nSVM: synchronize
-> > VMCB controls updated by the processor on every vmexit"), which states that the
-> > goal is to keep svm->nested.ctl.* synchronized, not vmcb12.  Or is nested.ctl the
-> > cache you are referring to?
+> > Is EIO worth a line of pr_warn()?  
 > 
-> Thanks for digging that commit out.
+> Maybe but I'm not sure it is worth it.  This was paralleling the original code
+> which called pci_doe_flush_mb() to shut down the mailbox.  So this is likely to
+> never happen.  The callers could print something if needed.
 > 
-> My reasoning was that cache contains both control and 'save' fields, and
-> we don't update 'save' fields on each VM exit.
->
-> For control it indeed looks like int_ctl and eventinj are the only fields
-> that are updated by the CPU, although IMHO they don't *need* to be updated
-> until we do a nested VM exit, because the VM isn't supposed to look at vmcb
-> while it is in use by the CPU, its state is undefined.
-
-The point of the cache isn't to forward info to L2 though, it's so that KVM can
-query the effective VMCB state without having to read guest memory and/or track
-where the current state lives.
-
-> For migration though, this does look like a problem. It can be fixed during
-> reading the nested state but it is a hack as well.
->
-> My idea was as you had seen in the patches it to unify int_ctl handling,
-> since some bits might need to be copied to vmcb12 but some to vmcb01,
-> and we happened to have none of these so far, and it "happened" to work.
+> >   
+> > > +		goto again;
+> > > +	}
+> > > +	exec_task(task);
+> > > +	mutex_unlock(&doe_mb->exec_lock);
+> > > +  
+> > 
+> > If it is likely to take two minutes to acquire the exec_lock after
+> > rounds of trying again, trylock + wait timeout barely make sense given EIO.  
 > 
-> Do you have an idea on how to do this cleanly? I can just leave this as is
-> and only sync the bits of int_ctl from vmcb02 to vmcb01 on nested VM exit.
-> Ugly but would work.
+> I'm not sure where 2 minutes come from?
+> 
+> #define PCI_DOE_TIMEOUT HZ
+> #define PCI_DOE_POLL_INTERVAL   (PCI_DOE_TIMEOUT / 128)
+> 
+> It is also not anticipated that more than 1 task is being given to the mailbox
+> but the protection needs to be there because exec_task() will get confused if
+> more than 1 thread submits at the same time.
 
-That honestly seems like the best option to me.  The ugly part isn't as much KVM's
-caching as it is the mixed, conditional behavior of int_ctl.  E.g. VMX has even
-more caching and synchronization (eVMCS, shadow VMCS, etc...), but off the top of
-my head I can't think of any scenarios where KVM needs to splice/split VMCS fields.
-KVM needs to conditionally sync fields, but not split like this.
+Given multiple protocols can be on the same DOE and they may be handled by
+either subdrivers or indeed driven by userspace interface, there is a high
+chance that more than one task will be queued up (once we have a few more
+supported protocols).
 
-In other words, I think this particular code is going to be rather ugly no matter
-what KVM does.
+> 
+> All this said I've now convinced myself that there is a race in the use of
+> PCI_DOE_FLAG_CANCEL even with the existing code.
+> 
+> I believe that if the pci device goes away the doe_mb structure may get free'ed
+> prior to other threads having a chance to check doe_mb->flags.  Worse yet the
+> work queue itself (doe_mb->wq) may become invalid...
+> 
+> I don't believe this can currently happen because anyone using the doe_mb
+> structure has a reference to the pci device.
+> 
+> With this patch I think all the doe_mb->flags and the wait queue can go away.
+> pci_doe_wait() can be replaced with a simple msleep_interruptible().
+> 
+> Let me work through that a bit.
+> 
+> Ira
+> 
+> > 
+> > Hillf
+> > 
+> > /**
+> >  * wait_event_timeout - sleep until a condition gets true or a timeout elapses
+> >  * @wq_head: the waitqueue to wait on
+> >  * @condition: a C expression for the event to wait for
+> >  * @timeout: timeout, in jiffies
+> >  *
+> >  * The process is put to sleep (TASK_UNINTERRUPTIBLE) until the
+> >  * @condition evaluates to true. The @condition is checked each time
+> >  * the waitqueue @wq_head is woken up.
+> >  *
+> >  * wake_up() has to be called after changing any variable that could
+> >  * change the result of the wait condition.
+> >  *
+> >  * Returns:
+> >  * 0 if the @condition evaluated to %false after the @timeout elapsed,
+> >  * 1 if the @condition evaluated to %true after the @timeout elapsed,
+> >  * or the remaining jiffies (at least 1) if the @condition evaluated
+> >  * to %true before the @timeout elapsed.
+> >  */  
+
