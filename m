@@ -2,189 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6704563274B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF8D632748
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiKUPF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S231958AbiKUPF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:05:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiKUPFk (ORCPT
+        with ESMTP id S231908AbiKUPFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:05:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734AFE6ED4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:53:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669042376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 21 Nov 2022 10:05:04 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E43C8462;
+        Mon, 21 Nov 2022 06:53:17 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CE6811F8A3;
+        Mon, 21 Nov 2022 14:53:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669042393; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tyYoQDvW5BLwsxIUp85ljPCfFSUwHbhCNM6YdC5pOm0=;
-        b=FGk0dMG9U3VmOgKd7Sbo4spjI63ae6ZNqCDkwDRzV1VAHHl/zJryKze8YlHtokRertcKBI
-        JcFCJpV+RZOpG+6TL4Ah0y47NTf/ApGi0GYXpSHcw5T46iiZTqi1k2GsZMlCM6JC5MfuEK
-        KHtc0UuUAtcRPG43N6zoTe6pp5XC3cQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-656-EJRTFjdVN1iKlgWy_qrz8w-1; Mon, 21 Nov 2022 09:52:54 -0500
-X-MC-Unique: EJRTFjdVN1iKlgWy_qrz8w-1
-Received: by mail-wr1-f71.google.com with SMTP id t12-20020adfa2cc000000b0022adcbb248bso3263292wra.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:52:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tyYoQDvW5BLwsxIUp85ljPCfFSUwHbhCNM6YdC5pOm0=;
-        b=1Z9JJL25V7XRlHMN5QZZNqGHnZg393891hhe6LyEMTLZTAvqFkVlbxEr2GuAOnuaUX
-         2QL+zeFvVoa+XCYoOsKwQQPnUw9FoUnqdmX4FwK0NR5yYKlgKC7FcSqoqfx4bCn59Bhv
-         KppkyB+BoOWThZwrnwmlJBfK1I0T/7dsEXwMTqvaF66TgVLxhxd4NLsoia1jbuJ+IMwg
-         Q/gYtcQba8iXHSvOQZbuHS2zjz7Leneb+T8AFvOJ//QpQJMnv3PJz3xs8tcrglcJjS22
-         Z6h3mq+t7EBYuWjIQsHOIS1aOVJGikBO17INz+V722E8ceYdQRoCjCEZy6Bhk9Sa5fZ8
-         gGag==
-X-Gm-Message-State: ANoB5plGGATy5kdLjTPOxvIcuqFhAKrZifMOHxS87x2HgI+uAEnMUtWO
-        d/f2llcrq5WTpe89WjQZeNm/Oz6n9Fuk58ek4Q9KdbWtfIjpbkurrVX+wHYeoH8M/WJLDuqRVMD
-        dT4ix8UHxwoV+V+TasL6SyUUl
-X-Received: by 2002:a05:600c:3d16:b0:3c6:de4a:d768 with SMTP id bh22-20020a05600c3d1600b003c6de4ad768mr1677481wmb.61.1669042373653;
-        Mon, 21 Nov 2022 06:52:53 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5jdJos1x+fJLl/VjateAcyVlqjFB0fbz73X92rukgJDZZKLp+g2j6EymPu53UGC0WeUNRsJg==
-X-Received: by 2002:a05:600c:3d16:b0:3c6:de4a:d768 with SMTP id bh22-20020a05600c3d1600b003c6de4ad768mr1677469wmb.61.1669042373452;
-        Mon, 21 Nov 2022 06:52:53 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id o18-20020a05600c4fd200b003cfa26c410asm20547986wmq.20.2022.11.21.06.52.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 06:52:53 -0800 (PST)
-Date:   Mon, 21 Nov 2022 15:52:48 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        kernel <kernel@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: Re: [RFC PATCH v1 2/3] test/vsock: add big message test
-Message-ID: <20221121145248.cmscv5vg3fir543x@sgarzare-redhat>
-References: <ba294dff-812a-bfc2-a43c-286f99aee0b8@sberdevices.ru>
- <f0510949-cc97-7a01-5fc8-f7e855b80515@sberdevices.ru>
+        bh=acoJFp5IMk6I2OGDsUSsh5rB6BjsYh+Mppy2CcuaTP8=;
+        b=ubrkClbfap/2YkTdJFU9ntiZxgQnojhyjjSM/KnifRuhCEH9o1iQMcoo4gCRHJIV9sJZMZ
+        OXn5+PHv7JJ3WdtzyjQKiPU81bhv+DHc8FQsBFEwV0BDJtagBJJK+b4XKEMmXRs9QRgpRJ
+        PCNCz/WW7R2TGr7klkPJYAtFbYgelXk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 86E2C1377F;
+        Mon, 21 Nov 2022 14:53:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id r41tH9mQe2NvKwAAMHmgww
+        (envelope-from <mwilck@suse.com>); Mon, 21 Nov 2022 14:53:13 +0000
+Message-ID: <41c39c52cadcaa6a34126662b953ef96177f5bba.camel@suse.com>
+Subject: Re: [PATCH] scsi: core: Add BLIST_NO_ASK_VPD_SIZE for some VDASD
+From:   Martin Wilck <mwilck@suse.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.de>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Lee Duncan <leeman.duncan@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Duncan <lduncan@suse.com>
+Date:   Mon, 21 Nov 2022 15:53:12 +0100
+In-Reply-To: <yq1k046kwyv.fsf@ca-mkp.ca.oracle.com>
+References: <20220928181350.9948-1-leeman.duncan@gmail.com>
+         <11a582f0-723c-95e1-0e44-0a19e1a8a9a8@acm.org>
+         <4a1da181-8a54-d2f8-6d19-d9c1982ab044@suse.de>
+         <yq1k046kwyv.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.0 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <f0510949-cc97-7a01-5fc8-f7e855b80515@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:52:35PM +0000, Arseniy Krasnov wrote:
->This adds test for sending message, bigger than peer's buffer size.
->For SOCK_SEQPACKET socket it must fail, as this type of socket has
->message size limit.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/vsock_test.c | 62 ++++++++++++++++++++++++++++++++
-> 1 file changed, 62 insertions(+)
->
->diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->index 107c11165887..bb4e8657f1d6 100644
->--- a/tools/testing/vsock/vsock_test.c
->+++ b/tools/testing/vsock/vsock_test.c
->@@ -560,6 +560,63 @@ static void test_seqpacket_timeout_server(const struct test_opts *opts)
-> 	close(fd);
-> }
->
->+static void test_seqpacket_bigmsg_client(const struct test_opts *opts)
->+{
->+	unsigned long sock_buf_size;
->+	ssize_t send_size;
->+	socklen_t len;
->+	void *data;
->+	int fd;
->+
->+	len = sizeof(sock_buf_size);
->+
->+	fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
+On Mon, 2022-11-07 at 21:50 -0500, Martin K. Petersen wrote:
+>=20
+> Hannes,
+>=20
+> I have been contemplating this for a bit.
+>=20
+> > > Has it been considered instead of introducing a blacklist flag to
+> > > not
+> > > use the reported VPD page size if the device reports that the VPD
+> > > page size is zero? I am not aware of any VPD pages for which zero
+> > > is
+> > > a valid size.
+>=20
+> That would also be my preferred approach, I think. I haven't received
+> any bug reports about devices returning short VPD pages since this
+> change was introduced. So I think I'd prefer falling back to a
+> (hopefully small) default if a device returns a 0 page length.
+>=20
+> Now, my question is which VPD pages are actually supported by this
+> device and how large are they?
 
-Not for this patch, but someday we should add a macro for this port and 
-maybe even make it configurable :-)
+I've tried to obtain an answer to this question from IBM, but they
+couldn't come up with a concrete number for the page length. Especially
+for VDASD devices, it's difficult to say, because these virtual devices
+just pass the INQUIRY down to the backing device.
 
->+	if (fd < 0) {
->+		perror("connect");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (getsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
->+		       &sock_buf_size, &len)) {
->+		perror("getsockopt");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	sock_buf_size++;
->+
->+	data = malloc(sock_buf_size);
->+	if (!data) {
->+		perror("malloc");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	send_size = send(fd, data, sock_buf_size, 0);
->+	if (send_size != -1) {
+How do we proceed? Could we simply fall back to a page length of 255
+bytes (like before c92a6b5d6335) if the reported page length is zero?
 
-Can we check also `errno`?
-IIUC it should contains EMSGSIZE.
+Regards,
+Martin W.
 
->+		fprintf(stderr, "expected 'send(2)' failure, got %zi\n",
->+			send_size);
->+	}
->+
->+	control_writeln("CLISENT");
->+
->+	free(data);
->+	close(fd);
->+}
->+
->+static void test_seqpacket_bigmsg_server(const struct test_opts *opts)
->+{
->+	int fd;
->+
->+	fd = vsock_seqpacket_accept(VMADDR_CID_ANY, 1234, NULL);
->+	if (fd < 0) {
->+		perror("accept");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	control_expectln("CLISENT");
->+
->+	close(fd);
->+}
->+
-> #define BUF_PATTERN_1 'a'
-> #define BUF_PATTERN_2 'b'
->
->@@ -832,6 +889,11 @@ static struct test_case test_cases[] = {
-> 		.run_client = test_seqpacket_timeout_client,
-> 		.run_server = test_seqpacket_timeout_server,
-> 	},
->+	{
->+		.name = "SOCK_SEQPACKET big message",
->+		.run_client = test_seqpacket_bigmsg_client,
->+		.run_server = test_seqpacket_bigmsg_server,
->+	},
-
-I would add new tests always at the end, so if some CI uses --skip, we 
-don't have to update the scripts to skip some tests.
-
-> 	{
-> 		.name = "SOCK_SEQPACKET invalid receive buffer",
-> 		.run_client = test_seqpacket_invalid_rec_buffer_client,
->-- 
->2.25.1
+>=20
+> > But pre-SPC drives will ignore the VPD bit in the inquiry size. And
+> > these devices do not set an additional length in the inquiry data
+>=20
+> Can you elaborate a bit on your experience with older devices? I
+> checked
+> SCSI-2 (1991) and don't see any indication this would be valid
+> behavior
+> even back then.
+>=20
 
