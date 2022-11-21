@@ -2,164 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6819B631CDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD689631CDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbiKUJ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S230106AbiKUJbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiKUJ3h (ORCPT
+        with ESMTP id S229650AbiKUJbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:29:37 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B6D26139;
-        Mon, 21 Nov 2022 01:29:35 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C20D01C0006;
-        Mon, 21 Nov 2022 09:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669022973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c/Vnj6MPjUKIBDRhrj8ixFI/juf2n4PkKcGC0BhMOmA=;
-        b=ngrxWGtv0zVvk4sWmRJqaVEY8vjSErYieuuHoJBEcDxkLetxG+O/372w40aGiHEMcU8fHB
-        tlncjX8G3cA/+qA95MCrxOpGbYpidkbdQltOZudwxNpYEnjU/OAz0Y/6RTZwylvVsaRPAq
-        C3QVw196EX0DWK4OzNMFyMTzuSaGLIavSVq/1l8Xh5dAnE1+JW/nA/KLtDDunhamMXfKwM
-        Cp4UkZ/59bsZp5BLHgtBKlxoDVTMbZnNmKXAAeUS2x/zq79tIesKT1IgsF74defA3WedcU
-        A47FXXAxSRK1Zqnz9jjOCGk/iIHKjHfBGG3I5ENDFFKMcbDoTqNWieTKv6/U7w==
-Date:   Mon, 21 Nov 2022 10:29:28 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        linux-kernel@vger.kernel.org,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH net-next 6/6] net: mvpp2: Consider NVMEM cells as
- possible MAC address source
-Message-ID: <20221121102928.7b190296@xps-13>
-In-Reply-To: <CAPv3WKdZ+tsW-jRJt_n=KqT+oEe+5QAEFOWKrXsTjHCBBzEh0A@mail.gmail.com>
-References: <20221117215557.1277033-1-miquel.raynal@bootlin.com>
-        <20221117215557.1277033-7-miquel.raynal@bootlin.com>
-        <CAPv3WKdZ+tsW-jRJt_n=KqT+oEe+5QAEFOWKrXsTjHCBBzEh0A@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 21 Nov 2022 04:31:06 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B776B27FF8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:31:04 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id be13so17950322lfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 01:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CQPROz4aDycrK9hXyd7awxnQI16NhFsbYCXty/7iDLc=;
+        b=YPif/7z/4Oju2FVv753TaQXyOan8g+BkANWHTTfY+Xz9WU6M8HM1oUUiFNSzCm5vcH
+         ssu9Zh8I8sTu/zX8IxmoyFonDRcEHxL/n4FPNR20CS6rFeZ4M1+tHcmrVdQ0ebDPE3IQ
+         gtkQZ4T8DCQQAM+fQJGyjidb69XI0L8bM3W3YHB0qAZ2FxVjowQPI7+RFr5dEzkvZqNf
+         USjmHYxXVPb2JBvQRe04p6hACI/yAxV95+tvkUtMpNABK0c/gEgtgiOo4yix79P2Ouah
+         HUnXUbjcf3UbMlkW8z/wsVTZvZfuAWklwn9XI+oX9xjnk9azRhbUOAUtFtsGy3QdavJG
+         GT7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CQPROz4aDycrK9hXyd7awxnQI16NhFsbYCXty/7iDLc=;
+        b=DJt4jnrQp7bewgtQNob2NkgEFmw1/nJZsD4Tff2+B/TM2TQ7nit6mCKlihDKADnd8a
+         ec/zvusmTkWOOGQNve+0OiZIO9dV5OIZLyD2OVZ198i3+3Y99w3TILwhFqli6TlcK2hX
+         J+rr3kdIRsN56y3bdtcR/RiAEZxw4ibc6w4DTI6L/7WWk16nDKk3C6xV29SpvJ5KNUap
+         oUd1O7RNAMjcl+PMCA1aEhpbGlSdfu/h7tutHkfLgxD6MimH/At1RhaprBdPfwvege7w
+         uEGUcwLhvo1NirsztQuqaJfrif7/dR7Knpx/KaRs2bEmPWfDY7Q2KWJbqwR36vYly4b0
+         WUsA==
+X-Gm-Message-State: ANoB5ploMG78p2Qdfkyrqn1l+9Ji5pq1rOAhGZO8At77/KjiGFYiIi4m
+        VNkd47SDSS6qZNA4oT7mKO6QRw==
+X-Google-Smtp-Source: AA0mqf41zO2BkZnCLnbyNAxGF2Zdz2SvHz17MTRYX8uZRG2eaqIi0wmkIWOF20jrFoqi96NsGegt+Q==
+X-Received: by 2002:a05:6512:260f:b0:4b4:caeb:c9b1 with SMTP id bt15-20020a056512260f00b004b4caebc9b1mr1601719lfb.500.1669023063096;
+        Mon, 21 Nov 2022 01:31:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w8-20020a2e9bc8000000b0026e00df2ed0sm1403812ljj.30.2022.11.21.01.31.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 01:31:02 -0800 (PST)
+Message-ID: <5ebc0bb2-55a0-eba3-6391-27e190c68b4f@linaro.org>
+Date:   Mon, 21 Nov 2022 10:31:01 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/5] media: add FSD MIPI-CSI2 Rx controller driver
+Content-Language: en-US
+To:     Sathyakam M <sathya@samsung.com>
+Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pankaj Kumar Dubey <pankaj.dubey@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Aswani Reddy <aswani.reddy@samsung.com>,
+        Andi Shyti <andi@etezian.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ming Qian <ming.qian@nxp.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Will Deacon <will@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <CGME20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f@epcas5p3.samsung.com>
+ <cover.1668963790.git.sathya@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cover.1668963790.git.sathya@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcin,
+On 20/11/2022 19:52, Sathyakam M wrote:
+> This patch series adds the V4L2 media driver for
+> Tesla Full Self Driving (FSD) SoC MIPI-CSI2 Rx controller.
+> 
+> The controller is compliant to MIPI CSI2 v1.3 specification.
+> It receives images from camera sensors over the D-PHY interface.
+> 
+> The D-PHY interface is compliant to MIPI D-PHY v1.2 specification. It
+> supports up to maximum of 4 data lanes.
+> 
+> V4L2 user control is provided to set the desired number of data lanes.
+> 
+> Maximum of up to 4 streams can be received simultaneously by one Rx
+> port. (Each streams identified by designated Virtual Channel
+> Identifier).
+> 
+> The controller instances consist of port property describing the endpoints.
+> When combined with remote-endpoint property the driver instantiates
+> video device nodes using V4L2 async subdev methods.
+> 
+> Streaming formats supported:
+> - YUV420
+> - RGB565, RGB666, RGB888
+> - RAW8, RAW10, RAW12
+> - JPEG
+> 
+> The driver implementation is verified on FSD evaluation board.
+> 
+> Thanks, Sathyakam
+> 
+> Cc: Sathyakam M <sathya@samsung.com>,Vinod Koul <vkoul@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@kernel.org>,Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Pankaj Kumar Dubey <pankaj.dubey@samsung.com>,Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Alim Akhtar <alim.akhtar@samsung.com>,Shashank Prashar <s.prashar@samsung.com>
+> Cc: Aswani Reddy <aswani.reddy@samsung.com>,Chandrasekar R <rcsekar@samsung.com>
+> Cc: Andi Shyti <andi@etezian.org>,Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Ming Qian <ming.qian@nxp.com>,Dmitry Osipenko <digetx@gmail.com>
+> Cc: Jacopo Mondi <jacopo@jmondi.org>,Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>,Bjorn Andersson <andersson@kernel.org>
+> Cc: Shawn Guo <shawnguo@kernel.org>,Arnd Bergmann <arnd@arndb.de>
+> Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>,Mark Brown <broonie@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org,linux-phy@lists.infradead.org,devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org,linux-media@vger.kernel.org
+> 
+> Sathyakam M (5):
+>   dt-bindings: phy: fsd: MIPI CSI2 Rx controller syscon node
+>   media: dt-bindings: fsd: MIPI CSI2 Rx controller device nodes
+>   arm64: dts: fsd: add device tree nodes for MIPI CSI2 Rx controller
+>   media: fsd: add MIPI CSI2 Rx controller driver
 
-mw@semihalf.com wrote on Sat, 19 Nov 2022 09:18:34 +0100:
+I did not get your patch #4. Don't Cc selectively.
 
-> Hi Miquel,
->=20
->=20
-> czw., 17 lis 2022 o 22:56 Miquel Raynal <miquel.raynal@bootlin.com> napis=
-a=C5=82(a):
-> >
-> > The ONIE standard describes the organization of tlv (type-length-value)
-> > arrays commonly stored within NVMEM devices on common networking
-> > hardware.
-> >
-> > Several drivers already make use of NVMEM cells for purposes like
-> > retrieving a default MAC address provided by the manufacturer.
-> >
-> > What made ONIE tables unusable so far was the fact that the information
-> > where "dynamically" located within the table depending on the
-> > manufacturer wishes, while Linux NVMEM support only allowed statically
-> > defined NVMEM cells. Fortunately, this limitation was eventually tackled
-> > with the introduction of discoverable cells through the use of NVMEM
-> > layouts, making it possible to extract and consistently use the content
-> > of tables like ONIE's tlv arrays.
-> >
-> > Parsing this table at runtime in order to get various information is now
-> > possible. So, because many Marvell networking switches already follow
-> > this standard, let's consider using NVMEM cells as a new valid source of
-> > information when looking for a base MAC address, which is one of the
-> > primary uses of these new fields. Indeed, manufacturers following the
-> > ONIE standard are encouraged to provide a default MAC address there, so
-> > let's eventually use it if no other MAC address has been found using the
-> > existing methods.
-> >
-> > Link: https://opencomputeproject.github.io/onie/design-spec/hw_requirem=
-ents.html =20
->=20
-> Thanks for the patch. Did you manage to test in on a real HW? I am curiou=
-s about
+Best regards,
+Krzysztof
 
-Yes, I have a Replica switch on which the commercial ports use the
-replica PCI IP while the config "OOB" port is running with mvpp2:
-[   16.737759] mvpp2 f2000000.ethernet eth52: Using nvmem cell mac address =
-18:be:92:13:9a:00
-
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/=
-net/ethernet/marvell/mvpp2/mvpp2_main.c
-> > index eb0fb8128096..7c8c323f4411 100644
-> > --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> > +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> > @@ -6104,6 +6104,12 @@ static void mvpp2_port_copy_mac_addr(struct net_=
-device *dev, struct mvpp2 *priv,
-> >                 }
-> >         }
-> >
-> > +       if (!of_get_mac_address(to_of_node(fwnode), hw_mac_addr)) { =20
->=20
-> Unfortunately, nvmem cells seem to be not supported with ACPI yet, so
-> we cannot extend fwnode_get_mac_address - I think it should be,
-> however, an end solution.
-
-Agreed.
-
-> As of now, I'd prefer to use of_get_mac_addr_nvmem directly, to avoid
-> parsing the DT again (after fwnode_get_mac_address) and relying
-> implicitly on falling back to nvmem stuff (currently, without any
-> comment it is not obvious).
-
-I did not do that in the first place because of_get_mac_addr_nvmem()
-was not exported, but I agree it would be the cleanest (and quickest)
-approach, so I'll attempt to export the function first, and then use it
-directly from the driver.
-
-> Best regards,
-> Marcin
->=20
-> > +               *mac_from =3D "nvmem cell";
-> > +               eth_hw_addr_set(dev, hw_mac_addr);
-> > +               return;
-> > +       }
-> > +
-> >         *mac_from =3D "random";
-> >         eth_hw_addr_random(dev);
-> >  }
-> > --
-> > 2.34.1
-> > =20
-
-Thanks a lot,
-Miqu=C3=A8l
