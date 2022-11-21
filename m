@@ -2,153 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C03563190C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0038C63190D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiKUDve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S229631AbiKUDvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 22:51:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKUDvd (ORCPT
+        with ESMTP id S229446AbiKUDvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:51:33 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800B01EEF0;
-        Sun, 20 Nov 2022 19:51:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669002692; x=1700538692;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hohlFiBJb37bBIJI1v6/igX0NmrgDgUxGKaO+zYS7MY=;
-  b=P6BINSiatazXrYxSbfynfsDgqnEFlMdRzgxuED55KubyOVJ2d0qqovvg
-   l/KJCKMfqujcZ+1mbtpYvqoDoS+gZie8HxOjZwt2qtWu9GFCcgk3c+IMC
-   z5YMWn4cLtAHv5fdTKTc3cv/3dJ/g285KCUxKSTw+m+RiDSsRCThX0HjP
-   xcIkGEvobZ8TYXIn6Pzmr29nasQ6gjq6PcTOk/Q+0mBs+zbfr4tQ7yxsh
-   v7JzoifseLjW8A4a5GvmmU0FppA0qjT9H7IvVd69uDHi9ZSkR8eICouJ1
-   L3JywNdrz/xQcZzfsZFxxD9AF+/Cvxrsl51aGGfic5vbdcrvSawhmvvJ1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="315285795"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="315285795"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 19:51:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="765820331"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="765820331"
-Received: from mjcardon-mobl.amr.corp.intel.com (HELO [10.209.57.10]) ([10.209.57.10])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 19:51:31 -0800
-Message-ID: <62c67ed3-e4d1-082f-800a-b0837c9432a9@linux.intel.com>
-Date:   Sun, 20 Nov 2022 19:51:31 -0800
+        Sun, 20 Nov 2022 22:51:50 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57521EEF0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 19:51:49 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 130so10190317pfu.8
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 19:51:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GxntLd/ct95PDR+cb+voA3PVWvgQd225Bxlaz4kUMug=;
+        b=G3+BJ6h3S2AwsBJvMKzpLcRAMmfnvNbqghjwS3l9dKG7H2nqHRd+WuWvUxxO4V9t7o
+         pSkW2ykPq5piIQ6mXp6Jk628w6L1iflshHCNR7Rk9ja3KpcvZVkXod+WBOpoTGddqns4
+         aYz9RO+oEVhTlg7TbVQ8KS/5s4DKt7L+GUMxrPRsn1rvd97A1Ir+OszygWwOKvVmmvOZ
+         7jSHc4PX2jnGsX6hOL9G/KVsr7G28ajHEBhISEL00cgRSDqdHgSBEAtjOsK4TanESi0F
+         +W65wypspVWFZHnYM5w2Scbxv2l99dKfkH7N6xwNvQeI6JXAOlKDnMaR3tDTRQ6UiFlD
+         qBfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GxntLd/ct95PDR+cb+voA3PVWvgQd225Bxlaz4kUMug=;
+        b=RcabOpsUUrQQH9VqXRUeOy0/e9OEnlHTl9uB05izlRu4H1DIijpgUdTsBbPKIANMub
+         NiluQT6NHejmWkYQNxgvrvEY4zZ73gPOOeuTizeqiyM4qxdn9fA3hAq68s51gR6ITS1S
+         p9BJAGi+M44qVChJDG1RWCQnhnu22dsLB5xDXcwggOgIFGKO7eTyEJJMWpbOaMQ+QZI7
+         xQCvb5tTa04SnQcZbfmsNJhyWu7C6vt5tKZqcRMmATriIPTeQlzTZ3vIUM84zdn47pGv
+         z75m1BWkyG5EjDM2IzEKeQE3RkNf/T1mdj4/Ui6P8XwvCBD/jjpgT7wl2Rng8Czhl4Y9
+         NadA==
+X-Gm-Message-State: ANoB5pkxKu3wKt51CKHhc/6TtTf91L15b99Amx+qT6HkTDuEdPwdDuAb
+        PPF6+5Xs4nVU9unuguTGJmoFGUI1v3LOjA==
+X-Google-Smtp-Source: AA0mqf6GmmnIaAXxRDWdzo2mwsMABgOBqxpoLd1EYj+5NiHrODlNUWz1ysL61n9/fPCAgD3u6ATjwg==
+X-Received: by 2002:a63:d241:0:b0:439:8688:a98d with SMTP id t1-20020a63d241000000b004398688a98dmr5641021pgi.424.1669002709390;
+        Sun, 20 Nov 2022 19:51:49 -0800 (PST)
+Received: from localhost.localdomain ([194.5.48.82])
+        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b00186acb14c4asm8476124plg.67.2022.11.20.19.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 19:51:49 -0800 (PST)
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+To:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
+        dave@stgolabs.net, paulmck@kernel.org, josh@joshtriplett.org,
+        mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Subject: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
+Date:   Mon, 21 Nov 2022 11:51:40 +0800
+Message-Id: <20221121035140.118651-1-zhouzhouyi@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v7 03/20] x86/virt/tdx: Disable TDX if X2APIC is not
- enabled
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, peterz@infradead.org,
-        ak@linux.intel.com, isaku.yamahata@intel.com, chao.gao@intel.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1668988357.git.kai.huang@intel.com>
- <c5f484c1a87ee052597fd5f539cf021f158755b9.1668988357.git.kai.huang@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <c5f484c1a87ee052597fd5f539cf021f158755b9.1668988357.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+During CPU-hotplug torture (CONFIG_NO_HZ_FULL=y), if we try to
+offline tick_do_timer_cpu, the operation will fail because in
+function tick_nohz_cpu_down:
+```
+if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
+      return -EBUSY;
+```
+Above bug was first discovered in torture tests performed in PPC VM
+of Open Source Lab of Oregon State University, and reproducable in RISC-V
+and X86-64 (with additional kernel commandline cpu0_hotplug).
 
+In this patch, we avoid offline tick_do_timer_cpu by distribute
+the offlining cpu among remaining cpus.
 
-On 11/20/22 4:26 PM, Kai Huang wrote:
-> The MMIO/xAPIC interface has some problems, most notably the APIC LEAK
+Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+---
+ include/linux/tick.h        |  1 +
+ kernel/time/tick-common.c   |  1 +
+ kernel/time/tick-internal.h |  1 -
+ kernel/torture.c            | 10 ++++++++++
+ 4 files changed, 12 insertions(+), 1 deletion(-)
 
-"some problems" looks more generic. May be we can be specific here. Like
-it has security issues?
-
-> [1].  This bug allows an attacker to use the APIC MMIO interface to
-> extract data from the SGX enclave.
-> 
-> TDX is not immune from this either.  Early check X2APIC and disable TDX
-> if X2APIC is not enabled, and make INTEL_TDX_HOST depend on X86_X2APIC.
-> 
-> [1]: https://aepicleak.com/aepicleak.pdf
-> 
-> Link: https://lore.kernel.org/lkml/d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com/
-> Link: https://lore.kernel.org/lkml/ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com/
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
-> 
-> v6 -> v7:
->  - Changed to use "Link" for the two lore links to get rid of checkpatch
->    warning.
-> 
-> ---
->  arch/x86/Kconfig            |  1 +
->  arch/x86/virt/vmx/tdx/tdx.c | 11 +++++++++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index cced4ef3bfb2..dd333b46fafb 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1958,6 +1958,7 @@ config INTEL_TDX_HOST
->  	depends on CPU_SUP_INTEL
->  	depends on X86_64
->  	depends on KVM_INTEL
-> +	depends on X86_X2APIC
->  	help
->  	  Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
->  	  host and certain physical attacks.  This option enables necessary TDX
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 982d9c453b6b..8d943bdc8335 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -12,6 +12,7 @@
->  #include <linux/printk.h>
->  #include <asm/msr-index.h>
->  #include <asm/msr.h>
-> +#include <asm/apic.h>
->  #include <asm/tdx.h>
->  #include "tdx.h"
->  
-> @@ -81,6 +82,16 @@ static int __init tdx_init(void)
->  		goto no_tdx;
->  	}
->  
-> +	/*
-> +	 * TDX requires X2APIC being enabled to prevent potential data
-> +	 * leak via APIC MMIO registers.  Just disable TDX if not using
-> +	 * X2APIC.
-
-Remove the double space.
-
-> +	 */
-> +	if (!x2apic_enabled()) {
-> +		pr_info("Disable TDX as X2APIC is not enabled.\n");
-
-pr_warn()?
-
-> +		goto no_tdx;
-> +	}
-> +
->  	return 0;
->  no_tdx:
->  	clear_tdx();
-
+diff --git a/include/linux/tick.h b/include/linux/tick.h
+index bfd571f18cfd..23cc0b205853 100644
+--- a/include/linux/tick.h
++++ b/include/linux/tick.h
+@@ -14,6 +14,7 @@
+ #include <linux/rcupdate.h>
+ 
+ #ifdef CONFIG_GENERIC_CLOCKEVENTS
++extern int tick_do_timer_cpu __read_mostly;
+ extern void __init tick_init(void);
+ /* Should be core only, but ARM BL switcher requires it */
+ extern void tick_suspend_local(void);
+diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
+index 46789356f856..87b9b9afa320 100644
+--- a/kernel/time/tick-common.c
++++ b/kernel/time/tick-common.c
+@@ -48,6 +48,7 @@ ktime_t tick_next_period;
+  *    procedure also covers cpu hotplug.
+  */
+ int tick_do_timer_cpu __read_mostly = TICK_DO_TIMER_BOOT;
++EXPORT_SYMBOL_GPL(tick_do_timer_cpu);
+ #ifdef CONFIG_NO_HZ_FULL
+ /*
+  * tick_do_timer_boot_cpu indicates the boot CPU temporarily owns
+diff --git a/kernel/time/tick-internal.h b/kernel/time/tick-internal.h
+index 649f2b48e8f0..8953dca10fdd 100644
+--- a/kernel/time/tick-internal.h
++++ b/kernel/time/tick-internal.h
+@@ -15,7 +15,6 @@
+ 
+ DECLARE_PER_CPU(struct tick_device, tick_cpu_device);
+ extern ktime_t tick_next_period;
+-extern int tick_do_timer_cpu __read_mostly;
+ 
+ extern void tick_setup_periodic(struct clock_event_device *dev, int broadcast);
+ extern void tick_handle_periodic(struct clock_event_device *dev);
+diff --git a/kernel/torture.c b/kernel/torture.c
+index 789aeb0e1159..bccbdd33dda2 100644
+--- a/kernel/torture.c
++++ b/kernel/torture.c
+@@ -33,6 +33,7 @@
+ #include <linux/delay.h>
+ #include <linux/stat.h>
+ #include <linux/slab.h>
++#include <linux/tick.h>
+ #include <linux/trace_clock.h>
+ #include <linux/ktime.h>
+ #include <asm/byteorder.h>
+@@ -358,7 +359,16 @@ torture_onoff(void *arg)
+ 			schedule_timeout_interruptible(HZ / 10);
+ 			continue;
+ 		}
++#ifdef CONFIG_NO_HZ_FULL
++		/* do not offline tick do timer cpu */
++		if (tick_nohz_full_running) {
++			cpu = (torture_random(&rand) >> 4) % maxcpu;
++			if (cpu >= tick_do_timer_cpu)
++				cpu = (cpu + 1) % (maxcpu + 1);
++		} else
++#else
+ 		cpu = (torture_random(&rand) >> 4) % (maxcpu + 1);
++#endif
+ 		if (!torture_offline(cpu,
+ 				     &n_offline_attempts, &n_offline_successes,
+ 				     &sum_offline, &min_offline, &max_offline))
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.34.1
+
