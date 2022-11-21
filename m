@@ -2,147 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82936318BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 03:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6A46318C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 03:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiKUC43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 21:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S229854AbiKUC7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 21:59:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKUC41 (ORCPT
+        with ESMTP id S229449AbiKUC7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 21:56:27 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6412F393
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 18:56:18 -0800 (PST)
-X-UUID: 585cc66bde9647dfa2ab50e4e3336118-20221121
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=VDymyQAetc3WEtO27z94FAZO4pTlwjOlBCBrAhSOXn4=;
-        b=M/P5kBGzr4bhgHeJZwiQQ+DgsKAtZie1OlNDY9eDagvbrPCet5xeS7mxAGUB0gyIj9UQ7gcszi9SvHa2FXw4jfN8EXObbqdyTApnMkK5kfSK9FIvTefO3BN3Uqm9RCZXMYGvU3tPUqCzQF0ddQkgWTeK3dFl8jOeacJW863UOHw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.13,REQID:886e6531-8a5e-4fec-a503-7fc0fd2060f5,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:95
-X-CID-INFO: VERSION:1.1.13,REQID:886e6531-8a5e-4fec-a503-7fc0fd2060f5,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:95
-X-CID-META: VersionHash:d12e911,CLOUDID:bd9a512f-2938-482e-aafd-98d66723b8a9,B
-        ulkID:221121105616SQ0WFPLA,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 585cc66bde9647dfa2ab50e4e3336118-20221121
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <sujuan.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 67850096; Mon, 21 Nov 2022 10:56:13 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 21 Nov 2022 10:56:12 +0800
-Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 21 Nov 2022 10:56:11 +0800
-From:   Sujuan Chen <sujuan.chen@mediatek.com>
-To:     Felix Fietkau <nbd@nbd.name>
-CC:     <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        Bo Jiao <bo.jiao@mediatek.com>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Sujuan Chen <sujuan.chen@mediatek.com>
-Subject: [PATCH] net: ethernet: mtk_wed: add wcid overwritten support for wed v1
-Date:   Mon, 21 Nov 2022 10:54:27 +0800
-Message-ID: <217932f091aa9d9cb5e876a2e958ca25f80f80b2.1668997816.git.sujuan.chen@mediatek.com>
-X-Mailer: git-send-email 2.17.0
+        Sun, 20 Nov 2022 21:59:08 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7A752F3A6;
+        Sun, 20 Nov 2022 18:59:04 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Bx3Nh26Xpj4AgJAA--.25036S3;
+        Mon, 21 Nov 2022 10:59:02 +0800 (CST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VZv6XpjyWgXAA--.42783S3;
+        Mon, 21 Nov 2022 10:58:56 +0800 (CST)
+Subject: Re: [PATCH] tools: perf: Use "grep -E" instead of "egrep"
+To:     Ian Rogers <irogers@google.com>
+References: <1668762999-9297-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAP-5=fXR58DQFkUW81KUs_f9cLTX=L28H1hkxXVzX3dUdRLBjw@mail.gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <ab41b1fe-4a59-2a6b-ee9f-785c98c48df5@loongson.cn>
+Date:   Mon, 21 Nov 2022 10:58:55 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAP-5=fXR58DQFkUW81KUs_f9cLTX=L28H1hkxXVzX3dUdRLBjw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Dx9VZv6XpjyWgXAA--.42783S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Cw4xAr48JFWfKw4fuF45Wrg_yoW8ZFWDpa
+        4YkFWUtrn5Jry8Aan7JF4aqF1Syrs3tayrJrWrtF1UZFZ8JasYgr1xXF4jyFZxZrZ7Zr4r
+        u39a9Fy8Cr45Z3DanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All wed versions should enable wcid overwritten feature,
-since the wcid size is controlled by the wlan driver.
 
-Tested-by: Sujuan Chen <sujuan.chen@mediatek.com>
-Co-developed-by: Bo Jiao <bo.jiao@mediatek.com>
-Signed-off-by: Bo Jiao <bo.jiao@mediatek.com>
-Signed-off-by: Sujuan Chen <sujuan.chen@mediatek.com>
----
- drivers/net/ethernet/mediatek/mtk_wed.c      | 9 ++++++---
- drivers/net/ethernet/mediatek/mtk_wed_regs.h | 2 ++
- include/linux/soc/mediatek/mtk_wed.h         | 3 +++
- 3 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_wed.c b/drivers/net/ethernet/mediatek/mtk_wed.c
-index 7d8842378c2b..a20093803e04 100644
---- a/drivers/net/ethernet/mediatek/mtk_wed.c
-+++ b/drivers/net/ethernet/mediatek/mtk_wed.c
-@@ -526,9 +526,9 @@ mtk_wed_dma_disable(struct mtk_wed_device *dev)
- 			MTK_WED_WPDMA_RX_D_RX_DRV_EN);
- 		wed_clr(dev, MTK_WED_WDMA_GLO_CFG,
- 			MTK_WED_WDMA_GLO_CFG_TX_DDONE_CHK);
--
--		mtk_wed_set_512_support(dev, false);
- 	}
-+
-+	mtk_wed_set_512_support(dev, false);
- }
- 
- static void
-@@ -1290,9 +1290,10 @@ mtk_wed_start(struct mtk_wed_device *dev, u32 irq_mask)
- 		if (mtk_wed_rro_cfg(dev))
- 			return;
- 
--		mtk_wed_set_512_support(dev, dev->wlan.wcid_512);
- 	}
- 
-+	mtk_wed_set_512_support(dev, dev->wlan.wcid_512);
-+
- 	mtk_wed_dma_enable(dev);
- 	dev->running = true;
- }
-@@ -1338,6 +1339,8 @@ mtk_wed_attach(struct mtk_wed_device *dev)
- 	dev->irq = hw->irq;
- 	dev->wdma_idx = hw->index;
- 	dev->version = hw->version;
-+	if (hw->version != 1)
-+		dev->rev_id = wed_r32(dev, MTK_WED_REV_ID);
- 
- 	if (hw->eth->dma_dev == hw->eth->dev &&
- 	    of_dma_is_coherent(hw->eth->dev->of_node))
-diff --git a/drivers/net/ethernet/mediatek/mtk_wed_regs.h b/drivers/net/ethernet/mediatek/mtk_wed_regs.h
-index 9e39dace95eb..873d50b9a6e6 100644
---- a/drivers/net/ethernet/mediatek/mtk_wed_regs.h
-+++ b/drivers/net/ethernet/mediatek/mtk_wed_regs.h
-@@ -20,6 +20,8 @@ struct mtk_wdma_desc {
- 	__le32 info;
- } __packed __aligned(4);
- 
-+#define MTK_WED_REV_ID					0x004
-+
- #define MTK_WED_RESET					0x008
- #define MTK_WED_RESET_TX_BM				BIT(0)
- #define MTK_WED_RESET_TX_FREE_AGENT			BIT(4)
-diff --git a/include/linux/soc/mediatek/mtk_wed.h b/include/linux/soc/mediatek/mtk_wed.h
-index 8294978f4bca..1b1ef57609f7 100644
---- a/include/linux/soc/mediatek/mtk_wed.h
-+++ b/include/linux/soc/mediatek/mtk_wed.h
-@@ -85,6 +85,9 @@ struct mtk_wed_device {
- 	int irq;
- 	u8 version;
- 
-+	/* used by wlan driver */
-+	u32 rev_id;
-+
- 	struct mtk_wed_ring tx_ring[MTK_WED_TX_QUEUES];
- 	struct mtk_wed_ring rx_ring[MTK_WED_RX_QUEUES];
- 	struct mtk_wed_ring txfree_ring;
--- 
-2.18.0
+On 11/20/2022 02:17 AM, Ian Rogers wrote:
+> On Fri, Nov 18, 2022 at 1:17 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> The latest version of grep claims the egrep is now obsolete so the build
+>> now contains warnings that look like:
+>>         egrep: warning: egrep is obsolescent; using grep -E
+>> fix this up by moving the related file to use "grep -E" instead.
+>>
+>>   sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/perf`
+>>
+>> Here are the steps to install the latest grep:
+>>
+>>   wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
+>>   tar xf grep-3.8.tar.gz
+>>   cd grep-3.8 && ./configure && make
+>>   sudo make install
+>>   export PATH=/usr/local/bin:$PATH
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>
+> Hi Tiezhu,
+>
+> installing a newer grep tool in order to build/test perf is somewhat
+> burdensome, as such I don't think we should merge this change. Looking
+> at my Debian derived distro. I have grep 3.7, so I'd need to do this.
+> I imagine the majority of people are using a grep earlier than 3.8. I
+> agree there is a problem perhaps we can:
+>  - rewrite to just need grep and not egrep;
+>  - rewrite in a stable language with regex support, perhaps python;
+>  - have a grep/egrep wrapper that selects based on version number.
+>
+
+Hi Ian,
+
+I found this issue on Linux From Scratch system which uses grep 3.8 [0],
+we can see the following NEWS in grep-3.8 release announcement [1]:
+
+"The egrep and fgrep commands, which have been deprecated since
+  release 2.5.3 (2007), now warn that they are obsolescent and should
+  be replaced by grep -E and grep -F."
+
+Additionally, the next grep rpm/deb version is 3.8 on Fedora [2]
+and Debian [3], so use "grep -E" instead of "egrep" so we won't see
+the warning for various versions of grep.
+
+[0] https://linuxfromscratch.org/~thomas/multilib/chapter06/grep.html
+[1] https://savannah.gnu.org/forum/forum.php?forum_id=10227
+[2] https://packages.fedoraproject.org/pkgs/grep/grep/fedora-rawhide.html
+[3] https://packages.debian.org/sid/grep
+
+Thanks,
+Tiezhu
 
