@@ -2,291 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C886327BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0862B6327C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbiKUPVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        id S231324AbiKUPVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232246AbiKUPVB (ORCPT
+        with ESMTP id S232097AbiKUPVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:21:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B62CCDFFB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:19:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 709FDCE149C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82148C433C1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669043944;
-        bh=hNvErq3/YI4nudexs9WhewJxFzxxT6n4zbIU2S0momQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=siXw93lDPd8wXGB3UTJDID/cFfKEeaSM81vj3f4Bh0cTHnK1iNHsVX8ieyeuoGld1
-         ObiMAU7+P7l+/Ppqe7+w8vsBSoPAsouuVi5ECqACorxPFmYQaKu6WXPiv25Y+4gBmM
-         j5gRNVTK+AfnlMylGKUUDrxXCvNB3l7OgiSjFqabm03OxMXPEYofspCHdAmTJvRhvi
-         5PJ2kaS/uepqTUG+9YNtT8OIHMyqtLRqYhYRT+8KqKKL5FZS2xiDtst0uKwQmrHXJV
-         322umduUFyKZv1zwHOtcTA+ZOyZvoWvT7MTzviQ/6HFiAYuSILag5doK7B8Qp4pOXt
-         OGvW/79pkhrMg==
-Received: by mail-yb1-f182.google.com with SMTP id b131so13939304yba.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:19:04 -0800 (PST)
-X-Gm-Message-State: ANoB5pk5jZl97N9Ch5BNMYOUdBZAtMvwflkZQmKPVMBP6jqwPdrWQoF7
-        HNXr8ZTmdw7kgDieRxXOxSC+gtiJoQDcH0ogecE=
-X-Google-Smtp-Source: AA0mqf7ceDqe5Fjo8jJBqFSfaLx/euEtnK53FpMQ42IwjbflQaf3yYI7/FWG7jLwGOxHaGrVPara/PGuSQjb2PS2PuQ=
-X-Received: by 2002:a25:c0d6:0:b0:6e6:619f:31f7 with SMTP id
- c205-20020a25c0d6000000b006e6619f31f7mr2575999ybf.642.1669043943527; Mon, 21
- Nov 2022 07:19:03 -0800 (PST)
+        Mon, 21 Nov 2022 10:21:19 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725346357;
+        Mon, 21 Nov 2022 07:19:50 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id vv4so20020498ejc.2;
+        Mon, 21 Nov 2022 07:19:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=q/HuL81xNFxzTaRqJ+HiITpDFoE0DLWV+muP5CIjecs=;
+        b=d4uL2DmGmrk6oL5D9P5/xGW4W+gbJ4/1dwzDukT2JHyuL5rXxT7O+Qwgw/J1Hr7KJN
+         T/PX5utN5GgQ9nUZ8RoD3PYVZ7GS3lx5ehTvxWTiVrZsZ3BaGQJPinf0UzPNVYERx70J
+         7zEnhNGp1iW+6oMwiaxtZ0v5Q+R1BPXmA9iN11hrFpd1SVKUMOII3KFHSb/qKDFDs1ua
+         VbqYTOHtIBv54LuNiJwRzjO1Cnmffk30rMjTqi8ZpjD/EnIUkaa1ptAMN/BLmgkagEcl
+         pRQySWjryuboVgmVm6Xqg2FOMchg4FwpKqrDqkwbZb/fQ1oPyNdnJSQBeLzEe8z8wNt5
+         7DYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q/HuL81xNFxzTaRqJ+HiITpDFoE0DLWV+muP5CIjecs=;
+        b=hjZ+u3owmnxq4ASf9CT3n3pd3lOge9kWBFohn8cxc50p1oqxPfHXHag8PbU32UDf71
+         +L8Ha75qCsMqwkpG7O1yC7AlvWy3hv53LA9MREgBXhTUeBgPxm6jc1hDr+4F95r9e9bv
+         MFCQqo+q6yRGTSgZp8DunJES8aXTRJQCloAYOS2+gtH9LlOe21ZUZ6FUTYZqVJHrkZv5
+         2p7V7Bomc3NeI1Eu/odSNr8dHLWf2UilW0gJ1o0gqKzW+gOPAkDU1bHRsQd4RO7s+cCT
+         ggozqL4hQxUy/+MX+OunqPuSYnCRixJMrSAPgZm3pd7Nw/4ad7Xd6ts+9b1R9PcUMUQu
+         LxTg==
+X-Gm-Message-State: ANoB5pkv4eUfPpYQzRSjtjl2QvGFwqsg8ekYVGAIkRHV3cmewviA1aoN
+        HMxRD9TqWNqeTtjHvItgVOB0hfawojjq3bnlPIU=
+X-Google-Smtp-Source: AA0mqf5vNBhtRh0iB5cXdrftLyJrnWLpK4MjphDpyJzzEKiIyUuaeNTVDoF5ht7NoEA6/2k4A/Ke0KODLmmsHXeHroQ=
+X-Received: by 2002:a17:906:50f:b0:78d:ad5d:75e with SMTP id
+ j15-20020a170906050f00b0078dad5d075emr15958955eja.172.1669043988900; Mon, 21
+ Nov 2022 07:19:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20221119204435.97113-1-ogabbay@kernel.org> <20221119204435.97113-5-ogabbay@kernel.org>
- <1e1cc8e3-8522-904f-6458-51dc8b212889@quicinc.com>
-In-Reply-To: <1e1cc8e3-8522-904f-6458-51dc8b212889@quicinc.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon, 21 Nov 2022 17:18:37 +0200
-X-Gmail-Original-Message-ID: <CAFCwf13KLp7SzNjDE_EuhVePQ5=a-KEmzd7ytt3zY+tO6RyOxw@mail.gmail.com>
-Message-ID: <CAFCwf13KLp7SzNjDE_EuhVePQ5=a-KEmzd7ytt3zY+tO6RyOxw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] doc: add documentation for accel subsystem
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Christopher Friedt <chrisfriedt@gmail.com>
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Mon, 21 Nov 2022 23:19:13 +0800
+Message-ID: <CAO4mrfc0_uMu0VQhxKqp6o5=wVtj5jDTwCmraLivZOo+ma1Qyg@mail.gmail.com>
+Subject: WARNING in inet_csk_destroy_sock
+To:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
+        netdev@vger.kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, kuniyu@amazon.com,
+        joannelkoong@gmail.com, richard_siegfried@systemli.org,
+        socketcan@hartkopp.net, hbh25y@gmail.com, kafai@fb.com,
+        dccp@vger.kernel.org, richardcochran@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 12:02 AM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
->
-> On 11/19/2022 1:44 PM, Oded Gabbay wrote:
-> > Add an introduction section for the accel subsystem. Most of the
-> > relevant data is in the DRM documentation, so the introduction only
-> > presents the why of the new subsystem, how are the compute accelerators
-> > exposed to user-space and what changes need to be done in a standard
-> > DRM driver to register it to the new accel subsystem.
-> >
-> > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
-> > ---
-> >   Documentation/accel/index.rst        |  17 +++++
-> >   Documentation/accel/introduction.rst | 109 +++++++++++++++++++++++++++
-> >   Documentation/subsystem-apis.rst     |   1 +
-> >   MAINTAINERS                          |   1 +
-> >   4 files changed, 128 insertions(+)
-> >   create mode 100644 Documentation/accel/index.rst
-> >   create mode 100644 Documentation/accel/introduction.rst
-> >
-> > diff --git a/Documentation/accel/index.rst b/Documentation/accel/index.rst
-> > new file mode 100644
-> > index 000000000000..2b43c9a7f67b
-> > --- /dev/null
-> > +++ b/Documentation/accel/index.rst
-> > @@ -0,0 +1,17 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +====================
-> > +Compute Accelerators
-> > +====================
-> > +
-> > +.. toctree::
-> > +   :maxdepth: 1
-> > +
-> > +   introduction
-> > +
-> > +.. only::  subproject and html
-> > +
-> > +   Indices
-> > +   =======
-> > +
-> > +   * :ref:`genindex`
-> > diff --git a/Documentation/accel/introduction.rst b/Documentation/accel/introduction.rst
-> > new file mode 100644
-> > index 000000000000..5a3963eae973
-> > --- /dev/null
-> > +++ b/Documentation/accel/introduction.rst
-> > @@ -0,0 +1,109 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +============
-> > +Introduction
-> > +============
-> > +
-> > +The Linux compute accelerators subsystem is designed to expose compute
-> > +accelerators in a common way to user-space and provide a common set of
-> > +functionality.
-> > +
-> > +These devices can be either stand-alone ASICs or IP blocks inside an SoC/GPU.
-> > +Although these devices are typically designed to accelerate Machine-Learning
-> > +and/or Deep-Learning computations, the accel layer is not limited to handling
->
-> You use "DL" later on as a short form for Deep-Learning.  It would be
-> good to introduce that here.
->
-> > +these types of accelerators.
-> > +
-> > +typically, a compute accelerator will belong to one of the following
->
-> Typically
->
-> > +categories:
-> > +
-> > +- Edge AI - doing inference at an edge device. It can be an embedded ASIC/FPGA,
-> > +  or an IP inside a SoC (e.g. laptop web camera). These devices
-> > +  are typically configured using registers and can work with or without DMA.
-> > +
-> > +- Inference data-center - single/multi user devices in a large server. This
-> > +  type of device can be stand-alone or an IP inside a SoC or a GPU. It will
-> > +  have on-board DRAM (to hold the DL topology), DMA engines and
-> > +  command submission queues (either kernel or user-space queues).
-> > +  It might also have an MMU to manage multiple users and might also enable
-> > +  virtualization (SR-IOV) to support multiple VMs on the same device. In
-> > +  addition, these devices will usually have some tools, such as profiler and
-> > +  debugger.
-> > +
-> > +- Training data-center - Similar to Inference data-center cards, but typically
-> > +  have more computational power and memory b/w (e.g. HBM) and will likely have
-> > +  a method of scaling-up/out, i.e. connecting to other training cards inside
-> > +  the server or in other servers, respectively.
-> > +
-> > +All these devices typically have different runtime user-space software stacks,
-> > +that are tailored-made to their h/w. In addition, they will also probably
-> > +include a compiler to generate programs to their custom-made computational
-> > +engines. Typically, the common layer in user-space will be the DL frameworks,
-> > +such as PyTorch and TensorFlow.
-> > +
-> > +Sharing code with DRM
-> > +=====================
-> > +
-> > +Because this type of devices can be an IP inside GPUs or have similar
-> > +characteristics as those of GPUs, the accel subsystem will use the
-> > +DRM subsystem's code and functionality. i.e. the accel core code will
-> > +be part of the DRM subsystem and an accel device will be a new type of DRM
-> > +device.
-> > +
-> > +This will allow us to leverage the extensive DRM code-base and
-> > +collaborate with DRM developers that have experience with this type of
-> > +devices. In addition, new features that will be added for the accelerator
-> > +drivers can be of use to GPU drivers as well.
-> > +
-> > +Differentiation from GPUs
-> > +=========================
-> > +
-> > +Because we want to prevent the extensive user-space graphic software stack
-> > +from trying to use an accelerator as a GPU, the compute accelerators will be
-> > +differentiated from GPUs by using a new major number and new device char files.
-> > +
-> > +Furthermore, the drivers will be located in a separate place in the kernel
-> > +tree - drivers/accel/.
-> > +
-> > +The accelerator devices will be exposed to the user space with the dedicated
-> > +261 major number and will have the following convention:
-> > +
-> > +- device char files - /dev/accel/accel*
-> > +- sysfs             - /sys/class/accel/accel*/
-> > +- debugfs           - /sys/kernel/debug/accel/accel*/
-> > +
-> > +Getting Started
-> > +===============
-> > +
-> > +First, read the DRM documentation. Not only it will explain how to write a new
->
-> How about a link to the DRM documentation?
->
-> > +DRM driver but it will also contain all the information on how to contribute,
-> > +the Code Of Conduct and what is the coding style/documentation. All of that
-> > +is the same for the accel subsystem.
-> > +
-> > +Second, make sure the kernel is configured with CONFIG_DRM_ACCEL.
-> > +
-> > +To expose your device as an accelerator, two changes are needed to
-> > +be done in your driver (as opposed to a standard DRM driver):
-> > +
-> > +- Add the DRIVER_COMPUTE_ACCEL feature flag in your drm_driver's
-> > +  driver_features field. It is important to note that this driver feature is
-> > +  mutually exclusive with DRIVER_RENDER and DRIVER_MODESET. Devices that want
->
-> I don't remember seeing code that validates a driver with
-> DRIVER_COMPUTE_ACCEL does not also have DRIVER_MODESET.  What am I missing?
+Dear Linux Developer,
 
-Look at drm_dev_init() (patch 3/4):
+Recently when using our tool to fuzz kernel, the following crash was triggered.
 
-if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
-               (drm_core_check_feature(dev, DRIVER_RENDER) ||
-                 drm_core_check_feature(dev, DRIVER_MODESET))) {
-            DRM_ERROR("DRM driver can't be both a compute acceleration
-and graphics driver\n");
-             return -EINVAL;
-}
+HEAD commit: 094226ad94f4 Linux v6.1-rc5
+git tree: upstream
+compiler: clang 12.0.1
+console output:
+https://drive.google.com/file/d/1YNhDIWBLrPbRas3gr13hh2zCSgMVMxt5/view?usp=share_link
+syz reproducer:
+https://drive.google.com/file/d/1cJrq3EeNsqGiOws-3xmY3IlfByhFWQVE/view?usp=share_link
+C reproducer: https://drive.google.com/file/d/1fjh4zHZp-z9ucvQahJsJp0KV9DlAFCOj/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1TdPsg_5Zon8S2hEFpLBWjb8Tnd2KA5WJ/view?usp=share_link
 
-Thanks for your other comments, I'll fix them before sending the PR.
-Oded
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
 
->
-> > +  to expose both graphics and compute device char files should be handled by
-> > +  two drivers that are connected using the auxiliary bus framework.
-> > +
-> > +- Change the open callback in your driver fops structure to accel_open().
-> > +  Alternatively, your driver can use DEFINE_DRM_ACCEL_FOPS macro to easily
-> > +  set the correct function operations pointers structure.
-> > +
-> > +External References
-> > +===================
-> > +
-> > +email threads
-> > +-------------
-> > +
-> > +* `Initial discussion on the New subsystem for acceleration devices <https://lkml.org/lkml/2022/7/31/83>`_ - Oded Gabbay (2022)
-> > +* `patch-set to add the new subsystem <https://lkml.org/lkml/2022/10/22/544>`_ - Oded Gabbay (2022)
-> > +
-> > +Conference talks
-> > +----------------
-> > +
-> > +* `LPC 2022 Accelerators BOF outcomes summary <https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summary.html>`_ - Dave Airlie (2022)
-> > diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
-> > index af65004a80aa..b51f38527e14 100644
-> > --- a/Documentation/subsystem-apis.rst
-> > +++ b/Documentation/subsystem-apis.rst
-> > @@ -43,6 +43,7 @@ needed).
-> >      input/index
-> >      hwmon/index
-> >      gpu/index
-> > +   accel/index
-> >      security/index
-> >      sound/index
-> >      crypto/index
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 4d752aac3ec0..6ba7bb35208a 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -6837,6 +6837,7 @@ L:      dri-devel@lists.freedesktop.org
-> >   S:  Maintained
-> >   C:  irc://irc.oftc.net/dri-devel
-> >   T:  git https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git
-> > +F:   Documentation/accel/
-> >   F:  drivers/accel/
-> >
-> >   DRM DRIVERS FOR ALLWINNER A10
->
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 2829 at net/ipv4/inet_connection_sock.c:1155
+inet_csk_destroy_sock+0x325/0x390
+Modules linked in:
+CPU: 0 PID: 2829 Comm: syz-executor.0 Not tainted 6.1.0-rc5 #40
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:inet_csk_destroy_sock+0x325/0x390 net/ipv4/inet_connection_sock.c:1155
+Code: 3c 23 00 74 08 48 89 ef e8 48 04 1e f9 48 c7 45 00 00 00 00 00
+43 80 3c 26 00 0f 85 be fe ff ff e9 c1 fe ff ff e8 db 47 cd f8 <0f> 0b
+e9 ea fd ff ff e8 cf 47 cd f8 4c 89 f7 be 03 00 00 00 48 83
+RSP: 0018:ffffc90005a2fba0 EFLAGS: 00010293
+RAX: ffffffff88b9f795 RBX: ffff8880433ab198 RCX: ffff8880137bc800
+RDX: 0000000000000000 RSI: 00000000000095d2 RDI: 0000000000000000
+RBP: dffffc0000000000 R08: ffffffff88b9f550 R09: ffffed100867556d
+R10: ffffed100867556d R11: 0000000000000000 R12: ffff8880433aab98
+R13: dffffc0000000000 R14: ffff8880433aab00 R15: ffff8880433aab00
+FS:  0000555555a3e940(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b32d21000 CR3: 0000000049629000 CR4: 0000000000750ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ dccp_close+0xc84/0xfc0 net/dccp/proto.c:1060
+ inet_release+0x16e/0x1f0 net/ipv4/af_inet.c:428
+ __sock_release net/socket.c:650 [inline]
+ sock_close+0xd7/0x260 net/socket.c:1365
+ __fput+0x3f7/0x8c0 fs/file_table.c:320
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x1f2/0x210 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
+ do_syscall_64+0x4c/0x90 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4376c3ba8b
+Code: 03 00 00 00 0f 05 48 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 7c
+24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d
+00 f0 ff ff 77 2f 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007ffe0965dd60 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 00007f4376c3ba8b
+RDX: 0000001b32d20000 RSI: ffffffff81adb419 RDI: 0000000000000003
+RBP: 0000000000000004 R08: 0000000000000000 R09: 00000000000014c0
+R10: 00000000a70694c4 R11: 0000000000000293 R12: 00007f4376d39500
+R13: 00007f4376db0458 R14: 00007f4376db0460 R15: 00000000002c238f
+ </TASK>
+
+Best,
+Wei
