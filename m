@@ -2,179 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FCC632669
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A19632673
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiKUOkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S231866AbiKUOk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbiKUOiH (ORCPT
+        with ESMTP id S231690AbiKUOiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:38:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754CF79356;
-        Mon, 21 Nov 2022 06:38:06 -0800 (PST)
-Message-ID: <20221121091327.326195230@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669041485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=OWDR1HVKygNBsw9mLHuKFZNGcf87XagJ2m0BnhitI40=;
-        b=MYJ30Z2I3+/4UN65MSl2Kn8D8g2XvMPskxphwjy0BVd0+xS/viqw9G59t19VywcVstzSqA
-        gDCg3d/hLBXDtH+I+WcB6/JnONfYtlclmpiTbua+Fkxb08oW9VXDeGD9RZOh3ZlcJXdF10
-        EnAs5ySwFrp69pXOqjGLUzVP27GD+O4Omv1eZGo1BuaBi1TkpIjIL3U897lsyjmGZ8jQTg
-        8Uzv0KbHOidX3GT8cCGaDP0qdgag7/+n7dTaTFShuoBTVmwnGlOhmmQeKhwEhp5j8bIMXo
-        GnuzUEc/NXCVegygI4cjLnPjpI261od9/2CMVvjtlw7BqmYlNceExhnmpuZfPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669041485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=OWDR1HVKygNBsw9mLHuKFZNGcf87XagJ2m0BnhitI40=;
-        b=jx/7uiun/9dkAJ6LcERIt0FGUS+gIXzv08q4ciOcwH0wxWPp5K6cMi1JNJGzS4I+A8t3+p
-        0lSzsanOwTOr68CA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-Subject: [patch V2 15/33] iommu/vt-d: Switch to MSI parent domains
-References: <20221121083657.157152924@linutronix.de>
+        Mon, 21 Nov 2022 09:38:13 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CF1AEBD8;
+        Mon, 21 Nov 2022 06:38:12 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NG9355XMGzmVn8;
+        Mon, 21 Nov 2022 22:37:37 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 22:38:06 +0800
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 22:38:06 +0800
+Message-ID: <3c7d52c7-6839-241e-c25e-05492bfdf115@huawei.com>
+Date:   Mon, 21 Nov 2022 22:38:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 21 Nov 2022 15:38:04 +0100 (CET)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 0/2] Fix scsi device's iodone_cnt mismatch with
+ iorequest_cnt
+Content-Language: en-US
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Steffen Maier <maier@linux.ibm.com>
+References: <20221021235638.1968832-1-haowenchao@huawei.com>
+From:   Wenchao Hao <haowenchao@huawei.com>
+In-Reply-To: <20221021235638.1968832-1-haowenchao@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggpeml500014.china.huawei.com (7.185.36.63) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the global PCI/MSI irqdomain implementation and provide the required
-MSI parent ops so the PCI/MSI code can detect the new parent and setup per
-device domains.
+On 2022/10/22 7:56, Wenchao Hao wrote:
+> Following scenario would make scsi_device's iodone_cnt mismatch with
+> iorequest_cnt even if there is no request on this device any more.
+> 
+> 1. request timeout happened. If we do not retry the timeouted command,
+>    this command would be finished in scsi_finish_command() which would
+>    not increase the iodone_cnt; if the timeouted command is retried,
+>    another increasement for iorequest_cnt would be performed, the
+>    command might add iorequest_cnt for multiple times but iodone_cnt
+>    only once. Increase iodone_cnt in scsi_timeout() can handle this
+>    scenario.
+> 
+> 2. scsi_dispatch_cmd() failed, while the iorequest_cnt has already been
+>    increased. If scsi_dispatch_cmd() failed, the request would be
+>    requeued, then another iorequest_cnt would be added. So we should not
+>    increase iorequest_cnt if dispatch command failed
+> 
+> V2:
+> - Add description about why we can add iodone_cnt in scsi_timeout()
+> - Do not increase iorequest_cnt if dispatch command failed
+> 
+> Wenchao Hao (2):
+>   scsi: increase scsi device's iodone_cnt in scsi_timeout()
+>   scsi: donot increase scsi_device's iorequest_cnt if dispatch failed
+> 
+>  drivers/scsi/scsi_error.c | 1 +
+>  drivers/scsi/scsi_lib.c   | 3 +--
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/kernel/apic/msi.c          |    2 ++
- drivers/iommu/intel/iommu.h         |    1 -
- drivers/iommu/intel/irq_remapping.c |   27 ++++++++++++---------------
- include/linux/irqdomain_defs.h      |    1 +
- 4 files changed, 15 insertions(+), 16 deletions(-)
-
---- a/arch/x86/kernel/apic/msi.c
-+++ b/arch/x86/kernel/apic/msi.c
-@@ -217,6 +217,8 @@ static bool x86_init_dev_msi_info(struct
- 		/* See msi_set_affinity() for the gory details */
- 		info->flags |= MSI_FLAG_NOMASK_QUIRK;
- 		break;
-+	case DOMAIN_BUS_DMAR:
-+		break;
- 	default:
- 		WARN_ON_ONCE(1);
- 		return false;
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -600,7 +600,6 @@ struct intel_iommu {
- #ifdef CONFIG_IRQ_REMAP
- 	struct ir_table *ir_table;	/* Interrupt remapping info */
- 	struct irq_domain *ir_domain;
--	struct irq_domain *ir_msi_domain;
- #endif
- 	struct iommu_device iommu;  /* IOMMU core code handle */
- 	int		node;
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -82,6 +82,7 @@ static const struct irq_domain_ops intel
- 
- static void iommu_disable_irq_remapping(struct intel_iommu *iommu);
- static int __init parse_ioapics_under_ir(void);
-+static const struct msi_parent_ops dmar_msi_parent_ops;
- 
- static bool ir_pre_enabled(struct intel_iommu *iommu)
- {
-@@ -230,7 +231,7 @@ static struct irq_domain *map_dev_to_ir(
- {
- 	struct dmar_drhd_unit *drhd = dmar_find_matched_drhd_unit(dev);
- 
--	return drhd ? drhd->iommu->ir_msi_domain : NULL;
-+	return drhd ? drhd->iommu->ir_domain : NULL;
- }
- 
- static int clear_entries(struct irq_2_iommu *irq_iommu)
-@@ -573,10 +574,10 @@ static int intel_setup_irq_remapping(str
- 		pr_err("IR%d: failed to allocate irqdomain\n", iommu->seq_id);
- 		goto out_free_fwnode;
- 	}
--	iommu->ir_msi_domain =
--		arch_create_remap_msi_irq_domain(iommu->ir_domain,
--						 "INTEL-IR-MSI",
--						 iommu->seq_id);
-+
-+	irq_domain_update_bus_token(iommu->ir_domain,  DOMAIN_BUS_DMAR);
-+	iommu->ir_domain->flags |= IRQ_DOMAIN_FLAG_MSI_PARENT;
-+	iommu->ir_domain->msi_parent_ops = &dmar_msi_parent_ops;
- 
- 	ir_table->base = page_address(pages);
- 	ir_table->bitmap = bitmap;
-@@ -620,9 +621,6 @@ static int intel_setup_irq_remapping(str
- 	return 0;
- 
- out_free_ir_domain:
--	if (iommu->ir_msi_domain)
--		irq_domain_remove(iommu->ir_msi_domain);
--	iommu->ir_msi_domain = NULL;
- 	irq_domain_remove(iommu->ir_domain);
- 	iommu->ir_domain = NULL;
- out_free_fwnode:
-@@ -644,13 +642,6 @@ static void intel_teardown_irq_remapping
- 	struct fwnode_handle *fn;
- 
- 	if (iommu && iommu->ir_table) {
--		if (iommu->ir_msi_domain) {
--			fn = iommu->ir_msi_domain->fwnode;
--
--			irq_domain_remove(iommu->ir_msi_domain);
--			irq_domain_free_fwnode(fn);
--			iommu->ir_msi_domain = NULL;
--		}
- 		if (iommu->ir_domain) {
- 			fn = iommu->ir_domain->fwnode;
- 
-@@ -1437,6 +1428,12 @@ static const struct irq_domain_ops intel
- 	.deactivate = intel_irq_remapping_deactivate,
- };
- 
-+static const struct msi_parent_ops dmar_msi_parent_ops = {
-+	.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED | MSI_FLAG_MULTI_PCI_MSI,
-+	.prefix			= "IR-",
-+	.init_dev_msi_info	= msi_parent_init_dev_msi_info,
-+};
-+
- /*
-  * Support of Interrupt Remapping Unit Hotplug
-  */
---- a/include/linux/irqdomain_defs.h
-+++ b/include/linux/irqdomain_defs.h
-@@ -23,6 +23,7 @@ enum irq_domain_bus_token {
- 	DOMAIN_BUS_VMD_MSI,
- 	DOMAIN_BUS_PCI_DEVICE_MSI,
- 	DOMAIN_BUS_PCI_DEVICE_MSIX,
-+	DOMAIN_BUS_DMAR,
- };
- 
- #endif /* _LINUX_IRQDOMAIN_DEFS_H */
+Hi Martin, these two count is useful for us, would like take a look?
 
