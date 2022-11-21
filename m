@@ -2,140 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0EE632592
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087BA63258A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiKUOXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        id S230376AbiKUOWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:22:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiKUOXI (ORCPT
+        with ESMTP id S229585AbiKUOWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:23:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A405326496
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:22:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669040523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ykhJnNqnxOyo9r4byFX0GgaM79yTY6Gqzcv3nxSkQBo=;
-        b=aImYbfPgZDo0uSbrWFqPm/IS8sZpV6+flHyJZZVyfwqxAKwZkc6d+CMjcthhEKeRAU84xi
-        xxS+mlXn778jmRnQMaGoU+mamQa5oK7iKnq1AEVeHYBlQEZsRh3OIL5rIWfYyG8liGGChb
-        65E8rywm4SkdlhgFyrm4tOGYXKjs4gk=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-645-GFKSsJGkOiC8VKlb1impTg-1; Mon, 21 Nov 2022 09:22:02 -0500
-X-MC-Unique: GFKSsJGkOiC8VKlb1impTg-1
-Received: by mail-qt1-f200.google.com with SMTP id fb5-20020a05622a480500b003a525d52abcso12030550qtb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:22:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ykhJnNqnxOyo9r4byFX0GgaM79yTY6Gqzcv3nxSkQBo=;
-        b=XwOWG2rdgslNduEu1JXTGL9ZU3HRZnoh8sjWOofRIe+1y2jGywdtD+H2hhKtOI3nwS
-         BZTi3+ag7Y/aS3ew9O4l9s67W7Gg7aIOHGzNIVo1zTU8T91x6w+oXhYsankFqYavQg/U
-         r/CnCTSBu72Hs0t0Nc889y4H/dPu4QUJfMHIei0L+Y/mGHMk2jNbTQdyrySG1BvQRgg/
-         CLPoLz4cRUueOvRYMQBJpSlV1pJwBimWq6BHMSIoFGTvQmk/savDrKgfEpxMQMNxb+cI
-         l0wJLtaKwITPETTvAINkMaOm9WPABcH5Ze7pr8ycQpIgqXFprbc4+dCeqweCFDTa33Up
-         abfQ==
-X-Gm-Message-State: ANoB5pmWLek9p1n5MfH20sW+5QV2safdhsgdNiryMdMR9SDKUD35/pNG
-        JNNaGxh4y/mr6MwQv4G7eABn3PmcP5dtMCe3khJuq/ZhWYcbUKOkJIWPUMj1bPWY9nIfiPTE01U
-        VqqSfckmpSR/AtwHEzAQahn/D
-X-Received: by 2002:ae9:e415:0:b0:6f3:e5c8:ddde with SMTP id q21-20020ae9e415000000b006f3e5c8dddemr31647qkc.80.1669040521899;
-        Mon, 21 Nov 2022 06:22:01 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6Kmo78A03hML/MnkehUvZc7anpEeRq7agSJVj/8E3w6Q4yg/FuaEwwBuxCvDZHq1Ggo7g2Kw==
-X-Received: by 2002:ae9:e415:0:b0:6f3:e5c8:ddde with SMTP id q21-20020ae9e415000000b006f3e5c8dddemr31624qkc.80.1669040521678;
-        Mon, 21 Nov 2022 06:22:01 -0800 (PST)
-Received: from [192.168.33.110] (c-73-19-232-221.hsd1.tn.comcast.net. [73.19.232.221])
-        by smtp.gmail.com with ESMTPSA id a13-20020ac84d8d000000b003a5430ee366sm6618466qtw.60.2022.11.21.06.21.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 06:21:59 -0800 (PST)
-Message-ID: <8cedf92b-af18-bf47-cc92-d70e228b99b0@redhat.com>
-Date:   Mon, 21 Nov 2022 09:21:58 -0500
+        Mon, 21 Nov 2022 09:22:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE031121;
+        Mon, 21 Nov 2022 06:22:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B1DA6126C;
+        Mon, 21 Nov 2022 14:22:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A0AC433C1;
+        Mon, 21 Nov 2022 14:22:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669040555;
+        bh=7FCnuULVVR720/Z8cmKwHyUcR9KpvBB36hU267VS2Jc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BoCuh3MxQmdnGuhI+b/zF5e6f2AWwukQApG2V1cr+T0DZiAvK+7+F2rmGKdHSNDz7
+         LU73Sqd0CnM9bEhIWRzUAeAR5Pz01Ez7YvOQFB0eCriT12kvA7fBeBA6AHijzivox6
+         ESRc9E2DmePd90L4GHU6XeBYKLzgjz4GBauTfZE5kq/0T2+i9B8xW2Xi084D0mEwg4
+         aBxqULfVGhPtynTDlHN83d7U33LquF6l2dYyNBK0cszIH6hVA6VnVgHY/0rseV5v30
+         tMEG0I7Yp124nf0VqNl70pGhkL7xb8dpazS1kR+eItEtoW8kFsiuU88FiKoS7D2eac
+         hbBrUwKBoW1qw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ox7gU-00007K-8S; Mon, 21 Nov 2022 15:22:06 +0100
+Date:   Mon, 21 Nov 2022 15:22:06 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] arm64: dts: qcom: sc8280xp: add audio support
+Message-ID: <Y3uJjo820Ij3aKAr@hovoldconsulting.com>
+References: <20221121130403.161817-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH next] kbuild: add ability to make source rpm buildable
- using koji
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, dzickus@redhat.com, kheib@redhat.com,
-        jtornosm@redhat.com, ihuguet@redhat.com,
-        Ivan Vecera <ivecera@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan Toppins <jtoppins@redhat.com>
-References: <5b59fdb7db34f5292b1d138939c6b70b2b2039dd.1666703850.git.jtoppins@redhat.com>
- <CAK7LNAQNTDpKRDdi5JXV1ofC=s9ttJBk4yCivczZ1+KK7G2j5A@mail.gmail.com>
-Content-Language: en-US
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <CAK7LNAQNTDpKRDdi5JXV1ofC=s9ttJBk4yCivczZ1+KK7G2j5A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121130403.161817-1-srinivas.kandagatla@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/13/22 08:33, Masahiro Yamada wrote:
-> On Tue, Oct 25, 2022 at 10:17 PM Jonathan Toppins <jtoppins@redhat.com> wrote:
->>
->> From: Ivan Vecera <ivecera@redhat.com>
->>
->> Changes:
->> - added new target 'srcrpm-pkg' to generate source rpm
->> - added required build tools to spec file
->> - removed locally compiled host tools to force their re-compile
->>
->> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
->> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+On Mon, Nov 21, 2022 at 01:04:00PM +0000, Srinivas Kandagatla wrote:
+> This patchset adds audio support for sc8280xp Lenovo x13s.
+> Support for Headset Playback/Capture, Speaker Playback and DMIC is
+> tested.
+> 
+> A prebuit ASoC topology file available at
+> https://git.linaro.org/people/srinivas.kandagatla/audioreach-topology.git/tree/prebuilt/SC8280XP-LENOVO-X13S-tplg.bin
 > 
 > 
+> Thanks to Johan and Kryz for reviewing v2.
 > 
-> I am fine with this patch.
+> Changes since v2:
+> 	- removed lots of stray lines.
+> 	- ordered include files.
+> 	- moved all the nodes before pinctrl
+> 	- fixed subject line to include x13s.
+> 	- rebased to latest qcom dts branch.
 > 
-> Just minor comments.
+> Thanks,
+> Srini
 > 
-> 
-> I noticed an inconsistency between
-> "--target $(UTS_MACHINE)-linux" in the rpm-pkg target and
-> "--target $(UTS_MACHINE)" in the srcrpm-pkg target.
-> 
-> 
-> I applied 6105e4f6511d6b383738be89efb99c607e158a29
-> just a few months ago.
-> Is it better to make it consistent here?
+> Srinivas Kandagatla (3):
+>   arm64: dts: qcom: sc8280xp/sa8540p: add gpr node
+>   arm64: dts: qcom: sc8280xp/sa8540p: add SoundWire and LPASS
 
-Yes I can post a v2 that includes this change.
+Only noticed now, but the commit prefix here should just be:
 
-> 
-> Actually, I do not know koji, also not sure if it is
-> important to mention it in the commit subject.
-> I just tested this patch by using 'rpmbuild' command
-> on my local machine.
+	arm64: dts: qcom: sc8280xp: ...
 
-koji (https://koji.fedoraproject.org/koji/) is the automated builder 
-available to Fedora developers. With this patch a developer can produce 
-an upstream kernel rpm rather easily.
+sa8540p is based on sc8280xp but you don't have to point that out in
+every commit (there was one exception where I was also updating the
+sa8540p dtsi due to platform differences).
 
+>   arm64: dts: qcom: sc8280xp-x13s: Add soundcard support
 > 
-> 
-[...]
-> 
-> 
-> --
-> Best Regards
-> Masahiro Yamada
-> 
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 213 +++++++++++
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 359 ++++++++++++++++++
+>  2 files changed, 572 insertions(+)
 
+Johan
