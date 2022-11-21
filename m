@@ -2,453 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B71A632065
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5A1632067
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiKULYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S230330AbiKULYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiKULXp (ORCPT
+        with ESMTP id S230247AbiKULYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:23:45 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6B2B9B85
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:19:03 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id j4so18389632lfk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:19:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bze5QXBYXjq9sVr5fTXdpM72OqKUrY/P/hxFE+uIBv8=;
-        b=dGszegw1FmC0qTLpX3ZL4U+6mUZcZ7NGjkCpRHgnDOTEFtYh98uu0CCCFtqvNtoMIg
-         t/SpnLah8ZKzu9Z3hEULagTKmue2Rv5Np6S5xzEFyncZBY6Bpx2Xpx0uhdUAYfJuaBdk
-         pUfxLaXTzJ9fNShpjYW8+SGn1mNWpDBXQx/8KD/zaeVXQEQvTDbbsox5H9kZs/FBFJAk
-         nu1yPZYki6eg9TXfK9yUcNhRTMVkYwWHnoNfs/MM6CSESJ7lQZDx+oF3HpItfC8hrHEJ
-         qN7U6ZbamKqbvy7YxA01evLIBhyyxvb7dajxyM/Uda3fry7bowMe9q7nBqrVpPk2tyMB
-         qQNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bze5QXBYXjq9sVr5fTXdpM72OqKUrY/P/hxFE+uIBv8=;
-        b=aNUp3TzbOjhzqVkj56eNp/+4oBV3udB2LCR3iJV/k8Rn3BpVqZX1zI47+xKyiPlq9v
-         oPwAz5CbZO7XB6SRn07hmXCu6WljbMnY20OrwxBrepIb6cRo3xiYDomx9DIlgnLwLZap
-         UdCkbIA/VlhWeDndZ3MAT6Ra1QyowWdFfJihtMnjlQppv0bTfF79tevyToCEm5mURoeq
-         tR37tCfQi1WzbUTdgek43bDlTdZpRtYYlOrFGZwxVSUshg7Aw2A/DhHNeCUvqO/N+HUE
-         e0sGIYj6KZdLSarZixojfHfDAY/IY8cVdoFk3zUGQBLb/Khd0+LLsTdp/Ui13At/7FQ4
-         rMnw==
-X-Gm-Message-State: ANoB5pkUwhs/e7Rp8FzPXohVeFNY63iPFr5boUV3G5cc6LivaxYJFBpQ
-        FI+lpf3Xtkib1XXHNooOyf9rvA==
-X-Google-Smtp-Source: AA0mqf4mCaHzwXFhKlSjSqhcDaaqWGh5uIRlr7OAmYDj6cfe3/wl6fwXFnhLifAwXo6DgWiGW1feFQ==
-X-Received: by 2002:a05:6512:3d05:b0:4a2:4f6d:7963 with SMTP id d5-20020a0565123d0500b004a24f6d7963mr6607092lfv.638.1669029541854;
-        Mon, 21 Nov 2022 03:19:01 -0800 (PST)
-Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
-        by smtp.gmail.com with ESMTPSA id c4-20020ac25304000000b0049fff3f645esm1969937lfh.70.2022.11.21.03.19.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 03:19:01 -0800 (PST)
-Message-ID: <ed803985-11df-4aed-7ea7-492e90775f66@linaro.org>
-Date:   Mon, 21 Nov 2022 12:18:59 +0100
+        Mon, 21 Nov 2022 06:24:11 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8444BE26C;
+        Mon, 21 Nov 2022 03:19:29 -0800 (PST)
+Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NG4Xm3gQlz6H6rh;
+        Mon, 21 Nov 2022 19:14:32 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 12:19:27 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
+ 2022 11:19:26 +0000
+Date:   Mon, 21 Nov 2022 11:19:25 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Gregory Price <gregory.price@memverge.com>,
+        "Li, Ming" <ming4.li@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alison Schofield <alison.schofield@intel.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] PCI/DOE: Remove asynchronous task support
+Message-ID: <20221121111925.00003eed@Huawei.com>
+In-Reply-To: <20221119222527.1799836-1-ira.weiny@intel.com>
+References: <20221119222527.1799836-1-ira.weiny@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 7/9] arm64: dts: qcom: msm8953: Add device tree for
- Xiaomi Mi A1
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Danila Tikhonov <JIaxyga@protonmail.com>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20221119203758.888207-1-luca@z3ntu.xyz>
- <20221119203758.888207-8-luca@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221119203758.888207-8-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 19 Nov 2022 14:25:27 -0800
+ira.weiny@intel.com wrote:
+
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> Gregory Price and Jonathan Cameron reported a bug within
+> pci_doe_submit_task().[1]  The issue was that work item initialization
+> needs to be done with either INIT_WORK_ONSTACK() or INIT_WORK()
+> depending on how the work item is allocated.
+> 
+> Initially, it was anticipated that DOE tasks were going to need to be
+> submitted asynchronously and the code was designed thusly.  Many
+> alternatives were discussed to fix the work initialization issue.[2]
+> 
+> However, all current users submit tasks synchronously and this has
+> therefore become an unneeded maintenance burden.  Remove the extra
+> maintenance burden by replacing asynchronous task submission with
+> a synchronous wait function.[3]
+> 
+> [1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
+> [2] https://lore.kernel.org/linux-cxl/Y3kSDQDur+IUDs2O@iweiny-mobl/T/#m0f057773d9c75432fcfcc54a2604483fe82abe92
+> [3] https://lore.kernel.org/linux-cxl/Y3kSDQDur+IUDs2O@iweiny-mobl/T/#m32d3f9b208ef7486bc148d94a326b26b2d3e69ff
+> 
+> Reported-by: Gregory Price <gregory.price@memverge.com>
+> Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Suggested-by: Dan Williams <dan.j.williams@intel.com>
+> Suggested-by: "Li, Ming" <ming4.li@intel.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+
+This is very similar to the very the first approach we long time back now.
+Ends up queueing multiple users on a mutex.  THat was the bit that people didn't
+like about those early proposals.  Ah well, I always thought it was simpler and
+cleaner even though there are potentially fairness problems if there are enough
+users.
+
+So on that note,
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+@Lukas, I assume we don't care about the async support for SPDM going forwards?
+
+Thanks,
+
+Jonathan
 
 
-On 19.11.2022 21:37, Luca Weiss wrote:
-> From: Danila Tikhonov <JIaxyga@protonmail.com>
 > 
-> Add device tree for the Xiaomi Mi A1 (tissot) smartphone. This device is
-> based on Snapdragon 625 (msm8953) SoC.
-> 
-> Co-developed-by: Anton Bambura <jenneron@protonmail.com>
-> Signed-off-by: Anton Bambura <jenneron@protonmail.com>
-> Signed-off-by: Danila Tikhonov <JIaxyga@protonmail.com>
-> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
-> Changes in v2:
-> * address review comments from v1
+> Thanks to Dan for the bulk of the patch.
+> Thanks to Ming for pointing out the need for a lock to prevent more
+> than 1 task from being processed at a time.
+> ---
+>  drivers/cxl/core/pci.c  | 16 ++------
+>  drivers/pci/doe.c       | 83 ++++++++++++++---------------------------
+>  include/linux/pci-doe.h | 10 +----
+>  3 files changed, 32 insertions(+), 77 deletions(-)
 > 
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../boot/dts/qcom/msm8953-xiaomi-tissot.dts   | 319 ++++++++++++++++++
->  2 files changed, 320 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index cd667df63326..f93e5cf062e5 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -24,6 +24,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-tissot.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-lg-bullhead-rev-10.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-lg-bullhead-rev-101.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-msft-lumia-octagon-talkman.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dts b/arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dts
-> new file mode 100644
-> index 000000000000..7c3b809cc551
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dts
-> @@ -0,0 +1,319 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2022, Danila Tikhonov <JIaxyga@protonmail.com>
-> + * Copyright (c) 2022, Anton Bambura <jenneron@protonmail.com>
-> + */
-> +/dts-v1/;
+> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> index 9240df53ed87..58977e0712b6 100644
+> --- a/drivers/cxl/core/pci.c
+> +++ b/drivers/cxl/core/pci.c
+> @@ -490,21 +490,14 @@ static struct pci_doe_mb *find_cdat_doe(struct device *uport)
+>  		    CXL_DOE_TABLE_ACCESS_TABLE_TYPE_CDATA) |		\
+>  	 FIELD_PREP(CXL_DOE_TABLE_ACCESS_ENTRY_HANDLE, (entry_handle)))
+>  
+> -static void cxl_doe_task_complete(struct pci_doe_task *task)
+> -{
+> -	complete(task->private);
+> -}
+> -
+>  struct cdat_doe_task {
+>  	u32 request_pl;
+>  	u32 response_pl[32];
+> -	struct completion c;
+>  	struct pci_doe_task task;
+>  };
+>  
+>  #define DECLARE_CDAT_DOE_TASK(req, cdt)                       \
+>  struct cdat_doe_task cdt = {                                  \
+> -	.c = COMPLETION_INITIALIZER_ONSTACK(cdt.c),           \
+>  	.request_pl = req,				      \
+>  	.task = {                                             \
+>  		.prot.vid = PCI_DVSEC_VENDOR_ID_CXL,        \
+> @@ -513,8 +506,6 @@ struct cdat_doe_task cdt = {                                  \
+>  		.request_pl_sz = sizeof(cdt.request_pl),      \
+>  		.response_pl = cdt.response_pl,               \
+>  		.response_pl_sz = sizeof(cdt.response_pl),    \
+> -		.complete = cxl_doe_task_complete,            \
+> -		.private = &cdt.c,                            \
+>  	}                                                     \
+>  }
+>  
+> @@ -525,12 +516,12 @@ static int cxl_cdat_get_length(struct device *dev,
+>  	DECLARE_CDAT_DOE_TASK(CDAT_DOE_REQ(0), t);
+>  	int rc;
+>  
+> -	rc = pci_doe_submit_task(cdat_doe, &t.task);
+> +	rc = pci_doe_submit_task_wait(cdat_doe, &t.task);
+>  	if (rc < 0) {
+>  		dev_err(dev, "DOE submit failed: %d", rc);
+>  		return rc;
+>  	}
+> -	wait_for_completion(&t.c);
 > +
-> +#include "msm8953.dtsi"
-> +#include "pm8953.dtsi"
-> +#include "pmi8950.dtsi"
-> +#include <dt-bindings/leds/common.h>
+>  	if (t.task.rv < sizeof(u32))
+>  		return -EIO;
+>  
+> @@ -554,12 +545,11 @@ static int cxl_cdat_read_table(struct device *dev,
+>  		u32 *entry;
+>  		int rc;
+>  
+> -		rc = pci_doe_submit_task(cdat_doe, &t.task);
+> +		rc = pci_doe_submit_task_wait(cdat_doe, &t.task);
+>  		if (rc < 0) {
+>  			dev_err(dev, "DOE submit failed: %d", rc);
+>  			return rc;
+>  		}
+> -		wait_for_completion(&t.c);
+>  		/* 1 DW header + 1 DW data min */
+>  		if (t.task.rv < (2 * sizeof(u32)))
+>  			return -EIO;
+> diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
+> index e402f05068a5..41a75112b39b 100644
+> --- a/drivers/pci/doe.c
+> +++ b/drivers/pci/doe.c
+> @@ -18,7 +18,6 @@
+>  #include <linux/mutex.h>
+>  #include <linux/pci.h>
+>  #include <linux/pci-doe.h>
+> -#include <linux/workqueue.h>
+>  
+>  #define PCI_DOE_PROTOCOL_DISCOVERY 0
+>  
+> @@ -40,7 +39,7 @@
+>   * @cap_offset: Capability offset
+>   * @prots: Array of protocols supported (encoded as long values)
+>   * @wq: Wait queue for work item
+> - * @work_queue: Queue of pci_doe_work items
+> + * @exec_lock: Lock to ensure 1 task is processed at a time
+>   * @flags: Bit array of PCI_DOE_FLAG_* flags
+>   */
+>  struct pci_doe_mb {
+> @@ -49,7 +48,7 @@ struct pci_doe_mb {
+>  	struct xarray prots;
+>  
+>  	wait_queue_head_t wq;
+> -	struct workqueue_struct *work_queue;
+> +	struct mutex exec_lock;
+>  	unsigned long flags;
+>  };
+>  
+> @@ -211,7 +210,6 @@ static int pci_doe_recv_resp(struct pci_doe_mb *doe_mb, struct pci_doe_task *tas
+>  static void signal_task_complete(struct pci_doe_task *task, int rv)
+>  {
+>  	task->rv = rv;
+> -	task->complete(task);
+>  }
+>  
+>  static void signal_task_abort(struct pci_doe_task *task, int rv)
+> @@ -231,10 +229,8 @@ static void signal_task_abort(struct pci_doe_task *task, int rv)
+>  	signal_task_complete(task, rv);
+>  }
+>  
+> -static void doe_statemachine_work(struct work_struct *work)
+> +static void exec_task(struct pci_doe_task *task)
+>  {
+> -	struct pci_doe_task *task = container_of(work, struct pci_doe_task,
+> -						 work);
+>  	struct pci_doe_mb *doe_mb = task->doe_mb;
+>  	struct pci_dev *pdev = doe_mb->pdev;
+>  	int offset = doe_mb->cap_offset;
+> @@ -295,18 +291,12 @@ static void doe_statemachine_work(struct work_struct *work)
+>  	signal_task_complete(task, rc);
+>  }
+>  
+> -static void pci_doe_task_complete(struct pci_doe_task *task)
+> -{
+> -	complete(task->private);
+> -}
+> -
+>  static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
+>  			     u8 *protocol)
+>  {
+>  	u32 request_pl = FIELD_PREP(PCI_DOE_DATA_OBJECT_DISC_REQ_3_INDEX,
+>  				    *index);
+>  	u32 response_pl;
+> -	DECLARE_COMPLETION_ONSTACK(c);
+>  	struct pci_doe_task task = {
+>  		.prot.vid = PCI_VENDOR_ID_PCI_SIG,
+>  		.prot.type = PCI_DOE_PROTOCOL_DISCOVERY,
+> @@ -314,17 +304,13 @@ static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
+>  		.request_pl_sz = sizeof(request_pl),
+>  		.response_pl = &response_pl,
+>  		.response_pl_sz = sizeof(response_pl),
+> -		.complete = pci_doe_task_complete,
+> -		.private = &c,
+>  	};
+>  	int rc;
+>  
+> -	rc = pci_doe_submit_task(doe_mb, &task);
+> +	rc = pci_doe_submit_task_wait(doe_mb, &task);
+>  	if (rc < 0)
+>  		return rc;
+>  
+> -	wait_for_completion(&c);
+> -
+>  	if (task.rv != sizeof(response_pl))
+>  		return -EIO;
+>  
+> @@ -376,13 +362,6 @@ static void pci_doe_xa_destroy(void *mb)
+>  	xa_destroy(&doe_mb->prots);
+>  }
+>  
+> -static void pci_doe_destroy_workqueue(void *mb)
+> -{
+> -	struct pci_doe_mb *doe_mb = mb;
+> -
+> -	destroy_workqueue(doe_mb->work_queue);
+> -}
+> -
+>  static void pci_doe_flush_mb(void *mb)
+>  {
+>  	struct pci_doe_mb *doe_mb = mb;
+> @@ -390,12 +369,9 @@ static void pci_doe_flush_mb(void *mb)
+>  	/* Stop all pending work items from starting */
+>  	set_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags);
+>  
+> -	/* Cancel an in progress work item, if necessary */
+> +	/* Cancel the in progress task and waiting tasks, if necessary */
+>  	set_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags);
+>  	wake_up(&doe_mb->wq);
+> -
+> -	/* Flush all work items */
+> -	flush_workqueue(doe_mb->work_queue);
+>  }
+>  
+>  /**
+> @@ -423,25 +399,13 @@ struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset)
+>  	doe_mb->pdev = pdev;
+>  	doe_mb->cap_offset = cap_offset;
+>  	init_waitqueue_head(&doe_mb->wq);
+> +	mutex_init(&doe_mb->exec_lock);
+>  
+>  	xa_init(&doe_mb->prots);
+>  	rc = devm_add_action(dev, pci_doe_xa_destroy, doe_mb);
+>  	if (rc)
+>  		return ERR_PTR(rc);
+>  
+> -	doe_mb->work_queue = alloc_ordered_workqueue("%s %s DOE [%x]", 0,
+> -						dev_driver_string(&pdev->dev),
+> -						pci_name(pdev),
+> -						doe_mb->cap_offset);
+> -	if (!doe_mb->work_queue) {
+> -		pci_err(pdev, "[%x] failed to allocate work queue\n",
+> -			doe_mb->cap_offset);
+> -		return ERR_PTR(-ENOMEM);
+> -	}
+> -	rc = devm_add_action_or_reset(dev, pci_doe_destroy_workqueue, doe_mb);
+> -	if (rc)
+> -		return ERR_PTR(rc);
+> -
+>  	/* Reset the mailbox by issuing an abort */
+>  	rc = pci_doe_abort(doe_mb);
+>  	if (rc) {
+> @@ -496,23 +460,22 @@ bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
+>  EXPORT_SYMBOL_GPL(pci_doe_supports_prot);
+>  
+>  /**
+> - * pci_doe_submit_task() - Submit a task to be processed by the state machine
+> + * pci_doe_submit_task_wait() - Submit and execute a task
+>   *
+>   * @doe_mb: DOE mailbox capability to submit to
+> - * @task: task to be queued
+> - *
+> - * Submit a DOE task (request/response) to the DOE mailbox to be processed.
+> - * Returns upon queueing the task object.  If the queue is full this function
+> - * will sleep until there is room in the queue.
+> + * @task: task to be run
+>   *
+> - * task->complete will be called when the state machine is done processing this
+> - * task.
+> + * Submit and run DOE task (request/response) to the DOE mailbox to be
+> + * processed.
+>   *
+>   * Excess data will be discarded.
+>   *
+> - * RETURNS: 0 when task has been successfully queued, -ERRNO on error
+> + * Context: non-interrupt
+> + *
+> + * RETURNS: 0 when task was executed, the @task->rv holds the status
+> + * result of the executed opertion, -ERRNO on failure to submit.
+>   */
+> -int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+> +int pci_doe_submit_task_wait(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+>  {
+>  	if (!pci_doe_supports_prot(doe_mb, task->prot.vid, task->prot.type))
+>  		return -EINVAL;
+> @@ -529,8 +492,18 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+>  		return -EIO;
+>  
+>  	task->doe_mb = doe_mb;
+> -	INIT_WORK(&task->work, doe_statemachine_work);
+> -	queue_work(doe_mb->work_queue, &task->work);
 > +
-> +/delete-node/ &adsp_fw_mem;
-> +/delete-node/ &qseecom_mem;
-> +/delete-node/ &wcnss_fw_mem;
+> +again:
+> +	if (!mutex_trylock(&doe_mb->exec_lock)) {
+> +		if (wait_event_timeout(task->doe_mb->wq,
+> +				test_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags),
+> +				PCI_DOE_POLL_INTERVAL))
+> +			return -EIO;
+> +		goto again;
+> +	}
+> +	exec_task(task);
+> +	mutex_unlock(&doe_mb->exec_lock);
 > +
-> +/ {
-> +	model = "Xiaomi Mi A1";
-> +	compatible = "xiaomi,tissot", "qcom,msm8953";
-> +	chassis-type = "handset";
-> +	qcom,msm-id = <293 0>;
-> +	qcom,board-id = <0x1000b 0x00>;
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&gpio_key_default>, <&gpio_hall_sensor_default>;
-> +
-> +		event-hall-sensor {
-> +			label = "Hall Effect Sensor";
-> +			gpios = <&tlmm 44 GPIO_ACTIVE_LOW>;
-> +			linux,input-type = <EV_SW>;
-> +			linux,code = <SW_LID>;
-> +			linux,can-disable;
-> +		};
-> +
-> +		key-volume-up {
-> +			label = "Volume Up";
-> +			gpios = <&tlmm 85 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_VOLUMEUP>;
-> +		};
-> +	};
-> +
-> +	reserved-memory {
-> +		qseecom_mem: qseecom@84a00000 {
-> +			reg = <0x0 0x84a00000 0x0 0x1900000>;
-> +			no-map;
-> +		};
-> +
-> +		adsp_fw_mem: adsp@8d600000 {
-> +			reg = <0x0 0x8d600000 0x0 0x1200000>;
-> +			no-map;
-> +		};
-> +
-> +		wcnss_fw_mem: wcnss@8e800000 {
-> +			reg = <0x0 0x8e800000 0x0 0x700000>;
-> +			no-map;
-> +		};
-> +
-> +		ramoops@9ff00000 {
-> +			compatible = "ramoops";
-> +			reg = <0x0 0x9ff00000 0x0 0x00100000>;
-> +			record-size = <0x1000>;
-> +			console-size = <0x80000>;
-> +			ftrace-size = <0x1000>;
-> +			pmsg-size = <0x8000>;
-> +		};
-> +	};
-> +
-> +	vph_pwr: vph-pwr-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vph_pwr";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +};
-> +
-> +&hsusb_phy {
-> +	vdd-supply = <&pm8953_l3>;
-> +	vdda-pll-supply = <&pm8953_l7>;
-> +	vdda-phy-dpdm-supply = <&pm8953_l13>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&i2c_2 {
-> +	status = "okay";
-> +
-> +	max98927_codec: audio-codec@3a {
-> +		compatible = "maxim,max98927";
-> +		reg = <0x3a>;
-> +
-> +		reset-gpios = <&tlmm 86 GPIO_ACTIVE_LOW>;
-> +
-> +		vmon-slot-no = <1>;
-> +		imon-slot-no = <1>;
-> +
-> +		#sound-dai-cells = <1>;
-> +	};
-> +
-> +	led-controller@45 {
-> +		compatible = "awinic,aw2013";
-> +		reg = <0x45>;
-> +
-> +		vcc-supply = <&pm8953_l10>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		led@0 {
-> +			reg = <0>;
-> +			led-max-microamp = <5000>;
-> +			function = LED_FUNCTION_INDICATOR;
-> +			color = <LED_COLOR_ID_WHITE>;
-> +		};
-> +	};
-> +};
-> +
-> +&i2c_3 {
-> +	status = "okay";
-> +
-> +	touchscreen@38 {
-> +		compatible = "edt,edt-ft5406";
-> +		reg = <0x38>;
-> +
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <65 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&ts_int_default>;
-> +
-> +		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-> +
-> +		vcc-supply = <&pm8953_l10>;
-> +
-> +		touchscreen-size-x = <1080>;
-> +		touchscreen-size-y = <1920>;
-> +	};
-> +};
-> +
-> +&pm8953_resin {
-> +	linux,code = <KEY_VOLUMEDOWN>;
-> +	status = "okay";
-> +};
-> +
-> +&pmi8950_wled {
-> +	qcom,num-strings = <2>;
-> +	qcom,external-pfet;
-> +	qcom,cabc;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&sdhc_1 {
-> +	status = "okay";
-> +};
-> +
-> +&sdhc_2 {
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
-> +	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-> +
-> +	cd-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
-> +
-> +	status = "okay";
-> +};
-These two are not sorted properly.
+>  	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(pci_doe_submit_task);
+> +EXPORT_SYMBOL_GPL(pci_doe_submit_task_wait);
 
-With that fixed:
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> +
-> +&rpm_requests {
-> +	regulators {
-> +		compatible = "qcom,rpm-pm8953-regulators";
-> +
-> +		vdd_s1-supply = <&vph_pwr>;
-> +		vdd_s2-supply = <&vph_pwr>;
-> +		vdd_s3-supply = <&vph_pwr>;
-> +		vdd_s4-supply = <&vph_pwr>;
-> +		vdd_s5-supply = <&vph_pwr>;
-> +		vdd_s6-supply = <&vph_pwr>;
-> +		vdd_s7-supply = <&vph_pwr>;
-> +		vdd_l1-supply = <&pm8953_s3>;
-> +		vdd_l2_l3-supply = <&pm8953_s3>;
-> +		vdd_l4_l5_l6_l7_l16_l19-supply = <&pm8953_s4>;
-> +		vdd_l8_l11_l12_l13_l14_l15-supply = <&vph_pwr>;
-> +		vdd_l9_l10_l17_l18_l22-supply = <&vph_pwr>;
-> +
-> +		pm8953_s1: s1 {
-> +			regulator-min-microvolt = <870000>;
-> +			regulator-max-microvolt = <1156000>;
-> +		};
-> +
-> +		pm8953_s3: s3 {
-> +			regulator-min-microvolt = <1224000>;
-> +			regulator-max-microvolt = <1224000>;
-> +		};
-> +
-> +		pm8953_s4: s4 {
-> +			regulator-min-microvolt = <1900000>;
-> +			regulator-max-microvolt = <2050000>;
-> +		};
-> +
-> +		pm8953_l1: l1 {
-> +			regulator-min-microvolt = <1000000>;
-> +			regulator-max-microvolt = <1000000>;
-> +		};
-> +
-> +		pm8953_l2: l2 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1225000>;
-> +		};
-> +
-> +		pm8953_l3: l3 {
-> +			regulator-min-microvolt = <925000>;
-> +			regulator-max-microvolt = <925000>;
-> +		};
-> +
-> +		pm8953_l5: l5 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8953_l6: l6 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8953_l7: l7 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1900000>;
-> +		};
-> +
-> +		pm8953_l8: l8 {
-> +			regulator-min-microvolt = <2900000>;
-> +			regulator-max-microvolt = <2900000>;
-> +		};
-> +
-> +		pm8953_l9: l9 {
-> +			regulator-min-microvolt = <3300000>;
-> +			regulator-max-microvolt = <3300000>;
-> +		};
-> +
-> +		pm8953_l10:l10 {
-> +			regulator-min-microvolt = <2850000>;
-> +			regulator-max-microvolt = <2850000>;
-> +		};
-> +
-> +		pm8953_l11: l11 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8953_l12: l12 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8953_l13: l13 {
-> +			regulator-min-microvolt = <3125000>;
-> +			regulator-max-microvolt = <3125000>;
-> +		};
-> +
-> +		pm8953_l16: l16 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8953_l17: l17 {
-> +			regulator-min-microvolt = <2750000>;
-> +			regulator-max-microvolt = <2850000>;
-> +		};
-> +
-> +		pm8953_l19: l19 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1350000>;
-> +		};
-> +
-> +		pm8953_l22: l22 {
-> +			regulator-min-microvolt = <2800000>;
-> +			regulator-max-microvolt = <2800000>;
-> +		};
-> +
-> +		pm8953_l23: l23 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1225000>;
-> +		};
-> +	};
-> +};
-> +
-> +&tlmm {
-> +	gpio-reserved-ranges = <0 4>, <16 4>, <135 4>;
-> +
-> +	gpio_hall_sensor_default: gpio-hall-sensor-state {
-> +		pins = "gpio44";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-pull-up;
-> +	};
-> +
-> +	ts_int_default: ts-int-default-state {
-> +		pins = "gpio65";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-pull-up;
-> +	};
-> +};
-> +
-> +&uart_0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart_console_active>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb3 {
-> +	status = "okay";
-> +};
-> +
-> +&usb3_dwc3 {
-> +	dr_mode = "peripheral";
-> +};
