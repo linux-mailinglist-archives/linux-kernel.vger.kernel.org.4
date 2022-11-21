@@ -2,145 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA43563235D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B72C463235E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiKUNYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S229977AbiKUNYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiKUNYJ (ORCPT
+        with ESMTP id S229732AbiKUNYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:24:09 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0302AC60
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:24:08 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id x5so15770777wrt.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:24:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4LJ8G4Vlx63n7xBM1es556I3FKQ+mU4sDRzPoRdCeX0=;
-        b=kd74NXQh18wXsJRyAWwjOEZo6k21PuwDdsL4ZmNCSg8eLPjALRuiX3ZSZ5RiPInHwR
-         ObrJ3F6rZaax9BBwPZ/cvOeJc/ZhxFdPBuWApa+uEQBY4ySZcH21fNOOgG9TV+srlhDK
-         sJY+fpmEVh/moUjqN9GhrBjkFat4UZ8IPCrZJcTuBV4VqYDooAI7toY9pkzEJnVlkZWj
-         qUmdWlYDENIMiVkRQwvaCWjmxPhzMpVE2mkYaJ/24jawnIMbzkaIv0uj21BSneaHWECg
-         gpmHNhIRtXHe3dnyAW2YWKDFkDqeOKdHhwnrRqZAbHOXP2OpS8mCCYsDgrBvNp1LaXvE
-         p7eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4LJ8G4Vlx63n7xBM1es556I3FKQ+mU4sDRzPoRdCeX0=;
-        b=W2sTsbF7YsWuAUQlZ1kSe5IyHlEWzlpm6Uuxd6kyV4GxOamVKoJ9bi8XSq21DchufB
-         Y+BEYTV7BvUXo246/cA63CTBbKk0BZBeM3w+GfHLy0Nh5vJBQg2jC57sieMyKShDzdAK
-         Tr4zT3I9OfdZvTrTMMtdlACHBjVmQnlsGE87WaK6SyNLQBwvzHbEH/vE1EFw7FITqjP4
-         43gfP6jSjoH9SFn/8qRxpCrCSYQXx08+5w2DpGzZiCQ+U38fowKjiNYIH8oB/bHP4Q+X
-         qcRM57gd6rcoEO9c73CQbbLgpLQJRw2383SPUr1c6o5bWgpZ5mQHjuet6dWZ4TOo8Ywz
-         Hv7A==
-X-Gm-Message-State: ANoB5pnnxE9I2gGYNTc8+wq7303Y3A6YHBIwxW6m/N/1pWP8TGbS8NJg
-        4Sp0MyijJj7zrI1pL9o5QxWxtFuDTzj8xELP
-X-Google-Smtp-Source: AA0mqf751Fr4N3/875Urx0i7J1CeHvrpttXLjJgI9qnKrrIfoaIeZRF5J+hyjNgMQMilcVeGAzzvMw==
-X-Received: by 2002:adf:e98b:0:b0:241:dbf1:dad with SMTP id h11-20020adfe98b000000b00241dbf10dadmr363012wrm.130.1669037046505;
-        Mon, 21 Nov 2022 05:24:06 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f19-20020a05600c155300b003c6f3e5ba42sm20242257wmg.46.2022.11.21.05.24.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 05:24:05 -0800 (PST)
-Message-ID: <7815f518-c764-a3d8-cde6-89c1f17c2329@linaro.org>
-Date:   Mon, 21 Nov 2022 14:24:04 +0100
+        Mon, 21 Nov 2022 08:24:11 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334C94090C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:24:10 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0E14C3200958;
+        Mon, 21 Nov 2022 08:24:07 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 21 Nov 2022 08:24:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1669037047; x=1669123447; bh=go
+        HhriPmNqgVzqWoz0ND7EocwpjpXPEn5qxwNPjIXSg=; b=Id1m2sP4DMPbLCTncm
+        2FtRqFLhncK04RL7vHhLHUwPqhkpUPItoejM0umsr7X6VvDOXM4zhimx4K3hbmGB
+        eXxCXh2cnsreGKUrhB19peUvFjMSFHSNk1lYOxxI0OPXdnwPK6RK+JW0s07MDa7g
+        bk+E9Wkl6Ic+FhAFtKod7hgxIMOjVwaAsmvNtX0GopeR17i6KNQ17C45Qbap/7V0
+        VeHlrRBXwYcHogCsr+lcmtdRiEJMjV1031cAE2szuAVmAeUDk31S/Z6J9lyKDgSU
+        eKRVpgG0gWjsy+HRQeJ2HeG565DKCNcKcVpdn0q9y2hTlZE4bol40ScjkilDc4AW
+        vfDg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669037047; x=1669123447; bh=goHhriPmNqgVzqWoz0ND7Eocwpjp
+        XPEn5qxwNPjIXSg=; b=Z9WLe9WiuyUTaxQldSvu7z0FfOcGZYwQWTEKk1WtzLHQ
+        cgNRE6B2lXpobH1L8Wl8yh+vrwwXBezQ1AvRziFWv7QbaqGYHdp2bIV+ZAOKpC7B
+        OGXorQFThUNc0+ZhOQQ23z3CHB8JAzaRy0CYr5egt9nzFMd4DU9pAQJWNV3xmEgJ
+        1D5BUvWLUzia4vTr3f1NV8PfFp+SoXTT7IcIHfqygEcdwNs1klewXEE6nmZlwuVZ
+        QtM+h7CxS8QfFmtw99Q1+nuI3jhn1KzvuLlAUjN6Fad9FGJzu/zxS6TKvxCg6SiP
+        h6VDoTtyH9X0J8H0i5P8k4jf9WRpbTFHe4V9ojjWyg==
+X-ME-Sender: <xms:9nt7Y3E9Dpx0uyKUz_pHce5HlCC5Ce3sYqpTvnjoHOIGNHIiBxr1Ow>
+    <xme:9nt7Y0XLZSdMUo1l3S4sXJIshWrwUyktTwzwUuh3oDbOTmGfAmVkbSRqh-mXcw-A0
+    G71gHw-R_eftE4JSIQ>
+X-ME-Received: <xmr:9nt7Y5Li82vnKOz8xHbj1kunXhBKh17b4FmqqQJbMJ65SuEt3oE31zWW2HI1qOh-Dj_amA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheeigdehtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:9nt7Y1EQ4tPhawoczBBqSOjggdBoQDyJoAaLRYGBzDZ8DFH6TZe7qg>
+    <xmx:9nt7Y9V82dYxB2ohDaWIDwH8n3brkh6rk6geZ4EUND7qyz0z6Qy29A>
+    <xmx:9nt7YwMhBCxmM7bAD8UhRIm8iSEeBmedIB7hLZdLSlJTb8sjwFgyVg>
+    <xmx:93t7Y0Mp3q4Wh0wG-tw2BrQGzK0YiKs3k67vpGzMEl5VPy7Q3RFLCQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Nov 2022 08:24:06 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id CD83F109A30; Mon, 21 Nov 2022 16:24:04 +0300 (+03)
+Date:   Mon, 21 Nov 2022 16:24:04 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 3/3] mm,thp,rmap: clean up the end of
+ __split_huge_pmd_locked()
+Message-ID: <20221121132404.sebpecbc5joto7h7@box.shutemov.name>
+References: <5f52de70-975-e94f-f141-543765736181@google.com>
+ <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
+ <2f4afe60-40d2-706c-af21-914fbbbd164@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 10/14] dt-bindings: clock: Add StarFive JH7110
- always-on clock and reset generator
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20221118010627.70576-1-hal.feng@starfivetech.com>
- <20221118010627.70576-11-hal.feng@starfivetech.com>
- <8153973d-e8ad-e47a-3808-bbcdbfd169a5@linaro.org>
- <CAJM55Z9ouj=jD2Otx3fK4W1wgnPjecUgFuKksw5CmU6SraM_Nw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAJM55Z9ouj=jD2Otx3fK4W1wgnPjecUgFuKksw5CmU6SraM_Nw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f4afe60-40d2-706c-af21-914fbbbd164@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 12:38, Emil Renner Berthing wrote:
-> On Mon, 21 Nov 2022 at 09:49, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 18/11/2022 02:06, Hal Feng wrote:
->>> From: Emil Renner Berthing <kernel@esmil.dk>
->>>
->>> Add bindings for the always-on clock and reset generator (AONCRG) on the
->>> JH7110 RISC-V SoC by StarFive Ltd.
->>>
->>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->>> ---
->>>  .../clock/starfive,jh7110-aoncrg.yaml         | 76 +++++++++++++++++++
->>>  1 file changed, 76 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
->>> new file mode 100644
->>> index 000000000000..afbb205e294f
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
->>> @@ -0,0 +1,76 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-aoncrg.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: StarFive JH7110 Always-On Clock and Reset Generator
->>> +
->>> +maintainers:
->>> +  - Emil Renner Berthing <kernel@esmil.dk>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: starfive,jh7110-aoncrg
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    items:
->>> +      - description: Main Oscillator
->>> +      - description: RTC clock
->>
->> Real Time Clock clock? :) I don't think the input to clock controller is
->> the output of RTC...
+On Fri, Nov 18, 2022 at 01:16:20AM -0800, Hugh Dickins wrote:
+> It's hard to add a page_add_anon_rmap() into __split_huge_pmd_locked()'s
+> HPAGE_PMD_NR set_pte_at() loop, without wincing at the "freeze" case's
+> HPAGE_PMD_NR page_remove_rmap() loop below it.
 > 
-> The description is bad, but even the documentation calls it "clk_rtc"
-> even though it's really an optional input from a 32k oscillator.
+> It's just a mistake to add rmaps in the "freeze" (insert migration entries
+> prior to splitting huge page) case: the pmd_migration case already avoids
+> doing that, so just follow its lead.  page_add_ref() versus put_page()
+> likewise.  But why is one more put_page() needed in the "freeze" case?
+> Because it's removing the pmd rmap, already removed when pmd_migration
+> (and freeze and pmd_migration are mutually exclusive cases).
+> 
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-Then description should match reality, not documentation. Documentation
-is often poor, so if possible better to extend it.
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Best regards,
-Krzysztof
-
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
