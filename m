@@ -2,84 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB4A631D9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 812F3631DA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiKUKBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        id S230197AbiKUKCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiKUKB3 (ORCPT
+        with ESMTP id S229908AbiKUKCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:01:29 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC452E9FC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:01:27 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id s8so18028861lfc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:01:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bdHq/rvX7KryG7wAunvfq9iiBy/GQXmZIFnR3Hg2TYE=;
-        b=BJ68t8t/GQgR6/g1k5r81iMpJYFzH5wJxzWH6RVyUydlRm8yvizWPjIO1jPV2z1U8A
-         a+3PeRRlhinBOTDqyeEPY93nP5QZkE3I6lGiYaBDzZAY8SjFnLHheidQCq24Pj8G2SiD
-         CJA78wDNvEpTz5evWXX+k2/F7Uh9eQkJq5XTyaAr/QCTZStIlHUEW74M79M89jk0xwoy
-         YjzQUzxG2YTLnhqFrdk0KsJsG9e1Kvz+a1RqRAzfbO7tJKeGLcLuNSMWLH+n+fEiOp4B
-         NsgL1lPfj+2tY6lwUsNDEOiw1dHZ0w7QefhEl8rJ4Cr+fPwH+Bm8ZRVcnvwGpF/tIxp6
-         WiMQ==
+        Mon, 21 Nov 2022 05:02:41 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46323205D1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:02:33 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id i26-20020a056e021d1a00b003025434c04eso8263787ila.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:02:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bdHq/rvX7KryG7wAunvfq9iiBy/GQXmZIFnR3Hg2TYE=;
-        b=E/iL9nQF2SHBUYy+BcpQjNbpcSKAz/C7eg68A/FJVj8GstPKEws39Bv2+hFrum3iLj
-         sPXFCe3Qavwd2gP1UTj4rDyk+Ps7naaJaFjVoVCxHcnO5e2f2vmqpiEGYgCEQtTOP8YY
-         4w+uRMuz4Lv8EMjJMKD19nrPxetvbg1cN471Yej/9RBHpTYN2t3stUdQjU3SnZkyM9cB
-         JArubLfFEg5jh7OxO/OzLEhW3bbwjzmIDbwOCJD1L8TGDptCkIOlCCfZ44WSGqsFkqWw
-         oKACsHkzitG58RKYAbq6+vlyI4LXHuy3OxqDjEN6cHKXe6KaFfpZxIMvm6WZ4JT1+61D
-         8GkQ==
-X-Gm-Message-State: ANoB5pmcoZwNw6yHgsnESZx6aWveg4dPq41lrU5EN1o/IkC4s6k57a+r
-        jRKP/WDMH76EQ6/G5r3Q2qVX1g==
-X-Google-Smtp-Source: AA0mqf57USOJxIKG1DLY+72g4hRVITQUAM2926LJyd102HRZeb0hnXMBqCPAiFIXTwniaOvmDybYfw==
-X-Received: by 2002:ac2:455a:0:b0:4ab:90c7:3f9 with SMTP id j26-20020ac2455a000000b004ab90c703f9mr1200451lfm.342.1669024886024;
-        Mon, 21 Nov 2022 02:01:26 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056512358700b004b4b69af17dsm1958123lfr.214.2022.11.21.02.01.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 02:01:25 -0800 (PST)
-Message-ID: <a7cbbdf0-1433-b3f8-bccf-b54ddb20d073@linaro.org>
-Date:   Mon, 21 Nov 2022 11:01:24 +0100
+        bh=sVvRetvU66viZg03zt42J481swUWQOVgkFgrLPfYY/8=;
+        b=r6a9cTP95hjdywlYe6lqK2COpgaj62zIPtTyhRzCnUvsglMNRMi8vzQ9rJ40u7Rf3I
+         mUuaxBVvwSttTVNkQs+FUnf6meA2jb0/Yw7Nd0yLnzHZFGtVSY8koTMhTmRzL/FS4juk
+         T40ONqDidi5xqkvHhmo/XwY3TENTPt/Dep3ZYTewYdinC3WBHVf5n6OsyPOCqIRqfwNy
+         vwGjz8tvuxzWwIBEMvEQdLN6fn54JxAOymlJ5MjeZCz4IqSnTQ2L5XfNsNqTDz09xLsn
+         ro3REvRAIhpdQNipE8NeqYh+kj/bByNe60PtkuOzGFmve6WTdcTRnzAB4ZPPA0sdL/gh
+         ooWQ==
+X-Gm-Message-State: ANoB5pllzYbsxg7ay4eARxIKPdsNVKTiHqMo9uaOEk89j/pUS1m7HhrR
+        yduAPVTiVyUqVszyH0aBCBEjNd7zUpfhW6ezCW7132y8xIBF
+X-Google-Smtp-Source: AA0mqf4DXRUTk1M2JEFw1hVVO6Pm/Mk0WsH+TOGiQM6G5JfdjVdUgYVOruJip3nXvQmtYRnvb9aGnLOqzpzDUaSvI0ItIaKgDNYY
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/5] dt-bindings: qcom: Document msm8916-gplus-fl8005a
-Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20221121004813.3883-1-linmengbo0689@protonmail.com>
- <20221121005128.4245-1-linmengbo0689@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221121005128.4245-1-linmengbo0689@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a92:dd0e:0:b0:300:b9c4:8c1 with SMTP id
+ n14-20020a92dd0e000000b00300b9c408c1mr1764432ilm.124.1669024953189; Mon, 21
+ Nov 2022 02:02:33 -0800 (PST)
+Date:   Mon, 21 Nov 2022 02:02:33 -0800
+In-Reply-To: <000000000000b960c00594598949@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000074cd1505edf82717@google.com>
+Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
+From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        stable-commits@vger.kernel.org, stable@vger.kernel.org,
+        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,14 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 01:52, Lin, Meng-Bo wrote:
-> Document the new gplus,fl8005a device tree bindings used in its
-> device tree.
-> 
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+This bug is marked as fixed by commit:
+net: core: netlink: add helper refcount dec and lock function
+net: sched: add helper function to take reference to Qdisc
+net: sched: extend Qdisc with rcu
+net: sched: rename qdisc_destroy() to qdisc_put()
+net: sched: use Qdisc rcu API instead of relying on rtnl lock
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.
