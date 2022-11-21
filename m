@@ -2,166 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6D263245D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD96632445
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbiKUNxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S231220AbiKUNuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiKUNxb (ORCPT
+        with ESMTP id S229954AbiKUNud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:53:31 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F101B94AE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:53:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669038810; x=1700574810;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xAgBqOEUMmWoQfbkuo6RneBuqFILZ8nL3SYVkdsI98s=;
-  b=BBXMjNn1G6DZ7lRQKRZAUM6N+9CBmlwTI5MkcZu1sHgxL7wpYd6wkpKA
-   QoBR3DzvnHMtYaIISy6rYqK5fSxAISFVW3N4ByEs5iObMXmKit3iP5cJI
-   C9tfbMSZOfIVc3xOk1YrTILOZ+CIDDjUz8Q/T7SNEO//+yoyxLvoKsgsn
-   USY09+bweTQjQgvkADb7O+wVlIaJ+FSTCoIpZWLcTPc9GNZWBDLUYdbCn
-   pbkQCYp8uLE+zu/fTyA+hrLqAZfxKjfbpf/cq+LV9rS9C5AjXFxcuzp3E
-   jcbKaKHYFf6udyxj+LdZXnq+iYX039HEh9hpbMcH2Dv0i7chTme5QdVgL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="312261165"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="312261165"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 05:53:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="886125108"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="886125108"
-Received: from feng-clx.sh.intel.com ([10.238.200.228])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Nov 2022 05:53:26 -0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>
-Subject: [PATCH -next 2/2] mm/kasan: simplify is_kmalloc check
-Date:   Mon, 21 Nov 2022 21:50:24 +0800
-Message-Id: <20221121135024.1655240-2-feng.tang@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221121135024.1655240-1-feng.tang@intel.com>
-References: <20221121135024.1655240-1-feng.tang@intel.com>
+        Mon, 21 Nov 2022 08:50:33 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E05260E4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:50:32 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id be13so18931536lfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:50:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QAt4YvIoyvYsFbo41kBZWP010rGTy75faIZV5/NcsYg=;
+        b=gzXIwUVXy1V7XBQQSTVPLPMyWs9eNUDdabh6yxCweLVXP0Y6xCGvLuky1A0pLGKMjt
+         EctDlYTbYh7atokrbgwkF3m2WoN7dkhcH7eiHwuD6hIwTy1XYNrBtCasY/E1VSWfLZsA
+         qROPXRiGVWnFpDVL1oWnB+qU1HMkJyretUNyK0pF9ynXE8ztKFR2X+MKbQSWzG+etLcv
+         cd+tK5t5IdGz8GGE5nuKL8KVDePd/hPi3oUWcbnV4YrMIgtkL3zDWxCdDFvXFVWC6aYo
+         SD28pL5bCy7dSkI2BrRaxkrt/OjbWOmyvPF7MksBJExMLpXWvMN/Fgoon8cJfwkhmTHZ
+         wzqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QAt4YvIoyvYsFbo41kBZWP010rGTy75faIZV5/NcsYg=;
+        b=pZIYjFw2whCBrfOIhZVJNQAizbxrOf52RdSV/XfrdCKmY4pn9RjNb+5uyEqeKNzF4X
+         qwwIJvqsHURNT5oHFeaUAhlTMnw2qPWI3UznxakOmCqeT5fb/gErdgMY4X7xkeKjMzav
+         YQtZgXiEGwI4uU+cWDA2+mq44PiRDunUIq0UwrbLE56QVYY7eJ/sotu/9uYH6oeXlbkP
+         lrlXT2GA4bi0Sa6cTS8i+O7PuY99ZcqPZso6r4jDK9MW0fXXIpemF0PiTSwAcZISzAaY
+         B6HQq+VzThhHtIvBPeWyQmcVukVYxt4dXA9MHQ3nJS+1orFslCxWCsufId+YFZPLlqBl
+         +anw==
+X-Gm-Message-State: ANoB5pnL5f1ai1LUVq+EBlSXSikWIlGW97UercYdQA5BlEg5JoIA4NOP
+        rAqu/xtdsfmBZvDJZTwSYdI/pg==
+X-Google-Smtp-Source: AA0mqf5TYxFBqqdBHMjFqcmXaZTC/TwSnfK8gpf3JY5xoq27k5W77KUczLzcmKQ1hGAgM6fJhOjrew==
+X-Received: by 2002:a05:6512:2109:b0:4a2:5f7b:840a with SMTP id q9-20020a056512210900b004a25f7b840amr3125371lfr.577.1669038630507;
+        Mon, 21 Nov 2022 05:50:30 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 21-20020ac24835000000b004a2588520f5sm2027721lft.166.2022.11.21.05.50.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 05:50:30 -0800 (PST)
+Message-ID: <e0835b03-c409-ef0b-501b-176251bc1725@linaro.org>
+Date:   Mon, 21 Nov 2022 14:50:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 03/10] arm64: dts: qcom: Add pm8010 pmic dtsi
+Content-Language: en-US
+To:     neil.armstrong@linaro.org, Abel Vesa <abel.vesa@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+References: <20221116103146.2556846-1-abel.vesa@linaro.org>
+ <20221116103146.2556846-4-abel.vesa@linaro.org>
+ <76560659-7c90-3846-c250-24bfb072ec0e@linaro.org>
+ <15ac1d06-5da7-ebd2-92ff-764c8df803a1@linaro.org>
+ <3a84d45c-6550-7ae2-2511-9f61d15894d1@linaro.org>
+ <081732c9-5e8e-b68e-c2bd-20724ca1a5d5@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <081732c9-5e8e-b68e-c2bd-20724ca1a5d5@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use new is_kmalloc_cache() to simplify the code of checking whether
-a kmem_cache is a kmalloc cache.
+On 21/11/2022 14:29, neil.armstrong@linaro.org wrote:
+>>>> Any reason why this is licensed BSD-3 clause? It's not a recommended
+>>>> license (2 clause is). Same for other patches.
+>>>
+>>> Probably a bad copy-paste from other existing files.
+>>>
+>>> While checking, the majority of arch/arm64/boot/dts/qcom/pm*.dtsi uses BSD-3-Clause
+>>> so it seems this was done for quite a while now.
+>>
+>> If it is derivative work (of upstrea, downstream), then you might have
+>> to keep BSD-3. But if not, how about changing it to BSD-2?
+> 
+> It's definitely a derivative work from upstream pm*.dtsi files with BSD-3-Clause
+> licence.
 
-Signed-off-by: Feng Tang <feng.tang@intel.com>
----
- include/linux/kasan.h | 9 ---------
- mm/kasan/common.c     | 9 ++-------
- mm/slab_common.c      | 1 -
- 3 files changed, 2 insertions(+), 17 deletions(-)
+OK.
 
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index dff604912687..fc46f5d6f404 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -102,7 +102,6 @@ struct kasan_cache {
- 	int alloc_meta_offset;
- 	int free_meta_offset;
- #endif
--	bool is_kmalloc;
- };
- 
- void __kasan_unpoison_range(const void *addr, size_t size);
-@@ -129,13 +128,6 @@ static __always_inline bool kasan_unpoison_pages(struct page *page,
- 	return false;
- }
- 
--void __kasan_cache_create_kmalloc(struct kmem_cache *cache);
--static __always_inline void kasan_cache_create_kmalloc(struct kmem_cache *cache)
--{
--	if (kasan_enabled())
--		__kasan_cache_create_kmalloc(cache);
--}
--
- void __kasan_poison_slab(struct slab *slab);
- static __always_inline void kasan_poison_slab(struct slab *slab)
- {
-@@ -252,7 +244,6 @@ static inline void kasan_poison_pages(struct page *page, unsigned int order,
- 				      bool init) {}
- static inline bool kasan_unpoison_pages(struct page *page, unsigned int order,
- 					bool init) { return false; }
--static inline void kasan_cache_create_kmalloc(struct kmem_cache *cache) {}
- static inline void kasan_poison_slab(struct slab *slab) {}
- static inline void kasan_unpoison_object_data(struct kmem_cache *cache,
- 					void *object) {}
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 1f30080a7a4c..f7e0e5067e7a 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -122,11 +122,6 @@ void __kasan_poison_pages(struct page *page, unsigned int order, bool init)
- 			     KASAN_PAGE_FREE, init);
- }
- 
--void __kasan_cache_create_kmalloc(struct kmem_cache *cache)
--{
--	cache->kasan_info.is_kmalloc = true;
--}
--
- void __kasan_poison_slab(struct slab *slab)
- {
- 	struct page *page = slab_page(slab);
-@@ -326,7 +321,7 @@ void * __must_check __kasan_slab_alloc(struct kmem_cache *cache,
- 	kasan_unpoison(tagged_object, cache->object_size, init);
- 
- 	/* Save alloc info (if possible) for non-kmalloc() allocations. */
--	if (kasan_stack_collection_enabled() && !cache->kasan_info.is_kmalloc)
-+	if (kasan_stack_collection_enabled() && is_kmalloc_cache(cache))
- 		kasan_save_alloc_info(cache, tagged_object, flags);
- 
- 	return tagged_object;
-@@ -372,7 +367,7 @@ static inline void *____kasan_kmalloc(struct kmem_cache *cache,
- 	 * Save alloc info (if possible) for kmalloc() allocations.
- 	 * This also rewrites the alloc info when called from kasan_krealloc().
- 	 */
--	if (kasan_stack_collection_enabled() && cache->kasan_info.is_kmalloc)
-+	if (kasan_stack_collection_enabled() && is_kmalloc_cache(cache))
- 		kasan_save_alloc_info(cache, (void *)object, flags);
- 
- 	/* Keep the tag that was set by kasan_slab_alloc(). */
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 8276022f0da4..a5480d67f391 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -663,7 +663,6 @@ struct kmem_cache *__init create_kmalloc_cache(const char *name,
- 
- 	create_boot_cache(s, name, size, flags | SLAB_KMALLOC, useroffset,
- 								usersize);
--	kasan_cache_create_kmalloc(s);
- 	list_add(&s->list, &slab_caches);
- 	s->refcount = 1;
- 	return s;
--- 
-2.34.1
+Best regards,
+Krzysztof
 
