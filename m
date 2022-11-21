@@ -2,162 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0038C63190D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B9E631915
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiKUDvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
+        id S229674AbiKUD72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 22:59:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKUDvu (ORCPT
+        with ESMTP id S229446AbiKUD70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:51:50 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57521EEF0
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 19:51:49 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 130so10190317pfu.8
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 19:51:49 -0800 (PST)
+        Sun, 20 Nov 2022 22:59:26 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F962D1C4;
+        Sun, 20 Nov 2022 19:59:24 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id v3so10059121pgh.4;
+        Sun, 20 Nov 2022 19:59:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GxntLd/ct95PDR+cb+voA3PVWvgQd225Bxlaz4kUMug=;
-        b=G3+BJ6h3S2AwsBJvMKzpLcRAMmfnvNbqghjwS3l9dKG7H2nqHRd+WuWvUxxO4V9t7o
-         pSkW2ykPq5piIQ6mXp6Jk628w6L1iflshHCNR7Rk9ja3KpcvZVkXod+WBOpoTGddqns4
-         aYz9RO+oEVhTlg7TbVQ8KS/5s4DKt7L+GUMxrPRsn1rvd97A1Ir+OszygWwOKvVmmvOZ
-         7jSHc4PX2jnGsX6hOL9G/KVsr7G28ajHEBhISEL00cgRSDqdHgSBEAtjOsK4TanESi0F
-         +W65wypspVWFZHnYM5w2Scbxv2l99dKfkH7N6xwNvQeI6JXAOlKDnMaR3tDTRQ6UiFlD
-         qBfA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=27WM+Y8jWb1LbvGj3DTgTBmDJaPh9BKIXQ56Fw9urpk=;
+        b=W2l2otg0QsQqjjC0xylN6Y9Y9t9QgGoBs8DnaTsfc0PZd88sh6kjbLZ16l2+Be0X6+
+         wWuTINsam5mP8psCVXL5668tpkGyhqKiQzSnGe+0EU6nd7TPhqOb+OkLz61INCHP/2Ki
+         Qvtn52r1ElroAH5F8J196hfAeGmy0SQ56vOxfP/zIf8jBg135myrGz8iUWGII32rfXPU
+         k08oKkLkXOEr+louuFRLOcL+G+HcFbJuXZxqn1ZMDfICRx3Max4TOGV/um28QNCs4j+m
+         z7PhNB/apyViyzHdTnhcwwtBDw/EWNtWEB4pw7lrYyMAP08B0jKLTTzfxhhVXE6MgkJb
+         e5xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GxntLd/ct95PDR+cb+voA3PVWvgQd225Bxlaz4kUMug=;
-        b=RcabOpsUUrQQH9VqXRUeOy0/e9OEnlHTl9uB05izlRu4H1DIijpgUdTsBbPKIANMub
-         NiluQT6NHejmWkYQNxgvrvEY4zZ73gPOOeuTizeqiyM4qxdn9fA3hAq68s51gR6ITS1S
-         p9BJAGi+M44qVChJDG1RWCQnhnu22dsLB5xDXcwggOgIFGKO7eTyEJJMWpbOaMQ+QZI7
-         xQCvb5tTa04SnQcZbfmsNJhyWu7C6vt5tKZqcRMmATriIPTeQlzTZ3vIUM84zdn47pGv
-         z75m1BWkyG5EjDM2IzEKeQE3RkNf/T1mdj4/Ui6P8XwvCBD/jjpgT7wl2Rng8Czhl4Y9
-         NadA==
-X-Gm-Message-State: ANoB5pkxKu3wKt51CKHhc/6TtTf91L15b99Amx+qT6HkTDuEdPwdDuAb
-        PPF6+5Xs4nVU9unuguTGJmoFGUI1v3LOjA==
-X-Google-Smtp-Source: AA0mqf6GmmnIaAXxRDWdzo2mwsMABgOBqxpoLd1EYj+5NiHrODlNUWz1ysL61n9/fPCAgD3u6ATjwg==
-X-Received: by 2002:a63:d241:0:b0:439:8688:a98d with SMTP id t1-20020a63d241000000b004398688a98dmr5641021pgi.424.1669002709390;
-        Sun, 20 Nov 2022 19:51:49 -0800 (PST)
-Received: from localhost.localdomain ([194.5.48.82])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b00186acb14c4asm8476124plg.67.2022.11.20.19.51.45
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=27WM+Y8jWb1LbvGj3DTgTBmDJaPh9BKIXQ56Fw9urpk=;
+        b=eax4mFKA5UmNDdx3JXWUI30plBUS2zkHe1BzpRxjyJPJjwVzHX2BwuDK4ZcmpFIZ7V
+         2573UR14pXrsFGvXgfpMm4A9lxC+JHwEYIPM6bfs78+fmbpYkbajr/NMrWiDZs/TK9CV
+         lrYlNHxIGYSU4nPCFuHNNZGT65p0WIpIBbljIDH1GfJXeG6qvZXsYlivjbEbmfxdDR1H
+         iS0CkWgdRP/vcdSb2wjbjX521ZP+QSSiC8xK4uCwOeH35jvQYPjVc1VGMft/cZUfTlB/
+         t8S6RH5dDrxMR7qk+/8yNE7toDX2veJe/upeM8v6cMg6Cp5lRAzR6g2DRV4F7GuqMxb7
+         at7A==
+X-Gm-Message-State: ANoB5pmvPqCd5K8Hw3nUCHpgDgC8vXHP6ARV0SuvWF5zFLPevKQoLlg+
+        uGt51Oi6Of7I0RJrqXGlRPBvCDnSrFk=
+X-Google-Smtp-Source: AA0mqf49jEfvGyxZO0jXVZ81EVi8wO9jpymaMotqlDjuJYfCHuNg7X8sS421I3+cFgNY3VQ6HT9slQ==
+X-Received: by 2002:a05:6a00:d66:b0:56a:fd45:d054 with SMTP id n38-20020a056a000d6600b0056afd45d054mr2845822pfv.3.1669003163465;
+        Sun, 20 Nov 2022 19:59:23 -0800 (PST)
+Received: from debian.. (subs03-180-214-233-72.three.co.id. [180.214.233.72])
+        by smtp.gmail.com with ESMTPSA id m9-20020a170902f64900b00176d218889esm8393163plg.228.2022.11.20.19.59.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 19:51:49 -0800 (PST)
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-To:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
-        dave@stgolabs.net, paulmck@kernel.org, josh@joshtriplett.org,
-        mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
-Date:   Mon, 21 Nov 2022 11:51:40 +0800
-Message-Id: <20221121035140.118651-1-zhouzhouyi@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 20 Nov 2022 19:59:23 -0800 (PST)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        kernel test robot <lkp@intel.com>
+Cc:     Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH net-next] Documentation: devlink: Add blank line padding on numbered lists in Devlink Port documentation
+Date:   Mon, 21 Nov 2022 10:58:55 +0700
+Message-Id: <20221121035854.28411-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <202211200926.kfOPiVti-lkp@intel.com>
+References: <202211200926.kfOPiVti-lkp@intel.com>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2915; i=bagasdotme@gmail.com; h=from:subject; bh=FikTYVYcBbXw6Hy49WYOku8tu7kNbGLfWCUs6r4Xui4=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMlV3+vWq35h2/c5/h1HMfvSbskN+ypMpH4mH7ohbjXnrIYQ b/C+jlIWBjEOBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAExkxzKGP9wKKzxurLq/431XCXOCya 2vvwq7LwsvDrhwp/fr1ZK78pyMDEtbd1u0vd7ocHFyyt5pTrpbBKJfr5L9mPL95HURxdfOUbwA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During CPU-hotplug torture (CONFIG_NO_HZ_FULL=y), if we try to
-offline tick_do_timer_cpu, the operation will fail because in
-function tick_nohz_cpu_down:
-```
-if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
-      return -EBUSY;
-```
-Above bug was first discovered in torture tests performed in PPC VM
-of Open Source Lab of Oregon State University, and reproducable in RISC-V
-and X86-64 (with additional kernel commandline cpu0_hotplug).
+kernel test robot reported indentation warnings:
 
-In this patch, we avoid offline tick_do_timer_cpu by distribute
-the offlining cpu among remaining cpus.
+Documentation/networking/devlink/devlink-port.rst:220: WARNING: Unexpected indentation.
+Documentation/networking/devlink/devlink-port.rst:222: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+These warnings cause lists (arbitration flow for which the warnings blame to
+and 3-step subfunction setup) to be rendered inline instead. Also, for the
+former list, automatic list numbering is messed up.
+
+Fix these warnings by adding missing blank line padding.
+
+Link: https://lore.kernel.org/linux-doc/202211200926.kfOPiVti-lkp@intel.com/
+Fixes: 242dd64375b80a ("Documentation: Add documentation for new devlink-rate attributes")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- include/linux/tick.h        |  1 +
- kernel/time/tick-common.c   |  1 +
- kernel/time/tick-internal.h |  1 -
- kernel/torture.c            | 10 ++++++++++
- 4 files changed, 12 insertions(+), 1 deletion(-)
+ Documentation/networking/devlink/devlink-port.rst | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/tick.h b/include/linux/tick.h
-index bfd571f18cfd..23cc0b205853 100644
---- a/include/linux/tick.h
-+++ b/include/linux/tick.h
-@@ -14,6 +14,7 @@
- #include <linux/rcupdate.h>
+diff --git a/Documentation/networking/devlink/devlink-port.rst b/Documentation/networking/devlink/devlink-port.rst
+index 643f5903d1d8aa..98557c2ab1c11f 100644
+--- a/Documentation/networking/devlink/devlink-port.rst
++++ b/Documentation/networking/devlink/devlink-port.rst
+@@ -130,10 +130,11 @@ it is deployed. Subfunction is created and deployed in unit of 1. Unlike
+ SRIOV VFs, a subfunction doesn't require its own PCI virtual function.
+ A subfunction communicates with the hardware through the parent PCI function.
  
- #ifdef CONFIG_GENERIC_CLOCKEVENTS
-+extern int tick_do_timer_cpu __read_mostly;
- extern void __init tick_init(void);
- /* Should be core only, but ARM BL switcher requires it */
- extern void tick_suspend_local(void);
-diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
-index 46789356f856..87b9b9afa320 100644
---- a/kernel/time/tick-common.c
-+++ b/kernel/time/tick-common.c
-@@ -48,6 +48,7 @@ ktime_t tick_next_period;
-  *    procedure also covers cpu hotplug.
-  */
- int tick_do_timer_cpu __read_mostly = TICK_DO_TIMER_BOOT;
-+EXPORT_SYMBOL_GPL(tick_do_timer_cpu);
- #ifdef CONFIG_NO_HZ_FULL
- /*
-  * tick_do_timer_boot_cpu indicates the boot CPU temporarily owns
-diff --git a/kernel/time/tick-internal.h b/kernel/time/tick-internal.h
-index 649f2b48e8f0..8953dca10fdd 100644
---- a/kernel/time/tick-internal.h
-+++ b/kernel/time/tick-internal.h
-@@ -15,7 +15,6 @@
+-To use a subfunction, 3 steps setup sequence is followed.
+-(1) create - create a subfunction;
+-(2) configure - configure subfunction attributes;
+-(3) deploy - deploy the subfunction;
++To use a subfunction, 3 steps setup sequence is followed:
++
++1) create - create a subfunction;
++2) configure - configure subfunction attributes;
++3) deploy - deploy the subfunction;
  
- DECLARE_PER_CPU(struct tick_device, tick_cpu_device);
- extern ktime_t tick_next_period;
--extern int tick_do_timer_cpu __read_mostly;
+ Subfunction management is done using devlink port user interface.
+ User performs setup on the subfunction management device.
+@@ -216,13 +217,17 @@ nodes with the same priority form a WFQ subgroup in the sibling group
+ and arbitration among them is based on assigned weights.
  
- extern void tick_setup_periodic(struct clock_event_device *dev, int broadcast);
- extern void tick_handle_periodic(struct clock_event_device *dev);
-diff --git a/kernel/torture.c b/kernel/torture.c
-index 789aeb0e1159..bccbdd33dda2 100644
---- a/kernel/torture.c
-+++ b/kernel/torture.c
-@@ -33,6 +33,7 @@
- #include <linux/delay.h>
- #include <linux/stat.h>
- #include <linux/slab.h>
-+#include <linux/tick.h>
- #include <linux/trace_clock.h>
- #include <linux/ktime.h>
- #include <asm/byteorder.h>
-@@ -358,7 +359,16 @@ torture_onoff(void *arg)
- 			schedule_timeout_interruptible(HZ / 10);
- 			continue;
- 		}
-+#ifdef CONFIG_NO_HZ_FULL
-+		/* do not offline tick do timer cpu */
-+		if (tick_nohz_full_running) {
-+			cpu = (torture_random(&rand) >> 4) % maxcpu;
-+			if (cpu >= tick_do_timer_cpu)
-+				cpu = (cpu + 1) % (maxcpu + 1);
-+		} else
-+#else
- 		cpu = (torture_random(&rand) >> 4) % (maxcpu + 1);
-+#endif
- 		if (!torture_offline(cpu,
- 				     &n_offline_attempts, &n_offline_successes,
- 				     &sum_offline, &min_offline, &max_offline))
+ Arbitration flow from the high level:
++
+ #. Choose a node, or group of nodes with the highest priority that stays
+    within the BW limit and are not blocked. Use ``tx_priority`` as a
+    parameter for this arbitration.
++
+ #. If group of nodes have the same priority perform WFQ arbitration on
+    that subgroup. Use ``tx_weight`` as a parameter for this arbitration.
++
+ #. Select the winner node, and continue arbitration flow among it's children,
+    until leaf node is reached, and the winner is established.
++
+ #. If all the nodes from the highest priority sub-group are satisfied, or
+    overused their assigned BW, move to the lower priority nodes.
+ 
+
+base-commit: 8bd8dcc5e47f0f9dc40187c3b8b42d992181eee1
 -- 
-2.34.1
+An old man doll... just what I always wanted! - Clara
 
