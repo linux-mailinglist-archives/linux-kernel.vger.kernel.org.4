@@ -2,159 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5302D632418
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC7F632417
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiKUNmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        id S230478AbiKUNmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiKUNmX (ORCPT
+        with ESMTP id S231298AbiKUNmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:42:23 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B431ACE9B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:42:23 -0800 (PST)
+        Mon, 21 Nov 2022 08:42:04 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45119596;
+        Mon, 21 Nov 2022 05:41:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669038143; x=1700574143;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vW6UpyDIJ4lErImes9hQg9f4W5M1m5/Y7NR0Nm54Jb0=;
-  b=bBig0DL5K/+cI8f2rLSuwZoAjhplqT00VNaub4W/EbGQbbmqdEPTPZ0U
-   fw6JvGIYVqpd7ubpqVGRcIUX/1WE8yOmylzwRHrVT0XIW8/3E4AiYDNnH
-   y37DOZqO3OYeiTVDwn2x6cVw2+mRUqFNxXSfI016e9RVzohP/z4orXbE7
-   jX7TINlAc3YFedbtArgTRpytxwBrGauNFeTUmhHC26ktrgnB6L5hCSUqg
-   LNwwTpiyJvohV5JTnmgisulX/JFhb14pXvY+pE76C3IpGTMLeZ4DI0g6X
-   3dw9/owGpgIwyzgxMKhchypAwJQv0dLPU7g/dQK1rngWqy7KHqgcisOHT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="375702673"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669038118; x=1700574118;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WA/TZriNXCVpyXKJ9P6CH+4zm9j1q1ICmB+nOCyp11w=;
+  b=rIhZnCp7zFct6ViFtZ1W+3LErVvPrItvU+580dzwgb8EHRY/N4HCk8PC
+   zv41kd70ghUVihr8wmv/a3o28ddOX/EqilsjfCK+LyRoyfMIOAmC1BB3c
+   EwH8/PYGdB9rKcet9d3CfhxjjfVV+SIpO7Kcql2zH8A0/NJm1Ja4BGAI0
+   k3oHU8o12ji0RbJQ89ZeeR9rj2rFzuCPWKD45edUZM7kq1MkmQI+mStzJ
+   XigouOauIWsS21MDRN5DJbK+ucOJqcEX2wkQPO7KW501zhKURHylWosf8
+   WLWpdY1gRQ0yDicmymmusnxfwbII4iJxdxghxZDF0liD1o1q3wdWL8DNU
+   A==;
 X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="375702673"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 05:42:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="746913669"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="746913669"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Nov 2022 05:42:21 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ox740-0000T8-1t;
-        Mon, 21 Nov 2022 13:42:20 +0000
-Date:   Mon, 21 Nov 2022 21:41:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.11.16a] BUILD SUCCESS
- bc5b4c8070cc9f937197bc66d87e29dcbd5eabec
-Message-ID: <637b8009.kwBmWhK8JBIzlwEv%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="184483608"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Nov 2022 06:41:58 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 21 Nov 2022 06:41:52 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 21 Nov 2022 06:41:50 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <alexander.sverdlin@nokia.com>, <linux-mtd@lists.infradead.org>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>, <richard@nod.at>,
+        <miquel.raynal@bootlin.com>, <linux-kernel@vger.kernel.org>,
+        <michael@walle.cc>, <stable@vger.kernel.org>, <p.yadav@ti.com>,
+        <vigneshr@ti.com>
+Subject: Re: [PATCH v2] mtd: spi-nor: Check for zero erase size in spi_nor_find_best_erase_type()
+Date:   Mon, 21 Nov 2022 15:41:47 +0200
+Message-ID: <166903807811.85501.2255834791206092904.b4-ty@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211119081412.29732-1-alexander.sverdlin@nokia.com>
+References: <20211119081412.29732-1-alexander.sverdlin@nokia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.11.16a
-branch HEAD: bc5b4c8070cc9f937197bc66d87e29dcbd5eabec  tools: memory-model: Add rmw-sequences to the LKMM
+On Fri, 19 Nov 2021 09:14:12 +0100, Alexander A Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> 
+> Erase can be zeroed in spi_nor_parse_4bait() or
+> spi_nor_init_non_uniform_erase_map(). In practice it happened with
+> mt25qu256a, which supports 4K, 32K, 64K erases with 3b address commands,
+> but only 4K and 64K erase with 4b address commands.
+> 
+> [...]
 
-elapsed time: 5236m
+Applied to spi-nor/next, thanks!
 
-configs tested: 77
-configs skipped: 3
+[1/1] mtd: spi-nor: Check for zero erase size in spi_nor_find_best_erase_type()
+      https://git.kernel.org/mtd/c/2ebc336be081
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-i386                                defconfig
-i386                             allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                                defconfig
-i386                 randconfig-a011-20221121
-i386                 randconfig-a013-20221121
-um                             i386_defconfig
-i386                 randconfig-a012-20221121
-ia64                             allmodconfig
-um                           x86_64_defconfig
-i386                 randconfig-a016-20221121
-s390                             allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a015-20221121
-i386                 randconfig-a014-20221121
-x86_64               randconfig-a012-20221121
-arc                  randconfig-r043-20221120
-x86_64               randconfig-a011-20221121
-x86_64               randconfig-a015-20221121
-x86_64               randconfig-a013-20221121
-mips                             allyesconfig
-x86_64               randconfig-a014-20221121
-s390                             allyesconfig
-x86_64               randconfig-a016-20221121
-powerpc                          allmodconfig
-sh                               allmodconfig
-arc                  randconfig-r043-20221121
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                            allnoconfig
-s390                 randconfig-r044-20221121
-x86_64                           rhel-8.3-syz
-riscv                randconfig-r042-20221121
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-sh                            migor_defconfig
-sh                          urquell_defconfig
-arc                              allyesconfig
-i386                          randconfig-c001
-alpha                            allyesconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-m68k                             allmodconfig
-mips                      loongson3_defconfig
-csky                                defconfig
-powerpc                      ppc6xx_defconfig
-sh                             espt_defconfig
-arm                              allmodconfig
-arm                           corgi_defconfig
-m68k                             allyesconfig
-
-clang tested configs:
-i386                 randconfig-a004-20221121
-i386                 randconfig-a001-20221121
-i386                 randconfig-a003-20221121
-i386                 randconfig-a005-20221121
-i386                 randconfig-a002-20221121
-i386                 randconfig-a006-20221121
-x86_64               randconfig-a001-20221121
-x86_64               randconfig-a002-20221121
-x86_64               randconfig-a004-20221121
-x86_64               randconfig-a003-20221121
-x86_64               randconfig-a005-20221121
-x86_64               randconfig-a006-20221121
-hexagon              randconfig-r041-20221120
-hexagon              randconfig-r041-20221121
-hexagon              randconfig-r045-20221120
-hexagon              randconfig-r045-20221121
-riscv                randconfig-r042-20221120
-s390                 randconfig-r044-20221120
-x86_64                        randconfig-k001
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Tudor Ambarus <tudor.ambarus@microchip.com>
