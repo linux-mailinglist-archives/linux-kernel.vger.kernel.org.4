@@ -2,42 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A76632885
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68597632888
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbiKUPqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:46:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
+        id S231474AbiKUPqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiKUPqB (ORCPT
+        with ESMTP id S232140AbiKUPqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:46:01 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE3C2675
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:45:32 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:4821:1ba5:2638:5c3a])
-        by laurent.telenet-ops.be with bizsmtp
-        id n3lW2800L5WXlCv013lW7t; Mon, 21 Nov 2022 16:45:30 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ox8zC-0019FQ-EU; Mon, 21 Nov 2022 16:45:30 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ox8zB-00BQQw-Sb; Mon, 21 Nov 2022 16:45:29 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH resend] [trivial] media: dvb_ringbuffer: Fix typo in dvb_ringbuffer_pkt_write() kerneldoc
-Date:   Mon, 21 Nov 2022 16:45:28 +0100
-Message-Id: <e047cd31c5bb171a04461c6c9636adc4e4fb5677.1669045495.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Mon, 21 Nov 2022 10:46:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B6A5656C;
+        Mon, 21 Nov 2022 07:45:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4D516129B;
+        Mon, 21 Nov 2022 15:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E07C433C1;
+        Mon, 21 Nov 2022 15:45:50 +0000 (UTC)
+Date:   Mon, 21 Nov 2022 10:45:48 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     KP Singh <kpsingh@kernel.org>, Chris Mason <clm@meta.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
+Message-ID: <20221121104548.4a7aa3de@gandalf.local.home>
+In-Reply-To: <CAADnVQJzRTEWkJoB3B4tgFLtoVRHWnsUvB5ZKSfBsswV3ck1zw@mail.gmail.com>
+References: <20221108220651.24492-1-revest@chromium.org>
+        <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
+        <20221117121617.4e1529d3@gandalf.local.home>
+        <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
+        <20221117174030.0170cd36@gandalf.local.home>
+        <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
+        <20221118114519.2711d890@gandalf.local.home>
+        <43d5d1f5-c01d-c0db-b421-386331c2b8c1@meta.com>
+        <20221118130608.5ba89bd8@gandalf.local.home>
+        <2ab2b854-723a-5f15-8c18-0b5730d1b535@meta.com>
+        <CACYkzJ613nhXViBpDuGWeEWzjfSJjbB1=KNpYtNDC6Xn7yizbw@mail.gmail.com>
+        <20221121101537.674f5aca@gandalf.local.home>
+        <CAADnVQJzRTEWkJoB3B4tgFLtoVRHWnsUvB5ZKSfBsswV3ck1zw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,26 +68,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no such error code EVINAL.
+On Mon, 21 Nov 2022 07:40:11 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- include/media/dvb_ringbuffer.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > As kprobes are set in most production environments, so is error injection.
+> > Do we really want error injection enabled on production environments?  
+> 
+> We absolutely want it enabled in production.
+> 
+> > I don't.  
+> 
+> Speak for yourself, because your employer thinks otherwise.
 
-diff --git a/include/media/dvb_ringbuffer.h b/include/media/dvb_ringbuffer.h
-index 8ed6bcc3a56e5ffd..029c8b615e490fae 100644
---- a/include/media/dvb_ringbuffer.h
-+++ b/include/media/dvb_ringbuffer.h
-@@ -214,7 +214,7 @@ extern ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
-  * @buf: Buffer to write.
-  * @len: Length of buffer (currently limited to 65535 bytes max).
-  *
-- * Return: Number of bytes written, or -EFAULT, -ENOMEM, -EVINAL.
-+ * Return: Number of bytes written, or -EFAULT, -ENOMEM, -EINVAL.
-  */
- extern ssize_t dvb_ringbuffer_pkt_write(struct dvb_ringbuffer *rbuf, u8 *buf,
- 					size_t len);
--- 
-2.25.1
+And speak for yourself! Just because you want it in production, does not
+mean that everyone else is forced to do so too.
 
+It's a DEBUG feature. It's in Kconfig.debug. Why is it enabled by default???
+
+-- Steve
