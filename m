@@ -2,92 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AC5632026
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F62632021
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiKULQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S230506AbiKULPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:15:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiKULQS (ORCPT
+        with ESMTP id S230504AbiKULOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:16:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C468C1F43
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:10:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669029011;
+        Mon, 21 Nov 2022 06:14:51 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9ADBFF5F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:10:21 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669029019;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6HFE5ckJ+/PkEEqbEDcxeM6P1Mra4LAFsLM3EpugvmI=;
-        b=EMLCOBkxKS6v25xXjAdge+Br8hPYZtath284xFs7yuod9WiH8RVTF1Ic+W7o2XkHu+7hPs
-        0RXnqqN9HzSIDt34fTUsmbCNliMEjbGfyL3802sP/+kN4OkZwd7Qv60QwXMFqXQm6UN1M/
-        sdpVVEH1M+yZFp/HwNmul0ksAIYwcHk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-466-xv_SHqDjOyCtG3CN1of28g-1; Mon, 21 Nov 2022 06:10:10 -0500
-X-MC-Unique: xv_SHqDjOyCtG3CN1of28g-1
-Received: by mail-wr1-f71.google.com with SMTP id d11-20020adfa40b000000b00241db65ec27so568665wra.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:10:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6HFE5ckJ+/PkEEqbEDcxeM6P1Mra4LAFsLM3EpugvmI=;
-        b=Gp0htfvZfVetRojAnOFNzYIW3McilcgV2ZW9EorVvVQM1dLdw4EilXTnw9g3jHhoHo
-         X/jgRPiXOPYmlTMKlJ7NIKQcWY7aMuTfGwqWZRumDpd5K1BxjgLjJyup8Ig0pG/DHCVo
-         Z7/wBiytdA6cRhNb9xkPx1J1h9IWHYU1gnabwPKepUAJjAMHWu8gfT11IhBMIFPuvdYq
-         oeM+RWe6O+fo0KefsmYnlXv6+ROF12FvHNGR1YpAGQv6eOVLUED9MPOnz9D0/v4aNka1
-         EvQULVcixLi2IEWwsUeFiVfUPs78Xr86WnXM8jEoH6jS6y4PPqrYkdvU1Yc65EXdunFK
-         SUsQ==
-X-Gm-Message-State: ANoB5pk097wjG9rE2O5ov+1PiMy+Ncs5fXxCiOlOt3qXgVnWu4yNMlkU
-        brtyDhlr9Q/MVtyBcTyU/v+WcjzxwwS5dT5s1UV33mqMPVK6kTSKaCU6Hf/Z2mdlW7aNkl95vO9
-        YNh800oHzo7/b+A/9dNVtxNtC
-X-Received: by 2002:a05:600c:3587:b0:3cf:a9c2:2b04 with SMTP id p7-20020a05600c358700b003cfa9c22b04mr12126016wmq.152.1669029008897;
-        Mon, 21 Nov 2022 03:10:08 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6qmkAtqZngrYlpX3LaYVMHNRMoKYxTdVMdo3Sx7bg+dmQB/Sga7GdUCdrPFwBUtw6/peox+w==
-X-Received: by 2002:a05:600c:3587:b0:3cf:a9c2:2b04 with SMTP id p7-20020a05600c358700b003cfa9c22b04mr12125983wmq.152.1669029008603;
-        Mon, 21 Nov 2022 03:10:08 -0800 (PST)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b003c6f1732f65sm19940702wmp.38.2022.11.21.03.10.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 03:10:08 -0800 (PST)
-Message-ID: <2ead7655dbb90d15b883c5d31f582ed87d4e8737.camel@redhat.com>
-Subject: Re: [PATCH 04/13] KVM: nSVM: clean up copying of int_ctl fields
- back to vmcb01/vmcb12
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
+        bh=Nwk4Gc2mfX1hXTJPF63GHH+HFqb50oIZMcGU+htD904=;
+        b=irYg37SJxjSmbpyeayx8NEea5ltICyf5wxKGwbND5X3kNR6itZte2yqVVc6d+QWFBpONpk
+        J4uAas+hCZ5j3t0HD25JCBhMfC24QOf8JGTm60dEfmBgBDu7CNVND0AopKlSuee/GKwi13
+        23z/QzHK0Tm+XSImD9f1ctKqDo0hxaDOazBZ5FA8mPTPMJd1JV7sNu36oWchIeEHi/Ghss
+        6RkGn+KqnElyA+RXnEL2G33qbUdH9LBE/iK8L/uNwMsLlRaZtSyObmeAISeuU3+53ydd3j
+        ACdIF3/DvtB1TZcgMJzeQar+zatvXxHpq1TNsajNSiqlcr7UX1FMqU9JkxnRmw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669029019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nwk4Gc2mfX1hXTJPF63GHH+HFqb50oIZMcGU+htD904=;
+        b=hhBh+t4qGgJle0ZJl9ZItE+2Hc3okldeh+SqJPl0rswq5Sxm4yfLBx1/h8JOdSGyHl6ASV
+        0jpbVGS6YxGNV+Bw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Babu Moger <babu.moger@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org
-Date:   Mon, 21 Nov 2022 13:10:06 +0200
-In-Reply-To: <Y3aWZJo8M2li/7BB@google.com>
-References: <20221117143242.102721-1-mlevitsk@redhat.com>
-         <20221117143242.102721-5-mlevitsk@redhat.com> <Y3aWZJo8M2li/7BB@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH printk v6 11/40] printk: introduce console_list_lock
+In-Reply-To: <20221116162152.193147-12-john.ogness@linutronix.de>
+References: <20221116162152.193147-1-john.ogness@linutronix.de>
+ <20221116162152.193147-12-john.ogness@linutronix.de>
+Date:   Mon, 21 Nov 2022 12:16:12 +0106
+Message-ID: <87sficwokr.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,146 +59,305 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 20:15 +0000, Sean Christopherson wrote:
-> On Thu, Nov 17, 2022, Maxim Levitsky wrote:
-> > Clean up the nested_sync_int_ctl_from_vmcb02:
-> > 
-> > 1. The comment about preservation of V_IRQ is wrong: when the L2 doesn't
-> >    use virtual interrupt masking, then the field just doesn't exist in
-> >    vmcb12 thus it should not be touched at all.
-> >    Since it is unused in this case, touching it doesn't matter that much,
-> >    so the bug is theoretical.
-> > 
-> > 2. When the L2 doesn't use virtual interrupt masking, then in the *theory*
-> >    if KVM uses the feature, it should copy the changes to V_IRQ* bits from
-> >    vmcb02 to vmcb01.
-> > 
-> >    In practise, KVM only uses it for detection of the interrupt window,
-> >    and it happens to re-open it on each nested VM exit because
-> >    kvm_set_rflags happens to raise the KVM_REQ_EVENT.
-> >    Do this explicitly.
-> > 
-> > 3. Add comment on why we don't need to copy V_GIF from vmcb02 to vmcb01
-> >    when nested guest doesn't use nested V_GIF (and thus L1's GIF is in
-> >    vmcb02 while nested), even though it can in theory affect L1's GIF.
-> > 
-> > 4. Add support code to also copy some bits of int_ctl from
-> >    vmcb02 to vmcb01.
-> >    Currently there are none.
-> 
-> Unless it's impossible for whatever reason, this patch should be split into
-> multiple patches.  IIUC, there are at least 2 different functional changes being
-> made, they just happen to not have any actual impact on things.
+Currently there exist races in register_console(), where the types
+of registered consoles are checked (without holding the console_lock)
+and then after acquiring the console_lock, it is assumed that the list
+has not changed. Also, some code that performs console_unregister()
+make similar assumptions.
 
-No objection to this.
+It might be possible to fix these races using the console_lock. But
+it would require a complex analysis of all console drivers to make
+sure that the console_lock is not taken in match() and setup()
+callbacks. And we really prefer to split up and reduce the
+responsibilities of console_lock rather than expand its complexity.
+Therefore, introduce a new console_list_lock to provide full
+synchronization for any console list changes.
 
-> 
-> > No (visible) functional change is intended.
-> > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/kvm/svm/nested.c | 47 ++++++++++++++++++++++++++-------------
-> >  1 file changed, 32 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> > index 54eb152e2b60b6..1f2b8492c8782f 100644
-> > --- a/arch/x86/kvm/svm/nested.c
-> > +++ b/arch/x86/kvm/svm/nested.c
-> > @@ -410,28 +410,45 @@ void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
-> >  static void nested_sync_int_ctl_from_vmcb02(struct vcpu_svm *svm,
-> >                                             struct vmcb *vmcb12)
-> >  {
-> > -       u32 mask;
-> > +       struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
-> > +       struct vmcb *vmcb01 = svm->vmcb01.ptr;
-> > +
-> > +       /* bitmask of bits of int_ctl that we copy from vmcb02 to vmcb12*/
-> > +       u32 l2_to_l1_mask = 0;
-> > +       /* bitmask of bits of int_ctl that we copy from vmcb02 to vmcb01*/
-> > +       u32 l2_to_l0_mask = 0;
-> >  
-> > -       /* Only a few fields of int_ctl are written by the processor.  */
-> 
-> Can this comment be kept in some form?  I found it super useful when reading this
-> code just now.
+In addition, also use console_list_lock for synchronization of
+console->flags updates. All flags are either static or modified only
+during the console registration. There are only two exceptions.
 
-No problem.
+The first exception is CON_ENABLED, which is also modified by
+console_start()/console_stop(). Therefore, these functions must
+also take the console_list_lock.
 
-> 
-> > -       mask = V_IRQ_MASK | V_TPR_MASK;
-> > -       if (!(svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK) &&
-> > -           svm_is_intercept(svm, INTERCEPT_VINTR)) {
-> > +       if (svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK)
-> > +               l2_to_l1_mask |= V_IRQ_MASK | V_TPR_MASK;
-> > +       else {
-> >                 /*
-> > -                * In order to request an interrupt window, L0 is usurping
-> > -                * svm->vmcb->control.int_ctl and possibly setting V_IRQ
-> > -                * even if it was clear in L1's VMCB.  Restoring it would be
-> > -                * wrong.  However, in this case V_IRQ will remain true until
-> > -                * interrupt_window_interception calls svm_clear_vintr and
-> > -                * restores int_ctl.  We can just leave it aside.
-> > +                * If IRQ window was opened while in L2, it must be reopened
-> > +                * after the VM exit
-> > +                *
-> > +                * vTPR value doesn't need to be copied from vmcb02 to vmcb01
-> > +                * because it is synced from/to apic registers on each VM exit
-> >                  */
-> > -               mask &= ~V_IRQ_MASK;
-> > +               if (vmcb02->control.int_ctl & V_IRQ_MASK)
-> > +                       kvm_make_request(KVM_REQ_EVENT, &svm->vcpu);
-> >         }
-> >  
-> >         if (nested_vgif_enabled(svm))
-> > -               mask |= V_GIF_MASK;
-> > +               l2_to_l1_mask |= V_GIF_MASK;
-> > +       else
-> > +               /* There is no need to sync V_GIF from vmcb02 to vmcb01
-> > +                * because GIF is cleared on VMexit, thus even though
-> > +                * nested guest can control host's GIF, on VM exit
-> > +                * its set value is lost
-> > +                */
-> > +               ;
-> 
-> The "else ... ;" is unnecessary, just throw the block comment above the nested
-> vGIF if-statment, e.g. if I'm understanding everything, this?
-Yes.
+The second exception is when the flags are modified by the console
+driver init code before the console is registered. These will be
+ignored because they are not visible to the rest of the system
+via the console_drivers list.
 
-> 
->         /*
->          * If nested vGIF is not enabled, L2 has access to L1's "real" GIF.  In
->          * this case, there's no need to sync V_GIF from vmcb02 to vmcb01
->          * because GIF is cleared on VM-Exit, thus any changes made by L2 are
->          * overwritten on VM-Exit to L1.
->          */
->         if (nested_vgif_enabled(svm))
->                 l2_to_l1_mask |= V_GIF_MASK;
-> 
-> > +
-> > +       vmcb12->control.int_ctl =
-> > +               (svm->nested.ctl.int_ctl & ~l2_to_l1_mask) |
-> > +               (vmcb02->control.int_ctl & l2_to_l1_mask);
-> >  
-> > -       vmcb12->control.int_ctl        &= ~mask;
-> > -       vmcb12->control.int_ctl        |= svm->vmcb->control.int_ctl & mask;
-> > +       vmcb01->control.int_ctl =
-> > +               (vmcb01->control.int_ctl & ~l2_to_l0_mask) |
-> > +               (vmcb02->control.int_ctl & l2_to_l0_mask);
-> 
-> No need for wrapping immediately after the "=", these all fit under the soft limit:
-> 
->         vmcb12->control.int_ctl = (svm->nested.ctl.int_ctl & ~l2_to_l1_mask) |
->                                   (vmcb02->control.int_ctl & l2_to_l1_mask);
-> 
->         vmcb01->control.int_ctl = (vmcb01->control.int_ctl & ~l2_to_l0_mask) |
->                                   (vmcb02->control.int_ctl & l2_to_l0_mask);
+Note that one of the various responsibilities of the console_lock is
+also intended to provide console list and console->flags
+synchronization. Later changes will update call sites relying on the
+console_lock for these purposes. Once all call sites have been
+updated, the console_lock will be relieved of synchronizing
+console_list and console->flags updates.
 
-OK.
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+---
+ Stephen reported [0] a build failure with linux-next. The problem was a
+ missing EXPORT of @lockdep_assert_console_list_lock_held for when
+ drivers are built as modules.
+ 
+ [0] https://lore.kernel.org/lkml/20221121110041.1d2c635b@canb.auug.org.au
 
+ include/linux/console.h | 23 +++++++++--
+ kernel/printk/printk.c  | 89 ++++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 100 insertions(+), 12 deletions(-)
 
-Best regards,
-	Maxim Levitsky
-
-> 
-
-
+diff --git a/include/linux/console.h b/include/linux/console.h
+index f4f0c9523835..24d83e24840b 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -158,6 +158,14 @@ struct console {
+ 	struct hlist_node node;
+ };
+ 
++#ifdef CONFIG_LOCKDEP
++extern void lockdep_assert_console_list_lock_held(void);
++#else
++static inline void lockdep_assert_console_list_lock_held(void)
++{
++}
++#endif
++
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+ extern bool console_srcu_read_lock_is_held(void);
+ #else
+@@ -170,6 +178,9 @@ static inline bool console_srcu_read_lock_is_held(void)
+ extern int console_srcu_read_lock(void);
+ extern void console_srcu_read_unlock(int cookie);
+ 
++extern void console_list_lock(void) __acquires(console_mutex);
++extern void console_list_unlock(void) __releases(console_mutex);
++
+ extern struct hlist_head console_list;
+ 
+ /**
+@@ -186,10 +197,16 @@ extern struct hlist_head console_list;
+ 	hlist_for_each_entry_srcu(con, &console_list, node,		\
+ 				  console_srcu_read_lock_is_held())
+ 
+-/*
+- * for_each_console() allows you to iterate on each console
++/**
++ * for_each_console() - Iterator over registered consoles
++ * @con:	struct console pointer used as loop cursor
++ *
++ * The console list and the console->flags are immutable while iterating.
++ *
++ * Requires console_list_lock to be held.
+  */
+-#define for_each_console(con) \
++#define for_each_console(con)						\
++	lockdep_assert_console_list_lock_held();			\
+ 	hlist_for_each_entry(con, &console_list, node)
+ 
+ extern int console_set_on_cmdline;
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index c84654444a02..2b4506673a86 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -78,6 +78,13 @@ EXPORT_SYMBOL(ignore_console_lock_warning);
+ int oops_in_progress;
+ EXPORT_SYMBOL(oops_in_progress);
+ 
++/*
++ * console_mutex protects console_list updates and console->flags updates.
++ * The flags are synchronized only for consoles that are registered, i.e.
++ * accessible via the console list.
++ */
++static DEFINE_MUTEX(console_mutex);
++
+ /*
+  * console_sem protects console_list and console->flags updates, and also
+  * provides serialization for access to the entire console driver system.
+@@ -103,6 +110,12 @@ static int __read_mostly suppress_panic_printk;
+ static struct lockdep_map console_lock_dep_map = {
+ 	.name = "console_lock"
+ };
++
++void lockdep_assert_console_list_lock_held(void)
++{
++	lockdep_assert_held(&console_mutex);
++}
++EXPORT_SYMBOL(lockdep_assert_console_list_lock_held);
+ #endif
+ 
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+@@ -227,6 +240,40 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
+ }
+ #endif /* CONFIG_PRINTK && CONFIG_SYSCTL */
+ 
++/**
++ * console_list_lock - Lock the console list
++ *
++ * For console list or console->flags updates
++ */
++void console_list_lock(void)
++{
++	/*
++	 * In unregister_console(), synchronize_srcu() is called with the
++	 * console_list_lock held. Therefore it is not allowed that the
++	 * console_list_lock is taken with the srcu_lock held.
++	 *
++	 * Detecting if this context is really in the read-side critical
++	 * section is only possible if the appropriate debug options are
++	 * enabled.
++	 */
++	WARN_ON_ONCE(debug_lockdep_rcu_enabled() &&
++		     srcu_read_lock_held(&console_srcu));
++
++	mutex_lock(&console_mutex);
++}
++EXPORT_SYMBOL(console_list_lock);
++
++/**
++ * console_list_unlock - Unlock the console list
++ *
++ * Counterpart to console_list_lock()
++ */
++void console_list_unlock(void)
++{
++	mutex_unlock(&console_mutex);
++}
++EXPORT_SYMBOL(console_list_unlock);
++
+ /**
+  * console_srcu_read_lock - Register a new reader for the
+  *	SRCU-protected console list
+@@ -3020,9 +3067,11 @@ struct tty_driver *console_device(int *index)
+ void console_stop(struct console *console)
+ {
+ 	__pr_flush(console, 1000, true);
++	console_list_lock();
+ 	console_lock();
+ 	console->flags &= ~CON_ENABLED;
+ 	console_unlock();
++	console_list_unlock();
+ 
+ 	/*
+ 	 * Ensure that all SRCU list walks have completed. All contexts must
+@@ -3036,9 +3085,11 @@ EXPORT_SYMBOL(console_stop);
+ 
+ void console_start(struct console *console)
+ {
++	console_list_lock();
+ 	console_lock();
+ 	console->flags |= CON_ENABLED;
+ 	console_unlock();
++	console_list_unlock();
+ 	__pr_flush(console, 1000, true);
+ }
+ EXPORT_SYMBOL(console_start);
+@@ -3187,6 +3238,8 @@ static void console_init_seq(struct console *newcon, bool bootcon_registered)
+ #define console_first()				\
+ 	hlist_entry(console_list.first, struct console, node)
+ 
++static int unregister_console_locked(struct console *console);
++
+ /*
+  * The console driver calls this routine during kernel initialization
+  * to register the console printing procedure with printk() and to
+@@ -3213,13 +3266,14 @@ void register_console(struct console *newcon)
+ 	bool realcon_registered = false;
+ 	int err;
+ 
++	console_list_lock();
++
+ 	for_each_console(con) {
+ 		if (WARN(con == newcon, "console '%s%d' already registered\n",
+-					 con->name, con->index))
+-			return;
+-	}
++					 con->name, con->index)) {
++			goto unlock;
++		}
+ 
+-	for_each_console(con) {
+ 		if (con->flags & CON_BOOT)
+ 			bootcon_registered = true;
+ 		else
+@@ -3230,7 +3284,7 @@ void register_console(struct console *newcon)
+ 	if ((newcon->flags & CON_BOOT) && realcon_registered) {
+ 		pr_info("Too late to register bootconsole %s%d\n",
+ 			newcon->name, newcon->index);
+-		return;
++		goto unlock;
+ 	}
+ 
+ 	/*
+@@ -3261,7 +3315,7 @@ void register_console(struct console *newcon)
+ 
+ 	/* printk() messages are not printed to the Braille console. */
+ 	if (err || newcon->flags & CON_BRL)
+-		return;
++		goto unlock;
+ 
+ 	/*
+ 	 * If we have a bootconsole, and are switching to a real console,
+@@ -3320,16 +3374,21 @@ void register_console(struct console *newcon)
+ 
+ 		hlist_for_each_entry_safe(con, tmp, &console_list, node) {
+ 			if (con->flags & CON_BOOT)
+-				unregister_console(con);
++				unregister_console_locked(con);
+ 		}
+ 	}
++unlock:
++	console_list_unlock();
+ }
+ EXPORT_SYMBOL(register_console);
+ 
+-int unregister_console(struct console *console)
++/* Must be called under console_list_lock(). */
++static int unregister_console_locked(struct console *console)
+ {
+ 	int res;
+ 
++	lockdep_assert_console_list_lock_held();
++
+ 	con_printk(KERN_INFO, console, "disabled\n");
+ 
+ 	res = _braille_unregister_console(console);
+@@ -3378,6 +3437,16 @@ int unregister_console(struct console *console)
+ 
+ 	return res;
+ }
++
++int unregister_console(struct console *console)
++{
++	int res;
++
++	console_list_lock();
++	res = unregister_console_locked(console);
++	console_list_unlock();
++	return res;
++}
+ EXPORT_SYMBOL(unregister_console);
+ 
+ /*
+@@ -3430,6 +3499,7 @@ static int __init printk_late_init(void)
+ 	struct console *con;
+ 	int ret;
+ 
++	console_list_lock();
+ 	hlist_for_each_entry_safe(con, tmp, &console_list, node) {
+ 		if (!(con->flags & CON_BOOT))
+ 			continue;
+@@ -3447,9 +3517,10 @@ static int __init printk_late_init(void)
+ 			 */
+ 			pr_warn("bootconsole [%s%d] uses init memory and must be disabled even before the real one is ready\n",
+ 				con->name, con->index);
+-			unregister_console(con);
++			unregister_console_locked(con);
+ 		}
+ 	}
++	console_list_unlock();
+ 
+ 	ret = cpuhp_setup_state_nocalls(CPUHP_PRINTK_DEAD, "printk:dead", NULL,
+ 					console_cpu_notify);
+-- 
+2.30.2
