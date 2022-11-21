@@ -2,126 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB5A631E0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC6A631E06
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiKUKQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:16:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
+        id S231300AbiKUKQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKUKQo (ORCPT
+        with ESMTP id S230143AbiKUKQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:16:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ADD8EB56
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:16:43 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ox3qd-0007SP-E5; Mon, 21 Nov 2022 11:16:19 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ox3qa-005dO4-AS; Mon, 21 Nov 2022 11:16:17 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ox3qa-000YEj-92; Mon, 21 Nov 2022 11:16:16 +0100
-Date:   Mon, 21 Nov 2022 11:16:16 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 166/606] iio: pressure: bmp280-i2c: Convert to i2c's
- .probe_new()
-Message-ID: <20221121101616.bdiufw4inflvee5s@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-167-uwe@kleine-koenig.org>
+        Mon, 21 Nov 2022 05:16:40 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4868EB54;
+        Mon, 21 Nov 2022 02:16:39 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id g7so18117936lfv.5;
+        Mon, 21 Nov 2022 02:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=phJFVLoc9/POc6nbD0liFwrgYsKAiaNUs+VrsQZny0U=;
+        b=HMQtLNQC6JHUcpQnXKaMPeLJYNEXESjWqW9Jm9fxHdDsyxq3fD2y+gUbum8cazGLlS
+         0Nzot0o7wlI3aHmX0JtEp59ASN04zoUP5cBLwhJUS8UWXS1vrDPK5s0nm6MtNyPRkAXr
+         i9HRjhzMXJwfcX+oinAm/OP6xU5bC2NyVL00djub62igijCsqVS/+Gs3g8Ob67GV62e5
+         lbpACEGBVz+P7gegvEedJPLtYc/UAuXuZCP3D6YMe70yXUQfK1oo2OuCbl17wDJsWOWJ
+         juioZPmih2Q2tDZ+3ZlWsJUEwqpG6mEfuUGwVkFA5iKPxQNEPbzHK7gtA/8R8W2wDMdd
+         a+Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=phJFVLoc9/POc6nbD0liFwrgYsKAiaNUs+VrsQZny0U=;
+        b=lBnKJ9Fbk84EXn+jTk5HHJfL13AGx3liKDAcE65PTFsCC4hj/XAp3XZ4ZKBow/JdVm
+         i+x0Rl/QabSEeU3VVdVsP2pKzP0mmGIk3LuAaihS+X5I64pKlimYo5RnALpb96jSf1zT
+         gRFm8ALGZ7I4l92gLZgfS5MeJ63QJLGwi57eBvGq2N7MDKqFxWlhW8Po2Lq6n0uxcIV6
+         D/NkxSzLu0edKpySKtePKK/6o7s5i65TrVHL/yGKG0Do8o+5rc5YGIGGpK+HcWuuDdQG
+         czPR5mGzseZnR9sZQu1WQ9uN6fNOBkbKboGNFJ+ao6GWVrhWflw3p5nrlz2hdceEOOTQ
+         NyNQ==
+X-Gm-Message-State: ANoB5pmkH5jlmtpM9VQVH3tX/1Cuw9zIU7rBqKiRQokEFu/QAq15kZNN
+        gOaFE3DTi1tP6HmrHlv5M2E=
+X-Google-Smtp-Source: AA0mqf4ot1dRfz4XcQJOzbIEVDNmvoy9FxZf/F3Gx+j1WTmSwhOpMtvOjIltFzq0/t2LrM51x6qHTA==
+X-Received: by 2002:a05:6512:2521:b0:4a4:5e83:e07d with SMTP id be33-20020a056512252100b004a45e83e07dmr1937785lfb.409.1669025797870;
+        Mon, 21 Nov 2022 02:16:37 -0800 (PST)
+Received: from [172.16.196.95] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id e8-20020a05651236c800b004a03d5c2140sm1957388lfs.136.2022.11.21.02.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 02:16:36 -0800 (PST)
+Message-ID: <20825b50-c2ef-7efb-efbf-ac00cc4ab9f4@gmail.com>
+Date:   Mon, 21 Nov 2022 12:16:24 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zqml5kqykog6t3x7"
-Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-167-uwe@kleine-koenig.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH] dt-bindings: Add missing start and/or end of line regex
+ anchors
+To:     Rob Herring <robh@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yangtao Li <tiny.windzz@gmail.com>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Daniel Mack <zonque@gmail.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20221118223728.1721589-1-robh@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20221118223728.1721589-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---zqml5kqykog6t3x7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Fri, Nov 18, 2022 at 11:38:20PM +0100, Uwe Kleine-K=F6nig wrote:
-> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+On 11/19/22 00:37, Rob Herring wrote:
+> json-schema patterns by default will match anywhere in a string, so
+> typically we want at least the start or end anchored. Fix the obvious
+> cases where the anchors were forgotten.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/iio/pressure/bmp280-i2c.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp=
-280-i2c.c
-> index 14eab086d24a..4da014b158c8 100644
-> --- a/drivers/iio/pressure/bmp280-i2c.c
-> +++ b/drivers/iio/pressure/bmp280-i2c.c
-> @@ -7,6 +7,7 @@
-> =20
->  static int bmp280_i2c_probe(struct i2c_client *client)
->  {
-> +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
->  	struct regmap *regmap;
->  	const struct regmap_config *regmap_config;
->  	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
 
-This patch is bogus, it degraded by rebasing on top of Angel Iglesias's
-conversion (021882de1a48cffaa405aa8014bd1d48ca6d5c19 in today's next).
+>   .../devicetree/bindings/regulator/rohm,bd9576-regulator.yaml  | 2 +-
 
-I dropped it from my queue, please don't apply.
+Acked-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Best regards
-Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
---zqml5kqykog6t3x7
-Content-Type: application/pgp-signature; name="signature.asc"
+~~ When things go utterly wrong vim users can always type :help! ~~
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN7T+0ACgkQwfwUeK3K
-7AnBgwgAjHrQRMd25irDTEifnbsKDLWp71dfzJck/YvStil4SygA0j4gpUpDafL6
-cK44nNFkhAhwm0wyYq6h4l4yvhjf2g5v/2EVILPO0BuqBfPYc4Exog//835Wgs1z
-1vZamb59YzbfFatawRxhgGPgMZ2ZCcUwsc9v9VX9OWQ0hICM17oMK56YyCdTvw1K
-Ji7e1Y8BYe1mjKja79Q1/P5mo2GHF5xDfOmdt9ffi6E3CwruVVshP46aVgPO93/O
-fj2N/ZbpMDycjfefB8knuhBj9pGCQLrN6jgOyMfdk9b+06AHXSkcpcuMrBirp9Ew
-bd69sPAoZobcKGcHBRCW+I4+m8RBbw==
-=k5Rx
------END PGP SIGNATURE-----
-
---zqml5kqykog6t3x7--
