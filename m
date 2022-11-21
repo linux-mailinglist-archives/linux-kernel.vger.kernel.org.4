@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0862B6327C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406676327BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiKUPVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S232279AbiKUPVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiKUPVT (ORCPT
+        with ESMTP id S232026AbiKUPVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:21:19 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725346357;
-        Mon, 21 Nov 2022 07:19:50 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id vv4so20020498ejc.2;
-        Mon, 21 Nov 2022 07:19:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=q/HuL81xNFxzTaRqJ+HiITpDFoE0DLWV+muP5CIjecs=;
-        b=d4uL2DmGmrk6oL5D9P5/xGW4W+gbJ4/1dwzDukT2JHyuL5rXxT7O+Qwgw/J1Hr7KJN
-         T/PX5utN5GgQ9nUZ8RoD3PYVZ7GS3lx5ehTvxWTiVrZsZ3BaGQJPinf0UzPNVYERx70J
-         7zEnhNGp1iW+6oMwiaxtZ0v5Q+R1BPXmA9iN11hrFpd1SVKUMOII3KFHSb/qKDFDs1ua
-         VbqYTOHtIBv54LuNiJwRzjO1Cnmffk30rMjTqi8ZpjD/EnIUkaa1ptAMN/BLmgkagEcl
-         pRQySWjryuboVgmVm6Xqg2FOMchg4FwpKqrDqkwbZb/fQ1oPyNdnJSQBeLzEe8z8wNt5
-         7DYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q/HuL81xNFxzTaRqJ+HiITpDFoE0DLWV+muP5CIjecs=;
-        b=hjZ+u3owmnxq4ASf9CT3n3pd3lOge9kWBFohn8cxc50p1oqxPfHXHag8PbU32UDf71
-         +L8Ha75qCsMqwkpG7O1yC7AlvWy3hv53LA9MREgBXhTUeBgPxm6jc1hDr+4F95r9e9bv
-         MFCQqo+q6yRGTSgZp8DunJES8aXTRJQCloAYOS2+gtH9LlOe21ZUZ6FUTYZqVJHrkZv5
-         2p7V7Bomc3NeI1Eu/odSNr8dHLWf2UilW0gJ1o0gqKzW+gOPAkDU1bHRsQd4RO7s+cCT
-         ggozqL4hQxUy/+MX+OunqPuSYnCRixJMrSAPgZm3pd7Nw/4ad7Xd6ts+9b1R9PcUMUQu
-         LxTg==
-X-Gm-Message-State: ANoB5pkv4eUfPpYQzRSjtjl2QvGFwqsg8ekYVGAIkRHV3cmewviA1aoN
-        HMxRD9TqWNqeTtjHvItgVOB0hfawojjq3bnlPIU=
-X-Google-Smtp-Source: AA0mqf5vNBhtRh0iB5cXdrftLyJrnWLpK4MjphDpyJzzEKiIyUuaeNTVDoF5ht7NoEA6/2k4A/Ke0KODLmmsHXeHroQ=
-X-Received: by 2002:a17:906:50f:b0:78d:ad5d:75e with SMTP id
- j15-20020a170906050f00b0078dad5d075emr15958955eja.172.1669043988900; Mon, 21
- Nov 2022 07:19:48 -0800 (PST)
+        Mon, 21 Nov 2022 10:21:12 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2826CEBAC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:19:29 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0818D320098C;
+        Mon, 21 Nov 2022 10:19:25 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 21 Nov 2022 10:19:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1669043965; x=1669130365; bh=IwU/+ORPNc
+        FJdwYkRLc8Tov1cg+1MzhrAUgCDtEZ8+o=; b=cL9lHO9g6PmvoOLKpfjGaHQjI3
+        EBsQjMGTuIUMN5Ow7V+s7UazdsDZ0Ve8lyFeKHp+4SzIogZWUOcWNS4pDmIww26G
+        uQyQZKyRfp657P4cgxmrht+cXVWIg6AVGxht1CIIGLJ9nba8A/cxUIL1VtuBdLHT
+        DPoZ4x2dTQDv1yWJ/CFmzRSHCLFWYRCoAkainDijf0R5TnbyPN7kGIDvUe5tlCWs
+        dFPLknYPN0WfPV+OWPufdKCTWf877pvPyaIf0McxLUIH5Gv0RnY2pwRo3lGAxXbY
+        9WL0xo9Lzd/k3O0NOPhFJFh32CYWNDdcjgX0RW/bNHGdDF8sABf3nPkAleYw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669043965; x=1669130365; bh=IwU/+ORPNcFJdwYkRLc8Tov1cg+1
+        MzhrAUgCDtEZ8+o=; b=ON1mS3ama0Qcy0IQOV5loGdhXAdGzymft2OWFUkXFxj/
+        P6ztAvdKrk6TE+Nni4Qn2kkTpEJONIWJRoHQW8BIZB3o/2i34lAao8gYOazElDgb
+        tGdIxkWv9bsDinntYO3c3jq7J6A1ORwGNj3E/LI6fav5lW8L0z69EbiVrHHUgJUl
+        QvDOQzWvvSQG5jmNrdfZcdQDrE7xERvscfPeSvymGrogqv0+HBnWT66aWjz0N4gW
+        QEX6Zr+sBQ6R2l/NS7mdaDh1sI9nVHEwhczQSVQjEPzVSTV/fHrRGHKWDh5I5inX
+        o7hhbILgDMvbXLWAioe7eNC8wKJyinAoi8sbgejMQA==
+X-ME-Sender: <xms:_ZZ7YxIZaKRojPmkMr_KwpI9n83kL6DhmzcIp5EY3kut5u07oPy6Nw>
+    <xme:_ZZ7Y9L0ZofcPyGtJg_jECxB7el1kHRPP0Uj4o7axqPo77KLpuz1OhXrecyNBcG2l
+    inC-8hfnIOfeBg98KI>
+X-ME-Received: <xmr:_ZZ7Y5tBw-usgXpTUDj3t6eYoVXJsO8pbQ3T4DFNfK2Gi80z3wC3b5WZK62j5MTM4h3WUUy8ABmTjbhkqzto08JBT_O08j_taw_0Uq6lorRLGQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheeigdejhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleejuefggeevteelveekteffgeduveeiteeiueegueegiedvtdejjedvfeef
+    tefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:_ZZ7Yyad2_gDy45I2Oyez40fS_ZnoKNm1Y-43qNFLQR6XpuyNX8-uQ>
+    <xmx:_ZZ7Y4bR_VO40F88b838D-UHkxRcEeBtu9x8KZy5WP8Kc1ZPlTBxbQ>
+    <xmx:_ZZ7Y2A2v6mZVybmAtFITptx4koD-j6PJKng5agLIoWgpoyjK4FRGQ>
+    <xmx:_ZZ7Y_Xtl98cfmWF0_10xD0e7cnORLim5ZGXYyE53MTM315dLdSJ6Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Nov 2022 10:19:25 -0500 (EST)
+Date:   Mon, 21 Nov 2022 16:19:22 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: git send-email friendly smtp provider anyone?
+Message-ID: <20221121151922.jaal6ym7z2ejju4q@houat>
+References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Mon, 21 Nov 2022 23:19:13 +0800
-Message-ID: <CAO4mrfc0_uMu0VQhxKqp6o5=wVtj5jDTwCmraLivZOo+ma1Qyg@mail.gmail.com>
-Subject: WARNING in inet_csk_destroy_sock
-To:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
-        netdev@vger.kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, kuniyu@amazon.com,
-        joannelkoong@gmail.com, richard_siegfried@systemli.org,
-        socketcan@hartkopp.net, hbh25y@gmail.com, kafai@fb.com,
-        dccp@vger.kernel.org, richardcochran@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aufutovedl5p2dcy"
+Content-Disposition: inline
+In-Reply-To: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
 
-Recently when using our tool to fuzz kernel, the following crash was triggered.
+--aufutovedl5p2dcy
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit: 094226ad94f4 Linux v6.1-rc5
-git tree: upstream
-compiler: clang 12.0.1
-console output:
-https://drive.google.com/file/d/1YNhDIWBLrPbRas3gr13hh2zCSgMVMxt5/view?usp=share_link
-syz reproducer:
-https://drive.google.com/file/d/1cJrq3EeNsqGiOws-3xmY3IlfByhFWQVE/view?usp=share_link
-C reproducer: https://drive.google.com/file/d/1fjh4zHZp-z9ucvQahJsJp0KV9DlAFCOj/view?usp=share_link
-kernel config: https://drive.google.com/file/d/1TdPsg_5Zon8S2hEFpLBWjb8Tnd2KA5WJ/view?usp=share_link
+On Mon, Nov 21, 2022 at 12:48:52PM +0100, Noralf Tr=F8nnes wrote:
+> A couple of years ago my email provider blocked me from using git
+> send-email with their smtp server. So I switched to the one my ISP
+> provides. Now my ISP have outsourced their email service so the first 3
+> emails gets through and the rest looks like it ends up in a tar pit or
+> something, 18 hours later and 5 of 7 emails have gotten through. I have
+> asked them about this, but I fear the answer will be this is not
+> supported since they now don't have the service in-house anymore. I'm
+> waiting for a reply.
+>=20
+> Today I tried sendinblue.com since they have a free plan, but they
+> insert <br> in the emails so that didn't work out. They also have some
+> kind of queue, after 1 hour 6 of 7 emails have gotten through.
+>=20
+> Does anyone have an smtp provider to recommend that works with git
+> send-email and that sends out all the emails at once?
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
+I'm using fastmail and am very happy about it so far.
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 2829 at net/ipv4/inet_connection_sock.c:1155
-inet_csk_destroy_sock+0x325/0x390
-Modules linked in:
-CPU: 0 PID: 2829 Comm: syz-executor.0 Not tainted 6.1.0-rc5 #40
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:inet_csk_destroy_sock+0x325/0x390 net/ipv4/inet_connection_sock.c:1155
-Code: 3c 23 00 74 08 48 89 ef e8 48 04 1e f9 48 c7 45 00 00 00 00 00
-43 80 3c 26 00 0f 85 be fe ff ff e9 c1 fe ff ff e8 db 47 cd f8 <0f> 0b
-e9 ea fd ff ff e8 cf 47 cd f8 4c 89 f7 be 03 00 00 00 48 83
-RSP: 0018:ffffc90005a2fba0 EFLAGS: 00010293
-RAX: ffffffff88b9f795 RBX: ffff8880433ab198 RCX: ffff8880137bc800
-RDX: 0000000000000000 RSI: 00000000000095d2 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: ffffffff88b9f550 R09: ffffed100867556d
-R10: ffffed100867556d R11: 0000000000000000 R12: ffff8880433aab98
-R13: dffffc0000000000 R14: ffff8880433aab00 R15: ffff8880433aab00
-FS:  0000555555a3e940(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b32d21000 CR3: 0000000049629000 CR4: 0000000000750ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <TASK>
- dccp_close+0xc84/0xfc0 net/dccp/proto.c:1060
- inet_release+0x16e/0x1f0 net/ipv4/af_inet.c:428
- __sock_release net/socket.c:650 [inline]
- sock_close+0xd7/0x260 net/socket.c:1365
- __fput+0x3f7/0x8c0 fs/file_table.c:320
- task_work_run+0x243/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x1f2/0x210 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
- do_syscall_64+0x4c/0x90 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4376c3ba8b
-Code: 03 00 00 00 0f 05 48 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 7c
-24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d
-00 f0 ff ff 77 2f 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007ffe0965dd60 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 00007f4376c3ba8b
-RDX: 0000001b32d20000 RSI: ffffffff81adb419 RDI: 0000000000000003
-RBP: 0000000000000004 R08: 0000000000000000 R09: 00000000000014c0
-R10: 00000000a70694c4 R11: 0000000000000293 R12: 00007f4376d39500
-R13: 00007f4376db0458 R14: 00007f4376db0460 R15: 00000000002c238f
- </TASK>
+Otherwise, you might consider using:
+https://b4.docs.kernel.org/en/latest/contributor/send.html#authenticating-w=
+ith-the-web-submission-endpoint
 
-Best,
-Wei
+Maxime
+
+--aufutovedl5p2dcy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3uW+gAKCRDj7w1vZxhR
+xTliAP42DZbkg/gGP8nHP2wOWsm3v/FZYdMVwNTEQquHeHM8HwEAuGuOAy3qshT5
+51ek0yfLAMn0kg2lW7eA9mhqt0abiQI=
+=cvH2
+-----END PGP SIGNATURE-----
+
+--aufutovedl5p2dcy--
