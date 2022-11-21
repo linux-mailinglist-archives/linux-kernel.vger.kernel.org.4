@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E009B632E3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8555F632E3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiKUU4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 15:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S230451AbiKUU4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 15:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiKUU4E (ORCPT
+        with ESMTP id S229813AbiKUU41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:56:04 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AA5CB969;
-        Mon, 21 Nov 2022 12:56:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669064163; x=1700600163;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WJB6p1YpOlRJQWXN28HsfDRojkmZzw+c2qGQk3AkCqM=;
-  b=AUncNM0IT/y5UW9Uv+h+TGJQ6WIugqLa+fQkFL79Shrx9/tOHcvKuQCj
-   JAOQ5833e3jY9i2ee8Qt2cMY+EiKJBhjgk2M6jBYI9xuvdKlMePaGBqk/
-   5vYmXoZU9S7FfEZwoG5vcMi4M2sxwZPMVCLfW5OYfgKsg76j+QtXSfBJw
-   SsVHImpyVb3meYwMKpXc6G+gBDvwQGevG/Zga4QSclKLKNt8ZRuAWSPJb
-   99kFMfPpHRfOl/xy9+f/+PMC/D4qUpcIM6r5m2qepK40XCXkwhgUSeh2V
-   zgK3cuLDl/CJNBz+iuLiC25ior9evckRdYMbIwixu6VvKc1xmUuQ+8cO5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="315481921"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="315481921"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 12:56:02 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="783587774"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="783587774"
-Received: from ticela-or-327.amr.corp.intel.com (HELO [10.209.6.63]) ([10.209.6.63])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 12:55:59 -0800
-Message-ID: <6bb65614-d420-49d3-312f-316dc8ca4cc4@intel.com>
-Date:   Mon, 21 Nov 2022 12:55:58 -0800
+        Mon, 21 Nov 2022 15:56:27 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2418CB9D3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:56:26 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id x5so17590993wrt.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:56:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=10ZFDYKk9wd8fhHDK1Vm52v8Semrqv5fRbpaid+M4YA=;
+        b=R8JSwsmRVbWCIMp9M5gvqtgEgMpviBk8m4IsOB7SXT+eTmlQKusM9LqMirWTs500Tp
+         QEpgbQgat9JmCU00yIc22n5Pu3f0KH3p+X9HkCQwfCzGNHwwdXfpQp2Sjkj3c6TlS1jj
+         vjLuiYV+iFcuwdIMmUK8oIrTa+nyCh/OQa5uSOr2U5FBYkFk5QlRpQyhvINJF0lB7n28
+         dKPGiCkpzhNuL5b+HL+3ktCTAvYM5+S9hzAF2+4URS5tYkqCBEaWia4/QDT5z26u21rW
+         IVn8yZ1xc2RMM4jbiFTc0DTBUYmlZrih70b4cK8ThWXObm+pztrSWv0gQVTeDKwQ0beT
+         aPdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=10ZFDYKk9wd8fhHDK1Vm52v8Semrqv5fRbpaid+M4YA=;
+        b=1kexdAwYgOkenocF2aFj8D5zDifg2hcMFCgydYNR+6N4jreeS9JK+5/8CywE5EuM4S
+         cGoF3TVHgAFWhUKd3h03RXb00V5ugu+MuPyZm/TexhrJhsr/a9rVUzWW3CA/X3A/SLRN
+         UabLJRSYEM/q8FIzn9W5fjyn0yQHFJI0jUWhYUjthDDhVVGGcYNEF+P6jmQIC9RPFcyN
+         RVY/1LtC7V73TtXJfmmJ2h8u5WeMIaGOTOezxyp2IkVsI3VeBU55vZlFBMnHcGhD78fD
+         6XjwM2ILVI0Mo2+dRjgFkETVfhb6CjUNUlbOKzhr6ymwgyde10mwHjriR73BveHTKMiq
+         Rhcw==
+X-Gm-Message-State: ANoB5pmc4v8oMWxPw8tti/XUJ1jaiwisF+GWAU986gZl3AX/bx/Lo/zB
+        5q7mUyDkvfO6z7oDqQWQJa2Fdg==
+X-Google-Smtp-Source: AA0mqf4RtlTjv2eCjVrSOUe5JmgekERpj1i3MVvlxgNrkMOtVQRW3ItFmEW8x/Zbvd91kyHnlQ1O0g==
+X-Received: by 2002:a5d:5685:0:b0:235:f0a6:fafd with SMTP id f5-20020a5d5685000000b00235f0a6fafdmr12435195wrv.75.1669064185170;
+        Mon, 21 Nov 2022 12:56:25 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id f16-20020a5d50d0000000b00235da296623sm12109359wrt.31.2022.11.21.12.56.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 12:56:24 -0800 (PST)
+Message-ID: <5c899a02-cec1-07c9-1c1a-8747773ece0c@arista.com>
+Date:   Mon, 21 Nov 2022 20:56:18 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 3/5] net/tcp: Disable TCP-MD5 static key on
+ tcp_md5sig_info destruction
 Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
-        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
-        kirill.shutemov@linux.intel.com, kys@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
-        wei.liu@kernel.org, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-3-decui@microsoft.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221121195151.21812-3-decui@microsoft.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
+References: <20221115211905.1685426-1-dima@arista.com>
+ <20221115211905.1685426-4-dima@arista.com>
+ <20221118191809.0174f4da@kernel.org>
+ <31efe48a-4c68-f17c-64ee-88d45f56c438@arista.com>
+ <20221121124135.4015cc66@kernel.org>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <20221121124135.4015cc66@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,91 +92,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 11:51, Dexuan Cui wrote:
-> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
-> +{
-> +	u64 ret, r11;
+On 11/21/22 20:41, Jakub Kicinski wrote:
+> On Mon, 21 Nov 2022 20:31:38 +0000 Dmitry Safonov wrote:
+>>> Maybe it wouldn't be 
+>>> the worst move to provide a sk_rcu_dereference() or rcu_dereference_sk()
+>>> or some such wrapper.
+>>>
+>>> More importantly tho - was the merging part for this patches discussed?
+>>> They don't apply to net-next.  
+>>
+>> They apply over linux-next as there's a change [1] in
+>> linux-tip/locking/core on which the patches set based.
+>>
+>> Could the way forward be through linux-tip tree, or that might create
+>> net conflicts?
+> 
+> Dunno from memory, too much happens in these files :S
+> 
+> Could you cherry-pick [1] onto net-next and see if 
+> 
+>   git am --no-3way patches/*
+> 
+> goes thru cleanly? If so no objections for the patches to go via tip,
+> we're close enough to the merge window.
 
-'r11' needs a real, logical name.
+That did go cleanly for me on today's net-next/main.
 
-> +	while (1) {
-> +		ret = _tdx_hypercall_output_r11(TDVMCALL_MAP_GPA, start,
-> +						end - start, 0, 0, &r11);
-> +		if (!ret)
-> +			break;
-> +
-> +		if (ret != TDVMCALL_STATUS_RETRY)
-> +			break;
-> +
-> +		/*
-> +		 * The guest must retry the operation for the pages in the
-> +		 * region starting at the GPA specified in R11. Make sure R11
-> +		 * contains a sane value.
-> +		 */
-> +		if ((r11 & ~cc_mkdec(0)) < (start & ~cc_mkdec(0)) ||
-> +		    (r11 & ~cc_mkdec(0)) >= (end  & ~cc_mkdec(0)))
-> +			return false;
+>> I'll send v5 with the trivial change to rcu_dereference_protected()
+>> mentioned above.
 
-This statement is, um, a wee bit ugly.
-
-First, it's not obvious at all why the address masking is necessary.
-
-Second, it's utterly insane to do that mask to 'r11' twice.  Third, it's
-silly do logically the same thing to start and end every time through
-the loop.
-
-This also seems to have built in the idea that cc_mkdec() *SETS* bits
-rather than clearing them.  That's true for TDX today, but it's a
-horrible chunk of code to leave around because it'll confuse actual
-legitimate cc_enc/dec() users.
-
-The more I write about it, the more I dislike it.
-
-Why can't this just be:
-
-		if ((map_fail_paddr < start) ||
-		    (map_fail_paddr >= end))
-			return false;
-
-If the hypervisor returns some crazy address in r11 that isn't masked
-like the inputs, just fail.
-
-> +		start = r11;
-> +
-> +		/* Set the shared (decrypted) bit. */
-> +		if (!enc)
-> +			start |= cc_mkdec(0);
-
-Why is only one side of this necessary?  Shouldn't it need to be
-something like:
-
-		if (enc)
-			start = cc_mkenc(start);
-		else
-			start = cc_mkdec(start);
-
-??
-
-> +	}
-> +
-> +	return !ret;
-> +}
-> +
->  /*
->   * Inform the VMM of the guest's intent for this physical page: shared with
->   * the VMM or private to the guest.  The VMM is expected to change its mapping
-> @@ -707,12 +765,7 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
->  		end   |= cc_mkdec(0);
->  	}
->  
-> -	/*
-> -	 * Notify the VMM about page mapping conversion. More info about ABI
-> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> -	 * section "TDG.VP.VMCALL<MapGPA>"
-> -	 */
-> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
-> +	if (!tdx_map_gpa(start, end, enc))
->  		return false;
->  
->  	/* private->shared conversion  requires only MapGPA call */
-
+Thanks,
+          Dmitry
