@@ -2,119 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EEC631C8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6C6631C97
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiKUJKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S230085AbiKUJOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:14:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiKUJJ5 (ORCPT
+        with ESMTP id S229689AbiKUJOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:09:57 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C41A8DA5D;
-        Mon, 21 Nov 2022 01:09:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669021797; x=1700557797;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=YK1fJnwYjE6pEUlQTwqHgFrvyAFXsLhLRFs9q3IFLwA=;
-  b=VPqJBqz+oqplmUPzu2q7pq7XThTBKojIo8jlrRXcoQHVpvGQ98kNWf/G
-   gEHNcsBG6U0VdzNV2qOPiZw2dM+ri0UVhaWyf+9OVUDKr5+vKUzeinHVT
-   FXTRnA9nv6+qqOPlerOxlZo/FXWPwTiZchWb8mTcpHCsR/rX2eC7Wlviz
-   sOfS2fBRDtneqpeibT02FmVbeecfVxe6D1/vCItvJjgT8Qp4k4mcOW+8S
-   1S2O0d+SdHL6bpiO9GOniJhoZpysDd0LTLl+Axpw4uu8BYNLKsWZ41pEq
-   2yPRWGXdb0AmJHi4Ta0Hq8GWNpDJYEcLXM8RGiF5wTH7GB8+UcAaY6DFv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="293221035"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="293221035"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 01:09:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="783378100"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="783378100"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 21 Nov 2022 01:09:51 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Nov 2022 11:09:51 +0200
-Date:   Mon, 21 Nov 2022 11:09:51 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-usb@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 584/606] usb: typec: ucsi: stm32g0: Convert to i2c's
- .probe_new()
-Message-ID: <Y3tAX8I3EWoIlraR@kuha.fi.intel.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-585-uwe@kleine-koenig.org>
+        Mon, 21 Nov 2022 04:14:50 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA27EC94;
+        Mon, 21 Nov 2022 01:14:48 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NG1p56V9qzqSZZ;
+        Mon, 21 Nov 2022 17:10:53 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 17:14:47 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 17:14:46 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-nilfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+CC:     <chenzhongjin@huawei.com>, <konishi.ryusuke@gmail.com>,
+        <akpm@linux-foundation.org>
+Subject: [PATCH v3] nilfs2: Fix nilfs_sufile_mark_dirty() not set segment usage as dirty
+Date:   Mon, 21 Nov 2022 17:11:41 +0800
+Message-ID: <20221121091141.214703-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-585-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:45:18PM +0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+When extending segments, nilfs_sufile_alloc() is called to get an
+unassigned segment, then mark it as dirty to avoid accidentally
+allocating the same segment in the future.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+But for some special cases such as a corrupted image it can be
+unreliable.
+If such corruption of the dirty state of the segment occurs, nilfs2 may
+reallocate a segment that is in use and pick the same segment for
+writing twice at the same time.
 
-> ---
->  drivers/usb/typec/ucsi/ucsi_stm32g0.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> index 7b92f0c8de70..93fead0096b7 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> @@ -626,7 +626,7 @@ static int ucsi_stm32g0_probe_bootloader(struct ucsi *ucsi)
->  	return 0;
->  }
->  
-> -static int ucsi_stm32g0_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +static int ucsi_stm32g0_probe(struct i2c_client *client)
->  {
->  	struct device *dev = &client->dev;
->  	struct ucsi_stm32g0 *g0;
-> @@ -763,7 +763,7 @@ static struct i2c_driver ucsi_stm32g0_i2c_driver = {
->  		.of_match_table = of_match_ptr(ucsi_stm32g0_typec_of_match),
->  		.pm = pm_sleep_ptr(&ucsi_stm32g0_pm_ops),
->  	},
-> -	.probe = ucsi_stm32g0_probe,
-> +	.probe_new = ucsi_stm32g0_probe,
->  	.remove = ucsi_stm32g0_remove,
->  	.id_table = ucsi_stm32g0_typec_i2c_devid
->  };
+This will cause the problem reported by syzkaller:
+https://syzkaller.appspot.com/bug?id=c7c4748e11ffcc367cef04f76e02e931833cbd24
 
-thanks,
+This case started with segbuf1.segnum = 3, nextnum = 4 when constructed.
+It supposed segment 4 has already been allocated and marked as dirty.
 
+However the dirty state was corrupted and segment 4 usage was not dirty.
+For the first time nilfs_segctor_extend_segments() segment 4 was
+allocated again, which made segbuf2 and next segbuf3 had same segment 4.
+
+sb_getblk() will get same bh for segbuf2 and segbuf3, and this bh is
+added to both buffer lists of two segbuf. It makes the lists broken
+which causes NULL pointer dereference.
+
+Fix the problem by setting usage as dirty every time in
+nilfs_sufile_mark_dirty(), which is called during constructing current
+segment to be written out and before allocating next segment.
+
+Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
+Cc: stable@vger.kernel.org
+Reported-by: syzbot+77e4f005cb899d4268d1@syzkaller.appspotmail.com
+Reported-by: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+---
+v1 -> v2:
+1) Add lock protection as Ryusuke suggested and slightly fix commit
+message.
+2) Fix and add tags.
+
+v2 -> v3:
+Fix commit message to make it clear.
+---
+ fs/nilfs2/sufile.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/fs/nilfs2/sufile.c b/fs/nilfs2/sufile.c
+index 77ff8e95421f..dc359b56fdfa 100644
+--- a/fs/nilfs2/sufile.c
++++ b/fs/nilfs2/sufile.c
+@@ -495,14 +495,22 @@ void nilfs_sufile_do_free(struct inode *sufile, __u64 segnum,
+ int nilfs_sufile_mark_dirty(struct inode *sufile, __u64 segnum)
+ {
+ 	struct buffer_head *bh;
++	void *kaddr;
++	struct nilfs_segment_usage *su;
+ 	int ret;
+ 
++	down_write(&NILFS_MDT(sufile)->mi_sem);
+ 	ret = nilfs_sufile_get_segment_usage_block(sufile, segnum, 0, &bh);
+ 	if (!ret) {
+ 		mark_buffer_dirty(bh);
+ 		nilfs_mdt_mark_dirty(sufile);
++		kaddr = kmap_atomic(bh->b_page);
++		su = nilfs_sufile_block_get_segment_usage(sufile, segnum, bh, kaddr);
++		nilfs_segment_usage_set_dirty(su);
++		kunmap_atomic(kaddr);
+ 		brelse(bh);
+ 	}
++	up_write(&NILFS_MDT(sufile)->mi_sem);
+ 	return ret;
+ }
+ 
 -- 
-heikki
+2.17.1
+
