@@ -2,103 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DFF63250E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB0D632515
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiKUOGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S229695AbiKUOHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiKUOFr (ORCPT
+        with ESMTP id S229927AbiKUOGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:05:47 -0500
-X-Greylist: delayed 12636 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 06:02:50 PST
-Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4BB1409C;
-        Mon, 21 Nov 2022 06:02:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1669039364;
-        bh=bn5ka49hAzqtQFFXjHtkHtPJpqlVkHmbnMnYIoTX4yA=;
-        h=From:To:Cc:Subject:Date;
-        b=Y/4JtOCxY0PP5v4pUKbFon5NbjAePU+1zqhOC3sfbhxxAxVHNWwFoAriFEviVliiQ
-         Ew2dgciSlzHZd5jfnnDbAEBYqXsch2ZtBVdjENKzmYJQHpqaqEglRhjGDf3Du0daKb
-         MoJ8BssB7P6byfDrRmyV2uFrP+S3B4vkoq6sfOkI=
-Received: from rtoax.. ([111.199.191.46])
-        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
-        id A828046; Mon, 21 Nov 2022 22:02:40 +0800
-X-QQ-mid: xmsmtpt1669039360t57sjgdme
-Message-ID: <tencent_C597352AB3AF24A35A88CC06A3421E590B08@qq.com>
-X-QQ-XMAILINFO: MyIXMys/8kCtwFWBpoUX2Wahw3uwiRwEHkyhHuf+mnfOrjsqEs2AH751oanacY
-         gE64ckivM/i3VrzshP/rzhwvUT4YSY7DbNCQwL9ICpHySiH+9nHdnZFpfHQv2T6uNL3Q9OFIcUet
-         viybl6f/uTYoB7zvqty+/UfVbHxnURnB3fsTdo7Iz4/I4ljNmbIYHNAPWND3gXuamosPe8Idlr6e
-         q4C/xqD0p3uMd3bIa4FsMbPtpfyuZbUc/wQeQ7s9KBZJNAc27cTaLdaauZi/vtKLbegWl/uU+aQS
-         yOcR9MkYQiFr2htcZDxFflHwEFpBfr7iUY1M5FQZ47l15iQKxuhjmObrYFC+p0Jc7dpdGYo30jMy
-         e5UymjKrjsGQrpxyRYBCqHkTxM2pOnJocsXAufNR3zq292aNnyagxXfC5kNFHIoursNgPZatlfsC
-         XpFbdiP+jhUINg288ydBO7mMZAvmViQs9dHFDtKt8+VmbZPcVxmE3yl8xsohVJFIwrS/IeryvyPz
-         ya4yvGeKEgWfHpZq7Se6CS5utMcNX7pR64R4yvzmNEekh9bvJ8NGP+ZGcKgpcLipez8w3U6JFVRy
-         5zyToMH+/0yXNGWRXJFeiO0u43pbYin2yjgT0/xHBLXZVPau4sjA85oNzo2dHNTNP/CdryntkKo7
-         k+h3wZtVdDsVh+VxS+KQd0z1UCeUb1L90V6AhJEL/La9Lctj2LICgFeFvnaU30l7hdaPjHAzCQj4
-         ZEmnn98rFISwIL68dKvUsGsHbaD8D74ke/V4W4t+SLHsh3H63i/tpCQhn5COU0/hGuBWW4rvLRsm
-         1OZvROJY7QTd28Cz5leHq4f9Mrbarm23NPfSjVOncXwEIdyhieS0ed+TsM4vVKLeQXabKOcx/Gy8
-         /O9eW57iHwXpVEuOGGtBmgUXY9B7dmXsiYD3ZXCxdeytmg5yqBdI0n00NSUkgYls8rGTJEfbHN4P
-         E/QRNEytUI/4qZTHc+J3CkUFNFhaksq5fS4/8Ty+zeOpv22WTU+W6mwIt45kOyhUD1uwW09rGZzR
-         jyipb/AtOFPRIr/YCXaQUyRmiXKVk=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     void@manifault.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        corbet@lwn.net, daniel@iogearbox.net, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, rongtao@cestc.cn, rtoax@foxmail.com,
-        sdf@google.com, song@kernel.org, yhs@fb.com
-Subject: [PATCH bpf-next v3] docs/bpf: Update btf selftests program and add link
-Date:   Mon, 21 Nov 2022 22:02:39 +0800
-X-OQ-MSGID: <20221121140239.16469-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 21 Nov 2022 09:06:45 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215D5C7207;
+        Mon, 21 Nov 2022 06:03:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1669039402;
+        bh=S0ZSP+LpMvn5EG+QMrGCuiVBzAD0TgzklGkqSoGsMpY=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=LmOnMjf/PWybJ5EX60Fa9yOKxgTbOvaRNaY04/paLbN5uH4o4lPv4ZMxd1OjFSPog
+         Jb7NDJz0ZFryHqV2O6+rSEhBsA6OMwneoaJQKNnz1xxYLQrFIAyv+iok9dE2vugAWJ
+         Tb5oPQaOnH+VFy7FEgUaIo3Nvkw17Gh0THyBTrw0=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 747E11286581;
+        Mon, 21 Nov 2022 09:03:22 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AUktWLsrhDZo; Mon, 21 Nov 2022 09:03:22 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1669039402;
+        bh=S0ZSP+LpMvn5EG+QMrGCuiVBzAD0TgzklGkqSoGsMpY=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=LmOnMjf/PWybJ5EX60Fa9yOKxgTbOvaRNaY04/paLbN5uH4o4lPv4ZMxd1OjFSPog
+         Jb7NDJz0ZFryHqV2O6+rSEhBsA6OMwneoaJQKNnz1xxYLQrFIAyv+iok9dE2vugAWJ
+         Tb5oPQaOnH+VFy7FEgUaIo3Nvkw17Gh0THyBTrw0=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id A207B1286558;
+        Mon, 21 Nov 2022 09:03:20 -0500 (EST)
+Message-ID: <10c85b8f4779700b82596c4a968daead65a29801.camel@HansenPartnership.com>
+Subject: Re: [PATCH 2/4] fs: define a firmware security filesystem named
+ fwsecurityfs
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nayna <nayna@linux.vnet.ibm.com>, Nayna Jain <nayna@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+        linux-efi@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, Dov Murik <dovmurik@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Russell Currey <ruscur@russell.cc>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Date:   Mon, 21 Nov 2022 09:03:18 -0500
+In-Reply-To: <Y3tbhmL4oG1YTyT/@kroah.com>
+References: <20221106210744.603240-1-nayna@linux.ibm.com>
+         <20221106210744.603240-3-nayna@linux.ibm.com> <Y2uvUFQ9S2oaefSY@kroah.com>
+         <8447a726-c45d-8ebb-2a74-a4d759631e64@linux.vnet.ibm.com>
+         <Y2zLRw/TzV/sWgqO@kroah.com>
+         <44191f02-7360-bca3-be8f-7809c1562e68@linux.vnet.ibm.com>
+         <Y3anQukokMcQr+iE@kroah.com>
+         <d615180d-6fe5-d977-da6a-e88fd8bf5345@linux.vnet.ibm.com>
+         <Y3pSF2MRIXd6aH14@kroah.com>
+         <88111914afc6204b2a3fb82ded5d9bfb6420bca6.camel@HansenPartnership.com>
+         <Y3tbhmL4oG1YTyT/@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On Mon, 2022-11-21 at 12:05 +0100, Greg Kroah-Hartman wrote:
+> On Sun, Nov 20, 2022 at 10:14:26PM -0500, James Bottomley wrote:
+> > On Sun, 2022-11-20 at 17:13 +0100, Greg Kroah-Hartman wrote:
+> > > On Sat, Nov 19, 2022 at 01:20:09AM -0500, Nayna wrote:
+> > > > 
+> > > > On 11/17/22 16:27, Greg Kroah-Hartman wrote:
+> > > > > On Mon, Nov 14, 2022 at 06:03:43PM -0500, Nayna wrote:
+> > > > > > On 11/10/22 04:58, Greg Kroah-Hartman wrote:
+> > [...]
+> > > > > > > I do not understand, sorry.  What does namespaces have to
+> > > > > > > do
+> > > > > > > with this?
+> > > > > > > sysfs can already handle namespaces just fine, why not
+> > > > > > > use
+> > > > > > > that?
+> > > > > > Firmware objects are not namespaced. I mentioned it here as
+> > > > > > an
+> > > > > > example of the difference between firmware and kernel
+> > > > > > objects.
+> > > > > > It is also in response to the feedback from James Bottomley
+> > > > > > in
+> > > > > > RFC v2 [
+> > > > > > https://lore.kernel.org/linuxppc-dev/41ca51e8db9907d9060cc38ad
+> > > > > > b59a66dcae4c59b.camel@HansenPartnership.com/].
+> > > > > I do not understand, sorry.  Do you want to use a namespace
+> > > > > for
+> > > > > these or not?  The code does not seem to be using
+> > > > > namespaces. 
+> > > > > You can use sysfs with, or without, a namespace so I don't
+> > > > > understand the issue here.
+> > > > > 
+> > > > > With your code, there is no namespace.
+> > > > 
+> > > > You are correct. There's no namespace for these.
+> > > 
+> > > So again, I do not understand.  Do you want to use filesystem
+> > > namespaces, or do you not?
+> > 
+> > Since this seems to go back to my email quoted again, let me
+> > repeat: the question isn't if this patch is namespaced; I think
+> > you've agreed several times it isn't.  The question is if the
+> > exposed properties would ever need to be namespaced.  This is a
+> > subtle and complex question which isn't at all explored by the
+> > above interchange.
+> > 
+> > > How again can you not use sysfs or securityfs due to namespaces? 
+> > > What is missing?
+> > 
+> > I already explained in the email that sysfs contains APIs like
+> > simple_pin_... which are completely inimical to namespacing.
+> 
+> Then how does the networking code handle the namespace stuff in
+> sysfs?
+> That seems to work today, or am I missing something?
 
-commit c64779e24e88("selftests/bpf: Merge most of test_btf into
-test_progs") rename selftests/bpf btf test from 'test_btf.c' to
-'prog_tests/btf.c'.
+have you actually tried?
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
-v3: v2 -> v3
-    s/Kernel bpf selftest/The kernel BPF selftest
-    s/provides extensive/provides an extensive
-v2: https://lore.kernel.org/lkml/tencent_114656E8259D0AEA2BDB6810E29241995006@qq.com/
-v1: https://lore.kernel.org/lkml/tencent_7F84D04F96EBE594CAD5EBD12815A2B00106@qq.com/
----
- Documentation/bpf/btf.rst | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+jejb@lingrow:~> sudo unshare --net bash
+lingrow:/home/jejb # ls /sys/class/net/
+lo  tun0  tun10  wlan0
+lingrow:/home/jejb # ip link show
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group
+default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index cf8722f96090..681416c86e81 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -1062,4 +1062,9 @@ format.::
- 7. Testing
- ==========
+So, as you see, I've entered a network namespace and ip link shows me
+the only interface I can see in that namespace (a down loopback) but
+sysfs shows me every interface on the system outside the namespace.
+
+This is pretty much the story of containers and sysfs: if you mount it
+inside the container, it leaks information about the host
+configuration.  Since I created a container with full root, I could
+actually fiddle with the host network parameters on interfaces I
+shouldn't be able to see within the container using sysfs ... which is
+one reason we try to persuade people to use a user namespace instead of
+full root.
  
--Kernel bpf selftest `test_btf.c` provides extensive set of BTF-related tests.
-+The kernel bpf selftest `tools/testing/selftests/bpf/prog_tests/btf.c`_
-+provides an extensive set of BTF-related tests.
-+
-+.. Links
-+.. _tools/testing/selftests/bpf/prog_tests/btf.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/prog_tests/btf.c
--- 
-2.38.1
+> If the namespace support needs to be fixed up in sysfs (or in
+> securityfs), then great, let's do that, and not write a whole new
+> filesystem just because that's not done.
+
+As I said: a fix is proposed for securityfs.  I think everyone in
+containers concluded long ago that sysfs is too big an Augean Stable.
+
+> Also this patch series also doesn't handle namespaces, so again, I am
+> totally confused as to why this is even being discussed...
+
+Well, it's not my patch.  I came into this saying *if* there was ever a
+reason to namespace these parameters then please don't use interfaces
+inimical to namespacing.  My personal view is that this should all just
+go in securityfs because that defers answering the question of whether
+it would eventually be namespaced.
+
+James
 
