@@ -2,187 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F12F632261
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A0263226C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiKUMiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S231441AbiKUMia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbiKUMiF (ORCPT
+        with ESMTP id S231426AbiKUMiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:38:05 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C35D9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:38:04 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALARnTH010078
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=tKyahOyvv7NJSSQ3I1JSCs/ym0L7h8gpvO2DVKj+SZ0=;
- b=buhBCLRgjCMzpNBPsoW9CKRccmSUualLAkANAUEMcKcDbIMUKRmvcUiSOpx9/z4odTCK
- +Cfc1XG31mVZtwntfrHSyZJuMMeXedGMmdJNMdBqFe9AslGrHBi+kld9OXOHD8cD5uuI
- k975pb3PUUbtt/VP8xxmUz9fuvbhsSManOtpFLb1Cbdvejes3f44HuwnruSJ0hOy2QOs
- TaRytdXpas713JupWSI03sQwoNqdXyah9dw/xFt6DyvD3tpGOZ88HULTdjTkE2qfpB9a
- xddk2B/qR220yKsuYjRjCIXNLy0TVBiEp5+PaMpLrv983WwpysBunLVr6lnDYhHhjV6/ Gw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrf5mgur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:04 +0000
-Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2ALCc37e002007
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:03 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 3kxr7kf9fx-1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:03 +0000
-Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ALCc3Ft001998
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:38:03 GMT
-Received: from hu-devc-lv-u18-c.qualcomm.com (hu-vtanuku-lv.qualcomm.com [10.47.206.121])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 2ALCc386001993;
-        Mon, 21 Nov 2022 12:38:03 +0000
-Received: by hu-devc-lv-u18-c.qualcomm.com (Postfix, from userid 410733)
-        id 1A2165000A7; Mon, 21 Nov 2022 04:38:03 -0800 (PST)
-From:   Visweswara Tanuku <quic_vtanuku@quicinc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     quic_vnivarth@quicinc.com,
-        Visweswara Tanuku <quic_vtanuku@quicinc.com>
-Subject: [PATCH] soc: qcom-geni-se: Update Tx and Rx fifo depth based on QUP HW version
-Date:   Mon, 21 Nov 2022 04:37:58 -0800
-Message-Id: <20221121123758.5052-1-quic_vtanuku@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aRDF680FiBSvSlxiDMWQyLYEq9ZKsdqQ
-X-Proofpoint-ORIG-GUID: aRDF680FiBSvSlxiDMWQyLYEq9ZKsdqQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_13,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- mlxlogscore=349 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210098
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 07:38:20 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C700C11C28;
+        Mon, 21 Nov 2022 04:38:15 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8Cx7Ng1cXtjWxoJAA--.25294S3;
+        Mon, 21 Nov 2022 20:38:13 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuAwcXtjXpkXAA--.61043S2;
+        Mon, 21 Nov 2022 20:38:12 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v5 1/3] gpio: loongson2ef: move driver to original location
+Date:   Mon, 21 Nov 2022 20:38:01 +0800
+Message-Id: <20221121123803.3786-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxXuAwcXtjXpkXAA--.61043S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Gw4DAry5Zw13Jry8WFyxuFg_yoWxKFyfpF
+        1fAw4kGrW8WF4fCrZ5CFykurZ8JanxGr9F9F47ur1UuF9rZa4UZr1ktF95Jr4DXrZ8JayI
+        9F9a9r12ka1jkwUanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07j0zuAUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From QUP HW Version 3.10 and above the Tx and Rx
-fifo depth bits are increased to 23:16 bits from
-21:16 bits in SE_HW_PARAM registers accomodating
-256bytes of fifo depth.
+This gpio driver doesn't cover CPU_LOONGSON64 platforms, because
+of gpio address was wrong and I don't plan to support it thus
+move this driver to arch/mips/loongson2ef/ so that I can drop the
+shackles of the legacy driver and add a new driver that supports
+dts/acpi to support LoongArch platforms.
 
-Updated geni_se_get_tx_fifo_depth and
-geni_se_get_rx_fifo_depth to retrieve right fifo
-depth based on QUP HW version.
-
-Signed-off-by: Visweswara Tanuku <quic_vtanuku@quicinc.com>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 ---
- include/linux/qcom-geni-se.h | 42 ++++++++++++++++++++++++++++++------
- 1 file changed, 36 insertions(+), 6 deletions(-)
+ MAINTAINERS                                                 | 2 +-
+ arch/loongarch/configs/loongson3_defconfig                  | 1 -
+ arch/loongarch/include/asm/loongson.h                       | 6 ------
+ arch/mips/configs/lemote2f_defconfig                        | 1 -
+ arch/mips/configs/loongson2k_defconfig                      | 1 -
+ arch/mips/configs/loongson3_defconfig                       | 1 -
+ arch/mips/include/asm/mach-loongson64/loongson.h            | 5 -----
+ arch/mips/loongson2ef/common/Makefile                       | 1 +
+ .../gpio-loongson.c => arch/mips/loongson2ef/common/gpio.c  | 2 +-
+ drivers/gpio/Kconfig                                        | 6 ------
+ drivers/gpio/Makefile                                       | 1 -
+ 11 files changed, 3 insertions(+), 24 deletions(-)
+ rename drivers/gpio/gpio-loongson.c => arch/mips/loongson2ef/common/gpio.c (98%)
 
-diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-index f5672785c0c4..5ea5351f8818 100644
---- a/include/linux/qcom-geni-se.h
-+++ b/include/linux/qcom-geni-se.h
-@@ -242,12 +242,22 @@ struct geni_se {
- /* SE_HW_PARAM_0 fields */
- #define TX_FIFO_WIDTH_MSK		GENMASK(29, 24)
- #define TX_FIFO_WIDTH_SHFT		24
-+/*
-+ * For QUP HW Version >= 3.10 Tx fifo depth support is increased
-+ * to 256bytes and corresponding bits are 16 to 23
-+ */
-+#define TX_FIFO_DEPTH_MSK_256_BYTES	GENMASK(23, 16)
- #define TX_FIFO_DEPTH_MSK		GENMASK(21, 16)
- #define TX_FIFO_DEPTH_SHFT		16
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 916b2d9cffc0..7b80a64b70b9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13881,7 +13881,7 @@ M:	Jiaxun Yang <jiaxun.yang@flygoat.com>
+ L:	linux-mips@vger.kernel.org
+ S:	Maintained
+ F:	arch/mips/include/asm/mach-loongson2ef/
+-F:	arch/mips/loongson2ef/
++F:	arch/mips/loongson2ef/*
+ F:	drivers/cpufreq/loongson2_cpufreq.c
  
- /* SE_HW_PARAM_1 fields */
- #define RX_FIFO_WIDTH_MSK		GENMASK(29, 24)
- #define RX_FIFO_WIDTH_SHFT		24
-+/*
-+ * For QUP HW Version >= 3.10 Rx fifo depth support is increased
-+ * to 256bytes and corresponding bits are 16 to 23
-+ */
-+#define RX_FIFO_DEPTH_MSK_256_BYTES	GENMASK(23, 16)
- #define RX_FIFO_DEPTH_MSK		GENMASK(21, 16)
- #define RX_FIFO_DEPTH_SHFT		16
+ MIPS/LOONGSON64 ARCHITECTURE
+diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
+index 3540e9c0a631..d576d802ffd0 100644
+--- a/arch/loongarch/configs/loongson3_defconfig
++++ b/arch/loongarch/configs/loongson3_defconfig
+@@ -601,7 +601,6 @@ CONFIG_I2C_PIIX4=y
+ CONFIG_I2C_GPIO=y
+ CONFIG_SPI=y
+ CONFIG_GPIO_SYSFS=y
+-CONFIG_GPIO_LOONGSON=y
+ CONFIG_SENSORS_LM75=m
+ CONFIG_SENSORS_LM93=m
+ CONFIG_SENSORS_W83795=m
+diff --git a/arch/loongarch/include/asm/loongson.h b/arch/loongarch/include/asm/loongson.h
+index 00db93edae1b..87587688fab8 100644
+--- a/arch/loongarch/include/asm/loongson.h
++++ b/arch/loongarch/include/asm/loongson.h
+@@ -29,12 +29,6 @@
+ #define LOONGSON_REG_SIZE	0x00100000	/* 1M */
+ #define LOONGSON_REG_TOP	(LOONGSON_REG_BASE+LOONGSON_REG_SIZE-1)
  
-@@ -388,7 +398,8 @@ static inline void geni_se_abort_s_cmd(struct geni_se *se)
+-/* GPIO Regs - r/w */
+-
+-#define LOONGSON_GPIODATA		LOONGSON_REG(0x11c)
+-#define LOONGSON_GPIOIE			LOONGSON_REG(0x120)
+-#define LOONGSON_REG_GPIO_BASE          (LOONGSON_REG_BASE + 0x11c)
+-
+ #define MAX_PACKAGES 16
  
- /**
-  * geni_se_get_tx_fifo_depth() - Get the TX fifo depth of the serial engine
-- * @se:	Pointer to the concerned serial engine.
-+ * based on QUP HW version
-+ * @se: Pointer to the concerned serial engine.
+ #define xconf_readl(addr) readl(addr)
+diff --git a/arch/mips/configs/lemote2f_defconfig b/arch/mips/configs/lemote2f_defconfig
+index 7e598d338979..81264ccaacfc 100644
+--- a/arch/mips/configs/lemote2f_defconfig
++++ b/arch/mips/configs/lemote2f_defconfig
+@@ -127,7 +127,6 @@ CONFIG_SERIAL_8250_EXTENDED=y
+ CONFIG_SERIAL_8250_MANY_PORTS=y
+ CONFIG_SERIAL_8250_FOURPORT=y
+ CONFIG_HW_RANDOM=y
+-CONFIG_GPIO_LOONGSON=y
+ CONFIG_THERMAL=y
+ CONFIG_MEDIA_SUPPORT=m
+ CONFIG_FB=y
+diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
+index 728bef666f7a..f11be40ccb4e 100644
+--- a/arch/mips/configs/loongson2k_defconfig
++++ b/arch/mips/configs/loongson2k_defconfig
+@@ -230,7 +230,6 @@ CONFIG_SERIAL_NONSTANDARD=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_I2C_CHARDEV=y
+ CONFIG_I2C_PIIX4=y
+-CONFIG_GPIO_LOONGSON=y
+ CONFIG_SENSORS_LM75=m
+ CONFIG_SENSORS_LM93=m
+ CONFIG_SENSORS_W83627HF=m
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index aca66a5f330d..82de65130722 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -269,7 +269,6 @@ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_I2C_CHARDEV=y
+ CONFIG_I2C_PIIX4=y
+-CONFIG_GPIO_LOONGSON=y
+ CONFIG_SENSORS_LM75=m
+ CONFIG_SENSORS_LM93=m
+ CONFIG_SENSORS_W83627HF=m
+diff --git a/arch/mips/include/asm/mach-loongson64/loongson.h b/arch/mips/include/asm/mach-loongson64/loongson.h
+index f7c3ab6d724e..51ee80d98742 100644
+--- a/arch/mips/include/asm/mach-loongson64/loongson.h
++++ b/arch/mips/include/asm/mach-loongson64/loongson.h
+@@ -177,11 +177,6 @@ extern int mach_i8259_irq(void);
+ #define LOONGSON_PCIMEMBASECFG		LOONGSON_REG(LOONGSON_REGBASE + 0x14)
+ #define LOONGSON_PCIMAP_CFG		LOONGSON_REG(LOONGSON_REGBASE + 0x18)
+ 
+-/* GPIO Regs - r/w */
+-
+-#define LOONGSON_GPIODATA		LOONGSON_REG(LOONGSON_REGBASE + 0x1c)
+-#define LOONGSON_GPIOIE			LOONGSON_REG(LOONGSON_REGBASE + 0x20)
+-
+ /* ICU Configuration Regs - r/w */
+ 
+ #define LOONGSON_INTEDGE		LOONGSON_REG(LOONGSON_REGBASE + 0x24)
+diff --git a/arch/mips/loongson2ef/common/Makefile b/arch/mips/loongson2ef/common/Makefile
+index 30ea8b5ca685..4d4063f90cc5 100644
+--- a/arch/mips/loongson2ef/common/Makefile
++++ b/arch/mips/loongson2ef/common/Makefile
+@@ -14,6 +14,7 @@ obj-$(CONFIG_LOONGSON_UART_BASE) += serial.o
+ obj-$(CONFIG_EARLY_PRINTK) += serial.o
+ obj-$(CONFIG_LOONGSON_UART_BASE) += uart_base.o
+ obj-$(CONFIG_LOONGSON_MC146818) += rtc.o
++obj-$(CONFIG_GPIOLIB) += gpio.o
+ 
+ #
+ # Enable CS5536 Virtual Support Module(VSM) to virtulize the PCI configure
+diff --git a/drivers/gpio/gpio-loongson.c b/arch/mips/loongson2ef/common/gpio.c
+similarity index 98%
+rename from drivers/gpio/gpio-loongson.c
+rename to arch/mips/loongson2ef/common/gpio.c
+index a42145873cc9..0d3e7aef46d3 100644
+--- a/drivers/gpio/gpio-loongson.c
++++ b/arch/mips/loongson2ef/common/gpio.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- *  Loongson-2F/3A/3B GPIO Support
++ *  Loongson-2F GPIO Support
   *
-  * This function is used to get the depth i.e. number of elements in the
-  * TX fifo of the serial engine.
-@@ -397,11 +408,20 @@ static inline void geni_se_abort_s_cmd(struct geni_se *se)
-  */
- static inline u32 geni_se_get_tx_fifo_depth(struct geni_se *se)
- {
--	u32 val;
-+	u32 val, hw_version, hw_major, hw_minor, tx_fifo_depth_mask;
-+
-+	hw_version = geni_se_get_qup_hw_version(se);
-+	hw_major = GENI_SE_VERSION_MAJOR(hw_version);
-+	hw_minor = GENI_SE_VERSION_MINOR(hw_version);
-+
-+	if ((hw_major == 3 && hw_minor >= 10) || hw_major > 3)
-+		tx_fifo_depth_mask = TX_FIFO_DEPTH_MSK_256_BYTES;
-+	else
-+		tx_fifo_depth_mask = TX_FIFO_DEPTH_MSK;
+  *  Copyright (c) 2008 Richard Liu,  STMicroelectronics	 <richard.liu@st.com>
+  *  Copyright (c) 2008-2010 Arnaud Patard <apatard@mandriva.com>
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index a01af1180616..bc55b80f212a 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -375,12 +375,6 @@ config GPIO_LOGICVC
+ 	  Say yes here to support GPIO functionality of the Xylon LogiCVC
+ 	  programmable logic block.
  
- 	val = readl_relaxed(se->base + SE_HW_PARAM_0);
- 
--	return (val & TX_FIFO_DEPTH_MSK) >> TX_FIFO_DEPTH_SHFT;
-+	return (val & tx_fifo_depth_mask) >> TX_FIFO_DEPTH_SHFT;
- }
- 
- /**
-@@ -424,7 +444,8 @@ static inline u32 geni_se_get_tx_fifo_width(struct geni_se *se)
- 
- /**
-  * geni_se_get_rx_fifo_depth() - Get the RX fifo depth of the serial engine
-- * @se:	Pointer to the concerned serial engine.
-+ * based on QUP HW version
-+ * @se: Pointer to the concerned serial engine.
-  *
-  * This function is used to get the depth i.e. number of elements in the
-  * RX fifo of the serial engine.
-@@ -433,11 +454,20 @@ static inline u32 geni_se_get_tx_fifo_width(struct geni_se *se)
-  */
- static inline u32 geni_se_get_rx_fifo_depth(struct geni_se *se)
- {
--	u32 val;
-+	u32 val, hw_version, hw_major, hw_minor, rx_fifo_depth_mask;
-+
-+	hw_version = geni_se_get_qup_hw_version(se);
-+	hw_major = GENI_SE_VERSION_MAJOR(hw_version);
-+	hw_minor = GENI_SE_VERSION_MINOR(hw_version);
-+
-+	if ((hw_major == 3 && hw_minor >= 10) || hw_major > 3)
-+		rx_fifo_depth_mask = RX_FIFO_DEPTH_MSK_256_BYTES;
-+	else
-+		rx_fifo_depth_mask = RX_FIFO_DEPTH_MSK;
- 
- 	val = readl_relaxed(se->base + SE_HW_PARAM_1);
- 
--	return (val & RX_FIFO_DEPTH_MSK) >> RX_FIFO_DEPTH_SHFT;
-+	return (val & rx_fifo_depth_mask) >> RX_FIFO_DEPTH_SHFT;
- }
- 
- void geni_se_init(struct geni_se *se, u32 rx_wm, u32 rx_rfr);
+-config GPIO_LOONGSON
+-	bool "Loongson-2/3 GPIO support"
+-	depends on CPU_LOONGSON2EF || CPU_LOONGSON64
+-	help
+-	  Driver for GPIO functionality on Loongson-2F/3A/3B processors.
+-
+ config GPIO_LPC18XX
+ 	tristate "NXP LPC18XX/43XX GPIO support"
+ 	default y if ARCH_LPC18XX
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 29e3beb6548c..cfd298e00737 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -77,7 +77,6 @@ obj-$(CONFIG_GPIO_JANZ_TTL)		+= gpio-janz-ttl.o
+ obj-$(CONFIG_GPIO_KEMPLD)		+= gpio-kempld.o
+ obj-$(CONFIG_GPIO_LOGICVC)		+= gpio-logicvc.o
+ obj-$(CONFIG_GPIO_LOONGSON1)		+= gpio-loongson1.o
+-obj-$(CONFIG_GPIO_LOONGSON)		+= gpio-loongson.o
+ obj-$(CONFIG_GPIO_LP3943)		+= gpio-lp3943.o
+ obj-$(CONFIG_GPIO_LP873X)		+= gpio-lp873x.o
+ obj-$(CONFIG_GPIO_LP87565)		+= gpio-lp87565.o
 -- 
-2.17.1
+2.33.0
 
