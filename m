@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0B8632E87
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E29632E8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiKUVMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 16:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S229917AbiKUVN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 16:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKUVMW (ORCPT
+        with ESMTP id S229498AbiKUVNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:12:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F61C6BC6;
-        Mon, 21 Nov 2022 13:12:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 21 Nov 2022 16:13:25 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5775D2870A;
+        Mon, 21 Nov 2022 13:13:24 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F2A961460;
-        Mon, 21 Nov 2022 21:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86F4C433D6;
-        Mon, 21 Nov 2022 21:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669065140;
-        bh=nmHwTBfz9HEKEVrdiVd0LFXO9AZHdMs3tAKcRRLdUsc=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=jKHBwzpxmQ5FiiNuMm8BVyYSu3oKFsWkh70TNQvQ0XH7jXQOshAjKEtZPQqgQE9yK
-         JYdFTwRlIjFFM13MMNPD13eFrMyC1sffarJLNovyELS6IaiJ19kXGktDQed20S6JZe
-         FJzkHWmX2VhYm2cMSV0FGyQibklpIEG3h6azgLIEgxs9XIXVGm8z/OyOkj+Mg5aXLf
-         iA3d7eYtPgtfw0ubDQQ9xFUgodsSrqf6FRdMUAU37FiBqdDeokSLxfX0WC5Wwnj6JK
-         SmAoPPrHCKLVUP7JW8uvkAV0TQBjFTCAYjdAINZgf375hV7GJcfKSu+pfjR1wiGrrC
-         MeJjO52z4x1Hg==
-Date:   Mon, 21 Nov 2022 22:12:19 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] samples/hid: Fix spelling mistake "wihout" ->
- "without"
-In-Reply-To: <20221116093943.597572-1-colin.i.king@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2211212212100.6045@cbobk.fhfr.pm>
-References: <20221116093943.597572-1-colin.i.king@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by ms.lwn.net (Postfix) with ESMTPSA id 06B90377;
+        Mon, 21 Nov 2022 21:13:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 06B90377
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1669065204; bh=Iol520HD+IvmDQhHhMYX8VqVgTTrliIv7/NunxcRzSw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=P0qbGBW72V5dL5o7xsu+tijozHEwBAY8hkEtmpiyJs46wLi2Vh6DZza8ZIZb43xaD
+         DpX4Khb2shfPeUcuG2zo6GKFGDGlfhNEXnD1PKVinKyjdxhYmsZzfGqra4aaWQahVv
+         Ywh4JrROcpoWzL5GDWQuTRJctd74Ks13+Q1yoyQe48oLRxrPYOix8n4Ha1M3WF99ey
+         DM8NpJ3Exau1jiZngC0ImHCslOTl37bbIeGXFJLZd1YYmB8N826cIZeK/7Ad+EEJCT
+         zsFzAgKHthNCeynfrP6yvn8He6v/7InIXVz6Q9owSjAXu7Nh/G5pgDxsrOC7yjkCQi
+         34+sSgDX0OOKg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        bilbao@vt.edu, Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: Re: [PATCH] docs/sp_SP: Add process coding-style translation
+In-Reply-To: <20221115184737.712625-1-carlos.bilbao@amd.com>
+References: <20221115184737.712625-1-carlos.bilbao@amd.com>
+Date:   Mon, 21 Nov 2022 14:13:23 -0700
+Message-ID: <87bkp09fkc.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,40 +50,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022, Colin Ian King wrote:
+Carlos Bilbao <carlos.bilbao@amd.com> writes:
 
-> There is a spelling mistake in a comment and a usage message. Fix them.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Translate Documentation/process/coding-style.rst into Spanish.
+>
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
 > ---
->  samples/hid/hid_surface_dial.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/samples/hid/hid_surface_dial.c b/samples/hid/hid_surface_dial.c
-> index bceea53d39b0..4bc97373a708 100644
-> --- a/samples/hid/hid_surface_dial.c
-> +++ b/samples/hid/hid_surface_dial.c
-> @@ -4,7 +4,7 @@
->   * This program will morph the Microsoft Surface Dial into a mouse,
->   * and depending on the chosen resolution enable or not the haptic feedback:
->   * - a resolution (-r) of 3600 will report 3600 "ticks" in one full rotation
-> - *   wihout haptic feedback
-> + *   without haptic feedback
->   * - any other resolution will report N "ticks" in a full rotation with haptic
->   *   feedback
->   *
-> @@ -57,7 +57,7 @@ static void usage(const char *prog)
->  		"This program will morph the Microsoft Surface Dial into a mouse,\n"
->  		"and depending on the chosen resolution enable or not the haptic feedback:\n"
->  		"- a resolution (-r) of 3600 will report 3600 'ticks' in one full rotation\n"
-> -		"  wihout haptic feedback\n"
-> +		"  without haptic feedback\n"
->  		"- any other resolution will report N 'ticks' in a full rotation with haptic\n"
->  		"  feedback\n"
+>  .../translations/sp_SP/coding-style.rst       | 1315 +++++++++++++++++
+>  Documentation/translations/sp_SP/index.rst    |    1 +
+>  2 files changed, 1316 insertions(+)
+>  create mode 100644 Documentation/translations/sp_SP/coding-style.rst
 
-Applied, thanks.
+So I'm kind of slow, I'll admit...but I have finally noticed that you're
+not preserving the directory structure used for Documentation/ as a
+whole.  Is there a reason for that?  We've been (slowly) working to
+organize our docs in a reader-friendly way, it seems unfortunate to lose
+that for the translations...?
 
--- 
-Jiri Kosina
-SUSE Labs
+Thanks,
 
+jon
