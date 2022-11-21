@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD0C631E26
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5A6631E2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiKUKWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:22:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S231363AbiKUKXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbiKUKWr (ORCPT
+        with ESMTP id S231371AbiKUKXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:22:47 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547BB13EB1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:22:45 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id l14so229893wrw.13
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:22:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iTOHRzceQYVbSDGQhGLsG3F76+dMRPGYLu5KqgSSAiM=;
-        b=LZ0IPSCDo80aHrpFHT2RbRfDhrEM8HzMSN1EyZP/Tb3gPrJ1qucGYmhr3Z97MBwJjb
-         HLcUq7b56VOCopXtILEmmsotshAJyTeCJJwPKS7hOww4zyhg+xtCOHWeWSMfDdQhVW67
-         s2KdqyT//VhTNhG7F2lytEKXx2jdITXPZ/PNxsUB3CxAT9XDTwPfXifiIhMzMeOF83eM
-         ciiGNI7r+7dUNzjZNsHTwlfzaLLMXr+fjalYsSXpK039uMO59MGK1gm8HO1A56vkpW/2
-         465WplN1OHOw2pmtawR0/RLuJsQlBhyMwVa16+njzup3ADQkjT6UkkSaXFblRxWJZmzI
-         Q4LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iTOHRzceQYVbSDGQhGLsG3F76+dMRPGYLu5KqgSSAiM=;
-        b=12sfcKPfq6aDJ5Ou/OMoMt/E5cf7nt69pruCaRCnxgCoKUuQxtXcU55XKVO5QESdrD
-         H9Co3dvBvY+wRctDyUr268ui89A/9P7N6/eOyzAIADxHpeym3B5q5wAZpygCkiAwgE8Q
-         ulyBdwqS78EUYhY2p6VTQ5wQbvs4JcZ1bMQEgTAagje2v6XQwrB1jV0PJlbIOBRxGbcs
-         Hftgk44GuYRXAFxxqM6XoKRuiPNWExtVs3e5naF1hTVBlcRFo/jwatT92UhDSs1Lk6rY
-         J6HJ53TDhG5Dy6y4eVZqoMb/qtl6rhcDtlJLt/QKvN7bBxYTGoc0BxvKq6D0cUNSEobO
-         1oiw==
-X-Gm-Message-State: ANoB5pnce1/ZeTdm/j64mEZUopkz5mipcYNbUwJCHS4mPlfz7GX4U/34
-        GH3w6Jp8bA9gFlaSx8hfLX4FBQ==
-X-Google-Smtp-Source: AA0mqf67/fMDHSu3j27cQjDIa1ZpZopwDRvpBD/uQs/oea0QTn+saXwNsfAKQLZBdoagr1e7hek2Bw==
-X-Received: by 2002:adf:e347:0:b0:236:76de:7280 with SMTP id n7-20020adfe347000000b0023676de7280mr10897544wrj.194.1669026163781;
-        Mon, 21 Nov 2022 02:22:43 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id a6-20020adffb86000000b0022cdeba3f83sm10864175wrr.84.2022.11.21.02.22.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 02:22:43 -0800 (PST)
-Date:   Mon, 21 Nov 2022 10:22:41 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 587/606] backlight: arcxcnn: Convert to i2c's .probe_new()
-Message-ID: <Y3tRcRJoURo/NTgt@maple.lan>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-588-uwe@kleine-koenig.org>
+        Mon, 21 Nov 2022 05:23:25 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516BB2182A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:23:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5zIwYFky3D2pTNep9PW/j8wYr5wyhQdCK147aNotvRg=; b=PuybbQgaGUYEKEKRg7Bst3hFqR
+        RS3Jn0evnz3ZeW0FsBZfbXq7+27aTdRbxN26knS3dQNtgsptkcC5VmCf885qJAA+qm3P+AbW2/Opn
+        4i928oITfHcwAmG1qN7sBwXCiUqoliWuZv4W4wsoGABi5SfCWrc8ueQsLVQEDxWh3YYaY8wPUUVB+
+        1kjmzHtYCPi2CFIJg2o9Xol/4ifGET5i0F6CfJnWxpwY5dp5J6dCEWp1xrUCexSJK/uJpwbKXu9OE
+        GYbybCTTxSFIxlMQMZFNdxKUaIyiggf2HIvlDd7N/hBdt9HMSc4gtxW96vTOLyXY0jymSkSL1NPNT
+        NI7F+rFg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ox3xC-0056sx-LC; Mon, 21 Nov 2022 10:23:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CF448300322;
+        Mon, 21 Nov 2022 11:22:56 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AD014203A8986; Mon, 21 Nov 2022 11:22:56 +0100 (CET)
+Date:   Mon, 21 Nov 2022 11:22:56 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH] x86: suppress KMSAN reports in arch_within_stack_frames()
+Message-ID: <Y3tRgGUKCxUoLeM8@hirez.programming.kicks-ass.net>
+References: <20221118172305.3321253-1-glider@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-588-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221118172305.3321253-1-glider@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:45:21PM +0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
->
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Fri, Nov 18, 2022 at 06:23:05PM +0100, Alexander Potapenko wrote:
+> arch_within_stack_frames() performs stack walking and may confuse
+> KMSAN by stepping on stale shadow values. To prevent false positive
+> reports, disable KMSAN checks in this function.
+> 
+> This fixes KMSAN's interoperability with CONFIG_HARDENED_USERCOPY.
+> 
+> Link: https://github.com/google/kmsan/issues/89
+> Link: https://lore.kernel.org/lkml/Y3b9AAEKp2Vr3e6O@sol.localdomain/
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+>  arch/x86/include/asm/thread_info.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/thread_info.h b/arch/x86/include/asm/thread_info.h
+> index f0cb881c1d690..f1cccba52eb97 100644
+> --- a/arch/x86/include/asm/thread_info.h
+> +++ b/arch/x86/include/asm/thread_info.h
+> @@ -163,7 +163,12 @@ struct thread_info {
+>   *	GOOD_FRAME	if within a frame
+>   *	BAD_STACK	if placed across a frame boundary (or outside stack)
+>   *	NOT_STACK	unable to determine (no frame pointers, etc)
+> + *
+> + * This function reads pointers from the stack and dereferences them. The
+> + * pointers may not have their KMSAN shadow set up properly, which may result
+> + * in false positive reports. Disable instrumentation to avoid those.
+>   */
+> +__no_kmsan_checks
+>  static inline int arch_within_stack_frames(const void * const stack,
+>  					   const void * const stackend,
+>  					   const void *obj, unsigned long len)
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Seems OK; but now I'm confused as to the exact distinction between
+__no_sanitize_memory and __no_kmsan_checks.
 
-
-Daniel.
+The comments there about seem to suggest __no_sanitize_memory ensures no
+instrumentation at all, and __no_kmsan_checks some instrumentation but
+doesn't actually check anything -- so what's left then?
