@@ -2,65 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECED6325DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B086325FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiKUObL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
+        id S230019AbiKUOgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiKUObI (ORCPT
+        with ESMTP id S229489AbiKUOf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:31:08 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8527208C;
-        Mon, 21 Nov 2022 06:31:05 -0800 (PST)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NG8tz0HTBzRpPy;
-        Mon, 21 Nov 2022 22:30:35 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+        Mon, 21 Nov 2022 09:35:57 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DBCC694C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:35:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669041330; x=1700577330;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=81q/NWq8iLH9tF/aVF7hETErH6QjCfNUwmfq2TDAUcY=;
+  b=ocKIBGb5LVX5Ot921FCgrBV4YyTm5x8B1jH7QXdZpBHjSJMOmdGUxg48
+   x3nGOtM7z4XJUoc4DW+3e03dyJo712fZ2ZctmHPxypzWuNpk7vo2Ai0hU
+   rxlExNwnjYzbMmHcNDFZzPb0h2O6Y1fZn1u4dFw3llVqOi3rIfHal+uM9
+   V4GfMnec67tblv5E5DmKS7yzGXeWbWFFa8+koY2P/8xbanydSmB/hQIWU
+   GdnOjF2uBIaPCMb5egQqK7oO4BVOO+Wb67LiGFKV7ZKLlnqFq4FN6z+DB
+   ZsNcNl9kkcteLHgKsJuFPbp4QlJkFqlnO0vrSLaqIBbFvT22as35BbFSj
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="187957811"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Nov 2022 07:32:13 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 22:31:02 +0800
-Subject: Re: [PATCH 2/2] scsi: core: Use SCSI_SCAN_INITIAL in
- do_scsi_scan_host()
-To:     John Garry <john.g.garry@oracle.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <damien.lemoal@opensource.wdc.com>
-References: <20221121121725.1910795-1-john.g.garry@oracle.com>
- <20221121121725.1910795-3-john.g.garry@oracle.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <f8ccad27-bc2a-f9f3-5971-0537b5ab50da@huawei.com>
-Date:   Mon, 21 Nov 2022 22:31:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+ 15.1.2507.12; Mon, 21 Nov 2022 07:32:12 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 21 Nov 2022 07:32:10 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <pratyush@kernel.org>, <michael@walle.cc>,
+        <yaliang.wang@windriver.com>, <richard@nod.at>,
+        <cyrille.pitchen@wedev4u.fr>, <vigneshr@ti.com>,
+        <andy.yan@rock-chips.com>, <miquel.raynal@bootlin.com>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/1] mtd: spi-nor: gigadevice: gd25q256: replace gd25q256_default_init with gd25q256_post_bfpt
+Date:   Mon, 21 Nov 2022 16:32:07 +0200
+Message-ID: <166904099810.93917.2481343672925708577.b4-ty@microchip.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221016171901.1483542-1-yaliang.wang@windriver.com>
+References: <1dddc60f-44fd-df65-f491-be8379fe2380@microchip.com> <20221016171901.1483542-1-yaliang.wang@windriver.com>
 MIME-Version: 1.0
-In-Reply-To: <20221121121725.1910795-3-john.g.garry@oracle.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/21 20:17, John Garry wrote:
-> Instead of using hardcoded '0' as the do_scsi_scan_host() ->
-> scsi_scan_host_selected() rescan arg, use proper macro SCSI_SCAN_INITIAL.
+On Mon, 17 Oct 2022 01:19:00 +0800, yaliang.wang@windriver.com wrote:
+> GD25Q256 'C' generation 'GD25Q256C' implements the JESD216 standards,
+> JESD216 doesn't define the QER field in BFPT, but the 'GD25Q256C'
+> does define QE bit in status register 1 bit 6, so we need to tweak
+> quad_enable to properly set the function.
 > 
-> Signed-off-by: John Garry<john.g.garry@oracle.com>
-> ---
->   drivers/scsi/scsi_scan.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> 'D' and 'E' generations implement the JESD216B standards, so parsing
+> the SFDP to set quad_enable function is enough for them.
+> 
+> [...]
 
-Looks good,
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
+Updated comment in gd25q256_post_bfpt and applied to spi-nor/next, thanks!
+
+[1/1] mtd: spi-nor: gigadevice: gd25q256: replace gd25q256_default_init with gd25q256_post_bfpt
+      https://git.kernel.org/mtd/c/4dc49062a7e9
+
+Best regards,
+-- 
+Tudor Ambarus <tudor.ambarus@microchip.com>
