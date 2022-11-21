@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDC8632D2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A02632D33
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiKUTpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 14:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
+        id S231594AbiKUTq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiKUTpk (ORCPT
+        with ESMTP id S231566AbiKUTqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:45:40 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7441CFE9D;
-        Mon, 21 Nov 2022 11:45:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=HN21k88BYPW1IXLLNQAyuv3uXPjyMHl4EerDCx5rTIw=; b=ciQVnzPeChYZY2d0235iiTvSdi
-        c8MR22HaUxDx84Rs3LamdRvRvSu+9bt3tbvHGrpPBOP22b57oPgy/+phkeftG+l0TLTjcX1V98Q/F
-        Nrv2sSd3Cw4Sc8OTikN0eZFwV1fDi49wGoOi+gPBbBaXcr4lPArEXU5F6nWq6r3S0NnU=;
-Received: from p200300daa7225c007502151ad3a4cf6f.dip0.t-ipconnect.de ([2003:da:a722:5c00:7502:151a:d3a4:cf6f] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1oxCjD-003axr-3p; Mon, 21 Nov 2022 20:45:15 +0100
-Message-ID: <3a9c2e94-3c45-5f83-c703-75e1cde13be1@nbd.name>
-Date:   Mon, 21 Nov 2022 20:45:14 +0100
+        Mon, 21 Nov 2022 14:46:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64413CFE83;
+        Mon, 21 Nov 2022 11:46:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B0ED61455;
+        Mon, 21 Nov 2022 19:46:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36061C4347C;
+        Mon, 21 Nov 2022 19:46:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669060009;
+        bh=pHzctSC+3S79oH24mEHkCYNAjNLCVnOPYHO4iVExqp8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gu4ApRO7ShKYUQt/o5rHuO7/e7edxcAQL2sz08D3vSZo4B4Yk7qIg2vN3+Vq3zb0+
+         Znpn4doRVYY6VPlWQoh0Ki+1FycncWJEWYrgpqSxcxLrGTrUT1KzhrLmH0QIH+WGGj
+         kbpFVJ/bYVorYvawbiwdS8l/ZzBij6GvGFI/CdCUsg6olmZxihCSuvgv3LaAYT0/7+
+         TvDA9gIAJkZJCq0ErkkUytJZssk6IIHLmwxHEAxykGzz/dfMEiK9/q/3cZw4EHXrxq
+         Ifz0K/JPBw7GfKC1syS2sIBKVLiEYwTrzvlu5GZqxy0pUPLAeBf3gY4OKNS1eYWpm/
+         4m6ENAR20nqXg==
+Date:   Mon, 21 Nov 2022 19:46:47 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
+        chao@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 2/5] fs: affs: initialize fsdata in affs_truncate()
+Message-ID: <Y3vVp/2A9nao8HZ2@gmail.com>
+References: <20221121112134.407362-1-glider@google.com>
+ <20221121112134.407362-2-glider@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH] netfilter: nf_flow_table: add missing locking
-Content-Language: en-US
-From:   Felix Fietkau <nbd@nbd.name>
-To:     netfilter-devel@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221121182615.90843-1-nbd@nbd.name>
-In-Reply-To: <20221121182615.90843-1-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121112134.407362-2-glider@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.11.22 19:26, Felix Fietkau wrote:
-> nf_flow_table_block_setup and the driver TC_SETUP_FT call can modify the flow
-> block cb list while they are being traversed elsewhere, causing a crash.
-> Add a write lock around the calls to protect readers
+On Mon, Nov 21, 2022 at 12:21:31PM +0100, Alexander Potapenko wrote:
+> When aops->write_begin() does not initialize fsdata, KMSAN may report
+> an error passing the latter to aops->write_end().
 > 
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Sorry, I forgot to add this:
+> Fix this by unconditionally initializing fsdata.
+> 
+> Suggested-by: Eric Biggers <ebiggers@kernel.org>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 
-Reported-by: Chad Monroe <chad.monroe@smartrg.com>
+Are you sure that is the correct Fixes commit?  What about commit f2b6a16eb8f5
+("fs: affs convert to new aops")?
 
-- Felix
+- Eric
