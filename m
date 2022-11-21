@@ -2,64 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CF6632415
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E749A63241A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiKUNmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S231301AbiKUNmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiKUNl5 (ORCPT
+        with ESMTP id S231297AbiKUNm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:41:57 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233F32D1DE;
-        Mon, 21 Nov 2022 05:41:54 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 21 Nov 2022 08:42:29 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7468AD44A;
+        Mon, 21 Nov 2022 05:42:24 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 60FFA1F85D;
+        Mon, 21 Nov 2022 13:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669038143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qA95gqtnEWLAc5KcUnMA1+AqDQceor8a48I1xrlWxRc=;
+        b=nRIq5223HNCGsq8acn1PHL2RS+Wo/YQ6dMGManoY/hSzPww1tvGNwS8k8FUPlvAPY2vPT0
+        89Tjv8TfPf7NWRl5rVQgcYCUXcQlGs/ILevFq6y1D1PRerriym2OxqsQkxvdHM2HOOLgr8
+        Mw99JXZJ2SlTspdGjuE7/AU6aNdFvTY=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1862E6600368;
-        Mon, 21 Nov 2022 13:41:52 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669038112;
-        bh=LEKyP7Lh1CGJUl09TE0Fs4DL19+CS3JViR/Mmqqgwrs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cSpESSFnz3CedZ2akD3CYVMgONzrJw4c6KypoOO4AiFgKjce6U8DtFf5C/iftIiRj
-         iC2XUupLKdaWDA2M8B6Bwlzy1tN8+s31SRO39vEwA3RVQzpwgbTGjUUZMWrizMjsab
-         WpiJSvJvudOO9HW7TxXmjiss9ddm+DRt9G/r7RlQGtGEcjvowgraMk8g4yosyyGRuT
-         d+0dAQUAnymgfIpGTdA8uEI2VDatrig6KfcSVnsvraOJ8oskUL8QLW00ab37sdYi0V
-         gmySM/oUrY7iQFcjDm6PPzAOFYwkrtBXv4+C0VFP8vssN0JFYzVTbQIBPwQ//VYXD1
-         nySEVAS7dOwuw==
-Message-ID: <fce278a4-b983-ffd2-52bd-0cbfed6e5294@collabora.com>
-Date:   Mon, 21 Nov 2022 14:41:49 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 40E352C143;
+        Mon, 21 Nov 2022 13:42:22 +0000 (UTC)
+Date:   Mon, 21 Nov 2022 14:42:22 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the printk tree
+Message-ID: <Y3uAPvCxSYzUTzFc@alley>
+References: <20221121110041.1d2c635b@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 5/7] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
- Document MT6765 pin controller
-Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
-References: <20221118113028.145348-1-y.oudjana@protonmail.com>
- <20221118113028.145348-6-y.oudjana@protonmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221118113028.145348-6-y.oudjana@protonmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121110041.1d2c635b@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,15 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/11/22 12:30, Yassine Oudjana ha scritto:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
+On Mon 2022-11-21 11:00:41, Stephen Rothwell wrote:
+> Hi all,
 > 
-> The MT6765 pin controller has had a driver for a while, but DT
-> bindings were never documented for it.
+> After merging the printk tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/video/fbdev/xen-fbfront.ko] undefined!
+> ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/tty/serial/8250/8250.ko] undefined!
+> ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/tty/serial/samsung_tty.ko] undefined!
+> ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/tty/serial/kgdboc.ko] undefined!
+> ERROR: modpost: "lockdep_assert_console_list_lock_held" [drivers/net/netconsole.ko] undefined!
+> 
+> Presumably caused by commits
+> 
+>   c26c1533e3bd ("printk: introduce console_list_lock")
+>   a71ba89dc3ed ("console: introduce wrappers to read/write console flags")
+>   d3ca62bf29bb ("console: introduce console_is_registered()")
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+John has fixed this by adding EXPORT_SYMBOL() for this function.
 
+> I have used the printk tree from next-20221118 for today.
 
+It is now fixed in "for-next" branch in printk/linux.git.
+
+Thanks a lot for the report!
+
+Best Regards,
+Petr
