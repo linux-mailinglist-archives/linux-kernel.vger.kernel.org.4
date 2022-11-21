@@ -2,200 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC710631FFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A27FE632006
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiKULM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S229864AbiKULNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiKULMJ (ORCPT
+        with ESMTP id S230426AbiKULNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:12:09 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79F0BA58F;
-        Mon, 21 Nov 2022 03:08:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oPB4BfoKnZS/lmzll43namEWjcY2NvRaqkl/8QhSDAQ6F1rpLrx/xymE/r9lv6WKWlGdieXrFyVO8LfMHV7bYlu06fhCy7722CF9fRjeCvdA3gW/aK07dr1yJboH2+mEVFnR4AgZAFWjg/MNtjQ+8t9H/TzOBl69TAVd8zSxJAL2aLU1Fka75FeaWbnLkh80NAuSAM+KR+/+LsJD40fLio6mrtW0wkeUI6tSrrnle+tvI0MJZlbSQ2eQdSeiqMIPzXi6lgSD43a4+cEUEq79a9rWNjjinzxEve2g2DUqmlz7mODHOeG0xcsRIT8AxvDIbrtdDbYHCc53XDqTTEyJ3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4OhYESem0zy1fPSEHzSf/MD1Jlfbs2fUilziKTwR3I4=;
- b=k3sOYwdn60pTy8IH1/VDIEp7r42Nvd2UDtRywB+exWZXf43yjjz6l+L+HWm2gznA6qk96TYNqZQJ9G//FmvitpuILx5SNUOcRzbZTAN/gQDiWzuIRv88jpcQ10G3kB4SuxIfo57TzkMJ8fzS2degeiI6tMkedtHpFca57zUKgdAc3XEeD8dLMJiUA8l++DOAeBFxtD/3XJ5pOe4b5Qjp+QGP06WpAyYumkyq50QTpRujKsbU6ENNWrFFtH2rJg9WY6MaPyBu1Ry6vj6BFMgjHsWGE8zxFHYhf9AOE0GOJFjhiqUovunZgLkjNRygZOuBd6+WQZnIHfIVMg3lXMxNnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4OhYESem0zy1fPSEHzSf/MD1Jlfbs2fUilziKTwR3I4=;
- b=THgk+Ob2di2+EYg2yopzBkgUbB9HvMaYZjehbN740/DW/ahwRO6H+fs6iIJRjPzz4QGbP0IFqSD0pXH9eExemueqVWf4w7PJnP5WGYn3qdPJm7+XG0Qs5n8dQvdrFylY3bRaHTPAiMb1KtqNVCzEmV5DuEqhb6u7N07zDcjdTaE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SJ2PR12MB8033.namprd12.prod.outlook.com (2603:10b6:a03:4c7::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
- 2022 11:07:46 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5834.009; Mon, 21 Nov 2022
- 11:07:46 +0000
-Message-ID: <0916abd9-265d-e4ed-819b-9dfa05e8d746@amd.com>
-Date:   Mon, 21 Nov 2022 12:07:40 +0100
+        Mon, 21 Nov 2022 06:13:22 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72AAB406D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:08:52 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso8733049wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:08:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ldIw3qE7TcfeO+CMNZSZzhqJXxqw8uTyqxjG7TVKHRA=;
+        b=a1X2OKkvQNOYrg2Ho4tHtXzbCVjjPjCnUbH2he6Lu/0a/dCxUbCFQkuAi+REPRzjZz
+         vew6pHKduwMkWoIO0JFU/eotkrhuRQxO8RvUdmBEVw0/WoucoCNxVQzaQOcy+BZvY8C8
+         GRXQvw3iqKXinlhtPt5/9ltQQ/0PUY7scXsvM8uqGRZH042S/gLyz+3gVZlo3U85Pe7Q
+         i49pKaEMahMQ4i5dqU8ErKx69bt0GMoWN77LXNtlSYWfYChkgCpTk1FhUPJlU1VToP/m
+         ETVt06vLHRXdNlEG6t2QPZWo2cw0QSiIORrkjxqTuoGXdFjZoeUFWeFkVtHZvRMmGqQR
+         LLrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ldIw3qE7TcfeO+CMNZSZzhqJXxqw8uTyqxjG7TVKHRA=;
+        b=i4BSxAlE7PWMKMDmyRGBtabBr90Exeqyp9alqofgo5YUvRth4jSUpyzV1HBMY99VuU
+         XSZ91PK1rzSFKvLPuOAoBsk9K9cMg2+CddEW/Ff9OAPQKRoyX3wbVDUMpkA3CChYfesy
+         Vydda7Ko8lgSrGCS/oNlZFA+9PxW1Uz8E5k8hX5tSFYbfIV3I5vK7aGJaBsAyKql4Ha8
+         fQ40tOVZl/IH5MiRmbazuAztn9bvykLe8UblnY2cbG5DcsYuO/oIYajqsy2qILvsjcFI
+         Ep3mJ3kUZ5pSv/p+YK+TlCnfN06ozs0eFV8f/HMILTGjGGaCCDY30eAhPg3yTUHHBuKE
+         YMNw==
+X-Gm-Message-State: ANoB5plNTeb+PlwcIGOl9AUdMGFjIgxd5l0YXXwNe10m2M/7Ah74ZLwX
+        cg88CkC58hxYZWpMolqZeQ1UoQ==
+X-Google-Smtp-Source: AA0mqf4890BbDvUAZKyzdiBlp8Yumr3tgn5xlZULQw9eYNuxY4HTyXVcYs/0E8kBvE+LhjlPgDChug==
+X-Received: by 2002:a05:600c:4c21:b0:3b4:8fd4:293e with SMTP id d33-20020a05600c4c2100b003b48fd4293emr15856331wmp.46.1669028924530;
+        Mon, 21 Nov 2022 03:08:44 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id fc10-20020a05600c524a00b003cf9bf5208esm19606724wmb.19.2022.11.21.03.08.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 03:08:43 -0800 (PST)
+Message-ID: <74e3582e-ac89-b81d-fe0e-c3f63d3e7985@linaro.org>
+Date:   Mon, 21 Nov 2022 11:08:41 +0000
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH AUTOSEL 6.0 38/44] drm/amdgpu: Unlock bo_list_mutex after
- error handling
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc8280xp: Add soundcard support
 Content-Language: en-US
-To:     =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Philip Yang <Philip.Yang@amd.com>, Xinhui.Pan@amd.com,
-        amd-gfx@lists.freedesktop.org, luben.tuikov@amd.com,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
-        Alex Deucher <alexander.deucher@amd.com>, airlied@gmail.com
-References: <20221119021124.1773699-1-sashal@kernel.org>
- <20221119021124.1773699-38-sashal@kernel.org>
- <e08c0d60-45d1-85a6-9c55-38c8e87b56c3@mailbox.org>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <e08c0d60-45d1-85a6-9c55-38c8e87b56c3@mailbox.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        agross@kernel.org, andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221119164425.86014-1-srinivas.kandagatla@linaro.org>
+ <20221119164425.86014-4-srinivas.kandagatla@linaro.org>
+ <1353266c-2d95-6c68-5288-c405231a37f1@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <1353266c-2d95-6c68-5288-c405231a37f1@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0043.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:92::16) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SJ2PR12MB8033:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbea118f-285d-42bc-bf7d-08dacbb09e8a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 575/dNStLYR/0Dr5CvQwqt+h8aifRgZJLItLLDGxeW7aaeEXwB3DVWITPT7Hcry4cH0n7fykoIC0Ps0Rnfjzo+DS+MTYqCUzHYbcSXppk7J/t0NWEAX5HQqGW8ALRD7R6002GNAVJNZhFGGLHXS6PcWWfbNEEKTrAWrlsjchax7bzFHDcP8W9x9oxtAMGErgXtT8CDpKaQYh4e1+2jH/HRhpbVLnKrE4pMUarkWZGeTvbdYZOzXcsIQzh5GOf6w9zfpQ+poaW+/W1MwGIVx3TgWXa1fhTGYy5x2wXEL1NhfIIUF517IRQvRYet8s6CThzeVwH8lYxz1xlv+kIUVY+4O+OGsO9bhUVoaUs/5VWrWn77phGQo7u57uqDcBjefjrLYDROKfl7CGZ/uLY9zo/S1rb9n3xWLYctZTCfitiv+07I/JSRtKupML5+Zg7cwBHEz5Ucc0PDvZD4jufaQaK36C0XqfMK1ilVbMviU7xSkjX0/DEswNqcg0OZeN15YhCZWBxZAd+M6sM2j7YinUvWb5b7DonLAcnccHcz7jN3k101xmwx95r/WND2kqRHVqbnJntvb0qAg7TuZJPK9FgSpamo0ia6u5U1G135voBjzDzPcBQlsSndPeFdRcqpzUN0IihPuPDT3Yv/XrXErVqNFyBVvPwIhszOJyba3Qb+K8SwepWy28h/rxO5u6nxGYfK8eWF8QHA2K926ZOwOX9xeVsIGo6eFc3VE9dV0Okck=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199015)(53546011)(26005)(6486002)(6666004)(478600001)(4326008)(8676002)(6506007)(66946007)(66476007)(66556008)(110136005)(41300700001)(316002)(38100700002)(6512007)(66574015)(54906003)(186003)(2616005)(83380400001)(8936002)(2906002)(5660300002)(31686004)(36756003)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ai9wa3VlVGZJL2IrbGZadkhHYlh4N3FYOS9sdnZsRnN5WnpkWjg5czF6YnRV?=
- =?utf-8?B?bVFKNHBoMXl6VFBHQ1pWTzhvTXFncVp5RXQxU3JHajRJN1doSjZzTlhwcVRT?=
- =?utf-8?B?WDM0bm5JMFBZeU9La25ZaGZaZTllWkRlL1ZzRXJzZVdkRWpwZUVESU5yT1A2?=
- =?utf-8?B?bWkyYmpQRURGLzNUUkVYWnhVYWRLYStpdVJ0MWZieUU3b0Q5OEppY3VsT1ZG?=
- =?utf-8?B?RlV3eGJGano1ZHBZY0pJL1FSMjhDUlkzc2V4dzlnaTZtSFZnaE5XOFZzWDFJ?=
- =?utf-8?B?cHhHTVo3blBCNXR5UXZ4MjdmOHJsQmtqV09udjBLS3FKM3BSbWZmZGN0L2ZG?=
- =?utf-8?B?VVd6UTZrVUw2MXhHWE16SDQyUm5UbnFlYmVlOFVNRGljdWF3dnlkcUR2WmVz?=
- =?utf-8?B?L1daRE5EeUFMODlpQUw3V1F1WGVpMFJmd2JIZ1NwcVZXRzNHUzRIRzlHK3lq?=
- =?utf-8?B?N0t0RHRYTE02NHZ0eU9yV2NRMVBtQmVLWHorQkI2TFpweDBJdVJUcFhlTDl1?=
- =?utf-8?B?bHRCYk9LVkx1LzhFeGdxb2g4NEdlZldxaGRTaU1GS013elpiaWJ0emJ4VDdr?=
- =?utf-8?B?WkdDNHY5b3JYeVRHZnN4T3pNUUgveUwxdmErUG9STjBoOXBXakxMbHVpOXBa?=
- =?utf-8?B?VHY3QXY0SVRWTHprbGNnd0lTUVZtZWF6WklRb1A4WFhmWnNMRjJOYnJYakFW?=
- =?utf-8?B?ODgwK3M3UTB3T2NtU1ZKc243dytlaThBWFVhYUJNeFRzRVBFb3R2NjZmbTNT?=
- =?utf-8?B?bngvVVBpUzVJejFEN3Z6aXdKU3ZTZWlQenVWdXJmZDAvTFlydTN3aE16Tms0?=
- =?utf-8?B?UjdkbjExc3phSVhWcExJczhxYWVEdWlXVEFiQ2c4aVEwWUd0dXJRV05CWkhn?=
- =?utf-8?B?VmVMblBHMGRBb3VIRG00RHZGTTFWd3BiaVJTeDhFbHF6NmsvNjhBZkZobmpa?=
- =?utf-8?B?TnYxV0FhK3IyVVhRek1vLzRGZjRKWEpIWUo1aEhxZm4xNGlNaGp5cmlyc25j?=
- =?utf-8?B?MzMyNVhrZTZ6QmdVS01TZU5nMkxXWFJhenpNb2xVSkhnZ2NZMmhLUXdXRlNF?=
- =?utf-8?B?Rk1JMnBGUERFVTZKRDYzOXpFWEYwdDZaRGVIME42L2FpZHh0ZFVMREZKRUVx?=
- =?utf-8?B?VXArd0R3bnFXVzZJVUFMTjBDQUhyb2trOWEwQkhBUHAzNTk0OHZ1ci94bFlJ?=
- =?utf-8?B?dTh6cUFQMXBPOUVrajVZNE81TzdGSEhhazdCOTQyUTJPVnQ4ZEloZ1pTOHc1?=
- =?utf-8?B?RjdFNjI3WTJ0QjlkSjBSMlovSzU1Mm13VmNNWWNOd0tzS0pDQkFaSkFCaXNY?=
- =?utf-8?B?eVNMcnVMcmc0RzVZb0xPR1VKaWVFQ01sREg1WENJVithTGw2djlSV0J4Skx2?=
- =?utf-8?B?QXk1NUtVdTJEWHVVbFp0THhCNGNNaVVGT3hVSEtsUktxaHZodDBUUzY3WjJP?=
- =?utf-8?B?MGpNa1YrNUxkd2N2aFp6QXlDa1UyZ0J5M0xVRDd2UDlKQzdjSHZFRjhvb3Zw?=
- =?utf-8?B?ZnVyVjAzdUdodnM3TTRMaDVKaGFhZTlSbHNKeG1UUGhNZXFKdGpXemhWdnEz?=
- =?utf-8?B?ZndnUGgwNlRWVWMzajgyRjZpcjkrS3lQZkgvbHNqZGJ6Kzc4WmIyb1kvR3k3?=
- =?utf-8?B?TWxNYUxuRExmSGcxZDR4T3hyMlJoVzZDb0plY1lvZjlGazRVNjh2OWt3bzJt?=
- =?utf-8?B?blE3NVo2eE5RL2phYmIyaDlCVm1ua0t3SkVveEtaUlJjRHcvd2tGKzNBL215?=
- =?utf-8?B?cUZMaElrVXdjbmVUM0dOT2NsZmtKaUpFb1ZxTDl6VnZxWmVUeExFNjUrTU1H?=
- =?utf-8?B?OUR4NHlzZVZlU0hRNlBQNE1mNC82TW5PK2tOMzU4S0F1V2d6VlFTMmg3THov?=
- =?utf-8?B?Rk9OVmxyWWdOUDlXdUZTMDJEaE42by95N1dHdVVMZ1ZQemRSQ0pqUm0ySVVv?=
- =?utf-8?B?ay90cFpxVjk0V2tuanlucDlPekZFQ2V3eVU1L1MzMmFMOGxWNG9MN21mbDZp?=
- =?utf-8?B?M1BEUUR4eHFQRXNQK1JEUmdFODJHdG5lYmkrUnFaWWhoamRJNHJrWUEwcDR3?=
- =?utf-8?B?M1RkMHlBZlRYVVhocXFJRXVVR05NbS9EenJMakd4OUNmTlc2eXpaSFRBcTFW?=
- =?utf-8?Q?rVYw=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbea118f-285d-42bc-bf7d-08dacbb09e8a
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 11:07:46.3578
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Rp5YvrSKlzYCCgOnRcW/dIsFYjRVP9fdRyA2YZpKa+VnqxuUvrlaS34a3DHZE2/C
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8033
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 21.11.22 um 10:57 schrieb Michel Dänzer:
-> On 11/19/22 03:11, Sasha Levin wrote:
->> From: Philip Yang <Philip.Yang@amd.com>
+Thanks Krzysztof,
+
+On 21/11/2022 08:34, Krzysztof Kozlowski wrote:
+> On 19/11/2022 17:44, Srinivas Kandagatla wrote:
+>> Add support for SoundCard on X13s. This patch adds support for Headset
+>> Playback, record and 2 DMICs on the Panel along with the regulators
+>> required for powering up the LPASS codecs.
 >>
->> [ Upstream commit 64f65135c41a75f933d3bca236417ad8e9eb75de ]
->>
->> Get below kernel WARNING backtrace when pressing ctrl-C to kill kfdtest
->> application.
->>
->> If amdgpu_cs_parser_bos returns error after taking bo_list_mutex, as
->> caller amdgpu_cs_ioctl will not unlock bo_list_mutex, this generates the
->> kernel WARNING.
->>
->> Add unlock bo_list_mutex after amdgpu_cs_parser_bos error handling to
->> cleanup bo_list userptr bo.
->>
->>   WARNING: kfdtest/2930 still has locks held!
->>   1 lock held by kfdtest/2930:
->>    (&list->bo_list_mutex){+.+.}-{3:3}, at: amdgpu_cs_ioctl+0xce5/0x1f10 [amdgpu]
->>    stack backtrace:
->>     dump_stack_lvl+0x44/0x57
->>     get_signal+0x79f/0xd00
->>     arch_do_signal_or_restart+0x36/0x7b0
->>     exit_to_user_mode_prepare+0xfd/0x1b0
->>     syscall_exit_to_user_mode+0x19/0x40
->>     do_syscall_64+0x40/0x80
->>
->> Signed-off-by: Philip Yang <Philip.Yang@amd.com>
->> Reviewed-by: Christian König <christian.koenig@amd.com>
->> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 >> ---
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> index b7bae833c804..9d59f83c8faa 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> @@ -655,6 +655,7 @@ static int amdgpu_cs_parser_bos(struct amdgpu_cs_parser *p,
->>   		}
->>   		mutex_unlock(&p->bo_list->bo_list_mutex);
->>   	}
->> +	mutex_unlock(&p->bo_list->bo_list_mutex);
->>   	return r;
->>   }
+> 
+> Thank you for your patch. There is something to discuss/improve.
+> 
+>> +	right_spkr: wsa8830-right@0,2{
+>> +		compatible = "sdw10217020200";
+>> +		reg = <0 2>;
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&spkr_2_sd_n_default>;
+>> +		powerdown-gpios = <&tlmm 179 GPIO_ACTIVE_LOW>;
+>> +		#thermal-sensor-cells = <0>;
+>> +		sound-name-prefix = "SpkrRight";
+>> +		#sound-dai-cells = <0>;
+>> +		vdd-supply = <&vreg_s10b>;
+>> +	};
+>> +};
+>> +
+>> +
+> 
+> Only one blank line.
+> 
+>> +&swr1 {
+>> +	status = "okay";
+>> +
+>> +	wcd_rx: wcd9380-rx@0,4 {
+>> +		compatible = "sdw20217010d00";
+>> +		reg = <0 4>;
+>> +		qcom,rx-port-mapping = <1 2 3 4 5 6>;
+> 
+> No improvements: Still looks too long.
+Yep we only have 5 out ports.
+
+> 
+>> +
+> 
+> Drop empty line.
+
+Looks like I had to many stray lines :-)
+
+will fix this in next spin.
+
+>> +	};
+>> +};
+>> +
+>> +&swr2 {
+>> +	status = "okay";
+>> +
+>> +	wcd_tx: wcd9380-tx@0,3 {
+>> +		compatible = "sdw20217010d00";
+>> +		reg = <0 3>;
+>> +		qcom,tx-port-mapping = <1 1 2 3>;
+>> +	};
+>> +};
+>> +
+>> +&vamacro {
+>> +	pinctrl-0 = <&dmic01_default>, <&dmic02_default>;
+>> +	pinctrl-names = "default";
+>> +	vdd-micb-supply = <&vreg_s10b>;
+>> +	qcom,dmic-sample-rate = <600000>;
+>> +};
+>> +
+>>   &tlmm {
+>>   	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
 >>   
-> Looks doubtful that this is a correct backport — there's an identical mutex_unlock call just above.
+>> @@ -369,6 +558,14 @@ reset {
+>>   		};
+>>   	};
+>>   
+>> +	wcd_default: wcd-default-state {
+>> +		reset-pins {
+>> +			pins = "gpio106";
+>> +			function = "gpio";
+>> +			bias-disable;
+>> +		};
+>> +	};
+>> +
+>>   	qup0_i2c4_default: qup0-i2c4-default-state {
+>>   		pins = "gpio171", "gpio172";
+>>   		function = "qup4";
+>> @@ -383,6 +580,26 @@ qup2_i2c5_default: qup2-i2c5-default-state {
+>>   		drive-strength = <16>;
+>>   	};
+>>   
+>> +	spkr_1_sd_n_default: spkr-1-sd-n-default-state {
+>> +		perst-n-pins {
+>> +			pins = "gpio178";
+>> +			function = "gpio";
+>> +			drive-strength = <16>;
+>> +			bias-disable;
+>> +			output-high;
+>> +		};
+>> +	};
+>> +
+>> +	spkr_2_sd_n_default: spkr-2-sd-n-default-state {
+>> +		perst-n-pins {
+>> +			pins = "gpio179";
+>> +			function = "gpio";
+>> +			drive-strength = <16>;
+>> +			bias-disable;
+>> +			output-high;
+>> +		};
+>> +	};
+>> +
+>>   	tpad_default: tpad-default-state {
+>>   		int-n {
+> 
+> This won't apply cleanly. You need to base your patches on recent trees.
 
+Yes, I will rebase this on top of 
+https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/log/?h=arm64-for-6.2
 
-Oh, yes good point. This patch doesn't needs to be backported at all 
-because it just fixes a problem introduced in the same cycle:
-
-commit 4953b6b22ab9d7f64706631a027b1ed1130ce4c8
-Author: Christian König <christian.koenig@amd.com>
-Date:   Tue Sep 13 09:52:13 2022 +0200
-
-     drm/amdgpu: cleanup error handling in amdgpu_cs_parser_bos
-
-     Return early on success and so remove all those "if (r)" in the error
-     path.
-
-     Signed-off-by: Christian König <christian.koenig@amd.com>
-     Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-
-Regards,
-Christian.
+--srini
+> 
+> Best regards,
+> Krzysztof
+> 
