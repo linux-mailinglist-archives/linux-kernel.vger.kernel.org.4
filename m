@@ -2,149 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223356319CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201FC6319D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiKUGmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 01:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S229787AbiKUGpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 01:45:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKUGmo (ORCPT
+        with ESMTP id S229613AbiKUGpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 01:42:44 -0500
+        Mon, 21 Nov 2022 01:45:13 -0500
 Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C16EAF
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:42:28 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id b29so10462022pfp.13
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:42:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3CC19C0F
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:45:11 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id b185so10485239pfb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:45:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Ka6Q0Zy6QrfcwL/CSvIzpjvnD4BQcyLVYFcLJW2zm44=;
-        b=eNAoMx9XYSD3E6TlqY/LO/eSe6DOJcSXrUsT2o3LX4RdBXicRWFCc+ECtGK8SsDC1X
-         VTsgWPxoc30xplkGVv1b7y3+pkV7YUtn0zAcD5K/0LwThmy2aoomAPeK+y8UbPt7Axms
-         Ug5VwOfkOb4YhyLAzewvgsAilQSOERs6Pr6tnfHR/CQ8blUy63w4uHO+adl9VXd+0l+m
-         x2JoaaU0KR0xXZ/AHvUoe9UM3qM9KB/gV9KYQUbjjb+KaFjt7B4kvj5ow3v+iWHxzQPh
-         E0kFS1P/FMAd07AMV1hSAVve3yRanQo34vG0NU++2Hfmzs/rOdVk2SsysmCBF+mno6V3
-         N9nQ==
+        bh=T9z6VNHAh5buPLOQbn4DZRIbuRpf7GLAza5o2jIuncE=;
+        b=oyqKPJqV6ChsbvcTQN+xTD9PeymSUxzZ4mMliDJurfoOfDB9tEnQWdI7PQaKjC1D0T
+         LIHx/SMR/6Q/7er1lusBloufr8W4xin7Qq2hfmIpZnRdWzTrEgCcgBJA2GhjmelaXvsI
+         V7iWawCflMlMvGxfITd89DW2MG1jgB1MG167Rh5uUUwRYS17aFVz9aT+XBY/hlbLXUwY
+         CII1XP/HqWT5StaQo6HXfG3eMIcMvfjbKa9TWZCNplJ5aPb92KuZsbTfZ/2Z9JSee89L
+         mm+TGdN+02s25vkFuC/G+eQWp3OjSa/6P8LrPLB2/LUD8mcMO7Mxdimiu+/fdxahIwPo
+         NxTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ka6Q0Zy6QrfcwL/CSvIzpjvnD4BQcyLVYFcLJW2zm44=;
-        b=xN9M/EIiJbpEWxNb5hImFIDWcr0Co2N1Z4VKkbMkDKn7sU8g//D+K6BSHVDCxziDXV
-         o0lVy0Mr4OcUJmYZHW3uazkpJgI1duZ/iMcqLfj6+/C6BcRGjlOjmvMrkCmNlRpU7FvF
-         dra4tX0VH6EgDQGCi9AiQX0DouzpVpk8TR32vXBTK+LqiqetxWmc90bRqODYCCfzDT59
-         9jVXRMxM6H6MFUwLEvQxQokhoDDh62NOikYxww/A5Oi3QAE4Pm2V6vIVApE6BY/Ap9EQ
-         nPfgkX3CTs5rXD8OBzp4e2oYaXesxqNeNqmaRg98AFydNzXfvkOE9s4xfMgasmFy4hzZ
-         1Oyg==
-X-Gm-Message-State: ANoB5pmmoJajsDDsfhJg/UWM9GYSp/tD4z9lhczEU1NHNwNbHWr84GVy
-        hxFgSHIngVfnH7m67fDVYYZQ
-X-Google-Smtp-Source: AA0mqf6SOw1bsMBSVvaKIDjRLtE0EG36yQRvgTWvQZmk5KxiBImOnTVz2U4HWOVmlCqxSJmqBWrIVw==
-X-Received: by 2002:aa7:81d8:0:b0:561:c694:80b with SMTP id c24-20020aa781d8000000b00561c694080bmr18994198pfn.47.1669012948034;
-        Sun, 20 Nov 2022 22:42:28 -0800 (PST)
+        bh=T9z6VNHAh5buPLOQbn4DZRIbuRpf7GLAza5o2jIuncE=;
+        b=tk7GDuN1tv8h7A0P52FsoFe1b1fxsp2cLJhho47kl55WDU8u5h4DLie89nz40bnPmI
+         1qix6sDjdklHOaq1UtM8qW9ve9koaepLH3OmotkB9OYlSMVvRwyhpUxgHjT5fD/zGMzp
+         q8pB85cF7p72Any0+YrrLIWPAIVI9OOiWsEyJKJck7XSjqWIJU1d+N/xAc5ozZF1pORV
+         o5bzT6xzxRBkY5CMHm9FufnbI2iurhOpbtyFLGNWueGnt3Y6m9Wa3seJVApdUWg326Fo
+         1sJijUesYDiFCqR7p4asxJKCGbJx0prXJ3mwAW05PwuFXXgrZBHmNw+d+13Fo1iVL/kr
+         JJMw==
+X-Gm-Message-State: ANoB5pl+FdCRlpgttA16eryvk14kdnLHdJgf8OXF2+OiGsb65P69jJyT
+        bYZa2P0TVpuo6zJZCNG9uDd7
+X-Google-Smtp-Source: AA0mqf6ddMnQGXatGtIKDuBbyT3kbY7n1kpxrE0Vd9I/tQTaSSyurICcwD9LRXBLZlh0j9EpMLqbdA==
+X-Received: by 2002:a63:5007:0:b0:45f:beda:4116 with SMTP id e7-20020a635007000000b0045fbeda4116mr789381pgb.618.1669013110909;
+        Sun, 20 Nov 2022 22:45:10 -0800 (PST)
 Received: from thinkpad ([59.92.99.222])
-        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b0016c9e5f291bsm8914094plh.111.2022.11.20.22.42.23
+        by smtp.gmail.com with ESMTPSA id d187-20020a6236c4000000b0053e62b6fd22sm7752028pfa.126.2022.11.20.22.45.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 22:42:27 -0800 (PST)
-Date:   Mon, 21 Nov 2022 12:12:24 +0530
+        Sun, 20 Nov 2022 22:45:09 -0800 (PST)
+Date:   Mon, 21 Nov 2022 12:15:07 +0530
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>, amit.pundir@linaro.org,
-        andersson@kernel.org, quic_sibis@quicinc.com,
-        sumit.semwal@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
- arch_dma_prep_coherent()"
-Message-ID: <20221121064224.GB11945@thinkpad>
-References: <20221114110329.68413-1-manivannan.sadhasivam@linaro.org>
- <20221114141109.GG30263@willie-the-truck>
- <1659929b-1372-cea6-5840-c58369a4252d@arm.com>
- <Y3J8+O7Y3f3onH0P@arm.com>
- <20221118105402.GA184726@thinkpad>
- <20221118123349.GC3697@willie-the-truck>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
+Message-ID: <20221121064507.GC11945@thinkpad>
+References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
+ <20221121051959.hphzjuaif423xwn6@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118123349.GC3697@willie-the-truck>
+In-Reply-To: <20221121051959.hphzjuaif423xwn6@vireshk-i7>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 12:33:49PM +0000, Will Deacon wrote:
-> On Fri, Nov 18, 2022 at 04:24:02PM +0530, Manivannan Sadhasivam wrote:
-> > On Mon, Nov 14, 2022 at 05:38:00PM +0000, Catalin Marinas wrote:
-> > > On Mon, Nov 14, 2022 at 03:14:21PM +0000, Robin Murphy wrote:
-> > > > On 2022-11-14 14:11, Will Deacon wrote:
-> > > > > On Mon, Nov 14, 2022 at 04:33:29PM +0530, Manivannan Sadhasivam wrote:
-> > > > > > This reverts commit c44094eee32f32f175aadc0efcac449d99b1bbf7.
-> > > > > > 
-> > > > > > As reported by Amit [1], dropping cache invalidation from
-> > > > > > arch_dma_prep_coherent() triggers a crash on the Qualcomm SM8250 platform
-> > > > > > (most probably on other Qcom platforms too). The reason is, Qcom
-> > > > > > qcom_q6v5_mss driver copies the firmware metadata and shares it with modem
-> > > > > > for validation. The modem has a secure block (XPU) that will trigger a
-> > > > > > whole system crash if the shared memory is accessed by the CPU while modem
-> > > > > > is poking at it.
-> > > > > > 
-> > > > > > To avoid this issue, the qcom_q6v5_mss driver allocates a chunk of memory
-> > > > > > with no kernel mapping, vmap's it, copies the firmware metadata and
-> > > > > > unvmap's it. Finally the address is then shared with modem for metadata
-> > > > > > validation [2].
-> > > > > > 
-> > > > > > Now because of the removal of cache invalidation from
-> > > > > > arch_dma_prep_coherent(), there will be cache lines associated with this
-> > > > > > memory even after sharing with modem. So when the CPU accesses it, the XPU
-> > > > > > violation gets triggered.
-> > > > > 
-> > > > > This last past is a non-sequitur: the buffer is no longer mapped on the CPU
-> > > > > side, so how would the CPU access it?
-> > > > 
-> > > > Right, for the previous change to have made a difference the offending part
-> > > > of this buffer must be present in some cache somewhere *before* the DMA
-> > > > buffer allocation completes.
-> > > > 
-> > > > Clearly that driver is completely broken though. If the DMA allocation came
-> > > > from a no-map carveout vma_dma_alloc_from_dev_coherent() then the vmap()
-> > > > shenanigans wouldn't work, so if it backed by struct pages then the whole
-> > > > dance is still pointless because *a cacheable linear mapping exists*, and
-> > > > it's just relying on the reduced chance that anything's going to re-fetch
-> > > > the linear map address after those pages have been allocated, exactly as I
-> > > > called out previously[1].
-> > > 
-> > > So I guess a DMA pool that's not mapped in the linear map, together with
-> > > memremap() instead of vmap(), would work around the issue. But the
-> > > driver needs fixing, not the arch code.
-> > > 
+On Mon, Nov 21, 2022 at 10:49:59AM +0530, Viresh Kumar wrote:
+> On 17-11-22, 11:01, Manivannan Sadhasivam wrote:
+> > Hello,
 > > 
-> > Okay, thanks for the hint. Can you share how to allocate the dma-pool that's
-> > not part of the kernel's linear map? I looked into it but couldn't find a way.
+> > This series adds clock provider support to the Qcom CPUFreq driver for
+> > supplying the clocks to the CPU cores in Qcom SoCs.
+> > 
+> > The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+> > clocks to the CPU cores. But this is not represented clearly in devicetree.
+> > There is no clock coming out of the CPUFreq HW node to the CPU. This created
+> > an issue [1] with the OPP core when a recent enhancement series was submitted.
+> > Eventhough the issue got fixed in the OPP framework in the meantime, that's
+> > not a proper solution and this series aims to fix it properly.
+> > 
+> > There was also an attempt made by Viresh [2] to fix the issue by moving the
+> > clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+> > since those clocks belong to the CPUFreq HW node only.
+> > 
+> > The proposal here is to add clock provider support to the Qcom CPUFreq HW
+> > driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+> > This correctly reflects the hardware implementation.
+> > 
+> > The clock provider is a simple one that just provides the frequency of the
+> > clocks supplied to each frequency domain in the SoC using .recalc_rate()
+> > callback. The frequency supplied by the driver will be the actual frequency
+> > that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+> > is not same as what the CPUFreq framework has set but it is the one that gets
+> > supplied to the CPUs after throttling by LMh.
+> > 
+> > This series has been tested on SM8450 based dev board with the OPP hack removed
+> > and hence there is a DTS change only for that platform. Once this series gets
+> > accepted, rest of the platform DTS can also be modified and finally the hack on
+> > the OPP core can be dropped.
 > 
-> The no-map property should take care of this iirc
+> Applied. Thanks.
+> 
+> If you get review comments later on, please send incremental patches
+> for that.
 > 
 
-Yeah, we have been using it in other places of the same driver. But as per
-Sibi, we used dynamic allocation for metadata validation since there was no
-memory reserved statically for that.
-
-But if we do not have a way to allocate a dynamic memory that is not part of
-kernel's linear map, then we may have to resort to using an existing reserved
-memory.
+Sure thing.
 
 Thanks,
 Mani
 
-> Will
+> -- 
+> viresh
 
 -- 
 மணிவண்ணன் சதாசிவம்
