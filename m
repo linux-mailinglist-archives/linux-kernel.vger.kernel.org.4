@@ -2,73 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD29A6327D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA84B6327DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbiKUPYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
+        id S232254AbiKUPY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiKUPX7 (ORCPT
+        with ESMTP id S232338AbiKUPYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:23:59 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338F3F585
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:23:56 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:4821:1ba5:2638:5c3a])
-        by laurent.telenet-ops.be with bizsmtp
-        id n3Pv280025WXlCv013Pvs5; Mon, 21 Nov 2022 16:23:55 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ox8eI-0019Ch-LD; Mon, 21 Nov 2022 16:23:54 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ox8eI-00BQ2H-5w; Mon, 21 Nov 2022 16:23:54 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Vinod Koul <vkoul@kernel.org>, Zhou Wang <wangzhou1@hisilicon.com>,
-        Zhenfa Qiu <qiuzhenfa@hisilicon.com>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] dmaengine: HISI_DMA should depend on ARCH_HISI
-Date:   Mon, 21 Nov 2022 16:23:53 +0100
-Message-Id: <363a1816d36cd3cf604d88ec90f97c75f604de64.1669044190.git.geert+renesas@glider.be>
+        Mon, 21 Nov 2022 10:24:42 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01EB2E0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:24:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669044276; x=1700580276;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6zAPc54Hyj7y1k86bWrWpPjCpi6QsBskBBHCuoWoeF4=;
+  b=PaCsNFDJO6aAyus7+vFmak9ARgruAnJmAoOl+jIo+kyBlzyxIiN/3/9B
+   uxuUmBOKHUkiTEuEuqpm5g13ZCUbcNbZNayYSfZ1pGJqJikL4MmvF/DfR
+   tXXSE86u6qME1aM0hIOz5IPOWuU1YYO66SDcWLvFnWgj5xQetyH/a+37E
+   EpVFX7qUauwRRThxrNOOKBO40lRfq57y3ToQce0Pk3yh4ctBuKN0gllkY
+   PW8baNU+RWal+ZGbT5al6JcPLGzdwnbEa30KRhS6ftAHgJPiumThu0I1E
+   v+4lvE4qdwaci7AYErDeS0JNOJpVmjzPsUreE1hw1GKHgJo0inVtwJFrM
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="184497757"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Nov 2022 08:24:35 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 21 Nov 2022 08:24:30 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 21 Nov 2022 08:24:28 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <michael@walle.cc>, <quic_jaehyoo@quicinc.com>, <p.yadav@ti.com>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>, <clg@kaod.org>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ggregory@quicinc.com>, <quic_jiles@quicinc.com>
+Subject: (subset)Re: [PATCH v3 1/2] mtd: spi-nor: fix select_uniform_erase to skip 0 erase size
+Date:   Mon, 21 Nov 2022 17:24:27 +0200
+Message-ID: <166904400383.115983.13314465270022760559.b4-ty@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220716000643.3541839-1-quic_jaehyoo@quicinc.com>
+References: <20220716000643.3541839-1-quic_jaehyoo@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HiSilicon DMA Engine is only present on HiSilicon SoCs.  Hence add a
-dependency on ARCH_HISI, to prevent asking the user about this driver
-when configuring a kernel without HiSilicon SoC support.
+On Fri, 15 Jul 2022 17:06:42 -0700, Jae Hyun Yoo wrote:
+> From: Michael Walle <michael@walle.cc>
+> 
+> 4bait will set the erase size to 0 if there is no corresponding
+> opcode for the 4byte erase. Fix spi_nor_select_uniform_erase to skip
+> the 0 erase size to avoid mtd device registration failure cases.
+> 
+> 
+> [...]
 
-Fixes: e9f08b65250d73ab ("dmaengine: hisilicon: Add Kunpeng DMA engine support")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/dma/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied [2/2] to spi-nor/next, thanks!
+I haven't applied 1/2 as Michael sent a similar patch which
+I had already taken at the time I got to your patch set, see:
+https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/commit/?id=39eece67a3cf
+Sorry!
 
-diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-index b9d54f20812f794b..67323afe9fcad137 100644
---- a/drivers/dma/Kconfig
-+++ b/drivers/dma/Kconfig
-@@ -245,7 +245,7 @@ config FSL_RAID
- 
- config HISI_DMA
- 	tristate "HiSilicon DMA Engine support"
--	depends on ARM64 || COMPILE_TEST
-+	depends on ARCH_HISI || COMPILE_TEST
- 	depends on PCI_MSI
- 	select DMA_ENGINE
- 	select DMA_VIRTUAL_CHANNELS
+[2/2] mtd: spi-nor: winbond: add support for W25Q512NW-IQ
+      https://git.kernel.org/mtd/c/ef434f08b056
+
+Best regards,
 -- 
-2.25.1
-
+Tudor Ambarus <tudor.ambarus@microchip.com>
