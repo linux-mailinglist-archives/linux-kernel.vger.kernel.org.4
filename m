@@ -2,69 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812F3631DA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FF7631DA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiKUKCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        id S230510AbiKUKDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:03:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiKUKCl (ORCPT
+        with ESMTP id S229908AbiKUKDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:02:41 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46323205D1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:02:33 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id i26-20020a056e021d1a00b003025434c04eso8263787ila.13
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:02:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sVvRetvU66viZg03zt42J481swUWQOVgkFgrLPfYY/8=;
-        b=r6a9cTP95hjdywlYe6lqK2COpgaj62zIPtTyhRzCnUvsglMNRMi8vzQ9rJ40u7Rf3I
-         mUuaxBVvwSttTVNkQs+FUnf6meA2jb0/Yw7Nd0yLnzHZFGtVSY8koTMhTmRzL/FS4juk
-         T40ONqDidi5xqkvHhmo/XwY3TENTPt/Dep3ZYTewYdinC3WBHVf5n6OsyPOCqIRqfwNy
-         vwGjz8tvuxzWwIBEMvEQdLN6fn54JxAOymlJ5MjeZCz4IqSnTQ2L5XfNsNqTDz09xLsn
-         ro3REvRAIhpdQNipE8NeqYh+kj/bByNe60PtkuOzGFmve6WTdcTRnzAB4ZPPA0sdL/gh
-         ooWQ==
-X-Gm-Message-State: ANoB5pllzYbsxg7ay4eARxIKPdsNVKTiHqMo9uaOEk89j/pUS1m7HhrR
-        yduAPVTiVyUqVszyH0aBCBEjNd7zUpfhW6ezCW7132y8xIBF
-X-Google-Smtp-Source: AA0mqf4DXRUTk1M2JEFw1hVVO6Pm/Mk0WsH+TOGiQM6G5JfdjVdUgYVOruJip3nXvQmtYRnvb9aGnLOqzpzDUaSvI0ItIaKgDNYY
+        Mon, 21 Nov 2022 05:03:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E458E2BE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:03:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7AC560FA7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 10:03:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23413C433C1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 10:03:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669025022;
+        bh=voyOtzVSQJWTMBmIautuhoF+w0ydSWMPpFHG1TdIRoc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dLE4FSTo5gfWwj745MsZJb/i9i8NSHZuiX27Yho/BTMbQpONvq3HhVlNxtlKAW2Fc
+         s0RNrRZX5e0CAK2BcbnNd4D0Cw1l1K74rF5Fb+GwS/B713VmN3w/Qbg1X97M4f10vJ
+         toAjqdIm0htYhDvRh5/Fz6o0PF7RIyj553rtsQ2Px7UzXqKUd87Q2tx0INUhwKdasg
+         H/1QbVzJfnalmtVNYIwyebeEMtsVeNQHUGNIqnoJlDwf9EyhjszRhe2knmQPM4Vc+P
+         Tgv4cvm9FSgaSvhZTa0FCsMyizqaxr7xfQYWH/NHKd5siXhPZR3Khd3da9aKj0nq6Z
+         a9Zc4k0u4vW+A==
+Received: by mail-ed1-f43.google.com with SMTP id e13so15494647edj.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:03:42 -0800 (PST)
+X-Gm-Message-State: ANoB5pnGA+HHWwmy6QZY98lOsxYPh4Vb24WN9E6v02vLbwr4rFm3Ldr+
+        196GBp4i1lZh1WFSObQaBhqSDvdjiirUlpFOltQ=
+X-Google-Smtp-Source: AA0mqf79yrSmnttgU/v91zhk/XWnSN+yH2+oxfA92MwbFwMMv40y4zrateqifULHcO2A1QB3Lr2MyxA+VjEb9MAPYAs=
+X-Received: by 2002:aa7:cc04:0:b0:463:1a0c:4dd1 with SMTP id
+ q4-20020aa7cc04000000b004631a0c4dd1mr6287783edt.137.1669025020334; Mon, 21
+ Nov 2022 02:03:40 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:dd0e:0:b0:300:b9c4:8c1 with SMTP id
- n14-20020a92dd0e000000b00300b9c408c1mr1764432ilm.124.1669024953189; Mon, 21
- Nov 2022 02:02:33 -0800 (PST)
-Date:   Mon, 21 Nov 2022 02:02:33 -0800
-In-Reply-To: <000000000000b960c00594598949@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000074cd1505edf82717@google.com>
-Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
-From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        stable-commits@vger.kernel.org, stable@vger.kernel.org,
-        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
+References: <20221121064826.2115193-1-chenhuacai@loongson.cn>
+In-Reply-To: <20221121064826.2115193-1-chenhuacai@loongson.cn>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 21 Nov 2022 18:03:28 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQpWqL_5n=5dScxrXaquUd6hpp_a9=9DQnR2wdjAJOM6A@mail.gmail.com>
+Message-ID: <CAJF2gTQpWqL_5n=5dScxrXaquUd6hpp_a9=9DQnR2wdjAJOM6A@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Set _PAGE_DIRTY only if _PAGE_MODIFIED is set
+ in {pmd,pte}_mkwrite()
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-net: core: netlink: add helper refcount dec and lock function
-net: sched: add helper function to take reference to Qdisc
-net: sched: extend Qdisc with rcu
-net: sched: rename qdisc_destroy() to qdisc_put()
-net: sched: use Qdisc rcu API instead of relying on rtnl lock
-But I can't find it in any tested tree for more than 90 days.
-Is it a correct commit? Please update it by replying:
-#syz fix: exact-commit-title
-Until then the bug is still considered open and
-new crashes with the same signature are ignored.
+On Mon, Nov 21, 2022 at 2:51 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> Set _PAGE_DIRTY only if _PAGE_MODIFIED is set in {pmd,pte}_mkwrite().
+> Otherwise, _PAGE_DIRTY silences the TLB modify exception and make us
+> have no chance to mark a pmd/pte dirty (_PAGE_MODIFIED) for software.
+Yes, the "VALID/DIRTY"  is a bad hardware pgtable-bit design. It
+caused the software to waste more bits in PTE.  We need hardware
+P/R/W/A/D definitions. It seems from MIPS in history, C-SKY also
+follows that :P.
+
+Reviewed-by: Guo Ren <guoren@kernel.org>
+
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/pgtable.h | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+> index debbe116f105..aa0e0e0d4ee5 100644
+> --- a/arch/loongarch/include/asm/pgtable.h
+> +++ b/arch/loongarch/include/asm/pgtable.h
+> @@ -357,7 +357,9 @@ static inline pte_t pte_mkdirty(pte_t pte)
+>
+>  static inline pte_t pte_mkwrite(pte_t pte)
+>  {
+> -       pte_val(pte) |= (_PAGE_WRITE | _PAGE_DIRTY);
+> +       pte_val(pte) |= _PAGE_WRITE;
+> +       if (pte_val(pte) & _PAGE_MODIFIED)
+> +               pte_val(pte) |= _PAGE_DIRTY;
+>         return pte;
+>  }
+>
+> @@ -457,7 +459,9 @@ static inline int pmd_write(pmd_t pmd)
+>
+>  static inline pmd_t pmd_mkwrite(pmd_t pmd)
+>  {
+> -       pmd_val(pmd) |= (_PAGE_WRITE | _PAGE_DIRTY);
+> +       pmd_val(pmd) |= _PAGE_WRITE;
+> +       if (pmd_val(pmd) & _PAGE_MODIFIED)
+> +               pmd_val(pmd) |= _PAGE_DIRTY;
+>         return pmd;
+>  }
+>
+> --
+> 2.31.1
+>
+
+
+--
+Best Regards
+ Guo Ren
