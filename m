@@ -2,216 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47045631A7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 08:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3D2631A83
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 08:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiKUHm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 02:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S229928AbiKUHnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 02:43:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiKUHmT (ORCPT
+        with ESMTP id S229907AbiKUHnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 02:42:19 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2076.outbound.protection.outlook.com [40.107.20.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4052F397;
-        Sun, 20 Nov 2022 23:42:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RqK9DPoNIbQ1KqH98uEKmATUsu1O4XDMGQ6qvZgg3Q8+qCvk9jJxh1DGkc6Uoe2bdTaeEjostkiEKuTlwlKYxWajCUZapO6NF6hUwABoK0KzN5huKiLOEzZUqIsq15FPjWfxcA05wga4c4HQraCPfBYiEuF1vv+g7bND9rn1FlG/mM7uaZj3ZMUHo1rAlH8xrt2lbHSsx0PB+DKE0hvDKWT0T3tbeZqVY5L0s+R7vjhBL9shl7XTcaw5uv+ZcP/jU/HE8Naznm02Ewq8OrAR7LzlcysbBTGXyWS9HPmBzJOMTEi1Z9ebWxVNe3/yVOTU6Vw0NWcukZMQjwkqxwQqpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/6gk0fy8DpImhS1Af8EuVFy+58YOfUyRACsIETT6g6s=;
- b=L3HMfgCJt64nCP9Twq+esIVXED990w4a39yhupHwWU/+/4cPOln14fOmzqbDTN1fNeRarRaVqAMA5+O5Ag8QI9GaIF+RHO2UloisnH44Yp2s73kzHIfGUbw/AoLZz9ep+yzpstFn0WdJz1Qcjrzbbnzua5da1sQAGI+OWhAngDKOA4LuzoiQPk6fob5rxwk5s9qcPCYXYRdJR06aZ4XrJ9Pmo94ytgYubvjNJPmeKAAvgfeoeCSAuPPRZ315wUAjT4GrbizB04lJRI/E5RdG0XLvMGM3LjiKuFkxaqDOZhi6Has/N855yowF3sYYg7v8voNafr/cEKnNfydwGj5Xow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kococonnector.com; dmarc=pass action=none
- header.from=kococonnector.com; dkim=pass header.d=kococonnector.com; arc=none
+        Mon, 21 Nov 2022 02:43:04 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4764F18F
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 23:43:02 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id v8so3978360edi.3
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 23:43:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=KoCoConnector.onmicrosoft.com; s=selector2-KoCoConnector-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/6gk0fy8DpImhS1Af8EuVFy+58YOfUyRACsIETT6g6s=;
- b=DqdEymwX10zXnNmk3V47HgApEYmvEHp12SoI+3UFAbP5NRNUgDhhuaYeiEHnC3j9mQdeY5ghJaH/G2o8sJihvnEhGieg0n8EWNL25CmjCFLu+FUZEdDSgxvjlNt5RDAPOdsNluNtn+qonyblKdB+n34TZ9GZ47yDoC4KuQOJ+xY=
-Received: from AM9PR09MB4884.eurprd09.prod.outlook.com (2603:10a6:20b:281::9)
- by DU2PR09MB5373.eurprd09.prod.outlook.com (2603:10a6:10:276::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
- 2022 07:42:15 +0000
-Received: from AM9PR09MB4884.eurprd09.prod.outlook.com
- ([fe80::707e:3312:93f6:f84f]) by AM9PR09MB4884.eurprd09.prod.outlook.com
- ([fe80::707e:3312:93f6:f84f%9]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
- 07:42:15 +0000
-From:   Oliver Graute <oliver.graute@kococonnector.com>
-To:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= <uwe@kleine-koenig.org>
-CC:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 237/606] Input: edt-ft5x06 - Convert to i2c's .probe_new()
-Thread-Topic: [PATCH 237/606] Input: edt-ft5x06 - Convert to i2c's
- .probe_new()
-Thread-Index: AQHY+5+zYrTZRZozzkuq8a6718hVna5JAjYA
-Date:   Mon, 21 Nov 2022 07:42:15 +0000
-Message-ID: <DCD9AF01-5C45-46A0-A687-F894DC282CAB@kococonnector.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-238-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-238-uwe@kleine-koenig.org>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.200.110.1.12)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kococonnector.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR09MB4884:EE_|DU2PR09MB5373:EE_
-x-ms-office365-filtering-correlation-id: 0c66ccfa-a615-489e-3ca0-08dacb93e8b3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xVTr23qPfUPnZzy1U3Mn//VMM/OBRLTIv24LtF+UVrOzxTeze1Sa5rKEpW9ZYK6ENqkE8m3K3ZnVrrZOXo2ruTys4DIiME8THVq9P1C1Ue8WLrFwKYzgcNP2a1WWjoyCeBHudTnkRqsVM9yKHYJhPuAqpatry2AV+pyOUBRWwMan6yeaNLa3N3oEVHkLSC39FoOBs+TRclQigID6KeYH7EzW/o4KgoUdzUGqEacBQE/QLV/vwy5W3jQNiMK/9Ho1PHtL8nLXhvX2vdVRAF+cn6csCuhecySRAw3ruyZTNU2Xcv02BP/ZNLIh9MfehOyHhQ4NHqa+khi4VqEKabdt17tI3uH6l2l8WIMODoiyXzFgRr8NeJ94UTveo2G6U91Q8B/mKOYB57U5SOIFIwGzTS1uIEHo6BpnWI4Je3OmkscW5KU1jUZPqkhDbZNuwYZkeM4LAuWrmdddvOJr6MCDMPgK6MgHpcxeyBIdeG+g+bwn9wDA1Uw7x11/5jwFLKuiwpfXQou83xWJ7d6Ll7kWpOcw1i+KbhschALVOhxj2orNjL1XFC67IYwFuWRfd/cmoEKJ0GSo/rvlK2s3TgT+bazlnFY0wZVpJ/YkzaD7R2Whsr/EGOmaXIei6UcE+7BqwZB+c78mN+gu00n7BpSxefxD0XNK05zLxIGHJRmVsJb9nfEcEYN6b1RFBarL9SVCJkIb++A7VZhlGpYEqoqbw3DDxUu+svo7VENL9qfHrZMedPfIvgI58Q+lm/bwB9YE
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR09MB4884.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(376002)(396003)(346002)(39830400003)(451199015)(86362001)(66946007)(33656002)(91956017)(66476007)(66556008)(76116006)(2616005)(36756003)(41300700001)(6506007)(186003)(4326008)(8676002)(7416002)(5660300002)(6512007)(478600001)(71200400001)(316002)(26005)(44832011)(6486002)(8936002)(54906003)(6916009)(38100700002)(66446008)(122000001)(38070700005)(64756008)(99936003)(83380400001)(2906002)(142923001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SG9jSlBiYzdWQXZOc3dxam54enBWcS9peFRmQTFmRDF0SUJRMDFnZ1lFeVZS?=
- =?utf-8?B?VXZWTm1TZjREejRkdk13bXFKZ2h3blpVajJyWkVZd3FicGRvV3VDZVpVejV6?=
- =?utf-8?B?b1ZxQmZQVHU4YnFIZWw0UGw4T21ZdXMybi9xQ1J0eURRcjVObUdRaTJFVnlM?=
- =?utf-8?B?V0xJT2tsbkxCRm03cFUybVEvSEZlemZxVGE2cDMwWVRPV3FKM3Q4aUdNTXl5?=
- =?utf-8?B?RHR3bSt0R0orRHVodU05U1QxdzdhSzQxV00zNG5KbFNldjlmL2poZm1zK3Yv?=
- =?utf-8?B?VkVQY1ZKd0lZdXFZNFM0M1hWeVVhSk5qSDRqVzA2SDhTN3E4MVJqR1gxNmxq?=
- =?utf-8?B?dHlnbjF5UmRYZUpkdUIwR1lhSEtCQVZMUGlUMFJkMUIrblZSZ0ljZVJ3YXZz?=
- =?utf-8?B?anlEemJFWEJVMTRDTmNlaS84ZVlETTNITTFITVZ4RHhFcE83a2hYUUxZdkkv?=
- =?utf-8?B?dVE4WERYNVlKSENjaHprMUgzSUIzeWRtN2g4TDdDY2JiZ2RXVWE0bXRlY1Rz?=
- =?utf-8?B?b09VYlVJalVhRVpSOXVaY3k4WEFCemxTa2F5aitLTU5BZXJ2Z1ZnTW9ncE5S?=
- =?utf-8?B?cCtPeFVONzdoQnR4YlBPNVZ3d09vQlBaMTVUbkJMakZpVEdjZW84M3dBckk2?=
- =?utf-8?B?ZTdhUEE1b1dPMFliTkUwdThpOURwS2lkYjluTzJwRko5aVZFRm9qYWhpUXNn?=
- =?utf-8?B?amQycy9GTzdnM09EWUxsbHYvU3FscFI5RkF0NDhXZXNoaTNvVERyUy9WcjI0?=
- =?utf-8?B?OVNMZWk3MXB2NHFwYSs1bFZ3b0M5K0pjaVlBVkdvUTJpRWtvbk5ES1JXeis0?=
- =?utf-8?B?bmU3R3VQeStDbWI1UFB1bTFYbUw4Qmx2aTBtOTBRQkVsWVRRWHQxN2Y1S1Iy?=
- =?utf-8?B?YWhJL09vbktjUnF0bklZd3ZsLzkzTzVFZDhSbGtSeS9jbW5XTGJaN3dtcW1X?=
- =?utf-8?B?STR2SlB5RjB3VUdiYXlVZDN5QUtmVU1aQjBORE5CRmlwbjZrS3VXakQ2bjkx?=
- =?utf-8?B?MDR1em45Uzc3TXJVenR5cFZ5bG9yRkFqT0RveVZ5OVlaWGtsOTVqM1JQMkRP?=
- =?utf-8?B?N3JYYW10Rm9ScHdwYUx0aG1SeVdCaXNCb21id0dDR01NWlNMNU9ocDROUmhh?=
- =?utf-8?B?RjhJeFE0b3RUcjh3KzJwZFE5eXIrVStDbUg2L2Zic3VDamgxcTVaTXpMaGhK?=
- =?utf-8?B?d1UxcEtMUStRZk50VWtkWG5wcUJqNTRaN1lmb2tHOWRHMGFQNS9wMG1DNlpU?=
- =?utf-8?B?anRqQWpKVVNkbVdWemQ5TXVBRjlMckdaMkVtRGp1RDBUR3pSNnhST2ZybVFk?=
- =?utf-8?B?TUFEVjBFUGo5N1pSWlV4NGlDL0syb05EMWZGb1o4MUp3QVFXdW9sazM3Mzk2?=
- =?utf-8?B?ZXZNMy9SL1REb214ZDZFUmhwc2FBemUyTFBZRzRsK0RGaEVremJBOCtZNlB3?=
- =?utf-8?B?MnpkUEdLV2UxTW9Nd0ZTV1lTT01NSmZhMHpuVzlqMG9iUitYRDlVSGNPc0ha?=
- =?utf-8?B?R3Z5b3VPOW5MZlNDY1loNStOU1cvSXY3QkFrTmd3Q002R0dJK3QvcVl0UCt3?=
- =?utf-8?B?M21wcGd6UWNYOTdraXUwZDFVNTV2cW04ZmRtM2VqNWdNSk5NeEQ0OXVqdWhl?=
- =?utf-8?B?aUJiSHQ3WHQ1UHpqbURrR3huSFh2alZtL2Ixc24zMnJOMEdQa3psdkFlZEVU?=
- =?utf-8?B?dklFaTQzWHltV1RlenhxaUkwV1UxaS9Yc3pkdXkvczVncXFCdHpVdWlYMDlY?=
- =?utf-8?B?bjlKMW9hWi9zclk4L1IyWXJ1K2F6TmZMZUdIcERCTVhXaGlkbGN6bWFxa1o1?=
- =?utf-8?B?WU4rWmdoVGVPMUVIRDZtVkNTeGQyUjhuQUZFbUlKd2ZNajNVSEhsTnJpM3Vi?=
- =?utf-8?B?ZHlYak8wcUpVcGxBZEdHVXhkMVFzamNtS0MvOVNqcUdPQWNES2x6TEprdDg0?=
- =?utf-8?B?ZENFc29kNHNHWlJEazBzMXBZK0t1YVJEN3lObnZEc0pIa3BqQ210YzU1N3hq?=
- =?utf-8?B?RGM2YVJQMTlSZHlmUDBEVlcwc0dsVWZYTlAwclFBVmc0VGRwQXY2RUFBWkpE?=
- =?utf-8?B?bnFYVlB0ZFgxWmJZV3J6RE1ML0ZVK1BoVGVQK3R3NkxMdFFqczFJZlJDMVla?=
- =?utf-8?B?S1h0Y01wS0xQZFpzL3dibVljTWtIK0tBMXZoM2xTMHVwNDlJWXBTK1dRUFRW?=
- =?utf-8?Q?LH4MzLwpb3T6sI6cSBvY0fI=3D?=
-Content-Type: multipart/signed;
-        boundary="Apple-Mail=_F1DC4C64-8A03-44CE-BD50-D5D3B2ECA483";
-        protocol="application/pgp-signature";
-        micalg=pgp-sha256
-MIME-Version: 1.0
-X-OriginatorOrg: kococonnector.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR09MB4884.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c66ccfa-a615-489e-3ca0-08dacb93e8b3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2022 07:42:15.0725
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 59845429-0644-4099-bd7e-17fba65a2f2b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QDg/6YyycZ91ZTc+al1EtAvqWJXooCugcW4TOrgg4rOGq14uUQNbSdVaCA63HB9dp6QKGEvMB3WLLBm+9TxVUTQ5CtxXnd1z/NhKG5l8neg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR09MB5373
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1TUVIyfnzpJrJjjktkuqFcVCWlSjqMueZ8oSh19wEx0=;
+        b=u8HULqbgDO1V1jjNHkBZ+tyxbUE+H5slR0LHOlbfeZAo3EEj10DJVA0a7eNayrx8QE
+         qkAIPnZN/1pyhj7djHgxGa6H6GOEPzp/BK4X9QN1iUaQzkZv42i3cBJppROe/Ej/iZ3E
+         DrQx85QkfKzETnYKoXMc/xsfBK04j9UbGhery64BTRSdObqu0tUQYDhy/q1NdZpfw1aY
+         6ZBdw+RMjZ8k2siwz+RcwlWJnWHhxYnldUPd4gqHu6++LVwVBmdtRmk885K7XmSv09fm
+         WbY3hF41oKOfCmenytGGcYFTMJYtm8wOhq+6nnTuT0a8an7eKvRjiv2AKO21kjqiN3Zo
+         tiUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1TUVIyfnzpJrJjjktkuqFcVCWlSjqMueZ8oSh19wEx0=;
+        b=CyU9ysy0V+7jz1TVhLIqTQ9C9BErgIttzeSkqqYRxl3qI9eEr83uTeR2DavuyeHdB0
+         hlDnJ8Atg0JUdyVofzRzPAaHfuvPKY2xyDMRWUA7pruAinS8/JOZapSqzrRmyY3UeYPp
+         EjO8mKNsU4FF8btucmacUuC17F+D28IyDFJbZ65gNQ9MC3BQ5Us50eEWAeUC1+9H1SsH
+         kH7zLpjSC7jdE0Nm+yX+ee76hlK0saErp8gSUPFUqrHtGMaucBESQ9uDZKFoL0efonZ4
+         LSLnVaBaoKWn5g408LTW58RurOqhYz3ZbKgt1eGySdPjfvxtpQHeZ0dsllhRX/bKerrw
+         6shA==
+X-Gm-Message-State: ANoB5plLXQMZ4CfyB+w+j0Q7jC7B9Jad2wtF0qL23BP9QL18J11Wa4ew
+        BvZd2GubRmacNZFWELGRLbjIQQ==
+X-Google-Smtp-Source: AA0mqf70Zc1BNt2e8y7KjZG/3WSjRLleM/arnX0rg2ndkyr3oTK5dpqVHh4yYqJ77f04oWtSKx3tnA==
+X-Received: by 2002:a05:6402:2a09:b0:461:30d8:6742 with SMTP id ey9-20020a0564022a0900b0046130d86742mr14964115edb.172.1669016580728;
+        Sun, 20 Nov 2022 23:43:00 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id e10-20020a170906648a00b007adade0e9easm4667280ejm.85.2022.11.20.23.42.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Nov 2022 23:42:59 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 21 Nov 2022 08:42:58 +0100
+Message-Id: <COHSZZ9A5570.1P4NTXRE9IRZR@otso>
+Cc:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] interconnect: qcom: icc-rpmh: Fix an error handling
+ path in qcom_icc_rpmh_probe()
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Georgi Djakov" <djakov@kernel.org>
+X-Mailer: aerc 0.13.0
+References: <ec929c37c655ede7bb42e426354093c8a1377a0b.1668947686.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <ec929c37c655ede7bb42e426354093c8a1377a0b.1668947686.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Apple-Mail=_F1DC4C64-8A03-44CE-BD50-D5D3B2ECA483
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
+Hi Christophe,
 
+On Sun Nov 20, 2022 at 1:35 PM CET, Christophe JAILLET wrote:
+> If of_platform_populate() fails, some resources need to be freed as alrea=
+dy
+> done in the other error handling paths.
+>
+> Fixes: 57eb14779dfd ("interconnect: qcom: icc-rpmh: Support child NoC dev=
+ice probe")
 
+I believe the same needs to be applied to icc-rpm.c.
 
-> Am 18.11.2022 um 23:39 schrieb Uwe Kleine-K=C3=B6nig =
-<uwe@kleine-koenig.org>:
->=20
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->=20
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Also there shouldn't be an empty line here between Fixes: and Signed-off-by=
+:
 
-Acked-by: Oliver Graute <oliver.graute@kococonnector.com>
+Regards
+Luca
 
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
-> drivers/input/touchscreen/edt-ft5x06.c | 6 +++---
-> 1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/input/touchscreen/edt-ft5x06.c =
-b/drivers/input/touchscreen/edt-ft5x06.c
-> index 9ac1378610bc..ddd0f1f62458 100644
-> --- a/drivers/input/touchscreen/edt-ft5x06.c
-> +++ b/drivers/input/touchscreen/edt-ft5x06.c
-> @@ -1131,9 +1131,9 @@ static void edt_ft5x06_disable_regulators(void =
-*arg)
-> regulator_disable(data->iovcc);
-> }
->=20
-> -static int edt_ft5x06_ts_probe(struct i2c_client *client,
-> - const struct i2c_device_id *id)
-> +static int edt_ft5x06_ts_probe(struct i2c_client *client)
-> {
-> + const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
-> const struct edt_i2c_chip_data *chip_data;
-> struct edt_ft5x06_ts_data *tsdata;
-> u8 buf[2] =3D { 0xfc, 0x00 };
-> @@ -1504,7 +1504,7 @@ static struct i2c_driver edt_ft5x06_ts_driver =3D =
-{
-> .probe_type =3D PROBE_PREFER_ASYNCHRONOUS,
-> },
-> .id_table =3D edt_ft5x06_ts_id,
-> - .probe    =3D edt_ft5x06_ts_probe,
-> + .probe_new =3D edt_ft5x06_ts_probe,
-> .remove   =3D edt_ft5x06_ts_remove,
-> };
->=20
-> --
-> 2.38.1
->=20
+>  drivers/interconnect/qcom/icc-rpmh.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/=
+qcom/icc-rpmh.c
+> index fd17291c61eb..5168bbf3d92f 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.c
+> +++ b/drivers/interconnect/qcom/icc-rpmh.c
+> @@ -235,8 +235,11 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev=
+)
+>  	platform_set_drvdata(pdev, qp);
+> =20
+>  	/* Populate child NoC devices if any */
+> -	if (of_get_child_count(dev->of_node) > 0)
+> -		return of_platform_populate(dev->of_node, NULL, NULL, dev);
+> +	if (of_get_child_count(dev->of_node) > 0) {
+> +		ret =3D of_platform_populate(dev->of_node, NULL, NULL, dev);
+> +		if (ret)
+> +			goto err;
+> +	}
+> =20
+>  	return 0;
+>  err:
+> --=20
+> 2.34.1
 
-
---Apple-Mail=_F1DC4C64-8A03-44CE-BD50-D5D3B2ECA483
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename=signature.asc
-Content-Type: application/pgp-signature;
-	name=signature.asc
-Content-Description: Message signed with OpenPGP
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQThJdQ+vZ33cLI00t00OmbS7pnyNQUCY3srxAAKCRA0OmbS7pny
-NdezAP0Rh0xA23U5/EBoCCwZHWMECvg+BXubNjVfLUzGzomGZgEA02RiqFGqLZ2a
-b4m50eP51hRxCINcGBy71E8o1HI7sA8=
-=W7mG
------END PGP SIGNATURE-----
-
---Apple-Mail=_F1DC4C64-8A03-44CE-BD50-D5D3B2ECA483--
