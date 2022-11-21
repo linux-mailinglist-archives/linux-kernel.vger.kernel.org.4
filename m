@@ -2,147 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A72631E5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 804E6631E64
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiKUK3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
+        id S229552AbiKUKbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiKUK3R (ORCPT
+        with ESMTP id S229667AbiKUKbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:29:17 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999E613D31
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:29:16 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3691e040abaso109045857b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:29:16 -0800 (PST)
+        Mon, 21 Nov 2022 05:31:38 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E3D1DF3B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:31:36 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id h12so13972377ljg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:31:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6yTWa2TxDwIxDHxGdCavaULiqNU91fmT1IvGC2ATR5w=;
-        b=XJmCGjth33C3t+iYBi4qHEMC7VQDSmVksC8bqWnR2AP8GD8lVu9B+S4lbI3mt0HIhx
-         BUZ+XvVE+baJxLz7LxISNo6km06oKbPyDA+Ia5EL1y7NUTEK/e8ONnFey/rdruWYbrq1
-         siJ05rpVl9TfDUHGRbXWNV0uEVq0C2Dw83lrtGnV8YLi7fhuUkDTekUCS4OcFX2LD1pn
-         7U95ZXR5kr+wP+TpozSw2lB+ZAT4EBVWb7MV60OwrsNmofvVAhoORIQTGmi0Cstxu+yc
-         ydn1uiyUbaXcI/YQkUk+5DcY/WIS7qP8v0kUZux6Tknf2TTSda9F9YSgkR4JwZa60597
-         fQXA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Slta85Trz78FGjwfDG8uy79pV5EloKWIZYoD0VMik0o=;
+        b=KuF3mPrP6YdH3IJDZjmfUjTv0ru0fcg3jK9DMUmtHqyzzh5MCUUlUHcPn1cua+VaIh
+         pOs+U6qfu/QKiATpFPX9AZQINHY3GTPMMtJIG1Yqtemd0rQdly+USJmwg6QGna7Oms/x
+         IWlVWqVyPUsqmPFxS9GY22PklA8gLXPU6Kagiqe+HnXsTAUePEreHrSLSVGxPcVjjUj3
+         fsdoMAaRgg2nig4LOnECS6CMIgyH62a9czxRi8IH8xQO7f9G0NLhiqSY3HCe2/wQ7yrZ
+         2u8yBZ6Q/gpBqtP1I8tIaqvBwS+K4qvc+peuOgpAylUK2aAXiGKui+c4FZxtfqmc2E/g
+         9KfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6yTWa2TxDwIxDHxGdCavaULiqNU91fmT1IvGC2ATR5w=;
-        b=f9iMhv9Y0G2Uz7HYwT9kDupwPdF1ncRDqNjnDofto2o9qTJmdpXs3+Bf8yp571s9ht
-         VVO6VpSZJjE6PTvfdjNphpk34nc7aXflnWUGobjD8YXiUNEFEKH1dKmCTlw0E6IIdrhf
-         d3jW7CWeR3OlCNTOUs+9jebqt5yxZoz2v6IwuRwgGQUB3+ptdouwQyxTGdstlHiMNKPI
-         +W7yeqVmX0h+CQ2j4N+L/QGZx8SbokZEmFf6rKcrmNwz2TrV8lDDSFjjlif1FJnp1kik
-         x6lUp16JffDDXet/cVy5xQdYqtYMMJ2D5hM3uVNQ+hDOBQtA/uftVTABVYwFaY72LGgl
-         okEg==
-X-Gm-Message-State: ANoB5pl1yHKwyAYUDsBqVoK8xACF9aNjJCKdo3zasO+JbRkLML3twJla
-        mklDjXhjpzP4BT26FCIWbj07X9DZ0L3vqmRBYM7VSQ==
-X-Google-Smtp-Source: AA0mqf7Cv0n4cnKw+fHfdATe7kP3oZrHDPPRxlCC6ZFH1aSvQbkVGr03/3eHkvbjXVyM/nn/ECYZTaCmBbmfUt5VWJA=
-X-Received: by 2002:a81:a18e:0:b0:368:b923:b500 with SMTP id
- y136-20020a81a18e000000b00368b923b500mr678210ywg.10.1669026555620; Mon, 21
- Nov 2022 02:29:15 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Slta85Trz78FGjwfDG8uy79pV5EloKWIZYoD0VMik0o=;
+        b=DCx+ro1XlpQ8Ye7FPWcPUwJUUQd1qSK/t3j85i1DvtOcCoNztWjTT1wwNXCWyRKSvs
+         z46d3RDz+fViFbvO56YQRT+qvl6ouaqhIz9tNagFMZQH6jHJrx1+DaNueRTnJFvstLjb
+         nZRDsSklqR4sS2hENF2DUk0cIf193ttuNfW3O+jU8RFALDsP99ctECN5cC9Rolo1FbAS
+         vNZYSF62n+sdxlxVOn2TSottbSy7PRyPeD6EwDqZIaLqPrR1OynE3KfvR99jiI6S8Ujt
+         spbQTm0ETdA1MQai1a5HQb3RMHadyyGJrx/XocdWPr2gJOJAkBu4Q42MP9xf+IrF0Rer
+         /nPg==
+X-Gm-Message-State: ANoB5pnHx2mWV5SiJmevuBS0DdfvQExRlruWbxCEOzpOYRu/Snvpsf6R
+        K86/9GGNVjxLvlFRR81OjPYwVQ==
+X-Google-Smtp-Source: AA0mqf6RMmIjGhBX3/kp2DTp7QpyuOxBd9xuRrCYvNmK5sbP+Pi7xf89GSnl0ysEgzeK0q+egGpGzA==
+X-Received: by 2002:a05:651c:549:b0:277:5059:82c8 with SMTP id q9-20020a05651c054900b00277505982c8mr5669806ljp.315.1669026695211;
+        Mon, 21 Nov 2022 02:31:35 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z17-20020a195e51000000b00499aefcf68esm1965873lfi.292.2022.11.21.02.31.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 02:31:34 -0800 (PST)
+Message-ID: <3a50ba73-aab7-f6db-5e42-beb7e193c5bf@linaro.org>
+Date:   Mon, 21 Nov 2022 11:31:33 +0100
 MIME-Version: 1.0
-References: <20221118172305.3321253-1-glider@google.com> <Y3tRgGUKCxUoLeM8@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y3tRgGUKCxUoLeM8@hirez.programming.kicks-ass.net>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 21 Nov 2022 11:28:39 +0100
-Message-ID: <CAG_fn=Wpy8KA0cLBHapd7BdtnPHsRTpYip+z9TjfB1aUHUGH3g@mail.gmail.com>
-Subject: Re: [PATCH] x86: suppress KMSAN reports in arch_within_stack_frames()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] dt-bindings: iio: adc: ad7923: adjust documentation
+Content-Language: en-US
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221120153419.GA3094349-robh@kernel.org>
+ <20221120170630.29354-1-edmund.berenson@emlix.com>
+ <d83e9a3d-2482-4342-03c1-818a38bd4b7b@linaro.org>
+ <20221121102600.uwmgivssgy7oakxf@emlix.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221121102600.uwmgivssgy7oakxf@emlix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:23 AM Peter Zijlstra <peterz@infradead.org> wrot=
-e:
->
-> On Fri, Nov 18, 2022 at 06:23:05PM +0100, Alexander Potapenko wrote:
-> > arch_within_stack_frames() performs stack walking and may confuse
-> > KMSAN by stepping on stale shadow values. To prevent false positive
-> > reports, disable KMSAN checks in this function.
-> >
-> > This fixes KMSAN's interoperability with CONFIG_HARDENED_USERCOPY.
-> >
-> > Link: https://github.com/google/kmsan/issues/89
-> > Link: https://lore.kernel.org/lkml/Y3b9AAEKp2Vr3e6O@sol.localdomain/
-> > Cc: Eric Biggers <ebiggers@kernel.org>
-> > Signed-off-by: Alexander Potapenko <glider@google.com>
-> > ---
-> >  arch/x86/include/asm/thread_info.h | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/arch/x86/include/asm/thread_info.h b/arch/x86/include/asm/=
-thread_info.h
-> > index f0cb881c1d690..f1cccba52eb97 100644
-> > --- a/arch/x86/include/asm/thread_info.h
-> > +++ b/arch/x86/include/asm/thread_info.h
-> > @@ -163,7 +163,12 @@ struct thread_info {
-> >   *   GOOD_FRAME      if within a frame
-> >   *   BAD_STACK       if placed across a frame boundary (or outside sta=
-ck)
-> >   *   NOT_STACK       unable to determine (no frame pointers, etc)
-> > + *
-> > + * This function reads pointers from the stack and dereferences them. =
-The
-> > + * pointers may not have their KMSAN shadow set up properly, which may=
- result
-> > + * in false positive reports. Disable instrumentation to avoid those.
-> >   */
-> > +__no_kmsan_checks
-> >  static inline int arch_within_stack_frames(const void * const stack,
-> >                                          const void * const stackend,
-> >                                          const void *obj, unsigned long=
- len)
->
-> Seems OK; but now I'm confused as to the exact distinction between
-> __no_sanitize_memory and __no_kmsan_checks.
->
-> The comments there about seem to suggest __no_sanitize_memory ensures no
-> instrumentation at all, and __no_kmsan_checks some instrumentation but
-> doesn't actually check anything -- so what's left then?
+On 21/11/2022 11:26, Edmund Berenson wrote:
+> On Mon, Nov 21, 2022 at 10:13:57AM +0100, Krzysztof Kozlowski wrote:
+>> On 20/11/2022 18:06, Edmund Berenson wrote:
+>>> - Add the ad7927 compatibility string, with fallback compatibility
+>>> to ad7928.
+>>> - ad7923 and ad7924 are treated the same in the driver, show
+>>> the relationship in the documentation.
+>>>
+>>> Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+>>> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+>>> ---
+>>>  .../bindings/iio/adc/adi,ad7923.yaml          | 26 ++++++++++++-------
+>>
+>> Do not respond with new patch to some old thread. Each patchset starts a
+>> new thread.
+>>
+> Sorry I didn't know this is the preferred way. I will send new patch
+> version as new thread in the future.
+>>>  1 file changed, 17 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+>>> index 07f9d1c09c7d..e553853e25d5 100644
+>>> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+>>> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+>>> @@ -11,7 +11,7 @@ maintainers:
+>>>  
+>>>  description: |
+>>>    Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
+>>> -   AD7918, AD7928 8 Channels ADCs.
+>>> +   AD7918, AD7927, AD7928 8 Channels ADCs.
+>>>  
+>>>    Specifications about the part can be found at:
+>>>      https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
+>>> @@ -20,14 +20,22 @@ description: |
+>>>  
+>>>  properties:
+>>>    compatible:
+>>> -    enum:
+>>> -      - adi,ad7904
+>>> -      - adi,ad7914
+>>> -      - adi,ad7923
+>>> -      - adi,ad7924
+>>> -      - adi,ad7908
+>>> -      - adi,ad7918
+>>> -      - adi,ad7928
+>>> +    oneOf:
+>>> +      - enum:
+>>> +          - adi,ad7904
+>>> +          - adi,ad7914
+>>> +          - adi,ad7908
+>>
+>> You already started shuffling the entries, so make them ordered. What's
+>> the point of changing the order from one non-sorted to another non-sorted?
+>>
+>>> +          - adi,ad7918
+>>> +          - adi,ad7923
+>>> +          - adi,ad7924
+>>
+>> Then deprecate this as alone compatible.
+>>
+>>> +          - adi,ad7927> +          - adi,ad7928
+>>
+>> Ditto
+>>
+>>> +      - items:
+>>> +          - const: adi,ad7923
+>>> +          - const: adi,ad7924
+>>
+>> I would expect lower number as fallback.
+> If I remove alone compatibility of 7924 and 7927 in the documentation,
 
-__no_sanitize_memory prohibits all instrumentation whatsoever, whereas
-__no_kmsan_checks adds instrumentation that suppresses potential false
-positives around this function.
+I don't understand. 7924 and 7927 are not compatible with each other -
+neither in old code nor in new - so what do you want to remove?
 
-Quoting include/linux/compiler-clang.h:
+> I will have to remove explicit compatibility match on the driver side,
+> correct?
+> Just want to make sure I don't misunderstand you.
 
-/*
- * The __no_kmsan_checks attribute ensures that a function does not produce
- * false positive reports by:
- *  - initializing all local variables and memory stores in this function;
- *  - skipping all shadow checks;
- *  - passing initialized arguments to this function's callees.
- */
+My comment to which you responded was about order of items. Usually
+lower number means older device and usually older device is the fallback.
 
-Does this answer your question?
+Best regards,
+Krzysztof
 
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
