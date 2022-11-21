@@ -2,87 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737DF632DFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D049C632DFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 21:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiKUUbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 15:31:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
+        id S229652AbiKUUch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 15:32:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKUUbu (ORCPT
+        with ESMTP id S229527AbiKUUcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:31:50 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2A9D9076
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:31:48 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so13667237wmb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:31:48 -0800 (PST)
+        Mon, 21 Nov 2022 15:32:35 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A976CF07
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:32:33 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id b131so14951356yba.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 12:32:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OOwmSGSbibS0Uto3PS8hOpgTDC9tEJQIR9Uesk+1yhM=;
-        b=Wg8pcldbMHJB2zC0xo4OlG5vfldwNalDml12LB8ao+dEvcThuSNofe+9/OVlhBCtR0
-         MpLnwncaXKce9IpVyQVNWs9IMoihzBar+TcAnFMPBM2bvPMn3NlWHR1s43m5cvvrAqCR
-         faPAIEXLIFGq31m1628HTK2UF6eqDFqWlfQ/UGh9cNkp95HMBHKHpdI+fFWoADXlaAXv
-         H6Or3diZ0slUcLqLtMCiqDrmg1r431NGD4dIjclQpTW+sLiV9Rp7EWJfItJgv6gnGIIH
-         XuhlNPzZz6c41FKpLUJS4oKpboPQ0tEucB1iKW+xSafhZyiSNhDOlqCD4cEVVxZ7GrRX
-         Vv6g==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eFlNQB0BzOryXQoC76S+j2lOLcpwit4Btksu9yTgRsY=;
+        b=emDy57bPo48C6Pc8nXPRpN4xXWiUhcEZgwTUEAzj6ewhRp0qN1po2N1NtvVbD8Qkvd
+         bHd6/Atgtf6wdsG+SThtlCsH8Prp8nmBRROWiV9ZyavVu+rlFOkqq/tXI0cGM36scvik
+         DxqxW1dquDCX5xApu/Iz5SOkfTEatLupPlX8zquR1DgsPpVXieh7I6wvAM4itzMUr7Ao
+         M3TWCEWQldxflcqhD85cXsveyqXk9LT30yXQrnAXpxqzHS8UOgmVAU2G0djVMMQ2w1Na
+         ZvYaochVDaU8jQ0lgzSu56NQ/DR2p3FVwHaZdty6ncQO6cu1xip97/dXrFdWSCElGbue
+         t7qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OOwmSGSbibS0Uto3PS8hOpgTDC9tEJQIR9Uesk+1yhM=;
-        b=mnA7f1cQLPB9nlSfU9klhq3Q+QW538TXIVdiZx5p+F3qG56ac6Lz2FOOG8dZVEI/Su
-         dAL/V9LORctZonkfJaMLVTFPzFAFj4zehkFVIbQ+pPhc1kpioNPG0nIkIEnCaGa8c5pq
-         A+bFPyvQ7QN5InAixxfCa43IhpBbsJfkqyp5mWlIQ7dSx5IQYss/e4d1AkfpJfLojjpB
-         D89d/KRGJTyBdlHdnD2h/FaAWrEl5+HksGQTCsDmfXj53N/ppxKNAXarJocrL6/0a5Az
-         m1cZEZIbPiC/IC2es6hOzHtRXZ39aDyLQ61hA6J3XscRqdh0V/gLbpfxKBfj7Cqy8JbO
-         a9Nw==
-X-Gm-Message-State: ANoB5pkQnuu9GeLJ/SKYeCDyV0pxA5+q8pkfljcmdCgugR22QaURUHtw
-        fmEpr3YVNmVL2ZKciYwmhs8dKQ==
-X-Google-Smtp-Source: AA0mqf5PJXz7NriEMEnf+dwEciIMBb19U/ahmM4fXSTm3FMsZ/EB9WV4vjlK7g+sk1gu5dTXUyE1fw==
-X-Received: by 2002:a7b:cd85:0:b0:3cf:931c:3cfa with SMTP id y5-20020a7bcd85000000b003cf931c3cfamr5240504wmj.203.1669062706922;
-        Mon, 21 Nov 2022 12:31:46 -0800 (PST)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id o9-20020a056000010900b00228692033dcsm11954238wrx.91.2022.11.21.12.31.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 12:31:46 -0800 (PST)
-Message-ID: <31efe48a-4c68-f17c-64ee-88d45f56c438@arista.com>
-Date:   Mon, 21 Nov 2022 20:31:38 +0000
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eFlNQB0BzOryXQoC76S+j2lOLcpwit4Btksu9yTgRsY=;
+        b=3qktzznTnjBV3/Je7QgyicEYCpqILp/fySJcgt/uhBodEQMeep4hR0y0/boyDJW7em
+         gPCAl2QoP0a4c/FAOr1KD9fdkTpiOHnNcKXYshZkfgW884VIx3aAI6/T9uRWRhtwCH6W
+         FHlaCrylnnzU56E9MoveEBBkftoQZBQ2XtUJKCaba6XHbO8RUmhyKhpBe/mhHN1zlpgo
+         PRiZlQ5q2HvrJmSm2zRKYozW8pQggulo+130l9lTTCzmAMgICECtohUqJ4r+xhFf2Vax
+         WsPg4WgS1PppY/ORUoOTVu0OCkRnYtr0qZ+PF10W727ncxIw2QLVDYWHa3GKBzGuhFO/
+         nRgQ==
+X-Gm-Message-State: ANoB5pkVNfZ4IkHls4NzEGIeHnyGlf2YdgGz3v9wLXAD3iA/84dYX3vr
+        TbImtZsAtIvrdy7Arzj9y2zyeuZAP9kqfRDb6C3MfA==
+X-Google-Smtp-Source: AA0mqf43553Sp5/0f5wm4G4NUzxC54INgVCrHxuAIlGsoqADaWZq1ZZO5ER4vUkWUnjhdpnBnrhBb94eYMBXExq3h1c=
+X-Received: by 2002:a25:d2cf:0:b0:6cf:e761:43e1 with SMTP id
+ j198-20020a25d2cf000000b006cfe76143e1mr19116339ybg.650.1669062752576; Mon, 21
+ Nov 2022 12:32:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 3/5] net/tcp: Disable TCP-MD5 static key on
- tcp_md5sig_info destruction
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
-References: <20221115211905.1685426-1-dima@arista.com>
- <20221115211905.1685426-4-dima@arista.com>
- <20221118191809.0174f4da@kernel.org>
-Content-Language: en-US
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <20221118191809.0174f4da@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
+In-Reply-To: <20221121184743.1123556-2-rmoar@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 21 Nov 2022 12:32:21 -0800
+Message-ID: <CAGS_qxpDUOjQ+4H==ztZxSB1h5UjrN5cTGrMyoxmo0bFPuLixg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, isabbasso@riseup.net,
+        anders.roxell@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,38 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/19/22 03:18, Jakub Kicinski wrote:
-> On Tue, 15 Nov 2022 21:19:03 +0000 Dmitry Safonov wrote:
->> +	if (!rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk))) {
->> +		if (tcp_md5sig_info_add(sk, sk_gfp_mask(sk, GFP_ATOMIC)))
->> +			return -ENOMEM;
->> +
->> +		if (!static_key_fast_inc_not_negative(&tcp_md5_needed.key.key)) {
->> +			struct tcp_md5sig_info *md5sig = tp->md5sig_info;
-> 
-> I don't think sparse will be able to deduce that ->md5sig_info access
-> is safe here, so could you wrap it up as well?
+On Mon, Nov 21, 2022 at 10:48 AM Rae Moar <rmoar@google.com> wrote:
+>
+> Change KUnit test output to better comply with KTAP v1 specifications
+> found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
+> 1) Use "KTAP version 1" instead of "TAP version 14" as test output header
+> 2) Remove '-' between test number and test name on test result lines
+> 2) Add KTAP version lines to each subtest header as well
+>
+> Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=
+=80=9D line now
+> located after the KTAP version line. This does not completely match the
+> KTAP v1 spec but since it is classified as a diagnostic line, it is not
+> expected to be disruptive or break any existing parsers. This
+> =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
+> (https://testanything.org/tap-version-14-specification.html)
+> and it is used to define the test name before the results.
+>
+> Original output:
+>
+>  TAP version 14
+>  1..1
+>    # Subtest: kunit-test-suite
+>    1..3
+>    ok 1 - kunit_test_1
+>    ok 2 - kunit_test_2
+>    ok 3 - kunit_test_3
+>  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+>  # Totals: pass:3 fail:0 skip:0 total:3
+>  ok 1 - kunit-test-suite
+>
+> New output:
+>
+>  KTAP version 1
+>  1..1
+>    KTAP version 1
+>    # Subtest: kunit-test-suite
+>    1..3
+>    ok 1 kunit_test_1
+>    ok 2 kunit_test_2
+>    ok 3 kunit_test_3
+>  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+>  # Totals: pass:3 fail:0 skip:0 total:3
+>  ok 1 kunit-test-suite
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> ---
+>
+> Changes since v1:
+> https://lore.kernel.org/all/20221104194705.3245738-1-rmoar@google.com/
+> - Switch order of patches to make changes to the parser before making
+>   changes to the test output
+> - Change location of the new KTAP version line in subtest header to be
+>   before the subtest header line
 
-Sure, that sounds logical to do.
+This patch still looks good to me. In fact, it looks better.
 
-> Maybe it wouldn't be 
-> the worst move to provide a sk_rcu_dereference() or rcu_dereference_sk()
-> or some such wrapper.
-> 
-> More importantly tho - was the merging part for this patches discussed?
-> They don't apply to net-next.
+I prefer this updated version since this works a bit better with
+debugfs. This way, kunit.py won't just skip over the subtest line when
+looking for the initial KTAP header.
 
-They apply over linux-next as there's a change [1] in
-linux-tip/locking/core on which the patches set based.
-
-Could the way forward be through linux-tip tree, or that might create
-net conflicts?
-
-I'll send v5 with the trivial change to rcu_dereference_protected()
-mentioned above.
-
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=locking/core&id=d0c006402e7941558e5283ae434e2847c7999378
-
-Thanks,
-          Dmitry
+Daniel
