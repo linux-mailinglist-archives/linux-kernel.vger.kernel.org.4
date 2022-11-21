@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA56C631B70
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A89631B72
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiKUIaa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Nov 2022 03:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S230089AbiKUIav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:30:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiKUIaZ (ORCPT
+        with ESMTP id S230121AbiKUIap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:30:25 -0500
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57521C90F;
-        Mon, 21 Nov 2022 00:30:24 -0800 (PST)
-Received: by mail-qk1-f175.google.com with SMTP id g10so7532048qkl.6;
-        Mon, 21 Nov 2022 00:30:24 -0800 (PST)
+        Mon, 21 Nov 2022 03:30:45 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1218F1C42C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:30:41 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so10628551pjl.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=77nlpT1UtT2f7TDmQ1L0AgCLVss9mxayAo02DMUC5Kg=;
+        b=K4Zsk9gJfvRPRaFFT0pLQvp03kvx7GRM+mBM//6uAQGpXOtu2xB7eGCJGoQ/7lVF0p
+         T5B3dt4waTkqRSPmp5+rriVpIwqMXD2+ndThw9l8XCrgUxfo44sdeSdZShGtaZN8SLz3
+         p08gOlv37G4vpLuksqe4s9Z1roS4cD+q3dMtUFQLBer9yD1/GFFfeQZxcqGG1j6GbcUo
+         bEtU9lhPtttj+2RB9FWmX03DiItSn0/xC2yBBDRLmj+xMZi2rDeLiApC174IZwNh5ya4
+         NLRxfL30VIl1C4DX8RKMP2Kb48qP4yDt9G2VWcLktEd7oAd2tCzi+IGvfS6rxkHP244N
+         ZvMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8VV82pu5u8NbT9jq7z3fcKpvggpPLbpVY5rhb5eoeVg=;
-        b=Bb5NBp9wH8abyyLYWcWE1Xp9pOY0cZ9tUDBGOZD752xseD2M2kUmxGeCXsejlREc8P
-         L9WZL6QjRF2op0U3LdQJTXgIriFSEeS9gx58rS0HRI/oxdpOy5KftrF9NAcNbyrkWiUh
-         LQvMIEAp+k/2ale0uQkLHsNh+7WF+PRPNYWaTr0UKlOXUYrf96OBq2bZs8CaQ55nY709
-         7lz0flMo+g6BBsnYIBrKainZMw0p9YHG71Rf9x1kF1PDJrXVRhcLChpXkCQubNSenI3d
-         fvQF4CoqkO6OwcbXC1klm4/lQy18DfyE+ZoeAEevwW1vx025Ry71pJ0X+LXauTjfI87a
-         LpxQ==
-X-Gm-Message-State: ANoB5pl7h2o4HX/9+xvwmjnwGUb75sKiTo29h+9fiyBShD2P7X4xnT9k
-        iTNE9ubVaPRfNOvHwVMj+yyjnyqpPaIuPQ==
-X-Google-Smtp-Source: AA0mqf5t78rHQSlm3H2YKV+FU7uqt3YYw7xeOFB19IY7AWRPwvbZlKl7EYQf8K8JuUR+rr3CXZ1rfg==
-X-Received: by 2002:a37:b1c4:0:b0:6fa:89:6642 with SMTP id a187-20020a37b1c4000000b006fa00896642mr15441239qkf.284.1669019423736;
-        Mon, 21 Nov 2022 00:30:23 -0800 (PST)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id dm53-20020a05620a1d7500b006fbbdc6c68fsm7656744qkb.68.2022.11.21.00.30.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 00:30:22 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3704852322fso106536657b3.8;
-        Mon, 21 Nov 2022 00:30:21 -0800 (PST)
-X-Received: by 2002:a05:690c:b81:b0:37e:6806:a5f9 with SMTP id
- ck1-20020a05690c0b8100b0037e6806a5f9mr604336ywb.47.1669019421512; Mon, 21 Nov
- 2022 00:30:21 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=77nlpT1UtT2f7TDmQ1L0AgCLVss9mxayAo02DMUC5Kg=;
+        b=xvQaZUdWt9KhzCw6NR0k83tLAmQgcIjXvWbXIRZumV/oCjpiP3kw0tBJQr4NjWJbZI
+         x/vOQO2a0NV7nF6uyaA19lbbac63w2rDM5aeWbLDHKS/rTLnG3SbECbE7yLRfVvst9CN
+         fRsRmBzNbg865KOgD5EgDPsc1RC9F1hs44bSR6YK6w6j1Z+1HiTsfOM9mT3OCY0r2Z8X
+         MnWTLS3Wm8QieAIE1CywGwOgfMW8TckiBTBq6KeLUnI9j28z4XuJaNI3z8efxYrD6XZT
+         iCyQQUPO/ASDeXUHtaBBlsT3INiv/JA21vBx5tXuf4MY1BIwcTcYnybKw3fgnDagCQwN
+         bH0w==
+X-Gm-Message-State: ANoB5pl4icmXsJ3UaCirDUDWssccCDDvalSuwgUuaytRaYXrnHL0PfMc
+        9RfDkwjQ3ZMwRW0I0AHuW4Rpow==
+X-Google-Smtp-Source: AA0mqf5O84zrPfVTz1lHk4N+pi0wSmqGktmOWxC6ECtbtk3vPtBCdrUGPm0LJVTCuKEUja7f8Q0BiA==
+X-Received: by 2002:a17:90a:6904:b0:208:4bfa:51e1 with SMTP id r4-20020a17090a690400b002084bfa51e1mr24643533pjj.228.1669019440577;
+        Mon, 21 Nov 2022 00:30:40 -0800 (PST)
+Received: from localhost ([122.172.85.60])
+        by smtp.gmail.com with ESMTPSA id im15-20020a170902bb0f00b00176c0e055f8sm8823141plb.64.2022.11.21.00.30.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 00:30:39 -0800 (PST)
+Date:   Mon, 21 Nov 2022 14:00:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] OPP: Disallow "opp-hz" property without a
+ corresponding clk
+Message-ID: <20221121083036.ppwfprrheuf7xl7c@vireshk-i7>
+References: <cover.1669012140.git.viresh.kumar@linaro.org>
+ <c03c4f2b9d4dcc3264d1902606c6c5c464b4b043.1669012140.git.viresh.kumar@linaro.org>
+ <Y3snGQet8yc7HnJK@hovoldconsulting.com>
+ <20221121073817.7ollj7jeixrx5og5@vireshk-i7>
+ <Y3sryFh84eK/sWKF@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-425-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-425-uwe@kleine-koenig.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Nov 2022 09:30:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXQ3cW2a-SLsKJ7Oot_5ww-D78ainJkb4UBV318vfwrVQ@mail.gmail.com>
-Message-ID: <CAMuHMdXQ3cW2a-SLsKJ7Oot_5ww-D78ainJkb4UBV318vfwrVQ@mail.gmail.com>
-Subject: Re: [PATCH 424/606] mfd: bd9571mwv: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Lee Jones <lee@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3sryFh84eK/sWKF@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 1:05 AM Uwe Kleine-König <uwe@kleine-koenig.org> wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
->
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On 21-11-22, 08:42, Johan Hovold wrote:
+> Ok, I was expected the devicetree update to through Bjorn's tree as I
+> imagine there may be conflicts otherwise.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Dropped the DT patch now.
 
-Gr{oetje,eeting}s,
+Mani, I believe the first patch in this series is still required.
+Without that, when the cpufreq driver calls dev_pm_opp_set_opp(), the
+OPP core may end up calling clk_set_rate(), which shouldn't be done in
+case of Qcom SoCs.
 
-                        Geert
+I am not sure though, how it will work with sc8280xp. Can you please
+check ?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+viresh
