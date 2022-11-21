@@ -2,173 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C9E632D77
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B62632D81
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiKUTzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 14:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        id S229808AbiKUT5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiKUTzb (ORCPT
+        with ESMTP id S231790AbiKUT5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:55:31 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8817F1D300
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:55:30 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id n12-20020a170902e54c00b00188515e81a6so10090900plf.23
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:55:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=W02RbsZsl++qiQdJK9RwY8tMReALtesu58tvw95Kdrw=;
-        b=ojjOBWylYfZsKG0qH6zTB7tdNrjOPvXnoS8ljAUKXfLUd/ZMEK0KRbWVPHHYz6+sU/
-         1CW84x9W0DB+oO6KH4pJOuHiD2wvj10vFgVM2ccmepE/Hr96b4xNT4jbUB4EWQM7Zj8y
-         w1qpRsfBCRhmFE0NdZsiNiOpHVXSLZyE8d7PuNDf2z5BYY4tnvuJBaAiLCgqxpqxv5NW
-         1awIF657EY0srq0JCIBRMzmoLk+ScM4eR1CQch8unvggPd+h/2e4jI6PMvMBzShellcI
-         yDhaO5qxiUVlRQJSy54b604EKbXVI5nVA73bufPELrDIQbkNYO0QoG2KV+c5WiVQQDkc
-         P3kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W02RbsZsl++qiQdJK9RwY8tMReALtesu58tvw95Kdrw=;
-        b=50NdRKr2yAMi5VK7/SRdfgl7cL4+uk4z0mQo0w69mI6/+X/6r0sbH2hMCCfrr3y8Qc
-         Y5L35x8DGyN1L2qAscHAK4ys9TtghKcIMPDX+3MZdIf6d0EuwPZkv4NB6ObyKcNJ1i/N
-         s4u+LOTJlJtYV/FDuOnGrTEfhV2SogZiHOMrO7lsABcG8fivnMsXCLkxj9MQXC32LmIO
-         KoESoBo+RzkYG4AsFKtoODMvM72h/ury+rZg15UQjCDe4Ih/Le0opie9TcZ/58ARAb0x
-         buByfSrHWRbMrBmvK2fU5OO0vDR6B8LnNGu8dTwjdUjAkHgFBcluZ8n1x+eVJntnVPL5
-         nYtw==
-X-Gm-Message-State: ANoB5pmDOrGfeJdjWIMyLT+GDzqEPSEKPbb8XEYueXUzTgkeFyw5yKma
-        MZOjwlm3EYZ/hKSDAXbNlFNqRvJG80D+gw==
-X-Google-Smtp-Source: AA0mqf72Ofv54sxGUf8sRNUPFhJvThaSO3oUCy8wtr7UXy9f0eeiG2/6Tte5rilGQur8S6aX360S3Fy3BAJLnA==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a17:90a:c298:b0:218:a32f:9612 with SMTP
- id f24-20020a17090ac29800b00218a32f9612mr10158502pjt.155.1669060530049; Mon,
- 21 Nov 2022 11:55:30 -0800 (PST)
-Date:   Mon, 21 Nov 2022 11:55:26 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221121195526.425882-1-dlatypov@google.com>
-Subject: [PATCH] kunit: tool: make --json do nothing if --raw_ouput is set
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 14:57:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028C5C657C;
+        Mon, 21 Nov 2022 11:57:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D270B81601;
+        Mon, 21 Nov 2022 19:57:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2069BC433C1;
+        Mon, 21 Nov 2022 19:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669060624;
+        bh=YPwgtKNdOylEcCHyoy7Ll8ot+K2wIWy3WC83g9m+Z8k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=A6n5/ekzVsVnII7l9A/wif06CcDNEFeWKzvHddNpuJA5b19z77u4cbpKXbXSB39ik
+         2vbgg8ra00DPk3ELH0LAOsCRtng6pKWyElvSuQPM7dye91Uq3EAlKtUfFASmlrDbf2
+         37fHml196vg1zd0eINFB/4PWo9watU2sWD3wivq95IUhZOy80eUkG+/DEnGA1ijuNG
+         hOFyTHIgBDSNSskArWkuJX2kjD7Q6A3zvwKaPVt/mi5WsdbPuEqAGZkuVAynG3sy4O
+         WT+8CF59sTyPCVlvwLBzENZlAsN/FOn5elb4cfhemClTItmbkjrtpWtxD+aFwBE/SD
+         k7rWFIVRjsJNA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BDBE65C09CB; Mon, 21 Nov 2022 11:57:03 -0800 (PST)
+Date:   Mon, 21 Nov 2022 11:57:03 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zheng Yejian <zhengyejian1@huawei.com>
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Fix kernel stack overflow caused by kprobe on
+ rcu_irq_enter_check_tick()
+Message-ID: <20221121195703.GO4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221119040049.795065-1-zhengyejian1@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221119040049.795065-1-zhengyejian1@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When --raw_output is set (to any value), we don't actually parse the
-test results. So asking to print the test results as json doesn't make
-sense.
+On Sat, Nov 19, 2022 at 12:00:49PM +0800, Zheng Yejian wrote:
+> Register kprobe on __rcu_irq_enter_check_tick() can cause kernel stack
+> overflow [1]. This issue is first found in v5.10 and can be reproduced
+> by enabling CONFIG_NO_HZ_FULL and doing like:
+>   # cd /sys/kernel/debug/tracing/
+>   # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
+>   # echo 1 > events/kprobes/enable
+> 
+> So __rcu_irq_enter_check_tick() should not be kprobed, mark it as noinstr.
 
-We internally create a fake test with one passing subtest, so --json
-would actually print out something misleading.
+Good catch!
 
-This patch:
-* Rewords the flag descriptions so hopefully this is more obvious.
-* Also updates --raw_output's description to note the default behavior
-  is to print out only "KUnit" results (actually any KTAP results)
-* also renames and refactors some related logic for clarity (e.g.
-  test_result => test, it's a kunit_parser.Test object).
+I am inclined to queue this, but noticed that one of its callers need
+it to be noinstr but that the others do not.
 
-Notably, this patch does not make it an error to specify --json and
---raw_output together. This is an edge case, but I know of at least one
-wrapper around kunit.py that always sets --json. You'd never be able to
-use --raw_output with that wrapper.
+Need noinstr:
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit.py | 34 ++++++++++++++++++----------------
- 1 file changed, 18 insertions(+), 16 deletions(-)
+o	enter_from_kernel_mode() -> __enter_from_kernel_mode() ->
+	rcu_irq_enter_check_tick() -> __rcu_irq_enter_check_tick()
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 4d4663fb578b..e7b6549712d6 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -192,12 +192,11 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
- def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
- 	parse_start = time.time()
- 
--	test_result = kunit_parser.Test()
--
- 	if request.raw_output:
- 		# Treat unparsed results as one passing test.
--		test_result.status = kunit_parser.TestStatus.SUCCESS
--		test_result.counts.passed = 1
-+		fake_test = kunit_parser.Test()
-+		fake_test.status = kunit_parser.TestStatus.SUCCESS
-+		fake_test.counts.passed = 1
- 
- 		output: Iterable[str] = input_data
- 		if request.raw_output == 'all':
-@@ -206,14 +205,17 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
- 			output = kunit_parser.extract_tap_lines(output, lstrip=False)
- 		for line in output:
- 			print(line.rstrip())
-+		parse_time = time.time() - parse_start
-+		return KunitResult(KunitStatus.SUCCESS, parse_time), fake_test
- 
--	else:
--		test_result = kunit_parser.parse_run_tests(input_data)
--	parse_end = time.time()
-+
-+	# Actually parse the test results.
-+	test = kunit_parser.parse_run_tests(input_data)
-+	parse_time = time.time() - parse_start
- 
- 	if request.json:
- 		json_str = kunit_json.get_json_result(
--					test=test_result,
-+					test=test,
- 					metadata=metadata)
- 		if request.json == 'stdout':
- 			print(json_str)
-@@ -223,10 +225,10 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
- 			stdout.print_with_timestamp("Test results stored in %s" %
- 				os.path.abspath(request.json))
- 
--	if test_result.status != kunit_parser.TestStatus.SUCCESS:
--		return KunitResult(KunitStatus.TEST_FAILURE, parse_end - parse_start), test_result
-+	if test.status != kunit_parser.TestStatus.SUCCESS:
-+		return KunitResult(KunitStatus.TEST_FAILURE, parse_time), test
- 
--	return KunitResult(KunitStatus.SUCCESS, parse_end - parse_start), test_result
-+	return KunitResult(KunitStatus.SUCCESS, parse_time), test
- 
- def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	      request: KunitRequest) -> KunitResult:
-@@ -359,14 +361,14 @@ def add_exec_opts(parser) -> None:
- 			    choices=['suite', 'test'])
- 
- def add_parse_opts(parser) -> None:
--	parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
--			    'If set to --raw_output=kunit, filters to just KUnit output.',
-+	parser.add_argument('--raw_output', help='If set don\'t parse output from kernel. '
-+			    'By default, filters to just KUnit output. Use '
-+			    '--raw_output=all to show everything',
- 			     type=str, nargs='?', const='all', default=None, choices=['all', 'kunit'])
- 	parser.add_argument('--json',
- 			    nargs='?',
--			    help='Stores test results in a JSON, and either '
--			    'prints to stdout or saves to file if a '
--			    'filename is specified',
-+			    help='Prints parsed test results as JSON to stdout or a file if '
-+			    'a filename is specified. Does nothing if --raw_output is set.',
- 			    type=str, const='stdout', default=None, metavar='FILE')
- 
- 
+Doesn't need noinstr:
 
-base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
--- 
-2.38.1.584.g0f3c55d4c2-goog
+o	ct_nmi_enter() -> rcu_irq_enter_check_tick() ->
+	__rcu_irq_enter_check_tick(), courtesy of the call to
+	instrumentation_begin() in ct_nmi_enter() that precedes the call
+	to rcu_irq_enter_check_tick().
 
+o	irqentry_enter() -> rcu_irq_enter_check_tick() ->
+	__rcu_irq_enter_check_tick(), courtesy of the call to
+	instrumentation_begin() in irqentry_enter() that precedes the
+	call to rcu_irq_enter_check_tick().
+
+Is tagging __rcu_irq_enter_check_tick() with noinstr as
+proposed in this patch the right thing to do, or should there
+be calls to instrumentation_begin() and instrumentation_end() in
+enter_from_kernel_mode()?  Or something else entirely?
+
+Thoughts?
+
+							Thanx, Paul
+
+> [1]
+> Insufficient stack space to handle exception!
+> Insufficient stack space to handle exception!
+> [...]
+> Kernel panic - not syncing: kernel stack overflow
+> CPU: 3 PID: 34 Comm: migration/3 Not tainted
+> 6.1.0-rc5-00884-g84368d882b96 #2
+> Hardware name: linux,dummy-virt (DT)
+> Stopper: multi_cpu_stop+0x0/0x228 <- __stop_cpus.constprop.0+0xa4/0x100
+> Call trace:
+>  dump_backtrace+0xf8/0x108
+>  show_stack+0x20/0x48
+>  dump_stack_lvl+0x68/0x84
+>  dump_stack+0x1c/0x38
+>  panic+0x214/0x404
+>  add_taint+0x0/0xf0
+>  panic_bad_stack+0x144/0x160
+>  handle_bad_stack+0x38/0x58
+>  __bad_stack+0x78/0x7c
+>  el1h_64_sync_handler+0x4/0xe8
+>  __rcu_irq_enter_check_tick+0x0/0x1b8
+>  arm64_enter_el1_dbg.isra.0+0x14/0x20
+>  el1_dbg+0x2c/0x90
+>  el1h_64_sync_handler+0xcc/0xe8
+>  el1h_64_sync+0x64/0x68
+>  __rcu_irq_enter_check_tick+0x0/0x1b8
+>  arm64_enter_el1_dbg.isra.0+0x14/0x20
+>  el1_dbg+0x2c/0x90
+>  el1h_64_sync_handler+0xcc/0xe8
+>  el1h_64_sync+0x64/0x68
+>  __rcu_irq_enter_check_tick+0x0/0x1b8
+>  arm64_enter_el1_dbg.isra.0+0x14/0x20
+>  el1_dbg+0x2c/0x90
+>  el1h_64_sync_handler+0xcc/0xe8
+>  el1h_64_sync+0x64/0x68
+>  __rcu_irq_enter_check_tick+0x0/0x1b8
+>  arm64_enter_el1_dbg.isra.0+0x14/0x20
+>  el1_dbg+0x2c/0x90
+>  el1h_64_sync_handler+0xcc/0xe8
+>  el1h_64_sync+0x64/0x68
+>  __rcu_irq_enter_check_tick+0x0/0x1b8
+>  arm64_enter_el1_dbg.isra.0+0x14/0x20
+>  el1_dbg+0x2c/0x90
+>  el1h_64_sync_handler+0xcc/0xe8
+>  el1h_64_sync+0x64/0x68
+>  __rcu_irq_enter_check_tick+0x0/0x1b8
+>  [...]
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: aaf2bc50df1f ("rcu: Abstract out rcu_irq_enter_check_tick() from rcu_nmi_enter()")
+> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+> ---
+>  kernel/rcu/tree.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 93416afebd59..68230f02cfb7 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -631,7 +631,7 @@ void rcu_irq_exit_check_preempt(void)
+>   * controlled environments, this function allows RCU to get what it
+>   * needs without creating otherwise useless interruptions.
+>   */
+> -void __rcu_irq_enter_check_tick(void)
+> +noinstr void __rcu_irq_enter_check_tick(void)
+>  {
+>  	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
+>  
+> -- 
+> 2.25.1
+> 
