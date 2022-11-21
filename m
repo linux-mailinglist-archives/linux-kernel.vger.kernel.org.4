@@ -2,90 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386DB63241C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D8363241F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiKUNnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:43:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
+        id S230095AbiKUNoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiKUNnI (ORCPT
+        with ESMTP id S229962AbiKUNoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:43:08 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF9BC1F71
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:42:43 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 205so13593531ybe.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:42:43 -0800 (PST)
+        Mon, 21 Nov 2022 08:44:00 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744C8248
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:43:59 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id kt23so28590056ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:43:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7fsoSstP+kTMnlGCyhKQpRZRy1Cn2GgHrvraYINr6P0=;
-        b=tLc3HmTvsLWQ82lR6B6iR76sR+Rdyf6gUKpUNsZ4d59KxO6FQLRT9iCtd+a7WXb/Kv
-         WxIy74c5i6veiZgMD1pSc7PMCo81tbqvtigJWx+oeTbCTVMgkCJtnB4IVQWgXi8c4dYV
-         doqWeCsxIsTxu8Gg/k4eOLy9THzp+WH4k9RifTHJeQCYHlnqAucBFaPIG0r8dcNlR1NE
-         wYwtslCMbW//KKggTSyDwe5TWzUhJ/1BrVdA3bg9o4czJ3x24VM4Mm3Xe3HEftKb6Jz9
-         Na4BT06OHWdus37ULNZ1BQ7JoySXCk3w0OAoPqyMtruwirxUhZ2fiv7Fj7XfrsRItaJZ
-         unrQ==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DLuxvrtTwLpjQCdZkBOlAPtT4PuOt7o3XUb4SWGRYeY=;
+        b=oZgQIeHI8fUBrBK0IzPI0CwS3tfHJMWbkpePnEknmN0uMPcNoktKEgea/9SyErC/lE
+         EbTRiBHO8z5pMReDK3rs5PQOMXeczhBD58SuBvPE3yu6RuzsYP5iKlBHdtpCxAl2g29c
+         SOMV79VAcEoEtpIyEv3weHtLQdZW0Lh6CyuOrdGvzEmzuHLHxdHEnWYGfxMqzUpUWp44
+         PpfzZ2USaG3aNctWdH0ZdL2FfC2t+MU2wdhBhwR5X/pfBuXyHyjYzWr5EMRr2BdBi48D
+         K6hXtmdOx1IYJYCpS4IzgvBRwTrxn54M15GWL38oipDDDGOqwN7av4yIPayTbsWTpB02
+         +yoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7fsoSstP+kTMnlGCyhKQpRZRy1Cn2GgHrvraYINr6P0=;
-        b=X19PMHRoFkfFeg0MrmzjMUKw8EoGmErhpA/uEhAvzJJPqHgeoRTo8ZyRI0Mv6pKuIX
-         qpMwxK9p6ZwMQ37zXL2tMo4/bRYH7bMSXhyyKJYyMnHY5p/spaPjwovbMqmN1OAGWkyE
-         PifkYzK4pHhAfRsuBXRDGCO9utKXe7ERbwD2mdgtq/FTZj/0VXUXWTZzuky3hAgp8XJM
-         mPwgZKHx2TeuSoKd9CMSSpLhstgdAjkWZs0m4RzTD7bReKzKfAakVJtKRuFU3IdxlqzU
-         bMB3D51ESuSSNC7mwiQWcYjtDVu1aZXtrdCg5Xef+ExOS5Q/Ilw5ttx4aY3vurqu9NEB
-         plkw==
-X-Gm-Message-State: ANoB5plj/ubbhbmP9H9Ou8zif6esET/FKRnOizqKcd42uAalb7ev3Jsd
-        xBdEnx5AWFEymcT8MG6YGhGP1YX4yPx8A4QZdcEapQ==
-X-Google-Smtp-Source: AA0mqf7D6nlXUukeFyw5JeCgOvxcdvH2H+0keXaRw1neBKuVwJvQY/4CuSboWYoyyNJkNwfRd/CnZz9h11UwJNgMk/M=
-X-Received: by 2002:a25:acd1:0:b0:6b4:b9e3:c64b with SMTP id
- x17-20020a25acd1000000b006b4b9e3c64bmr17664071ybd.238.1669038162430; Mon, 21
- Nov 2022 05:42:42 -0800 (PST)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLuxvrtTwLpjQCdZkBOlAPtT4PuOt7o3XUb4SWGRYeY=;
+        b=7esKdbk+gB55EmIM76qNmL1pth2lrTp0jn+69r3aDfzUCRfw/jh4Qi9BG3maznUPSJ
+         EGs+rRWMoPtii6kTG+FL3MF11dXuphtN/2B28vfIIyFrRKd3o8/RU9X8DsEg+65VK311
+         +R/l9C85JLOLUaGaE67eunujRiMnNWctQdGR4bKb7yEHlpTe33/jMACoHu2hrG/ZrWnF
+         SxIV7wc96Do+C6HuA9QY4v90DaPvis/gq/GjPIYK9ls8Tt2/AWb0KSokGDOPvnln36gC
+         ot1PssZwozrc3KC67BdMWEY7D1p0ch+h72hxzZ2REBjxkvjMc0ZFLBt+rdqI0LzotSU/
+         IySQ==
+X-Gm-Message-State: ANoB5pndPGr63ZZakL/RiEHgY6c0yxm5qmtL4Iff5EDgL1QYRGF4GWT2
+        T/JATMfBBFaQqGkG9DmWblVAUtwlb4Ipj/OfMjY=
+X-Google-Smtp-Source: AA0mqf5JclXnQrwMnS+iyAukB6nEVFSVgGfWvxLcPyclYgQmCIEjbRqa8INzQjrtzO8FDhcyRq2WTUOpU05Ib7Uqu7M=
+X-Received: by 2002:a17:906:da0f:b0:7ad:95cf:726e with SMTP id
+ fi15-20020a170906da0f00b007ad95cf726emr15780841ejb.60.1669038237931; Mon, 21
+ Nov 2022 05:43:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20221117123034.27383-1-korotkov.maxim.s@gmail.com>
-In-Reply-To: <20221117123034.27383-1-korotkov.maxim.s@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 21 Nov 2022 14:42:31 +0100
-Message-ID: <CACRpkdY09f+VUn+F3smfNksUr0r5+xMhTn8kb3LAd0ot+8gpMg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: single: Fix potential division by zero
-To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Haojian Zhuang <haojian.zhuang@linaro.org>,
-        "Manjunathappa, Prakash" <prakash.pm@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
+Received: by 2002:a05:6f02:905:b0:24:877f:7460 with HTTP; Mon, 21 Nov 2022
+ 05:43:57 -0800 (PST)
+Reply-To: thajxoa@gmail.com
+From:   Thaj Xoa <rw36223@gmail.com>
+Date:   Mon, 21 Nov 2022 13:43:57 +0000
+Message-ID: <CABnv2bu7b6pNS+RdS98u0G6Zc4ZLndbFdw_EznJDWAhNdUxMog@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 1:32 PM Maxim Korotkov
-<korotkov.maxim.s@gmail.com> wrote:
+-- 
+Dear Friend,
 
-> There is a possibility of dividing by zero due to the pcs->bits_per_pin
-> if pcs->fmask() also has a value of zero and called fls
-> from asm-generic/bitops/builtin-fls.h or arch/x86/include/asm/bitops.h.
-> The function pcs_probe() has the branch that assigned to fmask 0 before
-> pcs_allocate_pin_table() was called
->
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Fixes: 4e7e8017a80e ("pinctrl: pinctrl-single: enhance to configure multiple pins of different modules")
-> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+I have an important message for you.
 
-Patch applied for fixes.
+Sincerely,
 
-Yours,
-Linus Walleij
+Mr thaj xoa
+Deputy Financial State Securities Commission (SSC)
+Hanoi-Vietnam
