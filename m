@@ -2,185 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9E56327B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0546327B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiKUPTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
+        id S230411AbiKUPTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiKUPTD (ORCPT
+        with ESMTP id S230081AbiKUPTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 10:19:03 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDB6CFEAB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:15:44 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id w3-20020a17090a460300b00218524e8877so12232495pjg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:15:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4iomL/SuFm2qP/FaY1uaLFvnC19GQTDr6IrFZRdHZA=;
-        b=RFEzHslJIPr3wKkoXOuVeTeiw7UtPt5iy5zU7+rfoTjUVr5qRjm/PWz/WqsxtxgOPj
-         OPeYqCwIyS8doJX7QqnN8iDuTn2mDni7CkcEQerTHSevzpnozoEU2JEeGuiKLQrx8cd5
-         85Fp6Y18uvvpYhRlVgLTipbyHch+XnBQFxiEt2A2uhAU9Xu+qu22MrbmoDg6+WsSn/wt
-         xliA6Zt2TEqaGoXTAM+0xFRuJavVmM6B5YCmKiYZovnJQoNY5X1KOEnTOltkKGd2vsc+
-         dddElnLPRCpen9DrgzTCdahGQhI94ZDiQm6KX7pmHCEjowj05LW7E/EoNKT4a3CqjLiQ
-         GZxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4iomL/SuFm2qP/FaY1uaLFvnC19GQTDr6IrFZRdHZA=;
-        b=mmmEXIybaDeSmqXXppn+542ivv8Ovvil8pZzcQjc2A5C4JiOBU5J8dpZyPGtHykfVq
-         fmX3iXe8YJz6jQRHG/uuBDQyizZHn1UcWpLj1KXAAGWYvYIvzgKsEY8qRyLsNIXcJRxE
-         52clZ4TAbR3LgK1YkEyauUvTIe0z8Fro6XR+v2OZCiX47rM/+LjagXN3yfNQ/BRUCCG0
-         uHRjrLx6nk38jpgyZnX31AD8k36txP5jDXsChqqfH+TYq0ksbdLFpjWJA2IFSf2nZCqt
-         j9lMpTSfNQZWCfFqNerPu361FsdnkLNR8jwV/LEQRohhuaRwqapZkuQpEFb/BbolEyGm
-         mXDA==
-X-Gm-Message-State: ANoB5pkq63p6lZ3CsxUl48q0Iul3DF6s4PLcNdTTqW5KTGvOo/ksJV3b
-        uNWbbBj7x102CiqWl13fWWinZKdq3v0sTi/vbQQ9StW3WBQ=
-X-Google-Smtp-Source: AA0mqf71Kf/jCN7y1nl4PTcH28Uk6BtNQuC8mgTZ5dEqhq85VBIEuAvTzuT7TBYPlZmTLUdoBJeQryGeNjISQ9MLVhg=
-X-Received: by 2002:a17:90a:5883:b0:218:f84:3f98 with SMTP id
- j3-20020a17090a588300b002180f843f98mr27389810pji.238.1669043743578; Mon, 21
- Nov 2022 07:15:43 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66509C903C;
+        Mon, 21 Nov 2022 07:15:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01081612BC;
+        Mon, 21 Nov 2022 15:15:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B49C433D6;
+        Mon, 21 Nov 2022 15:15:40 +0000 (UTC)
+Date:   Mon, 21 Nov 2022 10:15:37 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Chris Mason <clm@meta.com>, Mark Rutland <mark.rutland@arm.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Florent Revest <revest@chromium.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Brendan Jackman <jackmanb@google.com>, markowsky@google.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC 0/1] BPF tracing for arm64 using fprobe
+Message-ID: <20221121101537.674f5aca@gandalf.local.home>
+In-Reply-To: <CACYkzJ613nhXViBpDuGWeEWzjfSJjbB1=KNpYtNDC6Xn7yizbw@mail.gmail.com>
+References: <20221108220651.24492-1-revest@chromium.org>
+        <CAADnVQ+BWpzqOV8dGCR=A3dR3u60CkBkqSXEQHe2kVqFzsgnHw@mail.gmail.com>
+        <20221117121617.4e1529d3@gandalf.local.home>
+        <d24cded7-87b1-89f5-fc2a-5346669f6d57@meta.com>
+        <20221117174030.0170cd36@gandalf.local.home>
+        <Y3e0KtnQrudxiZbz@FVFF77S0Q05N.cambridge.arm.com>
+        <20221118114519.2711d890@gandalf.local.home>
+        <43d5d1f5-c01d-c0db-b421-386331c2b8c1@meta.com>
+        <20221118130608.5ba89bd8@gandalf.local.home>
+        <2ab2b854-723a-5f15-8c18-0b5730d1b535@meta.com>
+        <CACYkzJ613nhXViBpDuGWeEWzjfSJjbB1=KNpYtNDC6Xn7yizbw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221121135024.1655240-1-feng.tang@intel.com> <20221121135024.1655240-2-feng.tang@intel.com>
-In-Reply-To: <20221121135024.1655240-2-feng.tang@intel.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 21 Nov 2022 16:15:32 +0100
-Message-ID: <CA+fCnZenKqb9_a2e5b25-DQ3uAKPgm=+tTDOP+D9c6wbDSjMNA@mail.gmail.com>
-Subject: Re: [PATCH -next 2/2] mm/kasan: simplify is_kmalloc check
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 2:53 PM Feng Tang <feng.tang@intel.com> wrote:
->
-> Use new is_kmalloc_cache() to simplify the code of checking whether
-> a kmem_cache is a kmalloc cache.
->
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
+On Mon, 21 Nov 2022 14:47:10 +0100
+KP Singh <kpsingh@kernel.org> wrote:
 
-Hi Feng,
+> This annotation already exists, i.e. ALLOW_ERROR_INJECTION
+> 
+> Users, with CONFIG_FUNCTION_ERROR_INJECTION, can already modify return
+> values of kernel functions using kprobes and the failure injection
+> framework [1] for functions annotated with ALLOW_ERROR_INJECTION.
+> 
+> BPF just provides another way to do the same thing with "modify
+> return" programs and this also respects the error injection list [2]
+> and users can *only* attach these programs to the functions annotated
+> with ALLOW_ERROR_INJECTION.
 
-Nice simplification!
+WAIT!
 
-> ---
->  include/linux/kasan.h | 9 ---------
->  mm/kasan/common.c     | 9 ++-------
->  mm/slab_common.c      | 1 -
->  3 files changed, 2 insertions(+), 17 deletions(-)
->
-> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-> index dff604912687..fc46f5d6f404 100644
-> --- a/include/linux/kasan.h
-> +++ b/include/linux/kasan.h
-> @@ -102,7 +102,6 @@ struct kasan_cache {
->         int alloc_meta_offset;
->         int free_meta_offset;
->  #endif
-> -       bool is_kmalloc;
->  };
+Looking at the Kconfigs, I see
 
-We can go even further here, and only define the kasan_cache struct
-and add the kasan_info field to kmem_cache when CONFIG_KASAN_GENERIC
-is enabled.
+CONFIG_FUNCTION_ERROR_INJECTION is set when
+CONFIG_HAVE_FUNCTION_ERROR_INJECTION is set, and when CONFIG_KPROBES is set.
 
->
->  void __kasan_unpoison_range(const void *addr, size_t size);
-> @@ -129,13 +128,6 @@ static __always_inline bool kasan_unpoison_pages(struct page *page,
->         return false;
->  }
->
-> -void __kasan_cache_create_kmalloc(struct kmem_cache *cache);
-> -static __always_inline void kasan_cache_create_kmalloc(struct kmem_cache *cache)
-> -{
-> -       if (kasan_enabled())
-> -               __kasan_cache_create_kmalloc(cache);
-> -}
-> -
->  void __kasan_poison_slab(struct slab *slab);
->  static __always_inline void kasan_poison_slab(struct slab *slab)
->  {
-> @@ -252,7 +244,6 @@ static inline void kasan_poison_pages(struct page *page, unsigned int order,
->                                       bool init) {}
->  static inline bool kasan_unpoison_pages(struct page *page, unsigned int order,
->                                         bool init) { return false; }
-> -static inline void kasan_cache_create_kmalloc(struct kmem_cache *cache) {}
->  static inline void kasan_poison_slab(struct slab *slab) {}
->  static inline void kasan_unpoison_object_data(struct kmem_cache *cache,
->                                         void *object) {}
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index 1f30080a7a4c..f7e0e5067e7a 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -122,11 +122,6 @@ void __kasan_poison_pages(struct page *page, unsigned int order, bool init)
->                              KASAN_PAGE_FREE, init);
->  }
->
-> -void __kasan_cache_create_kmalloc(struct kmem_cache *cache)
-> -{
-> -       cache->kasan_info.is_kmalloc = true;
-> -}
-> -
->  void __kasan_poison_slab(struct slab *slab)
->  {
->         struct page *page = slab_page(slab);
-> @@ -326,7 +321,7 @@ void * __must_check __kasan_slab_alloc(struct kmem_cache *cache,
->         kasan_unpoison(tagged_object, cache->object_size, init);
->
->         /* Save alloc info (if possible) for non-kmalloc() allocations. */
-> -       if (kasan_stack_collection_enabled() && !cache->kasan_info.is_kmalloc)
-> +       if (kasan_stack_collection_enabled() && is_kmalloc_cache(cache))
->                 kasan_save_alloc_info(cache, tagged_object, flags);
->
->         return tagged_object;
-> @@ -372,7 +367,7 @@ static inline void *____kasan_kmalloc(struct kmem_cache *cache,
->          * Save alloc info (if possible) for kmalloc() allocations.
->          * This also rewrites the alloc info when called from kasan_krealloc().
->          */
-> -       if (kasan_stack_collection_enabled() && cache->kasan_info.is_kmalloc)
-> +       if (kasan_stack_collection_enabled() && is_kmalloc_cache(cache))
->                 kasan_save_alloc_info(cache, (void *)object, flags);
->
->         /* Keep the tag that was set by kasan_slab_alloc(). */
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 8276022f0da4..a5480d67f391 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -663,7 +663,6 @@ struct kmem_cache *__init create_kmalloc_cache(const char *name,
->
->         create_boot_cache(s, name, size, flags | SLAB_KMALLOC, useroffset,
->                                                                 usersize);
-> -       kasan_cache_create_kmalloc(s);
->         list_add(&s->list, &slab_caches);
->         s->refcount = 1;
->         return s;
-> --
-> 2.34.1
->
+And ALLOW_ERROR_INJECTION() is set when CONFIG_FUNCTION_ERROR_INJECTION is.
+
+There's no way to turn it off on x86 except by disabling kprobes!
+
+WTF!
+
+I don't want a kernel that can add error injection just because kprobes is
+enabled. There's two kinds of kprobes. One that is for visibility only (for
+tracing) and one that can be used for functional changes. I want the
+visibility without the ability to change the kernel. The visibility portion
+is very useful for security, where as the modifying one can be used to
+circumvent security.
+
+As kprobes are set in most production environments, so is error injection.
+Do we really want error injection enabled on production environments?
+I don't.
+
+I think we need this patch ASAP!
+
+-- Steve
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index c3c0b077ade3..9ee72d8860c3 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1874,8 +1874,14 @@ config NETDEV_NOTIFIER_ERROR_INJECT
+ 	  If unsure, say N.
+ 
+ config FUNCTION_ERROR_INJECTION
+-	def_bool y
++	bool "Fault-injections of functions"
+ 	depends on HAVE_FUNCTION_ERROR_INJECTION && KPROBES
++	help
++	  Add fault injections into various functions that are annotated with
++	  ALLOW_ERROR_INJECTION() in the kernel. BPF may also modify the return
++	  value of theses functions. This is useful to test error paths of code.
++
++	  If unsure, say N
+ 
+ config FAULT_INJECTION
+ 	bool "Fault-injection framework"
