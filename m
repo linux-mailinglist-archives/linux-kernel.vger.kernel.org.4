@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8086317FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 01:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A76E5631800
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 01:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiKUAxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 19:53:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        id S229908AbiKUAyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 19:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiKUAxP (ORCPT
+        with ESMTP id S229755AbiKUAxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 19:53:15 -0500
-Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC0A15A27;
-        Sun, 20 Nov 2022 16:53:13 -0800 (PST)
-Date:   Mon, 21 Nov 2022 00:53:07 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1668991992; x=1669251192;
-        bh=rvgqD3kMhIWmN1uoL7kkpUV34ll+GvDevC8V4e/ofec=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=sCcoLWQM3EIAdUJxF6zz8wZEf8U79hqNmtyXgl7QI5kUKXmihQlokkgW6U7pCxTjS
-         EQY+PmUPo4uD5LH1nAnVuh0BgR5R+u3A7H/Dzem4eF2YiQ8PbJot40XpqLES6Cr2lU
-         R3BVneoW4kytwzLXkZI1AxV5y/74/Ygfe+kHNb1pLJuOY3x5Uu6x8HR4Ojpypu5ai/
-         Asa27fNqTkIBG/PsasMd2Wv2tOOrqTd/Pl8T17FZpETC9IpYTNC01Pu24tbxk9tCad
-         7G8sOCAaIut9W0H2jsOag2d69EiYphUrNJnQMN/cWjgO6Qd5TZIHOGpQiUPL92d5cG
-         lzLZgARP+ntMw==
-To:     linux-kernel@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v2 5/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add flash LED
-Message-ID: <20221121005200.4407-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20221121004813.3883-1-linmengbo0689@protonmail.com>
-References: <20221121004813.3883-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Sun, 20 Nov 2022 19:53:51 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692AF6434
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 16:53:50 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id y83so3798653yby.6
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 16:53:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TrR9tOTmmG1TbaSCSfozcLow+Bsm4fJxe0iyZV+9CFM=;
+        b=TVrPTSt8r2Jz1zSMLgNF08MRtXIIMyyvA3bNcYvH08Ur1qf7Iu/FRV6nliKe7qjgpQ
+         dIg5QR7vgbEnp2VmyOH37i1Fa1gUYKI06pOTYkDdpQ20bNT7zf87+0p2geLow62+XTaI
+         b627XlsogwLBJKhDHfG3HSY3aqkquc773CFMROBvblJ85uSoKPsmu524wQ4lx2BhdNfp
+         XdKqUJ6w0JzWkg5ZH0Feu2HALMF9cs1FAcVDZ6u4aIfan1gRJ7hm2bKc/hrA8KIWZ1UC
+         4s88KuUUfWW6Uuqp/5s+bsEe02A0XdJ+/8loJzrJdvlH5ng5mOJzvg+IIxvNTPyXXDXw
+         N75g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TrR9tOTmmG1TbaSCSfozcLow+Bsm4fJxe0iyZV+9CFM=;
+        b=4OaglgTSh+aAJHyvq0/1IM9u3g0uFbGMrs94v4nnZ0Nhd6+ClLBqZb0794yAuZ9fG9
+         tPq6+EAhVxXA5Bz5YMPvIK9FS/S7mrOOfHqw5r9hfcoWvXCfvd/yae9jUR0cwaeq6aNl
+         XJfnKFJ6NmhWCHnsdwVibdRKzIWyYr5c+MrJisM84yXNokPQYiBPy3Y+Is+WYQNvrKQs
+         U4/H4a6nYjWt/a6vpjYVXPrmVzNvJUzYAztglB1Jg1cBw7ll8Q0AdVPX7Dr5MZgWAtL8
+         4V49P4t7JM9MDt+M2KK7vulmiqxu8BpJgx7AhZLrgcs22NXt0vsITr+aPYy1VnknY6Nq
+         MCOQ==
+X-Gm-Message-State: ANoB5plmlrETNJOfCKsExoMhD8MfVFvbx++WcveVP8g0Z6HpNHkCHXKW
+        04sDNWC/1qDMMK6EWAQBSglPbpIVmsg5e3PmUOMPcQ==
+X-Google-Smtp-Source: AA0mqf6cSVccND9M5xJ5RTp71E2Ny3s2Nok8MgF/a1P3G908wQ59plabT92n3YUX4ro8/poXoubFdM3GH/Cg/PaFa5M=
+X-Received: by 2002:a25:bcc6:0:b0:6dd:1c5c:5602 with SMTP id
+ l6-20020a25bcc6000000b006dd1c5c5602mr15818415ybm.36.1668992029284; Sun, 20
+ Nov 2022 16:53:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+References: <20221120090213.922567-1-syoshida@redhat.com> <20221120104907.4795-1-hdanton@sina.com>
+ <CANn89iJxiV_-g6n60aeA=mO=DYwGV9VdJswHP4pc-Vwq_UgrRA@mail.gmail.com> <20221121003404.4875-1-hdanton@sina.com>
+In-Reply-To: <20221121003404.4875-1-hdanton@sina.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sun, 20 Nov 2022 16:53:38 -0800
+Message-ID: <CANn89i+cmAAH8om3ET-478ZxPV4=t5nF0Ei+DCZOxND5=EqBLw@mail.gmail.com>
+Subject: Re: [PATCH v2] net: tun: Fix use-after-free in tun_detach()
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Shigeru Yoshida <syoshida@redhat.com>, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot+106f9b687cd64ee70cd1@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,56 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FL8005A uses SGM3140 Flash LED driver. Add it to the device tree.
+On Sun, Nov 20, 2022 at 4:34 PM Hillf Danton <hdanton@sina.com> wrote:
+>
+> On 20 Nov 2022 08:04:13 -0800 Eric Dumazet <edumazet@google.com>
+> > On Sun, Nov 20, 2022 at 2:49 AM Hillf Danton <hdanton@sina.com> wrote:
+> > > On 20 Nov 2022 18:02:13 +0900 Shigeru Yoshida <syoshida@redhat.com>
+> > > >
+> > > > This patch fixes the issue by calling sock_put() from tun_detach()
+> > > > after all necessary accesses for the struct net has done.
+> > >
+> > > Thanks for your fix.
+> > >
+> > > But tun is not special wrt netdev_run_todo() and call_netdevice_notifiers(),
+> > > so the correct fix should be making netdev grab another hold on net and
+> > > invoking put_net() in the path of netdev_run_todo().
+> >
+> > Well, this is not going to work. Unless I am missing something.
+>
+> Thanks for taking a look.
+>
+> I mean bump up refcount for net when updating netdev->nd_net in a bid to
+> make dev_net() safe throught netdev's life span.
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
----
- .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+This would prevent netns deletion, as the following sequence would
+then no longer work as intended.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm6=
-4/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-index 73597f1883aa..bd021802cca6 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-@@ -21,6 +21,21 @@ chosen {
- =09=09stdout-path =3D "serial0";
- =09};
-=20
-+=09flash-led-controller {
-+=09=09compatible =3D "sgmicro,sgm3140";
-+=09=09enable-gpios =3D <&msmgpio 31 GPIO_ACTIVE_HIGH>;
-+=09=09flash-gpios =3D <&msmgpio 32 GPIO_ACTIVE_HIGH>;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&camera_flash_default>;
-+
-+=09=09flash_led: led {
-+=09=09=09function =3D LED_FUNCTION_FLASH;
-+=09=09=09color =3D <LED_COLOR_ID_WHITE>;
-+=09=09=09flash-max-timeout-us =3D <250000>;
-+=09=09};
-+=09};
-+
- =09gpio-keys {
- =09=09compatible =3D "gpio-keys";
-=20
-@@ -239,6 +254,14 @@ l18 {
- };
-=20
- &msmgpio {
-+=09camera_flash_default: camera-flash-default-state {
-+=09=09pins =3D "gpio31", "gpio32";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
-+
- =09gpio_keys_default: gpio-keys-default-state {
- =09=09pins =3D "gpio107";
- =09=09function =3D "gpio";
---=20
-2.30.2
+ip netns add foo
+ip netns add ip link set lo up
+ip netns del foo
 
-
+When a netns is deleted ("ip netns del" and no more refcounted sockets),
+we have callbacks to unregister all devices tied to it.
