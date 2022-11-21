@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7815632EA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17235632EAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiKUVSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 16:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S229482AbiKUVWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 16:22:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiKUVRy (ORCPT
+        with ESMTP id S229695AbiKUVWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:17:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3641741D;
-        Mon, 21 Nov 2022 13:17:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95AB261470;
-        Mon, 21 Nov 2022 21:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C50C433D7;
-        Mon, 21 Nov 2022 21:17:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669065467;
-        bh=9rMZqi6MTAkHx1NSuetSTwbMG0Y1rlHqENVtRTUctaw=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=fDqgZeSgtwgMon/Junx9uN/u4GZU8c2wrXcuS6T7AdMjTP3iMsAA4rgRspN/+7MhH
-         PtbLnF2hW975S53Aa5cYEbr3npQclxWlNNuTn64EW/guzlRFchtPPVVU7ZmyvzXWLZ
-         qz9H8WQLOsfwsg7Iu9nCpar24sQjWUtJgqk4QfGvRFFRN6mqGfjK8Ah7rNgG8DADT8
-         s6SDfWBXYNbo2K3wSmolQqF7PZrqPb9FqFoR+LQCQX6sDhZcHlsjZJ2pRhS7dpZTJ5
-         w1Eeic7/IHnjcNk6i2c78sICghvrjgWVqUAQxnl1PxmNpb1AVQgReof/KocSacf/JS
-         vmV0bqx6xJTrA==
-Date:   Mon, 21 Nov 2022 22:17:45 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH RESEND] HID: hid-alps: use default remove for hid
- device
-In-Reply-To: <20221117121322.5608-1-marcus.folkesson@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2211212217390.6045@cbobk.fhfr.pm>
-References: <20221117121322.5608-1-marcus.folkesson@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Mon, 21 Nov 2022 16:22:41 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDCEDF53;
+        Mon, 21 Nov 2022 13:22:38 -0800 (PST)
+Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 2227ECABCB;
+        Mon, 21 Nov 2022 21:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1669065756; bh=icGbgsxy1HEPQOcedMSGJbJlERu4+bC9CJp6D7yq+dM=;
+        h=From:To:Cc:Subject:Date;
+        b=whpoVQvD0ToIFInww8OxeGCeBHay+QtHzZAV8iFIoH1y345uUQClZlQ50NDOp1Jvx
+         wpIMUG87QkwFplSDVe6XbVmodEksvT/rx1n7l9DDSC+NHOQMYZT1lQ7UeVfobNUsO+
+         Z65OM9TjzLGl00Ik+x3rs6h0vALJvVq2HB8MJtk4=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] ARM: dts: msm8974: castor: Define pm8841 regulators
+Date:   Mon, 21 Nov 2022 22:22:25 +0100
+Message-Id: <20221121212226.321514-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022, Marcus Folkesson wrote:
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> hid_device_remove() will call hid_hw_stop() as default .remove function
-> if no function is specified.
-> 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  drivers/hid/hid-alps.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-alps.c b/drivers/hid/hid-alps.c
-> index 2b986d0dbde4..9abaff6f3afb 100644
-> --- a/drivers/hid/hid-alps.c
-> +++ b/drivers/hid/hid-alps.c
-> @@ -820,11 +820,6 @@ static int alps_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  	return 0;
->  }
->  
-> -static void alps_remove(struct hid_device *hdev)
-> -{
-> -	hid_hw_stop(hdev);
-> -}
-> -
->  static const struct hid_device_id alps_id[] = {
->  	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
->  		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1_DUAL) },
-> @@ -840,7 +835,6 @@ static struct hid_driver alps_driver = {
->  	.name = "hid-alps",
->  	.id_table		= alps_id,
->  	.probe			= alps_probe,
-> -	.remove			= alps_remove,
->  	.raw_event		= alps_raw_event,
->  	.input_mapping		= alps_input_mapping,
->  	.input_configured	= alps_input_configured,
+Define the pm8841 regulators under SMD/RPM, to allow the modem
+remoteproc to set the voltage during boot of the remote processor.
 
-Applied, thanks.
+Entries are just copied from the Honami dts.
 
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes in v2:
+* new patch in this series
+
+ ...-msm8974pro-sony-xperia-shinano-castor.dts | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+index 3f45f5c5d37b..2c33f84a6e4e 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+@@ -319,6 +319,30 @@ led@7 {
+ };
+ 
+ &rpm_requests {
++	pm8841-regulators {
++		compatible = "qcom,rpm-pm8841-regulators";
++
++		pm8841_s1: s1 {
++			regulator-min-microvolt = <675000>;
++			regulator-max-microvolt = <1050000>;
++		};
++
++		pm8841_s2: s2 {
++			regulator-min-microvolt = <500000>;
++			regulator-max-microvolt = <1050000>;
++		};
++
++		pm8841_s3: s3 {
++			regulator-min-microvolt = <500000>;
++			regulator-max-microvolt = <1050000>;
++		};
++
++		pm8841_s4: s4 {
++			regulator-min-microvolt = <500000>;
++			regulator-max-microvolt = <1050000>;
++		};
++	};
++
+ 	pm8941-regulators {
+ 		compatible = "qcom,rpm-pm8941-regulators";
+ 
 -- 
-Jiri Kosina
-SUSE Labs
+2.38.1
 
