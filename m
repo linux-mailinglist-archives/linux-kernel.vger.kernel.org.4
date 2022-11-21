@@ -2,188 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C962F631B86
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE5D631B8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiKUIej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
+        id S230039AbiKUIgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:36:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiKUIeg (ORCPT
+        with ESMTP id S229924AbiKUIgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:34:36 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D551EEF1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:34:32 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id l12so17714211lfp.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:34:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hYejw+k9KxJfa6Qv7Zm4NVNSTlImBJzqWTxtup6xt6k=;
-        b=p5+b03NQcjEAjwwFxdx+wjvB1qxgceoMDJxwlT1qbwUVTh1DAnsh6ltatdwsE8lkuE
-         HUFh6MivlQk6ozYkX8kWjdDjmjhsespIFrpd51k+XFmwhcOmYEbHYTFcvf/4TIMrHRvr
-         sk4zoVRbiC/75afBZ3lEgQ4w5pnVvb6YZJfqwMHx38QL5Fyk+HPeFDK6jIB62Sz5zTXS
-         JlgMsARKxLJEcmjMwYnry9woLUenX5jCyM1Oa0HktGcN+uhFS9mI+XjwG+DHzkhKIEwt
-         q3VXA10Dax1RstLIYJ1gj+f7JSNjaGCEjsugooUWVUZZduCiEWUj2M+q26g5B6EsX52+
-         vPyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hYejw+k9KxJfa6Qv7Zm4NVNSTlImBJzqWTxtup6xt6k=;
-        b=5cqqYl7zTzfviXYvG0mQ/Va/dNFwEUnFlNBwz7Y50t/3kCMkqylhtt+5AGslOZoil3
-         ODX1vt3P0a8RfIikEef2wdzJRUUEEY7qlMRBoj/O5ZrbaU2UAerRBPVVIMC01b7wissC
-         lMACoGMjc7sF9pOhl8BHxSGFyi6e8kEuUeG+hG3K5c2cJnhLOHV8UZIx0SAgUHCPKun3
-         0ohbNXJxaZ2UeNT+dqiUaav6qKf217EROvO5A9okD1+QfX3MdYelSJv5ZSsOJAXuFlaN
-         5jWjusd1l4ls+vr8ez+gFvAX7ZMnQc/Okn2HKWlJ0Fg8vTWY4TAgkBPyfWyRYxphZ73F
-         WArA==
-X-Gm-Message-State: ANoB5pmANPz8pN1OsXa7ojnTJ2PuLLTfajvk4sVM+zjmHy6KpnzUXdKZ
-        gHDH0wV8bGDTSe3sydDlclOzdg==
-X-Google-Smtp-Source: AA0mqf4eL/MpEQEqX1r7hzYLk3UUuFB3FNAC2RmceF35Js7nzf6LVPqC6nxPBP/Fw53xMviFWSZeOA==
-X-Received: by 2002:a19:4f14:0:b0:4b4:b20c:4b7 with SMTP id d20-20020a194f14000000b004b4b20c04b7mr124281lfb.201.1669019670875;
-        Mon, 21 Nov 2022 00:34:30 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id i25-20020a2ea239000000b002790fbb5f89sm1387438ljm.44.2022.11.21.00.34.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 00:34:30 -0800 (PST)
-Message-ID: <1353266c-2d95-6c68-5288-c405231a37f1@linaro.org>
-Date:   Mon, 21 Nov 2022 09:34:29 +0100
+        Mon, 21 Nov 2022 03:36:11 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F861EEF1;
+        Mon, 21 Nov 2022 00:36:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669019770; x=1700555770;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9XibHzlDtLMa4a3/w5lFbILntK28FGM/V+jykAvk+t8=;
+  b=Jj9CIdgSNoD3Hk1hY/ri/vBUSCLisWZxHHDtHifEzqhU0nczid0zFtq0
+   t1XQceb+qrFENep1nxZWmvhhJ5LV+Iy9RKWYUdiotbAijO2eSMCmb4pS4
+   c/hPAMgGd09fdeQVm32V/uQNz+h6ch/4kf0Vk6g86AmwnIjMOy1GxdRp+
+   beGDwGSlWrlAeFkC4vIpQY+ECXWlnrSSIPWXv+4pc5v60dHmZPhLzklcU
+   aSoPZki7wXwGzizjydLs5THq9ziV+C8CavTm3zmPn71Sf/paDxxcyTzny
+   /nDAwu0knsp46HMmyJKXXFyEOGMHvs0TrxSAAq1I1UGaEhAch9woWDoF3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="293894120"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="293894120"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 00:35:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="746815036"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="746815036"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Nov 2022 00:35:56 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ox2HS-00FBNo-2S;
+        Mon, 21 Nov 2022 10:35:54 +0200
+Date:   Mon, 21 Nov 2022 10:35:54 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ferry Toth <ftoth@exalondelft.nl>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
+ timeout
+Message-ID: <Y3s4ao9RrjyOjFfC@smile.fi.intel.com>
+References: <20221120153704.9090-1-ftoth@exalondelft.nl>
+ <20221120153704.9090-2-ftoth@exalondelft.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc8280xp: Add soundcard support
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        agross@kernel.org, andersson@kernel.org
-Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221119164425.86014-1-srinivas.kandagatla@linaro.org>
- <20221119164425.86014-4-srinivas.kandagatla@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221119164425.86014-4-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221120153704.9090-2-ftoth@exalondelft.nl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/11/2022 17:44, Srinivas Kandagatla wrote:
-> Add support for SoundCard on X13s. This patch adds support for Headset
-> Playback, record and 2 DMICs on the Panel along with the regulators
-> required for powering up the LPASS codecs.
+Sorry, Ferry, but a few style issues in the commit message.
+
+On Sun, Nov 20, 2022 at 04:37:03PM +0100, Ferry Toth wrote:
+> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+
+It's fine to wrap this long line when it's in the commit message main body.
+
+> Dual Role support on Intel Merrifield platform broke due to rearranging
+> the call to dwc3_get_extcon().
 > 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> It appears to be caused by ulpi_read_id() on the first test write failing
+> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+> DT when the test write fails and returns 0 in that case, even if DT does not
+> provide the phy. As a result usb probe completes without phy.
+> 
+> On Intel Merrifield the issue is reproducible but difficult to find the
+> root cause. Using an ordinary kernel and rootfs with buildroot ulpi_read_id()
+> succeeds. As soon as adding ftrace / bootconfig to find out why,
+> ulpi_read_id() fails and we can't analyze the flow. Using another rootfs
+> ulpi_read_id() fails even without adding ftrace. Appearantly the issue is
+> some kind of timing / race, but merely retrying ulpi_read_id() does not
+> resolve the issue.
+
+> This patch makes ulpi_read_id() return -ETIMEDOUT to its user if the first
+
+s/This patch makes/Make/  (as per Submitting Patches: use imperative form)
+
+> test write fails. The user should then handle it appropriately. A follow up
+> patch will make dwc3_core_init() set -EPROBE_DEFER in this case and bail out.
+> 
+> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+> Cc: stable@vger.kernel.org
+
+> 
+
+This line breaks the tag block, meaning that Fixes won't be recognized as a tag
+by some scripts.
+
+> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
 > ---
-
-Thank you for your patch. There is something to discuss/improve.
-
-> +	right_spkr: wsa8830-right@0,2{
-> +		compatible = "sdw10217020200";
-> +		reg = <0 2>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&spkr_2_sd_n_default>;
-> +		powerdown-gpios = <&tlmm 179 GPIO_ACTIVE_LOW>;
-> +		#thermal-sensor-cells = <0>;
-> +		sound-name-prefix = "SpkrRight";
-> +		#sound-dai-cells = <0>;
-> +		vdd-supply = <&vreg_s10b>;
-> +	};
-> +};
-> +
-> +
-
-Only one blank line.
-
-> +&swr1 {
-> +	status = "okay";
-> +
-> +	wcd_rx: wcd9380-rx@0,4 {
-> +		compatible = "sdw20217010d00";
-> +		reg = <0 4>;
-> +		qcom,rx-port-mapping = <1 2 3 4 5 6>;
-
-No improvements: Still looks too long.
-
-> +
-
-Drop empty line.
-> +	};
-> +};
-> +
-> +&swr2 {
-> +	status = "okay";
-> +
-> +	wcd_tx: wcd9380-tx@0,3 {
-> +		compatible = "sdw20217010d00";
-> +		reg = <0 3>;
-> +		qcom,tx-port-mapping = <1 1 2 3>;
-> +	};
-> +};
-> +
-> +&vamacro {
-> +	pinctrl-0 = <&dmic01_default>, <&dmic02_default>;
-> +	pinctrl-names = "default";
-> +	vdd-micb-supply = <&vreg_s10b>;
-> +	qcom,dmic-sample-rate = <600000>;
-> +};
-> +
->  &tlmm {
->  	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+>  drivers/usb/common/ulpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> index d7c8461976ce..60e8174686a1 100644
+> --- a/drivers/usb/common/ulpi.c
+> +++ b/drivers/usb/common/ulpi.c
+> @@ -207,7 +207,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
+>  	/* Test the interface */
+>  	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+>  	if (ret < 0)
+> -		goto err;
+> +		return ret;
 >  
-> @@ -369,6 +558,14 @@ reset {
->  		};
->  	};
->  
-> +	wcd_default: wcd-default-state {
-> +		reset-pins {
-> +			pins = "gpio106";
-> +			function = "gpio";
-> +			bias-disable;
-> +		};
-> +	};
-> +
->  	qup0_i2c4_default: qup0-i2c4-default-state {
->  		pins = "gpio171", "gpio172";
->  		function = "qup4";
-> @@ -383,6 +580,26 @@ qup2_i2c5_default: qup2-i2c5-default-state {
->  		drive-strength = <16>;
->  	};
->  
-> +	spkr_1_sd_n_default: spkr-1-sd-n-default-state {
-> +		perst-n-pins {
-> +			pins = "gpio178";
-> +			function = "gpio";
-> +			drive-strength = <16>;
-> +			bias-disable;
-> +			output-high;
-> +		};
-> +	};
-> +
-> +	spkr_2_sd_n_default: spkr-2-sd-n-default-state {
-> +		perst-n-pins {
-> +			pins = "gpio179";
-> +			function = "gpio";
-> +			drive-strength = <16>;
-> +			bias-disable;
-> +			output-high;
-> +		};
-> +	};
-> +
->  	tpad_default: tpad-default-state {
->  		int-n {
+>  	ret = ulpi_read(ulpi, ULPI_SCRATCH);
+>  	if (ret < 0)
+> -- 
+> 2.37.2
+> 
 
-This won't apply cleanly. You need to base your patches on recent trees.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Best regards,
-Krzysztof
 
