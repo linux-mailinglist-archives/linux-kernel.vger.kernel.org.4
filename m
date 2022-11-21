@@ -2,133 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3364F631ECB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3883B631ECF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiKUKwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S229699AbiKUKxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiKUKwr (ORCPT
+        with ESMTP id S229505AbiKUKxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:52:47 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52A9BC22
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:52:43 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so8711662wmi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:52:43 -0800 (PST)
+        Mon, 21 Nov 2022 05:53:31 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C45A1F2FC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:53:30 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id i10so27549305ejg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:53:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4DwFFWAbB39pdzGdbl/1ro70K08wbqiEN02fL5my0ng=;
-        b=nSAKPp9iT1tfGIkSlXmfAmD6MPcXsYYSG4wspAw3llD1/Df8G+BuHDkMTvqHL+Ou7k
-         BdMNJojv0ZkWbXFCsFg7d7OA4/6iPdyYm4WKe5lNtl4U7m6vEQm08L9Ms3ZmKPXqtpdx
-         I64b3oIqfZid2IGanRVuzxL3U/FfDQTek317Vcp9WljqMqy5DUAl7gdwh3PLfjHEUhkN
-         tJFIn9n/MGoRjCqHLTHIp/zAMjLbAOxMeYKQVxiOlibovRknkPM+XVoJMfdjpzzAXwlc
-         ud5Srn6WG1kuGnTHesZ1sV07MFHQ2uF1hXZbLaVPxmIq1lsmnqkr33HLgfephdLSU0j0
-         Iz1Q==
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oVR9zxWFI/yiTfyZ4zmDueQDkqj32nHPs9Uh0PG4vPE=;
+        b=KOwk43K2prxMCTWU5zSDoD7OjmzMBpZe59DoyncDt6F+Tc+Qtsvgf+G5R0i17IT+Nj
+         3gvfVY0T0UI3OCVP31Cq8Ar0xgsEjJD4bJn5jEFhuvh0dEd7Z0nFgvwKuA6na0brxsD4
+         YoLyr+iMi5GVBqKJsZYB1KlyEU41+29Va65MF/LNUJq3dEJA2A0PSFCdO1UnYKiKH8TK
+         A1o6q7JMNuSS3kDcOWAHOUt3HLy6qmD3lSiknCa1sZtShQ0PMymnlJxVg1/gfvzGsVIs
+         kCydES3mx6bQxzdRK2QcZgTLQLu68suH5cg2TxcFPmrtS7oFhHTx4ZIoeyyF9xHVJA7E
+         1yMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4DwFFWAbB39pdzGdbl/1ro70K08wbqiEN02fL5my0ng=;
-        b=xtBF2aWwUNuBsRbSLg0q96waUC+NthPQHdCOW/asJ61GtAcG6KSRN4gm2ZCZb32n0b
-         DqpaUc14Mq2sJBtFInNT0vf/k/IdPGV2+YMLX+2jcwiThWNLD4wiedRD7h0+IzL9LMU9
-         /szUuG5Aw6R7+t3Ow92hHQCX6Klv9KBrox7K4ibdM3u/+skIQ3Q+9GGpTS94DzIHxAG2
-         RdB3m5Iy3hR46nsH3/aDvj49DqoqvxbOJb2tvJbl9X3VGk5u0tEhR1yL6AUVmwinCZSd
-         +zkaWtavQJ2REb9Aum3N4eUdP96ycU0WJGcvLwLUTD86AixJlrA193zKZ3Gb2o3AnMJ3
-         lF+w==
-X-Gm-Message-State: ANoB5pmIC34518wfM6EmuD3ubtY4WR/mtxF3Fv8J8Hak2SEPFzf71szZ
-        IUIop3bI8F9DGJIMmh/ssqIg42qJZDf+cw==
-X-Google-Smtp-Source: AA0mqf5QSJ7OtroHLmnJdUzSWQwzpQbp01lD9Fe8uHseFbRLgx9H+XiLEeh83Dx4wJW6i6KniCCkYw==
-X-Received: by 2002:a1c:7409:0:b0:3cf:713a:c947 with SMTP id p9-20020a1c7409000000b003cf713ac947mr4678415wmc.40.1669027962284;
-        Mon, 21 Nov 2022 02:52:42 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id k33-20020a05600c1ca100b003b3365b38f9sm14550303wms.10.2022.11.21.02.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 02:52:41 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v2-0-a3df1e09b0af@linaro.org>
-References: <20221031-b4-odroid-go-ultra-initial-v2-0-a3df1e09b0af@linaro.org>
-Subject: Re: [PATCH v2 0/2] arm64: amlogic: add initial Odroid Go Ultra DTS
-Message-Id: <166902796132.3866590.17335821749451892538.b4-ty@linaro.org>
-Date:   Mon, 21 Nov 2022 11:52:41 +0100
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oVR9zxWFI/yiTfyZ4zmDueQDkqj32nHPs9Uh0PG4vPE=;
+        b=aHSkKgBbUfQH1Jqvn7u0IVhK7i1+0DWfwAbIVSff9BF1PLCWAS6G3M3BZcJxMq0FJV
+         2Vs3qycXkjtwuYlL7pUiYHadE51DSiF3SXLmHKYeNmUvw6IyTKYoiK/87iklg9p2KbSf
+         GwqV0sIjWUhP+MZnru0Ls61tv3+AUmlqgIpTObICo2hCQXR1BgMMS0Jz+GmKFWAV8jXS
+         9gdezftE95gbDjbn4eytq4StH9/rNG/6o5pDtfjZ7xFfmHHh7/s7kfsr9TGQCaV/ekA4
+         Uaqv8JXPaMpjQNDJX//ZHbv/8ACRmokO5jg8BTlKWF9IAy18UK9hKLbA0Ez71pNvXuSJ
+         PdiA==
+X-Gm-Message-State: ANoB5pkUExkNi2FAKDbmuLQqIWkRVp1jEZpmlk3R3e7VO5Siw59Jxu0w
+        7wWraOoS7SQ+8+a8qVCrkzSbvQ==
+X-Google-Smtp-Source: AA0mqf70BnFvfvb0IuSIgQsK2SzIyUkBrZLyuZoXrSWjPOnvQcHmbXrvzYpC3wtlID8hDdv5F+6kMg==
+X-Received: by 2002:a17:906:81c4:b0:78d:9858:e538 with SMTP id e4-20020a17090681c400b0078d9858e538mr15153542ejx.502.1669028008557;
+        Mon, 21 Nov 2022 02:53:28 -0800 (PST)
+Received: from [192.168.0.161] (79-100-144-200.ip.btc-net.bg. [79.100.144.200])
+        by smtp.gmail.com with ESMTPSA id i17-20020aa7c9d1000000b004638ba0ea96sm4962888edt.97.2022.11.21.02.53.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 02:53:25 -0800 (PST)
+Message-ID: <a153b239-26f4-9813-beb8-bf74d19808ef@blackwall.org>
+Date:   Mon, 21 Nov 2022 12:53:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 1/5] kobject: make kobject_get_ownership() take a constant
+ kobject *
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org
+References: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, 18 Nov 2022 16:50:04 +0100, Neil Armstrong wrote:
-> This adds initial support for the Hardkernel Odroid Go Ultra.
+On 21/11/2022 11:46, Greg Kroah-Hartman wrote:
+> The call, kobject_get_ownership(), does not modify the kobject passed
+> into it, so make it const.  This propagates down into the kobj_type
+> function callbacks so make the kobject passed into them also const,
+> ensuring that nothing in the kobject is being changed here.
 > 
-> The Odroid Go Ultra is a portable gaming device with the following
-> characteristics:
-> - Amlogic S922X SoC
-> - RK817 & RK818 PMICs
-> - 2GiB LPDDR4
-> - On board 16GiB eMMC
-> - Micro SD Card slot
-> - 5inch 854×480 MIPI-DSI TFT LCD
-> - Earphone stereo jack, 0.5Watt 8Ω Mono speaker
-> - Li-Polymer 3.7V/4000mAh Battery
-> - USB-A 2.0 Host Connector
-> - x16 GPIO Input Buttons
-> - 2x ADC Analog Joysticks
-> - USB-C Port for USB2 Device and Charging
+> This helps make it more obvious what calls and callbacks do, and do not,
+> modify structures passed to them.
 > 
-> [...]
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+> Cc: Anna Schumaker <anna@kernel.org>
+> Cc: Roopa Prabhu <roopa@nvidia.com>
+> Cc: Nikolay Aleksandrov <razor@blackwall.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Chuck Lever <chuck.lever@oracle.com>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: linux-nfs@vger.kernel.org
+> Cc: bridge@lists.linux-foundation.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/base/class.c    | 2 +-
+>  drivers/base/core.c     | 8 ++++----
+>  fs/nfs/sysfs.c          | 4 ++--
+>  include/linux/kobject.h | 8 ++++----
+>  lib/kobject.c           | 4 ++--
+>  net/bridge/br_if.c      | 2 +-
+>  net/core/net-sysfs.c    | 8 ++++----
+>  net/sunrpc/sysfs.c      | 8 ++++----
+>  8 files changed, 22 insertions(+), 22 deletions(-)
+> 
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.2/arm64-dt)
+For the bridge:
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
 
-[1/2] dt-bindings: amlogic: document Odroid Go Ultra compatible
-      https://git.kernel.org/amlogic/c/66af218f8669a262b1bf89ba80f2acf1a3be429c
-[2/2] arm64: dts: amlogic: add initial Odroid Go Ultra DTS
-      https://git.kernel.org/amlogic/c/62e73f000696cc41cfd237a1ad90b001ad0f76c6
 
-These changes has been applied on the intermediate git tree [1].
-
-The v6.2/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
