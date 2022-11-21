@@ -2,65 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E4463255A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC510632561
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiKUOQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S229977AbiKUORO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:17:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbiKUOP0 (ORCPT
+        with ESMTP id S229740AbiKUOQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:15:26 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7348CE44
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:14:18 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALCr4Bx002700;
-        Mon, 21 Nov 2022 08:14:09 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=1PeK3bms+IaPxcTW0cokINfe1642tn7T3FwGji4GBoA=;
- b=DOxSu/ImhjUT7GBsfIKcw4ZyPmFnObyOJrLWPJx8huTjgT24Dl3yv8+wAInG8YeZ0HDG
- wKXnkBnX13u7MliSf1Ry/yc2kA/aezf9XFM/Es2le4cag+BqZPR4IiemaWCCmFMUf1JV
- QMKPsgMO3/hfzGcZ+vlKttznU/vE0AVkQxFMe0bsPz6veBXal1GCzutLrdfe0xk06Xzy
- HMEKvM51KoJPhRU++S8iL6mmMALBghgu7cdHDVwCBYIiy2XYpjCTXedu0TLgmSIHLiXv
- t4LwgrGdLQVu5pRnDGNoY2NevrAf6Kc+yLgfixwl9EdnLlzkU/e/MCQu1lnGVci7BbsW MA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3kxvet283r-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 08:14:09 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 21 Nov
- 2022 08:14:06 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.20 via Frontend Transport; Mon, 21 Nov 2022 08:14:06 -0600
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9DF85468;
-        Mon, 21 Nov 2022 14:14:06 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <vkoul@kernel.org>
-CC:     <yung-chuan.liao@linux.intel.com>,
-        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: [PATCH v3 4/4] soundwire: stream: Move remaining register accesses over to no_pm
-Date:   Mon, 21 Nov 2022 14:14:06 +0000
-Message-ID: <20221121141406.3840561-5-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221121141406.3840561-1-ckeepax@opensource.cirrus.com>
-References: <20221121141406.3840561-1-ckeepax@opensource.cirrus.com>
+        Mon, 21 Nov 2022 09:16:54 -0500
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D543B3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:16:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=RzwUXYL+lOes2ybdcf0NZZVm/N58p9fAtL62cIEmTQ8=; b=LrQQfp2vf+LInWD7Pq23o3xJGr
+        DUEtxldzGHAomYP2XolcLqhKbKSnWpTJJlP9m28pm3MlR1hX1kM7yhn2xAFZSea4MP7FJ8UqUop5E
+        w5OZHh2vOuH/2PE8QwURiSh1gVZWysiN3bm8ta6I/Xnv7sEQZsRrOTCdA/jDu1C/Wkq6rUAiy/6Ol
+        OAvSAxIj0pEetsQ92u1JjNdfWAZ+fkLCrcUUfcLk6VUq9J2jXoVUQa01jrziXw/Z+r8ylSOR8JMHS
+        CzskN+efWyyjFT9Nsd/LaN9zKzvGGe4SRW1Hdj5sOgp7oHcoTkI2IJuhxksOuHZIh/E2KfyXKdxGJ
+        0wJsNNE1VComS4uJlfk2VaZQlZN7Gsjl9T467w5lE7caRW5Qe8qieoZ+B1hWwNnhGndlDXE+jMICf
+        PNbgZM8HRBnL7MaTgOdAqeS5HzoXvZ9N4SaXIrMuLTD0fl9c0FWGQJ9Vf/As64zgJvBQE3n8d4VYM
+        c3158o6e92/M2V89Xkhi5tNUt7W/GFNc/qGWWu4WMTHtuoyFkq+cXgjCZSIKkjtA2g5Cm6xRfEQQA
+        E473z7aYo/k/mI/R624PSVseVf6KnYhNm05hDUARAPFBghvGjyVVJDWt9zAriVM0OAZgzYvc5K9mP
+        N7Q8W+dbcZ9fhupbI6AEyj7UI+PNLlILKPNh5HjB0=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Stefano Stabellini <sstabellini@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     GUO Zihua <guozihua@huawei.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] 9p/xen: check logical size for buffer size
+Date:   Mon, 21 Nov 2022 15:16:10 +0100
+Message-ID: <8926859.ZlztnY0qrB@silver>
+In-Reply-To: <Y3hADWgV9JeajmfF@codewreck.org>
+References: <20221118135542.63400-1-asmadeus@codewreck.org>
+ <alpine.DEB.2.22.394.2211181713420.1049131@ubuntu-linux-20-04-desktop>
+ <Y3hADWgV9JeajmfF@codewreck.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Yj30PiP-VfJoLzeufnmghbBgSdGbfJl4
-X-Proofpoint-GUID: Yj30PiP-VfJoLzeufnmghbBgSdGbfJl4
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,172 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to play with the runtime reference everytime a register
-is accessed. All the remaining "pm" style register accesses trace back
-to 4 functions:
+On Saturday, November 19, 2022 3:31:41 AM CET Dominique Martinet wrote:
+[...]
+> > I made this change and tried the two patches together. Unfortunately I
+> > get the following error as soon as I try to write a file:
+> > 
+> > /bin/sh: can't create /mnt/file: Input/output error
+> > 
+> > 
+> > Next I reverted the second patch and only kept this patch. With that, it
+> > worked as usual. It looks like the second patch is the problem. I have
+> > not investigated further.
+> 
+> Thanks -- it's now obvious I shouldn't send patches without testing
+> before bedtime...
+> I could reproduce easily with virtio as well, this one was silly as well
+> (>= instead of >). . . With another problem when zc requests get
+> involved, as we don't actually allocate more than 4k for the rpc itself.
+> 
+> If I adjust it to also check with the zc 'inlen' as follow it appears to
+> work:
+> https://github.com/martinetd/linux/commit/162015a0dac40eccc9e8311a5eb031596ad35e82
+> But that inlen isn't actually precise, and trans_virtio (the only
+> transport implementing zc rpc) actually takes some liberty with the
+> actual sg size to better fit hardwre, so that doesn't really make
+> sense either and we probably should just trust trans_virtio at this
+> point?
+> 
+> This isn't obvious, so I'll just drop this patch for now.
+> Checking witih msize isn't any good but it can wait till we sort it out
+> as transports now all already check this one way or another; I'd like to
+> get the actual fixes out first.
+> 
+> (Christian, if you have time to look at it and take over I'd appreciate
+> it, but there's no hurry.)
 
-sdw_prepare_stream
-sdw_deprepare_stream
-sdw_enable_stream
-sdw_disable_stream
+OK, I'll look at this.
 
-Any sensible implementation will need to hold a runtime reference
-across all those functions, it makes no sense to be allowing the
-device/bus to suspend whilst streams are being prepared/enabled. And
-certainly in the case of the all existing users, they all call these
-functions from hw_params/prepare/trigger/hw_free callbacks in ALSA,
-which will have already runtime resumed all the audio devices
-associated during the open callback.
+Best regards,
+Christian Schoenebeck
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
-
-No changes since v2.
-
- drivers/soundwire/bus.c    |  2 +-
- drivers/soundwire/stream.c | 30 +++++++++++++++---------------
- 2 files changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index ef4878258afad..d87a188fcce1e 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -1214,7 +1214,7 @@ int sdw_configure_dpn_intr(struct sdw_slave *slave,
- 		val &= ~SDW_DPN_INT_PORT_READY;
- 	}
- 
--	ret = sdw_update(slave, addr, (mask | SDW_DPN_INT_PORT_READY), val);
-+	ret = sdw_update_no_pm(slave, addr, (mask | SDW_DPN_INT_PORT_READY), val);
- 	if (ret < 0)
- 		dev_err(&slave->dev,
- 			"SDW_DPN_INTMASK write failed:%d\n", val);
-diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
-index bd502368339e5..df3b36670df4c 100644
---- a/drivers/soundwire/stream.c
-+++ b/drivers/soundwire/stream.c
-@@ -81,14 +81,14 @@ static int _sdw_program_slave_port_params(struct sdw_bus *bus,
- 	}
- 
- 	/* Program DPN_OffsetCtrl2 registers */
--	ret = sdw_write(slave, addr1, t_params->offset2);
-+	ret = sdw_write_no_pm(slave, addr1, t_params->offset2);
- 	if (ret < 0) {
- 		dev_err(bus->dev, "DPN_OffsetCtrl2 register write failed\n");
- 		return ret;
- 	}
- 
- 	/* Program DPN_BlockCtrl3 register */
--	ret = sdw_write(slave, addr2, t_params->blk_pkg_mode);
-+	ret = sdw_write_no_pm(slave, addr2, t_params->blk_pkg_mode);
- 	if (ret < 0) {
- 		dev_err(bus->dev, "DPN_BlockCtrl3 register write failed\n");
- 		return ret;
-@@ -105,7 +105,7 @@ static int _sdw_program_slave_port_params(struct sdw_bus *bus,
- 	/* Program DPN_SampleCtrl2 register */
- 	wbuf = FIELD_GET(SDW_DPN_SAMPLECTRL_HIGH, t_params->sample_interval - 1);
- 
--	ret = sdw_write(slave, addr3, wbuf);
-+	ret = sdw_write_no_pm(slave, addr3, wbuf);
- 	if (ret < 0) {
- 		dev_err(bus->dev, "DPN_SampleCtrl2 register write failed\n");
- 		return ret;
-@@ -115,7 +115,7 @@ static int _sdw_program_slave_port_params(struct sdw_bus *bus,
- 	wbuf = FIELD_PREP(SDW_DPN_HCTRL_HSTART, t_params->hstart);
- 	wbuf |= FIELD_PREP(SDW_DPN_HCTRL_HSTOP, t_params->hstop);
- 
--	ret = sdw_write(slave, addr4, wbuf);
-+	ret = sdw_write_no_pm(slave, addr4, wbuf);
- 	if (ret < 0)
- 		dev_err(bus->dev, "DPN_HCtrl register write failed\n");
- 
-@@ -163,7 +163,7 @@ static int sdw_program_slave_port_params(struct sdw_bus *bus,
- 	wbuf = FIELD_PREP(SDW_DPN_PORTCTRL_DATAMODE, p_params->data_mode);
- 	wbuf |= FIELD_PREP(SDW_DPN_PORTCTRL_FLOWMODE, p_params->flow_mode);
- 
--	ret = sdw_update(s_rt->slave, addr1, 0xF, wbuf);
-+	ret = sdw_update_no_pm(s_rt->slave, addr1, 0xF, wbuf);
- 	if (ret < 0) {
- 		dev_err(&s_rt->slave->dev,
- 			"DPN_PortCtrl register write failed for port %d\n",
-@@ -173,7 +173,7 @@ static int sdw_program_slave_port_params(struct sdw_bus *bus,
- 
- 	if (!dpn_prop->read_only_wordlength) {
- 		/* Program DPN_BlockCtrl1 register */
--		ret = sdw_write(s_rt->slave, addr2, (p_params->bps - 1));
-+		ret = sdw_write_no_pm(s_rt->slave, addr2, (p_params->bps - 1));
- 		if (ret < 0) {
- 			dev_err(&s_rt->slave->dev,
- 				"DPN_BlockCtrl1 register write failed for port %d\n",
-@@ -184,7 +184,7 @@ static int sdw_program_slave_port_params(struct sdw_bus *bus,
- 
- 	/* Program DPN_SampleCtrl1 register */
- 	wbuf = (t_params->sample_interval - 1) & SDW_DPN_SAMPLECTRL_LOW;
--	ret = sdw_write(s_rt->slave, addr3, wbuf);
-+	ret = sdw_write_no_pm(s_rt->slave, addr3, wbuf);
- 	if (ret < 0) {
- 		dev_err(&s_rt->slave->dev,
- 			"DPN_SampleCtrl1 register write failed for port %d\n",
-@@ -193,7 +193,7 @@ static int sdw_program_slave_port_params(struct sdw_bus *bus,
- 	}
- 
- 	/* Program DPN_OffsetCtrl1 registers */
--	ret = sdw_write(s_rt->slave, addr4, t_params->offset1);
-+	ret = sdw_write_no_pm(s_rt->slave, addr4, t_params->offset1);
- 	if (ret < 0) {
- 		dev_err(&s_rt->slave->dev,
- 			"DPN_OffsetCtrl1 register write failed for port %d\n",
-@@ -203,7 +203,7 @@ static int sdw_program_slave_port_params(struct sdw_bus *bus,
- 
- 	/* Program DPN_BlockCtrl2 register*/
- 	if (t_params->blk_grp_ctrl_valid) {
--		ret = sdw_write(s_rt->slave, addr5, t_params->blk_grp_ctrl);
-+		ret = sdw_write_no_pm(s_rt->slave, addr5, t_params->blk_grp_ctrl);
- 		if (ret < 0) {
- 			dev_err(&s_rt->slave->dev,
- 				"DPN_BlockCtrl2 reg write failed for port %d\n",
-@@ -214,7 +214,7 @@ static int sdw_program_slave_port_params(struct sdw_bus *bus,
- 
- 	/* program DPN_LaneCtrl register */
- 	if (slave_prop->lane_control_support) {
--		ret = sdw_write(s_rt->slave, addr6, t_params->lane_ctrl);
-+		ret = sdw_write_no_pm(s_rt->slave, addr6, t_params->lane_ctrl);
- 		if (ret < 0) {
- 			dev_err(&s_rt->slave->dev,
- 				"DPN_LaneCtrl register write failed for port %d\n",
-@@ -319,9 +319,9 @@ static int sdw_enable_disable_slave_ports(struct sdw_bus *bus,
- 	 * it is safe to reset this register
- 	 */
- 	if (en)
--		ret = sdw_write(s_rt->slave, addr, p_rt->ch_mask);
-+		ret = sdw_write_no_pm(s_rt->slave, addr, p_rt->ch_mask);
- 	else
--		ret = sdw_write(s_rt->slave, addr, 0x0);
-+		ret = sdw_write_no_pm(s_rt->slave, addr, 0x0);
- 
- 	if (ret < 0)
- 		dev_err(&s_rt->slave->dev,
-@@ -476,9 +476,9 @@ static int sdw_prep_deprep_slave_ports(struct sdw_bus *bus,
- 		addr = SDW_DPN_PREPARECTRL(p_rt->num);
- 
- 		if (prep)
--			ret = sdw_write(s_rt->slave, addr, p_rt->ch_mask);
-+			ret = sdw_write_no_pm(s_rt->slave, addr, p_rt->ch_mask);
- 		else
--			ret = sdw_write(s_rt->slave, addr, 0x0);
-+			ret = sdw_write_no_pm(s_rt->slave, addr, 0x0);
- 
- 		if (ret < 0) {
- 			dev_err(&s_rt->slave->dev,
-@@ -491,7 +491,7 @@ static int sdw_prep_deprep_slave_ports(struct sdw_bus *bus,
- 		wait_for_completion_timeout(port_ready,
- 			msecs_to_jiffies(dpn_prop->ch_prep_timeout));
- 
--		val = sdw_read(s_rt->slave, SDW_DPN_PREPARESTATUS(p_rt->num));
-+		val = sdw_read_no_pm(s_rt->slave, SDW_DPN_PREPARESTATUS(p_rt->num));
- 		if ((val < 0) || (val & p_rt->ch_mask)) {
- 			ret = (val < 0) ? val : -ETIMEDOUT;
- 			dev_err(&s_rt->slave->dev,
--- 
-2.30.2
 
