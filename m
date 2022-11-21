@@ -2,205 +2,633 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE976318C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AA3631822
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 02:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiKUDCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
+        id S229995AbiKUBSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 20:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKUDCI (ORCPT
+        with ESMTP id S229951AbiKUBR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:02:08 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB59D31DFE
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 19:02:04 -0800 (PST)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221121030201epoutp019c74877c89d38be399dd2ff9cac91ee9~pemdRcCbp0482804828epoutp01l
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:02:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221121030201epoutp019c74877c89d38be399dd2ff9cac91ee9~pemdRcCbp0482804828epoutp01l
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1668999721;
-        bh=vjbfUFyJK93wID0lNnghGDCYcHsDlchldmX4KHuR58A=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=E8ClenqF1etN5uBw1yC3g1UNDn5TfwI7kaI8VAkTY9qd7iA47Z3/vCYIJxbSkakw3
-         bENMtaxM6B0aN6S97b9Xm1oOPahZZkBbaG0ZJZ+L/uzCRlEZgkJUhYcdFMZGC5Uv1k
-         DFlA1MVinX6D8s/uNroN5jNXSGfy0rCcIDOO5CE8=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20221121030200epcas5p3fb56e78c633640ee7a6e155b63d95a73~pemcl68AI0188501885epcas5p3j;
-        Mon, 21 Nov 2022 03:02:00 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4NFscQ556fz4x9Pv; Mon, 21 Nov
-        2022 03:01:58 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        14.1C.39477.62AEA736; Mon, 21 Nov 2022 12:01:58 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f~pX2FSUNgc0474704747epcas5p3X;
-        Sun, 20 Nov 2022 18:46:48 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221120184648epsmtrp1b7b1c94339974b98eae8144b4987909d~pX2FOtdYE0246702467epsmtrp1K;
-        Sun, 20 Nov 2022 18:46:48 +0000 (GMT)
-X-AuditID: b6c32a4a-007ff70000019a35-5b-637aea26ebc8
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F1.E5.14392.8167A736; Mon, 21 Nov 2022 03:46:48 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221120184646epsmtip2a39b4e4feb3d410449cd7cf54fb2a1fe~pX2DNRgsC1606116061epsmtip21;
-        Sun, 20 Nov 2022 18:46:46 +0000 (GMT)
-From:   Sathyakam M <sathya@samsung.com>
-To:     sathya@samsung.com
-Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pankaj Kumar Dubey <pankaj.dubey@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Aswani Reddy <aswani.reddy@samsung.com>,
-        Andi Shyti <andi@etezian.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ming Qian <ming.qian@nxp.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Will Deacon <will@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/5] media: add FSD MIPI-CSI2 Rx controller driver
-Date:   Mon, 21 Nov 2022 00:22:16 +0530
-Message-Id: <cover.1668963790.git.sathya@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAJsWRmVeSWpSXmKPExsWy7bCmlq7aq6pkg/eTVSwezNvGZrH4x3Mm
-        i0Obt7JbXJx5l8Xi7vMWRoujrf+ZLfpePGS22PT4GqvF5V1z2CwaH69istg1fQe7xaKtX9gt
-        vhx5zWjxYou4RcsdUwd+j+tLPjF7/L/xiNlj06pONo871/aweWxeUu+x8d0OJo++LasYPTa9
-        8vD4vEnO49TXz+wBXFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2
-        Si4+AbpumTlAPygplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL89L1
-        8lJLrAwNDIxMgQoTsjP+7SsvmCJfcfTDAuYGxn2SXYycHBICJhI/zt9g62Lk4hAS2M0ocbPz
-        BjOE84lRYsbLw6wQzjdGiQkvzjHBtLxbdAaqZS+jxN22jYwQTiuTxK1rE1hBqtgE1CTWd59j
-        BrFFBMQkrmz6BTaXWWADi8T95Q/BRgkLOElMnL4crIhFQFXi+OIFYHFeAVOJz/M/MUKsk5dY
-        veEAM4TdyiFxc5UnhO0icfLRbDYIW1ji1fEt7BC2lMTL/jYoO1mic/YBqJoMiWOvDrNA2PYS
-        B67MAbI5gA7SlFi/Sx8iLCsx9dQ6sBOYBfgken8/gfqYV2LHPBhbQWJB71WokWISp7svQNke
-        En9/PQFbKyQQKzH75GG2CYyysxA2LGBkXMUomVpQnJueWmxaYJSXWg6PqOT83E2M4KSp5bWD
-        8eGDD3qHGJk4GA8xSnAwK4nwihyrTBbiTUmsrEotyo8vKs1JLT7EaAoMsonMUqLJ+cC0nVcS
-        b2hiaWBiZmZmYmlsZqgkzrt4hlaykEB6YklqdmpqQWoRTB8TB6dUA1Me91fr7imKp9azJ5af
-        s02S8WVy4r0suJn11ZmfLyxEjv6e2LqazTmJ8WltHNPK/XInFRXXG0eys+VWJfVMW7/dRfLN
-        10f7S1RzVj2O0ePjXJznsFAi413+7WLL/S/uT/LU38K/NePOfvsLl3ILBf7HOdyv2PV17xMR
-        tmau1Z4aPxlWKghMSMnXn/aHc//d9Mq9TxKf/LoRUffhzC2Ta+vPfxTr2HvyTuXSsqifuWEV
-        rBZ/Y8Nvf9J64HuBK/ivv0FLe17Azy1rObqePBMVfOW565P07hcLbzWHvFT8WaTcHpT1IXnH
-        o89zn5THpjrecejg9VnBJ7sgU35d8cF70lvMZm4Mn1tfXP9r8wIfzi9KLMUZiYZazEXFiQCb
-        N7g/IwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDLMWRmVeSWpSXmKPExsWy7bCSvK5EWVWyQe8ZUYsH87axWSz+8ZzJ
-        4tDmrewWF2feZbG4+7yF0eJo639mi74XD5ktNj2+xmpxedccNovGx6uYLHZN38FusWjrF3aL
-        L0deM1q82CJu0XLH1IHf4/qST8we/288YvbYtKqTzePOtT1sHpuX1HtsfLeDyaNvyypGj02v
-        PDw+b5LzOPX1M3sAVxSXTUpqTmZZapG+XQJXxr995QVT5CuOfljA3MC4T7KLkZNDQsBE4t2i
-        M2xdjFwcQgK7GSUeTXrKDJEQk9iw8h6ULSyx8t9zdoiiZiaJb5dPsoMk2ATUJNZ3nwMrEgFq
-        uLLpFzNIEbPAHhaJ/50L2UASwgJOEhOnLwcrYhFQlTi+eAETiM0rYCrxef4nRogN8hKrNxxg
-        nsDIs4CRYRWjZGpBcW56brFhgWFearlecWJucWleul5yfu4mRnAAa2nuYNy+6oPeIUYmDsZD
-        jBIczEoivCLHKpOFeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCeWJKanZpakFoEk2Xi
-        4JRqYJoyzb5SPkzY6XKT2KVbh7+J3p0fedptYeB89b/eT1IjHxqXeDKkezzR4jTVmW31QqrX
-        W1JkzZbaqWdOfOw88UqFce/1TSw6HuvCfJZFzGnmjJ/NEjlzxTq3wwJ8Cq4nuJZybS65Hsi3
-        Z9v1Tv/2BatrmSzbtWVa2OeuuRHpffzP0iPS5llnnXYm3fGaI2kSE2z2Vz9HX6Rtn2eX5WHj
-        I95fjoQu3fQhqOWFzKF7r9asXF2X13639edF84yKTXu69roJLbu0astDUb6X7RzvVhnoe0nn
-        T5X8KdjEl+rLqFu3YdNC9YDHETo5K3vuP2q9U1S86V5jq1l7h9DfVwIsz+9a5L4PXNhbnBQz
-        d/a6vUosxRmJhlrMRcWJAPbRg4LPAgAA
-X-CMS-MailID: 20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f
-References: <CGME20221120184648epcas5p3e08766377944a2c5850f9600bf75cf8f@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 20 Nov 2022 20:17:59 -0500
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAAE193E5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 17:17:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1668993477; x=1700529477;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=d45LbNYgnOqZEhfJ/9Cje4Fr7AdmmjUeQVMJHsm7K5c=;
+  b=SBCGHUllebvVH5m6nbdjk8IrlIR/eP6Nxt+Qf1u6w6EKgT+68/mAT/z0
+   qVMYDnuMStfblG4p2AEqr6N6PUfc/gOtR7zWV4QxSMaxoc1s0HxDMeXLE
+   3n6MJdqk75jN2W2s6Ixu2Dx5/ghWxaLwlG4NMEXhbckD3ZnWMhKP2mQQl
+   Uh1F1YP7aU+vf/IVX3Qs9ErQfXGTT3zMp+hMIk+v5Zehl6FmBp8E60p3+
+   CnRBSgXoZKm0nhXpbMruBoM9SkWhdyzLqSMky7L4LyiCIqKEsCzoHaVyD
+   vEYOrjzN5HwA5IPmU4J84MaiGAKCQRIXWz3lPcHRUHpwOzZC9CU0ClRE1
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,180,1665417600"; 
+   d="scan'208";a="221899795"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Nov 2022 09:17:56 +0800
+IronPort-SDR: Pk/0vwRo7MMM789EOvjTKWNsJ2oRXjNWBptu7Z+3mGvinEtPG1p7tZv8gx4feUSxS64iPEyrSE
+ Z+PwDSC/JtJrpW0KM20IKeeQhtI5lB9WgmoUET5VADby5clmdpJTHsttp8CtwaS1C2H+w+PXt6
+ sT7vgEDAGT6LaoJxUEo0wjYaFckrifPW+hCPM5MmIJqbQq2gEWbZKSAipEeAN/1UmzwIV/byOs
+ RDNxa5YS1mkNNGqm1YoyDL/51uII5/bg0HydqgwVEhIAG6L0QwxZ+et0rj46UaQNER2nmJxTwE
+ UEI=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 16:36:46 -0800
+IronPort-SDR: F1teavwhH+TgSpAd+N1Dpcd33hdBIm0sc69WYG+yWKXT7xxdQCzduQQgtTNUmlhUkYaAce+QJL
+ 4oRly8cv57MVrZNRfdAXwfPniOl+vd45JRBcbkLtACRg/SjctO6/YuhReBkb2s3ekKehLDJDQE
+ P2oISi+PfRRu9LRatkgzHtteMMexUdaEJR/wjB9z3rC9VT0SFIY+MHMbx87KgRYOYuBWyGLpj4
+ Pfokxkit1MqZWzMwkG2RLZyi38D2ZLw33Ff+XV32YDfLLh6nOoBqj2I1uevHKAzY1UF4JgM/8f
+ e90=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2022 17:17:57 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NFqJM3L3sz1RwtC
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 17:17:55 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1668993473; x=1671585474; bh=d45LbNYgnOqZEhfJ/9Cje4Fr7AdmmjUeQVM
+        JHsm7K5c=; b=gd2aAs01sbFf/KevE7MlKYkXS2o336McbmBX5HscRQYTGk0WHnb
+        MPzWs8E61Ywj3cw+Q1T6ePCrsUuiZduzfJjMqn23c0pEKbjD99CBpGgH2Cbwma4R
+        /JcVsFNghIEmNZmt1eJaYybTGaUO3H+ro/2shbw5GMyPZP/P62xjq3V+Bi8FgTJt
+        w86aysr54/yW/5JKe2DH6vyY0s4LT3XNY42AiQFeOhgqovWlnmdDL40aomQ1vlOD
+        DUYJ+/xyFEpbI5m9cHuzfWHLnOPniUvUvpFIeswL1rLW9QX+g981CUHdqw0zZ6Oq
+        bAYNDPUlFG2aE6pSwfF0jw4g1fW7B5cA0kA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RnBUzZfEp7gM for <linux-kernel@vger.kernel.org>;
+        Sun, 20 Nov 2022 17:17:53 -0800 (PST)
+Received: from [10.225.163.53] (unknown [10.225.163.53])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NFqJH33Bxz1RvLy;
+        Sun, 20 Nov 2022 17:17:51 -0800 (PST)
+Message-ID: <e79d9c54-8724-0088-85e7-023f9bbc4170@opensource.wdc.com>
+Date:   Mon, 21 Nov 2022 10:17:49 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH V6 7/8] block, bfq: inject I/O to underutilized actuators
+Content-Language: en-US
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
+        Davide Zini <davidezini2@gmail.com>
+References: <20221103162623.10286-1-paolo.valente@linaro.org>
+ <20221103162623.10286-8-paolo.valente@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221103162623.10286-8-paolo.valente@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds the V4L2 media driver for
-Tesla Full Self Driving (FSD) SoC MIPI-CSI2 Rx controller.
+On 11/4/22 01:26, Paolo Valente wrote:
+> From: Davide Zini <davidezini2@gmail.com>
+> 
+> The main service scheme of BFQ for sync I/O is serving one sync
+> bfq_queue at a time, for a while. In particular, BFQ enforces this
+> scheme when it deems the latter necessary to boost throughput or
+> to preserve service guarantees. Unfortunately, when BFQ enforces
+> this policy, only one actuator at a time gets served for a while,
+> because each bfq_queue contains I/O only for one actuator. The
+> other actuators may remain underutilized.
+> 
+> Actually, BFQ may serve (inject) extra I/O, taken from other
+> bfq_queues, in parallel with that of the in-service queue. This
+> injection mechanism may provide the ground for dealing also with
+> the above actuator-underutilization problem. Yet BFQ does not take
+> the actuator load into account when choosing which queue to pick
+> extra I/O from. In addition, BFQ may happen to inject extra I/O
+> only when the in-service queue is temporarily empty.
+> 
+> In view of these facts, this commit extends the
+> injection mechanism in such a way that the latter:
+> (1) takes into account also the actuator load;
+> (2) checks such a load on each dispatch, and injects I/O for an
+>     underutilized actuator, if there is one and there is I/O for it.
+> 
+> To perform the check in (2), this commit introduces a load
+> threshold, currently set to 4.  A linear scan of each actuator is
+> performed, until an actuator is found for which the following two
+> conditions hold: the load of the actuator is below the threshold,
+> and there is at least one non-in-service queue that contains I/O
+> for that actuator. If such a pair (actuator, queue) is found, then
+> the head request of that queue is returned for dispatch, instead
+> of the head request of the in-service queue.
+> 
+> We have set the threshold, empirically, to the minimum possible
+> value for which an actuator is fully utilized, or close to be
+> fully utilized. By doing so, injected I/O 'steals' as few
+> drive-queue slots as possibile to the in-service queue. This
+> reduces as much as possible the probability that the service of
+> I/O from the in-service bfq_queue gets delayed because of slot
+> exhaustion, i.e., because all the slots of the drive queue are
+> filled with I/O injected from other queues (NCQ provides for 32
+> slots).
+> 
+> This new mechanism also counters actuator underutilization in the
+> case of asymmetric configurations of bfq_queues. Namely if there
+> are few bfq_queues containing I/O for some actuators and many
+> bfq_queues containing I/O for other actuators. Or if the
+> bfq_queues containing I/O for some actuators have lower weights
+> than the other bfq_queues.
+> 
+> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+> Signed-off-by: Davide Zini <davidezini2@gmail.com>
 
-The controller is compliant to MIPI CSI2 v1.3 specification.
-It receives images from camera sensors over the D-PHY interface.
+A few nits below. Otherwise, looks ok.
 
-The D-PHY interface is compliant to MIPI D-PHY v1.2 specification. It
-supports up to maximum of 4 data lanes.
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-V4L2 user control is provided to set the desired number of data lanes.
+> ---
+>  block/bfq-cgroup.c  |   2 +-
+>  block/bfq-iosched.c | 139 +++++++++++++++++++++++++++++++++-----------
+>  block/bfq-iosched.h |  39 ++++++++++++-
+>  block/bfq-wf2q.c    |   2 +-
+>  4 files changed, 143 insertions(+), 39 deletions(-)
+> 
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index d243c429d9c0..38ccfe55ad46 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -694,7 +694,7 @@ void bfq_bfqq_move(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  		bfq_activate_bfqq(bfqd, bfqq);
+>  	}
+>  
+> -	if (!bfqd->in_service_queue && !bfqd->rq_in_driver)
+> +	if (!bfqd->in_service_queue && !bfqd->tot_rq_in_driver)
+>  		bfq_schedule_dispatch(bfqd);
+>  	/* release extra ref taken above, bfqq may happen to be freed now */
+>  	bfq_put_queue(bfqq);
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 106c8820cc5c..db91f1a651d3 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -2252,6 +2252,7 @@ static void bfq_add_request(struct request *rq)
+>  
+>  	bfq_log_bfqq(bfqd, bfqq, "add_request %d", rq_is_sync(rq));
+>  	bfqq->queued[rq_is_sync(rq)]++;
+> +
 
-Maximum of up to 4 streams can be received simultaneously by one Rx
-port. (Each streams identified by designated Virtual Channel
-Identifier).
+whiteline change
 
-The controller instances consist of port property describing the endpoints.
-When combined with remote-endpoint property the driver instantiates
-video device nodes using V4L2 async subdev methods.
+>  	/*
+>  	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', however, it
+>  	 * may be read without holding the lock in bfq_has_work().
+> @@ -2297,9 +2298,9 @@ static void bfq_add_request(struct request *rq)
+>  		 *   elapsed.
+>  		 */
+>  		if (bfqq == bfqd->in_service_queue &&
+> -		    (bfqd->rq_in_driver == 0 ||
+> +		    (bfqd->tot_rq_in_driver == 0 ||
+>  		     (bfqq->last_serv_time_ns > 0 &&
+> -		      bfqd->rqs_injected && bfqd->rq_in_driver > 0)) &&
+> +		      bfqd->rqs_injected && bfqd->tot_rq_in_driver > 0)) &&
+>  		    time_is_before_eq_jiffies(bfqq->decrease_time_jif +
+>  					      msecs_to_jiffies(10))) {
+>  			bfqd->last_empty_occupied_ns = ktime_get_ns();
+> @@ -2323,7 +2324,7 @@ static void bfq_add_request(struct request *rq)
+>  			 * will be set in case injection is performed
+>  			 * on bfqq before rq is completed).
+>  			 */
+> -			if (bfqd->rq_in_driver == 0)
+> +			if (bfqd->tot_rq_in_driver == 0)
+>  				bfqd->rqs_injected = false;
+>  		}
+>  	}
+> @@ -2421,15 +2422,18 @@ static sector_t get_sdist(sector_t last_pos, struct request *rq)
+>  static void bfq_activate_request(struct request_queue *q, struct request *rq)
+>  {
+>  	struct bfq_data *bfqd = q->elevator->elevator_data;
+> +	unsigned int act_idx = bfq_actuator_index(bfqd, rq->bio);
+>  
+> -	bfqd->rq_in_driver++;
+> +	bfqd->tot_rq_in_driver++;
+> +	bfqd->rq_in_driver[act_idx]++;
+>  }
+>  
+>  static void bfq_deactivate_request(struct request_queue *q, struct request *rq)
+>  {
+>  	struct bfq_data *bfqd = q->elevator->elevator_data;
+>  
+> -	bfqd->rq_in_driver--;
+> +	bfqd->tot_rq_in_driver--;
+> +	bfqd->rq_in_driver[bfq_actuator_index(bfqd, rq->bio)]--;
+>  }
+>  #endif
+>  
+> @@ -2703,11 +2707,14 @@ void bfq_end_wr_async_queues(struct bfq_data *bfqd,
+>  static void bfq_end_wr(struct bfq_data *bfqd)
+>  {
+>  	struct bfq_queue *bfqq;
+> +	int i;
+>  
+>  	spin_lock_irq(&bfqd->lock);
+>  
+> -	list_for_each_entry(bfqq, &bfqd->active_list, bfqq_list)
+> -		bfq_bfqq_end_wr(bfqq);
+> +	for (i = 0; i < bfqd->num_actuators; i++) {
+> +		list_for_each_entry(bfqq, &bfqd->active_list[i], bfqq_list)
+> +			bfq_bfqq_end_wr(bfqq);
+> +	}
+>  	list_for_each_entry(bfqq, &bfqd->idle_list, bfqq_list)
+>  		bfq_bfqq_end_wr(bfqq);
+>  	bfq_end_wr_async(bfqd);
+> @@ -3651,13 +3658,13 @@ static void bfq_update_peak_rate(struct bfq_data *bfqd, struct request *rq)
+>  	 * - start a new observation interval with this dispatch
+>  	 */
+>  	if (now_ns - bfqd->last_dispatch > 100*NSEC_PER_MSEC &&
+> -	    bfqd->rq_in_driver == 0)
+> +	    bfqd->tot_rq_in_driver == 0)
+>  		goto update_rate_and_reset;
+>  
+>  	/* Update sampling information */
+>  	bfqd->peak_rate_samples++;
+>  
+> -	if ((bfqd->rq_in_driver > 0 ||
+> +	if ((bfqd->tot_rq_in_driver > 0 ||
+>  		now_ns - bfqd->last_completion < BFQ_MIN_TT)
+>  	    && !BFQ_RQ_SEEKY(bfqd, bfqd->last_position, rq))
+>  		bfqd->sequential_samples++;
+> @@ -3924,7 +3931,7 @@ static bool idling_needed_for_service_guarantees(struct bfq_data *bfqd,
+>  	return (bfqq->wr_coeff > 1 &&
+>  		(bfqd->wr_busy_queues <
+>  		 tot_busy_queues ||
+> -		 bfqd->rq_in_driver >=
+> +		 bfqd->tot_rq_in_driver >=
+>  		 bfqq->dispatched + 4)) ||
+>  		bfq_asymmetric_scenario(bfqd, bfqq) ||
 
-Streaming formats supported:
-- YUV420
-- RGB565, RGB666, RGB888
-- RAW8, RAW10, RAW12
-- JPEG
+Nit: with all the line splits, this is really hard to read... Use the full
+80 chars available please.
 
-The driver implementation is verified on FSD evaluation board.
+>  		tot_busy_queues == 1;
+> @@ -4696,6 +4703,7 @@ bfq_choose_bfqq_for_injection(struct bfq_data *bfqd)
+>  {
+>  	struct bfq_queue *bfqq, *in_serv_bfqq = bfqd->in_service_queue;
+>  	unsigned int limit = in_serv_bfqq->inject_limit;
+> +	int i;
 
-Thanks, Sathyakam
+Missing blank line after this declaration.
 
-Cc: Sathyakam M <sathya@samsung.com>,Vinod Koul <vkoul@kernel.org>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>,Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Pankaj Kumar Dubey <pankaj.dubey@samsung.com>,Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>,Shashank Prashar <s.prashar@samsung.com>
-Cc: Aswani Reddy <aswani.reddy@samsung.com>,Chandrasekar R <rcsekar@samsung.com>
-Cc: Andi Shyti <andi@etezian.org>,Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc: Ming Qian <ming.qian@nxp.com>,Dmitry Osipenko <digetx@gmail.com>
-Cc: Jacopo Mondi <jacopo@jmondi.org>,Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>,Bjorn Andersson <andersson@kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>,Arnd Bergmann <arnd@arndb.de>
-Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>,Mark Brown <broonie@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,linux-phy@lists.infradead.org,devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,linux-media@vger.kernel.org
+>  	/*
+>  	 * If
+>  	 * - bfqq is not weight-raised and therefore does not carry
+> @@ -4727,7 +4735,7 @@ bfq_choose_bfqq_for_injection(struct bfq_data *bfqd)
+>  		)
+>  		limit = 1;
+>  
+> -	if (bfqd->rq_in_driver >= limit)
+> +	if (bfqd->tot_rq_in_driver >= limit)
+>  		return NULL;
+>  
+>  	/*
+> @@ -4742,11 +4750,12 @@ bfq_choose_bfqq_for_injection(struct bfq_data *bfqd)
+>  	 *   (and re-added only if it gets new requests, but then it
+>  	 *   is assigned again enough budget for its new backlog).
+>  	 */
+> -	list_for_each_entry(bfqq, &bfqd->active_list, bfqq_list)
+> -		if (!RB_EMPTY_ROOT(&bfqq->sort_list) &&
+> -		    (in_serv_always_inject || bfqq->wr_coeff > 1) &&
+> -		    bfq_serv_to_charge(bfqq->next_rq, bfqq) <=
+> -		    bfq_bfqq_budget_left(bfqq)) {
+> +	for (i = 0; i < bfqd->num_actuators; i++) {
+> +		list_for_each_entry(bfqq, &bfqd->active_list[i], bfqq_list)
+> +			if (!RB_EMPTY_ROOT(&bfqq->sort_list) &&
+> +				(in_serv_always_inject || bfqq->wr_coeff > 1) &&
+> +				bfq_serv_to_charge(bfqq->next_rq, bfqq) <=
+> +				bfq_bfqq_budget_left(bfqq)) {
+>  			/*
+>  			 * Allow for only one large in-flight request
+>  			 * on non-rotational devices, for the
+> @@ -4771,22 +4780,69 @@ bfq_choose_bfqq_for_injection(struct bfq_data *bfqd)
+>  			else
+>  				limit = in_serv_bfqq->inject_limit;
+>  
+> -			if (bfqd->rq_in_driver < limit) {
+> +			if (bfqd->tot_rq_in_driver < limit) {
+>  				bfqd->rqs_injected = true;
+>  				return bfqq;
+>  			}
+>  		}
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static struct bfq_queue *
+> +bfq_find_active_bfqq_for_actuator(struct bfq_data *bfqd,
+> +						    int idx)
 
-Sathyakam M (5):
-  dt-bindings: phy: fsd: MIPI CSI2 Rx controller syscon node
-  media: dt-bindings: fsd: MIPI CSI2 Rx controller device nodes
-  arm64: dts: fsd: add device tree nodes for MIPI CSI2 Rx controller
-  media: fsd: add MIPI CSI2 Rx controller driver
-  arm64: defconfig: enable FSD MIPI CSI2 Rx controller driver
+Why the line split ?
 
- .../bindings/media/tesla-fsd-csis.yaml        |  148 +
- .../bindings/phy/fsd-csis-syscon.yaml         |   48 +
- .../media/drivers/fsd-csis-uapi.rst           |   78 +
- MAINTAINERS                                   |   12 +
- arch/arm64/boot/dts/tesla/fsd-evb.dts         |  232 ++
- arch/arm64/boot/dts/tesla/fsd.dtsi            |  162 +
- arch/arm64/configs/defconfig                  |    1 +
- drivers/media/platform/Kconfig                |    1 +
- drivers/media/platform/Makefile               |    1 +
- drivers/media/platform/fsd/Kconfig            |   73 +
- drivers/media/platform/fsd/Makefile           |    1 +
- drivers/media/platform/fsd/fsd-csis.c         | 2664 +++++++++++++++++
- drivers/media/platform/fsd/fsd-csis.h         |  785 +++++
- include/uapi/linux/fsd-csis.h                 |   19 +
- include/uapi/linux/v4l2-controls.h            |    5 +
- 15 files changed, 4230 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/tesla-fsd-csis.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/fsd-csis-syscon.yaml
- create mode 100644 Documentation/userspace-api/media/drivers/fsd-csis-uapi.rst
- create mode 100644 drivers/media/platform/fsd/Kconfig
- create mode 100644 drivers/media/platform/fsd/Makefile
- create mode 100644 drivers/media/platform/fsd/fsd-csis.c
- create mode 100644 drivers/media/platform/fsd/fsd-csis.h
- create mode 100644 include/uapi/linux/fsd-csis.h
+> +{
+> +	struct bfq_queue *bfqq = NULL;
+> +
+> +	if (bfqd->in_service_queue &&
+> +	    bfqd->in_service_queue->actuator_idx == idx)
+> +		return bfqd->in_service_queue;
+> +
+> +	list_for_each_entry(bfqq, &bfqd->active_list[idx], bfqq_list) {
+> +		if (!RB_EMPTY_ROOT(&bfqq->sort_list) &&
+> +			bfq_serv_to_charge(bfqq->next_rq, bfqq) <=
+> +				bfq_bfqq_budget_left(bfqq)) {
+> +			return bfqq;
+> +		}
+> +	}
+>  
+>  	return NULL;
+>  }
+>  
+> +/*
+> + * Perform a linear scan of each actuator, until an actuator is found
+> + * for which the following two conditions hold: the load of the
+> + * actuator is below the threshold (see comments on actuator_load_threshold
+> + * for details), and there is a queue that contains I/O for that
+> + * actuator. On success, return that queue.
+> + */
+> +static struct bfq_queue *
+> +bfq_find_bfqq_for_underused_actuator(struct bfq_data *bfqd)
+> +{
+> +	int i;
+> +
+> +	for (i = 0 ; i < bfqd->num_actuators; i++)
+> +		if (bfqd->rq_in_driver[i] < bfqd->actuator_load_threshold) {
+> +			struct bfq_queue *bfqq =
+> +				bfq_find_active_bfqq_for_actuator(bfqd, i);
+> +
+> +			if (bfqq)
+> +				return bfqq;
+> +		}
 
+Given that the statement inside the for loop is multi-line, adding curly
+brackets would be nice.
 
-base-commit: 77c51ba552a1c4f73228766e43ae37c4101b3758
+> +
+> +	return NULL;
+> +}
+> +
+> +
+>  /*
+>   * Select a queue for service.  If we have a current queue in service,
+>   * check whether to continue servicing it, or retrieve and set a new one.
+>   */
+>  static struct bfq_queue *bfq_select_queue(struct bfq_data *bfqd)
+>  {
+> -	struct bfq_queue *bfqq;
+> +	struct bfq_queue *bfqq, *inject_bfqq;
+>  	struct request *next_rq;
+>  	enum bfqq_expiration reason = BFQQE_BUDGET_TIMEOUT;
+>  
+> @@ -4808,6 +4864,15 @@ static struct bfq_queue *bfq_select_queue(struct bfq_data *bfqd)
+>  		goto expire;
+>  
+>  check_queue:
+> +	/*
+> +	 *  If some actuator is underutilized, but the in-service
+> +	 *  queue does not contain I/O for that actuator, then try to
+> +	 *  inject I/O for that actuator.
+> +	 */
+> +	inject_bfqq = bfq_find_bfqq_for_underused_actuator(bfqd);
+> +	if (inject_bfqq && inject_bfqq != bfqq)
+> +		return inject_bfqq;
+> +
+>  	/*
+>  	 * This loop is rarely executed more than once. Even when it
+>  	 * happens, it is much more convenient to re-execute this loop
+> @@ -5163,11 +5228,11 @@ static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
+>  
+>  		/*
+>  		 * We exploit the bfq_finish_requeue_request hook to
+> -		 * decrement rq_in_driver, but
+> +		 * decrement tot_rq_in_driver, but
+>  		 * bfq_finish_requeue_request will not be invoked on
+>  		 * this request. So, to avoid unbalance, just start
+> -		 * this request, without incrementing rq_in_driver. As
+> -		 * a negative consequence, rq_in_driver is deceptively
+> +		 * this request, without incrementing tot_rq_in_driver. As
+> +		 * a negative consequence, tot_rq_in_driver is deceptively
+>  		 * lower than it should be while this request is in
+>  		 * service. This may cause bfq_schedule_dispatch to be
+>  		 * invoked uselessly.
+> @@ -5176,7 +5241,7 @@ static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
+>  		 * bfq_finish_requeue_request hook, if defined, is
+>  		 * probably invoked also on this request. So, by
+>  		 * exploiting this hook, we could 1) increment
+> -		 * rq_in_driver here, and 2) decrement it in
+> +		 * tot_rq_in_driver here, and 2) decrement it in
+>  		 * bfq_finish_requeue_request. Such a solution would
+>  		 * let the value of the counter be always accurate,
+>  		 * but it would entail using an extra interface
+> @@ -5205,7 +5270,7 @@ static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
+>  	 * Of course, serving one request at a time may cause loss of
+>  	 * throughput.
+>  	 */
+> -	if (bfqd->strict_guarantees && bfqd->rq_in_driver > 0)
+> +	if (bfqd->strict_guarantees && bfqd->tot_rq_in_driver > 0)
+>  		goto exit;
+>  
+>  	bfqq = bfq_select_queue(bfqd);
+> @@ -5216,7 +5281,8 @@ static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
+>  
+>  	if (rq) {
+>  inc_in_driver_start_rq:
+> -		bfqd->rq_in_driver++;
+> +		bfqd->rq_in_driver[bfqq->actuator_idx]++;
+> +		bfqd->tot_rq_in_driver++;
+>  start_rq:
+>  		rq->rq_flags |= RQF_STARTED;
+>  	}
+> @@ -6289,7 +6355,7 @@ static void bfq_update_hw_tag(struct bfq_data *bfqd)
+>  	struct bfq_queue *bfqq = bfqd->in_service_queue;
+>  
+>  	bfqd->max_rq_in_driver = max_t(int, bfqd->max_rq_in_driver,
+> -				       bfqd->rq_in_driver);
+> +				       bfqd->tot_rq_in_driver);
+>  
+>  	if (bfqd->hw_tag == 1)
+>  		return;
+> @@ -6300,7 +6366,7 @@ static void bfq_update_hw_tag(struct bfq_data *bfqd)
+>  	 * sum is not exact, as it's not taking into account deactivated
+>  	 * requests.
+>  	 */
+> -	if (bfqd->rq_in_driver + bfqd->queued <= BFQ_HW_QUEUE_THRESHOLD)
+> +	if (bfqd->tot_rq_in_driver + bfqd->queued <= BFQ_HW_QUEUE_THRESHOLD)
+>  		return;
+>  
+>  	/*
+> @@ -6311,7 +6377,7 @@ static void bfq_update_hw_tag(struct bfq_data *bfqd)
+>  	if (bfqq && bfq_bfqq_has_short_ttime(bfqq) &&
+>  	    bfqq->dispatched + bfqq->queued[0] + bfqq->queued[1] <
+>  	    BFQ_HW_QUEUE_THRESHOLD &&
+> -	    bfqd->rq_in_driver < BFQ_HW_QUEUE_THRESHOLD)
+> +	    bfqd->tot_rq_in_driver < BFQ_HW_QUEUE_THRESHOLD)
+>  		return;
+>  
+>  	if (bfqd->hw_tag_samples++ < BFQ_HW_QUEUE_SAMPLES)
+> @@ -6332,7 +6398,8 @@ static void bfq_completed_request(struct bfq_queue *bfqq, struct bfq_data *bfqd)
+>  
+>  	bfq_update_hw_tag(bfqd);
+>  
+> -	bfqd->rq_in_driver--;
+> +	bfqd->rq_in_driver[bfqq->actuator_idx]--;
+> +	bfqd->tot_rq_in_driver--;
+>  	bfqq->dispatched--;
+>  
+>  	if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq)) {
+> @@ -6451,7 +6518,7 @@ static void bfq_completed_request(struct bfq_queue *bfqq, struct bfq_data *bfqd)
+>  					BFQQE_NO_MORE_REQUESTS);
+>  	}
+>  
+> -	if (!bfqd->rq_in_driver)
+> +	if (!bfqd->tot_rq_in_driver)
+>  		bfq_schedule_dispatch(bfqd);
+>  }
+>  
+> @@ -6582,13 +6649,13 @@ static void bfq_update_inject_limit(struct bfq_data *bfqd,
+>  	 * conditions to do it, or we can lower the last base value
+>  	 * computed.
+>  	 *
+> -	 * NOTE: (bfqd->rq_in_driver == 1) means that there is no I/O
+> +	 * NOTE: (bfqd->tot_rq_in_driver == 1) means that there is no I/O
+>  	 * request in flight, because this function is in the code
+>  	 * path that handles the completion of a request of bfqq, and,
+>  	 * in particular, this function is executed before
+> -	 * bfqd->rq_in_driver is decremented in such a code path.
+> +	 * bfqd->tot_rq_in_driver is decremented in such a code path.
+>  	 */
+> -	if ((bfqq->last_serv_time_ns == 0 && bfqd->rq_in_driver == 1) ||
+> +	if ((bfqq->last_serv_time_ns == 0 && bfqd->tot_rq_in_driver == 1) ||
+>  	    tot_time_ns < bfqq->last_serv_time_ns) {
+>  		if (bfqq->last_serv_time_ns == 0) {
+>  			/*
+> @@ -6598,7 +6665,7 @@ static void bfq_update_inject_limit(struct bfq_data *bfqd,
+>  			bfqq->inject_limit = max_t(unsigned int, 1, old_limit);
+>  		}
+>  		bfqq->last_serv_time_ns = tot_time_ns;
+> -	} else if (!bfqd->rqs_injected && bfqd->rq_in_driver == 1)
+> +	} else if (!bfqd->rqs_injected && bfqd->tot_rq_in_driver == 1)
+>  		/*
+>  		 * No I/O injected and no request still in service in
+>  		 * the drive: these are the exact conditions for
+> @@ -7239,7 +7306,8 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>  	bfqd->queue_weights_tree = RB_ROOT_CACHED;
+>  	bfqd->num_groups_with_pending_reqs = 0;
+>  
+> -	INIT_LIST_HEAD(&bfqd->active_list);
+> +	INIT_LIST_HEAD(&bfqd->active_list[0]);
+> +	INIT_LIST_HEAD(&bfqd->active_list[1]);
+>  	INIT_LIST_HEAD(&bfqd->idle_list);
+>  	INIT_HLIST_HEAD(&bfqd->burst_list);
+>  
+> @@ -7284,6 +7352,9 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>  		ref_wr_duration[blk_queue_nonrot(bfqd->queue)];
+>  	bfqd->peak_rate = ref_rate[blk_queue_nonrot(bfqd->queue)] * 2 / 3;
+>  
+> +	/* see comments on the definition of next field inside bfq_data */
+> +	bfqd->actuator_load_threshold = 4;
+> +
+>  	spin_lock_init(&bfqd->lock);
+>  
+>  	/*
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 90130a893c8f..adb3ba6a9d90 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -586,7 +586,12 @@ struct bfq_data {
+>  	/* number of queued requests */
+>  	int queued;
+>  	/* number of requests dispatched and waiting for completion */
+> -	int rq_in_driver;
+> +	int tot_rq_in_driver;
+> +	/*
+> +	 * number of requests dispatched and waiting for completion
+> +	 * for each actuator
+> +	 */
+> +	int rq_in_driver[BFQ_MAX_ACTUATORS];
+>  
+>  	/* true if the device is non rotational and performs queueing */
+>  	bool nonrot_with_queueing;
+> @@ -680,8 +685,13 @@ struct bfq_data {
+>  	/* maximum budget allotted to a bfq_queue before rescheduling */
+>  	int bfq_max_budget;
+>  
+> -	/* list of all the bfq_queues active on the device */
+> -	struct list_head active_list;
+> +	/*
+> +	 * List of all the bfq_queues active for a specific actuator
+> +	 * on the device. Keeping active queues separate on a
+> +	 * per-actuator basis helps implementing per-actuator
+> +	 * injection more efficiently.
+> +	 */
+> +	struct list_head active_list[BFQ_MAX_ACTUATORS];
+>  	/* list of all the bfq_queues idle on the device */
+>  	struct list_head idle_list;
+>  
+> @@ -816,6 +826,29 @@ struct bfq_data {
+>  	 * in this device.
+>  	 */
+>  	struct blk_independent_access_range ia_ranges[BFQ_MAX_ACTUATORS];
+> +
+> +	/*
+> +	 * If the number of I/O requests queued in the device for a
+> +	 * given actuator is below next threshold, then the actuator
+> +	 * is deemed as underutilized. If this condition is found to
+> +	 * hold for some actuator upon a dispatch, but (i) the
+> +	 * in-service queue does not contain I/O for that actuator,
+> +	 * while (ii) some other queue does contain I/O for that
+> +	 * actuator, then the head I/O request of the latter queue is
+> +	 * returned (injected), instead of the head request of the
+> +	 * currently in-service queue.
+> +	 *
+> +	 * We set the threshold, empirically, to the minimum possible
+> +	 * value for which an actuator is fully utilized, or close to
+> +	 * be fully utilized. By doing so, injected I/O 'steals' as
+> +	 * few drive-queue slots as possibile to the in-service
+> +	 * queue. This reduces as much as possible the probability
+> +	 * that the service of I/O from the in-service bfq_queue gets
+> +	 * delayed because of slot exhaustion, i.e., because all the
+> +	 * slots of the drive queue are filled with I/O injected from
+> +	 * other queues (NCQ provides for 32 slots).
+> +	 */
+> +	unsigned int actuator_load_threshold;
+>  };
+>  
+>  enum bfqq_state_flags {
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index 8fc3da4c23bb..ec0273e2cd07 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -477,7 +477,7 @@ static void bfq_active_insert(struct bfq_service_tree *st,
+>  	bfqd = (struct bfq_data *)bfqg->bfqd;
+>  #endif
+>  	if (bfqq)
+> -		list_add(&bfqq->bfqq_list, &bfqq->bfqd->active_list);
+> +		list_add(&bfqq->bfqq_list, &bfqq->bfqd->active_list[bfqq->actuator_idx]);
+>  #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>  	if (bfqg != bfqd->root_group)
+>  		bfqg->active_entities++;
+
 -- 
-2.17.1
+Damien Le Moal
+Western Digital Research
 
