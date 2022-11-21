@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCD7631C0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3D4631C13
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiKUIwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
+        id S230321AbiKUIxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiKUIwD (ORCPT
+        with ESMTP id S230191AbiKUIwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:52:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BE77FF00;
+        Mon, 21 Nov 2022 03:52:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6E67FF03;
         Mon, 21 Nov 2022 00:51:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD84460F45;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB9D060F43;
         Mon, 21 Nov 2022 08:51:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E57C4FF07;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F0BC4FF0F;
         Mon, 21 Nov 2022 08:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1669020715;
-        bh=RSCCNHg0pVmtS0IdanzEJRU1fo8izWYA/WxRqAymmF4=;
+        bh=UoN5wh15U6OwcuNRI1oxfnYffMWGCblGCdMNWedim9o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OO9qHUMDKnLBjdXTTukUmV0MM718EyTHjXyefp2iLOUw1gUCKcbnNyKYj9lz0RqBP
-         NQHFy/BqnDzgTI9ReWVieldnrgzfDdYDClzdePn+E0Ws2bvEt+1KD/E/wjpkOotZSn
-         m5eRcTf3oqMN+N1A/Ds/yJnjzPWz8U2rsVos8Zv0/PkPNlV+vYVbXtUoFYcV4CVheM
-         tdaRC95XdeFbkNT5DllABG45DpN/e4MAr3mFKeNO+Fbo+t9tRngmIoSJvSDi6H4cjC
-         l6rNiy2QVVpe9muG3OukxBdXJiDGDsj3qlI9z7OXN99Fi7Qgr1Vyh7C8nw96qhcqEl
-         YH1NIe8ZVHP7Q==
+        b=u+8PL8DvTjpTmKm98hiriehVbwFSzWmaKK89M7oDFzQUQjeAb9X+NnQxNKzfpor77
+         hAkcr4P3NIKRODEWIv/ZnvFWps3LcN7R8CUrLD8MxPA4cXHXoaSq+s7Ix9sAu4DvEp
+         FNheVqSg/j8Yzh5JuHj3EabFX2TXYLXo3qAqVrxcoqb4iMvjf34ju7q8r5X/umR0+K
+         JN65BfVjwbaVKAr6vbW7tne9QOiM17L2m8IaQH9JnjHNi0h1ChIPoxngzSWdGl+dnU
+         bCKKvZPj3YXpk9jlmLPcOXMlKwTj/1zTDzx8Gem0T/2d6cYuOOW3f8PvuME9FXhZ8w
+         7GFMk9DSdXBaQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ox2WT-00088c-8b; Mon, 21 Nov 2022 09:51:25 +0100
+        id 1ox2WT-00088e-Bs; Mon, 21 Nov 2022 09:51:25 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v3 10/15] phy: qcom-qmp-combo: clean up DP clock callbacks
-Date:   Mon, 21 Nov 2022 09:50:53 +0100
-Message-Id: <20221121085058.31213-11-johan+linaro@kernel.org>
+Subject: [PATCH v3 11/15] phy: qcom-qmp-combo: rename common-register pointers
+Date:   Mon, 21 Nov 2022 09:50:54 +0100
+Message-Id: <20221121085058.31213-12-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221121085058.31213-1-johan+linaro@kernel.org>
 References: <20221121085058.31213-1-johan+linaro@kernel.org>
@@ -64,112 +64,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the DP clock callbacks somewhat by dropping the redundant
-"qcom" prefix and removing line breaks after type specifiers.
+The common registers are shared by the USB and DP parts of the PHY so
+drop the misleading "dp" prefix from the corresponding pointers.
+
+Note that the "DP" prefix could also be dropped from the corresponding
+defines, but leave that in place for now.
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 33 ++++++++++-------------
- 1 file changed, 14 insertions(+), 19 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 24 +++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 89a5b51c770d..fb3705b00823 100644
+index fb3705b00823..5777bd1f76b3 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -2304,8 +2304,7 @@ static int phy_pipe_clk_register(struct qmp_combo *qmp, struct device_node *np)
-  *              for DP pixel clock
-  *
-  */
--static int qcom_qmp_dp_pixel_clk_determine_rate(struct clk_hw *hw,
--						struct clk_rate_request *req)
-+static int qmp_dp_pixel_clk_determine_rate(struct clk_hw *hw, struct clk_rate_request *req)
+@@ -864,7 +864,7 @@ struct qmp_combo {
+ 
+ 	const struct qmp_phy_cfg *cfg;
+ 
+-	void __iomem *dp_com;
++	void __iomem *com;
+ 
+ 	void __iomem *serdes;
+ 	void __iomem *tx;
+@@ -1767,7 +1767,7 @@ static int qmp_combo_dp_calibrate(struct phy *phy)
+ static int qmp_combo_com_init(struct qmp_combo *qmp)
  {
- 	switch (req->rate) {
- 	case 1620000000UL / 2:
-@@ -2317,8 +2316,7 @@ static int qcom_qmp_dp_pixel_clk_determine_rate(struct clk_hw *hw,
- 	}
- }
- 
--static unsigned long
--qcom_qmp_dp_pixel_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+static unsigned long qmp_dp_pixel_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- {
- 	const struct qmp_combo *qmp;
- 	const struct phy_configure_opts_dp *dp_opts;
-@@ -2340,13 +2338,12 @@ qcom_qmp_dp_pixel_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	}
- }
- 
--static const struct clk_ops qcom_qmp_dp_pixel_clk_ops = {
--	.determine_rate = qcom_qmp_dp_pixel_clk_determine_rate,
--	.recalc_rate = qcom_qmp_dp_pixel_clk_recalc_rate,
-+static const struct clk_ops qmp_dp_pixel_clk_ops = {
-+	.determine_rate	= qmp_dp_pixel_clk_determine_rate,
-+	.recalc_rate	= qmp_dp_pixel_clk_recalc_rate,
- };
- 
--static int qcom_qmp_dp_link_clk_determine_rate(struct clk_hw *hw,
--					       struct clk_rate_request *req)
-+static int qmp_dp_link_clk_determine_rate(struct clk_hw *hw, struct clk_rate_request *req)
- {
- 	switch (req->rate) {
- 	case 162000000:
-@@ -2359,8 +2356,7 @@ static int qcom_qmp_dp_link_clk_determine_rate(struct clk_hw *hw,
- 	}
- }
- 
--static unsigned long
--qcom_qmp_dp_link_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+static unsigned long qmp_dp_link_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- {
- 	const struct qmp_combo *qmp;
- 	const struct phy_configure_opts_dp *dp_opts;
-@@ -2379,13 +2375,12 @@ qcom_qmp_dp_link_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	}
- }
- 
--static const struct clk_ops qcom_qmp_dp_link_clk_ops = {
--	.determine_rate = qcom_qmp_dp_link_clk_determine_rate,
--	.recalc_rate = qcom_qmp_dp_link_clk_recalc_rate,
-+static const struct clk_ops qmp_dp_link_clk_ops = {
-+	.determine_rate	= qmp_dp_link_clk_determine_rate,
-+	.recalc_rate	= qmp_dp_link_clk_recalc_rate,
- };
- 
--static struct clk_hw *
--qcom_qmp_dp_clks_hw_get(struct of_phandle_args *clkspec, void *data)
-+static struct clk_hw *qmp_dp_clks_hw_get(struct of_phandle_args *clkspec, void *data)
- {
- 	struct qmp_combo *qmp = data;
- 	unsigned int idx = clkspec->args[0];
-@@ -2408,7 +2403,7 @@ static int phy_dp_clks_register(struct qmp_combo *qmp, struct device_node *np)
+ 	const struct qmp_phy_cfg *cfg = qmp->cfg;
+-	void __iomem *dp_com = qmp->dp_com;
++	void __iomem *com = qmp->com;
  	int ret;
  
- 	snprintf(name, sizeof(name), "%s::link_clk", dev_name(qmp->dev));
--	init.ops = &qcom_qmp_dp_link_clk_ops;
-+	init.ops = &qmp_dp_link_clk_ops;
- 	init.name = name;
- 	qmp->dp_link_hw.init = &init;
- 	ret = devm_clk_hw_register(qmp->dev, &qmp->dp_link_hw);
-@@ -2416,7 +2411,7 @@ static int phy_dp_clks_register(struct qmp_combo *qmp, struct device_node *np)
- 		return ret;
- 
- 	snprintf(name, sizeof(name), "%s::vco_div_clk", dev_name(qmp->dev));
--	init.ops = &qcom_qmp_dp_pixel_clk_ops;
-+	init.ops = &qmp_dp_pixel_clk_ops;
- 	init.name = name;
- 	qmp->dp_pixel_hw.init = &init;
- 	ret = devm_clk_hw_register(qmp->dev, &qmp->dp_pixel_hw);
-@@ -2452,7 +2447,7 @@ static int qmp_combo_register_clocks(struct qmp_combo *qmp, struct device_node *
+ 	mutex_lock(&qmp->phy_mutex);
+@@ -1798,25 +1798,25 @@ static int qmp_combo_com_init(struct qmp_combo *qmp)
  	if (ret)
- 		return ret;
+ 		goto err_assert_reset;
  
--	ret = of_clk_add_hw_provider(dp_np, qcom_qmp_dp_clks_hw_get, qmp);
-+	ret = of_clk_add_hw_provider(dp_np, qmp_dp_clks_hw_get, qmp);
- 	if (ret)
- 		return ret;
+-	qphy_setbits(dp_com, QPHY_V3_DP_COM_POWER_DOWN_CTRL, SW_PWRDN);
++	qphy_setbits(com, QPHY_V3_DP_COM_POWER_DOWN_CTRL, SW_PWRDN);
  
+ 	/* override hardware control for reset of qmp phy */
+-	qphy_setbits(dp_com, QPHY_V3_DP_COM_RESET_OVRD_CTRL,
++	qphy_setbits(com, QPHY_V3_DP_COM_RESET_OVRD_CTRL,
+ 			SW_DPPHY_RESET_MUX | SW_DPPHY_RESET |
+ 			SW_USB3PHY_RESET_MUX | SW_USB3PHY_RESET);
+ 
+ 	/* Default type-c orientation, i.e CC1 */
+-	qphy_setbits(dp_com, QPHY_V3_DP_COM_TYPEC_CTRL, 0x02);
++	qphy_setbits(com, QPHY_V3_DP_COM_TYPEC_CTRL, 0x02);
+ 
+-	qphy_setbits(dp_com, QPHY_V3_DP_COM_PHY_MODE_CTRL, USB3_MODE | DP_MODE);
++	qphy_setbits(com, QPHY_V3_DP_COM_PHY_MODE_CTRL, USB3_MODE | DP_MODE);
+ 
+ 	/* bring both QMP USB and QMP DP PHYs PCS block out of reset */
+-	qphy_clrbits(dp_com, QPHY_V3_DP_COM_RESET_OVRD_CTRL,
++	qphy_clrbits(com, QPHY_V3_DP_COM_RESET_OVRD_CTRL,
+ 			SW_DPPHY_RESET_MUX | SW_DPPHY_RESET |
+ 			SW_USB3PHY_RESET_MUX | SW_USB3PHY_RESET);
+ 
+-	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SWI_CTRL, 0x03);
+-	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SW_RESET, SW_RESET);
++	qphy_clrbits(com, QPHY_V3_DP_COM_SWI_CTRL, 0x03);
++	qphy_clrbits(com, QPHY_V3_DP_COM_SW_RESET, SW_RESET);
+ 
+ 	qphy_setbits(qmp->pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
+ 			SW_PWRDN);
+@@ -2538,9 +2538,9 @@ static int qmp_combo_parse_dt_legacy(struct qmp_combo *qmp, struct device_node *
+ 	if (IS_ERR(qmp->serdes))
+ 		return PTR_ERR(qmp->serdes);
+ 
+-	qmp->dp_com = devm_platform_ioremap_resource(pdev, 1);
+-	if (IS_ERR(qmp->dp_com))
+-		return PTR_ERR(qmp->dp_com);
++	qmp->com = devm_platform_ioremap_resource(pdev, 1);
++	if (IS_ERR(qmp->com))
++		return PTR_ERR(qmp->com);
+ 
+ 	qmp->dp_serdes = devm_platform_ioremap_resource(pdev, 2);
+ 	if (IS_ERR(qmp->dp_serdes))
 -- 
 2.37.4
 
