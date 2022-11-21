@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA31263310B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E54633111
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbiKUX40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S230139AbiKUX6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiKUX4N (ORCPT
+        with ESMTP id S232128AbiKUX5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:56:13 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BD74B98A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:56:11 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id b29so12763600pfp.13
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:56:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sFqoA3xlAXzNwNaJLAB412Ok7P7Z69MnqdPRYsS/dcY=;
-        b=UGMGIxl4MlQMRNDDoJWW1JeWd1Saa+VY7wYO0h5+ALzBmXWpD2TS+rloS5mLWItbTu
-         dmLO6NI0/V1oHyb1t8W3cmApDUm4Tye2vUImDyToVFtk3M6GOw5Inchh/UMvHT2e/+Mq
-         TZ0Zu/FXa04YRFFPQkZkOCpTQLS0EdUOIT0pN4L3oxkVk6sF6dYFnXSdIODc7wwURPgb
-         9uoLDRbPa4Hxw+5ALlkY5tWI5ZiDCeNk3+/eGSw7eJ37LD7LmjdzmNfuwXTxMuQBy69L
-         SQx4AJf0J8sU68MUvZMsMSHdQOZmK/LoNgQ2SeuUcyj1Hy7Nep6MNCRwXKjnXY74GtT0
-         A1eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sFqoA3xlAXzNwNaJLAB412Ok7P7Z69MnqdPRYsS/dcY=;
-        b=GCAjgSs4YWEoRq5VZGIPfYtHMyWa5AcG58zeT9XTUmWNJLH0bB+8dZqviFvQ1y1SMH
-         aStatMhe3SOgfg40Amqn6jN8Bl+aDbp993gS3PGhiGtnxwXCUHLDwAFHip763Repqe/k
-         FTYmZ12jbVKIoiOKQjBuFz4rVjQNRy60ZHY1hDT1S1tL9WVW8jUzkXjtNClNwlKWR86M
-         HpfFMrWCS/t71avhSQXDTSwCWxTrrXhT7SYtJeJqQvftgsoOtyyRGkWOTlSx2dgFk2mF
-         m3kK6Xkl1S45t47aJ6JfJ4dzN2gaD6gaRcRV8HYWl1q/kvRu73Yo2lFBR0jkA0H936dN
-         4M1A==
-X-Gm-Message-State: ANoB5plQ4mTvXhK/7CsXTSsb+bdsOh1bXQbf/ggl9pGMpaW4VT4+xJwr
-        uPiAqrB8gniNnuaLcBCLR9iMcvoPFIegx9GICqu9
-X-Google-Smtp-Source: AA0mqf7G6c3Nvud9YG/dWkDyX6JZDp8dvZSG4MT1APz5NyskblXGRN/R4W65HJ2mSLW6V+5KIth5yCSQDFWO6JKT7SI=
-X-Received: by 2002:a62:2941:0:b0:573:6a8d:dd15 with SMTP id
- p62-20020a622941000000b005736a8ddd15mr11936805pfp.2.1669074971136; Mon, 21
- Nov 2022 15:56:11 -0800 (PST)
+        Mon, 21 Nov 2022 18:57:53 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC6D554F2;
+        Mon, 21 Nov 2022 15:57:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669075069; x=1700611069;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ttMStxsbDlpMEs1D2wUgm8OuQh/Ime21MOFXRosoXV4=;
+  b=iGsIpxgSk69LxRvCs7aQJbg+brvTXpv4/eAVI1egitYvyCeZRTOQU/8/
+   nB61p/R6GQ7zbvVP1KhsMjSn9yyOfiAhl+pUYCj9e7EpUNJkam2KdSBnZ
+   uMN92IGt9xI0UfXWfSOO28ZtvdP2IwupKKUhh26orqJ0AW1JfoXlgZuT/
+   sDve7nht8lz3qTo1AwznK2x6XY7iahz85uaMqyJRiZhglnnJIlHhWb+hZ
+   szSXM/CFWYtGqMLMCcBoyYD+nd8pLpRGuO+q5DXgRxrWESxf6P/2Nrfek
+   ZioCmdgxRHffmrUzALdOQ0VcfgZnPu30x+T2WwwtmhlvXWuDoRec9RZe7
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="301237765"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="301237765"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 15:57:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="730201151"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="730201151"
+Received: from dylanhol-mobl.amr.corp.intel.com (HELO [10.212.242.103]) ([10.212.242.103])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 15:57:47 -0800
+Message-ID: <42bb1385-0c7f-6a87-43bb-ea4b12c48427@linux.intel.com>
+Date:   Mon, 21 Nov 2022 15:57:45 -0800
 MIME-Version: 1.0
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
- <20221110094639.3086409-3-roberto.sassu@huaweicloud.com> <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
- <aa5fa8c5f231115c58012352124df57d16a01e41.camel@huaweicloud.com> <7812899531b2bd936b25fde8fc2f1c2a6080b2bd.camel@linux.ibm.com>
-In-Reply-To: <7812899531b2bd936b25fde8fc2f1c2a6080b2bd.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 21 Nov 2022 18:55:59 -0500
-Message-ID: <CAHC9VhTvcgOjXAH51Vnk66kEjXfjUS2aJjXjJmU-rwLT53vWPw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] security: Rewrite security_old_inode_init_security()
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        ocfs2-devel@oss.oracle.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v7 02/20] x86/virt/tdx: Detect TDX during kernel boot
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <aaee2d5332a97c840ad401ba935842a998a877ec.1668988357.git.kai.huang@intel.com>
+ <3e4644e4-d939-7f15-02e1-a6be1ed7f932@linux.intel.com>
+ <827adb3d1610f43ce71b1491db8c680dbe095035.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <827adb3d1610f43ce71b1491db8c680dbe095035.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 3:54 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Mon, 2022-11-21 at 10:45 +0100, Roberto Sassu wrote:
-> > > As ocfs2 already defines initxattrs, that leaves only reiserfs missing
-> > > initxattrs().  A better, cleaner solution would be to define one.
-> >
-> > If I understood why security_old_inode_init_security() is called
-> > instead of security_inode_init_security(), the reason seems that the
-> > filesystem code uses the length of the obtained xattr to make some
-> > calculations (e.g. reserve space). The xattr is written at a later
-> > time.
-> >
-> > Since for reiserfs there is a plan to deprecate it, it probably
-> > wouldn't be worth to support the creation of multiple xattrs. I would
-> > define a callback to take the first xattr and make a copy, so that
-> > calling security_inode_init_security() + reiserfs_initxattrs() is
-> > equivalent to calling security_old_inode_init_security().
 
-FWIW, reiserfs isn't going to be removed until 2025, I'm hopeful we
-can remove the IMA/EVM special cases before then :)
 
-> > But then, this is what anyway I was doing with the
-> > security_initxattrs() callback, for all callers of security_old_inode_i
-> > nit_security().
-> >
-> > Also, security_old_inode_init_security() is exported to kernel modules.
-> > Maybe, it is used somewhere. So, unless we plan to remove it
-> > completely, it should be probably be fixed to avoid multiple LSMs
-> > successfully setting an xattr, and losing the memory of all except the
-> > last (which this patch fixes by calling security_inode_init_security()).
+On 11/21/22 1:37 AM, Huang, Kai wrote:
+>> Also why is this global variable? At least in this patch, there seems to
+>> be no use case.
+> Platform_tdx_enabled() uses tdx_keyid_num to determine whether TDX is enabled by
+> BIOS.
+> 
+> Also, in the changlog I can add "both initializing the TDX module and creating
+> TDX guest will need to use TDX private KeyID".
+> 
+> But I also have a comment saying something similar around ...
+> 
 
-I would much rather remove security_old_inode_init_security() then
-worry about what out-of-tree modules might be using it.  Hopefully we
-can resolve the ocfs2 usage and get ocfs2 exclusively on the new hook
-without too much trouble, which means all we have left is reiserfs ...
-how difficult would you expect the conversion to be for reiserfs?
-
-> > If there is still the preference, I will implement the reiserfs
-> > callback and make a fix for security_old_inode_init_security().
->
-> There's no sense in doing both, as the purpose of defining a reiserfs
-> initxattrs function was to clean up this code making it more readable.
->
-> Mimi
+I am asking about the tdx_keyid_start. It mainly used in detect_tdx(). Maybe you
+declared it as global as a preparation for next patches. But it is not explained
+in change log.
 
 -- 
-paul-moore.com
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
