@@ -2,169 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E76E631C37
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFED631C4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiKUJAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
+        id S229898AbiKUJC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKUI77 (ORCPT
+        with ESMTP id S229764AbiKUJCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:59:59 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9978CDF95;
-        Mon, 21 Nov 2022 00:59:58 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 463F61F897;
-        Mon, 21 Nov 2022 08:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669021197;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v9eI0l3L5J3waSLvW+eC332jj5gD4Rcqx/oy4092T7U=;
-        b=uJNWoBaxwvTkrgcPCkmSH5N8lmksBFO6vBhMcKeC2W7lOUh2gTFKNUCWjI6fbYlxpP4bPc
-        FekS8LKjm1E6B5wm3peAwXuznfWm6rE2l2WmGEaZSqIF05/CrJqQtHQvIhenohiltd0lPR
-        V2J68v0dm4icKuYkLMj6IUjdDe79bbc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669021197;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v9eI0l3L5J3waSLvW+eC332jj5gD4Rcqx/oy4092T7U=;
-        b=mwKTVaxEkEJfXDxmby4hh4uyjgP5plQNW4zg0K0s18PEbBjnSvse2OmeQrilKUMTFtMoFK
-        tjiy0rAVGrz7aCDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0E0D1376E;
-        Mon, 21 Nov 2022 08:59:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BGsKOQw+e2MxXQAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Mon, 21 Nov 2022 08:59:56 +0000
-Date:   Mon, 21 Nov 2022 09:59:55 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Li Wang <liwang@redhat.com>
-Cc:     ltp@lists.linux.it, Jens Axboe <axboe@kernel.dk>,
-        Minchan Kim <minchan@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        linux-kselftest@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Nitin Gupta <ngupta@vflare.org>
-Subject: Re: [LTP] [PATCH 1/1] zram01.sh: Workaround division by 0 on vfat on
- ppc64le
-Message-ID: <Y3s+Czg8sBsGYO+1@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20221107191136.18048-1-pvorel@suse.cz>
- <20221107191136.18048-2-pvorel@suse.cz>
- <CAEemH2fYv_=9UWdWB7VDiFOd8EC89qdCbxnPcTPAtGnkwLOYFg@mail.gmail.com>
+        Mon, 21 Nov 2022 04:02:21 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA4F317D2;
+        Mon, 21 Nov 2022 01:02:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669021341; x=1700557341;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M+rRHtdKg5QyHpNqpD1T8O6Ma2WXA8citsXe5pnDnJA=;
+  b=X8ZDYy/VFZq00SzmO3WyOIWglT2sBRgXAoXIsbpw3b7d0984/ZI4FjAi
+   qDm3dAWgDHzdDacdj/t30W54c9ga1+25PzNtuMKxFjkN5zD1xhJYqgCSn
+   YsRFa+siSqbFEOtnxWy0JEbVnSyLwa7h5XAyiCF4fi7EIVUjIi7OP01TD
+   4LHzAbSgloCDWmCEZGg0XV6YokJy1AUawNFYBF+wTZgk3yJrZlnfFmyyL
+   Pu7n6OBcpYvCGd2igB718ZJFgJKz35TMR4lX5JDOxi+RWflrYzWwMAgrl
+   sX6V/LpHn9vcepzihDheJyJpJjbyS3guWbCsYSN/5XImt9C2a7o3LT3Jq
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="311140789"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="311140789"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 01:02:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="783374619"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="783374619"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 21 Nov 2022 01:02:16 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Nov 2022 11:02:15 +0200
+Date:   Mon, 21 Nov 2022 11:02:15 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>
+Subject: Re: [PATCH v1 1/4] media: ipu3-cio2: Don't dereference fwnode handle
+Message-ID: <Y3s+l54MbAv+svzI@kuha.fi.intel.com>
+References: <20221118185617.33908-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEemH2fYv_=9UWdWB7VDiFOd8EC89qdCbxnPcTPAtGnkwLOYFg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221118185617.33908-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
+On Fri, Nov 18, 2022 at 08:56:14PM +0200, Andy Shevchenko wrote:
+> Use acpi_fwnode_handle() instead of dereferencing an fwnode handle directly,
+> which is a better coding practice.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/media/pci/intel/ipu3/cio2-bridge.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+> index df6c94da2f6a..18974a72e94a 100644
+> --- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
+> +++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
+> @@ -263,7 +263,7 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+>  				      struct cio2_bridge *bridge,
+>  				      struct pci_dev *cio2)
+>  {
+> -	struct fwnode_handle *fwnode;
+> +	struct fwnode_handle *fwnode, *primary;
+>  	struct cio2_sensor *sensor;
+>  	struct acpi_device *adev;
+>  	acpi_status status;
+> @@ -322,7 +322,9 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
+>  		}
+>  
+>  		sensor->adev = acpi_dev_get(adev);
+> -		adev->fwnode.secondary = fwnode;
+> +
+> +		primary = acpi_fwnode_handle(adev);
+> +		primary->secondary = fwnode;
+>  
+>  		cio2_bridge_instantiate_vcm_i2c_client(sensor);
+>  
 
-> Hi Petr,
+This and also the others look good to me. FWIW, for the series:
 
-> On Tue, Nov 8, 2022 at 3:12 AM Petr Vorel <pvorel@suse.cz> wrote:
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> > Repeatedly read /sys/block/zram*/mm_stat for 1 sec. This should fix bug
-> > on ppc64le on stable kernels, where mem_used_total is often 0.
+thanks,
 
-> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> > ---
-> >  .../kernel/device-drivers/zram/zram01.sh      | 27 +++++++++++++++++--
-> >  1 file changed, 25 insertions(+), 2 deletions(-)
-
-> > diff --git a/testcases/kernel/device-drivers/zram/zram01.sh
-> > b/testcases/kernel/device-drivers/zram/zram01.sh
-> > index 58d233f91..76a8ccab4 100755
-> > --- a/testcases/kernel/device-drivers/zram/zram01.sh
-> > +++ b/testcases/kernel/device-drivers/zram/zram01.sh
-> > @@ -105,6 +105,26 @@ zram_mount()
-> >         tst_res TPASS "mount of zram device(s) succeeded"
-> >  }
-
-> > +read_mem_used_total()
-> > +{
-> > +       echo $(awk '{print $3}' $1)
-> > +}
-> > +
-> > +# Reads /sys/block/zram*/mm_stat until mem_used_total is not 0.
-> > +loop_read_mem_used_total()
-
-
-> This is not a looping function to check if mem_used_total is equal to zero,
-> the loop part is by means of the TST_RETRY_FUNC macro.
-Thanks for your review!
-
-> So, I'd suggest renaming it to check_read_mem_used_total().
-Agree. Unfortunately even this didn't help on ppc64le system where I was able to
-reproduce it, thus probably not worth to merge.
-
-Unfortunately later I was not able to reproduce the problem any more, I'll try
-it more this week.
-
-Kind regards,
-Petr
-
-> Reviewed-by: Li Wang <liwang@redhat.com>
-
-
-
-> > +{
-> > +       local file="$1"
-> > +       local mem_used_total
-> > +
-> > +       tst_res TINFO "$file"
-> > +       cat $file >&2
-> > +
-> > +       mem_used_total=$(read_mem_used_total $file)
-> > +       [ "$mem_used_total" -eq 0 ] && return 1
-> > +
-> > +       return 0
-> > +}
-> > +
-> >  zram_fill_fs()
-> >  {
-> >         local mem_used_total
-> > @@ -133,9 +153,12 @@ zram_fill_fs()
-> >                         continue
-> >                 fi
-
-> > -               mem_used_total=`awk '{print $3}'
-> > "/sys/block/zram$i/mm_stat"`
-> > +               TST_RETRY_FUNC "loop_read_mem_used_total
-> > /sys/block/zram$i/mm_stat" 0
-> > +               mem_used_total=$(read_mem_used_total
-> > /sys/block/zram$i/mm_stat)
-> > +               tst_res TINFO "mem_used_total: $mem_used_total"
-> > +
-> >                 v=$((100 * 1024 * $b / $mem_used_total))
-> > -               r=`echo "scale=2; $v / 100 " | bc`
-> > +               r=$(echo "scale=2; $v / 100 " | bc)
-
-> >                 if [ "$v" -lt 100 ]; then
-> >                         tst_res TFAIL "compression ratio: $r:1"
-> > --
-> > 2.38.0
-
-
-> > --
-> > Mailing list info: https://lists.linux.it/listinfo/ltp
+-- 
+heikki
