@@ -2,157 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A69C6329D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC496329E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiKUQnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S230300AbiKUQnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiKUQnG (ORCPT
+        with ESMTP id S230298AbiKUQnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:43:06 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11021026.outbound.protection.outlook.com [40.93.199.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA531D650;
-        Mon, 21 Nov 2022 08:43:04 -0800 (PST)
+        Mon, 21 Nov 2022 11:43:25 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E69BF5B6;
+        Mon, 21 Nov 2022 08:43:18 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wkf4FUl1UJ9Rg87zR4Pquwh43h1OuMbxIajc9cwJbYqYqmip0lUPkJKgMeuS+w2qi0E2zu9lN1bLUmOsbE5mw/MihwhRsi49/F0yw2FKvR16fJaAQtbTFQTJ6vsjgjoudIsdX5QdcMbpn1LUwj+R0FyycbxtYvE5qsTK6tU6YNtQOFtbWboHyG3VAk8KmGXFUB7cTxCKUsdEZty03BDnKzgj5pZIMbQVOxS7iVZGkVIKD8Mnp0wqvoD1Dn1MV3lB27XqONHDfihw6MfHOg5/65tNysjbcVcQWPPB65PTX/32hl+YrTdwRiudfgFOJHAvcLz34zr4aVVK5zHcnY/7hg==
+ b=aBK3QMtLO9jOQlpRdspYfpVi6QKBC6QrLKETuGPDGcRHhhLOE6xPUkKC0okcKRhlHrmv/+EzOhdbfVOoJUUnEQoI6L48euNITcI/lwboNwn/NpEr/3mYzf4VKiGRor9Dqm5AOXmzYqv5nAe77fztKNTD0EmkBypEyDOFPO2MxzEcf10f9w+Y+SEaC9wcMIYhWqsr/CNT0r59StpN8tqQyM84v0C9bpgc+r738iTnqbyEOfj+I6XpH8jlu0bppbRTDLOXAg9Yme6qgEQ7FlYVM+85oEfKRi3c+L/InTbm+o27ciAMYICYS2SSsdt9SBezjLAy2wadrAWRT4Y5wJshrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ejeILJSykIlSuiquuA0I3LLEB6BiATdaSHJc2Aq/HEw=;
- b=hFprVJoEv4uyVzyNgVraeqjZlJdpNUmfUJX0kviuW/4cKI9Zpmzy7l6/vloFnH/y8YlnsYYVOBlMiwcOaH3sFi3qXVo4ihgtKAke+PtRRuIkuZZe4MOlbMDMU0GC41VOECgYsvABA+M9ebd8J7A47/JdHOTez94Y1vCf/XSME4xtXyq32xlZOGBHgBA2nvqBeiY/TUVtq4jjqIc3LieDP+/OBZjHlH4cpaNAkLZ9GlbJqhWmZb0ztIy8QxEqJShEXFyRSacHDHtL+H6tbu1E3A0IBz/lEFWs0h2ibfeoApln2lcf6AbuVo7vsnXTeZSqbq9Q6brpN+HRm6o4I4USwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ bh=v2axPqeESC/l8aE6D21gNNvD9QRikcwKhy3ptffKIg4=;
+ b=lygfDWdcEt4DwqwLz32WKWkOhV9INXE8wd2iSyndlbJkmjHG4P8PUvDZbxiFxv3rO62JvKmMP+EkE8G92HcSrp2QS4pko0ucbaK/TFkA1KgjQk+K5sDIOgJefD0HYzr4hXSgD6AQBCsSmQZs32IxgtYo6gU1cPw7aMRjIq9e5nva82TngdMQX2UfPjIQj7kqGATvcmBDP+r6NdPbupHYNnh2x3y9RUdebobm3IZHUcc3iIFzF8FMRlG2ENHb0uyf5hcnRbeKfJg2slKcdBgQW8Yu8XezYaNk8SXg5WFou6oV9QfVgq44ZHqKUFzuzT2Dd75828Tw5z/L+gjkgckDAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ejeILJSykIlSuiquuA0I3LLEB6BiATdaSHJc2Aq/HEw=;
- b=eiTb3QnlBF/8d1/ErkJxZaFG5WU8VG6NlmJp2M7zwaUhX5gxdnc0carhJDlgHSGflf3VE+Eiles+XGtI83XJ3WGyRXv0OqkJOmDzfvzKRC+Egx08MVXrJRxp+BbGuw2lyyaBx7H/zKSKEJagVLes1dPx6370rxgWlp/a05E0I7M=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by MW4PR21MB2041.namprd21.prod.outlook.com (2603:10b6:303:11c::8) with
+ bh=v2axPqeESC/l8aE6D21gNNvD9QRikcwKhy3ptffKIg4=;
+ b=p2RiqX7Dnrtqs5loSFomC1IrUHeSaqSQYYvYpaoW0ZuGRx7FVz8+pkE5XaU9YdCD6OoqHQ2GJ7WEOuz7iH2cx++3pwy7Mp7dsy6JYPYFzfmQe2wj6K8K7ni4i2y7V7RiY9VUfygdD6GcUAG8u4Gdv5hvyzAhGaxDoiOe+iLLuPM=
+Received: from BN8PR07CA0017.namprd07.prod.outlook.com (2603:10b6:408:ac::30)
+ by DM4PR12MB5246.namprd12.prod.outlook.com (2603:10b6:5:399::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.2; Mon, 21 Nov
- 2022 16:43:01 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd%5]) with mapi id 15.20.5880.001; Mon, 21 Nov 2022
- 16:43:01 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: RE: [Patch v3 02/14] x86/ioapic: Gate decrypted mapping on
- cc_platform_has() attribute
-Thread-Topic: [Patch v3 02/14] x86/ioapic: Gate decrypted mapping on
- cc_platform_has() attribute
-Thread-Index: AQHY+esth9rK8u0tbUSv/V2oJn73Oa5JbKAAgAAvn0A=
-Date:   Mon, 21 Nov 2022 16:43:01 +0000
-Message-ID: <BYAPR21MB16881FF9B49F546CDDE95486D70A9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
- <1668624097-14884-3-git-send-email-mikelley@microsoft.com>
- <Y3uCLPInEaA0ufN4@zn.tnic>
-In-Reply-To: <Y3uCLPInEaA0ufN4@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=c5152d74-1eb5-414c-a238-db40af278373;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-21T16:41:02Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MW4PR21MB2041:EE_
-x-ms-office365-filtering-correlation-id: 65212418-06f2-4f59-d55b-08dacbdf7439
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bmVHcw7keuJgW2WvPBoVep7MK6DFIsIYryL7Now8TEMbBm3oSPvm+YH2Ryz3TiK+qhLKMJhZuQKg5FMsY9hAjSdq4M4cBya8IiKan1WGX0qfLimoRlCEs//ta346NZcw74zVUztgtl53/gb0mFBC6sXHp6l82buNbudOka3zqRjhTl4hAevph9U42qLmCnFFcgIOlpNNUwgaPOzcHc4mCNbWmYIvjCGw91OuyKCkcgOqWJ2mb8RNVJuJ4N5Rs2gv7d9NsW1G9XHRdgJpCPPu2E2uNlQ3GV2/SzL0fnKC1/4L721E5zmdK+XHiC+Apje8jM9v4w0Inbi6tRpF3q5+tAqGZJ2w4m2rCKNs7Z9dLlz7SvzkM2njM3UE9tePRBBa9QjfWMM+XXaPapvE8LSdWyjyad/6A4Aq4p4yrdzZY5uojFuv+/mF3129I7uFE1XDrdyZIboTam13wsJFIpb2GWP1ocva6I+lJvuARAtAjid043ZMPNtBPBPMhwKGbNXK2G48Ow/tm2rjIAZuvjZOoFc5ER6m1R3o7fHxRbZDTwgX8cxczjrAd1dT+rx++HR7HbmDUI5TlDBFM/B/1HrLogcHzDbmpy8Uc108KSO9pFT1Y4g5KAQqQNUp1c9TOCqQEWcj13sEBcj54pNJhOUTYGva7vxlEiHqtC31NDnt2Taoc8eZ+HVs+1fIpDlD8PRuDHjGMyFVkc9rIDcUu4U56WnRdewZQsZ3GyZE4kHtAzt1Odtv7lC1AzvQroHy9KVX
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(346002)(396003)(376002)(136003)(451199015)(86362001)(38070700005)(33656002)(55016003)(7416002)(7406005)(71200400001)(8936002)(8990500004)(26005)(2906002)(9686003)(52536014)(7696005)(6506007)(316002)(6916009)(54906003)(10290500003)(76116006)(5660300002)(8676002)(478600001)(66476007)(64756008)(66446008)(66946007)(4326008)(66556008)(41300700001)(122000001)(82960400001)(82950400001)(38100700002)(186003)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xAgEGv/j/Cn4yE6ni5ksVPbdPkGbCDZmYHUzXdq4CuXOp65tgy4JnPX4eXsy?=
- =?us-ascii?Q?9f+FGTJTSU+TSyTvRu6ZB5H8X99oSw9jkjKrcgvhuq2+Q/2rPicv5N6tUkGg?=
- =?us-ascii?Q?rkcKpq64FN/wjzEfpBJC8GzxrCngfgsklSBzpm8R3zUuJUQEVs4h5VuX5AWr?=
- =?us-ascii?Q?YJm8GcJNw2uIacn7xNdviu7iHZpyQipWSNMEJQciaFvASE/HKADofLRbjxd6?=
- =?us-ascii?Q?d1gC23lj6yCGDaOQ/d8O3I9u5VvD6TO3wwwMc+TcalcGKtbfm7JCfbEoaOyL?=
- =?us-ascii?Q?0ofXM1fNjbW1McdfNqQHYHlCGZqvO6Op7OYwwKUvJmhN1a/7Lt9YMHsP9PGj?=
- =?us-ascii?Q?uDe2hcR0O9xOC0X/7Z5IbNuWSpyiZioaNG5mpBj8M+uKQ7XggFEhjc0coNoP?=
- =?us-ascii?Q?b0YdZ5/XQrY2rochBcI1fWfHCV4tIz9wuHAF//lmdeGSH9TeaahCv+ZgkZc0?=
- =?us-ascii?Q?HmCBxEwpx6KSsWgObuA+H4DTRZ71yxhbF/KFZ7vGfbxpVfycG+A+1l39CD79?=
- =?us-ascii?Q?QnKvMJ3iHnzRIi+X8dSAr9kr4SA0yOYRn1vYyYNRWLPlZun6L0d+kzNHUKy0?=
- =?us-ascii?Q?9MEgxSa7H4YQE3X1gjRGyreQRi7gDs1znyahDUpjmd5pFcskNEGEOyrUn2/L?=
- =?us-ascii?Q?fOL5UXJAr1r8CaLrTaAAOoEJlUJTeAqyFfNNRC1aU01ZckBDIBQP1ryDD+dq?=
- =?us-ascii?Q?bIjMmreUMwmgO4+5MKJ9SAhwkusdds3gx127prY7QueeSmi3J+f72ibvInnU?=
- =?us-ascii?Q?IeIJs+xo9DszDFg0wXF1Q1QANrviClS6eHtkqJj4LcbYsIVgs4ihNrtsc81g?=
- =?us-ascii?Q?Nr+uQnCvaAWE95F1+/YceMobkLtkJJF2ccQ+VWKP/ybVodGrlc6jA/70OB8b?=
- =?us-ascii?Q?T49ZxI3GfuWJ8DCbzFQuCw7Dsjs9DyS7WhiwMkwUc0dLrcsa8ghKueamzHJD?=
- =?us-ascii?Q?0Nj5RH6CSkR5X70/XLD5iIIWw+aprpAIy3+COdPnPRX5qaf6WfvMtm6vYlOt?=
- =?us-ascii?Q?lOoFW7tGrbNrZpFsGUr20U5dSNw2VjxsnvdZDzc/OEGOwxwnw2rUkZ0vVxMw?=
- =?us-ascii?Q?QB2gWghg0p0WAyQBWEk2AdNbc58HMbY8ifIP9eBaRumnwWaubS7H4BxlpHI3?=
- =?us-ascii?Q?Kl/iOBCE2Rm7EwFB1JEfcR/V2UOStCP0VltBSxTabzbN+2Vg3DGbjeNb8UhW?=
- =?us-ascii?Q?ftoHkpyc3Xnc4AUwpGK+AgM66H4rO+Zw6uKadnDmGti7ko4AGybr5Hz0Kc1j?=
- =?us-ascii?Q?iNBBxz0mWsRMYSvusic3k63z1QHbAT069uCKWXjxdS53uGD+ZGyv75e+DZQ2?=
- =?us-ascii?Q?DTbIPGCEW+tChMXW9SqI8hEVCGd2hi+Vcae1M9XUP7OR+IdslGkLX/QakHOB?=
- =?us-ascii?Q?0XNoadYsFk9fPV3tzqOKr5zbtFjsVnuLYeGEdYU3UnEcOsCVqiYc7LqZ3WUK?=
- =?us-ascii?Q?6UWYefC8IlrQYpL+eRIeYlRnJaOwoQsAT5dagR4NpVojanH0wyJCbNil2cJa?=
- =?us-ascii?Q?QFKELrDmSxsYUbX6H/aDqNpiY2GN0fDHn5bCwq3nb/kesTO+owI+Kor/1vIx?=
- =?us-ascii?Q?UPkAaO5foqVKn1Uo+rUBHVM1gVNqNd5Go5MX+zRurjdJLObY1CD0doZwPVWu?=
- =?us-ascii?Q?xg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
+ 2022 16:43:15 +0000
+Received: from BN8NAM11FT114.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ac:cafe::ef) by BN8PR07CA0017.outlook.office365.com
+ (2603:10b6:408:ac::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15 via Frontend
+ Transport; Mon, 21 Nov 2022 16:43:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT114.mail.protection.outlook.com (10.13.177.46) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5834.8 via Frontend Transport; Mon, 21 Nov 2022 16:43:15 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 21 Nov
+ 2022 10:43:14 -0600
+Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Mon, 21 Nov 2022 10:43:13 -0600
+From:   Lizhi Hou <lizhi.hou@amd.com>
+To:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
+        <frowand.list@gmail.com>, <helgaas@kernel.org>
+CC:     Lizhi Hou <lizhi.hou@amd.com>, <clement.leger@bootlin.com>,
+        <max.zhen@amd.com>, <sonal.santan@amd.com>, <larry.liu@amd.com>,
+        <brian.xu@amd.com>, <stefano.stabellini@xilinx.com>,
+        <trix@redhat.com>
+Subject: [RESEND PATCH RFC V4 1/3] of: dynamic: Add interfaces for creating device node dynamically
+Date:   Mon, 21 Nov 2022 08:43:02 -0800
+Message-ID: <1669048984-56394-2-git-send-email-lizhi.hou@amd.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1669048984-56394-1-git-send-email-lizhi.hou@amd.com>
+References: <1669048984-56394-1-git-send-email-lizhi.hou@amd.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65212418-06f2-4f59-d55b-08dacbdf7439
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2022 16:43:01.3970
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT114:EE_|DM4PR12MB5246:EE_
+X-MS-Office365-Filtering-Correlation-Id: 43aed840-f991-415f-16ca-08dacbdf7c98
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sJOEplWJtwhDVGlD5zDFRCdjwfZLXIZCBN6QWunttPQ0/eX2CZXYdC/tRL4Ovse+bhjiV8Cg+l/EaAxhXvWYcxMGDi5a0G2TqmIF/w4uI3FOwBzfYS5i2tkX+lsfEnYKSsxeTReB79mbXjvEn4yCc99Exdg81QUsmbHCox6285Kn/SI/uSyYfyc5mA/MPsOIC4A46LhG2Oj2ZCuoP3dKOuNjO6OgJy49yi++GY+dr4i1Qk9gobxLrhhosm7v38Z2UdAkGz+AlXKL9qX7Y95y6Nx+o02Judz1sRMG2At99T5Dqd4zTCOwFPqLvfhWl+6rFUIZgEtcxDFWm5MdFC7LOYksltIULnFzNu5yib/26FWZAGCAogXtp/8J6MulJ6ewG+bGrt7GeidUjLadQO050fbGjdcLjGASUlf2q1M68PuL6UrvucukK/vZCAxdc3cFok0JXJ/S36+M4gxMWs1s/OWw5+zLUIDM/1GSDpzonBTmMsH4aiJdSjzkyrlpRwjtfsrOXmV29Fzw3c6qScrTWCGCR69+5aOuAKtrScZsD3ENSV5hxfj8r+K9vu4SoYCZswCrOkHEsENYnHLhCzLFmuEpo8a529ya0H+HPuu6xR31j/EDwO0egAK8mln6WT87PsWERGoSaSIMXrqNS+fSwafwwxLRJQHqHuYhnVkqUcTL+EsdEBBV3H0jNwA67wKlonKUhBgHNPibfB8yHWdAPLmOEk5VIxk/DJ3bUHVCoqs=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(39860400002)(136003)(451199015)(40470700004)(36840700001)(46966006)(86362001)(36756003)(82310400005)(4326008)(70586007)(40460700003)(40480700001)(41300700001)(70206006)(2616005)(426003)(47076005)(186003)(5660300002)(8676002)(8936002)(336012)(6666004)(478600001)(26005)(316002)(44832011)(110136005)(82740400003)(54906003)(81166007)(356005)(83380400001)(36860700001)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 16:43:15.4365
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XV0ay9lEPNTJW6ae1rzMS3in7QXATq439ujnIAMsIMC0cb23apBhbZVZ2i2caNEGxYY6dWkKLrm0FRZX1ry++kLDyBb8vv1epVZ35Rd26DY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB2041
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43aed840-f991-415f-16ca-08dacbdf7c98
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT114.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5246
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -160,39 +102,267 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@alien8.de> Sent: Monday, November 21, 2022 5:51 A=
-M
->=20
-> On Wed, Nov 16, 2022 at 10:41:25AM -0800, Michael Kelley wrote:
-> > Current code always maps the IOAPIC as shared (decrypted) in a
-> > confidential VM. But Hyper-V guest VMs on AMD SEV-SNP with vTOM
-> > enabled use a paravisor running in VMPL0 to emulate the IOAPIC.
->=20
-> "IO-APIC" I guess, in all your text.
->=20
-> > In such a case, the IOAPIC must be accessed as private (encrypted).
->=20
-> So the condition for the IO-APIC is pretty specific but the naming
-> CC_ATTR_EMULATED_IOAPIC too generic. Other HVs emulate IO-APICs too,
-> right?
->=20
-> If you have to be precise, the proper check should be (pseudo code):
->=20
->  if (cc_vendor(HYPERV) &&
->      SNP enabled &&
->      SNP features has vTOM &&
->      paravisor in use)
->=20
-> so I guess you're probably better off calling it
->=20
->   CC_ATTR_ACCESS_IOAPIC_ENCRYPTED
->=20
-> which then gets set on exactly those guests and nothing else.
->=20
-> I'd say.
->=20
+of_create_node() creates device node dynamically. The parent device node
+and full name are required for creating the node. It optionally creates
+an OF changeset and attaches the newly created node to the changeset. The
+device node pointer and the changeset pointer can be used to add
+properties to the device node and apply the node to the base tree.
 
-I'm OK with naming it very narrowly.  When/if there's a more general
-case later, we can generalize to whatever degree is appropriate.
+of_destroy_node() frees the device node created by of_create_node(). If
+an OF changeset was also created for this node, it will destroy the
+changeset before freeing the device node.
 
-Michael
+Expand of_changeset APIs to handle specific types of properties.
+    of_changeset_add_prop_string()
+    of_changeset_add_prop_string_array()
+    of_changeset_add_prop_u32_array()
+
+Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+Signed-off-by: Max Zhen <max.zhen@amd.com>
+Reviewed-by: Brian Xu <brian.xu@amd.com>
+---
+ drivers/of/dynamic.c | 187 +++++++++++++++++++++++++++++++++++++++++++
+ include/linux/of.h   |  24 ++++++
+ 2 files changed, 211 insertions(+)
+
+diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+index cd3821a6444f..71d53c81b396 100644
+--- a/drivers/of/dynamic.c
++++ b/drivers/of/dynamic.c
+@@ -461,6 +461,72 @@ struct device_node *__of_node_dup(const struct device_node *np,
+ 	return NULL;
+ }
+ 
++/**
++ * of_create_node - Dynamically create a device node
++ *
++ * @parent: Pointer to parent device node
++ * @full_name: Node full name
++ * @cset: Pointer to returning changeset
++ *
++ * Return: Pointer to the created device node or NULL in case of an error.
++ */
++struct device_node *of_create_node(struct device_node *parent,
++				   const char *full_name,
++				   struct of_changeset **cset)
++{
++	struct of_changeset *ocs;
++	struct device_node *np;
++	int ret;
++
++	np = __of_node_dup(NULL, full_name);
++	if (!np)
++		return NULL;
++	np->parent = parent;
++
++	if (!cset)
++		return np;
++
++	ocs = kmalloc(sizeof(*cset), GFP_KERNEL);
++	if (!ocs) {
++		of_node_put(np);
++		return NULL;
++	}
++
++	of_changeset_init(ocs);
++	ret = of_changeset_attach_node(ocs, np);
++	if (ret) {
++		of_changeset_destroy(ocs);
++		of_node_put(np);
++		kfree(ocs);
++		return NULL;
++	}
++
++	np->data = ocs;
++	*cset = ocs;
++
++	return np;
++}
++EXPORT_SYMBOL(of_create_node);
++
++/**
++ * of_destroy_node - Destroy a dynamically created device node
++ *
++ * @np: Pointer to dynamically created device node
++ *
++ */
++void of_destroy_node(struct device_node *np)
++{
++	struct of_changeset *ocs;
++
++	if (np->data) {
++		ocs = (struct of_changeset *)np->data;
++		of_changeset_destroy(ocs);
++		kfree(ocs);
++	}
++	of_node_put(np);
++}
++EXPORT_SYMBOL(of_destroy_node);
++
+ static void __of_changeset_entry_destroy(struct of_changeset_entry *ce)
+ {
+ 	if (ce->action == OF_RECONFIG_ATTACH_NODE &&
+@@ -934,3 +1000,124 @@ int of_changeset_action(struct of_changeset *ocs, unsigned long action,
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(of_changeset_action);
++
++static int of_changeset_add_prop_helper(struct of_changeset *ocs,
++					struct device_node *np,
++					const struct property *pp)
++{
++	struct property *new_pp;
++	int ret;
++
++	new_pp = __of_prop_dup(pp, GFP_KERNEL);
++	if (!new_pp)
++		return -ENOMEM;
++
++	ret = of_changeset_add_property(ocs, np, new_pp);
++	if (ret) {
++		kfree(new_pp->name);
++		kfree(new_pp->value);
++		kfree(new_pp);
++	}
++
++	return ret;
++}
++
++/**
++ * of_changeset_add_prop_string - Add a string property to a changeset
++ *
++ * @ocs:	changeset pointer
++ * @np:		device node pointer
++ * @prop_name:	name of the property to be added
++ * @str:	pointer to null terminated string
++ *
++ * Create a string property and add it to a changeset.
++ *
++ * Return: 0 on success, a negative error value in case of an error.
++ */
++int of_changeset_add_prop_string(struct of_changeset *ocs,
++				 struct device_node *np,
++				 const char *prop_name, const char *str)
++{
++	struct property prop;
++
++	prop.name = (char *)prop_name;
++	prop.length = strlen(str) + 1;
++	prop.value = (void *)str;
++
++	return of_changeset_add_prop_helper(ocs, np, &prop);
++}
++EXPORT_SYMBOL_GPL(of_changeset_add_prop_string);
++
++/**
++ * of_changeset_add_prop_string_array - Add a string list property to
++ * a changeset
++ *
++ * @ocs:	changeset pointer
++ * @np:		device node pointer
++ * @prop_name:	name of the property to be added
++ * @str_array:	pointer to an array of null terminated strings
++ * @sz:		number of string array elements
++ *
++ * Create a string list property and add it to a changeset.
++ *
++ * Return: 0 on success, a negative error value in case of an error.
++ */
++int of_changeset_add_prop_string_array(struct of_changeset *ocs,
++				       struct device_node *np,
++				       const char *prop_name,
++				       const char **str_array, size_t sz)
++{
++	struct property prop;
++	int i, ret;
++	char *vp;
++
++	prop.name = (char *)prop_name;
++
++	prop.length = 0;
++	for (i = 0; i < sz; i++)
++		prop.length += strlen(str_array[i]) + 1;
++
++	prop.value = kmalloc(prop.length, GFP_KERNEL);
++	if (!prop.value)
++		return -ENOMEM;
++
++	vp = prop.value;
++	for (i = 0; i < sz; i++) {
++		vp += snprintf(vp, (char *)prop.value + prop.length - vp, "%s",
++			       str_array[i]) + 1;
++	}
++	ret = of_changeset_add_prop_helper(ocs, np, &prop);
++	kfree(prop.value);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(of_changeset_add_prop_string_array);
++
++/**
++ * of_changeset_add_prop_u32_array - Add a property of 32 bit integers
++ * property to a changeset
++ *
++ * @ocs:	changeset pointer
++ * @np:		device node pointer
++ * @prop_name:	name of the property to be added
++ * @array:	pointer to an array of 32 bit integers
++ * @sz:		number of array elements
++ *
++ * Create a property of 32 bit integers and add it to a changeset.
++ *
++ * Return: 0 on success, a negative error value in case of an error.
++ */
++int of_changeset_add_prop_u32_array(struct of_changeset *ocs,
++				    struct device_node *np,
++				    const char *prop_name,
++				    const u32 *array, size_t sz)
++{
++	struct property prop;
++
++	prop.name = (char *)prop_name;
++	prop.length = sizeof(u32) * sz;
++	prop.value = (void *)array;
++
++	return of_changeset_add_prop_helper(ocs, np, &prop);
++}
++EXPORT_SYMBOL_GPL(of_changeset_add_prop_u32_array);
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 766d002bddb9..ba31036f0876 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -1505,6 +1505,30 @@ static inline int of_changeset_update_property(struct of_changeset *ocs,
+ {
+ 	return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+ }
++
++struct device_node *of_create_node(struct device_node *parent,
++				   const char *full_name,
++				   struct of_changeset **cset);
++void of_destroy_node(struct device_node *np);
++int of_changeset_add_prop_string(struct of_changeset *ocs,
++				 struct device_node *np,
++				 const char *prop_name, const char *str);
++int of_changeset_add_prop_string_array(struct of_changeset *ocs,
++				       struct device_node *np,
++				       const char *prop_name,
++				       const char **str_array, size_t sz);
++int of_changeset_add_prop_u32_array(struct of_changeset *ocs,
++				    struct device_node *np,
++				    const char *prop_name,
++				    const u32 *array, size_t sz);
++static inline int of_changeset_add_prop_u32(struct of_changeset *ocs,
++					    struct device_node *np,
++					    const char *prop_name,
++					    const u32 val)
++{
++	return of_changeset_add_prop_u32_array(ocs, np, prop_name, &val, 1);
++}
++
+ #else /* CONFIG_OF_DYNAMIC */
+ static inline int of_reconfig_notifier_register(struct notifier_block *nb)
+ {
+-- 
+2.17.1
+
