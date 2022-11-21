@@ -2,94 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468C7632C05
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 19:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B51632C1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 19:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiKUSYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 13:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S229757AbiKUS06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 13:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKUSYw (ORCPT
+        with ESMTP id S229913AbiKUS0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 13:24:52 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9B2CDFD1;
-        Mon, 21 Nov 2022 10:24:51 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALGRpHi009307;
-        Mon, 21 Nov 2022 18:24:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=AMtjW6WLFCULVG/XV+qA98xsr1zwM1JGCHIM1oBMy+g=;
- b=mesbrjG7UOwJd7gfx3lnVVoiKpNXvsmwJ/RBuN0mXq8l2ewijI2edu2Crwk0wOW1pXRE
- /EbPdnKf9pY2DxX1olRVe95iqd1KZqwHDMdR9+0IlQWHUnDSQmtKj8lSYltYLl7eEEyn
- tRyYAeIUjVXiVbpE+coLm+7kIFrr1vYl5/vydFmJOdtxBPHJIlV4bwH4OC84Dg7JSxEq
- 800ikAO4lIhdEleiJk4iGS0HT/KEDRxLyrIkXnw4JQzRvpVzvr6gqCR3PPGjIgyoDI3A
- WqdRGq6sw/5VAy8CwG1MJNqnehKiOmUz+OGxxlfIT5MygeHKi2/9iFLUC3UlEfLPe77o eg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cvg2ky4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 18:24:07 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ALGWIXc028182;
-        Mon, 21 Nov 2022 18:24:07 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cvg2kxw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 18:24:07 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ALIL5h1016971;
-        Mon, 21 Nov 2022 18:24:06 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma01wdc.us.ibm.com with ESMTP id 3kxps970cs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 18:24:06 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ALIO5TQ8717046
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Nov 2022 18:24:05 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 352B458054;
-        Mon, 21 Nov 2022 18:24:05 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D2C155805C;
-        Mon, 21 Nov 2022 18:24:03 +0000 (GMT)
-Received: from sig-9-65-226-3.ibm.com (unknown [9.65.226.3])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Nov 2022 18:24:03 +0000 (GMT)
-Message-ID: <5d98172d77a8a0f1e3daab44ad51bf38978cc053.camel@linux.ibm.com>
-Subject: Re: [PATCH] lockdown: kexec_file: prevent unsigned kernel image
- when KEXEC_SIG not enabled
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>, Jiri Bohac <jbohac@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        linux-integrity@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        James Morris <jmorris@namei.org>,
-        Matthew Garrett <mjg59@google.com>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Mon, 21 Nov 2022 13:23:57 -0500
-In-Reply-To: <20221121072947.836672-1-coxu@redhat.com>
-References: <20221121072947.836672-1-coxu@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3bqLPIylRMF8WNuVop5Oo8wkFbGC0ndk
-X-Proofpoint-ORIG-GUID: myQEqmbxYN6708CMzE6cOpu7wWalPzdx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_16,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 malwarescore=0 impostorscore=0 mlxscore=0
- clxscore=1011 priorityscore=1501 suspectscore=0 spamscore=0
- mlxlogscore=905 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211210139
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        Mon, 21 Nov 2022 13:26:40 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722E7D02D6;
+        Mon, 21 Nov 2022 10:26:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Fz7dU5AsHIREf9gJ+3uHjaOYyC69u8wavjx25CmztKk=; b=bmtsOS4rDCd1b4M/f2CJG3mydH
+        MrOT08YZbpgJcOoOZ2dXOODZKLejl3USMNmxKOHXYdBPjqb92gjbWzBZZnN+DOKX0PDZlO9fxjStf
+        T5ZqmNr+vPvcR0V+7EtKn88L4iIublbw8fXn8P3rDt1hHhqcCnaDJPlwvIPSOjDsu16w=;
+Received: from p200300daa7225c007502151ad3a4cf6f.dip0.t-ipconnect.de ([2003:da:a722:5c00:7502:151a:d3a4:cf6f] helo=Maecks.lan)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1oxBUm-003YoF-LG; Mon, 21 Nov 2022 19:26:16 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     netfilter-devel@vger.kernel.org,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] netfilter: nf_flow_table: add missing locking
+Date:   Mon, 21 Nov 2022 19:26:15 +0100
+Message-Id: <20221121182615.90843-1-nbd@nbd.name>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,26 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Coiby,
+nf_flow_table_block_setup and the driver TC_SETUP_FT call can modify the flow
+block cb list while they are being traversed elsewhere, causing a crash.
+Add a write lock around the calls to protect readers
 
-On Mon, 2022-11-21 at 15:29 +0800, Coiby Xu wrote:
-> A kernel builder may not enable KEXEC_SIG and some architectures like
-> ppc64 simply don't have KEXEC_SIG. In these cases, unless both
-> IMA_ARCH_POLICY and secure boot also enabled, lockdown doesn't prevent
-> unsigned kernel image from being kexec'ed via the kexec_file_load
-> syscall whereas it could prevent one via the kexec_load syscall. Mandate
-> signature verification for those cases.
-> 
-> Fixes: 155bdd30af17 ("kexec_file: Restrict at runtime if the kernel is locked down")
-> Cc: Matthew Garrett <mjg59@srcf.ucam.org>
-> Cc: Jiri Bohac <jbohac@suse.cz>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: kexec@lists.infradead.org
-> Cc: linux-integrity@vger.kernel.org
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+---
+ net/netfilter/nf_flow_table_offload.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Other than correcting the function name to mandate_signature_verificati
-on(),
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+diff --git a/net/netfilter/nf_flow_table_offload.c b/net/netfilter/nf_flow_table_offload.c
+index b04645ced89b..00b522890d77 100644
+--- a/net/netfilter/nf_flow_table_offload.c
++++ b/net/netfilter/nf_flow_table_offload.c
+@@ -1098,6 +1098,7 @@ static int nf_flow_table_block_setup(struct nf_flowtable *flowtable,
+ 	struct flow_block_cb *block_cb, *next;
+ 	int err = 0;
+ 
++	down_write(&flowtable->flow_block_lock);
+ 	switch (cmd) {
+ 	case FLOW_BLOCK_BIND:
+ 		list_splice(&bo->cb_list, &flowtable->flow_block.cb_list);
+@@ -1112,6 +1113,7 @@ static int nf_flow_table_block_setup(struct nf_flowtable *flowtable,
+ 		WARN_ON_ONCE(1);
+ 		err = -EOPNOTSUPP;
+ 	}
++	up_write(&flowtable->flow_block_lock);
+ 
+ 	return err;
+ }
+@@ -1168,7 +1170,9 @@ static int nf_flow_table_offload_cmd(struct flow_block_offload *bo,
+ 
+ 	nf_flow_table_block_offload_init(bo, dev_net(dev), cmd, flowtable,
+ 					 extack);
++	down_write(&flowtable->flow_block_lock);
+ 	err = dev->netdev_ops->ndo_setup_tc(dev, TC_SETUP_FT, bo);
++	up_write(&flowtable->flow_block_lock);
+ 	if (err < 0)
+ 		return err;
+ 
+-- 
+2.38.1
 
