@@ -2,49 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B02D6318E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBA66318F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiKUD1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S229518AbiKUDan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 22:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiKUD1G (ORCPT
+        with ESMTP id S229455AbiKUDal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:27:06 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B8F26AD6;
-        Sun, 20 Nov 2022 19:27:05 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NFt9J0qhjz4xFy;
-        Mon, 21 Nov 2022 14:26:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669001220;
-        bh=6aqiKY3bEZTrEiPV4A0hOaMTh+jqeYnyGttXV5Q2xD4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eY8vPm+BKIhgNYu1pUaZJ8TijIIFukzybNI0jsODKREYZxW3M7FIMZv+6gIwM8g37
-         2vObue/Whcc8KKtZzqm7AtWXRsZnIOu3m/IZI9jsKxR+5Nx/sR5O5IBuOK6SYunEqt
-         wwOV+eN8G3S5hgQohNBDXkgr17c8FvoMxxxA7+zDIUV2R7hbgPiyvaWqbC5GaK5HIx
-         AWWh+lUvrL3WqMRzyBajEGCVWiEYB5fNtShIhN7K33CCU6Td4jPbxrOPuV+WcCGhJD
-         /3HjM649jKhjWFgn5g95HxfO+zZ2d7xNWn1oUB6Z7HaynQGNFnkhD4T+EM3Na7NT7s
-         fiF/rgnem0mLg==
-Date:   Mon, 21 Nov 2022 14:26:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the apparmor tree with the security
- tree
-Message-ID: <20221121142658.2e3f4108@canb.auug.org.au>
+        Sun, 20 Nov 2022 22:30:41 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AB93C6FF;
+        Sun, 20 Nov 2022 19:30:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669001440; x=1700537440;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=p/imUQ4wb1q/f081nAaWCXbMBiKhp6m9NHrOOSYOhF0=;
+  b=M1qFGF83gbjOde69Eat4u5T8S8Oc8mDx7LVrpOUuQz9fhCjYW+M1t6Bp
+   +p6rj2+3zug1Am4Rbt/TgK11or+wNlJaj+gHVbz4JbNb6c+MFO+ioYtqS
+   0qR1mJwLdajq5r5CVZfBZauKzmHjCEhTAch7joYTcqI9y9nFpMdzGAo9i
+   h4qwId7YCTR+OWS8+8Mg3udNv9fhZPzFz7/2ZH9CAHBo4M3AGOJrvIcjv
+   ++Lgfs9U/ehXZWH4GWAfiAiFd86E8wAJea+t7o1pXDiw1RgkxHNilQ7uz
+   sLjJvFmZ5265ohwN5UAQftQ01gGo0FefsjoZGtS9JJYru8CGrT6VAq1NO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="340319009"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="340319009"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2022 19:30:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="635043656"
+X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
+   d="scan'208";a="635043656"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 20 Nov 2022 19:30:39 -0800
+Received: from temeakar-mobl.amr.corp.intel.com (temeakar-mobl.amr.corp.intel.com [10.212.208.52])
+        by linux.intel.com (Postfix) with ESMTP id 36751580C39;
+        Sun, 20 Nov 2022 19:30:39 -0800 (PST)
+Message-ID: <d46a9aa805d740979b9ae0a89984d43231757bb5.camel@linux.intel.com>
+Subject: Re: [PATCH V8 RESEND 4/4] PCI: vmd: Add quirk to configure PCIe
+ ASPM and LTR
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 20 Nov 2022 19:30:39 -0800
+In-Reply-To: <cddb4c3d-cbaa-06fb-0edc-e0a1d8bf9ff2@linux.intel.com>
+References: <20221119021411.1383248-1-david.e.box@linux.intel.com>
+         <20221119021411.1383248-5-david.e.box@linux.intel.com>
+         <cddb4c3d-cbaa-06fb-0edc-e0a1d8bf9ff2@linux.intel.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Wwn7JLCJuK6TOGyJB2XRPx7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,78 +74,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Wwn7JLCJuK6TOGyJB2XRPx7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+T24gRnJpLCAyMDIyLTExLTE4IGF0IDIxOjUwIC0wODAwLCBTYXRoeWFuYXJheWFuYW4gS3VwcHVz
+d2FteSB3cm90ZToKPiBISSwKPiAKPiBPbiAxMS8xOC8yMiA2OjE0IFBNLCBEYXZpZCBFLiBCb3gg
+d3JvdGU6Cj4gPiBQQ0llIHBvcnRzIHJlc2VydmVkIGZvciBWTUQgdXNlIGFyZSBub3QgdmlzaWJs
+ZSB0byBCSU9TIGFuZCB0aGVyZWZvcmUgbm90Cj4gPiBjb25maWd1cmVkIHRvIGVuYWJsZSBQQ0ll
+IEFTUE0gb3IgTFRSIHZhbHVlcyAod2hpY2ggQklPUyB3aWxsIGNvbmZpZ3VyZSBpZgo+ID4gdGhl
+eSBhcmUgbm90IHNldCkuIExhY2sgb2YgdGhpcyBwcm9ncmFtbWluZyByZXN1bHRzIGluIGhpZ2gg
+cG93ZXIKPiA+IGNvbnN1bXB0aW9uIG9uIGxhcHRvcHMgYXMgcmVwb3J0ZWQgaW4gYnVnemlsbGEu
+wqAgRm9yIGFmZmVjdGVkIHByb2R1Y3RzIHVzZQo+ID4gcGNpX2VuYWJsZV9saW5rX3N0YXRlIHRv
+IHNldCB0aGUgYWxsb3dlZCBsaW5rIHN0YXRlcyBmb3IgZGV2aWNlcyBvbiB0aGUKPiA+IHJvb3Qg
+cG9ydHMuIEFsc28gc2V0IHRoZSBMVFIgdmFsdWUgdG8gdGhlIG1heGltdW0gdmFsdWUgbmVlZGVk
+IGZvciB0aGUgU29DLgo+ID4gCj4gPiBUaGlzIGlzIGEgd29ya2Fyb3VuZCBmb3IgcHJvZHVjdHMg
+ZnJvbSBSb2NrZXQgTGFrZSB0aHJvdWdoIEFsZGVyIExha2UuCj4gPiBSYXB0b3IgTGFrZSwgdGhl
+IGxhdGVzdCBwcm9kdWN0IGF0IHRoaXMgdGltZSwgaGFzIGFscmVhZHkgaW1wbGVtZW50ZWQgTFRS
+Cj4gPiBjb25maWd1cmluZyBpbiBCSU9TLiBGdXR1cmUgcHJvZHVjdHMgd2lsbCBtb3ZlIEFTUE0g
+Y29uZmlndXJhdGlvbiBiYWNrIHRvCj4gPiBCSU9TIGFzIHdlbGwuwqAgQXMgdGhpcyBzb2x1dGlv
+biBpcyBpbnRlbmRlZCBmb3IgbGFwdG9wcywgc3VwcG9ydCBpcyBub3QKPiA+IGFkZGVkIGZvciBo
+b3RwbHVnIG9yIGZvciBkZXZpY2VzIGRvd25zdHJlYW0gb2YgYSBzd2l0Y2ggb24gdGhlIHJvb3Qg
+cG9ydC4KPiA+IAo+ID4gTGluazogaHR0cHM6Ly9idWd6aWxsYS5rZXJuZWwub3JnL3Nob3dfYnVn
+LmNnaT9pZD0yMTIzNTUKPiA+IExpbms6IGh0dHBzOi8vYnVnemlsbGEua2VybmVsLm9yZy9zaG93
+X2J1Zy5jZ2k/aWQ9MjE1MDYzCj4gPiBMaW5rOiBodHRwczovL2J1Z3ppbGxhLmtlcm5lbC5vcmcv
+c2hvd19idWcuY2dpP2lkPTIxMzcxNwo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEJv
+dHRpbmkgPG1pY2hhZWwuYS5ib3R0aW5pQGxpbnV4LmludGVsLmNvbT4KPiA+IFNpZ25lZC1vZmYt
+Ynk6IERhdmlkIEUuIEJveCA8ZGF2aWQuZS5ib3hAbGludXguaW50ZWwuY29tPgo+ID4gUmV2aWV3
+ZWQtYnk6IEpvbiBEZXJyaWNrIDxqb25hdGhhbi5kZXJyaWNrQGxpbnV4LmRldj4KPiA+IFJldmll
+d2VkLWJ5OiBOaXJtYWwgUGF0ZWwgPG5pcm1hbC5wYXRlbEBsaW51eC5pbnRlbC5jb20+Cj4gPiAt
+LS0KPiA+IMKgVjgKPiA+IMKgIC0gUmVtb3ZlZCBzdHJ1Y3Qgdm1kX2RldmljZV9kYXRhIHBhdGNo
+LiBJbnN0ZWFkIHVzZSAjZGVmaW5lIGZvciB0aGUgTFRSCj4gPiDCoMKgwqAgdmFsdWUgd2hpY2gg
+aXMgdGhlIHNhbWUgYWNyb3NzIGFsbCBwcm9kdWN0cyBuZWVkaW5nIHRoZSBxdWlyay4KPiA+IMKg
+VjcKPiA+IMKgIC0gTm8gY2hhbmdlCj4gPiDCoFY2Cj4gPiDCoCAtIFNldCBBU1BNIGZpcnN0IGJl
+Zm9yZSBzZXR0aW5nIExUUi4gVGhpcyBpcyBuZWVkZWQgYmVjYXVzZSBzb21lCj4gPiDCoMKgwqAg
+ZGV2aWNlcyBtYXkgb25seSBoYXZlIExUUiBzZXQgYnkgQklPUyBhbmQgbm90IEFTUE0KPiA+IMKg
+IC0gU2tpcCBzZXR0aW5nIHRoZSBMVFIgaWYgdGhlIGN1cnJlbnQgTFRSIGluIG5vbi16ZXJvLgo+
+ID4gwqBWNQo+ID4gwqAgLSBQcm92aWRlIHRoZSBMVFIgdmFsdWUgYXMgZHJpdmVyIGRhdGEuCj4g
+PiDCoCAtIFVzZSBEV09SRCBmb3IgdGhlIGNvbmZpZyBzcGFjZSB3cml0ZSB0byBhdm9pZCBQQ0kg
+V09SRCBhY2Nlc3MgYnVnLgo+ID4gwqAgLSBTZXQgQVNQTSBsaW5rcyBmaXJzdHMsIGVuYWJsaW5n
+IGFsbCBsaW5rIHN0YXRlcywgYmVmb3JlIHNldHRpbmcgYQo+ID4gwqDCoMKgIGRlZmF1bHQgTFRS
+IGlmIHRoZSBjYXBhYmlsaXR5IGlzIHByZXNlbnQKPiA+IMKgIC0gQWRkIGtlcm5lbCBtZXNzYWdl
+IHRoYXQgVk1EIGlzIHNldHRpbmcgdGhlIGRldmljZSBMVFIuCj4gPiDCoFY0Cj4gPiDCoCAtIFJl
+ZmFjdG9yIHZtZF9lbmFibGVfYXBzbSgpIHRvIGV4aXQgZWFybHksIG1ha2luZyB0aGUgbGluZXMg
+c2hvcnRlcgo+ID4gwqDCoMKgIGFuZCBtb3JlIHJlYWRhYmxlLiBTdWdnZXN0ZWQgYnkgQ2hyaXN0
+b3BoLgo+ID4gwqBWMwo+ID4gwqAgLSBObyBjaGFuZ2VzCj4gPiDCoFYyCj4gPiDCoCAtIFVzZSBy
+ZXR1cm4gc3RhdHVzIHRvIHByaW50IHBjaV9pbmZvIG1lc3NhZ2UgaWYgQVNQTSBjYW5ub3QgYmUg
+ZW5hYmxlZC4KPiA+IMKgIC0gQWRkIG1pc3Npbmcgc3RhdGljIGRlY2xhcmF0aW9uLCBjYXVnaHQg
+YnkgbGtwQGludGVsLmNvbQo+ID4gCj4gPiDCoGRyaXZlcnMvcGNpL2NvbnRyb2xsZXIvdm1kLmMg
+fCA2NCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0KPiA+IMKgMSBmaWxlIGNo
+YW5nZWQsIDU4IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3BjaS9jb250cm9sbGVyL3ZtZC5jIGIvZHJpdmVycy9wY2kvY29udHJvbGxl
+ci92bWQuYwo+ID4gaW5kZXggODZmMzA4NWRiMDE0Li5jYmE1N2UzMDkxZjYgMTAwNjQ0Cj4gPiAt
+LS0gYS9kcml2ZXJzL3BjaS9jb250cm9sbGVyL3ZtZC5jCj4gPiArKysgYi9kcml2ZXJzL3BjaS9j
+b250cm9sbGVyL3ZtZC5jCj4gPiBAQCAtNjYsMTIgKzY2LDIyIEBAIGVudW0gdm1kX2ZlYXR1cmVz
+IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqAgKiBpbnRlcnJ1cHQgaGFuZGxpbmcuCj4gPiDCoMKgwqDC
+oMKgwqDCoMKgICovCj4gPiDCoMKgwqDCoMKgwqDCoMKgVk1EX0ZFQVRfQ0FOX0JZUEFTU19NU0lf
+UkVNQVDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgPSAoMSA8PCA0KSwKPiA+ICsKPiA+ICvCoMKgwqDC
+oMKgwqDCoC8qCj4gPiArwqDCoMKgwqDCoMKgwqAgKiBFbmFibGUgQVNQTSBvbiB0aGUgUENJRSBy
+b290IHBvcnRzIGFuZCBzZXQgdGhlIGRlZmF1bHQgTFRSIG9mIHRoZQo+ID4gK8KgwqDCoMKgwqDC
+oMKgICogc3RvcmFnZSBkZXZpY2VzIG9uIHBsYXRmb3JtcyB3aGVyZSB0aGVzZSB2YWx1ZXMgYXJl
+IG5vdAo+ID4gY29uZmlndXJlZCBieQo+ID4gK8KgwqDCoMKgwqDCoMKgICogQklPUy4gVGhpcyBp
+cyBuZWVkZWQgZm9yIGxhcHRvcHMsIHdoaWNoIHJlcXVpcmUgdGhlc2Ugc2V0dGluZ3MKPiA+IGZv
+cgo+ID4gK8KgwqDCoMKgwqDCoMKgICogcHJvcGVyIHBvd2VyIG1hbmFnZW1lbnQgb2YgdGhlIFNv
+Qy4KPiA+ICvCoMKgwqDCoMKgwqDCoCAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgVk1EX0ZFQVRfQklP
+U19QTV9RVUlSS8KgwqDCoMKgwqDCoMKgwqDCoMKgPSAoMSA8PCA1KSwKPiA+IMKgfTsKPiA+IMKg
+Cj4gPiDCoCNkZWZpbmUgVk1EX0ZFQVRTX0NMSUVOVMKgwqDCoMKgwqDCoMKgKFZNRF9GRUFUX0hB
+U19NRU1CQVJfU0hBRE9XX1ZTQ0FQIHzCoMKgwqDCoMKgXAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBWTURfRkVBVF9I
+QVNfQlVTX1JFU1RSSUNUSU9OUyB8wqDCoMKgwqDCoMKgwqDCoFwKPiA+IMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgVk1EX0ZF
+QVRfT0ZGU0VUX0ZJUlNUX1ZFQ1RPUikKPiA+IMKgCj4gPiArI2RlZmluZSBWTURfQklPU19QTV9R
+VUlSS19MVFLCoMKgMHgxMDAzwqDCoC8qIDMxNDU3MjggbnMgKi8KPiA+ICsKPiA+IMKgc3RhdGlj
+IERFRklORV9JREEodm1kX2luc3RhbmNlX2lkYSk7Cj4gPiDCoAo+ID4gwqAvKgo+ID4gQEAgLTcx
+Myw2ICs3MjMsNDYgQEAgc3RhdGljIHZvaWQgdm1kX2NvcHlfaG9zdF9icmlkZ2VfZmxhZ3Moc3Ry
+dWN0Cj4gPiBwY2lfaG9zdF9icmlkZ2UgKnJvb3RfYnJpZGdlLAo+ID4gwqDCoMKgwqDCoMKgwqDC
+oHZtZF9icmlkZ2UtPm5hdGl2ZV9kcGMgPSByb290X2JyaWRnZS0+bmF0aXZlX2RwYzsKPiA+IMKg
+fQo+ID4gwqAKPiA+ICsvKgo+ID4gKyAqIEVuYWJsZSBBU1BNIGFuZCBMVFIgc2V0dGluZ3Mgb24g
+ZGV2aWNlcyB0aGF0IGFyZW4ndCBjb25maWd1cmVkIGJ5IEJJT1MuCj4gPiArICovCj4gPiArc3Rh
+dGljIGludCB2bWRfcG1fZW5hYmxlX3F1aXJrKHN0cnVjdCBwY2lfZGV2ICpwZGV2LCB2b2lkICp1
+c2VyZGF0YSkKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBsb25nIGZlYXR1cmVz
+ID0gKih1bnNpZ25lZCBsb25nICopdXNlcmRhdGE7Cj4gPiArwqDCoMKgwqDCoMKgwqB1MTYgbHRy
+ID0gVk1EX0JJT1NfUE1fUVVJUktfTFRSOwo+ID4gK8KgwqDCoMKgwqDCoMKgdTMyIGx0cl9yZWc7
+Cj4gPiArwqDCoMKgwqDCoMKgwqBpbnQgcG9zOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYg
+KCEoZmVhdHVyZXMgJiBWTURfRkVBVF9CSU9TX1BNX1FVSVJLKSkKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHBjaV9l
+bmFibGVfbGlua19zdGF0ZShwZGV2LCBQQ0lFX0xJTktfU1RBVEVfQUxMKTsKPiA+ICsKPiA+ICvC
+oMKgwqDCoMKgwqDCoHBvcyA9IHBjaV9maW5kX2V4dF9jYXBhYmlsaXR5KHBkZXYsIFBDSV9FWFRf
+Q0FQX0lEX0xUUik7Cj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoIXBvcykKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoC8q
+Cj4gPiArwqDCoMKgwqDCoMKgwqAgKiBTa2lwIGlmIHRoZSBtYXggc25vb3AgTFRSIGlzIG5vbi16
+ZXJvLCBpbmRpY2F0aW5nIEJJT1MgaGFzIHNldCBpdAo+ID4gK8KgwqDCoMKgwqDCoMKgICogc28g
+dGhlIExUUiBxdWlyayBpcyBub3QgbmVlZGVkLgo+ID4gK8KgwqDCoMKgwqDCoMKgICovCj4gPiAr
+wqDCoMKgwqDCoMKgwqBwY2lfcmVhZF9jb25maWdfZHdvcmQocGRldiwgcG9zICsgUENJX0xUUl9N
+QVhfU05PT1BfTEFULCAmbHRyX3JlZyk7Cj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoISEobHRyX3Jl
+ZyAmIChQQ0lfTFRSX1ZBTFVFX01BU0sgfCBQQ0lfTFRSX1NDQUxFX01BU0spKSkKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKg
+wqDCoC8qCj4gPiArwqDCoMKgwqDCoMKgwqAgKiBTZXQgdGhlIGRlZmF1bHQgdmFsdWVzIHRvIHRo
+ZSBtYXhpbXVtIHJlcXVpcmVkIGJ5IHRoZSBwbGF0Zm9ybSB0bwo+ID4gK8KgwqDCoMKgwqDCoMKg
+ICogYWxsb3cgdGhlIGRlZXBlc3QgcG93ZXIgbWFuYWdlbWVudCBzYXZpbmdzLiBXcml0ZSBhcyBh
+IERXT1JECj4gPiB3aGVyZQo+ID4gK8KgwqDCoMKgwqDCoMKgICogdGhlIGxvd2VyIHdvcmQgaXMg
+dGhlIG1heCBzbm9vcCBsYXRlbmN5IGFuZCB0aGUgdXBwZXIgd29yZCBpcyB0aGUKPiA+ICvCoMKg
+wqDCoMKgwqDCoCAqIG1heCBub24tc25vb3AgbGF0ZW5jeS4KPiA+ICvCoMKgwqDCoMKgwqDCoCAq
+Lwo+ID4gK8KgwqDCoMKgwqDCoMKgbHRyX3JlZyA9IChsdHIgPDwgMTYpIHwgbHRyOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgcGNpX3dyaXRlX2NvbmZpZ19kd29yZChwZGV2LCBwb3MgKyBQQ0lfTFRSX01B
+WF9TTk9PUF9MQVQsIGx0cl9yZWcpOwo+ID4gK8KgwqDCoMKgwqDCoMKgcGNpX2luZm8ocGRldiwg
+IlZNRDogRGVmYXVsdCBMVFIgdmFsdWUgc2V0IGJ5IGRyaXZlclxuIik7Cj4gPiArCj4gPiArwqDC
+oMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+ICt9Cj4gPiArCj4gPiDCoHN0YXRpYyBpbnQgdm1kX2Vu
+YWJsZV9kb21haW4oc3RydWN0IHZtZF9kZXYgKnZtZCwgdW5zaWduZWQgbG9uZyBmZWF0dXJlcykK
+PiA+IMKgewo+ID4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBwY2lfc3lzZGF0YSAqc2QgPSAmdm1k
+LT5zeXNkYXRhOwo+ID4gQEAgLTg2Nyw2ICs5MTcsOCBAQCBzdGF0aWMgaW50IHZtZF9lbmFibGVf
+ZG9tYWluKHN0cnVjdCB2bWRfZGV2ICp2bWQsCj4gPiB1bnNpZ25lZCBsb25nIGZlYXR1cmVzKQo+
+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwY2lfcmVzZXRfYnVzKGNoaWxkLT5z
+ZWxmKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqBwY2lfYXNzaWduX3VuYXNzaWduZWRfYnVzX3Jlc291
+cmNlcyh2bWQtPmJ1cyk7Cj4gPiDCoAo+ID4gK8KgwqDCoMKgwqDCoMKgcGNpX3dhbGtfYnVzKHZt
+ZC0+YnVzLCB2bWRfcG1fZW5hYmxlX3F1aXJrLCAmZmVhdHVyZXMpOwo+ID4gKwo+ID4gwqDCoMKg
+wqDCoMKgwqDCoC8qCj4gPiDCoMKgwqDCoMKgwqDCoMKgICogVk1EIHJvb3QgYnVzZXMgYXJlIHZp
+cnR1YWwgYW5kIGRvbid0IHJldHVybiB0cnVlIG9uIHBjaV9pc19wY2llKCkKPiA+IMKgwqDCoMKg
+wqDCoMKgwqAgKiBhbmQgd2lsbCBmYWlsIHBjaWVfYnVzX2NvbmZpZ3VyZV9zZXR0aW5ncygpIGVh
+cmx5LiBJdCBjYW4gaW5zdGVhZAo+ID4gYmUKPiA+IEBAIC0xMDA1LDE3ICsxMDU3LDE3IEBAIHN0
+YXRpYyBjb25zdCBzdHJ1Y3QgcGNpX2RldmljZV9pZCB2bWRfaWRzW10gPSB7Cj4gPiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+Vk1EX0ZFQVRfSEFTX0JVU19SRVNUUklDVElPTlMgfAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoFZNRF9GRUFUX0NBTl9C
+WVBBU1NfTVNJX1JFTUFQLH0sCj4gPiDCoMKgwqDCoMKgwqDCoMKge1BDSV9WREVWSUNFKElOVEVM
+LCAweDQ2N2YpLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5kcml2ZXJfZGF0
+YSA9IFZNRF9GRUFUU19DTElFTlQsfSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAuZHJpdmVyX2RhdGEgPSBWTURfRkVBVFNfQ0xJRU5UIHwgVk1EX0ZFQVRfQklPU19QTV9RVUlS
+Syx9LAo+ID4gwqDCoMKgwqDCoMKgwqDCoHtQQ0lfVkRFVklDRShJTlRFTCwgMHg0YzNkKSwKPiA+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAuZHJpdmVyX2RhdGEgPSBWTURfRkVBVFNf
+Q0xJRU5ULH0sCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLmRyaXZlcl9kYXRh
+ID0gVk1EX0ZFQVRTX0NMSUVOVCB8IFZNRF9GRUFUX0JJT1NfUE1fUVVJUkssfSwKPiA+IMKgwqDC
+oMKgwqDCoMKgwqB7UENJX1ZERVZJQ0UoSU5URUwsIDB4YTc3ZiksCj4gPiAtwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgLmRyaXZlcl9kYXRhID0gVk1EX0ZFQVRTX0NMSUVOVCx9LAo+ID4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5kcml2ZXJfZGF0YSA9IFZNRF9GRUFUU19D
+TElFTlQgfCBWTURfRkVBVF9CSU9TX1BNX1FVSVJLLH0sCj4gPiDCoMKgwqDCoMKgwqDCoMKge1BD
+SV9WREVWSUNFKElOVEVMLCAweDdkMGIpLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoC5kcml2ZXJfZGF0YSA9IFZNRF9GRUFUU19DTElFTlQsfSwKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAuZHJpdmVyX2RhdGEgPSBWTURfRkVBVFNfQ0xJRU5UIHwgVk1EX0ZF
+QVRfQklPU19QTV9RVUlSSyx9LAo+ID4gwqDCoMKgwqDCoMKgwqDCoHtQQ0lfVkRFVklDRShJTlRF
+TCwgMHhhZDBiKSwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAuZHJpdmVyX2Rh
+dGEgPSBWTURfRkVBVFNfQ0xJRU5ULH0sCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgLmRyaXZlcl9kYXRhID0gVk1EX0ZFQVRTX0NMSUVOVCB8IFZNRF9GRUFUX0JJT1NfUE1fUVVJ
+UkssfSwKPiA+IMKgwqDCoMKgwqDCoMKgwqB7UENJX1ZERVZJQ0UoSU5URUwsIFBDSV9ERVZJQ0Vf
+SURfSU5URUxfVk1EXzlBMEIpLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5k
+cml2ZXJfZGF0YSA9IFZNRF9GRUFUU19DTElFTlQsfSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAuZHJpdmVyX2RhdGEgPSBWTURfRkVBVFNfQ0xJRU5UIHwgVk1EX0ZFQVRfQklP
+U19QTV9RVUlSSyx9LAo+IAo+IFdoeSBub3QgYWRkIFZNRF9GRUFUX0JJT1NfUE1fUVVJUksgcGFy
+dCBvZiBWTURfRkVBVFNfQ0xJRU5UPwoKQmVjYXVzZSBvdXIgVk1EIHRlYW0gaXMgaW4gdGhlIG1p
+ZGRsZSBvZiByZW1vdmluZyB0aGUgbmVlZCBmb3IgdGhlIGN1cnJlbnQgb24KbmV4dCBnZW4uCgpE
+YXZpZAoKPiAKPiA+IMKgwqDCoMKgwqDCoMKgwqB7MCx9Cj4gPiDCoH07Cj4gPiDCoE1PRFVMRV9E
+RVZJQ0VfVEFCTEUocGNpLCB2bWRfaWRzKTsKPiAKCg==
 
-Hi all,
-
-Today's linux-next merge of the apparmor tree got a conflict in:
-
-  security/apparmor/domain.c
-
-between commit:
-
-  f6fbd8cbf3ed ("lsm,fs: fix vfs_getxattr_alloc() return type and caller er=
-ror paths")
-
-from the security tree and commit:
-
-  217af7e2f4de ("apparmor: refactor profile rules and attachments")
-
-from the apparmor tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc security/apparmor/domain.c
-index 00dc0ec066de,b447bc13ea8e..000000000000
---- a/security/apparmor/domain.c
-+++ b/security/apparmor/domain.c
-@@@ -308,14 -296,16 +296,15 @@@ static int change_profile_perms(struct=20
-   * Returns: number of extended attributes that matched, or < 0 on error
-   */
-  static int aa_xattrs_match(const struct linux_binprm *bprm,
-- 			   struct aa_profile *profile, unsigned int state)
-+ 			   struct aa_profile *profile, aa_state_t state)
-  {
-  	int i;
- -	ssize_t size;
-  	struct dentry *d;
-  	char *value =3D NULL;
-- 	int size, value_size =3D 0, ret =3D profile->xattr_count;
-+ 	struct aa_attachment *attach =3D &profile->attach;
- -	int value_size =3D 0, ret =3D attach->xattr_count;
-++	int size, value_size =3D 0, ret =3D attach->xattr_count;
- =20
-- 	if (!bprm || !profile->xattr_count)
-+ 	if (!bprm || !attach->xattr_count)
-  		return 0;
-  	might_sleep();
- =20
-
---Sig_/Wwn7JLCJuK6TOGyJB2XRPx7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN68AIACgkQAVBC80lX
-0GxJJgf/RzyAD1DIeOb0wANDuJZrmRGhahYkMSpok5ZM9kN1e0XSAM3XYRk3E3qt
-Z+n3nyyvrKGO6prrGGaQ6gG7+uUHQ4MxJXCVzfMt1mA+J1m13xhVeFn+J1mTtk6E
-pOynIUGUdW4FS2eyjlrutlFm68vj+Y3C+1BAo/BwOaESQmJ1ELZWGVUk6YGw0h4Z
-XdzxD2OfFFwWDuyXzn7HKdax6pyJiP5d3F6OnXqiI/wpeVWNE/fUFYFgblVcQNTs
-3Wa50WSP+qF1bbeSY2DGTjKgPlQgXTocdK9mwjkn9kW5Pd3g21pGFU1qd0rM+NqM
-41k8hBrJwx5CAiQFyDuO+DvbkSzZgg==
-=7Cmh
------END PGP SIGNATURE-----
-
---Sig_/Wwn7JLCJuK6TOGyJB2XRPx7--
