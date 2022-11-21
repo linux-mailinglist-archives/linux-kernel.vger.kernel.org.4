@@ -2,619 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01D3632FA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1A1632FA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 23:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiKUWQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 17:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S231654AbiKUWQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 17:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKUWQL (ORCPT
+        with ESMTP id S229501AbiKUWQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 17:16:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED90D92EE;
-        Mon, 21 Nov 2022 14:16:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D380614BE;
-        Mon, 21 Nov 2022 22:16:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E867C433C1;
-        Mon, 21 Nov 2022 22:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669068968;
-        bh=hVhQKai+VdaA84bL2hSqW8a4+HrJYhcbBcUxJxtcGrw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N8T6+8rdFLYjRGmDtcHE0D6lAXLmyc8D2MhwVRHv+lMvikscMIlhAP6NWXSjcGDNr
-         4AE99qK5TiUJX9jgyYsxz7zvsZ1s/pNujn8K2IOJEmsi2+FW5DZ+o8DttTTgXxTQk9
-         JwTvXqk81s3pvOwlsttNcihGmEee4VzNNlZdMUS2ize4hye9j5Ez4n58Z1LWW6Eapc
-         T2YtBZ+ebOtIBzr6TAvOocFraXnL/8qfLkM7tNfKPdFVZA4y1rt5XeWASSBeSV6KIK
-         6l4Nl7QZLySI+dGD0vJivkrmyMI7YaKAQbiJf+DlOErm6oybAqGWzPRhF9f+upUofp
-         Ew7QAPl2LFoUQ==
-Date:   Tue, 22 Nov 2022 07:16:05 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Song Chen <chensong_2000@189.cn>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] kernel/trace: Introduce new APIs to process probe
- arguments
-Message-Id: <20221122071605.5f3d4e8247375657e908372b@kernel.org>
-In-Reply-To: <1668601507-4289-1-git-send-email-chensong_2000@189.cn>
-References: <1668601507-4289-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 17:16:44 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1E9D9B99;
+        Mon, 21 Nov 2022 14:16:43 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E896574C;
+        Mon, 21 Nov 2022 23:16:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669069001;
+        bh=dByGzk5Ixipj8ieHyh9CDx3Ni0F5DSa2dT1//PyYycM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vw9UNv2VcIDDSN0MafAt+SO4xJDrHcMh/7inYbjwf4BAaxWis0br2ehGd8nFh6QxH
+         x/YZAvlZApKVmAFTCtkz8PUx/9viR2nP6jZiLJIkj+XzdJSvru8IdrHLhUm0DErFxB
+         wkZSwnDXcE7IyedRaXGXnhKL24+RU0XWYbqAxUW8=
+Date:   Tue, 22 Nov 2022 00:16:25 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        David Plowman <david.plowman@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH 00/14] staging: vc04_services: bcm2835-isp support
+Message-ID: <Y3v4uZuhZTve2UI5@pendragon.ideasonboard.com>
+References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221121214722.22563-1-umang.jain@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 20:25:07 +0800
-Song Chen <chensong_2000@189.cn> wrote:
+Hi Umang,
 
-> Introduce 3 new APIs:
-> 1. trace_probe_get_data_size: get arguments' data size
-> 2. trace_probe_store_args: store aruguments into ring buffer
-> 3. trace_probe_print_args: print arguments into trace file
+Nice to see this series on the list !
+
+On Tue, Nov 22, 2022 at 03:17:08AM +0530, Umang Jain wrote:
+> This series aims to upport bcm2835-isp from the RPi kernel [1] and is a
+> independent subset of earlier series [2] posted to upport CSI-2/CCP2
+> receiver IP core("Unicam) + the ISP driver found in BCM283x and compatible
+> SoCs (namely BCM2711). Unicam is still under active development to work
+> with multistream support to get into mainline. Hence only the ISP driver
+> will remain the primary area of this series.
 > 
-> Those APIs are going to merge similar implementations respectively
-> in kprobe/uprobe/eprobe.
+> Patch (01-02)/14  adds a new driver named vc-sm-cma to handle memory sharing
+> with the VC4 VPU. 
 > 
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
-> ---
->  kernel/trace/trace_probe.c        | 305 ++++++++++++++++++++++++++++++
->  kernel/trace/trace_probe.h        |   5 +
->  kernel/trace/trace_probe_common.h |  69 +++++++
->  kernel/trace/trace_probe_user.h   |  95 ++++++++++
->  4 files changed, 474 insertions(+)
->  create mode 100644 kernel/trace/trace_probe_common.h
->  create mode 100644 kernel/trace/trace_probe_user.h
+> Patch 03/14 adds a small extension to videobuf2 to allow exporting as a
+> dma_buf instead of a file-descriptor.
 > 
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index 36dff277de46..303f057bd2f7 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -12,6 +12,9 @@
->  #define pr_fmt(fmt)	"trace_probe: " fmt
->  
->  #include "trace_probe.h"
-> +#include "trace_probe_kernel.h"
-> +#include "trace_probe_user.h"
-> +#include "trace_probe_common.h"
->  
->  #undef C
->  #define C(a, b)		b
-> @@ -1218,3 +1221,305 @@ int trace_probe_create(const char *raw_command, int (*createfn)(int, const char
->  
->  	return ret;
->  }
-> +
-> +/* From the 2nd stage, routine is same */
-> +static nokprobe_inline int
-> +process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
-> +			   void *dest, void *base, int flags)
-> +{
-> +	struct fetch_insn *s3 = NULL;
-> +	int total = 0, ret = 0, i = 0;
-> +	u32 loc = 0;
-> +	unsigned long lval = val;
-> +	int is_uprobe = flags & TRACE_EVENT_FL_UPROBE;
-> +
-> +stage2:
-> +	/* 2nd stage: dereference memory if needed */
-> +	do {
-> +		if (code->op == FETCH_OP_DEREF) {
-> +			lval = val;
-> +			ret = probe_mem_read(&val, (void *)val + code->offset,
-> +					     sizeof(val));
-> +		} else if (code->op == FETCH_OP_UDEREF) {
-> +			lval = val;
-> +			ret = probe_mem_read_user(&val,
-> +				 (void *)val + code->offset, sizeof(val));
-> +		} else
-> +			break;
-> +		if (ret)
-> +			return ret;
-> +		code++;
-> +	} while (1);
-> +
-> +	s3 = code;
-> +stage3:
-> +	/* 3rd stage: store value to buffer */
-> +	if (unlikely(!dest)) {
-> +		if (code->op == FETCH_OP_ST_STRING) {
-> +			if (is_uprobe)
-> +				ret = user_fetch_store_strlen(val + code->offset);
-> +			else
-> +				ret = kern_fetch_store_strlen(val + code->offset);
-> +			code++;
-> +			goto array;
-> +		} else if (code->op == FETCH_OP_ST_USTRING) {
-> +			if (is_uprobe)
-> +				ret += user_fetch_store_strlen_user(val + code->offset);
-> +			else
-> +				ret += kern_fetch_store_strlen_user(val + code->offset);
-
-Also, I would not like to see this "is_uprobe" check in the code. That is useless
-when running this in the kernel. This is why I did this in trace_probe_tmpl.h as
-an inlined function.
-
-So, sorting print_args function is OK for me, but the process_fetch_insn* should be
-kept as inlined. Maybe some common code can be move to the trace_probe_tmpl.h as
-inlined functions?
-
-
-> +			code++;
-> +			goto array;
-> +		} else
-> +			return -EILSEQ;
-> +	}
-> +
-> +	switch (code->op) {
-> +	case FETCH_OP_ST_RAW:
-> +		fetch_store_raw(val, code, dest);
-> +		break;
-> +	case FETCH_OP_ST_MEM:
-> +		probe_mem_read(dest, (void *)val + code->offset, code->size);
-> +		break;
-> +	case FETCH_OP_ST_UMEM:
-> +		probe_mem_read_user(dest, (void *)val + code->offset, code->size);
-> +		break;
-> +	case FETCH_OP_ST_STRING:
-> +		loc = *(u32 *)dest;
-> +		if (is_uprobe)
-> +			ret = user_fetch_store_string(val + code->offset, dest, base);
-> +		else
-> +			ret = kern_fetch_store_string(val + code->offset, dest, base);
-> +		break;
-> +	case FETCH_OP_ST_USTRING:
-> +		loc = *(u32 *)dest;
-> +		if (is_uprobe)
-> +			ret = user_fetch_store_string_user(val + code->offset, dest, base);
-> +		else
-> +			ret = kern_fetch_store_string_user(val + code->offset, dest, base);
-> +		break;
-> +	default:
-> +		return -EILSEQ;
-> +	}
-> +	code++;
-> +
-> +	/* 4th stage: modify stored value if needed */
-> +	if (code->op == FETCH_OP_MOD_BF) {
-> +		fetch_apply_bitfield(code, dest);
-> +		code++;
-> +	}
-> +
-> +array:
-> +	/* the last stage: Loop on array */
-> +	if (code->op == FETCH_OP_LP_ARRAY) {
-> +		total += ret;
-> +		if (++i < code->param) {
-> +			code = s3;
-> +			if (s3->op != FETCH_OP_ST_STRING &&
-> +			    s3->op != FETCH_OP_ST_USTRING) {
-> +				dest += s3->size;
-> +				val += s3->size;
-> +				goto stage3;
-> +			}
-> +			code--;
-> +			val = lval + sizeof(char *);
-> +			if (dest) {
-> +				dest += sizeof(u32);
-> +				*(u32 *)dest = update_data_loc(loc, ret);
-> +			}
-> +			goto stage2;
-> +		}
-> +		code++;
-> +		ret = total;
-> +	}
-> +
-> +	return code->op == FETCH_OP_END ? ret : -EILSEQ;
-> +}
-> +
-> +static unsigned long get_event_field(struct fetch_insn *code, void *rec)
-> +{
-> +	struct ftrace_event_field *field = code->data;
-> +	unsigned long val;
-> +	void *addr;
-> +
-> +	addr = rec + field->offset;
-> +
-> +	if (is_string_field(field)) {
-> +		switch (field->filter_type) {
-> +		case FILTER_DYN_STRING:
-> +			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
-> +			break;
-> +		case FILTER_RDYN_STRING:
-> +			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
-> +			break;
-> +		case FILTER_STATIC_STRING:
-> +			val = (unsigned long)addr;
-> +			break;
-> +		case FILTER_PTR_STRING:
-> +			val = (unsigned long)(*(char *)addr);
-> +			break;
-> +		default:
-> +			WARN_ON_ONCE(1);
-> +			return 0;
-> +		}
-> +		return val;
-> +	}
-> +
-> +	switch (field->size) {
-> +	case 1:
-> +		if (field->is_signed)
-> +			val = *(char *)addr;
-> +		else
-> +			val = *(unsigned char *)addr;
-> +		break;
-> +	case 2:
-> +		if (field->is_signed)
-> +			val = *(short *)addr;
-> +		else
-> +			val = *(unsigned short *)addr;
-> +		break;
-> +	case 4:
-> +		if (field->is_signed)
-> +			val = *(int *)addr;
-> +		else
-> +			val = *(unsigned int *)addr;
-> +		break;
-> +	default:
-> +		if (field->is_signed)
-> +			val = *(long *)addr;
-> +		else
-> +			val = *(unsigned long *)addr;
-> +		break;
-> +	}
-> +	return val;
-> +}
-> +
-> +/* Note that we don't verify it, since the code does not come from user space */
-> +static int
-> +process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-> +		   void *base, int flags)
-> +{
-> +	struct pt_regs *regs = rec;
-> +	unsigned long val;
-> +	int is_uprobe = flags & TRACE_EVENT_FL_UPROBE;
-> +
-> +retry:
-> +	/* 1st stage: get value from context */
-> +	switch (code->op) {
-> +	case FETCH_OP_REG:
-> +		val = regs_get_register(regs, code->param);
-> +		break;
-> +	case FETCH_OP_STACK:
-> +		if (is_uprobe)
-> +			val = get_user_stack_nth(regs, code->param);
-> +		else
-> +			val = regs_get_kernel_stack_nth(regs, code->param);
-> +		break;
-
-Ditto.
-
-> +	case FETCH_OP_STACKP:
-> +		if (is_uprobe)
-> +			val = user_stack_pointer(regs);
-> +		else
-> +			val = kernel_stack_pointer(regs);
-> +		break;
-> +	case FETCH_OP_RETVAL:
-> +		val = regs_return_value(regs);
-> +		break;
-> +	case FETCH_OP_IMM:
-> +		val = code->immediate;
-> +		break;
-> +	case FETCH_OP_COMM:
-> +		val = (unsigned long)current->comm;
-> +		break;
-> +	case FETCH_OP_DATA:
-> +		val = (unsigned long)code->data;
-> +		break;
-> +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-> +	case FETCH_OP_ARG:
-> +		val = regs_get_kernel_argument(regs, code->param);
-> +		break;
-> +#endif
-> +	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-> +		code++;
-> +		goto retry;
-> +	case FETCH_OP_TP_ARG:
-> +		val = get_event_field(code, rec);
-> +		break;
-> +	default:
-> +		return -EILSEQ;
-> +	}
-> +	code++;
-> +
-> +	return process_fetch_insn_bottom(code, val, dest, base, flags);
-> +}
-> +NOKPROBE_SYMBOL(process_fetch_insn)
-> +
-> +/* Sum up total data length for dynamic arrays (strings) */
-> +int trace_probe_get_data_size(struct trace_probe *tp, struct pt_regs *regs)
-> +{
-> +	struct probe_arg *arg;
-> +	int i, len, ret = 0;
-> +	struct trace_event_call *call = trace_probe_event_call(tp);
-> +
-> +	for (i = 0; i < tp->nr_args; i++) {
-> +		arg = tp->args + i;
-> +		if (unlikely(arg->dynamic)) {
-> +			len = process_fetch_insn(arg->code, regs, NULL, NULL, call->flags);
-> +			if (len > 0)
-> +				ret += len;
-> +		}
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +void trace_probe_store_args(void *data, struct trace_probe *tp, void *rec,
-> +		 int header_size, int maxlen)
-> +{
-> +	struct probe_arg *arg;
-> +	void *base = data - header_size;
-> +	void *dyndata = data + tp->size;
-> +	u32 *dl;	/* Data location */
-> +	int ret, i;
-> +	struct trace_event_call *call = trace_probe_event_call(tp);
-> +
-> +	for (i = 0; i < tp->nr_args; i++) {
-> +		arg = tp->args + i;
-> +		dl = data + arg->offset;
-> +		/* Point the dynamic data area if needed */
-> +		if (unlikely(arg->dynamic))
-> +			*dl = make_data_loc(maxlen, dyndata - base);
-> +		ret = process_fetch_insn(arg->code, rec, dl, base, call->flags);
-> +		if (unlikely(ret < 0 && arg->dynamic)) {
-> +			*dl = make_data_loc(0, dyndata - base);
-> +		} else {
-> +			dyndata += ret;
-> +			maxlen -= ret;
-> +		}
-> +	}
-> +}
-> +
-> +int trace_probe_print_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
-> +		 u8 *data, void *field)
-> +{
-> +	void *p;
-> +	int i, j;
-> +
-> +	for (i = 0; i < nr_args; i++) {
-> +		struct probe_arg *a = args + i;
-> +
-> +		trace_seq_printf(s, " %s=", a->name);
-> +		if (likely(!a->count)) {
-> +			if (!a->type->print(s, data + a->offset, field))
-> +				return -ENOMEM;
-> +			continue;
-> +		}
-> +		trace_seq_putc(s, '{');
-> +		p = data + a->offset;
-> +		for (j = 0; j < a->count; j++) {
-> +			if (!a->type->print(s, p, field))
-> +				return -ENOMEM;
-> +			trace_seq_putc(s, j == a->count - 1 ? '}' : ',');
-> +			p += a->type->size;
-> +		}
-> +	}
-> +	return 0;
-> +}
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index de38f1c03776..4f044047b748 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -343,6 +343,11 @@ int trace_probe_compare_arg_type(struct trace_probe *a, struct trace_probe *b);
->  bool trace_probe_match_command_args(struct trace_probe *tp,
->  				    int argc, const char **argv);
->  int trace_probe_create(const char *raw_command, int (*createfn)(int, const char **));
-> +int trace_probe_get_data_size(struct trace_probe *tp, struct pt_regs *regs);
-> +void trace_probe_store_args(void *data, struct trace_probe *tp, void *rec,
-> +		 int header_size, int maxlen);
-> +int trace_probe_print_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
-> +		 u8 *data, void *field);
->  
->  #define trace_probe_for_each_link(pos, tp)	\
->  	list_for_each_entry(pos, &(tp)->event->files, list)
-> diff --git a/kernel/trace/trace_probe_common.h b/kernel/trace/trace_probe_common.h
-> new file mode 100644
-> index 000000000000..b8d77447fe0c
-> --- /dev/null
-> +++ b/kernel/trace/trace_probe_common.h
-
-Please do not add an internal header file only just for 1 file. 
-
-> @@ -0,0 +1,69 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __TRACE_PROBE_COMMON_H_
-> +#define __TRACE_PROBE_COMMON_H_
-> +
-> +#define FAULT_STRING "(fault)"
-> +
-> +static nokprobe_inline void
-> +fetch_store_raw(unsigned long val, struct fetch_insn *code, void *buf)
-> +{
-> +	switch (code->size) {
-> +	case 1:
-> +		*(u8 *)buf = (u8)val;
-> +		break;
-> +	case 2:
-> +		*(u16 *)buf = (u16)val;
-> +		break;
-> +	case 4:
-> +		*(u32 *)buf = (u32)val;
-> +		break;
-> +	case 8:
-> +		//TBD: 32bit signed
-> +		*(u64 *)buf = (u64)val;
-> +		break;
-> +	default:
-> +		*(unsigned long *)buf = val;
-> +	}
-> +}
-> +
-> +static nokprobe_inline void
-> +fetch_apply_bitfield(struct fetch_insn *code, void *buf)
-> +{
-> +	switch (code->basesize) {
-> +	case 1:
-> +		*(u8 *)buf <<= code->lshift;
-> +		*(u8 *)buf >>= code->rshift;
-> +		break;
-> +	case 2:
-> +		*(u16 *)buf <<= code->lshift;
-> +		*(u16 *)buf >>= code->rshift;
-> +		break;
-> +	case 4:
-> +		*(u32 *)buf <<= code->lshift;
-> +		*(u32 *)buf >>= code->rshift;
-> +		break;
-> +	case 8:
-> +		*(u64 *)buf <<= code->lshift;
-> +		*(u64 *)buf >>= code->rshift;
-> +		break;
-> +	}
-> +}
-> +
-> +static nokprobe_inline int
-> +probe_mem_read_user(void *dest, void *src, size_t size)
-> +{
-> +	const void __user *uaddr =  (__force const void __user *)src;
-> +
-> +	return copy_from_user_nofault(dest, uaddr, size);
-> +}
-> +
-> +static nokprobe_inline int
-> +probe_mem_read(void *dest, void *src, size_t size)
-> +{
-> +#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-> +	if ((unsigned long)src < TASK_SIZE)
-> +		return probe_mem_read_user(dest, src, size);
-> +#endif
-> +	return copy_from_kernel_nofault(dest, src, size);
-> +}
-> +#endif /* __TRACE_PROBE_COMMON_H_ */
-> diff --git a/kernel/trace/trace_probe_user.h b/kernel/trace/trace_probe_user.h
-> new file mode 100644
-> index 000000000000..2104ccb44d56
-> --- /dev/null
-> +++ b/kernel/trace/trace_probe_user.h
-
-Ditto.
-
-Thank you,
-
-> @@ -0,0 +1,95 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __TRACE_PROBE_USER_H_
-> +#define __TRACE_PROBE_USER_H_
-> +
-> +#define FAULT_STRING "(fault)"
-> +
-> +/*
-> + * Fetch a null-terminated string. Caller MUST set *(u32 *)dest with max
-> + * length and relative data location.
-> + */
-> +static nokprobe_inline int
-> +user_fetch_store_string(unsigned long addr, void *dest, void *base)
-> +{
-> +	long ret;
-> +	u32 loc = *(u32 *)dest;
-> +	int maxlen  = get_loc_len(loc);
-> +	u8 *dst = get_loc_data(dest, base);
-> +	void __user *src = (void __force __user *) addr;
-> +
-> +	if (unlikely(!maxlen))
-> +		return -ENOMEM;
-> +
-> +	if (addr == FETCH_TOKEN_COMM)
-> +		ret = strlcpy(dst, current->comm, maxlen);
-> +	else
-> +		ret = strncpy_from_user(dst, src, maxlen);
-> +	if (ret >= 0) {
-> +		if (ret == maxlen)
-> +			dst[ret - 1] = '\0';
-> +		else
-> +			/*
-> +			 * Include the terminating null byte. In this case it
-> +			 * was copied by strncpy_from_user but not accounted
-> +			 * for in ret.
-> +			 */
-> +			ret++;
-> +		*(u32 *)dest = make_data_loc(ret, (void *)dst - base);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static nokprobe_inline int
-> +user_fetch_store_string_user(unsigned long addr, void *dest, void *base)
-> +{
-> +	return user_fetch_store_string(addr, dest, base);
-> +}
-> +
-> +/* Return the length of string -- including null terminal byte */
-> +static nokprobe_inline int
-> +user_fetch_store_strlen(unsigned long addr)
-> +{
-> +	int len;
-> +	void __user *vaddr = (void __force __user *) addr;
-> +
-> +	if (addr == FETCH_TOKEN_COMM)
-> +		len = strlen(current->comm) + 1;
-> +	else
-> +		len = strnlen_user(vaddr, MAX_STRING_SIZE);
-> +
-> +	return (len > MAX_STRING_SIZE) ? 0 : len;
-> +}
-> +
-> +static nokprobe_inline int
-> +user_fetch_store_strlen_user(unsigned long addr)
-> +{
-> +	return user_fetch_store_strlen(addr);
-> +}
-> +
-> +#ifdef CONFIG_STACK_GROWSUP
-> +static unsigned long adjust_stack_addr(unsigned long addr, unsigned int n)
-> +{
-> +	return addr - (n * sizeof(long));
-> +}
-> +#else
-> +static unsigned long adjust_stack_addr(unsigned long addr, unsigned int n)
-> +{
-> +	return addr + (n * sizeof(long));
-> +}
-> +#endif
-> +
-> +static unsigned long get_user_stack_nth(struct pt_regs *regs, unsigned int n)
-> +{
-> +	unsigned long ret;
-> +	unsigned long addr = user_stack_pointer(regs);
-> +
-> +	addr = adjust_stack_addr(addr, n);
-> +
-> +	if (copy_from_user(&ret, (void __force __user *) addr, sizeof(ret)))
-> +		return 0;
-> +
-> +	return ret;
-> +}
-> +
-> +#endif /* __TRACE_PROBE_USER_H_ */
-> -- 
-> 2.25.1
+> Patch (04-05)/14 adds a couple of improvements/support for
+> bcm2835-isp(event callback and zero-copy) to vchiq-mmal.
 > 
+> Patch (06-09)/14 adds the core bcm2835-isp driver along with headers
+> and format defintions.
+> 
+> Patch (10-11)/14 deals with the colorspace support.
+> Note: This is still WIP since the implementation of colorspace is still
+> getting ironed out (especially around setting of colorspace flags handling).
+> 
+> Patch 12/14 allows multiple instances of the ISP.
+> 
+> Patch 13/14 adds a admin-guide document on bcm2835-isp.
+> 
+> Patch 14/14 wires all this up with the vchiq-mmal driver.
+> 
+> Testing:
+> Tested with RPi Model 4B running linux mainline v6.1-rc6. To test
+> end-to-end, I choose to cherry-pick the Unicam patches and OV5647 DT
+> bindings from [1]). Once done, functional testing was conducted with
+> libcamera[3] and its utility tools.
+> 
+> Also note: Reviews given on [2] for the relevant ISP driver patches have
+> been incorporated in this version.
+> 
+> Known issues:
+> - Colorspace handling 
 
-Thanks,
+This will require further discussions, I'll try to comment on this topic
+in the review of the ISP driver patch.
+
+> - vc-sm-cma spamming kernel log with
+> 	- pr_err("%s: Expecting an uncached alias for dma_addr %pad\n"
+
+Do you have any plan to address this ? Is the root cause known ?
+
+> [1]: https://github.com/raspberrypi/linux
+> [2]: https://lore.kernel.org/linux-media/20200504092611.9798-1-laurent.pinchart@ideasonboard.com/
+> [3]: https://libcamera.org/getting-started.html
+> 
+> Dave Stevenson (7):
+>   staging: vc04_services: Add new vc-sm-cma driver
+>   staging: vchiq_arm: Register vcsm-cma as a platform driver
+>   media: videobuf2: Allow exporting of a struct dmabuf
+>   staging: mmal-vchiq: Add support for event callbacks
+>   staging: mmal-vchiq: Use vc-sm-cma to support zero copy
+>   staging: mmal_vchiq: Add image formats to be used by bcm2835-isp
+>   uapi: bcm2835-isp: Add bcm2835-isp uapi header file
+> 
+> David Plowman (2):
+>   vc04_services: bcm2835-isp: Allow formats with different colour spaces
+>   vc04_services: bcm2835-isp: Permit all sRGB colour spaces on ISP
+>     outputs
+> 
+> Naushir Patuck (5):
+>   media: uapi: v4l2-core: Add ISP statistics output V4L2 fourcc type
+>   staging: vc04_services: bcm2835-isp: Add a more complex ISP processing
+>     component
+>   staging: vc04_services: bcm2835_isp: Allow multiple users
+>   docs: admin-guide: media: bcm2835-isp: Add documentation for
+>     bcm2835-isp
+>   staging: vc04_services: vchiq: Load bcm2835_isp driver from vchiq
+> 
+>  .../admin-guide/media/bcm2835-isp.rst         |  127 ++
+>  .../userspace-api/media/drivers/index.rst     |    1 +
+>  .../userspace-api/media/v4l/meta-formats.rst  |    1 +
+>  .../v4l/pixfmt-meta-bcm2835-isp-stats.rst     |   41 +
+>  MAINTAINERS                                   |    9 +
+>  .../media/common/videobuf2/videobuf2-core.c   |   36 +-
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+>  drivers/staging/vc04_services/Kconfig         |    4 +
+>  drivers/staging/vc04_services/Makefile        |    2 +
+>  .../staging/vc04_services/bcm2835-isp/Kconfig |   14 +
+>  .../vc04_services/bcm2835-isp/Makefile        |    8 +
+>  .../bcm2835-isp/bcm2835-isp-ctrls.h           |   72 +
+>  .../bcm2835-isp/bcm2835-isp-fmts.h            |  558 +++++
+>  .../bcm2835-isp/bcm2835-v4l2-isp.c            | 1817 +++++++++++++++++
+>  .../interface/vchiq_arm/vchiq_arm.c           |    6 +
+>  .../staging/vc04_services/vc-sm-cma/Kconfig   |   10 +
+>  .../staging/vc04_services/vc-sm-cma/Makefile  |   12 +
+>  .../staging/vc04_services/vc-sm-cma/vc_sm.c   |  801 ++++++++
+>  .../staging/vc04_services/vc-sm-cma/vc_sm.h   |   54 +
+>  .../vc04_services/vc-sm-cma/vc_sm_cma_vchi.c  |  507 +++++
+>  .../vc04_services/vc-sm-cma/vc_sm_cma_vchi.h  |   63 +
+>  .../vc04_services/vc-sm-cma/vc_sm_defs.h      |  187 ++
+>  .../vc04_services/vc-sm-cma/vc_sm_knl.h       |   28 +
+>  .../staging/vc04_services/vchiq-mmal/Kconfig  |    1 +
+>  .../vc04_services/vchiq-mmal/mmal-common.h    |    5 +
+>  .../vc04_services/vchiq-mmal/mmal-encodings.h |   66 +
+>  .../vc04_services/vchiq-mmal/mmal-msg.h       |   35 +
+>  .../vchiq-mmal/mmal-parameters.h              |  165 +-
+>  .../vc04_services/vchiq-mmal/mmal-vchiq.c     |  253 ++-
+>  .../vc04_services/vchiq-mmal/mmal-vchiq.h     |    5 +
+>  include/media/videobuf2-core.h                |   15 +
+>  include/uapi/linux/bcm2835-isp.h              |  347 ++++
+>  include/uapi/linux/v4l2-controls.h            |    6 +
+>  include/uapi/linux/videodev2.h                |    1 +
+>  34 files changed, 5225 insertions(+), 33 deletions(-)
+>  create mode 100644 Documentation/admin-guide/media/bcm2835-isp.rst
+>  create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-meta-bcm2835-isp-stats.rst
+>  create mode 100644 drivers/staging/vc04_services/bcm2835-isp/Kconfig
+>  create mode 100644 drivers/staging/vc04_services/bcm2835-isp/Makefile
+>  create mode 100644 drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-ctrls.h
+>  create mode 100644 drivers/staging/vc04_services/bcm2835-isp/bcm2835-isp-fmts.h
+>  create mode 100644 drivers/staging/vc04_services/bcm2835-isp/bcm2835-v4l2-isp.c
+>  create mode 100644 drivers/staging/vc04_services/vc-sm-cma/Kconfig
+>  create mode 100644 drivers/staging/vc04_services/vc-sm-cma/Makefile
+>  create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm.c
+>  create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm.h
+>  create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm_cma_vchi.c
+>  create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm_cma_vchi.h
+>  create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm_defs.h
+>  create mode 100644 drivers/staging/vc04_services/vc-sm-cma/vc_sm_knl.h
+>  create mode 100644 include/uapi/linux/bcm2835-isp.h
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Regards,
+
+Laurent Pinchart
