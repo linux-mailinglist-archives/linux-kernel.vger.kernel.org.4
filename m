@@ -2,462 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D010C632834
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AC563283C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiKUPbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:31:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S232396AbiKUPbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232514AbiKUPaO (ORCPT
+        with ESMTP id S232504AbiKUPbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:30:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03717CFA7E;
-        Mon, 21 Nov 2022 07:29:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 625EC612DA;
-        Mon, 21 Nov 2022 15:29:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD6AC433D6;
-        Mon, 21 Nov 2022 15:29:30 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PrOQPOSL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669044569;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bUe/UPdVanyT01WYSBYtxq9AiXBRH1RhNA3ekgRQKdg=;
-        b=PrOQPOSL+jFkJcjruOfktxO0tqBqSV4JIcPXODWTs8apRamvl+Y5WlbOIyFMyMG7hlHpKJ
-        ZNeDq9qKwrLe2cOI1DvtEwdxx7Mjjq2ww1Fi6Is+hLK6nPGmVAEqx1PS+qL3j4yJ0IJLLd
-        UKcUdfP7j1BFLEOhpYAmkWzueTWmQjk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2d21d89e (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 21 Nov 2022 15:29:29 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>
-Subject: [PATCH v6 3/3] x86: vdso: Wire up getrandom() vDSO implementation
-Date:   Mon, 21 Nov 2022 16:29:09 +0100
-Message-Id: <20221121152909.3414096-4-Jason@zx2c4.com>
-In-Reply-To: <20221121152909.3414096-1-Jason@zx2c4.com>
-References: <20221121152909.3414096-1-Jason@zx2c4.com>
+        Mon, 21 Nov 2022 10:31:25 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4AECB6AC;
+        Mon, 21 Nov 2022 07:30:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669044602; x=1700580602;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=NJfSeDq4t7eXJ+r8Flfm6fvOs6zAa043c4LOLwT19p4=;
+  b=zFH6Fn7Ph0Or/Lo/AR4S61X6CXFq2poKOW9CRy+co6ZwLL+kZKLdxBcb
+   cGceq5t53v2olaqQ3eL7y5OROlohDQmo9Y1VviSWFnGqzakj/Xg9BGftV
+   O3T4pG7ue68qVZBqdd0S6PhneQPsJKWinGY/mme/W5Chfm64WwX8T36A4
+   oRvPtSwy71isvWzVXFw0C/F4k4aat5ZfRmFbCcCDOCn6kfCb+Gg8+NXeH
+   BeXX5Gp8CQOSwxoPPa5rIg3MGBE2fFtz4Tz47Ff3uFupCcKJ5340D2Xy2
+   CCa5TGdlpBREmeDojG03BEGnr13dFUBiZJueN+z+Xwv0X7AXk0RGqyVT1
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="184498651"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Nov 2022 08:30:01 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 21 Nov 2022 08:29:58 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Mon, 21 Nov 2022 08:29:56 -0700
+Date:   Mon, 21 Nov 2022 15:29:39 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Conor Dooley <conor@kernel.org>
+CC:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v12 1/2] pwm: add microchip soft ip corePWM driver
+Message-ID: <Y3uZY5mt/ZIWk3sS@wendy>
+References: <20221110093512.333881-1-conor.dooley@microchip.com>
+ <20221110093512.333881-2-conor.dooley@microchip.com>
+ <20221117164950.cssukd63fywzuwua@pengutronix.de>
+ <Y3Zxkt3OSPQc46Q2@spud>
+ <20221117210433.n5j7upqqksld42mu@pengutronix.de>
+ <Y3avobkvYK3ydKTS@spud>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y3avobkvYK3ydKTS@spud>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hook up the generic vDSO implementation to the x86 vDSO data page. Since
-the existing vDSO infrastructure is heavily based on the timekeeping
-functionality, which works over arrays of bases, a new macro is
-introduced for vvars that are not arrays.
+On Thu, Nov 17, 2022 at 10:03:13PM +0000, Conor Dooley wrote:
+> On Thu, Nov 17, 2022 at 10:04:33PM +0100, Uwe Kleine-König wrote:
+> > On Thu, Nov 17, 2022 at 05:38:26PM +0000, Conor Dooley wrote:
+> > > On Thu, Nov 17, 2022 at 05:49:50PM +0100, Uwe Kleine-König wrote:
+> > > > Hello Conor,
+> > > 
+> > > Hello Uwe,
+> > > 
+> > > > On Thu, Nov 10, 2022 at 09:35:12AM +0000, Conor Dooley wrote:
+> > > > > [...]
+> > > > > +
+> > > > > +static void mchp_core_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm,
+> > > > > +				 bool enable, u64 period)
+> > > > > +{
+> > > > > +	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
+> > > > > +	u8 channel_enable, reg_offset, shift;
+> > > > > +
+> > > > > +	/*
+> > > > > +	 * There are two adjacent 8 bit control regs, the lower reg controls
+> > > > > +	 * 0-7 and the upper reg 8-15. Check if the pwm is in the upper reg
+> > > > > +	 * and if so, offset by the bus width.
+> > > > > +	 */
+> > > > > +	reg_offset = MCHPCOREPWM_EN(pwm->hwpwm >> 3);
+> > > > > +	shift = pwm->hwpwm & 7;
+> > > > > +
+> > > > > +	channel_enable = readb_relaxed(mchp_core_pwm->base + reg_offset);
+> > > > > +	channel_enable &= ~(1 << shift);
+> > > > > +	channel_enable |= (enable << shift);
+> > > > > +
+> > > > > +	writel_relaxed(channel_enable, mchp_core_pwm->base + reg_offset);
+> > > > > +	mchp_core_pwm->channel_enabled &= ~BIT(pwm->hwpwm);
+> > > > > +	mchp_core_pwm->channel_enabled |= enable << pwm->hwpwm;
+> > > > > +
+> > > > > +	/*
+> > > > > +	 * Notify the block to update the waveform from the shadow registers.
+> > > > > +	 * The updated values will not appear on the bus until they have been
+> > > > > +	 * applied to the waveform at the beginning of the next period. We must
+> > > > > +	 * write these registers and wait for them to be applied before
+> > > > > +	 * considering the channel enabled.
+> > > > > +	 * If the delay is under 1 us, sleep for at least 1 us anyway.
+> > > > > +	 */
+> > > > > +	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
+> > > > > +		u64 delay;
+> > > > > +
+> > > > > +		delay = div_u64(period, 1000u) ? : 1u;
+> > > > > +		writel_relaxed(1U, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
+> > > > > +		usleep_range(delay, delay * 2);
+> > > > > +	}
+> > > > 
+> > > > In some cases the delay could be prevented. e.g. when going from one
+> > > > disabled state to another. If you don't want to complicate the driver
+> > > > here, maybe point it out in a comment at least?
+> > > 
+> > > Maybe this is my naivity talking, but I'd rather wait. Is there not the
+> > > chance that we re-enter pwm_apply() before the update has actually gone
+> > > through?
+> > 
+> > My idea was to do something like that:
+> > 
+> > 	int mchp_core_pwm_apply(....)
+> > 	{
+> > 		if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
+> > 			/*
+> > 			 * We're still waiting for an update, don't
+> > 			 * interfer until it's completed.
+> > 			 */
+> > 			while (readl_relaxed(mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD)) {
+> > 				cpu_relax();
+> > 				if (waited_unreasonably_long())
+> > 					return -ETIMEOUT;
+> > 			}
+> > 		}
+> > 
+> > 		update_period_and_duty(...);
+> > 		return 0;
+> > 	}
 
-The vDSO function requires a ChaCha20 implementation that does not write
-to the stack, yet can still do an entire ChaCha20 permutation, so
-provide this using SSE2, since this is userland code that must work on
-all x86-64 processors.
+So I was doing some fiddling, and the following works reasonably well:
+	if (mchp_core_pwm->sync_update_mask & (1 << pwm->hwpwm)) {
+		u32 delay = MCHPCOREPWM_TIMEOUT_US;
+		u32 sync_upd;
+		int ret;
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/x86/Kconfig                        |   1 +
- arch/x86/entry/vdso/Makefile            |   3 +-
- arch/x86/entry/vdso/vdso.lds.S          |   2 +
- arch/x86/entry/vdso/vgetrandom-chacha.S | 181 ++++++++++++++++++++++++
- arch/x86/entry/vdso/vgetrandom.c        |  18 +++
- arch/x86/include/asm/vdso/getrandom.h   |  49 +++++++
- arch/x86/include/asm/vdso/vsyscall.h    |   2 +
- arch/x86/include/asm/vvar.h             |  16 +++
- 8 files changed, 271 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/entry/vdso/vgetrandom-chacha.S
- create mode 100644 arch/x86/entry/vdso/vgetrandom.c
- create mode 100644 arch/x86/include/asm/vdso/getrandom.h
+		writel_relaxed(1u, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 331e21ba961a..b64b1b1274ae 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -270,6 +270,7 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select HAVE_VDSO_GETRANDOM		if X86_64
- 	select HOTPLUG_SMT			if SMP
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 3e88b9df8c8f..2de64e52236a 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -27,7 +27,7 @@ VDSO32-$(CONFIG_X86_32)		:= y
- VDSO32-$(CONFIG_IA32_EMULATION)	:= y
- 
- # files to link into the vdso
--vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o
-+vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o vgetrandom.o vgetrandom-chacha.o
- vobjs32-y := vdso32/note.o vdso32/system_call.o vdso32/sigreturn.o
- vobjs32-y += vdso32/vclock_gettime.o
- vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
-@@ -104,6 +104,7 @@ CFLAGS_REMOVE_vclock_gettime.o = -pg
- CFLAGS_REMOVE_vdso32/vclock_gettime.o = -pg
- CFLAGS_REMOVE_vgetcpu.o = -pg
- CFLAGS_REMOVE_vsgx.o = -pg
-+CFLAGS_REMOVE_vgetrandom.o = -pg
- 
- #
- # X32 processes use x32 vDSO to access 64bit kernel data.
-diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
-index 4bf48462fca7..1919cc39277e 100644
---- a/arch/x86/entry/vdso/vdso.lds.S
-+++ b/arch/x86/entry/vdso/vdso.lds.S
-@@ -28,6 +28,8 @@ VERSION {
- 		clock_getres;
- 		__vdso_clock_getres;
- 		__vdso_sgx_enter_enclave;
-+		getrandom;
-+		__vdso_getrandom;
- 	local: *;
- 	};
- }
-diff --git a/arch/x86/entry/vdso/vgetrandom-chacha.S b/arch/x86/entry/vdso/vgetrandom-chacha.S
-new file mode 100644
-index 000000000000..bc563d95b976
---- /dev/null
-+++ b/arch/x86/entry/vdso/vgetrandom-chacha.S
-@@ -0,0 +1,181 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+
-+#include <linux/linkage.h>
-+#include <asm/frame.h>
-+
-+.section	.rodata.cst16.CONSTANTS, "aM", @progbits, 16
-+.align 16
-+CONSTANTS:	.octa 0x6b20657479622d323320646e61707865
-+.text
-+
-+/*
-+ * Very basic SSE2 implementation of ChaCha20. Produces a given positive number
-+ * of blocks of output with a nonce of 0, taking an input key and 8-byte
-+ * counter. Importantly does not spill to the stack. Its arguments are:
-+ *
-+ *	rdi: output bytes
-+ *	rsi: 32-byte key input
-+ *	rdx: 8-byte counter input/output
-+ *	rcx: number of 64-byte blocks to write to output
-+ */
-+SYM_FUNC_START(chacha20_blocks_nostack)
-+	FRAME_BEGIN
-+
-+#define output  %rdi
-+#define key     %rsi
-+#define counter %rdx
-+#define nblocks %rcx
-+#define i       %al
-+#define state0  %xmm0
-+#define state1  %xmm1
-+#define state2  %xmm2
-+#define state3  %xmm3
-+#define copy0   %xmm4
-+#define copy1   %xmm5
-+#define copy2   %xmm6
-+#define copy3   %xmm7
-+#define temp    %xmm8
-+#define one     %xmm9
-+
-+	/* copy0 = "expand 32-byte k" */
-+	movaps		CONSTANTS(%rip),copy0
-+	/* copy1,copy2 = key */
-+	movdqu		0x00(key),copy1
-+	movdqu		0x10(key),copy2
-+	/* copy3 = counter || zero nonce */
-+	movq		0x00(counter),copy3
-+	/* one = 1 || 0 */
-+	movq		$1,%rax
-+	movq		%rax,one
-+
-+.Lblock:
-+	/* state0,state1,state2,state3 = copy0,copy1,copy2,copy3 */
-+	movdqa		copy0,state0
-+	movdqa		copy1,state1
-+	movdqa		copy2,state2
-+	movdqa		copy3,state3
-+
-+	movb		$10,i
-+.Lpermute:
-+	/* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
-+	paddd		state1,state0
-+	pxor		state0,state3
-+	movdqa		state3,temp
-+	pslld		$16,temp
-+	psrld		$16,state3
-+	por		temp,state3
-+
-+	/* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
-+	paddd		state3,state2
-+	pxor		state2,state1
-+	movdqa		state1,temp
-+	pslld		$12,temp
-+	psrld		$20,state1
-+	por		temp,state1
-+
-+	/* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
-+	paddd		state1,state0
-+	pxor		state0,state3
-+	movdqa		state3,temp
-+	pslld		$8,temp
-+	psrld		$24,state3
-+	por		temp,state3
-+
-+	/* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
-+	paddd		state3,state2
-+	pxor		state2,state1
-+	movdqa		state1,temp
-+	pslld		$7,temp
-+	psrld		$25,state1
-+	por		temp,state1
-+
-+	/* state1 = shuffle32(state1, MASK(0, 3, 2, 1)) */
-+	pshufd		$0x39,state1,state1
-+	/* state2 = shuffle32(state2, MASK(1, 0, 3, 2)) */
-+	pshufd		$0x4e,state2,state2
-+	/* state3 = shuffle32(state3, MASK(2, 1, 0, 3)) */
-+	pshufd		$0x93,state3,state3
-+
-+	/* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
-+	paddd		state1,state0
-+	pxor		state0,state3
-+	movdqa		state3,temp
-+	pslld		$16,temp
-+	psrld		$16,state3
-+	por		temp,state3
-+
-+	/* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
-+	paddd		state3,state2
-+	pxor		state2,state1
-+	movdqa		state1,temp
-+	pslld		$12,temp
-+	psrld		$20,state1
-+	por		temp,state1
-+
-+	/* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
-+	paddd		state1,state0
-+	pxor		state0,state3
-+	movdqa		state3,temp
-+	pslld		$8,temp
-+	psrld		$24,state3
-+	por		temp,state3
-+
-+	/* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
-+	paddd		state3,state2
-+	pxor		state2,state1
-+	movdqa		state1,temp
-+	pslld		$7,temp
-+	psrld		$25,state1
-+	por		temp,state1
-+
-+	/* state1 = shuffle32(state1, MASK(2, 1, 0, 3)) */
-+	pshufd		$0x93,state1,state1
-+	/* state2 = shuffle32(state2, MASK(1, 0, 3, 2)) */
-+	pshufd		$0x4e,state2,state2
-+	/* state3 = shuffle32(state3, MASK(0, 3, 2, 1)) */
-+	pshufd		$0x39,state3,state3
-+
-+	decb		i
-+	jnz		.Lpermute
-+
-+	/* output0 = state0 + copy0 */
-+	paddd		copy0,state0
-+	movdqu		state0,0x00(output)
-+	/* output1 = state1 + copy1 */
-+	paddd		copy1,state1
-+	movdqu		state1,0x10(output)
-+	/* output2 = state2 + copy2 */
-+	paddd		copy2,state2
-+	movdqu		state2,0x20(output)
-+	/* output3 = state3 + copy3 */
-+	paddd		copy3,state3
-+	movdqu		state3,0x30(output)
-+
-+	/* ++copy3.counter */
-+	paddq		one,copy3
-+
-+	/* output += 64, --nblocks */
-+	addq		$64,output
-+	decq		nblocks
-+	jnz		.Lblock
-+
-+	/* counter = copy3.counter */
-+	movq		copy3,0x00(counter)
-+
-+	/* Zero out all the regs, in case nothing uses these again. */
-+	pxor		state0,state0
-+	pxor		state1,state1
-+	pxor		state2,state2
-+	pxor		state3,state3
-+	pxor		copy0,copy0
-+	pxor		copy1,copy1
-+	pxor		copy2,copy2
-+	pxor		copy3,copy3
-+	pxor		temp,temp
-+
-+	FRAME_END
-+	RET
-+SYM_FUNC_END(chacha20_blocks_nostack)
-diff --git a/arch/x86/entry/vdso/vgetrandom.c b/arch/x86/entry/vdso/vgetrandom.c
-new file mode 100644
-index 000000000000..c7a2476d5d8a
---- /dev/null
-+++ b/arch/x86/entry/vdso/vgetrandom.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+#include <linux/kernel.h>
-+#include <linux/types.h>
-+
-+#include "../../../../lib/vdso/getrandom.c"
-+
-+ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags, void *state);
-+
-+ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags, void *state)
-+{
-+	return __cvdso_getrandom(buffer, len, flags, state);
-+}
-+
-+ssize_t getrandom(void *, size_t, unsigned int, void *)
-+	__attribute__((weak, alias("__vdso_getrandom")));
-diff --git a/arch/x86/include/asm/vdso/getrandom.h b/arch/x86/include/asm/vdso/getrandom.h
-new file mode 100644
-index 000000000000..099aca58ef20
---- /dev/null
-+++ b/arch/x86/include/asm/vdso/getrandom.h
-@@ -0,0 +1,49 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+#ifndef __ASM_VDSO_GETRANDOM_H
-+#define __ASM_VDSO_GETRANDOM_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <asm/unistd.h>
-+#include <asm/vvar.h>
-+
-+static __always_inline ssize_t
-+getrandom_syscall(void *buffer, size_t len, unsigned int flags)
-+{
-+	long ret;
-+
-+	asm ("syscall" : "=a" (ret) :
-+	     "0" (__NR_getrandom), "D" (buffer), "S" (len), "d" (flags) :
-+	     "rcx", "r11", "memory");
-+
-+	return ret;
-+}
-+
-+#define __vdso_rng_data (VVAR(_vdso_rng_data))
-+
-+static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
-+{
-+	if (__vdso_data->clock_mode == VDSO_CLOCKMODE_TIMENS)
-+		return (void *)&__vdso_rng_data +
-+		       ((void *)&__timens_vdso_data - (void *)&__vdso_data);
-+	return &__vdso_rng_data;
-+}
-+
-+/*
-+ * Generates a given positive number of block of ChaCha20 output with nonce=0,
-+ * and does not write to any stack or memory outside of the parameters passed
-+ * to it. This way, we don't need to worry about stack data leaking into forked
-+ * child processes.
-+ */
-+static __always_inline void __arch_chacha20_blocks_nostack(u8 *dst_bytes, const u32 *key, u32 *counter, size_t nblocks)
-+{
-+	extern void chacha20_blocks_nostack(u8 *dst_bytes, const u32 *key, u32 *counter, size_t nblocks);
-+	return chacha20_blocks_nostack(dst_bytes, key, counter, nblocks);
-+}
-+
-+#endif /* !__ASSEMBLY__ */
-+
-+#endif /* __ASM_VDSO_GETRANDOM_H */
-diff --git a/arch/x86/include/asm/vdso/vsyscall.h b/arch/x86/include/asm/vdso/vsyscall.h
-index be199a9b2676..71c56586a22f 100644
---- a/arch/x86/include/asm/vdso/vsyscall.h
-+++ b/arch/x86/include/asm/vdso/vsyscall.h
-@@ -11,6 +11,8 @@
- #include <asm/vvar.h>
- 
- DEFINE_VVAR(struct vdso_data, _vdso_data);
-+DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
-+
- /*
-  * Update the vDSO data page to keep in sync with kernel timekeeping.
-  */
-diff --git a/arch/x86/include/asm/vvar.h b/arch/x86/include/asm/vvar.h
-index 183e98e49ab9..9d9af37f7cab 100644
---- a/arch/x86/include/asm/vvar.h
-+++ b/arch/x86/include/asm/vvar.h
-@@ -26,6 +26,8 @@
-  */
- #define DECLARE_VVAR(offset, type, name) \
- 	EMIT_VVAR(name, offset)
-+#define DECLARE_VVAR_SINGLE(offset, type, name) \
-+	EMIT_VVAR(name, offset)
- 
- #else
- 
-@@ -37,6 +39,10 @@ extern char __vvar_page;
- 	extern type timens_ ## name[CS_BASES]				\
- 	__attribute__((visibility("hidden")));				\
- 
-+#define DECLARE_VVAR_SINGLE(offset, type, name)				\
-+	extern type vvar_ ## name					\
-+	__attribute__((visibility("hidden")));				\
-+
- #define VVAR(name) (vvar_ ## name)
- #define TIMENS(name) (timens_ ## name)
- 
-@@ -44,12 +50,22 @@ extern char __vvar_page;
- 	type name[CS_BASES]						\
- 	__attribute__((section(".vvar_" #name), aligned(16))) __visible
- 
-+#define DEFINE_VVAR_SINGLE(type, name)					\
-+	type name							\
-+	__attribute__((section(".vvar_" #name), aligned(16))) __visible
-+
- #endif
- 
- /* DECLARE_VVAR(offset, type, name) */
- 
- DECLARE_VVAR(128, struct vdso_data, _vdso_data)
- 
-+#if !defined(_SINGLE_DATA)
-+#define _SINGLE_DATA
-+DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
-+#endif
-+
- #undef DECLARE_VVAR
-+#undef DECLARE_VVAR_SINGLE
- 
- #endif
--- 
-2.38.1
+		ret = read_poll_timeout(readl, sync_upd, !sync_upd, delay/100, delay,
+					false, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
+		if (ret)
+			dev_dbg(mchp_core_pwm->chip.dev,
+				"timed out waiting for shadow register sync\n");
+	}
+
+but...
+
+> > This way you don't have to wait at all if the calls to pwm_apply() are
+> > infrequent. Of course this only works this way, if you can determine if
+> > there is a pending update.
+> 
+> Ah I think I get what you mean now about waiting for completion &
+> reading the bit. I don't know off the top of my head if that bit is
+> readable. Docs say that they're R/W but I don't know if that means that
+> an AXI read works or if the value is actually readable. I'll try
+> something like this if I can.
+
+...it does not implement what I think you suggested & comes with the
+drawback of inconsistent behaviour depending on whether the timeout is
+hit or not.
+
+Instead, waiting in apply(), as you suggested, & get_state() looks to be the
+better option, using the same sort of logic as above, say:
+static int mchp_core_pwm_wait_for_sync_update(struct mchp_core_pwm_chip *mchp_core_pwm,
+					      unsigned int channel)
+{
+	int ret;
+
+	/*
+	 * If a shadow register is used for this PWM channel, and iff there is
+	 * a pending update to the waveform, we must wait for it to be applied
+	 * before attempting to read its state, as reading the registers yields
+	 * the currently implemented settings, the new ones are only readable
+	 * once the current period has ended.
+	 *
+	 * Rather large delays are possible, in the seconds, so to avoid waiting
+	 * around for **too** long - cap the wait at 100 ms.
+	 */
+	if (mchp_core_pwm->sync_update_mask & (1 << channel)) {
+		u32 delay = MCHPCOREPWM_TIMEOUT_US;
+		u32 sync_upd;
+
+		writel_relaxed(1u, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
+
+		ret = read_poll_timeout(readl, sync_upd, !sync_upd, delay/100, delay,
+					false, mchp_core_pwm->base + MCHPCOREPWM_SYNC_UPD);
+		if (ret)
+			return -ETIMEDOUT;
+	}
+
+	return 0;
+}
+
+I think that strikes a good balance? We return quickly & don't blocker
+the caller, but simultaneously try to prevent them from either trying to
+apply new settings or get the current settings until the last request
+has gone though?
+
+get_state() returns void though, is it valid behaviour to wait for the
+timeout there?
+I had a check in the core code and found some places where the call in
+looks like:
+	struct pwm_state s1, s2; 
+	chip->ops->get_state(chip, pwm, &s1);
+In this case, exiting early would leave us with a completely wrong
+idead of the state, if it was to time out.
+
+Either way, it seems like either way we would be misleading the caller
+of get_state() - perhaps the way around that is to do the wait & then
+just carry on with get_state()?
+In that scenario, you'd get the new settings where possible and the old ones
+otherwise.
+Returning if the timeout is hit would give you the new settings where possible
+& otherwise you'd get whatever was passed to get_state().
+I'm not really sure which of those two situations would be preferred?
+
+Thanks,
+Conor.
 
