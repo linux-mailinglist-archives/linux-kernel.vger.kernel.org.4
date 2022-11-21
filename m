@@ -2,138 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876326318C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 04:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D1A6318A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 03:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiKUDCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Nov 2022 22:02:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
+        id S229827AbiKUChl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Nov 2022 21:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiKUDCM (ORCPT
+        with ESMTP id S229645AbiKUChj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Nov 2022 22:02:12 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBA6131EC2;
-        Sun, 20 Nov 2022 19:02:09 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Cxbbcw6npj+AgJAA--.20171S3;
-        Mon, 21 Nov 2022 11:02:08 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOIv6npjMmkXAA--.61033S3;
-        Mon, 21 Nov 2022 11:02:08 +0800 (CST)
-Subject: Re: [PATCH] tools/memory-model: Use "grep -E" instead of "egrep"
-To:     Akira Yokosawa <akiyks@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-References: <1668823998-28548-1-git-send-email-yangtiezhu@loongson.cn>
- <d0d2ea9e-9345-f462-b15b-edf31024f7d5@gmail.com>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <cf646450-c908-519b-f07a-b51c3946ad7f@loongson.cn>
-Date:   Mon, 21 Nov 2022 11:02:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sun, 20 Nov 2022 21:37:39 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23006766B
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 18:37:37 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NFs3l5C8Dz15Mld;
+        Mon, 21 Nov 2022 10:37:07 +0800 (CST)
+Received: from huawei.com (10.67.174.191) by canpemm500009.china.huawei.com
+ (7.192.105.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
+ 2022 10:37:35 +0800
+From:   Li Hua <hucool.lihua@huawei.com>
+To:     <mhiramat@kernel.org>, <rostedt@goodmis.org>,
+        <akpm@linux-foundation.org>
+CC:     <nathan@kernel.org>, <ananth@in.ibm.com>,
+        <linux-kernel@vger.kernel.org>, <weiyongjun1@huawei.com>,
+        <yusongping@huawei.com>, <hucool.lihua@huawei.com>
+Subject: [PATCH] test_kprobes: Fix implicit declaration error of test_kprobes
+Date:   Mon, 21 Nov 2022 11:06:20 +0800
+Message-ID: <20221121030620.63181-1-hucool.lihua@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <d0d2ea9e-9345-f462-b15b-edf31024f7d5@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxoOIv6npjMmkXAA--.61033S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uFyDuF43Kr4Uur43Ww4DJwb_yoW8Kw4xpF
-        WDAa4jkanIvFyUXan2ka18JF15t3Z7GF4xGry5Aa15Xrn8Wr4ayryxXF4YyFsFqFWDJw4S
-        kayqvFyUJr4UC3DanT9S1TB71UUUUbUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jr9NsUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.174.191]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If KPROBES_SANITY_TEST and ARCH_CORRECT_STACKTRACE_ON_KRETPROBE is enabled, but
+STACKTRACE is not set. Build failed as below:
 
+lib/test_kprobes.c: In function ‘stacktrace_return_handler’:
+lib/test_kprobes.c:228:8: error: implicit declaration of function ‘stack_trace_save’; did you mean ‘stacktrace_driver’? [-Werror=implicit-function-declaration]
+  ret = stack_trace_save(stack_buf, STACK_BUF_SIZE, 0);
+        ^~~~~~~~~~~~~~~~
+        stacktrace_driver
+cc1: all warnings being treated as errors
+scripts/Makefile.build:250: recipe for target 'lib/test_kprobes.o' failed
+make[2]: *** [lib/test_kprobes.o] Error 1
 
-On 11/20/2022 07:19 PM, Akira Yokosawa wrote:
-> On Sat, 19 Nov 2022 10:13:18 +0800, Tiezhu Yang wrote:
->> The latest version of grep claims the egrep is now obsolete so the build
->> now contains warnings that look like:
->> 	egrep: warning: egrep is obsolescent; using grep -E
->> fix this up by moving the related file to use "grep -E" instead.
->>
->>   sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/memory-model`
->>
->> Here are the steps to install the latest grep:
->>
->>   wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
->>   tar xf grep-3.8.tar.gz
->>   cd grep-3.8 && ./configure && make
->>   sudo make install
->>   export PATH=/usr/local/bin:$PATH
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>  tools/memory-model/scripts/checkghlitmus.sh | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/memory-model/scripts/checkghlitmus.sh b/tools/memory-model/scripts/checkghlitmus.sh
->> index 6589fbb..f72816a 100755
->> --- a/tools/memory-model/scripts/checkghlitmus.sh
->> +++ b/tools/memory-model/scripts/checkghlitmus.sh
->> @@ -35,13 +35,13 @@ fi
->>  # Create a list of the C-language litmus tests previously run.
->>  ( cd $LKMM_DESTDIR; find litmus -name '*.litmus.out' -print ) |
->>  	sed -e 's/\.out$//' |
->> -	xargs -r egrep -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' |
->> +	xargs -r grep -E -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' |
->>  	xargs -r grep -L "^P${LKMM_PROCS}"> $T/list-C-already
->>
->>  # Create a list of C-language litmus tests with "Result:" commands and
->>  # no more than the specified number of processes.
->>  find litmus -name '*.litmus' -exec grep -l -m 1 "^C " {} \; > $T/list-C
->> -xargs < $T/list-C -r egrep -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' > $T/list-C-result
->> +xargs < $T/list-C -r grep -E -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' > $T/list-C-result
->>  xargs < $T/list-C-result -r grep -L "^P${LKMM_PROCS}" > $T/list-C-result-short
->>
->>  # Form list of tests without corresponding .litmus.out files
->
-> Looks good to me.
->
-> Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
->
-> Paul, JFYI, this patch doesn't apply cleanly on -rcu dev due to
-> a couple of changes in the lkmm-dev.2022.10.18c branch.
->
->         Thanks, Akira
->
+To fix this error, Select STACKTRACE if ARCH_CORRECT_STACKTRACE_ON_KRETPROBE is enabled.
 
-Hi Akira,
+Fixes: 1f6d3a8f5e39 ("kprobes: Add a test case for stacktrace from kretprobe handler")
+Signed-off-by: Li Hua <hucool.lihua@huawei.com>
+---
+ lib/Kconfig.debug | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for your review, sorry for that, let me rebase on
-linux-rcu.git dev and send v2 later.
-
-Thanks,
-Tiezhu
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index c3c0b077ade3..a1005415f0f4 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2107,6 +2107,7 @@ config KPROBES_SANITY_TEST
+ 	depends on DEBUG_KERNEL
+ 	depends on KPROBES
+ 	depends on KUNIT
++	select STACKTRACE if ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
+ 	default KUNIT_ALL_TESTS
+ 	help
+ 	  This option provides for testing basic kprobes functionality on
+-- 
+2.17.1
 
