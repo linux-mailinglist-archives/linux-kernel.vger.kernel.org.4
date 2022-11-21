@@ -2,376 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B39632735
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA87632764
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiKUPCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S232106AbiKUPKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiKUPCO (ORCPT
+        with ESMTP id S232076AbiKUPJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:02:14 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C270E14EE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:51:31 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so9186693wmg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:51:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NPydWrNdfqIGDmJS35ofH3oOUFMXcgrP2822hY23e4Q=;
-        b=b7rA/fYhZMoYD4Ha+nNtQgfE5+5JwqQhN1Vi8ciVD9ticy56QfhkdO7rRLckhUfnWH
-         wUZ++ROqe21Z9tqm1YoCr1/EZN0pOFQeRFqL7tNfBXeIn9MX9ITNvpRu1X8ho6eH9ci3
-         UabKwK9zsMkJrI+i1wFXsy2D8tDPjdgny8SIw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NPydWrNdfqIGDmJS35ofH3oOUFMXcgrP2822hY23e4Q=;
-        b=nZ8PhPAI3kj+dFFRtu9U8DNdR5XF9pmt1qPwB1jdIXfInfPjgRftWtI5x6s4R9wH2K
-         UE7SGHfbKsXaRTj6ybsCm13zsVOoTGyw7k6n6Kjr6UYvsYzqP2vvaM2jsXOKy6tWZXlX
-         ceyEbOLx9ossF/oDGGGuK6COfB90qnZ4Pk6Hu0J/oDHUs9FNI6bgWezwi4+OtO+2rAPc
-         DqOComDmIiUzqq5ZYE3SQsmrCUsMwPkB6RV7fCOtxgqHCHP0v+GSIPPjRYtSJlG5+m2+
-         5K+j87vXUr2fTdooym55fXmS5jEA+AzdsTMseu+4qS1wwusyP8lmMX9w4FZH+GLdBkRu
-         vrFg==
-X-Gm-Message-State: ANoB5pmyAnL1H5GPMCtHShGWnJNPm2dyrXSYg67xGI7cVJ9Vsf7OZUGE
-        ytUnAvp6RG2OSJ6oKyAdQXZs4Q==
-X-Google-Smtp-Source: AA0mqf6qLatuwUKGxJQ8235zzwr6t2QAx8gSWiqWJcy9iIeUjKbaWRqJ36As06k4guyP0zP7dkYfUw==
-X-Received: by 2002:a7b:cbc6:0:b0:3c6:b650:34dd with SMTP id n6-20020a7bcbc6000000b003c6b65034ddmr6437308wmi.45.1669042289540;
-        Mon, 21 Nov 2022 06:51:29 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id e21-20020a05600c219500b003cf894dbc4fsm13847724wme.25.2022.11.21.06.51.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 06:51:29 -0800 (PST)
-Date:   Mon, 21 Nov 2022 15:51:26 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ben Skeggs <bskeggs@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Dom Cobley <dom@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v10 00/19] drm: Analog TV Improvements
-Message-ID: <Y3uQbuQotGxh+XPS@phenom.ffwll.local>
-Mail-Followup-To: Maxime Ripard <maxime@cerno.tech>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
-        Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>, nouveau@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Dom Cobley <dom@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220728-rpi-analog-tv-properties-v10-0-256dad125326@cerno.tech>
+        Mon, 21 Nov 2022 10:09:47 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540DBD3395;
+        Mon, 21 Nov 2022 07:00:16 -0800 (PST)
+Message-ID: <20221121140050.705171344@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669041616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=xVC5XhbyhuC0nBwKYdli0UkkPUi3eZn9huiS4dLgbno=;
+        b=vwn1NtVaeWpzWR0KY98QBhWK1aS0jtYIfpHEqHGKLVMaKSd8dCf1wXkLuu6Do7FS+xpHRr
+        1bciPbQgGX83ut5KEzwdp3OkAsaHoKupl/THeC12qFTh5wWFF7gYmjMtEQMKtvJJ3T8RSY
+        bQ2cs5o2HMkUcMcfsCLh0NRWvOcOxC6zFJPw2qi6HPO4P8aIEZzjT9nzt57xV+XYRtarwL
+        Ur3LzSeSuoS3hzSQHWW3m8GwuXTZis6nkLGYuCOyw5u7F8lhZmgnYgFZBYLcIJ3KxKqYCD
+        qeykij+aRKm4zK78AVpIE9DzuNd8H7016kLNM6UjlivMlTRtPF7hHeWngSK70Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669041616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=xVC5XhbyhuC0nBwKYdli0UkkPUi3eZn9huiS4dLgbno=;
+        b=JzHCyAnuDTPU5GhvQhVEJpvVEt48zMqZWiaEwdeeThy07eCD8lvkRskVRtDbI6tP15CtT3
+        iAESw3oGSii/tcDA==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, Sinan Kaya <okaya@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [patch V2 38/40] irqchip/irq-mvebu-icu: Remove platform MSI leftovers
+References: <20221121135653.208611233@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220728-rpi-analog-tv-properties-v10-0-256dad125326@cerno.tech>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 21 Nov 2022 15:40:15 +0100 (CET)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 10:28:43AM +0100, Maxime Ripard wrote:
-> Hi,
-> 
-> Here's a series aiming at improving the command line named modes support,
-> and more importantly how we deal with all the analog TV variants.
-> 
-> The named modes support were initially introduced to allow to specify the
-> analog TV mode to be used.
-> 
-> However, this was causing multiple issues:
-> 
->   * The mode name parsed on the command line was passed directly to the
->     driver, which had to figure out which mode it was suppose to match;
-> 
->   * Figuring that out wasn't really easy, since the video= argument or what
->     the userspace might not even have a name in the first place, but
->     instead could have passed a mode with the same timings;
-> 
->   * The fallback to matching on the timings was mostly working as long as
->     we were supporting one 525 lines (most likely NSTC) and one 625 lines
->     (PAL), but couldn't differentiate between two modes with the same
->     timings (NTSC vs PAL-M vs NSTC-J for example);
-> 
->   * There was also some overlap with the tv mode property registered by
->     drm_mode_create_tv_properties(), but named modes weren't interacting
->     with that property at all.
-> 
->   * Even though that property was generic, its possible values were
->     specific to each drivers, which made some generic support difficult.
-> 
-> Thus, I chose to tackle in multiple steps:
-> 
->   * A new TV mode property was introduced, with generic values, each driver
->     reporting through a bitmask what standard it supports to the userspace;
-> 
->   * This option was added to the command line parsing code to be able to
->     specify it on the kernel command line, and new atomic_check and reset
->     helpers were created to integrate properly into atomic KMS;
-> 
->   * The named mode parsing code is now creating a proper display mode for
->     the given named mode, and the TV standard will thus be part of the
->     connector state;
-> 
->   * Two drivers were converted and tested for now (vc4 and sun4i), with
->     some backward compatibility code to translate the old TV mode to the
->     new TV mode;
-> 
-> Unit tests were created along the way.
-> 
-> One can switch from NTSC to PAL now using (on vc4)
-> 
-> modetest -M vc4  -s 53:720x480i -w 53:'TV mode':1 # NTSC
-> modetest -M vc4  -s 53:720x576i -w 53:'TV mode':4 # PAL
-> 
-> Let me know what you think,
-> Maxime
+All related domains provide MSI parent functionality, so the fallback code
+to the original platform MSI implementation is not longer required.
 
-Maxime asked me to drop an Ack-in-principle on this, and I'm not sure I
-have any useful input here with my utter lack of understanding for TV
-things (I never even had one in my entire life, that's how much I don't
-care). But it seems to check all the design boxes around solving annoying
-uapi/kms-config issues properly, so
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
+Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+---
+ drivers/irqchip/irq-mvebu-icu.c |  213 +---------------------------------------
+ 1 file changed, 6 insertions(+), 207 deletions(-)
 
-Acked-in-principle-or-something-like-that-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+--- a/drivers/irqchip/irq-mvebu-icu.c
++++ b/drivers/irqchip/irq-mvebu-icu.c
+@@ -129,196 +129,6 @@ static void mvebu_icu_init(struct mvebu_
+ 	writel_relaxed(msg[1].address_lo, icu->base + subset->offset_clr_al);
+ }
+ 
+-/* Start of area to be removed once all parent chips provide MSI parent */
+-
+-struct mvebu_icu_irq_data {
+-	struct mvebu_icu *icu;
+-	unsigned int icu_group;
+-	unsigned int type;
+-};
+-
+-static void mvebu_icu_write_msg(struct msi_desc *desc, struct msi_msg *msg)
+-{
+-	struct irq_data *d = irq_get_irq_data(desc->irq);
+-	struct mvebu_icu_msi_data *msi_data = platform_msi_get_host_data(d->domain);
+-	struct mvebu_icu_irq_data *icu_irqd = d->chip_data;
+-	struct mvebu_icu *icu = icu_irqd->icu;
+-	unsigned int icu_int;
+-
+-	if (msg->address_lo || msg->address_hi) {
+-		/* One off initialization per domain */
+-		mvebu_icu_init(icu, msi_data, msg);
+-		/* Configure the ICU with irq number & type */
+-		icu_int = msg->data | ICU_INT_ENABLE;
+-		if (icu_irqd->type & IRQ_TYPE_EDGE_RISING)
+-			icu_int |= ICU_IS_EDGE;
+-		icu_int |= icu_irqd->icu_group << ICU_GROUP_SHIFT;
+-	} else {
+-		/* De-configure the ICU */
+-		icu_int = 0;
+-	}
+-
+-	writel_relaxed(icu_int, icu->base + ICU_INT_CFG(d->hwirq));
+-
+-	/*
+-	 * The SATA unit has 2 ports, and a dedicated ICU entry per
+-	 * port. The ahci sata driver supports only one irq interrupt
+-	 * per SATA unit. To solve this conflict, we configure the 2
+-	 * SATA wired interrupts in the south bridge into 1 GIC
+-	 * interrupt in the north bridge. Even if only a single port
+-	 * is enabled, if sata node is enabled, both interrupts are
+-	 * configured (regardless of which port is actually in use).
+-	 */
+-	if (d->hwirq == ICU_SATA0_ICU_ID || d->hwirq == ICU_SATA1_ICU_ID) {
+-		writel_relaxed(icu_int,
+-			       icu->base + ICU_INT_CFG(ICU_SATA0_ICU_ID));
+-		writel_relaxed(icu_int,
+-			       icu->base + ICU_INT_CFG(ICU_SATA1_ICU_ID));
+-	}
+-}
+-
+-static struct irq_chip mvebu_icu_nsr_chip = {
+-	.name			= "ICU-NSR",
+-	.irq_mask		= irq_chip_mask_parent,
+-	.irq_unmask		= irq_chip_unmask_parent,
+-	.irq_eoi		= irq_chip_eoi_parent,
+-	.irq_set_type		= irq_chip_set_type_parent,
+-	.irq_set_affinity	= irq_chip_set_affinity_parent,
+-};
+-
+-static struct irq_chip mvebu_icu_sei_chip = {
+-	.name			= "ICU-SEI",
+-	.irq_ack		= irq_chip_ack_parent,
+-	.irq_mask		= irq_chip_mask_parent,
+-	.irq_unmask		= irq_chip_unmask_parent,
+-	.irq_set_type		= irq_chip_set_type_parent,
+-	.irq_set_affinity	= irq_chip_set_affinity_parent,
+-};
+-
+-static int
+-mvebu_icu_irq_domain_translate(struct irq_domain *d, struct irq_fwspec *fwspec,
+-			       unsigned long *hwirq, unsigned int *type)
+-{
+-	unsigned int param_count = static_branch_unlikely(&legacy_bindings) ? 3 : 2;
+-	struct mvebu_icu_msi_data *msi_data = platform_msi_get_host_data(d);
+-	struct mvebu_icu *icu = msi_data->icu;
+-
+-	/* Check the count of the parameters in dt */
+-	if (WARN_ON(fwspec->param_count != param_count)) {
+-		dev_err(icu->dev, "wrong ICU parameter count %d\n",
+-			fwspec->param_count);
+-		return -EINVAL;
+-	}
+-
+-	if (static_branch_unlikely(&legacy_bindings)) {
+-		*hwirq = fwspec->param[1];
+-		*type = fwspec->param[2] & IRQ_TYPE_SENSE_MASK;
+-		if (fwspec->param[0] != ICU_GRP_NSR) {
+-			dev_err(icu->dev, "wrong ICU group type %x\n",
+-				fwspec->param[0]);
+-			return -EINVAL;
+-		}
+-	} else {
+-		*hwirq = fwspec->param[0];
+-		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+-
+-		/*
+-		 * The ICU receives level interrupts. While the NSR are also
+-		 * level interrupts, SEI are edge interrupts. Force the type
+-		 * here in this case. Please note that this makes the interrupt
+-		 * handling unreliable.
+-		 */
+-		if (msi_data->subset_data->icu_group == ICU_GRP_SEI)
+-			*type = IRQ_TYPE_EDGE_RISING;
+-	}
+-
+-	if (*hwirq >= ICU_MAX_IRQS) {
+-		dev_err(icu->dev, "invalid interrupt number %ld\n", *hwirq);
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static int
+-mvebu_icu_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+-			   unsigned int nr_irqs, void *args)
+-{
+-	int err;
+-	unsigned long hwirq;
+-	struct irq_fwspec *fwspec = args;
+-	struct mvebu_icu_msi_data *msi_data = platform_msi_get_host_data(domain);
+-	struct mvebu_icu *icu = msi_data->icu;
+-	struct mvebu_icu_irq_data *icu_irqd;
+-	struct irq_chip *chip = &mvebu_icu_nsr_chip;
+-
+-	icu_irqd = kmalloc(sizeof(*icu_irqd), GFP_KERNEL);
+-	if (!icu_irqd)
+-		return -ENOMEM;
+-
+-	err = mvebu_icu_irq_domain_translate(domain, fwspec, &hwirq,
+-					     &icu_irqd->type);
+-	if (err) {
+-		dev_err(icu->dev, "failed to translate ICU parameters\n");
+-		goto free_irqd;
+-	}
+-
+-	if (static_branch_unlikely(&legacy_bindings))
+-		icu_irqd->icu_group = fwspec->param[0];
+-	else
+-		icu_irqd->icu_group = msi_data->subset_data->icu_group;
+-	icu_irqd->icu = icu;
+-
+-	err = platform_msi_device_domain_alloc(domain, virq, nr_irqs);
+-	if (err) {
+-		dev_err(icu->dev, "failed to allocate ICU interrupt in parent domain\n");
+-		goto free_irqd;
+-	}
+-
+-	/* Make sure there is no interrupt left pending by the firmware */
+-	err = irq_set_irqchip_state(virq, IRQCHIP_STATE_PENDING, false);
+-	if (err)
+-		goto free_msi;
+-
+-	if (icu_irqd->icu_group == ICU_GRP_SEI)
+-		chip = &mvebu_icu_sei_chip;
+-
+-	err = irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
+-					    chip, icu_irqd);
+-	if (err) {
+-		dev_err(icu->dev, "failed to set the data to IRQ domain\n");
+-		goto free_msi;
+-	}
+-
+-	return 0;
+-
+-free_msi:
+-	platform_msi_device_domain_free(domain, virq, nr_irqs);
+-free_irqd:
+-	kfree(icu_irqd);
+-	return err;
+-}
+-
+-static void
+-mvebu_icu_irq_domain_free(struct irq_domain *domain, unsigned int virq,
+-			  unsigned int nr_irqs)
+-{
+-	struct irq_data *d = irq_get_irq_data(virq);
+-	struct mvebu_icu_irq_data *icu_irqd = d->chip_data;
+-
+-	kfree(icu_irqd);
+-
+-	platform_msi_device_domain_free(domain, virq, nr_irqs);
+-}
+-
+-static const struct irq_domain_ops mvebu_icu_domain_ops = {
+-	.translate = mvebu_icu_irq_domain_translate,
+-	.alloc     = mvebu_icu_irq_domain_alloc,
+-	.free      = mvebu_icu_irq_domain_free,
+-};
+-
+-/* End of removal area */
+-
+ static int mvebu_icu_msi_init(struct irq_domain *domain, struct msi_domain_info *info,
+ 			      unsigned int virq, irq_hw_number_t hwirq, msi_alloc_info_t *arg)
+ {
+@@ -448,9 +258,10 @@ static const struct of_device_id mvebu_i
+ 
+ static int mvebu_icu_subset_probe(struct platform_device *pdev)
+ {
++	const struct msi_domain_template *tmpl;
+ 	struct mvebu_icu_msi_data *msi_data;
+ 	struct device *dev = &pdev->dev;
+-	struct irq_domain *irq_domain;
++	bool sei;
+ 
+ 	msi_data = devm_kzalloc(dev, sizeof(*msi_data), GFP_KERNEL);
+ 	if (!msi_data)
+@@ -471,26 +282,14 @@ static int mvebu_icu_subset_probe(struct
+ 	if (!irq_domain_get_of_node(dev->msi.domain))
+ 		return -ENODEV;
+ 
+-	if (irq_domain_is_msi_parent(dev->msi.domain)) {
+-		bool sei = msi_data->subset_data->icu_group == ICU_GRP_SEI;
+-		const struct msi_domain_template *tmpl;
+-
+-		tmpl = sei ? &mvebu_icu_sei_msi_template : &mvebu_icu_nsr_msi_template;
+-
+-		if (!msi_create_device_irq_domain(dev, MSI_DEFAULT_DOMAIN, tmpl,
+-						  ICU_MAX_IRQS, NULL, msi_data))
+-			return -ENOMEM;
+-	}
++	sei = msi_data->subset_data->icu_group == ICU_GRP_SEI;
++	tmpl = sei ? &mvebu_icu_sei_msi_template : &mvebu_icu_nsr_msi_template;
+ 
+-	irq_domain = platform_msi_create_device_tree_domain(dev, ICU_MAX_IRQS,
+-							    mvebu_icu_write_msg,
+-							    &mvebu_icu_domain_ops,
+-							    msi_data);
+-	if (!irq_domain) {
++	if (!msi_create_device_irq_domain(dev, MSI_DEFAULT_DOMAIN, tmpl,
++					  ICU_MAX_IRQS, NULL, msi_data)) {
+ 		dev_err(dev, "Failed to create ICU MSI domain\n");
+ 		return -ENOMEM;
+ 	}
+-
+ 	return 0;
+ }
+ 
 
-Cheers, Daniel
-
-> 
-> To: David Airlie <airlied@linux.ie>
-> To: Daniel Vetter <daniel@ffwll.ch>
-> To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> To: Maxime Ripard <mripard@kernel.org>
-> To: Thomas Zimmermann <tzimmermann@suse.de>
-> To: Emma Anholt <emma@anholt.net>
-> To: Jani Nikula <jani.nikula@linux.intel.com>
-> To: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> To: Ben Skeggs <bskeggs@redhat.com>
-> To: Karol Herbst <kherbst@redhat.com>
-> To: Lyude Paul <lyude@redhat.com>
-> To: Chen-Yu Tsai <wens@csie.org>
-> To: Jernej Skrabec <jernej.skrabec@gmail.com>
-> To: Samuel Holland <samuel@sholland.org>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-> Cc: "Noralf Trønnes" <noralf@tronnes.org>
-> Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> Cc: Dom Cobley <dom@raspberrypi.com>
-> Cc: Phil Elwell <phil@raspberrypi.com>
-> Cc: <dri-devel@lists.freedesktop.org>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: nouveau@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-sunxi@lists.linux.dev
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
-> ---
-> Changes in v10:
-> - Rebase on top of drm-misc-next-2022-11-17
-> - Fix checkpatch issues
-> - Add missing MODULE_* macros
-> - Link to v9: https://lore.kernel.org/r/20220728-rpi-analog-tv-properties-v9-0-24b168e5bcd5@cerno.tech
-> 
-> Changes in v9:
-> - Rename some tests, switch to kunit_test_suite and parameterized tests where
->   relevant
-> - Document the valid named modes
-> - Link to v8: https://lore.kernel.org/r/20220728-rpi-analog-tv-properties-v8-0-09ce1466967c@cerno.tech
-> 
-> Changes in v8:
-> - Changed slightly the helper API to pass in the features
-> - Removed unused tv_mode_support function
-> - Removed mode name match in _pick_cmdline_mode
-> - Added unit tests to the get_modes helper
-> - Collected Noralf and Mateusz tags
-> - Rebased on drm-misc-next-2022-11-10
-> - Link to v7: https://lore.kernel.org/r/20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech
-> 
-> Changes in v7:
-> - Switch to another implementation of get_modes from Noralf
-> - Made more checks in VEC's atomic_check
-> - Fixed typo in a commit log
-> - Checked for tv_mode_specified in drm_mode_parse_command_line_for_connector
-> - Rebased on drm-misc-next-2022-11-03
-> - Link to v6: https://lore.kernel.org/r/20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech
-> 
-> Changes in v6:
-> - Add and convert to a new get_modes helper to create the PAL and NTSC modes in
->   the proper order, with the right preferred mode flag, depending on the driver
->   capabilities and defaults.
-> - Support PAL60
-> - Renamed tests to be consistent with DRM tests naming convention
-> - Simplified a bit the named mode parsing code
-> - Add a tv_mode_specified field
-> - Return 0 in get_modes implementations instead of error codes
-> - Link to v5: https://lore.kernel.org/r/20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech
-> 
-> Changes in v5:
-> - Dropped TV Standard documentation removal
-> - Switched the TV Mode documentation from CSV to actual documentation
-> - Switched to kunit assertions where possible
-> - Switched to KUNIT_ASSERT_NOT_NULL instead of KUNIT_ASSERT_PTR_NE(..., NULL)
-> - Shuffled a bit the introduction of drm_client_modeset_connector_get_modes between patches
-> - Renamed tv_mode_names to legacy_tv_mode_names
-> - Removed the count variable in sun4i_tv_comp_get_modes
-> - Rebased on top of current drm-misc-next
-> - Link to v4: https://lore.kernel.org/r/20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech
-> 
-> Changes in v4:
-> - Removed the unused TV Standard property documentation
-> - Added the TV Mode property documentation to kms-properties.csv
-> - Fixed the documentation of drm_mode_create_tv_properties()
-> - Removed DRM_MODE_TV_MODE_NONE
-> - Reworded the line length check comment in drm_mode_analog_tv tests
-> - Switched to HZ_PER_KHZ in drm_mode_analog_tv tests
-> - Reworked drm_mode_analog_tv to fill our mode using the previously computed
->   timings
-> - Added the command-line option documentation to modedb.rst
-> - Improved the Kunit helpers cleanup
-> - Moved the subconnector documentation renaming to the proper patch
-> - Added the various review tags
-> - Removed the count variable in vc4_vec_connector_get_modes
-> - Rebased on drm-misc-next-2022-09-23 and fixed a merge conflict
-> - Folded all the named mode parsing improvements in a single patch
-> - Link to v3: https://lore.kernel.org/r/20220728-rpi-analog-tv-properties-v2-0-f733a0ed9f90@cerno.tech
-> 
-> Changes in v3:
-> - Applied some of the fixes to vc4 and sun4i
-> - Renamed the old TV mode property to legacy_mode
-> - Fixed a bunch of bisection errors
-> - Removed most of the redundant TV modes
-> - Added a new None TV mode to not fall back on NTSC by mistake
-> - Fixed the mode generation function to match better what is expected
-> - Added some logging to the mode generation function
-> - Split the improvements to the named mode parsing logic into separate patches
-> - Added more checks to the TV atomic_check helper
-> - Link to v2: https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech/
-> 
-> Changes in v2:
-> - Kept the older TV mode property as legacy so we can keep the old drivers functional
-> - Renamed the tv_norm property to tv_mode
-> - Added a function to create PAL and NTSC compatible display modes
-> - Added some helpers to instantiate a mock DRM device in Kunit
-> - More Kunit tests
-> - Removed the HD analog TV modes
-> - Renamed some of the tests
-> - Renamed some of the named modes
-> - Fixed typos in commit logs
-> - Added the various tags
-> - Link to v1: https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech/
-> 
-> ---
-> Mateusz Kwiatkowski (2):
->       drm/vc4: vec: Check for VEC output constraints
->       drm/vc4: vec: Add support for more analog TV standards
-> 
-> Maxime Ripard (16):
->       drm/tests: client: Mention that we can't use MODULE_ macros
->       drm/connector: Rename legacy TV property
->       drm/connector: Only register TV mode property if present
->       drm/connector: Rename drm_mode_create_tv_properties
->       drm/connector: Add TV standard property
->       drm/modes: Add a function to generate analog display modes
->       drm/connector: Add a function to lookup a TV mode by its name
->       drm/modes: Introduce the tv_mode property as a command-line option
->       drm/modes: Properly generate a drm_display_mode from a named mode
->       drm/client: Remove match on mode name
->       drm/modes: Introduce more named modes
->       drm/atomic-helper: Add a TV properties reset helper
->       drm/atomic-helper: Add an analog TV atomic_check implementation
->       drm/vc4: vec: Use TV Reset implementation
->       drm/vc4: vec: Convert to the new TV mode property
->       drm/sun4i: tv: Convert to the new TV mode property
-> 
-> Noralf Trønnes (1):
->       drm/probe-helper: Provide a TV get_modes helper
-> 
->  Documentation/fb/modedb.rst                     |   5 +
->  Documentation/gpu/drm-kms.rst                   |   6 +
->  drivers/gpu/drm/drm_atomic_state_helper.c       | 124 ++++++
->  drivers/gpu/drm/drm_atomic_uapi.c               |   4 +
->  drivers/gpu/drm/drm_client_modeset.c            |   4 -
->  drivers/gpu/drm/drm_connector.c                 | 173 +++++++-
->  drivers/gpu/drm/drm_modes.c                     | 544 +++++++++++++++++++++++-
->  drivers/gpu/drm/drm_probe_helper.c              |  82 ++++
->  drivers/gpu/drm/gud/gud_connector.c             |  10 +-
->  drivers/gpu/drm/i2c/ch7006_drv.c                |   8 +-
->  drivers/gpu/drm/i915/display/intel_tv.c         |   4 +-
->  drivers/gpu/drm/nouveau/dispnv04/tvnv17.c       |   6 +-
->  drivers/gpu/drm/sun4i/sun4i_tv.c                | 141 ++----
->  drivers/gpu/drm/tests/Makefile                  |   3 +
->  drivers/gpu/drm/tests/drm_client_modeset_test.c |  91 +++-
->  drivers/gpu/drm/tests/drm_cmdline_parser_test.c |  68 +++
->  drivers/gpu/drm/tests/drm_connector_test.c      |  76 ++++
->  drivers/gpu/drm/tests/drm_modes_test.c          | 145 +++++++
->  drivers/gpu/drm/tests/drm_probe_helper_test.c   | 205 +++++++++
->  drivers/gpu/drm/vc4/vc4_vec.c                   | 342 ++++++++++++---
->  include/drm/drm_atomic_state_helper.h           |   4 +
->  include/drm/drm_connector.h                     |  82 +++-
->  include/drm/drm_mode_config.h                   |  12 +-
->  include/drm/drm_modes.h                         |  17 +
->  include/drm/drm_probe_helper.h                  |   1 +
->  25 files changed, 1959 insertions(+), 198 deletions(-)
-> ---
-> base-commit: 9a47d2357cc30d13054bb0598f74fd61f2c9fc51
-> change-id: 20220728-rpi-analog-tv-properties-0914dfcee460
-> 
-> Best regards,
-> -- 
-> Maxime Ripard <maxime@cerno.tech>
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
