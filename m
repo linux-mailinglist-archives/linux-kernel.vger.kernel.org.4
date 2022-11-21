@@ -2,125 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D366330F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB896330FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiKUXux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S231993AbiKUXwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 18:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbiKUXuu (ORCPT
+        with ESMTP id S231148AbiKUXwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:50:50 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0A1C5A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:50:49 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so8309390otl.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:50:49 -0800 (PST)
+        Mon, 21 Nov 2022 18:52:17 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F01D59;
+        Mon, 21 Nov 2022 15:52:15 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-39e61d2087dso53421187b3.5;
+        Mon, 21 Nov 2022 15:52:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9qJGSmI/PVM4rhm2z0vPY9+1OW24z6YeaOBoyxuNZ2Y=;
-        b=pZeRXuaDR4YUAfk9pdiqFA9TNENllOMQJLmkdrsc2MdWnAAdd30cd7c7ROFGKUDQf6
-         +ZNNNZ6KQrQS7mXrU5dtHljL+yC4zTULQH3K6B1tf9UZpkaXG5sbD0ytAKxL8yhOTF1I
-         veCJvHxCJEFLT1214Au5yOvydOw7ieR3Csaxo=
+        bh=PH1MFowh0m8X5SP47+4l8kVJrUDEKp1YYOWjduOTIHs=;
+        b=CSA2yvphJeHULK54lTzNkWGZDZXfEJbsgyjC/WZgUP4CrT7HAHEiaR//3wDktmuUz7
+         fSWtnkJM338VQ+95Aa63L3XPj8wb/u0TfMCpH2kh9LpwfPTUdB26fC+xbInbmS71VJIb
+         9DOTwp30dkGb9Ay7Azi0BbaI+RWP39RPA4sKkIgv2s0gpip1iWumVfrDkxFad5JmR93x
+         DxdvUZEM1Z3e61uP5TwCs0vFXHrMOGj0UTgyhjJuIAIdkBUFDWjjVA9NXk77o4Tt0nVp
+         QU+b7UU5wAWWOFJIrbwXjLduAcfchbutXyOKOr10XkyzZlX32KXwF/OujtnEs9wuTC8g
+         XlmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9qJGSmI/PVM4rhm2z0vPY9+1OW24z6YeaOBoyxuNZ2Y=;
-        b=avookRE062GImci7V9DCkJWTwK8aKnsttAJm3Mfus5f3sG0ZTZcAIi5QepP+BjVFfn
-         0BBDMeoBBQru/W0RWgtWttMIm7byOoPKmY8Zcyn5fsjL3gkJfULEBzvN7nkHz/ENkHpU
-         x4pDSPBQMh52r2eUaKFL6w6WhA4L0HLn2AJn9FOV7ClXmzshWVx9b8Ai7sUe3lT40hti
-         hCRP3nX002BiysGdX5D0Es7SU5hSKrX61886WSbPlc4mIJtdz3OSmcFvsaMReg7R8/PW
-         cMMtDQXdt+GhANTMEUz+U87yuoKtkHoT934r5nwCdmblYkbbPkWBhjGEGNdYj0fMXWot
-         COCw==
-X-Gm-Message-State: ANoB5pneVFs50/QLj3O5N3NzYS4oE5lQ6BJe+RqZXlEj3Pklf2TzVKSY
-        5l3Hw3n+nnTXXJByAdbU0zVWnZysFU0nfsAluQYe
-X-Google-Smtp-Source: AA0mqf7kgYx54Yys6ETxvNQky+UEeKJ5p7LWh6nQdHq65TGyGvoY5M23v26YV+tFfDLtE9o9NFgqlU+8tlQQZEuniNM=
-X-Received: by 2002:a05:6830:22f2:b0:669:3797:c1b4 with SMTP id
- t18-20020a05683022f200b006693797c1b4mr10436192otc.293.1669074648514; Mon, 21
- Nov 2022 15:50:48 -0800 (PST)
+        bh=PH1MFowh0m8X5SP47+4l8kVJrUDEKp1YYOWjduOTIHs=;
+        b=b+mYri5fcYtUwHLHXvD3KCuGKx5F9APqYyvmtCWctWFxOc5ri4bTasP6LzUQ+Rh59L
+         n/Ntya+IcIB7Qnecp6VwqwaRi9PfBL/JAprPw/KbMOeASym/G6nm+CCTK7Yrr+Qp2dX3
+         lHJG2EE8NDuBOyq+gKzk+yWlASIjdLamZnK1xcuoe7SpJQj4ptpK9Kk2o7gyKaOnn96a
+         W/8aTyBzoikfk1RPeM0FmGcl5K7Fq4q4iHb60aoTq0IghkKfmGQxYdEia278KDSYILDC
+         J1ZkNM9yhVV19f9bTVqbsUHEPgRXdhx8O00/K75hMPG50kApujfX+aonif4NTAKqnNVD
+         hhBQ==
+X-Gm-Message-State: ANoB5pnLItgbUo47nmC2/Xg+eRPRSXUm3JGth2S6cFB5NYAqC/4UVAcp
+        5sJLyppSlaZjHzf2eWiDW+Gdu1H06b8086jZQ54=
+X-Google-Smtp-Source: AA0mqf7nUi7AvW46+GVluz4UhjtGfyNkH3sxKOsAJ3aoBlpwQwui55eNQ4N5bsjhgOp7z9OhpOvsZZ6xZ9hgJK1Kq44=
+X-Received: by 2002:a81:7cd6:0:b0:385:136f:6e0b with SMTP id
+ x205-20020a817cd6000000b00385136f6e0bmr1515338ywc.256.1669074734754; Mon, 21
+ Nov 2022 15:52:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20220718170205.2972215-1-atishp@rivosinc.com> <20220718170205.2972215-2-atishp@rivosinc.com>
- <20221101123008.e3bwen6f2yxi3whi@kamzik>
-In-Reply-To: <20221101123008.e3bwen6f2yxi3whi@kamzik>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 21 Nov 2022 15:50:37 -0800
-Message-ID: <CAOnJCU+wf=CR12GONjBougZGs+ZQV1MoDAK-w+ALQatEECoFBQ@mail.gmail.com>
-Subject: Re: [RFC 1/9] RISC-V: Define a helper function to probe number of
- hardware counters
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
+References: <20221119165921.18806-1-bilbao@vt.edu> <87o7t07zrq.fsf@meer.lwn.net>
+In-Reply-To: <87o7t07zrq.fsf@meer.lwn.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 22 Nov 2022 00:52:03 +0100
+Message-ID: <CANiq72kRB=g_G4cJUZKreKc+qP2npLf6ze8HJMzpBrA6YfDW9g@mail.gmail.com>
+Subject: Re: [RFC] Integrate Rust code documentation into Documentation/
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Carlos Bilbao <bilbao@vt.edu>, ojeda@kernel.org,
+        alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 5:30 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+On Mon, Nov 21, 2022 at 10:39 PM Jonathan Corbet <corbet@lwn.net> wrote:
 >
-> On Mon, Jul 18, 2022 at 10:01:57AM -0700, Atish Patra wrote:
-> > KVM module needs to know how many hardware counters the platform supports.
-> > Otherwise, it will not be able to show optimal value of virtual
->                                         ^ the
-> > counters to the guest.
-> >
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > ---
-> >  drivers/perf/riscv_pmu_sbi.c   | 23 +++++++++++++++++------
-> >  include/linux/perf/riscv_pmu.h |  4 ++++
-> >  2 files changed, 21 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-> > index 24124546844c..1723af68ffa1 100644
-> > --- a/drivers/perf/riscv_pmu_sbi.c
-> > +++ b/drivers/perf/riscv_pmu_sbi.c
-> > @@ -27,6 +27,7 @@
-> >   */
-> >  static union sbi_pmu_ctr_info *pmu_ctr_list;
-> >  static unsigned int riscv_pmu_irq;
-> > +static struct riscv_pmu *rvpmu;
+> Carlos Bilbao <bilbao@vt.edu> writes:
 >
-> Do we really need rvpmu? From a quick scan of the series it's only used
-> for num_hw_counters, which has to be added to struct riscv_pmu, and
-> num_counters. How about instead creating a static global for num_counters
-
-Yes. I added rvpmu just for future usage if any.
-
-> and then getting num_hw_counters by iterating pmu_ctr_list. If we want
-
-iteration is fine as we are doing that for hpm_width anyways.
-
-> riscv_pmu_sbi_get_num_hw_ctrs() to be faster, then we can cache the value
-> in a static variable in the function.
+> > I propose we include in 'make htmldocs' the option to integrate
+> > rustdoc-generated information. We could create and use
+> > Documentation/rust/rustdoc.rst as linking point for that HTML. This
+> > wouldn't be costly for the kernel itself. More importantly, the kernel
+> > website could host this information by default.
 >
+> I'm all in favor of including that output, just haven't had the time to
+> try to figure out how to make it actually work.  Got a patch that
+> implements this behavior? :)
 
-We have cmask now which can be cached in a static variable. We need to
-retrieve the
-counter width and the hardware counters for kvm. I have combined PATCH
-1 & PATCH 2
-to return both the values in one function.
+Agreed, generating them in `make htmldocs` is also what Konstantin
+(Cc'd) proposed a long time ago. In which case, I assume he will need
+to add the toolchain to some infrastructure so that we actually get
+them.
 
-> Thanks,
-> drew
+There are a couple bits to handle: they should only be generated if
+the Rust toolchain is available (and if the Rust support is enabled,
+really; and probably that suggested `rustdoc.rst` should reflect the
+result too). Also, the existing target depends on a kernel config --
+we may use x86_64 allyesconfig for the moment.
 
-
-
--- 
-Regards,
-Atish
+Cheers,
+Miguel
