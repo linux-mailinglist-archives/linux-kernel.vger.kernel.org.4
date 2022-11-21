@@ -2,147 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB5E6323B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F9C6323C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiKUNde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
+        id S230145AbiKUNdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiKUNdY (ORCPT
+        with ESMTP id S229864AbiKUNd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:33:24 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F6C220D4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:33:22 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id s5so2672272wru.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:33:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/AZ4ygC1zrywaVeDravJh+79FfEh+MWc17/2b5dHnFI=;
-        b=HhtboEGdl6Fk3OyjFtdSC0vRkGcOtA6lwHK46rnl7KucXpugcql4jfN/z4U3fxStX5
-         bH2McLqqFK3nsOSLPBvF+vJ3ohKVKs8lNsZH/eCMAFqxFobjfTG4JqClqhFOx4zH4zkf
-         YUieQJu9wr5pqkoiA8EApI62I7leQpVCg3C4ZDAeVktkNG6pyeP1g5XtOtoOuCYvjHoD
-         OS7b6M/xJeh+UC9q6IxqM8+ttR2lSzKHLt1mtpOWTwkX4hxwHUiN0G5+oPbdPwSJYq1j
-         2eAGJs1PBNr+DoWhcmuOy8MuQzq8E1CjjzIvnFmN6mNLdA94eNB2AWory4BsJUyv5Gzp
-         UErQ==
+        Mon, 21 Nov 2022 08:33:27 -0500
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0168784822;
+        Mon, 21 Nov 2022 05:33:26 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id p18so7956362qkg.2;
+        Mon, 21 Nov 2022 05:33:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/AZ4ygC1zrywaVeDravJh+79FfEh+MWc17/2b5dHnFI=;
-        b=DzHUKEwOzy1FAtDg4TF/rBnL++bSBBwYEn8m0MYzpySa3QpkQPebhWS8u6/1A/HM7S
-         Gn/2yLH0yZx2WlBYEYUGbZK18eBa1F9dllhLKiwpd8gMAk+C0H+zETfhNFSHpic08n+l
-         5uHaDZ5ue8h87Uq05mF5ntK/LB2FZ1fsg+k9rFLAnRjQ0vuaBlvOMAdqysmvmZaAWr5i
-         YOivprtJcne1J8CofhB5M+iOdFLxVykbSLqFnSexmIFu11MRHtVMjQf+u+f6j7JxrKKi
-         WPzfpJB/B+aGt51Jb23i8OeLC++T6mbT2yzvkRcjCBZhdunbfQQ1SUz/A9T1qD8A97CU
-         2C+A==
-X-Gm-Message-State: ANoB5pmiirHETSnwtOwQkk0PzKU8EoRE6t/fHVqxqNeKfbUJEUtkHOVN
-        ZUkEyvfGW0P1x7Pr3DGERYjIog==
-X-Google-Smtp-Source: AA0mqf65U+hVaWTrA35GMU6HsufKw4fwTxCfsQNgEWiSbacZGQ1vytMt5Bep31zS425r88w5qPgkrg==
-X-Received: by 2002:a5d:4577:0:b0:241:c9fc:71bc with SMTP id a23-20020a5d4577000000b00241c9fc71bcmr5324874wrc.317.1669037601244;
-        Mon, 21 Nov 2022 05:33:21 -0800 (PST)
-Received: from localhost.localdomain (lfbn-gre-1-201-46.w90-112.abo.wanadoo.fr. [90.112.163.46])
-        by smtp.gmail.com with ESMTPSA id j18-20020a05600c191200b003c83465ccbfsm20332980wmq.35.2022.11.21.05.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 05:33:20 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-efi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH] riscv: Sync efi page table's kernel mappings before switching
-Date:   Mon, 21 Nov 2022 14:33:03 +0100
-Message-Id: <20221121133303.1782246-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
+        bh=W52hjy2XgXbLvoau/TZhYUdh0mFs9ky77EejBWrKJL0=;
+        b=MKBAflyqCUHtzPOOQZ6ifQuwGDxrXiqLha4B6jgtDirrkjwDpkFryHuD6F/dt8H0QI
+         /OIxYrlqSHJDdf035z2Khhf6Kryhq1gElZdNzSmWIBxdcJErG0ksH8kPf2cpKnjiGIly
+         jDZA5W2gtjqmoIEHcAdhqOYFTh1/kn8BF7eeKJcFk2VjJkIWVC5Ad5PmSNuuBGrnERyp
+         c80M43ypsnc9Em3IJzqGakMQC8lGEP87p4FVat1CCYUeyIGWTts6Q2ROcXfUuxpSE3AA
+         5Xqf4HHD5kcwg6YwWXUrJ1/eZxMVpT2w3M5TLvlivG1HOyJ8IFsM6fXzmDinFTgUttcU
+         Uqhg==
+X-Gm-Message-State: ANoB5plLQ5A+/+zT5/m1BgTpcb1kqSljtoUhzcMqioQs+/IM6aYOCLxV
+        8maqDHR5KaxgAEMGSgB6hUqsAxwHQez/9g==
+X-Google-Smtp-Source: AA0mqf5ztepVbKEErbeHzkEO/g8ATeu0M6TG2+WT51QBKFlvCWQFw94PLJ5lwReFzcLN831JtiNw6w==
+X-Received: by 2002:a05:620a:993:b0:6fa:172:c37d with SMTP id x19-20020a05620a099300b006fa0172c37dmr16277536qkx.92.1669037604910;
+        Mon, 21 Nov 2022 05:33:24 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id l21-20020a37f915000000b006fa7b5ea2d1sm8239937qkj.125.2022.11.21.05.33.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 05:33:23 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-36cbcda2157so113000447b3.11;
+        Mon, 21 Nov 2022 05:33:23 -0800 (PST)
+X-Received: by 2002:a81:4f4c:0:b0:357:66a5:bb25 with SMTP id
+ d73-20020a814f4c000000b0035766a5bb25mr17212924ywb.383.1669037603130; Mon, 21
+ Nov 2022 05:33:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org> <20221121110615.97962-8-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221121110615.97962-8-krzysztof.kozlowski@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 21 Nov 2022 14:33:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUtT3=F-3XLb604VUvKxNQBWK1y0rMnMn0kASKjQGw=3g@mail.gmail.com>
+Message-ID: <CAMuHMdUtT3=F-3XLb604VUvKxNQBWK1y0rMnMn0kASKjQGw=3g@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] dt-bindings: drop redundant part of title (beginning)
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The EFI page table is initially created as a copy of the kernel page table.
-With VMAP_STACK enabled, kernel stacks are allocated in the vmalloc area:
-if the stack is allocated in a new PGD (one that was not present at the
-moment of the efi page table creation or not synced in a previous vmalloc
-fault), the kernel will take a trap when switching to the efi page table
-when the vmalloc kernel stack is accessed, resulting in a kernel panic.
+On Mon, Nov 21, 2022 at 12:09 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "Devicetree binding", but instead just describe the hardware.
+>
+> Drop beginning "Devicetree bindings" in various forms:
+>
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [dD]evice[ -]\?[tT]ree [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+>
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+>
+>   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
+>     -exec sed -i -e 's/^title: [dD][tT] [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Fix that by updating the efi kernel mappings before switching to the efi
-page table.
+>  .../devicetree/bindings/interrupt-controller/renesas,irqc.yaml  | 2 +-
 
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
- arch/riscv/include/asm/efi.h     |  6 +++++-
- arch/riscv/include/asm/pgalloc.h | 11 ++++++++---
- 2 files changed, 13 insertions(+), 4 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/arch/riscv/include/asm/efi.h b/arch/riscv/include/asm/efi.h
-index f74879a8f1ea..e229d7be4b66 100644
---- a/arch/riscv/include/asm/efi.h
-+++ b/arch/riscv/include/asm/efi.h
-@@ -10,6 +10,7 @@
- #include <asm/mmu_context.h>
- #include <asm/ptrace.h>
- #include <asm/tlbflush.h>
-+#include <asm/pgalloc.h>
- 
- #ifdef CONFIG_EFI
- extern void efi_init(void);
-@@ -20,7 +21,10 @@ extern void efi_init(void);
- int efi_create_mapping(struct mm_struct *mm, efi_memory_desc_t *md);
- int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
- 
--#define arch_efi_call_virt_setup()      efi_virtmap_load()
-+#define arch_efi_call_virt_setup()      ({		\
-+		sync_kernel_mappings(efi_mm.pgd);	\
-+		efi_virtmap_load();			\
-+	})
- #define arch_efi_call_virt_teardown()   efi_virtmap_unload()
- 
- #define ARCH_EFI_IRQ_FLAGS_MASK (SR_IE | SR_SPIE)
-diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
-index 947f23d7b6af..59dc12b5b7e8 100644
---- a/arch/riscv/include/asm/pgalloc.h
-+++ b/arch/riscv/include/asm/pgalloc.h
-@@ -127,6 +127,13 @@ static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
- #define __p4d_free_tlb(tlb, p4d, addr)  p4d_free((tlb)->mm, p4d)
- #endif /* __PAGETABLE_PMD_FOLDED */
- 
-+static inline void sync_kernel_mappings(pgd_t *pgd)
-+{
-+	memcpy(pgd + USER_PTRS_PER_PGD,
-+	       init_mm.pgd + USER_PTRS_PER_PGD,
-+	       (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
-+}
-+
- static inline pgd_t *pgd_alloc(struct mm_struct *mm)
- {
- 	pgd_t *pgd;
-@@ -135,9 +142,7 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
- 	if (likely(pgd != NULL)) {
- 		memset(pgd, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
- 		/* Copy kernel mappings */
--		memcpy(pgd + USER_PTRS_PER_PGD,
--			init_mm.pgd + USER_PTRS_PER_PGD,
--			(PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
-+		sync_kernel_mappings(pgd);
- 	}
- 	return pgd;
- }
--- 
-2.37.2
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
