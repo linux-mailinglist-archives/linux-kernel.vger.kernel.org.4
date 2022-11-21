@@ -2,168 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D4F632096
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3746320A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiKUL3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:29:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S230438AbiKULaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiKUL3L (ORCPT
+        with ESMTP id S230407AbiKUL3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:29:11 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9D1A4166
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:23:55 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id d3so14179579ljl.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:23:55 -0800 (PST)
+        Mon, 21 Nov 2022 06:29:40 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E1BB97F8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:24:34 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-39451671bdfso85029127b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:24:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d1hGOwFF0QOaziSceA+/kHlNJfHPDOB+lxzerxjy37o=;
-        b=YJggKpNFJMfD36AY7M96yLXiFYjsPS9oSWYw5ibweyqMc6ggvkWBDLZjKQ83ZQMMVP
-         +eskohJ9QvWrIxPl1/JTg7qU78bDg7VUHkWZXh8UE3odnBpAOS02WupeYx1uWwIOCpHD
-         Pa71ENGsyNFTJ+4Z5vm92AMNQo2pqk7Ob5oVcL18SoSCI/LoUfuzUgYWvp454xiWLTkH
-         V9LN9tDVb1tDGTvpOPD8loXSx3hZ5OadJM3qf9dOcQ8U8wSAN9r3B6F6HfOm8AugbOOI
-         7tjJV3S2SWa6T8owV7VDSedJt1H1gIkEAHvcD0psTRcawWZT1PmD9SqZPFXZq/CwGL6K
-         9FgA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z0Yxxijw1rGvRh5thj+hdyAsK4hKNzeEn6cA7Ahy6R4=;
+        b=HG+D9UeDx4HZ6s3bsFbtXomKMBm/Wsv0I8Gt2SAPNz80qn0WqEBfTEO8M31PajsupY
+         2e2I7NaniuTDmzgpj9jtSwvC9pd2QV17kMFnPZm/bS954/kqXxbBe0IizUPf+pnYAuZQ
+         4Jebxz2oro59V4Fknt82a0kr7PusZAoySnkYbDNtLWec6n4Lgn4vCFInXEQ0fL5WpgHO
+         42Td3zL/3UdQ51/IW9Jp0ogB+rssDwWzqOekV9hUCWPMoXfQjPbsu9P1BBTL84gi1eIO
+         SbSCVGmubesPca1HwX69V3LIetUcELmuN3E+UB5C0h0zmZD494Td67Lk7Td3FoXtkRMf
+         RMJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d1hGOwFF0QOaziSceA+/kHlNJfHPDOB+lxzerxjy37o=;
-        b=htED2veXZ5Pa4BVdtsorp057qc9v91W6kEFO0IryjPRAoQAz6oLF03TqjYuaAaPN+r
-         BLFmhV1pJmKWLhTs1PCzCZHO7EOXiTTEFPkd093fiCWvWKrq0mSoW3jMXY8n3L2axD8n
-         ZDSzcT4T3st1rpsJapo9TPHbQKYFK5WI+amBvvw9fT3TJYx8iVTpr5zckG0K72nIzSkU
-         L+gDaI69WHhhe+vayU9tMAr9b/RIUkwa6D+lNgdx2GSQBhGm3RJi+oEnVM3NuGh0iH23
-         0m3i8AtB/PQz4u7mREn7AYQB715LwdIkGExq5jACg9OxPrBrnfMWG8NmJ6DeBGo2FCte
-         r4Ww==
-X-Gm-Message-State: ANoB5pmnytQ5gtnzLEajAlbRIcjmaJXmbb4ZqBnbqhRiPvhJGASXT8MG
-        Wqqlz7EveP0tUg4SaIPtL2BsIA==
-X-Google-Smtp-Source: AA0mqf5Gy6Om8GCoWWSM+y5Gu90BLj8vZ4RsuzPdzhzC3Pz48PdN39Vc+SL0UNZKWidA5ntFxgVyNw==
-X-Received: by 2002:a2e:3807:0:b0:277:b3a:43dc with SMTP id f7-20020a2e3807000000b002770b3a43dcmr5051173lja.411.1669029834066;
-        Mon, 21 Nov 2022 03:23:54 -0800 (PST)
-Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
-        by smtp.gmail.com with ESMTPSA id k8-20020a05651210c800b0048a982ad0a8sm1980583lfg.23.2022.11.21.03.23.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 03:23:53 -0800 (PST)
-Message-ID: <729600fb-e2e6-5ae8-514b-2847501b1c14@linaro.org>
-Date:   Mon, 21 Nov 2022 12:23:52 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z0Yxxijw1rGvRh5thj+hdyAsK4hKNzeEn6cA7Ahy6R4=;
+        b=14wBkZRppze1/qWt4rkKAlK268R4kazjRDEffwRIalzD6+2Uoihif9ueZ1R1f4+NnH
+         NzGuxXDCx87eAKfzPmJ3uROsegYxhBClTs8aih7V4JP8z5rcKqZq5yKm40S+dQ0UPTHi
+         aSTaSxup3PEsM+srHhVSSmHnaWOK8kz4DGgWNkSOvOAeSPoO9KQZxvw0wxRcFLlKQ7p2
+         fsjax3hKjSs/uvNZGJfzrbO/P3zlCuG86NR3rKkvwurtaSXlsi+JAgOl2ojdwlDKBOMu
+         QAN/nTQ68zmrtoMJy+30H2hRVC4jOXmdMjYFYOtH82/9m4Oyr/ORPSgdVuLyR0uDQwEj
+         DgXg==
+X-Gm-Message-State: ANoB5pnn/8F8uNP1Sb82qS5+DrICgtigDS7NtYD9J9cw0YRaatg22U4k
+        Un/cz3JdUgvBh0sLK2DY/Iy7raPXCbYWXPZrXaUVw+8LYqM=
+X-Google-Smtp-Source: AA0mqf6lonTuOQc++bsUBoOIUNs2D/PyEdavPXG4/IVfsvUOai8Ap31tSYnDgK3s6D8683TvgIcwbu86D7SigqsG2s8=
+X-Received: by 2002:a81:a18e:0:b0:368:b923:b500 with SMTP id
+ y136-20020a81a18e000000b00368b923b500mr873052ywg.10.1669029873914; Mon, 21
+ Nov 2022 03:24:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 4/5] arm64: dts: qcom: msm8916-gplus-fl8005a: Add
- touchscreen
-Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20221119202316.93142-1-linmengbo0689@protonmail.com>
- <20221119202649.93613-1-linmengbo0689@protonmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221119202649.93613-1-linmengbo0689@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114082935.3007497-1-glider@google.com> <Y3KG9bAo11t84SIg@gmail.com>
+In-Reply-To: <Y3KG9bAo11t84SIg@gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 21 Nov 2022 12:23:57 +0100
+Message-ID: <CAG_fn=VaBW3NBULC1JGhJW7hhWBb-h6Me_wecktt0Mgo+m8VeQ@mail.gmail.com>
+Subject: Re: [PATCH] fs: ext4: initialize fsdata in pagecache_write()
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
+        chao@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org,
+        syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 7:20 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Mon, Nov 14, 2022 at 09:29:35AM +0100, Alexander Potapenko wrote:
+> > [PATCH] fs: ext4: initialize fsdata in pagecache_write()
+> >
+> > When aops->write_begin() does not initialize fsdata, KMSAN reports
+> > an error passing the latter to aops->write_end().
+> >
+> > Fix this by unconditionally initializing fsdata.
+> >
+> > Also speculatively fix similar issues in affs, f2fs, hfs, hfsplus,
+> > as suggested by Eric Biggers.
+>
+> You might have better luck with separate patches for each filesystem, as =
+it
+> might be hard to get someone to apply this patch otherwise.
+
+Done.
+Please disregard this patch.
+
+> If you do go with a single patch, then the subject prefix should be "fs:"=
+, not
+> "fs: ext4:".
+>
+> - Eric
 
 
-On 19.11.2022 21:27, Lin, Meng-Bo wrote:
-> FL8005A uses a Focaltech FT5402 touchscreen that is connected to
-> blsp_i2c5. Add it to the device tree.
-> 
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-> ---
->  .../boot/dts/qcom/msm8916-gplus-fl8005a.dts   | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-> index bed1fe984287..cc81880f7c42 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-> @@ -65,6 +65,32 @@ usb_id: usb-id {
->  	};
->  };
->  
-> +&blsp_i2c5 {
-> +	status = "okay";
-> +
-> +	touchscreen@38 {
-> +		/* Actually ft5402 */
-> +		compatible = "edt,edt-ft5406";
-> +		reg = <0x38>;
-> +
-> +		interrupt-parent = <&msmgpio>;
-> +		interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +		reset-gpios = <&msmgpio 12 GPIO_ACTIVE_LOW>;
-> +
-> +		vcc-supply = <&pm8916_l17>;
-> +		iovcc-supply = <&pm8916_l6>;
-> +
-> +		touchscreen-size-x = <800>;
-> +		touchscreen-size-y = <500>;
-> +		touchscreen-inverted-x;
-> +		touchscreen-swapped-x-y;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&touchscreen_default>;
-> +	};
-> +};
-> +
->  &blsp1_uart2 {
->  	status = "okay";
->  };
-> @@ -229,6 +255,24 @@ gpio_leds_default: gpio-led-default-state {
->  		bias-disable;
->  	};
->  
-> +	touchscreen_default: touchscreen-default-state {
-> +		touchscreen-pins {
-> +			pins = "gpio13";
-> +			function = "gpio";
-> +
-> +			drive-strength = <2>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		reset-pins {
-> +			pins = "gpio12";
-> +			function = "gpio";
-> +
-> +			drive-strength = <2>;
-> +			bias-disable;
-> +		};
-These subnodes are not sorted in any way, neither alphabetically nor
-GPIO-no wise. Please swap them.
 
-With that:
+--=20
+Alexander Potapenko
+Software Engineer
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-Konrad
-> +	};
-> +
->  	usb_id_default: usb-id-default-state {
->  		pins = "gpio110";
->  		function = "gpio";
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
