@@ -2,206 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56B46327C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C886327BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbiKUPV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        id S232041AbiKUPVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiKUPV3 (ORCPT
+        with ESMTP id S232246AbiKUPVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:21:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CBA9DBA3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:18:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669043892;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mWzLboUVaaSQBKudGWmScz/emJJTGhEhKaSsizNUtHA=;
-        b=JCzhrYckysBgYTmxhkes0awgEv3wAtWirHgqctp1N8qxL0yVBVh8jU+80PAyvCCkh8aMiV
-        vRVFEDp8Tb1h70vzBdfPGk2z4AEj5voTc6TT3pzZM5d+3GaxbWvuHASMBYzehP3eRWVLyG
-        9sSGseZoa1PpB07mznCV2QcTr/Q31HM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-466-MErn0cdCOWqYUJUR4NFRjg-1; Mon, 21 Nov 2022 10:18:09 -0500
-X-MC-Unique: MErn0cdCOWqYUJUR4NFRjg-1
-Received: by mail-wr1-f71.google.com with SMTP id e21-20020adfa455000000b00241daf5b9b2so836658wra.18
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:18:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mWzLboUVaaSQBKudGWmScz/emJJTGhEhKaSsizNUtHA=;
-        b=Zm6t/B+ZZmZ1Cw0L6/S37z6HrsgelW+RFR4nCVa1vOpIiy4Tn3jHViKdmvjfe9pL1l
-         bwdcHSRvrjOGzoIu+cds7sHotu7oQK6MGYmnPSIQoXQlbmEGYR/Z7AunwKC6wBTQROqj
-         hx+/H2ewEmDi/X0O4ZAI/1QyhgwJ2qgjrcs74SNvc89Sx2wJdvk7ctQpT8z/fkxyRSnA
-         7cDj/sLWWi5gRmCjV3ub8K6I1hdi0qoEK0kKKQShfrOcljsXNNhv1V26Ykm8Git/y7uB
-         41iYGyFzvVU3P/Pte6m7NQjrUImlEq3eTQyEDvm4lTHGWKJMOx6FUk1qyo9fcvXLrmQL
-         ankA==
-X-Gm-Message-State: ANoB5pljn235W2LUVEzRiqutDlBvbB83yiu1hFH236pGh4WlAiQVi0Dv
-        +wCu3R2yug5dM48WCEnPdp/x8SQ0nDmJstbeEnpGbdhzsKXMeWIXtU6YXeEWgGeuZAfu3zjeR7r
-        rXC899uj3q6YKuUH4HkZYw0xZ
-X-Received: by 2002:a5d:4d8b:0:b0:241:bf7b:db5b with SMTP id b11-20020a5d4d8b000000b00241bf7bdb5bmr9361002wru.267.1669043887447;
-        Mon, 21 Nov 2022 07:18:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7W7hS2PAbvhVoDxfYm/gMb2yAVzOuUX6eEt4DhS4ID1WqyLI65K8a6qYqLBb7rTEfgcLWUEA==
-X-Received: by 2002:a5d:4d8b:0:b0:241:bf7b:db5b with SMTP id b11-20020a5d4d8b000000b00241bf7bdb5bmr9360983wru.267.1669043887169;
-        Mon, 21 Nov 2022 07:18:07 -0800 (PST)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id o7-20020a056000010700b002366f9bd717sm13805064wrx.45.2022.11.21.07.18.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 07:18:06 -0800 (PST)
-Message-ID: <984a2c3f4ace0c2f48ee8d19f20d52d9f2fba8ba.camel@redhat.com>
-Subject: Re: [PATCH v3] KVM: x86: Allow APICv APIC ID inhibit to be cleared
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Greg Edwards <gedwards@ddn.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Mon, 21 Nov 2022 17:18:05 +0200
-In-Reply-To: <20221117183247.94314-1-gedwards@ddn.com>
-References: <20221114202037.254176-1-gedwards@ddn.com>
-         <20221117183247.94314-1-gedwards@ddn.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Mon, 21 Nov 2022 10:21:01 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B62CCDFFB
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:19:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 709FDCE149C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:19:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82148C433C1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669043944;
+        bh=hNvErq3/YI4nudexs9WhewJxFzxxT6n4zbIU2S0momQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=siXw93lDPd8wXGB3UTJDID/cFfKEeaSM81vj3f4Bh0cTHnK1iNHsVX8ieyeuoGld1
+         ObiMAU7+P7l+/Ppqe7+w8vsBSoPAsouuVi5ECqACorxPFmYQaKu6WXPiv25Y+4gBmM
+         j5gRNVTK+AfnlMylGKUUDrxXCvNB3l7OgiSjFqabm03OxMXPEYofspCHdAmTJvRhvi
+         5PJ2kaS/uepqTUG+9YNtT8OIHMyqtLRqYhYRT+8KqKKL5FZS2xiDtst0uKwQmrHXJV
+         322umduUFyKZv1zwHOtcTA+ZOyZvoWvT7MTzviQ/6HFiAYuSILag5doK7B8Qp4pOXt
+         OGvW/79pkhrMg==
+Received: by mail-yb1-f182.google.com with SMTP id b131so13939304yba.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:19:04 -0800 (PST)
+X-Gm-Message-State: ANoB5pk5jZl97N9Ch5BNMYOUdBZAtMvwflkZQmKPVMBP6jqwPdrWQoF7
+        HNXr8ZTmdw7kgDieRxXOxSC+gtiJoQDcH0ogecE=
+X-Google-Smtp-Source: AA0mqf7ceDqe5Fjo8jJBqFSfaLx/euEtnK53FpMQ42IwjbflQaf3yYI7/FWG7jLwGOxHaGrVPara/PGuSQjb2PS2PuQ=
+X-Received: by 2002:a25:c0d6:0:b0:6e6:619f:31f7 with SMTP id
+ c205-20020a25c0d6000000b006e6619f31f7mr2575999ybf.642.1669043943527; Mon, 21
+ Nov 2022 07:19:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221119204435.97113-1-ogabbay@kernel.org> <20221119204435.97113-5-ogabbay@kernel.org>
+ <1e1cc8e3-8522-904f-6458-51dc8b212889@quicinc.com>
+In-Reply-To: <1e1cc8e3-8522-904f-6458-51dc8b212889@quicinc.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Mon, 21 Nov 2022 17:18:37 +0200
+X-Gmail-Original-Message-ID: <CAFCwf13KLp7SzNjDE_EuhVePQ5=a-KEmzd7ytt3zY+tO6RyOxw@mail.gmail.com>
+Message-ID: <CAFCwf13KLp7SzNjDE_EuhVePQ5=a-KEmzd7ytt3zY+tO6RyOxw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] doc: add documentation for accel subsystem
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Christopher Friedt <chrisfriedt@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-17 at 11:33 -0700, Greg Edwards wrote:
-> Legacy kernels prior to commit 4399c03c6780 ("x86/apic: Remove
-> verify_local_APIC()") write the APIC ID of the boot CPU twice to verify
-> a functioning local APIC.  This results in APIC acceleration inhibited
-> on these kernels for reason APICV_INHIBIT_REASON_APIC_ID_MODIFIED.
-> 
-> Allow the APICV_INHIBIT_REASON_APIC_ID_MODIFIED inhibit reason to be
-> cleared if/when all APICs in xAPIC mode set their APIC ID back to the
-> expected vcpu_id value.
-> 
-> Fold the functionality previously in kvm_lapic_xapic_id_updated() into
-> kvm_recalculate_apic_map(), as this allows examining all APICs in one
-> pass.
-> 
-> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
-> Signed-off-by: Greg Edwards <gedwards@ddn.com>
-> ---
-> Changes from v2:
->   * Comment and variable name tweaks.  [Sean]
-> 
-> Changes from v1:
->   * Fold kvm_lapic_xapic_id_updated() into kvm_recalculate_apic_map() and
->     verify no APICs in xAPIC mode have a modified APIC ID before clearing
->     APICV_INHIBIT_REASON_APIC_ID_MODIFIED.  [Sean]
->   * Rebase on top of Sean's APIC fixes+cleanups series.  [Sean]
->     https://lore.kernel.org/all/20221001005915.2041642-1-seanjc@google.com/
-> 
->  arch/x86/kvm/lapic.c | 41 +++++++++++++++--------------------------
->  1 file changed, 15 insertions(+), 26 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 9b3af49d2524..5224d73cd84a 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -236,6 +236,7 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
->         struct kvm_vcpu *vcpu;
->         unsigned long i;
->         u32 max_id = 255; /* enough space for any xAPIC ID */
-> +       bool xapic_id_mismatch = false;
->  
->         /* Read kvm->arch.apic_map_dirty before kvm->arch.apic_map.  */
->         if (atomic_read_acquire(&kvm->arch.apic_map_dirty) == CLEAN)
-> @@ -285,6 +286,15 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
->                 xapic_id = kvm_xapic_id(apic);
->                 x2apic_id = kvm_x2apic_id(apic);
->  
-> +               /*
-> +                * Deliberately truncate the vCPU ID when detecting a mismatched
-> +                * APIC ID to avoid false positives if the vCPU ID, i.e. x2APIC
-> +                * ID, is a 32-bit value.  Any unwanted aliasing due to
-> +                * truncation results will be detected below.
-> +                */
-> +               if (!apic_x2apic_mode(apic) && xapic_id != (u8)vcpu->vcpu_id)
-> +                       xapic_id_mismatch = true;
-> +
->                 /*
->                  * Apply KVM's hotplug hack if userspace has enable 32-bit APIC
->                  * IDs.  Allow sending events to vCPUs by their x2APIC ID even
-> @@ -396,6 +406,11 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
->         else
->                 kvm_clear_apicv_inhibit(kvm, APICV_INHIBIT_REASON_LOGICAL_ID_ALIASED);
->  
-> +       if (xapic_id_mismatch)
-> +               kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
-> +       else
-> +               kvm_clear_apicv_inhibit(kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
-> +
->         old = rcu_dereference_protected(kvm->arch.apic_map,
->                         lockdep_is_held(&kvm->arch.apic_map_lock));
->         rcu_assign_pointer(kvm->arch.apic_map, new);
-> @@ -2155,28 +2170,6 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
->         }
->  }
->  
-> -static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
-> -{
-> -       struct kvm *kvm = apic->vcpu->kvm;
-> -
-> -       if (!kvm_apic_hw_enabled(apic))
-> -               return;
-> -
-> -       if (KVM_BUG_ON(apic_x2apic_mode(apic), kvm))
-> -               return;
-> -
-> -       /*
-> -        * Deliberately truncate the vCPU ID when detecting a modified APIC ID
-> -        * to avoid false positives if the vCPU ID, i.e. x2APIC ID, is a 32-bit
-> -        * value.  If the wrap/truncation results in unwatned aliasing, APICv
-> -        * will be inhibited as part of updating KVM's optimized APIC maps.
-> -        */
-> -       if (kvm_xapic_id(apic) == (u8)apic->vcpu->vcpu_id)
-> -               return;
-> -
-> -       kvm_set_apicv_inhibit(apic->vcpu->kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
-> -}
-> -
->  static int get_lvt_index(u32 reg)
->  {
->         if (reg == APIC_LVTCMCI)
-> @@ -2197,7 +2190,6 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
->         case APIC_ID:           /* Local APIC ID */
->                 if (!apic_x2apic_mode(apic)) {
->                         kvm_apic_set_xapic_id(apic, val >> 24);
-> -                       kvm_lapic_xapic_id_updated(apic);
->                 } else {
->                         ret = 1;
->                 }
-> @@ -2919,9 +2911,6 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
->         }
->         memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
->  
-> -       if (!apic_x2apic_mode(vcpu->arch.apic))
-> -               kvm_lapic_xapic_id_updated(vcpu->arch.apic);
-> -
->         atomic_set_release(&apic->vcpu->kvm->arch.apic_map_dirty, DIRTY);
->         kvm_recalculate_apic_map(vcpu->kvm);
->         kvm_apic_set_version(vcpu);
+On Mon, Nov 21, 2022 at 12:02 AM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
+>
+> On 11/19/2022 1:44 PM, Oded Gabbay wrote:
+> > Add an introduction section for the accel subsystem. Most of the
+> > relevant data is in the DRM documentation, so the introduction only
+> > presents the why of the new subsystem, how are the compute accelerators
+> > exposed to user-space and what changes need to be done in a standard
+> > DRM driver to register it to the new accel subsystem.
+> >
+> > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+> > ---
+> >   Documentation/accel/index.rst        |  17 +++++
+> >   Documentation/accel/introduction.rst | 109 +++++++++++++++++++++++++++
+> >   Documentation/subsystem-apis.rst     |   1 +
+> >   MAINTAINERS                          |   1 +
+> >   4 files changed, 128 insertions(+)
+> >   create mode 100644 Documentation/accel/index.rst
+> >   create mode 100644 Documentation/accel/introduction.rst
+> >
+> > diff --git a/Documentation/accel/index.rst b/Documentation/accel/index.rst
+> > new file mode 100644
+> > index 000000000000..2b43c9a7f67b
+> > --- /dev/null
+> > +++ b/Documentation/accel/index.rst
+> > @@ -0,0 +1,17 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +====================
+> > +Compute Accelerators
+> > +====================
+> > +
+> > +.. toctree::
+> > +   :maxdepth: 1
+> > +
+> > +   introduction
+> > +
+> > +.. only::  subproject and html
+> > +
+> > +   Indices
+> > +   =======
+> > +
+> > +   * :ref:`genindex`
+> > diff --git a/Documentation/accel/introduction.rst b/Documentation/accel/introduction.rst
+> > new file mode 100644
+> > index 000000000000..5a3963eae973
+> > --- /dev/null
+> > +++ b/Documentation/accel/introduction.rst
+> > @@ -0,0 +1,109 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +============
+> > +Introduction
+> > +============
+> > +
+> > +The Linux compute accelerators subsystem is designed to expose compute
+> > +accelerators in a common way to user-space and provide a common set of
+> > +functionality.
+> > +
+> > +These devices can be either stand-alone ASICs or IP blocks inside an SoC/GPU.
+> > +Although these devices are typically designed to accelerate Machine-Learning
+> > +and/or Deep-Learning computations, the accel layer is not limited to handling
+>
+> You use "DL" later on as a short form for Deep-Learning.  It would be
+> good to introduce that here.
+>
+> > +these types of accelerators.
+> > +
+> > +typically, a compute accelerator will belong to one of the following
+>
+> Typically
+>
+> > +categories:
+> > +
+> > +- Edge AI - doing inference at an edge device. It can be an embedded ASIC/FPGA,
+> > +  or an IP inside a SoC (e.g. laptop web camera). These devices
+> > +  are typically configured using registers and can work with or without DMA.
+> > +
+> > +- Inference data-center - single/multi user devices in a large server. This
+> > +  type of device can be stand-alone or an IP inside a SoC or a GPU. It will
+> > +  have on-board DRAM (to hold the DL topology), DMA engines and
+> > +  command submission queues (either kernel or user-space queues).
+> > +  It might also have an MMU to manage multiple users and might also enable
+> > +  virtualization (SR-IOV) to support multiple VMs on the same device. In
+> > +  addition, these devices will usually have some tools, such as profiler and
+> > +  debugger.
+> > +
+> > +- Training data-center - Similar to Inference data-center cards, but typically
+> > +  have more computational power and memory b/w (e.g. HBM) and will likely have
+> > +  a method of scaling-up/out, i.e. connecting to other training cards inside
+> > +  the server or in other servers, respectively.
+> > +
+> > +All these devices typically have different runtime user-space software stacks,
+> > +that are tailored-made to their h/w. In addition, they will also probably
+> > +include a compiler to generate programs to their custom-made computational
+> > +engines. Typically, the common layer in user-space will be the DL frameworks,
+> > +such as PyTorch and TensorFlow.
+> > +
+> > +Sharing code with DRM
+> > +=====================
+> > +
+> > +Because this type of devices can be an IP inside GPUs or have similar
+> > +characteristics as those of GPUs, the accel subsystem will use the
+> > +DRM subsystem's code and functionality. i.e. the accel core code will
+> > +be part of the DRM subsystem and an accel device will be a new type of DRM
+> > +device.
+> > +
+> > +This will allow us to leverage the extensive DRM code-base and
+> > +collaborate with DRM developers that have experience with this type of
+> > +devices. In addition, new features that will be added for the accelerator
+> > +drivers can be of use to GPU drivers as well.
+> > +
+> > +Differentiation from GPUs
+> > +=========================
+> > +
+> > +Because we want to prevent the extensive user-space graphic software stack
+> > +from trying to use an accelerator as a GPU, the compute accelerators will be
+> > +differentiated from GPUs by using a new major number and new device char files.
+> > +
+> > +Furthermore, the drivers will be located in a separate place in the kernel
+> > +tree - drivers/accel/.
+> > +
+> > +The accelerator devices will be exposed to the user space with the dedicated
+> > +261 major number and will have the following convention:
+> > +
+> > +- device char files - /dev/accel/accel*
+> > +- sysfs             - /sys/class/accel/accel*/
+> > +- debugfs           - /sys/kernel/debug/accel/accel*/
+> > +
+> > +Getting Started
+> > +===============
+> > +
+> > +First, read the DRM documentation. Not only it will explain how to write a new
+>
+> How about a link to the DRM documentation?
+>
+> > +DRM driver but it will also contain all the information on how to contribute,
+> > +the Code Of Conduct and what is the coding style/documentation. All of that
+> > +is the same for the accel subsystem.
+> > +
+> > +Second, make sure the kernel is configured with CONFIG_DRM_ACCEL.
+> > +
+> > +To expose your device as an accelerator, two changes are needed to
+> > +be done in your driver (as opposed to a standard DRM driver):
+> > +
+> > +- Add the DRIVER_COMPUTE_ACCEL feature flag in your drm_driver's
+> > +  driver_features field. It is important to note that this driver feature is
+> > +  mutually exclusive with DRIVER_RENDER and DRIVER_MODESET. Devices that want
+>
+> I don't remember seeing code that validates a driver with
+> DRIVER_COMPUTE_ACCEL does not also have DRIVER_MODESET.  What am I missing?
 
+Look at drm_dev_init() (patch 3/4):
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
+               (drm_core_check_feature(dev, DRIVER_RENDER) ||
+                 drm_core_check_feature(dev, DRIVER_MODESET))) {
+            DRM_ERROR("DRM driver can't be both a compute acceleration
+and graphics driver\n");
+             return -EINVAL;
+}
 
-Best regards,
-	Maxim Levitsky
+Thanks for your other comments, I'll fix them before sending the PR.
+Oded
 
+>
+> > +  to expose both graphics and compute device char files should be handled by
+> > +  two drivers that are connected using the auxiliary bus framework.
+> > +
+> > +- Change the open callback in your driver fops structure to accel_open().
+> > +  Alternatively, your driver can use DEFINE_DRM_ACCEL_FOPS macro to easily
+> > +  set the correct function operations pointers structure.
+> > +
+> > +External References
+> > +===================
+> > +
+> > +email threads
+> > +-------------
+> > +
+> > +* `Initial discussion on the New subsystem for acceleration devices <https://lkml.org/lkml/2022/7/31/83>`_ - Oded Gabbay (2022)
+> > +* `patch-set to add the new subsystem <https://lkml.org/lkml/2022/10/22/544>`_ - Oded Gabbay (2022)
+> > +
+> > +Conference talks
+> > +----------------
+> > +
+> > +* `LPC 2022 Accelerators BOF outcomes summary <https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summary.html>`_ - Dave Airlie (2022)
+> > diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
+> > index af65004a80aa..b51f38527e14 100644
+> > --- a/Documentation/subsystem-apis.rst
+> > +++ b/Documentation/subsystem-apis.rst
+> > @@ -43,6 +43,7 @@ needed).
+> >      input/index
+> >      hwmon/index
+> >      gpu/index
+> > +   accel/index
+> >      security/index
+> >      sound/index
+> >      crypto/index
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 4d752aac3ec0..6ba7bb35208a 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -6837,6 +6837,7 @@ L:      dri-devel@lists.freedesktop.org
+> >   S:  Maintained
+> >   C:  irc://irc.oftc.net/dri-devel
+> >   T:  git https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git
+> > +F:   Documentation/accel/
+> >   F:  drivers/accel/
+> >
+> >   DRM DRIVERS FOR ALLWINNER A10
+>
