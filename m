@@ -2,149 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B1E6319B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5442F6319B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiKUGVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 01:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
+        id S229723AbiKUGZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 01:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiKUGVP (ORCPT
+        with ESMTP id S229490AbiKUGZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 01:21:15 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBAE2C673
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:21:14 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso9887399pjt.0
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:21:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L7+eqek/E/WnqdTO067PuTCEyXCliseIp9lN/F5T2O4=;
-        b=ZKk0StmpbeGK016qCI8yukcq0kjSwsVRgEDhsd3qv/+fSh5pCk+JobvB0b3YXjtCVl
-         awhHREbDL+19v+bGncU+okf+vipgkMWoxkFaMAH8xgRpXQ2XDk3fo0AAFZI9WEsOS6ZO
-         rOIMdMWmO7sYarTeLF7+IhqjMe3EMj4H4bzuA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L7+eqek/E/WnqdTO067PuTCEyXCliseIp9lN/F5T2O4=;
-        b=SRjXMF0uGCp+aRdySY0OhvYXoTLBmxdoncTojLT3MdxODQxNJHXHT9VDWPI07TXMYg
-         symalP41blT6W+R2ZlIoEotV9zVS/WEJ0F/Vn+ayrkx3OWCTgwCjl5v8ERviB+SCaCGl
-         CxRhxmXzsa3iI0rCgUUInNjkZWIJvcEvEP8ba+w0aguOVB6qhjSujfCSHJKxm4oicH18
-         3LQEQZW3xQUSfLAIk7su4b4tJ2HCjl7KVSrYcx1SNOoj+RRcXAeaMoTDQIWAc3H5qFPS
-         MuNlMClXmBY5nrmyq9dND/swcWplYTZN8oQ2y8e904cCkMwbJN2QlAurqFxdr+viLYwM
-         o+QQ==
-X-Gm-Message-State: ANoB5pl4/GWa5GvxmG55NnOSXxdWgdvETHF8tqCrbbKD1IgDRfAfLPnE
-        sNq1oDmhc7E9XkGxYWxveUff8c6wikrhBg==
-X-Google-Smtp-Source: AA0mqf41wGsKF+KvurHLgTWrzpNLuSkLYdFgJLDTYAoZT6VdvaoReQISDx5+eq3DZYIJB+B09WRmDA==
-X-Received: by 2002:a17:90a:7004:b0:218:8757:8f2b with SMTP id f4-20020a17090a700400b0021887578f2bmr13906217pjk.221.1669011673897;
-        Sun, 20 Nov 2022 22:21:13 -0800 (PST)
-Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id p188-20020a625bc5000000b0056e32a2b88esm7672980pfb.219.2022.11.20.22.21.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 22:21:13 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] usb: typec: pd: Add symlink to linked device
-Date:   Mon, 21 Nov 2022 06:20:39 +0000
-Message-Id: <20221121062106.2569297-1-pmalani@chromium.org>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+        Mon, 21 Nov 2022 01:25:43 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1C926571;
+        Sun, 20 Nov 2022 22:25:38 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id AA67B24E205;
+        Mon, 21 Nov 2022 14:25:35 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 21 Nov
+ 2022 14:25:35 +0800
+Received: from [192.168.50.235] (113.72.144.23) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 21 Nov
+ 2022 14:25:34 +0800
+Message-ID: <7cf9be4a-6ef2-f1f9-07a3-4801fd2833a8@starfivetech.com>
+Date:   Mon, 21 Nov 2022 14:25:21 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 01/14] clk: starfive: Factor out common JH7100 and
+ JH7110 code
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221118010627.70576-1-hal.feng@starfivetech.com>
+ <20221118010627.70576-2-hal.feng@starfivetech.com>
+ <CAJM55Z8nGNm_TrTsw0HZnAVehWrFU9-MtAj0ngRRx_E8jFapGg@mail.gmail.com>
+Content-Language: en-US
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <CAJM55Z8nGNm_TrTsw0HZnAVehWrFU9-MtAj0ngRRx_E8jFapGg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.23]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There exists a symlink from a device to its USB Power Delivery object,
-but not the other way around. Add a symlink from the USB PD object to
-the device which it's associated with, and call it "device".
+On Sat, 19 Nov 2022 00:22:10 +0800, Emil Renner Berthing wrote:
+> On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
+> >
+> > From: Emil Renner Berthing <kernel@esmil.dk>
+> >
+> > The clock control registers on the StarFive JH7100 and JH7110 work
+> > identically, so factor out the code then drivers for the two SoCs
+> > can share it without depending on each other. No functional change.
+> >
+> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
+> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> > ---
+> >  MAINTAINERS                                |   2 +-
+> >  drivers/clk/starfive/Kconfig               |   5 +
+> >  drivers/clk/starfive/Makefile              |   3 +-
+> >  drivers/clk/starfive/clk-starfive-jh7100.c | 325 --------------------
+> >  drivers/clk/starfive/clk-starfive-jh7100.h |   2 +
+> >  drivers/clk/starfive/clk-starfive-jh71x0.c | 333 +++++++++++++++++++++
+> >  6 files changed, 343 insertions(+), 327 deletions(-)
+> >  create mode 100644 drivers/clk/starfive/clk-starfive-jh71x0.c
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 256f03904987..d43daa89d5f1 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -19602,7 +19602,7 @@ STARFIVE JH7100 CLOCK DRIVERS
+> >  M:     Emil Renner Berthing <kernel@esmil.dk>
+> >  S:     Maintained
+> >  F:     Documentation/devicetree/bindings/clock/starfive,jh7100-*.yaml
+> > -F:     drivers/clk/starfive/clk-starfive-jh7100*
+> > +F:     drivers/clk/starfive/
+> 
+> When this entry cover all the starfive clock drivers the header should
+> also match. Eg.
+> STARFIVE CLOCK DRIVERS
 
-This is helpful to identify said device (a Type-C peripheral for
-example) during uevents, since during USB PD object
-creation/destruction, a uevent is generated for the PD object,
-but not the device linked to it.
+OK, will fix it. Ditto for the reset driver.
 
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Benson Leung <bleung@chromium.org>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
- .../ABI/testing/sysfs-class-usb_power_delivery       |  6 ++++++
- drivers/usb/typec/pd.c                               | 12 ++++++++++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-usb_power_delivery b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-index ce2b1b563cb3..e7d19193875f 100644
---- a/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-+++ b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-@@ -4,6 +4,12 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
- Description:
- 		Directory for USB Power Delivery devices.
- 
-+What:		/sys/class/usb_power_delivery/.../device
-+Date:		November 2022
-+Contact:	Prashant Malani <pmalani@chromium.org>
-+Description:
-+		Symbolic link to the directory of the device to which the USB PD object is linked.
-+
- What:		/sys/class/usb_power_delivery/.../revision
- Date:		May 2022
- Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-index dc72005d68db..ed073d922655 100644
---- a/drivers/usb/typec/pd.c
-+++ b/drivers/usb/typec/pd.c
-@@ -656,7 +656,8 @@ EXPORT_SYMBOL_GPL(usb_power_delivery_unregister);
-  * @dev: The device.
-  *
-  * This function can be used to create a symlink named "usb_power_delivery" for
-- * @dev that points to @pd.
-+ * @dev that points to @pd. It also creates another symlink named "device" which
-+ * points from @pd to @dev.
-  */
- int usb_power_delivery_link_device(struct usb_power_delivery *pd, struct device *dev)
- {
-@@ -669,6 +670,12 @@ int usb_power_delivery_link_device(struct usb_power_delivery *pd, struct device
- 	if (ret)
- 		return ret;
- 
-+	ret = sysfs_create_link(&pd->dev.kobj, &dev->kobj, "device");
-+	if (ret) {
-+		sysfs_remove_link(&dev->kobj, "usb_power_delivery");
-+		return ret;
-+	}
-+
- 	get_device(&pd->dev);
- 	get_device(dev);
- 
-@@ -681,13 +688,14 @@ EXPORT_SYMBOL_GPL(usb_power_delivery_link_device);
-  * @pd: The USB PD instance.
-  * @dev: The device.
-  *
-- * Remove the symlink that was previously created with pd_link_device().
-+ * Remove the symlinks that were previously created with pd_link_device().
-  */
- void usb_power_delivery_unlink_device(struct usb_power_delivery *pd, struct device *dev)
- {
- 	if (IS_ERR_OR_NULL(pd) || !dev)
- 		return;
- 
-+	sysfs_remove_link(&pd->dev.kobj, "device");
- 	sysfs_remove_link(&dev->kobj, "usb_power_delivery");
- 	put_device(&pd->dev);
- 	put_device(dev);
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
+Best regards,
+Hal
