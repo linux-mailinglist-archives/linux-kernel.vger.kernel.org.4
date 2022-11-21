@@ -2,177 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C646327FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BBF632821
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbiKUP0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
+        id S232391AbiKUP3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiKUP0q (ORCPT
+        with ESMTP id S232388AbiKUP1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:26:46 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B303AC;
-        Mon, 21 Nov 2022 07:26:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669044405; x=1700580405;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2BKmILpU0EKVuXiS647V739vhLgJGOZVqprtJ6L4XrY=;
-  b=JZjriEgqtAI6snkKbRjWCfm8unuHWAkEucRRiFDH3OPfbggsDOR3nSwH
-   I2FczUlpAeg+WuFoC15bCLUyVB7tinpYPawUlQuO5KXBsUeovby/PXgkl
-   J/eInsu3pwi3B7Y6H2pqwmqGfdgX6MByod/0SOp0qlHvy263jkmgiKc+S
-   n7GoEPUqQgIfizEeNBpSw7D3bv9FMYSsPvot1RcSEWST3xfz1bQeZ2Xiu
-   f9d7Ga3zOMvJSAqVhev/7vdRKzM7u2Kn520BiIxtlzsXJ/jvh08edz1B3
-   c3bJUeaSlqqnAf6dDtmF8vVvONUG3VMJyym/SrjO0Z9uW2+LAnIEHd29n
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="296941341"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="296941341"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 07:26:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="635213957"
-X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="635213957"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2022 07:26:39 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4E7E3385; Mon, 21 Nov 2022 17:27:05 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2 4/4] software node: Remove unused APIs
-Date:   Mon, 21 Nov 2022 17:27:04 +0200
-Message-Id: <20221121152704.30180-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221121152704.30180-1-andriy.shevchenko@linux.intel.com>
-References: <20221121152704.30180-1-andriy.shevchenko@linux.intel.com>
+        Mon, 21 Nov 2022 10:27:46 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E64DFD8;
+        Mon, 21 Nov 2022 07:27:32 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALDOxAB026886;
+        Mon, 21 Nov 2022 10:27:30 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kxvx9uy8y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 10:27:30 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2ALFRTrm029877
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Nov 2022 10:27:29 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 21 Nov
+ 2022 10:27:28 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 21 Nov 2022 10:27:28 -0500
+Received: from rbolboac.ad.analog.com ([10.48.65.139])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2ALFRHal003861;
+        Mon, 21 Nov 2022 10:27:22 -0500
+From:   Ramona Bolboaca <ramona.bolboaca@analog.com>
+To:     <jic23@kernel.org>, <nuno.sa@analog.com>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Ramona Bolboaca <ramona.bolboaca@analog.com>
+Subject: [PATCH v5 0/9] Add '__adis_enable_irq()'
+Date:   Mon, 21 Nov 2022 17:27:08 +0200
+Message-ID: <20221121152717.403667-1-ramona.bolboaca@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: _E3XDOAGhnlX0mJnnmeckWFuRvGs59lT
+X-Proofpoint-ORIG-GUID: _E3XDOAGhnlX0mJnnmeckWFuRvGs59lT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_13,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
+ spamscore=0 adultscore=0 mlxlogscore=751 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211210119
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no more users of software_node_register_nodes() and
-software_node_unregister_nodes(). Remove them.
+Added implementation for '__adis_enable_irq()' and called it instead of
+'adis_enable_irq()' inside '__adis_initial_startup()'.
+Replaced 'adis_initial_startup()' calls in probe, with its unlocked
+variant.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-v2: added tags (Heikki, Daniel)
+changes in v3:
+ new patches: 1,2
+ changed commit message for patches 2-9
 
- drivers/base/swnode.c    | 61 ----------------------------------------
- include/linux/property.h |  3 --
- 2 files changed, 64 deletions(-)
+changes in v4:
+ squashed patches 1 & 2 from v3
 
-diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-index 0a482212c7e8..da3c1c2cb9a8 100644
---- a/drivers/base/swnode.c
-+++ b/drivers/base/swnode.c
-@@ -819,67 +819,6 @@ swnode_register(const struct software_node *node, struct swnode *parent,
- 	return &swnode->fwnode;
- }
- 
--/**
-- * software_node_register_nodes - Register an array of software nodes
-- * @nodes: Zero terminated array of software nodes to be registered
-- *
-- * Register multiple software nodes at once. If any node in the array
-- * has its .parent pointer set (which can only be to another software_node),
-- * then its parent **must** have been registered before it is; either outside
-- * of this function or by ordering the array such that parent comes before
-- * child.
-- */
--int software_node_register_nodes(const struct software_node *nodes)
--{
--	int ret;
--	int i;
--
--	for (i = 0; nodes[i].name; i++) {
--		const struct software_node *parent = nodes[i].parent;
--
--		if (parent && !software_node_to_swnode(parent)) {
--			ret = -EINVAL;
--			goto err_unregister_nodes;
--		}
--
--		ret = software_node_register(&nodes[i]);
--		if (ret)
--			goto err_unregister_nodes;
--	}
--
--	return 0;
--
--err_unregister_nodes:
--	software_node_unregister_nodes(nodes);
--	return ret;
--}
--EXPORT_SYMBOL_GPL(software_node_register_nodes);
--
--/**
-- * software_node_unregister_nodes - Unregister an array of software nodes
-- * @nodes: Zero terminated array of software nodes to be unregistered
-- *
-- * Unregister multiple software nodes at once. If parent pointers are set up
-- * in any of the software nodes then the array **must** be ordered such that
-- * parents come before their children.
-- *
-- * NOTE: If you are uncertain whether the array is ordered such that
-- * parents will be unregistered before their children, it is wiser to
-- * remove the nodes individually, in the correct order (child before
-- * parent).
-- */
--void software_node_unregister_nodes(const struct software_node *nodes)
--{
--	unsigned int i = 0;
--
--	while (nodes[i].name)
--		i++;
--
--	while (i--)
--		software_node_unregister(&nodes[i]);
--}
--EXPORT_SYMBOL_GPL(software_node_unregister_nodes);
--
- /**
-  * software_node_register_node_group - Register a group of software nodes
-  * @node_group: NULL terminated array of software node pointers to be registered
-diff --git a/include/linux/property.h b/include/linux/property.h
-index 5d840299146d..6870abe12dc5 100644
---- a/include/linux/property.h
-+++ b/include/linux/property.h
-@@ -492,9 +492,6 @@ const struct software_node *
- software_node_find_by_name(const struct software_node *parent,
- 			   const char *name);
- 
--int software_node_register_nodes(const struct software_node *nodes);
--void software_node_unregister_nodes(const struct software_node *nodes);
--
- int software_node_register_node_group(const struct software_node **node_group);
- void software_node_unregister_node_group(const struct software_node **node_group);
- 
+changes in v5:
+ fix compilation error
+
+Ramona Bolboaca (9):
+  iio: adis: add '__adis_enable_irq()' implementation
+  iio: accel: adis16201: Call '__adis_initial_startup()' in probe
+  iio: accel: adis16209: Call '__adis_initial_startup()' in probe
+  iio: gyro: adis16136: Call '__adis_initial_startup()' in probe
+  iio: gyro: adis16260: Call '__adis_initial_startup()' in probe
+  iio: imu: adis16400: Call '__adis_initial_startup()' in probe
+  staging: iio: accel: adis16203: Call '__adis_initial_startup()'
+  staging: iio: accel: adis16240: Call '__adis_initial_startup()'
+  iio: imu: adis: Remove adis_initial_startup function
+
+ drivers/iio/accel/adis16201.c         |  2 +-
+ drivers/iio/accel/adis16209.c         |  2 +-
+ drivers/iio/gyro/adis16136.c          |  2 +-
+ drivers/iio/gyro/adis16260.c          |  2 +-
+ drivers/iio/imu/adis.c                | 28 ++++++++++-----------------
+ drivers/iio/imu/adis16400.c           |  2 +-
+ drivers/staging/iio/accel/adis16203.c |  2 +-
+ drivers/staging/iio/accel/adis16240.c |  2 +-
+ include/linux/iio/imu/adis.h          | 17 ++++++++--------
+ 9 files changed, 25 insertions(+), 34 deletions(-)
+
 -- 
-2.35.1
+2.25.1
 
