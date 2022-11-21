@@ -2,114 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6EB6319AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B1E6319B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiKUGTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 01:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S229723AbiKUGVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 01:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiKUGTE (ORCPT
+        with ESMTP id S229490AbiKUGVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 01:19:04 -0500
-Received: from out28-221.mail.aliyun.com (out28-221.mail.aliyun.com [115.124.28.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEDE29C9B;
-        Sun, 20 Nov 2022 22:19:01 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07477166|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.041814-0.000814244-0.957372;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.QCt.C5w_1669011516;
-Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.QCt.C5w_1669011516)
-          by smtp.aliyun-inc.com;
-          Mon, 21 Nov 2022 14:18:58 +0800
-Message-ID: <23c0a4ae-d714-cfb1-aeb5-68b66b5bf0ee@allwinnertech.com>
-Date:   Mon, 21 Nov 2022 14:18:36 +0800
+        Mon, 21 Nov 2022 01:21:15 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBAE2C673
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:21:14 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso9887399pjt.0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:21:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L7+eqek/E/WnqdTO067PuTCEyXCliseIp9lN/F5T2O4=;
+        b=ZKk0StmpbeGK016qCI8yukcq0kjSwsVRgEDhsd3qv/+fSh5pCk+JobvB0b3YXjtCVl
+         awhHREbDL+19v+bGncU+okf+vipgkMWoxkFaMAH8xgRpXQ2XDk3fo0AAFZI9WEsOS6ZO
+         rOIMdMWmO7sYarTeLF7+IhqjMe3EMj4H4bzuA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L7+eqek/E/WnqdTO067PuTCEyXCliseIp9lN/F5T2O4=;
+        b=SRjXMF0uGCp+aRdySY0OhvYXoTLBmxdoncTojLT3MdxODQxNJHXHT9VDWPI07TXMYg
+         symalP41blT6W+R2ZlIoEotV9zVS/WEJ0F/Vn+ayrkx3OWCTgwCjl5v8ERviB+SCaCGl
+         CxRhxmXzsa3iI0rCgUUInNjkZWIJvcEvEP8ba+w0aguOVB6qhjSujfCSHJKxm4oicH18
+         3LQEQZW3xQUSfLAIk7su4b4tJ2HCjl7KVSrYcx1SNOoj+RRcXAeaMoTDQIWAc3H5qFPS
+         MuNlMClXmBY5nrmyq9dND/swcWplYTZN8oQ2y8e904cCkMwbJN2QlAurqFxdr+viLYwM
+         o+QQ==
+X-Gm-Message-State: ANoB5pl4/GWa5GvxmG55NnOSXxdWgdvETHF8tqCrbbKD1IgDRfAfLPnE
+        sNq1oDmhc7E9XkGxYWxveUff8c6wikrhBg==
+X-Google-Smtp-Source: AA0mqf41wGsKF+KvurHLgTWrzpNLuSkLYdFgJLDTYAoZT6VdvaoReQISDx5+eq3DZYIJB+B09WRmDA==
+X-Received: by 2002:a17:90a:7004:b0:218:8757:8f2b with SMTP id f4-20020a17090a700400b0021887578f2bmr13906217pjk.221.1669011673897;
+        Sun, 20 Nov 2022 22:21:13 -0800 (PST)
+Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id p188-20020a625bc5000000b0056e32a2b88esm7672980pfb.219.2022.11.20.22.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 22:21:13 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: typec: pd: Add symlink to linked device
+Date:   Mon, 21 Nov 2022 06:20:39 +0000
+Message-Id: <20221121062106.2569297-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] mmc:mmc-hsq:use fifo to dispatch mmc_request
-Content-Language: en-US
-To:     Wenchao Chen <wenchao.chen666@gmail.com>
-Cc:     ulf.hansson@linaro.org, wenchao.chen@unisoc.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221118054725.80414-1-michael@allwinnertech.com>
- <CA+Da2qxP2gvUc2=n5xW7_YEcgevGpDhqbcVFWVbF0c6DqXDXHA@mail.gmail.com>
-From:   Michael Wu <michael@allwinnertech.com>
-In-Reply-To: <CA+Da2qxP2gvUc2=n5xW7_YEcgevGpDhqbcVFWVbF0c6DqXDXHA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/2022 7:43 PM, Wenchao Chen wrote:
-> On Fri, Nov 18, 2022 at 1:52 PM Michael Wu <michael@allwinnertech.com> wrote:
->>
->> Current next_tag selection will cause a large delay in some requests and
->> destroy the scheduling results of the block scheduling layer. Because the
->> issued mrq tags cannot ensure that each time is sequential, especially when
->> the IO load is heavy. In the fio performance test, we found that 4k random
->> read data was sent to mmc_hsq to start calling request_atomic It takes
->> nearly 200ms to process the request, while mmc_hsq has processed thousands
->> of other requests. So we use fifo here to ensure the first in, first out
->> feature of the request and avoid adding additional delay to the request.
->>
-> 
-> Hi Michael
-> Is the test device an eMMC?
-> Could you share the fio test command if you want?
-> Can you provide more logs?
-> 
-Hi Wenchao,
-Yes, the tested device is emmc.
-The test command we used is `./fio -name=Rand_Read_IOPS_Test 
--group_reporting -rw=random -bs=4K -numjobs=8 -directory=/data/data 
--size=1G -io_size=64M -nrfiles=1 -direct=1 -thread && rm 
-/data/Rand_Read_IOPS_Test *`,  which replaces the io performance random 
-read performance test of androidbench, and the file size is set to 1G, 8 
-thread test configuration. Where /data uses f2fs and /data/data is a 
-file encrypted path.
+There exists a symlink from a device to its USB Power Delivery object,
+but not the other way around. Add a symlink from the USB PD object to
+the device which it's associated with, and call it "device".
 
-After enabling the hsq configuration, we can clearly see from below fio 
-test log that the minimum value of random reading is 3175 iops and the 
-maximum value is 8554iops, and the maximum delay of io completion is 
-about 200ms.
-```
-     clat percentiles (usec):
-      |  1.00th=[   498],  5.00th=[   865], 10.00th=[   963], 20.00th=[ 
-  1045],
-      | 30.00th=[  1090], 40.00th=[  1139], 50.00th=[  1172], 60.00th=[ 
-  1221],
-      | 70.00th=[  1254], 80.00th=[  1319], 90.00th=[  1401], 95.00th=[ 
-  1614],
-      | 99.00th=[  2769], 99.50th=[  3589], 99.90th=[ 31589], 99.95th=[ 
-66323],
-      | 99.99th=[200279]
-    bw (  KiB/s): min=12705, max=34225, per=100.00%, avg=23931.79, 
-stdev=497.40, samples=345
-    iops        : min= 3175, max= 8554, avg=5981.67, stdev=124.38, 
-samples=345
-```
+This is helpful to identify said device (a Type-C peripheral for
+example) during uevents, since during USB PD object
+creation/destruction, a uevent is generated for the PD object,
+but not the device linked to it.
 
-
-```
-     clat percentiles (usec):
-      |  1.00th=[  799],  5.00th=[  938], 10.00th=[  963], 20.00th=[  979],
-      | 30.00th=[  996], 40.00th=[ 1004], 50.00th=[ 1020], 60.00th=[ 1045],
-      | 70.00th=[ 1074], 80.00th=[ 1106], 90.00th=[ 1172], 95.00th=[ 1237],
-      | 99.00th=[ 1450], 99.50th=[ 1516], 99.90th=[ 1762], 99.95th=[ 2180],
-      | 99.99th=[ 9503]
-    bw (  KiB/s): min=29200, max=30944, per=100.00%, avg=30178.91, 
-stdev=53.45, samples=272
-    iops        : min= 7300, max= 7736, avg=7544.62, stdev=13.38, 
-samples=272
-```
-When NOT enabling hsq, the minimum value of random reading is 7300 iops 
-and the maximum value is 7736 iops, and the maximum delay of io is only 
-9 ms. Finally, we added debug to the mmc driver. The reason for locating 
-the 200ms delay of hsq is due to the next tag selection of hsq.
-
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Benson Leung <bleung@chromium.org>
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
 ---
-Michael Wu
+ .../ABI/testing/sysfs-class-usb_power_delivery       |  6 ++++++
+ drivers/usb/typec/pd.c                               | 12 ++++++++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-class-usb_power_delivery b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+index ce2b1b563cb3..e7d19193875f 100644
+--- a/Documentation/ABI/testing/sysfs-class-usb_power_delivery
++++ b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
+@@ -4,6 +4,12 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Description:
+ 		Directory for USB Power Delivery devices.
+ 
++What:		/sys/class/usb_power_delivery/.../device
++Date:		November 2022
++Contact:	Prashant Malani <pmalani@chromium.org>
++Description:
++		Symbolic link to the directory of the device to which the USB PD object is linked.
++
+ What:		/sys/class/usb_power_delivery/.../revision
+ Date:		May 2022
+ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
+index dc72005d68db..ed073d922655 100644
+--- a/drivers/usb/typec/pd.c
++++ b/drivers/usb/typec/pd.c
+@@ -656,7 +656,8 @@ EXPORT_SYMBOL_GPL(usb_power_delivery_unregister);
+  * @dev: The device.
+  *
+  * This function can be used to create a symlink named "usb_power_delivery" for
+- * @dev that points to @pd.
++ * @dev that points to @pd. It also creates another symlink named "device" which
++ * points from @pd to @dev.
+  */
+ int usb_power_delivery_link_device(struct usb_power_delivery *pd, struct device *dev)
+ {
+@@ -669,6 +670,12 @@ int usb_power_delivery_link_device(struct usb_power_delivery *pd, struct device
+ 	if (ret)
+ 		return ret;
+ 
++	ret = sysfs_create_link(&pd->dev.kobj, &dev->kobj, "device");
++	if (ret) {
++		sysfs_remove_link(&dev->kobj, "usb_power_delivery");
++		return ret;
++	}
++
+ 	get_device(&pd->dev);
+ 	get_device(dev);
+ 
+@@ -681,13 +688,14 @@ EXPORT_SYMBOL_GPL(usb_power_delivery_link_device);
+  * @pd: The USB PD instance.
+  * @dev: The device.
+  *
+- * Remove the symlink that was previously created with pd_link_device().
++ * Remove the symlinks that were previously created with pd_link_device().
+  */
+ void usb_power_delivery_unlink_device(struct usb_power_delivery *pd, struct device *dev)
+ {
+ 	if (IS_ERR_OR_NULL(pd) || !dev)
+ 		return;
+ 
++	sysfs_remove_link(&pd->dev.kobj, "device");
+ 	sysfs_remove_link(&dev->kobj, "usb_power_delivery");
+ 	put_device(&pd->dev);
+ 	put_device(dev);
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
