@@ -2,82 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E8E6328AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E81776328B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiKUPxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        id S230062AbiKUPyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiKUPxL (ORCPT
+        with ESMTP id S229585AbiKUPx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:53:11 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FD2CB68D;
-        Mon, 21 Nov 2022 07:53:10 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e725329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e725:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9D4D41EC02FE;
-        Mon, 21 Nov 2022 16:53:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669045988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ovoD+OFlGzUpGbbTqt/UdHTpTxjHta09GD2GLSLjtCA=;
-        b=VSBDoJ5NcTC1m5fgrXm9tbg3XMvDOsrw3RQFtSvrB8an+Fz5HXdvj0Tuc5ep2k2HccQGyy
-        8WvXk3s0PeQTTR3XBGBOfa+pMXlj+f6HmOACwnsgsXVGWdNAmRkrNbcGcZshDam+MkutHR
-        wwLl8QWtcBaPFbWNKXcAVovqerKVr8k=
-Date:   Mon, 21 Nov 2022 16:53:04 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com,
-        ndesaulniers@google.com, alexandre.belloni@bootlin.com,
-        peterz@infradead.org, jpoimboe@kernel.org,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        babu.moger@amd.com, jmattson@google.com, sandipan.das@amd.com,
-        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        fenghua.yu@intel.com, keescook@chromium.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] x86: KVM: Advertise CMPccXADD CPUID to user space
-Message-ID: <Y3ue4PoJD7EGC5dV@zn.tnic>
-References: <20221118141509.489359-1-jiaxi.chen@linux.intel.com>
- <20221118141509.489359-2-jiaxi.chen@linux.intel.com>
- <efb55727-f8bd-815c-ddfc-a8432ae5af4e@intel.com>
- <f04c2e74-87e4-5d50-579a-0a60554b83d3@linux.intel.com>
- <6d7fae50-ef3c-dc1e-336c-691095007117@intel.com>
- <Y3udtm6oC7k41kaR@google.com>
+        Mon, 21 Nov 2022 10:53:58 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5887CCB690;
+        Mon, 21 Nov 2022 07:53:55 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL8Oovb000814;
+        Mon, 21 Nov 2022 15:53:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iTFbOuUq8jlB7FYKsO2QFbHF7KSE3Y+SOGWHJJHHqfk=;
+ b=KxzyqbADG02kEFmBiyRURXOf/c2UXg0Sr7oVX9S88p3EGEoHMKoPmNMYRuUKcuOlVEJN
+ JtIxcMn5hQnapCAji9bR4Y+x0uO2KHlJnHRSeCmNwSAWoWY/XN+uQDZ4PGBGtK2ErLVf
+ q0XGfoRrOZcoiceFekkI2mx3JYYXaI0zjfi+Tc2GgbMjXfq72yTGngxIb/OkyyF2ASdJ
+ CtJ14dbpZKiwJTVj68TgctfraCl78CKyWKBn++93LhU8vl0CaQYazQ2dgwPXE6Ijzd4M
+ rhVmyeWnRnnG43ObvQsmoBiusHb1wJR7UlDMhfOmD/lJ4T6Ufy7QlN0sB65f3b09FH0E HQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrf5myqn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 15:53:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ALFriRc013226
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Nov 2022 15:53:44 GMT
+Received: from [10.50.44.157] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 21 Nov
+ 2022 07:53:41 -0800
+Message-ID: <9e0cebc4-0ee3-c316-01b3-5131298d70ce@quicinc.com>
+Date:   Mon, 21 Nov 2022 21:23:38 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y3udtm6oC7k41kaR@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH] asm-generic/io: Add _RET_IP_ to MMIO trace for more
+ accurate debug info
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+To:     Steven Rostedt <rostedt@goodmis.org>, Arnd Bergmann <arnd@arndb.de>
+CC:     Masami Hiramatsu <mhiramat@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <quic_satyap@quicinc.com>
+References: <20221017143450.9161-1-quic_saipraka@quicinc.com>
+ <20221024120929.41241e07@gandalf.local.home>
+ <2f19ea9c-10e6-d0f7-2fc9-fb0f896bfc64@quicinc.com>
+In-Reply-To: <2f19ea9c-10e6-d0f7-2fc9-fb0f896bfc64@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mSf_gyUUoxu3v3oHNGVzsqP78QKun3pf
+X-Proofpoint-ORIG-GUID: mSf_gyUUoxu3v3oHNGVzsqP78QKun3pf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_14,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=608 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 priorityscore=1501 clxscore=1011
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211210123
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 03:48:06PM +0000, Sean Christopherson wrote:
-> Actually, for these features that don't require additional KVM enabling, KVM isn't
-> making the feature avaiable to the guest.  KVM is just advertising to userspace
-> that KVM "supports" these features.  Userspace ultimately controls guest CPUID;
-> outside of a few special cases, KVM neither rejects nor filters unsupported bits
-> in CPUID.
+Hi Arnd,
 
-So is there any point to those "enable it in KVM" patches streaming constantly?
+On 10/26/2022 7:17 PM, Sai Prakash Ranjan wrote:
+> Hi Steve,
+> 
+> On 10/24/2022 9:39 PM, Steven Rostedt wrote:
+>> On Mon, 17 Oct 2022 20:04:50 +0530
+>> Sai Prakash Ranjan <quic_saipraka@quicinc.com> wrote:
+>>
+>>> Due to compiler optimizations like inlining, there are cases where
+>>> MMIO traces using _THIS_IP_ for caller information might not be
+>>> sufficient to provide accurate debug traces.
+>>>
+>>> 1) With optimizations (Seen with GCC):
+>>>
+>>> In this case, _THIS_IP_ works fine and prints the caller information
+>>> since it will be inlined into the caller and we get the debug traces
+>>> on who made the MMIO access, for ex:
+>>>
+>>> rwmmio_read: qcom_smmu_tlb_sync+0xe0/0x1b0 width=32 
+>>> addr=0xffff8000087447f4
+>>> rwmmio_post_read: qcom_smmu_tlb_sync+0xe0/0x1b0 width=32 val=0x0 
+>>> addr=0xffff8000087447f4
+>>>
+>>> 2) Without optimizations (Seen with Clang):
+>>>
+>>> _THIS_IP_ will not be sufficient in this case as it will print only
+>>> the MMIO accessors itself which is of not much use since it is not
+>>> inlined as below for example:
+>>>
+>>> rwmmio_read: readl+0x4/0x80 width=32 addr=0xffff8000087447f4
+>>> rwmmio_post_read: readl+0x48/0x80 width=32 val=0x4 
+>>> addr=0xffff8000087447f4
+>>>
+>>> So in order to handle this second case as well irrespective of the 
+>>> compiler
+>>> optimizations, add _RET_IP_ to MMIO trace to make it provide more 
+>>> accurate
+>>> debug information in all these scenarios.
+>>>
+>>> Before:
+>>>
+>>> rwmmio_read: readl+0x4/0x80 width=32 addr=0xffff8000087447f4
+>>> rwmmio_post_read: readl+0x48/0x80 width=32 val=0x4 
+>>> addr=0xffff8000087447f4
+>>>
+>>> After:
+>>>
+>>> rwmmio_read: qcom_smmu_tlb_sync+0xe0/0x1b0 -> readl+0x4/0x80 width=32 
+>>> addr=0xffff8000087447f4
+>>> rwmmio_post_read: qcom_smmu_tlb_sync+0xe0/0x1b0 -> readl+0x4/0x80 
+>>> width=32 val=0x0 addr=0xffff8000087447f4
+>>>
+>>> Fixes: 210031971cdd ("asm-generic/io: Add logging support for MMIO 
+>>> accessors")
+>>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+>>
+>>
+>> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>>
+>> What tree should this go through?
+>>
+>> -- Steve
+> 
+> 
+> Thanks for the ack, with this I believe Arnd can take it through his 
+> tree like last time.
+> 
 
-AFAICT, the only reason is to "pass through" the CPUID bit to the guest
-in case KVM is not showing it in the intercepted CPUID...
 
--- 
-Regards/Gruss,
-    Boris.
+Can we take this patch atleast for 6.2-rc1?
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Sai
