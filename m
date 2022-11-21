@@ -2,103 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBC8631ACF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 08:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E813A631ADA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiKUH5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 02:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
+        id S229848AbiKUH77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 02:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiKUH5S (ORCPT
+        with ESMTP id S229590AbiKUH75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 02:57:18 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C48BC04;
-        Sun, 20 Nov 2022 23:57:17 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id j4so17670274lfk.0;
-        Sun, 20 Nov 2022 23:57:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vs2l23NxmyfDzTeykhjw4XnqjbPvSyKWp0TKAT504Gs=;
-        b=qZ5TqP+tU7NjssMr6vD8VJ70uIGXA+SK4QPz6fglRMTHclkDx/hz9TcruN6hw9XTMk
-         JuDdr5vV0v8XrXshakEitOkB1K6RHeaTBIW8uLhJBYjJKS+w3nF8WjxgmpciZIrcK2mY
-         EloizFriSWMWsMxGPDDXwtsqtUJWdhPJAWgzwkkUQ9sWpYS2zAFBLVLjPntiIfHmWkzP
-         TMeuFaRBQn7q9M69nb6JF/hMrFzHs5mgtLQbScUVKQf9DgjmMHmbT6rFsPfS86MMMJhQ
-         w64IGNmISHNJ9A9zzBV1v/z8YG7o1cnFIddNGfhMGdOZxxFWY/af1ti5gTHGynLLQtWe
-         C2LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vs2l23NxmyfDzTeykhjw4XnqjbPvSyKWp0TKAT504Gs=;
-        b=0BMn/r6N/ZuFFi8Tg13IwmrUoJ7RvwYHgt3S8HYJ8rhgofXRmu340nNcy0Pysh9vBE
-         +hCral1ClY1yzjiKTZHaynAy/1BV6i0FXvEJXwagdbsUvkoYLIen0RQxcXrzqPbu+MmS
-         4OJ+SF9yoh+CmzADvwpTI0Jll/Z41UFYBmL49MSdDOh2g8Yhofk1O4GabouN7QIlFMFB
-         bBBJaqhFv4gsIP5ee43Na/rHLRKW7jSDuGKUrv3TMpG9nmilAHn+RcX6XoUQ91RLWcDR
-         nr2Q50Kv9r9qZv0XoOgxUf+XTzKX2CTlJPrceHuI14uVSruPyjhhuTmwLCZuLvXGcdah
-         o0sA==
-X-Gm-Message-State: ANoB5pmn2usfSCjVcJ5JaIZ001zeMyWk0wcAknID7Zg4m6RVlplGI89e
-        YlL3dWhytPeyndGRYEadVh/gr2nLiFn9yIiQ9Idt3w==
-X-Google-Smtp-Source: AA0mqf4m6QUsMqZQdvZ8Mj+V6wwfroTLEtPD1osHScALU5pHabMfzEKi82v2T1XBNFbV69Vy8AJz+Q==
-X-Received: by 2002:a05:6512:280e:b0:4a2:5154:ead9 with SMTP id cf14-20020a056512280e00b004a25154ead9mr5836045lfb.32.1669017435541;
-        Sun, 20 Nov 2022 23:57:15 -0800 (PST)
-Received: from mkor.rasu.local ([212.22.67.162])
-        by smtp.gmail.com with ESMTPSA id y18-20020a05651c107200b0027741daec09sm1292904ljm.107.2022.11.20.23.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 23:57:15 -0800 (PST)
-From:   Maxim Korotkov <korotkov.maxim.s@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Maxim Korotkov <korotkov.maxim.s@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>, Tom Rix <trix@redhat.com>,
-        Marco Bonelli <marco@mebeim.net>,
-        Edward Cree <ecree@solarflare.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] ethtool: avoiding integer overflow in ethtool_phys_id()
-Date:   Mon, 21 Nov 2022 10:56:18 +0300
-Message-Id: <20221121075618.15877-1-korotkov.maxim.s@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 02:59:57 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ECBD124;
+        Sun, 20 Nov 2022 23:59:56 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 4B01168AA6; Mon, 21 Nov 2022 08:59:51 +0100 (CET)
+Date:   Mon, 21 Nov 2022 08:59:51 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Martin Brandenburg <martin@omnibond.com>,
+        "Darrick J. Wong" <djwong@kernel.org>, hch@lst.de,
+        linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, cluster-devel@redhat.com,
+        linux-nfs@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        devel@lists.orangefs.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH] filelock: move file locking definitions to separate
+ header file
+Message-ID: <20221121075951.GB24878@lst.de>
+References: <20221120210004.381842-1-jlayton@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221120210004.381842-1-jlayton@kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The value of an arithmetic expression "n * id.data" is subject
-to possible overflow due to a failure to cast operands to a larger data
-type before performing arithmetic. Added cast of first operand to u64
-for avoiding overflow.
+Looks good:
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-Fixes: 2adc6edcaec0 ("ethtool: fix error handling in ethtool_phys_id")
-Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
----
- net/ethtool/ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-index 6a7308de192d..cf87e53c2e74 100644
---- a/net/ethtool/ioctl.c
-+++ b/net/ethtool/ioctl.c
-@@ -2007,7 +2007,7 @@ static int ethtool_phys_id(struct net_device *dev, void __user *useraddr)
- 	} else {
- 		/* Driver expects to be called at twice the frequency in rc */
- 		int n = rc * 2, interval = HZ / n;
--		u64 count = n * id.data, i = 0;
-+		u64 count = (u64)n * id.data, i = 0;
- 
- 		do {
- 			rtnl_lock();
--- 
-2.17.1
-
+Although it would be nice to drop all the pointless externs in the
+new file while you're at it.
