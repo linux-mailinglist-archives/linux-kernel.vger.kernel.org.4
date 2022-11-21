@@ -2,194 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD64632491
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0001632494
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiKUN7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 08:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S229842AbiKUOA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbiKUN7d (ORCPT
+        with ESMTP id S231555AbiKUOAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:59:33 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3ED2FC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:58:39 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id j7-20020a056e02154700b003025b3c0ea3so8711929ilu.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 05:58:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+DBMQBdNE4cZBaDY0X69thduCCP80awLLejvHLEOe9A=;
-        b=NUbwzjMaif73ST8LWjNepprbtKWjLntoUMCf491LIfVaDCJa0uZrI0Tich4b8Ro75g
-         /6o4Fd+JpUSIE4/ZJxl6PCZrm/Tc8z/z9To7ZxUK/VThQjRUpPFe7iO2kDosA05aAYb1
-         2uBug3JrHJipxMFoGEa9aLrBBpSSPSEH84jrRC3PLEGOlIHF9ij5js13LTvqnDCpDsIO
-         9gIs4iAozDSArX3pvlT4Wzcl8pb9Alvs7A2BV+SHeHQtaeOufC2kWFQhIfd8i5MjJ0IS
-         oubY0nIaLU78M4bTj4lcegmZXJY78A99krpkoQxQf47F9itlyoV+2K4SrkuHdaguSf4R
-         hz7Q==
-X-Gm-Message-State: ANoB5pklKZCPHz6yyKl0cn+WEqI+8VpoVDcsMfQ1vwDxT4x9z/pEwDx1
-        Jd8s5p79aj90eRBCcNzfvW5Dk4h49vxcSprN4HTjDFoVUq5K
-X-Google-Smtp-Source: AA0mqf4FJzd8ynkXYUYNBPZJIbnfu7j5yrY/MEW1xClIy7BICWDFeTXbbLCfF6Q4BYWTCNzi99EjrnfkcEmMzVmbAkootgDldxu7
+        Mon, 21 Nov 2022 09:00:06 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20151C92D;
+        Mon, 21 Nov 2022 05:59:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669039159; x=1700575159;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=sj2b1TjV39Tt4i/TIED+Enb/63DlzwcLP/R2kSeUNTQ=;
+  b=dBSKhY14Z+U91e4nbkQu2ZY8JS8OTAR0YMmdKjvRKJuImC5TgMRvW2Pv
+   Vi+YxyBHfsNKLbI6k0sEOh2NWy0XEm47kkJJ9dF5bgRbBOTO7ApkcnL2R
+   oe1yk6dus25m2fFiBc9oOxtbM6r9woOkkfyGWdeH1aqPoCNli4qXq5XB2
+   gG061brKnsn5xaa+/8R7LHnuwSztz0cMFArCPdmqgjj0Wp8MJG33mFxgF
+   YF06EtTjq7gC1x8UTxkoW3jV2XhQtGEf1EKmXeTrpOsIcWS1jEykskiiS
+   rFoB3vNJeljW6GzCLPo2m6nPlHPGdEUxqj1HfSFI8k7vqNp/HEPIwhrFt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="311189762"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="311189762"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 05:59:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="704568621"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="704568621"
+Received: from ebarboza-mobl1.amr.corp.intel.com ([10.251.209.16])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 05:59:15 -0800
+Date:   Mon, 21 Nov 2022 15:59:13 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 2/7] serial: bflb_uart: add Bouffalolab UART Driver
+In-Reply-To: <20221120082114.3030-3-jszhang@kernel.org>
+Message-ID: <faa34e87-4633-31e7-144b-4fec46cb8f59@linux.intel.com>
+References: <20221120082114.3030-1-jszhang@kernel.org> <20221120082114.3030-3-jszhang@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3a5:b0:363:e85b:a845 with SMTP id
- z5-20020a05663803a500b00363e85ba845mr8187169jap.138.1669039118765; Mon, 21
- Nov 2022 05:58:38 -0800 (PST)
-Date:   Mon, 21 Nov 2022 05:58:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ca546e05edfb7356@google.com>
-Subject: [syzbot] WARNING in reiserfs_dir_fsync
-From:   syzbot <syzbot+3c4ce3260a74215d1deb@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, 20 Nov 2022, Jisheng Zhang wrote:
 
-syzbot found the following issue on:
+> Add the driver for Bouffalolab UART IP which is found in Bouffalolab
+> SoCs such as bl808.
+> 
+> UART driver probe will create path named "/dev/ttySx".
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
-HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1540810d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
-dashboard link: https://syzkaller.appspot.com/bug?extid=3c4ce3260a74215d1deb
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+> diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
+> index 238a9557b487..8509cdc11d87 100644
+> --- a/drivers/tty/serial/Makefile
+> +++ b/drivers/tty/serial/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_SERIAL_8250) += 8250/
+>  
+>  obj-$(CONFIG_SERIAL_AMBA_PL010) += amba-pl010.o
+>  obj-$(CONFIG_SERIAL_AMBA_PL011) += amba-pl011.o
+> +obj-$(CONFIG_SERIAL_BFLB) += bflb_uart.o
+>  obj-$(CONFIG_SERIAL_CLPS711X) += clps711x.o
+>  obj-$(CONFIG_SERIAL_PXA_NON8250) += pxa.o
+>  obj-$(CONFIG_SERIAL_SA1100) += sa1100.o
+> diff --git a/drivers/tty/serial/bflb_uart.c b/drivers/tty/serial/bflb_uart.c
+> new file mode 100644
+> index 000000000000..65f98ccf8fa8
+> --- /dev/null
+> +++ b/drivers/tty/serial/bflb_uart.c
+> @@ -0,0 +1,659 @@
+> +#define UART_FIFO_CONFIG_1		(0x84)
+> +#define  UART_TX_FIFO_CNT_SFT		0
+> +#define  UART_TX_FIFO_CNT_MSK		GENMASK(5, 0)
+> +#define  UART_RX_FIFO_CNT_MSK		GENMASK(13, 8)
+> +#define  UART_TX_FIFO_TH_SFT		16
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Use FIELD_PREP() instead of adding a separate *_SFT define.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3c4ce3260a74215d1deb@syzkaller.appspotmail.com
-
-EXT2-fs (loop5): error: revision level too high, forcing read-only mode
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-WARNING: CPU: 0 PID: 23017 at kernel/locking/mutex.c:582 __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-Modules linked in:
-CPU: 0 PID: 23017 Comm: syz-executor.5 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-lr : __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
-sp : ffff800013ee3ca0
-x29: ffff800013ee3d10 x28: ffff80000eefa000 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000002
-x23: ffff80000879d3d4 x22: 0000000000000000 x21: 0000000000000000
-x20: 0000000000000000 x19: ffff0000f751c428 x18: 0000000000000157
-x17: ffff80000c0ed83c x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
-x11: 0000000000000c6a x10: ffff80001ad76000 x9 : 72cc9bc43b455200
-x8 : 72cc9bc43b455200 x7 : 4e5241575f534b43 x6 : ffff80000c0b2b74
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000028
-Call trace:
- __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
- reiserfs_dir_fsync+0x70/0xb8 fs/reiserfs/dir.c:42
- vfs_fsync_range fs/sync.c:188 [inline]
- vfs_fsync fs/sync.c:202 [inline]
- do_fsync fs/sync.c:212 [inline]
- __do_sys_fdatasync fs/sync.c:225 [inline]
- __se_sys_fdatasync fs/sync.c:223 [inline]
- __arm64_sys_fdatasync+0x60/0xb8 fs/sync.c:223
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-irq event stamp: 831
-hardirqs last  enabled at (831): [<ffff8000080388c4>] local_daif_restore arch/arm64/include/asm/daifflags.h:75 [inline]
-hardirqs last  enabled at (831): [<ffff8000080388c4>] el0_svc_common+0x40/0x220 arch/arm64/kernel/syscall.c:107
-hardirqs last disabled at (830): [<ffff80000c0a53a4>] el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-softirqs last  enabled at (826): [<ffff80000801c38c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (824): [<ffff80000801c358>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000054
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010acce000
-[0000000000000054] pgd=08000001413b5003, p4d=08000001413b5003, pud=08000001371ff003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 23017 Comm: syz-executor.5 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : owner_on_cpu include/linux/sched.h:2290 [inline]
-pc : mutex_can_spin_on_owner kernel/locking/mutex.c:409 [inline]
-pc : mutex_optimistic_spin+0x1c8/0x254 kernel/locking/mutex.c:452
-lr : __mutex_lock_common+0x1b4/0xca8 kernel/locking/mutex.c:607
-sp : ffff800013ee3c40
-x29: ffff800013ee3c50 x28: ffff80000eefa000 x27: ffff80000cbd7d0f
-x26: 0000000000000000 x25: 0000000000000000 x24: ffff0000f751c490
-x23: ffff80000879d3d4 x22: ffff80000d3ac000 x21: 0000000000000000
-x20: 0000000000000000 x19: ffff0000f751c428 x18: 0000000000000157
-x17: ffff80000c0ed83c x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
-x11: 0000000000000c6a x10: ffff80000d3ac000 x9 : 0000000000000003
-x8 : 0000000000000020 x7 : 4e5241575f534b43 x6 : ffff80000879d3d4
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0000f751c428
-Call trace:
- mutex_can_spin_on_owner kernel/locking/mutex.c:408 [inline]
- mutex_optimistic_spin+0x1c8/0x254 kernel/locking/mutex.c:452
- __mutex_lock_common+0x1b4/0xca8 kernel/locking/mutex.c:607
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
- reiserfs_dir_fsync+0x70/0xb8 fs/reiserfs/dir.c:42
- vfs_fsync_range fs/sync.c:188 [inline]
- vfs_fsync fs/sync.c:202 [inline]
- do_fsync fs/sync.c:212 [inline]
- __do_sys_fdatasync fs/sync.c:225 [inline]
- __se_sys_fdatasync fs/sync.c:223 [inline]
- __arm64_sys_fdatasync+0x60/0xb8 fs/sync.c:223
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: 37080148 f9400268 f27df108 54000080 (b9403509) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	37080148 	tbnz	w8, #1, 0x28
-   4:	f9400268 	ldr	x8, [x19]
-   8:	f27df108 	ands	x8, x8, #0xfffffffffffffff8
-   c:	54000080 	b.eq	0x1c  // b.none
-* 10:	b9403509 	ldr	w9, [x8, #52] <-- trapping instruction
+> +#define  UART_TX_FIFO_TH_MSK		GENMASK(20, 16)
+> +#define  UART_RX_FIFO_TH_SFT		24
+> +#define  UART_RX_FIFO_TH_MSK		GENMASK(28, 24)
+> +#define UART_FIFO_WDATA			0x88
+> +#define UART_FIFO_RDATA			0x8c
+> +#define  UART_FIFO_RDATA_MSK		GENMASK(7, 0)
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +	val = rdl(port, UART_URX_CONFIG);
+> +	val &= ~UART_CR_URX_EN;
+> +	wrl(port, UART_URX_CONFIG, val);
+> +
+> +	val = rdl(port, UART_INT_MASK);
+> +	val |= UART_URX_FIFO_INT | UART_URX_RTO_INT |
+> +	       UART_URX_FER_INT;
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Fits to single line.
+
+> +	port->type = PORT_BFLB;
+> +
+> +	/* Clear mask, so no surprise interrupts. */
+> +	val = rdl(port, UART_INT_MASK);
+> +	val |= UART_UTX_END_INT;
+> +	val |= UART_UTX_FIFO_INT;
+> +	val |= UART_URX_FIFO_INT;
+> +	val |= UART_URX_RTO_INT;
+> +	val |= UART_URX_FER_INT;
+
+Why to split it to this many lines?
+
+> +	spin_lock_irqsave(&port->lock, flags);
+> +
+> +	val = rdl(port, UART_INT_MASK);
+> +	val |= 0xfff;
+
+In most of the other places, the bits used with UART_INT_MASK are named, 
+but for some reason you don't do it here and the bits extend beyond the 
+ones which are defined with name.
+
+> +	wrl(port, UART_INT_MASK, val);
+> +
+> +	wrl(port, UART_DATA_CONFIG, 0);
+> +	wrl(port, UART_SW_MODE, 0);
+> +	wrl(port, UART_URX_RTO_TIMER, 0x4f);
+
+FIELD_PREP(UART_CR_URX_RTO_VALUE_MSK, 0x4f)? It would document what field
+is written explicitly.
+
+> +
+> +	val = rdl(port, UART_FIFO_CONFIG_1);
+> +	val &= ~UART_RX_FIFO_TH_MSK;
+> +	val |= BFLB_UART_RX_FIFO_TH << UART_RX_FIFO_TH_SFT;
+> +	wrl(port, UART_FIFO_CONFIG_1, val);
+> +
+> +	/* Unmask RX interrupts now */
+> +	val = rdl(port, UART_INT_MASK);
+> +	val &= ~UART_URX_FIFO_INT;
+> +	val &= ~UART_URX_RTO_INT;
+> +	val &= ~UART_URX_FER_INT;
+
+Combine to single line.
+
+> +static int bflb_uart_request_port(struct uart_port *port)
+> +{
+> +	/* UARTs always present */
+> +	return 0;
+> +}
+> +static void bflb_uart_release_port(struct uart_port *port)
+> +{
+> +	/* Nothing to release... */
+> +}
+
+Both release_port and request_port are NULL checked by the caller, there's 
+no need to provide and empty one.
+
+> +static const struct uart_ops bflb_uart_ops = {
+> +	.tx_empty = bflb_uart_tx_empty,
+> +	.get_mctrl = bflb_uart_get_mctrl,
+> +	.set_mctrl = bflb_uart_set_mctrl,
+> +	.start_tx = bflb_uart_start_tx,
+> +	.stop_tx = bflb_uart_stop_tx,
+> +	.stop_rx = bflb_uart_stop_rx,
+> +	.break_ctl = bflb_uart_break_ctl,
+> +	.startup = bflb_uart_startup,
+> +	.shutdown = bflb_uart_shutdown,
+> +	.set_termios = bflb_uart_set_termios,
+> +	.type = bflb_uart_type,
+> +	.request_port = bflb_uart_request_port,
+> +	.release_port = bflb_uart_release_port,
+> +	.config_port = bflb_uart_config_port,
+> +	.verify_port = bflb_uart_verify_port,
+> +};
+
+> +static void bflb_uart_console_write(struct console *co, const char *s,
+> +				    u_int count)
+> +{
+> +	struct uart_port *port = &bflb_uart_ports[co->index]->port;
+> +	u32 status, reg, mask;
+> +
+> +	/* save then disable interrupts */
+> +	mask = rdl(port, UART_INT_MASK);
+> +	reg = -1;
+
+Use ~0 instead. Why -1 here and 0xfff in the other place?
+
+
+-- 
+ i.
