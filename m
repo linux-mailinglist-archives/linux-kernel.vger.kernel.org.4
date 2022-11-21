@@ -2,172 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88E2632A89
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96480632A9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiKURNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:13:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S231518AbiKURQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiKURNX (ORCPT
+        with ESMTP id S230496AbiKURPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:13:23 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1629B9488;
-        Mon, 21 Nov 2022 09:12:36 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ALHCKte036107;
-        Mon, 21 Nov 2022 11:12:20 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1669050740;
-        bh=d2yjy4E3Cau/LM3GEWxS0TIWJTajMDUqGXONkImtaAI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=PqZuyRAXD0ozhV67WM2uGpruJDOPcZrhLjzHRKqUbMic0eu9DdH0El1rTk3Fn612n
-         dE+j4kS0s6F9zstCOAIhhj2MoYGlWvTRcvBVIKRC6eWgBPuqn2lpEEmEzWO3fNnr3m
-         v90T3XRsgfMNx2FXc3zzOfp2+bhUNu/3eOxCUZzU=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ALHCKE1128330
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Nov 2022 11:12:20 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 21
- Nov 2022 11:12:20 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 21 Nov 2022 11:12:20 -0600
-Received: from [10.250.38.44] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ALHCJpq004140;
-        Mon, 21 Nov 2022 11:12:19 -0600
-Message-ID: <dafbff84-209c-a4d5-1e84-f08e84156ed8@ti.com>
-Date:   Mon, 21 Nov 2022 11:12:18 -0600
+        Mon, 21 Nov 2022 12:15:44 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE2AD92CD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:13:47 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id q9so11920183pfg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:13:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xtv4h9c3AldnpSSbBkhgTkQdjwq0G0RPbTNhSWZQ0dw=;
+        b=TOb6az3jRFkBe4X0HzQjP8GYDWWbHNFZ9MxWe2M6asN1VtdRiqKVEQROwPVhV+vczh
+         sNa8toL8xN+dXKiEB2JyK6nWXEZAngN9NOKmaKn1PqZsvQgW4W8jXV5COsjCdfg/KgV/
+         leOYIAnsVphTKt477QZtn/rV7TmS9Xyazf8h0V0VZy6fboV5bzuzgcfZOtfnEpyUze3W
+         I9nAtf114C+ajWnYbP3b1K3nOeeUcElzvtqJp38XCz8NlQPnH2bulpdxpmcWIu8YRupm
+         wNf60n23jRVSe03sA1pbkic2zuMvh+jfu9FICnmFbCdIYsiG6Y3sy2BeYM9NoPYpJF+t
+         YPoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xtv4h9c3AldnpSSbBkhgTkQdjwq0G0RPbTNhSWZQ0dw=;
+        b=EvAuYm7AX2xM2vLMKaLtUDRl+y0Vbc6XYR6UeJFmYVQNawBn1Hlkj7OghZucyaqbaK
+         DQx0GS00SUV/eFz/AwpJxYGjXfIuj2jYC5hYyeTfBbv1iG9lI5AUF1zmKDFpC2AxBgWC
+         6rQ8v9K+0KkbWytERcSXCagAXMXwRqAEe3sg+6ltowYTboeq1aktyI+gTlvJxfkZLmfn
+         AdY/tgOWlTA5IGzEPUrkaiLQ2QIMU70GGiE5udk3pfE28gf+ZLYCtDtHSzuI4c/o2127
+         HEp+zOTM6JXDQTfz6qVFINeUzBSIPW1hnp+L9HPX7fL5OyTvi9I65omScFNeiEpHiBQx
+         BvfQ==
+X-Gm-Message-State: ANoB5pkgskDvUgYtEywqtSmsXn9WDF4OIqnMuCDGeclX1MVvctrUdvWY
+        /Aj8CjrBJFeRABRF/OZ8L3q+jw==
+X-Google-Smtp-Source: AA0mqf5h12so7YydnNjvEbSQjdg3H+com4vquDXfsPBsWVFlFdqUZ7jZvjbRyDwyIU4nzD2d27WLvw==
+X-Received: by 2002:a63:da4d:0:b0:46b:3c3d:f618 with SMTP id l13-20020a63da4d000000b0046b3c3df618mr4676440pgj.423.1669050827057;
+        Mon, 21 Nov 2022 09:13:47 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:8b90:bf06:8462:1d8b])
+        by smtp.gmail.com with ESMTPSA id e5-20020a170902b78500b001891177cb48sm5406001pls.140.2022.11.21.09.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 09:13:46 -0800 (PST)
+Date:   Mon, 21 Nov 2022 10:13:44 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     ye.xingchen@zte.com.cn
+Cc:     andersson@kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-next] remoteproc: core: Use device_match_of_node()
+Message-ID: <20221121171344.GA457869@p14s>
+References: <202211171541061366938@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 7/8] arm64: dts: ti: k3-j721s2-main: Add PCIe device
- tree node
-Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
-        <r-gunasekaran@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221119040906.9495-1-mranostay@ti.com>
- <20221119040906.9495-8-mranostay@ti.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20221119040906.9495-8-mranostay@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202211171541061366938@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/22 10:09 PM, Matt Ranostay wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
+On Thu, Nov 17, 2022 at 03:41:06PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> Add PCIe device tree node (both RC and EP) for the single PCIe
-> instance present in j721s2.
+> Replace the open-code with device_match_of_node().
 > 
-
-So which is it, you have two nodes but this is one device. It can
-switch between the two modes, a property should have been used to
-select the mode for the device.
-
-Making two nodes for the same device as examples of what they could
-look like, then only enabling one of the two in the board level DT
-is not how this is done anywhere else. Take the common parts and
-make one node here with those. Then at the board level .dts where we
-select what mode this driver will act in, add the specific bits for
-the chosen mode.
-
-Andrew
-
-> Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 > ---
->   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 61 ++++++++++++++++++++++
->   1 file changed, 61 insertions(+)
+>  drivers/remoteproc/remoteproc_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+
+Applied.
+
+Thanks,
+Mathieu
+
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index cb1d414a2389..11c165ddf1fc 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -2112,7 +2112,7 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index adbb172658b9..04294e25d587 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -841,6 +841,67 @@ serdes0: serdes@5060000 {
->   		};
->   	};
->   
-> +	pcie1_rc: pcie@2910000 {
-> +		compatible = "ti,j7200-pcie-host", "ti,j721e-pcie-host";
-> +		reg = <0x00 0x02910000 0x00 0x1000>,
-> +		      <0x00 0x02917000 0x00 0x400>,
-> +		      <0x00 0x0d800000 0x00 0x00800000>,
-> +		      <0x00 0x18000000 0x00 0x00001000>;
-> +		reg-names = "intd_cfg", "user_cfg", "reg", "cfg";
-> +		interrupt-names = "link_state";
-> +		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
-> +		device_type = "pci";
-> +		ti,syscon-pcie-ctrl = <&scm_conf 0x074>;
-> +		max-link-speed = <3>;
-> +		num-lanes = <4>;
-> +		power-domains = <&k3_pds 276 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 276 41>;
-> +		clock-names = "fck";
-> +		#address-cells = <3>;
-> +		#size-cells = <2>;
-> +		bus-range = <0x0 0xff>;
-> +		vendor-id = <0x104c>;
-> +		device-id = <0xb013>;
-> +		msi-map = <0x0 &gic_its 0x0 0x10000>;
-> +		dma-coherent;
-> +		ranges = <0x01000000 0x0 0x18001000  0x00 0x18001000  0x0 0x0010000>,
-> +			 <0x02000000 0x0 0x18011000  0x00 0x18011000  0x0 0x7fef000>;
-> +		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
-> +		#interrupt-cells = <1>;
-> +		interrupt-map-mask = <0 0 0 7>;
-> +		interrupt-map = <0 0 0 1 &pcie1_intc 0>, /* INT A */
-> +				<0 0 0 2 &pcie1_intc 0>, /* INT B */
-> +				<0 0 0 3 &pcie1_intc 0>, /* INT C */
-> +				<0 0 0 4 &pcie1_intc 0>; /* INT D */
-> +
-> +		pcie1_intc: interrupt-controller {
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-> +			interrupt-parent = <&gic500>;
-> +			interrupts = <GIC_SPI 324 IRQ_TYPE_EDGE_RISING>;
-> +		};
-> +	};
-> +
-> +	pcie1_ep: pcie-ep@2910000 {
-> +		compatible = "ti,j7200-pcie-ep", "ti,j721e-pcie-ep";
-> +		reg = <0x00 0x02910000 0x00 0x1000>,
-> +		      <0x00 0x02917000 0x00 0x400>,
-> +		      <0x00 0x0d800000 0x00 0x00800000>,
-> +		      <0x00 0x18000000 0x00 0x08000000>;
-> +		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
-> +		interrupt-names = "link_state";
-> +		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
-> +		ti,syscon-pcie-ctrl = <&scm_conf 0x074>;
-> +		max-link-speed = <3>;
-> +		num-lanes = <4>;
-> +		power-domains = <&k3_pds 276 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 276 41>;
-> +		clock-names = "fck";
-> +		max-functions = /bits/ 8 <6>;
-> +		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
-> +		dma-coherent;
-> +	};
-> +
->   	main_mcan0: can@2701000 {
->   		compatible = "bosch,m_can";
->   		reg = <0x00 0x02701000 0x00 0x200>,
+>  	rcu_read_lock();
+>  	list_for_each_entry_rcu(r, &rproc_list, node) {
+> -		if (r->dev.parent && r->dev.parent->of_node == np) {
+> +		if (r->dev.parent && device_match_of_node(r->dev.parent, np)) {
+>  			/* prevent underlying implementation from being removed */
+>  			if (!try_module_get(r->dev.parent->driver->owner)) {
+>  				dev_err(&r->dev, "can't get owner\n");
+> -- 
+> 2.25.1
