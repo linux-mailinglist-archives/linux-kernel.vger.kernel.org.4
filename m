@@ -2,90 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AD6631C2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E76E631C37
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiKUI6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S229681AbiKUJAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiKUI6p (ORCPT
+        with ESMTP id S229446AbiKUI77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:58:45 -0500
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF5D2D3;
-        Mon, 21 Nov 2022 00:58:45 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id bj12so26809731ejb.13;
-        Mon, 21 Nov 2022 00:58:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PVOvAfGe8EFehC4Um3S5FYYIC4OCoqGuqtE1Oktag4Q=;
-        b=LpfMOpSbAca9wWz8nkQpSsO2Gi/9UtBgRk7YanbPNDrHQ6nr0/JLDPaNR1jT3uBxqC
-         UTuguHr92aXYfouIskj5MkhY4qqea2E5Vs1yfVE0OpGut/Tn56NOZP68gRgPxCl8AED7
-         5T/FJa6KmgP+BwWJcNDLnoQNbOGScyOh6LvM1EvALTnxOSAnKCTw4NvPnMuOAri3E5vK
-         wgijhxrTBC5VB8jjnhOOtYOpo1kvwambZWt8i7uTy/1kWUIkoW8g5xUox9BvTz6qH17w
-         4u4Xfh7LaJr3GFELuVa4IExsWmGBi74CUVc+UOiB2OXtb/VVw/OsfrdA1aznDaQaE4/r
-         yl0A==
-X-Gm-Message-State: ANoB5plXaG64aJ3cK26NA94r71kTrRliyNy4qo0J+5DF8ysnx4Bqh+Xs
-        WhH9gU/bI+AL9bHhl6T8B8I=
-X-Google-Smtp-Source: AA0mqf6uDngcY8U/b2D28EFm58gOju20m5WgSxWJC4mLLcPZa4hFvp1jvQh+4WVNdBhjdVxJHRzDng==
-X-Received: by 2002:a17:906:3fce:b0:7ad:bb54:75d3 with SMTP id k14-20020a1709063fce00b007adbb5475d3mr14286281ejj.484.1669021123551;
-        Mon, 21 Nov 2022 00:58:43 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id c1-20020a17090618a100b0074134543f82sm4824059ejf.90.2022.11.21.00.58.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 00:58:43 -0800 (PST)
-Message-ID: <7e2e76f8-5d88-4df4-2335-9f7b129b2e26@kernel.org>
-Date:   Mon, 21 Nov 2022 09:58:41 +0100
+        Mon, 21 Nov 2022 03:59:59 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9978CDF95;
+        Mon, 21 Nov 2022 00:59:58 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 463F61F897;
+        Mon, 21 Nov 2022 08:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669021197;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v9eI0l3L5J3waSLvW+eC332jj5gD4Rcqx/oy4092T7U=;
+        b=uJNWoBaxwvTkrgcPCkmSH5N8lmksBFO6vBhMcKeC2W7lOUh2gTFKNUCWjI6fbYlxpP4bPc
+        FekS8LKjm1E6B5wm3peAwXuznfWm6rE2l2WmGEaZSqIF05/CrJqQtHQvIhenohiltd0lPR
+        V2J68v0dm4icKuYkLMj6IUjdDe79bbc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669021197;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v9eI0l3L5J3waSLvW+eC332jj5gD4Rcqx/oy4092T7U=;
+        b=mwKTVaxEkEJfXDxmby4hh4uyjgP5plQNW4zg0K0s18PEbBjnSvse2OmeQrilKUMTFtMoFK
+        tjiy0rAVGrz7aCDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0E0D1376E;
+        Mon, 21 Nov 2022 08:59:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BGsKOQw+e2MxXQAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Mon, 21 Nov 2022 08:59:56 +0000
+Date:   Mon, 21 Nov 2022 09:59:55 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Li Wang <liwang@redhat.com>
+Cc:     ltp@lists.linux.it, Jens Axboe <axboe@kernel.dk>,
+        Minchan Kim <minchan@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        linux-kselftest@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nitin Gupta <ngupta@vflare.org>
+Subject: Re: [LTP] [PATCH 1/1] zram01.sh: Workaround division by 0 on vfat on
+ ppc64le
+Message-ID: <Y3s+Czg8sBsGYO+1@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+ <20221107191136.18048-2-pvorel@suse.cz>
+ <CAEemH2fYv_=9UWdWB7VDiFOd8EC89qdCbxnPcTPAtGnkwLOYFg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v5 13/14] serial: liteuart: add IRQ support for the TX
- path
-Content-Language: en-US
-To:     Gabriel Somlo <gsomlo@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        kgugala@antmicro.com, mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        geert@linux-m68k.org, ilpo.jarvinen@linux.intel.com
-References: <20221118145512.509950-1-gsomlo@gmail.com>
- <20221118145512.509950-14-gsomlo@gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221118145512.509950-14-gsomlo@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEemH2fYv_=9UWdWB7VDiFOd8EC89qdCbxnPcTPAtGnkwLOYFg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18. 11. 22, 15:55, Gabriel Somlo wrote:
-> Switch the TX path to IRQ-driven operation, while maintaining support
-> for polling mode via the poll timer.
-> 
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-...
-> @@ -154,6 +148,8 @@ static irqreturn_t liteuart_interrupt(int irq, void *data)
->   	isr = litex_read8(port->membase + OFF_EV_PENDING) & uart->irq_reg;
->   	if (isr & EV_RX)
->   		liteuart_rx_chars(port);
-> +	if (isr & EV_TX)
-> +		liteuart_tx_chars(port);
+Hi Li,
 
-Wait, how do you ensure the OFF_EV_PENDING reg contains EV_RX and/or 
-EV_TX in the polling mode?
+> Hi Petr,
 
-thanks,
--- 
-js
-suse labs
+> On Tue, Nov 8, 2022 at 3:12 AM Petr Vorel <pvorel@suse.cz> wrote:
 
+> > Repeatedly read /sys/block/zram*/mm_stat for 1 sec. This should fix bug
+> > on ppc64le on stable kernels, where mem_used_total is often 0.
+
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > ---
+> >  .../kernel/device-drivers/zram/zram01.sh      | 27 +++++++++++++++++--
+> >  1 file changed, 25 insertions(+), 2 deletions(-)
+
+> > diff --git a/testcases/kernel/device-drivers/zram/zram01.sh
+> > b/testcases/kernel/device-drivers/zram/zram01.sh
+> > index 58d233f91..76a8ccab4 100755
+> > --- a/testcases/kernel/device-drivers/zram/zram01.sh
+> > +++ b/testcases/kernel/device-drivers/zram/zram01.sh
+> > @@ -105,6 +105,26 @@ zram_mount()
+> >         tst_res TPASS "mount of zram device(s) succeeded"
+> >  }
+
+> > +read_mem_used_total()
+> > +{
+> > +       echo $(awk '{print $3}' $1)
+> > +}
+> > +
+> > +# Reads /sys/block/zram*/mm_stat until mem_used_total is not 0.
+> > +loop_read_mem_used_total()
+
+
+> This is not a looping function to check if mem_used_total is equal to zero,
+> the loop part is by means of the TST_RETRY_FUNC macro.
+Thanks for your review!
+
+> So, I'd suggest renaming it to check_read_mem_used_total().
+Agree. Unfortunately even this didn't help on ppc64le system where I was able to
+reproduce it, thus probably not worth to merge.
+
+Unfortunately later I was not able to reproduce the problem any more, I'll try
+it more this week.
+
+Kind regards,
+Petr
+
+> Reviewed-by: Li Wang <liwang@redhat.com>
+
+
+
+> > +{
+> > +       local file="$1"
+> > +       local mem_used_total
+> > +
+> > +       tst_res TINFO "$file"
+> > +       cat $file >&2
+> > +
+> > +       mem_used_total=$(read_mem_used_total $file)
+> > +       [ "$mem_used_total" -eq 0 ] && return 1
+> > +
+> > +       return 0
+> > +}
+> > +
+> >  zram_fill_fs()
+> >  {
+> >         local mem_used_total
+> > @@ -133,9 +153,12 @@ zram_fill_fs()
+> >                         continue
+> >                 fi
+
+> > -               mem_used_total=`awk '{print $3}'
+> > "/sys/block/zram$i/mm_stat"`
+> > +               TST_RETRY_FUNC "loop_read_mem_used_total
+> > /sys/block/zram$i/mm_stat" 0
+> > +               mem_used_total=$(read_mem_used_total
+> > /sys/block/zram$i/mm_stat)
+> > +               tst_res TINFO "mem_used_total: $mem_used_total"
+> > +
+> >                 v=$((100 * 1024 * $b / $mem_used_total))
+> > -               r=`echo "scale=2; $v / 100 " | bc`
+> > +               r=$(echo "scale=2; $v / 100 " | bc)
+
+> >                 if [ "$v" -lt 100 ]; then
+> >                         tst_res TFAIL "compression ratio: $r:1"
+> > --
+> > 2.38.0
+
+
+> > --
+> > Mailing list info: https://lists.linux.it/listinfo/ltp
