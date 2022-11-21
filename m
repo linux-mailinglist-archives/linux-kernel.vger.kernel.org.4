@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7C4631DCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1FF631DD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 11:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiKUKJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 05:09:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        id S230117AbiKUKKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 05:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiKUKJu (ORCPT
+        with ESMTP id S231276AbiKUKKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:09:50 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BE5647B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:09:48 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id g12so18098944lfh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:09:48 -0800 (PST)
+        Mon, 21 Nov 2022 05:10:20 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6760FE0FD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:10:19 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id c1so18071032lfi.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 02:10:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=i3YXumFsPw6lbI2IHMtFObomGfN5gHhNwcdgLP+EhJk=;
-        b=jMQDqklr6GJhwiLPT9kPQTPmexECun/4HMUGVLBEqBvYISI8XEuWKkoKtj+dKN2kW8
-         LnyRPehM4XhFvmvIv7o8L1T7/0ugBPOT9oMyWvlsqngtdLPsdhc4DftPtJVqPwZ3ajMF
-         zB5BQky4xx8qaU/c7Wuq25mcd7cAeoJdiEwFZ1lptGOkknfifq8ztal99bBbiWwkWfeM
-         5wjxp2czMpvgnJavWNh1b6EWfwNwQ9tncKAkyrzSefAaBJDi9YSwOtA9aR826sp/4z67
-         iIIsu0EgU2jqZF5JijtlmtYruvIVVwTIl2+CscNbK7DLfXToq2+9aMY/qiUQ8lg2sfEx
-         hQ/Q==
+        bh=Yts7SFQTOzD/Zmg+pBx8VAiiYiBWh2/r7q0385trxog=;
+        b=HIPCJCLb4vItCW6ypgokSruO/dw52ZPFFUzEkKdTzelE6YiuhqCaDNssRbwZFd3h1l
+         x+ubADq1KAhDDWg9+y9JMPFNdKfgUdvS16KRlY0lByvvx2lrlJPbluLfK5ya3zQP5tVW
+         XfyNq1V5XpMNeblDgRBPCDMi7tmTtI7CvgGQwPVhlgewPk6yd45Fjor/djLQu9OqmdN9
+         v7C2svCocSZJWJonsqcSOlsZojaRAJioHQhndmnRSRYI2YrzfUW572nUr4CfDy2CkDMh
+         QaDQTzgRLr5iJx59vyQGrYP9p523iU2UyigISbU2X2QxV6CVoTveZWsFy58fCaU450sK
+         5CtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i3YXumFsPw6lbI2IHMtFObomGfN5gHhNwcdgLP+EhJk=;
-        b=jkpAvu5TWITJugmAwLKdPkSmVYpXMLP1rkjduMcgDB9WFoSph1R5ShO0BotdhlTY3N
-         QCif/DixXdSRvRqvUR80y+r3kbUFgU9XUaUHp12qndfYjz/Ing0yTA5oRQvq4+OXXBHk
-         EvkfbEThJSOlAV7PQSsmUywa9VrsFLY3VvQ/yZ4pSEGhcSJkQo6ffpagH+qtVGMEh6Lx
-         qNVkQYKyhbI9+Icus0DXiYii59Dn/AjROlTg/TgwQXFsn6pCtVvmphYbzSD7N5lU3YDd
-         ItxiFUWD6NYo9Qq6+Rd/U5c1DwxSQUEuSc6LLOrqA86KX6v2UKsDDLroS8iUR7YSrJiY
-         SpOA==
-X-Gm-Message-State: ANoB5pl7wITSbz1R3xUHgua3r69QTsHVUkBgzMKf2H/L+lRN4sNmyeHH
-        YIxC6aAI2UwNSQ8V71ADZIYetA==
-X-Google-Smtp-Source: AA0mqf6DBfrEF5O0+Ktio6r059/CuVFDgOS3eqygqMtw5mUk3rI1/U6Kjd8+p/QbRjRwyx2S7laiMA==
-X-Received: by 2002:ac2:5e2c:0:b0:4a2:243a:ef6e with SMTP id o12-20020ac25e2c000000b004a2243aef6emr942157lfg.454.1669025387158;
-        Mon, 21 Nov 2022 02:09:47 -0800 (PST)
+        bh=Yts7SFQTOzD/Zmg+pBx8VAiiYiBWh2/r7q0385trxog=;
+        b=BCc+cLomwCOzeSejkccLvrfQqm84ngq+CEZoogBsLptASnBXgRCx3f9ZeJjZUn9LaQ
+         Sb+7/8C+NtkfZbC2SRS/eMGbic6BULtcLgeDtGcD/3VDxIL8DTuGXFg9n8tPvtGvw5v/
+         dbpOmeLUjKwgg8eYuCQrDltgqP4e/rD0iLcO0fB0EIvVFA7gycuqNFry1Ppuop2+6DxV
+         YJSige1OjTyJYHWOLT8XrK0wl2lFUPB7F6a7LbEVEFg0dhu9+NxQsiihGOFjBUnF8wNR
+         WKwU3vAYzyvoeCHXHYmRLenp6S9FBe4M+ftw2ZWI1Fzh9SEZQDGx03NxlBooXD15eZgm
+         uoHw==
+X-Gm-Message-State: ANoB5pnSL29RuzNyEEAyGfePTmlRnCyK2IUR+gh/PiV3ODjVUqoshXCY
+        qm2OtIkjhWQTNcbQaxLN06oODQ==
+X-Google-Smtp-Source: AA0mqf5GAJIM1z6ZAoGTvS5DKX4b9e6G7EJ/wZ8M/Mz9jOSEoYVWXxpxsOnBEgyrX2uxxAh9Fa4lZA==
+X-Received: by 2002:a05:6512:708:b0:4a2:6d30:fef2 with SMTP id b8-20020a056512070800b004a26d30fef2mr367826lfs.324.1669025417695;
+        Mon, 21 Nov 2022 02:10:17 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id be34-20020a056512252200b0049e9122bd1bsm1975586lfb.164.2022.11.21.02.09.46
+        by smtp.gmail.com with ESMTPSA id m7-20020a056512358700b004b4b69af17dsm1961156lfr.214.2022.11.21.02.10.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 02:09:46 -0800 (PST)
-Message-ID: <9d287ce2-a826-5777-8d88-8e05e6924670@linaro.org>
-Date:   Mon, 21 Nov 2022 11:09:45 +0100
+        Mon, 21 Nov 2022 02:10:17 -0800 (PST)
+Message-ID: <a712462b-5039-dfc2-b8c2-5a447128dc56@linaro.org>
+Date:   Mon, 21 Nov 2022 11:10:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 5/7] riscv: dts: bouffalolab: add the bl808 SoC base
- device tree
+Subject: Re: [PATCH 6/7] riscv: dts: bouffalolab: add Sipeed M1S dock
+ devicetree
 Content-Language: en-US
 To:     Jisheng Zhang <jszhang@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -69,14 +69,15 @@ To:     Jisheng Zhang <jszhang@kernel.org>,
 Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
 References: <20221120082114.3030-1-jszhang@kernel.org>
- <20221120082114.3030-6-jszhang@kernel.org>
+ <20221120082114.3030-7-jszhang@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221120082114.3030-6-jszhang@kernel.org>
+In-Reply-To: <20221120082114.3030-7-jszhang@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,24 +85,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 20/11/2022 09:21, Jisheng Zhang wrote:
-> Add a baisc dtsi for the bouffalolab bl808 SoC.
+> Sipeed manufactures a M1S system-on-module and dock board, add basic
+> support for them.
 > 
 > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
->  arch/riscv/boot/dts/Makefile               |  1 +
->  arch/riscv/boot/dts/bouffalolab/bl808.dtsi | 74 ++++++++++++++++++++++
->  2 files changed, 75 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+>  arch/riscv/boot/dts/bouffalolab/Makefile      |  2 ++
+>  .../boot/dts/bouffalolab/bl808-sipeed-m1s.dts | 30 +++++++++++++++++++
+>  2 files changed, 32 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/bouffalolab/Makefile
+>  create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dts
 > 
-> diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-> index ff174996cdfd..b525467152b2 100644
-> --- a/arch/riscv/boot/dts/Makefile
-> +++ b/arch/riscv/boot/dts/Makefile
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +subdir-y += bouffalolab
+> diff --git a/arch/riscv/boot/dts/bouffalolab/Makefile b/arch/riscv/boot/dts/bouffalolab/Makefile
+> new file mode 100644
+> index 000000000000..42e17e1a97bd
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/bouffalolab/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +dtb-$(CONFIG_SOC_BOUFFALOLAB) += bl808-sipeed-m1s.dtb
+> diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dts b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dts
+> new file mode 100644
+> index 000000000000..64421fb2ad67
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dts
+> @@ -0,0 +1,30 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +/*
+> + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "bl808.dtsi"
+> +
+> +/ {
+> +	model = "Sipeed M1S";
+> +	compatible = "sipeed,m1s", "bouffalolab,bl808";
 
-Nothing to build there, so not yet.
+Missing bindings.
 
 
 Best regards,
