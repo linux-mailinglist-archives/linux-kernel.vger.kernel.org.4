@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E5E63213D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A9F63213E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiKULue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:50:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S230378AbiKULuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbiKULuN (ORCPT
+        with ESMTP id S230212AbiKULue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:50:13 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A4029808
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:50:12 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id d18so4296368qvs.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:50:12 -0800 (PST)
+        Mon, 21 Nov 2022 06:50:34 -0500
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE52520341
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:50:33 -0800 (PST)
+Received: by mail-qv1-f44.google.com with SMTP id k2so6635837qvo.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:50:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QPRFFDX3sukLa+H8slFSfV4bRc1zyJQTvoCuAInx6IY=;
-        b=Q0G3THeXjDq7gq8CZS4lZDCyBv1RkMyWppyWTuB61qfiswgdqQEkYnQN+dmD7uZWlV
-         jafxV6fLkfXYRa6RMsadQzMq+g/S9A7qv/p0l2k6MgMa0vKu4N+SiZAz5OfYUvkelI6P
-         uX653AR3N03vmf4CUlGXCQnSKqUNT6SoVvfHsa6w8Bxqpj5/++CB6Yayy5DmpEQJ2Gg4
-         8qZmP4gDT+twUjDTQI5NiUjw8h2TK+DDcm48730vlJHtr5GnxKTqy0/MjfoCqpzNandq
-         2XabSiW7t7NVq/VL2MU+jfjf1B8N/lXZezbZKR6aPIwUMNkcoy8aFQtGofNXMHoNBPCb
-         tayQ==
-X-Gm-Message-State: ANoB5pmgmyrFr6p1Kii33TqHwTa5FLfJFNQlrljIe386HBsUxIJaLlp4
-        J0k5nfmzsTFG7wW3nDH8zJiN1D9b0XRpa4yxBaBDcShI3UY=
-X-Google-Smtp-Source: AA0mqf6FDzINKHpNjIj/oCDhtBMmufnAaE4Y2hiR8KcpM9BLPiP953f6WGEk4FsaM333r7AHPBK9F/nv3+5d+I+2ia4=
-X-Received: by 2002:a05:6214:558e:b0:4c0:8055:fb5 with SMTP id
- mi14-20020a056214558e00b004c080550fb5mr17280305qvb.73.1669031411616; Mon, 21
- Nov 2022 03:50:11 -0800 (PST)
+        bh=vM9IytLH07S9l82QF9h03u/KdFe4rcZrcYs4tSHSYN8=;
+        b=NKcXR9FjcUeORPb72kEelYMicf3DS88evWDwAqfvjLU3YKob08KPTv2JoZu9f1BITR
+         73Ko/kYUAn+57Gx0bu4B58DWDRZsVm+I0FbVNnUuG7P8vHJSnpyf399kYF3FG7+OGaDK
+         Zfy1ujaPYrsf9bZPYD4ZIRhpgCcN1wW26amidhVvVlL6/0N6ysdXBoGBc2ytrGZg1an6
+         6HoTTcjTdIuBGtPhfOx6IaF+43FMplbtXg8XkLu88d6kcMtpAp/1Ow6LXrYcKVMtORlp
+         fNK4b5cGEEyDtv64OFCyrXOM9tLm43Q7O5T6HCK1+KDgs4SpUB6XoOZvSnc//rCghiyb
+         NIRg==
+X-Gm-Message-State: ANoB5pkG5HbAigV+MYdL4LiaOHxxE0be/JMFugz9jwO3bnvSxBADGcgv
+        kTDGJCNR3bZetjd1iOTXI6KJxiifA1RUo8EnbB0=
+X-Google-Smtp-Source: AA0mqf5a1KfP8eLw51/njf3NsZatGLM3tJI8a0m2WJuhIsFmB8vljZkah9i1LnYCRd5I9/NjA1cL6Kq5v8sFuRTR6z4=
+X-Received: by 2002:ad4:534b:0:b0:4b1:8429:a8a7 with SMTP id
+ v11-20020ad4534b000000b004b18429a8a7mr1180085qvs.52.1669031433042; Mon, 21
+ Nov 2022 03:50:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20221121094649.1556002-1-gregkh@linuxfoundation.org> <20221121094649.1556002-2-gregkh@linuxfoundation.org>
-In-Reply-To: <20221121094649.1556002-2-gregkh@linuxfoundation.org>
+References: <20221121094649.1556002-1-gregkh@linuxfoundation.org> <20221121094649.1556002-4-gregkh@linuxfoundation.org>
+In-Reply-To: <20221121094649.1556002-4-gregkh@linuxfoundation.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Nov 2022 12:49:56 +0100
-Message-ID: <CAJZ5v0iNDXhFMP5CK_ZNBm5AXZ1cWkAUfeGbfXFZeJr5RjNFTw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] kobject: make kobject_namespace take a const *
+Date:   Mon, 21 Nov 2022 12:50:18 +0100
+Message-ID: <CAJZ5v0h6S_CNnKULDrA3OyL5weQEJ2wE5-rnza3qBYxsMWAVsg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] kobject: kset_uevent_ops: make name() callback take a
+ const *
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>
@@ -56,13 +57,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:46 AM Greg Kroah-Hartman
+On Mon, Nov 21, 2022 at 10:47 AM Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> kobject_namespace() should take a const *kobject as it does not modify
-> the kobject passed to it.  Change that, and the functions
-> kobj_child_ns_ops() and kobj_ns_ops() needed to also be changed to const
-> *.
+> The name() callback in struct kset_uevent_ops does not modify the
+> kobject passed into it, so make the pointer const to enforce this
+> restriction.  When doing so, fix up the single existing name() callback
+> to have the correct signature to preserve the build.
 >
 > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -70,70 +71,39 @@ On Mon, Nov 21, 2022 at 10:46 AM Greg Kroah-Hartman
 Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
 > ---
->  include/linux/kobject.h    | 2 +-
->  include/linux/kobject_ns.h | 4 ++--
->  lib/kobject.c              | 6 +++---
->  3 files changed, 6 insertions(+), 6 deletions(-)
+>  drivers/base/core.c     | 4 ++--
+>  include/linux/kobject.h | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 005a2b092f3e..a3e14143ec0c 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2376,9 +2376,9 @@ static int dev_uevent_filter(const struct kobject *kobj)
+>         return 0;
+>  }
+>
+> -static const char *dev_uevent_name(struct kobject *kobj)
+> +static const char *dev_uevent_name(const struct kobject *kobj)
+>  {
+> -       struct device *dev = kobj_to_dev(kobj);
+> +       const struct device *dev = kobj_to_dev(kobj);
+>
+>         if (dev->bus)
+>                 return dev->bus->name;
 > diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-> index d978dbceb50d..5a2d58e10bf5 100644
+> index 640f59d4b3de..58a5b75612e3 100644
 > --- a/include/linux/kobject.h
 > +++ b/include/linux/kobject.h
-> @@ -112,7 +112,7 @@ extern struct kobject * __must_check kobject_get_unless_zero(
->                                                 struct kobject *kobj);
->  extern void kobject_put(struct kobject *kobj);
+> @@ -136,7 +136,7 @@ struct kobj_uevent_env {
 >
-> -extern const void *kobject_namespace(struct kobject *kobj);
-> +extern const void *kobject_namespace(const struct kobject *kobj);
->  extern void kobject_get_ownership(const struct kobject *kobj,
->                                   kuid_t *uid, kgid_t *gid);
->  extern char *kobject_get_path(const struct kobject *kobj, gfp_t flag);
-> diff --git a/include/linux/kobject_ns.h b/include/linux/kobject_ns.h
-> index 2b5b64256cf4..be707748e7ce 100644
-> --- a/include/linux/kobject_ns.h
-> +++ b/include/linux/kobject_ns.h
-> @@ -47,8 +47,8 @@ struct kobj_ns_type_operations {
+>  struct kset_uevent_ops {
+>         int (* const filter)(const struct kobject *kobj);
+> -       const char *(* const name)(struct kobject *kobj);
+> +       const char *(* const name)(const struct kobject *kobj);
+>         int (* const uevent)(struct kobject *kobj, struct kobj_uevent_env *env);
+>  };
 >
->  int kobj_ns_type_register(const struct kobj_ns_type_operations *ops);
->  int kobj_ns_type_registered(enum kobj_ns_type type);
-> -const struct kobj_ns_type_operations *kobj_child_ns_ops(struct kobject *parent);
-> -const struct kobj_ns_type_operations *kobj_ns_ops(struct kobject *kobj);
-> +const struct kobj_ns_type_operations *kobj_child_ns_ops(const struct kobject *parent);
-> +const struct kobj_ns_type_operations *kobj_ns_ops(const struct kobject *kobj);
->
->  bool kobj_ns_current_may_mount(enum kobj_ns_type type);
->  void *kobj_ns_grab_current(enum kobj_ns_type type);
-> diff --git a/lib/kobject.c b/lib/kobject.c
-> index 26e744a46d24..6e0bf03f4f36 100644
-> --- a/lib/kobject.c
-> +++ b/lib/kobject.c
-> @@ -25,7 +25,7 @@
->   * and thus @kobj should have a namespace tag associated with it.  Returns
->   * %NULL otherwise.
->   */
-> -const void *kobject_namespace(struct kobject *kobj)
-> +const void *kobject_namespace(const struct kobject *kobj)
->  {
->         const struct kobj_ns_type_operations *ns_ops = kobj_ns_ops(kobj);
->
-> @@ -1039,7 +1039,7 @@ int kobj_ns_type_registered(enum kobj_ns_type type)
->         return registered;
->  }
->
-> -const struct kobj_ns_type_operations *kobj_child_ns_ops(struct kobject *parent)
-> +const struct kobj_ns_type_operations *kobj_child_ns_ops(const struct kobject *parent)
->  {
->         const struct kobj_ns_type_operations *ops = NULL;
->
-> @@ -1049,7 +1049,7 @@ const struct kobj_ns_type_operations *kobj_child_ns_ops(struct kobject *parent)
->         return ops;
->  }
->
-> -const struct kobj_ns_type_operations *kobj_ns_ops(struct kobject *kobj)
-> +const struct kobj_ns_type_operations *kobj_ns_ops(const struct kobject *kobj)
->  {
->         return kobj_child_ns_ops(kobj->parent);
->  }
 > --
 > 2.38.1
 >
