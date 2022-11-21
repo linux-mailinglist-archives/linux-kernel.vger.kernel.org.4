@@ -2,127 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406676327BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FEB6327C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbiKUPVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S231640AbiKUPWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiKUPVM (ORCPT
+        with ESMTP id S232363AbiKUPV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:21:12 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2826CEBAC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:19:29 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 0818D320098C;
-        Mon, 21 Nov 2022 10:19:25 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 21 Nov 2022 10:19:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1669043965; x=1669130365; bh=IwU/+ORPNc
-        FJdwYkRLc8Tov1cg+1MzhrAUgCDtEZ8+o=; b=cL9lHO9g6PmvoOLKpfjGaHQjI3
-        EBsQjMGTuIUMN5Ow7V+s7UazdsDZ0Ve8lyFeKHp+4SzIogZWUOcWNS4pDmIww26G
-        uQyQZKyRfp657P4cgxmrht+cXVWIg6AVGxht1CIIGLJ9nba8A/cxUIL1VtuBdLHT
-        DPoZ4x2dTQDv1yWJ/CFmzRSHCLFWYRCoAkainDijf0R5TnbyPN7kGIDvUe5tlCWs
-        dFPLknYPN0WfPV+OWPufdKCTWf877pvPyaIf0McxLUIH5Gv0RnY2pwRo3lGAxXbY
-        9WL0xo9Lzd/k3O0NOPhFJFh32CYWNDdcjgX0RW/bNHGdDF8sABf3nPkAleYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669043965; x=1669130365; bh=IwU/+ORPNcFJdwYkRLc8Tov1cg+1
-        MzhrAUgCDtEZ8+o=; b=ON1mS3ama0Qcy0IQOV5loGdhXAdGzymft2OWFUkXFxj/
-        P6ztAvdKrk6TE+Nni4Qn2kkTpEJONIWJRoHQW8BIZB3o/2i34lAao8gYOazElDgb
-        tGdIxkWv9bsDinntYO3c3jq7J6A1ORwGNj3E/LI6fav5lW8L0z69EbiVrHHUgJUl
-        QvDOQzWvvSQG5jmNrdfZcdQDrE7xERvscfPeSvymGrogqv0+HBnWT66aWjz0N4gW
-        QEX6Zr+sBQ6R2l/NS7mdaDh1sI9nVHEwhczQSVQjEPzVSTV/fHrRGHKWDh5I5inX
-        o7hhbILgDMvbXLWAioe7eNC8wKJyinAoi8sbgejMQA==
-X-ME-Sender: <xms:_ZZ7YxIZaKRojPmkMr_KwpI9n83kL6DhmzcIp5EY3kut5u07oPy6Nw>
-    <xme:_ZZ7Y9L0ZofcPyGtJg_jECxB7el1kHRPP0Uj4o7axqPo77KLpuz1OhXrecyNBcG2l
-    inC-8hfnIOfeBg98KI>
-X-ME-Received: <xmr:_ZZ7Y5tBw-usgXpTUDj3t6eYoVXJsO8pbQ3T4DFNfK2Gi80z3wC3b5WZK62j5MTM4h3WUUy8ABmTjbhkqzto08JBT_O08j_taw_0Uq6lorRLGQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheeigdejhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleejuefggeevteelveekteffgeduveeiteeiueegueegiedvtdejjedvfeef
-    tefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:_ZZ7Yyad2_gDy45I2Oyez40fS_ZnoKNm1Y-43qNFLQR6XpuyNX8-uQ>
-    <xmx:_ZZ7Y4bR_VO40F88b838D-UHkxRcEeBtu9x8KZy5WP8Kc1ZPlTBxbQ>
-    <xmx:_ZZ7Y2A2v6mZVybmAtFITptx4koD-j6PJKng5agLIoWgpoyjK4FRGQ>
-    <xmx:_ZZ7Y_Xtl98cfmWF0_10xD0e7cnORLim5ZGXYyE53MTM315dLdSJ6Q>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Nov 2022 10:19:25 -0500 (EST)
-Date:   Mon, 21 Nov 2022 16:19:22 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     dri-devel@lists.freedesktop.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: git send-email friendly smtp provider anyone?
-Message-ID: <20221121151922.jaal6ym7z2ejju4q@houat>
-References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
+        Mon, 21 Nov 2022 10:21:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D98817056
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 07:21:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B4E8612D2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 15:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C42C433D6;
+        Mon, 21 Nov 2022 15:21:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669044068;
+        bh=7atMFS0RY0Y/N7XUzTTJuXzocBWr2wWTxt267FH+3DI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=HnB3Tf4Idvo2yTv2MbHMbHDj3aHypDeuBOuDJ5xK8bFFkyKxlP9tQCLOh/0yDG0hp
+         8HSFNsAT/tRtAB9J8gevCqbjDtO8CgzIB8W6S9iESZExOSj7EnwdVUXdsk7sIAEB3N
+         nE0EmiiChIlAbvnAOrTB6GeLgKqV/9ErWIiEzqtsB6I/E1g873vuxlr82JZqqctVpo
+         l9MyhstIKDG33MroHwZ8iSAfeFz0ktRQS8PhTUHWUjAEInIPOG9wtFsohwIhYLHfEP
+         ZBbNsdaRcb0zE7PcP1VQGyzrbKYunxKxWj+KWSjmu7h89CiFOCP1ZqKoXm3aZuBto7
+         LFxAdEGrqAEIw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 96D825C0292; Mon, 21 Nov 2022 07:21:07 -0800 (PST)
+Date:   Mon, 21 Nov 2022 07:21:07 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        john.stultz@linaro.org, sboyd@kernel.org, corbet@lwn.net,
+        Mark.Rutland@arm.com, maz@kernel.org, kernel-team@meta.com,
+        neeraju@codeaurora.org, ak@linux.intel.com,
+        zhengjun.xing@intel.com, Chris Mason <clm@meta.com>,
+        John Stultz <jstultz@google.com>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
+ clocksource measurements
+Message-ID: <20221121152107.GI4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
+ <20221114232827.835599-1-paulmck@kernel.org>
+ <87mt8pkzw1.ffs@tglx>
+ <20221117230910.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y3rMc2VbgVLHN9db@feng-clx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aufutovedl5p2dcy"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3rMc2VbgVLHN9db@feng-clx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 21, 2022 at 08:55:15AM +0800, Feng Tang wrote:
+> On Thu, Nov 17, 2022 at 03:09:10PM -0800, Paul E. McKenney wrote:
+> > On Thu, Nov 17, 2022 at 10:57:34PM +0100, Thomas Gleixner wrote:
+> > > Paul!
+> > > 
+> > > On Mon, Nov 14 2022 at 15:28, Paul E. McKenney wrote:
+> > > >  
+> > > > +		/* Check for bogus measurements. */
+> > > > +		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
+> > > > +		if (wd_nsec < (wdi >> 2)) {
+> > > > +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> > > > +			continue;
+> > > > +		}
+> > > > +		if (wd_nsec > (wdi << 2)) {
+> > > > +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> > > > +			continue;
+> > > > +		}
+> > > 
+> > > This is really getting ridiculous.
+> > 
+> > I have absolutely no argument with this statement, and going back a
+> > long time.  ;-)
+> > 
+> > But the set of systems that caused me to send this turned out to have
+> > real divergence between HPET and TSC, and 40 milliseconds per second of
+> > divergence at that.  So not only do you hate this series, but it is also
+> > the case that this series doesn't help with the problem at hand.
+> 
+> The drift is about 4% which is quite big. It seems that this is
+> either problem of HPET/TSC's hardware/firmware, or the problem of
+> frequency calibration for HPET/TSC. TSC calibration is complex,
+> as it could be done from different methods depending on hardware
+> and firmware, could you share the kernel boot log related with
+> tsc/hpet and clocksource? 
 
---aufutovedl5p2dcy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for looking into this!
 
-On Mon, Nov 21, 2022 at 12:48:52PM +0100, Noralf Tr=F8nnes wrote:
-> A couple of years ago my email provider blocked me from using git
-> send-email with their smtp server. So I switched to the one my ISP
-> provides. Now my ISP have outsourced their email service so the first 3
-> emails gets through and the rest looks like it ends up in a tar pit or
-> something, 18 hours later and 5 of 7 emails have gotten through. I have
-> asked them about this, but I fear the answer will be this is not
-> supported since they now don't have the service in-house anymore. I'm
-> waiting for a reply.
->=20
-> Today I tried sendinblue.com since they have a free plan, but they
-> insert <br> in the emails so that didn't work out. They also have some
-> kind of queue, after 1 hour 6 of 7 emails have gotten through.
->=20
-> Does anyone have an smtp provider to recommend that works with git
-> send-email and that sends out all the emails at once?
+Knucklehead here failed to save away the dmesg.  Let me see what
+I can drum up.
 
-I'm using fastmail and am very happy about it so far.
+> Also if your platform has acpi PM_TIMER, you may try "nohpet"
+> to use PM_TIMER instead of HPET and check if there is also big
+> drift between TSC and PM_TIMER.
 
-Otherwise, you might consider using:
-https://b4.docs.kernel.org/en/latest/contributor/send.html#authenticating-w=
-ith-the-web-submission-endpoint
+Let me see about giving this a go, and again, thank you!
 
-Maxime
-
---aufutovedl5p2dcy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3uW+gAKCRDj7w1vZxhR
-xTliAP42DZbkg/gGP8nHP2wOWsm3v/FZYdMVwNTEQquHeHM8HwEAuGuOAy3qshT5
-51ek0yfLAMn0kg2lW7eA9mhqt0abiQI=
-=cvH2
------END PGP SIGNATURE-----
-
---aufutovedl5p2dcy--
+						Thanx, Paul
