@@ -2,115 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FAF631C56
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A068631C5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 10:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiKUJGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 04:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S229916AbiKUJH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 04:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKUJGH (ORCPT
+        with ESMTP id S229674AbiKUJHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:06:07 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9059583EBB;
-        Mon, 21 Nov 2022 01:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669021566; x=1700557566;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Q1XM2FQnV3HV/erohw/6BcN8dtVdOAeGf+I9EBQJpAU=;
-  b=EifBon7dXPmol6RWGQ6QHtN5tKjUhIf+Yk7sXJF9bY4M50WmoLaq3ttp
-   X8rixOZ5cN9dskdk1AV+dS0QhO2O/la1Wo6m2boO+xZfX5HZAzpViiGKj
-   ImRzgzAmyO7BXWN+0NM57g/VM88F4ZKbQ5iF7PZq//ujrAplcw9b7ItZI
-   Xipj8M16EuJcZMj817c3Cp0QXe9nwmgso5MhBfQ717D2sx0Gy976bs47i
-   GeP090d68mQOaP+0ezLnvcAFYgyVfH/K/LaMTftnkrwlFhr5enlG7uT19
-   WKAtREgLExf9xb4cG0S3gqHQXW+Aaw3/AWBTAcjjQ0gWVMGuk4HvSCMOp
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="340368441"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="340368441"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 01:06:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="783376344"
-X-IronPort-AV: E=Sophos;i="5.96,180,1665471600"; 
-   d="scan'208";a="783376344"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 21 Nov 2022 01:06:02 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Nov 2022 11:06:01 +0200
-Date:   Mon, 21 Nov 2022 11:06:01 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 578/606] usb: typec: hd3ss3220: Convert to i2c's
- .probe_new()
-Message-ID: <Y3s/eWXzGKGfuAUR@kuha.fi.intel.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-579-uwe@kleine-koenig.org>
+        Mon, 21 Nov 2022 04:07:22 -0500
+X-Greylist: delayed 33674 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 01:07:21 PST
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8E26DCF7;
+        Mon, 21 Nov 2022 01:07:20 -0800 (PST)
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2AL96qJA015443;
+        Mon, 21 Nov 2022 18:06:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2AL96qJA015443
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1669021613;
+        bh=7X6L8AAqOEY0/aQSZIAWdIdlY5cPDBedn82Z4qDbDj8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bnQuxmb5RXwPbs0ZUhMNOeDUNzwY/Zhp3ZOHah5mrJYICSCcNUgGwoPPHUg+BegtS
+         J5pOR0SpnPPe0CMz2/5zaUv0EMjloyHCipCzvBpgWgP5oZYfVjposgLigRwcWb8oGH
+         xeOb1/sGcD/hs/x7q+hmiHfCDuj6GRApfYKFGMmLqqY9DyJ5GZx0cs3+8G+kxyV1yR
+         9mHIoaQAXnbD7ta3fVmQMGlWgic0DZ0vihX9O5QatbZekvvHcuOddmheF5BFtJR77J
+         RwVI/6juTSl6HHmeT2AMWdHS0zmsqqca7hX2ruiTisv54Z2WAkOry2L6gcFQEBPaOT
+         Fbfvz7BhBRCmQ==
+X-Nifty-SrcIP: [209.85.167.171]
+Received: by mail-oi1-f171.google.com with SMTP id v81so11911434oie.5;
+        Mon, 21 Nov 2022 01:06:53 -0800 (PST)
+X-Gm-Message-State: ANoB5pnsxr4EPOygI75y6gbxGkHkInPVXXh5B+WiciRX9Nqx8H3/d9UL
+        Z7NVhLEHi+1MyNx1FRY1mE5e3TfqYcLe+Fw6mvc=
+X-Google-Smtp-Source: AA0mqf4oPAKiL8xYOTZ6xdM9i5EZ8/eV9uwfHeFU3qXK3j1ph/tgydAxQdRN8Em2+5zt0pL3BK3LUpJUuqi8g1IvgKM=
+X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
+ ay9-20020a056808300900b0035494a6a721mr11148779oib.194.1669021611960; Mon, 21
+ Nov 2022 01:06:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-579-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221119225650.1044591-1-alobakin@pm.me> <20221119225650.1044591-12-alobakin@pm.me>
+ <Y3oxyUx0UkWVjGvn@smile.fi.intel.com> <961a7d7e-c917-86a8-097b-5961428e9ddc@redhat.com>
+ <CAK7LNASxxzA1OEGuJR=BU=6G8XaatGx+gDCMe2s9Y3MRcwptYw@mail.gmail.com> <87852fc9-0757-7e58-35a2-90cccf970f5c@redhat.com>
+In-Reply-To: <87852fc9-0757-7e58-35a2-90cccf970f5c@redhat.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 21 Nov 2022 18:06:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAROUV6Z6L6yn4WiigfPRJTGU4+j0ujLt6nsxVp9+aCUzw@mail.gmail.com>
+Message-ID: <CAK7LNAROUV6Z6L6yn4WiigfPRJTGU4+j0ujLt6nsxVp9+aCUzw@mail.gmail.com>
+Subject: Re: [PATCH 11/18] platform/x86: int3472: fix object shared between
+ several modules
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        linux-kbuild@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:45:12PM +0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Mon, Nov 21, 2022 at 5:12 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi,
+>
+> On 11/21/22 00:45, Masahiro Yamada wrote:
+> > On Mon, Nov 21, 2022 at 5:55 AM Hans de Goede <hdegoede@redhat.com> wrote:
+> >>
+> >> Hi,
+> >>
+> >> On 11/20/22 14:55, Andy Shevchenko wrote:
+> >>> On Sat, Nov 19, 2022 at 11:08:17PM +0000, Alexander Lobakin wrote:
+> >>>> common.o is linked to both intel_skl_int3472_{discrete,tps68470}:
+> >>>>
+> >>>>> scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile:
+> >>>>> common.o is added to multiple modules: intel_skl_int3472_discrete
+> >>>>> intel_skl_int3472_tps68470
+> >>>>
+> >>>> Although both drivers share one Kconfig option
+> >>>> (CONFIG_INTEL_SKL_INT3472), it's better to not link one object file
+> >>>> into several modules (and/or vmlinux).
+> >>>> Under certain circumstances, such can lead to the situation fixed by
+> >>>> commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
+> >>>>
+> >>>> Introduce the new module, intel_skl_int3472_common, to provide the
+> >>>> functions from common.o to both discrete and tps68470 drivers. This
+> >>>> adds only 3 exports and doesn't provide any changes to the actual
+> >>>> code.
+> >>
+> >> Replying to Andy's reply here since I never saw the original submission
+> >> which was not Cc-ed to platform-driver-x86@vger.kernel.org .
+> >>
+> >> As you mention already in the commit msg, the issue from:
+> >>
+> >> commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects")
+> >>
+> >> is not an issue here since both modules sharing the .o file are
+> >> behind the same Kconfig option.
+> >>
+> >> So there is not really an issue here and common.o is tiny, so
+> >> small chances are it does not ever increase the .ko size
+> >> when looking a the .ko size rounded up to a multiple of
+> >> the filesystem size.
+> >>
+> >> At the same time adding an extra module does come with significant
+> >> costs, it will eat up at least 1 possibly more then 1 fs blocks
+> >> (I don't know what the module header size overhead is).
+> >>
+> >> And it needs to be loaded separately and module loading is slow;
+> >> and it will grow the /lib/modules/<kver>/modules.* sizes.
+> >>
+> >> So nack from me for this patch, since I really don't see
+> >> it adding any value.
+> >
+> >
+> >
+> >
+> > This does have a value.
+> >
+> > This clarifies the ownership of the common.o,
+> > in other words, makes KBUILD_MODNAME deterministic.
+> >
+> >
+> > If an object belongs to a module,
+> > KBUILD_MODNAME is defined as the module name.
+> >
+> > If an object is always built-in,
+> > KBUILD_MODNAME is defined as the basename of the object.
+> >
+> >
+> >
+> > Here is a question:
+> > if common.o is shared by two modules intel_skl_int3472_discrete
+> > and intel_skl_int3472_tps68470, what should KBUILD_MODNAME be?
+> >
+> >
+> > I see some patch submissions relying on the assumption that
+> > KBUILD_MODNAME is unique.
+> > We cannot determine KBUILD_MODNAME correctly if an object is shared
+> > by multiple modules.
+> >
+> >
+> >
+> >
+> >
+> >
+> > BTW, this patch is not the way I suggested.
+> > The Suggested-by should not have been there
+> > (or at least Reported-by)
+> >
+> >
+> > You argued "common.o is tiny", so I would vote for
+> > making them inline functions, like
+> >
+> >
+> > https://lore.kernel.org/linux-kbuild/20221119225650.1044591-2-alobakin@pm.me/T/#u
+>
+> Yes just moving the contents of common.c to static inline helpers in common.h
+> would be much better.
+>
+> If someone creates such a patch, please do not forget to Cc
+> platform-driver-x86@vger.kernel.org
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> ---
->  drivers/usb/typec/hd3ss3220.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index 2a58185fb14c..f128664cb130 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -148,8 +148,7 @@ static const struct regmap_config config = {
->  	.max_register = 0x0A,
->  };
->  
-> -static int hd3ss3220_probe(struct i2c_client *client,
-> -		const struct i2c_device_id *id)
-> +static int hd3ss3220_probe(struct i2c_client *client)
->  {
->  	struct typec_capability typec_cap = { };
->  	struct hd3ss3220 *hd3ss3220;
-> @@ -264,7 +263,7 @@ static struct i2c_driver hd3ss3220_driver = {
->  		.name = "hd3ss3220",
->  		.of_match_table = of_match_ptr(dev_ids),
->  	},
-> -	.probe = hd3ss3220_probe,
-> +	.probe_new = hd3ss3220_probe,
->  	.remove =  hd3ss3220_remove,
->  };
->  
 
-thanks,
+I think this patch series should be split
+and sent to each sub-system instead of kbuild.
+
+
+
+
+
+
+> Regards,
+>
+> Hans
+>
+>
+>
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >> Regards,
+> >>
+> >> Hans
+> >>
+> >>
+> >>
+> >>
+> >>
+> >>>
+> >>> ...
+> >>>
+> >>>> +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
+> >>>> +
+> >>>
+> >>> Redundant blank line. You may put it to be last MODULE_*() in the file, if you
+> >>> think it would be more visible.
+> >>>
+> >>>>  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI Discrete Device Driver");
+> >>>>  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
+> >>>>  MODULE_LICENSE("GPL v2");
+> >>>
+> >>> ...
+> >>>
+> >>>> +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
+> >>>> +
+> >>>>  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI TPS68470 Device Driver");
+> >>>>  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
+> >>>>  MODULE_LICENSE("GPL v2");
+> >>>
+> >>> Ditto. And the same to all your patches.
+> >>>
+> >>
+> >
+> >
+>
+
 
 -- 
-heikki
+Best Regards
+Masahiro Yamada
