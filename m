@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031446327D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6356327D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiKUPYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        id S232376AbiKUPYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbiKUPXt (ORCPT
+        with ESMTP id S232312AbiKUPXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 10:23:49 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B67C77F;
-        Mon, 21 Nov 2022 07:23:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E01DAE6F;
+        Mon, 21 Nov 2022 07:23:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A004A612A0;
-        Mon, 21 Nov 2022 15:23:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA66C433C1;
-        Mon, 21 Nov 2022 15:23:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669044220;
-        bh=QQw8NxuV8G4Qi2Nafk+TR8YSN0dQyB1OpYIiPoiXKG4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JhTVilP0jmaBMOHakjdhfUVVZlW4tP3isgRF5S8XzQvcJPkJTcTUijQsfSr/i+m8n
-         S31YVTsEx9jpFiAwhSQp950pCO00gvQdISUOvATioTlGkhbbtM8MZXENUQQvcuUSJ7
-         +s4w5qP0uIryz9YnR0kO39Do1eKUkpZ2ZzYID/JC5OGnO1XpnDywdN5yYzjxB466p/
-         a5pSKrm+LeYQZVmcbqVq98hoEXJJQ+AZVX9B1xW80wOvpDve+SNJRSzne49eIZ8qy0
-         Y4Rii3W2Qy6gy5gTd4+WyjloZ7cta1dqSPfhBhcUrHNRVG0X7e2wtf6rs3usPUWgnT
-         xyEWr2PIA9J4Q==
-Message-ID: <3bc11449-bd5f-f4c4-98da-ebc0d7c8b309@kernel.org>
-Date:   Mon, 21 Nov 2022 17:23:33 +0200
-MIME-Version: 1.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD6F4612D2;
+        Mon, 21 Nov 2022 15:23:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3614C433D7;
+        Mon, 21 Nov 2022 15:23:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669044219;
+        bh=QbQnXvBZPM2Fc+Puldyfu/fVxa2ZZ7i3raAeUOxW3MQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zcGfBTwiwOaiFCK8+hsJz+ZGUZry2gy4/Qq71811oPcsdPJ5w2Ua8V0qSpuWjyMZD
+         PuiDWwq1SmNYIbUGwtYq5h0W/s/tHnmEaTwcLooxi6JZJXsDtso50DyUFP/CCcwfBG
+         REoi3D5k50/zfLE7EBJLXxYjKgFbRvJt5SOAgtrQ=
+Date:   Mon, 21 Nov 2022 16:23:35 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221118182245.31035-1-quic_molvera@quicinc.com>
- <20221118182245.31035-2-quic_molvera@quicinc.com>
-Content-Language: en-US
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20221118182245.31035-2-quic_molvera@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v7 10/20] gunyah: rsc_mgr: Add resource manager RPC core
+Message-ID: <Y3uX9ywOVLubxYkW@kroah.com>
+References: <20221121140009.2353512-1-quic_eberman@quicinc.com>
+ <20221121140009.2353512-11-quic_eberman@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121140009.2353512-11-quic_eberman@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,102 +68,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Melody,
-
-On 18.11.22 20:22, Melody Olvera wrote:
-> Add documentation for virtual rpmh devices. These interconnects
-> are not controlled by the application processor and thus
-> require separate bindings. Also, move compatibles for sm8450 to
-> this document and add them for QDU1000/QRU1000 platforms.
+On Mon, Nov 21, 2022 at 05:59:59AM -0800, Elliot Berman wrote:
+> The resource manager is a special virtual machine which is always
+> running on a Gunyah system. It provides APIs for creating and destroying
+> VMs, secure memory management, sharing/lending of memory between VMs,
+> and setup of inter-VM communication. Calls to the resource manager are
+> made via message queues.
 > 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> This patch implements the basic probing and RPC mechanism to make those
+> API calls. Request/response calls can be made with gh_rm_call.
+> Drivers can also register to notifications pushed by RM via
+> gh_rm_register_notifier
+> 
+> Specific API calls that resource manager supports will be implemented in
+> subsequent patches.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 > ---
->   .../bindings/interconnect/qcom,rpmh-virt.yaml | 55 +++++++++++++++++++
->   .../bindings/interconnect/qcom,rpmh.yaml      |  2 -
->   2 files changed, 55 insertions(+), 2 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,rpmh-virt.yaml
+>  MAINTAINERS                          |   2 +-
+>  drivers/virt/gunyah/Kconfig          |   7 +
+>  drivers/virt/gunyah/Makefile         |   2 +
+>  drivers/virt/gunyah/gunyah_rm_rpc.c  | 570 +++++++++++++++++++++++++++
+>  drivers/virt/gunyah/gunyah_rsc_mgr.c |  50 +++
+>  drivers/virt/gunyah/rsc_mgr.h        |  37 ++
+>  include/linux/gunyah_rsc_mgr.h       |  18 +
+>  7 files changed, 685 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/virt/gunyah/gunyah_rm_rpc.c
+>  create mode 100644 drivers/virt/gunyah/gunyah_rsc_mgr.c
+>  create mode 100644 drivers/virt/gunyah/rsc_mgr.h
+>  create mode 100644 include/linux/gunyah_rsc_mgr.h
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh-virt.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-virt.yaml
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 502798197b80..b65f7ff444e5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8948,7 +8948,7 @@ F:	Documentation/virt/gunyah/
+>  F:	arch/arm64/gunyah/
+>  F:	drivers/mailbox/gunyah-msgq.c
+>  F:	drivers/virt/gunyah/
+> -F:	include/linux/gunyah.h
+> +F:	include/linux/gunyah*.h
+>  
+>  HABANALABS PCI DRIVER
+>  M:	Oded Gabbay <ogabbay@kernel.org>
+> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
+> index 127156a678a6..0bb497372d4e 100644
+> --- a/drivers/virt/gunyah/Kconfig
+> +++ b/drivers/virt/gunyah/Kconfig
+> @@ -10,3 +10,10 @@ config GUNYAH
+>  
+>  	  Say Y/M here to enable the drivers needed to interact in a Gunyah
+>  	  virtual environment.
+> +
+> +if GUNYAH
+> +config GUNYAH_RESOURCE_MANAGER
+> +	tristate
+> +	depends on MAILBOX
+> +	select GUNYAH_MESSAGE_QUEUES
+> +endif
+> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+> index 2ac4ee64b89d..b62ac4045621 100644
+> --- a/drivers/virt/gunyah/Makefile
+> +++ b/drivers/virt/gunyah/Makefile
+> @@ -1 +1,3 @@
+>  obj-$(CONFIG_GUNYAH) += gunyah.o
+> +
+> +obj-$(CONFIG_GUNYAH_RESOURCE_MANAGER) += gunyah_rsc_mgr.o gunyah_rm_rpc.o
+> diff --git a/drivers/virt/gunyah/gunyah_rm_rpc.c b/drivers/virt/gunyah/gunyah_rm_rpc.c
 > new file mode 100644
-> index 000000000000..5cbaa51df863
+> index 000000000000..45b1a8691982
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-virt.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,rpmh-virt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/virt/gunyah/gunyah_rm_rpc.c
+> @@ -0,0 +1,570 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
 > +
-> +title: Qualcomm RPMh Virtual Network-On-Chip Interconnect
-> +
-> +maintainers:
-> +  - Georgi Djakov <georgi.djakov@linaro.org>
+> +#include <linux/of.h>
+> +#include <linux/slab.h>
+> +#include <linux/mutex.h>
+> +#include <linux/sched.h>
+> +#include <linux/gunyah.h>
+> +#include <linux/module.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/kthread.h>
+> +#include <linux/notifier.h>
+> +#include <linux/workqueue.h>
+> +#include <linux/completion.h>
+> +#include <linux/gunyah_rsc_mgr.h>
+> +#include <linux/platform_device.h>
 
-This email is not valid anymore, so please replace it with djakov@kernel.org.
+This should not have anything to do with a platform device, please see
+below.
 
-Thanks,
-Georgi
+> +#include <linux/gunyah_rsc_mgr.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "rsc_mgr.h"
+> +
+> +static int gh_rm_drv_probe(struct platform_device *pdev)
 
-> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
-> +
-> +description: |
-> +   RPMh interconnect providers support system bandwidth requirements through
-> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
-> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
-> +   associated with each execution environment. Provider nodes must point to at
-> +   least one RPMh device child node pertaining to their RSC and each provider
-> +   can map to multiple RPMh resources. Virtual interconnect providers are not
-> +   controlled by AP and do not support QoS; they should not have associated
-> +   register regions.
-> +
-> +allOf:
-> +  - $ref: qcom,rpmh-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,qdu1000-clk-virt
-> +      - qcom,qdu1000-mc-virt
-> +      - qcom,sm8450-clk-virt
-> +      - qcom,sm8450-mc-virt
-> +
-> +  '#interconnect-cells': true
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +      #include <dt-bindings/interconnect/qcom,sm8450.h>
-> +
-> +      clk_virt: interconnect-0 {
-> +             compatible = "qcom,sm8450-clk-virt";
-> +             #interconnect-cells = <2>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> +
-> +      mc_virt: interconnect-1 {
-> +             compatible = "qcom,sm8450-mc-virt";
-> +             #interconnect-cells = <2>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> index a429a1ed1006..bd474f49deb0 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> @@ -123,11 +123,9 @@ properties:
->         - qcom,sm8350-system-noc
->         - qcom,sm8450-aggre1-noc
->         - qcom,sm8450-aggre2-noc
-> -      - qcom,sm8450-clk-virt
->         - qcom,sm8450-config-noc
->         - qcom,sm8450-gem-noc
->         - qcom,sm8450-lpass-ag-noc
-> -      - qcom,sm8450-mc-virt
->         - qcom,sm8450-mmss-noc
->         - qcom,sm8450-nsp-noc
->         - qcom,sm8450-pcie-anoc
+Why is this tied to a platformm device?
 
+I don't understand the relationship here, sorry.
+
+> +{
+> +	struct gh_rm_rpc *rsc_mgr;
+> +
+> +	rsc_mgr = gh_rm_rpc_init(pdev);
+
+Shouldn't this be creating a new one that is just a child passed in?
+Shouldn't this call just take a 'struct device *'?
+
+thanks,
+
+greg k-h
