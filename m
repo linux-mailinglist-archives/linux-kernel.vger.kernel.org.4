@@ -2,380 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9991F632728
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE779632719
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 15:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiKUO6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 09:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S231238AbiKUO5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 09:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbiKUO5A (ORCPT
+        with ESMTP id S231366AbiKUO4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 09:57:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7548BD0DCF
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:46:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669041971;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=49l7uwzwJBYMSPS3fAiFOq+KwJFhFEgqo0S0nCW63Gg=;
-        b=iFJVPU1WbsfHcwx/83t/KMrcwwSpkyzmnk3wgfazCjMhwGfp8TzpWIUGU2psWV3jhu/okD
-        3deasKxJMGV+iDplRibDqyH1L2MBuby6KdsYZ9GxvpQEctK1SKkBWk8p7NgRDuTJTapyNQ
-        VFrDqV3l6yMmif8cATZt+pp0yUw2MRA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-587-B-HXoZ2xME2HEjvDEJuwGw-1; Mon, 21 Nov 2022 09:46:09 -0500
-X-MC-Unique: B-HXoZ2xME2HEjvDEJuwGw-1
-Received: by mail-wm1-f70.google.com with SMTP id p14-20020a05600c204e00b003cf4cce4da5so3191129wmg.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 06:46:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=49l7uwzwJBYMSPS3fAiFOq+KwJFhFEgqo0S0nCW63Gg=;
-        b=H6UBjm6muU+NTUVpFZq9KX1cNGdArXfNPOUnZWaNmxIHC6n9HRvan+Rzsz4YQPh8wV
-         XOaqTZ4FgGdZ4x0nBwKmDmdR783hToicR1Jxll58jzvlJ0YMaxIBxhkprxtF64oxdb1a
-         2UJQZDoGcIt6XPjXnDVjSO86K/FOLNAaozHVCFM/O0flzCcqVJ2dte/BTqjLOIEopImk
-         gN9q+kGp+DMwkbdIHJgAvlQFl0GWG1RDu0/r4XLVpUErjCbwqBN3FEueNfpzbAttbFix
-         /WP1VZBBsa9H7zDZ/h15bWWFY+a9ezmKo7nvru35ya9etfUfkM+R2yEeUh9ETuxdM6Vd
-         emAA==
-X-Gm-Message-State: ANoB5pn5Lmmz6bjF9ZcvAPC6BWCtv908+DLGDSXEZ9neb0ny8lj2Vikr
-        ulGrwhPO1ZaFOTsaSuFjB7r0gnoCdSx9FnJL1qcL2UG3DMHXWUVzc8LD/+rJDvZcb1fgP238f+7
-        x79a26ErmHpcg/suWbmD1CQIt
-X-Received: by 2002:adf:e94c:0:b0:236:6d79:b312 with SMTP id m12-20020adfe94c000000b002366d79b312mr11351771wrn.699.1669041967658;
-        Mon, 21 Nov 2022 06:46:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6QVuuVUlXoQyvE+4BVWABJqKE6mvTwb1exRu2HTI+okNm73LPbjfr4/o8ihWthfD/iwDx/iw==
-X-Received: by 2002:adf:e94c:0:b0:236:6d79:b312 with SMTP id m12-20020adfe94c000000b002366d79b312mr11351756wrn.699.1669041967403;
-        Mon, 21 Nov 2022 06:46:07 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id x2-20020a1c7c02000000b003b4935f04a4sm16025080wmc.5.2022.11.21.06.46.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 06:46:06 -0800 (PST)
-Date:   Mon, 21 Nov 2022 15:46:02 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        kernel <kernel@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: Re: [RFC PATCH v1 1/3] test/vsock: rework message bound test
-Message-ID: <20221121144602.gnrzlaatrnasaard@sgarzare-redhat>
-References: <ba294dff-812a-bfc2-a43c-286f99aee0b8@sberdevices.ru>
- <c991dffd-1dbc-e1d1-b682-a3c71f6ce51c@sberdevices.ru>
+        Mon, 21 Nov 2022 09:56:19 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185CAD14D0;
+        Mon, 21 Nov 2022 06:46:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669042006; x=1700578006;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fbKJTCgwO7jTDSMZaCLd0+BKHMNRpeWE5PGwz7IlfMU=;
+  b=jC6BBdQuZUFqTeUMkdhYPWz8RReC+MluWYYf+Bo4uI5Fqn7Fsv1aeCpF
+   7mIiuTt30UekYe/Xd/0ULcURXKs5aosQmveDTjeqMTBDiAMsE/er9cTFk
+   MGVzYG1z+4IzcTYKnBhvfgIN4TUPI0OmvE4sE3htWkeVh1yhjE0VW1PR5
+   tUzyh4tw0iNDG9DeDTdj1TU9dVCrvCAKBgQ9PakVb7RE2cRedloG5lJNF
+   r2+adaBiCLsh/45g1LExgNSpqt6mIh9r2oK3y6yik/uOOD6QhrXqdHfft
+   INao0SIfQOmgUVX59UIFwtHYj25FT8C86iWPHSxy+Jw71EZfX7IVBuJwB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="293961780"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="293961780"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 06:46:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="709829528"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="709829528"
+Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.254.209.33]) ([10.254.209.33])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 06:46:23 -0800
+Message-ID: <f04c2e74-87e4-5d50-579a-0a60554b83d3@linux.intel.com>
+Date:   Mon, 21 Nov 2022 22:46:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <c991dffd-1dbc-e1d1-b682-a3c71f6ce51c@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 1/6] x86: KVM: Advertise CMPccXADD CPUID to user space
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        ndesaulniers@google.com, alexandre.belloni@bootlin.com,
+        peterz@infradead.org, jpoimboe@kernel.org,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        babu.moger@amd.com, jmattson@google.com, sandipan.das@amd.com,
+        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        fenghua.yu@intel.com, keescook@chromium.org, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221118141509.489359-1-jiaxi.chen@linux.intel.com>
+ <20221118141509.489359-2-jiaxi.chen@linux.intel.com>
+ <efb55727-f8bd-815c-ddfc-a8432ae5af4e@intel.com>
+From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
+In-Reply-To: <efb55727-f8bd-815c-ddfc-a8432ae5af4e@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:50:36PM +0000, Arseniy Krasnov wrote:
->This updates message bound test making it more complex. Instead of
->sending 1 bytes messages with one MSG_EOR bit, it sends messages of
->random length(one half of messages are smaller than page size, second
->half are bigger) with random number of MSG_EOR bits set. Receiver
->also don't know total number of messages.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/control.c    |  34 +++++++++
-> tools/testing/vsock/control.h    |   2 +
-> tools/testing/vsock/util.c       |  13 ++++
-> tools/testing/vsock/util.h       |   1 +
-> tools/testing/vsock/vsock_test.c | 115 +++++++++++++++++++++++++++----
-> 5 files changed, 152 insertions(+), 13 deletions(-)
->
->diff --git a/tools/testing/vsock/control.c b/tools/testing/vsock/control.c
->index 4874872fc5a3..bed1649bdf3d 100644
->--- a/tools/testing/vsock/control.c
->+++ b/tools/testing/vsock/control.c
->@@ -141,6 +141,40 @@ void control_writeln(const char *str)
-> 	timeout_end();
-> }
->
->+void control_writeulong(unsigned long value)
->+{
->+	char str[32];
->+
->+	if (snprintf(str, sizeof(str), "%lu", value) >= sizeof(str)) {
->+		perror("snprintf");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	control_writeln(str);
->+}
->+
->+unsigned long control_readulong(bool *ok)
->+{
->+	unsigned long value;
->+	char *str;
->+
->+	if (ok)
->+		*ok = false;
->+
->+	str = control_readln();
->+
->+	if (str == NULL)
 
-checkpatch suggests to use !str
 
->+		return 0;
+On 11/19/2022 12:47 AM, Dave Hansen wrote:
+> On 11/18/22 06:15, Jiaxi Chen wrote:
+>> CMPccXADD is a new set of instructions in the latest Intel platform
+>> Sierra Forest. This new instruction set includes a semaphore operation
+>> that can compare and add the operands if condition is met, which can
+>> improve database performance.
+>>
+>> The bit definition:
+>> CPUID.(EAX=7,ECX=1):EAX[bit 7]
+>>
+>> This CPUID is exposed to userspace. Besides, there is no other VMX
+>> control for this instruction.
+> 
+> The last time you posted these, I asked:
+> 
+>> Intel folks, when you add these bits, can you please include information
+>> about the "vetting" that you performed?
+> 
+> I think you're alluding to that in your comment about VMX contols.
+> Could you be more explicit here and include *all* of your logic about
+> why this feature is OK to pass through to guests?
+> 
+Yes, that's very rigorous. Will check and add these for all features in
+this patch series.
 
-Maybe we can just call exit(EXIT_FAILURE) here and remove the `ok`
-parameter, since I'm not sure we can recover from this error.
+> Also, do we *want* this showing up in /proc/cpuinfo?
+>
+> There are also two distinct kinds of features that you're adding here.
+> These:
+> 
+>> +#define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* CMPccXADD instructions */
+> 
+> and these:
+> 
+> +#define X86_FEATURE_PREFETCHITI         KVM_X86_FEATURE(CPUID_7_1_EDX, 14)
+> 
+> Could you also please include a sentence or two about why the feature
+> was treated on way versus another?  That's frankly a lot more important
+> than telling us which random Intel codename this shows up on first, or
+> wasting space on telling us what the CPUID bit definition is.  We can
+> kinda get that from the patch.
+Yes. A few words of description is necessary here.
 
->+
->+	value = strtoul(str, NULL, 10);
->+	free(str);
->+
->+	if (ok)
->+		*ok = true;
->+
->+	return value;
->+}
->+
-> /* Return the next line from the control socket (without the trailing newline).
->  *
->  * The program terminates if a timeout occurs.
->diff --git a/tools/testing/vsock/control.h b/tools/testing/vsock/control.h
->index 51814b4f9ac1..cdd922dfea68 100644
->--- a/tools/testing/vsock/control.h
->+++ b/tools/testing/vsock/control.h
->@@ -9,7 +9,9 @@ void control_init(const char *control_host, const char *control_port,
-> void control_cleanup(void);
-> void control_writeln(const char *str);
-> char *control_readln(void);
->+unsigned long control_readulong(bool *ok);
-> void control_expectln(const char *str);
-> bool control_cmpln(char *line, const char *str, bool fail);
->+void control_writeulong(unsigned long value);
->
-> #endif /* CONTROL_H */
->diff --git a/tools/testing/vsock/util.c b/tools/testing/vsock/util.c
->index 2acbb7703c6a..351903836774 100644
->--- a/tools/testing/vsock/util.c
->+++ b/tools/testing/vsock/util.c
->@@ -395,3 +395,16 @@ void skip_test(struct test_case *test_cases, size_t test_cases_len,
->
-> 	test_cases[test_id].skip = true;
-> }
->+
->+unsigned long djb2(const void *data, size_t len)
+Features which has been enabled in kernel usually should be added to
+/proc/cpuinfo.
 
-I would add hash_ as a prefix (or suffix).
+The first way is often used for bit whose leaf has many other bits in
+use. It's very simple to do, just adding one line for each feature based
+on existing words in can get the effect.
 
->+{
->+	unsigned long hash = 5381;
->+	int i = 0;
->+
->+	while (i < len) {
->+		hash = ((hash << 5) + hash) + ((unsigned char *)data)[i];
->+		i++;
->+	}
->+
->+	return hash;
->+}
->diff --git a/tools/testing/vsock/util.h b/tools/testing/vsock/util.h
->index a3375ad2fb7f..988cc69a4642 100644
->--- a/tools/testing/vsock/util.h
->+++ b/tools/testing/vsock/util.h
->@@ -49,4 +49,5 @@ void run_tests(const struct test_case *test_cases,
-> void list_tests(const struct test_case *test_cases);
-> void skip_test(struct test_case *test_cases, size_t test_cases_len,
-> 	       const char *test_id_str);
->+unsigned long djb2(const void *data, size_t len);
-> #endif /* UTIL_H */
->diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->index bb6d691cb30d..107c11165887 100644
->--- a/tools/testing/vsock/vsock_test.c
->+++ b/tools/testing/vsock/vsock_test.c
->@@ -284,10 +284,14 @@ static void test_stream_msg_peek_server(const struct test_opts *opts)
-> 	close(fd);
-> }
->
->-#define MESSAGES_CNT 7
->-#define MSG_EOR_IDX (MESSAGES_CNT / 2)
->+#define SOCK_BUF_SIZE (2 * 1024 * 1024)
->+#define MAX_MSG_SIZE (32 * 1024)
->+
-> static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
-> {
->+	unsigned long curr_hash;
->+	int page_size;
->+	int msg_count;
-> 	int fd;
->
-> 	fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
->@@ -296,18 +300,69 @@ static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
-> 		exit(EXIT_FAILURE);
-> 	}
->
->-	/* Send several messages, one with MSG_EOR flag */
->-	for (int i = 0; i < MESSAGES_CNT; i++)
->-		send_byte(fd, 1, (i == MSG_EOR_IDX) ? MSG_EOR : 0);
->+	/* Wait, until receiver sets buffer size. */
->+	control_expectln("SRVREADY");
->+
->+	curr_hash = 0;
->+	page_size = getpagesize();
->+	msg_count = SOCK_BUF_SIZE / MAX_MSG_SIZE;
->+
->+	for (int i = 0; i < msg_count; i++) {
->+		ssize_t send_size;
->+		size_t buf_size;
->+		int flags;
->+		void *buf;
->+
->+		/* Use "small" buffers and "big" buffers. */
->+		if (i & 1)
->+			buf_size = page_size +
->+					(rand() % (MAX_MSG_SIZE - page_size));
->+		else
->+			buf_size = 1 + (rand() % page_size);
->+
->+		buf = malloc(buf_size);
->+
->+		if (!buf) {
->+			perror("malloc");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		/* Set at least one MSG_EOR + some random. */
->+		if (i == (msg_count / 2) || (rand() & 1)) {
->+			flags = MSG_EOR;
->+			curr_hash++;
->+		} else {
->+			flags = 0;
->+		}
->+
->+		send_size = send(fd, buf, buf_size, flags);
->+
->+		if (send_size < 0) {
->+			perror("send");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		if (send_size != buf_size) {
->+			fprintf(stderr, "Invalid send size\n");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		curr_hash += send_size;
->+		curr_hash = djb2(&curr_hash, sizeof(curr_hash));
->+	}
->
-> 	control_writeln("SENDDONE");
->+	control_writeulong(curr_hash);
+For those bits whose leaf has just a few bits in use, they should be
+defined in a 'scattered' way. However, this kind of features in this
+patch series have no other kernel usage and they just need to be
+advertised to kvm userspace. Therefore, define them in a kvm-only way is
+more explicit.
 
-Why do we need to hash the size?
+> 
+> Another nit on these:
+> 
+>> This CPUID is exposed to userspace. Besides, there is no other VMX
+>> control for this instruction.
+> 
+> Please remember to use imperative voice when describing what the patch
+> in question does.  Using passive voice like that makes it seem like
+> you're describing the state of the art rather than the patch.
+> 
+> For example, that should probably be:
+> 
+> 	Expose CMPCCXADD to KVM userspace.  This is safe because there
+> 	are no new VMX controls or host enabling required for guests to
+> 	use this feature.
+> 
+> See how that first sentence is giving orders?  It's *telling* you what
+> to do.  That's imperative voice and that's what you use to describe the
+> actions of *this* patch.
 
-Maybe we can send it without making the hash, anyway even if it wraps,
-it should wrap the same way in both the server and the client.
-(Or maybe we can use uin32_t or uint64_t to make sure both were
-using 4 or 8 bytes)
-
-> 	close(fd);
-> }
->
-> static void test_seqpacket_msg_bounds_server(const struct test_opts *opts)
-> {
->+	unsigned long sock_buf_size;
->+	unsigned long remote_hash;
->+	unsigned long curr_hash;
-> 	int fd;
->-	char buf[16];
->+	char buf[MAX_MSG_SIZE];
-> 	struct msghdr msg = {0};
-> 	struct iovec iov = {0};
->
->@@ -317,25 +372,58 @@ static void test_seqpacket_msg_bounds_server(const struct test_opts *opts)
-> 		exit(EXIT_FAILURE);
-> 	}
->
->+	sock_buf_size = SOCK_BUF_SIZE;
->+
->+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_MAX_SIZE,
->+		       &sock_buf_size, sizeof(sock_buf_size))) {
->+		perror("getsockopt");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
->+		       &sock_buf_size, sizeof(sock_buf_size))) {
->+		perror("getsockopt");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	/* Ready to receive data. */
->+	control_writeln("SRVREADY");
->+	/* Wait, until peer sends whole data. */
-> 	control_expectln("SENDDONE");
-> 	iov.iov_base = buf;
-> 	iov.iov_len = sizeof(buf);
-> 	msg.msg_iov = &iov;
-> 	msg.msg_iovlen = 1;
->
->-	for (int i = 0; i < MESSAGES_CNT; i++) {
->-		if (recvmsg(fd, &msg, 0) != 1) {
->-			perror("message bound violated");
->-			exit(EXIT_FAILURE);
->-		}
->+	curr_hash = 0;
->
->-		if ((i == MSG_EOR_IDX) ^ !!(msg.msg_flags & MSG_EOR)) {
->-			perror("MSG_EOR");
->+	while (1) {
->+		ssize_t recv_size;
->+
->+		recv_size = recvmsg(fd, &msg, 0);
->+
->+		if (!recv_size)
->+			break;
->+
->+		if (recv_size < 0) {
->+			perror("recvmsg");
-> 			exit(EXIT_FAILURE);
-> 		}
->+
->+		if (msg.msg_flags & MSG_EOR)
->+			curr_hash++;
->+
->+		curr_hash += recv_size;
->+		curr_hash = djb2(&curr_hash, sizeof(curr_hash));
-> 	}
->
-> 	close(fd);
->+	remote_hash = control_readulong(NULL);
->+
->+	if (curr_hash != remote_hash) {
->+		fprintf(stderr, "Message bounds broken\n");
->+		exit(EXIT_FAILURE);
->+	}
-> }
->
-> #define MESSAGE_TRUNC_SZ 32
->@@ -837,6 +925,7 @@ int main(int argc, char **argv)
-> 		.peer_cid = VMADDR_CID_ANY,
-> 	};
->
->+	srand(time(NULL));
-> 	init_signals();
->
-> 	for (;;) {
->-- 
->2.25.1
-
+Appreciate your very detailed suggestions. Thanks very much!
+-- 
+Regards,
+Jiaxi
