@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96A1632CBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0207C632CDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbiKUTPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 14:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
+        id S229568AbiKUTSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiKUTOy (ORCPT
+        with ESMTP id S231302AbiKUTSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:14:54 -0500
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2878B61768;
-        Mon, 21 Nov 2022 11:14:52 -0800 (PST)
-Received: by mail-pl1-f169.google.com with SMTP id jn7so9605340plb.13;
-        Mon, 21 Nov 2022 11:14:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LForrfw/k4kDBmpFT/eGtENaxzc1S7hFGEnquIpgcGI=;
-        b=bfCe9HZQgalQtLkQdZb0zxWBRKaJ0aAaMSr4r+3df/7q8Bk4m3ugp3Xo/zhhyHPlN6
-         +cRrQoY9Fh7OzBwDLAjqx13q8Mt/M66xU086aGwLxPBQZHcxPZL3wwjsnEOLyeI4ZTcj
-         UUAXw0fhvUOA1W6UfsOF9Cg3f2+lwZ4or4sywQfeKxnW1ovvrdxcV3uGV0eD9k1pjYdn
-         bqAFVnOWRI1QR9c8IS25cf8z9ZLaAO+CWuNqcVnnpLQe6NlrnqHT5dK703GD4uJcL6zF
-         k2luIcEu3GbubiK45++zZrWrmYzR09FAnKHleOk5U41kdzd0eaVtbjhTm/O6nsDODRTO
-         ztZg==
-X-Gm-Message-State: ANoB5pknGcT0k7bqPFAAHGmRVN8B2vZl7yB3GWVSZpUqj1PYVvcSsJkv
-        0nlC6/cxTBDdfMpHcFdajbL/ICMJ2dI=
-X-Google-Smtp-Source: AA0mqf4Mn37XOmi0UK54FjPQM0Ylag6LcAD2uUA69TZL/zh+QUotfv8YF1utw0FPCTxUhZKU05z9AQ==
-X-Received: by 2002:a17:90b:b17:b0:218:a733:25ec with SMTP id bf23-20020a17090b0b1700b00218a73325ecmr9090982pjb.152.1669058091521;
-        Mon, 21 Nov 2022 11:14:51 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:545d:bfd:7b53:8e94? ([2620:15c:211:201:545d:bfd:7b53:8e94])
-        by smtp.gmail.com with ESMTPSA id b8-20020a1709027e0800b0016c0c82e85csm10102490plm.75.2022.11.21.11.14.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 11:14:50 -0800 (PST)
-Message-ID: <bade026a-ec83-7516-d5ef-bb373df48a6e@acm.org>
-Date:   Mon, 21 Nov 2022 11:14:48 -0800
+        Mon, 21 Nov 2022 14:18:23 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0CA5BDA4F3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 11:17:58 -0800 (PST)
+Received: (qmail 128144 invoked by uid 1000); 21 Nov 2022 14:17:56 -0500
+Date:   Mon, 21 Nov 2022 14:17:56 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     John Keeping <john@metanate.com>
+Cc:     Lee Jones <lee@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
+        balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3vO5OwUzsn08Avz@rowland.harvard.edu>
+References: <Y3ZlvyZoL+PzpbQX@rowland.harvard.edu>
+ <Y3dIXUmjTfJLpPe7@google.com>
+ <Y3er7nenAhbmBdBy@rowland.harvard.edu>
+ <Y3e0zAa7+HiNVrKN@donbot>
+ <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
+ <Y3piS43drwSoipD9@donbot>
+ <Y3qSImZkZwCG1kA1@rowland.harvard.edu>
+ <Y3txTcASyvTWqFlc@donbot>
+ <Y3uk2kwYsZ3j67+l@rowland.harvard.edu>
+ <Y3vJfwtH3fniy5ep@donbot>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 0/3] mmc: Improve block layer requeueing behavior
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        "vincent.whitchurch@axis.com" <vincent.whitchurch@axis.com>
-References: <f30ec7fe7d834c1d8e116508500110cf@hyperstone.com>
- <c1e1281e-0977-cbf7-041e-db911ee722a7@intel.com>
- <d1a1340a-f5f8-6953-e066-b8c6095d63fd@acm.org>
- <5df2c4d5-f426-e3ea-8e6d-f772ec7091b6@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <5df2c4d5-f426-e3ea-8e6d-f772ec7091b6@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3vJfwtH3fniy5ep@donbot>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 00:25, Adrian Hunter wrote:
-> On 18/11/22 19:27, Bart Van Assche wrote:
->> On 11/18/22 02:47, Adrian Hunter wrote:
->>> Does anyone know why the block layer does not support
->>> (max_hw_sectors << 9) < PAGE_SIZE ?
->>
->> Does this mean that the following patch series would not only be
->> useful for UFS but also for MMC? "[PATCH 00/10] Support DMA segments
->> smaller than the page size"
->> (https://lore.kernel.org/linux-block/20221019222324.362705-1-bvanassche@acm.org/).
+On Mon, Nov 21, 2022 at 06:54:55PM +0000, John Keeping wrote:
+> It turns out there's already a device being created here, just not
+> associated with the structure.  Your suggestions around
+> cdev_device_add() made me spot what's going on with that so the actual
+> fix is to pull its lifetime up to match struct f_hidg.
+
+It's not obvious from the patch what device was already being created, 
+but never mind...
+
+> -- >8 --
+> Subject: [PATCH] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
 > 
-> That patchset still does not allow max_hw_sectors = 1 which is
-> what Christian's case needs.
+> The embedded struct cdev does not have its lifetime correctly tied to
+> the enclosing struct f_hidg, so there is a use-after-free if /dev/hidgN
+> is held open while the gadget is deleted.
+> 
+> This can readily be replicated with libusbgx's example programs (for
+> conciseness - operating directly via configfs is equivalent):
+> 
+> 	gadget-hid
+> 	exec 3<> /dev/hidg0
+> 	gadget-vid-pid-remove
+> 	exec 3<&-
+> 
+> Pull the existing device up in to struct f_hidg and make use of the
+> cdev_device_{add,del}() helpers.  This changes the lifetime of the
+> device object to match struct f_hidg, but note that it is still added
+> and deleted at the same time.
+> 
+> [Also fix refcount leak on an error path.]
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+>  drivers/usb/gadget/function/f_hid.c | 50 ++++++++++++++++-------------
+>  1 file changed, 28 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index ca0a7d9eaa34..0b94668a3812 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
 
-Hi Adrian,
+> @@ -999,21 +1005,12 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>  
+>  	/* create char device */
+>  	cdev_init(&hidg->cdev, &f_hidg_fops);
+> -	dev = MKDEV(major, hidg->minor);
+> -	status = cdev_add(&hidg->cdev, dev, 1);
+> +	cdev_set_parent(&hidg->cdev, &hidg->dev.kobj);
 
-Why would that patch series not support max_hw_sectors = 1? What am I 
-overlooking?
+This line isn't needed; cdev_device_add() does it for you because 
+hidg->dev.devt has been set.
 
-Thanks,
+> +	status = cdev_device_add(&hidg->cdev, &hidg->dev);
+>  	if (status)
+>  		goto fail_free_descs;
 
-Bart.
+> @@ -1277,17 +1272,28 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+>  	mutex_lock(&opts->lock);
+>  	++opts->refcnt;
+>  
+> -	hidg->minor = opts->minor;
+> +	device_initialize(&hidg->dev);
+> +	hidg->dev.release = hidg_release;
+> +	hidg->dev.class = hidg_class;
+> +	hidg->dev.devt = MKDEV(major, opts->minor);
+> +	ret = dev_set_name(&hidg->dev, "hidg%d", opts->minor);
+> +	if (ret) {
+> +		--opts->refcnt;
+> +		mutex_unlock(&opts->lock);
+> +		return ERR_PTR(ret);
+> +	}
+> +
 
+Otherwise this looks okay (although I don't know any of the details of 
+how fhidg works, so you shouldn't take my word for it).
 
+Alan Stern
