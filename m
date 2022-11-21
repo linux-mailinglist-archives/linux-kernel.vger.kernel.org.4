@@ -2,140 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96179632B42
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FD4632B4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiKURmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S229915AbiKURoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:44:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiKURmK (ORCPT
+        with ESMTP id S229456AbiKURom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:42:10 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62838D28B1;
-        Mon, 21 Nov 2022 09:42:08 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALGRk4V009093;
-        Mon, 21 Nov 2022 17:42:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=yty/7DiPlJ4v2j4gvgeSX7Mya9x2N/OMpJm8yIe9JO0=;
- b=IscGch+I0rww/6u5zkNSiki3DY0BP4IIdodchGKr8w4Okr1XKABovJNgv5DuWk7VEjPW
- z2GWbAhfhS3ZPJBAFxC4uh8O3VtIWIw+kGl/6sJAnP38hpxAFEnLCbEIGC8iXOu8y+02
- S1B4g1XyWoNxkvfv6fi0dg3RdrJ+nsRhiwo2nkt9QiOeBAmTj2s4VTy94z47v3TZochQ
- +3tde1b1cTM0id2P5EK5PjxSKNWscxZAVwqxrHCpsQVb6ihxCUs6c9U/esWQnQds8Nuh
- CijZCJ5Fpcko6Z4H/69VXjXahki0FqGkJZq1vJlAxBOGq5YZJZpABg6HAFk1JjSaXPf9 ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cvg1qdf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 17:42:02 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ALHg2Lf017277;
-        Mon, 21 Nov 2022 17:42:02 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cvg1qcq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 17:42:02 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ALHbE1h001980;
-        Mon, 21 Nov 2022 17:42:00 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3kxpdhu1e4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 17:42:00 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ALHfvsc51118506
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Nov 2022 17:41:57 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5896D5204E;
-        Mon, 21 Nov 2022 17:41:57 +0000 (GMT)
-Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.52.183])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id AD65A52050;
-        Mon, 21 Nov 2022 17:41:56 +0000 (GMT)
-Message-ID: <2bee338bddf828a735a7c66473679fd388840851.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 1/9] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Date:   Mon, 21 Nov 2022 18:41:56 +0100
-In-Reply-To: <Y3dalbP5yb2gflA9@osiris>
-References: <20221117221758.66326-1-scgl@linux.ibm.com>
-         <20221117221758.66326-2-scgl@linux.ibm.com> <Y3dalbP5yb2gflA9@osiris>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 21 Nov 2022 12:44:42 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5452C131;
+        Mon, 21 Nov 2022 09:44:40 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id f27so30350832eje.1;
+        Mon, 21 Nov 2022 09:44:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RLnharg7HDG4tuhJcBKXRgEiJmoIlGVpeHO4ji1PupQ=;
+        b=QMxs7gt0GdJyUwOlWlUC7k8EYUiuFa2UjgYIVh3FqAjs64LLxkxattfbJ6q9RN1/Xt
+         UjgjDR2kn7+E1O5kJc+eIcAE2y5BELiDUH2a5ShKVTlU2XfWFWS8b9U615oGAaOZlu5W
+         +zPWFpWn/EWRE8EgId63QukTU3LKvFicXp387MXKZtE87pailleizraUkcGWBTKwCAP2
+         jVfbC4J410Qr6kd/PVSo3cLwXm7N5Zg/bADMRrhobWTBlJ6CZV9WQQY/dObzVCwiJ7cZ
+         /4xtai8Q71kHnPOjG0zCZtJTbCs07MeXUTmettAKy84z8xbSjOX/O2zHh+BZm0mB4WyV
+         UmRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RLnharg7HDG4tuhJcBKXRgEiJmoIlGVpeHO4ji1PupQ=;
+        b=3E2kCkA2nrF5rK9QKcf5AKl+W+6VJzM1Cei5oTHsbNUxPuxwtBKsfREq+oPAflkwf8
+         +jQe+KdRcXjiz6ekaf7jriez/bUcmxjiqhGuaL8IlxiEpvAiF7rQGCsw+ldFR8oynHNV
+         zdbqGy4QHXWiTLbX58VDTAtbslIPIMK2nXJ28dUjlRvfxip7pifNnyjdTOf/NS8P+/0+
+         b9E5CNi+QZEOxwcPXJ4WN3CkqrM+sAto1UJ2kI97N63wTbeoJsrSuiLDF/JPp004T6KC
+         5hrTtwq/0+CqK2aM/EHIug3+PovRTxiCbnAwpqFaiHWy5uCGsbZun8QKbuTlr3UOAo1m
+         Xeew==
+X-Gm-Message-State: ANoB5pkuCkIr+5nAoNfus34wE96VYwS7aunqkifHXRD8aw47B3RfWPSB
+        H8XtLuTM8OwG9MkR2SC6zBE=
+X-Google-Smtp-Source: AA0mqf5hbgaT1LTR83Rgz0E8eKtIWdVjV/lZPLQv/7DyuZ4ztHtH3rHY0A0ZW3+Vs7MM7VoXiPYOwQ==
+X-Received: by 2002:a17:906:85d2:b0:78e:ebd:bf96 with SMTP id i18-20020a17090685d200b0078e0ebdbf96mr16597014ejy.625.1669052678827;
+        Mon, 21 Nov 2022 09:44:38 -0800 (PST)
+Received: from localhost ([217.131.81.52])
+        by smtp.gmail.com with UTF8SMTPSA id 14-20020a170906308e00b007b29a6bec24sm5172485ejv.32.2022.11.21.09.44.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 09:44:38 -0800 (PST)
+From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
+To:     thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sasha Finkelstein <fnkl.kernel@gmail.com>
+Subject: [PATCH RESEND v3 0/4] PWM and keyboard backlight driver for ARM Macs
+Date:   Mon, 21 Nov 2022 20:42:24 +0300
+Message-Id: <20221121174228.93670-1-fnkl.kernel@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2aXbb6tfkp0FHum4hPbro6_tFPL2-4f-
-X-Proofpoint-ORIG-GUID: ef1HfGmyCDiEJjkutdZsunQv77TtVL-a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_14,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 malwarescore=0 impostorscore=0 mlxscore=0
- clxscore=1015 priorityscore=1501 suspectscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211210132
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-11-18 at 11:12 +0100, Heiko Carstens wrote:
-> On Thu, Nov 17, 2022 at 11:17:50PM +0100, Janis Schoetterl-Glausch wrote:
-> > User space can use the MEM_OP ioctl to make storage key checked reads
-> > and writes to the guest, however, it has no way of performing atomic,
-> > key checked, accesses to the guest.
-> > Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
-> > mode. For now, support this mode for absolute accesses only.
-> > 
-> > This mode can be use, for example, to set the device-state-change
-> > indicator and the adapter-local-summary indicator atomically.
-> > 
-> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> > ---
-> >  include/uapi/linux/kvm.h |   5 ++
-> >  arch/s390/kvm/gaccess.h  |   3 ++
-> >  arch/s390/kvm/gaccess.c  | 101 +++++++++++++++++++++++++++++++++++++++
-> >  arch/s390/kvm/kvm-s390.c |  35 +++++++++++++-
-> >  4 files changed, 142 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index 0d5d4419139a..1f36be5493e6 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -588,6 +588,8 @@ struct kvm_s390_mem_op {
-> >  		struct {
-> >  			__u8 ar;	/* the access register number */
-> >  			__u8 key;	/* access key, ignored if flag unset */
-> > +			__u8 pad1[6];	/* ignored */
-> > +			__u64 old_p;	/* ignored if flag unset */
-> 
-> Just one comment: the suffix "_p" for pointer is quite unusual within
-> the kernel. This also would be the first of its kind within kvm.h.
-> Usually there is either no suffix or "_addr".
-> So for consistency reasons I would suggest to change this to one of
-> the common variants.
-> 
-Thanks, good point.
+Hi,
 
-[...]
+This is a resend of the v3 of the patch series to add PWM and keyboard
+backlight driver for ARM macs.
+
+Changes in v1:
+Addressing the review comments.
+
+Changes in v2:
+Added the reviewed-by and acked-by tags.
+Addressing a review comment.
+
+v1: https://www.spinics.net/lists/linux-pwm/msg19500.html
+v2: https://www.spinics.net/lists/linux-pwm/msg19562.html
+
+
+Sasha Finkelstein (4):
+  dt-bindings: pwm: Add Apple PWM controller
+  pwm: Add Apple PWM controller
+  arm64: dts: apple: t8103: Add PWM controller
+  MAINTAINERS: Add entries for Apple PWM driver
+
+ .../bindings/pwm/apple,s5l-fpwm.yaml          |  51 +++++++
+ MAINTAINERS                                   |   2 +
+ arch/arm64/boot/dts/apple/t8103-j293.dts      |  20 +++
+ arch/arm64/boot/dts/apple/t8103-j313.dts      |  20 +++
+ arch/arm64/boot/dts/apple/t8103.dtsi          |   9 ++
+ drivers/pwm/Kconfig                           |  12 ++
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-apple.c                       | 127 ++++++++++++++++++
+ 8 files changed, 242 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+ create mode 100644 drivers/pwm/pwm-apple.c
+
+-- 
+2.38.1
+
