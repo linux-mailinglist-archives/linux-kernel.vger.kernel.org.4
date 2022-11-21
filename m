@@ -2,97 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0566632D1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D83632D22
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 20:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiKUTmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 14:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S231176AbiKUToq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 14:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKUTmr (ORCPT
+        with ESMTP id S229501AbiKUToo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:42:47 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2673FD116;
-        Mon, 21 Nov 2022 11:42:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669059767; x=1700595767;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hWmAqluuQ5/3puqN3B6aykKHCk3Z+rkcmnnsHtMfROk=;
-  b=GXh6CtHT8xbLYvhFkj7CLYbd1UsdAY8igpNiazeCowXsnsyXTQwxzFrf
-   tqBVJUq6NmdHnz+mCMk04xL/X0xyziXoifr+0lhGJQ45zaCD6tKK+hIH+
-   z6EyjsxzTNJIRodojbOS2JL+WS8i46kfmwlKMfKWbgmSmC9yb82Cb01oL
-   e+ymKjFQB1Ob6CvUkSnJ20IzVTdsKPgXR5h/mFkf7r0sR5sLQypq0Zjj9
-   hLvC9KlYIyiKQrglWwyXCeedVLlpY2L9yu4Ki7jllgM/q7apJaCO0BFZr
-   iJCqSTBrNPmEAiQIclXillKSDyx78iNVJWMHek4ZWW6WV2Ay/xOHVo/tA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="297004546"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="297004546"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 11:42:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="672211423"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="672211423"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.94])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 11:42:43 -0800
-Message-ID: <1c9b3db6-3443-5580-08f2-42520d6a3318@intel.com>
-Date:   Mon, 21 Nov 2022 21:42:39 +0200
+        Mon, 21 Nov 2022 14:44:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11776A9963;
+        Mon, 21 Nov 2022 11:44:42 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F2C97220E5;
+        Mon, 21 Nov 2022 19:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669059880; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HK8SHrswSKDS6/O+Mgs+PmBluOOCcSpzcSHcaJVrEzE=;
+        b=sGBGsUvnd5vxckcevJ68UxFxz1PoSqb+HhkiZGIEIDv5PR4YlOP0Zat6gVJdddKiT400ks
+        wisOjKNDBHCc4+joBpswgAQDQXnYetJ9aUaT7Wg9UcqlRbNDkiHk7BWVRvebwJDG2sibT+
+        RwgzKgvvOsvdRGQJ/P8vcVMnR/oOku0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669059880;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HK8SHrswSKDS6/O+Mgs+PmBluOOCcSpzcSHcaJVrEzE=;
+        b=RHu+rInak5/4nHVa3RdOHmAbZaaxIEagdc61JXpBnzjGyWi4Zyr3p6vQ7MuqiWEOoxE/qR
+        Nt9yrf83lq8MtuDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6022D1376E;
+        Mon, 21 Nov 2022 19:44:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sE6GFifVe2O+QwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 21 Nov 2022 19:44:39 +0000
+Message-ID: <53c6d988-7147-2233-6904-f881e7c067b6@suse.cz>
+Date:   Mon, 21 Nov 2022 20:42:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH 0/3] mmc: Improve block layer requeueing behavior
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 12/12] mm, slob: rename CONFIG_SLOB to
+ CONFIG_SLOB_DEPRECATED
 Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        "vincent.whitchurch@axis.com" <vincent.whitchurch@axis.com>
-References: <f30ec7fe7d834c1d8e116508500110cf@hyperstone.com>
- <c1e1281e-0977-cbf7-041e-db911ee722a7@intel.com>
- <d1a1340a-f5f8-6953-e066-b8c6095d63fd@acm.org>
- <5df2c4d5-f426-e3ea-8e6d-f772ec7091b6@intel.com>
- <bade026a-ec83-7516-d5ef-bb373df48a6e@acm.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <bade026a-ec83-7516-d5ef-bb373df48a6e@acm.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Conor Dooley <conor@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-13-vbabka@suse.cz>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221121171202.22080-13-vbabka@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/22 21:14, Bart Van Assche wrote:
-> On 11/21/22 00:25, Adrian Hunter wrote:
->> On 18/11/22 19:27, Bart Van Assche wrote:
->>> On 11/18/22 02:47, Adrian Hunter wrote:
->>>> Does anyone know why the block layer does not support
->>>> (max_hw_sectors << 9) < PAGE_SIZE ?
->>>
->>> Does this mean that the following patch series would not only be
->>> useful for UFS but also for MMC? "[PATCH 00/10] Support DMA segments
->>> smaller than the page size"
->>> (https://lore.kernel.org/linux-block/20221019222324.362705-1-bvanassche@acm.org/).
->>
->> That patchset still does not allow max_hw_sectors = 1 which is
->> what Christian's case needs.
+On 11/21/22 18:12, Vlastimil Babka wrote:
+> As explained in [1], we would like to remove SLOB if possible.
 > 
-> Hi Adrian,
+> - There are no known users that need its somewhat lower memory footprint
+>    so much that they cannot handle SLUB (after some modifications by the
+>    previous patches) instead.
 > 
-> Why would that patch series not support max_hw_sectors = 1? What am I overlooking?
+> - It is an extra maintenance burden, and a number of features are
+>    incompatible with it.
+> 
+> - It blocks the API improvement of allowing kfree() on objects allocated
+>    via kmem_cache_alloc().
+> 
+> As the first step, rename the CONFIG_SLOB option in the slab allocator
+> configuration choice to CONFIG_SLOB_DEPRECATED. Add CONFIG_SLOB
+> depending on CONFIG_SLOB_DEPRECATED as an internal option to avoid code
+> churn. This will cause existing .config files and defconfigs with
+> CONFIG_SLOB=y to silently switch to the default (and recommended
+> replacement) SLUB, while still allowing SLOB to be configured by anyone
+> that notices and needs it. But those should contact the slab maintainers
+> and linux-mm@kvack.org as explained in the updated help. With no valid
+> objections, the plan is to update the existing defconfigs to SLUB and
+> remove SLOB in a few cycles.
+> 
+> To make SLUB more suitable replacement for SLOB, a CONFIG_SLUB_TINY
+> option was introduced to limit SLUB's memory overhead.
+> There is a number of defconfigs specifying CONFIG_SLOB=y. As part of
+> this patch, update them to select CONFIG_SLUB and CONFIG_SLUB_TINY.
 
-blk_queue_max_hw_sectors() does not allow it.
+Hm I forgot - some of those defconfigs might not actually be for so tiny 
+devices to need CONFIG_SLUB_TINY (or SLOB previously). For those it 
+would make more sense to simply remove CONFIG_SLOB=y and leave it to the 
+default choice, which is SLUB (without _TINY). Feel free to point those 
+out to me and I'll adjust. Thanks.
+
+> [1] https://lore.kernel.org/all/b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz/
+> 
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+> Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Conor Dooley <conor@kernel.org>
+> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: <linux-arm-kernel@lists.infradead.org>
+> Cc: <linux-omap@vger.kernel.org>
+> Cc: <openrisc@lists.librecores.org>
+> Cc: <linux-riscv@lists.infradead.org>
+> Cc: <linux-sh@vger.kernel.org>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
