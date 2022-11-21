@@ -2,171 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D248632ADB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B42C632AE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiKURVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S229613AbiKURXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiKURVO (ORCPT
+        with ESMTP id S229716AbiKURX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:21:14 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DBBD29B6;
-        Mon, 21 Nov 2022 09:20:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FhCWPS4BxB5NjgQJVET9e+2twuMC7fcE9A3TlWgZH5tkRtnFMZLybtxkn1S+4xSUeUeEVyVPHka8kXmJS0kuUQxDL1Rqp0i0vg44GmbwSn+7K59FO22amQ2IVsEWIntTgcxxLlLMuUWEAFnI8Ghh7YHtNi1dJ2+RLWLiiPcGBQ0qzzZEv/Y/scrKbLQL2q1nLxlR2UKBHyX+z81h1M14h2c4rtSwmdn9qhxWWGavgkOYDakE8nyFoWcsDI8Av0L7KgXq6Fy8yramGq5UBAkIqQInbi+cPA2uo4AbdCwNvA6vD/CM7xtJA7auE6LZhZcN7cQ4RSNn3uTFOGQWeoncMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HlutBJxvlvzHUj8gwPKI9qiwRfiZV9chrM/fPFsNBfo=;
- b=EovD/gJj4VuB+zAlLsaw8bwa0/Qn3xesfsQMjRC9yGwLOeSIPt7fXRcZd1M0abck7p3ko/CfdPG5Zs5CXalysAbax4tmAUxTUnoBMrbYUQoYlKWd4/7JGVCqNrmZqj+icZFAnw80ArmiNAwol67htwhBybGcomr0+4olwR7pCrrnQpcw5Sn1liYLuO9/LCl1tPzkOhTNCoh2BjIoNms41EQyzLHVYFj+yvSkiP6B9Vp/Mx0XtREr2qa2XO/FJviZ8/aexc8ejvUzw1qMZSsVoT9yHw6grCIQ+RzaNbn1TNBYBL+EneMtPTntUW+NzzSlQNXGiniebU8TCJkzs16wTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HlutBJxvlvzHUj8gwPKI9qiwRfiZV9chrM/fPFsNBfo=;
- b=XuBK7axY2RYS7806cpk6eT4skiYZtEwjV/F+rTvIna8kK860zAKF/Xe2lTywUX19aNjv2pAJO21GtXiy+/zmhaoE/CP+LVySMaVnXoFLxQLso2P6DCfaksoFnvdruiZP+D+PAieD129yWTe3vQjd9gU+DxtkcC6DDt8PlTOFShRL0RIaMdnjV5MdDPxUOXpU7wUaPN/HR8dqA7FwrZTdmkO+G4Is48iceUdttU602jQfIEynoLLgcMN9SRntpxpFxNUh9S5a1YYNGTMEP3bAHX2jWSLdBJKSn0gXN3Hm5xejamZEtGQ6WxLiBnAcDtf/YUx4+lsYBGl/s0FU1/y4XA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM6PR12MB4219.namprd12.prod.outlook.com (2603:10b6:5:217::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
- 2022 17:20:22 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.5834.011; Mon, 21 Nov 2022
- 17:20:21 +0000
-Date:   Mon, 21 Nov 2022 13:20:20 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 19/33] genirq/msi: Provide msi_desc::msi_data
-Message-ID: <Y3uzVJ/7ecL8DBK7@nvidia.com>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.346985384@linutronix.de>
- <Y3U5xwujkZvI0TEN@nvidia.com>
- <871qpzkj9k.ffs@tglx>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871qpzkj9k.ffs@tglx>
-X-ClientProxiedBy: BL1PR13CA0105.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::20) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 21 Nov 2022 12:23:27 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9307FCE4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:23:24 -0800 (PST)
+Received: from [192.168.10.9] (unknown [39.45.241.105])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 22D6566029A5;
+        Mon, 21 Nov 2022 17:23:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669051402;
+        bh=XBAUcHQ1kFMN61zpgZfHhNfm+9S8x0kij55HjK06z1c=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=KsvPIRXEdzFiQ+P7VWKyqzKkcJgdQ5WrgoaJj2J7yT1UBdlKrcnILeA+APMnm/M+W
+         UzkVehGPQzlKmLTxIqZmzPNg0LD23mc96xspCva1aouFBT/NEYpNxY3GV8ECc0Bpfe
+         PX1N5DJf54TAJJFf7+QBrb5T2e50pjGAs/p/oc0MErhwVSNWtDZXjLEmoD/c1sNAVH
+         Af1Nl4u8WtGkfAX0oUSGoM4HredV56yo2dju0FpKnQmUcG99xPENBzKoUxq2Rq30lZ
+         ctyWQaGWXqJUYsMdeRfNXi8Cs/wNuaQqqoyXjMaxLNrRoGmYn+iPV3M8cqiCrFaAwI
+         TErjADL53BWAw==
+Message-ID: <5930891f-7fce-35d5-94a8-95c63840b3c6@collabora.com>
+Date:   Mon, 21 Nov 2022 22:23:11 +0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4219:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf30c9a6-8a13-41f9-fee1-08dacbe4ab89
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Y5H8OOV8XBWGT2xA5E2EPmRy4ZgiiARRBO55FV598UFeBW04aEw4gy10cY2v4zA3WvegUoeerIPuduSsinfLIZe6cN4c9SyrQWT1Wm7CXOdb3jcocVjgGTUpdJ0Ee5M3JtVLkte6t+mOnq6uPmCL0WtgXKfCc+9EIC2DZ/GjKLVaj8pYMhrNHJs2Yb7cs/rzAiBpxunvHEnbAvLqNb8wY2CsYZNfMxWfjaAf9i07hSvaKJpJ1cyu4gxpZTZ4lxBvqQou63ubXt/AXpADLhiRmrAAMDlt1/raubnn/c4UuclEc4DcKsJ2L7SEYd8m7DdSJhG1YxBbTLDCvcS2kbu33nflTRPAN9948yU59cUqEiTuZtd3gotoFi5ZNIdx7yNFi60Ta9WshVWfO5ZwZiii0l4bLpKdlfpHFNupUcwKGJwVElUY1Sf47sWgfu88SRppXsRT37vRSI0mMa1CaSEJIQUSHNQcI/kBM8U0tkWkPsDFoA49dCbuMKL+pr0dB2sXPEJQnL3s37ZMxs9toJImL7kMf9f4ywTR/IqFFT8diFmblci4LM0iOvo3NQANRZbOvRXKSiTLDy6w85KGdPCY80wQDVwHO3VP0Yq4pQOQCErCUJLmqR8TS7Gl+5XiIe/K
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(376002)(39860400002)(346002)(451199015)(478600001)(6486002)(66899015)(66556008)(36756003)(66946007)(6512007)(41300700001)(8676002)(66476007)(4326008)(8936002)(186003)(2616005)(26005)(7416002)(5660300002)(316002)(6506007)(54906003)(6916009)(83380400001)(2906002)(86362001)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9SxHW9m1aDe5STSjxD06eugs9Tf5VJWkZZAUgZrHXSHuB7dfQlUguN+URS/z?=
- =?us-ascii?Q?o/vVNscCeK4ia5CtdC4gvqUFZr6JaW6p3Z3UDZ+v8egxi9foEwoq+K6kskkI?=
- =?us-ascii?Q?NHUQLUNiczJrXn8nXAeGcX3CFZwwTJ7v31AiVy0fhc3WfuF1W4cl0tNEY0sI?=
- =?us-ascii?Q?hA46mgiWr2MDdw5YL6NtKvFXWer6JxZBXFL80HBsIcp6VL8rq6bkHqBz4d5T?=
- =?us-ascii?Q?dIE6ypOvwC8rJ89fa7H94j7H021xg6JmAbX83/+tx83/Sy0qM5S4flfvzKd7?=
- =?us-ascii?Q?Jo/T0FYZT6vkloVK1lEkDejKJE3mx7PP5jMQlneD3z9vcajEaJWs96gEqxHn?=
- =?us-ascii?Q?+O6Ri6Dj3ouhdd0hbOB5jF/0IXkr6Gby2qK7V9Rx87bK/2EWJe7+8kiaoxF0?=
- =?us-ascii?Q?WkYtBWtd7xJreF99BeCSvmuQPU4mJ2wNrHFLHAioH4mmJvmZs3BKTCEDDm0r?=
- =?us-ascii?Q?KxNLSO3t88/vpud1jawn4ya8jdEEau/gH7uYiLx4U/S3fkSeYFw4maxm1ezt?=
- =?us-ascii?Q?6IOxWP8WV1xbNfbPTRqxvBLdv99KvFo4UolJaQ6pp9s+j5QUSRscUoWy9Ns3?=
- =?us-ascii?Q?hsm/UdQFXNE+OjT3jJrwWyWlNtVvj+Z8QOj9dYE8G1+P5Xpcyd7AKrQsbAiC?=
- =?us-ascii?Q?bqkUgTN3CGIipw401jnBgmKG0cvLWTpam92sZqXPhqHthtBvzvCiEJ60usYT?=
- =?us-ascii?Q?G/Z5U7X8jQ1qF59cmBmizbdYr8EdiLn0bK2eKpBQrvaZrrPx77wXrIoFj2AM?=
- =?us-ascii?Q?EZtgTbKU21dQd2DrqMyUKstFnNIOcZ7darXNBEAYXB3Z/d3K3UGIbTArX9LV?=
- =?us-ascii?Q?n5BpB9gHIJxRkPPko5tgBzUx3z8ZNzwG5KDwdj7XaVCByNFm0OzRVveVImI4?=
- =?us-ascii?Q?3o1kBsu500YykaZxh1dQWZxP5SZCCDI27CME5+udmbJYNQ8mPR00WywyLK3z?=
- =?us-ascii?Q?DeHdc0TcPxfA6ZLSTTtXHRnc8m9bUuf9MMV1KnEFdTPgTvxvxwQGxKREq/TM?=
- =?us-ascii?Q?N7PEFXCXz/n14GT2sGEYC19ewaB31XC4wzfZ+JqTbpCZHVPzL/R9ZWHYCKXC?=
- =?us-ascii?Q?RApgwmreiooHnxK5kBTz9juzdTmV1mRH5mbP6uoWXTWUoirTTMihUpnsPdQV?=
- =?us-ascii?Q?XcCphz7vYajBBkjvtof+5lIkr9m4RDkum7epgkb2fy7hC+LD9fR2OVGSO+wm?=
- =?us-ascii?Q?R7XXP5kVGKZ8/FZSr/g6rbmt4/g6qEImzoQUf7eqJNaemfOxxxfD73TyNS9y?=
- =?us-ascii?Q?TRrE/ZmI+c+aredRflmkP7nNUx+u0rfh1Iwa/YoY4OcSWAHednXJ19Xo74vx?=
- =?us-ascii?Q?SKQkWIPVEL4McOhyuW4wIo0FDIz+3yrdM3Ke0SAWPn2ok4g+scLZNIbZQzq8?=
- =?us-ascii?Q?eno1K/0gWhv4SPJLDy3GHsIbQNLmVcn2oX2N//vXhqe36IbkNsSI0kS1oDNV?=
- =?us-ascii?Q?h+aBFt6vmSnKINelZwTknqmo0azEvAdQwS96kYI8R1HsmE+wiGhGqVy7e7Jf?=
- =?us-ascii?Q?4+Y1SxpNE+8cACPLbw5zymf6Jj9i0EG+yUCaylRfKSxYBCaLRwltATIgcnSV?=
- =?us-ascii?Q?UyUqRYP4jaR7ghhK1PM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf30c9a6-8a13-41f9-fee1-08dacbe4ab89
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 17:20:21.8838
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ISAGbCI0Tr8TpbnVp5KoJDE8dJcBjodAh2+W/cxmcnIkBqUQXVS2jVMLGu86j2dB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4219
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: Re: [Bug 67651] Bisected: Lots of fragmented mmaps cause gimp to fail
+ in 3.12 after exceeding vm_max_map_count
+To:     Cyrill Gorcunov <gorcunov@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Pavel Emelyanov <xemul@parallels.com>, gnome@rvzt.net,
+        drawoc@darkrefraction.com, alan@lxorguk.ukuu.org.uk,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        bugzilla-daemon@bugzilla.kernel.org, kernel@collabora.com,
+        Paul Gofman <pgofman@codeweavers.com>
+References: <20140122190816.GB4963@suse.de> <52E04A21.3050101@mit.edu>
+ <20140123055906.GS1574@moon>
+ <20140122220910.198121ee.akpm@linux-foundation.org>
+ <20140123062746.GT1574@moon>
+Content-Language: en-US
+In-Reply-To: <20140123062746.GT1574@moon>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 11:08:55PM +0100, Thomas Gleixner wrote:
+Sorry for replying to so much older thread. The original thread:
+https://lore.kernel.org/all/20140123151445.GX1574@moon/
 
-> I looked into this and it gets ugly very fast.
+On 1/23/14 11:27 AM, Cyrill Gorcunov wrote:
+> On Wed, Jan 22, 2014 at 10:09:10PM -0800, Andrew Morton wrote:
+>>>>
+>>>> That being said, this could cause vma blowups for programs that are
+>>>> actually using this thing.
+>>>
+>>> Hi Andy, indeed, this could happen. The easiest way is to ignore softdirty bit
+>>> when we're trying to merge vmas and set it one new merged. I think this should
+>>> be correct. Once I finish I'll send the patch.
+>>
+>> Hang on.  We think the problem is that gimp is generating vmas which
+>> *should* be merged, but for unknown reasons they differ in
+>> VM_SOFTDIRTY, yes?
 > 
-> The above has two parts:
+> Yes. One place where I forgot to set softdirty bit is setup_arg_pages. But
+> it called once on elf load, so it can't cause such effect (but should be
+> fixed too). Also there is do_brk where vmasoftdirty is missed too :/
 > 
->     iobase    is domain specific and setup by the domain code
+> Another problem is the potential scenario when we have a bunch of vmas
+> and clear vma-softdirty bit on them, then we try to map new one, flags
+> won't match and instead of extending old vma the new one will be created.
+> I think (if only I'm not missing something) that vma-softdirty should
+> be ignored in such case (ie inside is_mergeable_vma) and once vma extended
+> it should be marked as dirty one. Again, I need to think and test more.
 > 
->     cookie    is per interrupt allocation. That's where the instance
->               queue or whatever connects to the domain.
+>> Shouldn't we work out where we're forgetting to set VM_SOFTDIRTY? 
+>> Putting bandaids over this error when we come to trying to merge the
+>> vmas sounds very wrong?
 > 
-> I can abuse the fields for PCI/MSI of course, but see below.
+> I'm looking into this as well.
+I've looked at it while working on adding an IOCTL to get and/or clear the
+soft dirty bit for a particular region only [1]. The VM_SOFTDIRTY should be
+set in the vm_flags to be tested if new allocation should be merged in
+previous vma or not. With the following patch, the new allocations are
+merged in the previous VMAs.
 
-I don't know that we need to store the second one forever in the desc.
-I was thinking this information is ephemeral, just used during alloc,
-and if the msi domain driver wishes some of it to be stored then it
-should do so.
+I've tested it by reverting the 34228d473efe ("mm: ignore VM_SOFTDIRTY on
+VMA merging") commit and after adding the following patch, I'm seeing that
+all the new allocations done through mmap() (in my testing) are merged in
+the previous VMAs. The number of VMAs doesn't increase drastically which
+had contributed to the crash of gimp. If I run the same test after
+reverting and not including the following, the number of VMAs keep on
+increasing with every mmap() syscall which proves this patch.
 
-> Sure I could make both cookies plain u64, but I hate these forced type
-> casts and the above is simple to handle and understand.
+diff --git a/mm/mmap.c b/mm/mmap.c
+index f9b96b387a6f..b132d52f6fe1 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1708,6 +1708,15 @@ unsigned long mmap_region(struct file *file,
+unsigned long addr,
+ 		vm_flags |= VM_ACCOUNT;
+ 	}
 
-I guess, they aren't what I think of as cookies, so I wouldn't make
-them u64 in the first place.
++	/*
++	 * New (or expanded) vma always get soft dirty status.
++	 * Otherwise user-space soft-dirty page tracker won't
++	 * be able to distinguish situation when vma area unmapped,
++	 * then new mapped in-place (which must be aimed as
++	 * a completely new data area).
++	 */
++	vm_flags |= VM_SOFTDIRTY;
++
+ 	/*
+ 	 * Can we just expand an old mapping?
+ 	 */
+@@ -1823,15 +1832,6 @@ unsigned long mmap_region(struct file *file,
+unsigned long addr,
+ 	if (file)
+ 		uprobe_mmap(vma);
 
-The argument to msi_domain_alloc_irq_at() ideally wants to be a
-per-domain-type struct so we can folow it around more cleanly. This is
-C so we have to type erase it as a void * through the core code, but
-OK.
+-	/*
+-	 * New (or expanded) vma always get soft dirty status.
+-	 * Otherwise user-space soft-dirty page tracker won't
+-	 * be able to distinguish situation when vma area unmapped,
+-	 * then new mapped in-place (which must be aimed as
+-	 * a completely new data area).
+-	 */
+-	vma->vm_flags |= VM_SOFTDIRTY;
+-
+ 	vma_set_page_prot(vma);
 
-The second one is typically called "driver private data" in device
-driver subsystems that can't use container_of for some reason - just a
-chunk of data the driver can associate with a core owned struct.
+ 	return addr;
+@@ -2998,6 +2998,8 @@ static int do_brk_flags(unsigned long addr, unsigned
+long len, unsigned long fla
+ 	if (security_vm_enough_memory_mm(mm, len >> PAGE_SHIFT))
+ 		return -ENOMEM;
 
-The usual pattern for driver private data is for the core to provide
-some kind of accessor void *get_priv() (think dev_get_drvdata()) or
-whatever.
++	flags |= VM_SOFTDIRTY;
++
+ 	/* Can we just expand an old private anonymous mapping? */
+ 	vma = vma_merge(mm, prev, addr, addr + len, flags,
+ 			NULL, NULL, pgoff, NULL, NULL_VM_UFFD_CTX, NULL);
+@@ -3026,7 +3028,7 @@ static int do_brk_flags(unsigned long addr, unsigned
+long len, unsigned long fla
+ 	mm->data_vm += len >> PAGE_SHIFT;
+ 	if (flags & VM_LOCKED)
+ 		mm->locked_vm += (len >> PAGE_SHIFT);
+-	vma->vm_flags |= VM_SOFTDIRTY;
++
+ 	return 0;
+ }
 
-But I do understand your point about keeping the drivers away from
-things. Maybe some other pattern is better in this case.
+This patch should be included in the kernel regardless if we revert
+34228d473efe or not. Thoughts?
 
-Jason
+
+Cyrill is correct about the following:
+> Another problem is the potential scenario when we have a bunch of vmas
+> and clear vma-softdirty bit on them, then we try to map new one, flags
+> won't match and instead of extending old vma the new one will be created.
+> I think (if only I'm not missing something) that vma-softdirty should
+> be ignored in such case (ie inside is_mergeable_vma) and once vma
+> extended
+> it should be marked as dirty one. Again, I need to think and test more.
+While implementing clear soft-dirty bit for a range of address space, I'm
+facing an issue. The non-soft dirty VMA gets merged sometimes with the soft
+dirty VMA. Thus the non-soft dirty VMA become dirty which is undesirable.
+When discussed with the some other developers they consider it the
+regression. Why the non-soft dirty page should appear as soft dirty when it
+isn't soft dirty in reality? I agree with them. Should we revert
+34228d473efe or find a workaround in the IOCTL?
+
+* Revert may cause the VMAs to expand in uncontrollable situation where the
+soft dirty bit of a lot of memory regions or the whole address space is
+being cleared again and again. AFAIK normal process must either be only
+clearing a few memory regions. So the applications should be okay. There is
+still chance of regressions if some applications are already using the
+soft-dirty bit. I'm not sure how to test it.
+
+* Add a flag in the IOCTL to ignore the dirtiness of VMA. The user will
+surely lose the functionality to detect reused memory regions. But the
+extraneous soft-dirty pages would not appear. I'm trying to do this in the
+patch series [1]. Some discussion is going on that this fails with some
+mprotect use case [2]. I still need to have a look at the mprotect selftest
+to see how and why this fails. I think this can be implemented after some
+more work.
+
+What are your thoughts?
+
+> 
+> 	Cyrill
+> 
+
+[1]
+https://lore.kernel.org/all/20221109102303.851281-1-usama.anjum@collabora.com/
+[2]
+https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/
+
+-- 
+BR,
+Muhammad Usama Anjum
