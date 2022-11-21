@@ -2,194 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F0D632828
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16473632825
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbiKUP3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S232487AbiKUP3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbiKUP2t (ORCPT
+        with ESMTP id S232473AbiKUP2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 10:28:49 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463E9C8469;
-        Mon, 21 Nov 2022 07:28:34 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id me22so12777160ejb.8;
-        Mon, 21 Nov 2022 07:28:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hoTrouIZVhvpH4CAuc3k03YnFRSR2oWgJtrCBTl9X2g=;
-        b=CDKi+Dl1HzFWlab7aKVtda7kjXD7qAL+UCeSxI/ftCqNNj2tGrzw4LtH4CWUXk4kLo
-         kP5Gd4z+WlHi9wkhy+kxAFSSbjMaSqHjNKdtDM/qjyGbJNgNJaU9xTB9X/QTci/bE9fZ
-         7r4aoxcIcFNj/x4ixfW/tVP/hpmwJqL2nEO3MuOdoF15g2T3S5DX06Orq7Bb5qbPfYRW
-         f2XD3Esvj00Jplrkd1JbQgNPN5H7x8AVmnpK5VdQR4UK0Ys5t5Vx2o9I3WBbNYCKXQqx
-         bL6aoVij/vdwj7UlAGJyKTGPmjnKecJMKDJ56S/DyIoj3Iv4QVjNxuEDJMFMtu0fiqoF
-         XPlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hoTrouIZVhvpH4CAuc3k03YnFRSR2oWgJtrCBTl9X2g=;
-        b=7nWneiRC5DqlbwrrE/2ALFC/utUqXP55mFH0uT8w8DURO2RiS4iSz/bj+1xmklQ7j1
-         MBzvEZOw+tT3zxT8KsPuSvCOPvD9s8FN6i5lkyIlpnh0E3fL7OZLNAJMB6w0JMc+3USH
-         QS9ximxjZJrK9jn1OVwPqR6GIJQl8oWOkkDGUF2R0JtvA7HtJlTNhW+UztIsOK3s2aEp
-         awKO0SFvUFbsldKXNNpoa8RXvB3uOLnFCVPE1kZ86cOgPSVQosemaKYbsQp8G+Lx+oM3
-         zond/ptFW+d49B6mii0RjBPeYBmrj2LIi7ILtZAyIQ0KqfGrVHtwpEZXo8MZ4R5gJWWd
-         +SDA==
-X-Gm-Message-State: ANoB5pm1G9OO9IpXKL7LetjVte0th95C82cGZYeTw0Q+R4Y0iBHMaY8e
-        /2avQ036dlMZQ2GXesDxqv8UOZY1LIWBlbH0I0A=
-X-Google-Smtp-Source: AA0mqf4FBTx1VFIh/xj6nggsJGq6o0Qnk+AkUjTnEGI4HjruJVFEJ/Zkmex1zK2eNtpedoJPoMWD9bcMA8gQmEVtxbQ=
-X-Received: by 2002:a17:907:3ac5:b0:78d:5d4a:c12f with SMTP id
- fi5-20020a1709073ac500b0078d5d4ac12fmr16439252ejc.421.1669044512722; Mon, 21
- Nov 2022 07:28:32 -0800 (PST)
+        Mon, 21 Nov 2022 10:28:34 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2038.outbound.protection.outlook.com [40.92.98.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306F2C7593;
+        Mon, 21 Nov 2022 07:28:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qelv/iufT4t1r0STen5pA4Obumrn9/St/SUjUhI0VdsG5XFCy/TfG9G7o5ABzskMguMY6jgP+w0gkM4Igzy2BfUjocAHrNBQ2oVifr7GqGx9BA5gxRoSaWJ/4ja6ymXiUibnvhSbXFtEuA4UCmXNFfsJAfpkhoS4W9dg0nY9Yha1SDYj0V9htK1KUXHI9N4BLtHvSnuku1qtK8iTLIeS9zpaM3VUjRF3Dw/udXK6IF6fjMaooHQTnqTosOiDK9L/35qdIxmYbvmQE66ddX8vMOxe5F6/aU/9mpiblPc7CfVZEXMHWGSZBa1W2amBkTXw5ncwEyI8H4OsVGl6HHUUjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ly1rcD1U0Bd9tIswe0QbNLxpcD4H4qzzCby4dNqVSwE=;
+ b=YZYTDuRhq4el0D9+x2iDsxPxmCBXA9W5MVl+7ypf5X/BA9JDpJaniO9WsoZPH0nMWUZ2otRAo1zPaYNorQyFR9PPyTqCFzjvjiZXQRW4gCTBKFs0Zxu7Kex9PT907srpTrEiG7OKGzaf30UV8KQ96xbbds5GUX4GTa6Kkf79OUyXJieKkU5E5fhUWdAKyNM/TdK1wPC+M1PWblODdJvJ+/Hn7jqWJ4M4YPTRPiBkf8GIgDjUjG8lLlP8kCxjgk7N2tbXJd0KL/hdRhmANrkxlyiNTsyIRJN7u+AZP6rE0RMk1eyNgp7Ur3Fcf89djuEA+WdpOqnOQsyBTGssJ/auzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ly1rcD1U0Bd9tIswe0QbNLxpcD4H4qzzCby4dNqVSwE=;
+ b=Ntx0wTRw3fQtkRLN/nwK4IPXHcdmzHeSdwm5T6MHh5CNmvI+vagLH42ZYChC+wh2JTdJ8yeGpqwOncei4XTjw+RmKi/v88GcoQMHHeBFG5YnJQY90VLKSEFBpudD6DqDjW5yjWO56EFkUWvKQoP93nwlfz2IpOpAOcQkh4p4/mNdxNA/jr60Mg1lPMaR6xHLbjNuZ2Ep8ACHenH67RKLbgyWASufaVRsLODYBZ6wrF6R2iZODJ2125GbxGJQZyqtG3OcjHuL0NtUqVxlbBuWJMdaw5k5EKD9P2+ZKPOogpjN/3ferj+BSCKvtbDAK8m1ZEm5D/RHmxHihKgl2C0NMQ==
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
+ by OSZP286MB1557.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1b2::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
+ 2022 15:28:19 +0000
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ff96:9cb6:e047:c605]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ff96:9cb6:e047:c605%4]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
+ 15:28:19 +0000
+Date:   Mon, 21 Nov 2022 23:28:13 +0800
+From:   Dawei Li <set_pte_at@outlook.com>
+To:     sumit.semwal@linaro.org, christian.koenig@amd.com
+Cc:     benjamin.gaignard@collabora.com, labbott@redhat.com,
+        Brian.Starkey@arm.com, jstultz@google.com, afd@ti.com,
+        sspatil@android.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] dma-buf: fix racing conflict of dma_heap_add()
+Message-ID: <TYCP286MB2323894F9939C27291FD998CCA0A9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+References: <TYCP286MB2323873BBDF88020781FB986CA3B9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYCP286MB2323873BBDF88020781FB986CA3B9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-TMN:  [UoBXl6n5xYFVzXXIeJukr5rGJBgLvpuw]
+X-ClientProxiedBy: SI2PR02CA0022.apcprd02.prod.outlook.com
+ (2603:1096:4:195::23) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:152::9)
+X-Microsoft-Original-Message-ID: <20221121152813.GA4430@wendao-VirtualBox>
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Mon, 21 Nov 2022 23:27:56 +0800
-Message-ID: <CAO4mrfc+5zmJ_skpczu5aWW3jNWWPwq15LHJ2fzsZ1mzJ3CSGw@mail.gmail.com>
-Subject: BUG: unable to handle kernel NULL pointer dereference in xfrm_policy_lookup_bytype
-To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, bpf@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|OSZP286MB1557:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8bdd4859-e0bd-4a7a-ac5a-08dacbd5037c
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GqoSvLfYXio+NfurrX6DuPkLI264iiky6pW8TDT72WhS29smZPkFMMY9nQ6Js8Nq7LLLJYXGcXvmkVgfha4Awaiw3rOXIz8mw8UY0a5e8n5viR/tpusvEsCLasF69YhMuezOgHOtOQ+aMSZHz1KkoaGYpz0ajSdhgBuUIfFw4Vsl8Teo1zhzT7CsANhMmGLJcQhtaXdByccj5hDUZzCE7LhbBWgEHSsNPswitvR3YtRVI/MdEZhvpQT/i4xWYVJ9HdvMl+GrhppuCO5aBmjQUx6jttqxHNWBIandEpyH0rpWiGwASMapPPNAZsTv1iA0NtmjmvE/oL+M+IXkGpf7nBhEs9jefOvXUwxTTmLBNM/mKESNfsdlI9TH7Cq8mX78Q4DMa/d2JV//ZQBUGumPt7UK11Wks0MEemughLvod/jFYismmwtmxPJIGSZVgUkl5ZD/DVMd8UzAkFCQG6ERU+0v4LuADDimU1TcQkEO9E2DNdSqQVJ9RPJhWcEMu03xkDXJWOmV8thXsV+hnFlYBNsEFeYGfIpBYBeKP94onGnfCu+PVwvw9Kn6ncwZ8/y7Va9oa9TjfUlBwuECMII7+qgt9dPdiXPzLzJk9mdpYkv//mmInoVxdq58t3hb9O6W0YLcOdtFHrT/7wmvcirq2Q==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vBpnwVeJMnCyVEzp23LIvfCxQ9la+ozPK451H4PzT5prytczX1hOpXAI8LNp?=
+ =?us-ascii?Q?hq7RM4SNqa3ddlx2eKwoN5DU5/ZQSQexItwVZAtx9BXSLCEOY4mcYwGB75WW?=
+ =?us-ascii?Q?3n4K9Pptcx7Yp8dQvgKzKEYkNNFPQuTlUpgxlCRqFUDFGlpCMKcsFvJj3tY1?=
+ =?us-ascii?Q?eJCm79itu3QHeqmQaSA6OUWDW328IkX6N09nhtGLw+4rCwBiYDOZwkhC0rPm?=
+ =?us-ascii?Q?wJ8nPld8YwB9RJptBHj6NDcocKADHKXao/RImLIthniuBjfrWpcsYCS0Qu8f?=
+ =?us-ascii?Q?FSX+yHeQ3okcguK7dOE5UPqCmMralAVsiVQNBk5j0F0cvsZ10vIyA8z+CK2F?=
+ =?us-ascii?Q?Przkq3RfsoiFq8ZfGnASZ44tCt0QCZVdIXfbmJx9GdlXIi3+QE13x3cFA3w9?=
+ =?us-ascii?Q?/73X3WeYy8wYIfd2EXGyqO3r3XMgaqNege21cp7LbqE5RkIEcEheSKYa3bo+?=
+ =?us-ascii?Q?t2Y/OLhYbMX5uv1qwoF4xAlzR02VNFOBQRt4rVZKCmw9SyotRCUJ21dUljq7?=
+ =?us-ascii?Q?ykYzQ71M+D7l5KP6QEdRECl5No0Qo6WJRiuYgqxIhYm9xv38qMNYLTlefAQW?=
+ =?us-ascii?Q?q+k+eadEcwbnPNajXiSVmRReP9fJoA1CsMsaIyKivfpyph3EA1MHFvTuB+gx?=
+ =?us-ascii?Q?S01L7/wm7VtWqi07xYOcbawz4yX0jgpAeYy0RoAtwuvEIovgApFdKpTWSvxP?=
+ =?us-ascii?Q?pLdArMxbedEjY2bZPIlxOhXeY5JWUdPXOq1deyzp+SmWoslCM8ZiLdbSewCN?=
+ =?us-ascii?Q?ugDxyn112kVpSapEA60iPHFgTmbsYRimgXNN4PdG25ekHy0LNe0hIIbC0yqa?=
+ =?us-ascii?Q?d6AqR16G/R3H3PFevtIkWiejd28oAE9ks+Ai+Pt+1oiokQ5TDZqloy7mw3iJ?=
+ =?us-ascii?Q?6SGoVfk0NX/S13FwHiYe5Dnqo+DlXInis16GEVPDz/OFvOD5PjCOHS6dyxvS?=
+ =?us-ascii?Q?adXAXZkNqaM/4zkra1VaiTBPyk5m0jhHH2XtT+XzosDM84JoIsWyYptw2P3N?=
+ =?us-ascii?Q?aeOQb0zOHvskmHZoI9fTSfuZGzYKfBqvb/cEbyE7uEUS3dtbftTSxrdXEDZp?=
+ =?us-ascii?Q?eiYPLk00LMI0EBnfsCnlSQmW2eDE8jR6PWCaJTZ7s02mXj1B7Az0y5wOOv6Y?=
+ =?us-ascii?Q?uAmT7HL4POnakvTaHrwL3mQAwfXLLuSS+AVGRt/BK1h4xI7DW8fz+Ahluh00?=
+ =?us-ascii?Q?OUvtBzxQnkMC9f6A52x/ow9bI7PwQs618Kfw38he7oTbAof8EGHh0eJW+d9J?=
+ =?us-ascii?Q?c98tr8+J7ZS4gtw7X7ThxgevikZkIycJTTC0Rz/7eQ=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bdd4859-e0bd-4a7a-ac5a-08dacbd5037c
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 15:28:19.4874
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB1557
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+On Sat, Nov 05, 2022 at 12:05:36AM +0800, Dawei Li wrote:
 
-Recently when using our tool to fuzz kernel, the following crash was triggered.
+Hi Christian,
+May I have your opinion on this change?
 
-HEAD commit: 147307c69ba
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1DW61s3gHmgG-1aa8JP-KfsQzVW_1zm_P/view?usp=share_link
-kernel config: https://drive.google.com/file/d/1NAf4S43d9VOKD52xbrqw-PUP1Mbj8z-S/view?usp=share_link
-Syz reproducer:
-https://drive.google.com/file/d/1LfCJ4C3H2QKanNGIfVwEAewaN53G9CSE/view?usp=share_link
+Thanks,
+Dawei
 
-Unfortunately, if we transform the syz reproducer to C reproducer with
-syz-prog2c, the crash would not happen. Please consider using
-syz-execprog and syz-executor to reproduce the crash.
-
-BUG: kernel NULL pointer dereference, address: 000000000000006c
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 106d3d067 P4D 106d3d067 PUD 107d32067 PMD 0
-Oops: 0000 [#1] PREEMPT SMP
-CPU: 0 PID: 2783 Comm: kworker/0:3 Not tainted 6.1.0-rc5-next-20221118 #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-Workqueue: wg-crypt-wg0 wg_packet_tx_worker
-RIP: 0010:xfrm_policy_lookup_bytype+0x1764/0x1790 net/xfrm/xfrm_policy.c:2139
-Code: 00 00 00 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 03 4b 1f fd eb 0c
-e8 fc 4a 1f fd e8 17 a3 12 fd 31 ed 48 8d 7d 6c e8 ec b3 32 fd <8b> 75
-6c 48 c7 c7 89 21 7e 85 44 89 e2 31 c0 e8 38 5f a1 00 eb a6
-RSP: 0000:ffffc90000003740 EFLAGS: 00010246
-RAX: ffff88813bc274d8 RBX: 0000000000000000 RCX: ffffffff840866f4
-RDX: 00000000000004d4 RSI: 0000000000000000 RDI: 000000000000006c
-RBP: 0000000000000000 R08: 000000000000006f R09: 0000000000000000
-R10: 0001ffffffffffff R11: ffff8881032a4000 R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff88813bc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000000006c CR3: 0000000104bd7000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- xfrm_policy_lookup net/xfrm/xfrm_policy.c:2151 [inline]
- __xfrm_policy_check+0x5c1/0x19e0 net/xfrm/xfrm_policy.c:3571
- __xfrm_policy_check2 include/net/xfrm.h:1132 [inline]
- xfrm_policy_check include/net/xfrm.h:1137 [inline]
- xfrm6_policy_check include/net/xfrm.h:1147 [inline]
- udpv6_queue_rcv_one_skb+0x184/0xb90 net/ipv6/udp.c:703
- udpv6_queue_rcv_skb+0x53d/0x5c0 net/ipv6/udp.c:792
- udp6_unicast_rcv_skb net/ipv6/udp.c:935 [inline]
- __udp6_lib_rcv+0xceb/0x1770 net/ipv6/udp.c:1020
- udpv6_rcv+0x4b/0x50 net/ipv6/udp.c:1133
- ip6_protocol_deliver_rcu+0x85f/0xd80 net/ipv6/ip6_input.c:439
- ip6_input_finish net/ipv6/ip6_input.c:484 [inline]
- NF_HOOK include/linux/netfilter.h:302 [inline]
- ip6_input+0x9f/0x180 net/ipv6/ip6_input.c:493
- dst_input include/net/dst.h:454 [inline]
- ip6_rcv_finish+0x1e9/0x2d0 net/ipv6/ip6_input.c:79
- NF_HOOK include/linux/netfilter.h:302 [inline]
- ipv6_rcv+0x85/0x140 net/ipv6/ip6_input.c:309
- __netif_receive_skb_one_core net/core/dev.c:5482 [inline]
- __netif_receive_skb+0x8b/0x1b0 net/core/dev.c:5596
- process_backlog+0x23f/0x3b0 net/core/dev.c:5924
- __napi_poll+0x65/0x420 net/core/dev.c:6485
- napi_poll net/core/dev.c:6552 [inline]
- net_rx_action+0x37e/0x730 net/core/dev.c:6663
- __do_softirq+0xf2/0x2c9 kernel/softirq.c:571
- do_softirq+0xb1/0xf0 kernel/softirq.c:472
- </IRQ>
- <TASK>
- __local_bh_enable_ip+0x6f/0x80 kernel/softirq.c:396
- __raw_read_unlock_bh include/linux/rwlock_api_smp.h:257 [inline]
- _raw_read_unlock_bh+0x17/0x20 kernel/locking/spinlock.c:284
- wg_socket_send_skb_to_peer+0x107/0x120 drivers/net/wireguard/socket.c:184
- wg_packet_create_data_done drivers/net/wireguard/send.c:251 [inline]
- wg_packet_tx_worker+0x142/0x360 drivers/net/wireguard/send.c:276
- process_one_work+0x3e3/0x950 kernel/workqueue.c:2289
- worker_thread+0x628/0xa70 kernel/workqueue.c:2436
- kthread+0x1a9/0x1e0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
-CR2: 000000000000006c
----[ end trace 0000000000000000 ]---
-RIP: 0010:xfrm_policy_lookup_bytype+0x1764/0x1790 net/xfrm/xfrm_policy.c:2139
-Code: 00 00 00 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 03 4b 1f fd eb 0c
-e8 fc 4a 1f fd e8 17 a3 12 fd 31 ed 48 8d 7d 6c e8 ec b3 32 fd <8b> 75
-6c 48 c7 c7 89 21 7e 85 44 89 e2 31 c0 e8 38 5f a1 00 eb a6
-RSP: 0000:ffffc90000003740 EFLAGS: 00010246
-RAX: ffff88813bc274d8 RBX: 0000000000000000 RCX: ffffffff840866f4
-RDX: 00000000000004d4 RSI: 0000000000000000 RDI: 000000000000006c
-RBP: 0000000000000000 R08: 000000000000006f R09: 0000000000000000
-R10: 0001ffffffffffff R11: ffff8881032a4000 R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff88813bc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000000006c CR3: 0000000104bd7000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0: 00 00                add    %al,(%rax)
-   2: 00 5b 41              add    %bl,0x41(%rbx)
-   5: 5c                    pop    %rsp
-   6: 41 5d                pop    %r13
-   8: 41 5e                pop    %r14
-   a: 41 5f                pop    %r15
-   c: 5d                    pop    %rbp
-   d: c3                    retq
-   e: e8 03 4b 1f fd        callq  0xfd1f4b16
-  13: eb 0c                jmp    0x21
-  15: e8 fc 4a 1f fd        callq  0xfd1f4b16
-  1a: e8 17 a3 12 fd        callq  0xfd12a336
-  1f: 31 ed                xor    %ebp,%ebp
-  21: 48 8d 7d 6c          lea    0x6c(%rbp),%rdi
-  25: e8 ec b3 32 fd        callq  0xfd32b416
-* 2a: 8b 75 6c              mov    0x6c(%rbp),%esi <-- trapping instruction
-  2d: 48 c7 c7 89 21 7e 85 mov    $0xffffffff857e2189,%rdi
-  34: 44 89 e2              mov    %r12d,%edx
-  37: 31 c0                xor    %eax,%eax
-  39: e8 38 5f a1 00        callq  0xa15f76
-  3e: eb a6                jmp    0xffffffe6
-
-Best,
-Wei
+> Racing conflict could be:
+> task A                 task B
+> list_for_each_entry
+> strcmp(h->name))
+>                        list_for_each_entry
+>                        strcmp(h->name)
+> kzalloc                kzalloc
+> ......                 .....
+> device_create          device_create
+> list_add
+>                        list_add
+> 
+> The root cause is that task B has no idea about the fact someone
+> else(A) has inserted heap with same name when it calls list_add,
+> so a potential collision occurs.
+> 
+> Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ---
+> v1: https://lore.kernel.org/all/TYCP286MB2323950197F60FC3473123B7CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
+> v1->v2: Narrow down locking scope, check the existence of heap before
+> insertion, as suggested by Andrew Davis.
+> v2->v3: Remove double checking.
+> v3->v4: Minor coding style and patch formatting adjustment.
+> ---
+>  drivers/dma-buf/dma-heap.c | 28 +++++++++++++++-------------
+>  1 file changed, 15 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+> index 8f5848aa144f..59d158873f4c 100644
+> --- a/drivers/dma-buf/dma-heap.c
+> +++ b/drivers/dma-buf/dma-heap.c
+> @@ -233,18 +233,6 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> -	/* check the name is unique */
+> -	mutex_lock(&heap_list_lock);
+> -	list_for_each_entry(h, &heap_list, list) {
+> -		if (!strcmp(h->name, exp_info->name)) {
+> -			mutex_unlock(&heap_list_lock);
+> -			pr_err("dma_heap: Already registered heap named %s\n",
+> -			       exp_info->name);
+> -			return ERR_PTR(-EINVAL);
+> -		}
+> -	}
+> -	mutex_unlock(&heap_list_lock);
+> -
+>  	heap = kzalloc(sizeof(*heap), GFP_KERNEL);
+>  	if (!heap)
+>  		return ERR_PTR(-ENOMEM);
+> @@ -283,13 +271,27 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+>  		err_ret = ERR_CAST(dev_ret);
+>  		goto err2;
+>  	}
+> -	/* Add heap to the list */
+> +
+>  	mutex_lock(&heap_list_lock);
+> +	/* check the name is unique */
+> +	list_for_each_entry(h, &heap_list, list) {
+> +		if (!strcmp(h->name, exp_info->name)) {
+> +			mutex_unlock(&heap_list_lock);
+> +			pr_err("dma_heap: Already registered heap named %s\n",
+> +			       exp_info->name);
+> +			err_ret = ERR_PTR(-EINVAL);
+> +			goto err3;
+> +		}
+> +	}
+> +
+> +	/* Add heap to the list */
+>  	list_add(&heap->list, &heap_list);
+>  	mutex_unlock(&heap_list_lock);
+>  
+>  	return heap;
+>  
+> +err3:
+> +	device_destroy(dma_heap_class, heap->heap_devt);
+>  err2:
+>  	cdev_del(&heap->heap_cdev);
+>  err1:
+> -- 
+> 2.25.1
+> 
