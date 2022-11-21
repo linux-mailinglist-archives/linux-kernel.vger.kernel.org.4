@@ -2,112 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB7A632EE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE07632EE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 22:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbiKUVdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 16:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S231625AbiKUVdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 16:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiKUVdK (ORCPT
+        with ESMTP id S229460AbiKUVd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 16:33:10 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF9F10B5F;
-        Mon, 21 Nov 2022 13:33:08 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id gv23so31526839ejb.3;
-        Mon, 21 Nov 2022 13:33:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MrnT+eSbey2CG+aPSBBnxrMG7unNpVOnktkqfmkzqVU=;
-        b=n6ChiPX/0X6KmY7+2o4+fswG5u7ei9vyDif1QYvCokDRZtasfbHHoM1gqpfPC1kNns
-         aw1mNKF3DlH/d+46jwy7UVuURA/jwPqAv6+siGb+IAFnL1jMOiV0dlbnH94tpdyYcUhq
-         IAqz6alY2BEUzJbBeIhxt9br1EZ5o3Ol30/8dBh1H96brOgmV7noZ4Nnc8izd1zMzOQq
-         NOBKdUmTKsO/KrzrjeuP+OOtCbE3GaEyGmS64OrQyiC0NRcX28WONs89jJkk8kApqJC0
-         YYJG3xma3lsIFG2+tyQbXB6xwl/L1Dy1lS5nuIXcmPenWMA71Fd5+10ORiM1+eBY9IRC
-         G6yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MrnT+eSbey2CG+aPSBBnxrMG7unNpVOnktkqfmkzqVU=;
-        b=6zlQ2kVvWzhWVeazc8vecX/OjN+k90Erz2Sa+ocPSNTSFL0rxpF/onN38nCBG9Pg9Z
-         4s73P3dpaiU7e+OCUVSZ1d7THRyiRn7XuNUY7ITHlc1TNvFAp5wj/TwvmAHE2OvezKG1
-         sJoqxno+TlY1b6KhwDz7EhyEnnf2HRd3jAiT48vUelg3XTlwoSbao9mY+DjVs/vtyVOa
-         zbRS7i93ZSGy2L0SyAdY2Xl/laqoKMkPjQAgJvkefeY3v5ZHOIGVYs5vju6cr83Rkbz9
-         ofawEy7OVidNPoQM/OliXRihBVoYqEVqjo0cyw1l0IuMHV3zfTseOQW7pRVjfbwWqlc0
-         r+VA==
-X-Gm-Message-State: ANoB5pmJoqBs2v0CncftXkN0DFDEGXwdoElLi7UjU1PSnN+wt12EYRd6
-        h8X3V6bxh+laM6+0EPRu1Y8=
-X-Google-Smtp-Source: AA0mqf6vCReIQ8RGXycSP2jzKhKbxAj0ZLfxQq5d8yLVtjj3HJWldO6lB73MNpWQrMUvgv3McGlJJQ==
-X-Received: by 2002:a17:906:b0cd:b0:78d:8c6b:397b with SMTP id bk13-20020a170906b0cd00b0078d8c6b397bmr4210221ejb.364.1669066387317;
-        Mon, 21 Nov 2022 13:33:07 -0800 (PST)
-Received: from skbuf ([188.26.57.184])
-        by smtp.gmail.com with ESMTPSA id cn16-20020a0564020cb000b0045c010d0584sm5644221edb.47.2022.11.21.13.33.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 13:33:06 -0800 (PST)
-Date:   Mon, 21 Nov 2022 23:33:04 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com
-Subject: Re: [RFC Patch net-next v2 2/8] net: dsa: microchip: adding the
- posix clock support
-Message-ID: <20221121213304.vytvbfvikuwcw3oi@skbuf>
-References: <20221121154150.9573-1-arun.ramadoss@microchip.com>
- <20221121154150.9573-1-arun.ramadoss@microchip.com>
- <20221121154150.9573-3-arun.ramadoss@microchip.com>
- <20221121154150.9573-3-arun.ramadoss@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121154150.9573-3-arun.ramadoss@microchip.com>
- <20221121154150.9573-3-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 16:33:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FF91C41E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 13:33:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CB607CE186C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 21:33:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9486FC433C1;
+        Mon, 21 Nov 2022 21:33:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1669066401;
+        bh=Dl1R9b0AHghTRfXyys1XgEZQ5J33PnAzaYPtOIHH+zM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dwGiAgsGwInbdHDjuP9L+CDahcr5Nn6x2oKNpsogkF0A+fZ06kwUY+t2PFN53uC3n
+         Y3dv4ajua98tlVlDTMUVDpA4w8xZ2vAclcKisv5Px1E/CctRrOTNBxxUybF55iYRjC
+         8/kiCJOHBIRWIcp9tINmI7Gbyo02sYAX664KKRNA=
+Date:   Mon, 21 Nov 2022 13:33:20 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com
+Subject: Re: [PATCH v1] mm/gup: disallow FOLL_FORCE|FOLL_WRITE on hugetlb
+ mappings
+Message-Id: <20221121133320.a4e1c70af6ca72f29795fd5f@linux-foundation.org>
+In-Reply-To: <e2e59601-ced3-a62e-48e8-69fd24b1297e@redhat.com>
+References: <20221031152524.173644-1-david@redhat.com>
+        <Y1/0e12ZJT6+N0kI@nvidia.com>
+        <Y2BIbyxT0Bh6bCUr@monkey>
+        <e2e59601-ced3-a62e-48e8-69fd24b1297e@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 09:11:44PM +0530, Arun Ramadoss wrote:
-> +int ksz_ptp_clock_register(struct dsa_switch *ds)
-> +{
-> +	/* Register the PTP Clock */
-> +	ptp_data->clock = ptp_clock_register(&ptp_data->caps, dev->dev);
-> +	if (IS_ERR_OR_NULL(ptp_data->clock))
-> +		return PTR_ERR(ptp_data->clock);
-> +}
-> +
-> +void ksz_ptp_clock_unregister(struct dsa_switch *ds)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +	struct ksz_ptp_data *ptp_data = &dev->ptp_data;
-> +
-> +	if (IS_ERR_OR_NULL(ptp_data->clock))
-> +		return;
-> +
-> +	ptp_clock_unregister(ptp_data->clock);
-> +}
+On Mon, 21 Nov 2022 09:05:43 +0100 David Hildenbrand <david@redhat.com> wrote:
 
-API usage seems to be incorrect here (probably copied from sja1105 which
-is written by me and also incorrect, yay).
+> >> MikeK do you have test cases?
+> > 
+> > Sorry, I do not have any test cases.
+> > 
+> > I can ask one of our product groups about their usage.  But, that would
+> > certainly not be a comprehensive view.
+> 
+> With
+> 
+> https://lkml.kernel.org/r/20221116102659.70287-1-david@redhat.com
+> 
+> on it's way, the RDMA concern should be gone, hopefully.
+> 
+> @Andrew, can you queue this one? Thanks.
 
-The intention with IS_ERR_OR_NULL() is for the caller to return 0
-(success) when ptp_clock_register() returns NULL (when PTP support
-is compiled out), and this will not make the driver fail to probe.
+This is all a little tricky.
 
-There isn't a reason to use IS_ERR_OR_NULL() in the normal unregister
-code path, because the code won't get there in the IS_ERR() case.
-So a simple "if (ptp_data->clock) ptp_clock_unregister(ptp_data->clock)"
-would do.
+It's not good that 6.0 and earlier permit unprivileged userspace to
+trigger a WARN.  But we cannot backport this fix into earlier kernels
+because it requires the series "mm/gup: remove FOLL_FORCE usage from
+drivers (reliable R/O long-term pinning)".
+
+Is it possible to come up with a fix for 6.1 and earlier which won't
+break RDMA?
+
