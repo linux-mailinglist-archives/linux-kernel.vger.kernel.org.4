@@ -2,100 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1379E631BC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE46B631BC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiKUIpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S230149AbiKUIp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiKUIpJ (ORCPT
+        with ESMTP id S230145AbiKUIpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:45:09 -0500
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9813661744;
-        Mon, 21 Nov 2022 00:45:08 -0800 (PST)
-Received: by mail-ej1-f51.google.com with SMTP id gv23so26846361ejb.3;
-        Mon, 21 Nov 2022 00:45:08 -0800 (PST)
+        Mon, 21 Nov 2022 03:45:16 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51027212E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:45:14 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id r8so3116374ljn.8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:45:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mycMge6787I2pSG246uybE+7CW7nJVNvvmftra6HFuc=;
+        b=EpCIUBS1xLeEDrqaJF+VCHWZRLmXU/nQF3q72N6xLlGNAOw9okfhX6AJTkUsmacS++
+         8GHdCUDpo7gDtaNU4CRgy84ky9JKr11n9jsSQHU4nacXn750M5txZ77fCl0losTGiCF9
+         AX7DlOE6fbMx/FYg02ASuqJ0m0TsVS3i5nIlDr+oaGBn1DnZFVtMRRgnpVR7co9sTdKW
+         TeYd/uSlquRtpUN8ngminea2BQ4JuFGMun3RPjkuZxGkQ4/0nTZg6AkF7Y5N2v1f6Ys8
+         dulwvixdg5kqlvvvqwoeTQOjGgMIGBitFv1LnjCEbM8b8yhSXwUlRvBrgkIo3GiQ39Jb
+         8bJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OSwlfEXLAaByikFdLKEpN0fMli0S+iw5J5JRP+E+1Cc=;
-        b=rvQCUCyxWAlLkTXzd4eJbfIbHWOHY0fpbLDY+PkqkAE9T7lE4SegWbl5WWGliyV+ih
-         LM1cW4bGK81GNwYL4ZzsCV8mCuWZhc/HedEOvXTYZRlQbTd9I1YBkIfhSFuBzG0I4nfN
-         2P8pYGntOiji5oD0t7VDmShr3gaO4t24fAiROX7dpyOSTC1M81QjDGWX39zblAOr73NN
-         VFfcEXrVspB/4cmCiCMIyJ7NGwMHJaeaWtCx7MBEmsTXbVNdlSIy5K5pHTgsdLsThAB4
-         adDN9hZmD4dL8Wd0i+ZbvXjvvRPMM3eSECmkDIKxqTiNF9FlYxm9LF1BukRMwxse9V7Z
-         AvRg==
-X-Gm-Message-State: ANoB5pkUSbym6XGl3v8c838WTV/smfOPv+A+euXw6CQHhcELIU/inqni
-        +whBKFnJuv03J/P2NkxYmQQ=
-X-Google-Smtp-Source: AA0mqf41aeCMWBPw/W7bBHcNFCqsvqDvBWz2UqhC19oVJxhOzms9tp5qTIha/NA4JBOobYK3ayRaBQ==
-X-Received: by 2002:a17:906:ce35:b0:7ae:215:2dd5 with SMTP id sd21-20020a170906ce3500b007ae02152dd5mr14306117ejb.208.1669020307205;
-        Mon, 21 Nov 2022 00:45:07 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id es8-20020a056402380800b00459148fbb3csm4896199edb.86.2022.11.21.00.45.06
+        bh=mycMge6787I2pSG246uybE+7CW7nJVNvvmftra6HFuc=;
+        b=OtwZfljsR1F7HweMfeM4bQPsaKyJHM8OyFooENLNw51M9QkbBT9lpvUS46NMoO609A
+         PX4Uz7Goa684TOed+klToJDyD/QUNdJyiFT5Ynx0GU8xkn4zTTa7dBfxmbQ1i0tCZ1nn
+         1l75h9fV6EDJbYLT1WfbnW8J8mw9Qns3JaZW5XIdLd6l5p+B0gFePOKn7GVPM+FhivNx
+         5zpZQPJrgmj2N6o0yTapofCblen2ymz73vH8rQ1dYEXHjNw3KG0GoaxhVPi8VVfFuXZY
+         aR2DfmIET+E+yg5d9kF9EmyCitPyCNp9knnl1qYKKDGTh7t8CywX0tdA3UIgpKrAO/Rc
+         0o0A==
+X-Gm-Message-State: ANoB5pkdjWmlbuBcA5Llihw6YRCZeLtaW9ZjJgwvb7OlayGi3vEBj2Of
+        bKDwfY5tYOs4GFZRThctjtt9rA==
+X-Google-Smtp-Source: AA0mqf7lf5Y283PltKwNYB6rVc/aL101oDcgs/xDNwunV6PjB/jvcixKvd81YQAo5e3xQh08QOAdWg==
+X-Received: by 2002:a2e:b523:0:b0:277:31c3:ca17 with SMTP id z3-20020a2eb523000000b0027731c3ca17mr413372ljm.523.1669020313313;
+        Mon, 21 Nov 2022 00:45:13 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c26-20020ac25f7a000000b0049f54c5f2a4sm1922312lfc.229.2022.11.21.00.45.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 00:45:06 -0800 (PST)
-Message-ID: <1b5a963c-2a5b-54fe-784e-fcc4d06c347e@kernel.org>
-Date:   Mon, 21 Nov 2022 09:45:05 +0100
+        Mon, 21 Nov 2022 00:45:12 -0800 (PST)
+Message-ID: <4d1fbddc-ee8b-1ab3-d1a9-8496bda3f668@linaro.org>
+Date:   Mon, 21 Nov 2022 09:45:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v5 09/14] serial: liteuart: fix rx loop variable types
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 07/14] dt-bindings: clock: Add StarFive JH7110 system
+ and always-on clock definitions
 Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-To:     Gabriel Somlo <gsomlo@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        kgugala@antmicro.com, mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        geert@linux-m68k.org, ilpo.jarvinen@linux.intel.com
-References: <20221118145512.509950-1-gsomlo@gmail.com>
- <20221118145512.509950-10-gsomlo@gmail.com>
- <44bf21b6-cbe4-4d73-0883-a9bcbd7d5971@kernel.org>
-In-Reply-To: <44bf21b6-cbe4-4d73-0883-a9bcbd7d5971@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+References: <20221118010627.70576-1-hal.feng@starfivetech.com>
+ <20221118010627.70576-8-hal.feng@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118010627.70576-8-hal.feng@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21. 11. 22, 9:37, Jiri Slaby wrote:
-> On 18. 11. 22, 15:55, Gabriel Somlo wrote:
->> Update variable types to match the signature of uart_insert_char()
->> which consumes them.
->>
->> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
->> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->> ---
->>   drivers/tty/serial/liteuart.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/tty/serial/liteuart.c 
->> b/drivers/tty/serial/liteuart.c
->> index 81aa7c1da73c..42ac9aee050a 100644
->> --- a/drivers/tty/serial/liteuart.c
->> +++ b/drivers/tty/serial/liteuart.c
->> @@ -73,8 +73,7 @@ static void liteuart_timer(struct timer_list *t)
->>       struct liteuart_port *uart = from_timer(uart, t, timer);
->>       struct uart_port *port = &uart->port;
->>       unsigned char __iomem *membase = port->membase;
->> -    int ch;
->> -    unsigned long status;
->> +    unsigned int status, ch;
+On 18/11/2022 02:06, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
 > 
-> These should be u8 after all, right?
+> Add all clock outputs for the StarFive JH7110 system (SYS) and
+> always-on (AON) clock generator.
+> 
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  MAINTAINERS                                 |   5 +-
+>  include/dt-bindings/clock/starfive-jh7110.h | 234 ++++++++++++++++++++
+>  2 files changed, 237 insertions(+), 2 deletions(-)
+>  create mode 100644 include/dt-bindings/clock/starfive-jh7110.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e6f1060e7964..e97dac9c0ee4 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19598,12 +19598,13 @@ M:	Ion Badulescu <ionut@badula.org>
+>  S:	Odd Fixes
+>  F:	drivers/net/ethernet/adaptec/starfire*
+>  
+> -STARFIVE JH7100 CLOCK DRIVERS
+> +STARFIVE CLOCK DRIVERS
+>  M:	Emil Renner Berthing <kernel@esmil.dk>
+> +M:	Hal Feng <hal.feng@starfivetech.com>
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/clock/starfive,jh7100-*.yaml
+>  F:	drivers/clk/starfive/
+> -F:	include/dt-bindings/clock/starfive-jh7100*.h
+> +F:	include/dt-bindings/clock/starfive*
+>  
+>  STARFIVE JH7100 PINCTRL DRIVER
+>  M:	Emil Renner Berthing <kernel@esmil.dk>
+> diff --git a/include/dt-bindings/clock/starfive-jh7110.h b/include/dt-bindings/clock/starfive-jh7110.h
 
-And can you change membase to u8 * too 8-)?
+Filename based / the same as compatible (or bindings filename).
 
--- 
-js
-suse labs
+
+Best regards,
+Krzysztof
 
