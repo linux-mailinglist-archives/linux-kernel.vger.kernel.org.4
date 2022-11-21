@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF9B6327FC
+	by mail.lfdr.de (Postfix) with ESMTP id 74FAF6327FB
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 16:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiKUP0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 10:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S232102AbiKUP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 10:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiKUP0p (ORCPT
+        with ESMTP id S229758AbiKUP0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 10:26:45 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279C62B8;
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFB52E0;
         Mon, 21 Nov 2022 07:26:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1669044404; x=1700580404;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5TSvQT5+U3vvcJBcdLDzf8vC8Y35yVoLbaW0xTDEF8U=;
-  b=SXfRJwj4TGc5cmbHcjKs/BCt/dNXXlAzwn3e9oeIhecDQxS3VMIQyNJR
-   cIHRcWDw2fTK6juOZ67jzdaNa/8L/y9HJKoKBoy4ECyX0C2OFna7SFVha
-   nwGDBhd3l4SW9j0TG66IblEpYEn7KzEBjr84AQRFkeIa/wiQd372fL5yg
-   1i07++ds6sMkbY7Uwk573ACDumQ9lYDyFvZXz+X+RaNenL7QuLr+Kq4dR
-   TlLxhmtHc2JrfIrAFq+QVrwaaoCx6yXLpQbFwhuzRJj8kn4twbfo97A5b
-   I3nnEMOB2sHELEBNeq1NsMLPg9CrJbKLUUqnkd/PjkZKi8JFEVg/5xYfc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="296941338"
+  bh=D+VBW6XwroKj5NIfjAKgNJPCqO6QO8SpE0cvuaGIrmQ=;
+  b=TCUNPIl2u/PTe2AytDyO8StJH9iQ2GR8vwdcLAYBYSmwJQ0j9R6ahwyN
+   TQtmhrBJHhRzeybVxZ4l44JFS0X9XK4YM80DA0C9yvzfBGIRtyS5FCyPT
+   L8E5XyroCNHzPONEr4drG2iTM2Dac2ceD7DBaiJjPQj4IlZux0Yexrb38
+   QBf0Ta1/C1hBjRdj1qtqinzwRmwKBxZXrp9sQRItg9zOkP4tVKVclLXue
+   BMM6CSeD6IU/ffvvGfe/qRS4qFoEefEKscBUQRPZlqqw9GVvFPKG6rlSY
+   e6F77SqeGdcCswiAIwa13EQGGl1WDsnZRgAnET/Evt8E2EFzbGYJ6nnFo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="399872889"
 X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="296941338"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 07:26:43 -0800
+   d="scan'208";a="399872889"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 07:26:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="635213958"
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="746949111"
 X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
-   d="scan'208";a="635213958"
+   d="scan'208";a="746949111"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2022 07:26:39 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 21 Nov 2022 07:26:39 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 387B884; Mon, 21 Nov 2022 17:27:05 +0200 (EET)
+        id 416CE2F3; Mon, 21 Nov 2022 17:27:05 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
@@ -57,113 +57,129 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bingbu Cao <bingbu.cao@intel.com>,
         Tianshu Qiu <tian.shu.qiu@intel.com>,
         Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v2 2/4] media: ipu3-cio2: Convert to use software_node_register_node_group()
-Date:   Mon, 21 Nov 2022 17:27:02 +0200
-Message-Id: <20221121152704.30180-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 3/4] software node: Switch property entry test to a new API
+Date:   Mon, 21 Nov 2022 17:27:03 +0200
+Message-Id: <20221121152704.30180-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221121152704.30180-1-andriy.shevchenko@linux.intel.com>
 References: <20221121152704.30180-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The currently used software_node_register_nodes() is going to
-be removed. Prepare driver by switching to a new API.
+Switch property entry test to use software_node_register_node_group() API.
+The current one is going to be removed soon.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
 v2: added tags (Heikki, Daniel)
 
- drivers/media/pci/intel/ipu3/cio2-bridge.c | 21 ++++++++++++++++++---
- drivers/media/pci/intel/ipu3/cio2-bridge.h |  5 +++--
- 2 files changed, 21 insertions(+), 5 deletions(-)
+ drivers/base/test/property-entry-test.c | 30 ++++++++++++-------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
-index 18974a72e94a..dfefe0d8aa95 100644
---- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
-+++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
-@@ -195,6 +195,19 @@ static void cio2_bridge_init_swnode_names(struct cio2_sensor *sensor)
- 		 SWNODE_GRAPH_ENDPOINT_NAME_FMT, 0); /* And endpoint 0 */
- }
- 
-+static void cio2_bridge_init_swnode_group(struct cio2_sensor *sensor)
-+{
-+	struct software_node *nodes = sensor->swnodes;
-+
-+	sensor->group[SWNODE_SENSOR_HID] = &nodes[SWNODE_SENSOR_HID];
-+	sensor->group[SWNODE_SENSOR_PORT] = &nodes[SWNODE_SENSOR_PORT];
-+	sensor->group[SWNODE_SENSOR_ENDPOINT] = &nodes[SWNODE_SENSOR_ENDPOINT];
-+	sensor->group[SWNODE_CIO2_PORT] = &nodes[SWNODE_CIO2_PORT];
-+	sensor->group[SWNODE_CIO2_ENDPOINT] = &nodes[SWNODE_CIO2_ENDPOINT];
-+	if (sensor->ssdb.vcmtype)
-+		sensor->group[SWNODE_VCM] =  &nodes[SWNODE_VCM];
-+}
-+
- static void cio2_bridge_create_connection_swnodes(struct cio2_bridge *bridge,
- 						  struct cio2_sensor *sensor)
+diff --git a/drivers/base/test/property-entry-test.c b/drivers/base/test/property-entry-test.c
+index 6071d5bc128c..dd2b606d76a3 100644
+--- a/drivers/base/test/property-entry-test.c
++++ b/drivers/base/test/property-entry-test.c
+@@ -405,20 +405,18 @@ static void pe_test_move_inline_str(struct kunit *test)
+ /* Handling of reference properties */
+ static void pe_test_reference(struct kunit *test)
  {
-@@ -219,6 +232,8 @@ static void cio2_bridge_create_connection_swnodes(struct cio2_bridge *bridge,
- 	if (sensor->ssdb.vcmtype)
- 		nodes[SWNODE_VCM] =
- 			NODE_VCM(cio2_vcm_types[sensor->ssdb.vcmtype - 1]);
-+
-+	cio2_bridge_init_swnode_group(sensor);
+-	static const struct software_node nodes[] = {
+-		{ .name = "1", },
+-		{ .name = "2", },
+-		{ }
+-	};
++	static const struct software_node node1 = { .name = "1" };
++	static const struct software_node node2 = { .name = "2" };
++	static const struct software_node *group[] = { &node1, &node2, NULL };
+ 
+ 	static const struct software_node_ref_args refs[] = {
+-		SOFTWARE_NODE_REFERENCE(&nodes[0]),
+-		SOFTWARE_NODE_REFERENCE(&nodes[1], 3, 4),
++		SOFTWARE_NODE_REFERENCE(&node1),
++		SOFTWARE_NODE_REFERENCE(&node2, 3, 4),
+ 	};
+ 
+ 	const struct property_entry entries[] = {
+-		PROPERTY_ENTRY_REF("ref-1", &nodes[0]),
+-		PROPERTY_ENTRY_REF("ref-2", &nodes[1], 1, 2),
++		PROPERTY_ENTRY_REF("ref-1", &node1),
++		PROPERTY_ENTRY_REF("ref-2", &node2, 1, 2),
+ 		PROPERTY_ENTRY_REF_ARRAY("ref-3", refs),
+ 		{ }
+ 	};
+@@ -427,7 +425,7 @@ static void pe_test_reference(struct kunit *test)
+ 	struct fwnode_reference_args ref;
+ 	int error;
+ 
+-	error = software_node_register_nodes(nodes);
++	error = software_node_register_node_group(group);
+ 	KUNIT_ASSERT_EQ(test, error, 0);
+ 
+ 	node = fwnode_create_software_node(entries, NULL);
+@@ -436,7 +434,7 @@ static void pe_test_reference(struct kunit *test)
+ 	error = fwnode_property_get_reference_args(node, "ref-1", NULL,
+ 						   0, 0, &ref);
+ 	KUNIT_ASSERT_EQ(test, error, 0);
+-	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &nodes[0]);
++	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &node1);
+ 	KUNIT_EXPECT_EQ(test, ref.nargs, 0U);
+ 
+ 	/* wrong index */
+@@ -447,7 +445,7 @@ static void pe_test_reference(struct kunit *test)
+ 	error = fwnode_property_get_reference_args(node, "ref-2", NULL,
+ 						   1, 0, &ref);
+ 	KUNIT_ASSERT_EQ(test, error, 0);
+-	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &nodes[1]);
++	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &node2);
+ 	KUNIT_EXPECT_EQ(test, ref.nargs, 1U);
+ 	KUNIT_EXPECT_EQ(test, ref.args[0], 1LLU);
+ 
+@@ -455,7 +453,7 @@ static void pe_test_reference(struct kunit *test)
+ 	error = fwnode_property_get_reference_args(node, "ref-2", NULL,
+ 						   3, 0, &ref);
+ 	KUNIT_ASSERT_EQ(test, error, 0);
+-	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &nodes[1]);
++	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &node2);
+ 	KUNIT_EXPECT_EQ(test, ref.nargs, 3U);
+ 	KUNIT_EXPECT_EQ(test, ref.args[0], 1LLU);
+ 	KUNIT_EXPECT_EQ(test, ref.args[1], 2LLU);
+@@ -470,14 +468,14 @@ static void pe_test_reference(struct kunit *test)
+ 	error = fwnode_property_get_reference_args(node, "ref-3", NULL,
+ 						   0, 0, &ref);
+ 	KUNIT_ASSERT_EQ(test, error, 0);
+-	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &nodes[0]);
++	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &node1);
+ 	KUNIT_EXPECT_EQ(test, ref.nargs, 0U);
+ 
+ 	/* second reference in the array */
+ 	error = fwnode_property_get_reference_args(node, "ref-3", NULL,
+ 						   2, 1, &ref);
+ 	KUNIT_ASSERT_EQ(test, error, 0);
+-	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &nodes[1]);
++	KUNIT_EXPECT_PTR_EQ(test, to_software_node(ref.fwnode), &node2);
+ 	KUNIT_EXPECT_EQ(test, ref.nargs, 2U);
+ 	KUNIT_EXPECT_EQ(test, ref.args[0], 3LLU);
+ 	KUNIT_EXPECT_EQ(test, ref.args[1], 4LLU);
+@@ -488,7 +486,7 @@ static void pe_test_reference(struct kunit *test)
+ 	KUNIT_EXPECT_NE(test, error, 0);
+ 
+ 	fwnode_remove_software_node(node);
+-	software_node_unregister_nodes(nodes);
++	software_node_unregister_node_group(group);
  }
  
- static void cio2_bridge_instantiate_vcm_i2c_client(struct cio2_sensor *sensor)
-@@ -252,7 +267,7 @@ static void cio2_bridge_unregister_sensors(struct cio2_bridge *bridge)
- 
- 	for (i = 0; i < bridge->n_sensors; i++) {
- 		sensor = &bridge->sensors[i];
--		software_node_unregister_nodes(sensor->swnodes);
-+		software_node_unregister_node_group(sensor->group);
- 		ACPI_FREE(sensor->pld);
- 		acpi_dev_put(sensor->adev);
- 		i2c_unregister_device(sensor->vcm_i2c_client);
-@@ -310,7 +325,7 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
- 		cio2_bridge_create_fwnode_properties(sensor, bridge, cfg);
- 		cio2_bridge_create_connection_swnodes(bridge, sensor);
- 
--		ret = software_node_register_nodes(sensor->swnodes);
-+		ret = software_node_register_node_group(sensor->group);
- 		if (ret)
- 			goto err_free_pld;
- 
-@@ -337,7 +352,7 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
- 	return 0;
- 
- err_free_swnodes:
--	software_node_unregister_nodes(sensor->swnodes);
-+	software_node_unregister_node_group(sensor->group);
- err_free_pld:
- 	ACPI_FREE(sensor->pld);
- err_put_adev:
-diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.h b/drivers/media/pci/intel/ipu3/cio2-bridge.h
-index 4418cbd08208..b93b749c65bd 100644
---- a/drivers/media/pci/intel/ipu3/cio2-bridge.h
-+++ b/drivers/media/pci/intel/ipu3/cio2-bridge.h
-@@ -117,8 +117,9 @@ struct cio2_sensor {
- 	struct acpi_device *adev;
- 	struct i2c_client *vcm_i2c_client;
- 
--	/* SWNODE_COUNT + 1 for terminating empty node */
--	struct software_node swnodes[SWNODE_COUNT + 1];
-+	/* SWNODE_COUNT + 1 for terminating NULL */
-+	const struct software_node *group[SWNODE_COUNT + 1];
-+	struct software_node swnodes[SWNODE_COUNT];
- 	struct cio2_node_names node_names;
- 
- 	struct cio2_sensor_ssdb ssdb;
+ static struct kunit_case property_entry_test_cases[] = {
 -- 
 2.35.1
 
