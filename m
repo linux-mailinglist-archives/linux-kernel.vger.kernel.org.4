@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AC463219B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 676856321CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiKUMIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
+        id S229645AbiKUMWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKUMIc (ORCPT
+        with ESMTP id S229495AbiKUMWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:08:32 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EBA45095
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:08:31 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id d20so14215824ljc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mp/Wf7Ihyn7IRm224a6elGwJlmdiu5nLebRBT6EL2QY=;
-        b=YtArTj74J8IWD8ozryoyr8jgBtCtYTisL83R4ZTuWeI4lKKYPZWjpNHRgmVCqmHEU8
-         p/S6DnN82lh6h9zMitXTzE6sz7RqV9bREiwkZ/AjGuyseg1VyPDdf6s0vnri41vWzwU+
-         6A9shmNbl00ggyoXbkvzTVcgESEmHFSvzWc1c8/j7FdJqvoK+qwNKPa0xUBgObbJT8mI
-         YzndDbvMZGWpeuGtPUnptnefQgoJc2iyMwCc49WAjKDtUTdtbK5JgwHX8I8kWVXN16VU
-         hCsWQ1NPfKmjjUyVN585BSWARIbiHJBJbuypt7k2RJZDS6TNB7x6z1/SYOasdF7aaogu
-         To1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mp/Wf7Ihyn7IRm224a6elGwJlmdiu5nLebRBT6EL2QY=;
-        b=aUUgE/F9ipDoySkra4J0A05H4UA/Mp6f1U4D59sAuhyxdOebSQFDm9q4l4bzBRgKsP
-         pmN8vMumRVAQ2S6h+7pbw3mAB70CgGdeVxH/ovIqpJOYRUi/7EYEiEpZWHGfIztJAJbu
-         aGdrTuXhPpYkrNe8XNdAR9A8KS+FGEmNzGgupQ2DW/NP6rKl2hLec15N5mwPaAxiXslW
-         QcCLWKpYAuRiexS50u17gX6kThY0TavPzhRaU07zjgKrspA9fVlJ6f+PcejAcfZkK1BK
-         np4WGz20JlrwgIcOgD6e0QzrCwBEIYqScfIorKxOOYy1qrBeCV6yfMEhO/gm8EHqGFmv
-         HKVw==
-X-Gm-Message-State: ANoB5plDCtdxlN6N6n8jqcEzPfAyrgq7MayQR95eoOYKP29xdk2WqCPR
-        DBpi7xkBiH64TK7NN6VaKySO+Q==
-X-Google-Smtp-Source: AA0mqf7nzlJ13PlkibFVu8sbGpZadx0YW7VJA9cwKVJLyjBcjoYZRkY5LsNsaHcWs6OROfJdyXkxKw==
-X-Received: by 2002:a2e:a911:0:b0:277:44b2:6b9c with SMTP id j17-20020a2ea911000000b0027744b26b9cmr5272068ljq.26.1669032509403;
-        Mon, 21 Nov 2022 04:08:29 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id h7-20020a056512220700b0049ae3ed42e8sm1992278lfu.180.2022.11.21.04.08.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 04:08:28 -0800 (PST)
-Message-ID: <dd6acba0-fa3a-1dae-b383-d70cc08dd114@linaro.org>
-Date:   Mon, 21 Nov 2022 13:08:27 +0100
+        Mon, 21 Nov 2022 07:22:07 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9AB2C114
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:22:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669033326; x=1700569326;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YKC4AsIBlrcJzc9V2jYLZIn6QS66e188H3uD5Ifr8GA=;
+  b=TmTkW2jjcfuScsOGlioXPUz7WKbMppNFOCmO2dAww0SFXMob0YqZdhqu
+   wqLbXMTEFdTqFAo+z2JsmQB39KYYpV86BwIklt1S1tywTKoHJiG0qAUZC
+   nu9B25X5NrM306pBKI0M3s7oiW0M83Gm7G/DA/PlS96o/6HZcJbalQKme
+   eRZGr0IDO1hVbGvouBpkTxiZqMsHT7nZi/+YrvJ9MLYH0JarDqZoTYL8J
+   Cv3/jbA8PmvWEkd8LbYQ3lGwvmM2ydzXs9aT4ltFTFcg1onFY/04ZCqEW
+   KKsKf1045gIRibPO9fwxitsozTpEk0Pq0lRXvGGUxVazeofawfoPyrWK5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="399832375"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="399832375"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 04:22:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10537"; a="618806451"
+X-IronPort-AV: E=Sophos;i="5.96,181,1665471600"; 
+   d="scan'208";a="618806451"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga006.jf.intel.com with ESMTP; 21 Nov 2022 04:22:03 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2ALCM2sq004950;
+        Mon, 21 Nov 2022 12:22:02 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] x86/boot: fix relying on link order
+Date:   Mon, 21 Nov 2022 13:09:18 +0100
+Message-Id: <20221121120918.388035-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <2993a60c-edaa-a29a-2644-3ee86c622847@intel.com>
+References: <20221101161529.1634188-1-alexandr.lobakin@intel.com> <20221107125528.543764-1-alexandr.lobakin@intel.com> <2993a60c-edaa-a29a-2644-3ee86c622847@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/6] phy: tesla-pcie: Add PCIe PHY driver support for FSD
-Content-Language: en-US
-To:     Shradha Todi <shradha.t@samsung.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kishon@ti.com, vkoul@kernel.org, lpieralisi@kernel.org,
-        kw@linux.com, mani@kernel.org, arnd@arndb.de,
-        gregkh@linuxfoundation.org, alim.akhtar@samsung.com,
-        ajaykumar.rs@samsung.com, rcsekar@samsung.com,
-        sriranjani.p@samsung.com, bharat.uppal@samsung.com,
-        s.prashar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, p.rajanbabu@samsung.com,
-        niyas.ahmed@samsung.com, chanho61.park@samsung.com
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-References: <20221121105210.68596-1-shradha.t@samsung.com>
- <CGME20221121104736epcas5p36c12ff0b575af77f8cf99811b055b339@epcas5p3.samsung.com>
- <20221121105210.68596-5-shradha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221121105210.68596-5-shradha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 11:52, Shradha Todi wrote:
-> This patch adds PHY driver support for PCIe controller
-> found in Tesla FSD SoC.
+From: Dave Hansen <dave.hansen@intel.com>
+Date: Tue, 8 Nov 2022 15:09:07 -0800
+
+> On 11/7/22 04:55, Alexander Lobakin wrote:
+> > Ping?
+> > 
+> > Also, I managed to remove .head.text at all from x86. Would it be
+> > better to respin this series with the third patch or send a
+> > follow-up later?
+> > 
 > 
-> Signed-off-by: Niyas Ahmed S T <niyas.ahmed@samsung.com>
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
-> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-> ---
->  drivers/phy/samsung/Kconfig          |  10 +
->  drivers/phy/samsung/Makefile         |   1 +
->  drivers/phy/samsung/phy-tesla-pcie.c | 397 +++++++++++++++++++++++++++
->  3 files changed, 408 insertions(+)
->  create mode 100644 drivers/phy/samsung/phy-tesla-pcie.c
+> Hi Alexander,
+
+Hey,
+
 > 
+> Things are a bit busy in the review queue at the moment.  As always,
+> we'd love help reviewing stuff.  So, while you're waiting for us to
+> review this, could you perhaps look around and find a series that's also
+> hurting for review tags?
 
-Same comment as for PCI. It's the third driver for Samsung Exynos PCIe
-PHY and every time you will say "but it is different".
+I've got Reviewed-by and Tested-by from Jiri, isn't that enough? Or
+I need also some other group to get tags from?
 
-No, work on unified approach not 3 different drivers.
-
-Best regards,
-Krzysztof
-
+Thanks,
+Olek
