@@ -2,129 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5790632912
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5713F632917
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 17:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiKUQLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 11:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
+        id S229865AbiKUQMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 11:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiKUQLl (ORCPT
+        with ESMTP id S229593AbiKUQMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 11:11:41 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6FBCEB98
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:11:40 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id q6-20020a056e020c2600b00302664fc72cso8859167ilg.14
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 08:11:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wQ1zfeFmNsAsIxaKH/SjGFqk5lQttN1A1CeY8+UIilU=;
-        b=WxlGi466Qelqr/2Frtb8g1adF45kxQnVzVqjAy6jGM4BXWfOxoFqQ6e6/Fb3FPS9Fi
-         Qlh7fyXgLWDrLeRakA6Otw8fQPig2O3hF1i1I9YF2x9IcAzLuoVSIC7yyC9iHHxFcYgV
-         eYKP5dv7pLG4Cp5P0smimDBqHbRvg19TLlQSpIYce2uy7DA/AnrxTWfhivkS9vR+bD5p
-         MwrkFGyD9EViQEaEpKOEgAy+iqSoUo+F1eNd+Xhta7pN1+Fe7Op30okx9uc+V8fG1AZv
-         RXjBNfNr+96Cmgca278RPabAl2K/Hak9qh2Ztus7HLu3YmwXmxMOVLkdL4jr3PrLSfly
-         YmLw==
-X-Gm-Message-State: ANoB5pmdPrG24jIsUldfAsqo/3uQOJrsrUBPtJV9K7q5MORjtYGsaP1B
-        7SBpU9u0so2x8UMPeFngOOUTl2GBdKeH/XH9P+hTeoG7/2iF
-X-Google-Smtp-Source: AA0mqf5TKpsu7cjyArCHQI4Bv/jOsQ9WA1NfZ8/8TVAf98OxGihpm9pZJD/r4zuyXKu5LbcMUz7XKuSIdY/0TGtqYL+OgaNOkCfA
+        Mon, 21 Nov 2022 11:12:30 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23577F53;
+        Mon, 21 Nov 2022 08:12:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CE22A220D0;
+        Mon, 21 Nov 2022 16:12:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669047147; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eoTtLtRQFJkOuXTGDQgCRnPiZdbkTxUys+1kYjgptDA=;
+        b=O1s0wsU7jaRbS7uwWdjtvpv8yVeyW/G4kGex8BtkT5cDGxmlAtCSy9jC9JEaQKDqNq5UL/
+        nx76hCSr+camGVAE8Cc9m9HJ0irgdZe3Msjc+lEIOsuhvVbLG53vJQdo6pyh0JAg+z7GmB
+        +GuXjFpLt7bj01jx81hhhDHcn9BQ79g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669047147;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eoTtLtRQFJkOuXTGDQgCRnPiZdbkTxUys+1kYjgptDA=;
+        b=7vqKuxCgfP1ONjE5ztkXAk4X8lDcPy2w61Y1alJPxHwjwoSBGbFdZR+p5JlBWo8Nhy4p8Z
+        TIacpRrI54iRtzDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 949BB1377F;
+        Mon, 21 Nov 2022 16:12:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WY4TI2uje2NyWQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 21 Nov 2022 16:12:27 +0000
+Message-ID: <6d6728a2-03bc-0207-a1af-2df65c601df8@suse.de>
+Date:   Mon, 21 Nov 2022 17:12:27 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:280a:0:b0:302:47fc:5578 with SMTP id
- l10-20020a92280a000000b0030247fc5578mr37957ilf.45.1669047100041; Mon, 21 Nov
- 2022 08:11:40 -0800 (PST)
-Date:   Mon, 21 Nov 2022 08:11:40 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000082f1d605edfd4f60@google.com>
-Subject: [syzbot] BUG: corrupted list in v9fs_session_close
-From:   syzbot <syzbot+fbd9516e00e67ffaf87d@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, ericvh@gmail.com,
-        linux-kernel@vger.kernel.org, linux_oss@crudebyte.com,
-        lucho@ionkov.net, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 3/3] drm/gem-shmem: When drm_gem_object_init failed,
+ should release object
+Content-Language: en-US
+To:     ChunyouTang <tangchunyou@163.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch, sumit.semwal@linaro.org,
+        christian.koenig@amd.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+References: <20221119064131.364-1-tangchunyou@163.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221119064131.364-1-tangchunyou@163.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------178vOI27ZMnlsZ4D0f2x8z52"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------178vOI27ZMnlsZ4D0f2x8z52
+Content-Type: multipart/mixed; boundary="------------BSq1CN0WqfyR8W7YHLAcqEGh";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: ChunyouTang <tangchunyou@163.com>, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, airlied@gmail.com, daniel@ffwll.ch,
+ sumit.semwal@linaro.org, christian.koenig@amd.com
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Message-ID: <6d6728a2-03bc-0207-a1af-2df65c601df8@suse.de>
+Subject: Re: [PATCH v2 3/3] drm/gem-shmem: When drm_gem_object_init failed,
+ should release object
+References: <20221119064131.364-1-tangchunyou@163.com>
+In-Reply-To: <20221119064131.364-1-tangchunyou@163.com>
 
-syzbot found the following issue on:
+--------------BSq1CN0WqfyR8W7YHLAcqEGh
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ca37d9880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
-dashboard link: https://syzkaller.appspot.com/bug?extid=fbd9516e00e67ffaf87d
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+SGkNCg0KQW0gMTkuMTEuMjIgdW0gMDc6NDEgc2NocmllYiBDaHVueW91VGFuZzoNCj4gd2hl
+biBnb3RvIGVycl9mcmVlLCB0aGUgb2JqZWN0IGhhZCBpbml0LCBzbyBpdCBzaG91bGQgYmUg
+cmVsZWFzZSB3aGVuIGZhaWwuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBDaHVueW91VGFuZyA8
+dGFuZ2NodW55b3VAMTYzLmNvbT4NCg0KVGhhbmtzIGEgbG90LiBJIG1lcmdlZCB0aGUgcGF0
+Y2ggaW50byBkcm0tbWlzYy1uZXh0Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IC0t
+LQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtLmMgICAgICAgICAgICAgIHwgMTkgKysr
+KysrKysrKysrKysrKy0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hl
+bHBlci5jIHwgIDQgKysrLQ0KPiAgIGluY2x1ZGUvZHJtL2RybV9nZW0uaCAgICAgICAgICAg
+ICAgICAgIHwgIDEgKw0KPiAgIDMgZmlsZXMgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwg
+NCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJt
+X2dlbS5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW0uYw0KPiBpbmRleCA4YjY4YTNjMWU2
+YWIuLjNlMmU2NjA3MTdjMyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9n
+ZW0uYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbS5jDQo+IEBAIC0xNjksNiAr
+MTY5LDIwIEBAIHZvaWQgZHJtX2dlbV9wcml2YXRlX29iamVjdF9pbml0KHN0cnVjdCBkcm1f
+ZGV2aWNlICpkZXYsDQo+ICAgfQ0KPiAgIEVYUE9SVF9TWU1CT0woZHJtX2dlbV9wcml2YXRl
+X29iamVjdF9pbml0KTsNCj4gICANCj4gKy8qKg0KPiArICogZHJtX2dlbV9wcml2YXRlX29i
+amVjdF9maW5pIC0gRmluYWxpemUgYSBmYWlsZWQgZHJtX2dlbV9vYmplY3QNCj4gKyAqIEBv
+Ymo6IGRybV9nZW1fb2JqZWN0DQo+ICsgKg0KPiArICogVW5pbml0aWFsaXplIGFuIGFscmVh
+ZHkgYWxsb2NhdGVkIEdFTSBvYmplY3Qgd2hlbiBpdCBpbml0aWFsaXplZCBmYWlsZWQNCj4g
+KyAqLw0KPiArdm9pZCBkcm1fZ2VtX3ByaXZhdGVfb2JqZWN0X2Zpbmkoc3RydWN0IGRybV9n
+ZW1fb2JqZWN0ICpvYmopDQo+ICt7DQo+ICsJV0FSTl9PTihvYmotPmRtYV9idWYpOw0KPiAr
+DQo+ICsJZG1hX3Jlc3ZfZmluaSgmb2JqLT5fcmVzdik7DQo+ICt9DQo+ICtFWFBPUlRfU1lN
+Qk9MKGRybV9nZW1fcHJpdmF0ZV9vYmplY3RfZmluaSk7DQo+ICsNCj4gICAvKioNCj4gICAg
+KiBkcm1fZ2VtX29iamVjdF9oYW5kbGVfZnJlZSAtIHJlbGVhc2UgcmVzb3VyY2VzIGJvdW5k
+IHRvIHVzZXJzcGFjZSBoYW5kbGVzDQo+ICAgICogQG9iajogR0VNIG9iamVjdCB0byBjbGVh
+biB1cC4NCj4gQEAgLTkzMCwxMiArOTQ0LDExIEBAIGRybV9nZW1fcmVsZWFzZShzdHJ1Y3Qg
+ZHJtX2RldmljZSAqZGV2LCBzdHJ1Y3QgZHJtX2ZpbGUgKmZpbGVfcHJpdmF0ZSkNCj4gICB2
+b2lkDQo+ICAgZHJtX2dlbV9vYmplY3RfcmVsZWFzZShzdHJ1Y3QgZHJtX2dlbV9vYmplY3Qg
+Km9iaikNCj4gICB7DQo+IC0JV0FSTl9PTihvYmotPmRtYV9idWYpOw0KPiAtDQo+ICAgCWlm
+IChvYmotPmZpbHApDQo+ICAgCQlmcHV0KG9iai0+ZmlscCk7DQo+ICAgDQo+IC0JZG1hX3Jl
+c3ZfZmluaSgmb2JqLT5fcmVzdik7DQo+ICsJZHJtX2dlbV9wcml2YXRlX29iamVjdF9maW5p
+KG9iaik7DQo+ICsNCj4gICAJZHJtX2dlbV9mcmVlX21tYXBfb2Zmc2V0KG9iaik7DQo+ICAg
+CWRybV9nZW1fbHJ1X3JlbW92ZShvYmopOw0KPiAgIH0NCj4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jIGIvZHJpdmVycy9ncHUvZHJtL2Ry
+bV9nZW1fc2htZW1faGVscGVyLmMNCj4gaW5kZXggMzUxMzhmOGEzNzVjLi5kYjczMjM0ZWRj
+YmUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBl
+ci5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jDQo+
+IEBAIC03OSw4ICs3OSwxMCBAQCBfX2RybV9nZW1fc2htZW1fY3JlYXRlKHN0cnVjdCBkcm1f
+ZGV2aWNlICpkZXYsIHNpemVfdCBzaXplLCBib29sIHByaXZhdGUpDQo+ICAgCX0gZWxzZSB7
+DQo+ICAgCQlyZXQgPSBkcm1fZ2VtX29iamVjdF9pbml0KGRldiwgb2JqLCBzaXplKTsNCj4g
+ICAJfQ0KPiAtCWlmIChyZXQpDQo+ICsJaWYgKHJldCkgew0KPiArCQlkcm1fZ2VtX3ByaXZh
+dGVfb2JqZWN0X2Zpbmkob2JqKTsNCj4gICAJCWdvdG8gZXJyX2ZyZWU7DQo+ICsJfQ0KPiAg
+IA0KPiAgIAlyZXQgPSBkcm1fZ2VtX2NyZWF0ZV9tbWFwX29mZnNldChvYmopOw0KPiAgIAlp
+ZiAocmV0KQ0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kcm0vZHJtX2dlbS5oIGIvaW5jbHVk
+ZS9kcm0vZHJtX2dlbS5oDQo+IGluZGV4IGJkNDJmMjVlNDQ5Yy4uOWIxZmViMDMwNjlkIDEw
+MDY0NA0KPiAtLS0gYS9pbmNsdWRlL2RybS9kcm1fZ2VtLmgNCj4gKysrIGIvaW5jbHVkZS9k
+cm0vZHJtX2dlbS5oDQo+IEBAIC00MDUsNiArNDA1LDcgQEAgaW50IGRybV9nZW1fb2JqZWN0
+X2luaXQoc3RydWN0IGRybV9kZXZpY2UgKmRldiwNCj4gICAJCQlzdHJ1Y3QgZHJtX2dlbV9v
+YmplY3QgKm9iaiwgc2l6ZV90IHNpemUpOw0KPiAgIHZvaWQgZHJtX2dlbV9wcml2YXRlX29i
+amVjdF9pbml0KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsDQo+ICAgCQkJCSBzdHJ1Y3QgZHJt
+X2dlbV9vYmplY3QgKm9iaiwgc2l6ZV90IHNpemUpOw0KPiArdm9pZCBkcm1fZ2VtX3ByaXZh
+dGVfb2JqZWN0X2Zpbmkoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmopOw0KPiAgIHZvaWQg
+ZHJtX2dlbV92bV9vcGVuKHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hKTsNCj4gICB2b2lk
+IGRybV9nZW1fdm1fY2xvc2Uoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEpOw0KPiAgIGlu
+dCBkcm1fZ2VtX21tYXBfb2JqKHN0cnVjdCBkcm1fZ2VtX29iamVjdCAqb2JqLCB1bnNpZ25l
+ZCBsb25nIG9ial9zaXplLA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBE
+cml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgN
+Ck1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwg
+QUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-Unfortunately, I don't have any reproducer for this issue yet.
+--------------BSq1CN0WqfyR8W7YHLAcqEGh--
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
+--------------178vOI27ZMnlsZ4D0f2x8z52
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fbd9516e00e67ffaf87d@syzkaller.appspotmail.com
+-----BEGIN PGP SIGNATURE-----
 
-list_del corruption. prev->next should be ffff00011fd79548, but was ffff00014c2e3030. (prev=ffff00010c388948)
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:61!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 3127 Comm: syz-executor.4 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __list_del_entry_valid+0xbc/0xd0 lib/list_debug.c:59
-lr : __list_del_entry_valid+0xbc/0xd0 lib/list_debug.c:59
-sp : ffff800012ddbcb0
-x29: ffff800012ddbcb0 x28: ffff0000c3e69a40 x27: 0000000000000000
-x26: 00000000000000c0 x25: 0000000000000002 x24: ffff80000d3ad050
-x23: ffff80000d3a9000 x22: 0000000000000000 x21: 0000000000000000
-x20: 0000000000000000 x19: ffff00011fd79500 x18: 00000000000000c0
-x17: 20747562202c3834 x16: ffff80000dc18158 x15: ffff0000c3e69a40
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c3e69a40
-x11: ff808000081c6510 x10: 0000000000000000 x9 : d3c609970caf8000
-x8 : d3c609970caf8000 x7 : ffff80000c0b2b74 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0001fefddcc8 x1 : 0000000100000001 x0 : 000000000000006d
-Call trace:
- __list_del_entry_valid+0xbc/0xd0 lib/list_debug.c:59
- __list_del_entry include/linux/list.h:134 [inline]
- list_del include/linux/list.h:148 [inline]
- v9fs_session_close+0x8c/0xd8 fs/9p/v9fs.c:516
- v9fs_kill_super+0x34/0x50 fs/9p/vfs_super.c:226
- deactivate_locked_super+0x70/0xe8 fs/super.c:332
- deactivate_super+0xd0/0xd4 fs/super.c:363
- cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
- __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
- task_work_run+0x100/0x148 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: f001b780 912ce000 aa0803e3 94aa876f (d4210000) 
----[ end trace 0000000000000000 ]---
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmN7o2sFAwAAAAAACgkQlh/E3EQov+A/
+cw/+OskibjtV/WFpXmKmO5DqHHMvgaSmrDZnnXTNtqEddrnW1cDSa2iwX/8Lj8LbiFF1viiBNQ/k
+7GQ1OSCGLo8R6nHFtwqOzL6oJiPhg+5odV0yNEZsF1qXLWkt/oIAU2jUUItQP0l+BqxuaA9BIVkZ
+RxCAqAF7Vmkr0BnGLNslvQ9mbj9wi/qtFQZsMEL1b5uZQnflnXvWfWfWEwRCAC8PfLL/oCNEmU4X
+OAfcyaQQgG76Fk3S+VJXlUx8aZgHbrZHnOY6YciV/8hwtTTHu+KHw1Mmk7MVrCVkZH7j4RAmMevJ
+kYJ3BbpPXWFQryBTdcf/fcFx2gvTE5YgoXXJLPULJONSBP6OqgyCSDw9ylksDoqM2/jGV5YU2I36
+Ke556SeB04wROSk/+uIi2k1NDtSZEeRt2AzGICkLe5eenSeEKRqqZ7G5xpGP/lAESrud1KfrHf1L
+nR2yWK4VSpycrUYt7X1nbKr9X76d+SpC780GWKHhmj9NBxeEIyOnyCgUU7BOVE54R1cbA4k/WK+8
+2tVTxPkIYDAXyLPvq3715hgoDkM7nhcGLwoSmqbUz0bENN47tiPNkViCjvSTn72fxDMmMZ8vuwyN
+ZVX28A58Dhs/lVGmB/ehga4QylzbeE0tOYrv+y01L1XqIh5KirzTBX8/LMvDNYSErlbCQ+Jz/3cH
+RHw=
+=gwHh
+-----END PGP SIGNATURE-----
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--------------178vOI27ZMnlsZ4D0f2x8z52--
