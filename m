@@ -2,116 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9157C632044
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB621632048
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 12:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiKULUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 06:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S230475AbiKULVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 06:21:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiKULTl (ORCPT
+        with ESMTP id S229518AbiKULUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 06:19:41 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB7FBF80B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:15:05 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id z24so14135455ljn.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:15:05 -0800 (PST)
+        Mon, 21 Nov 2022 06:20:30 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBC0C561A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:15:37 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id k19so14145925lji.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 03:15:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vGZVXroNko2LYkXX2d1H5176dslCLRw4/wVpm6c8VeI=;
-        b=qEhchM3MgppYSIBV1XnWkiC7NbnASNfljGkSnGQOviQ+f0Wj968PjRIOGWuwMkqy2H
-         jnb/GrzRQEIWgQs4+DiD1ktBBoqtC3N9eHWLjhajHw6PC+nEbPkKeDKrB/aVeNbVUXpG
-         cGw2bRIILy4ngROjKJ1kSJotNrl5rHhOba9aahn42csyn8ZgjDOnLO8vshyGtu1cGOIE
-         IRy3cIs6G25oghlRT8mBK5NRTj6L3AdJ8fElCY8s2cuDPPI7RQZkdccjmxLt7/tgKl1r
-         TMdnYki1lDOnEA/JcDFNRHWGED7LjPoFRhViaUizrraKvPOmNe9CPGs8NZozapePeAvV
-         5TkA==
+        bh=uWC8CYNLKIyO+05hiYCKGraT17Q/Il0FYDWGtXnGDsA=;
+        b=cLFBBJ7khNJ6Xv059O4X8uyLuI3lDNF8IVVuKU01pHaTqKykXdd8CpoXY9XQ2U/uy4
+         RsQ6EiPAjDo1cJtfnxg3LnKys60d7Hpc381RI+7CsT5rxAiCjlpLAkAsczZNYozwSnHZ
+         ppjKQujNviMGJmwaBhCId8rnA16UXhnwdMXpoEyj48TQhzpV+YlnMYkrTWj/g3PQOrFM
+         1tfpMjAIx4hzw6CLbGSqXuAOpd4JVOLqHEaKvLTbvbIIWoa0BXUukx+UGMlyExW3odu3
+         jKwnE+J/hx1GcpoxHQ3t826W2PbipfYNZW9c85pdfFeIr8y8rkeCN4SYDSphYficSOg3
+         L55w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vGZVXroNko2LYkXX2d1H5176dslCLRw4/wVpm6c8VeI=;
-        b=F+Xpxn0eEh4hEJVczIhRbPxHQhaodwUce8NirjcB238sUI1PowfLYxH6YWQUChBVul
-         xbd3pDfZ6/zVi6IFSq64b6dJ6prmYYIbY/s1McqOPxS5mbYM6U/gx8aaSOmEmXrt2JE+
-         S8QSj31frJohKuEGSpD8IHwI0OmQ546RkD7iGnr4GG4uNA944Ne7Exe7tNFgUoR9+DFD
-         U6jP3ZOBLAwaveSQj8/JHMo2e5iya39d+1MNQyjgULncuf3qdOuYV5a3wlbASAq0WhNA
-         o/BAqOZTOvJ8Jle4luv+BLXaaVoE3lAdasaIOH9jsmp6FGVT7n6BEm2p9pUpU736oxST
-         cr5Q==
-X-Gm-Message-State: ANoB5pkpq8gdeq/fJX+3lvJpklDXyLX/shX3hvT/O2mveEfIMIhylc5m
-        349TeYTUP1syvCyyxwMWSrsHHQ==
-X-Google-Smtp-Source: AA0mqf6ix/+IvbUURLngZVLZxzFONWcQeQ1FwEpxAM4PSx9ITjsMwk+U4Vc3uWLeua7FmQaNss7j9w==
-X-Received: by 2002:a2e:a265:0:b0:26d:ee99:93b4 with SMTP id k5-20020a2ea265000000b0026dee9993b4mr540887ljm.329.1669029303825;
-        Mon, 21 Nov 2022 03:15:03 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b0049e9122bd0esm1178039lfr.114.2022.11.21.03.15.02
+        bh=uWC8CYNLKIyO+05hiYCKGraT17Q/Il0FYDWGtXnGDsA=;
+        b=jRclMa9s83q9OU0MIqz9CMaeqzLH99Qyt65IhksQTftGLug6Mm+4yRe9/tPZ42V7k1
+         FRoFdGenJbi7CCg27qN7pVfY/rOx3e7L71O/6wfY4aUN+xwne5cD5WablKZlR8OGeY4f
+         007DlEiTjUAxbDaA8mIp1ZmWstiGB6VHROFOp+QVWMCzSNm0P8iols1hfrCFQY/KzE7C
+         qjXVjvsI3BSk0Z9RZuXSOhBtZmQ5/vdYq/gqeo70Zo4kql3e6B0J35VMUBHVuDdrh/oo
+         ak0LbitNnedPq46v41erI67gq9ZS70uvM21jk2mSWBCxO/6l71blEgV/hLlzDGbJ/NFW
+         Tcnw==
+X-Gm-Message-State: ANoB5pkSRt47L1rzmt94Z/M3npiLZjoeBa8Mq/XxmWm1I9UgJSYQMtWu
+        6K0VFc37xbhFcG57JT904lUTtA==
+X-Google-Smtp-Source: AA0mqf7xpS2eSVLUKP0jfKxKzA1Qc3nanDwhynuehhRBjbaU4FajHMh2tvjcdHn1JTDAZtbJnq7LIw==
+X-Received: by 2002:a2e:b55c:0:b0:277:7f8a:e21d with SMTP id a28-20020a2eb55c000000b002777f8ae21dmr172402ljn.447.1669029335721;
+        Mon, 21 Nov 2022 03:15:35 -0800 (PST)
+Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
+        by smtp.gmail.com with ESMTPSA id k11-20020a05651c10ab00b002793cf0e9e8sm852389ljn.122.2022.11.21.03.15.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 03:15:03 -0800 (PST)
-Message-ID: <3847c997-6f66-4595-6352-7ed3f4dd3f6d@linaro.org>
-Date:   Mon, 21 Nov 2022 12:15:02 +0100
+        Mon, 21 Nov 2022 03:15:35 -0800 (PST)
+Message-ID: <a0e482a8-fed0-622a-99ba-dba23c33fb17@linaro.org>
+Date:   Mon, 21 Nov 2022 12:15:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3] dt-bindings: iio: adc: ad7923: adjust documentation
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/9] arm64: dts: qcom: msm8953: Adjust reserved-memory
+ nodes
 Content-Language: en-US
-To:     Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221120153419.GA3094349-robh@kernel.org>
- <20221120170630.29354-1-edmund.berenson@emlix.com>
- <d83e9a3d-2482-4342-03c1-818a38bd4b7b@linaro.org>
- <20221121102600.uwmgivssgy7oakxf@emlix.com>
- <3a50ba73-aab7-f6db-5e42-beb7e193c5bf@linaro.org>
- <20221121104532.dibxead6kiv3xqzw@emlix.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221121104532.dibxead6kiv3xqzw@emlix.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221119203758.888207-1-luca@z3ntu.xyz>
+ <20221119203758.888207-3-luca@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221119203758.888207-3-luca@z3ntu.xyz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 11:45, Edmund Berenson wrote:
-
->>>> I would expect lower number as fallback.
->>> If I remove alone compatibility of 7924 and 7927 in the documentation,
->>
->> I don't understand. 7924 and 7927 are not compatible with each other -
->> neither in old code nor in new - so what do you want to remove?
->>
->>> I will have to remove explicit compatibility match on the driver side,
->>> correct?
->>> Just want to make sure I don't misunderstand you.
->>
->> My comment to which you responded was about order of items. Usually
->> lower number means older device and usually older device is the fallback.
-> My response was meant to respond to both your comment to "deprecate
-> alone compatibility" and "lower number should be fallback"
-> Which I understood in the following way: because 7923, 7924 for one and
-> 7927, 7928 are compatible with each other I will remove
-> 7924 compatible string from driver and not add 7927 to the driver and
-> only add it to the documentation.
-
-That's not what I suggested. I said nothing about driver, I did not even
-look there. I *only* asked to mark old variants as "deprecated: true".
-Not remove anything from drivers as this would be obvious ABI break.
 
 
-Best regards,
-Krzysztof
+On 19.11.2022 21:37, Luca Weiss wrote:
+> Adjust node names so they're not just memory@ but actually show what
+> they're used for. Also add labels to most nodes so we can easily
+> reference them from devices.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+> Changes in v2:
+> * new patch
+> 
+>  arch/arm64/boot/dts/qcom/msm8953.dtsi | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+> index 32349174c4bd..62d2ae30711b 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+> @@ -245,18 +245,18 @@ reserved-memory {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> -		zap_shader_region: memory@81800000 {
+> +		zap_shader_region: zap@81800000 {
+>  			compatible = "shared-dma-pool";
+>  			reg = <0x0 0x81800000 0x0 0x2000>;
+>  			no-map;
+>  		};
+>  
+> -		memory@85b00000 {
+> +		qseecom_mem: qseecom@85b00000 {
+>  			reg = <0x0 0x85b00000 0x0 0x800000>;
+>  			no-map;
+>  		};
+>  
+> -		smem_mem: memory@86300000 {
+> +		smem_mem: smem@86300000 {
+>  			compatible = "qcom,smem";
+>  			reg = <0x0 0x86300000 0x0 0x100000>;
+>  			qcom,rpm-msg-ram = <&rpm_msg_ram>;
+> @@ -264,47 +264,47 @@ smem_mem: memory@86300000 {
+>  			no-map;
+>  		};
+>  
+> -		memory@86400000 {
+> +		reserved@86400000 {
+>  			reg = <0x0 0x86400000 0x0 0x400000>;
+>  			no-map;
+>  		};
+>  
+> -		mpss_mem: memory@86c00000 {
+> +		mpss_mem: mpss@86c00000 {
+>  			reg = <0x0 0x86c00000 0x0 0x6a00000>;
+>  			no-map;
+>  		};
+>  
+> -		adsp_fw_mem: memory@8d600000 {
+> +		adsp_fw_mem: adsp@8d600000 {
+>  			reg = <0x0 0x8d600000 0x0 0x1100000>;
+>  			no-map;
+>  		};
+>  
+> -		wcnss_fw_mem: memory@8e700000 {
+> +		wcnss_fw_mem: wcnss@8e700000 {
+>  			reg = <0x0 0x8e700000 0x0 0x700000>;
+>  			no-map;
+>  		};
+>  
+> -		memory@90000000 {
+> +		dfps_data_mem: dfps-data@90000000 {
+>  			reg = <0 0x90000000 0 0x1000>;
+>  			no-map;
+>  		};
+>  
+> -		memory@90001000 {
+> +		cont_splash_mem: cont-splash@90001000 {
+>  			reg = <0x0 0x90001000 0x0 0x13ff000>;
+>  			no-map;
+>  		};
+>  
+> -		venus_mem: memory@91400000 {
+> +		venus_mem: venus@91400000 {
+>  			reg = <0x0 0x91400000 0x0 0x700000>;
+>  			no-map;
+>  		};
+>  
+> -		mba_mem: memory@92000000 {
+> +		mba_mem: mba@92000000 {
+>  			reg = <0x0 0x92000000 0x0 0x100000>;
+>  			no-map;
+>  		};
+>  
+> -		memory@f2d00000 {
+> +		rmtfs@f2d00000 {
+>  			compatible = "qcom,rmtfs-mem";
+>  			reg = <0x0 0xf2d00000 0x0 0x180000>;
+>  			no-map;
