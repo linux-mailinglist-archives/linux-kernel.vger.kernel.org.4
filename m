@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC40631B1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFBE631B1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 09:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiKUISq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 03:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S229928AbiKUITP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 03:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiKUISm (ORCPT
+        with ESMTP id S229576AbiKUITN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 03:18:42 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F088D193CE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:18:39 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id p4so10465926vsa.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5FNLqZ3+KdQjzm7Sx3mBq4NxeuMTkAwBYeRYu3X/hpw=;
-        b=ZT1IBXqXR8n7CAGsZwETJtXB5s+32HQ0WfDf9ELFM7TnqZKlgWOeBc/bChoGMeTXZI
-         DBw5IgWzhYRwwB8q2PlTYpDsgp/Xn0faD8qlQqeqGTzK+LtA5bO4pTSl6VhvOF3XjuUB
-         v7cQhUjxPdiSW4o/cUm4GMGrYxkl6E57CDG+DeRbt7ONLQ4PRpM51bw/quQN3Qeh/nRb
-         JOozyTr672VPCmMVeXPM/Pap3nqPGUKwDDQvfOazKh7eIRlTkGXUgXoNOSeHNoDkShnQ
-         BYjmuzxMjI4p4EU4gVYY8/BJb9B8jMg9lMMiMnAoeTTtQL0QVNNx19/DQH0TeRn3a1mM
-         HCZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5FNLqZ3+KdQjzm7Sx3mBq4NxeuMTkAwBYeRYu3X/hpw=;
-        b=Gwx6PrVAYafMoMhKM/6vGBkNxQTz2+x6V7lCa5bx9X/BJHsCB8mUWT/cyr4//8+2Lr
-         NDXja82Gmc6jw1GvD7BBm6caSyZPjBaGkj32Ql6q8A4LnU+D5pQdNJMUuuf/JtX51p2J
-         aE1GPYXdMIQ2wuazyUTapeWiB+g+705TfKg1yKrZRukzxIaQL1+yTy7ZQEWC5KwvzEh5
-         di774cfEHoKB33NqP7rxHW62sn0EJyx3Gvqaz0Yw2/bm5BKYzgomDjAF1ej4dLR5hpK0
-         xhLEIRDzwKsJwqnROEHfbEtL3bcITljFXOmoSK1fa27bvCPCAYvkRdD1zTPYkgroHebG
-         RDag==
-X-Gm-Message-State: ANoB5pkceRhRbhtjp+UF+UEcmHNZ+q/lHpcVDFnBZl3mSdQjIevrY3A2
-        blm/48WOAgapEjT6uqYpyW8qXofuxbN8FzHssnqjWKUH45s=
-X-Google-Smtp-Source: AA0mqf6QG/XZV0N6cp0tywJ1b6hLNvJyyPYmMjylRsqJ9dVG67YrNCJaKMIbcALAv7PxmXvGlzEcAkmgNqBCPxSecSs=
-X-Received: by 2002:a67:c98e:0:b0:3ad:3d65:22b with SMTP id
- y14-20020a67c98e000000b003ad3d65022bmr3275421vsk.65.1669018718896; Mon, 21
- Nov 2022 00:18:38 -0800 (PST)
+        Mon, 21 Nov 2022 03:19:13 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BF519C2E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 00:19:12 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NG0Yx2LTWzqSbJ;
+        Mon, 21 Nov 2022 16:15:17 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 16:19:10 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 16:19:09 +0800
+Subject: Re: [PATCH v2] tracing: Fix infinite loop in tracing_read_pipe on
+ overflowed print_trace_line
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221118102521.62362-1-yangjihong1@huawei.com>
+ <20221120143852.7e84b50d@rorschach.local.home>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <befaafc6-ff84-3b98-87fd-1d85b322f330@huawei.com>
+Date:   Mon, 21 Nov 2022 16:19:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-References: <42579618-f8e2-9fd2-0b6c-f2c87f7c57a6@eikelenboom.it> <99178e0a-ff6a-9bfa-4ade-b4bf6fdc306f@suse.com>
-In-Reply-To: <99178e0a-ff6a-9bfa-4ade-b4bf6fdc306f@suse.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 21 Nov 2022 01:18:02 -0700
-Message-ID: <CAOUHufY8it25rBbV1QeO3-wF3g32VkDwrsT6mL4fQUNZsMGkKw@mail.gmail.com>
-Subject: Re: Xen-unstable Linux-6.1.0-rc5 BUG: unable to handle page fault for
- address: ffff8880083374d0
-To:     Juergen Gross <jgross@suse.com>,
-        Sander Eikelenboom <linux@eikelenboom.it>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Xen-devel <xen-devel@lists.xen.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20221120143852.7e84b50d@rorschach.local.home>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,66 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 12:10 AM Juergen Gross <jgross@suse.com> wrote:
->
-> On 19.11.22 09:28, Sander Eikelenboom wrote:
-> > Hi Yu / Juergen,
+Hello,
 
-Hi Sander / Juergen,
+On 2022/11/21 3:38, Steven Rostedt wrote:
+> On Fri, 18 Nov 2022 18:25:21 +0800
+> Yang Jihong <yangjihong1@huawei.com> wrote:
+> 
+>> print_trace_line may overflow seq_file buffer. If the event is not
+>> consumed, the while loop keeps peeking this event, causing a infinite loop.
+>>
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>
+>> Changes since v1:
+>>    - Print partial line to show the broken trace event when overflowed print_trace_line
+>>
+>>   kernel/trace/trace.c | 27 ++++++++++++++++++++++++++-
+>>   1 file changed, 26 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+>> index 47a44b055a1d..81c36dc80212 100644
+>> --- a/kernel/trace/trace.c
+>> +++ b/kernel/trace/trace.c
+>> @@ -6786,7 +6786,32 @@ tracing_read_pipe(struct file *filp, char __user *ubuf,
+>>   
+>>   		ret = print_trace_line(iter);
+>>   		if (ret == TRACE_TYPE_PARTIAL_LINE) {
+>> -			/* don't print partial lines */
+>> +			/*
+>> +			 * If one trace_line of the tracer overflows seq_file
+>> +			 * buffer, trace_seq_to_user returns -EBUSY.
+>> +			 * In this case, we need to consume, otherwise,
+>> +			 * while loop will peek this event next time,
+>> +			 * resulting in an infinite loop.
+>> +			 */
+>> +			if (trace_seq_has_overflowed(&iter->seq)) {
+> 
+> We need to only do this if save_len is zero. Because the reason that it
+> returns TRACE_TYPE_PARTIAL_LINE is usually because it overflowed.
+> 
+> This loops until the trace_seq is full, so it's OK to have it overflow.
+> The case I believe you are fixing, is the case were one
+> print_trace_line() actually fills the entire trace_seq in one shot. In
+> which case, it will never print, and in that case, save_len will be zero.
+> 
+Yes, I'm fixing the situation you mentioned.
+For the sake of discussion, I've replied in the v1 patch to see if it's 
+just add "trace_seq_puts(&iter->seq, "[LINE TOO BIG]\n");" or a more 
+complex situation.
 
-Thanks for the report and the analysis.
-
-> > This night I got a dom0 kernel crash on my new Ryzen box running Xen-unstable
-> > and a Linux-6.1.0-rc5 kernel.
-> > I did enable the new and shiny MGLRU, could this be related ?
->
-> It might be related, but I think it could happen independently from it.
-
-Yes, I think it's related.
-
-> > Nov 19 06:30:11 serveerstertje kernel: [68959.647371] BUG: unable to handle page
-> > fault for address: ffff8880083374d0
-> > Nov 19 06:30:11 serveerstertje kernel: [68959.663555] #PF: supervisor write
-> > access in kernel mode
-> > Nov 19 06:30:11 serveerstertje kernel: [68959.677542] #PF: error_code(0x0003) -
-> > permissions violation
-> > Nov 19 06:30:11 serveerstertje kernel: [68959.691181] PGD 3026067 P4D 3026067
-> > PUD 3027067 PMD 7fee5067 PTE 8010000008337065
-> > Nov 19 06:30:11 serveerstertje kernel: [68959.705084] Oops: 0003 [#1] PREEMPT
-> > SMP NOPTI
-> > Nov 19 06:30:11 serveerstertje kernel: [68959.718710] CPU: 7 PID: 158 Comm:
-> > kswapd0 Not tainted 6.1.0-rc5-20221118-doflr-mac80211debug+ #1
-> > Nov 19 06:30:11 serveerstertje kernel: [68959.732457] Hardware name: To Be
-> > Filled By O.E.M. To Be Filled By O.E.M./B450 Pro4 R2.0, BIOS P5.60 10/20/2022
-> > Nov 19 06:30:11 serveerstertje kernel: [68959.746391] RIP:
-> > e030:pmdp_test_and_clear_young+0x25/0x40
->
-> The kernel tired to reset the "accessed" bit in the pmd entry.
-
-Correct.
-
-> It does so only since commit eed9a328aa1ae. Before that
-> pmdp_test_and_clear_young() could be called only for huge pages, which are
-> disabled in Xen PV guests.
-
-Correct. After that commit, we also can clear the accessed bit in
-non-leaf PMD entries (pointing to PTE tables).
-
-> pmdp_test_and_clear_young() does a test_and_clear_bit() of the pmd entry, which
-> is failing since the hypervisor is emulating pte entry modifications only (pmd
-> and pud entries can be set via hypercalls only).
->
-> Could you please test the attached patch whether it fixes the issue for you?
-
-There is a runtime kill switch for ARCH_HAS_NONLEAF_PMD_YOUNG, since I
-wasn't able to verify this capability on all x86 varieties. The following
-should do it:
-
-  # cat /sys/kernel/mm/lru_gen/enabled
-  0x0007
-  # echo 3 >/sys/kernel/mm/lru_gen/enabled
-
-Details are in Documentation/admin-guide/mm/multigen_lru.rst.
-
-Alternatively, we could make ARCH_HAS_NONLEAF_PMD_YOUNG a runtime
-check similar to arch_has_hw_pte_young() on arm64.
+Thanks,
+Yang
