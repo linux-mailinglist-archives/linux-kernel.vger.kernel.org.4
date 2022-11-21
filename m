@@ -2,247 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A2F63226E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE49B63226D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiKUMin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S231563AbiKUMih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 07:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbiKUMiV (ORCPT
+        with ESMTP id S231506AbiKUMiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 07:38:21 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2A05B6B35;
-        Mon, 21 Nov 2022 04:38:16 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxTts3cXtjaxoJAA--.25367S3;
-        Mon, 21 Nov 2022 20:38:15 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuAwcXtjXpkXAA--.61043S4;
-        Mon, 21 Nov 2022 20:38:13 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 3/3] dt-bindings: gpio: add loongson gpio
-Date:   Mon, 21 Nov 2022 20:38:03 +0800
-Message-Id: <20221121123803.3786-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221121123803.3786-1-zhuyinbo@loongson.cn>
-References: <20221121123803.3786-1-zhuyinbo@loongson.cn>
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149EDB6B3A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 04:38:16 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id C617D32007E8;
+        Mon, 21 Nov 2022 07:38:14 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 21 Nov 2022 07:38:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1669034294; x=1669120694; bh=T8
+        0Ixd8IplxWaxxkiIeZY9gINSKEir9nQQHp4lWGxVk=; b=Y5faw+yRWPNOV2hnUX
+        LASny6c2pOyCWupx2QWAxgQkAxVqhhNxzABiywBKZObmiB+J6cJKmH7554p/n73G
+        bz3lUt+rsQPAxPUrrWvyIAIqoH3ffeo/mzRofAI+8QC+tFO8SgWyGnO5g0Y8NkVF
+        Qu2udl3ngnON8skNwSsBA89mWXID86D+FZwDd3Jagr9EXFqBajbKoxfsbLq4FpA1
+        ZZULMMs9P76kG+o4spa+X0G3AiXwGjuWZUsFblBdTikjIdJcJ4TQHYmJBcGege5D
+        10JX5RDHHEUGWNO8fw7SXmiewcaX6a4fKOVwWRZ73qD2c2YUHRt4ZCZfLsk/9wEc
+        FIQg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669034294; x=1669120694; bh=T80Ixd8IplxWaxxkiIeZY9gINSKE
+        ir9nQQHp4lWGxVk=; b=OYUC11qV0I2IrvHvHtUA0RSGB2/xDAkyKQGluEfCEfBw
+        DJxF9up8rpG3ZAejxCGco7+x3UKYakTpf5Fsv8dXtCxkL3eFxnr+7BmuyRULph3D
+        6OuSc0/h4rwsaV9SJCx7zX6Iu8eZM2jElaHgO/f21rUwZw7tstUGxfgQbaMvmml4
+        B20IaTb9MNxyuAY9O6xs30C0jDi1Ka5X8V3q1tY/ipU7yyDspBZwWDHY2ZX4pZH3
+        go/esFGC0zDT01RiwJ7ZVNBF8/yu6uJ+/hTqw7rMFpzS+pFc0jg9P/HmhXfpedR0
+        qoJrhXTsLozMVsr6B8JpnkgQSHlz9UtiFK8l5wEYdA==
+X-ME-Sender: <xms:NXF7Y8lga2uH2ye8Nf3zkXZtxuWiImf-gRD5aciOjiRQ9zNLf5SwjQ>
+    <xme:NXF7Y73n7gTM11HnIEeb2G9oMiY6DzVpJ1nPHueIknSSKVrF2vMDwYvgCR_U7x6bh
+    2eNkFvO9dAG5cYCENA>
+X-ME-Received: <xmr:NXF7Y6rRiD071_LoKI0VALPc4wqdQb577pnZqrQzfDV1Ep420vIvMJLCITMXUQ9hDrbucg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheeigdegudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:NnF7Y4ltOxmwlXVzP9SEzwPg58vHsC-z9pKzvBhBTDj5-FY-2Hv-Jw>
+    <xmx:NnF7Y619RifMHo68zOuLawYlfcSpQMVfIxNLCF6cvrvLxwCEwBmqdQ>
+    <xmx:NnF7Y_uMT3DDFBPfYxZ11DJQsv3wVIHQHZyvhwW7zHrcO82fMnzO6g>
+    <xmx:NnF7Yz6akadTNNLoIFfPr8cu-trS9QB8whlgAyqdp8TvtXK2iOoGTQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Nov 2022 07:38:13 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 2CC2B109A30; Mon, 21 Nov 2022 15:38:12 +0300 (+03)
+Date:   Mon, 21 Nov 2022 15:38:12 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/3 fix] mm,thp,rmap: subpages_mapcount of PTE-mapped
+ subpages: fix
+Message-ID: <20221121123812.4sxk7ewzfhdqq6zs@box.shutemov.name>
+References: <5f52de70-975-e94f-f141-543765736181@google.com>
+ <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
+ <78fa518-85b5-32c0-ee92-537fa46131f6@google.com>
+ <CAOUHufYf9Ns6vPpDeSOnUBaQm3Th+N6WbLiT7F=191LNpsatNQ@mail.gmail.com>
+ <759077a6-a08-5bb0-a0b6-53be2fe8b56a@google.com>
+ <7a4f5e5e-de33-dace-c526-4a3d3cf5f6e0@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxXuAwcXtjXpkXAA--.61043S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF45Wry5Zw45GFWxWFg_yoWrtr1fp3
-        WDZFZxX3y2grnxtFs8Ka17Zr4fAr1kC3WrurnxC3yxtrWUKwn8XFWfWFykG3Z3WrWUXF17
-        JwsrurWrta43Aw7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_
-        Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU06WlPUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a4f5e5e-de33-dace-c526-4a3d3cf5f6e0@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson platform gpio binding with DT schema format using
-json-schema.
+On Fri, Nov 18, 2022 at 05:35:05PM -0800, Hugh Dickins wrote:
+> Yu Zhao reports compiler warning in page_add_anon_rmap():
+> 
+> mm/rmap.c:1236:13: warning: variable 'first' is used uninitialized
+> whenever 'if' condition is false [-Wsometimes-uninitialized]
+>         } else if (PageTransHuge(page)) {
+>                    ^~~~~~~~~~~~~~~~~~~
+> mm/rmap.c:1248:18: note: uninitialized use occurs here
+>         VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
+>                         ^~~~~
+> 
+> We do need to fix that, even though it's only uninitialized in an
+> impossible condition: I've chosen to initialize "first" true, to
+> minimize the BUGs it might then hit; but you could just as well
+> choose to initialize it false, to maximize the BUGs it might hit.
+> 
+> Reported-by: Yu Zhao <yuzhao@google.com>
+> Signed-off-by: Hugh Dickins <hughd@google.com>
+> ---
+>  mm/rmap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 66be8cae640f..25b720d5ba17 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1281,7 +1281,7 @@ void page_add_anon_rmap(struct page *page,
+>  	struct compound_mapcounts mapcounts;
+>  	int nr = 0, nr_pmdmapped = 0;
+>  	bool compound = flags & RMAP_COMPOUND;
+> -	bool first;
+> +	bool first = true;
+>  
+>  	if (unlikely(PageKsm(page)))
+>  		lock_page_memcg(page);
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v5:
-		1. NO change, but other patch in this series of patches set has
-		   change.
-Change in v4:
-		1. Remove the string "series".
-		2. Add the reviewed-by information.
-Change in v3:
-		1. Separate some changes of MAINTAINERS file and enter the first patch.
-Change in v2:
-		1. Drop "loongson,gpio_base" and "gpio-ranges" will cover it.
-		1. Drop "loongson,conf_offset", "loongson,out_offset", "loongson,in_offset",
-		   "loongson,support_irq" and kernel driver will initial them that depend
-		   compatible in kernel.
-		3. Fixup maintainer for this driver.
+Other option is to drop PageTransHuge() check that you already claim to be
+redundant.
 
- .../bindings/gpio/loongson,ls-gpio.yaml       | 126 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 127 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
+Or have else BUG() to catch cases where the helper called with
+compound=true on non-THP page.
 
-diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-new file mode 100644
-index 000000000000..fb86e8ce6349
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-@@ -0,0 +1,126 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gpio/loongson,ls-gpio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson GPIO controller.
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-gpio
-+      - loongson,ls7a-gpio
-+
-+  reg:
-+    maxItems: 1
-+
-+  ngpios:
-+    minimum: 1
-+    maximum: 64
-+
-+  "#gpio-cells":
-+    const: 2
-+
-+  gpio-controller: true
-+
-+  gpio-ranges: true
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 64
-+
-+required:
-+  - compatible
-+  - reg
-+  - ngpios
-+  - "#gpio-cells"
-+  - gpio-controller
-+  - gpio-ranges
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    gpio0: gpio@1fe00500 {
-+      compatible = "loongson,ls2k-gpio";
-+      reg = <0x1fe00500 0x38>;
-+      ngpios = <64>;
-+      #gpio-cells = <2>;
-+      gpio-controller;
-+      gpio-ranges = <&pctrl 0 0 15>,
-+                    <&pctrl 16 16 15>,
-+                    <&pctrl 32 32 10>,
-+                    <&pctrl 44 44 20>;
-+      interrupt-parent = <&liointc1>;
-+      interrupts = <28 IRQ_TYPE_LEVEL_LOW>,
-+                   <29 IRQ_TYPE_LEVEL_LOW>,
-+                   <30 IRQ_TYPE_LEVEL_LOW>,
-+                   <30 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <26 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <>,
-+                   <>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>,
-+                   <27 IRQ_TYPE_LEVEL_LOW>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 47721a25249f..6381c0bebb34 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12052,6 +12052,7 @@ LOONGSON GPIO DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-gpio@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
- F:	drivers/gpio/gpio-loongson.c
- F:	include/linux/platform_data/gpio-loongson.h
- 
 -- 
-2.33.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
