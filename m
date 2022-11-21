@@ -2,102 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96480632A9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74BE632AA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 18:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbiKURQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 12:16:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S231555AbiKURQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 12:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbiKURPo (ORCPT
+        with ESMTP id S231530AbiKURPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 12:15:44 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE2AD92CD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:13:47 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id q9so11920183pfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 09:13:47 -0800 (PST)
+        Mon, 21 Nov 2022 12:15:49 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C56CC8C90;
+        Mon, 21 Nov 2022 09:13:53 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id n3so4296778wrp.5;
+        Mon, 21 Nov 2022 09:13:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtv4h9c3AldnpSSbBkhgTkQdjwq0G0RPbTNhSWZQ0dw=;
-        b=TOb6az3jRFkBe4X0HzQjP8GYDWWbHNFZ9MxWe2M6asN1VtdRiqKVEQROwPVhV+vczh
-         sNa8toL8xN+dXKiEB2JyK6nWXEZAngN9NOKmaKn1PqZsvQgW4W8jXV5COsjCdfg/KgV/
-         leOYIAnsVphTKt477QZtn/rV7TmS9Xyazf8h0V0VZy6fboV5bzuzgcfZOtfnEpyUze3W
-         I9nAtf114C+ajWnYbP3b1K3nOeeUcElzvtqJp38XCz8NlQPnH2bulpdxpmcWIu8YRupm
-         wNf60n23jRVSe03sA1pbkic2zuMvh+jfu9FICnmFbCdIYsiG6Y3sy2BeYM9NoPYpJF+t
-         YPoA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iOdZm+t0ZjNb9E1ZMCmZ/u5jw9aDGTn6ypSEA7WGmII=;
+        b=Bri+YqkxR9A7oBnDSBN5S+vyOvU73bMGjpOqXuh54mO57W/8vv2dISgFfJOv3GVPOO
+         oprFGOYKvPDkUXBkinoQBz9ugVtWHtbvoxjmtsz8uoKHrn3o4h7g8HzFMT7pZSWm3tQl
+         ClJNBQoFkCPAL0MU349QGlUMLQGqPY86xykMZKCWkbcHBRDAz2s9EzUbcjmMdXrFaeWy
+         KXJLqSv1NIG7+lIf0t23v2cu1b2bFHGZMN8NVVK6CAXLcA04FgEkSIorOTi9/NgTZfPk
+         2ZWmQ/1KOoaRIrZVUtuN5dcjuJheAkvjOXD8diWI7ljW/v9ofHCjrFQZKA5aY3kxeK6O
+         TpsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xtv4h9c3AldnpSSbBkhgTkQdjwq0G0RPbTNhSWZQ0dw=;
-        b=EvAuYm7AX2xM2vLMKaLtUDRl+y0Vbc6XYR6UeJFmYVQNawBn1Hlkj7OghZucyaqbaK
-         DQx0GS00SUV/eFz/AwpJxYGjXfIuj2jYC5hYyeTfBbv1iG9lI5AUF1zmKDFpC2AxBgWC
-         6rQ8v9K+0KkbWytERcSXCagAXMXwRqAEe3sg+6ltowYTboeq1aktyI+gTlvJxfkZLmfn
-         AdY/tgOWlTA5IGzEPUrkaiLQ2QIMU70GGiE5udk3pfE28gf+ZLYCtDtHSzuI4c/o2127
-         HEp+zOTM6JXDQTfz6qVFINeUzBSIPW1hnp+L9HPX7fL5OyTvi9I65omScFNeiEpHiBQx
-         BvfQ==
-X-Gm-Message-State: ANoB5pkgskDvUgYtEywqtSmsXn9WDF4OIqnMuCDGeclX1MVvctrUdvWY
-        /Aj8CjrBJFeRABRF/OZ8L3q+jw==
-X-Google-Smtp-Source: AA0mqf5h12so7YydnNjvEbSQjdg3H+com4vquDXfsPBsWVFlFdqUZ7jZvjbRyDwyIU4nzD2d27WLvw==
-X-Received: by 2002:a63:da4d:0:b0:46b:3c3d:f618 with SMTP id l13-20020a63da4d000000b0046b3c3df618mr4676440pgj.423.1669050827057;
-        Mon, 21 Nov 2022 09:13:47 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:8b90:bf06:8462:1d8b])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170902b78500b001891177cb48sm5406001pls.140.2022.11.21.09.13.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 09:13:46 -0800 (PST)
-Date:   Mon, 21 Nov 2022 10:13:44 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     andersson@kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next] remoteproc: core: Use device_match_of_node()
-Message-ID: <20221121171344.GA457869@p14s>
-References: <202211171541061366938@zte.com.cn>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iOdZm+t0ZjNb9E1ZMCmZ/u5jw9aDGTn6ypSEA7WGmII=;
+        b=ZelV5ALgDxQc9l73EThonb7YOuonhjnLD2RrueobYNmgdWxdan8zUueLoojpFY9WNh
+         6Dkl3YCkizBZrFbVjvHSrp1azrsmsPVgXBC5VLrjngCnCXoGrtwsiCk63dJxZrBxNthJ
+         iPpzrE4Lmvp/sxViL7mrFHa358dlGPQFwaOH2qrWymKpKINQQqk7jcwsyqaGfLoFOuvh
+         Wfmo8aLIB6HN7wzm7/8t42ITi6AY67poy0XJNmAbgB+IMRK5KeccFWKX1nVJj7QM08Ar
+         u9qpgC/S0XBMgOE3p6D1Rdl2QsfrrzwrGTUypNEaMkPTv+WZc+tVC3rUJsHDFQq/FtsV
+         vzcA==
+X-Gm-Message-State: ANoB5pnGctMdzYfeOgpCpReA0XBSq1As2xs/PZfBGGFiMOHWbfGvZbWv
+        vWkDWEPY9QcySJl7hEGWGYY=
+X-Google-Smtp-Source: AA0mqf4hbwsmtUuhLGr69LHoOQQEqvX+EvI7mtwqoCP9NL9TQavoW8740rWW99QiGdXzv6vfRPk5aw==
+X-Received: by 2002:a05:6000:10c6:b0:241:d021:52d3 with SMTP id b6-20020a05600010c600b00241d02152d3mr4812424wrx.540.1669050831503;
+        Mon, 21 Nov 2022 09:13:51 -0800 (PST)
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id 4-20020a05600c020400b003b492753826sm13911425wmi.43.2022.11.21.09.13.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 09:13:50 -0800 (PST)
+Message-ID: <ef9c585f-37fd-f1f4-032b-20680bda1865@gmail.com>
+Date:   Mon, 21 Nov 2022 18:13:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202211171541061366938@zte.com.cn>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 05/11] dt-bindings: PCI: mediatek-gen3: add support for
+ mt7986
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+References: <20221118190126.100895-1-linux@fw-web.de>
+ <20221118190126.100895-6-linux@fw-web.de>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221118190126.100895-6-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:41:06PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+
+
+On 18/11/2022 20:01, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Replace the open-code with device_match_of_node().
+> Add compatible string and clock-definition for mt7986. It needs 4 clocks
+> for PCIe, define them in binding.
 > 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-by: Jianjun Wang <jianjun.wang@mediatek.com>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
 > ---
->  drivers/remoteproc/remoteproc_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-
-Applied.
-
-Thanks,
-Mathieu
-
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index cb1d414a2389..11c165ddf1fc 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -2112,7 +2112,7 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
+> v2:
+> - squashed patch 2+3 (compatible and clock definition)
+> ---
+>   .../bindings/pci/mediatek-pcie-gen3.yaml        | 17 +++++++++++++++++
+>   1 file changed, 17 insertions(+)
 > 
->  	rcu_read_lock();
->  	list_for_each_entry_rcu(r, &rproc_list, node) {
-> -		if (r->dev.parent && r->dev.parent->of_node == np) {
-> +		if (r->dev.parent && device_match_of_node(r->dev.parent, np)) {
->  			/* prevent underlying implementation from being removed */
->  			if (!try_module_get(r->dev.parent->driver->owner)) {
->  				dev_err(&r->dev, "can't get owner\n");
-> -- 
-> 2.25.1
+> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> index 5d7369debff2..f7a02019daea 100644
+> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> @@ -48,6 +48,7 @@ properties:
+>       oneOf:
+>         - items:
+>             - enum:
+> +              - mediatek,mt7986-pcie
+>                 - mediatek,mt8188-pcie
+>                 - mediatek,mt8195-pcie
+>             - const: mediatek,mt8192-pcie
+> @@ -78,9 +79,11 @@ properties:
+>         - const: mac
+>   
+>     clocks:
+> +    minItems: 4
+>       maxItems: 6
+>   
+>     clock-names:
+> +    minItems: 4
+>       maxItems: 6
+>   
+>     assigned-clocks:
+> @@ -160,6 +163,20 @@ allOf:
+>               - const: tl_32k
+>               - const: peri_26m
+>               - const: peri_mem
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt7986-pcie
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: pl_250m
+> +            - const: tl_26m
+> +            - const: peri_26m
+> +            - const: top_133m
+>   
+>   unevaluatedProperties: false
+>   
