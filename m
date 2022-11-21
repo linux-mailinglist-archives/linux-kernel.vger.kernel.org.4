@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1E16322E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 13:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAF56322EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 14:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiKUM5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 07:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S229936AbiKUNA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 08:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiKUM5B (ORCPT
+        with ESMTP id S229649AbiKUNAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 07:57:01 -0500
+        Mon, 21 Nov 2022 08:00:21 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8925127CEA;
-        Mon, 21 Nov 2022 04:56:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BA429353;
+        Mon, 21 Nov 2022 05:00:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47E4CB80E12;
-        Mon, 21 Nov 2022 12:56:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B5FC433C1;
-        Mon, 21 Nov 2022 12:56:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E568CB80FAB;
+        Mon, 21 Nov 2022 13:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AF49C433D6;
+        Mon, 21 Nov 2022 13:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669035416;
-        bh=/G6QKes/X8UyFcxejxGfT2znJ4EkFvp7x9NzpUwCL0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b7/c4kml36zi5c1SlvD3v6p2w3OtKCh9j0+AFc09vIB8gY5E1+gyjqIRphozvecf6
-         QsB3K5awQYT8bNLVsNg3ZVya6ewZlO4xNTGwRSd3KWN163eugs4n6qis8OEUV1pDAu
-         IbRVBMODgve3wt0I6rkjWBOer5O4zLDCtnyNekw9r6gOSoJCBQ9feejQG2xfxfnh2W
-         YsCACerx9pN4lLw5qxz+33encEJ/s6NgGKPtk6OfCC7a5HN4RUFtWiFQcjJZc8VnnN
-         yIlbLrCDxfWgtLJlkx2oobiu1rWYoWMBzniZR4BNNQ8rNozA1AzLZGt+GoDbCcKOPn
-         H87OGo/YaPgCQ==
-Date:   Mon, 21 Nov 2022 12:56:50 +0000
-From:   Will Deacon <will@kernel.org>
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     acme@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, irogers@google.com
-Subject: Re: [PATCH] MAINTAINERS: Update John Garry's email address for arm64
- perf tooling
-Message-ID: <20221121125648.GB7097@willie-the-truck>
-References: <20221121113018.1899426-1-john.g.garry@oracle.com>
+        s=k20201202; t=1669035617;
+        bh=IRLq90HgIgaYJBqQlWqulBLuJesIMlaOBHZHwZsU2kQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=TCbD21TK43sgC0q0MdEx+Ng5Ab1Iuut4l/2CoLyQqeVts1o+uk/kemvRt274T9H20
+         CmbzdS8oysqGYsjI9IIChUmrMBuIK03BN9+XUvzCZSXY/SpIyNWsPahmIWJWZ6LYyf
+         voBsZ/rpHKvgPfWZOj7F5FN4UPtbNlv+9gClYaZ19BdUELwtlEjTEFSC+kBlXH3c7I
+         uDQmUXvJzZbg2v5pAOqciliLIZHywBMrATE5uGabcXzftmwj8m+bDz37t1K9XqzLkv
+         G3qrxsbnuencTwncy5b8LDgjtckUJH19Ymw/j2C4lTkAS3GG2n5MB/pc0kuNihJzxw
+         D0tVZ9o8D1ucQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C979E270C9;
+        Mon, 21 Nov 2022 13:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121113018.1899426-1-john.g.garry@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/net: Find nettest in current directory
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166903561750.31413.5757792572510946174.git-patchwork-notify@kernel.org>
+Date:   Mon, 21 Nov 2022 13:00:17 +0000
+References: <20221118034421.994619-1-daniel.diaz@linaro.org>
+In-Reply-To: <20221118034421.994619-1-daniel.diaz@linaro.org>
+To:     =?utf-8?q?Daniel_D=C3=ADaz_=3Cdaniel=2Ediaz=40linaro=2Eorg=3E?=@ci.codeaurora.org
+Cc:     linux-kselftest@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,27 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:30:18AM +0000, John Garry wrote:
-> Update my address.
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 17 Nov 2022 21:44:21 -0600 you wrote:
+> The `nettest` binary, built from `selftests/net/nettest.c`,
+> was expected to be found in the path during test execution of
+> `fcnal-test.sh` and `pmtu.sh`, leading to tests getting
+> skipped when the binary is not installed in the system, as can
+> be seen in these logs found in the wild [1]:
 > 
-> Signed-off-by: John Garry <john.g.garry@oracle.com>
+>   # TEST: vti4: PMTU exceptions                                         [SKIP]
+>   [  350.600250] IPv6: ADDRCONF(NETDEV_CHANGE): veth_b: link becomes ready
+>   [  350.607421] IPv6: ADDRCONF(NETDEV_CHANGE): veth_a: link becomes ready
+>   # 'nettest' command not found; skipping tests
+>   #   xfrm6udp not supported
+>   # TEST: vti6: PMTU exceptions (ESP-in-UDP)                            [SKIP]
+>   [  351.605102] IPv6: ADDRCONF(NETDEV_CHANGE): veth_b: link becomes ready
+>   [  351.612243] IPv6: ADDRCONF(NETDEV_CHANGE): veth_a: link becomes ready
+>   # 'nettest' command not found; skipping tests
+>   #   xfrm4udp not supported
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 379945f82a64..2ec6a2709225 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16191,7 +16191,7 @@ F:	tools/lib/perf/
->  F:	tools/perf/
->  
->  PERFORMANCE EVENTS TOOLING ARM64
-> -R:	John Garry <john.garry@huawei.com>
-> +R:	John Garry <john.g.garry@oracle.com>
->  R:	Will Deacon <will@kernel.org>
->  R:	James Clark <james.clark@arm.com>
->  R:	Mike Leach <mike.leach@linaro.org>
+> [...]
 
-Thanks for doing this, John, and good luck with your new role!
+Here is the summary with links:
+  - selftests/net: Find nettest in current directory
+    https://git.kernel.org/netdev/net/c/bd5e1e42826f
 
-Acked-by: Will Deacon <will@kernel.org>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Will
+
