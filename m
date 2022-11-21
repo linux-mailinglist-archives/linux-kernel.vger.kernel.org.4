@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9ED46319DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 07:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669CF631A00
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Nov 2022 08:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiKUGsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 01:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S229515AbiKUHIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 02:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiKUGsq (ORCPT
+        with ESMTP id S229447AbiKUHIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 01:48:46 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45D21B1D7
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 22:48:41 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NFydK44NnzHw20;
-        Mon, 21 Nov 2022 14:48:05 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 14:48:40 +0800
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
- 2022 14:48:39 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Denys Vlasenko <dvlasenk@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        David Hildenbrand <dhildenb@redhat.com>,
-        Rafael Aquini <raquini@redhat.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH v3] arm64/mm: fix incorrect file_map_count for invalid pmd
-Date:   Mon, 21 Nov 2022 15:36:08 +0800
-Message-ID: <20221121073608.4183459-1-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 21 Nov 2022 02:08:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFA91742A
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Nov 2022 23:08:10 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ox0uO-0005Q3-QR; Mon, 21 Nov 2022 08:08:00 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ox0uM-005bpK-3y; Mon, 21 Nov 2022 08:07:59 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ox0uM-000VV4-Bf; Mon, 21 Nov 2022 08:07:58 +0100
+Date:   Mon, 21 Nov 2022 08:07:57 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 571/606] serial: sc16is7xx: Convert to i2c's .probe_new()
+Message-ID: <20221121070757.cqiybt5uk4qiczmr@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-572-uwe@kleine-koenig.org>
+ <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qzaz4p2qzqthzohs"
+Content-Disposition: inline
+In-Reply-To: <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,73 +60,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The page table check trigger BUG_ON() unexpectedly when split hugepage:
 
- ------------[ cut here ]------------
- kernel BUG at mm/page_table_check.c:119!
- Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
- Dumping ftrace buffer:
-    (ftrace buffer empty)
- Modules linked in:
- CPU: 7 PID: 210 Comm: transhuge-stres Not tainted 6.1.0-rc3+ #748
- Hardware name: linux,dummy-virt (DT)
- pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : page_table_check_set.isra.0+0x398/0x468
- lr : page_table_check_set.isra.0+0x1c0/0x468
-[...]
- Call trace:
-  page_table_check_set.isra.0+0x398/0x468
-  __page_table_check_pte_set+0x160/0x1c0
-  __split_huge_pmd_locked+0x900/0x1648
-  __split_huge_pmd+0x28c/0x3b8
-  unmap_page_range+0x428/0x858
-  unmap_single_vma+0xf4/0x1c8
-  zap_page_range+0x2b0/0x410
-  madvise_vma_behavior+0xc44/0xe78
-  do_madvise+0x280/0x698
-  __arm64_sys_madvise+0x90/0xe8
-  invoke_syscall.constprop.0+0xdc/0x1d8
-  do_el0_svc+0xf4/0x3f8
-  el0_svc+0x58/0x120
-  el0t_64_sync_handler+0xb8/0xc0
-  el0t_64_sync+0x19c/0x1a0
-[...]
+--qzaz4p2qzqthzohs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On arm64, pmd_leaf() will return true even if the pmd is invalid due to
-pmd_present_invalid() check. So in pmdp_invalidate() the file_map_count
-will not only decrease once but also increase once. Then in set_pte_at(),
-the file_map_count increase again, and so trigger BUG_ON() unexpectedly.
+Hello Jiri,
 
-Add !pmd_present_invalid() check in pmd_user_accessible_page() to fix the
-problem.
+On Mon, Nov 21, 2022 at 07:03:41AM +0100, Jiri Slaby wrote:
+> On 18. 11. 22, 23:45, Uwe Kleine-K=F6nig wrote:
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > that explicitly in the probe function.
+>=20
+> I wonder why -- is this a new approach to probe functions? Or is only i2c
+> affected? And why? Could you point to the commit introducing and describi=
+ng
+> the change in the i2c core?
 
-Fixes: 42b2547137f5 ("arm64/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
-Reported-by: Denys Vlasenko <dvlasenk@redhat.com>
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-v1->v2: Update comment and optimize the code by moving p?d_valid() at
-	first place suggested by Mark.
-v2->v3: Replace pmd_valid() with pmd_present_invalid() suggested by Will.
+I didn't sent the cover letter to all recipents of the individual
+patches, so flow of information is a bit rough. Sorry about that.
 
- arch/arm64/include/asm/pgtable.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You can find it at
+https://lore.kernel.org/lkml/20221118224540.619276-1-uwe@kleine-koenig.org/,
+it should answer your question.
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index edf6625ce965..17afb09f386f 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -863,7 +863,7 @@ static inline bool pte_user_accessible_page(pte_t pte)
- 
- static inline bool pmd_user_accessible_page(pmd_t pmd)
- {
--	return pmd_leaf(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-+	return pmd_leaf(pmd) && !pmd_present_invalid(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
- }
- 
- static inline bool pud_user_accessible_page(pud_t pud)
--- 
-2.25.1
+The short version is: The i2c framework does a more or less expensive
+lookup for each call to .probe() to provide the id parameter. A relevant
+part of the drivers however doesn't use this parameter, so the idea is
+to let the drivers who actually need it, determine it themselves.
 
+Statistics for the current state of this series in my tree:
+Among the 602 converted drivers, 404 don't make use of the parameter.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--qzaz4p2qzqthzohs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN7I8oACgkQwfwUeK3K
+7AkwfQgAoRAltu+HeVF+TW0b2G9bVqHBdeedC31HXHdW/6GgLkeD/WAn1EYXYXZ1
+PX+bTgPfossqMEBTJEp+LhOwtPdtouMo1U3jzN7kyXkClA3saOuOugsnH805nV7i
+Yxw8ff/4MMVkKuEOacPJs9YOt5D7jSvkUJrPlKp54e9IfjFjJy0j4KDuHhhxsCfC
+SsPKRif3bwMvFHa71kQmtK+/29RC1mI6Om1WtvRcjUpKE7plf6s5cPRBLIyUDJ5E
+pkuIx1bHRLGSwhNXDpRbyULSvQ2J8m5XFptxDe6T7AlvBS/Io74AXfRRG+9wM16Z
+b/n6ZuqbMLZPq95cvCzyKDE63B/JHw==
+=XAQK
+-----END PGP SIGNATURE-----
+
+--qzaz4p2qzqthzohs--
