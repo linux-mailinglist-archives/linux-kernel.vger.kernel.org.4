@@ -2,170 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8B5633790
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E06F8633791
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbiKVIyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:54:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S232656AbiKVIyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbiKVIyC (ORCPT
+        with ESMTP id S229509AbiKVIyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:54:02 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3E2DD4;
-        Tue, 22 Nov 2022 00:54:00 -0800 (PST)
-Received: from [192.168.10.9] (unknown [39.45.241.105])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE3616602A89;
-        Tue, 22 Nov 2022 08:53:56 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669107239;
-        bh=8ZEvrn+4mbqku0WNRgI9tdJCkGeYKUqf7aXJXCGXOEc=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=H/LSoreWTskXcbuNcSY+biZE1CZrnl06I5k9aU13bMl3fHDzbhrGsyrbmPWABc3o0
-         OLC6tUMM9GqwP6qic+HevPlAXgNLCVtDICcvIEw8NZLrfDcg5uISB7/LrHoerMRM9o
-         NMjmLIcbpk6Bm3nU+6qRwtukRbsFGsjaiQ/hdJg1OKuYkqTUllSf4Iiac8R0akBWjW
-         RIpgIQTSRH9T5P/2JxX44I2R9U3NjzWOcYn611fjRk4Yv5Q3B1UEWnWC48WtLXpkie
-         o5GdgFLi/pNApb2n3B0cSq62GewRdHIEf+8ZHJMlh8pGMlGG8pVNLvDk8fPja36uNZ
-         KgMRUUXnYr0aA==
-Message-ID: <e6523c46-df2e-6f73-1f69-c53e4f86ad50@collabora.com>
-Date:   Tue, 22 Nov 2022 13:53:52 +0500
+        Tue, 22 Nov 2022 03:54:38 -0500
+Received: from out28-169.mail.aliyun.com (out28-169.mail.aliyun.com [115.124.28.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B1D24947
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:54:36 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07855445|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.19499-0.000630966-0.804379;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047204;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.QE5zelE_1669107271;
+Received: from 192.168.220.136(mailfrom:michael@allwinnertech.com fp:SMTPD_---.QE5zelE_1669107271)
+          by smtp.aliyun-inc.com;
+          Tue, 22 Nov 2022 16:54:34 +0800
+Message-ID: <80d747aa-df0e-88e1-7b62-c119bd469153@allwinnertech.com>
+Date:   Tue, 22 Nov 2022 16:54:31 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Mel Gorman <mgorman@suse.de>, Peter Xu <peterx@redhat.com>,
-        Andrei Vagin <avagin@gmail.com>, kernel@collabora.com,
-        stable@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: set the vma flags dirty before testing if it is
- mergeable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] ALSA: usb-audio: fix urb timeout with URB_ISO_ASAP flag
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Cyrill Gorcunov <gorcunov@gmail.com>
-References: <20221122082442.1938606-1-usama.anjum@collabora.com>
- <b1bc82e2-a789-85f4-d428-c5f1b451f4b7@redhat.com>
- <4ebdbc0f-6352-5020-3f74-94e6c3743a1d@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <4ebdbc0f-6352-5020-3f74-94e6c3743a1d@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     perex@perex.cz, tiwai@suse.com, aichao@kylinos.cn,
+        wanjiabing@vivo.com, ubizjak@gmail.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20221122082040.48591-1-michael@allwinnertech.com>
+ <87tu2rv0kj.wl-tiwai@suse.de>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <87tu2rv0kj.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 1:49 PM, Muhammad Usama Anjum wrote:
-> On 11/22/22 1:36 PM, David Hildenbrand wrote:
->> On 22.11.22 09:24, Muhammad Usama Anjum wrote:
->>> The VM_SOFTDIRTY should be set in the vma flags to be tested if new
->>> allocation should be merged in previous vma or not. With this patch,
->>> the new allocations are merged in the previous VMAs.
->>>
->>> I've tested it by reverting the commit 34228d473efe ("mm: ignore
->>> VM_SOFTDIRTY on VMA merging") and after adding this following patch,
->>> I'm seeing that all the new allocations done through mmap() are merged
->>> in the previous VMAs. The number of VMAs doesn't increase drastically
->>> which had contributed to the crash of gimp. If I run the same test after
->>> reverting and not including this patch, the number of VMAs keep on
->>> increasing with every mmap() syscall which proves this patch.
->>>
->>> The commit 34228d473efe ("mm: ignore VM_SOFTDIRTY on VMA merging")
->>> seems like a workaround. But it lets the soft-dirty and non-soft-dirty
->>> VMA to get merged. It helps in avoiding the creation of too many VMAs.
->>> But it creates the problem while adding the feature of clearing the
->>> soft-dirty status of only a part of the memory region.
->>>
->>> Cc: <stable@vger.kernel.org>
->>> Fixes: d9104d1ca966 ("mm: track vma changes with VM_SOFTDIRTY bit")
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>> We need more testing of this patch.
->>>
->>> While implementing clear soft-dirty bit for a range of address space, I'm
->>> facing an issue. The non-soft dirty VMA gets merged sometimes with the soft
->>> dirty VMA. Thus the non-soft dirty VMA become dirty which is undesirable.
->>> When discussed with the some other developers they consider it the
->>> regression. Why the non-soft dirty page should appear as soft dirty when it
->>> isn't soft dirty in reality? I agree with them. Should we revert
->>> 34228d473efe or find a workaround in the IOCTL?
->>>
->>> * Revert may cause the VMAs to expand in uncontrollable situation where the
->>> soft dirty bit of a lot of memory regions or the whole address space is
->>> being cleared again and again. AFAIK normal process must either be only
->>> clearing a few memory regions. So the applications should be okay. There is
->>> still chance of regressions if some applications are already using the
->>> soft-dirty bit. I'm not sure how to test it.
->>>
->>> * Add a flag in the IOCTL to ignore the dirtiness of VMA. The user will
->>> surely lose the functionality to detect reused memory regions. But the
->>> extraneous soft-dirty pages would not appear. I'm trying to do this in the
->>> patch series [1]. Some discussion is going on that this fails with some
->>> mprotect use case [2]. I still need to have a look at the mprotect selftest
->>> to see how and why this fails. I think this can be implemented after some
->>> more work probably in mprotect side.
->>>
->>> [1]
->>> https://lore.kernel.org/all/20221109102303.851281-1-usama.anjum@collabora.com/
->>> [2]
->>> https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/
->>> ---
->>>   mm/mmap.c | 21 +++++++++++----------
->>>   1 file changed, 11 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/mm/mmap.c b/mm/mmap.c
->>> index f9b96b387a6f..6934b8f61fdc 100644
->>> --- a/mm/mmap.c
->>> +++ b/mm/mmap.c
->>> @@ -1708,6 +1708,15 @@ unsigned long mmap_region(struct file *file,
->>> unsigned long addr,
->>>           vm_flags |= VM_ACCOUNT;
->>>       }
->>>   +    /*
->>> +     * New (or expanded) vma always get soft dirty status.
->>> +     * Otherwise user-space soft-dirty page tracker won't
->>> +     * be able to distinguish situation when vma area unmapped,
->>> +     * then new mapped in-place (which must be aimed as
->>> +     * a completely new data area).
->>> +     */
->>> +    vm_flags |= VM_SOFTDIRTY;
->>> +
->>>       /*
->>>        * Can we just expand an old mapping?
->>>        */
->>> @@ -1823,15 +1832,6 @@ unsigned long mmap_region(struct file *file,
->>> unsigned long addr,
->>>       if (file)
->>>           uprobe_mmap(vma);
->>>   -    /*
->>> -     * New (or expanded) vma always get soft dirty status.
->>> -     * Otherwise user-space soft-dirty page tracker won't
->>> -     * be able to distinguish situation when vma area unmapped,
->>> -     * then new mapped in-place (which must be aimed as
->>> -     * a completely new data area).
->>> -     */
->>> -    vma->vm_flags |= VM_SOFTDIRTY;
->>> -
->>>       vma_set_page_prot(vma);
+On 11/22/2022 4:46 PM, Takashi Iwai wrote:
+> On Tue, 22 Nov 2022 09:20:40 +0100,
+> Michael Wu wrote:
 >>
->> vma_set_page_prot(vma) has to be called after adjusting vma->vm_flags.
+>> When the loglevel is greater than 4, with a long messages printed on the
+>> console while playing or recording audios, the usb controller may become
+>> abnormal.
+>> `usb 1-2: timeout: still 1 active urbs on EP #1`
 >>
->> Did not look into the details here, but that jumped at me.
-> vma_set_page_prot() also needs to be removed from here as it was being
-> called after updating the vm_flags. I'll remove it. vma_set_page_prot() was
-> added in a separate commit 64e455079e1b. I'll send a v2 in a while.
-Just had another look. vm_flags is being modified just above
-vma_set_page_prot(). So we don't need to remove it.
+>> Fix it by configuring the transfer_flags URB_ISO_ASAP flag.
+>>
+>> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> 
+> Hrm, that's somewhat backward action to the change we've done years
+> ago, commit c75c5ab575af7db707689cdbb5a5c458e9a034bb:
+> 
+>      ALSA: USB: adjust for changed 3.8 USB API
+>      
+>      The recent changes in the USB API ("implement new semantics for
+>      URB_ISO_ASAP") made the former meaning of the URB_ISO_ASAP flag the
+>      default, and changed this flag to mean that URBs can be delayed.
+>      This is not the behaviour wanted by any of the audio drivers because
+>      it leads to discontinuous playback with very small period sizes.
+>      Therefore, our URBs need to be submitted without this flag.
+> 
+> I rather suspect that your problem is in the USB controller side.
+> 
+> 
+> thanks,
+> 
+> Takashi
+> 
+Dear Takashi, thanks for the reminding. Let me check...
 
 -- 
-BR,
-Muhammad Usama Anjum
+Regards,
+Michael Wu
