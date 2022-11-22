@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85CF634878
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F9063486E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbiKVUkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S233139AbiKVUj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:39:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiKVUju (ORCPT
+        with ESMTP id S234777AbiKVUjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:39:50 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54873725E0;
+        Tue, 22 Nov 2022 15:39:47 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7596B697D9;
         Tue, 22 Nov 2022 12:39:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
         s=smtpout1; t=1669149585;
-        bh=3FQzak7NFQCeQ17sM6xyWBPLJooy+CEjUwRxboNNo2U=;
+        bh=ay4/Rf8ACqyHamy6OVpRQ1uU4XWlbJihVMLu/JPLDYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q9bdwhkoIOl3a0a7KUDXD2xTHcVGHLg70EzMk8dzd7kKvWoiP9zK1zw0uOUsB0w0Y
-         0gkW7B7aYlcWy75DJWmWiQ+yFiEF6zhGY0++WOyErXmhRKXD/3wNRgHZZ9zX2yA6+O
-         ZAFi7p5Wr3/JKQY5OGjfZ7t0eKpB7H9J7+pylRJ2+FtSTP90X8j0Dp6j+jt7HZNi2l
-         WNvM5bxlU5+wck+OMG26oaEgnPxB5tykmc5N8x5NO8mA3wbhVIPtuWaiEVH6pwt6tc
-         FFZLxBfY6c3WY3fPNYkX7Jiw60mnAAMMdPR9n3u4/DP1EnBwxAv6Zxuka5JFLkRIK+
-         punpFFYFoLKmg==
+        b=o+HkZdQNvCKcT3dPVoW6pTHaa7PamhWCG+6KJ/1wraFbtBUWY0gQ1p1wDuB38igZg
+         RT0ITC7BBdjzae2jo1+QJAVIiROAnsDLDjz3mEhOM53ycMu9ZS7n30QDTlmOxvLpV3
+         tDG+CaoHGI5ak0eTF/7LBiwC4HZL7yxikkjKhZxZm4ju9wWLG/8soBu8Qjt+czQPCE
+         FKvtKcxXbdkBqhtlYOwxPcMAGE2kBiwAWBMNF/bigUaI/Fx2nVx8HioMLugpfrF3IE
+         lDqFuKmlxxoa5pcVIat5z9OUDMOFOY1m3BmO+WVAuW6mtKH60MWftZOEfRkPEkn6Yv
+         aK08UrxtiCsuA==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NGx2S6wLhzXR9;
-        Tue, 22 Nov 2022 15:39:44 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NGx2T2l21zXRB;
+        Tue, 22 Nov 2022 15:39:45 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
@@ -40,88 +40,189 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Alexander Mikhalitsyn <alexander@mihalicyn.com>,
         Chris Kennelly <ckennelly@google.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 02/30] rseq: Introduce feature size and alignment ELF auxiliary vector entries
-Date:   Tue, 22 Nov 2022 15:39:04 -0500
-Message-Id: <20221122203932.231377-3-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 03/30] rseq: Introduce extensible rseq ABI
+Date:   Tue, 22 Nov 2022 15:39:05 -0500
+Message-Id: <20221122203932.231377-4-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221122203932.231377-1-mathieu.desnoyers@efficios.com>
 References: <20221122203932.231377-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export the rseq feature size supported by the kernel as well as the
-required allocation alignment for the rseq per-thread area to user-space
-through ELF auxiliary vector entries.
+Introduce the extensible rseq ABI, where the feature size supported by
+the kernel and the required alignment are communicated to user-space
+through ELF auxiliary vectors.
 
-This is part of the extensible rseq ABI.
+This allows user-space to call rseq registration with a rseq_len of
+either 32 bytes for the original struct rseq size (which includes
+padding), or larger.
+
+If rseq_len is larger than 32 bytes, then it must be large enough to
+contain the feature size communicated to user-space through ELF
+auxiliary vectors.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- fs/binfmt_elf.c             | 5 +++++
- include/uapi/linux/auxvec.h | 2 ++
- include/uapi/linux/rseq.h   | 5 +++++
- 3 files changed, 12 insertions(+)
+Changes since v4:
+- Accept original rseq alignment for original rseq size.
+---
+ include/linux/sched.h |  4 ++++
+ kernel/ptrace.c       |  2 +-
+ kernel/rseq.c         | 37 ++++++++++++++++++++++++++++++-------
+ 3 files changed, 35 insertions(+), 8 deletions(-)
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 63c7ebb0da89..04fca1e4cbd2 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -46,6 +46,7 @@
- #include <linux/cred.h>
- #include <linux/dax.h>
- #include <linux/uaccess.h>
-+#include <linux/rseq.h>
- #include <asm/param.h>
- #include <asm/page.h>
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 23de7fe86cc4..2a9e14e3e668 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1305,6 +1305,7 @@ struct task_struct {
  
-@@ -288,6 +289,10 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
- 	if (bprm->have_execfd) {
- 		NEW_AUX_ENT(AT_EXECFD, bprm->execfd);
+ #ifdef CONFIG_RSEQ
+ 	struct rseq __user *rseq;
++	u32 rseq_len;
+ 	u32 rseq_sig;
+ 	/*
+ 	 * RmW on rseq_event_mask must be performed atomically
+@@ -2355,10 +2356,12 @@ static inline void rseq_fork(struct task_struct *t, unsigned long clone_flags)
+ {
+ 	if (clone_flags & CLONE_VM) {
+ 		t->rseq = NULL;
++		t->rseq_len = 0;
+ 		t->rseq_sig = 0;
+ 		t->rseq_event_mask = 0;
+ 	} else {
+ 		t->rseq = current->rseq;
++		t->rseq_len = current->rseq_len;
+ 		t->rseq_sig = current->rseq_sig;
+ 		t->rseq_event_mask = current->rseq_event_mask;
  	}
-+#ifdef CONFIG_RSEQ
-+	NEW_AUX_ENT(AT_RSEQ_FEATURE_SIZE, offsetof(struct rseq, end));
-+	NEW_AUX_ENT(AT_RSEQ_ALIGN, __alignof__(struct rseq));
-+#endif
- #undef NEW_AUX_ENT
- 	/* AT_NULL is zero; clear the rest too */
- 	memset(elf_info, 0, (char *)mm->saved_auxv +
-diff --git a/include/uapi/linux/auxvec.h b/include/uapi/linux/auxvec.h
-index c7e502bf5a6f..6991c4b8ab18 100644
---- a/include/uapi/linux/auxvec.h
-+++ b/include/uapi/linux/auxvec.h
-@@ -30,6 +30,8 @@
- 				 * differ from AT_PLATFORM. */
- #define AT_RANDOM 25	/* address of 16 random bytes */
- #define AT_HWCAP2 26	/* extension of AT_HWCAP */
-+#define AT_RSEQ_FEATURE_SIZE	27	/* rseq supported feature size */
-+#define AT_RSEQ_ALIGN		28	/* rseq allocation alignment */
+@@ -2367,6 +2370,7 @@ static inline void rseq_fork(struct task_struct *t, unsigned long clone_flags)
+ static inline void rseq_execve(struct task_struct *t)
+ {
+ 	t->rseq = NULL;
++	t->rseq_len = 0;
+ 	t->rseq_sig = 0;
+ 	t->rseq_event_mask = 0;
+ }
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index 54482193e1ed..0786450074c1 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -813,7 +813,7 @@ static long ptrace_get_rseq_configuration(struct task_struct *task,
+ {
+ 	struct ptrace_rseq_configuration conf = {
+ 		.rseq_abi_pointer = (u64)(uintptr_t)task->rseq,
+-		.rseq_abi_size = sizeof(*task->rseq),
++		.rseq_abi_size = task->rseq_len,
+ 		.signature = task->rseq_sig,
+ 		.flags = 0,
+ 	};
+diff --git a/kernel/rseq.c b/kernel/rseq.c
+index bda8175f8f99..c1058b3f10ac 100644
+--- a/kernel/rseq.c
++++ b/kernel/rseq.c
+@@ -18,6 +18,9 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/rseq.h>
  
- #define AT_EXECFN  31	/* filename of program */
- 
-diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-index 77ee207623a9..05d3c4cdeb40 100644
---- a/include/uapi/linux/rseq.h
-+++ b/include/uapi/linux/rseq.h
-@@ -130,6 +130,11 @@ struct rseq {
- 	 *     this thread.
- 	 */
- 	__u32 flags;
++/* The original rseq structure size (including padding) is 32 bytes. */
++#define ORIG_RSEQ_SIZE		32
 +
-+	/*
-+	 * Flexible array member at end of structure, after last feature field.
-+	 */
-+	char end[];
- } __attribute__((aligned(4 * sizeof(__u64))));
+ #define RSEQ_CS_NO_RESTART_FLAGS (RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT | \
+ 				  RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL | \
+ 				  RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE)
+@@ -87,10 +90,15 @@ static int rseq_update_cpu_id(struct task_struct *t)
+ 	u32 cpu_id = raw_smp_processor_id();
+ 	struct rseq __user *rseq = t->rseq;
  
- #endif /* _UAPI_LINUX_RSEQ_H */
+-	if (!user_write_access_begin(rseq, sizeof(*rseq)))
++	if (!user_write_access_begin(rseq, t->rseq_len))
+ 		goto efault;
+ 	unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
+ 	unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
++	/*
++	 * Additional feature fields added after ORIG_RSEQ_SIZE
++	 * need to be conditionally updated only if
++	 * t->rseq_len != ORIG_RSEQ_SIZE.
++	 */
+ 	user_write_access_end();
+ 	trace_rseq_update(t);
+ 	return 0;
+@@ -117,6 +125,11 @@ static int rseq_reset_rseq_cpu_id(struct task_struct *t)
+ 	 */
+ 	if (put_user(cpu_id, &t->rseq->cpu_id))
+ 		return -EFAULT;
++	/*
++	 * Additional feature fields added after ORIG_RSEQ_SIZE
++	 * need to be conditionally reset only if
++	 * t->rseq_len != ORIG_RSEQ_SIZE.
++	 */
+ 	return 0;
+ }
+ 
+@@ -329,7 +342,7 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ 		/* Unregister rseq for current thread. */
+ 		if (current->rseq != rseq || !current->rseq)
+ 			return -EINVAL;
+-		if (rseq_len != sizeof(*rseq))
++		if (rseq_len != current->rseq_len)
+ 			return -EINVAL;
+ 		if (current->rseq_sig != sig)
+ 			return -EPERM;
+@@ -338,6 +351,7 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ 			return ret;
+ 		current->rseq = NULL;
+ 		current->rseq_sig = 0;
++		current->rseq_len = 0;
+ 		return 0;
+ 	}
+ 
+@@ -350,7 +364,7 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ 		 * the provided address differs from the prior
+ 		 * one.
+ 		 */
+-		if (current->rseq != rseq || rseq_len != sizeof(*rseq))
++		if (current->rseq != rseq || rseq_len != current->rseq_len)
+ 			return -EINVAL;
+ 		if (current->rseq_sig != sig)
+ 			return -EPERM;
+@@ -359,15 +373,24 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ 	}
+ 
+ 	/*
+-	 * If there was no rseq previously registered,
+-	 * ensure the provided rseq is properly aligned and valid.
++	 * If there was no rseq previously registered, ensure the provided rseq
++	 * is properly aligned, as communcated to user-space through the ELF
++	 * auxiliary vector AT_RSEQ_ALIGN. If rseq_len is the original rseq
++	 * size, the required alignment is the original struct rseq alignment.
++	 *
++	 * In order to be valid, rseq_len is either the original rseq size, or
++	 * large enough to contain all supported fields, as communicated to
++	 * user-space through the ELF auxiliary vector AT_RSEQ_FEATURE_SIZE.
+ 	 */
+-	if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq)) ||
+-	    rseq_len != sizeof(*rseq))
++	if (rseq_len < ORIG_RSEQ_SIZE ||
++	    (rseq_len == ORIG_RSEQ_SIZE && !IS_ALIGNED((unsigned long)rseq, ORIG_RSEQ_SIZE)) ||
++	    (rseq_len != ORIG_RSEQ_SIZE && (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq)) ||
++					    rseq_len < offsetof(struct rseq, end))))
+ 		return -EINVAL;
+ 	if (!access_ok(rseq, rseq_len))
+ 		return -EFAULT;
+ 	current->rseq = rseq;
++	current->rseq_len = rseq_len;
+ 	current->rseq_sig = sig;
+ 	/*
+ 	 * If rseq was previously inactive, and has just been
 -- 
 2.25.1
 
