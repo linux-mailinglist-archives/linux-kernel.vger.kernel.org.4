@@ -2,125 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E15634120
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DE8634141
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234109AbiKVQOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S234340AbiKVQQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 11:16:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbiKVQNo (ORCPT
+        with ESMTP id S234288AbiKVQP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:13:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20377990F;
-        Tue, 22 Nov 2022 08:12:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70E126179B;
-        Tue, 22 Nov 2022 16:12:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 585A8C43470;
-        Tue, 22 Nov 2022 16:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669133537;
-        bh=CZmpOpNqrVQxpsX2fOGYDMBNpPg1FLHDxqQLqoO0bqk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zip4tUr9yFB5O2ebDQ+Ck/H8fHgwdROhGTZF1crB2aWWd/iVYRyLnWNhXnGgKD2TG
-         UycnVuO6xCxhI+gmui4Yr8BM+8HNrffTocfEL1Vmwdy6IE/DVPKrljZT+j4KtfVVL4
-         1DkPHDja6fBYphckk3zqUGVYaaRuawgZhoqJ1Cpo=
-Date:   Tue, 22 Nov 2022 17:12:14 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2] USB: gadget: dummy_hcd: switch char * to u8 *
-Message-ID: <Y3z03sS65YKgvI5R@kroah.com>
-References: <20221109084450.2181848-1-gregkh@linuxfoundation.org>
- <Y2vBWJOgEBDn0NzU@rowland.harvard.edu>
+        Tue, 22 Nov 2022 11:15:59 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7345D73431
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:13:51 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id b12so11661860wrn.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mC90GwNhm6j7BlWHBWFQA6hS+M8xqG7H71ScqSgu+SE=;
+        b=duED85v80csEaRq1YyX8RGCan5YsZObsDE+LxOFw2hRKLd4y74hJ6VQpH2h8i42z3a
+         Clii+1EG793oZfMdmFqoOXa6/ceHR4g9KwtXM/2o4kfpKIHEwQaVTAIE3wvAVwoB/32u
+         wpVuAXugU8a9n8vANtU1W1XTMegemYjVCPGXndxhV8l1D/UznxvyXgXQ+8jCYydRJjfy
+         6nXiMTWxIdUjqfx/wRrvMOfOyJbyEsQyeEm+M9vEFOoKFpge1FaGl+okkjKZoQYH3F7y
+         R6KCyvD+KFF3Khy2rvirDlDJOuYh1eJzSja6BYJgs7j42ubvK8GD5SxEcVe+FADW1PHF
+         IUAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mC90GwNhm6j7BlWHBWFQA6hS+M8xqG7H71ScqSgu+SE=;
+        b=Mw6FQgVD7ezAUM7+PXJ1mKe6M0K3IfgUG7LFXUckJXFY153TGkN1i/7heU7/jtqrxY
+         G4U6Ok2t8w560G7CLgrbqZd5OWsi3eYV449fr6GTycvtDo67cIwUUyHlhJsg+SZXfnsd
+         LtMq+4kTeG4z+n6G5wJ+GLbDr8KbRN4SAOL2btSYGd6zYby+HWS4aakImbW988TSZZdW
+         Hta8wjkl9HJJy1lvWX8nRx11iQ52Gy5KNn8bfNCD8HAzghh/Qb9jvkCWhzbKpBoa1sse
+         X2mLfia3WsQbUPBpv20Pxcw18PPiU4T1JLRho4RABIHSeMU0yOU3PgmiG6w/l0XSduNb
+         tl/w==
+X-Gm-Message-State: ANoB5plEb5fuhB8bpa0aNiaPBhx4dWZ5lkXtxnwc7EgObXk9ayJyS4Eo
+        Hpzkhu7QVSsNekJ4R0T7lYY=
+X-Google-Smtp-Source: AA0mqf5qnuuB7LLLd0XE2bXOYFU/xJz0C1TnyOb7qcwmV6QYY7frWdzVjqgcGPlabDwcunMKuQIgWg==
+X-Received: by 2002:adf:fb4c:0:b0:236:5270:735e with SMTP id c12-20020adffb4c000000b002365270735emr3949996wrs.659.1669133629782;
+        Tue, 22 Nov 2022 08:13:49 -0800 (PST)
+Received: from localhost.localdomain (2001-1ae9-2f0-fa00-5962-fdfb-2a9a-17bd.ip6.tmcz.cz. [2001:1ae9:2f0:fa00:5962:fdfb:2a9a:17bd])
+        by smtp.googlemail.com with ESMTPSA id j13-20020adff54d000000b0023655e51c33sm14610846wrp.4.2022.11.22.08.13.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 08:13:48 -0800 (PST)
+From:   Petr Skocik <pskocik@gmail.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        Petr Skocik <pskocik@gmail.com>
+Subject: [PATCH 0/1] *** Fix kill(-1,s) returning 0 on 0 kills ***
+Date:   Tue, 22 Nov 2022 17:12:40 +0100
+Message-Id: <20221122161240.137570-1-pskocik@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2vBWJOgEBDn0NzU@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 10:03:52AM -0500, Alan Stern wrote:
-> On Wed, Nov 09, 2022 at 09:44:50AM +0100, Greg Kroah-Hartman wrote:
-> > The function handle_control_request() casts the urb buffer to a char *,
-> > and then treats it like a unsigned char buffer when assigning data to
-> > it.  On some architectures, "char" is really signed, so let's just
-> > properly set this pointer to a u8 to take away any potential problems as
-> > that's what is really wanted here.
-> > 
-> > Use put_unaligned_le16() to copy the full 16bits into the buffer,
-> > it's not a problem just yet as only 7 bits are being used here, but this
-> > protects us when/if the USB spec changes in the future to define more of
-> > these bits.
-> > 
-> > Cc: Felipe Balbi <balbi@kernel.org>
-> > Cc: Jakob Koschel <jakobkoschel@gmail.com>
-> > Cc: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Ira Weiny <ira.weiny@intel.com>
-> > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> > v2: - use put_unaligned_le16() on Linus's recommendation as a simpler and
-> >       more obvious way to describe the data being copied here.
-> >     - update device: comment based on Alan's review
-> > 
-> >  drivers/usb/gadget/udc/dummy_hcd.c | 13 ++++++-------
-> >  1 file changed, 6 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-> > index 899ac9f9c279..7c59c20c8623 100644
-> > --- a/drivers/usb/gadget/udc/dummy_hcd.c
-> > +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-> > @@ -1740,13 +1740,13 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
-> >  		if (setup->bRequestType == Dev_InRequest
-> >  				|| setup->bRequestType == Intf_InRequest
-> >  				|| setup->bRequestType == Ep_InRequest) {
-> > -			char *buf;
-> > +			u8 *buf;
-> >  			/*
-> > -			 * device: remote wakeup, selfpowered
-> > +			 * device: remote wakeup, selfpowered, LTM, U1, or U2
-> >  			 * interface: nothing
-> >  			 * endpoint: halt
-> >  			 */
-> > -			buf = (char *)urb->transfer_buffer;
-> > +			buf = urb->transfer_buffer;
-> >  			if (urb->transfer_buffer_length > 0) {
-> >  				if (setup->bRequestType == Ep_InRequest) {
-> >  					ep2 = find_endpoint(dum, w_index);
-> > @@ -1755,10 +1755,9 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
-> >  						break;
-> >  					}
-> >  					buf[0] = ep2->halted;
-> > -				} else if (setup->bRequestType ==
-> > -					   Dev_InRequest) {
-> > -					buf[0] = (u8)dum->devstatus;
-> > -				} else
-> > +				} else if (setup->bRequestType == Dev_InRequest)
-> > +					put_unaligned_le16(dum->devstatus, buf);
-> 
-> This is tempting but wrong.  At this point we haven't checked how big 
-> the transfer_buffer is; if it is only one byte long then this call will 
-> overflow the buffer.  Notice the "if" statement three lines below.
+Hi. I've never sent a kernel patch before but this one seemed trivial,
+so I thought I'd give it a shot.
 
-Ick, good catch.  I'll redo this again...
+My issue: kill(-1,s) on Linux doesn't return -ESCHR when it has nothing
+to kill.
 
-thanks,
+The code sample below demonstrates the problem, which gets fixed by the
+patch:
 
-greg k-h
+    #define _GNU_SOURCE
+    #include <assert.h>
+    #include <errno.h>
+    #include <signal.h>
+    #include <stdio.h>
+    #include <sys/wait.h>
+    #include <unistd.h>
+    #define VICTIM_UID 4200 //check these are safe to use on your system!
+    #define UNUSED_UID 4300
+    int main(){
+        uid_t r,e,s;
+        if(geteuid()) return 1; //requires root privileges
+
+        //pipe to let the parent know when the child has changed ids
+        int fds[2]; if(0>pipe(fds)) return 1;
+        pid_t pid;
+        if(0>(pid=fork())) return 1;
+        else if(0==pid){
+            setreuid(VICTIM_UID,VICTIM_UID);
+            getresuid(&r,&e,&s); printf("child: %u %u %u\n", r,e,s);
+            close(fds[0]); close(fds[1]); //let the parent continue
+            for(;;) pause();
+        }
+        close(fds[1]);
+        read(fds[0],&(char){0},1); //wait for uid change in the child
+
+        #if 1
+        setreuid(VICTIM_UID,(uid_t)-1); seteuid(VICTIM_UID);
+        #else
+        setresuid(UNUSED_UID,VICTIM_UID,0);
+        #endif
+        getresuid(&r,&e,&s); printf("parent: %u %u %u\n", r,e,s); //4200 4200 0
+
+        int err = kill(-1,-111); (void)err; //test -EINVAL
+        assert(err < 0 &&  errno == EINVAL);
+
+        int rc = kill(-1,SIGTERM); //test 0
+        if(rc>=0) wait(0);
+        int rc2 = kill(-1,SIGTERM); //test -ESCHR
+        printf("1st kill ok==%d; 2nd kill ESRCH==%d\n", rc==0, rc2<0&& errno==ESRCH);
+    }
+
+Thank you for considering the patch.
+
+Best regards,
+Petr S.
+
+
+Petr Skocik (1):
+  Fix kill(-1,s) returning 0 on 0 kills
+
+ kernel/signal.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
+
