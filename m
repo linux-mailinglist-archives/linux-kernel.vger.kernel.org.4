@@ -2,273 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89ABB63322E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7B963322F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiKVBdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
+        id S232252AbiKVBdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbiKVBdN (ORCPT
+        with ESMTP id S232241AbiKVBdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:33:13 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEA2B97F8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:33:12 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id b1-20020a17090a10c100b0020da29fa5e5so6739459pje.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:33:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jw+pa4Hghc6DNqT2ZjHPvBrmIDFJee53B5N07cXK5TA=;
-        b=VQiF6B2AiWPxuDaU543wmXQ9fJI73usRCS2tEaUARqzdNYWpa0vkycXr2Q3TCD8DT+
-         qEV3F9EJqmNGYVgf/FeGkZW4qpTYvYdLuSJh5nI1sjK7Gkj3BvzbOPBsRtPDBKBdBfrS
-         RPmLWdrKBMvio8ukGXoClhqdFtRISRID8Vz43PLr2UDvMLKysBWO/ddPOnNDqMAbLbMk
-         aaVUuSovyMALqMoaCFXuGE8w58N8DbKYrPQKHhsfERzQYv5rBBxn2+RClCYIs4bKVY3l
-         rlBU9J+8hFpSP/pO5M4DmnlowkAMx1dXoieVn4gjokqbQhgY4o0IAUUU0Y7PJ29r7O/P
-         rDUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:reply-to:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Jw+pa4Hghc6DNqT2ZjHPvBrmIDFJee53B5N07cXK5TA=;
-        b=ID/vY5aYEYMLzt6A5DGlG38uoT4oge0z6riWg0QikHfVVHOXMdzBKE2cXy6MTc1HcW
-         ehU2PF20Il7RlpoyMhFzXxn+zmAOC1lXJUR08J67Pkg+NfKolxkSHcoHplgNx6Dwz2HX
-         2b1cAmeI6mJxccHtCQ8R02RzcFmZYdFO/KwqyFSTntsjQXLiFIQpTWQTwltyoNMGo+uh
-         0DfzpMPwGgRZyhWk2pF8rjEKppLVqa9dccQ7bCdCz071a9hfkllfzgaZEe8kzy3h8ifO
-         lisHMgt9kCjB7Jrf9LThpf2FqJ08x68AHTmku3se1Bd4MS8QA+dEvcCO0qadqcYfoMnD
-         bxFw==
-X-Gm-Message-State: ANoB5plo7MpcJXdPBMBQCM0qkDnwzsz5vKrF0XEBIW0cqSTDk+Q/M7tY
-        lTEimSoGiRq4+6WfCkc3F3Vgb2AWTyg=
-X-Google-Smtp-Source: AA0mqf5IUv74w5o2HIig6Dio77QDCV1b85+y917UKkiYu9TTQzt1AZFzYf0mg5S3BiZmCmqlB7GCfjezLro=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:54c2:0:b0:56b:fb4f:3d7c with SMTP id
- i185-20020a6254c2000000b0056bfb4f3d7cmr23246950pfb.54.1669080791735; Mon, 21
- Nov 2022 17:33:11 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 22 Nov 2022 01:33:09 +0000
+        Mon, 21 Nov 2022 20:33:40 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C373E14D7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:33:39 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NGRc15QtZz4y0v7;
+        Tue, 22 Nov 2022 09:33:37 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AM1XQvS024917;
+        Tue, 22 Nov 2022 09:33:26 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 22 Nov 2022 09:33:27 +0800 (CST)
+Date:   Tue, 22 Nov 2022 09:33:27 +0800 (CST)
+X-Zmail-TransId: 2afa637c26e7ffffffffe8deadb2
+X-Mailer: Zmail v1.0
+Message-ID: <202211220933274886024@zte.com.cn>
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221122013309.1872347-1-seanjc@google.com>
-Subject: [PATCH] KVM: selftests: Define and use a custom static assert in lib headers
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   <ye.xingchen@zte.com.cn>
+To:     <miquel.raynal@bootlin.com>
+Cc:     <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <chi.minghao@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIXSBtdGQ6IHJhd25hbmQ6IG9yaW9uOiB1c2UKCiBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AM1XQvS024917
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 637C26F1.001 by FangMail milter!
+X-FangMail-Envelope: 1669080817/4NGRc15QtZz4y0v7/637C26F1.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 637C26F1.001/4NGRc15QtZz4y0v7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define and use kvm_static_assert() in the common KVM selftests headers to
-provide deterministic behavior, and to allow creating static asserts
-without dummy messages.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-The kernel's static_assert() makes the message param optional, and on the
-surface, tools/include/linux/build_bug.h appears to follow suit.  However,
-glibc may override static_assert() and redefine it as a direct alias of
-_Static_assert(), which makes the message parameter mandatory.  This leads
-to non-deterministic behavior as KVM selftests code that utilizes
-static_assert() without a custom message may or not compile depending on
-the order of includes.  E.g. recently added asserts in
-x86_64/processor.h fail on some systems with errors like
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-  In file included from lib/memstress.c:11:0:
-  include/x86_64/processor.h: In function =E2=80=98this_cpu_has_p=E2=80=99:
-  include/x86_64/processor.h:193:34: error: expected =E2=80=98,=E2=80=99 be=
-fore =E2=80=98)=E2=80=99 token
-    static_assert(low_bit < high_bit);     \
-                                    ^
-due to _Static_assert() expecting a comma before a message.  The "message
-optional" version of static_assert() uses macro magic to strip away the
-comma when presented with empty an __VA_ARGS__
-
-  #ifndef static_assert
-  #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #ex=
-pr)
-  #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-  #endif // static_assert
-
-and effectively generates "_Static_assert(expr, #expr)".
-
-The incompatible version of static_assert() gets defined by this snippet
-in /usr/include/assert.h:
-
-  #if defined __USE_ISOC11 && !defined __cplusplus
-  # undef static_assert
-  # define static_assert _Static_assert
-  #endif
-
-which yields "_Static_assert(expr)" and thus fails as above.
-
-KVM selftests don't actually care about using C11, but __USE_ISOC11 gets
-defined because of _GNU_SOURCE, which many tests do #define.  _GNU_SOURCE
-triggers a massive pile of defines in /usr/include/features.h, including
-_ISOC11_SOURCE:
-
-  /* If _GNU_SOURCE was defined by the user, turn on all the other features=
-.  */
-  #ifdef _GNU_SOURCE
-  # undef  _ISOC95_SOURCE
-  # define _ISOC95_SOURCE 1
-  # undef  _ISOC99_SOURCE
-  # define _ISOC99_SOURCE 1
-  # undef  _ISOC11_SOURCE
-  # define _ISOC11_SOURCE 1
-  # undef  _POSIX_SOURCE
-  # define _POSIX_SOURCE  1
-  # undef  _POSIX_C_SOURCE
-  # define _POSIX_C_SOURCE        200809L
-  # undef  _XOPEN_SOURCE
-  # define _XOPEN_SOURCE  700
-  # undef  _XOPEN_SOURCE_EXTENDED
-  # define _XOPEN_SOURCE_EXTENDED 1
-  # undef  _LARGEFILE64_SOURCE
-  # define _LARGEFILE64_SOURCE    1
-  # undef  _DEFAULT_SOURCE
-  # define _DEFAULT_SOURCE        1
-  # undef  _ATFILE_SOURCE
-  # define _ATFILE_SOURCE 1
-  #endif
-
-which further down in /usr/include/features.h leads to:
-
-  /* This is to enable the ISO C11 extension.  */
-  #if (defined _ISOC11_SOURCE \
-       || (defined __STDC_VERSION__ && __STDC_VERSION__ >=3D 201112L))
-  # define __USE_ISOC11   1
-  #endif
-
-To make matters worse, /usr/include/assert.h doesn't guard against
-multiple inclusion by turning itself into a nop, but instead #undefs a
-few macros and continues on.  As a result, it's all but impossible to
-ensure the "message optional" version of static_assert() will actually be
-used, e.g. explicitly including assert.h and #undef'ing static_assert()
-doesn't work as a later inclusion of assert.h will again redefine its
-version.
-
-  #ifdef  _ASSERT_H
-
-  # undef _ASSERT_H
-  # undef assert
-  # undef __ASSERT_VOID_CAST
-
-  # ifdef __USE_GNU
-  #  undef assert_perror
-  # endif
-
-  #endif /* assert.h      */
-
-  #define _ASSERT_H       1
-  #include <features.h>
-
-Fixes: fcba483e8246 ("KVM: selftests: Sanity check input to ioctls() at bui=
-ld time")
-Fixes: ee3795536664 ("KVM: selftests: Refactor X86_FEATURE_* framework to p=
-rep for X86_PROPERTY_*")
-Fixes: 53a7dc0f215e ("KVM: selftests: Add X86_PROPERTY_* framework to retri=
-eve CPUID values")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- .../selftests/kvm/include/kvm_util_base.h     | 14 +++++++++++-
- .../selftests/kvm/include/x86_64/processor.h  | 22 +++++++++----------
- 2 files changed, 24 insertions(+), 12 deletions(-)
+ drivers/mtd/nand/raw/orion_nand.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/te=
-sting/selftests/kvm/include/kvm_util_base.h
-index c7685c7038ff..9fa0d340f291 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -22,6 +22,18 @@
-=20
- #include "sparsebit.h"
-=20
-+/*
-+ * Provide a version of static_assert() that is guaranteed to have an opti=
-onal
-+ * message param.  If _ISOC11_SOURCE is defined, glibc (/usr/include/asser=
-t.h)
-+ * #undefs and #defines static_assert() as a direct alias to _Static_asser=
-t(),
-+ * i.e. effectively makes the message mandatory.  Many KVM selftests #defi=
-ne
-+ * _GNU_SOURCE for various reasons, and _GNU_SOURCE implies _ISOC11_SOURCE=
-.  As
-+ * a result, static_assert() behavior is non-deterministic and may or may =
-not
-+ * require a message depending on #include order.
-+ */
-+#define __kvm_static_assert(expr, msg, ...) _Static_assert(expr, msg)
-+#define kvm_static_assert(expr, ...) __kvm_static_assert(expr, ##__VA_ARGS=
-__, #expr)
-+
- #define KVM_DEV_PATH "/dev/kvm"
- #define KVM_MAX_VCPUS 512
-=20
-@@ -196,7 +208,7 @@ static inline bool kvm_has_cap(long cap)
-=20
- #define kvm_do_ioctl(fd, cmd, arg)						\
- ({										\
--	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) =3D=3D _IOC_SIZE(cmd), "");=
-	\
-+	kvm_static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) =3D=3D _IOC_SIZE(cmd));=
-	\
- 	ioctl(fd, cmd, arg);							\
- })
-=20
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools=
-/testing/selftests/kvm/include/x86_64/processor.h
-index 5d310abe6c3f..c65717142fda 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -72,11 +72,11 @@ struct kvm_x86_cpu_feature {
- 		.bit =3D __bit,							\
- 	};									\
- 										\
--	static_assert((fn & 0xc0000000) =3D=3D 0 ||					\
--		      (fn & 0xc0000000) =3D=3D 0x40000000 ||			\
--		      (fn & 0xc0000000) =3D=3D 0x80000000 ||			\
--		      (fn & 0xc0000000) =3D=3D 0xc0000000);				\
--	static_assert(idx < BIT(sizeof(feature.index) * BITS_PER_BYTE));	\
-+	kvm_static_assert((fn & 0xc0000000) =3D=3D 0 ||				\
-+			  (fn & 0xc0000000) =3D=3D 0x40000000 ||			\
-+			  (fn & 0xc0000000) =3D=3D 0x80000000 ||			\
-+			  (fn & 0xc0000000) =3D=3D 0xc0000000);			\
-+	kvm_static_assert(idx < BIT(sizeof(feature.index) * BITS_PER_BYTE));	\
- 	feature;								\
- })
-=20
-@@ -190,12 +190,12 @@ struct kvm_x86_cpu_property {
- 		.hi_bit =3D high_bit,						\
- 	};									\
- 										\
--	static_assert(low_bit < high_bit);					\
--	static_assert((fn & 0xc0000000) =3D=3D 0 ||					\
--		      (fn & 0xc0000000) =3D=3D 0x40000000 ||			\
--		      (fn & 0xc0000000) =3D=3D 0x80000000 ||			\
--		      (fn & 0xc0000000) =3D=3D 0xc0000000);				\
--	static_assert(idx < BIT(sizeof(property.index) * BITS_PER_BYTE));	\
-+	kvm_static_assert(low_bit < high_bit);					\
-+	kvm_static_assert((fn & 0xc0000000) =3D=3D 0 ||				\
-+			  (fn & 0xc0000000) =3D=3D 0x40000000 ||			\
-+			  (fn & 0xc0000000) =3D=3D 0x80000000 ||			\
-+			  (fn & 0xc0000000) =3D=3D 0xc0000000);			\
-+	kvm_static_assert(idx < BIT(sizeof(property.index) * BITS_PER_BYTE));	\
- 	property;								\
- })
-=20
+diff --git a/drivers/mtd/nand/raw/orion_nand.c b/drivers/mtd/nand/raw/orion_nand.c
+index 1bfecf502216..00bd7be76e07 100644
+--- a/drivers/mtd/nand/raw/orion_nand.c
++++ b/drivers/mtd/nand/raw/orion_nand.c
+@@ -102,7 +102,6 @@ static int __init orion_nand_probe(struct platform_device *pdev)
+ 	struct mtd_info *mtd;
+ 	struct nand_chip *nc;
+ 	struct orion_nand_data *board;
+-	struct resource *res;
+ 	void __iomem *io_base;
+ 	int ret = 0;
+ 	u32 val = 0;
+@@ -119,8 +118,7 @@ static int __init orion_nand_probe(struct platform_device *pdev)
+ 	info->controller.ops = &orion_nand_ops;
+ 	nc->controller = &info->controller;
 
-base-commit: 0fa32dad1e78629cb42999dacd82489503fdf4c2
---=20
-2.38.1.584.g0f3c55d4c2-goog
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	io_base = devm_ioremap_resource(&pdev->dev, res);
++	io_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
 
+ 	if (IS_ERR(io_base))
+ 		return PTR_ERR(io_base);
+-- 
+2.25.1
