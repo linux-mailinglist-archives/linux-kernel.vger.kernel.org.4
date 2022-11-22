@@ -2,143 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4976633672
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 626CF6335DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiKVH5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S232024AbiKVHdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiKVH5k (ORCPT
+        with ESMTP id S231948AbiKVHdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:57:40 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB3013CC8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:57:37 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so6629796ioz.8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:57:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bc8RrsqreLFi7HYFtgQkTdL3TrNOh9evIgWdfmzeQJw=;
-        b=4bzoOXgzHeQ/phNbxJsWfxAUDJ/EQrLJF3/qIutnmK23SdLpTzmA8M4Hsdr6KQbDyX
-         ZYqBlwouHxkEd5UQ1WPJfWb/No/93kYoWak2t88CnNUk2b9O30fvYYJCkaQLd/KyIMlh
-         K+2ZCw7/KkAtUDt62VqmMAh1pp2HgPMFq3+VDuBLIFUeMgaHSZJ8NliMSTIplPTqnfTG
-         RHo4Jrta6HQaLTvle/enci+v7CUiacGUpfbY2bj3Ade66fbATQe5MEAJO1aF7+iwDbGd
-         QR7TYAiDXtV5uH2BWRk0FhBjYKfBwqvTe67CciPKNSJ5opXMsKvE4JhMvkbPK8Gl9ATu
-         OIpg==
-X-Gm-Message-State: ANoB5pkmb9bBPfZi4hkgWfayVe3lT0rjzprNAGH1laHN9jSpBTF8/wU6
-        L46MBXJqT8q8JYjWOhbhbKt4fRBDeGIIsLgNaW+OOj6OlH+S
-X-Google-Smtp-Source: AA0mqf718VO4ONghTLkTuhGLusUX0QQ9d+60ngsXijMXAQvGYJ/YErkU9mcLtkcRZDbW4k3SOLkrwRrGIKkwoFaJ0uw3Fg+EWRKj
+        Tue, 22 Nov 2022 02:33:40 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18F213F1F;
+        Mon, 21 Nov 2022 23:33:37 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NGbZp3ysrz15Mns;
+        Tue, 22 Nov 2022 15:33:06 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 15:33:35 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 15:33:34 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <damien.lemoal@wdc.com>, <linus.walleij@linaro.org>,
+        <seanga2@gmail.com>, <palmerdabbelt@google.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sunnanyong@huawei.com>,
+        <wangkefeng.wang@huawei.com>, ZhangPeng <zhangpeng362@huawei.com>
+Subject: [PATCH] pinctrl: call of_node_put() when breaking out of for_each_available_child_of_node()
+Date:   Tue, 22 Nov 2022 07:58:53 +0000
+Message-ID: <20221122075853.2496680-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8806:0:b0:6d2:4c85:c7b2 with SMTP id
- l6-20020a5e8806000000b006d24c85c7b2mr1178024ioj.32.1669103856657; Mon, 21 Nov
- 2022 23:57:36 -0800 (PST)
-Date:   Mon, 21 Nov 2022 23:57:36 -0800
-In-Reply-To: <000000000000c1e64305ed9dc5e8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000782c8605ee0a8612@google.com>
-Subject: Re: [syzbot] BUG: MAX_LOCKDEP_ENTRIES too low! (3)
-From:   syzbot <syzbot+b04c9ffbbd2f303d00d9@syzkaller.appspotmail.com>
-To:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org,
-        davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
-        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        mareklindner@neomailbox.ch, netdev@vger.kernel.org,
-        pabeni@redhat.com, sven@narfation.org, sw@simonwunderlich.de,
-        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-HEAD commit:    9ab000d9ac54 Merge branch 'nfc-leaks'
-git tree:       net
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=178f3db5880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6f4e5e9899396248
-dashboard link: https://syzkaller.appspot.com/bug?extid=b04c9ffbbd2f303d00d9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15051edd880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b9d365880000
+Since for_each_available_child_of_node() will increase the refcount of
+node, we need to call of_node_put() manually when breaking out of the
+iteration.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0db12aff8b37/disk-9ab000d9.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/62dc4dacf73e/vmlinux-9ab000d9.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0cc1ecdd9ab6/bzImage-9ab000d9.xz
+Fixes: d4c34d09ab03 ("pinctrl: Add RISC-V Canaan Kendryte K210 FPIOA driver")
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+---
+ drivers/pinctrl/pinctrl-k210.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b04c9ffbbd2f303d00d9@syzkaller.appspotmail.com
-
-8021q: adding VLAN 0 to HW filter on device batadv968
-BUG: MAX_LOCKDEP_ENTRIES too low!
-turning off the locking correctness validator.
-CPU: 1 PID: 5813 Comm: syz-executor248 Not tainted 6.1.0-rc5-syzkaller-00128-g9ab000d9ac54 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- alloc_list_entry.cold+0x11/0x18 kernel/locking/lockdep.c:1402
- add_lock_to_list kernel/locking/lockdep.c:1423 [inline]
- check_prev_add kernel/locking/lockdep.c:3167 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x3626/0x56d0 kernel/locking/lockdep.c:5055
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- batadv_tt_local_event+0x1f6/0x7e0 net/batman-adv/translation-table.c:482
- batadv_tt_local_add+0x638/0x1f50 net/batman-adv/translation-table.c:758
- batadv_softif_create_vlan+0x2ed/0x530 net/batman-adv/soft-interface.c:586
- batadv_interface_add_vid+0xd7/0x110 net/batman-adv/soft-interface.c:646
- vlan_add_rx_filter_info+0x149/0x1d0 net/8021q/vlan_core.c:211
- __vlan_vid_add net/8021q/vlan_core.c:306 [inline]
- vlan_vid_add+0x3f6/0x7f0 net/8021q/vlan_core.c:336
- vlan_device_event.cold+0x28/0x2d net/8021q/vlan.c:385
- notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1945
- call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
- call_netdevice_notifiers net/core/dev.c:1997 [inline]
- dev_open net/core/dev.c:1473 [inline]
- dev_open+0x136/0x150 net/core/dev.c:1461
- team_port_add drivers/net/team/team.c:1215 [inline]
- team_add_slave+0xa03/0x1b90 drivers/net/team/team.c:1984
- do_set_master+0x1c8/0x220 net/core/rtnetlink.c:2578
- rtnl_newlink_create net/core/rtnetlink.c:3381 [inline]
- __rtnl_newlink+0x13ac/0x17e0 net/core/rtnetlink.c:3581
- rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3594
- rtnetlink_rcv_msg+0x43e/0xca0 net/core/rtnetlink.c:6091
- netlink_rcv_skb+0x157/0x430 net/netlink/af_netlink.c:2540
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xd3/0x120 net/socket.c:734
- ____sys_sendmsg+0x712/0x8c0 net/socket.c:2482
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2565
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2d5511cab9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffddb541428 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 000000000003d335 RCX: 00007f2d5511cab9
-RDX: 0000000000000000 RSI: 0000000020000300 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 00007ffddb5415c8 R09: 00007ffddb5415c8
-R10: 00007ffddb5415c8 R11: 0000000000000246 R12: 00007ffddb54143c
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-team968: Port device batadv968 added
+diff --git a/drivers/pinctrl/pinctrl-k210.c b/drivers/pinctrl/pinctrl-k210.c
+index ecab6bf63dc6..ad4db99094a7 100644
+--- a/drivers/pinctrl/pinctrl-k210.c
++++ b/drivers/pinctrl/pinctrl-k210.c
+@@ -862,8 +862,10 @@ static int k210_pinctrl_dt_node_to_map(struct pinctrl_dev *pctldev,
+ 	for_each_available_child_of_node(np_config, np) {
+ 		ret = k210_pinctrl_dt_subnode_to_map(pctldev, np, map,
+ 						     &reserved_maps, num_maps);
+-		if (ret < 0)
++		if (ret < 0) {
++			of_node_put(np);
+ 			goto err;
++		}
+ 	}
+ 	return 0;
+ 
+-- 
+2.25.1
 
