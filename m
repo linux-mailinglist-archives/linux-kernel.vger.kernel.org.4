@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80816343FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 19:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD2F634403
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 19:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234602AbiKVSuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 13:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
+        id S233470AbiKVSxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 13:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbiKVSuF (ORCPT
+        with ESMTP id S230365AbiKVSxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 13:50:05 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749D4898F2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:50:04 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id k2so10909341qkk.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ONbu9NKlge4aXI9Ua7o2VzF2jzXIMd69Emtlg0d7jig=;
-        b=IZKFXNiZAlcvGwZQTvz/r/qBZwYoEU1en/WCdwOhRJpkMk3ITVUKCyqFv1Fg3YhSYW
-         soSRWrqa4zMFE1MNo7W75NuLN5BjHz51yECrbqGhCMgVG6CjPpqABPfrYn4Q/owPA+yw
-         AYsKZsRgQzRliHSdxw2gsiCGn6zDm59p/MaGg=
+        Tue, 22 Nov 2022 13:53:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CD98C088
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:52:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669143129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aep8RFMu1+GiUZaTPB9joRtRtN+HkoJa3LBopYYK188=;
+        b=VUwGJdexXBQH0NdexVRtOoXO9aRjo7QqwpysrOHu/h2NqX9u92cEJ13qm3CHk0/Q2BHpiF
+        Ql6C2l8dQbqI3CneZMAEgfSfj+CZMZFwzfNBWlKzHfX88Px8Dl03rDUGgv3el8eYg0rzUQ
+        LA8ZVSGbF5xeGTH8n3GPkwdW368AaFQ=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-35--K2UBD72OwWH5vlJbE9XAQ-1; Tue, 22 Nov 2022 13:52:08 -0500
+X-MC-Unique: -K2UBD72OwWH5vlJbE9XAQ-1
+Received: by mail-pl1-f200.google.com with SMTP id o7-20020a170902d4c700b001868cdac9adso12256682plg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:52:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ONbu9NKlge4aXI9Ua7o2VzF2jzXIMd69Emtlg0d7jig=;
-        b=UrWBxIhailvlae5WZ3tBmqKaHorZeGBv8T3UaXMt85M7M+oly0I5fySqlKNQeAEp6D
-         zgh6meb0xyaJ9EQO9jG9ntTS9jtvXEAYmgPvQKCHYnTycHWrvRJMO1euzn9Co0xTRQQ4
-         3gQS7nt1sqxDCzacDglMmLOb1sSVWXZtiI/16enHN/mznOu/cofa27Y+OvRsGQwORoEy
-         PMLOjT8BZzUtjgAVKIhFh+9nhMdNLcfDLpSJgdJyzgm/CNxjhrrIl8njNiu3fQw97jQu
-         RoCwSiENu4ycREmrXQyQWj2HG3uFLsM4dqcFyPw+dfHl39+qUcWcV6WzGZfwbf78yAf9
-         SCjw==
-X-Gm-Message-State: ANoB5pnb4sWeTXi46g6v8unBd4BKqpOPUqGLr6FOzrDzkmviwmAFzTMt
-        PHbffPnAlIQd0ttfMjZOHvkVJcGVT0D/qg==
-X-Google-Smtp-Source: AA0mqf7itZdsyAHiBGYxZMtg5NwoOzvapT2HLFR+k8Fs3wLuJuONAiRFiwc/YfCWsZSdRRay/KEIEg==
-X-Received: by 2002:a05:620a:918:b0:6f9:de1b:8809 with SMTP id v24-20020a05620a091800b006f9de1b8809mr21822200qkv.296.1669143003547;
-        Tue, 22 Nov 2022 10:50:03 -0800 (PST)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
-        by smtp.gmail.com with ESMTPSA id y12-20020a37f60c000000b006e8f8ca8287sm10289830qkj.120.2022.11.22.10.50.02
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aep8RFMu1+GiUZaTPB9joRtRtN+HkoJa3LBopYYK188=;
+        b=7QLOxFVkPA52ek3+efdTUm9U2yylTcoSzuXuVVjf49RQpZeOIH4MQMWBmgxJbHcIWJ
+         EBj+3je7rmmIj+0lEV9s1HtS8fSF4cBSTwHz2pza81HkaucGR0YIOm2pfVa49GJbOZVl
+         +Fm94hRZGfGv3DGaNwcb8/fiBck6mZaJteoJmlyjE+kdUW17Vmv6Q2IIzxYVTjCP8L/n
+         KoMjs7OMMPYoj1olgJBHGrjwREmaA2y1pBTDi2k/7lLYV43V4hcxMfb+800qScoyZto+
+         sTIpg9tC5haHuLlm1xNV2HnRMOGCoe8kLD8v5X7cC9L6u+x9qm120iL09cLjCc2lY+ic
+         annQ==
+X-Gm-Message-State: ANoB5pnpx+HTMmPYkHw3V9s4OfuHff0g9BdjQHIYHc6WBaQKvSokMubS
+        AaXTGvLvv6jREYgJiALVluva6orFReSp3Wt9PG4S8Xkus/Qr4HP5ehG9JJLy4yDff3K6LZoZMlC
+        rLdWk3aB7MP9EdEmAKyJZ/KSK
+X-Received: by 2002:a63:f354:0:b0:476:db6f:e79d with SMTP id t20-20020a63f354000000b00476db6fe79dmr4471104pgj.399.1669143126988;
+        Tue, 22 Nov 2022 10:52:06 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5Z+51TBzvK+WApZPtmfv/cY2Dyq8KHaQoYEX+J7yPOkn9D/KL6gvCIltzBARHLl6qQLK4iww==
+X-Received: by 2002:a63:f354:0:b0:476:db6f:e79d with SMTP id t20-20020a63f354000000b00476db6fe79dmr4471079pgj.399.1669143126697;
+        Tue, 22 Nov 2022 10:52:06 -0800 (PST)
+Received: from ryzen.. ([240d:1a:c0d:9f00:fc9c:8ee9:e32c:2d9])
+        by smtp.gmail.com with ESMTPSA id y63-20020a623242000000b0056be1d7d4a3sm10950745pfy.73.2022.11.22.10.52.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 10:50:03 -0800 (PST)
-Date:   Tue, 22 Nov 2022 13:50:01 -0500
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, dri-devel@lists.freedesktop.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: git send-email friendly smtp provider anyone?
-Message-ID: <20221122185001.q6hmeblp64jqdzvz@meerkat.local>
-References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
- <20221121151922.jaal6ym7z2ejju4q@houat>
- <de12952f-8346-8995-236d-69dcb70f19f6@tronnes.org>
- <20221122155122.edxtmsqpjxgj4dsj@meerkat.local>
- <3b06dfd5-0eb4-dbfc-6ba8-077b1a92865b@tronnes.org>
+        Tue, 22 Nov 2022 10:52:06 -0800 (PST)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     hverkuil@xs4all.nl, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Shigeru Yoshida <syoshida@redhat.com>,
+        syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
+Subject: [PATCH] media: si470x: Fix use-after-free in si470x_int_in_callback()
+Date:   Wed, 23 Nov 2022 03:51:59 +0900
+Message-Id: <20221122185159.1184593-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3b06dfd5-0eb4-dbfc-6ba8-077b1a92865b@tronnes.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 06:42:19PM +0100, Noralf Trønnes wrote:
-> The first thing that strikes me is that everyone mentioned in one of the
-> patches get the entire patchset, even stable@vger.kernel.org (cc'ed in a
-> fixes patch). The first patch touches a core file and as a result a few
-> drivers, so I've cc'ed the driver maintainers in that patch, but now
-> they get the entire patchset where 5 of 6 patches is about a driver that
-> I maintain. So from their point of view, they see a patchset about a
-> driver they don't care about and a patch touching a core file, but from
-> the subject it's not apparent that it touches their driver. I'm afraid
-> that this might result in none of them looking at that patch. In this
-> particular case it's not that important, but in another case it might be.
+syzbot reported use-after-free in si470x_int_in_callback() [1].  This
+indicates that urb->context, which contains struct si470x_device
+object, is freed when si470x_int_in_callback() is called.
 
-I did some (unscientific) polling among kernel maintainers and, by a vast
-margin, they always prefer to receive the entire series instead of
-cherry-picked patches -- having the entire series helps provide important
-context for the change they are looking at.
+The cause of this issue is that si470x_int_in_callback() is called for
+freed urb.
 
-So, this is deliberate and, for now at least, not configurable. Unless you're
-sending 100+ patch series, I doubt anyone will have any problem with receiving
-the whole series instead of individual patches.
+si470x_usb_driver_probe() calls si470x_start_usb(), which then calls
+usb_submit_urb() and si470x_start().  If si470x_start_usb() fails,
+si470x_usb_driver_probe() doesn't kill urb, but it just frees struct
+si470x_device object, as depicted below:
 
-> As for the setting up the web endpoint, should I just follow the b4 docs
-> on that?
-> 
-> I use b4 version 0.10.1, is that recent enough?
+si470x_usb_driver_probe()
+  ...
+  si470x_start_usb()
+    ...
+    usb_submit_urb()
+    retval = si470x_start()
+    return retval
+  if (retval < 0)
+    free struct si470x_device object, but don't kill urb
 
-Yes. There will be a 0.10.2 in the near future, but the incoming fixes
-shouldn't make much difference for the b4 send code.
+This patch fixes this issue by killing urb when si470x_start_usb()
+fails and urb is submitted.  If si470x_start_usb() fails and urb is
+not submitted, i.e. submitting usb fails, it just frees struct
+si470x_device object.
 
--K
+Reported-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=94ed6dddd5a55e90fd4bab942aa4bb297741d977 [1]
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+ drivers/media/radio/si470x/radio-si470x-usb.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
+index 6b2768623c88..aa7a580dbecc 100644
+--- a/drivers/media/radio/si470x/radio-si470x-usb.c
++++ b/drivers/media/radio/si470x/radio-si470x-usb.c
+@@ -727,8 +727,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+ 
+ 	/* start radio */
+ 	retval = si470x_start_usb(radio);
+-	if (retval < 0)
++	if (retval < 0 && !radio->int_in_running)
+ 		goto err_buf;
++	else if (retval < 0)	/* in case of radio->int_in_running == 1 */
++		goto err_all;
+ 
+ 	/* set initial frequency */
+ 	si470x_set_freq(radio, 87.5 * FREQ_MUL); /* available in all regions */
+-- 
+2.38.1
+
