@@ -2,192 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B1163419E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A916341A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234242AbiKVQeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S232546AbiKVQfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 11:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiKVQef (ORCPT
+        with ESMTP id S234263AbiKVQfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:34:35 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21412120A7;
-        Tue, 22 Nov 2022 08:34:33 -0800 (PST)
-Received: from frapeml500003.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NGqXY1xw2z6H792;
-        Wed, 23 Nov 2022 00:31:57 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml500003.china.huawei.com (7.182.85.28) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 17:34:30 +0100
-Received: from localhost (10.45.149.88) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 22 Nov
- 2022 16:34:29 +0000
-Date:   Tue, 22 Nov 2022 16:34:26 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Gregory Price <gregory.price@memverge.com>,
-        "Li, Ming" <ming4.li@intel.com>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 1/2] PCI/DOE: Remove the pci_doe_flush_mb() call
-Message-ID: <20221122163426.0000467c@Huawei.com>
-In-Reply-To: <20221122155324.1878416-2-ira.weiny@intel.com>
-References: <20221122155324.1878416-1-ira.weiny@intel.com>
-        <20221122155324.1878416-2-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 22 Nov 2022 11:35:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0C0140C0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:35:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B90B6B81CB2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:35:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 584B8C433D6;
+        Tue, 22 Nov 2022 16:35:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669134914;
+        bh=dYGnsW5MGyF46yAFgqxQ2djiHjolP5sJlbnisgZvXe4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=CJq0ZG9xaqB391bC/PG7a83GJFehC506K43VikYMoCLHELPx/mvQJH3LAroGeQuh5
+         XpnKkvKrw44TiTBIV7kNpTm1xYou2NXcqlgviVJeWTwpv58o6DaqT0SDlgsdoJ4S82
+         C9cOPMQysXEF9ud2nF/CGo4SXV+9PKxbPPdDFRTfpjxzSZuYm/Nm7PEWWqZpSk0QrI
+         qfLwXdp17OCYRh0U0Hy8HPVwcR3OElFRH9T6Wt5psN0Wd329kVRnHaOr9N5gvi06LA
+         Uf8l/MYlo/GGk3EW8e09ICkm6bB+rWsyumlGpjUtZaBVHSFDcpDymR4x+DgfraJzya
+         auR9od0fubR6Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 072E35C0F98; Tue, 22 Nov 2022 08:35:14 -0800 (PST)
+Date:   Tue, 22 Nov 2022 08:35:14 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: next-20221122: tinyconfig: ppc n s390:
+ kernel/printk/printk.c:95:1: error: type specifier missing, defaults to
+ 'int'; ISO C99 and later do not support implicit int
+ [-Werror,-Wimplicit-int]
+Message-ID: <20221122163514.GL4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CA+G9fYvCWwndXdsvuW7iJ25wgfN6_iMY-OC_z6ufSwiJkzFFMw@mail.gmail.com>
+ <87o7szoyij.fsf@jogness.linutronix.de>
+ <20221122144839.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <87leo3ovpw.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.149.88]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87leo3ovpw.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 07:53:23 -0800
-ira.weiny@intel.com wrote:
+On Tue, Nov 22, 2022 at 04:33:39PM +0106, John Ogness wrote:
+> On 2022-11-22, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> >> @paulmck: Do you have a problem with permanently activating CONFIG_SRCU?
+> >
+> > The people wanting it separate back in the day were those wanting very
+> > tiny kernels.  I have not heard from them in a long time, so maybe it
+> > is now OK to just make SRCU unconditional.
+> 
+> Who decides this? Or maybe I should create a semaphore-based Variant of
+> console_srcu_read_lock()/console_srcu_read_unlock() for the
+> "!CONFIG_PRINTK && !CONFIG_SRCU" case?
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Each struct doe_mb is managed as part of the PCI device.  They can't go
-> away as long as the PCI device exists.  pci_doe_flush_mb() was set up to
-> flush the workqueue and prevent any further submissions to the mailboxes
-> when the PCI device goes away.  Unfortunately, this was fundamentally
-> flawed.  There was no guarantee that a struct doe_mb remained after
-> pci_doe_flush_mb() returned.  Therefore, the doe_mb state could be
-> invalid when those threads waiting on the workqueue were flushed.
-> 
-> Fortunately the current code is safe because all callers make a
-> synchronous call to pci_doe_submit_task() and maintain a reference on the
-> PCI device.
-> 
-> For these reasons, pci_doe_flush_mb() will never be called while tasks
-> are being processed and there is no use for it.
-> 
-> Remove the dead code around pci_doe_flush_mb().
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+As an alternative, I will queue the patch making SRCU unconditional.  ;-)
 
-Looks fine I think, though one question inline.
- 
-> ---
->  drivers/pci/doe.c | 48 ++++-------------------------------------------
->  1 file changed, 4 insertions(+), 44 deletions(-)
-> 
-> diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
-> index e402f05068a5..260313e9052e 100644
-> --- a/drivers/pci/doe.c
-> +++ b/drivers/pci/doe.c
-> @@ -24,10 +24,9 @@
->  
->  /* Timeout of 1 second from 6.30.2 Operation, PCI Spec r6.0 */
->  #define PCI_DOE_TIMEOUT HZ
-> -#define PCI_DOE_POLL_INTERVAL	(PCI_DOE_TIMEOUT / 128)
-> +#define PCI_DOE_POLL_INTERVAL	8
-
-Why this change?  
-
->  
-> -#define PCI_DOE_FLAG_CANCEL	0
-> -#define PCI_DOE_FLAG_DEAD	1
-> +#define PCI_DOE_FLAG_DEAD	0
->  
->  /**
->   * struct pci_doe_mb - State for a single DOE mailbox
-> @@ -53,15 +52,6 @@ struct pci_doe_mb {
->  	unsigned long flags;
->  };
->  
-> -static int pci_doe_wait(struct pci_doe_mb *doe_mb, unsigned long timeout)
-> -{
-> -	if (wait_event_timeout(doe_mb->wq,
-> -			       test_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags),
-> -			       timeout))
-> -		return -EIO;
-> -	return 0;
-> -}
-> -
->  static void pci_doe_write_ctrl(struct pci_doe_mb *doe_mb, u32 val)
->  {
->  	struct pci_dev *pdev = doe_mb->pdev;
-> @@ -82,12 +72,9 @@ static int pci_doe_abort(struct pci_doe_mb *doe_mb)
->  	pci_doe_write_ctrl(doe_mb, PCI_DOE_CTRL_ABORT);
->  
->  	do {
-> -		int rc;
->  		u32 val;
->  
-> -		rc = pci_doe_wait(doe_mb, PCI_DOE_POLL_INTERVAL);
-> -		if (rc)
-> -			return rc;
-> +		msleep_interruptible(PCI_DOE_POLL_INTERVAL);
->  		pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
->  
->  		/* Abort success! */
-> @@ -278,11 +265,7 @@ static void doe_statemachine_work(struct work_struct *work)
->  			signal_task_abort(task, -EIO);
->  			return;
->  		}
-> -		rc = pci_doe_wait(doe_mb, PCI_DOE_POLL_INTERVAL);
-> -		if (rc) {
-> -			signal_task_abort(task, rc);
-> -			return;
-> -		}
-> +		msleep_interruptible(PCI_DOE_POLL_INTERVAL);
->  		goto retry_resp;
->  	}
->  
-> @@ -383,21 +366,6 @@ static void pci_doe_destroy_workqueue(void *mb)
->  	destroy_workqueue(doe_mb->work_queue);
->  }
->  
-> -static void pci_doe_flush_mb(void *mb)
-> -{
-> -	struct pci_doe_mb *doe_mb = mb;
-> -
-> -	/* Stop all pending work items from starting */
-> -	set_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags);
-> -
-> -	/* Cancel an in progress work item, if necessary */
-> -	set_bit(PCI_DOE_FLAG_CANCEL, &doe_mb->flags);
-> -	wake_up(&doe_mb->wq);
-> -
-> -	/* Flush all work items */
-> -	flush_workqueue(doe_mb->work_queue);
-> -}
-> -
->  /**
->   * pcim_doe_create_mb() - Create a DOE mailbox object
->   *
-> @@ -450,14 +418,6 @@ struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset)
->  		return ERR_PTR(rc);
->  	}
->  
-> -	/*
-> -	 * The state machine and the mailbox should be in sync now;
-> -	 * Set up mailbox flush prior to using the mailbox to query protocols.
-> -	 */
-> -	rc = devm_add_action_or_reset(dev, pci_doe_flush_mb, doe_mb);
-> -	if (rc)
-> -		return ERR_PTR(rc);
-> -
->  	rc = pci_doe_cache_protocols(doe_mb);
->  	if (rc) {
->  		pci_err(pdev, "[%x] failed to cache protocols : %d\n",
-
+							Thanx, Paul
