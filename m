@@ -2,174 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0666B6333F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318E16333F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiKVDab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
+        id S229730AbiKVDbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiKVDa3 (ORCPT
+        with ESMTP id S231915AbiKVDbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:30:29 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3A325E94
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:30:28 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id b62so13007420pgc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:30:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S5oDlArRtMmw99urVyDNSpVN62izNr9i9C2sCE4fBF0=;
-        b=GK+ZdDEb16GYXHPP2FnOoiF0rXW/dmeHHI2xYmmoVPSDbAzwQbGcWqsm3zmo9XpPke
-         1BZZN8h3+7ZjDJ+NgpejGPT4UdN5rw4Uxrh9zncpYu49mrJPUI6M6SjnVsKToYv5rV89
-         XcmIg92sRueqeLyGVvUZUBHPHh9jRuGXMOm9I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S5oDlArRtMmw99urVyDNSpVN62izNr9i9C2sCE4fBF0=;
-        b=3M/r9MDFUGmsvPTpAoVc4wKxAGP09+KeY7xxY0yB6tVXTI5wQwrT6tortr4BDLoRJ6
-         xpnprWX3fmwsVxt5F1p+/t/TsvBMTvDmpyfg/+kXH1EAkIKD0gDRGzcFhJolQmoePpmu
-         GpyvgKjJ7k7HQUzYBmrQDC1FNetVfisFK0ea9FEyIgAMa2s/wq1ihd3AycMpX8Oaey4f
-         DhEINuwiNpXaL2tvM3m4lJXTk04dBAFO2dh9Oopwo9xge+tV33Uq+CGjhgZ0FUJDJkgN
-         LXbcK44eMBVvRzDT5fIicCfSOuHqslHGfyN+m5Yt2yBn7hdhuimx4JUZ1zZhJaFNQ6te
-         q0/Q==
-X-Gm-Message-State: ANoB5plWFs8FByvxcTyZIYK9KS4umEcLVV8ywhDE8BLT7RPf9SBLVJGc
-        1PsL/mQBUHg/0R518b+90x+MuQ==
-X-Google-Smtp-Source: AA0mqf4VZRRZaWCn9No0pC1Jg+R9MBk28gho9viR3o3LSoSprNWTLt4wSzhaPrqz2vt0oShWyP/Y1A==
-X-Received: by 2002:a05:6a00:439a:b0:56b:c95f:34dd with SMTP id bt26-20020a056a00439a00b0056bc95f34ddmr2006400pfb.74.1669087827579;
-        Mon, 21 Nov 2022 19:30:27 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
-        by smtp.gmail.com with ESMTPSA id y16-20020aa78f30000000b0057280487af3sm9279703pfr.203.2022.11.21.19.30.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 19:30:27 -0800 (PST)
-Date:   Tue, 22 Nov 2022 12:30:22 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Nhat Pham <nphamcs@gmail.com>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] zswap: do not allocate from atomic pool
-Message-ID: <Y3xCTr6ikbtcUr/y@google.com>
-References: <20221122013338.3696079-1-senozhatsky@chromium.org>
- <Y3w/DFTAypX7L2mp@cmpxchg.org>
+        Mon, 21 Nov 2022 22:31:13 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40D8326117
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:31:11 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowADX3+9lQnxjt1KwAA--.9972S2;
+        Tue, 22 Nov 2022 11:30:46 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, michal.simek@xilinx.com, harini.katakam@amd.com,
+        xuhaoyue1@hisilicon.com, huangjunxian6@hisilicon.com,
+        wangqing@vivo.com, christophe.jaillet@wanadoo.fr,
+        yangyingliang@huawei.com, chenhao288@hisilicon.com
+Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] NTB: ntb_tool: Add check for devm_kcalloc
+Date:   Tue, 22 Nov 2022 11:30:44 +0800
+Message-Id: <20221122033044.5720-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3w/DFTAypX7L2mp@cmpxchg.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADX3+9lQnxjt1KwAA--.9972S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4DurWfJryxGFy8CFW8tFb_yoWfZFc_CF
+        y2qrsrGr45Cw45K3Z2yr4xZrWxA3WDuFZ7W3y8tan8urWDCw1xXry8urZxCa1fua48GFZr
+        G34jyry0yF1xujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/21 22:16), Johannes Weiner wrote:
-> On Tue, Nov 22, 2022 at 10:33:38AM +0900, Sergey Senozhatsky wrote:
-> > zswap_frontswap_load() should be called from preemptible
-> > context (we even call mutex_lock() there) and it does not
-> > look like we need to do GFP_ATOMIC allocaion for temp
-> > buffer there. Use GFP_KERNEL instead.
-> > 
-> > Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > ---
-> >  mm/zswap.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/mm/zswap.c b/mm/zswap.c
-> > index 2d69c1d678fe..f6c89049cf70 100644
-> > --- a/mm/zswap.c
-> > +++ b/mm/zswap.c
-> > @@ -1314,7 +1314,7 @@ static int zswap_frontswap_load(unsigned type, pgoff_t offset,
-> >  	}
-> >  
-> >  	if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
-> > -		tmp = kmalloc(entry->length, GFP_ATOMIC);
-> > +		tmp = kmalloc(entry->length, GFP_KERNEL);
-> 
-> There is another one in zswap_writeback_entry() that seems equally
-> arbitrary. They came in through the same commit, with no further
-> explanation as to this choice. Do you want to pick that up too?
+As the devm_kcalloc may return NULL pointer,
+it should be better to add check for the return
+value, as same as the others.
 
-Yup, you patch it in https://lore.kernel.org/lkml/20221119001536.2086599-2-nphamcs@gmail.com/
-and I guess it's there just by accident. We probably want a separate
-patch instead that touches those GFP_ATOMIC allocations in both places.
-
-So I have it like this at present
-
+Fixes: 7f46c8b3a552 ("NTB: ntb_tool: Add full multi-port NTB API support")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
+ drivers/ntb/test/ntb_tool.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-From 66e4acffc0926498f818d11f2f57b9c772131f6e Mon Sep 17 00:00:00 2001
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-Date: Tue, 22 Nov 2022 10:26:13 +0900
-Subject: [PATCH] zswap: do not allocate from atomic pool
-
-zswap_frontswap_load() should be called from preemptible
-context (we even call mutex_lock() there) and it does not
-look like we need to do GFP_ATOMIC allocaion for temp
-buffer. The same applies to zswap_writeback_entry().
-
-Use GFP_KERNEL for temporary buffer allocation in both
-cases.
-
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- mm/zpool.c | 7 +++++++
- mm/zswap.c | 4 ++--
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/mm/zpool.c b/mm/zpool.c
-index 68facc193496..f46c0d5e766c 100644
---- a/mm/zpool.c
-+++ b/mm/zpool.c
-@@ -387,6 +387,13 @@ bool zpool_evictable(struct zpool *zpool)
-  * zpool_can_sleep_mapped - Test if zpool can sleep when do mapped.
-  * @zpool:	The zpool to test
-  *
-+ * Some allocators enter non-preemptible context in ->map() callback (e.g.
-+ * disable pagefaults) and exit that context in ->unmap(), which limits what
-+ * we can do with the mapped object. For instance, we cannot wait for
-+ * asynchronous crypto API to decompress such an object or take mutexes
-+ * since those will call into the scheduler. This function tells us whether
-+ * we use such an allocator.
-+ *
-  * Returns: true if zpool can sleep; false otherwise.
-  */
- bool zpool_can_sleep_mapped(struct zpool *zpool)
-diff --git a/mm/zswap.c b/mm/zswap.c
-index 2d48fd59cc7a..3019f0bde194 100644
---- a/mm/zswap.c
-+++ b/mm/zswap.c
-@@ -958,7 +958,7 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
- 	};
+diff --git a/drivers/ntb/test/ntb_tool.c b/drivers/ntb/test/ntb_tool.c
+index 5ee0afa621a9..eeeb4b1c97d2 100644
+--- a/drivers/ntb/test/ntb_tool.c
++++ b/drivers/ntb/test/ntb_tool.c
+@@ -998,6 +998,8 @@ static int tool_init_mws(struct tool_ctx *tc)
+ 		tc->peers[pidx].outmws =
+ 			devm_kcalloc(&tc->ntb->dev, tc->peers[pidx].outmw_cnt,
+ 				   sizeof(*tc->peers[pidx].outmws), GFP_KERNEL);
++		if (tc->peers[pidx].outmws == NULL)
++			return -ENOMEM;
  
- 	if (!zpool_can_sleep_mapped(pool)) {
--		tmp = kmalloc(PAGE_SIZE, GFP_ATOMIC);
-+		tmp = kmalloc(PAGE_SIZE, GFP_KERNEL);
- 		if (!tmp)
- 			return -ENOMEM;
- 	}
-@@ -1311,7 +1311,7 @@ static int zswap_frontswap_load(unsigned type, pgoff_t offset,
- 	}
- 
- 	if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
--		tmp = kmalloc(entry->length, GFP_ATOMIC);
-+		tmp = kmalloc(entry->length, GFP_KERNEL);
- 		if (!tmp) {
- 			ret = -ENOMEM;
- 			goto freeentry;
+ 		for (widx = 0; widx < tc->peers[pidx].outmw_cnt; widx++) {
+ 			tc->peers[pidx].outmws[widx].pidx = pidx;
 -- 
-2.38.1.584.g0f3c55d4c2-goog
+2.25.1
 
