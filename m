@@ -2,116 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87264633CA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F18BF633CA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbiKVMhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S233815AbiKVMhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:37:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiKVMhj (ORCPT
+        with ESMTP id S232604AbiKVMho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:37:39 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4C61276D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:37:30 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id bp15so23347172lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w0KfeZQDt2kqu3VffioA4jWiWF7VwBC/2sPf+6WgA8Y=;
-        b=Ep+CKDHfxbAlJvVm1xz5mlueq8XD8NReNK/nzbSB66TA2xNxLeCPdBaKPDoUXu9OdP
-         lEKa8U1nWq4aTEu5Z9l2X+G8zwWB9jTkehn3NHWg7HbHmiulFiF70L8zov59zB0VpwPM
-         OLHbP6pfzojwYPq15JscKna1qhDZitmvKzNuo7CDPeUKo426fj98cvqDqLnmSwCdV8Ln
-         dJRelueSbxlgxQ3F5XjBTH7WNhTNdBBsOkfYS72WF0oykGbHUByWJH0elHQAKMRPa3TP
-         vJWcdIuqkZIq0SSFrDokdMfiffhf/0MsCyY8pitooI0ZUVbpvcFSGa7Anpw4HkBkzJeo
-         6gHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w0KfeZQDt2kqu3VffioA4jWiWF7VwBC/2sPf+6WgA8Y=;
-        b=RRBxYzs2VVK3YPj8F1xiVUUNUF1wRvsUrDeD0Lq7WBGpr40jBO4WXekmy6IxVOMn//
-         x23uhYXMYT3DxM/3DfPV10a02N/x0AjEYQjPBhvoJf9XOQvy9jU330K/vdErTio55SHA
-         QW00iE5RZ0D1uuD7C2W4dZ18eWxG+2jwP7u/6cFyYKRUqmCVDE1B+6g42/NsUDodT8AB
-         rt29sEf3EZN5VQxpr+Aq+fO1azOS4gox2LLJUE1Ahs9sL/02adPnIMP0vAZXk2eoSHBr
-         f3GPf9Hs/8HDQ9Bod96GeBwiNvq/FbTTsIiuTxMWDoTKa6eymH+ZJUrTm07GmzGKOSsC
-         C+Iw==
-X-Gm-Message-State: ANoB5pn1Tb1D5UpWVR33aPLq632Dax++EHjk9IEh6Z3lgnGhkRJQ9RVH
-        8c2QHaAZA2g3koftfKU2hv5kVg==
-X-Google-Smtp-Source: AA0mqf5ksyyVPOsBQE+sl3WYIWeFYnsvODRJ9lWHgaMW2xr2XTY9CKeudMn/yKtpF5uy64vWTFbrtw==
-X-Received: by 2002:a05:6512:4011:b0:4a2:8bfe:a03b with SMTP id br17-20020a056512401100b004a28bfea03bmr3681307lfb.210.1669120648462;
-        Tue, 22 Nov 2022 04:37:28 -0800 (PST)
-Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id m19-20020a195213000000b004a46f92a15bsm2501844lfb.41.2022.11.22.04.37.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 04:37:27 -0800 (PST)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Revert "arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state"
-Date:   Tue, 22 Nov 2022 13:37:13 +0100
-Message-Id: <20221122123713.65631-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 22 Nov 2022 07:37:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0302F13DE5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:37:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=cNXoS8rK3xdXYHntjExdlYL5Xqo/UM8xFFchEuZahf8=; b=EaYGanzfFaL4Bx00RjIVqndAU6
+        InhoUYCHsw745V6+pRgDH8/YgglXGx3G2QWlYq0by+AW6X/+diRoEwKhIBGNjt8Z6w+3kBdmAI8NB
+        FnwmATxbGFZurrrET4bhqemtn75ouzH0nBtnIOBKXZQ7UiTnEzKKOMgX9oM0kM+JeL778fVRTUJ19
+        B7yKDep3XUU7PUeGESfzWTnfoFitjbzEhvvbMF1jJjER5BXi6bE377iLDgDeh1bPcJAvADb4jr5bh
+        ZQoHM0azouNctW5Nsaq9iy1flA/mtL3OyjzLCV49PljnZSfUFP/LeJR39rtZiQRHVTMRatSDIbPJn
+        +8SAco6w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxSWi-006MRl-RQ; Tue, 22 Nov 2022 12:37:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3A242300244;
+        Tue, 22 Nov 2022 13:37:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 17D452D694B12; Tue, 22 Nov 2022 13:37:17 +0100 (CET)
+Date:   Tue, 22 Nov 2022 13:37:17 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
+        Paul McKenney <paulmck@kernel.org>
+Subject: Re: [PATCH-tip] sched: Don't call kfree() in do_set_cpus_allowed()
+Message-ID: <Y3zCfQCpBu8aBy6O@hirez.programming.kicks-ass.net>
+References: <20221118193302.522399-1-longman@redhat.com>
+ <Y3tVPjAjE9OFRLaP@hirez.programming.kicks-ass.net>
+ <601640d0-9dc2-a060-e165-c8efac54aa34@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <601640d0-9dc2-a060-e165-c8efac54aa34@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to recent improvements of the cluster idle state support for Qcom based
-platforms, we are now able to support the deepest cluster idle state. Let's
-therefore revert the earlier workaround.
+On Mon, Nov 21, 2022 at 10:04:33AM -0500, Waiman Long wrote:
+> 
+> On 11/21/22 05:38, Peter Zijlstra wrote:
+> > On Fri, Nov 18, 2022 at 02:33:02PM -0500, Waiman Long wrote:
+> > > Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
+> > > do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
+> > > set. Unfortunately, some of the callers of do_set_cpus_allowed()
+> > 'some' ? There's only 3 or so, which one triggers this?
+> 
+> It happenned at __kthread_bind_mask() where do_set_cpus_allowed() is called
+> with pi_lock held.
+> 
+> [ 1084.820105]  <TASK>
+> [ 1084.820110]  dump_stack_lvl+0x57/0x81
+> [ 1084.820117]  check_noncircular+0x103/0x120
+> [ 10[ 1084.820160]  lock_acquire+0xba/0x230
+> [ 1084.820164]  ? kfree+0x10f/0x380
+> [ 1084.820172]  ? do_set_cpus_allowed+0x40/0x60
+> [ 1084.820181]  rt_spin_lock+0x27/0xe0
+> [ 1084.820184]  ? kfree+0x10f/0x380
+> [ 1084.820188]  kfree+0x10f/0x380
+> [ 1084.820195]  do_set_cpus_allowed+0x40/0x60
+> [ 1084.820203]  kthread_bind_mask+0x4a/0x70
+> [ 1084.820211]  create_worker+0xfb/0x1a0
+> [ 1084.820220]  worker_thread+0x2e3/0x3c0
+> [ 1084.820226]  ? process_one_work+0x450/0x450
+> [ 1084.820230]  kthread+0x111/0x130
+> [ 1084.820236]  ? kthread_complete_and_exit+0x20/0x20
+> [ 1084.820244]  ret_from_fork+0x22/0x30
+> [ 1084.820258]  </TASK>
+> [ 1084.820260] BUG: sleeping function called from invalid context at
+> kernel/locking/spinlock_rt.c:46
+> 
+> It shows up with PREEMPT_RT kernel.
 
-This reverts commit cadaa773bcf1 ("arm64: dts: qcom: sm8250: Disable the
-not yet supported cluster idle state"), which is available from v6.1-rc6.
+Oh, I see ..
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Maybe. One thing that I am not clear about is why user_cpus_ptr is set in
+> the first place.
+
+Perhaps someone set an affinity on kthreadd ?
+
+But I'm thinking this exact problem is also possible (rather more likely
+even) with select_fallback_rq() that too holds pi_lock (which account
+for both other users of this function).
+
+Bah.
+
+And the allocation is just the one long in size (for small configs)
+which is just enough space for a single linked list like you had.
+
+Urgh.
+
+The below is yuck too, and I'm not sure Paul wants us to use
+kvfree_call_rcu() without its wrapper.
+
 ---
-
-Note that, the improvements that I am referring to above, comes from the below
-series, which Bjorn has queued for v6.2.
-
-https://lore.kernel.org/linux-arm-kernel/20221018152837.619426-1-ulf.hansson@linaro.org/
-
-Kind regards
-Ulf Hansson
-
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index e276eed1f8e2..a5b62cadb129 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -334,7 +334,6 @@ CLUSTER_SLEEP_0: cluster-sleep-0 {
- 				exit-latency-us = <6562>;
- 				min-residency-us = <9987>;
- 				local-timer-stop;
--				status = "disabled";
- 			};
- 		};
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 78b2d5cabcc5..0d0af0fc7fcf 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2606,7 +2606,12 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
  	};
--- 
-2.34.1
-
+ 
+ 	__do_set_cpus_allowed(p, &ac);
+-	kfree(ac.user_mask);
++	/*
++	 * Because this is called with p->pi_lock held, it is not possible
++	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
++	 * kfree_rcu().
++	 */
++	kvfree_call_rcu((struct rcu_head *)ac.user_mask, (rcu_callback_t)0);
+ }
+ 
+ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+@@ -8196,7 +8201,7 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ 	struct affinity_context ac;
+ 	struct cpumask *user_mask;
+ 	struct task_struct *p;
+-	int retval;
++	int retval, size;
+ 
+ 	rcu_read_lock();
+ 
+@@ -8229,7 +8234,11 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ 	if (retval)
+ 		goto out_put_task;
+ 
+-	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
++	/*
++	 * See do_set_cpus_allowed() for the rcu_head usage.
++	 */
++	size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
++	user_mask = kmalloc(size, GFP_KERNEL);
+ 	if (!user_mask) {
+ 		retval = -ENOMEM;
+ 		goto out_put_task;
