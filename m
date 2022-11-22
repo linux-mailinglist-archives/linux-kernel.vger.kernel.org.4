@@ -2,164 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C20C63323A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2590563323B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiKVBiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S232321AbiKVBiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiKVBh5 (ORCPT
+        with ESMTP id S232300AbiKVBiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:37:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7392A3422
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:37:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 502DE6142A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49E3C433C1;
-        Tue, 22 Nov 2022 01:37:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669081074;
-        bh=QcONz78rL0Sk+f9V0abznXKrHZ2DoMdZuXQELbeKy4A=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=iooDK4IBUeRwKAN/9vC+xPpwR+SCQ88Cbf4UYRDhNWFqJMe/W8RY3wYdidBBWBL6a
-         Rxw4IZTlwYJos4i4Q5y/dtUWlm9FvusqNf3F+/hNqspeQNSWUk6CGV7cjbbHlFgc1z
-         1KUkKENH/g5ZpK23jaMUlqH5wJ4Kj/xkQpre1ft7+lleVFA6KrsZuQAYQamonAZr0/
-         /I3pd1plrVjPtJVCWbatStdIz65msSoTNPGGoyZfgqut0+Xcbf08yFQpua27sFQEoj
-         y/1WGq00HPY16Kvm8MXEDbgEe97iPq8qpbp2KEUf6iQe1xF8POKHWP1cvAdBn36IuX
-         kouHFTFN32u9Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 36CF05C0641; Mon, 21 Nov 2022 17:37:54 -0800 (PST)
-Date:   Mon, 21 Nov 2022 17:37:54 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
-        dave@stgolabs.net, josh@joshtriplett.org, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
-Message-ID: <20221122013754.GY4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221121035140.118651-1-zhouzhouyi@gmail.com>
+        Mon, 21 Nov 2022 20:38:00 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8137A3422;
+        Mon, 21 Nov 2022 17:37:58 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id y13so12967554pfp.7;
+        Mon, 21 Nov 2022 17:37:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OglGzgpYMyqj8QLL99cHzcyrtXf8AaVJLvZ6MUdXVbM=;
+        b=DMZCQQU6xzfha3oRwrG/+v6K3YeyvSHyIguZJUnk8JqHaetRW6TjzBQ/PnIWLZhncb
+         1awxrf+ChpGwbGqk8lqyUldWtsThOZkUUbcKB86w5whDLwfNS6KcpXf1E78ihksY8iaB
+         ST7tNVluqG9NU0iXimFDE5srH7vyke7+cNoj5B9v8XInspfnM15yuG0mH3KVrGNnNM3D
+         bL2QfxOofnnMIphXunC+uZHe5C0mL1TfTl/bniKdu2/FBvsU1CURG3zen2oMD4DLiS+4
+         a2jYwVRJAoIWUFFHXB9a1Qv+wCdX3IReMf0qgTDFKiZcTBjiMXrp96Cl/JSStksVlFE4
+         CAQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OglGzgpYMyqj8QLL99cHzcyrtXf8AaVJLvZ6MUdXVbM=;
+        b=HuQLKsUHmC/5z4V1Iget7h0ZfH3fZwyZZ6uJkW+r7Rhvw/O+OzCdI2sa9wpwWCWpin
+         g18GNF73SttPtxWyyJ6MPAy5gjW7q7ukTM34xeyoAWCxnNKxNn2m8zcshwmzkN0QV8Xb
+         E6rJpMDrpl4fyVXRDXBeRQcK92g5D2sA0rKYId/oBbT2mre2DhEYi2jzPDlDaxIXG2qc
+         pTkqSVe/wGRRWELhsM1SsG2nEop+2If0E/5Mo8F5YRc5Ol3WumpQK8UcdtykNz3Rql9K
+         ml9icPkushwxSSvPNLwEjHJBc9i6m6NQFuIzuYfwyvW/k5XlbQ3qaDBl/y+QOS7EoZNT
+         oNJA==
+X-Gm-Message-State: ANoB5plTpUliGl507TnIppdAhmnTRf7Pkz3FXpIiE/Gem+ZQFn4yl5Gf
+        T4ef5RTxEhB8eErXQkjb4Dk=
+X-Google-Smtp-Source: AA0mqf7fvIADqXeFH5nRswqo5AfA2P/FscS26XdKuh6ZX/1pWBoUcCzu8yfjpafSEduYL0FEDa1bJw==
+X-Received: by 2002:a65:694e:0:b0:474:6749:407d with SMTP id w14-20020a65694e000000b004746749407dmr1311330pgq.425.1669081078088;
+        Mon, 21 Nov 2022 17:37:58 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 8-20020a17090a004800b0020ae09e9724sm8319928pjb.53.2022.11.21.17.37.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 17:37:57 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 21 Nov 2022 15:37:56 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v2 rcu 13/16] workqueue: Make queue_rcu_work() use
+ call_rcu_flush()
+Message-ID: <Y3wn9AK1XxEZIIFw@slm.duckdns.org>
+References: <20221122010408.GA3799268@paulmck-ThinkPad-P17-Gen-1>
+ <20221122010421.3799681-13-paulmck@kernel.org>
+ <Y3whScgTs0FgrVtY@slm.duckdns.org>
+ <20221122012357.GV4001@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221121035140.118651-1-zhouzhouyi@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221122012357.GV4001@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:51:40AM +0800, Zhouyi Zhou wrote:
-> During CPU-hotplug torture (CONFIG_NO_HZ_FULL=y), if we try to
-> offline tick_do_timer_cpu, the operation will fail because in
-> function tick_nohz_cpu_down:
-> ```
-> if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
->       return -EBUSY;
-> ```
-> Above bug was first discovered in torture tests performed in PPC VM
-> of Open Source Lab of Oregon State University, and reproducable in RISC-V
-> and X86-64 (with additional kernel commandline cpu0_hotplug).
+On Mon, Nov 21, 2022 at 05:23:57PM -0800, Paul E. McKenney wrote:
+> On Mon, Nov 21, 2022 at 03:09:29PM -1000, Tejun Heo wrote:
+> > On Mon, Nov 21, 2022 at 05:04:18PM -0800, Paul E. McKenney wrote:
+> > > And another call_rcu() instance that cannot be lazy is the one
+> > > in queue_rcu_work(), given that callers to queue_rcu_work() are
+> > > not necessarily OK with long delays.
+> > 
+> > So, this is fine but another thing we can do is propagating the distinction
+> > through the workqueue interface so that the the choice can be made by
+> > workqueue users. Would that make sense?
 > 
-> In this patch, we avoid offline tick_do_timer_cpu by distribute
-> the offlining cpu among remaining cpus.
-> 
-> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> It might well!  My thought was to wait to suggest that until we found a
+> real-life case where this was needed, but I have no objection to being
+> proactive here.
 
-Good show chasing this down!
+Oh yeah, I'm completely fine either way too.
 
-A couple of questions below.
+> But the hard part...  Thought for a good name?  ;-)
 
-> ---
->  include/linux/tick.h        |  1 +
->  kernel/time/tick-common.c   |  1 +
->  kernel/time/tick-internal.h |  1 -
->  kernel/torture.c            | 10 ++++++++++
->  4 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/tick.h b/include/linux/tick.h
-> index bfd571f18cfd..23cc0b205853 100644
-> --- a/include/linux/tick.h
-> +++ b/include/linux/tick.h
-> @@ -14,6 +14,7 @@
->  #include <linux/rcupdate.h>
->  
->  #ifdef CONFIG_GENERIC_CLOCKEVENTS
-> +extern int tick_do_timer_cpu __read_mostly;
->  extern void __init tick_init(void);
->  /* Should be core only, but ARM BL switcher requires it */
->  extern void tick_suspend_local(void);
-> diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
-> index 46789356f856..87b9b9afa320 100644
-> --- a/kernel/time/tick-common.c
-> +++ b/kernel/time/tick-common.c
-> @@ -48,6 +48,7 @@ ktime_t tick_next_period;
->   *    procedure also covers cpu hotplug.
->   */
->  int tick_do_timer_cpu __read_mostly = TICK_DO_TIMER_BOOT;
-> +EXPORT_SYMBOL_GPL(tick_do_timer_cpu);
->  #ifdef CONFIG_NO_HZ_FULL
->  /*
->   * tick_do_timer_boot_cpu indicates the boot CPU temporarily owns
-> diff --git a/kernel/time/tick-internal.h b/kernel/time/tick-internal.h
-> index 649f2b48e8f0..8953dca10fdd 100644
-> --- a/kernel/time/tick-internal.h
-> +++ b/kernel/time/tick-internal.h
-> @@ -15,7 +15,6 @@
->  
->  DECLARE_PER_CPU(struct tick_device, tick_cpu_device);
->  extern ktime_t tick_next_period;
-> -extern int tick_do_timer_cpu __read_mostly;
->  
->  extern void tick_setup_periodic(struct clock_event_device *dev, int broadcast);
->  extern void tick_handle_periodic(struct clock_event_device *dev);
-> diff --git a/kernel/torture.c b/kernel/torture.c
-> index 789aeb0e1159..bccbdd33dda2 100644
-> --- a/kernel/torture.c
-> +++ b/kernel/torture.c
-> @@ -33,6 +33,7 @@
->  #include <linux/delay.h>
->  #include <linux/stat.h>
->  #include <linux/slab.h>
-> +#include <linux/tick.h>
->  #include <linux/trace_clock.h>
->  #include <linux/ktime.h>
->  #include <asm/byteorder.h>
-> @@ -358,7 +359,16 @@ torture_onoff(void *arg)
->  			schedule_timeout_interruptible(HZ / 10);
->  			continue;
->  		}
-> +#ifdef CONFIG_NO_HZ_FULL
-> +		/* do not offline tick do timer cpu */
-> +		if (tick_nohz_full_running) {
-> +			cpu = (torture_random(&rand) >> 4) % maxcpu;
-> +			if (cpu >= tick_do_timer_cpu)
+If we go with a separate interface, yeah, _flush would be confusing for
+workqueue. Maybe _quick or _hurry? Hmm... it'd be nice to keep the suffix
+consistent with RCU. What's the relationship with
+synchronize_rcu_expedited()? Would using _expedited be confusing?
 
-Why is this ">=" instead of "=="?
+Thanks.
 
-> +				cpu = (cpu + 1) % (maxcpu + 1);
-> +		} else
-> +#else
->  		cpu = (torture_random(&rand) >> 4) % (maxcpu + 1);
-> +#endif
-
-What happens if the value of tick_do_timer_cpu changes between the time of
-the check above and the call to torture_offline() below?  Alternatively,
-how is such a change in value prevented?
-
-							Thanx, Paul
-
->  		if (!torture_offline(cpu,
->  				     &n_offline_attempts, &n_offline_successes,
->  				     &sum_offline, &min_offline, &max_offline))
-> -- 
-> 2.34.1
-> 
+-- 
+tejun
