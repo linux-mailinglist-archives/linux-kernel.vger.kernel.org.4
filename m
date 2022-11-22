@@ -2,120 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B66F6337B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0496A6337C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbiKVI6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S233156AbiKVI7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbiKVI5z (ORCPT
+        with ESMTP id S233141AbiKVI7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:57:55 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A132D13F8F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669107470; x=1700643470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+SSTtDJKH/DT1imwO1wWLGEs22th08LxjRQLt0jLVxY=;
-  b=RtpgOb2xeVbybvEW1m7nJLFEnLCJoklOwzZL+ZzFeZky/w9XOreW/Itu
-   cpMwMkIbCeZyTGpkS8jeMPyWgo54mBK6gW+sw2NmhepS4x55Mw2e/GnGC
-   ol8VeIT6nGZJXolb5fifmO6IwCQ0VNAHY4wZNIBMA3+2T5NR1THjUsb7S
-   mO0BG0KZxCCFlJR08Qb7ojM70zRRzM5Fh1SbPu6sYfUQowqxcrxjp+czW
-   bhVjetK/Bb4tm72fk0ogtTY3HOib1esZg9Oh8ghiBiImgknzp+ptwP8SH
-   pvtJHVXSXMlrJEKmTFw6Sqwz3G6tkyCOl9OW6y/YD4TTM+xkYooYeNQ+e
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="124555764"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 01:57:49 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 01:57:49 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 22 Nov 2022 01:57:48 -0700
-Date:   Tue, 22 Nov 2022 08:57:30 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Song Shuai <suagrfillet@gmail.com>
-CC:     <guoren@kernel.org>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <mark.rutland@arm.com>, <paul.walmsley@sifive.com>,
-        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] riscv/ftrace: fix ftrace_modify_call bug
-Message-ID: <Y3yO+ii+NEVPTYFo@wendy>
-References: <20221122075440.1165172-1-suagrfillet@gmail.com>
+        Tue, 22 Nov 2022 03:59:21 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA63447301
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:58:34 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-39ce6773248so67881697b3.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:58:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rjqv25rWWEtR1zBiyBsGJy5jmsV/uC/d3iK5e8meezM=;
+        b=Debqw6K//5JO0uRGLJgyvzVf+d//XS5xvwBVJOczASNpX3roBvWuTMMgL2e0JreOIV
+         x79ORcuLBBHpeltwgRO2Dw9p/gEmQw9HuxuoWl1KUqF45wRc6sY1TqoCo2TYyFLC9vjV
+         kyF199DuHalUtiD+xFpIjlwH8mxz/UifToukRr/VF5l57TmMBscERwwp4oWixvaAK11a
+         QMhAQAyKIN6ZWGTMn0+BpZRutwJcRpKRijSD8KJwKdAWRE8TnMq9puR1KtTCUSNblthE
+         f7vfFmNfiu12LTiXuJJXWFOm/wcXvUywprHB60X+/D+ppLnaw+JphD3h7yTYuOqXhQHn
+         Qvjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rjqv25rWWEtR1zBiyBsGJy5jmsV/uC/d3iK5e8meezM=;
+        b=AvbI3/eKQ/3mc40MKsGS9iC6Woh1N/AzARt2a9gYUABH4k+GPI3IjMQsreiPvtv84v
+         pmseQxVWar4b/H8HI65zh2wvTj06w9faQiQXFNP9hWTlvpYWX5EDDQjXNkXFMw7L20s1
+         PsC9g1kYcTolnFB6xi994PMqGuh1eAjKT9QxpIFyHHnnsVorYzBo0AeCsOhPx/FWXPIM
+         /5QFW1OHBu5YhtLgSHhIhxywrcs+S2S3nNA6ksNfQ6qoKCvXBtXYuuheAIY+7XzQLxkH
+         2kYmSXTlQeH83pwjBStOqHUtJWJnUJdk0HSu7FSuqRseLBPjYb3s2pdwoOVlELHyI7z/
+         iOHA==
+X-Gm-Message-State: ANoB5pm1q5sUdPFaXyFi3xTuaFmIw3BItF890pJKDCWMcH7m+hD4X/se
+        jGKXD5v6F8FtM1Rq+Ok5/cAsQiKUjo+KjDnj1LK+UAYF94k=
+X-Google-Smtp-Source: AA0mqf4wDwK/XWUxdraM37iTax/qOyyWnB+16Ye1sv/PKOtKjjqKpBpldGte1NW/BYAV+FAvU13uBdvUK1Pp3cuqfXc=
+X-Received: by 2002:a81:dd05:0:b0:36e:8228:a127 with SMTP id
+ e5-20020a81dd05000000b0036e8228a127mr2737632ywn.299.1669107513776; Tue, 22
+ Nov 2022 00:58:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221122075440.1165172-1-suagrfillet@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221121112134.407362-1-glider@google.com> <20221121112134.407362-2-glider@google.com>
+ <Y3vVp/2A9nao8HZ2@gmail.com>
+In-Reply-To: <Y3vVp/2A9nao8HZ2@gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 22 Nov 2022 09:57:57 +0100
+Message-ID: <CAG_fn=VA=ZDX4mLruDAMsMa1o11s7c9B9n3k7vohwFu2dpUmAA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] fs: affs: initialize fsdata in affs_truncate()
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
+        chao@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 03:54:40PM +0800, Song Shuai wrote:
-> With this commit (riscv: ftrace: Reduce the detour code size to half)
+On Mon, Nov 21, 2022 at 8:46 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Mon, Nov 21, 2022 at 12:21:31PM +0100, Alexander Potapenko wrote:
+> > When aops->write_begin() does not initialize fsdata, KMSAN may report
+> > an error passing the latter to aops->write_end().
+> >
+> > Fix this by unconditionally initializing fsdata.
+> >
+> > Suggested-by: Eric Biggers <ebiggers@kernel.org>
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>
+> Are you sure that is the correct Fixes commit?  What about commit f2b6a16=
+eb8f5
+> ("fs: affs convert to new aops")?
 
-AFAICT the above patch has not been applied & this patch here should be
-folded into the offending patch?
-I've marked this one as "Not Applicable" in patchwork as a result, but
-let me know if that is an incorrect assumption.
+Hmm, indeed, you are right.
 
-Thanks,
-Conor.
+> - Eric
 
-> patched, ftrace bug occurred When hosting kprobe and function tracer
-> at the same function.
-> 
-> Obviously, the variable caller in ftrace_modify_call was assigned by
-> rec->ip with 4 offset failing the code replacing at function entry.
-> And the caller should be assigned by rec->ip directly to indicate
-> the function entry.
-> 
-> The following is the ftrace bug log.
-> 
-> ```
-> [  419.632855] 00000000f8776803: expected (ffe00297 1a4282e7) but got (1a8282e7 f0227179)
-> [  419.633390] ------------[ ftrace bug ]------------
-> [  419.633553] ftrace failed to modify
-> [  419.633569] [<ffffffff802091cc>] kernel_read+0x0/0x52
-> [  419.633863]  actual:   97:02:e0:ff:e7:82:82:1a
-> [  419.634087] Updating ftrace call site to call a different ftrace function
-> [  419.634279] ftrace record flags: e0000002
-> [  419.634487]  (2) R
-> [  419.634487]  expected tramp: ffffffff800093cc
-> [  419.634935] ------------[ cut here ]------------
-> ```
-> 
-> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> ---
->  arch/riscv/kernel/ftrace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-> index 8c77f236fc71..61b24d767e2e 100644
-> --- a/arch/riscv/kernel/ftrace.c
-> +++ b/arch/riscv/kernel/ftrace.c
-> @@ -132,7 +132,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
->  		       unsigned long addr)
->  {
->  	unsigned int call[2];
-> -	unsigned long caller = rec->ip + 4;
-> +	unsigned long caller = rec->ip;
->  	int ret;
->  
->  	make_call_t0(caller, old_addr, call);
-> -- 
-> 2.20.1
-> 
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
