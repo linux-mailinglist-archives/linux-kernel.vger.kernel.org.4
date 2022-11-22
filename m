@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F87633E2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89884633E33
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiKVNyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S233614AbiKVNzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiKVNyk (ORCPT
+        with ESMTP id S232498AbiKVNza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:54:40 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B156654EB;
-        Tue, 22 Nov 2022 05:54:37 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VVSj4Yo_1669125271;
-Received: from 30.32.119.53(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VVSj4Yo_1669125271)
-          by smtp.aliyun-inc.com;
-          Tue, 22 Nov 2022 21:54:33 +0800
-Message-ID: <9cc55d4f-d864-aca5-78a0-ea7602c35176@linux.alibaba.com>
-Date:   Tue, 22 Nov 2022 21:54:31 +0800
+        Tue, 22 Nov 2022 08:55:30 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D620654EB;
+        Tue, 22 Nov 2022 05:55:29 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id bp26-20020a056820199a00b0049f4e8f2d95so2264574oob.12;
+        Tue, 22 Nov 2022 05:55:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2SBGeqgV8aQ4ClE1rxARDUjCn/QaGrg5bogBswoE+Gk=;
+        b=SnJrJJJB+uAOWpogJlqoVY6znPbePuzs8v8E+Jasq1bg9moQq8Gbla8WPFPotFYdUs
+         rdiNTyjJgUOpZ//qEmNSffWMfpXCemCqV4jqqOLcafNGMG3y7VzHk2z9V6YfIYYTp81D
+         df5NkH3zm4zUw3PzBRdPGQ4f8CJIBaeUTQh9hasrwmNEXQM/Q4hIQ6dVrmQyovTykNlk
+         RNdlw5G+f5UCJDWk4RkG0HUq6cWwz+Pat2UDROelcqWZxV0KlNgJCCVHtdzbVNto0nKe
+         fES8l3XJEdiw4y/2lEdykL46NhCsN3MbN/y7RDB/FanhyNqBLX9zLaQeCHNrj9s0p+p2
+         fKaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2SBGeqgV8aQ4ClE1rxARDUjCn/QaGrg5bogBswoE+Gk=;
+        b=YQ+5sKKE9f9zj3rKyFNBXBc+2w9dFll0gF1aNMIo7+04UCGzeQM+owAwL+cHi51bA4
+         YTpB1iAvFZ7wOdgCeEs6OX13SsQ8MmV3mclWasIJygulwDXO5InIs5CU0Kbhe/Xn1oJp
+         u8Pwp7o5F+PYBnkNalM5t7PiqMbt+kbCf2DSNz4Chdvc/2Lv2TLLGcPfK0oY2/TXof/S
+         5skToxJmsDLpxta41YdVZ98Y97F3MQlBhOjgiWgqjVCFAusGutDfTgTJmAeHALxV72fK
+         u072HFNTKIgmGMp6OlCc5WtnoOrUDlcf+yhHZ2vgge0quyezA5hmDdUTc95uW8FKFGti
+         GiAw==
+X-Gm-Message-State: ANoB5pnhyFQLnIiV4Use9Bo5k6kGkKUck0CZFdqvTuWMhCcnucqDdpEq
+        mGVOZH0087X+oj5MbhNvoZMiqG8s4wo0vgyCb2klnAkprrQ=
+X-Google-Smtp-Source: AA0mqf7ykzweR9BqX2Z1bFr3kRAAU5C3xDVsZgtZl+Svh5PRx1RmM9Dz5FRt4dxqYY1KiJhP24NikZC0YwM35U5Onhk=
+X-Received: by 2002:a4a:d1b2:0:b0:498:ce46:9fb1 with SMTP id
+ z18-20020a4ad1b2000000b00498ce469fb1mr6131515oor.97.1669125328656; Tue, 22
+ Nov 2022 05:55:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH] filelock: move file locking definitions to separate
- header file
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>, Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>
-Cc:     hch@lst.de, linux-kernel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, cluster-devel@redhat.com,
-        linux-nfs@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        devel@lists.orangefs.org, linux-xfs@vger.kernel.org
-References: <20221120210004.381842-1-jlayton@kernel.org>
- <0c6a44ff-409e-99b2-eaa9-fd6e87a9e104@linux.alibaba.com>
- <a731e688122d1a6fdb2f7bdbd71d403fa110e9f2.camel@kernel.org>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <a731e688122d1a6fdb2f7bdbd71d403fa110e9f2.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wjKJyzfJmOzBdEOqCFRc8Fh-rdGM4tvMXfW0WXbbHwV0w@mail.gmail.com>
+ <20221122105054.4062213-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2211221154280.284524@ramsan.of.borg>
+In-Reply-To: <alpine.DEB.2.22.394.2211221154280.284524@ramsan.of.borg>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 22 Nov 2022 08:55:17 -0500
+Message-ID: <CADnq5_PvouSKugXxJXqkVeZf+kbP8+hhUKFgVALSO=MOW3jzvA@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v6.1-rc6
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-um@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 22, 2022 at 5:56 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> On Tue, 22 Nov 2022, Geert Uytterhoeven wrote:
+> > JFYI, when comparing v6.1-rc6[1] to v6.1-rc5[3], the summaries are:
+> >  - build errors: +6/-0
+>
+>    + /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]:  => 239:34
+>
+> sh4-gcc11/sh-allmodconfig (in cvm_oct_free_hw_memory())
+>
+>    + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer:  => 94:18
+>    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]:  => 1934:1
+>
+> um-x86_64/um-all{mod,yes}config (in kfd_cpumask_to_apic_id())
 
+Presumably cpu_data is not defined on um-x86_64?  Does it even make
+sense to build drivers on um-x86_64?
 
-On 11/22/22 8:20 PM, Jeff Layton wrote:
-> On Tue, 2022-11-22 at 09:51 +0800, Joseph Qi wrote:
->> Hi,
->>
->> On 11/21/22 4:59 AM, Jeff Layton wrote:
->>> The file locking definitions have lived in fs.h since the dawn of time,
->>> but they are only used by a small subset of the source files that
->>> include it.
->>>
->>> Move the file locking definitions to a new header file, and add the
->>> appropriate #include directives to the source files that need them. By
->>> doing this we trim down fs.h a bit and limit the amount of rebuilding
->>> that has to be done when we make changes to the file locking APIs.
->>>
->>> Signed-off-by: Jeff Layton <jlayton@kernel.org>
->>> ---
->>>  fs/9p/vfs_file.c          |   1 +
->>>  fs/afs/internal.h         |   1 +
->>>  fs/attr.c                 |   1 +
->>>  fs/ceph/locks.c           |   1 +
->>>  fs/cifs/cifsfs.c          |   1 +
->>>  fs/cifs/cifsglob.h        |   1 +
->>>  fs/cifs/cifssmb.c         |   1 +
->>>  fs/cifs/file.c            |   1 +
->>>  fs/cifs/smb2file.c        |   1 +
->>>  fs/dlm/plock.c            |   1 +
->>>  fs/fcntl.c                |   1 +
->>>  fs/file_table.c           |   1 +
->>>  fs/fuse/file.c            |   1 +
->>>  fs/gfs2/file.c            |   1 +
->>>  fs/inode.c                |   1 +
->>>  fs/ksmbd/smb2pdu.c        |   1 +
->>>  fs/ksmbd/vfs.c            |   1 +
->>>  fs/ksmbd/vfs_cache.c      |   1 +
->>>  fs/lockd/clntproc.c       |   1 +
->>>  fs/lockd/netns.h          |   1 +
->>>  fs/locks.c                |   1 +
->>>  fs/namei.c                |   1 +
->>>  fs/nfs/nfs4_fs.h          |   1 +
->>>  fs/nfs_common/grace.c     |   1 +
->>>  fs/nfsd/netns.h           |   1 +
->>>  fs/ocfs2/locks.c          |   1 +
->>>  fs/ocfs2/stack_user.c     |   1 +
->>
->> Seems it misses the related changes in:
->> fs/ocfs2/stackglue.c
->>
-> 
-> I was able to build ocfs2.ko just fine without any changes to
-> stackglue.c. What problem do you see here?
-> 
-Okay, that's because there is prototype declaration in
-fs/ocfs2/stackglue.h, and it seems has no real effect in current
-version.
+Alex
 
-So it looks good to me. For ocfs2 part,
-Acked-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+>
+>    + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function):  => 149:37
+>    + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor':  => 149:22
+>    + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]:  => 150:1
+>
+> um-x86_64/um-allyesconfig
+>
+> > [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/eb7081409f94a9a8608593d0fb63a1aa3d6f95d8/ (all 149 configs)
+> > [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/094226ad94f471a9f19e8f8e7140a09c2625abaa/ (all 149 configs)
+>
+> Gr{oetje,eeting}s,
+>
+>                                                 Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                                             -- Linus Torvalds
