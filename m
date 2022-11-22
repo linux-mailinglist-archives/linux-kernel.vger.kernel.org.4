@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59CD6332D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7C56332F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbiKVCP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 21:15:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S231856AbiKVCQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiKVCP1 (ORCPT
+        with ESMTP id S232552AbiKVCQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:15:27 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFADE0CB0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:15:26 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id mv18so4372152pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:15:26 -0800 (PST)
+        Mon, 21 Nov 2022 21:16:34 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37A5E634D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:16:08 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-36810cfa61fso127414127b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:16:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HHM45P9CjRvHsVijXk9ZVHXwEbtAPy50ILNl92/joDY=;
-        b=jxYZOik4RLpujktsjOabVQGOR90STmbik2Sw3PmAzG7UrmIsIbshf5YKYMkRELIVPi
-         Lf5zywjY+WSlWInhXMYMRaf/FEytVnWz8iWVRPykEmxnnXEA9JgDdROrp4gzcmSV3OqT
-         jQWw8koyVaYSEvJUYMeKmxztQI0gHA5bWZP6U=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J0kBTpGRrZ4fbYeP7Bh1hsOct+NKdkC7fVmp/4th4/s=;
+        b=PTyyzqK8VIpYcc3Jnv1HwKlTZVtN825+P2qskFJugJ/DNoyLCfdNJgvvb4WK//Litx
+         9PSdHS+fDIZijxFoVEzf+iNQufz0lxZloF1cOdSlQxtrE3mGt+L7NNZ7cAq+QY79+G+5
+         qDhW62Uexhw5NGJYa+8of89/EQtHfE3nO8G2fOeaWQ4CRwdC6fVqUCyjN41ZDHRvzP0e
+         1D4semdRyxKDsXvvOZn8BhhTnael1tURdERVZKJGOgEYACViGTrodjUlJBmnKctQGZd1
+         WHhMCxTizWOZtXg3xr0jXG4k/8eB3tTqtQsiIsWRi9nQDHQUvHOz09sNxIWD/ti3qwf2
+         kzFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HHM45P9CjRvHsVijXk9ZVHXwEbtAPy50ILNl92/joDY=;
-        b=eAP5QBbM3QfUIMfWYEWvaZ54jPloIZsrM5uPIigiNdb/uS4wK91WgvlV0jUzM5gGfV
-         ccLMOJ3tTBrHas8Tdb91GxzcGqQnjKDidnAjIs3LpDrrAHZkVbPoJE1caK7/2MRIRSGi
-         ldFqrYCmyGpROpM08QNXrRQ9fAXcQnL/3/vE61gm+ww+8ko+9cS0qRL6CDa2q+ebnLgh
-         PTeVaJSf2pxBiULKHGWf0PDIYezE9t6+UkpmEwMh1+YSvSSirDDiZ1sATCcH1e1Af6Rn
-         lFEq74opyZSJy1QCoZG9XGbXyTRBKlJ/+CkuiRAbfQ1RSgtEFx/+beUDwCoXpCvilIT/
-         HCjA==
-X-Gm-Message-State: ANoB5pm1QrIxn3g06wUbdWhgE3yVlw18CZUrYq5LqdhhcFAlKfisfZ6x
-        XjAAY5K/7V754fXp8aDjbbhJ4A==
-X-Google-Smtp-Source: AA0mqf4p4DPJ6pgUFsOKYSOfHBjYEjyAnzdS6CSrXvbaB71OjqhgxtMGeyfws+s/bd/s6BKaQ7eKFA==
-X-Received: by 2002:a17:90a:4ece:b0:218:7c55:47de with SMTP id v14-20020a17090a4ece00b002187c5547demr20774326pjl.172.1669083326192;
-        Mon, 21 Nov 2022 18:15:26 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
-        by smtp.gmail.com with ESMTPSA id n1-20020a170902f60100b00186ac4b21cfsm10475812plg.230.2022.11.21.18.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 18:15:25 -0800 (PST)
-Date:   Tue, 22 Nov 2022 11:15:20 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
- zsmalloc
-Message-ID: <Y3wwuMSy8YC86QAi@google.com>
-References: <20221119001536.2086599-1-nphamcs@gmail.com>
- <20221119001536.2086599-7-nphamcs@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119001536.2086599-7-nphamcs@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J0kBTpGRrZ4fbYeP7Bh1hsOct+NKdkC7fVmp/4th4/s=;
+        b=Kt6DAr5TrS3ZXa5pZ2EhJ+WQlXhbSBUh5d1u1lqtYY9NcGPEMHLJo/U+jYPMm8OY9Q
+         Ud6DGZrUgmjk8oAu/n0vdKF6Lc607DubGLR75TCuIuAPqLEwCfZcek6jydSzomuB3W/p
+         thCNT7NahyOoZIp+WsHcJu0ZyL7fWX/FiadQSFcuulkhy5wvUsBo116b3+ojd8UaLYWg
+         b9YvI4YRTeAjQndRkb88C0k7jz4wEs3UVMejFC1KKto5UJjcxsxGiKJxiAei2Lq276Z6
+         rd/XojFWVSqGFXLsd1YP4LFGhshGS/2lGmcOH3tPv/1g0TJQ0+YWvP5S1ZOorJEdXJKC
+         QpmA==
+X-Gm-Message-State: ANoB5pmTgaHHf+cs9bFBrbxp5WjxcRmo7veobc3gav7UUwc5MEqvcNAb
+        K5wLtOVRIa/ES3pOtAb36PbVa5mZWeI=
+X-Google-Smtp-Source: AA0mqf73Jt7+46OfL52Xg14iE61SnVE1xuS16R+nTJ/NK6q+VyFTx2GjobIGL8pHS0TY+qa/ra9LsUFEknk=
+X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:200:8539:aadd:13be:6e82])
+ (user=drosen job=sendgmr) by 2002:a05:6902:118e:b0:6e7:f54:b3d6 with SMTP id
+ m14-20020a056902118e00b006e70f54b3d6mr4166933ybu.577.1669083368110; Mon, 21
+ Nov 2022 18:16:08 -0800 (PST)
+Date:   Mon, 21 Nov 2022 18:15:21 -0800
+In-Reply-To: <20221122021536.1629178-1-drosen@google.com>
+Mime-Version: 1.0
+References: <20221122021536.1629178-1-drosen@google.com>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221122021536.1629178-7-drosen@google.com>
+Subject: [RFC PATCH v2 06/21] fuse-bpf: Don't support export_operations
+From:   Daniel Rosenberg <drosen@google.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@android.com,
+        Daniel Rosenberg <drosen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/18 16:15), Nhat Pham wrote:
-> +
-> +static int zs_zpool_shrink(void *pool, unsigned int pages,
-> +			unsigned int *reclaimed)
-> +{
-> +	unsigned int total = 0;
-> +	int ret = -EINVAL;
-> +
-> +	while (total < pages) {
-> +		ret = zs_reclaim_page(pool, 8);
-> +		if (ret < 0)
-> +			break;
-> +		total++;
-> +	}
-> +
-> +	if (reclaimed)
-> +		*reclaimed = total;
-> +
-> +	return ret;
-> +}
+In the future, we may choose to support these, but it poses some
+challenges. In order to create a disconnected dentry/inode, we'll need
+to encode the mountpoint and bpf into the file_handle, which means we'd
+need a stable representation of them. This also won't hold up to cases
+where the bpf is not stateless. One possibility is registering bpf
+programs and mounts in a specific order, so they can be assigned
+consistent ids we can use in the file_handle. We can defer to the lower
+filesystem for the lower inode's representation in the file_handle.
 
-A silly question: why do we need a retry loop in zs_reclaim_page()?
+Signed-off-by: Daniel Rosenberg <drosen@google.com>
+---
+ fs/fuse/inode.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+index 224d7dfe754d..bafb2832627d 100644
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -1100,6 +1100,14 @@ static int fuse_encode_fh(struct inode *inode, u32 *fh, int *max_len,
+ 	nodeid = get_fuse_inode(inode)->nodeid;
+ 	generation = inode->i_generation;
+ 
++#ifdef CONFIG_FUSE_BPF
++	/* TODO: Does it make sense to support this in some cases? */
++	if (!nodeid && get_fuse_inode(inode)->backing_inode) {
++		*max_len = 0;
++		return FILEID_INVALID;
++	}
++#endif
++
+ 	fh[0] = (u32)(nodeid >> 32);
+ 	fh[1] = (u32)(nodeid & 0xffffffff);
+ 	fh[2] = generation;
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
