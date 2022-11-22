@@ -2,96 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFC963339C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F16E56333A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiKVDAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S231929AbiKVDCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbiKVDAm (ORCPT
+        with ESMTP id S232052AbiKVDCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:00:42 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42CF1D0FD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:00:41 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so12728291pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:00:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wHFDUHtOwvUbApX56IPf0JK3BcogReTYpXne7oiLh6g=;
-        b=HsHhTLxPGSX/SOQLa8i0mclVgaAony/uoIqSiNk2F7aUqm3oOvFR4+hqrJeWKeA8kP
-         0ev+UlYSci2yUYxBYTcHi/07bQFHH0vf5Pp6rNi78LMk6kGatA4cfPszA84RKTU0O+gA
-         xwlHUTY52a76c0t0mqgbv+/6Yc8+9PpHYpKkI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wHFDUHtOwvUbApX56IPf0JK3BcogReTYpXne7oiLh6g=;
-        b=Ms8nkw5y8ftneQKvQjc/pqGCRWEM+E9tIHoDbh+VpQWthueElal2GGbEu3P9Qq60dQ
-         Xf0Y1PXOD7YHhUBpJvSNEu/rGZRzc4QSNLwma1De1425PVetopHZ8IYYJ+/iXC5MIUHr
-         5KYj9JpEdyCabmFtA3ejcXpF2LNM7PU6LfZRrIvDaHsmnS1v9+FdS8P/MKytFZCwrTjP
-         URZXTHs28sUPkKeMqHWturAHYwU6LNHRZvo9x8pIoMC1xg/ziF6H2XaU1pp0GREnZNGe
-         QiLrR8YKCtDh3Kuo8B24H4hGr4K68Fcnu/bsK8gbJvhGVvV29edLPwiYRqs+v2omMkpq
-         4Jcg==
-X-Gm-Message-State: ANoB5pkz3lUl5V9toa9wGKnxuDH53PeM1pON9kLd8/idyia8AWEqlQpn
-        UDEnz/orkWdXxDKCFqLwxAwSoA==
-X-Google-Smtp-Source: AA0mqf6ssW5PeKYQMBjucgUacUesrALiKSjEBDiNYRmO/H0eoDAdfWODXNQS/1qb7eR9vXjF1Udllg==
-X-Received: by 2002:a17:902:6b89:b0:179:eaa8:9113 with SMTP id p9-20020a1709026b8900b00179eaa89113mr1725905plk.55.1669086041198;
-        Mon, 21 Nov 2022 19:00:41 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
-        by smtp.gmail.com with ESMTPSA id a14-20020a170902710e00b0018703bf3ec9sm10525755pll.61.2022.11.21.19.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 19:00:40 -0800 (PST)
-Date:   Tue, 22 Nov 2022 12:00:36 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Alexey Romanov <avromanov@sberdevices.ru>, minchan@kernel.org,
-        senozhatsky@chromium.org, ngupta@vflare.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
-        ddrokosov@sberdevices.ru
-Subject: Re: [RFC PATCH v1 0/4] Introduce merge identical pages mechanism
-Message-ID: <Y3w7VP5CKvm6XmoJ@google.com>
-References: <20221121190020.66548-1-avromanov@sberdevices.ru>
- <Y3vjQ7VJYUEWl2uc@cmpxchg.org>
+        Mon, 21 Nov 2022 22:02:17 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330621D0FE;
+        Mon, 21 Nov 2022 19:02:16 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 59597890;
+        Tue, 22 Nov 2022 04:02:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669086134;
+        bh=Ca28UhB9SgGZCoIjPHP31lx8i8vFUKXIOsQCRggn/e4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EDkXlHOouhQxm769dalIKJYAfmOUhg16wBVrnznOGYY6ycfoMc443QSCCG6JqfV+a
+         j8ZOdf6bD9GuzsLukgPMocbsTmY8gtJZNN8kGQ/5TXyjI1/n88Kr355D21joCOEDpd
+         fYYo+Ym1bs9AuNZLoa7B2qC1kxjn475/hvjZo67M=
+Date:   Tue, 22 Nov 2022 05:01:59 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Subject: Re: [PATCH v1 5/8] arm64: dts: renesas: white-hawk-cpu: Add DP
+ output support
+Message-ID: <Y3w7p0EGMLILUdaA@pendragon.ideasonboard.com>
+References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com>
+ <20221117122547.809644-6-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y3vjQ7VJYUEWl2uc@cmpxchg.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221117122547.809644-6-tomi.valkeinen@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/21 15:44), Johannes Weiner wrote:
-> This looks pretty great.
+Hi Tomi,
+
+Thank you for the patch.
+
+On Thu, Nov 17, 2022 at 02:25:44PM +0200, Tomi Valkeinen wrote:
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 > 
-> However, I'm curious why it's specific to zram, and not part of
-> zsmalloc? That way zswap would benefit as well, without having to
-> duplicate the implementation. This happened for example with
-> page_same_filled() and zswap_is_page_same_filled().
+> Add DT nodes needed for the mini DP connector. The DP is driven by
+> sn65dsi86, which in turn gets the pixel data from the SoC via DSI.
 > 
-> It's zsmalloc's job to store content efficiently, so couldn't this
-> feature (just like the page_same_filled one) be an optimization that
-> zsmalloc does transparently for all its users?
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 
-Yea, that's a much needed functionality, but things may be "complicated".
-We had that KSM-ish thing in the past in zram. Very briefly as we quickly
-found out that the idea was patented by some company in China and we couldn't
-figure our if it was safe to land that code upstream. So we ended up dropping
-the patches.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-https://lore.kernel.org/lkml/1494556204-25796-1-git-send-email-iamjoonsoo.kim@lge.com/
+> ---
+>  .../dts/renesas/r8a779g0-white-hawk-cpu.dtsi  | 94 +++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi b/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
+> index c10740aee9f6..8aab859aac7a 100644
+> --- a/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
+> @@ -97,6 +97,15 @@ memory@600000000 {
+>  		reg = <0x6 0x00000000 0x1 0x00000000>;
+>  	};
+>  
+> +	reg_1p2v: regulator-1p2v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "fixed-1.2V";
+> +		regulator-min-microvolt = <1200000>;
+> +		regulator-max-microvolt = <1200000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +	};
+> +
+>  	reg_1p8v: regulator-1p8v {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "fixed-1.8V";
+> @@ -114,6 +123,24 @@ reg_3p3v: regulator-3p3v {
+>  		regulator-boot-on;
+>  		regulator-always-on;
+>  	};
+> +
+> +	mini-dp-con {
+> +		compatible = "dp-connector";
+> +		label = "CN5";
+> +		type = "mini";
+> +
+> +		port {
+> +			mini_dp_con_in: endpoint {
+> +				remote-endpoint = <&sn65dsi86_out>;
+> +			};
+> +		};
+> +	};
+> +
+> +	sn65dsi86_refclk: clk-x6 {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <38400000>;
+> +	};
+>  };
+>  
+>  &avb0 {
+> @@ -134,6 +161,23 @@ phy0: ethernet-phy@0 {
+>  	};
+>  };
+>  
+> +&dsi0 {
+> +	status = "okay";
+> +
+> +	ports {
+> +		port@1 {
+> +			dsi0_out: endpoint {
+> +				remote-endpoint = <&sn65dsi86_in>;
+> +				data-lanes = <1 2 3 4>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&du {
+> +	status = "okay";
+> +};
+> +
+>  &extal_clk {
+>  	clock-frequency = <16666666>;
+>  };
+> @@ -172,6 +216,51 @@ eeprom@50 {
+>  	};
+>  };
+>  
+> +&i2c1 {
+> +	pinctrl-0 = <&i2c1_pins>;
+> +	pinctrl-names = "default";
+> +
+> +	status = "okay";
+> +	clock-frequency = <400000>;
+> +
+> +	bridge@2c {
+> +		compatible = "ti,sn65dsi86";
+> +		reg = <0x2c>;
+> +
+> +		clocks = <&sn65dsi86_refclk>;
+> +		clock-names = "refclk";
+> +
+> +		interrupt-parent = <&intc_ex>;
+> +		interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +		enable-gpios = <&gpio1 26 GPIO_ACTIVE_HIGH>;
+> +
+> +		vccio-supply = <&reg_1p8v>;
+> +		vpll-supply = <&reg_1p8v>;
+> +		vcca-supply = <&reg_1p2v>;
+> +		vcc-supply = <&reg_1p2v>;
+> +
+> +		ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@0 {
+> +				reg = <0>;
+> +				sn65dsi86_in: endpoint {
+> +					remote-endpoint = <&dsi0_out>;
+> +				};
+> +			};
+> +
+> +			port@1 {
+> +				reg = <1>;
+> +				sn65dsi86_out: endpoint {
+> +					remote-endpoint = <&mini_dp_con_in>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+>  &mmc0 {
+>  	pinctrl-0 = <&mmc_pins>;
+>  	pinctrl-1 = <&mmc_pins>;
+> @@ -221,6 +310,11 @@ i2c0_pins: i2c0 {
+>  		function = "i2c0";
+>  	};
+>  
+> +	i2c1_pins: i2c1 {
+> +		groups = "i2c1";
+> +		function = "i2c1";
+> +	};
+> +
+>  	keys_pins: keys {
+>  		pins = "GP_5_0", "GP_5_1", "GP_5_2";
+>  		bias-pull-up;
 
-> Would it make sense to hook this up to a shrinker?
+-- 
+Regards,
 
-Hmm, ratelimited perhaps. We most likely don't want to scan the whole pool
-every time a shrinker calls us (which can be quite often).
+Laurent Pinchart
