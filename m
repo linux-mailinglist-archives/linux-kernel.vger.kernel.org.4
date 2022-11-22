@@ -2,134 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFE6633796
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F65633798
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiKVIz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S232786AbiKVIzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiKVIzY (ORCPT
+        with ESMTP id S232955AbiKVIzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:55:24 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DD2193F1;
-        Tue, 22 Nov 2022 00:55:24 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id s4so8860017qtx.6;
-        Tue, 22 Nov 2022 00:55:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P7qk9S0cPIQ0L5zgnqXV8Oc65l49/AfnuuGAj/cKJTk=;
-        b=XM4pgryGinKaUIuRWHujuOGyGex/kjQfJrimqTpuOdTdknmVrSV2IEQhzIXkZ6uwQg
-         /mrRsuXyI9BErkOJ5ucN38tJ4oFISnSbXgpbpYV02/ZAjLea+IfPVIa2uGp7Irj2vio9
-         3bWadttIVkgesveJLUjb229/XLkNrd4Aq7X84EU1LBSheHY88ThCYss4oBmO75v/gEna
-         RN4bxkevduaeGln+Nw1Btj4+50PTXWDdrHl+9P2AW6LuNd/VOrWjpcmF/Q884dvmdMzL
-         lCxjk3UNFTuBwPXlOrPhN+XH+A63W+ibV1Al4qESDmDR2cT06oqXqTnzjD83TE4yrEjp
-         4g+A==
-X-Gm-Message-State: ANoB5pmAAX4Ymkegi22IfUcVb1tOl42KrvpmXiK9Bchpn1RCHncY5OfD
-        ybTWhttCit4AKjb3bR4tkW78EQdiRkP+Hg==
-X-Google-Smtp-Source: AA0mqf7uEyhL6SZ4wQqqSS9FgyZTnHN6MilujgP5+sAe7rzs8HcJBKMdPNWem73Tv4Fg7UOV0gjQPQ==
-X-Received: by 2002:a05:622a:4890:b0:3a5:84b9:3292 with SMTP id fc16-20020a05622a489000b003a584b93292mr20723848qtb.119.1669107323118;
-        Tue, 22 Nov 2022 00:55:23 -0800 (PST)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id x12-20020ae9e90c000000b006b5cc25535fsm9366502qkf.99.2022.11.22.00.55.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 00:55:22 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-398cff43344so88100087b3.0;
-        Tue, 22 Nov 2022 00:55:21 -0800 (PST)
-X-Received: by 2002:a0d:fec2:0:b0:36b:56d3:71b8 with SMTP id
- o185-20020a0dfec2000000b0036b56d371b8mr20585246ywf.384.1669107321620; Tue, 22
- Nov 2022 00:55:21 -0800 (PST)
+        Tue, 22 Nov 2022 03:55:33 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B09829C88
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:55:32 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669107330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WHpMFQ3nTDIAnDhdGTOVqww/Tpb7qPsjpJRCRXT0sZg=;
+        b=e42iyoX1Y1pobvlJl/4/5733Fcvpd/RZVQKgYOq8jAqmuFBuvxk85+fhXQjWIH4lCCLzs0
+        +CxPXp3/j/b5BrtgF4bP81tNXVxk5srbgu+aHXlxjom8xmJkQXvx8wvgdafLdouDf2pilZ
+        tyBQS5SQfQhlEWJbzWhz0cvoT/QRv/90B3W9l5sxQpHyx77ltlEooeCP4a2WaoFnKr0+p6
+        nGQY3HvQvg/sfukZn9cxwfAO4PYvdC6SseXM8caHxdAF3RUv//XemXdB4oqKUT1mLKiN+f
+        IkVJ37Vi3xiOSrqJr65+nlS/0j6bqtqWLBC2lLRbxJus/Vqg1u8U2AHvXe4/xg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669107330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WHpMFQ3nTDIAnDhdGTOVqww/Tpb7qPsjpJRCRXT0sZg=;
+        b=ONYwZcqCk+x/QIhXQ3Q/hCg5Yua1/fEFiBBJAQFviouHMZdGgAqRqWRM/EaIBnXJp0UbT5
+        dgGx3NKb+KgaNpDQ==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH printk] printk: htmldocs: add missing description
+In-Reply-To: <20221122181052.75618842@canb.auug.org.au>
+References: <20221122181052.75618842@canb.auug.org.au>
+Date:   Tue, 22 Nov 2022 10:01:23 +0106
+Message-ID: <87zgcjpdvo.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com>
- <20221117122547.809644-3-tomi.valkeinen@ideasonboard.com> <CAMuHMdWUvLzCtFRXvUpCxczpkpaunb==gjBMwdniXY4UBVuMUw@mail.gmail.com>
- <f5df3cb8-d315-b06b-aa04-f0b4af64a1c2@ideasonboard.com>
-In-Reply-To: <f5df3cb8-d315-b06b-aa04-f0b4af64a1c2@ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Nov 2022 09:55:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWsvcd3_CX_dESW3EO4FoSGcMWAAyKO_5g2ch-jezdzzQ@mail.gmail.com>
-Message-ID: <CAMuHMdWsvcd3_CX_dESW3EO4FoSGcMWAAyKO_5g2ch-jezdzzQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/8] dt-bindings: display: bridge: renesas,dsi-csi2-tx:
- Add r8a779g0
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+Variable and return descriptions were missing from the SRCU read
+lock functions. Add them.
 
-On Tue, Nov 22, 2022 at 9:20 AM Tomi Valkeinen
-<tomi.valkeinen@ideasonboard.com> wrote:
-> On 17/11/2022 17:14, Geert Uytterhoeven wrote:
-> > On Thu, Nov 17, 2022 at 1:26 PM Tomi Valkeinen
-> > <tomi.valkeinen@ideasonboard.com> wrote:
-> >> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> >>
-> >> Extend the Renesas DSI display bindings to support the r8a779g0 V4H.
-> >>
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> >> ---
-> >>   .../bindings/display/bridge/renesas,dsi-csi2-tx.yaml           | 3 ++-
-> >>   1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml b/Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml
-> >> index afeeb967393d..bc3101f77e5a 100644
-> >> --- a/Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml
-> >> +++ b/Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml
-> >> @@ -11,13 +11,14 @@ maintainers:
-> >>
-> >>   description: |
-> >>     This binding describes the MIPI DSI/CSI-2 encoder embedded in the Renesas
-> >> -  R-Car V3U SoC. The encoder can operate in either DSI or CSI-2 mode, with up
-> >> +  R-Car V3U/V4H SoC. The encoder can operate in either DSI or CSI-2 mode, with up
-> >
-> > Perhaps "R-Car Gen4 SoCs", so we stay within 80 chars, and don't have
-> > to update this when the next member of the family is around the block?
->
-> Is V3U gen 4? Or do you mean "R-Car V3U and Gen 4 SoCs"?
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+---
+ Fix htmldocs build warning as reported by Stephen [0]. Thanks Stephen!
 
-Despite the name, R-Car V3U is the first member of the R-Car Gen4 family...
-https://www.renesas.com/us/en/products/automotive-products/automotive-system-chips-socs/r-car-v3u-best-class-r-car-v3u-asil-d-system-chip-automated-driving
+ [0] https://lore.kernel.org/lkml/20221122181052.75618842@canb.auug.org.au
 
-> > Is there anything that might be SoC-specific?
-> > If not, perhaps the time is ripe for a family-specific compatible value?
->
-> At least v3u and v4h DSIs are slightly different. Well, the DSI IP block
-> itself looks the same, but the PLL and PHY are different.
+ kernel/printk/printk.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I noticed, when I saw the dsi-csi2 driver changes.
-So no family-specific compatible value is needed.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 503d55ccc835..9ec101766471 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -282,6 +282,7 @@ EXPORT_SYMBOL(console_list_unlock);
+  * Use for_each_console_srcu() to iterate the console list
+  *
+  * Context: Any context.
++ * Return: A cookie to pass to console_srcu_read_unlock().
+  */
+ int console_srcu_read_lock(void)
+ {
+@@ -292,6 +293,7 @@ EXPORT_SYMBOL(console_srcu_read_lock);
+ /**
+  * console_srcu_read_unlock - Unregister an old reader from
+  *	the SRCU-protected console list
++ * @cookie: cookie returned from console_srcu_read_lock()
+  *
+  * Counterpart to console_srcu_read_lock()
+  */
+-- 
+2.30.2
