@@ -2,167 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1976634931
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB155634934
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234597AbiKVV0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
+        id S235028AbiKVV0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234416AbiKVV0O (ORCPT
+        with ESMTP id S235021AbiKVV0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:26:14 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03972B70C5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:26:13 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id c7-20020a170903234700b0018729febd96so12352893plh.19
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:26:12 -0800 (PST)
+        Tue, 22 Nov 2022 16:26:17 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0726ACEAD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:26:15 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id d18so7454750qvs.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:26:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=zgimOf2fhkQleYDBm+3WEMJX9iyYgXrpyh87WZyj3iY=;
-        b=lVv2mTakLyH0mUQEmNwxYoDh+3DxuzDGtIVYSniYeHvEtMOtdEPVoNfksWen4QT0H0
-         6H+2+LjZrO2G2h88rSxZ39aZ/CfY0OGjAs5EHQcpFqTCqSYHCLCig1EK8P3sZQl49ALf
-         GB5hn6rrVf3oqbw3wC1vBug2kvL1DcUtnatLFJfLk5JoA4NWjjhtmQllFS/q3Ka0CbhH
-         rKjGCIHW3yFzoUJHB2j4HiD2Vg8M2MXcHFbxzCvuEIufeJfbB2jT5YBXs3kOOIcgukES
-         XZGYLg62U2fMD2/rIUXsFc6d9o7uDcAUBjoJRL7j4vx4/+Yi4UQUBtUQSR2PqoeWb5oz
-         xNfQ==
+        bh=H/3w9yKqqRG++46SYKw/BvQ7OXa5qiQLydJKuGizLjM=;
+        b=OEeURiKxi5yR2FfAezt4doRA2iCud9LVWoVbXOvejmapl8ihM9YHEElXzysAANCfxa
+         dQbQB24lXf3tDszqiMSczQqra98Kh8OeBOwMzLLYO6eEn5XnslrT3Q8IuV1dSqYl43xU
+         Z4o9oM03xmFj1RJeJnOy6MUpYPiJiYbPu9mCk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zgimOf2fhkQleYDBm+3WEMJX9iyYgXrpyh87WZyj3iY=;
-        b=heT12XDyYZ6Y6TL18BFuBqsrvwuWlLVV0G+vpe1Ys++/YML4IpL6jZqOZHagS/cd0Y
-         n8C9OnK/4NtPc/DfYojGI+x2MFytK+HYyzz0PVUM8bU65wHZDsRmoZQpnXcem2GPw2dO
-         Ny2QUTdcbV3nFFwXyIslHaWTShpNirDqVqOfdaFdgxmqWhQ1M9P4UhugeW8eekYz/fGQ
-         vmZovipJ3s/iCybgyw4J66UJqfOwYiXdBtltbWEAmZgGh0pzBD4W9SWoRJJoxfwQxj6N
-         j6C9B3mo5GSYrFNsWdsalPJlhPH0KdBFBNc5B1SL1BBnbULt6t36OK3JxDRIb2/gvYxQ
-         NBzQ==
-X-Gm-Message-State: ANoB5pmozcBmMSZNDlyHTrXB89gY81iLtQD8UXRJj8wmkKBSMJ57Z879
-        MNJKgLi7MmpOCEIqMcKvIsCAmPtQ+u2/IP3Zgw==
-X-Google-Smtp-Source: AA0mqf6tF7wuZFNnT06MIDxN4K88WuS+gvWo34APH7cHAv8iYvQPOdJIW8aHcfgRyichIBKp9SpUgsF/jBKIFuZIDA==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a63:cd57:0:b0:46e:c9d0:96c with SMTP
- id a23-20020a63cd57000000b0046ec9d0096cmr4913454pgj.586.1669152372521; Tue,
- 22 Nov 2022 13:26:12 -0800 (PST)
-Date:   Tue, 22 Nov 2022 13:26:10 -0800
-In-Reply-To: <9e8346b692eb377576363a028c3688c66f3c0bfe.1667110240.git.isaku.yamahata@intel.com>
-Mime-Version: 1.0
-Message-ID: <diqzedtubs0d.fsf@google.com>
-Subject: Re: [PATCH v10 047/108] KVM: x86/tdp_mmu: Don't zap private pages for
- unsupported cases
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        pbonzini@redhat.com, erdemaktas@google.com, seanjc@google.com,
-        sagis@google.com, dmatlack@google.com,
-        sean.j.christopherson@intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        bh=H/3w9yKqqRG++46SYKw/BvQ7OXa5qiQLydJKuGizLjM=;
+        b=oPEInAo7nBaT7FparNlFtrN9CnsLoqEqOfISXprsX3JuNgZ4khJZdZ0kDJBF351z4S
+         rY5IFO0wMf+F4uC+7By8yOihTFyV9qMXZn8Cq+63pjSyC0TDyEKGT0/IW2ZMrozNsvgO
+         wG8veeviunjPz8ajGWI1V9XRPwLX0TotiPKzkjoKXzykIkjmvokQ0FGzTNPgj8F4ntut
+         nnyjfQ5gOrWS4IzXDpKq2SskfnIuJDDDXyfLP5NHZlUevgs3MJnw8muDoerJKMkssgUo
+         RgjAZfbR8de4pIu5eTmjg6zxkX+rds7IFoWqQHFbr129kBIoC4UzmxL2fYwLC7WlFN7Q
+         aVKA==
+X-Gm-Message-State: ANoB5pmzTE5evtxqqkfCDdTuebBCsXoCA5BCdWJLAm9rdSHqCf0lc+SR
+        86ZIL26hzfuyldKM7jMBNtZfq69B+in6Vw==
+X-Google-Smtp-Source: AA0mqf6tagH+MzMTfd+Es3fiBHAq8mjPv7ni0PixV/V4F1Bx3v0jsuCgqKjaWc2ULHVGOTrQK7alCA==
+X-Received: by 2002:a0c:90f1:0:b0:4c6:8f2e:9a2 with SMTP id p104-20020a0c90f1000000b004c68f2e09a2mr22270476qvp.100.1669152374770;
+        Tue, 22 Nov 2022 13:26:14 -0800 (PST)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05622a114e00b003434d3b5938sm8870457qty.2.2022.11.22.13.26.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 13:26:14 -0800 (PST)
+Date:   Tue, 22 Nov 2022 16:26:12 -0500
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: git send-email friendly smtp provider anyone?
+Message-ID: <20221122212612.sbqv47ecsgiqmhss@meerkat.local>
+References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
+ <20221121151922.jaal6ym7z2ejju4q@houat>
+ <de12952f-8346-8995-236d-69dcb70f19f6@tronnes.org>
+ <20221122155122.edxtmsqpjxgj4dsj@meerkat.local>
+ <3b06dfd5-0eb4-dbfc-6ba8-077b1a92865b@tronnes.org>
+ <20221122185001.q6hmeblp64jqdzvz@meerkat.local>
+ <02bc2442-e3b3-d720-9d13-ffcdfd760fb8@tronnes.org>
+ <182643db-e5f4-2277-a971-0f159849dadf@tronnes.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <182643db-e5f4-2277-a971-0f159849dadf@tronnes.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
+On Tue, Nov 22, 2022 at 10:10:47PM +0100, Noralf Trønnes wrote:
+> Konstantin found a workaround, so I was able to push the patches.
 
-> TDX supports only write-back(WB) memory type for private memory
-> architecturally so that (virtualized) memory type change doesn't make  
-> sense
-> for private memory.  Also currently, page migration isn't supported for  
-> TDX
-> yet. (TDX architecturally supports page migration. it's KVM and kernel
-> implementation issue.)
+Yes, this uncovered quite a few bugs -- which is excellent for me, not so
+excellent for you. :)
 
-> Regarding memory type change (mtrr virtualization and lapic page mapping
-> change), pages are zapped by kvm_zap_gfn_range().  On the next KVM page
-> fault, the SPTE entry with a new memory type for the page is populated.
-> Regarding page migration, pages are zapped by the mmu notifier. On the  
-> next
-> KVM page fault, the new migrated page is populated.  Don't zap private
-> pages on unmapping for those two cases.
+> Here's the result if anyone is interested in seeing the result of using
+> b4 and the web endpoint:
+> https://lore.kernel.org/dri-devel/20221122-gud-shadow-plane-v1-0-9de3afa3383e@tronnes.org/
+> 
+> Patchwork gave me a new submitter ID:
+> https://patchwork.freedesktop.org/series/111222/
 
-> When deleting/moving a KVM memory slot, zap private pages. Typically
-> tearing down VM.  Don't invalidate private page tables. i.e. zap only leaf
-> SPTEs for KVM mmu that has a shared bit mask. The existing
-> kvm_tdp_mmu_invalidate_all_roots() depends on role.invalid with read-lock
-> of mmu_lock so that other vcpu can operate on KVM mmu concurrently.  It
-> marks the root page table invalid and zaps SPTEs of the root page
-> tables. The TDX module doesn't allow to unlink a protected root page table
-> from the hardware and then allocate a new one for it. i.e. replacing a
-> protected root page table.  Instead, zap only leaf SPTEs for KVM mmu with  
-> a
-> shared bit mask set.
+Oooh, I see that patchwork is still not doing the right thing with
+X-Original-From. It will only do the substitution when the From email address
+is the same as the email address of the list.
 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/kvm/mmu/mmu.c     | 85 ++++++++++++++++++++++++++++++++++++--
->   arch/x86/kvm/mmu/tdp_mmu.c | 24 ++++++++---
->   arch/x86/kvm/mmu/tdp_mmu.h |  5 ++-
->   3 files changed, 103 insertions(+), 11 deletions(-)
+https://github.com/getpatchwork/patchwork/blob/main/patchwork/parser.py#L437
 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index faf69774c7ce..0237e143299c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1577,8 +1577,38 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct  
-> kvm_gfn_range *range)
->   	if (kvm_memslots_have_rmaps(kvm))
->   		flush = kvm_handle_gfn_range(kvm, range, kvm_zap_rmap);
+There's unfortunately no fix for this that I can do on my end. :(
 
-> -	if (is_tdp_mmu_enabled(kvm))
-> -		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
-> +	if (is_tdp_mmu_enabled(kvm)) {
-> +		bool zap_private;
-
-We should initialize zap_private to true, otherwise zap_private is
-uninitialized in call
-
-     kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, zap_private)
-
-if the condition
-
-     if (kvm_slot_can_be_private(range->slot)) {
-
-evaluates to false.
-
-> +
-> +		if (kvm_slot_can_be_private(range->slot)) {
-> +			if (range->flags & KVM_GFN_RANGE_FLAGS_RESTRICTED_MEM)
-> +				/*
-> +				 * For private slot, the callback is triggered
-> +				 * via falloc.  Mode can be allocation or punch
-> +				 * hole.  Because the private-shared conversion
-> +				 * is done via
-> +				 * KVM_MEMORY_ENCRYPT_REG/UNREG_REGION, we can
-> +				 * ignore the request from restrictedmem.
-> +				 */
-> +				return flush;
-> +			else if (range->flags & KVM_GFN_RANGE_FLAGS_SET_MEM_ATTR) {
-> +				if (range->attr == KVM_MEM_ATTR_SHARED)
-> +					zap_private = true;
-> +				else {
-> +					WARN_ON_ONCE(range->attr != KVM_MEM_ATTR_PRIVATE);
-> +					zap_private = false;
-> +				}
-> +			} else
-> +				/*
-> +				 * kvm_unmap_gfn_range() is called via mmu
-> +				 * notifier.  For now page migration for private
-> +				 * page isn't supported yet, don't zap private
-> +				 * pages.
-> +				 */
-> +				zap_private = false;
-> +		}
-> +		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, zap_private);
-> +	}
-
->   	return flush;
->   }
+-K
