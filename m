@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FE5633ACA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F15633AF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbiKVLL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S233000AbiKVLOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiKVLLX (ORCPT
+        with ESMTP id S233142AbiKVLNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:11:23 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90F2E2CCAC
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:11:21 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5EBD91FB;
-        Tue, 22 Nov 2022 03:11:27 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.3.127])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7E2E3F587;
-        Tue, 22 Nov 2022 03:11:19 -0800 (PST)
-Date:   Tue, 22 Nov 2022 11:11:14 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64/mm: Intercept pfn changes in set_pte_at()
-Message-ID: <Y3yuUizzhVe+vLlL@FVFF77S0Q05N>
-References: <20221116031001.292236-1-anshuman.khandual@arm.com>
- <20221118141317.GF4046@willie-the-truck>
- <879e561c-e834-196c-b9c5-6e44ac2c0296@arm.com>
- <20221122095748.GA19471@willie-the-truck>
+        Tue, 22 Nov 2022 06:13:24 -0500
+Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BAEA15A05;
+        Tue, 22 Nov 2022 03:13:19 -0800 (PST)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.securetransport.de (Postfix) with ESMTPSA id E08B95E973;
+        Tue, 22 Nov 2022 12:12:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1669115561;
+        bh=E5rcQ8i8Nv0jd3ZCKpMwbFuP+IDytTQYVBhmzFtWaMo=;
+        h=From:To:CC:Subject:Date:From;
+        b=QgzcDV+jhGdEKBJ+Xm1I24Sb4f0CDkg8wKWAWtmOsgC89sUPqeCAvDhHGZXwoz+3h
+         Xy1BkMWuxAwP8Sn0hPfjoHN3KKCbORThlzwfxgaCLMBZ4d7aUlqdGBVbsgmE90Mthl
+         IDsC2RJuaWdCJfW5sjrO3DcDVk6nTiQVRbuRBmLad9m7x9OjOwM+U+uyICCgNBzTuM
+         Aw0kNIR2pYzdouo0OBGZYXbyYBVky5VKhrK6aIO7DrDVqCtsnlBaSoGMUrxSMoyx/s
+         4jdhPBsHcznV2LYNYKDkzH3ZX2NDNOm7EPijsV8kQK5n+6KTPHmSkHyK8osBJXyJKu
+         fi290OvnmWaHg==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.20; Tue, 22 Nov 2022 12:12:34 +0100
+Received: from localhost.localdomain (172.16.51.2) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.20 via Frontend Transport; Tue, 22 Nov 2022 12:12:33 +0100
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Marek Vasut <marex@denx.de>, <kernel@dh-electronics.com>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH] dt-bindings: leds: Mark label property as deprecated
+Date:   Tue, 22 Nov 2022 12:11:22 +0100
+Message-ID: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122095748.GA19471@willie-the-truck>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 09:57:49AM +0000, Will Deacon wrote:
-> On Tue, Nov 22, 2022 at 01:43:17PM +0530, Anshuman Khandual wrote:
-> > 
-> > 
-> > On 11/18/22 19:43, Will Deacon wrote:
-> > > On Wed, Nov 16, 2022 at 08:40:01AM +0530, Anshuman Khandual wrote:
-> > >> Changing pfn on a user page table mapped entry, without first going through
-> > >> break-before-make (BBM) procedure is unsafe. This just updates set_pte_at()
-> > >> to intercept such changes, via an updated pgattr_change_is_safe(). This new
-> > >> check happens via __check_racy_pte_update(), which has now been renamed as
-> > >> __check_safe_pte_update().
-> > >>
-> > >> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > >> Cc: Will Deacon <will@kernel.org>
-> > >> Cc: Mark Rutland <mark.rutland@arm.com> 
-> > >> Cc: Andrew Morton <akpm@linux-foundation.org> 
-> > >> Cc: linux-arm-kernel@lists.infradead.org
-> > >> Cc: linux-kernel@vger.kernel.org
-> > >> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> > >> ---
-> > >> This applies on v6.1-rc4
-> > >>
-> > >>  arch/arm64/include/asm/pgtable.h | 8 ++++++--
-> > >>  arch/arm64/mm/mmu.c              | 8 +++++++-
-> > >>  2 files changed, 13 insertions(+), 3 deletions(-)
-> > > 
-> > > I remember Mark saying that BBM is sometimes violated by the core code in
-> > > cases where the pte isn't actually part of a live pgtable (e.g. if it's on
-> > > the stack or part of a newly allocated table). Won't that cause false
-> > > positives here?
-> > 
-> > Could you please elaborate ? If the pte is not on a live page table, then
-> > pte_valid() will return negative on such entries. So any update there will
-> > be safe. I am wondering, how this change will cause false positives which
-> > would not have been possible earlier.
-> 
-> I don't think pte_valid() will always return false for these entries.
-> Consider, for example, ptes which are valid but which live in a table that
-> is not reachable by the MMU. I think this is what Mark had in mind, but it
-> would be helpful if he could chime in with the specific example he ran into.
+Mark the label property as deprecated as it is mentioned
+in the description.
 
-Yup -- that was the case I had in mind. IIRC I hit that in the past when trying
-to do something similar, but I can't recall exactly where that was. I suspect
-that was probably to do with page migration or huge page splitting/merging.
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+---
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: kernel@dh-electronics.com
+Cc: linux-leds@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+To: linux-kernel@vger.kernel.org
+---
+ Documentation/devicetree/bindings/leds/common.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Looking around, at least __split_huge_zero_page_pmd() and
-__split_huge_pmd_locked() do something like that, creating a temporary pmd
-entry on the stack, populating a table of non-live but valid ptes, then
-plumbing it into the real pmd.
+diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
+index f5c57a580078..c1ce846f7676 100644
+--- a/Documentation/devicetree/bindings/leds/common.yaml
++++ b/Documentation/devicetree/bindings/leds/common.yaml
+@@ -52,6 +52,7 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   label:
++    deprecated: true
+     description:
+       The label for this LED. If omitted, the label is taken from the node name
+       (excluding the unit address). It has to uniquely identify a device, i.e.
+-- 
+2.11.0
 
-We'd need to check that there aren't other cases like that.
-
-Thanks,
-Mark.
