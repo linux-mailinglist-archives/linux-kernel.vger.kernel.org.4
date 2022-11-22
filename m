@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDFF633F1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C8B633F1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbiKVOkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
+        id S232654AbiKVOkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiKVOj5 (ORCPT
+        with ESMTP id S232628AbiKVOkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:39:57 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696D62B1AD
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:39:56 -0800 (PST)
-Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 41CCD6602A9F;
-        Tue, 22 Nov 2022 14:39:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669127994;
-        bh=1st3ieDQkiQof93MDMgMLlXqhvQ5AE2T3/Zoqzl8ov8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kU5Urq/M4qqcdMaCl2c0kq/ou+3e6P7PabNaY8VO/7TPsRvQ8TCfLJGhleL2bfKE5
-         +B/3w6m44bKrYIDchckcf5fidaGJnAqzhq/LJ3dQtAZGWO5uA/UK6Z3JXLNW/Cxge9
-         KbkI9KORE/oT+bWmZtbh1CRtWLIinkqcAsc7EwL41ElnSk46NJzB46IOyXd+QArvCr
-         pyQZtQUbpxotQB7TgD97Ij7Iti1qVGIdjQnC9CdX5/8foWYA8emEBGfpleiNUSewNt
-         lM3wIzVsNLX5UxXZphC3a2HkGj4L9M55pdoMQ26KDP6LRfz3mjZ6xcuJ7aeioZfcZL
-         C7Q3E4HSeCCnw==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     kernel@collabora.com, "Nancy . Lin" <nancy.lin@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, CK Hu <ck.hu@mediatek.com>,
-        Daniel Kurtz <djkurtz@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Mao Huang <littlecvr@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        YT Shen <yt.shen@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v2] drm/mediatek: Clean dangling pointer on bind error path
-Date:   Tue, 22 Nov 2022 09:39:49 -0500
-Message-Id: <20221122143949.3493104-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 22 Nov 2022 09:40:03 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18866AEF4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:40:01 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id 8so10359240qka.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:40:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=timesys-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R+FOvmh9any63aYhENKhboGoqz/opZ018HM9vaw+jdI=;
+        b=cpTx+k/SZXpl9JQ2gcxIrpXW8vRmNKQ3ZfQF/zjqBRjejrDZk+eH6Y3IkhLYrVAkpb
+         SHiDixdnTwKmjW12p5FyxM+z/xRAta0CNLoNxpdU6IipeatwOwU8am4A/OShMysWb8Iw
+         HV4MwxzB+xnXUiYKDaysvIT5gIg7frHQCYq9xGay7YVkidK5Vk2GBXw3/T3Q9qSKzJ+/
+         +HomYovzAaPOdymfZpoNJfQAjoCDPE+WB+VbvJwJXw1FNwG/ML6fCr9zmUHAOvc/5KBT
+         OrySSgTIb3yWchkiIuqlcNvMsX7KVdQrG1s9rINuuMAJUQKmroLdv6HA9fbh4xdu37c2
+         kWaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+FOvmh9any63aYhENKhboGoqz/opZ018HM9vaw+jdI=;
+        b=SUFSHf65xPN/2aX00OkZALEQvM7pbB6VaZd0rxWo86AVFd9VwNypU26ZCsoEi8Yylg
+         oxKK24SUDxshoCF6iM+psTDKouhiBvMmQexzMI3019GzAwDSnCAVkRRrYrlYHUqhbSmB
+         fAKwjkeCGkkj8U7dMg/8M12C4rDIhMRjiBREzUO8//S/L+XUAVoq/4iNRoM3+lgA2SdM
+         Sm6MQ8zrQaUkyDu2D5Hs5IEyD9tP1k8jq32HdCCCJTdZwWAPsEVKcGi0/Bwy/WevrGqd
+         BQiLaU6JXMDtiMyqF8gepvBHcWXCkAdqB9xFC5FdXTtoe6oLLev7VM/qlQTgyR2DK2nE
+         irGw==
+X-Gm-Message-State: ANoB5plvJJb33sjDSxhNNv2TjSX3qOv9v7Yd9lwEZUGzOMu3zupVgirm
+        q1RyWEg1YfBGbMGl9IB9xRO/CPmK2cQuie+e
+X-Google-Smtp-Source: AA0mqf5iDK5qbBVOILYXOAk81ayd7By/mJ/oBweezU2BtZ/l2P/MxStHda36kiQGXr0l8u9mNfY65Q==
+X-Received: by 2002:a37:8203:0:b0:6fa:3b1b:9c80 with SMTP id e3-20020a378203000000b006fa3b1b9c80mr20815276qkd.722.1669128000841;
+        Tue, 22 Nov 2022 06:40:00 -0800 (PST)
+Received: from [192.168.1.187] (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
+        by smtp.gmail.com with ESMTPSA id y10-20020a05620a25ca00b006f9f714cb6asm10162084qko.50.2022.11.22.06.40.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 06:40:00 -0800 (PST)
+Message-ID: <5c736870-9333-f7a0-5197-98c187a7e5f5@timesys.com>
+Date:   Tue, 22 Nov 2022 09:39:59 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] spi: cadence-quadspi: Properly pass buswidth through to
+ underlying SPI subsystem via buswidth_override_bits instead of mode_bits.
+Content-Language: en-US
+Cc:     "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221122133551.91536-1-nathan.morrison@timesys.com>
+From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+In-Reply-To: <20221122133551.91536-1-nathan.morrison@timesys.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,MISSING_HEADERS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mtk_drm_bind() can fail, in which case drm_dev_put() is called,
-destroying the drm_device object. However a pointer to it was still
-being held in the private object, and that pointer would be passed along
-to DRM in mtk_drm_sys_prepare() if a suspend were triggered at that
-point, resulting in a panic. Clean the pointer when destroying the
-object in the error path to prevent this from happening.
+Please disregard.  This isn't quite right.  I'll resubmit a better patch
 
-Fixes: 119f5173628a ("drm/mediatek: Add DRM Driver for Mediatek SoC MT8173.")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
----
-
-Changes in v2:
-- Added Fixes tag
-
- drivers/gpu/drm/mediatek/mtk_drm_drv.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 39a42dc8fb85..a21ff1b3258c 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -514,6 +514,7 @@ static int mtk_drm_bind(struct device *dev)
- err_deinit:
- 	mtk_drm_kms_deinit(drm);
- err_free:
-+	private->drm = NULL;
- 	drm_dev_put(drm);
- 	return ret;
- }
--- 
-2.38.1
-
+On 11/22/22 08:35, Nathan Barrett-Morrison wrote:
+> While trying to enable Octal SPI mode, it was observed that
+> SPI_RX_OCTAL/SPI_TX_OCTAL were not propagating into the spi_device
+> spi->mode setting.  This was causing the SPI device to always
+> operate in 1x mode instead of the desired 8x mode.
+> 
+> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+> ---
+>  drivers/spi/spi-cadence-quadspi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> index 447230547945..c92a95bdaa05 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -1589,7 +1589,7 @@ static int cqspi_probe(struct platform_device *pdev)
+>  		dev_err(&pdev->dev, "spi_alloc_master failed\n");
+>  		return -ENOMEM;
+>  	}
+> -	master->mode_bits = SPI_RX_QUAD | SPI_RX_DUAL;
+> +	master->buswidth_override_bits = SPI_RX_QUAD | SPI_RX_DUAL;
+>  	master->mem_ops = &cqspi_mem_ops;
+>  	master->mem_caps = &cqspi_mem_caps;
+>  	master->dev.of_node = pdev->dev.of_node;
+> @@ -1686,7 +1686,7 @@ static int cqspi_probe(struct platform_device *pdev)
+>  			cqspi->wr_delay = 50 * DIV_ROUND_UP(NSEC_PER_SEC,
+>  						cqspi->master_ref_clk_hz);
+>  		if (ddata->hwcaps_mask & CQSPI_SUPPORTS_OCTAL)
+> -			master->mode_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
+> +			master->buswidth_override_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
+>  		if (!(ddata->quirks & CQSPI_DISABLE_DAC_MODE))
+>  			cqspi->use_direct_mode = true;
+>  		if (ddata->quirks & CQSPI_SUPPORT_EXTERNAL_DMA)
