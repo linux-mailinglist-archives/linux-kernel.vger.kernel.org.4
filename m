@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FF16335FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575A96335FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbiKVHkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
+        id S232526AbiKVHku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbiKVHkX (ORCPT
+        with ESMTP id S232449AbiKVHkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:40:23 -0500
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18282F02B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:39:30 -0800 (PST)
+        Tue, 22 Nov 2022 02:40:33 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEFB2CDD3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:39:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1669102769;
+        s=selector; t=1669102773;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XtiwGqXBFxhLlETvxktwt1UqNvSglqTHBPfqfwhsYIM=;
-        b=UcP263p6N2TG1BS4XSgvYyUErTmv6YA8VCzKnX4jKwyY49R+zQ/dYeYllwvYObWST3djcb
-        XfbT/2DS0pje3R7oCXETGoaeVtF+2/TL5PI34Ay/oUdAQEMuT1g8Wlxu3/pDkoKAEGw6Be
-        cLFSYPK5vFyVIVNgF02U8NCgIhrKvvu8ttMJHfGaAa8ZeBeFAz8kB2EGeobdm6KrCF5OP5
-        RkAB/2GiBQJND7+XVPsmvm8l2f3b8PKpqazkPmBIx9iyp69gelEG1bYfK3GBQzZdHZ/NsK
-        ccK3XWglzWqjszV23xHAu34VodndVs/7QGBHlCdMoeZu3RbSvGlQxjp9zlZN3g==
+        bh=NIxTZz2RzC+iXQFQE7e0/V45lRrJ5i50zwbfXYW5JwA=;
+        b=IsAIDmzitw9T3PISuGOEoATYC3ZrvJpZODtdTKZGxIfvrOdnlYUFCdM16dkGaunED5w3en
+        SSSRzs06a9l5EUWY4UxMoaj5rzLb9eaD4+hm/FVyiZJZwzG7WW1+dNATRuwhhcNSSfrR8P
+        IcActC+tGHr2tax5KZXVAVhqA0EqPBgP4L0Q6zJXwCyLAIZFpV/iEednRp/c+UF+I9T1nX
+        BPdfSpRjLQAgE64ndYM6LCtlKGjDwa/kcOaWHuzZ8Be83vXYJhkQ/uT3ZvjNoOQqpJL+wN
+        fZMKZS6BdEXKJfS+JGmSiFyf5QHa/dz5ZUXqWfvtBsJyrnipbU4Lx9AB3fZuHg==
 Received: from mail.maxlinear.com (174-47-1-84.static.ctl.one [174.47.1.84])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-403-ZD30hwUhOOCueD0AViRi6g-1; Tue, 22 Nov 2022 02:39:27 -0500
-X-MC-Unique: ZD30hwUhOOCueD0AViRi6g-1
+ us-mta-648-F9bOVu-HOg-Z6mcJPGgXxg-1; Tue, 22 Nov 2022 02:39:30 -0500
+X-MC-Unique: F9bOVu-HOg-Z6mcJPGgXxg-1
 Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
  mail.maxlinear.com (10.23.38.119) with Microsoft SMTP Server id 15.1.2375.24;
- Mon, 21 Nov 2022 23:39:23 -0800
+ Mon, 21 Nov 2022 23:39:26 -0800
 From:   Rahul Tanwar <rtanwar@maxlinear.com>
 To:     <bigeasy@linutronix.de>, <robh@kernel.org>, <tglx@linutronix.de>,
         <mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>,
@@ -42,9 +42,9 @@ To:     <bigeasy@linutronix.de>, <robh@kernel.org>, <tglx@linutronix.de>,
 CC:     <andriy.shevchenko@linux.intel.com>, <dave.hansen@linux.intel.com>,
         <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
         Rahul Tanwar <rtanwar@maxlinear.com>
-Subject: [PATCH v3 3/4] x86/of: Replace printk(KERN_LVL) with pr_lvl()
-Date:   Tue, 22 Nov 2022 15:39:09 +0800
-Message-ID: <64a905649accf1b68f03c31a9b6ce205b03c6703.1669100394.git.rtanwar@maxlinear.com>
+Subject: [PATCH v3 4/4] x86/of: Add support for boot time interrupt delivery mode configuration
+Date:   Tue, 22 Nov 2022 15:39:10 +0800
+Message-ID: <c62b81d5b91514e905d97e37feff6920f598e0ac.1669100394.git.rtanwar@maxlinear.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1669100394.git.rtanwar@maxlinear.com>
 References: <cover.1669100394.git.rtanwar@maxlinear.com>
@@ -62,39 +62,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use latest available pr_lvl() instead of older printk(KERN_LVL)
-Just a upgrade of print utilities usage no functional changes.
+Presently, init/boot time interrupt delivery mode is enumerated
+only for ACPI enabled systems by parsing MADT table or for older
+systems by parsing MP table. But for OF based x86 systems, it is
+assumed & hardcoded to legacy PIC mode. This is a bug for
+platforms which are OF based but do not use 8259 compliant legacy
+PIC interrupt controller. Such platforms can not even boot because
+of this bug/hardcoding.
 
+Fix this bug by adding support for configuration of init time
+interrupt delivery mode for x86 OF based systems by introducing a
+new optional boolean property 'intel,virtual-wire-mode' for
+interrupt-controller node of local APIC. This property emulates
+IMCRP Bit 7 of MP feature info byte 2 of MP floating pointer
+structure.
+
+Defaults to legacy PIC mode if absent. Configures it to virtual
+wire compatibility mode if present.
+
+Fixes: 3879a6f32948 ("x86: dtb: Add early parsing of IO_APIC")
 Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
 ---
- arch/x86/kernel/devicetree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/devicetree.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index 5cd51f25f446..fcc6f1b7818f 100644
+index fcc6f1b7818f..458e43490414 100644
 --- a/arch/x86/kernel/devicetree.c
 +++ b/arch/x86/kernel/devicetree.c
-@@ -248,7 +248,7 @@ static void __init dtb_add_ioapic(struct device_node *d=
-n)
-=20
- =09ret =3D of_address_to_resource(dn, 0, &r);
- =09if (ret) {
--=09=09printk(KERN_ERR "Can't obtain address from device node %pOF.\n", dn)=
-;
-+=09=09pr_err("Can't obtain address from device node %pOF.\n", dn);
- =09=09return;
+@@ -167,7 +167,14 @@ static void __init dtb_lapic_setup(void)
+ =09=09=09return;
  =09}
- =09mp_register_ioapic(++ioapic_id, r.start, gsi_top, &cfg);
-@@ -265,7 +265,7 @@ static void __init dtb_ioapic_setup(void)
- =09=09of_ioapic =3D 1;
- =09=09return;
- =09}
--=09printk(KERN_ERR "Error: No information about IO-APIC in OF.\n");
-+=09pr_err("Error: No information about IO-APIC in OF.\n");
+ =09smp_found_config =3D 1;
+-=09pic_mode =3D 1;
++=09if (of_property_read_bool(dn, "intel,virtual-wire-mode")) {
++=09=09pr_info("Virtual Wire compatibility mode.\n");
++=09=09pic_mode =3D 0;
++=09} else {
++=09=09pr_info("IMCR and PIC compatibility mode.\n");
++=09=09pic_mode =3D 1;
++=09}
++
+ =09register_lapic_address(lapic_addr);
  }
- #else
- static void __init dtb_ioapic_setup(void) {}
+=20
 --=20
 2.17.1
 
