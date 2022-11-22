@@ -2,135 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3C0633830
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3472A633834
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbiKVJSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S233283AbiKVJTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:19:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiKVJSP (ORCPT
+        with ESMTP id S233040AbiKVJTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:18:15 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C2E43AEA;
-        Tue, 22 Nov 2022 01:18:13 -0800 (PST)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGdvW4mv2zRpTQ;
-        Tue, 22 Nov 2022 17:17:43 +0800 (CST)
-Received: from [10.174.179.215] (10.174.179.215) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 17:18:11 +0800
-Subject: Re: [PATCH -next] Bluetooth: Fix Kconfig warning for BT_HIDP
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <jkosina@suse.cz>, <gregkh@linuxfoundation.org>,
-        <linux-bluetooth@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221122034246.24408-1-yuehaibing@huawei.com>
- <29fb52c0-155b-470e-10d5-5e3b2451272d@molgen.mpg.de>
- <CAO-hwJKraiox13k=ukXOhSNt9sTc6Q0KpGR5=AHDknZeR6omwA@mail.gmail.com>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <ee09680a-899c-96c8-778d-0af04d6d59ee@huawei.com>
-Date:   Tue, 22 Nov 2022 17:18:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Tue, 22 Nov 2022 04:19:15 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66B1949B60
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:19:07 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowAAHDpYBlHxjrWbEAA--.49387S2;
+        Tue, 22 Nov 2022 17:18:58 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     maximlevitsky@gmail.com, oakad@yahoo.com, ulf.hansson@linaro.org,
+        christophe.jaillet@wanadoo.fr, axboe@kernel.dk, hare@suse.de
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] memstick/ms_block: Add check for alloc_ordered_workqueue
+Date:   Tue, 22 Nov 2022 17:18:56 +0800
+Message-Id: <20221122091856.47606-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAO-hwJKraiox13k=ukXOhSNt9sTc6Q0KpGR5=AHDknZeR6omwA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowAAHDpYBlHxjrWbEAA--.49387S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw1UZFykAryxWr4kXFyxXwb_yoWfurXEkr
+        yxZF48tFW0k3W8AryUAryruF9ayw40gryFqayrtwsxJrW7CF15Zr1jv345ur18uFWUCry3
+        Ca4DX34rZw1UKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbwAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
+        wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUq38nUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As the alloc_ordered_workqueue may return NULL pointer,
+it should be better to add check for the return
+value.
 
-On 2022/11/22 17:06, Benjamin Tissoires wrote:
-> Hi,
-> 
-> On Tue, Nov 22, 2022 at 9:37 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->>
->> Dear YueHaibing,
->>
->>
->> Thank you for your patch.
->>
->>
->> Am 22.11.22 um 04:42 schrieb YueHaibing:
->>
->> Maybe use the more specific summary below:
->>
->> Bluetooth: Add HID_SUPPORT dependency for BT_HIDP
->>
->>> commit 25621bcc8976 add HID_SUPPORT, and HID depends on it now.
->>
->> add*s*
->>
->> or
->>
->> Commit 25621bcc8976 ("HID: Kconfig: split HID support and hid-core
->> compilation") introduces the new Kconfig symbol HID_SUPPORT …
->>
->>
->> Kind regards,
->>
->> Paul
->>
->>
->>> Add HID_SUPPORT dependency for BT_HIDP to fix the warning:
->>>
->>> WARNING: unmet direct dependencies detected for HID
->>>    Depends on [n]: HID_SUPPORT [=n]
->>>    Selected by [m]:
->>>    - BT_HIDP [=m] && NET [=y] && BT_BREDR [=y] && INPUT [=m]
->>>
->>> Fixes: 25621bcc8976 ("HID: Kconfig: split HID support and hid-core compilation")
->>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->>> ---
-> 
-> 
-> FWIW, a fix is already in -next:
-> https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?h=for-6.2/hid-bpf&id=6cc90ccd4f6cfed98e2a3a378debc69f28d57473
+Fixes: 0ab30494bc4f ("memstick: add support for legacy memorysticks")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/memstick/core/ms_block.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-OK, thanks for your info.
+diff --git a/drivers/memstick/core/ms_block.c b/drivers/memstick/core/ms_block.c
+index ba8414519515..ccfdb3dea30a 100644
+--- a/drivers/memstick/core/ms_block.c
++++ b/drivers/memstick/core/ms_block.c
+@@ -2116,6 +2116,9 @@ static int msb_init_disk(struct memstick_dev *card)
+ 	dbg("Set total disk size to %lu sectors", capacity);
+ 
+ 	msb->io_queue = alloc_ordered_workqueue("ms_block", WQ_MEM_RECLAIM);
++	if (!msb->io_queue)
++		goto out_cleanup_disk;
++
+ 	INIT_WORK(&msb->io_work, msb_io_work);
+ 	sg_init_table(msb->prealloc_sg, MS_BLOCK_MAX_SEGS+1);
+ 
+-- 
+2.25.1
 
-> 
->  But thanks for the patch nonetheless!
-> 
-> Cheers,
-> Benjamin
-> 
->>
->>>   net/bluetooth/hidp/Kconfig | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/net/bluetooth/hidp/Kconfig b/net/bluetooth/hidp/Kconfig
->>> index 14100f341f33..6746be07e222 100644
->>> --- a/net/bluetooth/hidp/Kconfig
->>> +++ b/net/bluetooth/hidp/Kconfig
->>> @@ -1,7 +1,7 @@
->>>   # SPDX-License-Identifier: GPL-2.0-only
->>>   config BT_HIDP
->>>       tristate "HIDP protocol support"
->>> -     depends on BT_BREDR && INPUT
->>> +     depends on BT_BREDR && INPUT && HID_SUPPORT
->>>       select HID
->>>       help
->>>         HIDP (Human Interface Device Protocol) is a transport layer
->>
-> 
-> .
-> 
