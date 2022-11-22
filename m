@@ -2,165 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3C5633793
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFE6633796
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbiKVIzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        id S232911AbiKVIz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiKVIzB (ORCPT
+        with ESMTP id S232361AbiKVIzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:55:01 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD4229C88
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:55:00 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id l190so13778597vsc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:55:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RrMdEjR9PuoPL1f65E/LRwRLMAkjVdgbOUDXvYazWFU=;
-        b=LJUev07An3NNdKCBOFHeCbJiP7pQToVmFdX9LB4Y1C6wc0FAcbAqzHDSAAMsF3URy9
-         YhBB3AVtqS0aHcIZnnJBYjIXYONPd3RTYlFBlGuchc0G3nMARFPHTbkYbz8hj3x4xBv9
-         nSCWtaLx7n4vqDZz6HM0Lk1iTzqPeogGvuAaH37I4QU61eGbszg2Ocesn17EBXVIDAPT
-         DwXXlv/QBwj6dUGYxxT3nqWSRsxH6ThLTQrNPcjjftxCaplJTb3rIcdureubEebwAQDh
-         JqlKPC8ZCTC9Q+2joEkLCUGGjNLHfdgnLqjzEdi458BRfpmpDP2e8C8AafnmCbpEvfYq
-         G06g==
+        Tue, 22 Nov 2022 03:55:24 -0500
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DD2193F1;
+        Tue, 22 Nov 2022 00:55:24 -0800 (PST)
+Received: by mail-qt1-f181.google.com with SMTP id s4so8860017qtx.6;
+        Tue, 22 Nov 2022 00:55:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RrMdEjR9PuoPL1f65E/LRwRLMAkjVdgbOUDXvYazWFU=;
-        b=z4Yu22qfQgqohnVnuyj0zkyWj5OO97LoeGy4BpJ7N4W2NSdrUDJCyRV5kze+kJMlCs
-         ZU0n44ZYu51Dx94ygRupH2fLC+IEuQYOHLmQSX352W3UcJgef0doGDIYWazQIYrkIQcK
-         yzLZh1CPT1yiw9L2EtuZxsgOmpSA29AGChtSOfO7vhAPkdKeALFblf4GgA6/shBxyCie
-         b06HbA6ttFKXQUKYJNQcVj9P5VTjWQaPklpQ3lIDnUt7xKrwxj+9jxwhONoGRk1gTDMI
-         YIEmY0Um6KTpSLY8LpOcBREZCXuh7qr4ZEsoHBdDOnYHcOSlwCeaFuL84B3Xos1VHgdc
-         Grhg==
-X-Gm-Message-State: ANoB5pnhqpS0nbxd2yBBOeoKkdeiLH1RjmqmPE5YT09GOHSptITMKMAO
-        uVJJHxx5f02Qo8YZBxaxIi3S8ZtAm9rEmjy1hFXvXw==
-X-Google-Smtp-Source: AA0mqf6hG1QbTutyVtAH0K149RQVtMPeyYn++70pRRD8lY/OdujrS+TCmK2O6oLBwWyJZ5xkVEJn5RhRcYfK1KV5tdU=
-X-Received: by 2002:a67:fc83:0:b0:3b0:5e50:44ff with SMTP id
- x3-20020a67fc83000000b003b05e5044ffmr1485975vsp.4.1669107299311; Tue, 22 Nov
- 2022 00:54:59 -0800 (PST)
+        bh=P7qk9S0cPIQ0L5zgnqXV8Oc65l49/AfnuuGAj/cKJTk=;
+        b=XM4pgryGinKaUIuRWHujuOGyGex/kjQfJrimqTpuOdTdknmVrSV2IEQhzIXkZ6uwQg
+         /mrRsuXyI9BErkOJ5ucN38tJ4oFISnSbXgpbpYV02/ZAjLea+IfPVIa2uGp7Irj2vio9
+         3bWadttIVkgesveJLUjb229/XLkNrd4Aq7X84EU1LBSheHY88ThCYss4oBmO75v/gEna
+         RN4bxkevduaeGln+Nw1Btj4+50PTXWDdrHl+9P2AW6LuNd/VOrWjpcmF/Q884dvmdMzL
+         lCxjk3UNFTuBwPXlOrPhN+XH+A63W+ibV1Al4qESDmDR2cT06oqXqTnzjD83TE4yrEjp
+         4g+A==
+X-Gm-Message-State: ANoB5pmAAX4Ymkegi22IfUcVb1tOl42KrvpmXiK9Bchpn1RCHncY5OfD
+        ybTWhttCit4AKjb3bR4tkW78EQdiRkP+Hg==
+X-Google-Smtp-Source: AA0mqf7uEyhL6SZ4wQqqSS9FgyZTnHN6MilujgP5+sAe7rzs8HcJBKMdPNWem73Tv4Fg7UOV0gjQPQ==
+X-Received: by 2002:a05:622a:4890:b0:3a5:84b9:3292 with SMTP id fc16-20020a05622a489000b003a584b93292mr20723848qtb.119.1669107323118;
+        Tue, 22 Nov 2022 00:55:23 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id x12-20020ae9e90c000000b006b5cc25535fsm9366502qkf.99.2022.11.22.00.55.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 00:55:22 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-398cff43344so88100087b3.0;
+        Tue, 22 Nov 2022 00:55:21 -0800 (PST)
+X-Received: by 2002:a0d:fec2:0:b0:36b:56d3:71b8 with SMTP id
+ o185-20020a0dfec2000000b0036b56d371b8mr20585246ywf.384.1669107321620; Tue, 22
+ Nov 2022 00:55:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20221121133303.1782246-1-alexghiti@rivosinc.com> <Y3yMp6R1swSq06WR@wendy>
-In-Reply-To: <Y3yMp6R1swSq06WR@wendy>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Tue, 22 Nov 2022 09:54:48 +0100
-Message-ID: <CAHVXubgk2zTGNjtcJP_CvopT36T4cX36W1a8NqDT7=8Wh6L=NA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Sync efi page table's kernel mappings before switching
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-efi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Atish Kumar Patra <atishp@rivosinc.com>
+References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com>
+ <20221117122547.809644-3-tomi.valkeinen@ideasonboard.com> <CAMuHMdWUvLzCtFRXvUpCxczpkpaunb==gjBMwdniXY4UBVuMUw@mail.gmail.com>
+ <f5df3cb8-d315-b06b-aa04-f0b4af64a1c2@ideasonboard.com>
+In-Reply-To: <f5df3cb8-d315-b06b-aa04-f0b4af64a1c2@ideasonboard.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 22 Nov 2022 09:55:10 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWsvcd3_CX_dESW3EO4FoSGcMWAAyKO_5g2ch-jezdzzQ@mail.gmail.com>
+Message-ID: <CAMuHMdWsvcd3_CX_dESW3EO4FoSGcMWAAyKO_5g2ch-jezdzzQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/8] dt-bindings: display: bridge: renesas,dsi-csi2-tx:
+ Add r8a779g0
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hi Tomi,
 
-On Tue, Nov 22, 2022 at 9:48 AM Conor Dooley <conor.dooley@microchip.com> wrote:
+On Tue, Nov 22, 2022 at 9:20 AM Tomi Valkeinen
+<tomi.valkeinen@ideasonboard.com> wrote:
+> On 17/11/2022 17:14, Geert Uytterhoeven wrote:
+> > On Thu, Nov 17, 2022 at 1:26 PM Tomi Valkeinen
+> > <tomi.valkeinen@ideasonboard.com> wrote:
+> >> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> >>
+> >> Extend the Renesas DSI display bindings to support the r8a779g0 V4H.
+> >>
+> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> >> ---
+> >>   .../bindings/display/bridge/renesas,dsi-csi2-tx.yaml           | 3 ++-
+> >>   1 file changed, 2 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml b/Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml
+> >> index afeeb967393d..bc3101f77e5a 100644
+> >> --- a/Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml
+> >> +++ b/Documentation/devicetree/bindings/display/bridge/renesas,dsi-csi2-tx.yaml
+> >> @@ -11,13 +11,14 @@ maintainers:
+> >>
+> >>   description: |
+> >>     This binding describes the MIPI DSI/CSI-2 encoder embedded in the Renesas
+> >> -  R-Car V3U SoC. The encoder can operate in either DSI or CSI-2 mode, with up
+> >> +  R-Car V3U/V4H SoC. The encoder can operate in either DSI or CSI-2 mode, with up
+> >
+> > Perhaps "R-Car Gen4 SoCs", so we stay within 80 chars, and don't have
+> > to update this when the next member of the family is around the block?
 >
-> On Mon, Nov 21, 2022 at 02:33:03PM +0100, Alexandre Ghiti wrote:
-> > The EFI page table is initially created as a copy of the kernel page table.
-> > With VMAP_STACK enabled, kernel stacks are allocated in the vmalloc area:
-> > if the stack is allocated in a new PGD (one that was not present at the
-> > moment of the efi page table creation or not synced in a previous vmalloc
-> > fault), the kernel will take a trap when switching to the efi page table
-> > when the vmalloc kernel stack is accessed, resulting in a kernel panic.
-> >
-> > Fix that by updating the efi kernel mappings before switching to the efi
-> > page table.
-> >
-> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Is V3U gen 4? Or do you mean "R-Car V3U and Gen 4 SoCs"?
+
+Despite the name, R-Car V3U is the first member of the R-Car Gen4 family...
+https://www.renesas.com/us/en/products/automotive-products/automotive-system-chips-socs/r-car-v3u-best-class-r-car-v3u-asil-d-system-chip-automated-driving
+
+> > Is there anything that might be SoC-specific?
+> > If not, perhaps the time is ripe for a family-specific compatible value?
 >
-> Hey Alex,
-> What commit does this fix?
+> At least v3u and v4h DSIs are slightly different. Well, the DSI IP block
+> itself looks the same, but the PLL and PHY are different.
 
-You're right, I should have added this and +cc Atish:
+I noticed, when I saw the dsi-csi2 driver changes.
+So no family-specific compatible value is needed.
 
-Fixes: b91540d52a08 ("RISC-V: Add EFI runtime services")
+Gr{oetje,eeting}s,
 
-Thanks,
+                        Geert
 
-Alex
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
->
->
-> > ---
-> >  arch/riscv/include/asm/efi.h     |  6 +++++-
-> >  arch/riscv/include/asm/pgalloc.h | 11 ++++++++---
-> >  2 files changed, 13 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/riscv/include/asm/efi.h b/arch/riscv/include/asm/efi.h
-> > index f74879a8f1ea..e229d7be4b66 100644
-> > --- a/arch/riscv/include/asm/efi.h
-> > +++ b/arch/riscv/include/asm/efi.h
-> > @@ -10,6 +10,7 @@
-> >  #include <asm/mmu_context.h>
-> >  #include <asm/ptrace.h>
-> >  #include <asm/tlbflush.h>
-> > +#include <asm/pgalloc.h>
-> >
-> >  #ifdef CONFIG_EFI
-> >  extern void efi_init(void);
-> > @@ -20,7 +21,10 @@ extern void efi_init(void);
-> >  int efi_create_mapping(struct mm_struct *mm, efi_memory_desc_t *md);
-> >  int efi_set_mapping_permissions(struct mm_struct *mm, efi_memory_desc_t *md);
-> >
-> > -#define arch_efi_call_virt_setup()      efi_virtmap_load()
-> > +#define arch_efi_call_virt_setup()      ({           \
-> > +             sync_kernel_mappings(efi_mm.pgd);       \
-> > +             efi_virtmap_load();                     \
-> > +     })
-> >  #define arch_efi_call_virt_teardown()   efi_virtmap_unload()
-> >
-> >  #define ARCH_EFI_IRQ_FLAGS_MASK (SR_IE | SR_SPIE)
-> > diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
-> > index 947f23d7b6af..59dc12b5b7e8 100644
-> > --- a/arch/riscv/include/asm/pgalloc.h
-> > +++ b/arch/riscv/include/asm/pgalloc.h
-> > @@ -127,6 +127,13 @@ static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
-> >  #define __p4d_free_tlb(tlb, p4d, addr)  p4d_free((tlb)->mm, p4d)
-> >  #endif /* __PAGETABLE_PMD_FOLDED */
-> >
-> > +static inline void sync_kernel_mappings(pgd_t *pgd)
-> > +{
-> > +     memcpy(pgd + USER_PTRS_PER_PGD,
-> > +            init_mm.pgd + USER_PTRS_PER_PGD,
-> > +            (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
-> > +}
-> > +
-> >  static inline pgd_t *pgd_alloc(struct mm_struct *mm)
-> >  {
-> >       pgd_t *pgd;
-> > @@ -135,9 +142,7 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
-> >       if (likely(pgd != NULL)) {
-> >               memset(pgd, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
-> >               /* Copy kernel mappings */
-> > -             memcpy(pgd + USER_PTRS_PER_PGD,
-> > -                     init_mm.pgd + USER_PTRS_PER_PGD,
-> > -                     (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
-> > +             sync_kernel_mappings(pgd);
-> >       }
-> >       return pgd;
-> >  }
-> > --
-> > 2.37.2
-> >
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
