@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A2F6331F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8401C6331F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiKVBJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:09:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S232148AbiKVBKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbiKVBJR (ORCPT
+        with ESMTP id S232154AbiKVBJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:09:17 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEC2554EC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:08:14 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id me22so15793953ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:08:14 -0800 (PST)
+        Mon, 21 Nov 2022 20:09:18 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E1A25C62
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:08:15 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id bj12so32285111ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:08:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M8Z/CuSU+65/xoefFvoUYNSAqkT5w7zFjiS9CzpEsgo=;
-        b=khl3j/XE7m0EGnorZA5Q3DsiTbyoBwHi5GUL7KsN5WlbQ+h1lY66BGMbM+GhD9kaMz
-         u47U0zrTL0kvn7kfYNZRORwbSPyXy0piyY8zcGPxNckS1lhvn6VR8nu13RnVQQ0XbgmN
-         0KI3ZRrknYNP6Oh7kYy/xVEcCuU+e6yxPxPfz1P9vEm2T4Rn+GdfM6OOPnRXK6UTo8LN
-         SDHXV/U2xOlAaiu0s8kV6f0i6hk1zkL1yaJU4GlQFS61EyqKe7kZa+nux6/RbpzqoF7d
-         2y37q0+hcsMmpuWIk/qYoT/rFdaz1C3009x2XE7O/z6IaXZpW/GlAGBWwCjFFYvGP2ZR
-         mnUg==
+        bh=pVZ6+cmK/ek0Z/OEVG5B02bFoCV8UTRj8V3VuqIql3A=;
+        b=7PU/zr3G+t8KUIvLexsH+u2860yRH86YCPctKi6jVpZSG9hKr2LozoPqCT7fp1IExo
+         joSPMv6kkdUSMTdaZCnPHw3m8evHyxRsEDYj3/qxFmNd0A9KFH0rsN2PgyBuIih0iqUA
+         6we61TpVhNxM7+aQXSP5/RNgxtlvO0Qu245bz/cuQBYWKdR9VNIYV25I5bBBNq/xSrVc
+         BuYoER6H0JiFUAa815Nu9UiiQsIJ117Vr8396/HXMopJKy3S0DYWWrLtx5UBYNsFkU4R
+         oDdP2/YMozV/5nG3e0N8e61TqipuSN3ioLPxbu8JiQoHxqnvjgSFKwxlGIWoJO6dN5mj
+         xgAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M8Z/CuSU+65/xoefFvoUYNSAqkT5w7zFjiS9CzpEsgo=;
-        b=KH9i7Wo3DhxvV9qM9SjyV6qpWcm9IoUPlQXE/pful5OloTVU1gJnoCIARXVSt6fV5w
-         H2z/r1eEa+1JhPr6+8MN0zzl1UuE+4OpNK8wO3Z+7WBe/wnk+QjjnR9sETUMtnn2x1LD
-         dn0nNDmtauODawcXYZc/6hjdmdPlI8Lvdg/cA+16RZBGhlTu4SQ5/T806wXOz+Fql3vg
-         SCd+n83bll0+00ELzjp7nC/4kBa4IwPxtCiuA8pP9tSD2JD0gJYQh8JFlS84vmQ+cguZ
-         RSsPdJGK2m1tLmtY9PJkXLP9lDesdjsnLx8oQ+8v1KewOQny4ZVsUz+rAZc7vTd4Wn+2
-         aGdQ==
-X-Gm-Message-State: ANoB5pl9HYUIl+iE+AAxxcKwuZ91j8drCGUs1aOQAKNEUp82VbXkDCh7
-        oYFW4xKuYY6wemqc4J9qt6K+OA==
-X-Google-Smtp-Source: AA0mqf7Go5aHljXna58A3ki2BugYv1A9YAbDkmIxbJqzeq58ZihN3W52HFeTXtwAFk/yPKe8S3aGLQ==
-X-Received: by 2002:a17:906:1ecf:b0:7ad:902c:d1d6 with SMTP id m15-20020a1709061ecf00b007ad902cd1d6mr6197186ejj.143.1669079293135;
-        Mon, 21 Nov 2022 17:08:13 -0800 (PST)
+        bh=pVZ6+cmK/ek0Z/OEVG5B02bFoCV8UTRj8V3VuqIql3A=;
+        b=oV1xgUGAC+ee3SodKan3BIaE9knE3UY4RUEHh8tE0G+/vwt2kUCY3ekZ4Q0cnV57zp
+         aB+UfYjqhS2el6YafPvsGiEZv9bMpevKPzlCOg0FvD0QjdNU5Kzg8FTD9CZwzUrD5IFf
+         1Wz4C9uf/4tzaOx4r/ifQC7KhP8CemckI31m0A48t0OkEUddVdxq1R+SluePwsRzqmoT
+         WUX7AhBX/sOcWibDJEKZ6iDYMKEJsfIW+vbHzV1rXAN9mPLzWLW8VwefYMh/u/cHyMy2
+         QlwhJ1HqiVJySyhIgbz3OfdPHu3lLtjNXlWkrEftyNrwCit1Kn7tjExV5BvgvdxJbjkK
+         oIWQ==
+X-Gm-Message-State: ANoB5pniOtNSznZVCMjMJHWKA8Cx8Szeke8UFPDbTKTkchZCjVk1iKDR
+        /foRcnUO1rW5UvpV3bIgwuhEkQ==
+X-Google-Smtp-Source: AA0mqf6Rscbb2Xk+Iw5+n43aJADKV4pLrXNsz2Omd130tyO43/THJlxoYpPQi8bWlXolQfLcDJw0kg==
+X-Received: by 2002:a17:906:5055:b0:78d:cdce:bc52 with SMTP id e21-20020a170906505500b0078dcdcebc52mr1581398ejk.469.1669079294070;
+        Mon, 21 Nov 2022 17:08:14 -0800 (PST)
 Received: from c64.fritz.box ([2a01:2a8:8108:8301:7643:bec8:f62b:b074])
-        by smtp.gmail.com with ESMTPSA id f13-20020a1709064dcd00b007030c97ae62sm5514683ejw.191.2022.11.21.17.08.12
+        by smtp.gmail.com with ESMTPSA id f13-20020a1709064dcd00b007030c97ae62sm5514683ejw.191.2022.11.21.17.08.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 17:08:12 -0800 (PST)
+        Mon, 21 Nov 2022 17:08:13 -0800 (PST)
 From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
 To:     devicetree@vger.kernel.org
 Cc:     linux-mediatek@lists.infradead.org,
@@ -58,9 +58,9 @@ Cc:     linux-mediatek@lists.infradead.org,
         mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
         krzysztof.kozlowski@linaro.org, matthias.bgg@gmail.com,
         angelogioacchino.delregno@collabora.com, khilman@baylibre.com
-Subject: [PATCH v2 6/7] ARM: dts: mediatek: Remove pins-are-numbered property
-Date:   Tue, 22 Nov 2022 02:07:52 +0100
-Message-Id: <20221122010753.3126828-7-bero@baylibre.com>
+Subject: [PATCH v2 7/7] ARM: dts: stm32: Remove the pins-are-numbered property
+Date:   Tue, 22 Nov 2022 02:07:53 +0100
+Message-Id: <20221122010753.3126828-8-bero@baylibre.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221122010753.3126828-1-bero@baylibre.com>
 References: <20221122010753.3126828-1-bero@baylibre.com>
@@ -76,54 +76,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the unnecessary pins-are-numbered property from
-Mediatek ARM DeviceTrees
+Remove the pins-are-numbered property from STM32 DeviceTrees
 
 Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Acked-by: Kevin Hilman <khilman@baylibre.com>
 ---
- arch/arm/boot/dts/mt2701.dtsi | 1 -
- arch/arm/boot/dts/mt7623.dtsi | 1 -
- arch/arm/boot/dts/mt8135.dtsi | 1 -
- 3 files changed, 3 deletions(-)
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi | 1 -
+ arch/arm/boot/dts/stm32f7-pinctrl.dtsi | 1 -
+ arch/arm/boot/dts/stm32h743.dtsi       | 1 -
+ arch/arm/boot/dts/stm32mp131.dtsi      | 1 -
+ arch/arm/boot/dts/stm32mp151.dtsi      | 2 --
+ 5 files changed, 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/mt2701.dtsi b/arch/arm/boot/dts/mt2701.dtsi
-index b8eba3ba153c2..0a0fe8c5a4059 100644
---- a/arch/arm/boot/dts/mt2701.dtsi
-+++ b/arch/arm/boot/dts/mt2701.dtsi
-@@ -178,7 +178,6 @@ pio: pinctrl@1000b000 {
- 		compatible = "mediatek,mt2701-pinctrl";
- 		reg = <0 0x1000b000 0 0x1000>;
- 		mediatek,pctl-regmap = <&syscfg_pctl_a>;
--		pins-are-numbered;
- 		gpio-controller;
- 		#gpio-cells = <2>;
- 		interrupt-controller;
-diff --git a/arch/arm/boot/dts/mt7623.dtsi b/arch/arm/boot/dts/mt7623.dtsi
-index 25d31e40a5535..11379c3e6b4ca 100644
---- a/arch/arm/boot/dts/mt7623.dtsi
-+++ b/arch/arm/boot/dts/mt7623.dtsi
-@@ -253,7 +253,6 @@ pio: pinctrl@10005000 {
- 		compatible = "mediatek,mt7623-pinctrl";
- 		reg = <0 0x1000b000 0 0x1000>;
- 		mediatek,pctl-regmap = <&syscfg_pctl_a>;
--		pins-are-numbered;
- 		gpio-controller;
- 		#gpio-cells = <2>;
- 		interrupt-controller;
-diff --git a/arch/arm/boot/dts/mt8135.dtsi b/arch/arm/boot/dts/mt8135.dtsi
-index a031b36363187..0f291ad22d3af 100644
---- a/arch/arm/boot/dts/mt8135.dtsi
-+++ b/arch/arm/boot/dts/mt8135.dtsi
-@@ -152,7 +152,6 @@ pio: pinctrl@10005000 {
- 			compatible = "mediatek,mt8135-pinctrl";
- 			reg = <0 0x1000b000 0 0x1000>;
- 			mediatek,pctl-regmap = <&syscfg_pctl_a &syscfg_pctl_b>;
+diff --git a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
+index 500bcc302d422..4523c63475e4c 100644
+--- a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
+@@ -51,7 +51,6 @@ pinctrl: pinctrl@40020000 {
+ 			ranges = <0 0x40020000 0x3000>;
+ 			interrupt-parent = <&exti>;
+ 			st,syscfg = <&syscfg 0x8>;
 -			pins-are-numbered;
- 			gpio-controller;
- 			#gpio-cells = <2>;
- 			interrupt-controller;
+ 
+ 			gpioa: gpio@40020000 {
+ 				gpio-controller;
+diff --git a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
+index 8f37aefa73150..c8e6c52fb248e 100644
+--- a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
+@@ -15,7 +15,6 @@ pinctrl: pinctrl@40020000 {
+ 			ranges = <0 0x40020000 0x3000>;
+ 			interrupt-parent = <&exti>;
+ 			st,syscfg = <&syscfg 0x8>;
+-			pins-are-numbered;
+ 
+ 			gpioa: gpio@40020000 {
+ 				gpio-controller;
+diff --git a/arch/arm/boot/dts/stm32h743.dtsi b/arch/arm/boot/dts/stm32h743.dtsi
+index 28e3deb20e1e1..f30796f7adf36 100644
+--- a/arch/arm/boot/dts/stm32h743.dtsi
++++ b/arch/arm/boot/dts/stm32h743.dtsi
+@@ -588,7 +588,6 @@ pinctrl: pinctrl@58020000 {
+ 			ranges = <0 0x58020000 0x3000>;
+ 			interrupt-parent = <&exti>;
+ 			st,syscfg = <&syscfg 0x8>;
+-			pins-are-numbered;
+ 
+ 			gpioa: gpio@58020000 {
+ 				gpio-controller;
+diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+index 2a9b3a5bba830..adaee0f9e1263 100644
+--- a/arch/arm/boot/dts/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/stm32mp131.dtsi
+@@ -549,7 +549,6 @@ pinctrl: pinctrl@50002000 {
+ 			ranges = <0 0x50002000 0x8400>;
+ 			interrupt-parent = <&exti>;
+ 			st,syscfg = <&exti 0x60 0xff>;
+-			pins-are-numbered;
+ 
+ 			gpioa: gpio@50002000 {
+ 				gpio-controller;
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 5491b6c4dec20..4e437d3f2ed66 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -1660,7 +1660,6 @@ pinctrl: pinctrl@50002000 {
+ 			ranges = <0 0x50002000 0xa400>;
+ 			interrupt-parent = <&exti>;
+ 			st,syscfg = <&exti 0x60 0xff>;
+-			pins-are-numbered;
+ 
+ 			gpioa: gpio@50002000 {
+ 				gpio-controller;
+@@ -1789,7 +1788,6 @@ pinctrl_z: pinctrl@54004000 {
+ 			#size-cells = <1>;
+ 			compatible = "st,stm32mp157-z-pinctrl";
+ 			ranges = <0 0x54004000 0x400>;
+-			pins-are-numbered;
+ 			interrupt-parent = <&exti>;
+ 			st,syscfg = <&exti 0x60 0xff>;
+ 
 -- 
 2.38.1
 
