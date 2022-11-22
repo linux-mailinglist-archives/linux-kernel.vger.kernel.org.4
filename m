@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0123A6332C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F796332C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbiKVCK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 21:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S231747AbiKVCLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:11:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiKVCKz (ORCPT
+        with ESMTP id S229882AbiKVCLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:10:55 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8EDE223D;
-        Mon, 21 Nov 2022 18:10:53 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGSQJ1tBwzHwD6;
-        Tue, 22 Nov 2022 10:10:16 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 10:10:51 +0800
-Subject: Re: [PATCH] can: can327: fix potential skb leak when netdev is down
-To:     Max Staudt <max@enpas.org>
-CC:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-References: <20221110061437.411525-1-william.xuanziyang@huawei.com>
- <20221111010412.6ca0ff1c.max@enpas.org>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <cd51300f-34cc-3222-7bd9-ec349b9cd603@huawei.com>
-Date:   Tue, 22 Nov 2022 10:10:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Mon, 21 Nov 2022 21:11:31 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FEEE2B4F;
+        Mon, 21 Nov 2022 18:11:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=S5UQwhQ86B3Sk/yj+YA+vYGEBxKXXRDQ5dJk/qGX/I8=; b=bWjPQkvTLxBsmebw/tihw0Co9f
+        r7fMuNokzwFEwD2FFdcmraInf+ey5ldekR6juJOTwFopwInVwCvBCOVS7dFMftkbW13Tc7MaLQ9XC
+        K4dBYgsuFCZjdnhuQENexY47JwK4vsaSMcb3jffm+KRuVXSivOKFh8rqyOlHEcKqWDmjMfaS7eZv4
+        7DudSvHzIsQIA6sm9QNdG7qw4fBE1Z8CayLyQS6nGavLqdX92ox4zpxpwQG/MyhHt+s+lpBytrqkx
+        h+52XYCf77Yu8JvZ4mLsNQSlS1PuTixw7vBYxO7CMwUIirOAfwVrRrr2D4N2YPwht6nVmS/oFq6v7
+        pluGnCbQ==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxIkr-002M9O-Db; Tue, 22 Nov 2022 02:11:21 +0000
+Message-ID: <c9cf3c02-fb48-33bd-4a3b-987209c7c21d@infradead.org>
+Date:   Mon, 21 Nov 2022 18:11:20 -0800
 MIME-Version: 1.0
-In-Reply-To: <20221111010412.6ca0ff1c.max@enpas.org>
-Content-Type: text/plain; charset="gbk"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH -next] clk: Fix one kernel-doc comment
 Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, mturquette@baylibre.com
+Cc:     sboyd@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
+        samuel@sholland.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20221122011616.1530-1-yang.lee@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221122011616.1530-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi--
 
-Gently ask.
+On 11/21/22 17:16, Yang Li wrote:
+> drivers/clk/sunxi-ng/ccu_mmc_timing.c:54: warning: expecting prototype for sunxi_ccu_set_mmc_timing_mode(). Prototype was for sunxi_ccu_get_mmc_timing_mode() instead
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3230
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/clk/sunxi-ng/ccu_mmc_timing.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/sunxi-ng/ccu_mmc_timing.c b/drivers/clk/sunxi-ng/ccu_mmc_timing.c
+> index de33414fc5c2..c6a6ce98ca03 100644
+> --- a/drivers/clk/sunxi-ng/ccu_mmc_timing.c
+> +++ b/drivers/clk/sunxi-ng/ccu_mmc_timing.c
+> @@ -43,7 +43,7 @@ int sunxi_ccu_set_mmc_timing_mode(struct clk *clk, bool new_mode)
+>  EXPORT_SYMBOL_GPL(sunxi_ccu_set_mmc_timing_mode);
+>  
+>  /**
+> - * sunxi_ccu_set_mmc_timing_mode: Get the current MMC clock timing mode
+> + * sunxi_ccu_get_mmc_timing_mode: Get the current MMC clock timing mode
 
-Is there any other problem? And can it be applied?
+function name and description should be separated by a '-' instead of ':'.
 
-Thanks.
+>   * @clk: clock to query
+>   *
+>   * Returns 0 if the clock is in old timing mode, > 0 if it is in
 
-> (CC Vincent, he may be interested)
-> 
-> 
-> On Thu, 10 Nov 2022 14:14:37 +0800
-> Ziyang Xuan <william.xuanziyang@huawei.com> wrote:
-> 
->> Fix it by adding kfree_skb() in can327_feed_frame_to_netdev() when netdev
->> is down. Not tested, just compiled.
-> 
-> Looks correct to me, so:
-> 
-> Reviewed-by: Max Staudt <max@enpas.org>
-> 
-> 
-> Thank you very much for finding and fixing this!
-> 
-> Max
-> 
-> .
-> 
+-- 
+~Randy
