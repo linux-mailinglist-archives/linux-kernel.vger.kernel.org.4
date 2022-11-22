@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F29063374A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B109B63374D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbiKVIkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S232896AbiKVIkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:40:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbiKVIkS (ORCPT
+        with ESMTP id S232891AbiKVIkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:40:18 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D7F30F68;
-        Tue, 22 Nov 2022 00:40:17 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0A49E21F4C;
-        Tue, 22 Nov 2022 08:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669106416; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8BZ09nC+Ltb5ETuM0UVHvj1htjE600StTsDaDLvmw28=;
-        b=Ejw1DBowwlD1MjGWZTvlL9cwgiYFjIT1GODBe3YPf+UfBsmX6zfGtD9/YNB6PKhsQANtUP
-        Sl6oIxkVZMl8Osn6QTVBiIpJx0pVxG3AWBwnehh4sI23sYah90hsobVfqYd5sdDHDp08rS
-        mmGmTVnERp0vqFnoAEDw+SQZ84WYvCo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E0A8513B01;
-        Tue, 22 Nov 2022 08:40:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZRqONO+KfGP9IAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 22 Nov 2022 08:40:15 +0000
-Date:   Tue, 22 Nov 2022 09:40:15 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
- pidfd_set_mempolicy().
-Message-ID: <Y3yK78HMSVA/Q6CS@dhcp22.suse.cz>
-References: <a44f794e-fe60-e261-3631-9107822d5c36@bytedance.com>
- <Y3IqLzvduM6HqPJV@dhcp22.suse.cz>
- <3a3b4f5b-14d1-27d8-7727-cf23da90988f@bytedance.com>
- <Y3KFFfMFE55lVdNZ@dhcp22.suse.cz>
- <82c9c89c-aee2-08a3-e562-359631bb0137@bytedance.com>
- <0bd0b744-3d97-b4c3-a4fb-6040f8f8024a@bytedance.com>
- <Y3T6SqZvAmSG5I6W@dhcp22.suse.cz>
- <6433156f-34a8-400f-e282-91268b242279@bytedance.com>
- <Y3uNWbPmwHtytKzY@dhcp22.suse.cz>
- <ff3e9255-028a-7174-3608-2d9c362bdaf7@bytedance.com>
+        Tue, 22 Nov 2022 03:40:47 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A88D3134D;
+        Tue, 22 Nov 2022 00:40:44 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DDB3C24E32C;
+        Tue, 22 Nov 2022 16:40:37 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 16:40:37 +0800
+Received: from [192.168.125.106] (113.72.144.23) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 16:40:37 +0800
+Message-ID: <a5193e23-efe1-fa65-15de-d53b80b87d63@starfivetech.com>
+Date:   Tue, 22 Nov 2022 16:40:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff3e9255-028a-7174-3608-2d9c362bdaf7@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 4/8] dt-bindings: sifive,ccache0: Support StarFive
+ JH7110 SoC
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-5-hal.feng@starfivetech.com> <Y3duiJguYE6VrVLP@spud>
+ <Y3dvCPP1g0LzzHFO@spud>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <Y3dvCPP1g0LzzHFO@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.23]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 22-11-22 16:33:09, Zhongkun He wrote:
-> Hi Michal, thanks for your replay and suggestions.
-> 
+On Fri, 18 Nov 2022 19:39:52 +0800, Conor Dooley wrote:
+> On Fri, Nov 18, 2022 at 11:37:50AM +0000, Conor Dooley wrote:
+> > On Fri, Nov 18, 2022 at 09:17:10AM +0800, Hal Feng wrote:
+> > > From: Emil Renner Berthing <kernel@esmil.dk>
+> > > 
+> > > This cache controller is also used on the StarFive JH7110 SoC.
 > > 
-> > Yes the memory consumption is going to increase but the question is
-> > whether this is something that is a real problem. Is it really common to
-> > have many vmas with a dedicated policy?
+> > "... and configured identically to that of the FU740"?
+> > Anyways,
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Yes, it does not a realy problem.
-> 
-> > 
-> > What I am arguing here is that there are essentially 2 ways forward.
-> > Either we continue to build up on top of the existing and arguably very
-> > fragile code and make it even more subtle or follow a general pattern of
-> > a proper reference counting (with usual tricks to reduce cache line
-> > bouncing and similar issues). I do not really see why memory policies
-> > should be any different and require very special treatment.
-> > 
-> 
-> I got it. It is rather subtle and easy to get wrong if we push forward
-> with the existing way and it is a good opportunity to get from the
-> existing subtle model. I will try that on next version.
+> Actually, after looking at the next patch - why can you not fall back to
+> the fu740 one since you appear to have the same configuration as it?
 
-Thanks for being receptive to the review feedback!
--- 
-Michal Hocko
-SUSE Labs
+Right, I will drop this patch and use "sifive,fu740-c000-ccache" as
+compatible in dts.
+
+Best regards,
+Hal
