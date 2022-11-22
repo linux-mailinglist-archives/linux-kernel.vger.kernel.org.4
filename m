@@ -2,116 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F02634246
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD353634248
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbiKVROK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 12:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S234376AbiKVRO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 12:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234453AbiKVROI (ORCPT
+        with ESMTP id S232889AbiKVROz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 12:14:08 -0500
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63AF6E577;
-        Tue, 22 Nov 2022 09:14:07 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 8A7FA100DCEC0;
-        Tue, 22 Nov 2022 18:14:06 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 6BAF4A236D; Tue, 22 Nov 2022 18:14:06 +0100 (CET)
-Date:   Tue, 22 Nov 2022 18:14:06 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'ira.weiny@intel.com'" <ira.weiny@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Gregory Price <gregory.price@memverge.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH V2] PCI/DOE: Detect on stack work items automatically
-Message-ID: <20221122171406.GC11310@wunner.de>
-References: <20221118000524.1477383-1-ira.weiny@intel.com>
- <e59f83f3ca4149d098efe43b48fecd1b@AcuMS.aculab.com>
- <20221122171309.GA11310@wunner.de>
+        Tue, 22 Nov 2022 12:14:55 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBE9729B6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:14:54 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3a3961f8659so59114007b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:14:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Trw6pRag45zh7xbBzKuk9eUIAumLjV1FB/I5WWUMeXc=;
+        b=AJOsT7QLtuXDOuqy8Nd0IGY7ZchJBpJoPvWh9Vj61PSLn6YqfZr843CbYEjqCXumYy
+         dLBBDwqSL0uccXO8vUb4PtIE2gttVA6O8zx5TTZ9r5LikYoQkKw1la+JO08szC3HK4Yy
+         yFdEUjvlTsyRoNvmp5qFe8kHanUkkAh70rHNjqUaAxmzWHD+89FucUS22ae6nfITrfr6
+         txyfXpjPfdRBwebcTlBBIFyVRQX5VyCw18U9e5nb45jhFYFgljqjpSQHAi6JtUDKlHSJ
+         zU+gIisrqVQ9gVvfPpgdRcwB9vQ9W54orXzvWCm+XK1pw3HC+Qy4GDzWfY9RMX3V2sxg
+         0+5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Trw6pRag45zh7xbBzKuk9eUIAumLjV1FB/I5WWUMeXc=;
+        b=8Bc26jl2uqcX+5euKs+IvH1TifqkvOcxDIn6iAVHZILKfkIhagL1mg0Yy08iU7CA8T
+         NERvk6J/8Jx+ZM54vZDLckbfR/dQc5uO0YLPU0tyRQtfxtxhywIGYtG6E1vuxkPYkI63
+         CwQDdu1QCKFEK6rD5qkihVthVOZ8nQtZARtZ0k4yuiEFsDN6vxZIByNSHXLmsyGhMHCd
+         C3jNyP8cWD26IqYFaPr8XO6qZovpdyx0FqozBFgHDs7A3bwTPCbs4RQfPMfGTPC2uXN2
+         g/cARxDgQ7ELZGtDBMJNL9JKnO44fRImIWjhROiazh8rRrbIOgGVzy2d0LstihT6vdMk
+         Y24w==
+X-Gm-Message-State: ANoB5pmP5p8l8eT2MY0EkP+Mx3CpEMzYHJRxd2+/p7iQhOIjM5k6zfQF
+        bnOWVfp2Rv4sUG01Ggm4qmwS/cnGR/FkLuNyZTA5pA==
+X-Google-Smtp-Source: AA0mqf6oO1oQ43wqxjCiE8z46ZjJMYHiF0pORLs1DGtEER+w3Lkn9AfI1AOxTLN0CLxS1gKZ3D/+ojACQvYkZgRs7vs=
+X-Received: by 2002:a0d:dc05:0:b0:36a:bc93:587c with SMTP id
+ f5-20020a0ddc05000000b0036abc93587cmr23162179ywe.59.1669137293721; Tue, 22
+ Nov 2022 09:14:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122171309.GA11310@wunner.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
+ <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
+In-Reply-To: <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 22 Nov 2022 09:14:42 -0800
+Message-ID: <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
+        davidgow@google.com, skhan@linuxfoundation.org,
+        mauro.chehab@linux.intel.com, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        isabbasso@riseup.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now with Thomas added to cc for real.
+On Tue, Nov 22, 2022 at 1:17 AM Anders Roxell <anders.roxell@linaro.org> wr=
+ote:
+>
+> On Mon, 21 Nov 2022 at 19:48, Rae Moar <rmoar@google.com> wrote:
+> >
+> > Change KUnit test output to better comply with KTAP v1 specifications
+> > found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
+> > 1) Use "KTAP version 1" instead of "TAP version 14" as test output head=
+er
+> > 2) Remove '-' between test number and test name on test result lines
+> > 2) Add KTAP version lines to each subtest header as well
+> >
+> > Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=
+=80=9D line now
+> > located after the KTAP version line. This does not completely match the
+> > KTAP v1 spec but since it is classified as a diagnostic line, it is not
+> > expected to be disruptive or break any existing parsers. This
+> > =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
+> > (https://testanything.org/tap-version-14-specification.html)
+> > and it is used to define the test name before the results.
+> >
+> > Original output:
+> >
+> >  TAP version 14
+> >  1..1
+> >    # Subtest: kunit-test-suite
+> >    1..3
+> >    ok 1 - kunit_test_1
+> >    ok 2 - kunit_test_2
+> >    ok 3 - kunit_test_3
+> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+> >  # Totals: pass:3 fail:0 skip:0 total:3
+> >  ok 1 - kunit-test-suite
+> >
+> > New output:
+> >
+> >  KTAP version 1
+> >  1..1
+> >    KTAP version 1
+> >    # Subtest: kunit-test-suite
+> >    1..3
+> >    ok 1 kunit_test_1
+> >    ok 2 kunit_test_2
+> >    ok 3 kunit_test_3
+> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+> >  # Totals: pass:3 fail:0 skip:0 total:3
+> >  ok 1 kunit-test-suite
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> > Reviewed-by: David Gow <davidgow@google.com>
+>
+> I tried this patch, see the full boot log [1] and I can still see some
+>  tests that output the "old" format with 'ok 1 - kunit_test_1', for examp=
+le
+>
+> ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+>
+> Isn't this something that should be converted too?
 
-On Tue, Nov 22, 2022 at 06:13:09PM +0100, Lukas Wunner wrote:
-> [+cc Thomas Gleixner, author of dc186ad741c1]
-> 
-> On Fri, Nov 18, 2022 at 09:20:38AM +0000, David Laight wrote:
-> > > From: ira.weiny@intel.com
-> > > Sent: 18 November 2022 00:05
-> > > 
-> > > Work item initialization needs to be done with either
-> > > INIT_WORK_ONSTACK() or INIT_WORK() depending on how the work item is
-> > > allocated.
-> > > 
-> > > The callers of pci_doe_submit_task() allocate struct pci_doe_task on the
-> > > stack and pci_doe_submit_task() incorrectly used INIT_WORK().
-> > > 
-> > > Jonathan suggested creating doe task allocation macros such as
-> > > DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this is the work
-> > > function is not known to the callers and must be initialized correctly.
-> > > 
-> > > A follow up suggestion was to have an internal 'pci_doe_work' item
-> > > allocated by pci_doe_submit_task().[2]  This requires an allocation which
-> > > could restrict the context where tasks are used.
-> > > 
-> > > Another idea was to have an intermediate step to initialize the task
-> > > struct with a new call.[3]  This added a lot of complexity.
-> > > 
-> > > Lukas pointed out that object_is_on_stack() is available to detect this
-> > > automatically.
-> > > 
-> > > Use object_is_on_stack() to determine the correct init work function to
-> > > call.
-> > 
-> > This is all a bit strange.
-> > The 'onstack' flag is needed for the diagnostic check:
-> > 	is_on_stack = object_is_on_stack(addr);
-> > 	if (is_on_stack == onstack)
-> > 		return;
-> > 	pr_warn(...);
-> > 	WARN_ON(1);
-> > 
-> > So setting the flag to the location of the buffer just subverts the check.
-> > It that is sane there ought to be a proper way to do it.
-> 
-> If object_is_on_stack() is sufficient to check whether a struct
-> is on the stack or not, why doesn't __init_work() use it to
-> auto-detect whether to call debug_object_init_on_stack() or
-> debug_object_init()?
-> 
-> Forcing developers to use a specific initializer for something
-> that can be auto-detected is akin to treating them like kids
-> and telling them "You didn't say the magic word."
-> 
-> What's the point?
-> 
-> Thanks,
-> 
-> Lukas
+Yes, thanks for catching that.
+That's what I get from only looking over the diff this time since I
+thought I remembered the code...
+
+We also want this diff to fix a) debugfs, b) subtests.
+
+diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+index 1048ef1b8d6e..de0ee2e03ed6 100644
+--- a/lib/kunit/debugfs.c
++++ b/lib/kunit/debugfs.c
+@@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file
+*seq, void *v)
+        kunit_suite_for_each_test_case(suite, test_case)
+                debugfs_print_result(seq, suite, test_case);
+
+-       seq_printf(seq, "%s %d - %s\n",
++       seq_printf(seq, "%s %d %s\n",
+                   kunit_status_to_ok_not_ok(success), 1, suite->name);
+        return 0;
+ }
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 19344cb501c5..c9d57a1d9524 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -556,7 +556,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+
+                                kunit_log(KERN_INFO, &test,
+                                          KUNIT_SUBTEST_INDENT
+KUNIT_SUBTEST_INDENT
+-                                         "%s %d - %s",
++                                         "%s %d %s",
+
+kunit_status_to_ok_not_ok(test.status),
+                                          test.param_index + 1, param_desc)=
+;
+
+Daniel
