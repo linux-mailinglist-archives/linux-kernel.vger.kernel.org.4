@@ -2,174 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC56F6336C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D496336BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiKVIMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S232333AbiKVIML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiKVIMg (ORCPT
+        with ESMTP id S232697AbiKVIL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:12:36 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D00DEE0;
-        Tue, 22 Nov 2022 00:12:31 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NGcJL3Bkwz9v7Gp;
-        Tue, 22 Nov 2022 16:05:38 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnGPVLhHxj44iEAA--.29174S2;
-        Tue, 22 Nov 2022 09:12:07 +0100 (CET)
-Message-ID: <aa51b845dca6021282b5b2ae260020a3a5cfb5c6.camel@huaweicloud.com>
-Subject: Re: [PATCH v4 1/5] reiserfs: Add missing calls to
- reiserfs_security_free()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Date:   Tue, 22 Nov 2022 09:11:50 +0100
-In-Reply-To: <CAHC9VhQ9WftDrF1R--ZYJXOv-YbVU-Pr1Ob_deDwEWm8OcQ-TA@mail.gmail.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
-         <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
-         <CAHC9VhQ9WftDrF1R--ZYJXOv-YbVU-Pr1Ob_deDwEWm8OcQ-TA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 22 Nov 2022 03:11:59 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9F83F07D;
+        Tue, 22 Nov 2022 00:11:57 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso13039651pjt.0;
+        Tue, 22 Nov 2022 00:11:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=btLM7ioiVORnm3lEYHf5T5x/aS6QHwdNoAQEJBXdHAc=;
+        b=M1jLnNubYt0SrwfSW9i33n6YX1ESpn28PZnSjooKh5wdJp0U3GRDiUEoEkEBFtfJDP
+         4dkjfxA1VTmYtoudabd51wBXPWcEaawZxcMTcUZJwZ46wusGDqOZcK3qn4UjMWbLxRui
+         n4byirPUyNnplpDep6IBcqP49UpD/GA09QeuUn6PeUF/6yiNOzcyo83YUX6QuvdrFEbH
+         HxDGK+TPhvn4EniN8wO+Zg3s4Jc0cO82Ha/s8kAorlDgzCKxWkhUQHq8j2FB5Y9GU9mV
+         Cwgjbffjc4fUeAwn6XVyKeJnwcmIO3SUzpKl4jq8MT0Fd5lWQHDSDe6nyjFt8fFXbneW
+         7O+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=btLM7ioiVORnm3lEYHf5T5x/aS6QHwdNoAQEJBXdHAc=;
+        b=P0Br42GokGvwuo4qbpP0wlQJUzQlGxkqEcr5Df0qx87cq7mYw70ts+m5zemQ4zowSs
+         QfEtpwW4TqxkY4AO9wiN/MCtNIjL5rE2YWcsalvyYEf88ZuZVGZxuWwLJiN1+SeuqJsJ
+         QtXu4cF3m+/+Z6AveS5X+CmHK8Ny+ckvtTso2/cmu57EYQ7/PMO/WJf8Pq86N2CMnkzW
+         +5woP0e77OQCidM4NmJc2fQKtJLaxc1hqQMkEgD9bYxdhLnkAbBL3LwvGF/RzotS61Ek
+         SPU1Ltk1zrD76zVdC7DD01XAvjzzhZHutytim8QnrhtKu810xTPAYZrOuKuAmY2WWCPO
+         Q1BA==
+X-Gm-Message-State: ANoB5pnHMv6qhex1ozm9BB0QQMuNkYqpQk9zLXmQsictp04d9XGrvZn5
+        ZaR0dg/qOjPgFsFREzTBzHE=
+X-Google-Smtp-Source: AA0mqf4rUn0XDlqrmJJBd6NyKaOBpE5iWvUY5T498CL9cJwO2dSokFPls/EDnGAcTn7P77yiHWPvfg==
+X-Received: by 2002:a17:902:ef44:b0:185:40ca:68b8 with SMTP id e4-20020a170902ef4400b0018540ca68b8mr4368853plx.16.1669104717383;
+        Tue, 22 Nov 2022 00:11:57 -0800 (PST)
+Received: from [192.168.43.80] (subs03-180-214-233-4.three.co.id. [180.214.233.4])
+        by smtp.gmail.com with ESMTPSA id e7-20020aa798c7000000b0056bee23a80bsm9994602pfm.137.2022.11.22.00.11.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 00:11:57 -0800 (PST)
+Message-ID: <492af720-43ad-15d6-f21c-b94eea5442b5@gmail.com>
+Date:   Tue, 22 Nov 2022 15:11:53 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] PCI/MSI: api: Use bullet lists in kernel-doc comments
+Content-Language: en-US
+To:     "Ahmed S. Darwish" <darwi@linutronix.de>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-doc@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20221121184100.0974cc35@canb.auug.org.au>
+ <20221121101245.23544-1-bagasdotme@gmail.com> <Y3t83uo/TZzxc1nL@lx-t490>
+ <Y3xFV2IkUlRWPdCd@debian.me> <Y3xkj/3G4JxgXlal@lx-t490>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <Y3xkj/3G4JxgXlal@lx-t490>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDnGPVLhHxj44iEAA--.29174S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw48Zr1xAF4kJFW5GFW8Crg_yoW5KF1fpF
-        WxK3WUKr1DJF1kur1Fvanxua1Iq3yag3y7GrsxKryqya9xZw1kKF4Ikay3u397KrWDGr4I
-        qa1xGw43uw45J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4GyWwAAsb
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-11-21 at 18:41 -0500, Paul Moore wrote:
-> On Thu, Nov 10, 2022 at 4:47 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
-> > during inode creation") defined reiserfs_security_free() to free the name
-> > and value of a security xattr allocated by the active LSM through
-> > security_old_inode_init_security(). However, this function is not called
-> > in the reiserfs code.
-> > 
-> > Thus, add a call to reiserfs_security_free() whenever
-> > reiserfs_security_init() is called, and initialize value to NULL, to avoid
-> > to call kfree() on an uninitialized pointer.
-> > 
-> > Finally, remove the kfree() for the xattr name, as it is not allocated
-> > anymore.
-> > 
-> > Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
-> > Cc: stable@vger.kernel.org
-> > Cc: Jeff Mahoney <jeffm@suse.com>
-> > Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> > Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  fs/reiserfs/namei.c          | 4 ++++
-> >  fs/reiserfs/xattr_security.c | 2 +-
-> >  2 files changed, 5 insertions(+), 1 deletion(-)
+On 11/22/22 12:56, Ahmed S. Darwish wrote:
+> On Tue, Nov 22, 2022 at 10:43:19AM +0700, Bagas Sanjaya wrote:
+>>
+>> For the list above, no, since if the alignment is kept, like:
+>>
 > 
-> If I'm understanding this patch correctly, this is a standalone
-> bugfix, right?  Any reason this shouldn't be merged now, independent
-> of the rest of patches in this patchset?
-
-Yes. It would be fine for me to pick this sooner.
-
-Thanks
-
-Roberto
-
-> > diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-> > index 3d7a35d6a18b..b916859992ec 100644
-> > --- a/fs/reiserfs/namei.c
-> > +++ b/fs/reiserfs/namei.c
-> > @@ -696,6 +696,7 @@ static int reiserfs_create(struct user_namespace *mnt_userns, struct inode *dir,
-> > 
-> >  out_failed:
-> >         reiserfs_write_unlock(dir->i_sb);
-> > +       reiserfs_security_free(&security);
-> >         return retval;
-> >  }
-> > 
-> > @@ -779,6 +780,7 @@ static int reiserfs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
-> > 
-> >  out_failed:
-> >         reiserfs_write_unlock(dir->i_sb);
-> > +       reiserfs_security_free(&security);
-> >         return retval;
-> >  }
-> > 
-> > @@ -878,6 +880,7 @@ static int reiserfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
-> >         retval = journal_end(&th);
-> >  out_failed:
-> >         reiserfs_write_unlock(dir->i_sb);
-> > +       reiserfs_security_free(&security);
-> >         return retval;
-> >  }
-> > 
-> > @@ -1194,6 +1197,7 @@ static int reiserfs_symlink(struct user_namespace *mnt_userns,
-> >         retval = journal_end(&th);
-> >  out_failed:
-> >         reiserfs_write_unlock(parent_dir->i_sb);
-> > +       reiserfs_security_free(&security);
-> >         return retval;
-> >  }
-> > 
-> > diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
-> > index 8965c8e5e172..857a65b05726 100644
-> > --- a/fs/reiserfs/xattr_security.c
-> > +++ b/fs/reiserfs/xattr_security.c
-> > @@ -50,6 +50,7 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
-> >         int error;
-> > 
-> >         sec->name = NULL;
-> > +       sec->value = NULL;
-> > 
-> >         /* Don't add selinux attributes on xattrs - they'll never get used */
-> >         if (IS_PRIVATE(dir))
-> > @@ -95,7 +96,6 @@ int reiserfs_security_write(struct reiserfs_transaction_handle *th,
-> > 
-> >  void reiserfs_security_free(struct reiserfs_security_handle *sec)
-> >  {
-> > -       kfree(sec->name);
-> >         kfree(sec->value);
-> >         sec->name = NULL;
-> >         sec->value = NULL;
-> > --
-> > 2.25.1
-> > 
+> NAK.
 > 
+> Below patch works properly on my side, no Sphinx errors and proper HTML
+> view, while still keeping proper-alignment in the C code.
 > 
+> Sorry, you're too focusing on the HTML side.
+> 
+> Making the C code readable, not just the HTML output, is quite
+> important.
+> 
+> =>
+> 
+> From: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+> Use bullet-list RST syntax for kernel-doc parameters' flags and
+> interrupt mode descriptions. Otherwise Sphinx produces "Unexpected
+> identation" errors and warnings.
+> 
+> Link: https://lore.kernel.org/r/20221121101245.23544-1-bagasdotme@gmail.com
+> Fixes: 5c0997dc33ac24 ("PCI/MSI: Move pci_alloc_irq_vectors() to api.c")
+> Fixes: 017239c8db2093 ("PCI/MSI: Move pci_irq_vector() to api.c")
+> Fixes: be37b8428b7b77 ("PCI/MSI: Move pci_irq_get_affinity() to api.c")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> [darwi@linutronix.de: Match subject-line with other subystem commits]
+> [darwi@linutronix.de: Remove verbose Sphinx log from commit log]
+> [darwi@linutronix.de: For C kernel-doc comments legibility, keep
+>  the flags and interrupt mode descriptions aligned.]
+> Acked-by: Ahmed S. Darwish <darwi@linutronix.de>
+> ---
+> 
+>  drivers/pci/msi/api.c | 33 +++++++++++++++++++--------------
+>  1 file changed, 19 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/pci/msi/api.c b/drivers/pci/msi/api.c
+> index dfcaa77108de..6c0c0f3ad3b8 100644
+> --- a/drivers/pci/msi/api.c
+> +++ b/drivers/pci/msi/api.c
+> @@ -209,12 +209,15 @@ EXPORT_SYMBOL(pci_disable_msix);
+>   * @min_vecs: minimum required number of vectors (must be >= 1)
+>   * @max_vecs: maximum desired number of vectors
+>   * @flags:    One or more of:
+> - *            %PCI_IRQ_MSIX      Allow trying MSI-X vector allocations
+> - *            %PCI_IRQ_MSI       Allow trying MSI vector allocations
+> - *            %PCI_IRQ_LEGACY    Allow trying legacy INTx interrupts, if
+> - *                               and only if @min_vecs == 1
+> - *            %PCI_IRQ_AFFINITY  Auto-manage IRQs affinity by spreading
+> - *                               the vectors around available CPUs
+> + *
+> + *            * %PCI_IRQ_MSIX      Allow trying MSI-X vector allocations
+> + *            * %PCI_IRQ_MSI       Allow trying MSI vector allocations
+> + *
+> + *            * %PCI_IRQ_LEGACY    Allow trying legacy INTx interrupts, if
+> + *              and only if @min_vecs == 1
+> + *
+> + *            * %PCI_IRQ_AFFINITY  Auto-manage IRQs affinity by spreading
+> + *              the vectors around available CPUs
+>   *
+>   * Allocate up to @max_vecs interrupt vectors on device. MSI-X irq
+>   * vector allocation has a higher precedence over plain MSI, which has a
+> @@ -299,10 +302,11 @@ EXPORT_SYMBOL(pci_alloc_irq_vectors_affinity);
+>   * pci_irq_vector() - Get Linux IRQ number of a device interrupt vector
+>   * @dev: the PCI device to operate on
+>   * @nr:  device-relative interrupt vector index (0-based); has different
+> - *       meanings, depending on interrupt mode
+> - *         MSI-X        the index in the MSI-X vector table
+> - *         MSI          the index of the enabled MSI vectors
+> - *         INTx         must be 0
+> + *       meanings, depending on interrupt mode:
+> + *
+> + *         * MSI-X     the index in the MSI-X vector table
+> + *         * MSI       the index of the enabled MSI vectors
+> + *         * INTx      must be 0
+>   *
+>   * Return: the Linux IRQ number, or -EINVAL if @nr is out of range
+>   */
+> @@ -322,10 +326,11 @@ EXPORT_SYMBOL(pci_irq_vector);
+>   * pci_irq_get_affinity() - Get a device interrupt vector affinity
+>   * @dev: the PCI device to operate on
+>   * @nr:  device-relative interrupt vector index (0-based); has different
+> - *       meanings, depending on interrupt mode
+> - *         MSI-X        the index in the MSI-X vector table
+> - *         MSI          the index of the enabled MSI vectors
+> - *         INTx         must be 0
+> + *       meanings, depending on interrupt mode:
+> + *
+> + *         * MSI-X     the index in the MSI-X vector table
+> + *         * MSI       the index of the enabled MSI vectors
+> + *         * INTx      must be 0
+>   *
+>   * Return: MSI/MSI-X vector affinity, NULL if @nr is out of range or if
+>   * the MSI(-X) vector was allocated without explicit affinity
+
+Personally I'd like to write the entries as:
+
+  * term - definition
+
+But anyway, your suggestion patch LGTM. Thanks!
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+-- 
+An old man doll... just what I always wanted! - Clara
 
