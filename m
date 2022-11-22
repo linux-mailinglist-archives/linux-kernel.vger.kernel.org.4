@@ -2,194 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D611E633898
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62C56338A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiKVJeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S232593AbiKVJhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbiKVJeP (ORCPT
+        with ESMTP id S232156AbiKVJhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:34:15 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92C6644C;
-        Tue, 22 Nov 2022 01:34:14 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AM8d916028851;
-        Tue, 22 Nov 2022 09:34:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=waIgJpgjNqSFfMmI93mxxF++m/jo6IpqkSlWNClHgSI=;
- b=J5AwhQNsQb2eid9FLXbarvCI7GIrmGZVFvU1tm6IHAGMYdHTIxBRjLH7SrfyWf2lvBi4
- V/N4Wula+o25rreYd+AKYmaBzKVBHcTT7UnaQK7S20DG6IA2IwoR83n9t65zhIkaez7n
- BHe9QKynsxh9NTZI/3TKA1QTfVIJzHVOvM7URNkfic+TL2j0VgH1uxU1+OAVi+Yw/nQ+
- XDnG00DZM6avfhCoDSqVjSpr9qm0YEQdP9MgqoaX4Kd7DTq1ubmDQ5AZjQ0QolhWQBPP
- Oe20NfXNWCbIFK8nVX8h+Mc6quao+WF7dlW54WMP0eYHdRJj0oTgkQ3P/BfOe+FTqhMf rA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0rhdcwem-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 09:34:09 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AM7mVF9009259;
-        Tue, 22 Nov 2022 09:34:09 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0rhdcwdt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 09:34:08 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AM9LU7R031077;
-        Tue, 22 Nov 2022 09:34:07 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3kxps92vuj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 09:34:06 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AM9Y3tq6423140
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Nov 2022 09:34:03 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7BE30A4059;
-        Tue, 22 Nov 2022 09:34:03 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C97D3A4051;
-        Tue, 22 Nov 2022 09:34:02 +0000 (GMT)
-Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.44.213])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 22 Nov 2022 09:34:02 +0000 (GMT)
-Message-ID: <71d10db8151c3b78d84a252a688e2892448eaa95.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 5/9] KVM: s390: selftest: memop: Move testlist into
- main
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Thomas Huth <thuth@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Date:   Tue, 22 Nov 2022 10:34:02 +0100
-In-Reply-To: <c801611e-61db-73d2-2ff1-cd06350215b2@redhat.com>
-References: <20221117221758.66326-1-scgl@linux.ibm.com>
-         <20221117221758.66326-6-scgl@linux.ibm.com>
-         <c801611e-61db-73d2-2ff1-cd06350215b2@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 22 Nov 2022 04:37:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F05A4A055;
+        Tue, 22 Nov 2022 01:37:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDAD3615D7;
+        Tue, 22 Nov 2022 09:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68428C433D6;
+        Tue, 22 Nov 2022 09:36:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669109821;
+        bh=7wpu88Q6B2Kkm7KKjQcA0/8wvOjYoaetfEppOc8/LrQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tBY2vKikg0x96nQXt+AZQCh4q2OfzV+uadi3H6VV6L3w+cJ59JhcNem7fCPrHkIcN
+         E8JP1Y58itlhsaVm+Kq/CKnkSXLu263e4xIoFUlMaqKQh1/QO8RcbsGYjdjdtCwh0R
+         5OFrI5sKkBOQlC3X9n+nBLpT9LNQyG71hf9Bp1/BmPP3k3BPyslhYlTvmeaqUQE5AN
+         vG2RXMynurkwvAYVPn4hJwUPjELYfPXpxRSd14Ft6URqjU3hd+EN47CIIb5eWReXQk
+         0oa2UIVkMOcTUKDXxQMCQstO/5rMhb28sqTUy6o643p6EdsyPkLGx+LDBMTuYjVlzo
+         1vcd54Ioazxwg==
+Date:   Tue, 22 Nov 2022 11:36:39 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
+Message-ID: <Y3yYJzz2o95fyMnf@kernel.org>
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+ <20221104223604.29615-36-rick.p.edgecombe@intel.com>
+ <Y3Olme4Nl+VOkjAH@hirez.programming.kicks-ass.net>
+ <223bf306716f5eb68e4f9fd660414c84cddd9886.camel@intel.com>
+ <CY4PR11MB2005AD47BA1D97BC1A96A769F9069@CY4PR11MB2005.namprd11.prod.outlook.com>
+ <a2c2552fcdba1a0fce0d02aeb519d33cac83bfd2.camel@intel.com>
+ <Y3srU89TAwMURoEj@kernel.org>
+ <dcbf087fb8082be8ff9be14c440a0efaee95cf93.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TE8dwqfOiCUvqpW2CEZMTngHlClnv3fj
-X-Proofpoint-GUID: ZUply-oT0HlAwhb8_mCmPxmc8BeHrB4S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-22_04,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 priorityscore=1501
- mlxlogscore=999 clxscore=1015 adultscore=0 phishscore=0 spamscore=0
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211220070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dcbf087fb8082be8ff9be14c440a0efaee95cf93.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-22 at 08:52 +0100, Thomas Huth wrote:
-> On 17/11/2022 23.17, Janis Schoetterl-Glausch wrote:
-> > This allows checking if the necessary requirements for a test case are
-> > met via an arbitrary expression. In particular, it is easy to check if
-> > certain bits are set in the memop extension capability.
+On Mon, Nov 21, 2022 at 03:52:57PM +0000, Edgecombe, Rick P wrote:
+> On Mon, 2022-11-21 at 09:40 +0200, Mike Rapoport wrote:
+> > On Thu, Nov 17, 2022 at 07:57:59PM +0000, Edgecombe, Rick P wrote:
+> > > On Thu, 2022-11-17 at 12:25 +0000, Schimpe, Christina wrote:
+> > > > > Hmm, we definitely need to be able to set the SSP. Christina,
+> > > > > does
+> > > > > GDB need
+> > > > > anything else? I thought maybe toggling SHSTK_EN?
+> > > > 
+> > > > In addition to the SSP, we want to write the CET state. For
+> > > > instance
+> > > > for inferior calls,
+> > > > we want to reset the IBT bits.
+> > > > However, we won't write states that are disallowed by HW.
+> > > 
+> > > Sorry, I should have given more background. Peter is saying we
+> > > should
+> > > split the ptrace interface so that shadow stack and IBT are
+> > > separate. 
+> > > They would also no longer necessarily mirror the CET_U MSR format.
+> > > Instead the kernel would expose a kernel specific format that has
+> > > the
+> > > needed bits of shadow stack support. And a separate one later for
+> > > IBT.
+> > > 
+> > > So the question is what does shadow stack need to support for
+> > > ptrace
+> > > besides SSP? Is it only SSP? The other features are SHSTK_EN and
+> > > WRSS_EN. It might actually be nice to keep how these bits get
+> > > flipped
+> > > more controlled (remove them from ptrace). It looks like CRIU
+> > > didn't
+> > > need them.
 > > 
-> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> > ---
-> >   tools/testing/selftests/kvm/s390x/memop.c | 132 +++++++++++-----------
-> >   1 file changed, 66 insertions(+), 66 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> > index 286185a59238..10f34c629cac 100644
-> > --- a/tools/testing/selftests/kvm/s390x/memop.c
-> > +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> > @@ -690,87 +690,87 @@ static void test_errors(void)
-> >   	kvm_vm_free(t.kvm_vm);
-> >   }
-> >   
-[...]
-> > 
-> > +	} testlist[] = {
-> > +		{
-> > +			.name = "simple copy",
-> > +			.test = test_copy,
-> > +			.requirements_met = true,
-> > +		},
-> > +		{
-> > +			.name = "generic error checks",
-> > +			.test = test_errors,
-> > +			.requirements_met = true,
-> > +		},
-> > +		{
-> > +			.name = "copy with storage keys",
-> > +			.test = test_copy_key,
-> > +			.requirements_met = extension_cap > 0,
-> > +		},
-> > +		{
-> > +			.name = "copy with key storage protection override",
-> > +			.test = test_copy_key_storage_prot_override,
-> > +			.requirements_met = extension_cap > 0,
-> > +		},
-> > +		{
-> > +			.name = "copy with key fetch protection",
-> > +			.test = test_copy_key_fetch_prot,
-> > +			.requirements_met = extension_cap > 0,
-> > +		},
-> > +		{
-> > +			.name = "copy with key fetch protection override",
-> > +			.test = test_copy_key_fetch_prot_override,
-> > +			.requirements_met = extension_cap > 0,
-> > +		},
-> > +		{
-> > +			.name = "error checks with key",
-> > +			.test = test_errors_key,
-> > +			.requirements_met = extension_cap > 0,
-> > +		},
-> > +		{
-> > +			.name = "termination",
-> > +			.test = test_termination,
-> > +			.requirements_met = extension_cap > 0,
-> > +		},
-> > +		{
-> > +			.name = "error checks with key storage protection override",
-> > +			.test = test_errors_key_storage_prot_override,
-> > +			.requirements_met = extension_cap > 0,
-> > +		},
-> > +		{
-> > +			.name = "error checks without key fetch prot override",
-> > +			.test = test_errors_key_fetch_prot_override_not_enabled,
-> > +			.requirements_met = extension_cap > 0,
-> > +		},
-> > +		{
-> > +			.name = "error checks with key fetch prot override",
-> > +			.test = test_errors_key_fetch_prot_override_enabled,
-> > +			.requirements_met = extension_cap > 0,
+> >  
+> > CRIU reads CET_U with ptrace(PTRACE_GETREGSET, NT_X86_CET). It's done
+> > before the injection of the parasite. The value of SHSTK_EN is used
+> > then to
+> > detect if shadow stack is enabled and to setup victim's shadow stack
+> > for
+> > sigreturn.
 > 
-> I wonder whether it would rather make sense to check for "extension_cap & 1" 
-> instead of "extension_cap > 0" ?
+> Hmm, can it read /proc/pid/status? It has some lines like this:
+> x86_Thread_features: shstk wrss
+> x86_Thread_features_locked: shstk wrss
 
-The cap should always have been a bitmap, but unfortunately I didn't initially
-define it as one, the storage key extension must be supported if the cap > 0.
-So the test reflects that and may catch an error in the future.
-> 
-> Anyway:
-> Reviewed-by: Thomas Huth <thuth@redhat.com>
-> 
-Thanks!
+It could, but that would be much more intrusive than GETREGSET because
+currently /proc parsing and parasite injection don't really interact.
+If anything, arch_prctl(ARCH_CET_GET) via ptrace would be much nicer than
+/proc. 
+
+-- 
+Sincerely yours,
+Mike.
