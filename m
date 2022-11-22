@@ -2,198 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91CE63498F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE69634992
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbiKVVmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:42:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S234697AbiKVVnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235131AbiKVVm3 (ORCPT
+        with ESMTP id S235185AbiKVVnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:42:29 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5647AC6BC3;
-        Tue, 22 Nov 2022 13:41:33 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id i10so38675510ejg.6;
-        Tue, 22 Nov 2022 13:41:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rIlEqmzQ43h5mSij/yzLC0+0L3JCO/odjsG2ekPxh9U=;
-        b=h+9kdKFpd/hcmB9R34FN30DRJjEATOGghrxYQQa/sKXJh0OJ9nFB3xlb/rvMGCYIAT
-         kw1p6YABGept+dIP3PZKkZdSUa1xnQX3zHaSE3//HboVh/CFxZYfsWFZQ7rxp0eEr8MV
-         IMCYHW4Xe2IiiTd2j5W4VZfTawM7xQAjEp4UqsL2XSedaMUlYTruH/ehk5qz9YS1swAC
-         5Q5Pzy6SCOdnI0ZH3SYfq0pO/t6c2gJMUzigFwMCYREsa+9OO3SI0if4IBgbySosppuW
-         HSU7ymp+WDZzw4D4FtqZPzbvTdCNkr9rBtKVl5MFBtEfs5hxgNdwn6P9x1GdA69W6RXg
-         WU2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rIlEqmzQ43h5mSij/yzLC0+0L3JCO/odjsG2ekPxh9U=;
-        b=Y74lVrCcG30fo/lOIh+Y6e7kgG8lmBLxnr8A/2L5tVRnnOMseKE6JpnQ7yyemHXDkX
-         3QgihMvGvBfxmHIYet6/gC9hNgAtBbAJmhfVQfJBOMY9bjmt13n/2D7UJfA4jJE9996m
-         0YvQAcqJoX7529Mwy4BwY58Xc7rCdXJz4LC3+nuBf7V5hqfv9MMTgn/awjmx4ty6EtGz
-         W0js2cTqbmxtSt5brCgSQPEYTHLoGqhBr8j8FQoPWl5dBX/uFr11WsN2QTprN5vm5/mn
-         uLLji8KUtF4KU0YUuOFt89MDiniQW05gxFb+pvqu6YpNUHIGBx2PN78lEo1Gui/xUQwi
-         kUhQ==
-X-Gm-Message-State: ANoB5pmmMLZ72sFx31GHdDx0xnW6+rz3/4B7aQ/39OugoaN0RE5Zk3jt
-        nNRThd0uyubafBC2PSF/ztY=
-X-Google-Smtp-Source: AA0mqf6TDlqWgJrmTLHSzauxMrhn5bqpuKWijJ37xhWA7M3zWQPKY2WbY6FtgxDKHxCv64P2E7/y8w==
-X-Received: by 2002:a17:906:810:b0:7ad:d7f9:1f96 with SMTP id e16-20020a170906081000b007add7f91f96mr5253604ejd.384.1669153291680;
-        Tue, 22 Nov 2022 13:41:31 -0800 (PST)
-Received: from ?IPV6:2a01:c23:b808:900:d439:ecf6:5870:6417? (dynamic-2a01-0c23-b808-0900-d439-ecf6-5870-6417.c23.pool.telefonica.de. [2a01:c23:b808:900:d439:ecf6:5870:6417])
-        by smtp.googlemail.com with ESMTPSA id d4-20020a056402400400b0046a0096bfdfsm722502eda.52.2022.11.22.13.41.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 13:41:31 -0800 (PST)
-Message-ID: <52861a84-0fe2-37f0-d66a-145f2ebe1d79@gmail.com>
-Date:   Tue, 22 Nov 2022 22:41:30 +0100
+        Tue, 22 Nov 2022 16:43:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6899911446;
+        Tue, 22 Nov 2022 13:43:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05FE3618EE;
+        Tue, 22 Nov 2022 21:43:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD0AC433B5;
+        Tue, 22 Nov 2022 21:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669153389;
+        bh=Us36PTZHvI11zr97GUDhlESW/qDe06eNQv+kgcGZ7hw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cn52BcXR2eRR5iYnzWMd7jMC+FPriDPeGS+qQMHqbyrbPJQsMRaa5fRTdFzBDFroU
+         gvp2oZit0j1hjurttMDmLMamdhPlvjUhELicWkQ28iwBv3ZW+HqzBxG8YqNbNZtmNy
+         7sQjU2zOn69+XRpNjnKqt+n2Y6JvreSAfNOXNmQJamclcEwjcUoYqhNrTeP0IrkJ4a
+         xEUEBehW0SlDirBBnLvjunXryZUqHshaDOZ7lpUr4w7NL8nj4h/vpuND6k4zTKq9W3
+         XaTCA95oa/Gqc3yrh4GJM3w0QQbKnm5lkSIWY0UFZcDyZiyRztcQzS1ZpZnO1cjmtG
+         B27GR5gbHSRFA==
+Received: by mail-lf1-f50.google.com with SMTP id c1so25487048lfi.7;
+        Tue, 22 Nov 2022 13:43:09 -0800 (PST)
+X-Gm-Message-State: ANoB5pl6E+ELxq0jLHXC4yxe0TJFJTNq2yRXSNWIeQR3eYwVxdbJcZmD
+        K0N4zdWT5BicP/HUalEHDw0msI0VgJ70ZhjU2XI=
+X-Google-Smtp-Source: AA0mqf7scteqcIYLXwi5rWvAgaAyNNSA69LziUV6JQP2iw0ZWMY8BQ5LgaUuEmf0PhjW2ZTnvtzUZ7YwDGu4H9qKD40=
+X-Received: by 2002:a05:6512:15a8:b0:4a6:3ed2:3717 with SMTP id
+ bp40-20020a05651215a800b004a63ed23717mr2797186lfb.637.1669153387377; Tue, 22
+ Nov 2022 13:43:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-To:     Peter Suti <peter.suti@streamunlimited.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <CAPDyKFqrCCtY_A072WswEFa3Bnz7EfMp40MRYtr3G7Jbq_hbTw@mail.gmail.com>
- <20221122132304.1482508-1-peter.suti@streamunlimited.com>
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v2] mmc: meson-gx: fix SDIO interrupt handling
-In-Reply-To: <20221122132304.1482508-1-peter.suti@streamunlimited.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122161017.2426828-1-ardb@kernel.org> <5750d157-43dd-6f3d-1407-f41af3cff207@amd.com>
+ <CAMj1kXHUQFAcRKzRkuGG3Rsyrexdi7_NUS1-aXrS36LP4Q=rxw@mail.gmail.com>
+In-Reply-To: <CAMj1kXHUQFAcRKzRkuGG3Rsyrexdi7_NUS1-aXrS36LP4Q=rxw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 22 Nov 2022 22:42:50 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFX3df00cv5hwij396jS2AOgVGavDM-8hRii49Omn5=pw@mail.gmail.com>
+Message-ID: <CAMj1kXFX3df00cv5hwij396jS2AOgVGavDM-8hRii49Omn5=pw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/17] x86: head_64.S spring cleaning
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.11.2022 14:23, Peter Suti wrote:
-> With the interrupt support introduced in commit 066ecde sometimes the
-> Marvell-8987 wifi chip entered a deadlock using the marvell-sd-uapsta-8987
-> vendor driver. The cause seems to be that sometimes the interrupt handler
-> handles 2 IRQs and one of them disables the interrupts which are not reenabled
-> when all interrupts are finished. To work around this, disable all interrupts
-> when we are in the IRQ context and reenable them when the current IRQ is handled.
-> 
-To me it's still not clear what you mean with "handles 2 IRQs".
-Hard irq handlers aren't re-entrant. Can you provide the exact call sequence
-for the issue you're facing?
-Are SDIO interrupts handled on more than one CPU in your case?
-Are you concerned about the hard irq handler running in parallel on more than one CPU?
+On Tue, 22 Nov 2022 at 22:37, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Tue, 22 Nov 2022 at 21:48, Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> >
+> > On 11/22/22 10:10, Ard Biesheuvel wrote:
+> > > After doing some cleanup work on the EFI code in head_64.S, the mixed
+> > > mode code in particular, I noticed that the memory encryption pieces
+> > > could use some attention as well, so I cleaned that up too.
+> > >
+> > > Changes since v2:
+> > > - add some clarifying comments to the EFI mixed mode changes
+> > > - include patch to make the EFI handover protocol optional that was sent
+> > >    out separately before
+> > > - rebase onto tip/master
+> > >
+> > > Changes since v1:
+> > > - at Boris's request, split the patches into smaller ones that are
+> > >    easier to review
+> > >
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Ingo Molnar <mingo@redhat.com>
+> > > Cc: Borislav Petkov <bp@alien8.de>
+> > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > > Cc: Michael Roth <michael.roth@amd.com>
+> >
+> > This causes an SEV guest to blow up on boot in the early boot code. It
+> > looks like the stack pointer is not valid and it triple faults on a pushq
+> > instruction (pushq $__KERNEL_CS in arch/x86/boot/compressed/head_64.S of
+> > startup_64).
+> >
+>
+> Thanks for the report.
+>
+> So the mystery here (at least to me) is that all the changes are to
+> the 32-bit code, and startup_64 reloads the stack pointer from the
+> symbol
+>
+> Does your config have CONFIG_EFI_MIXED enabled?
+>
+> Can I reproduce this fully emulated with QEMU? Or do I need a SEV host?
+>
 
-The proposed patch looks hacky and somewhat bypasses the SDIO core logic
-by partially re-enabling SDIO interrupts in the hard irq handler.
+Also, mind giving this a quick spin?
 
-In the first review round I wrote the following but didn't see a feedback yet.
-Did you check the linked discussion whether it may be related to your issue?
+diff --git a/drivers/firmware/efi/libstub/x86-stub.c
+b/drivers/firmware/efi/libstub/x86-stub.c
+index cb5f0befee57..1af11d34bc6c 100644
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -23,7 +23,7 @@
 
--> IIRC I had a similar/same problem in mind when discussing the following:
--> https://lore.kernel.org/linux-arm-kernel/CAPDyKFoameOb7d3cn8_ki1O6DbMEAFvkQh1uUsYp4S-Lkq41oQ@mail.gmail.com/
--> Not sure though whether it's related to the issue you're facing.
+ const efi_system_table_t *efi_system_table;
+ const efi_dxe_services_table_t *efi_dxe_table;
+-u32 image_offset;
++u32 __section(".data") image_offset;
+ static efi_loaded_image_t *image = NULL;
 
+ static efi_status_t
 
-
-> Fixes: 066ecde ("mmc: meson-gx: add SDIO interrupt support")
-> 
-> Signed-off-by: Peter Suti <peter.suti@streamunlimited.com>
-> ---
-> Changes in v2:
-> 	- use spin_lock instead of spin_lock_irqsave
-> 	- only reenable interrupts if they were enabled already
-> 
->  drivers/mmc/host/meson-gx-mmc.c | 30 +++++++++++++++++++++++-------
->  1 file changed, 23 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/meson-gx-mmc.c b/drivers/mmc/host/meson-gx-mmc.c
-> index 6e5ea0213b47..0c95f8640b34 100644
-> --- a/drivers/mmc/host/meson-gx-mmc.c
-> +++ b/drivers/mmc/host/meson-gx-mmc.c
-> @@ -934,6 +934,13 @@ static void meson_mmc_read_resp(struct mmc_host *mmc, struct mmc_command *cmd)
->  	}
->  }
->  
-> +static bool __meson_mmc_sdio_irq_is_enabled(struct mmc_host *mmc)
-> +{
-> +	struct meson_host *host = mmc_priv(mmc);
-> +
-> +	return readl(host->regs + SD_EMMC_IRQ_EN) & IRQ_SDIO;
-> +}
-> +
->  static void __meson_mmc_enable_sdio_irq(struct mmc_host *mmc, int enable)
->  {
->  	struct meson_host *host = mmc_priv(mmc);
-> @@ -950,6 +957,11 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->  	struct mmc_command *cmd;
->  	u32 status, raw_status;
->  	irqreturn_t ret = IRQ_NONE;
-> +	bool irq_enabled;
-> +
-> +	spin_lock(&host->lock);
-> +	irq_enabled = __meson_mmc_sdio_irq_is_enabled(host->mmc);
-> +	__meson_mmc_enable_sdio_irq(host->mmc, 0);
->  
->  	raw_status = readl(host->regs + SD_EMMC_STATUS);
->  	status = raw_status & (IRQ_EN_MASK | IRQ_SDIO);
-> @@ -958,11 +970,11 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->  		dev_dbg(host->dev,
->  			"Unexpected IRQ! irq_en 0x%08lx - status 0x%08x\n",
->  			 IRQ_EN_MASK | IRQ_SDIO, raw_status);
-> -		return IRQ_NONE;
-> +		goto out_unlock;
->  	}
->  
->  	if (WARN_ON(!host))
-> -		return IRQ_NONE;
-> +		goto out_unlock;
->  
->  	/* ack all raised interrupts */
->  	writel(status, host->regs + SD_EMMC_STATUS);
-> @@ -970,17 +982,16 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->  	cmd = host->cmd;
->  
->  	if (status & IRQ_SDIO) {
-> -		spin_lock(&host->lock);
-> -		__meson_mmc_enable_sdio_irq(host->mmc, 0);
->  		sdio_signal_irq(host->mmc);
-> -		spin_unlock(&host->lock);
->  		status &= ~IRQ_SDIO;
-> -		if (!status)
-> +		if (!status) {
-> +			spin_unlock(&host->lock);
->  			return IRQ_HANDLED;
-> +		}
->  	}
->  
->  	if (WARN_ON(!cmd))
-> -		return IRQ_NONE;
-> +		goto out_unlock;
->  
->  	cmd->error = 0;
->  	if (status & IRQ_CRC_ERR) {
-> @@ -1023,6 +1034,11 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->  	if (ret == IRQ_HANDLED)
->  		meson_mmc_request_done(host->mmc, cmd->mrq);
->  
-> +out_unlock:
-> +	if (irq_enabled)
-> +		__meson_mmc_enable_sdio_irq(host->mmc, 1);
-> +	spin_unlock(&host->lock);
-> +
->  	return ret;
->  }
->  
-
+Thanks,
+Ard.
