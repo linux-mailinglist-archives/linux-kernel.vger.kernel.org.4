@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252C5634863
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD159634866
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiKVUjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        id S234902AbiKVUjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234512AbiKVUjF (ORCPT
+        with ESMTP id S234777AbiKVUjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:39:05 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A601D697C5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:39:04 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id p7-20020a631e47000000b0047691854a86so9085055pgm.16
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:39:04 -0800 (PST)
+        Tue, 22 Nov 2022 15:39:13 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AF868C75
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:39:11 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-393c38f7bcfso128045147b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:39:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mH2xKyLbtphuPdUJ732OjxOQc7w7f5rhMLqPKs8ZczA=;
-        b=qdsmec8olNuJkHjim4tCNOzdWa/frQp8m5lufYNaqejkZMLoMUUyW+CWmAkGziybpf
-         XVtKd/0LwOGTSKPzuW0laRVzBchDj/eYAtuTCSNB8IMPYcpApfCWC2zjH37lPwrTquSo
-         e6VwPwg/ku5WTWy2ImXR0wgUFLZ1Bya8Re9NroqrrjtTrQdgeKHCixYvONLr+VBOSK7D
-         y/z7y3/mili8PPvIi+kePEDEmzvJZh09v92ohyzbQ5RuROFwKw5KgQsz7VHG+PzHsW5E
-         1yg6L/6VSUWRD0wFpHrfizjK3o+Nif6zqdPMbBMhrgAWMlNgfhUP/5lOq0C7Wj8y1WM3
-         OO7A==
+        bh=FPSzCF4B4ZUUfFv+NywISnCJ1Cav2tvMYf25Hqqvvgg=;
+        b=Ylw0t/TQAkkJ5ZZ1Pjx3hAcFXh/aS80QxJujdVf6jQSIZZqenDDpuUnVzgNX6ILpOT
+         D+OjVdmtDW5/tAPK26Gb1zGy/ZoTCNYUJRF0pyT+nwSM+/hfu38zrqKsPnMqXGmEd+xx
+         cuUwYrnWdEWlYYI+NWRholXeyBpeozHwyScvQAjTUOFxdVVobSIfg3zrrhjVGUP9l7Px
+         HcnmajR3YLpKxiUY3qDInKNDQjuM2qZP0Bd8vfd5A7IwOfoP5RK2bZZ11acFXKOU83kT
+         GwdUHROVxNzf/nQ9nlj5eX8S+GZeK8I5hMFTQ/pyIzMVhZn83FC27sX4jgh9Me5r10Ge
+         mRkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mH2xKyLbtphuPdUJ732OjxOQc7w7f5rhMLqPKs8ZczA=;
-        b=VNk9QvOUjkdQ3NPvDnKGiIxw1VSM8zh5+H5tySS9TVbIT98Eceplu2QuyEWnywb6on
-         Ltb0DLHx7+SxoTDB1i1JPIU//jja+rf1OCGDopXWxEkTq+pq924o5QlmNMmeFETrTIMt
-         GA0o3pYzJs4GdG5MmebvYYf6vRj0TAXS70EX/XsUeYXq3iZ2FzOKpdCdvFAIQhwn/agZ
-         ZGpf8dikdoJkf2f6Toii/EqNI3Nx6nZOAydKTgaCixIiAoLM3fqogXz1sMduQTXFy74v
-         aUSVfOFJcCYwAtvaGWsIYsbgu4xd0nPVNOIeWA6trhfkO1WFaLOmeJGElmhE7177cG0z
-         o2Og==
-X-Gm-Message-State: ANoB5pn99rWThp9cfFqM9CZbaRfgv3Eh0xeqwJfRjYQKRPS4FV41SQYp
-        X9RHZ0nkJ5uMDRbIA5dvwC7o3iTwc2453oIDbw==
-X-Google-Smtp-Source: AA0mqf4nRSDZsJA5udKOk+WPQ7He8G7ypX1TuK+m1EL8dLhG9pG68x3W9SVyDcAVprESbrBcmMcBBy7AvLCfO1+7Ag==
+        bh=FPSzCF4B4ZUUfFv+NywISnCJ1Cav2tvMYf25Hqqvvgg=;
+        b=hSg9oDOuTDIY7qYkqZIMmukoYNlf5GISiD+Eo0Ml7qK6I4frZ+gk3dB5UWFRXqFhS2
+         wLVT8pl+UZEaHlELig428vlV/h7/+I57VR5FMA5ZI8Gl0r4X2paNT/Thj9NCDWjTYfkz
+         MFnRfxPMW5Ljzo3VsSZTd3M9qBd+rCXW1kvn0ZmveulmR+DrkoFyQkvt/MUrZbxULF/k
+         V9TRny6uySrE9/yIDcppPpTTvxlgrLl92nwbbyDod163xOVrK75bPJih4nK6Su1T+8/d
+         z2rcKfXmkwnz99TFpM8sr2CLX5FNPKI7pEA47Rkf9V/hSai3OW6+AnFXEqMxxUgBTQBH
+         FUmA==
+X-Gm-Message-State: ANoB5pnMtnBKeBnTDw5t83zbimYs/3L+zf6iW5RHqONxqtylzbIExPoA
+        TaamPS/HDvUtmBxelO2ajh91Z2O0epb1nIy52Q==
+X-Google-Smtp-Source: AA0mqf5zIOUTB1IFL2y2aEl4Z42kcyhA+7NcLlkiYs3Zc4zWJSHdxsp+4pi/s7LSj0PB2eVCfSvbDfxnKCWTXWMg1w==
 X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2d4:203:b7d0:497d:abe4:3e6f])
- (user=almasrymina job=sendgmr) by 2002:a63:7143:0:b0:46f:918e:7338 with SMTP
- id b3-20020a637143000000b0046f918e7338mr6371506pgn.8.1669149544152; Tue, 22
- Nov 2022 12:39:04 -0800 (PST)
-Date:   Tue, 22 Nov 2022 12:38:46 -0800
+ (user=almasrymina job=sendgmr) by 2002:a25:cccc:0:b0:6de:afe7:1c27 with SMTP
+ id l195-20020a25cccc000000b006deafe71c27mr2ybf.642.1669149550378; Tue, 22 Nov
+ 2022 12:39:10 -0800 (PST)
+Date:   Tue, 22 Nov 2022 12:38:47 -0800
 In-Reply-To: <20221122203850.2765015-1-almasrymina@google.com>
 Mime-Version: 1.0
 References: <20221122203850.2765015-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221122203850.2765015-2-almasrymina@google.com>
-Subject: [RFC PATCH v1] mm: Add memory.demote for proactive demotion only
+Message-ID: <20221122203850.2765015-3-almasrymina@google.com>
+Subject: [RFC PATCH v1 3/4] mm: Fix demotion-only scanning anon pages
 From:   Mina Almasry <almasrymina@google.com>
 To:     Huang Ying <ying.huang@intel.com>,
         Yang Shi <yang.shi@linux.alibaba.com>,
         Yosry Ahmed <yosryahmed@google.com>,
         Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
         shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     Mina Almasry <almasrymina@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
         linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,123 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the proactive demotion interface memory.demote. This interface can
-be used as follows:
+This is likely a missed change from commit a2a36488a61c ("mm/vmscan: Consider
+anonymous pages without swap"). Current logic is if !may_swap _or_
+!can_reclaim_anon_pages() then we don't scan anon memory.
 
-echo "1m" > memory.demote
+This should be an 'and'. We would like to scan anon memory if we may swap
+or if we can_reclaim_anon_pages().
 
-At this command the kernel will attempt to demote 1m of memory from this
-cgroup. The kernel may not be able to demote the full amount requested
-by the userspace and in that case EAGAIN would be returned to the user
-(similar to memory.reclaim).
-
-The kernel will only attempt to demote pages with this interface. It
-will not attempt any other kind of reclaim (swap, writeback or
-reclaiming clean file pages).
+Fixes: commit a2a36488a61c ("mm/vmscan: Consider anonymous pages without swap")
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
- mm/memcontrol.c | 38 ++++++++++++++++++++++++++++++++++++++
- mm/vmscan.c     | 18 ++++++++++++++----
- 2 files changed, 52 insertions(+), 4 deletions(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index fd4ff1c865a2..427c79e467eb 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -6623,6 +6623,39 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
- 	return nbytes;
- }
-
-+static ssize_t memory_demote(struct kernfs_open_file *of, char *buf,
-+			     size_t nbytes, loff_t off)
-+{
-+	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
-+	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
-+	unsigned long nr_to_demote, nr_demoted = 0;
-+	unsigned int reclaim_options = MEMCG_RECLAIM_ONLY_DEMOTE;
-+	int err;
-+
-+	buf = strstrip(buf);
-+	err = page_counter_memparse(buf, "", &nr_to_demote);
-+	if (err)
-+		return err;
-+
-+	while (nr_demoted < nr_to_demote) {
-+		unsigned long demoted;
-+
-+		if (signal_pending(current))
-+			return -EINTR;
-+
-+		demoted = try_to_free_mem_cgroup_pages(
-+			memcg, nr_to_demote - nr_demoted, GFP_KERNEL,
-+			reclaim_options);
-+
-+		if (!demoted && !nr_retries--)
-+			return -EAGAIN;
-+
-+		nr_demoted += demoted;
-+	}
-+
-+	return nbytes;
-+}
-+
- static struct cftype memory_files[] = {
- 	{
- 		.name = "current",
-@@ -6691,6 +6724,11 @@ static struct cftype memory_files[] = {
- 		.flags = CFTYPE_NS_DELEGATABLE,
- 		.write = memory_reclaim,
- 	},
-+	{
-+		.name = "demote",
-+		.flags = CFTYPE_NS_DELEGATABLE,
-+		.write = memory_demote,
-+	},
- 	{ }	/* terminate */
- };
+ mm/vmscan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index dea05ad8ece5..8c1f5416d789 100644
+index 8c1f5416d789..d7e509b3f07f 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -1657,12 +1657,13 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
- 	LIST_HEAD(demote_folios);
- 	unsigned int nr_reclaimed = 0;
- 	unsigned int pgactivate = 0;
--	bool do_demote_pass;
-+	bool do_demote_pass, only_demote_pass;
- 	struct swap_iocb *plug = NULL;
+@@ -2931,7 +2931,7 @@ static void get_scan_count(struct lruvec *lruvec, struct scan_control *sc,
+ 	enum lru_list lru;
 
- 	memset(stat, 0, sizeof(*stat));
- 	cond_resched();
- 	do_demote_pass = can_demote(pgdat->node_id, sc);
-+	only_demote_pass = sc->demotion == 2;
-
- retry:
- 	while (!list_empty(folio_list)) {
-@@ -2091,10 +2092,19 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
- 	nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
- 	/* Folios that could not be demoted are still in @demote_folios */
- 	if (!list_empty(&demote_folios)) {
--		/* Folios which weren't demoted go back on @folio_list for retry: */
-+		/*
-+		 * Folios which weren't demoted go back on @folio_list.
-+		 */
- 		list_splice_init(&demote_folios, folio_list);
--		do_demote_pass = false;
--		goto retry;
-+
-+		/*
-+		 * goto retry to reclaim the undemoted folios in folio_list if
-+		 * desired.
-+		 */
-+		if (!only_demote_pass) {
-+			do_demote_pass = false;
-+			goto retry;
-+		}
+ 	/* If we have no swap space, do not bother scanning anon folios. */
+-	if (!sc->may_swap || !can_reclaim_anon_pages(memcg, pgdat->node_id, sc)) {
++	if (!sc->may_swap && !can_reclaim_anon_pages(memcg, pgdat->node_id, sc)) {
+ 		scan_balance = SCAN_FILE;
+ 		goto out;
  	}
-
- 	pgactivate = stat->nr_activate[0] + stat->nr_activate[1];
 --
 2.38.1.584.g0f3c55d4c2-goog
