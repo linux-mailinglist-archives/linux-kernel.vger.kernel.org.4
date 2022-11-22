@@ -2,156 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FC26348F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B756348F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbiKVVK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S234711AbiKVVMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbiKVVKz (ORCPT
+        with ESMTP id S232645AbiKVVMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:10:55 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D2E7CB97
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:10:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6dPZRBVDncbKAsAtZalrSR3psk0nbnHpzr/Zu2o2Hjk=; b=qTSmc/SW3xqZ589OMJfYmo5pJ2
-        xArLSRGgxN5wsCIwQy4C1WqaM6Vn4I2woblv063J2ZBcP8gMHO2k8q6sREtBFOQR6fc8NlgmElRNp
-        FntXusr9FdKXS5AfbxqJd5tihS0xWzbRWfnBDzahzUSQC1FbMswKwrsIbPnGk06+00ziSUvTZhjaD
-        Xt+cho0dYgxAulC3lhsAzKo+1Cx3RUYlKPCLGjd1pixKT33T98F1QKFSG4G/s4n0LaXv5hsswJF6/
-        UvO5jb6eVTFwygXgREOe/ir9e2A0ODyPQNwItq0194r1+HrpneYy9INB92cFcr2OR36n2kFgRO+N7
-        xLKjSRsw==;
-Received: from [2a01:799:95e:1700:6395:ccbd:d000:d42b] (port=62028)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oxaXa-0006jg-5j; Tue, 22 Nov 2022 22:10:50 +0100
-Message-ID: <182643db-e5f4-2277-a971-0f159849dadf@tronnes.org>
-Date:   Tue, 22 Nov 2022 22:10:47 +0100
+        Tue, 22 Nov 2022 16:12:30 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D8DE36
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:12:27 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id s12so22347469edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LiJPTtNBXY5lhaOhCcN8eCHMZ+ykoBBHSWuDo0YtH9k=;
+        b=8BzZEW+GpWjfoA2jDCk2XgBIuTqCXEYGhvtI2dMtEmXET/pY6ajsFLYPHWBdm6cjcS
+         61XS1AhGNhsiazdY8jbmmyHVqZUsc5/O/fr7Rmv+9hcwva7P7QiAWNqABnyDjra5clXd
+         Q3bdwZqPI5DvUGKgJXNkNTsNcgfUiByD8nQa7jMPaC9DSP8Dvv6DC6zSa7ZPPG9nb1+X
+         jjZn22XEc/xuxpvP2T1kz5UJUUdBlpNN7X1wAV3EDXS5voMRjByT0mPATUx5OtJkBt4s
+         HU9BwBKyy9QSmL/xoChZKGq7cBKgSscm80npAN+/qb9G4bA82Ooj/v7k/xg1Fkrzm90C
+         8bWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LiJPTtNBXY5lhaOhCcN8eCHMZ+ykoBBHSWuDo0YtH9k=;
+        b=ZIJ672U6TqHd6Hzcn9RYSHBWyaPNAGJHtcwV7qMQXrExscj5a3sV+sNhaKzLTDS6zB
+         KcVyrvGrEM4LcGyCHjJF2CRGX0QaTvRezBsVEAtdfAwsFWZoAsl+hM5ogr6LX+XKbpEG
+         KgF0Gmj5oEDtelPjvBs7lAKibi6dTNO1hOedFVR4b4LZDqkXz6IU4uPbaU3D5tFjHKZb
+         5fm0vDHJSbTHriI7bYc194bUD+0W0tDpouT2dgxDwucDuEubkHtKFXwZJ5Fhu/pu58++
+         iWBJbIpAUJlu/z9unGEyS6+FaItSBTgSfQeBaVCUb1gBP/O/qD0EvtlcYKwMHhI3uwKV
+         DH8w==
+X-Gm-Message-State: ANoB5pk1o12ti+P3MlHFYT31B8Hg00JsFiYPWewTrQ14YtSwgE9YuB6o
+        yrHlkd6TfxIxN2999KuLGPpWqA==
+X-Google-Smtp-Source: AA0mqf7aknnAyeTvjcufOtAurfTLSW+/2fuCYb1DjvTp8y+EVrAzwEIb/u3mVWH5kO8i+BjjYEmmrg==
+X-Received: by 2002:aa7:d799:0:b0:469:ede4:8219 with SMTP id s25-20020aa7d799000000b00469ede48219mr3919123edq.132.1669151545535;
+        Tue, 22 Nov 2022 13:12:25 -0800 (PST)
+Received: from [192.168.0.161] (79-100-144-200.ip.btc-net.bg. [79.100.144.200])
+        by smtp.gmail.com with ESMTPSA id w18-20020a056402129200b00467c3cbab6fsm2739853edv.77.2022.11.22.13.12.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 13:12:25 -0800 (PST)
+Message-ID: <0e7bb31c-ca92-dac2-4d29-5eb2d3327b26@blackwall.org>
+Date:   Tue, 22 Nov 2022 23:12:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: git send-email friendly smtp provider anyone?
-To:     dri-devel@lists.freedesktop.org
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
- <20221121151922.jaal6ym7z2ejju4q@houat>
- <de12952f-8346-8995-236d-69dcb70f19f6@tronnes.org>
- <20221122155122.edxtmsqpjxgj4dsj@meerkat.local>
- <3b06dfd5-0eb4-dbfc-6ba8-077b1a92865b@tronnes.org>
- <20221122185001.q6hmeblp64jqdzvz@meerkat.local>
- <02bc2442-e3b3-d720-9d13-ffcdfd760fb8@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <02bc2442-e3b3-d720-9d13-ffcdfd760fb8@tronnes.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH net-next 2/2] bonding: fix link recovery in mode 2 when
+ updelay is nonzero
+Content-Language: en-US
+To:     Jonathan Toppins <jtoppins@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Jay Vosburgh <j.vosburgh@gmail.com>
+Cc:     Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+References: <cover.1668800711.git.jtoppins@redhat.com>
+ <cb89b92af89973ee049a696c362b4a2abfdd9b82.1668800711.git.jtoppins@redhat.com>
+ <38fbc36783d583f805f30fb3a55a8a87f67b59ac.camel@redhat.com>
+ <1fe036eb-5207-eccd-0cb3-aa22f5d130ce@redhat.com>
+ <5718ba71a8755040f61ed7b2f688b1067ca56594.camel@redhat.com>
+ <e1150971-ec16-0421-a13a-d6d2a0a66348@redhat.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <e1150971-ec16-0421-a13a-d6d2a0a66348@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 22.11.2022 20.22, skrev Noralf Trønnes:
-> 
-> 
-> Den 22.11.2022 19.50, skrev Konstantin Ryabitsev:
->> On Tue, Nov 22, 2022 at 06:42:19PM +0100, Noralf Trønnes wrote:
->>> The first thing that strikes me is that everyone mentioned in one of the
->>> patches get the entire patchset, even stable@vger.kernel.org (cc'ed in a
->>> fixes patch). The first patch touches a core file and as a result a few
->>> drivers, so I've cc'ed the driver maintainers in that patch, but now
->>> they get the entire patchset where 5 of 6 patches is about a driver that
->>> I maintain. So from their point of view, they see a patchset about a
->>> driver they don't care about and a patch touching a core file, but from
->>> the subject it's not apparent that it touches their driver. I'm afraid
->>> that this might result in none of them looking at that patch. In this
->>> particular case it's not that important, but in another case it might be.
->>
->> I did some (unscientific) polling among kernel maintainers and, by a vast
->> margin, they always prefer to receive the entire series instead of
->> cherry-picked patches -- having the entire series helps provide important
->> context for the change they are looking at.
->>
->> So, this is deliberate and, for now at least, not configurable. Unless you're
->> sending 100+ patch series, I doubt anyone will have any problem with receiving
->> the whole series instead of individual patches.
->>
->>> As for the setting up the web endpoint, should I just follow the b4 docs
->>> on that?
+On 22/11/2022 17:37, Jonathan Toppins wrote:
+> On 11/22/22 09:45, Paolo Abeni wrote:
+>> On Tue, 2022-11-22 at 08:36 -0500, Jonathan Toppins wrote:
+>>> On 11/22/22 05:59, Paolo Abeni wrote:
+>>>> Hello,
+>>>>
+>>>> On Fri, 2022-11-18 at 15:30 -0500, Jonathan Toppins wrote:
+>>>>> Before this change when a bond in mode 2 lost link, all of its slaves
+>>>>> lost link, the bonding device would never recover even after the
+>>>>> expiration of updelay. This change removes the updelay when the bond
+>>>>> currently has no usable links. Conforming to bonding.txt section 13.1
+>>>>> paragraph 4.
+>>>>>
+>>>>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>>>>
+>>>> Why are you targeting net-next? This looks like something suitable to
+>>>> the -net tree to me. If, so could you please include a Fixes tag?
+>>>>
+>>>> Note that we can add new self-tests even via the -net tree.
+>>>>
 >>>
->>> I use b4 version 0.10.1, is that recent enough?
+>>> I could not find a reasonable fixes tag for this, hence why I targeted
+>>> the net-next tree.
 >>
->> Yes. There will be a 0.10.2 in the near future, but the incoming fixes
->> shouldn't make much difference for the b4 send code.
+>> When in doubt I think it's preferrable to point out a commit surely
+>> affected by the issue - even if that is possibly not the one
+>> introducing the issue - than no Fixes as all. The lack of tag will make
+>> more difficult the work for stable teams.
+>>
+>> In this specific case I think that:
+>>
+>> Fixes: 41f891004063 ("bonding: ignore updelay param when there is no active slave")
+>>
+>> should be ok, WDYT? if you agree would you mind repost for -net?
+>>
+>> Thanks,
+>>
+>> Paolo
 >>
 > 
-> This is what I got:
+> Yes that looks like a good one. I will repost to -net a v2 that includes changes to reduce the number of icmp echos sent before failing the test.
 > 
-> $ b4 send --web-auth-verify <challenge string from email>
-> Signing challenge
-> Submitting verification to https://lkml.kernel.org/_b4_submit
-> Traceback (most recent call last):
->   File "/home/pi/.local/bin/b4", line 8, in <module>
->     sys.exit(cmd())
->   File "/home/pi/.local/lib/python3.10/site-packages/b4/command.py",
-> line 341, in cmd
->     cmdargs.func(cmdargs)
->   File "/home/pi/.local/lib/python3.10/site-packages/b4/command.py",
-> line 86, in cmd_send
->     b4.ez.cmd_send(cmdargs)
->   File "/home/pi/.local/lib/python3.10/site-packages/b4/ez.py", line
-> 1102, in cmd_send
->     auth_verify(cmdargs)
->   File "/home/pi/.local/lib/python3.10/site-packages/b4/ez.py", line
-> 188, in auth_verify
->     res = ses.post(endpoint, json=req)
->   File "/usr/lib/python3/dist-packages/requests/sessions.py", line 590,
-> in post
->     return self.request('POST', url, data=data, json=json, **kwargs)
->   File "/usr/lib/python3/dist-packages/requests/sessions.py", line 528,
-> in request
->     prep = self.prepare_request(req)
->   File "/usr/lib/python3/dist-packages/requests/sessions.py", line 456,
-> in prepare_request
->     p.prepare(
->   File "/usr/lib/python3/dist-packages/requests/models.py", line 319, in
-> prepare
->     self.prepare_body(data, files, json)
->   File "/usr/lib/python3/dist-packages/requests/models.py", line 469, in
-> prepare_body
->     body = complexjson.dumps(json)
->   File "/usr/lib/python3.10/json/__init__.py", line 231, in dumps
->     return _default_encoder.encode(obj)
->   File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
->     chunks = self.iterencode(o, _one_shot=True)
->   File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
->     return _iterencode(o, 0)
->   File "/usr/lib/python3.10/json/encoder.py", line 179, in default
->     raise TypeError(f'Object of type {o.__class__.__name__} '
-> TypeError: Object of type bytes is not JSON serializable
+> Thanks,
+> -Jon
 > 
 
-Konstantin found a workaround, so I was able to push the patches.
+One minor nit - could you please change "mode 2" to "mode balance-xor" ?
+It saves reviewers some grepping around the code to see what is mode 2.
+Obviously one has to dig in the code to see how it's affected, but still
+it is a bit more understandable. It'd be nice to add more as to why the link is not recovered,
+I get it after reading the code, but it would be nice to include a more detailed explanation in the
+commit message as well.
 
-Here's the result if anyone is interested in seeing the result of using
-b4 and the web endpoint:
-https://lore.kernel.org/dri-devel/20221122-gud-shadow-plane-v1-0-9de3afa3383e@tronnes.org/
+Thanks,
+ Nik
 
-Patchwork gave me a new submitter ID:
-https://patchwork.freedesktop.org/series/111222/
-
-Noralf.
