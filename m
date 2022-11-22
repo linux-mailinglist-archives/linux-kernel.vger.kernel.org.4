@@ -2,133 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E49633D39
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D71633D3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiKVNM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
+        id S233234AbiKVNMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbiKVNMZ (ORCPT
+        with ESMTP id S233004AbiKVNMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:12:25 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D10A623BC
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:12:24 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id q71so14025013pgq.8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:12:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oqwHzAInlPVGD6Tj99gfuhNqltvuUaoQbnrjs4tthqQ=;
-        b=iqFptG7/uCjX/WZys0RvEFs1QNIHoCzPFv1fNAzqAMu+zJYLIAIlTk5xbXKdx+huTA
-         903beUgNqdUyJbtx+1indJKeCxTl6PcQCU9vqOpDLb83FX0WK23+ILBpy9ly3TpIZDCC
-         xgjqsPh29pWWGt+2eiT8p/uT708pvtye0mpxMZQl+7KXngPg5fYjUKzILGUff0EBmGWG
-         OWN1ybOPMEoD14w22QOUMf0rMMUS/XViBDGXZgvtTtSzOJdrHzoq31K9eGKmHbbI91Gb
-         UUo/9UggJh/iYOMPpOGdHM+AU2ZIRy4cGxaeLE55UWyAkPBxF36Rdhb8iB+puBt7zvDM
-         ub8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oqwHzAInlPVGD6Tj99gfuhNqltvuUaoQbnrjs4tthqQ=;
-        b=LjJ21/AaBSxE2Ay/Hc87W34E9fJSA7T8TbwAkZ90hFf1lQs6ynXRabLLMOelXCIUZR
-         NPZ4wmB9VkARNXmO7FYbO/XMxctz5zYuySqOiM52uPBzC2qxurmmasJq2TBrfj2IGu5R
-         7IuEKcVPH0usWNO4lL20uEoBbA8aXclromstu09yAFaj7WoLysD5sba0KbRRdIUerQGp
-         Y1XtycgULzukUDnNXXfFQa0lpqg+4XxNz/jAH2YYyakIIqnicJNz5zRQTh+gYqbgNL29
-         pZx1OQYPMYJx27DnV90vQgFF8VKifYFNxB3+yICxvX302b+SiOyJshpxwN73ahQAy3yu
-         7Nrw==
-X-Gm-Message-State: ANoB5pnpS7w469T9CEaUvSi+gsalB/j/CGloDpurbPFNI8FP7g8DeHc/
-        +5m7BFCP66NIRxx06fT9yz9Vms9wvbpRQQ==
-X-Google-Smtp-Source: AA0mqf5OK6x93CXuy3MfVmeRxV/APyqC08Eof6VVqXzHXz44JzeRwY1jefa62wpRCQH0dU2x4RqDtw==
-X-Received: by 2002:a63:5819:0:b0:476:8ce9:be5d with SMTP id m25-20020a635819000000b004768ce9be5dmr5324378pgb.15.1669122743413;
-        Tue, 22 Nov 2022 05:12:23 -0800 (PST)
-Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id w18-20020a170902e89200b00183e2a96414sm11948992plg.121.2022.11.22.05.12.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 05:12:22 -0800 (PST)
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH v2] igb: Allocate MSI-X vector when testing
-Date:   Tue, 22 Nov 2022 22:11:45 +0900
-Message-Id: <20221122131145.68107-1-akihiko.odaki@daynix.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 22 Nov 2022 08:12:45 -0500
+Received: from outbound-smtp18.blacknight.com (outbound-smtp18.blacknight.com [46.22.139.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F283DEE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:12:43 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp18.blacknight.com (Postfix) with ESMTPS id 069191C383C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:12:42 +0000 (GMT)
+Received: (qmail 20906 invoked from network); 22 Nov 2022 13:12:41 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 22 Nov 2022 13:12:41 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH 0/2] Follow-up to Leave IRQs enabled for per-cpu page allocations
+Date:   Tue, 22 Nov 2022 13:12:27 +0000
+Message-Id: <20221122131229.5263-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without this change, the interrupt test fail with MSI-X environment:
+The following two patches are a fixup patch and a simplification as
+suggested by Vlastimil Babka.
 
-$ sudo ethtool -t enp0s2 offline
-[   43.921783] igb 0000:00:02.0: offline testing starting
-[   44.855824] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Down
-[   44.961249] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
-[   51.272202] igb 0000:00:02.0: testing shared interrupt
-[   56.996975] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
-The test result is FAIL
-The test extra info:
-Register test  (offline)	 0
-Eeprom test    (offline)	 0
-Interrupt test (offline)	 4
-Loopback test  (offline)	 0
-Link test   (on/offline)	 0
+ mm/page_alloc.c | 29 +++++++++++------------------
+ 1 file changed, 11 insertions(+), 18 deletions(-)
 
-Here, "4" means an expected interrupt was not delivered.
-
-This change routes interrupts correctly to the first MSI-X vector, and
-fixes the test:
-
-$ sudo ethtool -t enp0s2 offline
-[   42.762985] igb 0000:00:02.0: offline testing starting
-[   50.141967] igb 0000:00:02.0: testing shared interrupt
-[   56.163957] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
-The test result is PASS
-The test extra info:
-Register test  (offline)	 0
-Eeprom test    (offline)	 0
-Interrupt test (offline)	 0
-Loopback test  (offline)	 0
-Link test   (on/offline)	 0
-
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- drivers/net/ethernet/intel/igb/igb_ethtool.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-index e5f3e7680dc6..ff911af16a4b 100644
---- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-+++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-@@ -1413,6 +1413,8 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
- 			*data = 1;
- 			return -1;
- 		}
-+		wr32(E1000_IVAR_MISC, E1000_IVAR_VALID << 8);
-+		wr32(E1000_EIMS, BIT(0));
- 	} else if (adapter->flags & IGB_FLAG_HAS_MSI) {
- 		shared_int = false;
- 		if (request_irq(irq,
 -- 
-2.38.1
+2.35.3
 
