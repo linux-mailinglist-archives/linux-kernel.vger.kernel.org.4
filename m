@@ -2,91 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA88C6331A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCB16331A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbiKVAxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S231879AbiKVAy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:54:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiKVAxh (ORCPT
+        with ESMTP id S231820AbiKVAxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:53:37 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AB9DEAEE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:53:35 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NGQjn3KKtz4y0vF;
-        Tue, 22 Nov 2022 08:53:33 +0800 (CST)
-Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
-        by mse-fl1.zte.com.cn with SMTP id 2AM0rO5p080247;
-        Tue, 22 Nov 2022 08:53:24 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Tue, 22 Nov 2022 08:53:25 +0800 (CST)
-Date:   Tue, 22 Nov 2022 08:53:25 +0800 (CST)
-X-Zmail-TransId: 2b04637c1d85ffffffffda7cd3f2
-X-Mailer: Zmail v1.0
-Message-ID: <202211220853259244666@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>
-Cc:     <wuchi.zero@gmail.com>, <axboe@kernel.dk>,
-        <colin.i.king@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHJlbGF5OiB1c2Ugc3Ryc2NweSgpIGlzIG1vcmUgcm9idXN0IGFuZCBzYWZlcg==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2AM0rO5p080247
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 637C1D8D.000 by FangMail milter!
-X-FangMail-Envelope: 1669078413/4NGQjn3KKtz4y0vF/637C1D8D.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 637C1D8D.000/4NGQjn3KKtz4y0vF
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 21 Nov 2022 19:53:55 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAD9E06B7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:53:54 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id v184so209983ybv.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:53:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=O6WUOw9T0DV19s/c2TGTrCQrdf4F5EyxA3HYag+nfl0=;
+        b=K7uGD5oz/aX87z0dSzQiMLPSWToAYxYdnapsn443FHnDX0Zpnyu7ogdz44QyeZYtkh
+         N2soQOhA7Uf54WmfPwkNv8Wh6ohKOfa1RV33ck4avR0Fos+V9s17/WKxkSUAxC5H1lPj
+         MHaYxnD5euM+lAJWHkrzN/9sC9BjhZNqYWqqs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O6WUOw9T0DV19s/c2TGTrCQrdf4F5EyxA3HYag+nfl0=;
+        b=ZloCHswA1W6AJk/C5xdKm5APVX43PAYbYwQShirdB9vIwmdHYj7BYVBCS+dVEJRFHW
+         uyK24bGS6r/oNId687+Gyrse77z3vjfjucO7dY9jIXc0HjFgguAZRXbgc0ahjxGsuesh
+         3E+tIc5ffu1S3cMOqCb8eDNxaDrnIyc6DjfDwm89gPL67aIbAik9CnYShdu2bqUG9P4P
+         aiqaIJbu4hY5Z0GiCVnmLJSHuCSaFCofsTiKfOGJK1yOrV5xLEKro2IP+5ZWXYUqGCY4
+         xxaxv1aY/cPxvZpMgMEADJ21HRRQgyUNM8GJNi+01Xcyn3Gb5y5+exVz0YAzcfXki/4Y
+         hVwA==
+X-Gm-Message-State: ANoB5pnW2KkT7IdH1Hhx/vSxV+bcKnmA6y3dhNc8kFvAWbwdy5Wm/teU
+        EqfebHNQL1TdJKcMHd77A9RttZo+NeizesTAddFA4w==
+X-Google-Smtp-Source: AA0mqf4EpbJUR3UuJTQ7sbSad4/fl/NT35pwFr98CaDrRMn5fwcn3TSYJxpSSSeDeV2CANvkQa9SkrJLEtQifg4QTpY=
+X-Received: by 2002:a05:6902:1825:b0:6de:f09:2427 with SMTP id
+ cf37-20020a056902182500b006de0f092427mr1386018ybb.125.1669078433693; Mon, 21
+ Nov 2022 16:53:53 -0800 (PST)
+MIME-Version: 1.0
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Mon, 21 Nov 2022 16:53:43 -0800
+Message-ID: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
+Subject: Low TCP throughput due to vmpressure with swap enabled
+To:     Linux MM <linux-mm@kvack.org>
+Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+Hello,
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL terminated strings.
+We have observed a negative TCP throughput behavior from the following commit:
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- kernel/relay.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+* 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
 
-diff --git a/kernel/relay.c b/kernel/relay.c
-index d7edc934c56d..0a3d2e702001 100644
---- a/kernel/relay.c
-+++ b/kernel/relay.c
-@@ -507,7 +507,7 @@ struct rchan *relay_open(const char *base_filename,
- 	chan->private_data = private_data;
- 	if (base_filename) {
- 		chan->has_base_filename = 1;
--		strlcpy(chan->base_filename, base_filename, NAME_MAX);
-+		strscpy(chan->base_filename, base_filename, NAME_MAX);
- 	}
- 	chan->cb = cb;
- 	kref_init(&chan->kref);
-@@ -578,7 +578,7 @@ int relay_late_setup_files(struct rchan *chan,
- 	if (!chan || !base_filename)
- 		return -EINVAL;
+It landed back in 2016 in v4.5, so it's not exactly a new issue.
 
--	strlcpy(chan->base_filename, base_filename, NAME_MAX);
-+	strscpy(chan->base_filename, base_filename, NAME_MAX);
+The crux of the issue is that in some cases with swap present the
+workload can be unfairly throttled in terms of TCP throughput.
 
- 	mutex_lock(&relay_channels_mutex);
- 	/* Is chan already set up? */
--- 
-2.15.2
+I am able to reproduce this issue in a VM locally on v6.1-rc6 with 8
+GiB of RAM with zram enabled.
+
+The setup is fairly simple:
+
+1. Run the following go proxy in one cgroup (it has some memory
+ballast to simulate useful memory usage):
+
+* https://gist.github.com/bobrik/2c1a8a19b921fefe22caac21fda1be82
+
+sudo systemd-run --scope -p MemoryLimit=6G go run main.go
+
+2. Run the following fio config in another cgroup to simulate mmapped
+page cache usage:
+
+[global]
+size=8g
+bs=256k
+iodepth=256
+direct=0
+ioengine=mmap
+group_reporting
+time_based
+runtime=86400
+numjobs=8
+name=randread
+rw=randread
+
+[job1]
+filename=derp
+
+sudo systemd-run --scope fio randread.fio
+
+3. Run curl to request a large file via proxy:
+
+curl -o /dev/null http://localhost:4444
+
+4. Observe low throughput. The numbers here are dependent on your
+location, but in my VM the throughput drops from 60MB/s to 10MB/s
+depending on whether fio is running or not.
+
+I can see that this happens because of the commit I mentioned with
+some perf tracing:
+
+sudo perf probe --add 'vmpressure:48 memcg->css.cgroup->kn->id scanned
+vmpr_scanned=vmpr->scanned reclaimed vmpr_reclaimed=vmpr->reclaimed'
+sudo perf probe --add 'vmpressure:72 memcg->css.cgroup->kn->id'
+
+I can record the probes above during curl runtime:
+
+sudo perf record -a -e probe:vmpressure_L48,probe:vmpressure_L72 -- sleep 5
+
+Line 48 allows me to observe scanned and reclaimed page counters, line
+72 is the actual throttling.
+
+Here's an example trace showing my go proxy cgroup:
+
+kswapd0 89 [002] 2351.221995: probe:vmpressure_L48: (ffffffed2639dd90)
+id=0xf23 scanned=0x140 vmpr_scanned=0x0 reclaimed=0x0
+vmpr_reclaimed=0x0
+kswapd0 89 [007] 2351.333407: probe:vmpressure_L48: (ffffffed2639dd90)
+id=0xf23 scanned=0x2b3 vmpr_scanned=0x140 reclaimed=0x0
+vmpr_reclaimed=0x0
+kswapd0 89 [007] 2351.333408: probe:vmpressure_L72: (ffffffed2639de2c) id=0xf23
+
+We scanned lots of pages, but weren't able to reclaim anything.
+
+When throttling happens, it's in tcp_prune_queue, where rcv_ssthresh
+(TCP window clamp) is set to 4 x advmss:
+
+* https://elixir.bootlin.com/linux/v5.15.76/source/net/ipv4/tcp_input.c#L5373
+
+else if (tcp_under_memory_pressure(sk))
+tp->rcv_ssthresh = min(tp->rcv_ssthresh, 4U * tp->advmss);
+
+I can see plenty of memory available in both my go proxy cgroup and in
+the system in general:
+
+$ free -h
+total used free shared buff/cache available
+Mem: 7.8Gi 4.3Gi 104Mi 0.0Ki 3.3Gi 3.3Gi
+Swap: 11Gi 242Mi 11Gi
+
+It just so happens that all of the memory is hot and is not eligible
+to be reclaimed. Since swap is enabled, the memory is still eligible
+to be scanned. If swap is disabled, then my go proxy is not eligible
+for scanning anymore (all memory is anonymous, nowhere to reclaim it),
+so the whole issue goes away.
+
+Punishing well behaving programs like that doesn't seem fair. We saw
+production metals with 200GB page cache out of 384GB of RAM, where a
+well behaved proxy with 60GB of RAM + 15GB of swap is throttled like
+that. The fact that it only happens with swap makes it extra weird.
+
+I'm not really sure what to do with this. From our end we'll probably
+just pass cgroup.memory=nosocket in cmdline to disable this behavior
+altogether, since it's not like we're running out of TCP memory (and
+we can deal with that better if it ever comes to that). There should
+probably be a better general case solution.
+
+I don't know how widespread this issue can be. You need a fair amount
+of page cache pressure to try to go to anonymous memory for reclaim to
+trigger this.
+
+Either way, this seems like a bit of a landmine.
