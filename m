@@ -2,72 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919AA633360
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8077B63336A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiKVCeL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Nov 2022 21:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S231825AbiKVCh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiKVCeI (ORCPT
+        with ESMTP id S231641AbiKVChy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:34:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AC1BF5BF
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:34:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2907BB81603
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:34:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A06C433C1;
-        Tue, 22 Nov 2022 02:34:04 +0000 (UTC)
-Date:   Mon, 21 Nov 2022 21:34:02 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ftrace: avoid replacing the list func with itself
-Message-ID: <20221121213402.154adf09@rorschach.local.home>
-In-Reply-To: <CAAYs2=iOvP-TxLs+_QFMLQHG86xi2PYK_CN_rXUWHBx=kY+1aw@mail.gmail.com>
-References: <20221026132039.2236233-1-suagrfillet@gmail.com>
-        <CAAYs2=iOvP-TxLs+_QFMLQHG86xi2PYK_CN_rXUWHBx=kY+1aw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 21 Nov 2022 21:37:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC72C5B7F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:37:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669084619;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xvIIlAJedlMA1IAN6mozxkUlISNRY72m50Y0CwedFi4=;
+        b=VW8bLHTbzYFHBWB1nITK9JtOnhoZjtuFHsYMyxjfsZMvV9mwZItLZnZH8BKr1uTVjbBe6R
+        QmfuwLaKNuAe3m3AAkbnyMRza832ibEIa/l0ltGWbD+K+352KRVzX6iTf7nYCFldl5xlJD
+        42/g1uJvlspHUd4jri/fiPOjzZJgQpg=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-340-BXpH7yR4NkyYWZjUiP4F5A-1; Mon, 21 Nov 2022 21:36:58 -0500
+X-MC-Unique: BXpH7yR4NkyYWZjUiP4F5A-1
+Received: by mail-pg1-f198.google.com with SMTP id f19-20020a63f113000000b0046fde69a09dso7862198pgi.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:36:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xvIIlAJedlMA1IAN6mozxkUlISNRY72m50Y0CwedFi4=;
+        b=8KXB5L5KhknrwfPWABttJsKcUcu7HEMOWI/dBAY/tCwrooyCi9eJjDQgUNfGmj0mGc
+         gkbU7uP4G4ClQ/G+1eC6y/JaNeZNtjAON9XMUMkkKcHPmwq91NA8HqrmzS7z5QP9RdRo
+         172G4mVezDX0FcmVAM1YTTy5tWiX2oA46oSE4Eut2gVSGLC8kZHhxFpVkUDagqFOxv1o
+         LJvCjUxs6q84yQtbyOedv6kzocJYzA7rW8K+JChCwlcmFQ7lCdcvNvZLoLrUjvzNp3zX
+         mN46XXzBV3zgxfkATL8WS4vXbz69gUNdxT/dG+mF2mvQJJQuRN7sfCNUIF8/qgyzyS41
+         KyxA==
+X-Gm-Message-State: ANoB5pk9XyNUfeKPPvGeU2SLsLfrgxx3LYlN5Zi6cv8t1aK7HLTnpsuc
+        ZJ7cEVhfdhyvC2RWHvFaCPQch5w/d6AE1tg1Qb8ayc1QELhfaCELnldXqlNa0JZ5cPqsbs+8jh4
+        wGh+0Q9Byxet2K9WHqpnjSq35
+X-Received: by 2002:a17:902:bd42:b0:188:ca57:8945 with SMTP id b2-20020a170902bd4200b00188ca578945mr1672923plx.116.1669084617019;
+        Mon, 21 Nov 2022 18:36:57 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5u80bNrcNaRgL0fQ5kRBTesC/rxRbN9BLu4B5mZ4iRUSxKXsFzA1wq6uSnG3iu384vaVg/tg==
+X-Received: by 2002:a17:902:bd42:b0:188:ca57:8945 with SMTP id b2-20020a170902bd4200b00188ca578945mr1672913plx.116.1669084616745;
+        Mon, 21 Nov 2022 18:36:56 -0800 (PST)
+Received: from localhost ([240e:3a1:2e3:6280:f5b8:e7c9:62bf:459])
+        by smtp.gmail.com with ESMTPSA id k186-20020a6324c3000000b0046fd180640asm8185870pgk.24.2022.11.21.18.36.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 18:36:56 -0800 (PST)
+Date:   Tue, 22 Nov 2022 10:36:06 +0800
+From:   Coiby Xu <coxu@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     kexec@lists.infradead.org, Matthew Garrett <mjg59@srcf.ucam.org>,
+        Jiri Bohac <jbohac@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        James Morris <jmorris@namei.org>,
+        Matthew Garrett <mjg59@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] lockdown: kexec_file: prevent unsigned kernel image when
+ KEXEC_SIG not enabled
+Message-ID: <20221122023606.nrifkrng5nbfmkka@Rk>
+References: <20221121072947.836672-1-coxu@redhat.com>
+ <5d98172d77a8a0f1e3daab44ad51bf38978cc053.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <5d98172d77a8a0f1e3daab44ad51bf38978cc053.camel@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 02:28:25 +0000
-Song Shuai <suagrfillet@gmail.com> wrote:
+Hi Mimi,
 
-> Song Shuai <suagrfillet@gmail.com> 于2022年10月26日周三 13:20写道：
-> >
-> > The list func (ftrace_ops_list_func) will be patched first
-> > before the transition between old and new calls are set,
-> > which fixed the race described in this commit `59338f75`.
-> >
-> > While ftrace_trace_function changes from the list func to a
-> > ftrace_ops func, like unregistering the klp_ops to leave the only
-> > global_ops in ftrace_ops_list, the ftrace_[regs]_call will be
-> > replaced with the list func although it already exists. So there
-> > should be a condition to avoid this.
-> >
-> > This patch backups saved_ftrace_func by saved_ftrace_func_old
-> > which will be compared with the list func before trying to patch it.
-> >  
-> Ping...
+On Mon, Nov 21, 2022 at 01:23:57PM -0500, Mimi Zohar wrote:
+>Hi Coiby,
+>
+>On Mon, 2022-11-21 at 15:29 +0800, Coiby Xu wrote:
+>> A kernel builder may not enable KEXEC_SIG and some architectures like
+>> ppc64 simply don't have KEXEC_SIG. In these cases, unless both
+>> IMA_ARCH_POLICY and secure boot also enabled, lockdown doesn't prevent
+>> unsigned kernel image from being kexec'ed via the kexec_file_load
+>> syscall whereas it could prevent one via the kexec_load syscall. Mandate
+>> signature verification for those cases.
+>>
+>> Fixes: 155bdd30af17 ("kexec_file: Restrict at runtime if the kernel is locked down")
+>> Cc: Matthew Garrett <mjg59@srcf.ucam.org>
+>> Cc: Jiri Bohac <jbohac@suse.cz>
+>> Cc: David Howells <dhowells@redhat.com>
+>> Cc: kexec@lists.infradead.org
+>> Cc: linux-integrity@vger.kernel.org
+>> Signed-off-by: Coiby Xu <coxu@redhat.com>
+>
+>Other than correcting the function name to mandate_signature_verificati
+>on(),
 
-Thanks for the ping. I had thought I had replied to this, but I don't
-see it in my sent folder. I may have been distracted, and lost the
-message.
+Applied to v2, thanks for correcting me! Btw, I realize I overwrote the
+return code of kexec_image_verify_sig with
+mandate_signature_verification's. v2 has fixed this issue as well.
 
-I'll take a look at it tomorrow.
+>
+>Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
--- Steve
+And thanks for the review!
+
+-- 
+Best regards,
+Coiby
+
+-- 
+Best regards,
+Coiby
+
