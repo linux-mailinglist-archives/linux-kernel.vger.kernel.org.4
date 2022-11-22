@@ -2,88 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E754634520
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB1C634529
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbiKVUGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:06:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S234030AbiKVUHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:07:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234450AbiKVUGI (ORCPT
+        with ESMTP id S231174AbiKVUHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:06:08 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74060A7C35
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:06:06 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 6so14964422pgm.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Io17PfAc29uMBTDjrTmJ5rXTcrZmlMcBL16ZnrS2meo=;
-        b=hHkNHJ/TI/YGsTG53S+HMqoROlVIKOwZsl14RkYHb/axOVov+sxaZzLDJxKTQAicgz
-         DnUvDSz/LYvuwpqDypPY5xuCrTyR3FARTgb2OHlJWNzg8glI59NbKWLKKxwFJ7dUrZM2
-         vDFAW0JguDNs9DJGj+Pw2NVYlMb8+vBMdAkcmw2nHjjEdbb2CwWrYYseqrvO5lutn2Zz
-         phIuOZFEjhKDwiSOkBjbuOu5bXSo2g4QROYSGY6VFLtXuNfp9+hgOSTV3GbDs4xzh/3/
-         Cxb9dc6kWgnbtS+mPiwAQlsDNvuGbgy4+a01De97Oe607lp5StdrJWuhQQrRqqXxvYZ2
-         IE4Q==
+        Tue, 22 Nov 2022 15:07:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0026CA6A0F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:06:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669147610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0xAdJctF6H+O/M4MLLhKCg5TO/+mCew7BZYqlNiSSIs=;
+        b=RDRiia6HkKLAQTo4o6OjU/X6ZH0fl7VP5zvjG5KBbm0OJHRpK4NECDLQ4bCI64ICkR1xNs
+        PGRz/g8Jan2BeOcGIIh2bDidH5YXLipRGmtBaP0Ta3I+vmlem0xlsGjkjFlDv7i7izc0BI
+        5etxIO/2X3jK5I6OrdZDLbH0i3Mbymg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-283-7Ne7fpMXNnSiHk6gocynbw-1; Tue, 22 Nov 2022 15:06:48 -0500
+X-MC-Unique: 7Ne7fpMXNnSiHk6gocynbw-1
+Received: by mail-wm1-f71.google.com with SMTP id m17-20020a05600c3b1100b003cf9cc47da5so8554435wms.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:06:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Io17PfAc29uMBTDjrTmJ5rXTcrZmlMcBL16ZnrS2meo=;
-        b=VkYDZ/4E+GK4/qFb2fNazksTxw6NK3CTos0Kw2W/KC8tr13u0zHoUCmmnyHMzH8qYd
-         c5P9HWH9YfLTLYc15bQAH/rp/JCdn3G1W3xD1ivUSruWwGr1P48+9RP7OxamwesvMUws
-         bV/447Cd+2wCN6td5SPryBPOBEH+gg6VFJhaw4XHgJQuWEx3xOk3olR8Rv/LmwPkaU5E
-         EY97USSxF+sHpk/OiyObYPuxcPY4YUOu8yFYeetkGHQgHcGvITkToLGf1K+mIewPJZZ3
-         Q563MpWKtXpxCk/RP9qq7SAFUIz+jVChakv2X8g302MQrxJmYQ7JBxDrUUBc7XibOATK
-         +aCg==
-X-Gm-Message-State: ANoB5plI3fe3Ag62r8y8kxFLCNTUaNhvJeuf/WQyw8vE6uSf9T5tE8z4
-        BANTuXXqeE5GvaU2FzRUyWPmlQ==
-X-Google-Smtp-Source: AA0mqf6Ev2gBqgfT1KuMwfcbFwlKgouzc+D/Ubel+TnlBZCJDAc0UwpNtCkUO1EgvUDhY/hFnR/QWw==
-X-Received: by 2002:a63:e547:0:b0:473:e2bb:7fc7 with SMTP id z7-20020a63e547000000b00473e2bb7fc7mr4901625pgj.40.1669147565800;
-        Tue, 22 Nov 2022 12:06:05 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i18-20020a056a00005200b0056f0753390csm11376369pfk.96.2022.11.22.12.06.05
+        bh=0xAdJctF6H+O/M4MLLhKCg5TO/+mCew7BZYqlNiSSIs=;
+        b=gIxqpk/aFjpMGxGrW+q53rxbz7cPIMYXutjgWJn4s8Qx8x1gBPBB+/YYe5Ols4zSva
+         RRenkkYvLZ1Z2qKEl18CWsDBdcrEghtruY2zhNatgA45DCuw3dF5mu+zsbwmeCmMIBWY
+         T3rIcIY44lMVGmUKQPAKmPNBQeV0wpLR1Ucf8/MydrahIRDWAS4XPof1FuNgP+4SmHO/
+         B1sacS/sKrgTLAWMRVVhDMkeQ4f2j/qlGik8GHhZu91iJdml0UzlLrLs+OGYw2u/186S
+         cVgb0SefyJaRo8lfP/MeEjfgaJKhDXeGwrzGc+sjFvmBZjai0INh+fixpovBBoe4c0KQ
+         eTOg==
+X-Gm-Message-State: ANoB5pmVDO+cz+mg+ttLSWQ6u/wtEZ0nHR6SEIdYdH/CNa9R57XhayW8
+        gT05cQhq3hk8kjh4YfzxsKoY6axTImuyM+ZepyIskAMsjKcyG2Gke0exG4BENnWLfOieldxgq9r
+        0QWO6Pw7H4GcREWv6tZfMao19
+X-Received: by 2002:a05:600c:19d1:b0:3cf:ca1a:332a with SMTP id u17-20020a05600c19d100b003cfca1a332amr21535837wmq.118.1669147607623;
+        Tue, 22 Nov 2022 12:06:47 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7YWFh65HU9KyRpvxonEkQl/n1raz9o7hhsaT5c6a6bnb78L5u0hylpoRzGwVF6Heua+k5RZA==
+X-Received: by 2002:a05:600c:19d1:b0:3cf:ca1a:332a with SMTP id u17-20020a05600c19d100b003cfca1a332amr21535811wmq.118.1669147607355;
+        Tue, 22 Nov 2022 12:06:47 -0800 (PST)
+Received: from redhat.com ([2.52.16.74])
+        by smtp.gmail.com with ESMTPSA id c2-20020a05600c0a4200b003cfd4cf0761sm25248305wmq.1.2022.11.22.12.06.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 12:06:05 -0800 (PST)
-Date:   Tue, 22 Nov 2022 20:06:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com,
-        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
-        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
-        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
-        pgonda@google.com, nikunj@amd.com, diviness@google.com,
-        maz@kernel.org, dmatlack@google.com, axelrasmussen@google.com,
-        maciej.szmigiero@oracle.com, mizhang@google.com,
-        bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
-Message-ID: <Y30rqWwDRbH7nQaQ@google.com>
-References: <20221111014244.1714148-1-vannapurve@google.com>
- <20221111014244.1714148-2-vannapurve@google.com>
- <20221122100705.GA619277@chaop.bj.intel.com>
+        Tue, 22 Nov 2022 12:06:46 -0800 (PST)
+Date:   Tue, 22 Nov 2022 15:06:43 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     davem@davemloft.net, edumazet@google.com, jasowang@redhat.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, rusty@rustcorp.com.au,
+        cornelia.huck@de.ibm.com, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2] virtio_net: Fix probe failed when modprobe virtio_net
+Message-ID: <20221122150459-mutt-send-email-mst@kernel.org>
+References: <20221121132935.2032325-1-lizetao1@huawei.com>
+ <20221122150046.3910638-1-lizetao1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221122100705.GA619277@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20221122150046.3910638-1-lizetao1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,80 +80,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022, Chao Peng wrote:
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 10017a9f26ee..b3118d00b284 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -4280,6 +4280,10 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> >  
-> >  	fault->gfn = fault->addr >> PAGE_SHIFT;
-> >  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
-> > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
-> > +	fault->is_private = kvm_slot_can_be_private(fault->slot) &&
-> > +			kvm_mem_is_private(vcpu->kvm, fault->gfn);
-> > +#endif
-> >  
-> >  	if (page_fault_handle_page_track(vcpu, fault))
-> >  		return RET_PF_EMULATE;
-> > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > index 5cdff5ca546c..2e759f39c2c5 100644
-> > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > @@ -188,7 +188,6 @@ struct kvm_page_fault {
-> >  
-> >  	/* Derived from mmu and global state.  */
-> >  	const bool is_tdp;
-> > -	const bool is_private;
-> >  	const bool nx_huge_page_workaround_enabled;
-> >  
-> >  	/*
-> > @@ -221,6 +220,9 @@ struct kvm_page_fault {
-> >  	/* The memslot containing gfn. May be NULL. */
-> >  	struct kvm_memory_slot *slot;
-> >  
-> > +	/* Derived from encryption bits of the faulting GPA for CVMs. */
-> > +	bool is_private;
+On Tue, Nov 22, 2022 at 11:00:46PM +0800, Li Zetao wrote:
+> When doing the following test steps, an error was found:
+>   step 1: modprobe virtio_net succeeded
+>     # modprobe virtio_net        <-- OK
 > 
-> Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
-> it looks ugly I can remove the "const" in my code.
+>   step 2: fault injection in register_netdevice()
+>     # modprobe -r virtio_net     <-- OK
+>     # ...
+>       FAULT_INJECTION: forcing a failure.
+>       name failslab, interval 1, probability 0, space 0, times 0
+>       CPU: 0 PID: 3521 Comm: modprobe
+>       Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+>       Call Trace:
+>        <TASK>
+>        ...
+>        should_failslab+0xa/0x20
+>        ...
+>        dev_set_name+0xc0/0x100
+>        netdev_register_kobject+0xc2/0x340
+>        register_netdevice+0xbb9/0x1320
+>        virtnet_probe+0x1d72/0x2658 [virtio_net]
+>        ...
+>        </TASK>
+>       virtio_net: probe of virtio0 failed with error -22
+> 
+>   step 3: modprobe virtio_net failed
+>     # modprobe virtio_net        <-- failed
+>       virtio_net: probe of virtio0 failed with error -2
+> 
+> The root cause of the problem is that the queues are not
+> disable
 
-Hmm, I think we can keep the const.  Similar to the bug in kvm_faultin_pfn()[*],
-the kvm_slot_can_be_private() is bogus.  A fault should be considered private if
-it's marked as private, whether or not userspace has configured the slot to be
-private is irrelevant.  I.e. the xarray is the single source of truth, memslots
-are just plumbing.
+if you need to resend it:
 
-Then kvm_mmu_do_page_fault() can do something like:
+not disabled
 
-diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-index dbaf6755c5a7..456a9daa36e5 100644
---- a/arch/x86/kvm/mmu/mmu_internal.h
-+++ b/arch/x86/kvm/mmu/mmu_internal.h
-@@ -260,6 +260,8 @@ enum {
- static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-                                        u32 err, bool prefetch)
- {
-+       bool is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault);
-+
-        struct kvm_page_fault fault = {
-                .addr = cr2_or_gpa,
-                .error_code = err,
-@@ -269,13 +271,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-                .rsvd = err & PFERR_RSVD_MASK,
-                .user = err & PFERR_USER_MASK,
-                .prefetch = prefetch,
--               .is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
-+               .is_tdp = is_tdp,
-                .nx_huge_page_workaround_enabled =
-                        is_nx_huge_page_enabled(vcpu->kvm),
- 
-                .max_level = KVM_MAX_HUGEPAGE_LEVEL,
-                .req_level = PG_LEVEL_4K,
-                .goal_level = PG_LEVEL_4K,
-+               .private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
-+                          kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
-        };
-        int r;
+but that's minor, ok to ignore
 
-[*] https://lore.kernel.org/all/Y3Vgc5KrNRA8r6vh@google.com
+> on the error handling path when register_netdevice()
+> fails in virtnet_probe(), resulting in an error "-ENOENT"
+> returned in the next modprobe call in setup_vq().
+> 
+> virtio_pci_modern_device uses virtqueues to send or
+> receive message, and "queue_enable" records whether the
+> queues are available. In vp_modern_find_vqs(), all queues
+> will be selected and activated, but once queues are enabled
+> there is no way to go back except reset.
+> 
+> Fix it by reset virtio device on error handling path. This
+> makes error handling follow the same order as normal device
+> cleanup in virtnet_remove() which does: unregister, destroy
+> failover, then reset. And that flow is better tested than
+> error handling so we can be reasonably sure it works well.
+> 
+> Fixes: 024655555021 ("virtio_net: fix use after free on allocation failure")
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+
+Thanks, LGTM, feel free to merge.
+
+
+
+> ---
+> v1 was posted at: https://lore.kernel.org/all/20221121132935.2032325-1-lizetao1@huawei.com/
+> v1 -> v2: modify commit log and fixes tag
+> 
+>  drivers/net/virtio_net.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 7106932c6f88..86e52454b5b5 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3949,12 +3949,11 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	return 0;
+>  
+>  free_unregister_netdev:
+> -	virtio_reset_device(vdev);
+> -
+>  	unregister_netdev(dev);
+>  free_failover:
+>  	net_failover_destroy(vi->failover);
+>  free_vqs:
+> +	virtio_reset_device(vdev);
+>  	cancel_delayed_work_sync(&vi->refill);
+>  	free_receive_page_frags(vi);
+>  	virtnet_del_vqs(vi);
+> -- 
+> 2.25.1
+
