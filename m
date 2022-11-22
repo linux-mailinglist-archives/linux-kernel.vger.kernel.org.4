@@ -2,102 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065B3633829
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B4D633827
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbiKVJRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
+        id S232643AbiKVJRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbiKVJRq (ORCPT
+        with ESMTP id S233239AbiKVJRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:17:46 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDD926F3;
-        Tue, 22 Nov 2022 01:17:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669108659; x=1700644659;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=ju1JyQTn92u4HvUI5+WxNM5kNBlJYD4Eh6lJkA3+1pw=;
-  b=Oq7BQn6mlzlbISruwZjrEh64CH5T406xTR7b15XneT/bR8CZHbq4mO2d
-   OIUI2IsjcsvkSDuGtURO0WZRmX+Hbxb4rgMzLDJwudNVp36hmtEWmwg5J
-   36u2ODg2aO9rKJNH/mQ0g+B0TQOcBtOI8uhgKVvvNIUI06XRXgQh0PU/R
-   gScHhomVK1dTQmMGBXg1hGBSZ2co4T0QjIjyRbfO2W3uGBttlkWP/2KPr
-   gKWtmhjc8zl1DcMSd/32fK43ilX44hUn6WXDP2uUJPJmZ0FWjJLl9z3ke
-   0Tyox/3RM3Zf3mPyNhH0kljMkAOozPMezEo3V0HQtgku4T4TnVimVLaSz
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="188113651"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 02:17:28 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 02:17:26 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 22 Nov 2022 02:17:23 -0700
-Message-ID: <994f72742a15bec5a93d57324b749b71d0709035.camel@microchip.com>
-Subject: Re: [PATCH net-next v2 0/8] Add support for VCAP debugFS in Sparx5
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Casper Andersson" <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Daniel Machon" <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Date:   Tue, 22 Nov 2022 10:17:22 +0100
-In-Reply-To: <20221121110154.709bed49@kernel.org>
-References: <20221117213114.699375-1-steen.hegelund@microchip.com>
-         <20221121110154.709bed49@kernel.org>
+        Tue, 22 Nov 2022 04:17:42 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DA414003
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:17:36 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id me22so17747649ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E2ICHar1wEDuYN4dLbeWQM7OkIrhycn7GRhQ4BTAxpE=;
+        b=xPO0WIbaVfl1Wfy6cQOJKSkIKbZwreFXitLUZgVPGvNySk90ig+AqifoUc+lVOCfZQ
+         6D1sU/lDBOO9NFTGKAuFgfDMNYVPrWCsTIwyGSi1Nc285RHQmbaI2q0TKSFrfEzYkhqA
+         KrJRv+fEdbqcgY7DYU2u+0sSdEo1tiUIFhBgLvaxNL0dBQJ34Io398UpxSBWdoRREgx/
+         vdGaVCGVM17QroH0YPYiX+du4p8+AdeGCb9waDJIptj3+CTSUvw1ZrHBcEGClyE8KkZX
+         KtJ3RIoUCgvxTwSCFnPqxQXpohHraaIfDUkVp81pQLdeXb37PKmsVxAL2RbAyjZHjgxx
+         rl1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E2ICHar1wEDuYN4dLbeWQM7OkIrhycn7GRhQ4BTAxpE=;
+        b=yDGnI1m3ryHWxRC2re3kUvXmssxylV4op3hOzH6ahwBu2z1dI7D4BYWiN8iKO8slrK
+         /9KJ7sa+UzsLsuzttLtPsaj8qb4gpq2/HFa6I7dR+ShRQ9XdQqo3T5GsXrz7YRZ2Plta
+         vvF4+Z0qfRTopGUY1WFCQzO7HCR1jZPhPqJKWqwhE4YI9aKLet4bhOLaMmElPqr3mhAg
+         3XS7NzXV2+g8EPc2/79+aOMO5U3bAPisnRkNB7bRe/eIcd0gjlVWohM5RlTH0SyepEUz
+         cgpXCJhQu6g1AEQktX5boiib5dgCtuuNSlMD0F2F9ihsnA0mcprovwc0NDmsjeQz726z
+         dbyg==
+X-Gm-Message-State: ANoB5pkrzT0ejeeVrG7M3fvSf6bvgRb9irrhJGOr1O8z9OxAq1V7xikJ
+        ei+SO46nwgYk94y0vQitG30FiN42UXK7lqLyd0eOlKWIJDQ9qtkL
+X-Google-Smtp-Source: AA0mqf6PhJ6w1i6WXYV8mflwSbR+oQT/PtgKb1kcwbqZ9xVdW/4yYiVRA0WZo/GQn2ZVhkpdEY9lhivcVi/OR8goQwg=
+X-Received: by 2002:a17:907:a803:b0:7ae:bfeb:f484 with SMTP id
+ vo3-20020a170907a80300b007aebfebf484mr2820944ejc.174.1669108655288; Tue, 22
+ Nov 2022 01:17:35 -0800 (PST)
+MIME-Version: 1.0
+References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
+In-Reply-To: <20221121184743.1123556-2-rmoar@google.com>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Tue, 22 Nov 2022 10:17:24 +0100
+Message-ID: <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        dlatypov@google.com, skhan@linuxfoundation.org,
+        mauro.chehab@linux.intel.com, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        isabbasso@riseup.net
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacub,
+On Mon, 21 Nov 2022 at 19:48, Rae Moar <rmoar@google.com> wrote:
+>
+> Change KUnit test output to better comply with KTAP v1 specifications
+> found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
+> 1) Use "KTAP version 1" instead of "TAP version 14" as test output header
+> 2) Remove '-' between test number and test name on test result lines
+> 2) Add KTAP version lines to each subtest header as well
+>
+> Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=
+=80=9D line now
+> located after the KTAP version line. This does not completely match the
+> KTAP v1 spec but since it is classified as a diagnostic line, it is not
+> expected to be disruptive or break any existing parsers. This
+> =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
+> (https://testanything.org/tap-version-14-specification.html)
+> and it is used to define the test name before the results.
+>
+> Original output:
+>
+>  TAP version 14
+>  1..1
+>    # Subtest: kunit-test-suite
+>    1..3
+>    ok 1 - kunit_test_1
+>    ok 2 - kunit_test_2
+>    ok 3 - kunit_test_3
+>  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+>  # Totals: pass:3 fail:0 skip:0 total:3
+>  ok 1 - kunit-test-suite
+>
+> New output:
+>
+>  KTAP version 1
+>  1..1
+>    KTAP version 1
+>    # Subtest: kunit-test-suite
+>    1..3
+>    ok 1 kunit_test_1
+>    ok 2 kunit_test_2
+>    ok 3 kunit_test_3
+>  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+>  # Totals: pass:3 fail:0 skip:0 total:3
+>  ok 1 kunit-test-suite
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-On Mon, 2022-11-21 at 11:01 -0800, Jakub Kicinski wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
->=20
-> On Thu, 17 Nov 2022 22:31:06 +0100 Steen Hegelund wrote:
-> > This provides support for getting VCAP instance, VCAP rule and VCAP por=
-t
-> > keyset configuration information via the debug file system.
->=20
-> Have you checked devlink dpipe? On a quick scan it may be the right API
-> to use here? Perhaps this was merged before people who know the code
-> had a chance to take a look :(
+I tried this patch, see the full boot log [1] and I can still see some
+ tests that output the "old" format with 'ok 1 - kunit_test_1', for example
 
-No I was not aware of the scope of devlink-dpipe, but it looks like the Spa=
-rx5
-VCAP feature would fit in.
+ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
 
-I need to take a closer look at the model and see if I can make ends meet, =
-but
-if so, then I could send support for devlink-dpipe at a later stage...
+Isn't this something that should be converted too?
 
-BR
-Steen
+Cheers,
+Anders
+[1] http://ix.io/4gwf
