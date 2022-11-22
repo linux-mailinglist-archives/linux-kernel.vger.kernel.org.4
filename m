@@ -2,106 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE2F633AAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3FE633A8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiKVLA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:00:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S232229AbiKVKud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232160AbiKVLAx (ORCPT
+        with ESMTP id S231655AbiKVKu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:00:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B342B247
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:59:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669114797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UZ15QZfNx5TZYA9TqYEZfhCeGYi/zDR+lUcnamDPADo=;
-        b=aKpPz009NXNfknwon4Yo1CUk7CMKjhfKi6bfmDN2JeHvo5c6qO5bpEpOO+jtrUsDp45jQO
-        dXKViOD7R6+jpQUsp9H3/RHS0Pg1lVm+3n5ptoHLD3Gpw0u22FkeW3wk1feNAFhSBgxwMx
-        9GtNlN0D2fXJruhNELMkG/JlIpHLgo0=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-550-84DGk9mbNeuuAktBUZkjIg-1; Tue, 22 Nov 2022 05:59:56 -0500
-X-MC-Unique: 84DGk9mbNeuuAktBUZkjIg-1
-Received: by mail-qv1-f71.google.com with SMTP id h13-20020a0ceecd000000b004c6964dc952so10619094qvs.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:59:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UZ15QZfNx5TZYA9TqYEZfhCeGYi/zDR+lUcnamDPADo=;
-        b=pcqd6upleE/e9JnTE1eWkV6blo0E2kq5cpwP1Ku/ICo5vviY9gp7/PS4y8NZ2rHTsI
-         Y1BxpfGUwjB9Wnj8T8MfQ8jAOlMTFRXMYZMRLFWrbMnzwTNeeJW0oWN6qCxTHCNYk1MC
-         9tcK9KGjEks5AUKYmsWsCamCsGFjLLK6y3iHiwM0Z7mP4rsZhCdui1zBU5c1tXgZmS3z
-         GoZhjWFfTBKajiHiOa7wpcXoGI9KWjpzHTGqk5y6W24LCaKp1JLJfgsaQBHPhjS8LA5t
-         8MLNIWEvtBvkrxuqcnCFurXqgpJr8sY0MOyNUmDLLWl5b42G8CsVpHQho1jJoOROS7TA
-         ewrg==
-X-Gm-Message-State: ANoB5pkqGcneCyCJOP/lopIMncvOABnbBhRvErfWyPF6MXfBvAvKpZ+9
-        2Tc2Hkpjwy6ci1l+7VDs6ALozLmdgoIONLkEflB/yBwYP5hTdtaTVbGAvvkMKnG9FuXKB1oS2UO
-        GuHK81c4scWKbF6DqnkT2lYSB
-X-Received: by 2002:a05:620a:958:b0:6ea:ba87:4385 with SMTP id w24-20020a05620a095800b006eaba874385mr19918158qkw.128.1669114795723;
-        Tue, 22 Nov 2022 02:59:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf52FolY0Qq1mpykLuYR5naBZsmnjsJzEN2VLZ3Pg7pc07aUk3yDmUUlVVsqqzUGSpXC8TDzIw==
-X-Received: by 2002:a05:620a:958:b0:6ea:ba87:4385 with SMTP id w24-20020a05620a095800b006eaba874385mr19918144qkw.128.1669114795478;
-        Tue, 22 Nov 2022 02:59:55 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id y19-20020a05620a44d300b006bbf85cad0fsm10383626qkp.20.2022.11.22.02.59.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 02:59:54 -0800 (PST)
-Message-ID: <38fbc36783d583f805f30fb3a55a8a87f67b59ac.camel@redhat.com>
-Subject: Re: [PATCH net-next 2/2] bonding: fix link recovery in mode 2 when
- updelay is nonzero
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jonathan Toppins <jtoppins@redhat.com>, netdev@vger.kernel.org,
-        Jay Vosburgh <j.vosburgh@gmail.com>
-Cc:     Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
+        Tue, 22 Nov 2022 05:50:28 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3C4C52;
+        Tue, 22 Nov 2022 02:50:27 -0800 (PST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGgxw2ZdgzRpPH;
+        Tue, 22 Nov 2022 18:49:56 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 18:50:24 +0800
+Received: from localhost.localdomain (10.175.112.70) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 18:50:24 +0800
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+To:     Taras Chornyi <tchornyi@marvell.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Date:   Tue, 22 Nov 2022 11:59:51 +0100
-In-Reply-To: <cb89b92af89973ee049a696c362b4a2abfdd9b82.1668800711.git.jtoppins@redhat.com>
-References: <cover.1668800711.git.jtoppins@redhat.com>
-         <cb89b92af89973ee049a696c362b4a2abfdd9b82.1668800711.git.jtoppins@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>
+CC:     Zhang Changzhong <zhangchangzhong@huawei.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH net] net: marvell: prestera: add missing unregister_netdev() in prestera_port_create()
+Date:   Tue, 22 Nov 2022 19:10:31 +0800
+Message-ID: <1669115432-36841-1-git-send-email-zhangchangzhong@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+If prestera_port_sfp_bind() fails, unregister_netdev() should be called
+in error handling path.
 
-On Fri, 2022-11-18 at 15:30 -0500, Jonathan Toppins wrote:
-> Before this change when a bond in mode 2 lost link, all of its slaves
-> lost link, the bonding device would never recover even after the
-> expiration of updelay. This change removes the updelay when the bond
-> currently has no usable links. Conforming to bonding.txt section 13.1
-> paragraph 4.
-> 
-> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+Compile tested only.
 
-Why are you targeting net-next? This looks like something suitable to
-the -net tree to me. If, so could you please include a Fixes tag?
+Fixes: 52323ef75414 ("net: marvell: prestera: add phylink support")
+Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+---
+ drivers/net/ethernet/marvell/prestera/prestera_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Note that we can add new self-tests even via the -net tree.
-
-Thanks,
-
-Paolo
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+index 24f9d60..47796e4 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+@@ -746,6 +746,7 @@ static int prestera_port_create(struct prestera_switch *sw, u32 id)
+ 	return 0;
+ 
+ err_sfp_bind:
++	unregister_netdev(dev);
+ err_register_netdev:
+ 	prestera_port_list_del(port);
+ err_port_init:
+-- 
+2.9.5
 
