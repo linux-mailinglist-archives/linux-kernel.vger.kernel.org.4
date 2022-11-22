@@ -2,58 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEE9633CCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47629633CCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232952AbiKVMqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S233125AbiKVMrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:47:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232729AbiKVMqh (ORCPT
+        with ESMTP id S233237AbiKVMrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:46:37 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F435914A;
-        Tue, 22 Nov 2022 04:46:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=vv6m9biE4Z2OXrFYdjKygGiyDF
-        HmEGbtxyodsXFLla2N9vRI5uc1Uc/WwCqA7uLl4zpxWxNFhKZbS+kjbz4xGeVbJK1ryDjSfzzQUHM
-        Kyg9tAZvsKvsU9aD0o5nz416qw7GfxOrgtUt3CJJEZChwo7eVgsNqMyFiLvJteqYDT3B+xt6djfff
-        JSdw5g5rD87hF8UY130eXlJF2bilwzqHH3Dw5u9EmUJVr0IaV7w5cYtiEgvVrUq3mbgokjQeM7h0f
-        0oRS+kpts3rnHiwuas6U0/s8ODEWWO0J3OztuYeOhvUsd0P3F6OjNy9geJ/TT+l3LCsR1jFhVuc66
-        9I93fOQQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxSfU-009Nkf-C1; Tue, 22 Nov 2022 12:46:28 +0000
-Date:   Tue, 22 Nov 2022 04:46:28 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] mm: Move FOLL_* defs to mm_types.h
-Message-ID: <Y3zEpABh/+jui71a@infradead.org>
-References: <166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk>
- <166869688542.3723671.10243929000823258622.stgit@warthog.procyon.org.uk>
+        Tue, 22 Nov 2022 07:47:07 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7773B5BD47;
+        Tue, 22 Nov 2022 04:47:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C9BE1FB;
+        Tue, 22 Nov 2022 04:47:12 -0800 (PST)
+Received: from [10.57.71.118] (unknown [10.57.71.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AED973F73B;
+        Tue, 22 Nov 2022 04:47:01 -0800 (PST)
+Message-ID: <916a6953-d9b4-c257-c08b-f5277ead71af@arm.com>
+Date:   Tue, 22 Nov 2022 12:46:56 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166869688542.3723671.10243929000823258622.stgit@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH RFC v2 5/7] arm64: dts: imx: fix touchscreen reset GPIO
+ polarity
+Content-Language: en-GB
+To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        David Jander <david@protonic.nl>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Quentin Schulz <foss+kernel@0leil.net>,
+        "Angus Ainslie (Purism)" <angus@akkea.ca>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+References: <20221103-upstream-goodix-reset-v2-0-2c38fb03a300@theobroma-systems.com>
+ <20221103-upstream-goodix-reset-v2-5-2c38fb03a300@theobroma-systems.com>
+ <CAOMZO5BzWsHAy7KjZe+KEiXVq-Mfpggqjk0vswuzx7nkups3gA@mail.gmail.com>
+ <20221122081851.6cb762d8@erd992>
+ <907b9321-14dc-dc99-80fc-e1a20ee33a1e@theobroma-systems.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <907b9321-14dc-dc99-80fc-e1a20ee33a1e@theobroma-systems.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+On 2022-11-22 09:58, Quentin Schulz wrote:
+> Hi David,
+> 
+> Thanks Fabio for the Cc.
+> 
+> On 11/22/22 08:18, David Jander wrote:
+>> On Mon, 21 Nov 2022 15:18:32 -0300
+>> Fabio Estevam <festevam@gmail.com> wrote:
+>>
+>>> [Adding Angus and David]
+>>
+>> Thanks. This was apparently necessary ;-)
+>>
+>>> On Mon, Nov 21, 2022 at 3:12 PM Quentin Schulz 
+>>> <foss+kernel@0leil.net> wrote:
+>>>>
+>>>> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+>>>>
+>>>> The reset line is active low for the Goodix touchscreen controller so
+>>>> let's fix the polarity in the Device Tree node.
+>>>>
+>>>> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+>>>> ---
+>>>>   arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts         | 2 +-
+>>>>   arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts | 2 +-
+>>>>   2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts 
+>>>> b/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
+>>>> index 9fbbbb556c0b3..df7e5ae9698e1 100644
+>>>> --- a/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
+>>>> +++ b/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
+>>>> @@ -107,7 +107,7 @@ touchscreeen@5d {
+>>>>                  interrupt-parent = <&gpio1>;
+>>>>                  interrupts = <8 IRQ_TYPE_NONE>;
+>>>>                  irq-gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
+>>>> -               reset-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
+>>>> +               reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+>>
+>> NACK!
+>>
+>> The PRT8MM has an inverter in the reset line. The reason for that is 
+>> that the
+>> reset line needs to be inactive when the driving side is unpowered.
+>> The DT was correct, this change will break it.
+>>
+> 
+> The DT was correct. The implementation in the driver is changed (the 
+> polarity is swapped) in this patch series, therefore the DT isn't 
+> correct anymore, hence this patch.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+I'm not sure it's quite that simple... FWIW I'm using an add-on LCD 
+module with a GT9271[1] (and I won't be the only one - Raspberry Pi and 
+other SBC users using DT overlays or custom-built DTBs are a whole other 
+can of worms here), where GPIO_ACTIVE_LOW is correctly specified per the 
+schematics, thus "wrong" for the current driver behaviour, yet it *is* 
+working OK as-is. I guess that's because /RSTB ends up driven low for 
+long enough between the current "deassertion" by 
+gpiod_direction_output(1) and gpiod_direction_input() allowing the 
+external pull-up to take it high again.
+
+Robin.
+
+[1] 
+https://www.friendlyelec.com/index.php?route=product/product&path=81&product_id=230
+
+> 
+> See 
+> https://lore.kernel.org/linux-input/20221103-upstream-goodix-reset-v2-0-2c38fb03a300@theobroma-systems.com/ for the whole patch series.
+> 
+> This DT patch alone is obviously incorrect, but the context around it 
+> matters. I could/should have made it all into one big patch, the 
+> question is then how this big tree-crossing patch would be merged into 
+> Linux (if there's consensus). We're not there yet.
+> 
+> For some additional background on the discussion that was had in the v1:
+> https://lore.kernel.org/all/267de96a-0129-a97d-9bf6-e1001b422a1a@theobroma-systems.com/
+> I messed up the Cc list in the v1, apologies for the missing context in 
+> the archived mails, I think one should be able to understand the 
+> important bits by reading the answers in-mail. There, Dmitry, Hans and I 
+> discussed the meaning of the active level of GPIOs/reset lines and I 
+> expressed the reasons for such a change (which are also listed in the 
+> cover letter of this patch series).
+> 
+> As stated in v1 cover letter, no implementation will satisfy every one. 
+> We either make the DT binding implementation specific (which is what it 
+> shouldn't be), or we swap the polarity in the Linux implementation and 
+> thus the DT but then break DT backward compatibility.
+> 
+> Cheers,
+> Quentin
+> 
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
