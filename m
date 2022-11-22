@@ -2,394 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0384F6349DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 120696349E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbiKVWML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 17:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
+        id S235162AbiKVWNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 17:13:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235221AbiKVWLq (ORCPT
+        with ESMTP id S234070AbiKVWNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 17:11:46 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B662A43C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:11:43 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id n189so6502321yba.8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:11:43 -0800 (PST)
+        Tue, 22 Nov 2022 17:13:21 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EE832066;
+        Tue, 22 Nov 2022 14:13:20 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so187381pjh.2;
+        Tue, 22 Nov 2022 14:13:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bZUQmB6GiXQi+M8Npz6+SwmWsXR3hQITzPdj0ohPJm4=;
-        b=eUO7sYnvIbJsYZ0rzzXC7yH3N6HdZzYu0004UzcbkW8+vg0N1L8CfJzB97Fiut/sGk
-         ND/gEcbc6o6qJF1g4VN8Ihs21pHn4QTl4poS5rssJ3uZ0To1v43esRc/ZlZFLu9QRcVV
-         64qRYAWINJRl/0OQOzwWE+sigjOo7VTWIo7Q8=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4AX85xZR/Z+/BFidSsN8cuPlIss1GzSZ5O8aUvSnWk0=;
+        b=qtAroXIgR/kdmdgCvSWoRUBWUO7Q0R2oetA+DSgo8Im+qMa/WgDIzDI593eVDOfjmp
+         /YNDGl7b6PbGXNqPzfD0FYgqkIGyDLdO86xQISGNXBMAGCXQuwwtVGVVEez+EP+fv2YT
+         zEQKRaATTkqUxQrcsN0JxSecjm28Y7LeWESKEVAyR9T/wWVJF8MbJvxjjbNRQ2D+aCP3
+         kyuy2Nz8vKEQvRzjE6We5EvrQZh7e5sd8wWjPyBazcOmKlUC/RA83uyT7heG/aZy8O8t
+         QOUrE61bK1vgJYcSRRaY5D2iOxjwH6flA1rp/3fPzc5EB3D0BNxCi6I04NseacqdYRTz
+         v75Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bZUQmB6GiXQi+M8Npz6+SwmWsXR3hQITzPdj0ohPJm4=;
-        b=O3E2AVxa8jfg0PKXnQEa2+h9DLhz8OfvOM1TNZNHDe2tQ65rtdru7GrQCDPtthfKkx
-         anCpnl8Qm+EcjPgg40cg3xy8Jv9Vzj2IOumeWg1pYlQ+jM0yovaP/OuV4/KKXKvF4kZs
-         JUIChb1PZlaA+oIa0Qyfr++RfOPVBVfAv+XSQvFLqjAeq4SbiP2uIDAB52yrxQE1UNSd
-         x5nQkQtixgg35dd9mvnoZAfE0j6MiVBGyldPNZzVYnEx+PU3RrVoLscmxwP9Z9v/wuup
-         HoJS90tpS6i1veHaGsusLDsXdg628vasxaaCRO9zgbXawTbhL6qTIIVMXPdDkS3mx4LK
-         ga9A==
-X-Gm-Message-State: ANoB5pmB01kg9nysoRo3xjoom2o/v5lbUOVDnvzQse/75pK0x97EP4p5
-        SMXZbC6oF8wc7qKYEtpqailhU9veOiWXvFHhdelRmw==
-X-Google-Smtp-Source: AA0mqf4WnaGBdw4CGCLWrsP49C0Rvke2rFymY2r/mpnyiluTDYxZrED1mX5IDgVYhn9F4YUEKHxvg1S2Zkm2Xoj42cU=
-X-Received: by 2002:a25:ab44:0:b0:6dc:b78c:506d with SMTP id
- u62-20020a25ab44000000b006dcb78c506dmr23555771ybi.281.1669155102331; Tue, 22
- Nov 2022 14:11:42 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4AX85xZR/Z+/BFidSsN8cuPlIss1GzSZ5O8aUvSnWk0=;
+        b=q0Fi4Ia0h0dgHRK03X1yF1Z8NwuxPrtSymaj1n+mbTSH66Kf1xKAZfDvApm6mHNPwu
+         MJ2x02FMF2GFRfSmqbQMth8ctr3wFnIqV1AU3sih2h44qJ8MkgK5029/z7HzeVD2HBIP
+         1NHvYFw5Ibhueu+I7KTHq6NA/5+Bktl8JeO+r5TduDxDSbifsLS/oD1HGtlIfrQk35Nk
+         MavUxNn/iAo7fdWwe5x/y4b11EnwuyhPoWrmmfy8+lFaYo/XLRL++oc12pirV5Ll04c0
+         LxS/P4NjKKGSgTWbhlrcDIyAOyUL3sv0mnWW8bt7AhF0C2R1IFJGuEyOLNaOurFK9HSL
+         V8WQ==
+X-Gm-Message-State: ANoB5pliJ2ugPGUI8r0Oq52Y5oy4PPx9E2UiXHxfnKQkNx7+KgNmNgMF
+        MmP7Wya2k1uOFORcbFv4QAc=
+X-Google-Smtp-Source: AA0mqf7SSV5Spx3SdIMHV/m3SHtcgR2doOiXV0pHeCoiNsvfzayliCTA8GTupUvJ8yUHKFE/rHkUJA==
+X-Received: by 2002:a17:90a:e2c5:b0:214:1648:687d with SMTP id fr5-20020a17090ae2c500b002141648687dmr34036143pjb.78.1669155199951;
+        Tue, 22 Nov 2022 14:13:19 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:af8d:6047:29d5:446c])
+        by smtp.gmail.com with ESMTPSA id g6-20020a170902868600b0018703bf42desm12536214plo.159.2022.11.22.14.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 14:13:18 -0800 (PST)
+Date:   Tue, 22 Nov 2022 14:13:15 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Raul Rangel <rrangel@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Len Brown <lenb@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Alexis Savery <asavery@google.com>
+Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to
+ acpi_dev_irq_flags
+Message-ID: <Y31JezKDlQjmld03@google.com>
+References: <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
+ <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
+ <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
+ <YzYowYJpRTImmg4m@google.com>
+ <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
+ <YzcqdTxLMF5028yz@smile.fi.intel.com>
+ <YzcthIfnpi8E6XVk@google.com>
+ <CAJZ5v0iKXWBGYPmmg9__g3oHK2GhY+xFMnSA6c5KctOv2kTfNQ@mail.gmail.com>
+ <CAHQZ30D0NmVytkmiVYYZdGMEOChsO93hYRrG6SNbFiRO4S=YGA@mail.gmail.com>
+ <CAHQZ30D-vBHQG9tDXy_upKHzfFMA9ttUT72K4hqKNS+CtEek3w@mail.gmail.com>
 MIME-Version: 1.0
-References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
- <Y30rdnZ+lrfOxjTB@cmpxchg.org>
-In-Reply-To: <Y30rdnZ+lrfOxjTB@cmpxchg.org>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Tue, 22 Nov 2022 14:11:31 -0800
-Message-ID: <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
-Subject: Re: Low TCP throughput due to vmpressure with swap enabled
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHQZ30D-vBHQG9tDXy_upKHzfFMA9ttUT72K4hqKNS+CtEek3w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 12:05 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Mon, Nov 21, 2022 at 04:53:43PM -0800, Ivan Babrou wrote:
-> > Hello,
+On Mon, Nov 07, 2022 at 11:36:07AM -0700, Raul Rangel wrote:
+> On Mon, Oct 17, 2022 at 8:53 AM Raul Rangel <rrangel@chromium.org> wrote:
 > >
-> > We have observed a negative TCP throughput behavior from the following commit:
+> > On Sat, Oct 15, 2022 at 10:56 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > >
+> > > On Fri, Sep 30, 2022 at 7:55 PM Dmitry Torokhov
+> > > <dmitry.torokhov@gmail.com> wrote:
+> > > >
+> > > > On Fri, Sep 30, 2022 at 08:42:13PM +0300, Andy Shevchenko wrote:
+> > > > > On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
+> > > > > > On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
+> > > > > > <dmitry.torokhov@gmail.com> wrote:
+> > > > >
+> > > > > ...
+> > > > >
+> > > > > > I think that patches [5-8/13] from this series are significant
+> > > > > > framework changes, so it would make sense to route them via the ACPI
+> > > > > > tree.
+> > > > > >
+> > > > > > If this is fine with everybody, I will queue them up for merging into
+> > > > > > 6.1 (probably in the second half of the upcoming merge window).
+> > > > >
+> > > > > I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
+> > > > > but if you wish you always may take this PR [1] to your tree (it's already in
+> > > > > GPIO tree pending v6.1), it may be considered as immutable tag.
+> > > > >
+> > > > > [1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
+> > > >
+> > > > Yeah, having an immutable branch hanging off 6.0-rcN would be awesome -
+> > > > I could pull it and this would avoid any potential conflicts later.
+> > >
+> > > This material is in the mainline now, but the branch is still there in
+> > > case you need it:
+> > >
+> > >  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+> > >  acpi-wakeup
+> > >
+> > > It won't be necessary any more after 6.1-rc1 is out, though, I suppose.
 > >
-> > * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
+> 
 > >
-> > It landed back in 2016 in v4.5, so it's not exactly a new issue.
-> >
-> > The crux of the issue is that in some cases with swap present the
-> > workload can be unfairly throttled in terms of TCP throughput.
->
-> Thanks for the detailed analysis, Ivan.
->
-> Originally, we pushed back on sockets only when regular page reclaim
-> had completely failed and we were about to OOM. This patch was an
-> attempt to be smarter about it and equalize pressure more smoothly
-> between socket memory, file cache, anonymous pages.
->
-> After a recent discussion with Shakeel, I'm no longer quite sure the
-> kernel is the right place to attempt this sort of balancing. It kind
-> of depends on the workload which type of memory is more imporant. And
-> your report shows that vmpressure is a flawed mechanism to implement
-> this, anyway.
->
-> So I'm thinking we should delete the vmpressure thing, and go back to
-> socket throttling only if an OOM is imminent. This is in line with
-> what we do at the system level: sockets get throttled only after
-> reclaim fails and we hit hard limits. It's then up to the users and
-> sysadmin to allocate a reasonable amount of buffers given the overall
-> memory budget.
->
-> Cgroup accounting, limiting and OOM enforcement is still there for the
-> socket buffers, so misbehaving groups will be contained either way.
->
-> What do you think? Something like the below patch?
+> > Awesome, thanks for merging in the ACPI patches!
+> 
+> Dmitry,
+>  What are the next steps to getting the I2C patches landed? Should I
+> push out a new series that's rebased on 6.1-rc1?
 
-The idea sounds very reasonable to me. I can't really speak for the
-patch contents with any sort of authority, but it looks ok to my
-non-expert eyes.
+Everything should be applied now and will be in 6.2.
 
-There were some conflicts when cherry-picking this into v5.15. I think
-the only real one was for the "!sc->proactive" condition not being
-present there. For the rest I just accepted the incoming change.
+Thanks.
 
-I'm going to be away from my work computer until December 5th, but
-I'll try to expedite my backported patch to a production machine today
-to confirm that it makes the difference. If I can get some approvals
-on my internal PRs, I should be able to provide the results by EOD
-tomorrow.
-
->
-> ---
->
-> From 67757f78d8b4412b72fe1583ebaf13cfd0fc03b0 Mon Sep 17 00:00:00 2001
-> From: Johannes Weiner <hannes@cmpxchg.org>
-> Date: Tue, 22 Nov 2022 14:40:50 -0500
-> Subject: [PATCH] Revert "mm: memcontrol: hook up vmpressure to socket
->  pressure"
->
-> This reverts commit 8e8ae645249b85c8ed6c178557f8db8613a6bcc7.
->
-> NOT-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> ---
->  include/linux/memcontrol.h |  6 ++--
->  include/linux/vmpressure.h |  7 ++---
->  mm/memcontrol.c            | 19 +++++++++----
->  mm/vmpressure.c            | 58 ++++++--------------------------------
->  mm/vmscan.c                | 15 +---------
->  5 files changed, 29 insertions(+), 76 deletions(-)
->
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index e1644a24009c..e7369363d4c2 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -283,11 +283,11 @@ struct mem_cgroup {
->         atomic_long_t           memory_events[MEMCG_NR_MEMORY_EVENTS];
->         atomic_long_t           memory_events_local[MEMCG_NR_MEMORY_EVENTS];
->
-> +       /* Socket memory allocations have failed */
->         unsigned long           socket_pressure;
->
->         /* Legacy tcp memory accounting */
->         bool                    tcpmem_active;
-> -       int                     tcpmem_pressure;
->
->  #ifdef CONFIG_MEMCG_KMEM
->         int kmemcg_id;
-> @@ -1701,10 +1701,10 @@ void mem_cgroup_sk_alloc(struct sock *sk);
->  void mem_cgroup_sk_free(struct sock *sk);
->  static inline bool mem_cgroup_under_socket_pressure(struct mem_cgroup *memcg)
->  {
-> -       if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && memcg->tcpmem_pressure)
-> +       if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && memcg->socket_pressure)
->                 return true;
->         do {
-> -               if (time_before(jiffies, READ_ONCE(memcg->socket_pressure)))
-> +               if (memcg->socket_pressure)
->                         return true;
->         } while ((memcg = parent_mem_cgroup(memcg)));
->         return false;
-> diff --git a/include/linux/vmpressure.h b/include/linux/vmpressure.h
-> index 6a2f51ebbfd3..20d93de37a17 100644
-> --- a/include/linux/vmpressure.h
-> +++ b/include/linux/vmpressure.h
-> @@ -11,9 +11,6 @@
->  #include <linux/eventfd.h>
->
->  struct vmpressure {
-> -       unsigned long scanned;
-> -       unsigned long reclaimed;
-> -
->         unsigned long tree_scanned;
->         unsigned long tree_reclaimed;
->         /* The lock is used to keep the scanned/reclaimed above in sync. */
-> @@ -30,7 +27,7 @@ struct vmpressure {
->  struct mem_cgroup;
->
->  #ifdef CONFIG_MEMCG
-> -extern void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
-> +extern void vmpressure(gfp_t gfp, struct mem_cgroup *memcg,
->                        unsigned long scanned, unsigned long reclaimed);
->  extern void vmpressure_prio(gfp_t gfp, struct mem_cgroup *memcg, int prio);
->
-> @@ -44,7 +41,7 @@ extern int vmpressure_register_event(struct mem_cgroup *memcg,
->  extern void vmpressure_unregister_event(struct mem_cgroup *memcg,
->                                         struct eventfd_ctx *eventfd);
->  #else
-> -static inline void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
-> +static inline void vmpressure(gfp_t gfp, struct mem_cgroup *memcg,
->                               unsigned long scanned, unsigned long reclaimed) {}
->  static inline void vmpressure_prio(gfp_t gfp, struct mem_cgroup *memcg,
->                                    int prio) {}
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 2d8549ae1b30..066166aebbef 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -7195,10 +7195,10 @@ bool mem_cgroup_charge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages,
->                 struct page_counter *fail;
->
->                 if (page_counter_try_charge(&memcg->tcpmem, nr_pages, &fail)) {
-> -                       memcg->tcpmem_pressure = 0;
-> +                       memcg->socket_pressure = 0;
->                         return true;
->                 }
-> -               memcg->tcpmem_pressure = 1;
-> +               memcg->socket_pressure = 1;
->                 if (gfp_mask & __GFP_NOFAIL) {
->                         page_counter_charge(&memcg->tcpmem, nr_pages);
->                         return true;
-> @@ -7206,12 +7206,21 @@ bool mem_cgroup_charge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages,
->                 return false;
->         }
->
-> -       if (try_charge(memcg, gfp_mask, nr_pages) == 0) {
-> -               mod_memcg_state(memcg, MEMCG_SOCK, nr_pages);
-> -               return true;
-> +       if (try_charge(memcg, gfp_mask & ~__GFP_NOFAIL, nr_pages) == 0) {
-> +               memcg->socket_pressure = 0;
-> +               goto success;
-> +       }
-> +       memcg->socket_pressure = 1;
-> +       if (gfp_mask & __GFP_NOFAIL) {
-> +               try_charge(memcg, gfp_mask, nr_pages);
-> +               goto success;
->         }
->
->         return false;
-> +
-> +success:
-> +       mod_memcg_state(memcg, MEMCG_SOCK, nr_pages);
-> +       return true;
->  }
->
->  /**
-> diff --git a/mm/vmpressure.c b/mm/vmpressure.c
-> index b52644771cc4..4cec90711cf4 100644
-> --- a/mm/vmpressure.c
-> +++ b/mm/vmpressure.c
-> @@ -219,7 +219,6 @@ static void vmpressure_work_fn(struct work_struct *work)
->   * vmpressure() - Account memory pressure through scanned/reclaimed ratio
->   * @gfp:       reclaimer's gfp mask
->   * @memcg:     cgroup memory controller handle
-> - * @tree:      legacy subtree mode
->   * @scanned:   number of pages scanned
->   * @reclaimed: number of pages reclaimed
->   *
-> @@ -227,16 +226,9 @@ static void vmpressure_work_fn(struct work_struct *work)
->   * "instantaneous" memory pressure (scanned/reclaimed ratio). The raw
->   * pressure index is then further refined and averaged over time.
->   *
-> - * If @tree is set, vmpressure is in traditional userspace reporting
-> - * mode: @memcg is considered the pressure root and userspace is
-> - * notified of the entire subtree's reclaim efficiency.
-> - *
-> - * If @tree is not set, reclaim efficiency is recorded for @memcg, and
-> - * only in-kernel users are notified.
-> - *
->   * This function does not return any value.
->   */
-> -void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
-> +void vmpressure(gfp_t gfp, struct mem_cgroup *memcg,
->                 unsigned long scanned, unsigned long reclaimed)
->  {
->         struct vmpressure *vmpr;
-> @@ -271,46 +263,14 @@ void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
->         if (!scanned)
->                 return;
->
-> -       if (tree) {
-> -               spin_lock(&vmpr->sr_lock);
-> -               scanned = vmpr->tree_scanned += scanned;
-> -               vmpr->tree_reclaimed += reclaimed;
-> -               spin_unlock(&vmpr->sr_lock);
-> -
-> -               if (scanned < vmpressure_win)
-> -                       return;
-> -               schedule_work(&vmpr->work);
-> -       } else {
-> -               enum vmpressure_levels level;
-> -
-> -               /* For now, no users for root-level efficiency */
-> -               if (!memcg || mem_cgroup_is_root(memcg))
-> -                       return;
-> -
-> -               spin_lock(&vmpr->sr_lock);
-> -               scanned = vmpr->scanned += scanned;
-> -               reclaimed = vmpr->reclaimed += reclaimed;
-> -               if (scanned < vmpressure_win) {
-> -                       spin_unlock(&vmpr->sr_lock);
-> -                       return;
-> -               }
-> -               vmpr->scanned = vmpr->reclaimed = 0;
-> -               spin_unlock(&vmpr->sr_lock);
-> +       spin_lock(&vmpr->sr_lock);
-> +       scanned = vmpr->tree_scanned += scanned;
-> +       vmpr->tree_reclaimed += reclaimed;
-> +       spin_unlock(&vmpr->sr_lock);
->
-> -               level = vmpressure_calc_level(scanned, reclaimed);
-> -
-> -               if (level > VMPRESSURE_LOW) {
-> -                       /*
-> -                        * Let the socket buffer allocator know that
-> -                        * we are having trouble reclaiming LRU pages.
-> -                        *
-> -                        * For hysteresis keep the pressure state
-> -                        * asserted for a second in which subsequent
-> -                        * pressure events can occur.
-> -                        */
-> -                       WRITE_ONCE(memcg->socket_pressure, jiffies + HZ);
-> -               }
-> -       }
-> +       if (scanned < vmpressure_win)
-> +               return;
-> +       schedule_work(&vmpr->work);
->  }
->
->  /**
-> @@ -340,7 +300,7 @@ void vmpressure_prio(gfp_t gfp, struct mem_cgroup *memcg, int prio)
->          * to the vmpressure() basically means that we signal 'critical'
->          * level.
->          */
-> -       vmpressure(gfp, memcg, true, vmpressure_win, 0);
-> +       vmpressure(gfp, memcg, vmpressure_win, 0);
->  }
->
->  #define MAX_VMPRESSURE_ARGS_LEN        (strlen("critical") + strlen("hierarchy") + 2)
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 04d8b88e5216..d348366d58d4 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -6035,8 +6035,6 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
->         memcg = mem_cgroup_iter(target_memcg, NULL, NULL);
->         do {
->                 struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
-> -               unsigned long reclaimed;
-> -               unsigned long scanned;
->
->                 /*
->                  * This loop can become CPU-bound when target memcgs
-> @@ -6068,20 +6066,9 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
->                         memcg_memory_event(memcg, MEMCG_LOW);
->                 }
->
-> -               reclaimed = sc->nr_reclaimed;
-> -               scanned = sc->nr_scanned;
-> -
->                 shrink_lruvec(lruvec, sc);
-> -
->                 shrink_slab(sc->gfp_mask, pgdat->node_id, memcg,
->                             sc->priority);
-> -
-> -               /* Record the group's reclaim efficiency */
-> -               if (!sc->proactive)
-> -                       vmpressure(sc->gfp_mask, memcg, false,
-> -                                  sc->nr_scanned - scanned,
-> -                                  sc->nr_reclaimed - reclaimed);
-> -
->         } while ((memcg = mem_cgroup_iter(target_memcg, memcg, NULL)));
->  }
->
-> @@ -6111,7 +6098,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
->
->         /* Record the subtree's reclaim efficiency */
->         if (!sc->proactive)
-> -               vmpressure(sc->gfp_mask, sc->target_mem_cgroup, true,
-> +               vmpressure(sc->gfp_mask, sc->target_mem_cgroup,
->                            sc->nr_scanned - nr_scanned,
->                            sc->nr_reclaimed - nr_reclaimed);
->
-> --
-> 2.38.1
->
+-- 
+Dmitry
