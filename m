@@ -2,278 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4040633213
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5986633215
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiKVBSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:18:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S231749AbiKVBS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiKVBSD (ORCPT
+        with ESMTP id S229488AbiKVBSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:18:03 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4083D12628
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:18:02 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id mv18so4278820pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:18:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PXUXu09vEJkgXZ40nAvWtY2oQA1N7U9i3sjU0PlpdeY=;
-        b=fM/cEtkodNsQgJNohvYj06QMR98UhWW8IJspTB9KI9U/J2hY6OZr9R9qlkbarUMurR
-         yBaYqpo9N8hA1mioF0/Hvr+W3LCG36dK6Ke8RmrqRpE8p2kEpuibhUF7bLL8KilfTLu9
-         9UZeSOPgFupVbnOb1GEO0/Rmj7W2HE95wdpVEJN1bpy/pZ1HKSpzwvZa6Ni7kTDieuPO
-         nrJuHuxJDhfwm8y3NxeL56y/287zAbGunRmgq4OnrhumTEnmKZMELMHrq27shmCzgm63
-         GdXKxv+nQJufnrhgSS2M8ftMjO4KqK46ghgH9dDray2RS1ZUeJP2cE0rhmMDAu91up1f
-         rFAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PXUXu09vEJkgXZ40nAvWtY2oQA1N7U9i3sjU0PlpdeY=;
-        b=DJWhOuYlYBeIa/WvaGRd2WT/4i9dwYxqFgZBHFzvsWM/Xj3Rd54qbMGPU4n3V0vnfF
-         F+P4q1/Ks42bEI6EVCWx1sSDc9NEccWZMbX95sEQERr5BCtH8IBua8pntG28JgC08hUN
-         BmqPnPRllTMRds6hit4JxdWyl1HfQ9IkUM8CcIlrAUXvbZu3MkedLGj8dByxxlakWCmo
-         vORaZWUwNXbXozZ/DMleDb3hoR6GIaJZzDgGyc/Zzi4L9KZeOMH2absVG/6Ghjhe3k8y
-         JVsoQCRka/4RHTocizYCOoUo+X1s1sTtTKwFMmCtUrCTAn9DjhLAgs4ooOBALuFUr5au
-         1+pQ==
-X-Gm-Message-State: ANoB5plRGk98unIEcwE1xHb5crXWPJBO9AtOYOhE/xp+yg72b52Ybyxs
-        FtTcHIROl9hEVUL9vnjxOd2ZrEnIXIi8/g==
-X-Google-Smtp-Source: AA0mqf5jQ/bpAwlyjRRRfq2D7YvHXsGjbJWDS74GWhTup68Ad6MyukMAcNHmVE0xkF/vnt9GOwL6vQ==
-X-Received: by 2002:a17:90a:7c43:b0:213:ecb5:c4fe with SMTP id e3-20020a17090a7c4300b00213ecb5c4femr22983659pjl.179.1669079881617;
-        Mon, 21 Nov 2022 17:18:01 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-65-106.pa.vic.optusnet.com.au. [49.186.65.106])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b00189299218e2sm2141869pla.182.2022.11.21.17.18.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 17:18:01 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oxHvB-00H573-W0; Tue, 22 Nov 2022 12:17:58 +1100
-Date:   Tue, 22 Nov 2022 12:17:57 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zirong Lang <zlang@redhat.com>
-Subject: Re: [PATCH] xfs: account extra freespace btree splits for multiple
- allocations
-Message-ID: <20221122011757.GP3600936@dread.disaster.area>
-References: <20221109034802.40322-1-hsiangkao@linux.alibaba.com>
- <20221111203905.GN3600936@dread.disaster.area>
- <Y27e2U155YvH9et4@debian>
- <20221112214545.GQ3600936@dread.disaster.area>
- <Y3NGghqFDEoMPojt@B-P7TQMD6M-0146.local>
- <20221116025106.GB3600936@dread.disaster.area>
- <Y3qrEIy3DgGyhjli@debian>
+        Mon, 21 Nov 2022 20:18:53 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220B49B383;
+        Mon, 21 Nov 2022 17:18:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669079932; x=1700615932;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=X5/Oky70qNR5nNt+0jfc4GhFsXkTGaXChMNraZKSIoE=;
+  b=Kr0JgPjh1fI3Cwz2AIPpnf1u4QF/INMKdAzbNf4JmuZSGLAtaaban4ma
+   cu9W4csSGh40MpeABcRVfk3Hnx6B34boQSkXLkRvmMqhlktIF1L2lcsOu
+   s3GrbYj/3MAWTtPetzHLxiaYZ+0WtHhj0szDh0eJS54Yu689UDiQhH5zR
+   eh/RIXmEmv0SUXQQJZqc4vZvraIA0dBJLM1FEOvYaBn7Z+pmEESkBb5Cg
+   dPbFm4qIX3j2W8+BKReHrh+nHkge3aJIUMyd5XHe6+XTkgkNRJV8SurNm
+   OxpXoF2Cauq+pxbgz/15Qo926wjIxfX6Qk4J4Q0MyyFkmgrQyEAKRbwEp
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="313730979"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="313730979"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 17:18:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="815915993"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="815915993"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 21 Nov 2022 17:18:51 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 17:18:51 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 17:18:50 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 21 Nov 2022 17:18:50 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 21 Nov 2022 17:18:50 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lsbmA3nZdly/lf0+AIZexXQezLBjFIs2Xmw+rXt7aUW9yVDl+JBUXAZhhe/Y44vH4fyauXX+1ij+gER0mlFaOrLtVI2YkkR3adbgsWWV+uHi2m9m4q87L8mUW1yzec1/y3v+4xjXV7TnY+pgHCMLOJOi3Z1qr4ZBpTLvhvQA8EXCLoBULCPa8FiyYj3lPChnpjC6rYwV016ADNUmuLo5RiLbQ0KloBWUjDJeiGzhWit7tTxhZfbd0ugrBEig07lXSqm3aUkaFQTkridgjkVPOHuqYHvH5tZ4E5Bggla0WKC/gz0l6Vl+nUlT3Nl0Zp1lz3hSx5rsJn5I57zAm+QC6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=X5/Oky70qNR5nNt+0jfc4GhFsXkTGaXChMNraZKSIoE=;
+ b=Mg+O1opILw2pAoNc2fgcMiabMdB7iGvXxU1RHzMqLwZ1ti4hcHkBvCxSPNSwoNEXOfyLjUW/xUyBV+asVt1HpdRHuR6p+i5/O+w7i4T1foO/tJOyq19x88lTad57hfWSebo5D2dhBpQhnynty1gd8lvwzHekRJ2aRxrAI7Tx1SJR7hKDtfBKrUU4fru27PEu9eCLtnmyCx4C6uqNMe3tWusCkhUVQlM2u4E/XXkXID3MZby1IgcOWFv61QNJa8wUzHM9q50BpsbwlE6ZBAwxBZheyNCzWBf+k87c3C3pBpCdhKPNnL2HeWKkw9EqK8HtLaPPEKypBQERArh22m5Y0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by DM4PR11MB6477.namprd11.prod.outlook.com (2603:10b6:8:88::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
+ 2022 01:18:48 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
+ 01:18:48 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+CC:     "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v10 105/108] KVM: TDX: Add methods to ignore accesses to
+ CPU state
+Thread-Topic: [PATCH v10 105/108] KVM: TDX: Add methods to ignore accesses to
+ CPU state
+Thread-Index: AQHY7Ckvrt4ExdXw0UaZ9PPNheleja5KSGaA
+Date:   Tue, 22 Nov 2022 01:18:48 +0000
+Message-ID: <75c655620a6ab8e5cfdbb89148cfc27480a8cd56.camel@intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+         <282dd5a8edbee0aa87cdf035088ecd8558b0b999.1667110240.git.isaku.yamahata@intel.com>
+In-Reply-To: <282dd5a8edbee0aa87cdf035088ecd8558b0b999.1667110240.git.isaku.yamahata@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DM4PR11MB6477:EE_
+x-ms-office365-filtering-correlation-id: 2d6bcf54-5a9c-4f89-995b-08dacc2781f1
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YIfq59aJaHqzeGuXieq7VceKu0nw/8ukf1l0Rz+Zl4IZmaWvIAdCVUt03l+GH7fkjcgTqo0Yaku89vUVay90/Ehox9C0/HHhS6P2EfuduwvM7AtJ0Ct4tmQUG1AMQNnrK1fAojzNVuYNJwZoYstZc1wgXDCiz2B/Yvl43CwTfAdc3MluVLJ1UNkcBfNfxS0+Her/+chtPvv8hAlBm9Cy/Kow4gSeQK/KhQcwxKx0KMmTNUxcCiiKb1cAhlWkAxlqJk6zOzq2CEJvWR15sXoomkkaNcyCKlQ2ooLUwODWRujbYw6vAJ7TDKV8YIOfURij8bgJTHsShOi6XqOiAHaBy+XnUHHlJ41LOrCKgp2ty7tQ81hybTl1xYjvjxoWh56F1aJjB8VAF1yPG/zrUazLqyabdXl2NC8uOO44+gjxPSbJ/J9moQESXei3N3IDUKw/7CeJjQugDp48x74U0Pzv+7dLdPunnOKzSV39g6rTkNn1T/aqg3nUyfS3kQE367YgeOb7PO22t7tXnEMhqTcl9xnJRdhpjgTXTYED/E/04RXBTozDr0UXlVuIg7+Dp03zgOGv0154txWyEjExwIl4vggqHLHHLxzi/JlmKlD9YMGfJeF+SyMyx8vc99FKA+lx0UYDq/MUg2bhaEhlh4OPZlhFVdfz/Cexy+1gvFsnmFg3MinbVn3VVj5jCO10y5/khgM3nrHfSQrJBVjKgWsLhg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(346002)(39860400002)(136003)(376002)(451199015)(2906002)(6486002)(41300700001)(4326008)(478600001)(5660300002)(36756003)(6512007)(6506007)(26005)(4001150100001)(8936002)(76116006)(66946007)(8676002)(64756008)(66446008)(66476007)(66556008)(6636002)(316002)(91956017)(71200400001)(4744005)(54906003)(110136005)(86362001)(122000001)(38100700002)(2616005)(82960400001)(83380400001)(38070700005)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bzd5UDVrU0xpL0NYalBBaVljVnJVTFg1RmNiSDJsNHhRazlFM3VJMFcxSFFW?=
+ =?utf-8?B?bWs1MnZsK1FmOG1jYlplc3AycG1qK0hXYUhsekRXLzhzajhOUzUzYUg0ZnBK?=
+ =?utf-8?B?bDdlZGZmc3Y3MS9FaXBxVTdmUFNVTEdwUWNjZDZadEkzSDJOMEd5R1Nndks4?=
+ =?utf-8?B?MmpwSFJjQmg3cEE4Vk00SCsxQlpiZjNxTUFXaGRML2hrSG9UcmsvdGFQMjZu?=
+ =?utf-8?B?emwyamVubW1JOHJzcVVlQ0RFZm91bnlDT0xoQnIyMTBJc2M4MlFySDJiWnd1?=
+ =?utf-8?B?TDk0RVF1RXZoNUNzeWRPZVRZNlozaFdYelNiMXJOZ1lpYXlJM0xkSFllOFpQ?=
+ =?utf-8?B?SWdZYnBYWmlGMnNoMXd5dTRCU3NiNnRxYW56T3pRN0o1NGFVYnBLOWdOa1Y5?=
+ =?utf-8?B?ZENEa2VTSmNQT0xlL2EvOXhvcDBVRVAyUDlGL3hwZ01CUENNdjRWUlV1Qk41?=
+ =?utf-8?B?QVBJOUdGWFV5QzloUTNuQVJmYm5mSUxUbU1sRWlGeDFVUVhkbnh6dXI0bjBi?=
+ =?utf-8?B?VjNrcDNRSWJBd1psYkJuWjMvUlJQN2NqMG15bFlScGZUZ3REL0VjL3lqZEov?=
+ =?utf-8?B?bWc4dHNpaHMxcmVwN1MyNVdYbDM2cGwra203T041cU9HZ2E3U3VFajE5bi9q?=
+ =?utf-8?B?ZzM2MTJ2dFFXZStVU2NjWHRBUVNkWERUS2ppemQyUmZWVERGYVk5ZjBTejVs?=
+ =?utf-8?B?Q1lnY3A3cFRYaG1HRjRLc0Y5NGJtcVdTU1VuRGtrSm02WEcza09Ma1gwSThS?=
+ =?utf-8?B?b1pHeVJoaS9mdFZFSXhkSlVOQklOVDdYc1pyRjhzaHFTZGorVVNDMUxTSHU1?=
+ =?utf-8?B?eGl6cTVLcjdLSis1VWJ5ZDM4dmM2bVFoeGgrcWxFUnFGRWp1ZkI3OHVVVWRl?=
+ =?utf-8?B?Myt3eldlRTVQZkpTRWRnSEpwaWgzQ1ZxSkRsYWhTa1VHWTZNaTdEY3ZHZmVy?=
+ =?utf-8?B?cXkvaXhXUExodTZHKzRxcjcwZUxmeXJJaHVuSlVnQ3J3Wld3d1k3NEFZL1JP?=
+ =?utf-8?B?NHEyR1Q4QWdvcDN5c1lKOFNENTJySis4eFk3djFVK2I0R3NTVTlwb3N4WlNV?=
+ =?utf-8?B?d0pHZTAxaHJhNGxZM1hQWThqYytMdC9RM0pPN2tlL1JtbjlFVllwcWJRcnN5?=
+ =?utf-8?B?R2RTQjJMKzdpVmJTc1hOckR6R2NWVFNUcXAwVUlmV2pRemxxRDU2TUExYU9l?=
+ =?utf-8?B?dHpQSGFCdjFkMTRXKzlXa3FiT2JlRXJLV04zb3R1OXN1U2JYU3NBVElkVkZ2?=
+ =?utf-8?B?dTJVUzROUVB5TmJXV042b0NXSnZjeFFJd1RaeklvS1h2ZzhzQ0ZDa1J4cU1K?=
+ =?utf-8?B?ME80YVo5Zkx1ZUFMWE9sMHhrTUxDb1kyZmsxV21PMHhGcXpKRmdLSDM5N0Np?=
+ =?utf-8?B?M2JSd0FjdzVDR2ZjTkhiaWxHTmVHa1Z5U0Z5ZVZKNkdkS0JyVXV1RUg2ellx?=
+ =?utf-8?B?aUN3NHArSXhpZmJuSnVoWGNKYjEwSlR4M05WKzFiZ0s1bWVhc2VwbUFqRTJh?=
+ =?utf-8?B?WDhtVU9KUEs4OU05Si91YkhRQXRLNWVWOFJYYmRNVWhrclc2ODBKenJZMzJH?=
+ =?utf-8?B?N1dWTThmc1hsRHdkZ0pjbGp0VWd3UWhDckV0bXRZUnhRTHJLWVNDTEtYV1h0?=
+ =?utf-8?B?ODI5bnBub1NUcVBsQ1haTGl1Q3VRU1VpSXpuTXNqSHVqbDI0UU9qMXY5Zncz?=
+ =?utf-8?B?bnVBcmZ2Mk9TM1k3RncvSS81Sy8rUklIdnpBaFFNZWdRbFB6bllkdGVJMnFp?=
+ =?utf-8?B?SUtva0JoN1ppR0t1UG52UGxRVlIyYXV1V3k3Vkkwc0Q0akJ6RXU2NkYxdzhv?=
+ =?utf-8?B?RTdYUkszUXZXNllBcWRRWFhUdjZYZnhWbHM0SGN1WS9Vbm9QbUxvSlpyUHpn?=
+ =?utf-8?B?S3hJNGRlbFhkeHdFUXA0dEw4UTE2cEdaZXJVbzUwN1BvQldCanA2dDZERUg4?=
+ =?utf-8?B?Ny9HaXZqTFdsT3pEU3JadDhSN0srdjNLb1ltRWJxQ3R0KzJJd3JaNk1VMW85?=
+ =?utf-8?B?akR1NjEvY1RKbS9zM1lmSHFlcEFENmV1eCtGbVFwaFhYNmI3RHlDMnV4eUE3?=
+ =?utf-8?B?QjMvOUQ0TlhwUW1MZXhYdCtWMmxVRE1NSFhnVXFwSEFid1R5MkdvRXVLSnV6?=
+ =?utf-8?B?WFB0S2ExMlRod3VyMWFIbnJnSjRXSzc0QlVLNm56enFhT0pKZy8vSUpTZVdH?=
+ =?utf-8?B?b0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0C0B60270EEB5F498406F03D6B4CB6B7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3qrEIy3DgGyhjli@debian>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d6bcf54-5a9c-4f89-995b-08dacc2781f1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 01:18:48.2075
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: U2CeQv+QfSNNXMOWa2HXE3c79nEQG/3cDv5OWwWb5hKtfD+yFPlOuHbCy2HXPLGJC3BhRQtfpWRw9ndH7/49VQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6477
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 06:32:48AM +0800, Gao Xiang wrote:
-> On Wed, Nov 16, 2022 at 01:51:06PM +1100, Dave Chinner wrote:
-> > On Tue, Nov 15, 2022 at 03:57:54PM +0800, Gao Xiang wrote:
-> > > On Sun, Nov 13, 2022 at 08:45:45AM +1100, Dave Chinner wrote:
-> > ..... because the assumption is that AGFL blocks come from free
-> > space and so when we are at ENOSPC bno/cnt btrees *do no require
-> > splits* so will not consume extra space. Hence allocation at ENOSPC
-> > doesn't need to take into account AGFL block usage because the AGFL
-> > will not be consumed.
-> 
-> I noticed another thing.  I think the reason why the first allocation
-> in this case caused a cntbt split is that Zorro's workload set
-> sunit/swidth.  Therefore, due to align requirement, I assume it
-> called xfs_alloc_fix_len() to fix up agbno and len.
-> 
-> Actually I found our workload has the similar sunit/swidth setup and
-> I am thinking about this these days.  One thing is that why we need
-> freespace btree splits when consuming free blocks.
-
-stripe alignment does not affect AGFL behaviour, not free space
-btree allocation requirements. stripe alignment only affects the
-initial user data allocations from xfs_bmap_btalloc() where the
-stripe alignment variables (e.g. min align, align slop, etc). None
-of these parameters are set for AGFL or btree block allocations, so
-they ignore all alignment constraints.
-
-> Another thing is that considering we're near ENOSPC, and bno/cnt
-> btrees has only a few records.  If we allocates without alignment,
-> I also think bno/cnt btrees do no require splits so it will not
-> consume extra space since the overall extents only decrease.
-> 
-> Yet how about allocating with alignment? It seems that it can add
-> another free extent in order to fulfill the alignment.  I'm not sure
-> if it can cause some corner cases here.
-
-Alignment never requires an extra allocation - it reserves extra
-space to select a larger freespace that an aligned extent can be
-carved out of. If an aligned extent cannot be found, we fall back to
-unaligned allocation....
-
-> > Similarly, if we have enough free space records to split a free
-> > space btree block, we have enough free space to refill the AGFL
-> > multiple times and we don't have to reserve space for them.
-> > 
-> > IOWs, the allocation code has, historically, never had to care about
-> > AGFL refilling when the AG is near ENOSPC as nothing will consume
-> > AGFL blocks when the AG is near empty.
-> > 
-> > This is the design assumption that AG reservations broke. This is
-> > why I'm asking you to look into taking blocks that are supposedly
-> > reserved for the AGFL, because as reserved space is used, the
-> > bno/cnt btrees will shrink and return those blocks to free space and
-> > hence they are still available for reserved allocations to use as
-> > the real physical ENOSPC condition approaches.
-> 
-> Yeah, intuitively I also imagine like what you said.  However, does it
-> have strictly monotonicity, especially with stripe alignment setup?
-> 
-> > 
-> > The more I look at this, the more I think overall answer to this
-> > problem is to allow AGFL refilling to ignore AG reserves rather than
-> > causing ENOSPC....
-> 
-> Could you give more details how to fit this case?  Also we have a
-> short talk last Wednesday (sorry that I had an urgent thing at that
-> time).  You mentioned "the simple solution is something like
-> min(ag reservation blocks, needed AGFL blocks) instead of accounting
-> them separately", could you give an example for this case as well?
-
-Go read the head comment in xfs_ag_resv.c. Specifically, this bit:
-
- * Reserved blocks can be managed by passing one of the enum xfs_ag_resv_type
- * values via struct xfs_alloc_arg or directly to the xfs_free_extent
- * function.  It might seem a little funny to maintain a reservoir of blocks
- * to feed another reservoir, but the AGFL only holds enough blocks to get
- * through the next transaction.  The per-AG reservation is to ensure (we
- * hope) that each AG never runs out of blocks.  Each data structure wanting
- * to use the reservation system should update ask/used in xfs_ag_resv_init.
-
-This was originally written with RMAPBT updates in mind (rmap btree
-blocks come from the AGFL, just like the bno/cnt btrees). SInce this
-was written, AGFL blocks have been carved out of this reservation by
-XFS_AG_RESV_AGFL, and so this reservation space no longer reserves
-or accounts for refilling the AGFL for non-RMAPBT operations.
-
-My point is, however, that the reservation space was intended for
-ensuring the AGFL could be refilled without triggering ENOSPC in
-certain circumstances. And here we are with a situation where
-refilling the AGFL triggers ENOSPC because of the reservation
-space.
-
-The "available" calculation in xfs_alloc_space_available() does:
-
-	available = (int)(pag->pagf_freeblks + agflcount -
-                          reservation - min_free - args->minleft);
-
-
-Which is effectively:
-
-	available =	(free space) -
-			(reserved space) -
-			(minimum AG requires to be left free) -
-			(minimum allocation requires to left free)
-
-But what we have to consider is that three of these parameters have
-a component of "AGFL blocks" in them:
-
-free space	= indexed free space + current AGFL blocks
-reserved space	= space reserved for future AGFL block allocation
-minimum AG free = AGFL blocks needed for this allocation
-
-Looked at a different way (as a timeline):
-
-free space	= Previously allocated AGFL blocks
-reserved space  = future allocation AGFL block pool
-minimum free	= present allocation AGFL needs
-
-So the problem you are seeing is that on the second allocation of a
-chain, the AGFL blocks previously allocated by the initial
-allocation in the chain are not sufficient for present AGFL needs
-and we do not allow the present allocation to use space from the
-future AGFL block pool to fill the AGFL....
-
-Also, we need to keep in mind that the initial allocation uses
-args->resv = XFS_AG_RESV_NONE, so the reservation space returned for
-the initial allocation is the full metadata (finobt) + reserved
-(RMAPBT) reservation that is being made.
-
-The second allocation in the chain (where minleft is zero) really
-needs to have a reserve pool for AGFL filling. But we don't have a
-reserve pool for general AGFL allocations anymore, and this looks
-like we need it. i.e. instead of XFS_AG_RESV_AGFL just being used to
-avoid accounting AGFL block usage, perhaps it should actually manage
-a reserve pool for ensuring the AGFL can be refilled near ENOSPC
-(due to outstanding RMAP/FINOBT reservations) in a single
-transaction allocation chain....
-
-i.e. so long as the pool has more blocks in it than the current
-allocation requires to refill the AGFL, the allocation can
-proceed...
-
-> > > I have strong feeling that the current per-AG reservation code (or
-> > > AGFL reservation as in xfs_alloc_min_freelist() ) doesn't work
-> > > properly for multiple allocations in the same AG in order to make
-> > > sure such multiple allocations all succeed.
-> > > 
-> > > Also, a wilder question is that I'm not sure why such multiple
-> > > allocations in oneshot _cannot_ be handled with a defer ops as
-> > > some new log intent, so that we don't need to care about minleft
-> > > messy anymore.
-> > 
-> > We do use intents and deferred ops for BMBT freeing and reflink
-> > based insertion, but those only log changes to individual records in
-> > the btree. They do not record internal btree shape changes at all.
-> > Yes, we could convert normal extent allocation to use these intents
-> > as well, but that doesn't solve the problem of chained allocations
-> > within a single AG.
-> > 
-> > IOWs, the chain of allocations for a BMBT split I mention above
-> > still exists for record level intents. To handle the btree split
-> > case as a chain of intents involves a whole new level of complexity
-> > and overhead in the btree code, and likely introduces more problems
-> > at ENOSPC than it solves...
-> 
-> My question was that if we convert some allocations into dfops, does
-> inode extents-to-btree needs to be strictly allocated in this AG
-> anymore? ... Does that tend to be a long-term plan?
-
-It's not in any of my plans.
-
-The problem with moving to "any AG" allocation is that BMBT block
-allocation is now subject to AGF locking rules and availability.
-Say, for example, we have 4 AGs and we just allocated the initial
-extent in AG 3 (the last AG) - we only have one safe choice of AG we
-can allocate from due to AGF lock ordering.  If we don't ensure that
-the BMBT blocks can be allocated from the same AG as the initial
-allocation, we lose the ability to guarantee that the BMBT blocks
-(and INOBT blocks) will be allocated without an ENOSPC condition
-occurring.
-
-If we get ENOSPC part way through a BMBT or INOBT update regardless
-of whether we are rolling the transaction via deferops or just a
-single transaction allocation change, we have to cancel the
-currently running transaction. The transaction will be dirty at this
-point, and cancelling a dirty transaciton shuts down the filesystem.
-IOWs, failing to guarantee that the entire allocation chain will
-succeed results in turning a simple ENOSPC error being reported to
-userspace into a full filesystem shutdown....
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+T24gU2F0LCAyMDIyLTEwLTI5IGF0IDIzOjIzIC0wNzAwLCBpc2FrdS55YW1haGF0YUBpbnRlbC5j
+b20gd3JvdGU6DQo+IEZyb206IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW4uai5jaHJpc3RvcGhl
+cnNvbkBpbnRlbC5jb20+DQo+IA0KPiBURFggcHJvdGVjdHMgVERYIGd1ZXN0IHN0YXRlIGZyb20g
+Vk1NLiAgSW1wbGVtZW50cyB0byBhY2Nlc3MgbWV0aG9kcyBmb3INCj4gVERYIGd1ZXN0IHN0YXRl
+IHRvIGlnbm9yZSB0aGVtIG9yIHJldHVybiB6ZXJvLg0KDQpJTUhPIHRoaXMgcGF0Y2ggaXNuJ3Qg
+cmV2aWV3YWJsZSAtLSB0b28gbWFueSB0aGluZ3MgbWl4ZWQgdG9nZXRoZXIuICBBbmQgdGhlDQps
+b2dpYyBvZiB3aGV0aGVyIHRvIHVzZSBXQVJOKCkvS1ZNX0JVR19PTigpIGFnYWluc3QgVEQgaXMg
+aGFyZCB0byB0ZWxsIGFzIHRoZXkNCmRlcGVuZHMgb24gY29tbW9uIHg4NiBjb2RlIGxvZ2ljLiAg
+VGhlIHJlbGF0aXZlIHBhcnRzIChpLmUuIGludGVycnVwdCByZWxhdGVkDQpwYXJ0cykgc2hvdWxk
+IGJlIHB1dCB0b2dldGhlciBhcyBzZXBhcmF0ZSBwYXRjaGVzIHRvIG1ha2UgdGhlIHdob2xlIHRo
+aW5nDQpyZXZpZXdhYmxlLg0KDQpIaSBTZWFuLCBkbyB5b3UgaGF2ZSBhbnkgY29tbWVudHM/DQoN
+Cg==
