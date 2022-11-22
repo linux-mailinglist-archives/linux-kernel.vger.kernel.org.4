@@ -2,148 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C4363384F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAED9633869
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbiKVJZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:25:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S232888AbiKVJ2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiKVJZO (ORCPT
+        with ESMTP id S232672AbiKVJ20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:25:14 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE59C49B7E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:25:11 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id bp15so22661199lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:25:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O8HnwlLIuUW6GQ7MF6wb6CuJekIWr1nSvjXjmRhkscs=;
-        b=IiWqDjT6H1cRpC90wd65AWT/9WXUU+5hNY7FkQZBesPVQr9IdCFRIGTV34ehmgTZZK
-         3Jus1oyGfk+IMtnQAxdJLPDiOq9V8rNWApdkLIk+5alXBEh5o14B1MyG8uWIV2dzOuG8
-         toUTbMdScxGAqDtDb0qvamE57LbdJBuSEqdLOyuNLT5l/LGKQEuiZyH71dfr2IUMi0q6
-         /HKVLbgm1JY3WWz3viCNGwcOBt3cG7lrcIpnxAeIs2ULThxcyFaW0M58yA0S7mFSw+xQ
-         UNrZYm4Z5E5U0rleIsGfQlNV5rp5siEptUh093+4dlwIS7VXqJ063vgla6ASbpcWJ7++
-         9+dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8HnwlLIuUW6GQ7MF6wb6CuJekIWr1nSvjXjmRhkscs=;
-        b=aYlK7Rd7TXvIFWVkRUP7fd8o2QPYRi66HC0ynVnFsDdtq+ONqDjhZi87Nzsyl/IT9R
-         6L+ekzRZfulNIApMMfaEZbxvxoamtZlHY8cYYNPrgPL2w71QQ0T0X3Skk1kKyEadC0+x
-         Hoy/dC5g4G5MZ7+5tUJ40CDoWOCmtW5luOuGvVkSJHGz+flSw4q4+BvU8kDEdmqlMg+b
-         3FZIqZ2HqKktcBb3QlRNExl95NQiJguYXzYoDSFlW2+UXdZuG7bsrI8V5+CuCcUzMyuQ
-         lDkeBgqMRQrxB3Inzx4kNFkLQcJ8iOOnJLx1bIGdKqmZlEmaKLcmxRarmKCwWq4O3gFF
-         XRTg==
-X-Gm-Message-State: ANoB5pkLQLigZy3GeetoVNCkPO4H9sDGX10qONxgmMWqQlcIFODkUUPT
-        sTbimGWedeicgLyTpxijAXOElQ==
-X-Google-Smtp-Source: AA0mqf5byVk5N0XWLkFNIEkusMvYIeYHdcBQgOYQ8RWpuWexV58KEhN68yvC6R+ZBH9j/xzMZoTDiw==
-X-Received: by 2002:ac2:4424:0:b0:4a2:2dc9:3e0e with SMTP id w4-20020ac24424000000b004a22dc93e0emr8339106lfl.272.1669109110296;
-        Tue, 22 Nov 2022 01:25:10 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q6-20020ac25fc6000000b004a45f2e49b1sm2378780lfg.273.2022.11.22.01.25.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 01:25:09 -0800 (PST)
-Message-ID: <09aaf26a-7377-a4f6-6145-5301304927b7@linaro.org>
-Date:   Tue, 22 Nov 2022 10:25:08 +0100
+        Tue, 22 Nov 2022 04:28:26 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2349E2792E
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:28:25 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NGf3K2pZLzqSQ0;
+        Tue, 22 Nov 2022 17:24:29 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 17:28:23 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 17:28:23 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+CC:     <chenzhongjin@huawei.com>, <kari.argillander@gmail.com>,
+        <almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH] fs/ntfs3: Fix leaked mount_options if fill_super failed
+Date:   Tue, 22 Nov 2022 17:25:18 +0800
+Message-ID: <20221122092518.231347-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/2] dt-bindings: gce: add gce header file for mt8188
-Content-Language: en-US
-To:     =?UTF-8?B?RWx2aXMgV2FuZyAo546L5YabKQ==?= <Elvis.Wang@mediatek.com>,
-        "jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        =?UTF-8?B?WW9uZ3FpYW5nIE5pdSAo54mb5rC45by6KQ==?= 
-        <yongqiang.niu@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20221104074443.26172-1-Elvis.Wang@mediatek.com>
- <20221104074443.26172-2-Elvis.Wang@mediatek.com>
- <bdb46b7c-6e08-26cf-491d-ca68d36f29af@linaro.org>
- <fcec5536-6ba8-9cac-2001-710a7170df70@gmail.com>
- <5ad6c51677e1476d08ae6de6bd5021384a689b31.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5ad6c51677e1476d08ae6de6bd5021384a689b31.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 10:10, Elvis Wang (王军) wrote:
-> On Mon, 2022-11-07 at 12:18 +0100, Matthias Brugger wrote:
->>
->> On 06/11/2022 11:27, Krzysztof Kozlowski wrote:
->>> On 04/11/2022 08:44, Elvis.Wang wrote:
->>>> From: Elvis Wang <Elvis.Wang@mediatek.com>
->>>>
->>>> add gce header file to define the gce thread priority, gce subsys
->>>> id,
->>>> event and constant for mt8188.
->>>>
->>>> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
->>>> ---
->>>> Thanks for the reviews, I have removed the incorrect reviewed
->>>> message.
->>>> ---
->>>>   include/dt-bindings/gce/mediatek,mt8188-gce.h | 966
->>>> ++++++++++++++++++
->>>>   1 file changed, 966 insertions(+)
->>>>   create mode 100644 include/dt-bindings/gce/mediatek,mt8188-
->>>> gce.h
->>>>
->>>> diff --git a/include/dt-bindings/gce/mediatek,mt8188-gce.h
->>>> b/include/dt-bindings/gce/mediatek,mt8188-gce.h
->>>> new file mode 100644
->>>> index 000000000000..e2e2c56016a1
->>>> --- /dev/null
->>>> +++ b/include/dt-bindings/gce/mediatek,mt8188-gce.h
->>>
->>>
->>> What is a "gce" subsystem or type of hardware? Why do you put
->>> headers in
->>> "gce"?
->>>
->>
->> Yes, I think we should move all header files from the gce folder into
->> the 
->> mailbox folder.
->>
->> Regards,
->> Matthias
-> 
-> There are still a lot of header files undre gce. If all of them are
-> moved, it will also involve the modification of yaml and corresponding
-> project dts files, which requires more effort. Can we deal with the
-> 8188 part first?
+'9b75450d6c58 ("fs/ntfs3: Fix memory leak if fill_super failed")'
+Previous patch fixed leaked sbi when fill_super failed but forgot to put
+mount_options and left it leaked as kmemleak reported:
 
-Sure, just put the new bindings in proper location (mailbox if this is a
-Mailbox).
+unreferenced object 0xffff888107c353c0 (size 32):
+  backtrace:
+    [<00000000cf2c8c32>] kmalloc_trace+0x27/0x110
+    [<000000000184a864>] ntfs_init_fs_context+0x4c/0x540 [ntfs3]
+    [<000000008ded85aa>] alloc_fs_context+0x50e/0x940
+    [<00000000c225e601>] path_mount+0x747/0x1930
+    [<000000007bf15a5f>] do_mount+0xf3/0x110
+    ...
+unreferenced object 0xffff888101fdc2d0 (size 8):
+  backtrace:
+    [<00000000d0cba437>] __kmalloc_node_track_caller+0x4c/0x1c0
+    [<00000000923513f8>] kmemdup_nul+0x37/0xb0
+    [<000000007a9b98ed>] vfs_parse_fs_string+0xc5/0x150
+    [<00000000afbd0594>] generic_parse_monolithic+0x140/0x1c0
+    [<00000000e97e814e>] path_mount+0xf09/0x1930
+    [<000000007bf15a5f>] do_mount+0xf3/0x110
+    ...
 
-Best regards,
-Krzysztof
+Fixes: 610f8f5a7baf ("fs/ntfs3: Use new api for mounting")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ fs/ntfs3/super.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 47012c9bf505..c0e45f170701 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -1281,6 +1281,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	 * Free resources here.
+ 	 * ntfs_fs_free will be called with fc->s_fs_info = NULL
+ 	 */
++	put_mount_options(sbi->options);
+ 	put_ntfs(sbi);
+ 	sb->s_fs_info = NULL;
+ 
+-- 
+2.17.1
 
