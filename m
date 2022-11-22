@@ -2,86 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875F6633FBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7817633E97
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbiKVPCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
+        id S233405AbiKVONE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbiKVPCD (ORCPT
+        with ESMTP id S232572AbiKVONC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:02:03 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2718B0B;
-        Tue, 22 Nov 2022 07:00:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=+NFpLSd8ScOHEVd4DHTztoyZ+UkB3J/9rUIzBb7GyY0=;
-        t=1669129239; x=1670338839; b=M4XN9XK1W5a0FSbzeMQpJI7YfGc4KLqku3aIDcoSTviF46U
-        Tjum65SNwV7blxEtkrq70yR1nrlawSGN8RPBRrlaCaQfmfCeBussv6sdgC16zA/JACLvFXglfLGti
-        tyZWeutUSS1t1EL/sf6k/2f4VDe8Kz8dJ8mXHOXIChu2IoRZdI6mxvfX7y6tK8d55o0udNvYnB48l
-        2jkzWhsLco2GCmx3+5zD1AIW1CD/OoEJYSFfeNj5THvmhRamLOzBGllFz3UNBwfvpUOIuD+tQ210r
-        +ftThAwGnUT1rqyknPaGbddy03l14pUZgPE9iJw1rvEzPUXEM/k62gNvbQwIgisQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1oxUlH-006Ngc-2Z;
-        Tue, 22 Nov 2022 16:00:35 +0100
-Message-ID: <021efb6c9295402cf05406bb319c441c0b0229b3.camel@sipsolutions.net>
-Subject: Re: Build regressions/improvements in v6.1-rc6
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-um@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
-Date:   Tue, 22 Nov 2022 16:00:34 +0100
-In-Reply-To: <CADnq5_PvouSKugXxJXqkVeZf+kbP8+hhUKFgVALSO=MOW3jzvA@mail.gmail.com>
-References: <CAHk-=wjKJyzfJmOzBdEOqCFRc8Fh-rdGM4tvMXfW0WXbbHwV0w@mail.gmail.com>
-         <20221122105054.4062213-1-geert@linux-m68k.org>
-         <alpine.DEB.2.22.394.2211221154280.284524@ramsan.of.borg>
-         <CADnq5_PvouSKugXxJXqkVeZf+kbP8+hhUKFgVALSO=MOW3jzvA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 22 Nov 2022 09:13:02 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B4D18B2A;
+        Tue, 22 Nov 2022 06:13:01 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NGmRd5h6rz15Mhp;
+        Tue, 22 Nov 2022 22:12:29 +0800 (CST)
+Received: from huawei.com (10.67.175.21) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 22 Nov
+ 2022 22:12:58 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <lizetao1@huawei.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>,
+        <jasowang@redhat.com>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mst@redhat.com>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <rusty@rustcorp.com.au>, <cornelia.huck@de.ibm.com>,
+        <virtualization@lists.linux-foundation.org>
+Subject: [PATCH v2] virtio_net: Fix probe failed when modprobe virtio_net
+Date:   Tue, 22 Nov 2022 23:00:46 +0800
+Message-ID: <20221122150046.3910638-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221121132935.2032325-1-lizetao1@huawei.com>
+References: <20221121132935.2032325-1-lizetao1@huawei.com>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.21]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-22 at 08:55 -0500, Alex Deucher wrote:
-> >=20
-> >    + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called=
- object is not a function or function pointer:  =3D> 94:18
-> >    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: e=
-rror: control reaches end of non-void function [-Werror=3Dreturn-type]:  =
-=3D> 1934:1
-> >=20
-> > um-x86_64/um-all{mod,yes}config (in kfd_cpumask_to_apic_id())
->=20
-> Presumably cpu_data is not defined on um-x86_64?  Does it even make
-> sense to build drivers on um-x86_64?
+When doing the following test steps, an error was found:
+  step 1: modprobe virtio_net succeeded
+    # modprobe virtio_net        <-- OK
 
-Drivers in general yes ;-)
+  step 2: fault injection in register_netdevice()
+    # modprobe -r virtio_net     <-- OK
+    # ...
+      FAULT_INJECTION: forcing a failure.
+      name failslab, interval 1, probability 0, space 0, times 0
+      CPU: 0 PID: 3521 Comm: modprobe
+      Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+      Call Trace:
+       <TASK>
+       ...
+       should_failslab+0xa/0x20
+       ...
+       dev_set_name+0xc0/0x100
+       netdev_register_kobject+0xc2/0x340
+       register_netdevice+0xbb9/0x1320
+       virtnet_probe+0x1d72/0x2658 [virtio_net]
+       ...
+       </TASK>
+      virtio_net: probe of virtio0 failed with error -22
 
-This driver, probably not.
+  step 3: modprobe virtio_net failed
+    # modprobe virtio_net        <-- failed
+      virtio_net: probe of virtio0 failed with error -2
 
-But the issue is that a lot of drivers "depends on X86_64" or such,
-where only "X86" is the arch symbol. You could add "X86 && X86_64" to
-really build on x86 64-bit only.
+The root cause of the problem is that the queues are not
+disable on the error handling path when register_netdevice()
+fails in virtnet_probe(), resulting in an error "-ENOENT"
+returned in the next modprobe call in setup_vq().
 
-I didn't check this driver, but this has mostly popped up since UM got
-PCI support some time ago (which I added.)
+virtio_pci_modern_device uses virtqueues to send or
+receive message, and "queue_enable" records whether the
+queues are available. In vp_modern_find_vqs(), all queues
+will be selected and activated, but once queues are enabled
+there is no way to go back except reset.
 
-johannes
+Fix it by reset virtio device on error handling path. This
+makes error handling follow the same order as normal device
+cleanup in virtnet_remove() which does: unregister, destroy
+failover, then reset. And that flow is better tested than
+error handling so we can be reasonably sure it works well.
 
+Fixes: 024655555021 ("virtio_net: fix use after free on allocation failure")
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+---
+v1 was posted at: https://lore.kernel.org/all/20221121132935.2032325-1-lizetao1@huawei.com/
+v1 -> v2: modify commit log and fixes tag
+
+ drivers/net/virtio_net.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 7106932c6f88..86e52454b5b5 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -3949,12 +3949,11 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 	return 0;
+ 
+ free_unregister_netdev:
+-	virtio_reset_device(vdev);
+-
+ 	unregister_netdev(dev);
+ free_failover:
+ 	net_failover_destroy(vi->failover);
+ free_vqs:
++	virtio_reset_device(vdev);
+ 	cancel_delayed_work_sync(&vi->refill);
+ 	free_receive_page_frags(vi);
+ 	virtnet_del_vqs(vi);
+-- 
+2.25.1
 
