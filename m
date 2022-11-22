@@ -2,103 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998E6633E78
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 570A9633E7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233621AbiKVOHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:07:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S233353AbiKVOI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234045AbiKVOH1 (ORCPT
+        with ESMTP id S234036AbiKVOIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:07:27 -0500
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4704E6A769;
-        Tue, 22 Nov 2022 06:05:49 -0800 (PST)
-Received: from mailer.emlix.com (unknown [81.20.119.6])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 6BB3C5F890;
-        Tue, 22 Nov 2022 15:05:47 +0100 (CET)
-From:   Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Edmund Berenson <edmund.berenson@emlix.com>,
-        Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] dt-bindings: iio: adc: ad7923: adjust documentation
-Date:   Tue, 22 Nov 2022 15:05:43 +0100
-Message-Id: <20221122140543.11230-1-edmund.berenson@emlix.com>
-X-Mailer: git-send-email 2.37.4
+        Tue, 22 Nov 2022 09:08:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072BE1DA62
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:06:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QDYcMUCtSl9YoPGZD4u9771L9C9DxrFPzpaFGh4a/sY=; b=S2eMx9WTdQC/VfiX5e0mcSjxxG
+        xfBKbPLz0KGF59XtKywWJhTpsKBpwaBshAEx7ZMse9QFddFaCHdVPWu+P/Bu8AbsVJoaORKZJE0hw
+        vlUkTeCPrOvNhMP62VF/cRKfF8iZM2qY2fOAVueMsXFF0NYL4V+gls7HIWF81h7Vc8sBGIrhhSFDW
+        sJaEfPFVmw8Go2wT0KCYEUPdNjN5kJAXZCvK3ZspOBp8O4qTKO7j8dsdhOL1sWV8mOjOMMshik0be
+        l8q88Wg4/aqM3hhxxxpPQWCiMB368jygTYvuew/5TB/9wZ5LmMlNM6ypRHJasGUHtw0fBVqCdbaQ2
+        anwj+VAw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxTuk-006QlR-CJ; Tue, 22 Nov 2022 14:06:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5BFCB300445;
+        Tue, 22 Nov 2022 15:06:11 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4A7332077D3E6; Tue, 22 Nov 2022 15:06:11 +0100 (CET)
+Date:   Tue, 22 Nov 2022 15:06:11 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     wangbiao3@xiaomi.com
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, brauner@kernel.org, bsegall@google.com,
+        linux-kernel@vger.kernel.org, wenjieli@qti.qualcomm.com,
+        chenguanyou@xiaomi.com, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH 1/1] sched: fix user_mask double free
+Message-ID: <Y3zXU8SB4rnKQqFZ@hirez.programming.kicks-ass.net>
+References: <cover.1669020858.git.wangbiao3@xiaomi.com>
+ <b8970a530d420109ee9fe0b268e097fb839211b0.1669020858.git.wangbiao3@xiaomi.com>
+ <Y3zXDZeTUgDz2hJ8@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3zXDZeTUgDz2hJ8@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- The ad7927 is fully compatible with ad7928 driver, add
-documentation for device.
-- ad7923 and ad7924 are treated the same in the driver, show
-the relationship in the documentation.
+On Tue, Nov 22, 2022 at 03:05:01PM +0100, Peter Zijlstra wrote:
+> 
+> So you failed:
+> 
 
-Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
----
- .../bindings/iio/adc/adi,ad7923.yaml          | 25 ++++++++++++-------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+> > #/******?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? This e-mail and its attachments contain confidential information from XIAOMI, which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction, or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this e-mail in error, please notify the sender by phone or email immediately and delete it!******/#
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-index 07f9d1c09c7d..b6e2f1b41739 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-@@ -11,7 +11,7 @@ maintainers:
- 
- description: |
-   Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
--   AD7918, AD7928 8 Channels ADCs.
-+   AD7918, AD7927, AD7928 8 Channels ADCs.
- 
-   Specifications about the part can be found at:
-     https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
-@@ -20,14 +20,21 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - adi,ad7904
--      - adi,ad7914
--      - adi,ad7923
--      - adi,ad7924
--      - adi,ad7908
--      - adi,ad7918
--      - adi,ad7928
-+    oneOf:
-+      - const: adi,ad7904
-+      - const: adi,ad7908
-+      - const: adi,ad7914
-+      - const: adi,ad7918
-+      - const: adi,ad7923
-+      - const: adi,ad7924
-+        deprecated: true
-+      - const: adi,ad7928
-+      - items:
-+          - const: adi,ad7924
-+          - const: adi,ad7923
-+      - items:
-+          - const: adi,ad7927
-+          - const: adi,ad7928
- 
-   reg:
-     maxItems: 1
--- 
-2.37.4
-
+Also, that ^ is super fail, you're sending this to a public list. Please
+tell your (IT) manager it makes your corporation look like an idiot.
