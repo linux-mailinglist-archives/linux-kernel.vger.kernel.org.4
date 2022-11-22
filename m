@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72586633722
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1A963372C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiKVIan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S232940AbiKVIbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:31:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232870AbiKVIaT (ORCPT
+        with ESMTP id S232920AbiKVIad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:30:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0B33FBBE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:28:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669105728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z94rTogxpTfB3zkjuR47qQ/M+hZd3Seb7BgxdhYJsLY=;
-        b=IzxQkNcadQkYyjJ5RY64i3lffAi3t3S1VMSVSG2pNVlt64VSwv/gXyDS3o08NPP6OLxhAG
-        QptnJ0S/M0ff1F3APKHy+HAMAmibaD0hkuLZx8KIW+4XivX0+kF70OcArz0A1brXQbnIUc
-        nHIHcGRnWJzXfATquvqA2JvHVHZXA8g=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-634-kwVdvwCxN7C3hgveKl_XvQ-1; Tue, 22 Nov 2022 03:28:47 -0500
-X-MC-Unique: kwVdvwCxN7C3hgveKl_XvQ-1
-Received: by mail-qv1-f72.google.com with SMTP id nk7-20020a056214350700b004c68c912c93so12730797qvb.16
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:28:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Z94rTogxpTfB3zkjuR47qQ/M+hZd3Seb7BgxdhYJsLY=;
-        b=JWh08mWPvNGQqGyhuyHQELqMcqOnkYXc6ZrEo+xFaSk5y9cQpi6eOvgbAaNwA0fDHh
-         R/3jcRqD6lhWMrxUjz2MS7b8rNWLv8YzCG4mntxEsFp1YAeTYJFoaDy7G3nPrGeCLyYe
-         JrmEghloZ0tf0NOpLKtAtS/+78S2qDZPnvWtka3nOQ83AUBOy3vcoIC/d3bdYoJrK8Bn
-         qzEXtUH4RgjK4FbcKPcfc4RqX7uRhGCW6phC4vOvDUUvynHSDOpWCMlbl89rZA4QJoqo
-         EnVClSrT8AT/SHcj42rxYVn4SCB6t3fB+/MNhq69YOGLutv0DEjFtCiXkcJst4wPY5NZ
-         q24g==
-X-Gm-Message-State: ANoB5plMfTkQhCLJR/OpdM77WGDnFLGm7Ddr+qBXyP3LLod9dhFrzWqS
-        z4PMtgaDdDXPbJ2PHwZ0tWwV/zkCEq25IEIqHmZW44d3mlIis7oVqGbU6zCQHJCk0XFkg1lwv5e
-        uKg2vJTGwxF49f24SOIRa2m4P
-X-Received: by 2002:a37:80c:0:b0:6fa:2cab:4945 with SMTP id 12-20020a37080c000000b006fa2cab4945mr4570780qki.256.1669105727021;
-        Tue, 22 Nov 2022 00:28:47 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6Pliy5jAIfnm9v3oSdvBPyuy3r56Bwe/AXa5iDcJN9dM4Xf2uSXIiYOCiXMtfAJUuyEn+oOQ==
-X-Received: by 2002:a37:80c:0:b0:6fa:2cab:4945 with SMTP id 12-20020a37080c000000b006fa2cab4945mr4570766qki.256.1669105726782;
-        Tue, 22 Nov 2022 00:28:46 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id x10-20020a05620a258a00b006bb82221013sm9827463qko.0.2022.11.22.00.28.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 00:28:46 -0800 (PST)
-Message-ID: <0a568e890497f4066128b1ce957904e0c5540c16.camel@redhat.com>
-Subject: Re: [PATCH net] sfc: fix potential memleak in
- __ef100_hard_start_xmit()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Leon Romanovsky <leon@kernel.org>,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 22 Nov 2022 09:28:42 +0100
-In-Reply-To: <Y3e8wEZme3OpMZKV@unreal>
-References: <1668671409-10909-1-git-send-email-zhangchangzhong@huawei.com>
-         <Y3YctdnKDDvikQcl@unreal> <efedaa0e-33ce-24c6-bb9d-8f9b5c4a1c38@huawei.com>
-         <Y3YxlxPIiw43QiKE@unreal> <Y3dNP6iEj2YyEwqJ@gmail.com>
-         <Y3e8wEZme3OpMZKV@unreal>
+        Tue, 22 Nov 2022 03:30:33 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EE7326E1;
+        Tue, 22 Nov 2022 00:30:20 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NGcjY6PrXz9xFYG;
+        Tue, 22 Nov 2022 16:24:01 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAnDvp5iHxjEJiEAA--.54837S2;
+        Tue, 22 Nov 2022 09:29:56 +0100 (CET)
+Message-ID: <339eff96ebcd4c7ecba2ed56751fd2636fa52f73.camel@huaweicloud.com>
+Subject: Re: [PATCH v4 2/5] security: Rewrite
+ security_old_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        ocfs2-devel@oss.oracle.com
+Date:   Tue, 22 Nov 2022 09:29:40 +0100
+In-Reply-To: <CAHC9VhTvcgOjXAH51Vnk66kEjXfjUS2aJjXjJmU-rwLT53vWPw@mail.gmail.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
+         <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
+         <aa5fa8c5f231115c58012352124df57d16a01e41.camel@huaweicloud.com>
+         <7812899531b2bd936b25fde8fc2f1c2a6080b2bd.camel@linux.ibm.com>
+         <CAHC9VhTvcgOjXAH51Vnk66kEjXfjUS2aJjXjJmU-rwLT53vWPw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwAnDvp5iHxjEJiEAA--.54837S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF4rArykWFWxtF17tF4Dtwb_yoW5XFWrpr
+        WfKF1UKrn5JFWDCr4xtwsxWF4Ig3yfGFZxXrn5GrWUAr1DCF1xKr4jyF13u345JrWkJ3y0
+        qw4xZ3y3Zrn8AwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAEBF1jj4WyCQABsP
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 2022-11-21 at 18:55 -0500, Paul Moore wrote:
+> On Mon, Nov 21, 2022 at 3:54 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > On Mon, 2022-11-21 at 10:45 +0100, Roberto Sassu wrote:
+> > > > As ocfs2 already defines initxattrs, that leaves only reiserfs missing
+> > > > initxattrs().  A better, cleaner solution would be to define one.
+> > > 
+> > > If I understood why security_old_inode_init_security() is called
+> > > instead of security_inode_init_security(), the reason seems that the
+> > > filesystem code uses the length of the obtained xattr to make some
+> > > calculations (e.g. reserve space). The xattr is written at a later
+> > > time.
+> > > 
+> > > Since for reiserfs there is a plan to deprecate it, it probably
+> > > wouldn't be worth to support the creation of multiple xattrs. I would
+> > > define a callback to take the first xattr and make a copy, so that
+> > > calling security_inode_init_security() + reiserfs_initxattrs() is
+> > > equivalent to calling security_old_inode_init_security().
+> 
+> FWIW, reiserfs isn't going to be removed until 2025, I'm hopeful we
+> can remove the IMA/EVM special cases before then :)
 
-On Fri, 2022-11-18 at 19:11 +0200, Leon Romanovsky wrote:
-> On Fri, Nov 18, 2022 at 09:15:43AM +0000, Martin Habets wrote:
-> > On Thu, Nov 17, 2022 at 03:05:27PM +0200, Leon Romanovsky wrote:
-> > > Please take a look __ef100_enqueue_skb() and see if it frees SKB on
-> > > error or not. If not, please fix it.
+Well, we are not that far...
+
+> > > But then, this is what anyway I was doing with the
+> > > security_initxattrs() callback, for all callers of security_old_inode_i
+> > > nit_security().
+> > > 
+> > > Also, security_old_inode_init_security() is exported to kernel modules.
+> > > Maybe, it is used somewhere. So, unless we plan to remove it
+> > > completely, it should be probably be fixed to avoid multiple LSMs
+> > > successfully setting an xattr, and losing the memory of all except the
+> > > last (which this patch fixes by calling security_inode_init_security()).
+> 
+> I would much rather remove security_old_inode_init_security() then
+> worry about what out-of-tree modules might be using it.  Hopefully we
+> can resolve the ocfs2 usage and get ocfs2 exclusively on the new hook
+> without too much trouble, which means all we have left is reiserfs ...
+> how difficult would you expect the conversion to be for reiserfs?
+
+Ok for removing security_old_inode_init_security().
+
+For reiserfs, I guess maintaining the current behavior of setting only
+one xattr should be easy. For multiple xattrs, I need to understand
+exactly how many blocks need to be reserved.
+
+> > > If there is still the preference, I will implement the reiserfs
+> > > callback and make a fix for security_old_inode_init_security().
 > > 
-> > That function looks ok to me, but I appreciate the extra eyes on it.
-> 
-> __ef100_enqueue_skb() has the following check in error path:
-> 
->   498 err:
->   499         efx_enqueue_unwind(tx_queue, old_insert_count);
->   500         if (!IS_ERR_OR_NULL(skb))
->   501                 dev_kfree_skb_any(skb);
->   502
-> 
-> The issue is that skb is never error or null here and this "if" is
-> actually always true and can be deleted.
+> > There's no sense in doing both, as the purpose of defining a reiserfs
+> > initxattrs function was to clean up this code making it more readable.
 
-I think that such additional change could be suite for a different net-
-next patch, while this -net patch could land as is, @Leon: do you
-agree?
+The fix for security_old_inode_init_security(), stopping at the first
+LSM returning zero, was to avoid the memory leak. Will not be needed if
+the function is removed.
 
-Thanks!
-
-Paolo
+Roberto
 
