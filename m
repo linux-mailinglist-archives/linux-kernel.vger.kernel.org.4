@@ -2,85 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F52463322C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89ABB63322E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbiKVBc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S232242AbiKVBdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiKVBcx (ORCPT
+        with ESMTP id S232240AbiKVBdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:32:53 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBA226AF1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:32:51 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id l15so8475642qtv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:32:51 -0800 (PST)
+        Mon, 21 Nov 2022 20:33:13 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEA2B97F8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:33:12 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id b1-20020a17090a10c100b0020da29fa5e5so6739459pje.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:33:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W1WA2y8g5fhQuZnwMdhaIJwo0CEHJPMSKTSLaNEoLOM=;
-        b=h8qYltXZdrvwN5p1AA9AAY9YC7IjoIPByGxTfBvZd7L1Cnio697HypHyozFeHG4sUj
-         05blWC79g0AC1gIuZhplB56hjCYx0gqfq8mNMgulNtc6QsXEwFmmROqjqz4RJ/fMxOIV
-         5KGAC8QEOOqFLRkQmwBFqsexDLlgxo8StA6E+q9mO9dE/LndqKX9x6cQVmJI5c7xcfNR
-         1DeZoH72UQo3iP4ex1wYSb9Vm0bgBqMbDDZr63OKbS1nvojupZ7xHueGfEMpLVeCcCFW
-         YQ0I7xuDdCh3hijs/pjvTTnfugtsC/883gqWnG83L4ZhfAOvykF9usszbQgR8pQC8LbD
-         ar/w==
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jw+pa4Hghc6DNqT2ZjHPvBrmIDFJee53B5N07cXK5TA=;
+        b=VQiF6B2AiWPxuDaU543wmXQ9fJI73usRCS2tEaUARqzdNYWpa0vkycXr2Q3TCD8DT+
+         qEV3F9EJqmNGYVgf/FeGkZW4qpTYvYdLuSJh5nI1sjK7Gkj3BvzbOPBsRtPDBKBdBfrS
+         RPmLWdrKBMvio8ukGXoClhqdFtRISRID8Vz43PLr2UDvMLKysBWO/ddPOnNDqMAbLbMk
+         aaVUuSovyMALqMoaCFXuGE8w58N8DbKYrPQKHhsfERzQYv5rBBxn2+RClCYIs4bKVY3l
+         rlBU9J+8hFpSP/pO5M4DmnlowkAMx1dXoieVn4gjokqbQhgY4o0IAUUU0Y7PJ29r7O/P
+         rDUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W1WA2y8g5fhQuZnwMdhaIJwo0CEHJPMSKTSLaNEoLOM=;
-        b=Ta2G4B7kmOhabBOW7xMTCxIh2L8ypVH4uaA5tHVvXIzwrUJBnOei4salt1RbGKos7w
-         xuy4Oy6P9vVJaVpWW0QT9JvcPlrY0IMzwG4Zyv5izpRV0qhn8fFqxb2go9is72shMkrd
-         vxLac3ocTxUp/VYI/WhteLXkc3dBMPvsOLtJV7g4R3gv2ZCP0tr/myGnX2WTI4z4B6FO
-         NqJ92U6daQ+EiUbA0qe7Oy+E/RfbklK40QTv6Vni2nmjLuFB5lnByjrwrwz5p+uS3NDE
-         XhGZfxpVIGLdTM5R+cSICope7LA/+6mYKXw9k9TlC+B0ct4QhQDl0qz4S0Ik/hjX7I3e
-         hhQw==
-X-Gm-Message-State: ANoB5pkBlg/6hMJ8xNeYTTloTpfAAahBETRXj9DgqK2df6Ra/xX8NhDR
-        KD2eyxKipIeRU5FXZhEDXhgmBw==
-X-Google-Smtp-Source: AA0mqf54wtZs225FHFwy4u2vNw7pAUL37boEkl/v7zKM5DRyM++jr9L4yfp17P5dR13GSwjWzHut/g==
-X-Received: by 2002:ac8:1003:0:b0:398:27cc:8c31 with SMTP id z3-20020ac81003000000b0039827cc8c31mr6935732qti.416.1669080770069;
-        Mon, 21 Nov 2022 17:32:50 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id bw6-20020a05622a098600b003988b3d5280sm7557076qtb.70.2022.11.21.17.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 17:32:49 -0800 (PST)
-Date:   Mon, 21 Nov 2022 17:32:38 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Johannes Weiner <hannes@cmpxchg.org>
-cc:     Shakeel Butt <shakeelb@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
-In-Reply-To: <Y3vI58VtjiAkorUX@cmpxchg.org>
-Message-ID: <b6c842f-6656-447c-b743-3fe6629d2b47@google.com>
-References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <20221121165938.oid3pemsfkaeq3ws@google.com> <Y3vI58VtjiAkorUX@cmpxchg.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:reply-to:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Jw+pa4Hghc6DNqT2ZjHPvBrmIDFJee53B5N07cXK5TA=;
+        b=ID/vY5aYEYMLzt6A5DGlG38uoT4oge0z6riWg0QikHfVVHOXMdzBKE2cXy6MTc1HcW
+         ehU2PF20Il7RlpoyMhFzXxn+zmAOC1lXJUR08J67Pkg+NfKolxkSHcoHplgNx6Dwz2HX
+         2b1cAmeI6mJxccHtCQ8R02RzcFmZYdFO/KwqyFSTntsjQXLiFIQpTWQTwltyoNMGo+uh
+         0DfzpMPwGgRZyhWk2pF8rjEKppLVqa9dccQ7bCdCz071a9hfkllfzgaZEe8kzy3h8ifO
+         lisHMgt9kCjB7Jrf9LThpf2FqJ08x68AHTmku3se1Bd4MS8QA+dEvcCO0qadqcYfoMnD
+         bxFw==
+X-Gm-Message-State: ANoB5plo7MpcJXdPBMBQCM0qkDnwzsz5vKrF0XEBIW0cqSTDk+Q/M7tY
+        lTEimSoGiRq4+6WfCkc3F3Vgb2AWTyg=
+X-Google-Smtp-Source: AA0mqf5IUv74w5o2HIig6Dio77QDCV1b85+y917UKkiYu9TTQzt1AZFzYf0mg5S3BiZmCmqlB7GCfjezLro=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a62:54c2:0:b0:56b:fb4f:3d7c with SMTP id
+ i185-20020a6254c2000000b0056bfb4f3d7cmr23246950pfb.54.1669080791735; Mon, 21
+ Nov 2022 17:33:11 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 22 Nov 2022 01:33:09 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221122013309.1872347-1-seanjc@google.com>
+Subject: [PATCH] KVM: selftests: Define and use a custom static assert in lib headers
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,86 +70,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022, Johannes Weiner wrote:
-> On Mon, Nov 21, 2022 at 04:59:38PM +0000, Shakeel Butt wrote:
-> > On Fri, Nov 18, 2022 at 01:08:13AM -0800, Hugh Dickins wrote:
-> > > Linus was underwhelmed by the earlier compound mapcounts series:
-> > > this series builds on top of it (as in next-20221117) to follow
-> > > up on his suggestions - except rmap.c still using lock_page_memcg(),
-> > > since I hesitate to steal the pleasure of deletion from Johannes.
-> > 
-> > Is there a plan to remove lock_page_memcg() altogether which I missed? I
-> > am planning to make lock_page_memcg() a nop for cgroup-v2 (as it shows
-> > up in the perf profile on exit path) but if we are removing it then I
-> > should just wait.
-> 
-> We can remove it for rmap at least, but we might be able to do more.
+Define and use kvm_static_assert() in the common KVM selftests headers to
+provide deterministic behavior, and to allow creating static asserts
+without dummy messages.
 
-I hope the calls from mm/rmap.c can be deleted before deciding the
-bigger picture for lock_page_memcg() itself; getting rid of it would
-be very nice, but it has always had a difficult job to do (and you've
-devoted lots of good effort to minimizing it).
+The kernel's static_assert() makes the message param optional, and on the
+surface, tools/include/linux/build_bug.h appears to follow suit.  However,
+glibc may override static_assert() and redefine it as a direct alias of
+_Static_assert(), which makes the message parameter mandatory.  This leads
+to non-deterministic behavior as KVM selftests code that utilizes
+static_assert() without a custom message may or not compile depending on
+the order of includes.  E.g. recently added asserts in
+x86_64/processor.h fail on some systems with errors like
 
-> 
-> Besides rmap, we're left with the dirty and writeback page transitions
-> that wrt cgroups need to be atomic with NR_FILE_DIRTY and NR_WRITEBACK.
-> 
-> Looking through the various callsites, I think we can delete it from
-> setting and clearing dirty state, as we always hold the page lock (or
-> the pte lock in some instances of folio_mark_dirty). Both of these are
-> taken from the cgroup side, so we're good there.
-> 
-> I think we can also remove it when setting writeback, because those
-> sites have the page locked as well.
-> 
-> That leaves clearing writeback. This can't hold the page lock due to
-> the atomic context, so currently we need to take lock_page_memcg() as
-> the lock of last resort.
-> 
-> I wonder if we can have cgroup take the xalock instead: writeback
-> ending on file pages always acquires the xarray lock. Swap writeback
-> currently doesn't, but we could make it so (swap_address_space).
+  In file included from lib/memstress.c:11:0:
+  include/x86_64/processor.h: In function =E2=80=98this_cpu_has_p=E2=80=99:
+  include/x86_64/processor.h:193:34: error: expected =E2=80=98,=E2=80=99 be=
+fore =E2=80=98)=E2=80=99 token
+    static_assert(low_bit < high_bit);     \
+                                    ^
+due to _Static_assert() expecting a comma before a message.  The "message
+optional" version of static_assert() uses macro magic to strip away the
+comma when presented with empty an __VA_ARGS__
 
-It's a little bit of a regression to have to take that lock when
-ending writeback on swap (compared with the rcu_read_lock() of almost
-every lock_page_memcg()); but I suppose if swap had been doing that
-all along, like the normal page cache case, I would not be complaining.
+  #ifndef static_assert
+  #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #ex=
+pr)
+  #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+  #endif // static_assert
 
-> 
-> The only thing that gives me pause is the !mapping check in
-> __folio_end_writeback. File and swapcache pages usually have mappings,
-> and truncation waits for writeback to finish before axing
-> page->mapping. So AFAICS this can only happen if we call end_writeback
-> on something that isn't under writeback - in which case the test_clear
-> will fail and we don't update the stats anyway. But I want to be sure.
-> 
-> Does anybody know from the top of their heads if a page under
-> writeback could be without a mapping in some weird cornercase?
+and effectively generates "_Static_assert(expr, #expr)".
 
-End of writeback has been a persistent troublemaker, in several ways;
-I forget whether we are content with it now or not.
+The incompatible version of static_assert() gets defined by this snippet
+in /usr/include/assert.h:
 
-I would not trust whatever I think OTOH of that !mapping case, but I
-was deeper into it two years ago, and find myself saying "Can mapping be
-NULL? I don't see how, but allow for that with a WARN_ON_ONCE()" in a
-patch I posted then (but it didn't go in, we went in another direction).
+  #if defined __USE_ISOC11 && !defined __cplusplus
+  # undef static_assert
+  # define static_assert _Static_assert
+  #endif
 
-I'm pretty sure it never warned once for me, but I probably wasn't doing
-enough to test it.  And IIRC I did also think that the !mapping check had
-perhaps been copied from a related function, one where it made more sense.
+which yields "_Static_assert(expr)" and thus fails as above.
 
-It's also worth noting that the two stats which get decremented there,
-NR_WRITEBACK and NR_ZONE_WRITE_PENDING, are two of the three which we
-have commented "Skip checking stats known to go negative occasionally"
-in mm/vmstat.c: I never did come up with a convincing explanation for
-that (Roman had his explanation, but I wasn't quite convinced).
-Maybe it would just be wrong to touch them if mapping were NULL.
+KVM selftests don't actually care about using C11, but __USE_ISOC11 gets
+defined because of _GNU_SOURCE, which many tests do #define.  _GNU_SOURCE
+triggers a massive pile of defines in /usr/include/features.h, including
+_ISOC11_SOURCE:
 
-> 
-> If we could ensure that the NR_WRITEBACK decs are always protected by
-> the xalock, we could grab it from mem_cgroup_move_account(), and then
-> kill lock_page_memcg() altogether.
+  /* If _GNU_SOURCE was defined by the user, turn on all the other features=
+.  */
+  #ifdef _GNU_SOURCE
+  # undef  _ISOC95_SOURCE
+  # define _ISOC95_SOURCE 1
+  # undef  _ISOC99_SOURCE
+  # define _ISOC99_SOURCE 1
+  # undef  _ISOC11_SOURCE
+  # define _ISOC11_SOURCE 1
+  # undef  _POSIX_SOURCE
+  # define _POSIX_SOURCE  1
+  # undef  _POSIX_C_SOURCE
+  # define _POSIX_C_SOURCE        200809L
+  # undef  _XOPEN_SOURCE
+  # define _XOPEN_SOURCE  700
+  # undef  _XOPEN_SOURCE_EXTENDED
+  # define _XOPEN_SOURCE_EXTENDED 1
+  # undef  _LARGEFILE64_SOURCE
+  # define _LARGEFILE64_SOURCE    1
+  # undef  _DEFAULT_SOURCE
+  # define _DEFAULT_SOURCE        1
+  # undef  _ATFILE_SOURCE
+  # define _ATFILE_SOURCE 1
+  #endif
 
-I suppose so (but I still feel grudging about the xalock for swap).
+which further down in /usr/include/features.h leads to:
 
-Hugh
+  /* This is to enable the ISO C11 extension.  */
+  #if (defined _ISOC11_SOURCE \
+       || (defined __STDC_VERSION__ && __STDC_VERSION__ >=3D 201112L))
+  # define __USE_ISOC11   1
+  #endif
+
+To make matters worse, /usr/include/assert.h doesn't guard against
+multiple inclusion by turning itself into a nop, but instead #undefs a
+few macros and continues on.  As a result, it's all but impossible to
+ensure the "message optional" version of static_assert() will actually be
+used, e.g. explicitly including assert.h and #undef'ing static_assert()
+doesn't work as a later inclusion of assert.h will again redefine its
+version.
+
+  #ifdef  _ASSERT_H
+
+  # undef _ASSERT_H
+  # undef assert
+  # undef __ASSERT_VOID_CAST
+
+  # ifdef __USE_GNU
+  #  undef assert_perror
+  # endif
+
+  #endif /* assert.h      */
+
+  #define _ASSERT_H       1
+  #include <features.h>
+
+Fixes: fcba483e8246 ("KVM: selftests: Sanity check input to ioctls() at bui=
+ld time")
+Fixes: ee3795536664 ("KVM: selftests: Refactor X86_FEATURE_* framework to p=
+rep for X86_PROPERTY_*")
+Fixes: 53a7dc0f215e ("KVM: selftests: Add X86_PROPERTY_* framework to retri=
+eve CPUID values")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../selftests/kvm/include/kvm_util_base.h     | 14 +++++++++++-
+ .../selftests/kvm/include/x86_64/processor.h  | 22 +++++++++----------
+ 2 files changed, 24 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/te=
+sting/selftests/kvm/include/kvm_util_base.h
+index c7685c7038ff..9fa0d340f291 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -22,6 +22,18 @@
+=20
+ #include "sparsebit.h"
+=20
++/*
++ * Provide a version of static_assert() that is guaranteed to have an opti=
+onal
++ * message param.  If _ISOC11_SOURCE is defined, glibc (/usr/include/asser=
+t.h)
++ * #undefs and #defines static_assert() as a direct alias to _Static_asser=
+t(),
++ * i.e. effectively makes the message mandatory.  Many KVM selftests #defi=
+ne
++ * _GNU_SOURCE for various reasons, and _GNU_SOURCE implies _ISOC11_SOURCE=
+.  As
++ * a result, static_assert() behavior is non-deterministic and may or may =
+not
++ * require a message depending on #include order.
++ */
++#define __kvm_static_assert(expr, msg, ...) _Static_assert(expr, msg)
++#define kvm_static_assert(expr, ...) __kvm_static_assert(expr, ##__VA_ARGS=
+__, #expr)
++
+ #define KVM_DEV_PATH "/dev/kvm"
+ #define KVM_MAX_VCPUS 512
+=20
+@@ -196,7 +208,7 @@ static inline bool kvm_has_cap(long cap)
+=20
+ #define kvm_do_ioctl(fd, cmd, arg)						\
+ ({										\
+-	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) =3D=3D _IOC_SIZE(cmd), "");=
+	\
++	kvm_static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) =3D=3D _IOC_SIZE(cmd));=
+	\
+ 	ioctl(fd, cmd, arg);							\
+ })
+=20
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools=
+/testing/selftests/kvm/include/x86_64/processor.h
+index 5d310abe6c3f..c65717142fda 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -72,11 +72,11 @@ struct kvm_x86_cpu_feature {
+ 		.bit =3D __bit,							\
+ 	};									\
+ 										\
+-	static_assert((fn & 0xc0000000) =3D=3D 0 ||					\
+-		      (fn & 0xc0000000) =3D=3D 0x40000000 ||			\
+-		      (fn & 0xc0000000) =3D=3D 0x80000000 ||			\
+-		      (fn & 0xc0000000) =3D=3D 0xc0000000);				\
+-	static_assert(idx < BIT(sizeof(feature.index) * BITS_PER_BYTE));	\
++	kvm_static_assert((fn & 0xc0000000) =3D=3D 0 ||				\
++			  (fn & 0xc0000000) =3D=3D 0x40000000 ||			\
++			  (fn & 0xc0000000) =3D=3D 0x80000000 ||			\
++			  (fn & 0xc0000000) =3D=3D 0xc0000000);			\
++	kvm_static_assert(idx < BIT(sizeof(feature.index) * BITS_PER_BYTE));	\
+ 	feature;								\
+ })
+=20
+@@ -190,12 +190,12 @@ struct kvm_x86_cpu_property {
+ 		.hi_bit =3D high_bit,						\
+ 	};									\
+ 										\
+-	static_assert(low_bit < high_bit);					\
+-	static_assert((fn & 0xc0000000) =3D=3D 0 ||					\
+-		      (fn & 0xc0000000) =3D=3D 0x40000000 ||			\
+-		      (fn & 0xc0000000) =3D=3D 0x80000000 ||			\
+-		      (fn & 0xc0000000) =3D=3D 0xc0000000);				\
+-	static_assert(idx < BIT(sizeof(property.index) * BITS_PER_BYTE));	\
++	kvm_static_assert(low_bit < high_bit);					\
++	kvm_static_assert((fn & 0xc0000000) =3D=3D 0 ||				\
++			  (fn & 0xc0000000) =3D=3D 0x40000000 ||			\
++			  (fn & 0xc0000000) =3D=3D 0x80000000 ||			\
++			  (fn & 0xc0000000) =3D=3D 0xc0000000);			\
++	kvm_static_assert(idx < BIT(sizeof(property.index) * BITS_PER_BYTE));	\
+ 	property;								\
+ })
+=20
+
+base-commit: 0fa32dad1e78629cb42999dacd82489503fdf4c2
+--=20
+2.38.1.584.g0f3c55d4c2-goog
+
