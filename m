@@ -2,190 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCB16331A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C7A6331A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiKVAy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S230368AbiKVAz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbiKVAxz (ORCPT
+        with ESMTP id S231978AbiKVAzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:53:55 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAD9E06B7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:53:54 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id v184so209983ybv.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:53:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=O6WUOw9T0DV19s/c2TGTrCQrdf4F5EyxA3HYag+nfl0=;
-        b=K7uGD5oz/aX87z0dSzQiMLPSWToAYxYdnapsn443FHnDX0Zpnyu7ogdz44QyeZYtkh
-         N2soQOhA7Uf54WmfPwkNv8Wh6ohKOfa1RV33ck4avR0Fos+V9s17/WKxkSUAxC5H1lPj
-         MHaYxnD5euM+lAJWHkrzN/9sC9BjhZNqYWqqs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O6WUOw9T0DV19s/c2TGTrCQrdf4F5EyxA3HYag+nfl0=;
-        b=ZloCHswA1W6AJk/C5xdKm5APVX43PAYbYwQShirdB9vIwmdHYj7BYVBCS+dVEJRFHW
-         uyK24bGS6r/oNId687+Gyrse77z3vjfjucO7dY9jIXc0HjFgguAZRXbgc0ahjxGsuesh
-         3E+tIc5ffu1S3cMOqCb8eDNxaDrnIyc6DjfDwm89gPL67aIbAik9CnYShdu2bqUG9P4P
-         aiqaIJbu4hY5Z0GiCVnmLJSHuCSaFCofsTiKfOGJK1yOrV5xLEKro2IP+5ZWXYUqGCY4
-         xxaxv1aY/cPxvZpMgMEADJ21HRRQgyUNM8GJNi+01Xcyn3Gb5y5+exVz0YAzcfXki/4Y
-         hVwA==
-X-Gm-Message-State: ANoB5pnW2KkT7IdH1Hhx/vSxV+bcKnmA6y3dhNc8kFvAWbwdy5Wm/teU
-        EqfebHNQL1TdJKcMHd77A9RttZo+NeizesTAddFA4w==
-X-Google-Smtp-Source: AA0mqf4EpbJUR3UuJTQ7sbSad4/fl/NT35pwFr98CaDrRMn5fwcn3TSYJxpSSSeDeV2CANvkQa9SkrJLEtQifg4QTpY=
-X-Received: by 2002:a05:6902:1825:b0:6de:f09:2427 with SMTP id
- cf37-20020a056902182500b006de0f092427mr1386018ybb.125.1669078433693; Mon, 21
- Nov 2022 16:53:53 -0800 (PST)
+        Mon, 21 Nov 2022 19:55:03 -0500
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BF7E0766;
+        Mon, 21 Nov 2022 16:55:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1669078498;
+        bh=g7gCIlGkU3U+jeFwrooPJAeJ9QmWHloZWrjg/6voWQA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=C04sFJSOtw+OZx8TvteMhi8VwThfzDIjxiNqDcnOkb9m69pZpd8k18mdZhq5dTTzo
+         uGF8QIBo0nT3/ufV8WN2mhTeXTLbHlwbxIR4br8ecvROJXjTeWxvdX+BfrfB+aIu7b
+         YeB79gFCU7EMm9v4pWd6TqyRw+qhcOErxOWWZMV8=
+Received: from rtoax.. ([111.199.191.46])
+        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
+        id DB589AA7; Tue, 22 Nov 2022 08:54:53 +0800
+X-QQ-mid: xmsmtpt1669078493th1ljpq51
+Message-ID: <tencent_942FB754F85E4746D310150D3084F2B22809@qq.com>
+X-QQ-XMAILINFO: MiPTq5wGoKOmZeWHy0N8JLti8+/ncftsUxsvL9Q+CSLnwKZ6otErRfZneLvXXi
+         hWt9HpUWMQWyPw1M/E93jM6z2POBTuKGuwFUBLVSOG98OYhoPhRlYfzriNoOJppZ0cZBHP9ndEzZ
+         LC82FJGEMpEf6/1nH2Wp2aa2ZRCTgz/4lG0USZIeW99vv/mjSTkVgrdTaxz11ziO10CNM+F48qPv
+         oSLV9RE4gmztVhM+CHkndbuNsh2k0btVTUe4AT/6cGYCdjqpRewW6PMuR/cpym8GvacPK7jFCSkw
+         NcqyR+MHAVvXaGCd2eHdF9KUF32GtwVax+pEfv3C9q8bkMKQ0RmUS6V6hi9U92WPPgxZAqXNkXmJ
+         0by2DoUt2O2SywVXWPi9M+w7XT+fmiQa5xr8t7kQUTE4kgR4i9diMTEbKgEOEoq1mPzgcFklDa9H
+         N7zRG7Cn8HH7pEmEweRIka2lQs3W3W/1r82EQujQ0ks1chH1dOqdK60cLw5vRAGatos/Ph/sTiwE
+         NE99l3+ayVqzb7wHK0/BU5FcgzYyXcXbLZbgTo1lBbsm7Dvm7xKhNn6jDSICJ/EBIiLz9xNfPVZV
+         mg+9ZxwPUmthpOU9E1iryVEFnyKoof4dWlKdaukn8cWYlgmX+G28+eXZNPNpZfRlJ2xmykH/Z0rO
+         BVRNWf9zZzTc+gRVFQKHPI/3W0juQYDM3JFQJTe8RkyOJwSIbWICgIga5utLgUVqTDqkSbaUhJCY
+         9SUVITB2X7mjXxtfXY2nNPo3KI7gPkTV45FeP+jvPEcsLekeEFaE9v8ZT1MMSV64nFK+zwW/DCq5
+         inZZJKa0+FgjecvknC0GdwgPID/CTvLi/T7PlaRSGRd0Bx6+a9aOmBZy6RMycphz1QbJf0Fkkll9
+         XiYDw9oaUu3/NoIqFTz0KAUxVipAt1CzewPHTYscGAEDZS4CtgAmnQSwC90ZIub1Qdh/rWEJxXD8
+         pIyVnKPFcfl2/tQlPBYUU+/9fStvRdesGmeSLUuPqPLAZw9hKx7Y65FWWP3BPDUGvbBBY7DIEl4N
+         KW9tOfGQ==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     void@manifault.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        corbet@lwn.net, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, rongtao@cestc.cn, rtoax@foxmail.com,
+        sdf@google.com, song@kernel.org, yhs@fb.com
+Subject: Re: Re: [PATCH bpf-next v3] docs/bpf: Update btf selftests program and add link
+Date:   Tue, 22 Nov 2022 08:54:53 +0800
+X-OQ-MSGID: <20221122005453.5660-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <Y3uT7KfjF3OcbjMG@maniforge.lan>
+References: <Y3uT7KfjF3OcbjMG@maniforge.lan>
 MIME-Version: 1.0
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Mon, 21 Nov 2022 16:53:43 -0800
-Message-ID: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
-Subject: Low TCP throughput due to vmpressure with swap enabled
-To:     Linux MM <linux-mm@kvack.org>
-Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Thanks, David. I forgot to modify the case of the BPF, be sure to check
+carefully next time, thanks.
 
-We have observed a negative TCP throughput behavior from the following commit:
-
-* 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
-
-It landed back in 2016 in v4.5, so it's not exactly a new issue.
-
-The crux of the issue is that in some cases with swap present the
-workload can be unfairly throttled in terms of TCP throughput.
-
-I am able to reproduce this issue in a VM locally on v6.1-rc6 with 8
-GiB of RAM with zram enabled.
-
-The setup is fairly simple:
-
-1. Run the following go proxy in one cgroup (it has some memory
-ballast to simulate useful memory usage):
-
-* https://gist.github.com/bobrik/2c1a8a19b921fefe22caac21fda1be82
-
-sudo systemd-run --scope -p MemoryLimit=6G go run main.go
-
-2. Run the following fio config in another cgroup to simulate mmapped
-page cache usage:
-
-[global]
-size=8g
-bs=256k
-iodepth=256
-direct=0
-ioengine=mmap
-group_reporting
-time_based
-runtime=86400
-numjobs=8
-name=randread
-rw=randread
-
-[job1]
-filename=derp
-
-sudo systemd-run --scope fio randread.fio
-
-3. Run curl to request a large file via proxy:
-
-curl -o /dev/null http://localhost:4444
-
-4. Observe low throughput. The numbers here are dependent on your
-location, but in my VM the throughput drops from 60MB/s to 10MB/s
-depending on whether fio is running or not.
-
-I can see that this happens because of the commit I mentioned with
-some perf tracing:
-
-sudo perf probe --add 'vmpressure:48 memcg->css.cgroup->kn->id scanned
-vmpr_scanned=vmpr->scanned reclaimed vmpr_reclaimed=vmpr->reclaimed'
-sudo perf probe --add 'vmpressure:72 memcg->css.cgroup->kn->id'
-
-I can record the probes above during curl runtime:
-
-sudo perf record -a -e probe:vmpressure_L48,probe:vmpressure_L72 -- sleep 5
-
-Line 48 allows me to observe scanned and reclaimed page counters, line
-72 is the actual throttling.
-
-Here's an example trace showing my go proxy cgroup:
-
-kswapd0 89 [002] 2351.221995: probe:vmpressure_L48: (ffffffed2639dd90)
-id=0xf23 scanned=0x140 vmpr_scanned=0x0 reclaimed=0x0
-vmpr_reclaimed=0x0
-kswapd0 89 [007] 2351.333407: probe:vmpressure_L48: (ffffffed2639dd90)
-id=0xf23 scanned=0x2b3 vmpr_scanned=0x140 reclaimed=0x0
-vmpr_reclaimed=0x0
-kswapd0 89 [007] 2351.333408: probe:vmpressure_L72: (ffffffed2639de2c) id=0xf23
-
-We scanned lots of pages, but weren't able to reclaim anything.
-
-When throttling happens, it's in tcp_prune_queue, where rcv_ssthresh
-(TCP window clamp) is set to 4 x advmss:
-
-* https://elixir.bootlin.com/linux/v5.15.76/source/net/ipv4/tcp_input.c#L5373
-
-else if (tcp_under_memory_pressure(sk))
-tp->rcv_ssthresh = min(tp->rcv_ssthresh, 4U * tp->advmss);
-
-I can see plenty of memory available in both my go proxy cgroup and in
-the system in general:
-
-$ free -h
-total used free shared buff/cache available
-Mem: 7.8Gi 4.3Gi 104Mi 0.0Ki 3.3Gi 3.3Gi
-Swap: 11Gi 242Mi 11Gi
-
-It just so happens that all of the memory is hot and is not eligible
-to be reclaimed. Since swap is enabled, the memory is still eligible
-to be scanned. If swap is disabled, then my go proxy is not eligible
-for scanning anymore (all memory is anonymous, nowhere to reclaim it),
-so the whole issue goes away.
-
-Punishing well behaving programs like that doesn't seem fair. We saw
-production metals with 200GB page cache out of 384GB of RAM, where a
-well behaved proxy with 60GB of RAM + 15GB of swap is throttled like
-that. The fact that it only happens with swap makes it extra weird.
-
-I'm not really sure what to do with this. From our end we'll probably
-just pass cgroup.memory=nosocket in cmdline to disable this behavior
-altogether, since it's not like we're running out of TCP memory (and
-we can deal with that better if it ever comes to that). There should
-probably be a better general case solution.
-
-I don't know how widespread this issue can be. You need a fair amount
-of page cache pressure to try to go to anonymous memory for reclaim to
-trigger this.
-
-Either way, this seems like a bit of a landmine.
+Fix this problem in v4:
+  https://lore.kernel.org/lkml/tencent_1FA6904156E8E599CAE4ABDBE80F22830106@qq.com/
