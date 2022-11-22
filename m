@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4A0633D3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4160E633D44
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbiKVNM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S233481AbiKVNNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbiKVNMp (ORCPT
+        with ESMTP id S233322AbiKVNNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:12:45 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC7F5F5A;
-        Tue, 22 Nov 2022 05:12:44 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NGl2w0DgVzJnm9;
-        Tue, 22 Nov 2022 21:09:28 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 21:12:43 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 21:12:42 +0800
-Subject: Re: [PATCH v2] device property: fix of node refcount leak in
- fwnode_graph_get_next_endpoint()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <djrscally@gmail.com>, <heikki.krogerus@linux.intel.com>,
-        <sakari.ailus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <rafael@kernel.org>
-References: <20221122120039.760773-1-yangyingliang@huawei.com>
- <Y3zGjLsDmVv0ErVR@smile.fi.intel.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <75602dce-0780-e51a-c8c9-d1820ddf3e2b@huawei.com>
-Date:   Tue, 22 Nov 2022 21:12:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <Y3zGjLsDmVv0ErVR@smile.fi.intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 22 Nov 2022 08:13:11 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A4129C81;
+        Tue, 22 Nov 2022 05:13:09 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z63so1545746ede.1;
+        Tue, 22 Nov 2022 05:13:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8y8Hrci7gEBpK8ypTuE+fYD+XXvaKAxlJq93rw+OoIc=;
+        b=IyO6TpaYxflFJhaxYOV2PfGkRAwSZO3j+wxYnACuQZtZ47AAlMVq7mtJetf6M2SLn4
+         VlgBL5d5/82zp+sqUpl67AbeQfBs2fLSvZ4myCkMtzX+sBWBeAzAvJRA9b24MjOIbS1O
+         wD7XRoszDCFtQJHIHgNeniYHJsczpZPFTAK0i5gh9MX8cWPoXMZcUAWzje8wPLcEWDUi
+         JBUnisSTdn7jGG3Y9M5sn0/REyHc3tgkhogNJHb9j3LBYsW4y4BhNIJD/LQHd6HTOqoC
+         u1YyEfc24LkSSpO3fmjSaOvNgHxJyK0a7r83wYi1IWICrF7SKs4v5n/tihujwiJGBhBu
+         wbgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8y8Hrci7gEBpK8ypTuE+fYD+XXvaKAxlJq93rw+OoIc=;
+        b=J6f/Vt7pC2QU4OTG6ZpUtFw6cPhvg4l4VphkeObMFDnh3ek7Q7X64sk2Ewl0UsVHJG
+         VO1CioXI4oAK7+K7kwU9DcdW4WJvWeLVUEl917lVQuCIUk4sCWe4+X3DJnvEen8gxvef
+         +vlwUx5oichxv2F6ZNuN/+RMCLQIBVNF0VOGd8A+U6yt6jq8A4hzQWCQElCqpeonRIj2
+         HeS7t3IrU0KBH5ptcOOMhwp7QxCCThH48EE+6irKhpIQUd5i2HC+4mZj5EJUu8TeBQyn
+         Hx/pA7mkiZ65w7OXpT4VVnNcnWkaI8cdtRRTxOvfVpO84T6sslJbKUd8su/dgM78GMXg
+         D7Gw==
+X-Gm-Message-State: ANoB5plAF0FV0US0C5VZGlPj7WWMDmY9No2DDThrzvu3Mol7nBqdOnxm
+        GmTZnkzeupnypdXw3Wmw8+/ToPWEQtg=
+X-Google-Smtp-Source: AA0mqf7TQImuxqzpm8QfnBN7SZmV3h7LqqStygAGln0CurVZbkJJHbTc5h85jMQbWbfutDxzZCMC7g==
+X-Received: by 2002:a05:6402:4512:b0:461:4c59:12d6 with SMTP id ez18-20020a056402451200b004614c5912d6mr20960202edb.250.1669122787880;
+        Tue, 22 Nov 2022 05:13:07 -0800 (PST)
+Received: from felia.fritz.box (200116b8267b3700c41d4e99e424db57.dip.versatel-1u1.de. [2001:16b8:267b:3700:c41d:4e99:e424:db57])
+        by smtp.gmail.com with ESMTPSA id j7-20020a17090643c700b0079dbf06d558sm6033234ejn.184.2022.11.22.05.13.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 05:13:05 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+        b43-dev@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] wifi: b43: remove reference to removed config B43_PCMCIA
+Date:   Tue, 22 Nov 2022 14:12:48 +0100
+Message-Id: <20221122131248.23738-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,60 +68,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 399500da18f7 ("ssb: pick PCMCIA host code support from b43 driver")
+removes the config B43_PCMCIA.
 
-On 2022/11/22 20:54, Andy Shevchenko wrote:
-> On Tue, Nov 22, 2022 at 08:00:39PM +0800, Yang Yingliang wrote:
->> The 'parent' returned by fwnode_graph_get_port_parent()
->> with refcount incremented when 'prev' is not null, it
-> NULL
->
->> needs be put when finish using it.
->>
->> Because the parent is const, introduce a new variable to
->> store the returned fwnode, then put it before returning
->> from fwnode_graph_get_next_endpoint().
-> ...
->
->>   fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
->>   			       struct fwnode_handle *prev)
->>   {
->> +	struct fwnode_handle *ep, *port_parent = NULL;
->>   	const struct fwnode_handle *parent;
->> -	struct fwnode_handle *ep;
->>   
->>   	/*
->>   	 * If this function is in a loop and the previous iteration returned
->>   	 * an endpoint from fwnode->secondary, then we need to use the secondary
->>   	 * as parent rather than @fwnode.
->>   	 */
->> -	if (prev)
->> -		parent = fwnode_graph_get_port_parent(prev);
->> -	else
->> +	if (prev) {
->> +		port_parent = fwnode_graph_get_port_parent(prev);
->> +		parent = port_parent;
->> +	} else {
->>   		parent = fwnode;
->> +	}
->>   	if (IS_ERR_OR_NULL(parent))
->>   		return NULL;
->>   
->>   	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
->> -	if (ep)
->> +	if (ep) {
->> +		fwnode_handle_put(port_parent);
->>   		return ep;
->> +	}
->>   
->> -	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
->> +	ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
->> +	fwnode_handle_put(port_parent);
->> +	return ep;
-> It seems too complicated for the simple fix.
->
-> As I said, just drop const qualifier and add fwnode_handle_get() in the 'else'
-> branch. This will allow you to drop if (prev) at the end.
+Clean up the last reference to this removed config B43_PCMCIA in the
+b43_print_driverinfo() function.
 
-fwnode is const, fwnode_handle_get doesn't accept this type.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ drivers/net/wireless/broadcom/b43/main.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
->
+diff --git a/drivers/net/wireless/broadcom/b43/main.c b/drivers/net/wireless/broadcom/b43/main.c
+index 298febbdffc0..92ca0b2ca286 100644
+--- a/drivers/net/wireless/broadcom/b43/main.c
++++ b/drivers/net/wireless/broadcom/b43/main.c
+@@ -5784,15 +5784,12 @@ void b43_controller_restart(struct b43_wldev *dev, const char *reason)
+ 
+ static void b43_print_driverinfo(void)
+ {
+-	const char *feat_pci = "", *feat_pcmcia = "", *feat_nphy = "",
++	const char *feat_pci = "", *feat_nphy = "",
+ 		   *feat_leds = "", *feat_sdio = "";
+ 
+ #ifdef CONFIG_B43_PCI_AUTOSELECT
+ 	feat_pci = "P";
+ #endif
+-#ifdef CONFIG_B43_PCMCIA
+-	feat_pcmcia = "M";
+-#endif
+ #ifdef CONFIG_B43_PHY_N
+ 	feat_nphy = "N";
+ #endif
+@@ -5803,9 +5800,8 @@ static void b43_print_driverinfo(void)
+ 	feat_sdio = "S";
+ #endif
+ 	printk(KERN_INFO "Broadcom 43xx driver loaded "
+-	       "[ Features: %s%s%s%s%s ]\n",
+-	       feat_pci, feat_pcmcia, feat_nphy,
+-	       feat_leds, feat_sdio);
++	       "[ Features: %s%s%s%s ]\n",
++	       feat_pci, feat_nphy, feat_leds, feat_sdio);
+ }
+ 
+ static int __init b43_init(void)
+-- 
+2.17.1
+
