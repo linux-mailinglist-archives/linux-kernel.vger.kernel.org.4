@@ -2,84 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445F3633819
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E25563381B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbiKVJN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:13:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S233218AbiKVJOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233202AbiKVJNv (ORCPT
+        with ESMTP id S233262AbiKVJN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:13:51 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDA047316;
-        Tue, 22 Nov 2022 01:13:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tAJyYdDr0qopnArMHRvaYWXVoISL97AHjwr5u25VtnE=; b=OsSMiaw1+GuLxGRH/nM06nOe8Z
-        4tqVcJ5Mm4mo7LdqZ/9wrTL+JJGjdOyVEQXS1wDItstLOStUa2/9ylnONSaA92t70tSiWWk3BTSqt
-        O1SNEobHJbRDzp8md6ZOShFUb16SeJBPv+25wcCiSCShG5tfO/VUs6oPNlgb6RWXQRu8T1QWpQll+
-        E34HJu8vpiV9CCYmmQsuU/rkycCAM/h7PKVoQCT5DpW13jXxpNWhBbDOuyp/TjTvtKint5QpaEev/
-        N8O2iQSfx1GWchy3qTJdjIJxPPqWUq4ze5cW5GvndiAfQ/QvnXxCPnjGCTO9fsz7msfjoA/4TQxdq
-        cY53TdUw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxPLZ-003O7s-3y; Tue, 22 Nov 2022 09:13:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Tue, 22 Nov 2022 04:13:57 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FA2B70;
+        Tue, 22 Nov 2022 01:13:54 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A1A4E3001D7;
-        Tue, 22 Nov 2022 10:13:40 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 88F4A2D669369; Tue, 22 Nov 2022 10:13:40 +0100 (CET)
-Date:   Tue, 22 Nov 2022 10:13:40 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
-Message-ID: <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id BEE8424E;
+        Tue, 22 Nov 2022 10:13:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1669108432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=plum5bpGKf5YbsOXaR3ZRwg3M/Z81EXK5S/OvM4cVME=;
+        b=qYxEdPbaOaHsnp6nfQ6IxonRBxVMFYHRbuYTr2UIqVoZOWG/R3O1LY1nHREJ5WujTeU6Zi
+        wpkgCxGUhORwqsnJVGJFdKCvista9pqCnLRsOobS8DaMthuOGEaPNrIgzcCawvJirssVQQ
+        v+2Rp5scDO5vK9ezMvtHmYBe9eWOMpfLhkFrOkg+9AVnKwocpdHlyJdM2Ppah7+DlL30JP
+        Iv6WfP7Gbr0O0QjcoHnyNb2M0HFVVv0R+eyLhFwbmta7guR4hWBKHUUZgA8d+uTTyQApbU
+        Xln9NRJnwWx7LnvCsT5kjI7ssBFOJmTEbcW8gghcoNx8Tc728Yz5IJaAt1s4hg==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 22 Nov 2022 10:13:52 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     afaerber@suse.de, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, festevam@gmail.com,
+        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        liviu.dudau@arm.com, lorenzo.pieralisi@arm.com, mani@kernel.org,
+        nicolas.ferre@microchip.com, richard.genoud@gmail.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org, sudeep.holla@arm.com,
+        tklauser@distanz.ch, vz@mleia.com
+Subject: Re: [PATCH v5 2/3] tty: serial: use uart_port_tx() helper
+In-Reply-To: <ca8e1e8c-fe50-ca94-7cb8-9044f8cc16d0@kernel.org>
+References: <20221004104927.14361-3-jirislaby@kernel.org>
+ <20221121202724.1708460-1-michael@walle.cc>
+ <f95ef7b7-cc23-9fed-5d05-1aa66aaeb86a@kernel.org>
+ <0ef4f1e6d92601a39fe0d1c316506c12@walle.cc>
+ <325fdfbf37b155c41e2b45bcddd96e9b@walle.cc>
+ <0faeb934-a2c9-fcc2-6961-d3f1bbf37fa2@kernel.org>
+ <ca8e1e8c-fe50-ca94-7cb8-9044f8cc16d0@kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <83ed1b1bf6770488219a708f8fa32503@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 01:26:28PM +1300, Kai Huang wrote:
+Am 2022-11-22 09:25, schrieb Jiri Slaby:
+> On 22. 11. 22, 9:23, Jiri Slaby wrote:
+>> On 22. 11. 22, 9:18, Michael Walle wrote:
+>>> Am 2022-11-22 09:09, schrieb Michael Walle:
+>>>> Hi,
+>>>> 
+>>>> Am 2022-11-22 08:02, schrieb Jiri Slaby:
+>>>>> On 21. 11. 22, 21:27, Michael Walle wrote:
+>>>>>> This will break serial output for the userspace on my board
+>>>>>> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt*dts). The 
+>>>>>> uart_port_tx()
+>>>>>> helper will call __port->ops->stop_tx(__port) if 
+>>>>>> uart_circ_chars_pending()
+>>>>>> returns 0. But the code above, doesn't do that. In fact, removing 
+>>>>>> the
+>>>>>> stop_tx() call in the helper macro, will fix the console output.
+>>>>>> 
+>>>>>> Any ideas how to fix that?
+>>>>> 
+>>>>> Hm, so ATMEL_US_TXRDY is removed from tx_done_mask in stop_tx, but 
+>>>>> not
+>>>>> added back in start_tx. So the tx interrupt is never handled (the 
+>>>>> tx
+>>>>> tasklet is not scheduled to send the queue chars) in
+>>>>> atmel_handle_transmit().
+>>>>> 
+>>>>> Any chance, the below fixes it?
+>>>>> 
+>>>>> diff --git a/drivers/tty/serial/atmel_serial.c
+>>>>> b/drivers/tty/serial/atmel_serial.c
+>>>>> index 11bf2466390e..395370e0c77b 100644
+>>>>> --- a/drivers/tty/serial/atmel_serial.c
+>>>>> +++ b/drivers/tty/serial/atmel_serial.c
+>>>>> @@ -596,6 +596,8 @@ static void atmel_start_tx(struct uart_port 
+>>>>> *port)
+>>>>>                 /* re-enable PDC transmit */
+>>>>>                 atmel_uart_writel(port, ATMEL_PDC_PTCR, 
+>>>>> ATMEL_PDC_TXTEN);
+>>>>> 
+>>>>> +       atmel_port->tx_done_mask |= ATMEL_US_TXRDY;
+>>>>> +
+>>>>>         /* Enable interrupts */
+>>>>>         atmel_uart_writel(port, ATMEL_US_IER, 
+>>>>> atmel_port->tx_done_mask);
+>>>>> 
+>>>>> 
+>>>>> thanks,
+>>>> 
+>>>> Unfortunately, that doesn't help. Btw, some characters are 
+>>>> transmitted:
+>>>> 
+>>>> 
+>>>> [    6.219356] Key type dns_resolver registered
+>>>> [    6.223679] Registering SWP/SWPB emulation handler
+>>>> [    6.247530] Loading compiled-in X.509 certificates
+>>>> [    6.288467] Freeing unused kernel image (initmem) memory: 1024K
+>>>> [    6.297789] Run /init as init process
+>>>> WbSOROSOSOSOSOStarting linuxptp system clock synchronization: O
+>>>> 
+>>>> -michael
+>>> 
+>>> But you made me look at atmel_stop_tx() and there is this:
+>>> 
+>>>         /*
+>>>      * Disable the transmitter.
+>>>      * This is mandatory when DMA is used, otherwise the DMA buffer
+>>>      * is fully transmitted.
+>>>      */
+>>>      atmel_uart_writel(port, ATMEL_US_CR, ATMEL_US_TXDIS);
+>>> 
+>>> Removing that write, will also fix the problem. Could it be, that
+>>> the transmit is still active (via DMA) but the driver will call
+>>> tx_stop() and then stop the transmission in the background?
+>> 
+>> Yes, that was exactly the next step to try. The datasheet doesn't tell 
+>> much what happens when TXDIS is written while the characters are 
+>> transmitted.
+> 
+> Side note: your usart doesn't use dma. It's PIO (hence all that
+> uart_tx_helper()). And the attached patch doesn't touch TXDIS for
+> non-DMA case. I.e. it should transmit the final character (and nothing
+> more).
 
-> +/*
-> + * Call the SEAMCALL on all online CPUs concurrently.  Caller to check
-> + * @sc->err to determine whether any SEAMCALL failed on any cpu.
-> + */
-> +static void seamcall_on_each_cpu(struct seamcall_ctx *sc)
-> +{
-> +	on_each_cpu(seamcall_smp_call_function, sc, true);
-> +}
+ok ;)
 
-Suppose the user has NOHZ_FULL configured, and is already running
-userspace that will terminate on interrupt (this is desired feature for
-NOHZ_FULL), guess how happy they'll be if someone, on another parition,
-manages to tickle this TDX gunk?
+expect from "s/id_dma/is_dma/", this patch works. thanks!
+
+-michael
 
 
