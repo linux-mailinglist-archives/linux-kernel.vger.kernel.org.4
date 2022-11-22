@@ -2,187 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8636335B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603BB6335BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbiKVHLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
+        id S232356AbiKVHNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiKVHLo (ORCPT
+        with ESMTP id S232334AbiKVHNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:11:44 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3CB303EF;
-        Mon, 21 Nov 2022 23:11:42 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VVR4.1Q_1669101096;
-Received: from 30.221.132.69(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VVR4.1Q_1669101096)
-          by smtp.aliyun-inc.com;
-          Tue, 22 Nov 2022 15:11:38 +0800
-Message-ID: <74d26daa-69cb-41bf-5a33-229c95521536@linux.alibaba.com>
-Date:   Tue, 22 Nov 2022 15:11:35 +0800
+        Tue, 22 Nov 2022 02:13:09 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81842B26F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:13:07 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id h132so14997811oif.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:13:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=10BjkhMSoW3U2bUGh0N+e/mWSGo0zobvSPy084Dj9BQ=;
+        b=KqyzAPtZWobpeGRi9LQ+DhiSU4wvqjSNU3xs8C1GInmZQbSEtflx9JrArirkib4WQf
+         fw3U2sVgpL6y1AQjIQA4pDRp/VCicSAN7+FQDrVlIRNHFwkPLiR9E5idoDEdBajIDGsD
+         1tqIsuGX1Y7560n1FGmyImja+PG1ONFldo0V4jlIObwHcxmad27ZV2PJkHbDStIiY8pb
+         ikGOjHQWd5ylPVm1jFC43+vlxtrTimvPvKo7ZZGAlGQXx0NdlGNeiFFVGV3PfLiBe1Of
+         CPKUiCIceyD08wUn8Xt4YqcSSi2OfK3j+9fElpuyv80rPELXo6t8Fa/6mvvrcL8fr9fm
+         ltDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=10BjkhMSoW3U2bUGh0N+e/mWSGo0zobvSPy084Dj9BQ=;
+        b=Ug5u9N4VD3zwZ92fwllbnBNDMSDe/osUVSQYsX+FK82oicANhNXruxTKngVGycmqQF
+         CwaJGrn+ETqSoK4M+xjpAe4mPhVzBsZ6BUb4+zZ+Mrr12edB+u9Cgq+HbwF6uMDm2WIE
+         GbPSA0i/KC47d/v5+tcQ4+5efixG/w+Rwezt66KGKyvkzeedxrR/bnES07MnysOlGmpa
+         G/aXNeFz8WO0MZZ4B9/jd+rPp1VzRMaNxAehI9J0wcl7gsmK8NX3bdp/o9LdJBr4/Dra
+         XesJSY3tuj+LYuHg0rrpHCzdpLJwxRx/JqTnHu6zPEAV6var0GfGPdRxr+fRBKDTuPEA
+         wUsg==
+X-Gm-Message-State: ANoB5pm8ZeMigRWKYYvwL73wd90Thifl+IpxVDxUPDZN1RTjFpvPdmWA
+        nBVOIupmOyoJuvXrnE3kds5gDidsJAyv5EnerpRr4A==
+X-Google-Smtp-Source: AA0mqf4geafsJBx57KC9nW9HQ4zgwi/eHXhTeMgKKI74g9eXx4OqQNsH/1CqxiROB1z7sy3NpPw80n7ggOmcETXvAyE=
+X-Received: by 2002:a05:6808:1115:b0:359:cb71:328b with SMTP id
+ e21-20020a056808111500b00359cb71328bmr10640723oih.282.1669101186975; Mon, 21
+ Nov 2022 23:13:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH RFC 0/6] Add metrics for neoverse-n2
-To:     James Clark <james.clark@arm.com>,
-        nick Forrington <Nick.Forrington@arm.com>,
-        Jumana MP <Jumana.MP@arm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     Will Deacon <will@kernel.org>, Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
- <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
- <d334a33c-b171-8381-3f75-e47392b6cba5@linux.alibaba.com>
- <107dda1a-6053-ea35-1e29-96ee6d049eb1@arm.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <107dda1a-6053-ea35-1e29-96ee6d049eb1@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <CAO4mrfd4=HRXMrcdZQUorNaFss3AFfrRxuXWMFT3uh+Dvfwb9g@mail.gmail.com>
+ <CAO4mrfdU4oGktM8PPFg66=32N0JSGx=gtG80S89-b66tS3NLVw@mail.gmail.com>
+ <CAO4mrfftfwBWbt-a1H3q559jtnv93MQ92kp=DFnA+-pRrSObcw@mail.gmail.com>
+ <CACT4Y+Zub=+V3Yx=wSagYYeybwhbBt66COyTc=OjFAMOibybxg@mail.gmail.com> <Y3xmSbsjoMRnRIEd@casper.infradead.org>
+In-Reply-To: <Y3xmSbsjoMRnRIEd@casper.infradead.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 22 Nov 2022 08:12:54 +0100
+Message-ID: <CACT4Y+YCqrvj-Z46bQiOe-iHzt8CFvk3XZ-Zt4CSGOSshGg0oA@mail.gmail.com>
+Subject: Re: BUG: unable to handle kernel NULL pointer dereference in gfs2_evict_inode
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Wei Chen <harperchen1110@gmail.com>, rpeterso@redhat.com,
+        agruenba@redhat.com, cluster-devel@redhat.com,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        syzkaller@googlegroups.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 22 Nov 2022 at 07:03, Matthew Wilcox <willy@infradead.org> wrote:
+> > > Dear Linux developers,
+> > >
+> > > The bug persists in upstream Linux v6.0-rc5.
+> >
+> > If you fix this, please also add the syzbot tag:
+> >
+> > Reported-by: syzbot+8a5fc6416c175cecea34@syzkaller.appspotmail.com
+> > https://lore.kernel.org/all/000000000000ab092305e268a016@google.com/
+>
+> Hey Dmitri, does Wei Chen work with you?  They're not responding to
+> requests to understand what they're doing.  eg:
+>
+> https://lore.kernel.org/all/YtVhVKPAfzGmHu95@casper.infradead.org/
+>
+> https://lore.kernel.org/all/Y0SAT5grkUmUW045@casper.infradead.org/
+>
+> I'm just ignoring their reports now.
 
-
-在 2022/11/21 下午7:51, James Clark 写道:
-> 
-> 
-> On 16/11/2022 15:26, Jing Zhang wrote:
->>
->>
->> 在 2022/11/16 下午7:19, James Clark 写道:
->>>
->>>
->>> On 31/10/2022 11:11, Jing Zhang wrote:
->>>> This series add six metricgroups for neoverse-n2, among which, the
->>>> formula of topdown L1 is from the document:
->>>> https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
->>>>
->>>> Since neoverse-n2 does not yet support topdown L2, metricgroups such
->>>> as Cache, TLB, Branch, InstructionsMix, and PEutilization are added to
->>>> help further analysis of performance bottlenecks.
->>>>
->>>
->>> Hi Jing,
->>>
->>> Thanks for working on this, these metrics look ok to me in general,
->>> although we're currently working on publishing standardised metrics
->>> across all new cores as part of a new project in Arm. This will include
->>> N2, and our ones are very similar (or almost identical) to yours,
->>> barring slightly different group names, metric names, and differences in
->>> things like outputting topdown metrics as percentages.
->>>
->>> We plan to publish our standard metrics some time in the next 2 months.
->>> Would you consider holding off on merging this change so that we have
->>> consistant group names and units going forward? Otherwise N2 would be> the odd one out. I will send you the metrics when they are ready, and we
->>> will have a script to generate perf jsons from them, so you can review.
->>>
->>
->> Do you mean that after you release the new standard metrics, I remake my
->> patch referring to them, such as consistent group names and unit?
-> 
-> Hi Jing,
-> 
-> I was planning to submit the patch myself, but there will be a script to
-> generate perf json files, so no manual work would be needed. Although
-> this is complicated by the fact that we won't be publishing the fixed
-> TopdownL1 metrics that you have for the existing N2 silicon so there
-> would be a one time copy paste to fix that part.
-> 
->>
->>
->>> We also have a slightly different forumula for one of the top down
->>> metrics which I think would be slightly more accurate. We don't have
->>
->>
->> The v2 version of the patchset updated the formula of topdown L1.
->> Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
->>
->> The formula of the v2 version is more accurate than v1, and it has been
->> verified in our test environment. Can you share your formula first and we
->> can discuss it together? :)
-> 
-> I was looking at v2 but replied to the root of the thread by mistake. I
-> also had it the wrong way round. So your version corrects for the errata
-> on the current version of N2 (as you mentioned in the commit message).
-> Our version would be if there is a future new silicon revision with that
-> fixed, but it does have an extra improvement by subtracting the branch
-> mispredicts.
-> 
-> Perf doesn't currently match the jsons based on silicon revision, so
-> we'd have to add something in for that if a fixed silicon version is
-> released. But this is another problem for another time.
-> 
-
-Hi James,
-
-Let's do what Ian said, and you can improve it later with the standard metrics,
-after the fixed silicon version is released.
-
-
-> This is the frontend bound metric we have for future revisions:
-> 
-> 	"100 * ( (STALL_SLOT_FRONTEND/(CPU_CYCLES * 5)) - ((BR_MIS_PRED *
-> 4)/CPU_CYCLES) )"
-> 
-> Other changes are, for example, your 'wasted' metric, we have
-> 'bad_speculation', and without the
-> cycles subtraction:
-> 
-> 	100 * ( ((1 - (OP_RETIRED/OP_SPEC)) * (1 - (STALL_SLOT/(CPU_CYCLES *
-> 5)))) + ((BR_MIS_PRED * 4)/CPU_CYCLES) )
-> 
-
-Thanks for sharing your metric version, But I still wonder, is BR_MIS_PRED not classified
-as frontend bound? How do you judge the extra improvement by subtracting branch mispredicts?
-
-> And some more details filled in around the units, for example:
-> 
->     {
->         "MetricName": "bad_speculation",
->         "MetricExpr": "100 * ( ((1 - (OP_RETIRED/OP_SPEC)) * (1 -
-> (STALL_SLOT/(CPU_CYCLES * 5)))) + ((BR_MIS_PRED * 4)/CPU_CYCLES) )",
->         "BriefDescription": "Bad Speculation",
->         "PublicDescription": "This metric is the percentage of total
-> slots that executed operations and didn't retire due to a pipeline
-> flush.\nThis indicates cycles that were utilized but inefficiently.",
->         "MetricGroup": "TopdownL1",
->         "ScaleUnit": "1percent of slots"
->     },
-> 
-
-My "wasted" metric was changed according to the arm documentation description, it was originally
-"bad_speculation".  I will change "wasted" back to "bad_speculation", if you wish.
-
-
-Thanks,
-Jing
-
-
-> So ignoring the errata issue, the main reason to hold off is for
-> consistency and churn because these metrics in this format will be
-> released for all cores going forwards.
-> 
-> Thanks
-> James
-> 
+No, I know nothing about this.
