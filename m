@@ -2,130 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA974633841
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 724E8633845
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbiKVJXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:23:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S231318AbiKVJXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbiKVJXR (ORCPT
+        with ESMTP id S232108AbiKVJXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:23:17 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CD420F4E;
-        Tue, 22 Nov 2022 01:23:15 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B95126602AC7;
-        Tue, 22 Nov 2022 09:23:13 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669108994;
-        bh=+mlBG/PJoJUc9mB4Fvqa/9O1jnPv1xX0SkB4mOqIHso=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oATMFKxm8m+2BgI44UwSDJAtyNhdFHigDVbG6Z/9SiyBYFGV3ZSsbTLtST5gWh4KS
-         WJBQZWAGGa15Wiouudki0IYlWOUr+2EMIMnTehAUHfNbLwtF+sLHKydXIjqxCUz0AU
-         LuMRfxHk7vmryAUL9TDH1bxQDN8kjiY3HKNWtUu4CjarTpgLJ2tq8+RycPBNTjCLuy
-         PBnTp5ozH8QzSoabVMpb2uQqPng+rhyMbWe7oP8MxvyyQGyDwxugiijioK/ssdQRYx
-         q8cLwz48saX8Ksw857B93cNidbMc2/zl9LtpiF5RnE1QzdeoCkggEj5A96UEpZx51M
-         nfOBhknwD4Q5g==
-Message-ID: <a176dc88-add7-7ce2-16c8-2bd7c6821399@collabora.com>
-Date:   Tue, 22 Nov 2022 10:23:11 +0100
+        Tue, 22 Nov 2022 04:23:52 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA22E2612F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:23:50 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id t10so17326559ljj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:23:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0U8XxawDGWCZzhMqQukKmwsffMYQ51SkEqy9nNuVT0c=;
+        b=h0FsqIthkC8HTEetRPlBsWqyafaJq6Lm0EVShqc7hdQcLBOakjcQK/WU4rp1Pa0uLT
+         LMLwe0hz/Ysn1euiYBVyZpMmtKYPqbksUk8GtjoHnzOiqyztpvPLyc6uQBcDyFdYm7hy
+         Gu1UvMfRWaSOrbUotzzAi8r6vOJM6GIh07AEByviNnR1z0Ng6OFSHq3rZJlzzCMK/hM+
+         QcQWWXkP9Lp87ehDHmSiKNkKk9RR1FpwkeU+/7HY3MG6R46gX8Tvm6DEle/WAAt6de6v
+         Uw5NOMb6xluufDEHg/JfNoiQYaKt3mpleFpAuqezx7cqaInRLE5bTNGANVOS36Acf96Q
+         9h2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0U8XxawDGWCZzhMqQukKmwsffMYQ51SkEqy9nNuVT0c=;
+        b=oGz5lT7EE6Hx+UWusVu1z/yhqDxjwETNZ9NXKkUWQuypRyd0EXBAffb46jGokF030n
+         b480mE4VGI4Z2GH+UZ+9A6wkO1edgOr3zcZF+vnIBTMcxy7t86F44ctcDfZomYiTJ/uA
+         wtsKfk4kPQcuXGgHiHyzfOo1ojcLme1iHn+7I0h+dqdXITUp7S2VjngwR4b4w5G2pgqp
+         PniypVtzI3KdhWp6OUSJUMsbp5L7fdP0cX4c4B50rqJm7fYCI/X62BGnQoPXPcQGI5ij
+         0P9jTW3Ys9jMuNlQn9kcephfpOdkKhJ3jkapB7XRHtB6vZsOgaU4sLT4NLG4BZf8aM7l
+         XeAQ==
+X-Gm-Message-State: ANoB5pnubfwr1fCDqkYxOOn7L1bvi3pL5ahVtdsdRM+b9Rk8SmXlg1Rc
+        bEYBU5BACXbwIYY/8iguMLDOXw==
+X-Google-Smtp-Source: AA0mqf6vgG7Plae1Er/CfRBduDzg0qcvzJd7Hj0Nhl71bndZ4HSmKfVtly3r5rgY9vjTEkAz3tEFzQ==
+X-Received: by 2002:a05:651c:1101:b0:279:73ba:8719 with SMTP id e1-20020a05651c110100b0027973ba8719mr6266ljo.294.1669109029052;
+        Tue, 22 Nov 2022 01:23:49 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id br31-20020a056512401f00b004b1a5086485sm2405609lfb.2.2022.11.22.01.23.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 01:23:48 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH 1/2] dt-bindings: firmware: qcom,scm: document MSM8226 clocks
+Date:   Tue, 22 Nov 2022 10:23:44 +0100
+Message-Id: <20221122092345.44369-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1 1/1] pinctrl: meditatek: Startup with the IRQs disabled
-Content-Language: en-US
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ross Zwisler <zwisler@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-References: <20221122-mtk-pinctrl-v1-0-bedf5655a3d2@chromium.org>
- <20221122-mtk-pinctrl-v1-1-bedf5655a3d2@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221122-mtk-pinctrl-v1-1-bedf5655a3d2@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/11/22 00:38, Ricardo Ribalda ha scritto:
-> If the system is restarted via kexec(), the peripherals do not start
-> with a known state.
-> 
-> If the previous system had enabled an IRQs we will receive unexected
-> IRQs that can lock the system.
-> 
-> [   28.109251] watchdog: BUG: soft lockup - CPU#0 stuck for 26s!
-> [swapper/0:0]
-> [   28.109263] Modules linked in:
-> [   28.109273] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
-> 5.15.79-14458-g4b9edf7b1ac6 #1 9f2e76613148af94acccd64c609a552fb4b4354b
-> [   28.109284] Hardware name: Google Elm (DT)
-> [   28.109290] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS
-> 		BTYPE=--)
-> [   28.109298] pc : __do_softirq+0xa0/0x388
-> [   28.109309] lr : __do_softirq+0x70/0x388
-> [   28.109316] sp : ffffffc008003ee0
-> [   28.109321] x29: ffffffc008003f00 x28: 000000000000000a x27:
-> 0000000000000080
-> [   28.109334] x26: 0000000000000001 x25: ffffffefa7b350c0 x24:
-> ffffffefa7b47480
-> [   28.109346] x23: ffffffefa7b3d000 x22: 0000000000000000 x21:
-> ffffffefa7b0fa40
-> [   28.109358] x20: ffffffefa7b005b0 x19: ffffffefa7b47480 x18:
-> 0000000000065b6b
-> [   28.109370] x17: ffffffefa749c8b0 x16: 000000000000018c x15:
-> 00000000000001b8
-> [   28.109382] x14: 00000000000d3b6b x13: 0000000000000006 x12:
-> 0000000000057e91
-> [   28.109394] x11: 0000000000000000 x10: 0000000000000000 x9 :
-> ffffffefa7b47480
-> [   28.109406] x8 : 00000000000000e0 x7 : 000000000f424000 x6 :
-> 0000000000000000
-> [   28.109418] x5 : ffffffefa7dfaca0 x4 : ffffffefa7dfadf0 x3 :
-> 000000000000000f
-> [   28.109429] x2 : 0000000000000000 x1 : 0000000000000100 x0 :
-> 0000000001ac65c5
-> [   28.109441] Call trace:
-> [   28.109447]  __do_softirq+0xa0/0x388
-> [   28.109454]  irq_exit+0xc0/0xe0
-> [   28.109464]  handle_domain_irq+0x68/0x90
-> [   28.109473]  gic_handle_irq+0xac/0xf0
-> [   28.109480]  call_on_irq_stack+0x28/0x50
-> [   28.109488]  do_interrupt_handler+0x44/0x58
-> [   28.109496]  el1_interrupt+0x30/0x58
-> [   28.109506]  el1h_64_irq_handler+0x18/0x24
-> [   28.109512]  el1h_64_irq+0x7c/0x80
-> [   28.109519]  arch_local_irq_enable+0xc/0x18
-> [   28.109529]  default_idle_call+0x40/0x140
-> [   28.109539]  do_idle+0x108/0x290
-> [   28.109547]  cpu_startup_entry+0x2c/0x30
-> [   28.109554]  rest_init+0xe8/0xf8
-> [   28.109562]  arch_call_rest_init+0x18/0x24
-> [   28.109571]  start_kernel+0x338/0x42c
-> [   28.109578]  __primary_switched+0xbc/0xc4
-> [   28.109588] Kernel panic - not syncing: softlockup: hung tasks
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Document the clocks (core, bus and iface) used on MSM8226 SCM.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+---
+
+Cc: Abel Vesa <abel.vesa@linaro.org>
+Cc: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: Melody Olvera <quic_molvera@quicinc.com>
+---
+ Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+index 25688571ee7c..fc986f2f5d30 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -111,6 +111,7 @@ allOf:
+             enum:
+               - qcom,scm-apq8084
+               - qcom,scm-mdm9607
++              - qcom,scm-msm8226
+               - qcom,scm-msm8916
+               - qcom,scm-msm8953
+               - qcom,scm-msm8974
+-- 
+2.34.1
 
