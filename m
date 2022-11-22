@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7AD634916
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1976634931
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234889AbiKVVUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S234597AbiKVV0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbiKVVUV (ORCPT
+        with ESMTP id S234416AbiKVV0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:20:21 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EC18F3C3;
-        Tue, 22 Nov 2022 13:20:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669152017; x=1700688017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ads2cVRvZI8k8jJJ/EENd7OUJlc/7SM5FY/+3wbCKkk=;
-  b=RbwD1C3BA7JaRZqFrOM/Ty1NNyWBKb4cMJM6DBscm3k6rG6z5FcyggF+
-   JYxJ6YhtZOYq4nAyXEhC/H1jD15LuM8gKj+NTNszABb6KWq2ijk9c963u
-   BCZWsb6aPxBuZhbXHGsZGHJYgoGg7Qhow/bTIM5bTbd9gBsZHoF76z7WX
-   qZSYMFzFmXeFAmjtCyp+/HEJmVnOiBVRgZ5WGeef9XbIG64c81ka84BXU
-   XTIio4mS26CiPH1sN0mdj0+OWg5gOxWXDfkvOZIxvKg9IE6raDzYqIKxg
-   iShtMwfCguKHL9XyuHPvGaE2ePz0RhZ4Z3XLYrjzF7ceISZKhPpbEWVTt
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,185,1665471600"; 
-   d="scan'208";a="190134967"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 14:20:17 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 14:20:14 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 22 Nov 2022 14:20:14 -0700
-Date:   Tue, 22 Nov 2022 22:25:04 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>, <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next v3 5/7] net: lan966x: Update dma_dir of
- page_pool_params
-Message-ID: <20221122212504.nrwaucgab3lqqxpo@soft-dev3-1>
-References: <20221121212850.3212649-1-horatiu.vultur@microchip.com>
- <20221121212850.3212649-6-horatiu.vultur@microchip.com>
- <20221122114339.419188-1-alexandr.lobakin@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20221122114339.419188-1-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham
+        Tue, 22 Nov 2022 16:26:14 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03972B70C5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:26:13 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id c7-20020a170903234700b0018729febd96so12352893plh.19
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:26:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zgimOf2fhkQleYDBm+3WEMJX9iyYgXrpyh87WZyj3iY=;
+        b=lVv2mTakLyH0mUQEmNwxYoDh+3DxuzDGtIVYSniYeHvEtMOtdEPVoNfksWen4QT0H0
+         6H+2+LjZrO2G2h88rSxZ39aZ/CfY0OGjAs5EHQcpFqTCqSYHCLCig1EK8P3sZQl49ALf
+         GB5hn6rrVf3oqbw3wC1vBug2kvL1DcUtnatLFJfLk5JoA4NWjjhtmQllFS/q3Ka0CbhH
+         rKjGCIHW3yFzoUJHB2j4HiD2Vg8M2MXcHFbxzCvuEIufeJfbB2jT5YBXs3kOOIcgukES
+         XZGYLg62U2fMD2/rIUXsFc6d9o7uDcAUBjoJRL7j4vx4/+Yi4UQUBtUQSR2PqoeWb5oz
+         xNfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zgimOf2fhkQleYDBm+3WEMJX9iyYgXrpyh87WZyj3iY=;
+        b=heT12XDyYZ6Y6TL18BFuBqsrvwuWlLVV0G+vpe1Ys++/YML4IpL6jZqOZHagS/cd0Y
+         n8C9OnK/4NtPc/DfYojGI+x2MFytK+HYyzz0PVUM8bU65wHZDsRmoZQpnXcem2GPw2dO
+         Ny2QUTdcbV3nFFwXyIslHaWTShpNirDqVqOfdaFdgxmqWhQ1M9P4UhugeW8eekYz/fGQ
+         vmZovipJ3s/iCybgyw4J66UJqfOwYiXdBtltbWEAmZgGh0pzBD4W9SWoRJJoxfwQxj6N
+         j6C9B3mo5GSYrFNsWdsalPJlhPH0KdBFBNc5B1SL1BBnbULt6t36OK3JxDRIb2/gvYxQ
+         NBzQ==
+X-Gm-Message-State: ANoB5pmozcBmMSZNDlyHTrXB89gY81iLtQD8UXRJj8wmkKBSMJ57Z879
+        MNJKgLi7MmpOCEIqMcKvIsCAmPtQ+u2/IP3Zgw==
+X-Google-Smtp-Source: AA0mqf6tF7wuZFNnT06MIDxN4K88WuS+gvWo34APH7cHAv8iYvQPOdJIW8aHcfgRyichIBKp9SpUgsF/jBKIFuZIDA==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a63:cd57:0:b0:46e:c9d0:96c with SMTP
+ id a23-20020a63cd57000000b0046ec9d0096cmr4913454pgj.586.1669152372521; Tue,
+ 22 Nov 2022 13:26:12 -0800 (PST)
+Date:   Tue, 22 Nov 2022 13:26:10 -0800
+In-Reply-To: <9e8346b692eb377576363a028c3688c66f3c0bfe.1667110240.git.isaku.yamahata@intel.com>
+Mime-Version: 1.0
+Message-ID: <diqzedtubs0d.fsf@google.com>
+Subject: Re: [PATCH v10 047/108] KVM: x86/tdp_mmu: Don't zap private pages for
+ unsupported cases
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
+        pbonzini@redhat.com, erdemaktas@google.com, seanjc@google.com,
+        sagis@google.com, dmatlack@google.com,
+        sean.j.christopherson@intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,78 +70,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 11/22/2022 12:43, Alexander Lobakin wrote:
-> 
-> From: Horatiu Vultur <horatiu.vultur@microchip.com>
-> Date: Mon, 21 Nov 2022 22:28:48 +0100
-> 
-> > To add support for XDP_TX it is required to be able to write to the DMA
-> > area therefore it is required that the pages will be mapped using
-> > DMA_BIDIRECTIONAL flag.
-> > Therefore check if there are any xdp programs on the interfaces and in
-> > that case set DMA_BIDRECTIONAL otherwise use DMA_FROM_DEVICE.
-> > Therefore when a new XDP program is added it is required to redo the
-> > page_pool.
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  .../ethernet/microchip/lan966x/lan966x_fdma.c | 29 ++++++++++++++----
-> >  .../ethernet/microchip/lan966x/lan966x_main.h |  2 ++
-> >  .../ethernet/microchip/lan966x/lan966x_xdp.c  | 30 +++++++++++++++++++
-> >  3 files changed, 55 insertions(+), 6 deletions(-)
-> 
-> [...]
-> 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > index 8ebde1eb6a09c..05c5a28206558 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > @@ -11,6 +11,8 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
-> >       struct lan966x_port *port = netdev_priv(dev);
-> >       struct lan966x *lan966x = port->lan966x;
-> >       struct bpf_prog *old_prog;
-> > +     bool old_xdp, new_xdp;
-> > +     int err;
-> >
-> >       if (!lan966x->fdma) {
-> >               NL_SET_ERR_MSG_MOD(xdp->extack,
-> > @@ -18,7 +20,20 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
-> >               return -EOPNOTSUPP;
-> >       }
-> >
-> > +     old_xdp = lan966x_xdp_present(lan966x);
-> >       old_prog = xchg(&port->xdp_prog, xdp->prog);
-> > +     new_xdp = lan966x_xdp_present(lan966x);
-> > +
-> > +     if (old_xdp != new_xdp)
-> > +             goto out;
-> 
-> Shouldn't it be the other way around? E.g. when there's no prog and
-> you're installing it or there is a prog and we're removing it from
-> the interface, DMA dir must be changed, so we reload the Pools, but
-> if `old_xdp == new_xdp` we should just hotswap them and goto out?
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 
-Argh! Yes, it needs to be the other way around.
-> 
-> > +
-> > +     err = lan966x_fdma_reload_page_pool(lan966x);
-> > +     if (err) {
-> > +             xchg(&port->xdp_prog, old_prog);
-> > +             return err;
-> > +     }
-> > +
-> > +out:
-> >       if (old_prog)
-> >               bpf_prog_put(old_prog);
-> >
-> 
-> [...]
-> 
-> > --
-> > 2.38.0
-> 
-> Thanks,
-> Olek
+> TDX supports only write-back(WB) memory type for private memory
+> architecturally so that (virtualized) memory type change doesn't make  
+> sense
+> for private memory.  Also currently, page migration isn't supported for  
+> TDX
+> yet. (TDX architecturally supports page migration. it's KVM and kernel
+> implementation issue.)
 
--- 
-/Horatiu
+> Regarding memory type change (mtrr virtualization and lapic page mapping
+> change), pages are zapped by kvm_zap_gfn_range().  On the next KVM page
+> fault, the SPTE entry with a new memory type for the page is populated.
+> Regarding page migration, pages are zapped by the mmu notifier. On the  
+> next
+> KVM page fault, the new migrated page is populated.  Don't zap private
+> pages on unmapping for those two cases.
+
+> When deleting/moving a KVM memory slot, zap private pages. Typically
+> tearing down VM.  Don't invalidate private page tables. i.e. zap only leaf
+> SPTEs for KVM mmu that has a shared bit mask. The existing
+> kvm_tdp_mmu_invalidate_all_roots() depends on role.invalid with read-lock
+> of mmu_lock so that other vcpu can operate on KVM mmu concurrently.  It
+> marks the root page table invalid and zaps SPTEs of the root page
+> tables. The TDX module doesn't allow to unlink a protected root page table
+> from the hardware and then allocate a new one for it. i.e. replacing a
+> protected root page table.  Instead, zap only leaf SPTEs for KVM mmu with  
+> a
+> shared bit mask set.
+
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/mmu/mmu.c     | 85 ++++++++++++++++++++++++++++++++++++--
+>   arch/x86/kvm/mmu/tdp_mmu.c | 24 ++++++++---
+>   arch/x86/kvm/mmu/tdp_mmu.h |  5 ++-
+>   3 files changed, 103 insertions(+), 11 deletions(-)
+
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index faf69774c7ce..0237e143299c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1577,8 +1577,38 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct  
+> kvm_gfn_range *range)
+>   	if (kvm_memslots_have_rmaps(kvm))
+>   		flush = kvm_handle_gfn_range(kvm, range, kvm_zap_rmap);
+
+> -	if (is_tdp_mmu_enabled(kvm))
+> -		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
+> +	if (is_tdp_mmu_enabled(kvm)) {
+> +		bool zap_private;
+
+We should initialize zap_private to true, otherwise zap_private is
+uninitialized in call
+
+     kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, zap_private)
+
+if the condition
+
+     if (kvm_slot_can_be_private(range->slot)) {
+
+evaluates to false.
+
+> +
+> +		if (kvm_slot_can_be_private(range->slot)) {
+> +			if (range->flags & KVM_GFN_RANGE_FLAGS_RESTRICTED_MEM)
+> +				/*
+> +				 * For private slot, the callback is triggered
+> +				 * via falloc.  Mode can be allocation or punch
+> +				 * hole.  Because the private-shared conversion
+> +				 * is done via
+> +				 * KVM_MEMORY_ENCRYPT_REG/UNREG_REGION, we can
+> +				 * ignore the request from restrictedmem.
+> +				 */
+> +				return flush;
+> +			else if (range->flags & KVM_GFN_RANGE_FLAGS_SET_MEM_ATTR) {
+> +				if (range->attr == KVM_MEM_ATTR_SHARED)
+> +					zap_private = true;
+> +				else {
+> +					WARN_ON_ONCE(range->attr != KVM_MEM_ATTR_PRIVATE);
+> +					zap_private = false;
+> +				}
+> +			} else
+> +				/*
+> +				 * kvm_unmap_gfn_range() is called via mmu
+> +				 * notifier.  For now page migration for private
+> +				 * page isn't supported yet, don't zap private
+> +				 * pages.
+> +				 */
+> +				zap_private = false;
+> +		}
+> +		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, zap_private);
+> +	}
+
+>   	return flush;
+>   }
