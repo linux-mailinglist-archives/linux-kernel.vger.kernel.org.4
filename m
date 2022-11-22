@@ -2,77 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A426334BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 06:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBAB6334C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 06:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiKVFjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 00:39:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S229507AbiKVFkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 00:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbiKVFjQ (ORCPT
+        with ESMTP id S229445AbiKVFko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 00:39:16 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A9721274
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 21:39:16 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id z139-20020a6bc991000000b006dac0d359edso6486243iof.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 21:39:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WDHiCNxIn/z7bNGfAT44FusXeHcFJAow6l0Lx7uONlU=;
-        b=AImuDTKvPGysw0evkFtfZadO0rx71FY9xSiN64+Id8dvwfe/Xqwd6OOpqcYR5X//SV
-         Oh5OeXT5ih0PPleDTwbtvJmk/M69V/SNSQrcGUFPCAbIi/LMPjCh3+00o9BPJ89YfHog
-         Tb+0k0JQKcZvZ+ZVHCC+WUEBRMsmJnrygKC34O3H6UxRL8MIaOljbf2+7dyfXODkfZOc
-         lKUooKMS8cssIWFM6fEG1UCMHGDMpiM7B42LwsNVsV34uTUzO8QP7T/WGGTPhLesdpj9
-         7b8LL/LxTpyska+6DJe9W8h6R+H6DcoSdklDzQ/R/yqUvmKu+ogGa+UHe1IhVyJUvFLd
-         MHDA==
-X-Gm-Message-State: ANoB5pn1AQQQeTEBPR23ibazDIeo6dg97BgOMajNxYAYDe2ilrdyJt1P
-        hNdNaheRjMEEjONQxIQfOfeFngsh84qcoAOC/4pFrnYt1C8x
-X-Google-Smtp-Source: AA0mqf4a0BHoqsnrezXkaycFKNDR61DuR+fYA0esxSmDidn3Kf+nBqP+hC/zfGsOOY06ZUKKGMW9ucWsRXqiZLeyMyE9GGHbxvt4
-MIME-Version: 1.0
-X-Received: by 2002:a5e:9405:0:b0:6a1:48d3:149e with SMTP id
- q5-20020a5e9405000000b006a148d3149emr1042832ioj.136.1669095555513; Mon, 21
- Nov 2022 21:39:15 -0800 (PST)
-Date:   Mon, 21 Nov 2022 21:39:15 -0800
-In-Reply-To: <000000000000d984e005eb5ca593@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aec24b05ee0897b3@google.com>
-Subject: Re: [syzbot] WARNING in cleanup_transaction
-From:   syzbot <syzbot+021d10c4d4edc87daa03@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+        Tue, 22 Nov 2022 00:40:44 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D6018B12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 21:40:43 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AM4pCQN004971;
+        Tue, 22 Nov 2022 05:40:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=gLzUpKnzsNYq8BtGIgiOU2OHutEvCzzxfuMx9ZEF6Z4=;
+ b=k0hdga73BBEKgvjO74w7PhbuMNyAb4/rHeQc/tiqxJ0BlhldvM5idXhIlIMN/M9UkZqY
+ YenJNcfpMmoVGTuI8uSjEWgwPalrj26j+yuwxibyeJLfLnuROX/N5Qz+wteYEbhfmD4I
+ kEko+5YvaJm3TVzx4g2qaCV3RjJZyNYq8TO2bq5Vmdd+id0bNJmFAvnhrDgpWVCAzwWn
+ 0k6aMX9uco92JuiRQInerl+op9P/y3942mE9GjSewz6ZJr6+Fke/Hzps8nD3IljAWUtz
+ /+8V290KBKgrUZINuN/RtvKf9RcMXTdXLQZJJhFXumL1N6M0nbdLYDeqNC9tEo06OvIi 8Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0hqk0p76-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 05:40:30 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AM5Nt7I023423;
+        Tue, 22 Nov 2022 05:40:29 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0hqk0p69-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 05:40:29 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AM5Yrra023692;
+        Tue, 22 Nov 2022 05:40:27 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3kxps8tpby-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 05:40:27 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AM5ePT926804574
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Nov 2022 05:40:25 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E696F52051;
+        Tue, 22 Nov 2022 05:40:24 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 91A7352052;
+        Tue, 22 Nov 2022 05:40:24 +0000 (GMT)
+Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id C4B5C600F3;
+        Tue, 22 Nov 2022 16:40:14 +1100 (AEDT)
+Message-ID: <14aca800f33d1b347d0b942fc39b022006e2a65d.camel@linux.ibm.com>
+Subject: Re: [PATCH] cxl: Fix refcount leak in cxl_calc_capp_routing
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Lombard <clombard@linux.vnet.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Date:   Tue, 22 Nov 2022 16:39:59 +1100
+In-Reply-To: <f818d7f2-eeae-8a98-30a6-0c47bef9462e@csgroup.eu>
+References: <20220605060038.62217-1-linmq006@gmail.com>
+         <269ecf828ebaa4212a5be6310619aba6d8cfe41d.camel@linux.ibm.com>
+         <f818d7f2-eeae-8a98-30a6-0c47bef9462e@csgroup.eu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GMIuw7NmlagnTsuhC5Y1-qES3MT-0xOd
+X-Proofpoint-GUID: 68uSR8wx7cjia_2h0qcXGcLoTpMcbDEB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-22_02,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211220040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Mon, 2022-11-14 at 12:42 +0000, Christophe Leroy wrote:
+> Should this be applied by Bjorn as most recent changes to that file ?
 
-commit 8bb808c6ad91ec3d332f072ce8f8aa4b16e307e0
-Author: David Sterba <dsterba@suse.com>
-Date:   Thu Nov 3 13:39:01 2022 +0000
+We usually take cxl patches through powerpc, though sometimes Greg
+picks them up through char-misc.
 
-    btrfs: don't print stack trace when transaction is aborted due to ENOMEM
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12586f7d880000
-start commit:   493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=021d10c4d4edc87daa03
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16fcaed6880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=147d4978880000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: btrfs: don't print stack trace when transaction is aborted due to ENOMEM
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+--=20
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
