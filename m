@@ -2,109 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1493763385F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5285263384C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbiKVJ11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S232713AbiKVJYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiKVJ1Z (ORCPT
+        with ESMTP id S232500AbiKVJYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:27:25 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692E549B7A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:27:20 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NGf244WNfzqSbt;
-        Tue, 22 Nov 2022 17:23:24 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 17:27:18 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 17:27:18 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-CC:     <chenzhongjin@huawei.com>,
-        <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH] fs/ntfs3: Fix memory leak if ntfs_read_mft failed
-Date:   Tue, 22 Nov 2022 17:24:14 +0800
-Message-ID: <20221122092414.231084-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 22 Nov 2022 04:24:37 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9243FB9A;
+        Tue, 22 Nov 2022 01:24:36 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so11535105pjh.2;
+        Tue, 22 Nov 2022 01:24:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s8JJhKrnJnq6IJLlykHCdHSIPjJqB9EfI3hBa0xq0Z4=;
+        b=ApwQoSk3UzPJuhdouqlGiHxWAKrD6pOmDT4dwFzyGbs3A7/SR2g5gF622jQdsP3JLY
+         cPc2/2OrLw1jaQR3jaB1Oxzmq/zbtwR5yOvfGKpbMnn6KlDFwHW57OYd/sMzdoEycH1e
+         uYiW5dm/S1PGbjgakOk7FgI3wzyrjky5pKOuvlkg6rRGSO71ehsIkpKxoa4eegi7Y/ip
+         YSFsLDoYHB6KnX/FFadOGTFshDS57b9CwqKljn8eIyktEp9Q9bYDKgb1jzMmkmcubz65
+         FKuc03AEl8Zn0G79sAhV9hCqrEVMnn4R3ZicatsjvmfXiFf0Rg7jREbfSdjLNaoVx6h8
+         HgOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s8JJhKrnJnq6IJLlykHCdHSIPjJqB9EfI3hBa0xq0Z4=;
+        b=p3XAviXVIUA++0MtR5zZm9Pn1m88h7x18RySSqpJhQziQVsQkjyChIvtZRfowhbWyC
+         1CwxZcwV6Ojn1Ls7jaLwxtk8mX7Kj0c9jcPnVTnz3GXfWrKDD/I7eyjmxF6NafpgrSsK
+         CLr472SGRRwV+I8QDfnsViBwcQ4Ny/2tXAsgAd/JwEr7Ksy64bBZn2OYbJrBnLwW0XWY
+         puVb2GhTjvgsDFrOlvxKWjyVl+GQ/rGA1GE2o5zdpwAhCvSwZhmXCMTRI8Qwx6c1xAVw
+         XzumedKz+iT1D2smE0dD1xANnnvCpv7BcjMqKxsLVbfZKM2EVdulQCMqYm++NC8I/+It
+         mKPQ==
+X-Gm-Message-State: ANoB5pknnIyifsAL+ZwR74JVdI8aITrfJ4cPV3gnVcuq/6XOv3ojUnC0
+        WUb20BgwMYzr24UJTQ4Jn2gS19tUxaA=
+X-Google-Smtp-Source: AA0mqf7/zp4lIFi/fI8JMT9QscNTXT6F9SMwB9Q3FaO9A34ebbKbaO/+/n3Hr1gKQpX3YP7vsip75w==
+X-Received: by 2002:a17:902:d091:b0:187:337a:b692 with SMTP id v17-20020a170902d09100b00187337ab692mr2899058plv.166.1669109075733;
+        Tue, 22 Nov 2022 01:24:35 -0800 (PST)
+Received: from debian.. (subs03-180-214-233-4.three.co.id. [180.214.233.4])
+        by smtp.gmail.com with ESMTPSA id y13-20020a17090abd0d00b00213ee5a12c9sm9126826pjr.55.2022.11.22.01.24.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 01:24:35 -0800 (PST)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>
+Cc:     Stefan Roesch <shr@devkernel.io>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] mm: fix indentation of bdi sysfs description
+Date:   Tue, 22 Nov 2022 16:24:20 +0700
+Message-Id: <20221122092420.19363-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221122175057.52f0cd9f@canb.auug.org.au>
+References: <20221122175057.52f0cd9f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2786; i=bagasdotme@gmail.com; h=from:subject; bh=2zvRF+e1ifZB6Yjvr2jerEU0wt9FSzO7N8oT7Xykiqs=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMk1U118/zVJuKZFp93M+flin/wNtnn3bqX+i8+dXJhkNokx Mi26o5SFQYyDQVZMkWVSIl/T6V1GIhfa1zrCzGFlAhnCwMUpABMR/MvwV16wa8mn3f0GqrlHjyoU9S xSZktKNKrcPG8XU7eloHDgMkaGh48em88L3yx4VvUu9/8pAmffTWc/MfPo/rxvRpvyTjzPZwIA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Label ATTR_ROOT in ntfs_read_mft() sets is_root = true and
-ni->ni_flags |= NI_FLAG_DIR, then next attr will goto label ATTR_ALLOC
-and alloc ni->dir.alloc_run. However two states are not always
-consistent and can make memory leak.
+Stephen Rothwell reported htmldocs warnings when merging mm tree:
 
- 1) attr_name in ATTR_ROOT does not fit the condition it will set
- is_root = true but NI_FLAG_DIR is not set.
- 2) next attr_name in ATTR_ALLOC fits the condition and alloc
- ni->dir.alloc_run
- 3) in cleanup function ni_clear(), when NI_FLAG_DIR is set, it frees
- ni->dir.alloc_run, otherwise it frees ni->file.run
- 4) because NI_FLAG_DIR is not set in this case, ni->dir.alloc_run is
- leaked as kmemleak reported:
+Documentation/ABI/testing/sysfs-class-bdi:76: WARNING: Unexpected indentation.
+Documentation/ABI/testing/sysfs-class-bdi:89: WARNING: Unexpected indentation.
+Documentation/ABI/testing/sysfs-class-bdi:48: WARNING: Unexpected indentation.
 
-unreferenced object 0xffff888003bc5480 (size 64):
-  backtrace:
-    [<000000003d42e6b0>] __kmalloc_node+0x4e/0x1c0
-    [<00000000d8e19b8a>] kvmalloc_node+0x39/0x1f0
-    [<00000000fc3eb5b8>] run_add_entry+0x18a/0xa40 [ntfs3]
-    [<0000000011c9f978>] run_unpack+0x75d/0x8e0 [ntfs3]
-    [<00000000e7cf1819>] run_unpack_ex+0xbc/0x500 [ntfs3]
-    [<00000000bbf0a43d>] ntfs_iget5+0xb25/0x2dd0 [ntfs3]
-    [<00000000a6e50693>] ntfs_fill_super+0x218d/0x3580 [ntfs3]
-    [<00000000b9170608>] get_tree_bdev+0x3fb/0x710
-    [<000000004833798a>] vfs_get_tree+0x8e/0x280
-    [<000000006e20b8e6>] path_mount+0xf3c/0x1930
-    [<000000007bf15a5f>] do_mount+0xf3/0x110
-    ...
+These warnings are due to inconsistent indentation in description of bdi
+sysfs symbols.
 
-Fix this by always setting is_root and NI_FLAG_DIR together.
+Fix these by following indentation of surrounding text.
 
-Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Link: https://lore.kernel.org/linux-next/20221122175057.52f0cd9f@canb.auug.org.au/
+Fixes: 93e6d447506d8a ("mm: document /sys/class/bdi/<bdi>/min_bytes knob")
+Fixes: a0eef74439b213 ("mm: document /sys/class/bdi/<bdi>/max_ratio_fine knob")
+Fixes: 3aafa9ff1d4f67 ("mm: document /sys/class/bdi/<bdi>/min_ratio_fine knob")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- fs/ntfs3/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/ABI/testing/sysfs-class-bdi | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index d5a3afbbbfd8..b7f60624b044 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -247,7 +247,6 @@ static struct inode *ntfs_read_mft(struct inode *inode,
- 			goto out;
+diff --git a/Documentation/ABI/testing/sysfs-class-bdi b/Documentation/ABI/testing/sysfs-class-bdi
+index b4ed0db680cf69..0d2abd88a18cbd 100644
+--- a/Documentation/ABI/testing/sysfs-class-bdi
++++ b/Documentation/ABI/testing/sysfs-class-bdi
+@@ -54,8 +54,8 @@ Description:
  
- 		root = Add2Ptr(attr, roff);
--		is_root = true;
+ 	The 'min_ratio_fine' parameter allows assigning a minimum reserve
+ 	of the write-back cache to a particular device. The value is
+-    expressed as part of 1 million. For example, this is useful for
+-    providing a minimum QoS.
++	expressed as part of 1 million. For example, this is useful for
++	providing a minimum QoS.
  
- 		if (attr->name_len != ARRAY_SIZE(I30_NAME) ||
- 		    memcmp(attr_name(attr), I30_NAME, sizeof(I30_NAME)))
-@@ -260,6 +259,7 @@ static struct inode *ntfs_read_mft(struct inode *inode,
- 		if (!is_dir)
- 			goto next_attr;
+ 	(read-write)
  
-+		is_root = true;
- 		ni->ni_flags |= NI_FLAG_DIR;
+@@ -78,10 +78,10 @@ Contact:	Stefan Roesch <shr@devkernel.io>
+ Description:
+ 	Allows limiting a particular device to use not more than the
+ 	given value of the write-back cache.  The value is given as part
+-    of 1 million. This is useful in situations where we want to avoid
+-    one device taking all or most of the write-back cache.  For example
+-    in case of an NFS mount that is prone to get stuck, or a FUSE mount
+-    which cannot be trusted to play fair.
++	of 1 million. This is useful in situations where we want to avoid
++	one device taking all or most of the write-back cache.  For example
++	in case of an NFS mount that is prone to get stuck, or a FUSE mount
++	which cannot be trusted to play fair.
  
- 		err = indx_init(&ni->dir, sbi, attr, INDEX_MUTEX_I30);
+ 	(read-write)
+ 
+@@ -95,7 +95,7 @@ Description:
+ 
+ 	The 'min_bytes' parameter allows assigning a minimum
+ 	percentage of the write-back cache to a particular device
+-    expressed in bytes.
++	expressed in bytes.
+ 	For example, this is useful for providing a minimum QoS.
+ 
+ 	(read-write)
+
+base-commit: d45f43b2c12b5ec8492c48574cb015c63304161b
 -- 
-2.17.1
+An old man doll... just what I always wanted! - Clara
 
