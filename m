@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1C5633E25
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F87633E2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbiKVNxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S233522AbiKVNyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbiKVNxc (ORCPT
+        with ESMTP id S233330AbiKVNyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:53:32 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D390C654EB;
-        Tue, 22 Nov 2022 05:53:31 -0800 (PST)
-Received: from frapeml500001.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NGlvz3CzMz67Dr3;
-        Tue, 22 Nov 2022 21:48:31 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- frapeml500001.china.huawei.com (7.182.85.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 14:53:29 +0100
-Received: from localhost (10.45.149.88) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 22 Nov
- 2022 13:53:28 +0000
-Date:   Tue, 22 Nov 2022 13:53:27 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Yicong Yang <yangyicong@huawei.com>
-CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <linux-kernel@vger.kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
-        <linuxarm@huawei.com>, Yicong Yang <yangyicong@hisilicon.com>
-Subject: Re: [PATCH 1/2] hwtracing: hisi_ptt: Only add the supported devices
- to the filters list
-Message-ID: <20221122135327.000004d8@Huawei.com>
-In-Reply-To: <20221122120209.25682-1-yangyicong@huawei.com>
-References: <20221122120209.25682-1-yangyicong@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 22 Nov 2022 08:54:40 -0500
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B156654EB;
+        Tue, 22 Nov 2022 05:54:37 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VVSj4Yo_1669125271;
+Received: from 30.32.119.53(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VVSj4Yo_1669125271)
+          by smtp.aliyun-inc.com;
+          Tue, 22 Nov 2022 21:54:33 +0800
+Message-ID: <9cc55d4f-d864-aca5-78a0-ea7602c35176@linux.alibaba.com>
+Date:   Tue, 22 Nov 2022 21:54:31 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH] filelock: move file locking definitions to separate
+ header file
+Content-Language: en-US
+To:     Jeff Layton <jlayton@kernel.org>, Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>
+Cc:     hch@lst.de, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, cluster-devel@redhat.com,
+        linux-nfs@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        devel@lists.orangefs.org, linux-xfs@vger.kernel.org
+References: <20221120210004.381842-1-jlayton@kernel.org>
+ <0c6a44ff-409e-99b2-eaa9-fd6e87a9e104@linux.alibaba.com>
+ <a731e688122d1a6fdb2f7bdbd71d403fa110e9f2.camel@kernel.org>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <a731e688122d1a6fdb2f7bdbd71d403fa110e9f2.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.149.88]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 20:02:08 +0800
-Yicong Yang <yangyicong@huawei.com> wrote:
 
-> From: Yicong Yang <yangyicong@hisilicon.com>
+
+On 11/22/22 8:20 PM, Jeff Layton wrote:
+> On Tue, 2022-11-22 at 09:51 +0800, Joseph Qi wrote:
+>> Hi,
+>>
+>> On 11/21/22 4:59 AM, Jeff Layton wrote:
+>>> The file locking definitions have lived in fs.h since the dawn of time,
+>>> but they are only used by a small subset of the source files that
+>>> include it.
+>>>
+>>> Move the file locking definitions to a new header file, and add the
+>>> appropriate #include directives to the source files that need them. By
+>>> doing this we trim down fs.h a bit and limit the amount of rebuilding
+>>> that has to be done when we make changes to the file locking APIs.
+>>>
+>>> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+>>> ---
+>>>  fs/9p/vfs_file.c          |   1 +
+>>>  fs/afs/internal.h         |   1 +
+>>>  fs/attr.c                 |   1 +
+>>>  fs/ceph/locks.c           |   1 +
+>>>  fs/cifs/cifsfs.c          |   1 +
+>>>  fs/cifs/cifsglob.h        |   1 +
+>>>  fs/cifs/cifssmb.c         |   1 +
+>>>  fs/cifs/file.c            |   1 +
+>>>  fs/cifs/smb2file.c        |   1 +
+>>>  fs/dlm/plock.c            |   1 +
+>>>  fs/fcntl.c                |   1 +
+>>>  fs/file_table.c           |   1 +
+>>>  fs/fuse/file.c            |   1 +
+>>>  fs/gfs2/file.c            |   1 +
+>>>  fs/inode.c                |   1 +
+>>>  fs/ksmbd/smb2pdu.c        |   1 +
+>>>  fs/ksmbd/vfs.c            |   1 +
+>>>  fs/ksmbd/vfs_cache.c      |   1 +
+>>>  fs/lockd/clntproc.c       |   1 +
+>>>  fs/lockd/netns.h          |   1 +
+>>>  fs/locks.c                |   1 +
+>>>  fs/namei.c                |   1 +
+>>>  fs/nfs/nfs4_fs.h          |   1 +
+>>>  fs/nfs_common/grace.c     |   1 +
+>>>  fs/nfsd/netns.h           |   1 +
+>>>  fs/ocfs2/locks.c          |   1 +
+>>>  fs/ocfs2/stack_user.c     |   1 +
+>>
+>> Seems it misses the related changes in:
+>> fs/ocfs2/stackglue.c
+>>
 > 
-> The PTT device can only support the devices on the same PCIe core,
-> within BDF range [lower_bdf, upper_bdf]. It's not correct to assume
-> the devices on the root bus are from the same PCIe core, there are
-> cases that root ports from different PCIe core are sharing the same
-> bus. So add the checking when initialize the filters list.
+> I was able to build ocfs2.ko just fine without any changes to
+> stackglue.c. What problem do you see here?
 > 
-> Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Okay, that's because there is prototype declaration in
+fs/ocfs2/stackglue.h, and it seems has no real effect in current
+version.
 
-Make sense to me.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  drivers/hwtracing/ptt/hisi_ptt.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-> index 5d5526aa60c4..30f1525639b5 100644
-> --- a/drivers/hwtracing/ptt/hisi_ptt.c
-> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> @@ -356,8 +356,18 @@ static int hisi_ptt_register_irq(struct hisi_ptt *hisi_ptt)
->  
->  static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
->  {
-> +	struct pci_dev *root_port = pcie_find_root_port(pdev);
->  	struct hisi_ptt_filter_desc *filter;
->  	struct hisi_ptt *hisi_ptt = data;
-> +	u32 port_devid;
-> +
-> +	if (!root_port)
-> +		return 0;
-> +
-> +	port_devid = PCI_DEVID(root_port->bus->number, root_port->devfn);
-> +	if (port_devid < hisi_ptt->lower_bdf ||
-> +	    port_devid > hisi_ptt->upper_bdf)
-> +		return 0;
->  
->  	/*
->  	 * We won't fail the probe if filter allocation failed here. The filters
-
+So it looks good to me. For ocfs2 part,
+Acked-by: Joseph Qi <joseph.qi@linux.alibaba.com>
