@@ -2,89 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC689633831
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3C0633830
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbiKVJSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S232647AbiKVJSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:18:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiKVJSR (ORCPT
+        with ESMTP id S233352AbiKVJSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:18:17 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC16045EC4;
-        Tue, 22 Nov 2022 01:18:14 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 1D42224E23E;
-        Tue, 22 Nov 2022 17:18:12 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
- 2022 17:18:12 +0800
-Received: from [192.168.125.106] (113.72.144.23) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
- 2022 17:18:11 +0800
-Message-ID: <daa2c31b-0fd5-acca-a41f-cc5e407b74b8@starfivetech.com>
-Date:   Tue, 22 Nov 2022 17:17:57 +0800
+        Tue, 22 Nov 2022 04:18:15 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C2E43AEA;
+        Tue, 22 Nov 2022 01:18:13 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGdvW4mv2zRpTQ;
+        Tue, 22 Nov 2022 17:17:43 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 17:18:11 +0800
+Subject: Re: [PATCH -next] Bluetooth: Fix Kconfig warning for BT_HIDP
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <jkosina@suse.cz>, <gregkh@linuxfoundation.org>,
+        <linux-bluetooth@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221122034246.24408-1-yuehaibing@huawei.com>
+ <29fb52c0-155b-470e-10d5-5e3b2451272d@molgen.mpg.de>
+ <CAO-hwJKraiox13k=ukXOhSNt9sTc6Q0KpGR5=AHDknZeR6omwA@mail.gmail.com>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <ee09680a-899c-96c8-778d-0af04d6d59ee@huawei.com>
+Date:   Tue, 22 Nov 2022 17:18:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 5/8] soc: sifive: ccache: Add StarFive JH7110 support
+In-Reply-To: <CAO-hwJKraiox13k=ukXOhSNt9sTc6Q0KpGR5=AHDknZeR6omwA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
- <20221118011714.70877-6-hal.feng@starfivetech.com>
- <CAJM55Z-jo4x_qX85uFO0esqVFk12v3fS6H7ryx7-Heq1HEudNA@mail.gmail.com>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <CAJM55Z-jo4x_qX85uFO0esqVFk12v3fS6H7ryx7-Heq1HEudNA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.144.23]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Nov 2022 01:32:10 +0800, Emil Renner Berthing wrote:
-> On Fri, 18 Nov 2022 at 02:17, Hal Feng <hal.feng@starfivetech.com> wrote:
-> >
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> >
-> > This adds support for the StarFive JH7110 SoC which also
-> > features this SiFive cache controller.
-> >
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > ---
+
+On 2022/11/22 17:06, Benjamin Tissoires wrote:
+> Hi,
 > 
-> I'm fine with this, but it would be great if you could add the jh7100
-> support at the same time like the original patch did.
+> On Tue, Nov 22, 2022 at 9:37 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>>
+>> Dear YueHaibing,
+>>
+>>
+>> Thank you for your patch.
+>>
+>>
+>> Am 22.11.22 um 04:42 schrieb YueHaibing:
+>>
+>> Maybe use the more specific summary below:
+>>
+>> Bluetooth: Add HID_SUPPORT dependency for BT_HIDP
+>>
+>>> commit 25621bcc8976 add HID_SUPPORT, and HID depends on it now.
+>>
+>> add*s*
+>>
+>> or
+>>
+>> Commit 25621bcc8976 ("HID: Kconfig: split HID support and hid-core
+>> compilation") introduces the new Kconfig symbol HID_SUPPORT …
+>>
+>>
+>> Kind regards,
+>>
+>> Paul
+>>
+>>
+>>> Add HID_SUPPORT dependency for BT_HIDP to fix the warning:
+>>>
+>>> WARNING: unmet direct dependencies detected for HID
+>>>    Depends on [n]: HID_SUPPORT [=n]
+>>>    Selected by [m]:
+>>>    - BT_HIDP [=m] && NET [=y] && BT_BREDR [=y] && INPUT [=m]
+>>>
+>>> Fixes: 25621bcc8976 ("HID: Kconfig: split HID support and hid-core compilation")
+>>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>>> ---
+> 
+> 
+> FWIW, a fix is already in -next:
+> https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?h=for-6.2/hid-bpf&id=6cc90ccd4f6cfed98e2a3a378debc69f28d57473
 
-I think this patch series should only add support for JH7110. Maybe
-we can make a new patch series to do this.
+OK, thanks for your info.
 
-Best regards,
-Hal
+> 
+>  But thanks for the patch nonetheless!
+> 
+> Cheers,
+> Benjamin
+> 
+>>
+>>>   net/bluetooth/hidp/Kconfig | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/net/bluetooth/hidp/Kconfig b/net/bluetooth/hidp/Kconfig
+>>> index 14100f341f33..6746be07e222 100644
+>>> --- a/net/bluetooth/hidp/Kconfig
+>>> +++ b/net/bluetooth/hidp/Kconfig
+>>> @@ -1,7 +1,7 @@
+>>>   # SPDX-License-Identifier: GPL-2.0-only
+>>>   config BT_HIDP
+>>>       tristate "HIDP protocol support"
+>>> -     depends on BT_BREDR && INPUT
+>>> +     depends on BT_BREDR && INPUT && HID_SUPPORT
+>>>       select HID
+>>>       help
+>>>         HIDP (Human Interface Device Protocol) is a transport layer
+>>
+> 
+> .
+> 
