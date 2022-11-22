@@ -2,67 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916ED633FE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6050633FE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbiKVPN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:13:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S233184AbiKVPNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKVPNY (ORCPT
+        with ESMTP id S233081AbiKVPNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:13:24 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DE11B791;
-        Tue, 22 Nov 2022 07:13:23 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 7so17621586ybp.13;
-        Tue, 22 Nov 2022 07:13:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FTPGbQKklg3WPb4L2pCSqb2WzLeJedtyuqo1q379m1A=;
-        b=ialhRJddDMj4ibZs8gQX1Ey4rorGR/1j+F+b6ETvqWOvKsNlGXPDg2T3IMYJwGy3lu
-         uFdbVef2YndOpg5qrZ0hZQgfjPcZmHd4QSi81HLyJ4jhHhVhBMpq8VeMNgmtYcLbmI+q
-         i9Xf8wP+bzvAdxNsGx7jxXXcx0JOHrkXCoKUA0KPyWnIgEcGs8jSGozgvIoCpTajCHTy
-         zBhh4OZB1Q2hPQLb6FpaLvWaViEkR84hVjgjhqQbMOFQrZs5eIJ0GcCDO2ZZ+qK0Rxs9
-         g7juESUZ2hOWmZmPp1oejsX6rtA/to54sJSpwyjXB0nHk394qgpNmCcToEhMJLL3WyC1
-         atFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FTPGbQKklg3WPb4L2pCSqb2WzLeJedtyuqo1q379m1A=;
-        b=X2aHGElRWKUAfopCOJ6tRYzS5M8ep43h4ODnu0YXfXOMzufX6fRjz6Kk5reVhmBPuf
-         YiANCwqs1afKd0PZfoEFT0YqkuVqIa8L9Pb5JWMuAIZgh5HOyBfMhj8RqoAn8NzIBPpg
-         5jDmAjptqqaYdOM50fN1O+86RPp7TiT8Gzvma+FLziCBK847zP56fusopzF92jD8QhVd
-         BS6dbtSVU4Xx5fmxkrMp6yHTWOJTrS/1yr5nbPIpYzmwzdh+wLgZX0ENEbYgI0+T3ApV
-         ZCsce8AhXF+FFRw06L3l5gLae8I3EUMlr5GP4rY+FnvnLEQOPrXEhDvF/KO2lfvYFQ1I
-         3NEw==
-X-Gm-Message-State: ANoB5pm8mKPG2lCn+F7okPGus6FdjpbK7A734021Tqce5E535GKShAte
-        /XOdzo7pqrIypur5yq5t1FyZ56gvVu1c4zwpDDQ4D8Ik
-X-Google-Smtp-Source: AA0mqf5oWk8PwJBLc+tM5kalC/Q5zxw8k9YnsAMKTlWyb9fASLv+GLqH9r8CYg4au+EZPFkcy499KqY7Jfwga29nI80=
-X-Received: by 2002:a25:5cb:0:b0:6e7:868:405d with SMTP id 194-20020a2505cb000000b006e70868405dmr10725845ybf.389.1669130002937;
- Tue, 22 Nov 2022 07:13:22 -0800 (PST)
+        Tue, 22 Nov 2022 10:13:46 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C598E248E0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:13:45 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oxUxx-0004aj-Cj; Tue, 22 Nov 2022 16:13:41 +0100
+Message-ID: <075d8c0f-5448-73aa-bd3f-0d4e1216e87f@leemhuis.info>
+Date:   Tue, 22 Nov 2022 16:13:40 +0100
 MIME-Version: 1.0
-References: <20221122141434.30498-1-lukas.bulwahn@gmail.com> <0O6RLR.G9QGB8EGFCT01@crapouillou.net>
-In-Reply-To: <0O6RLR.G9QGB8EGFCT01@crapouillou.net>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 22 Nov 2022 16:13:12 +0100
-Message-ID: <CAKXUXMywmFc4TVBu8iDkoesMnGhStmGNPc5EqT0dFT_CKvr+3w@mail.gmail.com>
-Subject: Re: [PATCH] clocksource: ingenic-ost: define pm functions properly in
- platform_driver struct
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Maarten ter Huurne <maarten@treewalker.org>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] ARM: at91: fix build for SAMA5D3 w/o L2 cache
+Content-Language: en-US, de-DE
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <b7f8dacc-5e1f-0eb2-188e-3ad9a9f7613d@axentia.se>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <b7f8dacc-5e1f-0eb2-188e-3ad9a9f7613d@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669130025;94552674;
+X-HE-SMSGID: 1oxUxx-0004aj-Cj
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,73 +48,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 3:24 PM Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Hi Lukas,
->
-> Le mar. 22 nov. 2022 =C3=A0 15:14:34 +0100, Lukas Bulwahn
-> <lukas.bulwahn@gmail.com> a =C3=A9crit :
-> > Commit ca7b72b5a5f2 ("clocksource: Add driver for the Ingenic JZ47xx
-> > OST")
-> > adds the struct platform_driver ingenic_ost_driver, with the
-> > definition of
-> > pm functions under the non-existing config PM_SUSPEND, which means the
-> > intended pm functions were never actually included in any build.
-> >
-> > Since commit 7a82e97a11b9 ("PM: core: introduce pm_ptr() macro"), the
-> > default pattern for platform_driver definitions is to use pm_ptr().
-> > Assuming CONFIG_PM_SUSPEND really intended to mean CONFIG_PM (and not
-> > CONFIG_PM_SLEEP), use pm_ptr() just as most other drivers do.
->
-> It actually was supposed to be CONFIG_PM_SLEEP, yes. You can see that
-> because the only callbacks are .suspend_noirq and .resume_noirq.
-> Therefore you can use pm_sleep_ptr() instead of pm_ptr().
->
-> By the way, once you use this macro then the __maybe_unused tags on the
-> dev_pm_ops structure and its callbacks are not needed anymore, so you
-> can remove these as well.
->
-> > Fixes: ca7b72b5a5f2 ("clocksource: Add driver for the Ingenic JZ47xx
-> > OST")
->
-> That Fixes: tag won't work since the pm_ptr() macro did not exist back
-> then (besides, you didn't Cc linux-stable).
->
-> I'd advocate to remove the Fixes: tag, since it is not really a bug
-> fix, more like an improvement.
->
+Hi, this is your Linux kernel regression tracker.
 
-Thanks for the quick feedback. I will send a patch v2 incorporating that.
+On 12.11.22 16:40, Peter Rosin wrote:
+> The L2 cache is present on the newer SAMA5D2 and SAMA5D4 families, but
+> apparently not for the older SAMA5D3. At least not always.
+> 
+> Solves a build-time regression with the following symptom:
+> 
+> sama5.c:(.init.text+0x48): undefined reference to `outer_cache'
+> 
+> Fixes: 3b5a7ca7d252 ("ARM: at91: setup outer cache .write_sec() callback if needed")
+> Signed-off-by: Peter Rosin <peda@axentia.se>
 
-Lukas
+Clément Léger and Claudiu Beznea: what's up here? Is there a particular
+reason why this patch did get any feedback from you by now? It's ten
+days old and Peter already sent a kind of reminder a few days ago.
 
+Reminder, ideally this regression should be fixed by now. For details
+see the section "Prioritize work on fixing regressions"  in
+Documentation/process/handling-regressions.rst (
+https://docs.kernel.org/process/handling-regressions.html )
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+> ---
+>  arch/arm/mach-at91/sama5.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Hi!
+> 
+> I'm not sure this is the correct solution? Maybe SAMA5D3 should bring
+> in CONFIG_OUTER_CACHE unconditionally instead? But that seems like a
+> bigger change, and not just a tweak of the regressing commit...
+> 
 > Cheers,
-> -Paul
->
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > ---
-> >  drivers/clocksource/ingenic-ost.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/clocksource/ingenic-ost.c
-> > b/drivers/clocksource/ingenic-ost.c
-> > index 06d25754e606..6b64731df15c 100644
-> > --- a/drivers/clocksource/ingenic-ost.c
-> > +++ b/drivers/clocksource/ingenic-ost.c
-> > @@ -181,9 +181,7 @@ static const struct of_device_id
-> > ingenic_ost_of_match[] =3D {
-> >  static struct platform_driver ingenic_ost_driver =3D {
-> >       .driver =3D {
-> >               .name =3D "ingenic-ost",
-> > -#ifdef CONFIG_PM_SUSPEND
-> > -             .pm =3D &ingenic_ost_pm_ops,
-> > -#endif
-> > +             .pm =3D pm_ptr(&ingenic_ost_pm_ops),
-> >               .of_match_table =3D ingenic_ost_of_match,
-> >       },
-> >  };
-> > --
-> > 2.17.1
-> >
->
->
+> Peter
+> 
+> diff --git a/arch/arm/mach-at91/sama5.c b/arch/arm/mach-at91/sama5.c
+> index 67ed68fbe3a5..bf2b5c6a18c6 100644
+> --- a/arch/arm/mach-at91/sama5.c
+> +++ b/arch/arm/mach-at91/sama5.c
+> @@ -26,7 +26,7 @@ static void sama5_l2c310_write_sec(unsigned long val, unsigned reg)
+>  static void __init sama5_secure_cache_init(void)
+>  {
+>  	sam_secure_init();
+> -	if (sam_linux_is_optee_available())
+> +	if (IS_ENABLED(CONFIG_OUTER_CACHE) && sam_linux_is_optee_available())
+>  		outer_cache.write_sec = sama5_l2c310_write_sec;
+>  }
+>  
