@@ -2,101 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B577F633BCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0266633BCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbiKVLv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
+        id S233574AbiKVLwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiKVLv1 (ORCPT
+        with ESMTP id S233478AbiKVLwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:51:27 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D4D178A4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:51:27 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0C41C1F86B;
-        Tue, 22 Nov 2022 11:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669117885; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=pizNmII+kH90P+wFkDN3Lxn3VPpzAwqATNwsGxqqK60=;
-        b=XmiMVJbIHB7sx62hDnd/0pdiGvcygkdqeYqiGgXH0Zc0SF57nqZdyw9CavqXcxSqJ4xfhG
-        U7243p+Ce6aUOzTIJUmN8pZKGI9PcuqgsrDvRPJBz5f4RzIpOjEvJjx8faLYfC/uUg9wT4
-        5tL+jWQUkZsuVrPsRwqU2fE8ioGXOxk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669117885;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=pizNmII+kH90P+wFkDN3Lxn3VPpzAwqATNwsGxqqK60=;
-        b=TgUyRD1O+BUA8QsRUaves7GWLZEQQIziOiEA6Syxj4CU2s2wHksssPiSoHxodOIEYGse42
-        1S56pgfAPrwJolBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDDE013AA1;
-        Tue, 22 Nov 2022 11:51:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ecJ2Mby3fGOQEgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 22 Nov 2022 11:51:24 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Baoquan He <bhe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/kexec: Fix double-free of elf header buffer
-Date:   Tue, 22 Nov 2022 12:51:22 +0100
-Message-Id: <20221122115122.13937-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
+        Tue, 22 Nov 2022 06:52:20 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8022F3AF;
+        Tue, 22 Nov 2022 03:52:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=R9yjdI7hQmwtzs9JPkLaQha0pclNGWaaw26yNHcXB8c=; b=m/7MV
+        BNbU9VjV3poMVIUOpgyp4T00yYb0HMb0+hnP0aV1cdyk4Ch9DVT8pvpala78Zmkwl9IpajUh0uL13
+        0ZUY5V9bUKMBAcYNVzBAz+sPSAoqiBIiox1cugoeSs7drZdHJSpOCN3cYjoarQre0SIc4A7sj2mdd
+        XnE57aZ0qpwqYU3QtFJRob9OKgE2Q19QWZjBZVWMFjAqw/y2p29P1YthSTUSGewbuV+4hyIBqanrs
+        UuFxFeKw0VA1tgAJs9uAbZ+QjuOWa4nlEQsKO5zRIMv7zXbHKY2yzlQyQI6nanq/5ZfwQOXbhnSMH
+        OORQ7YvVyuFd9VmR/C3bjCa23/tGw==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1oxRp0-0002pr-MC;
+        Tue, 22 Nov 2022 11:52:15 +0000
+Date:   Tue, 22 Nov 2022 11:52:13 +0000
+From:   John Keeping <john@metanate.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Lee Jones <lee@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
+        balbi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y3y37ZCNmaMKBhi3@donbot>
+References: <Y3dIXUmjTfJLpPe7@google.com>
+ <Y3er7nenAhbmBdBy@rowland.harvard.edu>
+ <Y3e0zAa7+HiNVrKN@donbot>
+ <Y3f0DJTOQ/8TVX0h@rowland.harvard.edu>
+ <Y3piS43drwSoipD9@donbot>
+ <Y3qSImZkZwCG1kA1@rowland.harvard.edu>
+ <Y3txTcASyvTWqFlc@donbot>
+ <Y3uk2kwYsZ3j67+l@rowland.harvard.edu>
+ <Y3vJfwtH3fniy5ep@donbot>
+ <Y3vO5OwUzsn08Avz@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3vO5OwUzsn08Avz@rowland.harvard.edu>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The recent fix for memory leaks forgot to clear the error path that
-already does vfree() for the elf headers.  This may result in a
-double-free.
+On Mon, Nov 21, 2022 at 02:17:56PM -0500, Alan Stern wrote:
+> On Mon, Nov 21, 2022 at 06:54:55PM +0000, John Keeping wrote:
+> > It turns out there's already a device being created here, just not
+> > associated with the structure.  Your suggestions around
+> > cdev_device_add() made me spot what's going on with that so the actual
+> > fix is to pull its lifetime up to match struct f_hidg.
+> 
+> It's not obvious from the patch what device was already being created, 
+> but never mind...
 
-Drop the superfluous vfree() call at the error path of
-crash_load_segments().
+The patch has:
 
-Fixes: b3e34a47f989 ("x86/kexec: fix memory leak of elf header buffer")
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- arch/x86/kernel/crash.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+-       device = device_create(hidg_class, NULL, dev, NULL,
+-                              "%s%d", "hidg", hidg->minor);
 
-diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-index 9730c88530fc..305514431f26 100644
---- a/arch/x86/kernel/crash.c
-+++ b/arch/x86/kernel/crash.c
-@@ -401,10 +401,8 @@ int crash_load_segments(struct kimage *image)
- 	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
- 	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
- 	ret = kexec_add_buffer(&kbuf);
--	if (ret) {
--		vfree((void *)image->elf_headers);
-+	if (ret)
- 		return ret;
--	}
- 	image->elf_load_addr = kbuf.mem;
- 	pr_debug("Loaded ELF headers at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
- 		 image->elf_load_addr, kbuf.bufsz, kbuf.memsz);
--- 
-2.35.3
+but this device was not previously associated with the cdev (apart from
+indirectly via dev_t).
 
+> > -- >8 --
+> > Subject: [PATCH] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
+> > 
+> > The embedded struct cdev does not have its lifetime correctly tied to
+> > the enclosing struct f_hidg, so there is a use-after-free if /dev/hidgN
+> > is held open while the gadget is deleted.
+> > 
+> > This can readily be replicated with libusbgx's example programs (for
+> > conciseness - operating directly via configfs is equivalent):
+> > 
+> > 	gadget-hid
+> > 	exec 3<> /dev/hidg0
+> > 	gadget-vid-pid-remove
+> > 	exec 3<&-
+> > 
+> > Pull the existing device up in to struct f_hidg and make use of the
+> > cdev_device_{add,del}() helpers.  This changes the lifetime of the
+> > device object to match struct f_hidg, but note that it is still added
+> > and deleted at the same time.
+> > 
+> > [Also fix refcount leak on an error path.]
+> > 
+> > Signed-off-by: John Keeping <john@metanate.com>
+> > ---
+> >  drivers/usb/gadget/function/f_hid.c | 50 ++++++++++++++++-------------
+> >  1 file changed, 28 insertions(+), 22 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> > index ca0a7d9eaa34..0b94668a3812 100644
+> > --- a/drivers/usb/gadget/function/f_hid.c
+> > +++ b/drivers/usb/gadget/function/f_hid.c
+> 
+> > @@ -999,21 +1005,12 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+> >  
+> >  	/* create char device */
+> >  	cdev_init(&hidg->cdev, &f_hidg_fops);
+> > -	dev = MKDEV(major, hidg->minor);
+> > -	status = cdev_add(&hidg->cdev, dev, 1);
+> > +	cdev_set_parent(&hidg->cdev, &hidg->dev.kobj);
+> 
+> This line isn't needed; cdev_device_add() does it for you because 
+> hidg->dev.devt has been set.
+
+Thanks, I'll drop this line.
