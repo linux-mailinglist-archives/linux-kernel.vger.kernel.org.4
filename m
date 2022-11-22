@@ -2,45 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65F26348FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9B16348FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbiKVVOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:14:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S234764AbiKVVPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:15:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbiKVVOv (ORCPT
+        with ESMTP id S234697AbiKVVPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:14:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD85B2EF78
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:14:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 251A3618D9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 21:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6FECC433D6;
-        Tue, 22 Nov 2022 21:14:47 +0000 (UTC)
-Date:   Tue, 22 Nov 2022 16:14:46 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH] jump_label: use atomic_try_cmpxchg in
- static_key_slow_inc_cpuslocked
-Message-ID: <20221122161446.28907755@gandalf.local.home>
-In-Reply-To: <20221019140850.3395-1-ubizjak@gmail.com>
-References: <20221019140850.3395-1-ubizjak@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 22 Nov 2022 16:15:12 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A19B7ECAC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:15:09 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id me22so22028023ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:15:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=61JqF5d+7+dTLDUDG/R6nmdQVS+wlcZWOGVBUq1+qvM=;
+        b=hps2iygfkd1nHt3muzPJwDRZvqZC3BoUZ3q9wU1uFCB7NeG/yiHXK/jiKDAMKHBwMs
+         hXd8/SjlLOYS/y2/pjEAsUOVeokcC0NztFRsnmdYxK6mCvlQ2qejG01QNrLxAeCW2MSF
+         v5vG28IJ66uA3ea7roBwawMJ9EqJLvfTtzhqQoHiTrK56lobKGtU+cm30Fkq5/HSpBdR
+         BNHExdUhaohiq9UKufykn5Xe0JNe4ZwQDWdlRcEoTNWjZD0heC/hcQ9tdi9Sfd+3U0ve
+         EzG9iQUukHJqWOmtq1iGly8nY/xwbWkSKeMD9d9zRIJJJacgGQbHudN16hOjws8vXS4m
+         DPxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=61JqF5d+7+dTLDUDG/R6nmdQVS+wlcZWOGVBUq1+qvM=;
+        b=PytrGZ9+BFamkXXtEuPsAyliTWnbIpo4gzIu+iRYUACYF122wI58G1Ffn9uBYhH+jp
+         ZIAZRi3tYUezb51KW5e4U7HluIkdNSdReGlR9FqFEiWMmOXThh2rGTu7F6aebGkut4IC
+         dSlPdYn7ybcdU5Ivuy2wret+h/j1CDZbyT13HHQRl8h1cwu6el9J3JmZBLPDRdbdeViF
+         pf16s/PKvdSgUBXdec7qcid2kRe4WFuGm0L0JeH2m7Wc1J2jEI8Ufb9D8DFXAzuv9cXe
+         zRXIcp2sWre/C9dhCEltBQgvtXIwFzpVQB5CJJ2d/tuE9w2D0NJo5GlSnY9COO0SLFDL
+         KTcQ==
+X-Gm-Message-State: ANoB5pmQVLJ/+4pt6l8KUtYviEp0PCIcxycrCwSIWSVPtc7xOhfwYa7j
+        LbdC6IUuC3+B4Iw95oLNFMHsRw==
+X-Google-Smtp-Source: AA0mqf7v57zSC46AnC4u69lZL0+fqfUDKTuWXGXf7YBfKZk4SuG93TuTxHsO4Tb6/zbHZJVkfczxzg==
+X-Received: by 2002:a17:906:b80d:b0:78d:314e:b0fa with SMTP id dv13-20020a170906b80d00b0078d314eb0famr10404821ejb.370.1669151707886;
+        Tue, 22 Nov 2022 13:15:07 -0800 (PST)
+Received: from [192.168.0.161] (79-100-144-200.ip.btc-net.bg. [79.100.144.200])
+        by smtp.gmail.com with ESMTPSA id kv9-20020a17090778c900b0078b03d57fa7sm6406432ejc.34.2022.11.22.13.15.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 13:15:07 -0800 (PST)
+Message-ID: <840d6f2a-abc9-c5d3-d1d3-3862e479509a@blackwall.org>
+Date:   Tue, 22 Nov 2022 23:15:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH net-next 2/2] bonding: fix link recovery in mode 2 when
+ updelay is nonzero
+Content-Language: en-US
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+To:     Jonathan Toppins <jtoppins@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Jay Vosburgh <j.vosburgh@gmail.com>
+Cc:     Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+References: <cover.1668800711.git.jtoppins@redhat.com>
+ <cb89b92af89973ee049a696c362b4a2abfdd9b82.1668800711.git.jtoppins@redhat.com>
+ <38fbc36783d583f805f30fb3a55a8a87f67b59ac.camel@redhat.com>
+ <1fe036eb-5207-eccd-0cb3-aa22f5d130ce@redhat.com>
+ <5718ba71a8755040f61ed7b2f688b1067ca56594.camel@redhat.com>
+ <e1150971-ec16-0421-a13a-d6d2a0a66348@redhat.com>
+ <0e7bb31c-ca92-dac2-4d29-5eb2d3327b26@blackwall.org>
+In-Reply-To: <0e7bb31c-ca92-dac2-4d29-5eb2d3327b26@blackwall.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,67 +86,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 16:08:50 +0200
-Uros Bizjak <ubizjak@gmail.com> wrote:
-
-> Use atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old
-> in static_key_slow_inc_cpuslocked.  x86 CMPXCHG instruction returns success
-> in ZF flag, so this change saves a compare after cmpxchg (and related move
-> instruction in front of cmpxchg).
+On 22/11/2022 23:12, Nikolay Aleksandrov wrote:
+> On 22/11/2022 17:37, Jonathan Toppins wrote:
+>> On 11/22/22 09:45, Paolo Abeni wrote:
+>>> On Tue, 2022-11-22 at 08:36 -0500, Jonathan Toppins wrote:
+>>>> On 11/22/22 05:59, Paolo Abeni wrote:
+>>>>> Hello,
+>>>>>
+>>>>> On Fri, 2022-11-18 at 15:30 -0500, Jonathan Toppins wrote:
+>>>>>> Before this change when a bond in mode 2 lost link, all of its slaves
+>>>>>> lost link, the bonding device would never recover even after the
+>>>>>> expiration of updelay. This change removes the updelay when the bond
+>>>>>> currently has no usable links. Conforming to bonding.txt section 13.1
+>>>>>> paragraph 4.
+>>>>>>
+>>>>>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>>>>>
+>>>>> Why are you targeting net-next? This looks like something suitable to
+>>>>> the -net tree to me. If, so could you please include a Fixes tag?
+>>>>>
+>>>>> Note that we can add new self-tests even via the -net tree.
+>>>>>
+>>>>
+>>>> I could not find a reasonable fixes tag for this, hence why I targeted
+>>>> the net-next tree.
+>>>
+>>> When in doubt I think it's preferrable to point out a commit surely
+>>> affected by the issue - even if that is possibly not the one
+>>> introducing the issue - than no Fixes as all. The lack of tag will make
+>>> more difficult the work for stable teams.
+>>>
+>>> In this specific case I think that:
+>>>
+>>> Fixes: 41f891004063 ("bonding: ignore updelay param when there is no active slave")
+>>>
+>>> should be ok, WDYT? if you agree would you mind repost for -net?
+>>>
+>>> Thanks,
+>>>
+>>> Paolo
+>>>
+>>
+>> Yes that looks like a good one. I will repost to -net a v2 that includes changes to reduce the number of icmp echos sent before failing the test.
+>>
+>> Thanks,
+>> -Jon
+>>
 > 
-> Also, atomic_try_cmpxchg implicitly assigns old *ptr value to "old" when
-> cmpxchg fails, enabling further code simplifications.
+> One minor nit - could you please change "mode 2" to "mode balance-xor" ?
+> It saves reviewers some grepping around the code to see what is mode 2.
+> Obviously one has to dig in the code to see how it's affected, but still
+> it is a bit more understandable. It'd be nice to add more as to why the link is not recovered,
+> I get it after reading the code, but it would be nice to include a more detailed explanation in the
+> commit message as well.
 > 
-> No functional change intended.
+> Thanks,
+>  Nik
 > 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> Cc: Jason Baron <jbaron@akamai.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> ---
->  kernel/jump_label.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-> index 714ac4c3b556..4d6c6f5f60db 100644
-> --- a/kernel/jump_label.c
-> +++ b/kernel/jump_label.c
-> @@ -115,8 +115,6 @@ EXPORT_SYMBOL_GPL(static_key_count);
->  
->  void static_key_slow_inc_cpuslocked(struct static_key *key)
->  {
-> -	int v, v1;
-> -
->  	STATIC_KEY_CHECK_USE(key);
->  	lockdep_assert_cpus_held();
->  
-> @@ -132,11 +130,9 @@ void static_key_slow_inc_cpuslocked(struct static_key *key)
->  	 * so it counts as "enabled" in jump_label_update().  Note that
->  	 * atomic_inc_unless_negative() checks >= 0, so roll our own.
->  	 */
-> -	for (v = atomic_read(&key->enabled); v > 0; v = v1) {
-> -		v1 = atomic_cmpxchg(&key->enabled, v, v + 1);
-> -		if (likely(v1 == v))
-> +	for (int v = atomic_read(&key->enabled); v > 0; )
 
-Although it's permitted by the compiler, the kernel style is to not add
-declarations in conditionals.
-
-Please keep the "int v;" at the beginning.
-
-
-> +		if (likely(atomic_try_cmpxchg(&key->enabled, &v, v + 1)))
-
-I'm fine with this change.
-
--- Steve
-
-
->  			return;
-> -	}
->  
->  	jump_label_lock();
->  	if (atomic_read(&key->enabled) == 0) {
+Ah, I just noticed I'm late to the party. :)
+Nevermind my comments, no need for a v3.
 
