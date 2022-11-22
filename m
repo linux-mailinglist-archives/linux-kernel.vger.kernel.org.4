@@ -2,84 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506B563354E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8436F633540
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbiKVG2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 01:28:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S230377AbiKVG05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 01:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiKVG23 (ORCPT
+        with ESMTP id S229459AbiKVG0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 01:28:29 -0500
-X-Greylist: delayed 346 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 22:28:26 PST
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7BCD18B09;
-        Mon, 21 Nov 2022 22:28:23 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowADHzPSnanxjH8a_AA--.29968S2;
-        Tue, 22 Nov 2022 14:22:32 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     clabbe@baylibre.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net
-Cc:     linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] crypto: amlogic - Add check for devm_kcalloc
-Date:   Tue, 22 Nov 2022 14:22:30 +0800
-Message-Id: <20221122062230.22024-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 22 Nov 2022 01:26:54 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE562DA90;
+        Mon, 21 Nov 2022 22:26:52 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AM6Qg7f067538;
+        Tue, 22 Nov 2022 00:26:42 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669098402;
+        bh=iLSR+lNftbG5WCxJ5fgNr1tJatDoqnEjEPjFnCbRN8A=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=LUcPfF3+4ebkLqm+kPeJl0f2rrBM5MKe0vlQoHzE8gzy1yBWr0PFwRvpx8ijgK+zC
+         GwUmB0MgBV7556J9hkUbf9NqMXK7Y0cUqUjwfQMS7aGKuFVtj/CcZVMSHP/QWvM63c
+         V/8dbQOGoJi0O9sw1Qx/ROvFd152WlLuhkQ+dEDs=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AM6Qgk6012936
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Nov 2022 00:26:42 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 22
+ Nov 2022 00:26:42 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 22 Nov 2022 00:26:42 -0600
+Received: from [10.24.69.79] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AM6QdQk020414;
+        Tue, 22 Nov 2022 00:26:39 -0600
+Message-ID: <9e1ab6e2-6b58-7b0f-fd74-2a6d785f2551@ti.com>
+Date:   Tue, 22 Nov 2022 11:56:38 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADHzPSnanxjH8a_AA--.29968S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr1Utw1DCryDWryxArW5Wrg_yoWfZwb_Ca
-        97uFn7XFWrC34kJrW3JFy7CryFv3W5Wa4kWr4ftF1Sy3sFyryUuF1a9ws8urZ7CayUArsr
-        GFZFvrWYv34xZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbwkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
-        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbd-PUUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 2/8] arm64: dts: ti: k3-j721s2-main: Add SERDES and WIZ
+ device tree node
+To:     Matt Ranostay <mranostay@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221119040906.9495-1-mranostay@ti.com>
+ <20221119040906.9495-3-mranostay@ti.com>
+Content-Language: en-US
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+In-Reply-To: <20221119040906.9495-3-mranostay@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the devm_kcalloc may return NULL pointer,
-it should be better to add check for the return
-value, as same as the others.
 
-Fixes: 48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/crypto/amlogic/amlogic-gxl-core.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/crypto/amlogic/amlogic-gxl-core.c b/drivers/crypto/amlogic/amlogic-gxl-core.c
-index 6e7ae896717c..b243d6382664 100644
---- a/drivers/crypto/amlogic/amlogic-gxl-core.c
-+++ b/drivers/crypto/amlogic/amlogic-gxl-core.c
-@@ -238,6 +238,9 @@ static int meson_crypto_probe(struct platform_device *pdev)
- 	}
- 
- 	mc->irqs = devm_kcalloc(mc->dev, MAXFLOW, sizeof(int), GFP_KERNEL);
-+	if (!mc->irqs)
-+		return -ENOMEM;
-+
- 	for (i = 0; i < MAXFLOW; i++) {
- 		mc->irqs[i] = platform_get_irq(pdev, i);
- 		if (mc->irqs[i] < 0)
+On 19/11/22 9:39 am, Matt Ranostay wrote:
+> Add dt node for the single instance of WIZ (SERDES wrapper) and
+> SERDES module shared by PCIe, eDP and USB.
+> 
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 54 ++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> index b4869bff4f22..adbb172658b9 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> @@ -5,6 +5,17 @@
+>   * Copyright (C) 2021 Texas Instruments Incorporated - https://www.ti.com/
+>   */
+>  
+> +#include <dt-bindings/phy/phy-cadence.h>
+> +#include <dt-bindings/phy/phy-ti.h>
+> +
+> +/ {
+> +	serdes_refclk: clock-cmnrefclk {
+> +		#clock-cells = <0>;
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <0>;
+> +	};
+> +};
+> +
+>  &cbass_main {
+>  	msmc_ram: sram@70000000 {
+>  		compatible = "mmio-sram";
+> @@ -38,6 +49,13 @@ usb_serdes_mux: mux-controller-0 {
+>  			#mux-control-cells = <1>;
+>  			mux-reg-masks = <0x0 0x8000000>; /* USB0 to SERDES0 lane 1/3 mux */
+>  		};
+> +
+> +		serdes_ln_ctrl: mux-controller-80 {
+> +			compatible = "mmio-mux";
+> +			#mux-control-cells = <1>;
+> +			mux-reg-masks = <0x80 0x3>, <0x84 0x3>, /* SERDES0 lane0/1 select */
+> +					<0x88 0x3>, <0x8c 0x3>; /* SERDES0 lane2/3 select */
+> +		};
+>  	};
+>  
+>  	gic500: interrupt-controller@1800000 {
+> @@ -787,6 +805,42 @@ usb0: usb@6000000 {
+>  		};
+>  	};
+>  
+> +	serdes_wiz0: wiz@5060000 {
+> +		compatible = "ti,am64-wiz-10g";
+
+Using compatible "ti,am64-wiz-10g" may cause issues as the wiz_data->type plays a role in serdes configuration
+Please relook into this
+
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		power-domains = <&k3_pds 365 TI_SCI_PD_EXCLUSIVE>;
+> +		clocks = <&k3_clks 365 0>, <&k3_clks 365 3>, <&serdes_refclk>;
+> +		clock-names = "fck", "core_ref_clk", "ext_ref_clk";
+> +		num-lanes = <4>;
+> +		#reset-cells = <1>;
+> +		#clock-cells = <1>;
+> +		ranges = <0x5060000 0x0 0x5060000 0x10000>;
+> +
+> +		assigned-clocks = <&k3_clks 365 3>;
+> +		assigned-clock-parents = <&k3_clks 365 7>;
+> +
+> +		serdes0: serdes@5060000 {
+> +			compatible = "ti,j721e-serdes-10g";
+> +			reg = <0x05060000 0x00010000>;
+> +			reg-names = "torrent_phy";
+> +			resets = <&serdes_wiz0 0>;
+> +			reset-names = "torrent_reset";
+> +			clocks = <&serdes_wiz0 TI_WIZ_PLL0_REFCLK>,
+> +				 <&serdes_wiz0 TI_WIZ_PHY_EN_REFCLK>;
+> +			clock-names = "refclk", "phy_en_refclk";
+> +			assigned-clocks = <&serdes_wiz0 TI_WIZ_PLL0_REFCLK>,
+> +					  <&serdes_wiz0 TI_WIZ_PLL1_REFCLK>,
+> +					  <&serdes_wiz0 TI_WIZ_REFCLK_DIG>;
+> +			assigned-clock-parents = <&k3_clks 365 3>,
+> +						 <&k3_clks 365 3>,
+> +						 <&k3_clks 365 3>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			#clock-cells = <1>;
+> +		};
+> +	};
+> +
+>  	main_mcan0: can@2701000 {
+>  		compatible = "bosch,m_can";
+>  		reg = <0x00 0x02701000 0x00 0x200>,
+
 -- 
-2.25.1
-
+Regards,
+Ravi
