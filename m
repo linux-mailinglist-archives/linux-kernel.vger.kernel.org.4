@@ -2,67 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938A9634249
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325DB63425D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbiKVRPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 12:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S234399AbiKVRUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 12:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbiKVRPq (ORCPT
+        with ESMTP id S234089AbiKVRUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 12:15:46 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0316C73BB7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:15:45 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id c203so14945875pfc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:15:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I8wkkRX69sIhIBAwNUmzVRDA4iCA+IYX3ihJPlLDEDc=;
-        b=jX31Z4RI+TO1Xz7qsX4BnOuS8u0xKdw2IJRFFGNHToCfHTilU0Iw4KUt74bGooIHwN
-         iRdiwrjXrSJlAVAG+CLOxIZxYpqlZf+hlwjU3azZinH9f6PXMfgy2kHyRqWK/eVac0oy
-         DT+tCmfduxVlrmEdJ6qoHd1VwJFO/Y6D5aFqE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I8wkkRX69sIhIBAwNUmzVRDA4iCA+IYX3ihJPlLDEDc=;
-        b=CC1q3nHJGFwtDFkzFw83XFaptJeXFTuSq7rwVnWUvkVjkLd7xNcqiTy8s9PbKDeSaD
-         N/PRt38QyDYcjSS5I8p3RlMZh4LeTX/sTELCU5L4UuHgJp8VB1zCkxgInuUE9NDMPzAq
-         anQCyuslyTw0ukmpJReenhKHxk1+Aq/Cw4F/8CbW6SNNpmeF1w6rmiLnh1zzyc/NJWwn
-         OLDMzl34c4ujrXLxpUn4pyviC7n9wOc2d+gPjBLImpIUJrzPp+PDMlDmtYukUnPVRhjI
-         P0MKFEZ83u+t1bBVEAEztvvnTEe3QC1BV17e4o4BrfHqeA4FK95S87GC991y6QTB+bLN
-         InVQ==
-X-Gm-Message-State: ANoB5pkZO2C57Zhys/w637e6aqLqrRgIAexf3WB6hdQHXt6C72M0G1VK
-        dG/oBCM47wvrZya4Bw7PIUHRbvL9KRO8K0xX
-X-Google-Smtp-Source: AA0mqf76gUnvS8cwGVI6O3/C6486f2ZlsvPjvsTtc/YWs8NCGWYMza4GxvMBdAs79DkXIEsWDTjxOw==
-X-Received: by 2002:a63:f012:0:b0:477:b658:c2ea with SMTP id k18-20020a63f012000000b00477b658c2eamr688956pgh.598.1669137344396;
-        Tue, 22 Nov 2022 09:15:44 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00168dadc7354sm7709131pln.78.2022.11.22.09.15.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 09:15:43 -0800 (PST)
-Date:   Tue, 22 Nov 2022 09:15:42 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Petr Skocik <pskocik@gmail.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] *** Fix kill(-1,s) returning 0 on 0 kills ***
-Message-ID: <202211220913.AF86992@keescook>
-References: <20221122161240.137570-1-pskocik@gmail.com>
+        Tue, 22 Nov 2022 12:20:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADCB78193;
+        Tue, 22 Nov 2022 09:20:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E137EB81A02;
+        Tue, 22 Nov 2022 17:20:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503AAC433C1;
+        Tue, 22 Nov 2022 17:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669137608;
+        bh=CkDkYxYumzSqVOlmgiodWCPA5slheCSG76bDEVMll58=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tRD74yudS4/gNW7keEQHVwVnYPOWkIkFjHjwzbIVo1GnxR/IXoWHGFY1HasUCWwLd
+         Zfg7bY2lCGixxjiwlcAlLyQlJtW3fJGkeYsPeMY5HNtDxc1EWVOLcZMfbYbNnzSyPW
+         ugIArDJwdTxXpaIGxUWH65V/4O/FoJ8tIKRH6oA4=
+Date:   Tue, 22 Nov 2022 18:20:05 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] interconnect fix for 6.1-rc
+Message-ID: <Y30ExTAswA4kcxD6@kroah.com>
+References: <20221117135146.9261-1-djakov@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221122161240.137570-1-pskocik@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221117135146.9261-1-djakov@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,17 +49,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 05:12:40PM +0100, Petr Skocik wrote:
-> Hi. I've never sent a kernel patch before but this one seemed trivial,
-> so I thought I'd give it a shot.
+On Thu, Nov 17, 2022 at 03:51:46PM +0200, Georgi Djakov wrote:
+> Hello Greg,
 > 
-> My issue: kill(-1,s) on Linux doesn't return -ESCHR when it has nothing
-> to kill.
+> This pull request contains a tiny fix for the current cycle. The
+> details are in the signed tag. It has been in linux-next for a week.
+> Please pull into char-misc-linus when possible.
+> 
+> Thanks,
+> Georgi
+> 
+> 
+> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+> 
+>   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.1-rc6
 
-It looks like LTP already tests for this, and gets -ESRCH?
-https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/containers/pidns/pidns10.c
+Pulled and pushed out, thanks.
 
-Does it still pass with your change?
-
--- 
-Kees Cook
+greg k-h
