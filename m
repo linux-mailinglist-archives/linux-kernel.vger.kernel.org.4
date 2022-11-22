@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB969634497
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA76634492
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234805AbiKVTbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S234783AbiKVTbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234787AbiKVTbJ (ORCPT
+        with ESMTP id S234490AbiKVTbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:31:09 -0500
+        Tue, 22 Nov 2022 14:31:03 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530DF9150A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:30:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F8191C20
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:30:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669145404;
+        s=mimecast20190719; t=1669145407;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=i56PR02jE2EWUlpNGIk/oRna4HWRmge9xI1GU0olD7A=;
-        b=Ub75uuJi7t2fCuL7+OCvICSdyCXVV33RDz6r+BqN3sd+NrZMgSEprQ25Tp1CzZ1Ps2xZrX
-        EFfgNVYF+zI5KlE9jXbnIdbZHdAZsCw9vvI+ck5BbF402LBXOKKy7pQCK9ffWfa8RvK33f
-        5ruvOiM51GeJskD5qwy0ce53vcyzmwE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3juG06G3YKqZVFnwZoo8pO4nzDVQkrUL6djcNIQJnew=;
+        b=VfnByIqVcE/WN2vy495rsvv8O5A02XsAsNPBGNlvXUESLieZqxOfFMQkFESdgP/Ed+qwh1
+        3+KWhxEzPxyAHB3Nxd2Pvrpr3RbsszoxBxM91jPkeR8PRUteFyjr/yumLkeQlTDvRhhYYi
+        lzftUFFQoXVj+TMPTF1MQxHyZtv32IA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-140-Wc_KOc-TMfaAasY56W91Qg-1; Tue, 22 Nov 2022 14:30:03 -0500
-X-MC-Unique: Wc_KOc-TMfaAasY56W91Qg-1
-Received: by mail-wm1-f69.google.com with SMTP id v125-20020a1cac83000000b003cfa148576dso8519582wme.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:30:03 -0800 (PST)
+ us-mta-534-nIhQ87hwPV6XmiETeSv6uw-1; Tue, 22 Nov 2022 14:30:06 -0500
+X-MC-Unique: nIhQ87hwPV6XmiETeSv6uw-1
+Received: by mail-wm1-f71.google.com with SMTP id ay19-20020a05600c1e1300b003cf758f1617so11456094wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:30:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i56PR02jE2EWUlpNGIk/oRna4HWRmge9xI1GU0olD7A=;
-        b=MiZOZuxyFkVeo9jek1kACM7yzbYKe9l4ZEaqclLvFRKEruT6MrYU1ZwVYwWUBMyESQ
-         laix60VkFsQQUbz9PXiCjJP05Kdw2pffhDnLmpWgIujkrWcIs46sPjD1bCUSDH2fEjHB
-         IqnY+bpdZ7aYSjgnfVkBFr49d4V4trVS1bEROnANEnpWDajZwPaM4RJHF9wXVH04spX8
-         UKd7oTVQ1zcSS31W7UdZC/SSILF+6n5t7WhmnmvZjtbpRTt8ZvTg+spxWGQrErixuE/2
-         GHapEpHm4gf7zn/kfiWOHRI6c8ZLz+wvW28Qb25oJSKvp4VsUFPv0sUOUyLMhuaS9xgo
-         I3dw==
-X-Gm-Message-State: ANoB5pmf/utRq2DV5GzL+8++fPj5+xwu0jMJGHL6Eb4kT2G+cx0oWWoT
-        oLuOOn/QK8o6nb/sjunfi4A4PURe6AnnhBLrEyhh7O9XjfawWoPxqeIrwIUJpLbKUD6I1Zrq5Ur
-        2UV2ui8AvT3RxwNtQI96KTA632XelKBStnTpQLRwZkiEQQvZhPFkMDEjPAA1eVYsw1okj30IaJ2
-        mH
-X-Received: by 2002:a05:600c:1e12:b0:3cf:9ad3:a20e with SMTP id ay18-20020a05600c1e1200b003cf9ad3a20emr6319801wmb.151.1669145401869;
-        Tue, 22 Nov 2022 11:30:01 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7H55ukeD8W4vEMG+tcsgiL0S4YcBa9kMbUf0lKFnmv1zb7RhVghpWe22JOgaV9yh5WOd/W2w==
-X-Received: by 2002:a05:600c:1e12:b0:3cf:9ad3:a20e with SMTP id ay18-20020a05600c1e1200b003cf9ad3a20emr6319778wmb.151.1669145401634;
-        Tue, 22 Nov 2022 11:30:01 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3juG06G3YKqZVFnwZoo8pO4nzDVQkrUL6djcNIQJnew=;
+        b=JO1kgryaAVE/7IDO0+lJUHZcA9KskOAYtkHgGUSbcjzw2FZ4SayaJpAKS617u6mjJz
+         ZLnGbfN29qqYE/1XTgCExfNA7ead3dO4gUvkmHt8XlbcFGkBDFAM1Po6lsSzDukqQlzW
+         YKDTCIhl7txqwH9MKPMKkHyQM7ob2aEivvW3dowLF3pIoQOVd2oh3KrYcK4Bb5Fjlt8a
+         8wAzjnZGIJC1MvUFVEwxQ2NFPf1NobRaJb1HHAfcsTvcDYU/TMPj6XUZHwgdVFvFO7ot
+         vT1A3iIVhkFzGr5G/qoZ2PnpLt+g3ZtfyRFql77VLWW0PHkdrkpnBzF/uUJkctuQfshV
+         yeIQ==
+X-Gm-Message-State: ANoB5plFeIots5jFwJ3/R2Zd/MRU0hPXGlsW/46JmtgykUHKucTR8OUn
+        +WyLYCaedopyEEbFHans62pou8JYzkrHoyk4TK5s7+OMRdj9GegF7z507PQvT5tc2Vs1DmMaaY2
+        tzHtPOscTxTphSxKeh/afLRtIuawjnSzkirw6YN/RVWKK7P1yGtSvUvtN2wZjk+FZkUo/nr6ePy
+        ww
+X-Received: by 2002:a05:600c:538b:b0:3b4:7e87:895f with SMTP id hg11-20020a05600c538b00b003b47e87895fmr17780388wmb.30.1669145404376;
+        Tue, 22 Nov 2022 11:30:04 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6c1XqNSZJhWUUBOgDKLXeJu/15yG14cyD0JOBLWk4GIDbWjRLmnl0GW3OPHi30c6KcXAIOYw==
+X-Received: by 2002:a05:600c:538b:b0:3b4:7e87:895f with SMTP id hg11-20020a05600c538b00b003b47e87895fmr17780350wmb.30.1669145404034;
+        Tue, 22 Nov 2022 11:30:04 -0800 (PST)
 Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id r14-20020adff10e000000b002366553eca7sm4173682wro.83.2022.11.22.11.29.59
+        by smtp.gmail.com with ESMTPSA id r14-20020adff10e000000b002366553eca7sm4173682wro.83.2022.11.22.11.30.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 11:30:01 -0800 (PST)
+        Tue, 22 Nov 2022 11:30:03 -0800 (PST)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Frederic Weisbecker <frederic@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Phil Auld <pauld@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH v5 0/5] workqueue: destroy_worker() vs isolated CPUs
-Date:   Tue, 22 Nov 2022 19:29:32 +0000
-Message-Id: <20221122192937.2386494-1-vschneid@redhat.com>
+Subject: [PATCH v5 1/5] workqueue: Protects wq_unbound_cpumask with wq_pool_attach_mutex
+Date:   Tue, 22 Nov 2022 19:29:33 +0000
+Message-Id: <20221122192937.2386494-2-vschneid@redhat.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221122192937.2386494-1-vschneid@redhat.com>
+References: <20221122192937.2386494-1-vschneid@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -80,107 +85,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-That's v5 (hopefully) addressing Tejun's comments, cf.
-  https://lore.kernel.org/lkml/20221004150521.822266-1-vschneid@redhat.com/
+When unbind_workers() reads wq_unbound_cpumask to set the affinity of
+freshly-unbound kworkers, it only holds wq_pool_attach_mutex. This isn't
+sufficient as wq_unbound_cpumask is only protected by wq_pool_mutex.
 
-Revisions
-=========
+Make wq_unbound_cpumask protected with wq_pool_attach_mutex and also
+remove the need of temporary saved_cpumask.
 
-v4 -> v5
-++++++++
+Fixes: 10a5a651e3af ("workqueue: Restrict kworker in the offline CPU pool running on housekeeping CPUs")
+Reported-by: Valentin Schneider <vschneid@redhat.com>
+Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+---
+ kernel/workqueue.c | 41 ++++++++++++++++-------------------------
+ 1 file changed, 16 insertions(+), 25 deletions(-)
 
-o Rebase onto v6.1-rc6
-
-o Overall renaming from "reaping" to "cull"
-  I somehow convinced myself this was more appropriate
-  
-o Split the dwork into timer callback + work item (Tejun)
-
-  I didn't want to have redudant operations happen in the timer callback and in
-  the work item, so I made the timer callback detect which workers are "ripe"
-  enough and then toss them to a worker for removal.
-
-  This however means we release the pool->lock before getting to actually doing
-  anything to those idle workers, which means they can wake up in the meantime.
-  The new worker_pool.idle_cull_list is there for that reason.
-
-  The alternative was to have the timer callback detect if any worker was ripe
-  enough, kick the work item if so, and have the work item do the same thing
-  again, which I didn't like.
-
-RFCv3 -> v4
-+++++++++++
-
-o Rebase onto v6.0
-o Split into more patches for reviewability
-o Take dying workers out of the pool->workers as suggested by Lai
-
-RFCv2 -> RFCv3
-++++++++++++++
-
-o Rebase onto v5.19
-o Add new patch (1/3) around accessing wq_unbound_cpumask
-
-o Prevent WORKER_DIE workers for kfree()'ing themselves before the idle reaper
-  gets to handle them (Tejun)
-
-  Bit of an aside on that: I've been struggling to convince myself this can
-  happen due to spurious wakeups and would like some help here.
-
-  Idle workers are TASK_UNINTERRUPTIBLE, so they can't be woken up by
-  signals. That state is set *under* pool->lock, and all wakeups (before this
-  patch) are also done while holding pool->lock.
-  
-  wake_up_worker() is done under pool->lock AND only wakes a worker on the
-  pool->idle_list. Thus the to-be-woken worker *cannot* have WORKER_DIE, though
-  it could gain it *after* being woken but *before* it runs, e.g.:
-                          
-  LOCK pool->lock
-  wake_up_worker(pool)
-      wake_up_process(p)
-  UNLOCK pool->lock
-                          idle_reaper_fn()
-                            LOCK pool->lock
-                            destroy_worker(worker, list);
-			    UNLOCK pool->lock
-			                            worker_thread()
-						      goto woke_up;
-                                                      LOCK pool->lock
-						      READ worker->flags & WORKER_DIE
-                                                          UNLOCK pool->lock
-                                                          ...
-						          kfree(worker);
-                            reap_worker(worker);
-			        // Uh-oh
-			  
-  ... But IMO that's not a spurious wakeup, that's a concurrency issue. I don't
-  see any spurious/unexpected worker wakeup happening once a worker is off the
-  pool->idle_list.
-  
-
-RFCv1 -> RFCv2
-++++++++++++++
-
-o Change the pool->timer into a delayed_work to have a sleepable context for
-  unbinding kworkers
-
-Cheers,
-Valentin
-
-Lai Jiangshan (1):
-  workqueue: Protects wq_unbound_cpumask with wq_pool_attach_mutex
-
-Valentin Schneider (4):
-  workqueue: Factorize unbind/rebind_workers() logic
-  workqueue: Make too_many_workers() return the worker excess
-  workqueue: Convert the idle_timer to a timer + work_struct
-  workqueue: Unbind kworkers before sending them to exit()
-
- kernel/workqueue.c | 224 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 168 insertions(+), 56 deletions(-)
-
---
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 7cd5f5e7e0a1b..8e21c352c1558 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -326,7 +326,7 @@ static struct rcuwait manager_wait = __RCUWAIT_INITIALIZER(manager_wait);
+ static LIST_HEAD(workqueues);		/* PR: list of all workqueues */
+ static bool workqueue_freezing;		/* PL: have wqs started freezing? */
+ 
+-/* PL: allowable cpus for unbound wqs and work items */
++/* PL&A: allowable cpus for unbound wqs and work items */
+ static cpumask_var_t wq_unbound_cpumask;
+ 
+ /* CPU where unbound work was last round robin scheduled from this CPU */
+@@ -3952,7 +3952,8 @@ static void apply_wqattrs_cleanup(struct apply_wqattrs_ctx *ctx)
+ /* allocate the attrs and pwqs for later installation */
+ static struct apply_wqattrs_ctx *
+ apply_wqattrs_prepare(struct workqueue_struct *wq,
+-		      const struct workqueue_attrs *attrs)
++		      const struct workqueue_attrs *attrs,
++		      const cpumask_var_t unbound_cpumask)
+ {
+ 	struct apply_wqattrs_ctx *ctx;
+ 	struct workqueue_attrs *new_attrs, *tmp_attrs;
+@@ -3968,14 +3969,15 @@ apply_wqattrs_prepare(struct workqueue_struct *wq,
+ 		goto out_free;
+ 
+ 	/*
+-	 * Calculate the attrs of the default pwq.
++	 * Calculate the attrs of the default pwq with unbound_cpumask
++	 * which is wq_unbound_cpumask or to set to wq_unbound_cpumask.
+ 	 * If the user configured cpumask doesn't overlap with the
+ 	 * wq_unbound_cpumask, we fallback to the wq_unbound_cpumask.
+ 	 */
+ 	copy_workqueue_attrs(new_attrs, attrs);
+-	cpumask_and(new_attrs->cpumask, new_attrs->cpumask, wq_unbound_cpumask);
++	cpumask_and(new_attrs->cpumask, new_attrs->cpumask, unbound_cpumask);
+ 	if (unlikely(cpumask_empty(new_attrs->cpumask)))
+-		cpumask_copy(new_attrs->cpumask, wq_unbound_cpumask);
++		cpumask_copy(new_attrs->cpumask, unbound_cpumask);
+ 
+ 	/*
+ 	 * We may create multiple pwqs with differing cpumasks.  Make a
+@@ -4072,7 +4074,7 @@ static int apply_workqueue_attrs_locked(struct workqueue_struct *wq,
+ 		wq->flags &= ~__WQ_ORDERED;
+ 	}
+ 
+-	ctx = apply_wqattrs_prepare(wq, attrs);
++	ctx = apply_wqattrs_prepare(wq, attrs, wq_unbound_cpumask);
+ 	if (!ctx)
+ 		return -ENOMEM;
+ 
+@@ -5334,7 +5336,7 @@ void thaw_workqueues(void)
+ }
+ #endif /* CONFIG_FREEZER */
+ 
+-static int workqueue_apply_unbound_cpumask(void)
++static int workqueue_apply_unbound_cpumask(const cpumask_var_t unbound_cpumask)
+ {
+ 	LIST_HEAD(ctxs);
+ 	int ret = 0;
+@@ -5350,7 +5352,7 @@ static int workqueue_apply_unbound_cpumask(void)
+ 		if (wq->flags & __WQ_ORDERED)
+ 			continue;
+ 
+-		ctx = apply_wqattrs_prepare(wq, wq->unbound_attrs);
++		ctx = apply_wqattrs_prepare(wq, wq->unbound_attrs, unbound_cpumask);
+ 		if (!ctx) {
+ 			ret = -ENOMEM;
+ 			break;
+@@ -5365,6 +5367,11 @@ static int workqueue_apply_unbound_cpumask(void)
+ 		apply_wqattrs_cleanup(ctx);
+ 	}
+ 
++	if (!ret) {
++		mutex_lock(&wq_pool_attach_mutex);
++		cpumask_copy(wq_unbound_cpumask, unbound_cpumask);
++		mutex_unlock(&wq_pool_attach_mutex);
++	}
+ 	return ret;
+ }
+ 
+@@ -5383,7 +5390,6 @@ static int workqueue_apply_unbound_cpumask(void)
+ int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
+ {
+ 	int ret = -EINVAL;
+-	cpumask_var_t saved_cpumask;
+ 
+ 	/*
+ 	 * Not excluding isolated cpus on purpose.
+@@ -5397,23 +5403,8 @@ int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
+ 			goto out_unlock;
+ 		}
+ 
+-		if (!zalloc_cpumask_var(&saved_cpumask, GFP_KERNEL)) {
+-			ret = -ENOMEM;
+-			goto out_unlock;
+-		}
+-
+-		/* save the old wq_unbound_cpumask. */
+-		cpumask_copy(saved_cpumask, wq_unbound_cpumask);
+-
+-		/* update wq_unbound_cpumask at first and apply it to wqs. */
+-		cpumask_copy(wq_unbound_cpumask, cpumask);
+-		ret = workqueue_apply_unbound_cpumask();
+-
+-		/* restore the wq_unbound_cpumask when failed. */
+-		if (ret < 0)
+-			cpumask_copy(wq_unbound_cpumask, saved_cpumask);
++		ret = workqueue_apply_unbound_cpumask(cpumask);
+ 
+-		free_cpumask_var(saved_cpumask);
+ out_unlock:
+ 		apply_wqattrs_unlock();
+ 	}
+-- 
 2.31.1
 
