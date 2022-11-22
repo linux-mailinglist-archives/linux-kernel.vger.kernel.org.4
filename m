@@ -2,155 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD85D63380F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1257633810
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiKVJME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
+        id S233240AbiKVJMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbiKVJLs (ORCPT
+        with ESMTP id S233285AbiKVJLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:11:48 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B523347339
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:11:47 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id y4so13051218plb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:11:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JoTx9C4uNq1hBG7+PyDvIRzpdUCEux+gorC7Y4BuSig=;
-        b=pKItYzsHtblDg17Omt9eVUAvCwzac4oqmR4KDXabuznIoYuqj4kdQ1H/EV0hs8btaL
-         YtAvLpE2pNn8QeruD8M9mXRW8H7CXBGfB9brX8g6jgdykL8H+Aoa4BudOeXQYih/TPKI
-         JZVkJX6fmFTJiDDXRRqFhIK4FVO4F2zmxnWr+Ll4p35JaXFPBM5iQ280KIkTug3CmjCT
-         Vd2q2TKfZaR19wVH9Wco+5Z5buPmdSkDuiUsi8qxUWUgRwJbgYyGODMGtF0TWZjlvA4g
-         BN8r+U7qcfyIo6WvSoRXX02XJ7kO0FgV4BHHfNMloxCR0rsXQVBxTAO4JPm9VxNZVRog
-         Msug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JoTx9C4uNq1hBG7+PyDvIRzpdUCEux+gorC7Y4BuSig=;
-        b=JfsSjd9KguIJGIZHpzTSo3nwzPPxS0qe7hHbJmwXmQ+mvpq1MafYzJLbNvdOEP3tpa
-         9YQartO7bk8BOh7leElKHRsIpRS5PsiSzLfAymKt6qHpgqSNKH/V62DnMPrHAfYlg8Dl
-         hnpkqef2sa/wgPDmvLL/nwI1XwN2qjDRBImg3r4qrJqHlI3vfXJ5GLbkHGEk2x7sUAiQ
-         9N6cqqbAALpILedNsWinl8KTC6ZmUJ1F3vUkj0FjlZRMRD4YYXuf55Bu53M/dow9AdR7
-         2TEBbKUcYr+KK+IRgFgLT66o183QI59z0kbieYRpqopgBXPKEzOmZvADu4u7rG3vpFGU
-         hJEw==
-X-Gm-Message-State: ANoB5plZaJB1PvdS57688icqUjC/qs+UuExpxLFrv8G3lcFNicw2o4Qm
-        CylsVcI7nQa9vX264+lSOD921fyoXkcTPijlJSU=
-X-Google-Smtp-Source: AA0mqf6VwG6QTTx5bieFy6M4a8Omoi5dC0LYHvGLNImoGL+M+vdrkKx82ONeT7MVjXNQSt3UyWfjJQscQQwM6arG93k=
-X-Received: by 2002:a17:90a:dc06:b0:218:9196:1cd1 with SMTP id
- i6-20020a17090adc0600b0021891961cd1mr17572330pjv.230.1669108307219; Tue, 22
- Nov 2022 01:11:47 -0800 (PST)
+        Tue, 22 Nov 2022 04:11:54 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AA445A1D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:11:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8151D21C53;
+        Tue, 22 Nov 2022 09:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669108311; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+eQy8/FzmfAJmY6PaadkWLeuCTeBU4iD5a7n2mEcspo=;
+        b=13VX7qi1e2z/i1+Da0UlPonXzuzd29Mv1N/s3ixxOmenm9wvIgrC7eAuTUgUp7qIW7pupU
+        I2vEooyh734wRfPDYZU6hY2Xu9lOgjlB9Q59S3ZupVOzc/5LxGq6xIgTDmnqbVcvyr9WIl
+        9sspETKbh8zYkaJhNoDYleXHGuAr7Xg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669108311;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+eQy8/FzmfAJmY6PaadkWLeuCTeBU4iD5a7n2mEcspo=;
+        b=/m/OvbrBSI98HGwjHOaKIKiU0P+NhKBH15F7l01x4TCSgZMoh1ar2nbEGEjn9xJsOUSyQJ
+        4211cje37/q5j/Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 59BA813AA1;
+        Tue, 22 Nov 2022 09:11:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NQEzFVeSfGMpMgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 22 Nov 2022 09:11:51 +0000
+Message-ID: <79a168e3-41a0-ce4c-6f9c-777974f042aa@suse.cz>
+Date:   Tue, 22 Nov 2022 10:11:51 +0100
 MIME-Version: 1.0
-References: <20221122075440.1165172-1-suagrfillet@gmail.com> <CAJF2gTQWuu2wUk-7WhFdov0PG5R1z_F_+OLqHM0nGnMiC1Yi_w@mail.gmail.com>
-In-Reply-To: <CAJF2gTQWuu2wUk-7WhFdov0PG5R1z_F_+OLqHM0nGnMiC1Yi_w@mail.gmail.com>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Tue, 22 Nov 2022 09:11:34 +0000
-Message-ID: <CAAYs2=iSTTuthLhwiyw08yG2q=yLrdKPmvbG2rS7uibzhe-wXQ@mail.gmail.com>
-Subject: Re: [PATCH] riscv/ftrace: fix ftrace_modify_call bug
-To:     Guo Ren <guoren@kernel.org>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] mm/page_alloc: Leave IRQs enabled for per-cpu page
+ allocations
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20221118101714.19590-1-mgorman@techsingularity.net>
+ <20221118101714.19590-3-mgorman@techsingularity.net>
+ <f9acd363-bf53-c582-78ec-347fd7ec5c37@suse.cz>
+ <20221121120121.djgvgm5bsklgfx7c@techsingularity.net>
+ <20221121160324.4q7clvqdqohgycqh@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221121160324.4q7clvqdqohgycqh@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8822=E6=97=A5=E5=
-=91=A8=E4=BA=8C 08:57=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Nov 22, 2022 at 3:54 PM Song Shuai <suagrfillet@gmail.com> wrote:
-> >
-> > With this commit (riscv: ftrace: Reduce the detour code size to half)
-> > patched, ftrace bug occurred When hosting kprobe and function tracer
-> > at the same function.
-> >
-> > Obviously, the variable caller in ftrace_modify_call was assigned by
-> > rec->ip with 4 offset failing the code replacing at function entry.
-> > And the caller should be assigned by rec->ip directly to indicate
-> > the function entry.
-> Thank you, it's my fault, but I think the problem is:
->
-> Before (riscv: ftrace: Reduce the detour code size to half)
->      0: REG_S  ra, -SZREG(sp)
->      4: auipc  ra, ?          <- We need "rec->ip + 4" here
->      8: jalr   ?(ra)
->     12: REG_L  ra, -SZREG(sp)
->
-> After (riscv: ftrace: Reduce the detour code size to half)
->      0: auipc  t0, ?  <- We needn't "rec->ip + 4" anymore
->      4: jalr   t0, ?(t0)
->
-> I copied rec->ip + 4 blindly, then caused the bug. Right?
->
-Yes, you're right.
+On 11/21/22 17:03, Mel Gorman wrote:
+> On Mon, Nov 21, 2022 at 12:01:23PM +0000, Mel Gorman wrote:
+>> On Fri, Nov 18, 2022 at 03:30:57PM +0100, Vlastimil Babka wrote:
+>> > On 11/18/22 11:17, Mel Gorman wrote:
+>> > AFAICS if this block was just "locked_zone = NULL;" then the existing code
+>> > would do the right thing.
+>> > Or maybe to have simpler code, just do batch_count++ here and
+>> > make the relocking check do
+>> > if (zone != locked_zone || batch_count == SWAP_CLUSTER_MAX)
+>> > 
+>> 
+>> While I think you're right, I think it's a bit subtle, the batch reset would
+>> need to move, rechecked within the "Different zone, different pcp lock."
+>> block and it would be easy to forget exactly why it's structured like
+>> that in the future.  Rather than being a fix, it could be a standalone
+>> patch so it would be obvious in git blame but I don't feel particularly
+>> strongly about it.
+>> 
+> 
+> Ok, less subtle than I initially thought but still deserving of a separate
+> patch instead of being a fix. This?
 
-Here's my simple test case for your convenience.
-```
-echo kernel_read > set_ftrace_filter
-echo function > current_tracer
-echo 'p:myp kernel_read' > kprobe_events
-echo 1 > events/kprobes/myp/enable # ftrace bug
-```
-> >
-> > The following is the ftrace bug log.
-> >
-> > ```
-> > [  419.632855] 00000000f8776803: expected (ffe00297 1a4282e7) but got (=
-1a8282e7 f0227179)
-> > [  419.633390] ------------[ ftrace bug ]------------
-> > [  419.633553] ftrace failed to modify
-> > [  419.633569] [<ffffffff802091cc>] kernel_read+0x0/0x52
-> > [  419.633863]  actual:   97:02:e0:ff:e7:82:82:1a
-> > [  419.634087] Updating ftrace call site to call a different ftrace fun=
-ction
-> > [  419.634279] ftrace record flags: e0000002
-> > [  419.634487]  (2) R
-> > [  419.634487]  expected tramp: ffffffff800093cc
-> > [  419.634935] ------------[ cut here ]------------
-> > ```
-> >
-> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > ---
-> >  arch/riscv/kernel/ftrace.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-> > index 8c77f236fc71..61b24d767e2e 100644
-> > --- a/arch/riscv/kernel/ftrace.c
-> > +++ b/arch/riscv/kernel/ftrace.c
-> > @@ -132,7 +132,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsi=
-gned long old_addr,
-> >                        unsigned long addr)
-> >  {
-> >         unsigned int call[2];
-> > -       unsigned long caller =3D rec->ip + 4;
-> > +       unsigned long caller =3D rec->ip;
-> >         int ret;
-> >
-> >         make_call_t0(caller, old_addr, call);
-> > --
-> > 2.20.1
-> >
->
->
-> --
-> Best Regards
->  Guo Ren
-Thanks,
-Song
+Yeah, thanks!
+
+> --8<--
+> mm/page_alloc: Simplify locking during free_unref_page_list
+> 
+> While freeing a large list, the zone lock will be released and reacquired
+> to avoid long hold times since commit c24ad77d962c ("mm/page_alloc.c: avoid
+> excessive IRQ disabled times in free_unref_page_list()"). As suggested
+> by Vlastimil Babka, the lockrelease/reacquire logic can be simplified by
+> reusing the logic that acquires a different lock when changing zones.
+> 
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+> ---
+>  mm/page_alloc.c | 25 +++++++++----------------
+>  1 file changed, 9 insertions(+), 16 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 445066617204..08e32daf0918 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3518,13 +3518,19 @@ void free_unref_page_list(struct list_head *list)
+>  		list_del(&page->lru);
+>  		migratetype = get_pcppage_migratetype(page);
+>  
+> -		/* Different zone, different pcp lock. */
+> -		if (zone != locked_zone) {
+> +		/*
+> +		 * Either different zone requiring a different pcp lock or
+> +		 * excessive lock hold times when freeing a large list of
+> +		 * pages.
+> +		 */
+> +		if (zone != locked_zone || batch_count == SWAP_CLUSTER_MAX) {
+>  			if (pcp) {
+>  				pcp_spin_unlock(pcp);
+>  				pcp_trylock_finish(UP_flags);
+>  			}
+>  
+> +			batch_count = 0;
+> +
+>  			/*
+>  			 * trylock is necessary as pages may be getting freed
+>  			 * from IRQ or SoftIRQ context after an IO completion.
+> @@ -3539,7 +3545,6 @@ void free_unref_page_list(struct list_head *list)
+>  				continue;
+>  			}
+>  			locked_zone = zone;
+> -			batch_count = 0;
+>  		}
+>  
+>  		/*
+> @@ -3551,19 +3556,7 @@ void free_unref_page_list(struct list_head *list)
+>  
+>  		trace_mm_page_free_batched(page);
+>  		free_unref_page_commit(zone, pcp, page, migratetype, 0);
+> -
+> -		/*
+> -		 * Guard against excessive lock hold times when freeing
+> -		 * a large list of pages. Lock will be reacquired if
+> -		 * necessary on the next iteration.
+> -		 */
+> -		if (++batch_count == SWAP_CLUSTER_MAX) {
+> -			pcp_spin_unlock(pcp);
+> -			pcp_trylock_finish(UP_flags);
+> -			batch_count = 0;
+> -			pcp = NULL;
+> -			locked_zone = NULL;
+> -		}
+> +		batch_count++;
+>  	}
+>  
+>  	if (pcp) {
+
