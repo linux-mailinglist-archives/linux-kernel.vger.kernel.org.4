@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C72633F16
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 967AB633F18
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbiKVOjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S232855AbiKVOjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbiKVOi7 (ORCPT
+        with ESMTP id S232738AbiKVOjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:38:59 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7DC2B1AD;
-        Tue, 22 Nov 2022 06:38:57 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y4so13845647plb.2;
-        Tue, 22 Nov 2022 06:38:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tVuwP251JI0J9486LpQEsG/geG2FeNl8X2kV1b5W5q0=;
-        b=ddV5BJEYTQfeA1K7pTcwqvps5E2lAEF1MY7CMMCf1ejnNpQWCbZlJ++FKQUlmbI+xV
-         cRGcPkXO2EH/iwlqua7vAj8zXTR9y6rtKmKUEgGbyPvtvJIVkQp7QZ9z6XVvLnnaY2tP
-         3Y79Aqu6/Ai3bkQ8BG0d7Xi5WufwJeWiuyAac1+eD1A1IXQ2rhKh7mR+gBo77/1J99g6
-         3PKyucoa/2xCw6YQFKbsYLpBpw9LoaI8W2NpCGxQB2XDkDrgmDCjUmLbTCZ8vUGPpAy2
-         NsOr1iKZ+0kHeZi8Pg1kz17bZkLkanZhXRiFx6qrBWOC73hwT715IT8da8oKW90adQj6
-         3ZkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tVuwP251JI0J9486LpQEsG/geG2FeNl8X2kV1b5W5q0=;
-        b=D9XJA+EccubnPrpcrTBLolZdp3cHQXM1XENaSSCAzp8tJfJUadKLU6O0YmL4k7l1kK
-         +xmIeFUhA7nqlzzNxEIPIhQC11HPheuZSDaL9pg27+oYNnmc6TW8en2yqnCZ6K8APwVr
-         bGtStcYqJZLdTM2GMMwiDnC4AikJX6BlmRbLXt4VPHfLeyfoowt6D0xDVIvqwNEuIEc8
-         vDDOVbOZUKrZ8C5xM9wSCkOPDl+hHbbfBm4FAi1ewd+JKMMgp5VNHCzEBvTI8AiYQO02
-         UWB7P1CmwXxLW1WsybDWHtorWabHfM55Lq/ZlSyZZjhTKs3jRt56iR+xyhbeoBHWcJup
-         c6Uw==
-X-Gm-Message-State: ANoB5pkQmusPneSU2zoZ7kwhllxy9pH1OKaDrIUBgJzkKjSqPDfEEX2J
-        GaheRMItj3B8awJL+QDCmHU=
-X-Google-Smtp-Source: AA0mqf44OKSH/IJzzcyXFVYdPLL0givZmbapdvwxCwpoGgBie66zH/Mfystxx8NutxYWYOepnzuWMw==
-X-Received: by 2002:a17:90a:c095:b0:212:e766:f3e4 with SMTP id o21-20020a17090ac09500b00212e766f3e4mr25192156pjs.213.1669127936797;
-        Tue, 22 Nov 2022 06:38:56 -0800 (PST)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id az23-20020a17090b029700b00218b32f6a9esm3985479pjb.18.2022.11.22.06.38.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 06:38:56 -0800 (PST)
-Date:   Tue, 22 Nov 2022 06:38:53 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com
-Subject: Re: [RFC Patch net-next v2 8/8] net: dsa: microchip: ptp: add
- periodic output signal
-Message-ID: <Y3ze/S7qOCswSnv1@hoboy.vegasvil.org>
-References: <20221121154150.9573-1-arun.ramadoss@microchip.com>
- <20221121154150.9573-9-arun.ramadoss@microchip.com>
+        Tue, 22 Nov 2022 09:39:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9834387A;
+        Tue, 22 Nov 2022 06:39:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC2B861731;
+        Tue, 22 Nov 2022 14:39:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA1FC433D6;
+        Tue, 22 Nov 2022 14:39:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669127949;
+        bh=I3jJNAP9ZLch/e8adpMqIVPvk8KRS4yFg2lWfNILhjg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T1UzJAAqt+v+4ejnYmUHMqsOuC6IH3EjiaZO+A4MwdEKgfQcqUYoZapo8tRgI6PZQ
+         Rq4smgDoWP93yQjDB3YwT4qtSuJXbflyMXRNH0jxmh0rrLMsnJ8has26f/oYp4N/+T
+         TEl54sk9lyrE+1//7xB9CGcgIUIS8mkHLj8rfhGbwnjKV1yT+eKVoSisL7HHFXgrTI
+         SNxKNZBi+tRn0Ytk+OYTFEl0Ukgf19ZlzvIJ5XlZk0dKGMRAwihagS3N7ZK7SutgKg
+         2kslH3IhqTW9j2Lbhugw3fje8Sk22BKLrRt83Kl5SqQi2WrhiCwcmSKUFRSGc20Dmw
+         OI5HM3AJ/Jw7Q==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] kbuild: fix "cat: .version: No such file or directory"
+Date:   Tue, 22 Nov 2022 23:39:02 +0900
+Message-Id: <20221122143902.272330-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121154150.9573-9-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 09:11:50PM +0530, Arun Ramadoss wrote:
+Since commit 2df8220cc511 ("kbuild: build init/built-in.a just once"),
+the .version file is not touched at all when KBUILD_BUILD_VERSION is
+given.
 
-> +static int ksz_ptp_restart_perout(struct ksz_device *dev)
-> +{
-> +	struct ksz_ptp_data *ptp_data = &dev->ptp_data;
-> +	s64 now_ns, first_ns, period_ns, next_ns;
-> +	struct timespec64 now;
-> +	unsigned int count;
-> +	int ret;
-> +
-> +	ret = _ksz_ptp_gettime(dev, &now);
-> +	if (ret)
-> +		return ret;
-> +
-> +	now_ns = timespec64_to_ns(&now);
-> +	first_ns = timespec64_to_ns(&ptp_data->perout_target_time_first);
-> +
-> +	/* Calculate next perout event based on start time and period */
-> +	period_ns = timespec64_to_ns(&ptp_data->perout_period);
-> +
-> +	if (first_ns < now_ns) {
-> +		count = div_u64(now_ns - first_ns, period_ns);
-> +		next_ns = first_ns + count * period_ns;
-> +	} else {
-> +		next_ns = first_ns;
-> +	}
-> +
-> +	/* Ensure 100 ms guard time prior next event */
-> +	while (next_ns < now_ns + 100000000)
-> +		next_ns += period_ns;
-> +
-> +	/* Restart periodic output signal */
-> +	{
+If KBUILD_BUILD_VERSION is specified and the .version file is missing
+(for example right after 'make mrproper'), "No such file or director"
+is shown. Even if the .version exists, it is irrelevant to the version
+of the current build.
 
-CodingStyle: avoid anonymous blocks.  Move to helper function instead?
+  $ make -j$(nproc) KBUILD_BUILD_VERSION=100 mrproper defconfig all
+    [ snip ]
+    BUILD   arch/x86/boot/bzImage
+  cat: .version: No such file or directory
+  Kernel: arch/x86/boot/bzImage is ready  (#)
 
-Thanks,
-Richard
+Show KBUILD_BUILD_VERSION if it is given.
 
+Fixes: 2df8220cc511 ("kbuild: build init/built-in.a just once")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-> +		struct timespec64 next = ns_to_timespec64(next_ns);
-> +		struct ptp_perout_request perout_request = {
-> +			.start = {
-> +				.sec  = next.tv_sec,
-> +				.nsec = next.tv_nsec
-> +			},
-> +			.period = {
-> +				.sec  = ptp_data->perout_period.tv_sec,
-> +				.nsec = ptp_data->perout_period.tv_nsec
-> +			},
-> +			.index = 0,
-> +			.flags = 0,  /* keep current values */
-> +		};
-> +		ret = ksz_ptp_enable_perout(dev, &perout_request, 1);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
+ arch/microblaze/Makefile | 4 ++--
+ arch/x86/boot/Makefile   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/microblaze/Makefile b/arch/microblaze/Makefile
+index 3f8a86c4336a..02e6be9c5b0d 100644
+--- a/arch/microblaze/Makefile
++++ b/arch/microblaze/Makefile
+@@ -67,12 +67,12 @@ linux.bin.ub linux.bin.gz: linux.bin
+ linux.bin: vmlinux
+ linux.bin linux.bin.gz linux.bin.ub:
+ 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+-	@echo 'Kernel: $(boot)/$@ is ready' ' (#'`cat .version`')'
++	@echo 'Kernel: $(boot)/$@ is ready' ' (#'$(or $(KBUILD_BUILD_VERSION),`cat .version`)')'
+ 
+ PHONY += simpleImage.$(DTB)
+ simpleImage.$(DTB): vmlinux
+ 	$(Q)$(MAKE) $(build)=$(boot) $(addprefix $(boot)/$@., ub unstrip strip)
+-	@echo 'Kernel: $(boot)/$@ is ready' ' (#'`cat .version`')'
++	@echo 'Kernel: $(boot)/$@ is ready' ' (#'$(or $(KBUILD_BUILD_VERSION),`cat .version`)')'
+ 
+ define archhelp
+   echo '* linux.bin    - Create raw binary'
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index 9860ca5979f8..9e38ffaadb5d 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -83,7 +83,7 @@ cmd_image = $(obj)/tools/build $(obj)/setup.bin $(obj)/vmlinux.bin \
+ 
+ $(obj)/bzImage: $(obj)/setup.bin $(obj)/vmlinux.bin $(obj)/tools/build FORCE
+ 	$(call if_changed,image)
+-	@$(kecho) 'Kernel: $@ is ready' ' (#'`cat .version`')'
++	@$(kecho) 'Kernel: $@ is ready' ' (#'$(or $(KBUILD_BUILD_VERSION),`cat .version`)')'
+ 
+ OBJCOPYFLAGS_vmlinux.bin := -O binary -R .note -R .comment -S
+ $(obj)/vmlinux.bin: $(obj)/compressed/vmlinux FORCE
+-- 
+2.34.1
+
