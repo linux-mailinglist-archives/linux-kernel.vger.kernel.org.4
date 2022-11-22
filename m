@@ -2,146 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C366339A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092226339AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbiKVKR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:17:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
+        id S233525AbiKVKSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:18:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbiKVKRL (ORCPT
+        with ESMTP id S233581AbiKVKRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:17:11 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751415655D;
-        Tue, 22 Nov 2022 02:17:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UXysmEMsYO6xVoW8Z1GDm/3qyHpeHBAw8zWOXXRE5KlqssW7iUFdL+YSQviSf35pskuph/C3Pa31oR0UoOAV1Qk6tK7oOGBw56VN8JoUZBIHggCfuvw6vq2WtSi9lplMXtslUZgxHJxfhx4+xZkmQFaUdlo8WRh/dqMQdnd18cOLlMC4tumaVfOPpRXMUTVywLZ7nYJg2lrhaoQKlqWhZxBGxuvjK1N6/hcfZAsI+avmU4eqXs6KTC1IrCkQug+iIavFMEPfybji45t8XyplTE/DO2slJxhgDc49L2+gjc9PcL/2rgJJGMradUeAdpxDHISYaHzPq1nyW9ZYG5sW/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zjk3UZt/f26aKIQISvMCx76NAq7g7FRRbLCRwGNer+g=;
- b=OC+n1fbVzBf6emj1QPNcxzyNMgfYEircammGrg3sShUPMsau2OkLuD2dCw4i0NtwwHBQmZXQI5N8eQgXE/IN7QwCgn11qof6X8f7M/F18buBb6hmjU+ubLCTPkkJpP3aNmZejxys5DDBmNGapMKKGcGY1HtKKdT3Y0cmuWxub+KXKr+kOc3biTsJ/S2ebTPOVRmxsb0MQRH0HcDeMjo0xORzQSJrD04N5YW9tiZ+tSEKW1cBKB81vE3jrztaNfwHckfeMDjmWTLNgmtYAkFwZg7Ikb0CIT109/VN1AOyR4L83uXF/d7Hm9e1kROk3cqFXe5dGnw37ujfj8A8URNWlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zjk3UZt/f26aKIQISvMCx76NAq7g7FRRbLCRwGNer+g=;
- b=BgeYzyDm7r0huptisBvIsY9LN3vOova+wnSC0qXHXyc1T0XxjECfsz4/ku6Ct6mWzgw/omOPDWOpqwAivBCuAMGZWdvDAqthICPel+kVnzUO4mSsTi5hP0rqxLluoz88mhSxKcgBSeFyfyRM56DiOasZOETcUC4muO8CsO4nQ3zvr6B9QtH5XP+mxOShukNipEH2wFryYlpdAtgCsFSZH5mjm2Hv71HXMabjcUK+lJHB3RwFg/458sw3YWyvmgRDwJdzv4nniWIqXK9Bu6FTB7m4kuu2eK5D/M9OgRk80n7CUhvJOU8FzmJsJetW+B4d2yogvQOOhBDr3PApWyB0LQ==
-Received: from BN9PR03CA0176.namprd03.prod.outlook.com (2603:10b6:408:f4::31)
- by MW4PR12MB5665.namprd12.prod.outlook.com (2603:10b6:303:187::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 10:17:09 +0000
-Received: from BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f4:cafe::42) by BN9PR03CA0176.outlook.office365.com
- (2603:10b6:408:f4::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15 via Frontend
- Transport; Tue, 22 Nov 2022 10:17:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT064.mail.protection.outlook.com (10.13.176.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5834.8 via Frontend Transport; Tue, 22 Nov 2022 10:17:08 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 22 Nov
- 2022 02:16:59 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 22 Nov
- 2022 02:16:59 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Tue, 22 Nov 2022 02:16:59 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 4.19 00/34] 4.19.266-rc1 review
-In-Reply-To: <20221121124150.886779344@linuxfoundation.org>
-References: <20221121124150.886779344@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 22 Nov 2022 05:17:25 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D59554CF
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:17:22 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id l11so19942337edb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:17:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RfsviaYrCHk+orZnQxhCW/tSY7SqhA88C4nRk5RLhn4=;
+        b=nsZaO2DRwFAc4rjB6uyOdsgV2qnJRlhTAaxcp6DcNAUBBj2nPshRzUP4N/D6Rxd8rA
+         ky/cOc0LG5gTFprBYSy6bh/RkbcZJONOdOXu30UM7fNd2l9IY7ySOuHuVBssSTQ93ZA1
+         prNTPcQAeUK5BGT6J46WNCFi/fjn3Lru9/agxjDreFNjtjQzfzRmBCOEHZN+3VPQ6Wat
+         ParuKV4Ci6bOD5Ylx/v4RMfLShM2papdJvzXOaa4rXEQw3v9TfVS9fXbg2zgiWFpPuZw
+         Ax+dP/MXKqqESw2wPBUX3MLYYHavKeUJcdXgnc5U1EdrswtoJEPo4wmqPB+OSbc77Dj0
+         dQyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RfsviaYrCHk+orZnQxhCW/tSY7SqhA88C4nRk5RLhn4=;
+        b=vaf/BVYD4ub7rADgkdClq57zPlx9tiGYjeRKIL5UiWAbk2f1lazDkedDFn+PT6/30b
+         vWlfpy2bEnR0q2QWcUqnYX9xcsD1kYeRs0O9DXaXodLM0axx+eEVMD5U1Myl6MmmlDNb
+         pOxb+YG6Io7vJcMgO83gaMVOIvoPD9uiFMglHH6S/TdTnA04M+yAqxPVd/F31gNXDmX2
+         a4/Ur/FIP3SUBrgKV/j9Lvy8koBF8ptSkwX8LPTeqkPayvze5/nAuhwYmrUzX2Krl+V2
+         lfCaz65bSWOq/GL7A2islgY/c2mfwfUNx5Ry/JjJ7/twBSLX48HHySiroPtSwGraAhik
+         2HLw==
+X-Gm-Message-State: ANoB5pnwi5dltLUn6tcUfjLKf6fWGK3FEPrSqNMaGJmMAtWDL+c60ip1
+        AvWcORjZf0WrdZIMXKvWa+39v8MEc8EZODYsXvhvaQ==
+X-Google-Smtp-Source: AA0mqf4jC92x9fBcJ6kZVpXXpGOto9tN/vDeHuKP47U3FQADYdyZsI9IQuoKOU7TlLdKAIR1mXQ8TVvK2WabZCkVSOo=
+X-Received: by 2002:aa7:cf07:0:b0:469:5aae:5807 with SMTP id
+ a7-20020aa7cf07000000b004695aae5807mr11819758edy.133.1669112241094; Tue, 22
+ Nov 2022 02:17:21 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <8d2fd268-6b41-4328-a3f0-e8bf5cb32ea7@rnnvmail205.nvidia.com>
-Date:   Tue, 22 Nov 2022 02:16:59 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT064:EE_|MW4PR12MB5665:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69801933-aefc-4621-7f46-08dacc72b65e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NeltFn11JiWo19260gbtPYfnT4kQe30F9e6JWFofSs+CfjU1hHHnlPMAkHDAj75MPBJeIpxlmR/SWxpHMUF294lgvaJZF5ycp7fb3iw6SkRk/i/Ze6tx2F1t4eAjeKKSnKQsaMgPZtLc/uJKVBEuY9ogqDEOFpGCX/nJg2xrhqqjjY7h7srTyMw+x7yQx5n98C4aE6e1Pxk+f3MX2eV62woCFaBrA9ka+yb89GFNy5O/LYiLGTdSRO1L+bMewVxrVgX2MnYFhbYOcPKcsHX9pDdq6iJzSqBnAr5C0U5YH9ctHflTjJBoMnhRNdTwceNz0q2FaBfiLN4onyGmvas8uzPLzKUhilvcMpaTWnT0ukELcSK/tpS2qUr0Wc4HJjjJ8x3OoWELn8sFCwtwqZQRBK+aqhR5KfQVWbqdey68WimkxV2DZv35ZrkjnGmG4OHr2XUIo5ZYjCLmur+MbABOW+oTJtEF2/f7RJKMwDN8Q3hHajcccVLx00n27lTjla/fUvz5YnXfMIcS/ExCDHkDwZPB8ZuaodEq/6tzZ/ayMNLBavRNxsNRPpNsB9lM0ep7TdxDH/liJViOozwY9vkUdfR+O6QiY4/vXiBXX3hulRhq+ITy0few2YgHeXwiXRsfo1akHwWAf171HFyg8dSSzaLgDCx3ivwycprVB105T6hsrKoJ0O8vFuPX8Q4q1NtnncD3Gb+JyPEGBKxN7XmzJT93D5U7avRJ5NzV5zBvKl5ROQ9i/B4YAsrA+/5Vfk9gJzAAg+FobrYYL0DMFZ6ltOido9NsybHX2u1Fg6RNxlA=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(39860400002)(396003)(451199015)(46966006)(40470700004)(36840700001)(36860700001)(86362001)(82740400003)(47076005)(426003)(41300700001)(7636003)(31696002)(2906002)(7416002)(82310400005)(40480700001)(5660300002)(478600001)(8936002)(6916009)(40460700003)(4326008)(336012)(8676002)(316002)(54906003)(966005)(26005)(356005)(186003)(70206006)(70586007)(31686004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2022 10:17:08.2299
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69801933-aefc-4621-7f46-08dacc72b65e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5665
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com>
+ <20221005-mt6357-support-v5-9-8210d955dd3d@baylibre.com> <d61d8c22-fce5-74d5-6d2b-0eda6f2ace9e@gmail.com>
+In-Reply-To: <d61d8c22-fce5-74d5-6d2b-0eda6f2ace9e@gmail.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 22 Nov 2022 11:17:10 +0100
+Message-ID: <CAFGrd9rcDyZxnL5W0PvGyYyq6s+=imqvxM05nOeAqL4trgCDXQ@mail.gmail.com>
+Subject: Re: [PATCH v5 09/10] regulator: add mt6357 regulator
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Flora Fu <flora.fu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-leds@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 13:43:22 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.266 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 23 Nov 2022 12:41:40 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.266-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Le mer. 16 nov. 2022 =C3=A0 15:17, Matti Vaittinen
+<mazziesaccount@gmail.com> a =C3=A9crit :
+>
+> Hi Alexandre, All
+>
+> Please, treat my review more as initiation for discussion than 'hard
+> requirements' for this driver. I am in no point or no "confidence level"
+> to give you any requirements ;)
 
-All tests passing for Tegra ...
+Hi Matti,
+Understood, thanks for clarifying this.
 
-Test results for stable-v4.19:
-    10 builds:	10 pass, 0 fail
-    22 boots:	22 pass, 0 fail
-    40 tests:	40 pass, 0 fail
+>
+> If I read this right, the device has separate register(s) for writing
+> and reading the voltage? I wonder if this is a completely unique setup?
+>
+> If this is not unique, then it might be worth adding another field for
+> 'vsel_get' register and a flag in regulator desc - and modify the
+> generic regmap helpers to handle this in common code if the special
+> register? Not sure if this HW design is common enough to warrant the
+> added confusion though. You and Mark may have more insight.
+>
 
-Linux version:	4.19.266-rc1-g002bfba64dfd
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra20-ventana,
-                tegra210-p2371-2180, tegra30-cardhu-a04
+I didn't write this driver and when I handled it, I found this weird.
+In the datasheet, registers access are read and write.
+After some read/write tests in the registers, I understood that read
+vosel_reg always returns the wrong value.
+That's why the debug register is used to get the value.
+I'm not sure I understand your proposal, but it seems to add more
+custom stuff and modify generic regmap instead of using the generic
+regmap which already allows us to customize get and set functions
+properly.
+IMHO, modifying the generic regmap isn't a good solution because I
+think this HW design isn't common.
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> > +
+> > +static const struct linear_range buck_volt_range1[] =3D {
+> > +     REGULATOR_LINEAR_RANGE(518750, 0, 0x7f, 6250),
+> > +};
+> > +
+> > +static const struct linear_range buck_volt_range2[] =3D {
+> > +     REGULATOR_LINEAR_RANGE(500000, 0, 0x7f, 6250),
+> > +};
+> > +
+> > +static const struct linear_range buck_volt_range3[] =3D {
+> > +     REGULATOR_LINEAR_RANGE(500000, 0, 0x3f, 50000),
+> > +};
+> > +
+> > +static const struct linear_range buck_volt_range4[] =3D {
+> > +     REGULATOR_LINEAR_RANGE(1200000, 0, 0x7f, 12500),
+> > +};
+>
+> I am unsure if we should aim for dropping the REGULATOR_LINEAR_RANGE()
+> and using the LINEAR_RANGE(). If yes, then it might simplify things if
+> new drivers used LINEAR_RANGE() from the day 1. If we don't, then it
+> makes sense to keep consistently using REGULATOR_LINEAR_RANGE() for all
+> of the drivers. I am not sure which way is the right way.
 
-Jon
+Good catch.
+LINEAR_RANGE() is defined in "linear_range.h"
+REGULATOR_LINEAR_RANGE() is defined in "regulator/driver.h"
+"linear_range.h" is included in "regulator/driver.h"
+
+Then, I would like to say that regulator drivers should use
+REGULATOR_LINEAR_RANGE(). But duplicating the definition is weird,
+this is probably something which needs to be fixed or clarified.
+Also, that means mt6357-regulator.c no longer needs "#include
+<linux/linear_range.h>". Then I will remove it.
+
+>
+> > +static int mt6357_regulator_probe(struct platform_device *pdev)
+> > +{
+> > +     struct mt6397_chip *mt6357 =3D dev_get_drvdata(pdev->dev.parent);
+>
+> I am unsure what data do you need from the parent. If it is just the
+> regmap / device-tree node / device, then it does not (in my opinion)
+> really warrant using parent's drvdata. One can often get away with the
+> dev_get_regmap(pdev->dev.parent, NULL).
+
+Ok thanks, I wasn't aware of that. I tried to apply this change but
+I've got a kernel panic at boot because "mt6357_get_buck_voltage_sel"
+needs to retrieve the regmap.
