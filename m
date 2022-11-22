@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEC063323F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D46633240
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiKVBjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
+        id S232019AbiKVBkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbiKVBjL (ORCPT
+        with ESMTP id S231463AbiKVBkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:39:11 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43E3AB0C5;
-        Mon, 21 Nov 2022 17:39:10 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NGRkP39Vrz8RV5L;
-        Tue, 22 Nov 2022 09:39:09 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2AM1d2t0028295;
-        Tue, 22 Nov 2022 09:39:02 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Tue, 22 Nov 2022 09:39:03 +0800 (CST)
-Date:   Tue, 22 Nov 2022 09:39:03 +0800 (CST)
-X-Zmail-TransId: 2afa637c2837328fa23d
-X-Mailer: Zmail v1.0
-Message-ID: <202211220939032286231@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <lewan@microsoft.com>
-Cc:     <bp@alien8.de>, <tony.luck@intel.com>, <james.morse@arm.com>,
-        <mchehab@kernel.org>, <rric@kernel.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chi.minghao@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIXSBFREFDOiB1c2UgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2AM1d2t0028295
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 637C283D.001 by FangMail milter!
-X-FangMail-Envelope: 1669081149/4NGRkP39Vrz8RV5L/637C283D.001/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 637C283D.001/4NGRkP39Vrz8RV5L
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 20:40:20 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC5CE1BFE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:40:19 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id n17so12762193pgh.9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:40:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmViSLFa5OllJV9pTGQkDLSySpGZUy3VM35OK0GlOcI=;
+        b=K/hom9CbYbypJIGnzVOs25efj4/6n5Eehpw46jqAGqFhcK66ntifEwFgtLbyYz/qnh
+         /zmvTQDD74uBFlz9Fu+kD+asOqO+yNezeg3tXoPhzLLsOMBENOmibVsFJ5GO7+57hXc0
+         ytdwT9Yhs8eHoEgosmzLvEpacwy2I4nIQN1/s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OmViSLFa5OllJV9pTGQkDLSySpGZUy3VM35OK0GlOcI=;
+        b=jw3kLORlW18VPN9tLqqPek5J3c+KedHfpMGxQuPAKuFVMp3IFgJIzKnqj+rd1Bhw7W
+         h+RFtCgjfpdy3uh5Rn1vkCnpaQf2h7Z4sma2XbsQLCChtU/aloEA/W0RX+52T1VdxlyF
+         K1H3Q16ivpXvnlnFxWIWRf7wtXtvTzENwks+8aKUVafd+x1qnTqWkeKf0w8s/zqQ0yuX
+         5DiWtsJ5fxLosMxoXKXgwJ5C4oVsxzmnthdHO9RXghVKFPBsZvWEaIfgdNBqVG+7UUg/
+         16FcwSpWQ3ZdZQoZl5UUIsRXM5VYQMIyeDRO8iNqJRe9GmhzqOlJ1j4bFgiNEOoEVJQB
+         1YSg==
+X-Gm-Message-State: ANoB5plpxa5K4YTGNh9VcHvm+RMw38STxmdH6ll7nv2DWtOZcWXIgTbC
+        I3vbvPa3u16ohF0jR41ZQPTW9w==
+X-Google-Smtp-Source: AA0mqf4FhWFVIV3MNn2bOvl6m1yPm7gRKn6SNTWHXHYJ0R6v3cV3fqsy/Q7jRya/DTdCHn820x5chw==
+X-Received: by 2002:a63:1f65:0:b0:470:8e8d:44ae with SMTP id q37-20020a631f65000000b004708e8d44aemr4487308pgm.382.1669081219500;
+        Mon, 21 Nov 2022 17:40:19 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
+        by smtp.gmail.com with ESMTPSA id t20-20020a17090a951400b001fb1de10a4dsm7962686pjo.33.2022.11.21.17.40.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 17:40:19 -0800 (PST)
+Date:   Tue, 22 Nov 2022 10:40:14 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y3wofgb32j9z8Im2@google.com>
+References: <20221119001536.2086599-1-nphamcs@gmail.com>
+ <20221119001536.2086599-7-nphamcs@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221119001536.2086599-7-nphamcs@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On (22/11/18 16:15), Nhat Pham wrote:
+> +static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries);
+> +
+> +static int zs_zpool_shrink(void *pool, unsigned int pages,
+> +			unsigned int *reclaimed)
+> +{
+> +	unsigned int total = 0;
+> +	int ret = -EINVAL;
+> +
+> +	while (total < pages) {
+> +		ret = zs_reclaim_page(pool, 8);
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+Just curious why 8 retries and how was 8 picked?
 
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/edac/dmc520_edac.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/edac/dmc520_edac.c b/drivers/edac/dmc520_edac.c
-index 1fa5ca57e9ec..77756b5b811f 100644
---- a/drivers/edac/dmc520_edac.c
-+++ b/drivers/edac/dmc520_edac.c
-@@ -480,7 +480,6 @@ static int dmc520_edac_probe(struct platform_device *pdev)
- 	struct mem_ctl_info *mci;
- 	void __iomem *reg_base;
- 	u32 irq_mask_all = 0;
--	struct resource *res;
- 	struct device *dev;
- 	int ret, idx, irq;
- 	u32 reg_val;
-@@ -505,8 +504,7 @@ static int dmc520_edac_probe(struct platform_device *pdev)
- 	}
-
- 	/* Initialize dmc520 edac */
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	reg_base = devm_ioremap_resource(dev, res);
-+	reg_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(reg_base))
- 		return PTR_ERR(reg_base);
-
--- 
-2.25.1
+> +		if (ret < 0)
+> +			break;
+> +		total++;
+> +	}
+> +
+> +	if (reclaimed)
+> +		*reclaimed = total;
+> +
+> +	return ret;
+> +}
