@@ -2,119 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9A9633B9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B7A633B5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbiKVLmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S233036AbiKVL3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbiKVLlw (ORCPT
+        with ESMTP id S233000AbiKVL2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:41:52 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A3015FE9;
-        Tue, 22 Nov 2022 03:39:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669117150; x=1700653150;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=q88Eu4PK7R3MLGJthijzTE5pAxdoXj6Hqb2J6jRm7T4=;
-  b=A90p6j67BeXKtFGWt72zk0027CDdanMCtEn0vKF96QqC4tZNZ8VUII7E
-   +Qd11wR3hQhBfogdsqdw4p/5jAjwBEQjRtKDJy2xopNRmUPR36O4laUp8
-   VcMEfCHDMpnsFZX4RZlzftqredB5vRgcQ7LUiGRTSFgMtVK3GnJ90PPoM
-   23CbcTTaMKstMFA+nAMJM4CNc4HLlj1KJ55Xus1mMHvJG0JBZLJsQdlXo
-   k1jR0FE8MbBm/UfjsP2JyyaL1rx4IJGzMBH5qCy7eD1DE7yxb+mzHPjab
-   dJ+VNTYvzgmZwDW+ae7dyzdYWHXHVY2hhQHI6i/AP67kmAdMvSeqV/Pc+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="314944044"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="314944044"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 03:39:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="730366358"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="730366358"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Nov 2022 03:39:06 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AMBd5vt002861;
-        Tue, 22 Nov 2022 11:39:05 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v3 4/7] net: lan966x: Update rxq memory model
-Date:   Tue, 22 Nov 2022 12:38:51 +0100
-Message-Id: <20221122113851.418993-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221121212850.3212649-5-horatiu.vultur@microchip.com>
-References: <20221121212850.3212649-1-horatiu.vultur@microchip.com> <20221121212850.3212649-5-horatiu.vultur@microchip.com>
+        Tue, 22 Nov 2022 06:28:54 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3312C6415
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:22:39 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGhg51dN7zRpPv;
+        Tue, 22 Nov 2022 19:22:09 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 19:22:37 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 19:22:37 +0800
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     <arnd@arndb.de>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <yangyingliang@huawei.com>,
+        <wangxiongfeng2@huawei.com>
+Subject: [PATCH] applicom: Fix PCI device refcount leak in applicom_init()
+Date:   Tue, 22 Nov 2022 19:40:35 +0800
+Message-ID: <20221122114035.24194-1-wangxiongfeng2@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Mon, 21 Nov 2022 22:28:47 +0100
+As comment of pci_get_class() says, it returns a pci_device with its
+refcount increased and decreased the refcount for the input parameter
+@from if it is not NULL.
 
-> By default the rxq memory model is MEM_TYPE_PAGE_SHARED but to be able
-> to reuse pages on the TX side, when the XDP action XDP_TX it is required
-> to update the memory model to PAGE_POOL.
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> ---
->  .../net/ethernet/microchip/lan966x/lan966x_fdma.c  | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> index 384ed34197d58..483d1470c8362 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> @@ -78,8 +78,22 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
->  		.max_len = rx->max_mtu -
->  			   SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
->  	};
-> +	struct lan966x_port *port;
-> +	int i;
->  
->  	rx->page_pool = page_pool_create(&pp_params);
-> +
-> +	for (i = 0; i < lan966x->num_phys_ports; ++i) {
-> +		if (!lan966x->ports[i])
-> +			continue;
-> +
-> +		port = lan966x->ports[i];
-> +
-> +		xdp_rxq_info_unreg_mem_model(&port->xdp_rxq);
+If we break the loop in applicom_init() with 'dev' not NULL, we need to
+call pci_dev_put() to decrease the refcount. Add the missing
+pci_dev_put() to avoid refcount leak.
 
-xdp_rxq_info_unreg_mem_model() can emit a splat if currently the
-corresponding xdp_rxq_info is not registered[0]. Can't we face it
-here if called from lan966x_fdma_init()?
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+---
+ drivers/char/applicom.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> +		xdp_rxq_info_reg_mem_model(&port->xdp_rxq, MEM_TYPE_PAGE_POOL,
-> +					   rx->page_pool);
-> +	}
-> +
->  	return PTR_ERR_OR_ZERO(rx->page_pool);
->  }
->  
-> -- 
-> 2.38.0
+diff --git a/drivers/char/applicom.c b/drivers/char/applicom.c
+index 36203d3fa6ea..69314532f38c 100644
+--- a/drivers/char/applicom.c
++++ b/drivers/char/applicom.c
+@@ -197,8 +197,10 @@ static int __init applicom_init(void)
+ 		if (!pci_match_id(applicom_pci_tbl, dev))
+ 			continue;
+ 		
+-		if (pci_enable_device(dev))
++		if (pci_enable_device(dev)) {
++			pci_dev_put(dev);
+ 			return -EIO;
++		}
+ 
+ 		RamIO = ioremap(pci_resource_start(dev, 0), LEN_RAM_IO);
+ 
+@@ -207,6 +209,7 @@ static int __init applicom_init(void)
+ 				"space at 0x%llx\n",
+ 				(unsigned long long)pci_resource_start(dev, 0));
+ 			pci_disable_device(dev);
++			pci_dev_put(dev);
+ 			return -EIO;
+ 		}
+ 
+-- 
+2.20.1
 
-Thanks,
-Olek
