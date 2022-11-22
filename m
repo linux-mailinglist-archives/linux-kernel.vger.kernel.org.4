@@ -2,191 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243A1633FA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4A8633FA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234207AbiKVO7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S234193AbiKVO7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234058AbiKVO7H (ORCPT
+        with ESMTP id S233982AbiKVO7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:59:07 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB019592;
-        Tue, 22 Nov 2022 06:57:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669129052; x=1700665052;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ptcKDaqf3gRRwrB0yaoMEgRygHe9Kq+LCx/IHTSE3fY=;
-  b=hHDXnX/8KESKJDqzyI6WdbBytWghshqQwu9FzutiFD/19vhpLLkqC4nE
-   XrwJzYrEiuqvO6ELjgFLaO6AFdY01hajrzLsG+ZftzIOvHOlb90k4CO+S
-   5UET+WrQ38u+2y49C8I0hMRX1gHoYSlvlVn3J6QgrJk+oxlNpS9iSZeTB
-   OKbA+Wmn/V+O8JnMW7IFooZS17cpu49R8+1wpXjN5LX9vw26n3bRDWXuR
-   Zo/hLMbFSS/tOZhng44F/BN7PuiagDTUvMX1eD6h7QXwX3YDLbmPP1CZm
-   q+xciUx4Ymqv2tcNPysDXD5VEn7CT/wwpXCuCAWg5wCaSYosbRFvQkM7u
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="124605464"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 07:57:30 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 07:57:26 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 22 Nov 2022 07:57:23 -0700
-Date:   Tue, 22 Nov 2022 14:57:05 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <anup@brainfault.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Anup Patel <apatel@ventanamicro.com>,
+        Tue, 22 Nov 2022 09:59:08 -0500
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE6043AE6;
+        Tue, 22 Nov 2022 06:57:47 -0800 (PST)
+Received: from [192.168.10.46] (unknown [130.180.211.218])
+        (Authenticated sender: daniel.lezcano@free.fr)
+        by smtp1-g21.free.fr (Postfix) with ESMTPA id 9578EB00535;
+        Tue, 22 Nov 2022 15:57:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1669129065;
+        bh=B7HUiAPO+9HzwwBVHzf2LAUEewOOfyCp9QGvnFZZBRQ=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=TTcnBD4jzu7Dgg5B7PCE9UWE2GQjqzV0XlqQoqMb8ApUDKCShYCQvjzx2c9tBE6fV
+         svlmzm+aY/oN24AMqMOLnZ62rbRIrN0J1oMgZE9XBuktzxE6IEIv7RwZFjIOXnc06D
+         VqtAT0yggyU0CwAJYp81Z1/30GSamPE8J39+R3Zp94WQ2sSO6xw+Y8O5cdtlcsBOm/
+         VAYLRKoJ3vZ4RtQOUz6t5mJQG0d9s5OLfXnSKXYgxocpg/UPOw94iBC2hORFK/OM2a
+         ufoGPSt7U1Dlhf5SysKLO/fEb+1YNt2oJUaxQtgGDz9hIgjcq9mp3tRuvLhB0LAVVn
+         CnTcfashtg30g==
+Message-ID: <7586968e-eb25-56c4-19ce-be10216b0b28@free.fr>
+Date:   Tue, 22 Nov 2022 15:57:31 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v10 1/2] clocksource: loongson2_hpet: add hpet driver
+ support
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Samuel Holland <samuel@sholland.org>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: Add optional DT property
- riscv,timer-can-wake-cpu
-Message-ID: <Y3zjQXqEHsaoVVvf@wendy>
-References: <20220727114302.302201-1-apatel@ventanamicro.com>
- <20220727114302.302201-2-apatel@ventanamicro.com>
- <372e37bf-ac90-c371-ad9e-b9c18e1cc059@linaro.org>
- <CAK9=C2WjU+2cD7UZbja3TT++KCdRyWroT=50dw=fzi5mX30rcw@mail.gmail.com>
- <7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org>
- <CAAhSdy20p5bkVanKGkGyArn94hWJhwncztnX7U+4WkN9-v7NsA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAAhSdy20p5bkVanKGkGyArn94hWJhwncztnX7U+4WkN9-v7NsA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev
+References: <20221103131202.12481-1-zhuyinbo@loongson.cn>
+From:   Daniel Lezcano <daniel.lezcano@free.fr>
+In-Reply-To: <20221103131202.12481-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Anup,
-
-I've been meaning to get back to you on this stuff for quite a while,
-but unfortunately I've gotten distracted with other stuff every time I
-got close. Apologies for that :(
-
-On Wed, Jul 27, 2022 at 07:04:57PM +0530, Anup Patel wrote:
-> On Wed, Jul 27, 2022 at 6:05 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 27/07/2022 14:21, Anup Patel wrote:
-> > > On Wed, Jul 27, 2022 at 5:37 PM Krzysztof Kozlowski
-> > > <krzysztof.kozlowski@linaro.org> wrote:
-> > >>
-> > >> On 27/07/2022 13:43, Anup Patel wrote:
-> > >
-> > > Since, there is no dedicated timer node, we use CPU compatible string
-> > > for probing the per-CPU timer.
-> >
-> > Next time you add a properties:
-> > riscv,saata-can-wake-cpu
-> > riscv,usb-can-wake-cpu
-> > riscv,interrupt-controller-can-wake-cpu
-> >
-> > and so on and keep explaining that "historically" you did not define
-> > separate nodes, so thus must be in CPU node.
+On 03/11/2022 14:12, Yinbo Zhu wrote:
+> HPET (High Precision Event Timer) defines a new set of timers, which
+> are used by the operating system to schedule threads, interrupt the
+> kernel and interrupt the multimedia timer server. The operating
+> system can assign different timers to different applications. By
+> configuration, each timer can generate interrupt independently.
 > 
-> This is a one-of-case with RISC-V DeviceTree where we are living with
-> the fact that there is no timer DT node. If we add a timer DT node now
-> then we have to deal with compatibility for existing platforms.
+> The Loongson-2 HPET module includes a main count and three comparators,
+> all of which are 32 bits wide. Among the three comparators, only
+> one comparator supports periodic interrupt, all three comparators
+> support non periodic interrupts.
 
-I don't really understand the argument here. Perhaps this made sense a
-few months ago, but it no longer does IMO.
+What is the difference with arch/mips/loongson64/hpet.c ?
 
-We have existing platforms that interpreted the SBI spec (or perhaps
-predated the SBI spec in the relevant form?) differently. I've pasted it
-several times now I feel but it's relevant so pasting it here again...
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v10:
+> 		1. Replace "goto err" with "return -ENOMEM" if of_iomap fail.
+>                  2. This patch need rely on clock patch, which patchwork
+> 		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
+> Change in v9:
+> 		1. Replace string "register" with "request" in hpet_request_irq.
+> 		2. Move the varible "ret" to the begining position in
+> 		   loongson2_hpet_init and initialized it.
+> 		3. Adjust if judgement in clk_get_rate context, there was less
+> 		   less indentation in the normal path.
+>                  4. This patch need rely on clock patch, which patchwork
+> 		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
+> Change in v8:
+> 		1. Add all history change log information.
+> Change in v7:
+> 		1. Replace setup_irq with request_irq.
+> Change in v6:
+> 		1. Move comma to the end of the previous line if that comma at
+> 		   the beginning of the line.
+> Change in v5:
+> 		1. Replace string loongson2 with Loongson-2 in commit message
+> 		   and Kconfig file.
+> 		2. Replace string LOONGSON2 with LOONGSON-2 in MAINTAINERS.
+> 		3. Make include asm headers after all linux headers.
+> 		4. Add blank place before comma if comma when the comma is at
+> 		   the beginning of the line.
+> Change in v4:
+>                  1. Use common clock framework ops to gain apb clock.
+>                  2. This patch need rely on clock patch, which patchwork
+>                     link was "https://patchwork.kernel.org/project/linux-clk/list/?series=688892".
+> Change in v3:
+> 		1. NO change, but other patch in this series of patches set
+> 		   has changes
+> Change in v2:
+> 		1. NO change, but other patch in this series of patches set
+> 		   has changes
+> 
+>   MAINTAINERS                          |   6 +
+>   arch/loongarch/kernel/time.c         |   4 +-
+>   drivers/clocksource/Kconfig          |   9 +
+>   drivers/clocksource/Makefile         |   1 +
+>   drivers/clocksource/loongson2_hpet.c | 334 +++++++++++++++++++++++++++
+>   5 files changed, 353 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/clocksource/loongson2_hpet.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7afaf6d72800..52519695a458 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12026,6 +12026,12 @@ F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+>   F:	drivers/clk/clk-loongson2.c
+>   F:	include/dt-bindings/clock/loongson,ls2k-clk.h
+>   
+> +LOONGSON-2 SOC SERIES HPET DRIVER
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:	linux-kernel@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/clocksource/loongson2_hpet.c
+> +
+>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
+> index 09f20bc81798..0d8b37763086 100644
+> --- a/arch/loongarch/kernel/time.c
+> +++ b/arch/loongarch/kernel/time.c
+> @@ -216,7 +216,9 @@ int __init constant_clocksource_init(void)
+>   void __init time_init(void)
+>   {
+>   	of_clk_init(NULL);
+> -
+> +#ifdef CONFIG_TIMER_PROBE
+> +	timer_probe();
+> +#endif
 
-On the subject of suspend, the RISC-V SBI spec states:
-> Request the SBI implementation to put the calling hart in a platform
-> specific suspend (or low power) state specified by the suspend_type
-> parameter. The hart will automatically come out of suspended state and
-> resume normal execution when it receives an interrupt or platform
-> specific hardware event.
+This change should go in another patch.
 
-This does not cover whether a given event actually reaches the hart or
-not, just what the hart will do if it receives an event. For the
-implementation on the Allwinner D1, timer events are not received during
-suspend.
+#ifdef is not needed
 
-Through-out the various bits of conversation so far, I have been
-operating on the assumption that on PolarFire SoC, and potentially other
-SiFive based implementations, events from the RISC-V timer do reach a
-hart during suspend.
-I realised while writing this response that I have never actually tested
-it - the C3STOP flag caused problems for me during regular operation &
-not while using some DT defined sleep states.
-I've been learning/piecing together the bits of what is happening here as
-time goes on, so I made an assumption that may or may not be correct, and
-I am still oh-so-far from an understanding.
-I just took it for granted that the existing driver worked correctly for
-"old" SiFive stuff which MPFS is based on & figured that with ~the same
-core complex as the fu540 that we'd behave similarly.
-Perhaps that was not a good idea & please let me know if I've been
-barking up the wrong tree.
+>   	if (!cpu_has_cpucfg)
+>   		const_clock_freq = cpu_clock_freq;
+>   	else
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index 4469e7f555e9..f114ee47e6f7 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -721,4 +721,13 @@ config GOLDFISH_TIMER
+>   	help
+>   	  Support for the timer/counter of goldfish-rtc
+>   
+> +config LOONGSON2_HPET
+> +	bool "Loongson-2 High Precision Event Timer (HPET)"
+> +	select TIMER_PROBE
 
-Do we know definitively what is/isn't the case for any of the existing
-platforms?
-I can test some stuff, but it'll take some time as it's a bad week in
-my neck of the woods.
+TIMER_OF selects TIMER_PROBE
 
-> If we add a timer DT node now
-> then we have to deal with compatibility for existing platforms.
+> +	select TIMER_OF
+> +	help
+> +	  This option enables Loongson-2 High Precision Event Timer
+> +	  (HPET) module driver. It supports the oneshot, the periodic
+> +	  modes and high resolution. It is used as a clocksource and
+> +	  a clockevent.
+>   endmenu
+> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+> index 64ab547de97b..1a3abb770f11 100644
+> --- a/drivers/clocksource/Makefile
+> +++ b/drivers/clocksource/Makefile
+> @@ -88,3 +88,4 @@ obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
+>   obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
+>   obj-$(CONFIG_GOLDFISH_TIMER)		+= timer-goldfish.o
+>   obj-$(CONFIG_GXP_TIMER)			+= timer-gxp.o
+> +obj-$(CONFIG_LOONGSON2_HPET)		+= loongson2_hpet.o
 
-In terms of what to encode in a DT, and given the spec never says that
-the timer interrupt must arrive during suspend, we must assume, by
-default, that no timer events arrive during suspend.
+Please rename to timer-loongson.c
 
-We have a bunch of existing platforms that may (do?) get timer events
-during suspend, the opposite of the proposed default behaviour.
+> diff --git a/drivers/clocksource/loongson2_hpet.c b/drivers/clocksource/loongson2_hpet.c
+> new file mode 100644
+> index 000000000000..9b828f9728ca
+> --- /dev/null
+> +++ b/drivers/clocksource/loongson2_hpet.c
+> @@ -0,0 +1,334 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/percpu.h>
+> +#include <linux/delay.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_address.h>
+> +#include <linux/clk.h>
+> +#include <asm/time.h>
+> +
+> +/* HPET regs */
+> +#define HPET_CFG                0x010
+> +#define HPET_STATUS             0x020
+> +#define HPET_COUNTER            0x0f0
+> +#define HPET_T0_IRS             0x001
+> +#define HPET_T0_CFG             0x100
+> +#define HPET_T0_CMP             0x108
+> +#define HPET_CFG_ENABLE         0x001
+> +#define HPET_TN_LEVEL           0x0002
+> +#define HPET_TN_ENABLE          0x0004
+> +#define HPET_TN_PERIODIC        0x0008
+> +#define HPET_TN_SETVAL          0x0040
+> +#define HPET_TN_32BIT           0x0100
+> +
+> +#define HPET_MIN_CYCLES		16
+> +#define HPET_MIN_PROG_DELTA	(HPET_MIN_CYCLES * 12)
+> +#define HPET_COMPARE_VAL	((hpet_freq + HZ / 2) / HZ)
+> +
+> +void __iomem			*hpet_mmio_base;
+> +unsigned int			hpet_freq;
+> +unsigned int			hpet_t0_irq;
+> +unsigned int			hpet_irq_flags;
+> +unsigned int			hpet_t0_cfg;
+> +
+> +static DEFINE_SPINLOCK(hpet_lock);
+> +DEFINE_PER_CPU(struct clock_event_device, hpet_clockevent_device);
+> +
+> +static int hpet_read(int offset)
 
-I'm trying to follow the line of reasoning but I fail to see how taking
-either the property or node approach allows us to maintain behaviour for
-exiting platforms that that do see timer events during suspend without
-adding *something* to the DT. No matter what we add, we've got some sort
-of backwards compatibility issue, right?
+Please replace hpet by loogson as the former is already in the mips 
+namespace.
 
-I noted the above:
-
-> Since, there is no dedicated timer node, we use CPU compatible string
-> for probing the per-CPU timer.
-
-If we could rely on the cpu compatible why would we need to add a
-dt-property anyway? Forgive my naivety here, but is the timer event in
-suspend behaviour not a "core complex" level attribute rather than a
-something that can be consistently determined by the cpu compatible?
-
-Either way, we need to figure out why enabling C3STOP is causing other
-timer issues even when we are not in some sort of sleep state & do
-something about that - or figure out some different way to communicate
-the behavioural differences.
-I would expect timers to continue working "normally" with the flag set,
-even if how they work is subtly different?
-On a D1, with the C3STOP "feature" flag set, and it's custom timer
-implementation unused, how do timers behave?
-
-Hopefully I've missed something blatant here Anup!
-
-Thanks,
-Conor.
 
