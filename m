@@ -2,122 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8247B63B576
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B24D463B5CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Nov 2022 00:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234249AbiK1XC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 18:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        id S234684AbiK1XXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 18:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiK1XCZ (ORCPT
+        with ESMTP id S234670AbiK1XXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 18:02:25 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CAD1C10D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:02:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669676544; x=1701212544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iiqUjAHCO+LQ+rR+96mD8ATucD1rodYYrVb/pJ5LDbM=;
-  b=ePv5iSkxvnrSfFqK1rN8aNVPdegBiyKjAxkeq/P4LOxSP9GkeyHkii5E
-   gKE5dwmTaRcUfd73i5PLIgfmVUEmCEHMb8CirJnj4CQ64pEZGV0XkSsco
-   WK1i6m7OUlP+kKdWwmAkDWWsUk6/e0e4RzuBov+8nT6qzihK1NzLEAAkc
-   OiNsM/4mJD1SmyyqYKqvW6VyQ3vxf8nekQGo2MrEr8Sy8hZb9vlaF/AqJ
-   FEnYuU06vSGk1APFKdCmUzAqNvXx7svGLewLmVdJ5S+etuT4Rr82aEJKr
-   vPDOd0cImdNf7Hz5SxBvunswa4ljaMI4fQ7pQRDCKC4NbruhQ+zxPfydn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="313672943"
-X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
-   d="scan'208";a="313672943"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 15:02:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="676216763"
-X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
-   d="scan'208";a="676216763"
-Received: from gmeghash-mobl2.amr.corp.intel.com (HELO desk) ([10.209.19.254])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 15:02:21 -0800
-Date:   Mon, 28 Nov 2022 15:02:19 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Breno Leitao <leitao@debian.org>, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jpoimboe@kernel.org, peterz@infradead.org, x86@kernel.org,
-        cascardo@canonical.com, leit@meta.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] x86/bugs: Explicitly clear speculative MSR bits
-Message-ID: <20221128230219.urqiol42rikdhy2u@desk>
-References: <20221124104650.533427-1-leitao@debian.org>
- <Y4QD8o8kWb1V4osq@zn.tnic>
- <20221128220358.n5vk6youcdl2er35@desk>
- <Y4U40wKoSF/ze1Ud@zn.tnic>
+        Mon, 28 Nov 2022 18:23:43 -0500
+X-Greylist: delayed 73839 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 15:23:40 PST
+Received: from bd11.exonhost.com (bd11.exonhost.com [103.138.151.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2603C3134A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 15:23:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=patrika71.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=J00LEJiSrB+qvIFPDPqzZd/6nMYVVkupqrOt9mSmvBQ=; b=BDeNwRinWOtnVOVk6t+xu7Qoet
+        Gb6PsBF/WI7myVDLcUZN/WXCBS8MLfNm0rzJnD8KfaQwuqokkmdxhGD6TCPiWGR5rO0QTD6tOIJKN
+        t1lYuIL8wqfjDklLXLZCay+TdcgMmXc6SMqeKYyEvqI2GWSLrwyQl7J4YKkU8JBaBdRCU7wNOs1Za
+        4O3sFPuzr1YZgfDNamBmLCU27HJrYb5WbOdguwmC7nFgMwRohMXdN0q2z0e01WoqMEZ56mkE2CF3k
+        LWis40Pl2a0+3MTOcPpj6ch9ml2qZ6zuQnogCymj8kj9YXRp3VxjsR/kyjBPyMJvzkmu2A90J9Fog
+        uL1tzoCQ==;
+Received: from ec2-3-142-12-183.us-east-2.compute.amazonaws.com ([3.142.12.183]:64756 helo=alicequiltingclub.org.au)
+        by bd11.exonhost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <supports@alicequiltingclub.org.au>)
+        id 1oxJD0-000UVL-EZ
+        for linux-kernel@vger.kernel.org;
+        Tue, 22 Nov 2022 08:40:28 +0600
+Reply-To: adnakhalid@alrashidprojects.co
+From:   Adana khalid <director@patrika71.com>
+To:     linux-kernel@vger.kernel.org
+Subject:  LOAN FUNDING [OMAN]
+Date:   22 Nov 2022 02:40:27 +0000
+Message-ID: <20221122024026.2C8E43266C8EE227@patrika71.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y4U40wKoSF/ze1Ud@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bd11.exonhost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - alicequiltingclub.org.au
+X-Get-Message-Sender-Via: bd11.exonhost.com: authenticated_id: director@patrika71.com
+X-Authenticated-Sender: bd11.exonhost.com: director@patrika71.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_99,BAYES_999,
+        DEAR_SOMETHING,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
+        *      mail domains are different
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 11:40:19PM +0100, Borislav Petkov wrote:
->On Mon, Nov 28, 2022 at 02:03:58PM -0800, Pawan Gupta wrote:
->> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
->> index 3e3230cccaa7..cfc2ed2661fc 100644
->> --- a/arch/x86/kernel/cpu/bugs.c
->> +++ b/arch/x86/kernel/cpu/bugs.c
->> @@ -66,7 +66,7 @@ static DEFINE_MUTEX(spec_ctrl_mutex);
->>   */
->>  void write_spec_ctrl_current(u64 val, bool force)
->>  {
->> -	if (this_cpu_read(x86_spec_ctrl_current) == val)
->> +	if (!force && this_cpu_read(x86_spec_ctrl_current) == val)
->>  		return;
->>  	this_cpu_write(x86_spec_ctrl_current, val);
->
->Still looks hacky to me.
->
->I think it would be a lot cleaner if MSR_IA32_SPEC_CTRL gets cleaned of
->the speculation bits in init_speculation_control() which gets run on
->*every* CPU.
->
->So by the time check_bugs() gets to setup stuff, the MSR will be ready
->to go regardless.
->
->I.e., something like this (not supposed to work - just to show what I
->mean):
->
->diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
->index 73cc546e024d..367732c92942 100644
->--- a/arch/x86/kernel/cpu/common.c
->+++ b/arch/x86/kernel/cpu/common.c
->@@ -993,9 +993,19 @@ static void init_speculation_control(struct cpuinfo_x86 *c)
-> 	 * Intel CPUs, for finer-grained selection of what's available.
-> 	 */
-> 	if (cpu_has(c, X86_FEATURE_SPEC_CTRL)) {
->+		u64 msr;
->+
-> 		set_cpu_cap(c, X86_FEATURE_IBRS);
-> 		set_cpu_cap(c, X86_FEATURE_IBPB);
-> 		set_cpu_cap(c, X86_FEATURE_MSR_SPEC_CTRL);
->+
->+		/*
->+		 * Clear speculation control settings from a previous kernel
->+		 * run, i.e., kexec.
->+		 */
->+		rdmsrl(MSR_IA32_SPEC_CTRL, msr);
->+		if (msr & SPEC_CTRL_MASK)
->+			wrmsr (MSR_IA32_SPEC_CTRL, msr & ~SPEC_CTRL_MASK);
+Dear Sir/Madam,
 
-Yes thats a cleaner approach, except that the late microcode load will
-ruin the MSR:
+I recommend credible Entrepreneur/viable projects to a Consortium=20
+of Private Investors who are looking for good business=20
+plan/Entrepreneurs to invest and manage funds on a short and long=20
+term at interest rate of 3% for duration of 10 years.
 
-microcode_reload_late()
-   microcode_check()
-     get_cpu_cap()
-       init_speculation_control()
+The investor is ready to fund any kind of project that requires=20
+funding, 
+
+revert back if you are interested=20
+(adnakhalid@alrashidprojects.co)
+
+Best Regards,
+Adana khalid.
+
