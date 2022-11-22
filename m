@@ -2,58 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F65E633F37
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 454F9633F38
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbiKVOsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:48:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
+        id S233069AbiKVOtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:49:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233162AbiKVOsp (ORCPT
+        with ESMTP id S233269AbiKVOtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:48:45 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2CA2606
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:48:43 -0800 (PST)
+        Tue, 22 Nov 2022 09:49:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9261D663D2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:49:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2EA67CE1D3D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:48:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AB7C433C1;
-        Tue, 22 Nov 2022 14:48:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C83A6170B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:49:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E94FC433C1;
+        Tue, 22 Nov 2022 14:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669128520;
-        bh=H5yrJKp7IZ87cLQJKQXNDqJd6jBA32LmwBeh/HfHH2w=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=d2kuog9NAF3d688Expouf0jXiAbwY/5aL0M30bbseV7liEMBibzt4IOF72Ovh4+xL
-         qD17J7uD+nsKg7aQpACaTY7aDmfCnKSiu2TFUHKFSC60XT+TRIgj+vCwufwfDPSKXC
-         mjGp8CIK+LbWA0m1+CPoPU9Ox5ok7hCLcOgwoSnxSvAbkbqwJUZviorfgwFByEeVRv
-         EeEguzDWnf355Zfy7083KXUFQQGVfXOoaeDAqAy6Pi5Oqr3HfYEa+Z3xvQYKuuuDxA
-         O7mpZd3d7YAK58da6NXrshPzTQDhsIOPuV0roOnSvOKAv4rqSNWyRyJWaJCZi5L+n6
-         EZoROpiliEIjA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AC3EB5C09C9; Tue, 22 Nov 2022 06:48:39 -0800 (PST)
-Date:   Tue, 22 Nov 2022 06:48:39 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: next-20221122: tinyconfig: ppc n s390:
- kernel/printk/printk.c:95:1: error: type specifier missing, defaults to
- 'int'; ISO C99 and later do not support implicit int
- [-Werror,-Wimplicit-int]
-Message-ID: <20221122144839.GI4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <CA+G9fYvCWwndXdsvuW7iJ25wgfN6_iMY-OC_z6ufSwiJkzFFMw@mail.gmail.com>
- <87o7szoyij.fsf@jogness.linutronix.de>
+        s=k20201202; t=1669128554;
+        bh=bKeRPVjJrncT4C0fmvTZ2poFrpNaAGtHQW4ySLc8gUU=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=qkp7G5LChqlxCNxZPCZ1TRGAmlU997CYbuhQJ6cK0YdwjVtpogmfc5eQQJynKzW0i
+         oMS2Z2U60Iq//AlYuXhDULaSNjOex0oguGYP0o/FUDoXcW39hLcUNCASOyIA1aaznT
+         0sjpZ3trjAeurfgYg9oyNZedjBW58vHXuQIjQ2dGwOSNvEBm+WGZSbe0GqNqgeZYRa
+         qkXTPX0vCkcHrALdAVqVgzz44ot0AEIYWNqmjWNkKS4FsET3+LjFBb1kIGBjLHx9hS
+         Ka8E20/E3cO+E4Gh3tU7WCW16CH2eterIC3nY2jha90K8DO+XteuDwIK/ySSCEXaYK
+         iDYM+a+o9CPgg==
+From:   Mark Brown <broonie@kernel.org>
+To:     cezary.rojewski@intel.com, linux-kernel@vger.kernel.org,
+        perex@perex.cz, kai.vehmanen@linux.intel.com, tiwai@suse.com,
+        alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
+        lili.li@intel.com
+In-Reply-To: <20221121104742.1007486-1-lili.li@intel.com>
+References: <20221121104742.1007486-1-lili.li@intel.com>
+Subject: Re: [PATCH] ASoC: Intel: Skylake: Fix Kconfig dependency
+Message-Id: <166912855277.213382.2191182990253588501.b4-ty@kernel.org>
+Date:   Tue, 22 Nov 2022 14:49:12 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7szoyij.fsf@jogness.linutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,25 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 03:33:16PM +0106, John Ogness wrote:
-> Hi Petr,
+On Mon, 21 Nov 2022 18:47:42 +0800, lili.li@intel.com wrote:
+> From: Lili Li <lili.li@intel.com>
 > 
-> On 2022-11-22, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > Today's Linux next 20221122 tag clang-15 tinyconfig builds fails on
-> > powerpc and s390 architectures.
+> Commit e4746d94d00c ("ASoC: Intel: Skylake: Introduce HDA codec init and
+> exit routines") introduced HDA codec init routine which depends on SND_HDA.
+> Select SND_SOC_HDAC_HDA unconditionally to fix following compile error:
+> ERROR: modpost: "snd_hda_codec_device_init" [sound/soc/intel/skylake/snd-soc-skl.ko] undefined!
 > 
-> The problem is that CONFIG_SRCU is not selected. This must be selected
-> by any modules that requires SRCU. However, printk.c is _always_ built
-> into the kernel (even if !CONFIG_PRINTK). The registration of consoles
-> and the console list (which uses SRCU) is _always_ built into the
-> kernel.
-> 
-> So should CONFIG_SRCU now always be active?
-> 
-> @paulmck: Do you have a problem with permanently activating CONFIG_SRCU?
+> [...]
 
-The people wanting it separate back in the day were those wanting very
-tiny kernels.  I have not heard from them in a long time, so maybe it
-is now OK to just make SRCU unconditional.
+Applied to
 
-							Thanx, Paul
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: Intel: Skylake: Fix Kconfig dependency
+      commit: e5d4d2b23aed20a7815d1b500dbcd50af1da0023
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
