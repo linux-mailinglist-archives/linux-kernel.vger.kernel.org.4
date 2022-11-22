@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64052633FFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DB5634005
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbiKVPVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S234031AbiKVPVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbiKVPVB (ORCPT
+        with ESMTP id S234016AbiKVPVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:21:01 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEC268691;
-        Tue, 22 Nov 2022 07:21:00 -0800 (PST)
+        Tue, 22 Nov 2022 10:21:15 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5826663EC;
+        Tue, 22 Nov 2022 07:21:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669130460; x=1700666460;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7pZC/dz8/S5EuOYF3Mhliy+TJEj50Cth3ybWyWk6W2Q=;
-  b=ejhBbwm7kuuF8ARU6nz3rsTzkdBWAJQxbcJjC7sdqG0BoC9Ll/0p4UrQ
-   GImpERlD41BLTipUN378L+AqVMUy1D0+KbvvJKRCxBlnHrm/wz86HKGNt
-   gF5s/IsXEuIsUt3im7utp062ngvX/nY5mFdzm5KXk5yHquhmW5Sd+A5XL
-   3mn9LWSMp8uopmDA6rNk/PstQhXwd0NukCyf7aOWcoXJTvsGGj6cKnFeM
-   mugfUAUc5VbCIAdMH3uGX3rVqk46MuVEfbnyk61OStS2AgBXT7fVAxjOR
-   tywmHVAdvwoUR8f6mbFFuikXmRgafrood3/l+DqM3iV7OXI7l0U7OZnI3
+  t=1669130474; x=1700666474;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s3VVg2g632Tux17uwTkaAb/v5mQIhikDvfW22IAN4Os=;
+  b=OuK3+nnJb1LRXZb+k9CkuD8SWVrCvIZF8nE3/JYGGrh1brjqVML3SdP6
+   V98uA+ms0BrQmDyQTJvV81f5tYcR2XQTH0rbFjgQlQDUMlhUKmaTWu6bu
+   QJVC6/Dprgsrpgpu6SrRu08+Q/yVTrqTWa4cENisiMoUDUOHZyNnczUHR
+   88zW8lL2znmEtDmiNCaRu1YKnCBU4JFT65KKPabE0RMDvPD/fT3Xq32Rh
+   CWwOfDzRahGt1zfUYaWHj4P2dvt367CmyGc9ZAUxDGVoyQxfRGvQ7BgQM
+   C7Vg5I14USreFsTaMXl7w5AA5ve5UzvivHHtAZJQk14DnKl2qfyFeyYhx
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="313869913"
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="301388858"
 X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="313869913"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:20:30 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="783872775"
+   d="scan'208";a="301388858"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:20:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="886570850"
 X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="783872775"
-Received: from lcano-mobl1.amr.corp.intel.com (HELO [10.255.231.75]) ([10.255.231.75])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:20:28 -0800
-Message-ID: <058a6033-a5e0-771b-3c16-950fdbb8c1e5@intel.com>
-Date:   Tue, 22 Nov 2022 07:20:28 -0800
+   d="scan'208";a="886570850"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Nov 2022 07:20:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oxV4i-00FsuP-1K;
+        Tue, 22 Nov 2022 17:20:40 +0200
+Date:   Tue, 22 Nov 2022 17:20:40 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 2/4] usb: gadget: hid: Convert to use list_count()
+Message-ID: <Y3zoyFs2Q9ogoz/L@smile.fi.intel.com>
+References: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com>
+ <20221114162207.62559-2-andriy.shevchenko@linux.intel.com>
+ <CAOMZO5CJvuMUNwPQ7GUQh0dinYSfQ5TTLMawUt7hMVKJD4S3GQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com,
-        tony.luck@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1668988357.git.kai.huang@intel.com>
- <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
- <Y3yUdcJjrY2LhUWJ@hirez.programming.kicks-ass.net>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y3yUdcJjrY2LhUWJ@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOMZO5CJvuMUNwPQ7GUQh0dinYSfQ5TTLMawUt7hMVKJD4S3GQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 01:20, Peter Zijlstra wrote:
-> Either the Changelog is broken or this TDX crud is worse crap than I
-> thought possible, because the only way to actually meet that requirement
-> as stated is stop_machine().
+On Mon, Nov 14, 2022 at 04:15:35PM -0300, Fabio Estevam wrote:
+> On Mon, Nov 14, 2022 at 1:22 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > The list API now provides the list_count() to help with counting
+> > existing nodes in the list. Uilise it.
+> 
+> s/Uilise/Utilise
 
-I think the changelog is broken.  I don't see anything in the TDX module
-spec about "the SEMACALL can run concurrently on different CPUs".
-Shutdown, as far as I can tell, just requires that the shutdown seamcall
-be run once on each CPU.  Concurrency and ordering don't seem to matter
-at all.
+Fixed for v3, thanks!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
