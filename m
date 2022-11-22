@@ -2,85 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50871633FD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59413633FD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233906AbiKVPGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S234045AbiKVPHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiKVPG2 (ORCPT
+        with ESMTP id S233973AbiKVPGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:06:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA462E5;
-        Tue, 22 Nov 2022 07:06:27 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669129585;
+        Tue, 22 Nov 2022 10:06:51 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BEA2E5;
+        Tue, 22 Nov 2022 07:06:49 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e79b329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e79b:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 14C1C1EC04E2;
+        Tue, 22 Nov 2022 16:06:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669129608;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jgAMdI+izwDeEvpgX4m0VI03W8NKclkKP90RLZ9WIgA=;
-        b=1+tAieLZ/HZeaJFKtaHw4vi1gZimlzue2u9cqJzeYDjmsND6FbuFRnsrDHMvqStd36WDQ5
-        zdowaOcylQk455fJ8gN2mYKy7pFOIAxFF95RqMT8yTAwNFC6fSK4IwhbQZveqN6smCI1AF
-        hErxnuE2xff4VQHXbS3FOhYgbu4ynarw8Tk5xxHgMQ7x/+i8dFEGuASdL5vwujgHwe+ifr
-        lt6gA1frFaTT7rmGpRAq/CRtNld78MLdVjyWihZJYmfuwkF04TMWB4QcgpzaOA9WO0v1++
-        hNeq4/cElSkc6ZLN2S2IHkEcXyLaoba4w/8ynTHUHZWq10sDQ2f0zv+e0ytxLA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669129585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jgAMdI+izwDeEvpgX4m0VI03W8NKclkKP90RLZ9WIgA=;
-        b=BOGG+iOwzQCE8G/W4MRT93mk1FQyIcC0bvXLAIXGPpJZzsusE/JeB0Bpc5TtS53cfoLwQZ
-        66AGLC1EvkM65rAw==
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
-In-Reply-To: <Y3yUdcJjrY2LhUWJ@hirez.programming.kicks-ass.net>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
- <Y3yUdcJjrY2LhUWJ@hirez.programming.kicks-ass.net>
-Date:   Tue, 22 Nov 2022 16:06:25 +0100
-Message-ID: <87bkozgham.ffs@tglx>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=5yMV1ZCNV3SL3KeDjf/6/5dfqDL8Ilh1prBf3IRM6ZU=;
+        b=Wx1aIkqqyXz34T4ijeYsjo3X4fIguA60r9PaSI5S4+6cUmM14EhfTJMcwsE9KXP70C9FwM
+        BhiTrP9Sz7nraeCt/sT3Gowww7prx3tsfmZUcBL5oLO9iCscr/hsHZ+emgo9QKxcUukwZ1
+        6w0KNHT8mxHXL5v7BJ0K0Cm25jdAlpw=
+Date:   Tue, 22 Nov 2022 16:06:42 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Rabara Niravkumar L <niravkumar.l.rabara@intel.com>
+Cc:     Dinh Nguyen <dinguyen@kernel.org>, linux-edac@vger.kernel.org,
+        kexec@lists.infradead.org, pmladek@suse.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net
+Subject: Re: [PATCH V3 08/11] EDAC/altera: Skip the panic notifier if kdump
+ is loaded
+Message-ID: <Y3zlghMzlc1kzVJx@zn.tnic>
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-9-gpiccoli@igalia.com>
+ <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
+ <eaba1a1a-31cd-932f-277c-267699d7be30@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <eaba1a1a-31cd-932f-277c-267699d7be30@igalia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22 2022 at 10:20, Peter Zijlstra wrote:
+On Tue, Nov 22, 2022 at 10:33:12AM -0300, Guilherme G. Piccoli wrote:
 
-> On Mon, Nov 21, 2022 at 01:26:28PM +1300, Kai Huang wrote:
->
->> Shutting down the TDX module requires calling TDH.SYS.LP.SHUTDOWN on all
->> BIOS-enabled CPUs, and the SEMACALL can run concurrently on different
->> CPUs.  Implement a mechanism to run SEAMCALL concurrently on all online
->> CPUs and use it to shut down the module.  Later logical-cpu scope module
->> initialization will use it too.
->
-> Uhh, those requirements ^ are not met by this:
+Leaving in the whole thing for newly added people.
 
-  Can run concurrently != Must run concurrently
- 
-The documentation clearly says "can run concurrently" as quoted above.
+> On 18/09/2022 11:10, Guilherme G. Piccoli wrote:
+> > On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
+> >> The altera_edac panic notifier performs some data collection with
+> >> regards errors detected; such code relies in the regmap layer to
+> >> perform reads/writes, so the code is abstracted and there is some
+> >> risk level to execute that, since the panic path runs in atomic
+> >> context, with interrupts/preemption and secondary CPUs disabled.
+> >>
+> >> Users want the information collected in this panic notifier though,
+> >> so in order to balance the risk/benefit, let's skip the altera panic
+> >> notifier if kdump is loaded. While at it, remove a useless header
+> >> and encompass a macro inside the sole ifdef block it is used.
+> >>
+> >> Cc: Borislav Petkov <bp@alien8.de>
+> >> Cc: Petr Mladek <pmladek@suse.com>
+> >> Cc: Tony Luck <tony.luck@intel.com>
+> >> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+> >> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> >>
+> >> ---
+> >>
+> >> V3:
+> >> - added the ack tag from Dinh - thanks!
+> >> - had a good discussion with Boris about that in V2 [0],
+> >> hopefully we can continue and reach a consensus in this V3.
+> >> [0] https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
+> >>
+> >> V2:
+> >> - new patch, based on the discussion in [1].
+> >> [1] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
+> >>
+> >> [...]
+> > 
+> > Hi Dinh, Tony, Boris - sorry for the ping.
+> > 
+> > Appreciate reviews on this one - Dinh already ACKed the patch but Boris
+> > raised some points in the past version [0], so any opinions or
+> > discussions are welcome!
+> 
+> 
+> Hi folks, monthly ping heheh
+> Apologies for the re-pings, please let me know if there is anything
+> required to move on this patch.
 
-Thanks,
+Looking at this again, I really don't like the sprinkling of
 
-        tglx
+	if (kexec_crash_loaded())
+
+in unrelated code. And I still think that the real fix here is to kill
+this
+
+	edac->panic_notifier
+
+thing. And replace it with simply logging the error from the double bit
+error interrupt handle. That DBERR IRQ thing altr_edac_a10_irq_handler().
+Because this is what this panic notifier does - dump double-bit errors.
+
+Now, if Dinh doesn't move, I guess we can ask Tony and/or Rabara (he has
+sent a patch for this driver recently and Altera belongs to Intel now)
+to find someone who can test such a change and we (you could give it a
+try first :)) can do that change.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
