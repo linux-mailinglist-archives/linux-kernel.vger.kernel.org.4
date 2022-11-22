@@ -2,111 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C8B633F1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F930633F21
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbiKVOkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
+        id S232784AbiKVOkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbiKVOkD (ORCPT
+        with ESMTP id S232132AbiKVOkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:40:03 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18866AEF4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:40:01 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id 8so10359240qka.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:40:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R+FOvmh9any63aYhENKhboGoqz/opZ018HM9vaw+jdI=;
-        b=cpTx+k/SZXpl9JQ2gcxIrpXW8vRmNKQ3ZfQF/zjqBRjejrDZk+eH6Y3IkhLYrVAkpb
-         SHiDixdnTwKmjW12p5FyxM+z/xRAta0CNLoNxpdU6IipeatwOwU8am4A/OShMysWb8Iw
-         HV4MwxzB+xnXUiYKDaysvIT5gIg7frHQCYq9xGay7YVkidK5Vk2GBXw3/T3Q9qSKzJ+/
-         +HomYovzAaPOdymfZpoNJfQAjoCDPE+WB+VbvJwJXw1FNwG/ML6fCr9zmUHAOvc/5KBT
-         OrySSgTIb3yWchkiIuqlcNvMsX7KVdQrG1s9rINuuMAJUQKmroLdv6HA9fbh4xdu37c2
-         kWaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+FOvmh9any63aYhENKhboGoqz/opZ018HM9vaw+jdI=;
-        b=SUFSHf65xPN/2aX00OkZALEQvM7pbB6VaZd0rxWo86AVFd9VwNypU26ZCsoEi8Yylg
-         oxKK24SUDxshoCF6iM+psTDKouhiBvMmQexzMI3019GzAwDSnCAVkRRrYrlYHUqhbSmB
-         fAKwjkeCGkkj8U7dMg/8M12C4rDIhMRjiBREzUO8//S/L+XUAVoq/4iNRoM3+lgA2SdM
-         Sm6MQ8zrQaUkyDu2D5Hs5IEyD9tP1k8jq32HdCCCJTdZwWAPsEVKcGi0/Bwy/WevrGqd
-         BQiLaU6JXMDtiMyqF8gepvBHcWXCkAdqB9xFC5FdXTtoe6oLLev7VM/qlQTgyR2DK2nE
-         irGw==
-X-Gm-Message-State: ANoB5plvJJb33sjDSxhNNv2TjSX3qOv9v7Yd9lwEZUGzOMu3zupVgirm
-        q1RyWEg1YfBGbMGl9IB9xRO/CPmK2cQuie+e
-X-Google-Smtp-Source: AA0mqf5iDK5qbBVOILYXOAk81ayd7By/mJ/oBweezU2BtZ/l2P/MxStHda36kiQGXr0l8u9mNfY65Q==
-X-Received: by 2002:a37:8203:0:b0:6fa:3b1b:9c80 with SMTP id e3-20020a378203000000b006fa3b1b9c80mr20815276qkd.722.1669128000841;
-        Tue, 22 Nov 2022 06:40:00 -0800 (PST)
-Received: from [192.168.1.187] (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
-        by smtp.gmail.com with ESMTPSA id y10-20020a05620a25ca00b006f9f714cb6asm10162084qko.50.2022.11.22.06.40.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 06:40:00 -0800 (PST)
-Message-ID: <5c736870-9333-f7a0-5197-98c187a7e5f5@timesys.com>
-Date:   Tue, 22 Nov 2022 09:39:59 -0500
+        Tue, 22 Nov 2022 09:40:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4D62B1AD;
+        Tue, 22 Nov 2022 06:40:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17D2C61741;
+        Tue, 22 Nov 2022 14:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D752C433D6;
+        Tue, 22 Nov 2022 14:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669128017;
+        bh=ZdUOPikyCG80XtHDnM2rGG9TSWAkvMCXAo+3DdnnZnY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Z3U1U0YaPUGWa+E3QQtLfU26qUd7pWht5fsQmND3VCvU/L7pi5f6PIWpruwvuA7D8
+         LgI+JPMKQoa08L0kJhOky7Jbv3aPYxaEZ2gH1BWTMsqr3f28RgjYvxtSEvkqbE6EyZ
+         aH1l8QQ03gEyUMM9Sc9r8O5ZdyA2X2ahJv1vJ3iOKIy/3DwYFqcV1szwkeWUuNnAcj
+         waizuuLBDFN+jNZd1N5rG8FrOt6358KQF+kjka2teqkRkbXIenk+cIdQa04kJQwloj
+         uMrslTew19gILSsG3xDK9Ehlj13n/qxa7pFJ99SBc8HuT0YlR3AGE5SJHLu2IxSPvk
+         sAaPxQ1XJknxQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5FCE4E270E3;
+        Tue, 22 Nov 2022 14:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] spi: cadence-quadspi: Properly pass buswidth through to
- underlying SPI subsystem via buswidth_override_bits instead of mode_bits.
-Content-Language: en-US
-Cc:     "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221122133551.91536-1-nathan.morrison@timesys.com>
-From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-In-Reply-To: <20221122133551.91536-1-nathan.morrison@timesys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,MISSING_HEADERS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net-next 0/3] cleanup ocelot_stats exposure
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166912801738.31871.6233306488148993395.git-patchwork-notify@kernel.org>
+Date:   Tue, 22 Nov 2022 14:40:17 +0000
+References: <20221119231406.3167852-1-colin.foster@in-advantage.com>
+In-Reply-To: <20221119231406.3167852-1-colin.foster@in-advantage.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, edumazet@google.com, davem@davemloft.net,
+        f.fainelli@gmail.com, andrew@lunn.ch, UNGLinuxDriver@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.manoil@nxp.com,
+        vladimir.oltean@nxp.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please disregard.  This isn't quite right.  I'll resubmit a better patch
+Hello:
 
-On 11/22/22 08:35, Nathan Barrett-Morrison wrote:
-> While trying to enable Octal SPI mode, it was observed that
-> SPI_RX_OCTAL/SPI_TX_OCTAL were not propagating into the spi_device
-> spi->mode setting.  This was causing the SPI device to always
-> operate in 1x mode instead of the desired 8x mode.
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Sat, 19 Nov 2022 15:14:03 -0800 you wrote:
+> The ocelot_stats structures became redundant across all users. Replace
+> this redundancy with a static const struct. After doing this, several
+> definitions inside include/soc/mscc/ocelot.h no longer needed to be
+> shared. Patch 2 removes them.
 > 
-> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> ---
->  drivers/spi/spi-cadence-quadspi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Checkpatch throws an error for a complicated macro not in parentheses. I
+> understand the reason for OCELOT_COMMON_STATS was to allow expansion, but
+> interestingly this patch set is essentially reverting the ability for
+> expansion. I'm keeping the macro in this set, but am open to remove it,
+> since it doesn't _actually_ provide any immediate benefits anymore.
 > 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 447230547945..c92a95bdaa05 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -1589,7 +1589,7 @@ static int cqspi_probe(struct platform_device *pdev)
->  		dev_err(&pdev->dev, "spi_alloc_master failed\n");
->  		return -ENOMEM;
->  	}
-> -	master->mode_bits = SPI_RX_QUAD | SPI_RX_DUAL;
-> +	master->buswidth_override_bits = SPI_RX_QUAD | SPI_RX_DUAL;
->  	master->mem_ops = &cqspi_mem_ops;
->  	master->mem_caps = &cqspi_mem_caps;
->  	master->dev.of_node = pdev->dev.of_node;
-> @@ -1686,7 +1686,7 @@ static int cqspi_probe(struct platform_device *pdev)
->  			cqspi->wr_delay = 50 * DIV_ROUND_UP(NSEC_PER_SEC,
->  						cqspi->master_ref_clk_hz);
->  		if (ddata->hwcaps_mask & CQSPI_SUPPORTS_OCTAL)
-> -			master->mode_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
-> +			master->buswidth_override_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
->  		if (!(ddata->quirks & CQSPI_DISABLE_DAC_MODE))
->  			cqspi->use_direct_mode = true;
->  		if (ddata->quirks & CQSPI_SUPPORT_EXTERNAL_DMA)
+> [...]
+
+Here is the summary with links:
+  - [v2,net-next,1/3] net: mscc: ocelot: remove redundant stats_layout pointers
+    https://git.kernel.org/netdev/net-next/c/33d5eeb9a684
+  - [v2,net-next,2/3] net: mscc: ocelot: remove unnecessary exposure of stats structures
+    https://git.kernel.org/netdev/net-next/c/a3bb8f521fd8
+  - [v2,net-next,3/3] net: mscc: ocelot: issue a warning if stats are incorrectly ordered
+    https://git.kernel.org/netdev/net-next/c/877e7b7c3b12
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
