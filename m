@@ -2,158 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D03A633D32
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E49633D39
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbiKVNL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        id S232778AbiKVNM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbiKVNLS (ORCPT
+        with ESMTP id S232532AbiKVNMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:11:18 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D335963B85;
-        Tue, 22 Nov 2022 05:11:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669122674; x=1700658674;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uDAbUmrJSxyGSM1AaF/SoNBLvIhsZuamrriTLiE8KOs=;
-  b=MuWiMaLSBJptCHxPKR2RleH0+dp0ctnOENLyrUGewAUYzC4MvCSAceXl
-   G3YQyufJBsaBmUYdEfUf/k9FIvJ7lXnC6onHjAmM/QV186lmwt4YeQRny
-   J7/2Z3i25bic5sGwMB0D8V4npIkxcRFlCXOV5/k1afUAppfmOV5c1L0+k
-   a+ySr2z6HUZBaFuWlXXDd7Af7wBIF1d+pFdbcOLlmfGSGFmkkXhy/d9p5
-   qJpxlxTJOtyEqyBW1iwJ4R449n3AAvQgixvHcxM16+a5Y4F7A0QSHw83C
-   VbxJZchRMlUiAcvTFDcpaFSexmfzomrO2cfQF1Jf83v6C8Ud8X46VW1Lu
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="293519263"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="293519263"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 05:11:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="783834220"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="783834220"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 22 Nov 2022 05:11:10 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 22 Nov 2022 15:11:09 +0200
-Date:   Tue, 22 Nov 2022 15:11:09 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v3 1/3] device property: Get rid of
- __PROPERTY_ENTRY_ARRAY_EL*SIZE*()
-Message-ID: <Y3zKbbMpcaHfqB2C@kuha.fi.intel.com>
-References: <20221111154621.15941-1-andriy.shevchenko@linux.intel.com>
+        Tue, 22 Nov 2022 08:12:25 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D10A623BC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:12:24 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id q71so14025013pgq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oqwHzAInlPVGD6Tj99gfuhNqltvuUaoQbnrjs4tthqQ=;
+        b=iqFptG7/uCjX/WZys0RvEFs1QNIHoCzPFv1fNAzqAMu+zJYLIAIlTk5xbXKdx+huTA
+         903beUgNqdUyJbtx+1indJKeCxTl6PcQCU9vqOpDLb83FX0WK23+ILBpy9ly3TpIZDCC
+         xgjqsPh29pWWGt+2eiT8p/uT708pvtye0mpxMZQl+7KXngPg5fYjUKzILGUff0EBmGWG
+         OWN1ybOPMEoD14w22QOUMf0rMMUS/XViBDGXZgvtTtSzOJdrHzoq31K9eGKmHbbI91Gb
+         UUo/9UggJh/iYOMPpOGdHM+AU2ZIRy4cGxaeLE55UWyAkPBxF36Rdhb8iB+puBt7zvDM
+         ub8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oqwHzAInlPVGD6Tj99gfuhNqltvuUaoQbnrjs4tthqQ=;
+        b=LjJ21/AaBSxE2Ay/Hc87W34E9fJSA7T8TbwAkZ90hFf1lQs6ynXRabLLMOelXCIUZR
+         NPZ4wmB9VkARNXmO7FYbO/XMxctz5zYuySqOiM52uPBzC2qxurmmasJq2TBrfj2IGu5R
+         7IuEKcVPH0usWNO4lL20uEoBbA8aXclromstu09yAFaj7WoLysD5sba0KbRRdIUerQGp
+         Y1XtycgULzukUDnNXXfFQa0lpqg+4XxNz/jAH2YYyakIIqnicJNz5zRQTh+gYqbgNL29
+         pZx1OQYPMYJx27DnV90vQgFF8VKifYFNxB3+yICxvX302b+SiOyJshpxwN73ahQAy3yu
+         7Nrw==
+X-Gm-Message-State: ANoB5pnpS7w469T9CEaUvSi+gsalB/j/CGloDpurbPFNI8FP7g8DeHc/
+        +5m7BFCP66NIRxx06fT9yz9Vms9wvbpRQQ==
+X-Google-Smtp-Source: AA0mqf5OK6x93CXuy3MfVmeRxV/APyqC08Eof6VVqXzHXz44JzeRwY1jefa62wpRCQH0dU2x4RqDtw==
+X-Received: by 2002:a63:5819:0:b0:476:8ce9:be5d with SMTP id m25-20020a635819000000b004768ce9be5dmr5324378pgb.15.1669122743413;
+        Tue, 22 Nov 2022 05:12:23 -0800 (PST)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id w18-20020a170902e89200b00183e2a96414sm11948992plg.121.2022.11.22.05.12.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 05:12:22 -0800 (PST)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yan Vugenfirer <yan@daynix.com>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH v2] igb: Allocate MSI-X vector when testing
+Date:   Tue, 22 Nov 2022 22:11:45 +0900
+Message-Id: <20221122131145.68107-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111154621.15941-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 05:46:19PM +0200, Andy Shevchenko wrote:
-> First of all, _ELEMENT_SIZE() repeats existing sizeof_field() macro.
-> Second, usage of _ARRAY_ELSIZE_LEN() adds unnecessary indirection
-> to the data layout. It's more understandable when the data structure
-> is placed explicitly. That said, get rid of those macros by replacing
-> them with the existing helper and explicit data structure layout.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Without this change, the interrupt test fail with MSI-X environment:
 
-For the series:
+$ sudo ethtool -t enp0s2 offline
+[   43.921783] igb 0000:00:02.0: offline testing starting
+[   44.855824] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Down
+[   44.961249] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
+[   51.272202] igb 0000:00:02.0: testing shared interrupt
+[   56.996975] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
+The test result is FAIL
+The test extra info:
+Register test  (offline)	 0
+Eeprom test    (offline)	 0
+Interrupt test (offline)	 4
+Loopback test  (offline)	 0
+Link test   (on/offline)	 0
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Here, "4" means an expected interrupt was not delivered.
 
-> ---
-> v3: fixed typo in PROPERTY_ENTRY_REF_ARRAY_LEN() impl (LKP)
-> v2: rebased on latest Linux Next, fixed anon union assignment
->  include/linux/property.h | 34 ++++++++++++++--------------------
->  1 file changed, 14 insertions(+), 20 deletions(-)
-> 
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 5d840299146d..0eab13a5c7df 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -12,6 +12,7 @@
->  
->  #include <linux/bits.h>
->  #include <linux/fwnode.h>
-> +#include <linux/stddef.h>
->  #include <linux/types.h>
->  
->  struct device;
-> @@ -311,24 +312,14 @@ struct property_entry {
->   * crafted to avoid gcc-4.4.4's problems with initialization of anon unions
->   * and structs.
->   */
-> -
-> -#define __PROPERTY_ENTRY_ELEMENT_SIZE(_elem_)				\
-> -	sizeof(((struct property_entry *)NULL)->value._elem_[0])
-> -
-> -#define __PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_, _elsize_, _Type_,	\
-> -					  _val_, _len_)			\
-> -(struct property_entry) {						\
-> -	.name = _name_,							\
-> -	.length = (_len_) * (_elsize_),					\
-> -	.type = DEV_PROP_##_Type_,					\
-> -	{ .pointer = _val_ },						\
-> +#define __PROPERTY_ENTRY_ARRAY_LEN(_name_, _elem_, _Type_, _val_, _len_)		\
-> +(struct property_entry) {								\
-> +	.name = _name_,									\
-> +	.length = (_len_) * sizeof_field(struct property_entry, value._elem_[0]),	\
-> +	.type = DEV_PROP_##_Type_,							\
-> +	{ .pointer = _val_ },								\
->  }
->  
-> -#define __PROPERTY_ENTRY_ARRAY_LEN(_name_, _elem_, _Type_, _val_, _len_)\
-> -	__PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_,			\
-> -				__PROPERTY_ENTRY_ELEMENT_SIZE(_elem_),	\
-> -				_Type_, _val_, _len_)
-> -
->  #define PROPERTY_ENTRY_U8_ARRAY_LEN(_name_, _val_, _len_)		\
->  	__PROPERTY_ENTRY_ARRAY_LEN(_name_, u8_data, U8, _val_, _len_)
->  #define PROPERTY_ENTRY_U16_ARRAY_LEN(_name_, _val_, _len_)		\
-> @@ -340,9 +331,12 @@ struct property_entry {
->  #define PROPERTY_ENTRY_STRING_ARRAY_LEN(_name_, _val_, _len_)		\
->  	__PROPERTY_ENTRY_ARRAY_LEN(_name_, str, STRING, _val_, _len_)
->  #define PROPERTY_ENTRY_REF_ARRAY_LEN(_name_, _val_, _len_)		\
-> -	__PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_,			\
-> -				sizeof(struct software_node_ref_args),	\
-> -				REF, _val_, _len_)
-> +(struct property_entry) {						\
-> +	.name = _name_,							\
-> +	.length = (_len_) * sizeof(struct software_node_ref_args),	\
-> +	.type = DEV_PROP_REF,						\
-> +	{ .pointer = _val_ },						\
-> +}
->  
->  #define PROPERTY_ENTRY_U8_ARRAY(_name_, _val_)				\
->  	PROPERTY_ENTRY_U8_ARRAY_LEN(_name_, _val_, ARRAY_SIZE(_val_))
-> @@ -360,7 +354,7 @@ struct property_entry {
->  #define __PROPERTY_ENTRY_ELEMENT(_name_, _elem_, _Type_, _val_)		\
->  (struct property_entry) {						\
->  	.name = _name_,							\
-> -	.length = __PROPERTY_ENTRY_ELEMENT_SIZE(_elem_),		\
-> +	.length = sizeof_field(struct property_entry, value._elem_[0]),	\
->  	.is_inline = true,						\
->  	.type = DEV_PROP_##_Type_,					\
->  	{ .value = { ._elem_[0] = _val_ } },				\
-> -- 
-> 2.35.1
+This change routes interrupts correctly to the first MSI-X vector, and
+fixes the test:
 
+$ sudo ethtool -t enp0s2 offline
+[   42.762985] igb 0000:00:02.0: offline testing starting
+[   50.141967] igb 0000:00:02.0: testing shared interrupt
+[   56.163957] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
+The test result is PASS
+The test extra info:
+Register test  (offline)	 0
+Eeprom test    (offline)	 0
+Interrupt test (offline)	 0
+Loopback test  (offline)	 0
+Link test   (on/offline)	 0
+
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+---
+ drivers/net/ethernet/intel/igb/igb_ethtool.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+index e5f3e7680dc6..ff911af16a4b 100644
+--- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
++++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+@@ -1413,6 +1413,8 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
+ 			*data = 1;
+ 			return -1;
+ 		}
++		wr32(E1000_IVAR_MISC, E1000_IVAR_VALID << 8);
++		wr32(E1000_EIMS, BIT(0));
+ 	} else if (adapter->flags & IGB_FLAG_HAS_MSI) {
+ 		shared_int = false;
+ 		if (request_irq(irq,
 -- 
-heikki
+2.38.1
+
