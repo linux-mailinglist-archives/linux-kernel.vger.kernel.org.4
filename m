@@ -2,73 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64591634048
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 576D0634049
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbiKVPfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:35:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S233886AbiKVPfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbiKVPfQ (ORCPT
+        with ESMTP id S232791AbiKVPfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Nov 2022 10:35:16 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD6F69DC8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:35:15 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id k5so13536886pjo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vLXx8s2tHi2ef+9rJW+smmgw1F1tWCHZvSCKADXYsso=;
-        b=p2US4siEm65dZPd/JKwNmREIsN9DsbcqwPozK3HmHMd2WsKkb48/Zaf6eoUEg8adKH
-         XEQwa5VYlb+H9A/9wHcNmsZ7CZQJHL4FZvu/gnxqSOVImtwgyGdb3LLgE3WWPXywdF1k
-         Eog3XrvFEVAdRbN+qRlo9jG997+KgjsPfZ5K8OI7+LzadVX6yTiS5j1kWwqDOXjuMKpX
-         R6u0gUAXOSgeYNudr/uNqvstghJkBuJdc7QWLzgAfOYN3z4o7Cbv3H9vIcld27+fT7uo
-         n47MrWdctzSVKeidK+U2JBXF8RI34tghCTADcWPbJTQmugOYxwLJbKxxWlNfRbrl5lgM
-         k+AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vLXx8s2tHi2ef+9rJW+smmgw1F1tWCHZvSCKADXYsso=;
-        b=gTxq9vRkHTC0rnt0RkKAJcTGk+KZwKS3/Sf+qWxYlp/1XbwSTNOifRcUmQeU9V1K1P
-         5z9jy9qrQiRaZ4TzVj1ohhpBjBgIBKe/IzvvsbJfnApoSR9XDO/kMqIqLUjAUyuJ91Yw
-         Ozk1BA32TsYST04xcWSrUyarBLXc27MtBG1LoWsIxGaecVzYG6T7LfjhLRx/XrKF0Pof
-         VA2gMgluM9tV+MPOqaw26io5cC2LLS+oMyzufZOueVdPi9epkYgPYb9fracLcC3NNbcJ
-         J8WBNr9ThIB9NzkiU1FwlCUjEbVUMf+ERnWN/o2bspbEa0RM2j3txNyceXpI2XxO77e/
-         d4Vw==
-X-Gm-Message-State: ANoB5pkjytCwnmDLmKNkJn67c24tsougbkvqZ0GTQdV5SnVCxHlgkZPp
-        jvrFCCqO1gVIPiFUOw8DCznn6LPxt8IP5nOtJNM=
-X-Google-Smtp-Source: AA0mqf7qv7d8lL7ZUnWvBgkI7gwAUlW9V7U0Wz5A4s4nNr2ZudezHQ9Lcl3d7HApUgwf8alk3Sepy2mGmcKdAB+x5j0=
-X-Received: by 2002:a17:90a:1f81:b0:218:a672:bca0 with SMTP id
- x1-20020a17090a1f8100b00218a672bca0mr13370271pja.7.1669131315331; Tue, 22 Nov
- 2022 07:35:15 -0800 (PST)
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A8A697ED;
+        Tue, 22 Nov 2022 07:35:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669131315; x=1700667315;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=S4XpqXdqGWk1whCKjTw1Tbea2OWWldUyTEhirb3Ex2I=;
+  b=CDs97KAwtHnZL1ESISARre7fQaI0xQdm9nkVAzIlECDgFYEBaSgUeN2p
+   izbUOnjRcSZyDuVysWVYeWP2L9mANgcFGY3PadxkiC36mv36MnaVNb8LT
+   mD+XEMv/+PvE8Xuj1xydkYehBs9yiuKFzz8a2nd4Q6bBV868+x9om/y8P
+   b7HGxqBRgkDt0Ua94X1dGzhvxo8Qc0thtf89hnXna9EW4oZ0pM5oP3lIL
+   pTVLDpFMWTusJsCwzhPCB8DoxfytQR5L/92kxUtQ5vypY9gBfYaHKAVbZ
+   cYLfehyYLnqPmOWvFvaF96ONPb3ea8KVhpCfzMCJuGs8mc/GyKVH4JTSH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="315662396"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="315662396"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:35:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="747395673"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="747395673"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Nov 2022 07:35:00 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4E543F7; Tue, 22 Nov 2022 17:35:26 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v3 2/4] usb: gadget: hid: Convert to use list_count()
+Date:   Tue, 22 Nov 2022 17:35:14 +0200
+Message-Id: <20221122153516.52577-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221122153516.52577-1-andriy.shevchenko@linux.intel.com>
+References: <20221122153516.52577-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Reply-To: sgtkalamanthey@gmail.com
-Sender: tchipoakakokoubernard@gmail.com
-Received: by 2002:a05:6a10:e90a:b0:35c:d2b:dd3 with HTTP; Tue, 22 Nov 2022
- 07:35:14 -0800 (PST)
-From:   kala manthey <sgtkalamanthey@gmail.com>
-Date:   Tue, 22 Nov 2022 07:35:14 -0800
-X-Google-Sender-Auth: jtni7QyxnbFZkyvEWmW7N7IAnkE
-Message-ID: <CABhZMZ9Js3vnm6ny_Q55DL=2LDQw4VKWVwtPPUGPb6Mjacq09Q@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0LfQtNGA0LDQstC10LksINC/0L7Qu9GD0YfQuCDQu9C4INC40LzQtdC50LvQuNGC0LUg0LzQuD8g
-0LzQvtC70Y8sINC/0YDQvtCy0LXRgNC10YLQtSDQuCDQvNC4INC+0YLQs9C+0LLQvtGA0LXRgtC1
-DQo=
+The list API now provides the list_count() to help with counting
+existing nodes in the list. Utilise it.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3: fixed typo in the commit message (Fabio)
+v2: no change
+ drivers/usb/gadget/legacy/hid.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/gadget/legacy/hid.c b/drivers/usb/gadget/legacy/hid.c
+index 1187ee4f316a..6196c3456e0b 100644
+--- a/drivers/usb/gadget/legacy/hid.c
++++ b/drivers/usb/gadget/legacy/hid.c
+@@ -133,14 +133,11 @@ static struct usb_configuration config_driver = {
+ static int hid_bind(struct usb_composite_dev *cdev)
+ {
+ 	struct usb_gadget *gadget = cdev->gadget;
+-	struct list_head *tmp;
+ 	struct hidg_func_node *n = NULL, *m, *iter_n;
+ 	struct f_hid_opts *hid_opts;
+-	int status, funcs = 0;
+-
+-	list_for_each(tmp, &hidg_func_list)
+-		funcs++;
++	int status, funcs;
+ 
++	funcs = list_count(&hidg_func_list);
+ 	if (!funcs)
+ 		return -ENODEV;
+ 
+-- 
+2.35.1
+
