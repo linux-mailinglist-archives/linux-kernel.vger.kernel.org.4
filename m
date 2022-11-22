@@ -2,119 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBAA63482B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDFB634861
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiKVU2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:28:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S234402AbiKVUjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234546AbiKVU2R (ORCPT
+        with ESMTP id S232748AbiKVUjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:28:17 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAD515805
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:28:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669148896; x=1700684896;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=jiYnvM57QdQau/H42shFzT9M5SGTODsNBjdPxNUJhmI=;
-  b=NKkxiZ5Fji9Mkd6TVOXWtDrKNQtE8xJFI7uZ6aSxJFzMgHhILdr0ssmV
-   r5ep01bB53BDuAEVNBvek40Lsgc/1t53rkw4UyJay949WgIc9kRau3h2/
-   yAPe2fA3H8F1eNzGMTb3v6q0i/PtPLYeqhX3EKw0azbWMt9lakzI2JFP+
-   0za1zHOj8Qb/eQwJJumNo3w7VaqG3koknHzmLvOhp7uvbnY+u/awOkiAW
-   cblmNU1rCO7pJAhb//e/iwl17pqffbyr4gghdJ0mWabcLNr88942yt6kS
-   zOr3zB5oeAV8TCcZwTAW7KnTL/CN3WSYIRoqj0teW/MWe3NfCI+YHJuoI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="293616515"
-X-IronPort-AV: E=Sophos;i="5.96,185,1665471600"; 
-   d="scan'208";a="293616515"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 12:28:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="816228147"
-X-IronPort-AV: E=Sophos;i="5.96,185,1665471600"; 
-   d="scan'208";a="816228147"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga005.jf.intel.com with ESMTP; 22 Nov 2022 12:28:15 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v2 7/7] x86/sched/itmt: Consider the idle state of SMT siblings
-Date:   Tue, 22 Nov 2022 12:35:32 -0800
-Message-Id: <20221122203532.15013-8-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 15:39:00 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6E259864
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:38:59 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id x11-20020a056a000bcb00b0056c6ec11eefso9978145pfu.14
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:38:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lCk7crVpHsoWjxoXg4k9Oe7oFJlX0XDRsq0chOvtH5k=;
+        b=QLu2jTs+mXtjASsq5OzlqjbcvjHSntYcmXW5BeZ8EGTqfTk5VuRmfXcPpBa0L8tqf/
+         bFlbRqiqbUbz/1+E/2bUfGTCJGmdPok9Q0swfO4WvYL6CcTBwSXb6nWrLg8NPH4JZ7DU
+         J7zHtdY8JXGB2nmGkOsailBGhkdUMh2IXXQ94bzwKtwoBvglzRDNL27AHzpxuZVROun7
+         jnaGaCnYOGlJIJXLqCBKXYcQVMZfbTAcy6TeuM6HKS6F4d0BGHbSYgT1wtMpvbnh08vD
+         A50llXpkM7AX0OQmXUjKQyWpBPEoGm7+N/GAuIJLLu0porn9xtSY79p1BXcyvyjW+vAK
+         UdLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lCk7crVpHsoWjxoXg4k9Oe7oFJlX0XDRsq0chOvtH5k=;
+        b=0RflZ/8PYW6R876Gn2XmxjXXLLGTzD+TNM06tHNtF0tJIaBe1DOrw/jEC0euHQfn+g
+         4Wc8ji0+XmnVDqvFcc83wM24y5SysTtM3xLJ75WwljslYsaYujfPHP6Ukzuf0xrm68sR
+         szfl3yj3fjrNOPPA1+dpLsKhC6p4Yo7ZhHiT63t3gJY+LhNFUGWlSy5FSZH8QUrzv/Q5
+         Xjzz0vG7oCdLERiMaXZEa6RDM0yvnkL+w56fHVWIV0S6KhA9nV3vgu+CXsRDiRUWKl1v
+         zXi+sXDPX0KB+iEj7pU+FFxxsEk6neOG7BrwYwZKny6hf0+76bqJxFDQVl12sKK1LwF7
+         TOyg==
+X-Gm-Message-State: ANoB5plYZagbGhtr2WF85Vr9IeRforjiXGRArgBLPfwCF3Avwe+kj1Zf
+        fYIqwHKtZbmJe3DWSmjt1k5eME8wbROnuW5KEQ==
+X-Google-Smtp-Source: AA0mqf7JVRwZjTH2qF1roqexXA9Lp5dWIvMNfnFMyaaNEXsV0n4N6GJN2mLIFPAONnS+SuXgvUK2QAtLed9LHtiwdQ==
+X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2d4:203:b7d0:497d:abe4:3e6f])
+ (user=almasrymina job=sendgmr) by 2002:a63:1801:0:b0:45f:a78b:f905 with SMTP
+ id y1-20020a631801000000b0045fa78bf905mr14719607pgl.296.1669149538565; Tue,
+ 22 Nov 2022 12:38:58 -0800 (PST)
+Date:   Tue, 22 Nov 2022 12:38:45 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221122203850.2765015-1-almasrymina@google.com>
+Subject: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+From:   Mina Almasry <almasrymina@google.com>
+To:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cores with more than one busy SMT sibling need help from fully idle cores,
-even if they have lower priority. Return a priority of 0 if any of the SMT
-siblings of a CPU are busy. This lets lower-priority idle cores pull tasks
-from the CPU.
+Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+reclaim""), the proactive reclaim interface memory.reclaim does both
+reclaim and demotion. This is likely fine for us for latency critical
+jobs where we would want to disable proactive reclaim entirely, and is
+also fine for latency tolerant jobs where we would like to both
+proactively reclaim and demote.
 
-Only do this if the scheduler cares about the idle state of the siblings.
+However, for some latency tiers in the middle we would like to demote but
+not reclaim. This is because reclaim and demotion incur different latency
+costs to the jobs in the cgroup. Demoted memory would still be addressable
+by the userspace at a higher latency, but reclaimed memory would need to
+incur a pagefault.
 
-Cc: Ben Segall <bsegall@google.com>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Tim C. Chen <tim.c.chen@intel.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To address this, I propose having reclaim-only and demotion-only
+mechanisms in the kernel. There are a couple possible
+interfaces to carry this out I considered:
+
+1. Disable demotion in the memory.reclaim interface and add a new
+   demotion interface (memory.demote).
+2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
+   behavior in the kernel like so:
+   	- demote=0 would disable demotion from this call.
+	- demote=1 would allow the kernel to demote if it desires.
+	- demote=2 would only demote if possible but not attempt any
+	  other form of reclaim.
+
+I've implemented option #1 in this RFC to demonstrate a sample and would
+love feedback on the usecase and approach.
+
+Additionally, when triggering proactive demotion it is preferrable to have
+a nodelist argument that allows the userspace to proactively demote from
+specific memory tiers according to its policy. The userspace may want
+to demote from specific nodes that are under pressure, and may want to
+demote from specific tiers that are under pressure. An example of this
+use case would be in a 3 memory tier system, the userspace may want to
+demote from the second tier without disturbing the hot memory in the top
+tier.
+
+The current RFC series is missing updates to docs and selftests, but if
+the general approach and usecase is acceptable I plan to add these with
+a PATCH V1 review.
+
+First patch in this series disables demotion from the proactive reclaim
+interface memory.reclaim. Follow up patches in the series implement the
+memory.demote interface and its nodeslist arg.
+
+Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
-Changes since v1:
- * Introduced this patch.
----
- arch/x86/kernel/itmt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/linux/swap.h |  6 ++++++
+ mm/memcontrol.c      | 16 +++++++++-------
+ mm/vmscan.c          | 21 +++++++++++++++++----
+ 3 files changed, 32 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
-index 2be49ce4f94a..cb22944969a1 100644
---- a/arch/x86/kernel/itmt.c
-+++ b/arch/x86/kernel/itmt.c
-@@ -169,7 +169,10 @@ void sched_clear_itmt_support(void)
- 
- int arch_asym_cpu_priority(int cpu, bool check_smt)
- {
--	return per_cpu(sched_core_priority, cpu);
-+	if (!check_smt || sched_smt_siblings_idle(cpu))
-+		return per_cpu(sched_core_priority, cpu);
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index fec6647a289a..f768171c2dc2 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -416,6 +416,12 @@ extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
+
+ #define MEMCG_RECLAIM_MAY_SWAP (1 << 1)
+ #define MEMCG_RECLAIM_PROACTIVE (1 << 2)
++#define MEMCG_RECLAIM_MAY_DEMOTE (1 << 3)
++#define MEMCG_RECLAIM_ONLY_DEMOTE (1 << 4)
++#define MEMCG_RECLAIM_DEFAULT \
++	(MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_MAY_DEMOTE)
++#define MEMCG_RECLAIM_NO_SWAP (MEMCG_RECLAIM_DEFAULT & ~MEMCG_RECLAIM_MAY_SWAP)
 +
-+	return 0;
- }
- 
- /**
--- 
-2.25.1
+ extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 						  unsigned long nr_pages,
+ 						  gfp_t gfp_mask,
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index f412c903ee4f..fd4ff1c865a2 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2392,7 +2392,7 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
+ 		psi_memstall_enter(&pflags);
+ 		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
+ 							gfp_mask,
+-							MEMCG_RECLAIM_MAY_SWAP);
++							MEMCG_RECLAIM_DEFAULT);
+ 		psi_memstall_leave(&pflags);
+ 	} while ((memcg = parent_mem_cgroup(memcg)) &&
+ 		 !mem_cgroup_is_root(memcg));
+@@ -2637,7 +2637,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	struct page_counter *counter;
+ 	unsigned long nr_reclaimed;
+ 	bool passed_oom = false;
+-	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
++	unsigned int reclaim_options = MEMCG_RECLAIM_DEFAULT;
+ 	bool drained = false;
+ 	bool raised_max_event = false;
+ 	unsigned long pflags;
+@@ -3503,7 +3503,8 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
+ 		}
 
+ 		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
+-					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP)) {
++					memsw ? MEMCG_RECLAIM_NO_SWAP :
++						MEMCG_RECLAIM_DEFAULT)) {
+ 			ret = -EBUSY;
+ 			break;
+ 		}
+@@ -3614,7 +3615,7 @@ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
+ 			return -EINTR;
+
+ 		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
+-						  MEMCG_RECLAIM_MAY_SWAP))
++						  MEMCG_RECLAIM_DEFAULT))
+ 			nr_retries--;
+ 	}
+
+@@ -6407,7 +6408,7 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
+ 		}
+
+ 		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
+-					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP);
++					GFP_KERNEL, MEMCG_RECLAIM_DEFAULT);
+
+ 		if (!reclaimed && !nr_retries--)
+ 			break;
+@@ -6456,7 +6457,7 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
+
+ 		if (nr_reclaims) {
+ 			if (!try_to_free_mem_cgroup_pages(memcg, nr_pages - max,
+-					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP))
++					GFP_KERNEL, MEMCG_RECLAIM_DEFAULT))
+ 				nr_reclaims--;
+ 			continue;
+ 		}
+@@ -6593,7 +6594,8 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 	if (err)
+ 		return err;
+
+-	reclaim_options	= MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE;
++	reclaim_options = MEMCG_RECLAIM_DEFAULT | MEMCG_RECLAIM_PROACTIVE;
++	reclaim_options &= ~MEMCG_RECLAIM_MAY_DEMOTE;
+ 	while (nr_reclaimed < nr_to_reclaim) {
+ 		unsigned long reclaimed;
+
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index d8751e403599..dea05ad8ece5 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -132,8 +132,14 @@ struct scan_control {
+ 	/* The file folios on the current node are dangerously low */
+ 	unsigned int file_is_tiny:1;
+
+-	/* Always discard instead of demoting to lower tier memory */
+-	unsigned int no_demotion:1;
++	/*
++	 * Configure discard instead of demoting to lower tier memory:
++	 *
++	 * demotion = 0 -> no demotion
++	 * demotion = 1 -> may demote
++	 * demotion = 2 -> only demote
++	 */
++	unsigned int demotion;
+
+ #ifdef CONFIG_LRU_GEN
+ 	/* help kswapd make better choices among multiple memcgs */
+@@ -542,7 +548,7 @@ static bool can_demote(int nid, struct scan_control *sc)
+ {
+ 	if (!numa_demotion_enabled)
+ 		return false;
+-	if (sc && sc->no_demotion)
++	if (sc && !sc->demotion)
+ 		return false;
+ 	if (next_demotion_node(nid) == NUMA_NO_NODE)
+ 		return false;
+@@ -2674,7 +2680,7 @@ static unsigned int reclaim_folio_list(struct list_head *folio_list,
+ 		.may_writepage = 1,
+ 		.may_unmap = 1,
+ 		.may_swap = 1,
+-		.no_demotion = 1,
++		.demotion = 0,
+ 	};
+
+ 	nr_reclaimed = shrink_folio_list(folio_list, pgdat, &sc, &dummy_stat, false);
+@@ -6726,6 +6732,13 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 	 */
+ 	struct zonelist *zonelist = node_zonelist(numa_node_id(), sc.gfp_mask);
+
++	if (reclaim_options & MEMCG_RECLAIM_ONLY_DEMOTE)
++		sc.demotion = 2;
++	else if (reclaim_options & MEMCG_RECLAIM_MAY_DEMOTE)
++		sc.demotion = 1;
++	else
++		sc.demotion = 0;
++
+ 	set_task_reclaim_state(current, &sc.reclaim_state);
+ 	trace_mm_vmscan_memcg_reclaim_begin(0, sc.gfp_mask);
+ 	noreclaim_flag = memalloc_noreclaim_save();
+--
+2.38.1.584.g0f3c55d4c2-goog
