@@ -2,94 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4687B633F3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79CB9633F53
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbiKVOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
+        id S232771AbiKVOu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbiKVOtb (ORCPT
+        with ESMTP id S232410AbiKVOuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:49:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A89966C83;
-        Tue, 22 Nov 2022 06:49:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E32DB81B9C;
-        Tue, 22 Nov 2022 14:49:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B614C433C1;
-        Tue, 22 Nov 2022 14:49:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669128567;
-        bh=a3OVo2P+U554M6HgyX1t5OpywxtfTWA1mgEyuhYxNY0=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=F0QS8ohhUzRk3xijpbtDWtMrlkM1QsQADLZ+Bd3g9G5kMd+pAtLQbdcFlSZ1HNNvr
-         X2+ylyneTh4cF/JpVZxjgmnCnF275IoQQdlujbX1fSDRY81iAe0jxGwW0hc+U62lDa
-         Qq9ITu2dtdj5lOxn4u9vVA/mrYOZzTgUvFe+QPDMx6/QiN77Hs/uRpfI/8rseJV2U9
-         nkwSNhZVSPx7Yntc1m+Q1g1oOlR4b4M9RXvMG0p10HycyqFWeTAqmraNwUSD1Bhk3s
-         y6EEMvCw6PX1YuP2d8RP/NDo8HXescOYAHWAsrqXDfXbqP8XGTPdHpxYn3kPgBpgl5
-         Y0q29MiNrimcg==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-omap@vger.kernel.org, tony@atomide.com, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, Nicolae_Rosia@mentor.com,
-        Andreas Kemnade <andreas@kemnade.info>
-In-Reply-To: <20221120221208.3093727-1-andreas@kemnade.info>
-References: <20221120221208.3093727-1-andreas@kemnade.info>
-Subject: Re: [PATCH 0/2] regulator: twl6030: some TWL6032 fixes
-Message-Id: <166912856621.213500.2092954918480556621.b4-ty@kernel.org>
-Date:   Tue, 22 Nov 2022 14:49:26 +0000
+        Tue, 22 Nov 2022 09:50:54 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5752B663D2;
+        Tue, 22 Nov 2022 06:50:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=JTXHliGkwFbAvvGXxfkFbQkqDVWqZZH0nH2iHGLdV0I=; b=EkR7AvwKw7/77Gyqk9CslT4+jV
+        pB50ssBJUZg5FnA9n3hQwmtXjFZ19xqpQ3pjIJkuQ4vEV5geB15AssZ4e3u/DCLkSmExSPERidtVt
+        omfBId4VblVuw/07rEPHBiwutZuGiTLkfVI272K4yikc3bglh16cqZtUqobSdWPQF40Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oxUai-00383o-NA; Tue, 22 Nov 2022 15:49:40 +0100
+Date:   Tue, 22 Nov 2022 15:49:40 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "Keller, Jacob E" <jacob.e.keller@intel.com>,
+        Tom Rix <trix@redhat.com>, Marco Bonelli <marco@mebeim.net>,
+        Edward Cree <ecree@solarflare.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH v3] ethtool: avoiding integer overflow in
+ ethtool_phys_id()
+Message-ID: <Y3zhhLE8G2zspVvR@lunn.ch>
+References: <20221122122901.22294-1-korotkov.maxim.s@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221122122901.22294-1-korotkov.maxim.s@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 20 Nov 2022 23:12:06 +0100, Andreas Kemnade wrote:
-> There are some problems regarding TWL6032 regulators, including
-> inconsistent states. They come to light during porting support
-> for the Epson Moverio BT-200 to newer kernels.
-> Information sources are the 3.0 vendor kernel
-> (http://epsonservice.goepson.com/downloads/VI-APS/BT200_kernel.tgz)
-> and git blame archeology.
+On Tue, Nov 22, 2022 at 03:29:01PM +0300, Maxim Korotkov wrote:
+> The value of an arithmetic expression "n * id.data" is subject
+> to possible overflow due to a failure to cast operands to a larger data
+> type before performing arithmetic. Used macro for multiplication instead
+> operator for avoiding overflow.
 > 
-> [...]
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
 
-Applied to
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[1/2] regulator: twl6030: re-add TWL6032_SUBCLASS
-      commit: 3d6c982b26db94cc21bc9f7784f63e8286b7be62
-[2/2] regulator: twl6030: fix get status of twl6032 regulators
-      commit: 31a6297b89aabc81b274c093a308a7f5b55081a7
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+    Andrew
