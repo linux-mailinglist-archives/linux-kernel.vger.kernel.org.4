@@ -2,291 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4696D633B8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7614C633B8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbiKVLil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S232316AbiKVLi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbiKVLiP (ORCPT
+        with ESMTP id S233085AbiKVLi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:38:15 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710FB606BA
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:33:15 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id i12so20397454wrb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:33:14 -0800 (PST)
+        Tue, 22 Nov 2022 06:38:26 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EC77645
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:33:46 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id c1so23138353lfi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:33:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sIMthWRv9QH4f8IhwYnbK6rK18ReVZ6lQR3GH4fCpEY=;
-        b=hharGGQN2xOe0HApjcil1RiFHn26qSrEDJyXQg40tzFVPEtUJ0de6zzPwjALG9rZ4z
-         BqeUfV97lPBbROssAOWgqiE4oNZsfuP+Aro9ZVZTLrBv3V2n81Kye9TW4R4PrC3EOzuu
-         1iWVYbJCMzeSVNKWL3vqWnrKIDUeF+3IDSYtUiTJ0FvSO4Xc9AKZlLGgeMx8zQ8TvrBC
-         tBmtj5r6zMVQ9WZqcOssVCFvtNsomaxEL0EUWdGyMkhweI5WRvjKNG97hqtgDX6fxWZA
-         EO4oY1826fY7K62Q/GJWj5KR0xaSMzyX0FylWSIWlSeiBiIN4Rv29TpVbe5g76+1LAvB
-         M07w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8AecBzrto7iiXG/YkhUDUlAYZpkE3vdWXEj9FqL/Bks=;
+        b=kWI4uiyGXOJoWem+WZR1cLHg4R0E/uZdXekLM1H2LYco+HF5lZa4appczftYoI+ed8
+         KGGfp8Py8TZkC5UUmo4MxHZHRYpAw22AoEKrgIim0+kkeYUflgPxZ4Hx8bQ7+YpVLsl/
+         tzSUgt+uX4DiHJXgeBxK49NEL+zLRaQOsDobnHvIbi0sU2cZB+if5JlM3jNiGaOs+lDN
+         Ca+BJDjtkO3bm/UNRcGm/zW3y2uBuVFD1AQIst96/16OuuFYFDjhM4kcEFmeRs8wYBm+
+         /2Vl458kyM9oIE7iMAWSBNoqSGyhVwkIhfLL1OmsNPIIALKf6gP+LOYM3uHLOoy+Z7SD
+         PXCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sIMthWRv9QH4f8IhwYnbK6rK18ReVZ6lQR3GH4fCpEY=;
-        b=4Np0/R1CQA/7N7Gsm1NZepVeswNd5eqc3vqizYPDPzMb7WtmG5lXzLB87oLyT/rpc8
-         LkIxivpZeOeeHu7vugXGNqPflBvz+i23qQDk/ep5YwjU7+KiKdbtvmfIZ5zfV9kWEqjk
-         gKo94gSH80aqZz4CiJV1K/rCvvjqfRi6MCOpxaoSA1FHibgRlXG0RHTjZLMjXbE4zpSW
-         hGw3BndvzsFFhi4/NO75UOfp1kzC28dQakFYbPbnIdsbph40p0WoS/S/HbsQIggdIZ7j
-         bbLrJJK55qOx+LQAD0QVBy22WWgUjO52wXvUkAeEScjW45fWp6mqsIasSJP+LkbskGV3
-         AYRw==
-X-Gm-Message-State: ANoB5pk+7ANcBTRRXKE6uXVrjcM3BwcKdiFQIC+UChJDKzTb/MJHoElN
-        yY4k6ks0DD02XAjedg2/VUvxcw==
-X-Google-Smtp-Source: AA0mqf647JGRBnHPLuoHfAJf2YjY8fCLsFnDMSo3BM+PUmTG+0E4dGr042libqGPqKA/J/axO9zL5g==
-X-Received: by 2002:a05:6000:107:b0:22e:3460:5e28 with SMTP id o7-20020a056000010700b0022e34605e28mr2247083wrx.211.1669116793581;
-        Tue, 22 Nov 2022 03:33:13 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id x11-20020a5d60cb000000b00241bc4880fesm12914086wrt.111.2022.11.22.03.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 03:33:13 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     broonie@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] hwmon: (pmbus/core): Implement IRQ support
-Date:   Tue, 22 Nov 2022 12:32:57 +0100
-Message-Id: <20221122113257.3213700-3-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221122113257.3213700-1-Naresh.Solanki@9elements.com>
-References: <20221122113257.3213700-1-Naresh.Solanki@9elements.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8AecBzrto7iiXG/YkhUDUlAYZpkE3vdWXEj9FqL/Bks=;
+        b=YfzG99ghK2+8zxhLx467ngpJ7e9bDnrmwLYCl/CIQ4Oo8RYBoF06FvFMQfI2w/lRIU
+         aRZZRTYvGASQjnARZ2TQodn79PUwnJorPW3GYsly/oz5YlH30xzq3SQSFwocCqKK1Hmk
+         L+h1fmSeQnwHURoYb6+WkIGMw/XsdpoLXX28HM+7iuEYpFuGEy+1B/jKkYVlmOgE/ECQ
+         xcLpDjGYDQXwUQpFyKgvwi/+cXMM+zIZMYGlmWa8DZaKKLCjkKkFjDP+UPbuPhpwwBv5
+         q7z2K5n13ZwWNLNrf5h080X+iuE5zSg/GRnze9nEez2UMqFJEhTcovoqtw9vlX8qvpZn
+         CHGg==
+X-Gm-Message-State: ANoB5plJIcg7jMQaof1J3ixwQLP3SBTTHdaLnED3BIahfhcCIYj2sHt8
+        fAnZjmQ7E82njfZ3JVqBp8OccQ==
+X-Google-Smtp-Source: AA0mqf5bC3f0DyiKAPcMWf4Dku34Z4NS2BSMjJSPFXvCykSvblKIrgtSFPaZSw7abqjeQ25GMN0JnQ==
+X-Received: by 2002:a05:6512:1505:b0:4af:b5d0:695e with SMTP id bq5-20020a056512150500b004afb5d0695emr7928714lfb.6.1669116824639;
+        Tue, 22 Nov 2022 03:33:44 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u4-20020a2eb804000000b00279742d2b91sm15500ljo.36.2022.11.22.03.33.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 03:33:44 -0800 (PST)
+Message-ID: <3a2c702b-afc3-0973-b302-f2c652790514@linaro.org>
+Date:   Tue, 22 Nov 2022 12:33:42 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 1/4] dt-bindings: interrupt-controller: mediatek,cirq:
+ Migrate to dt schema
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, tglx@linutronix.de
+Cc:     maz@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        youlin.pei@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221118100639.33704-1-angelogioacchino.delregno@collabora.com>
+ <20221118100639.33704-2-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118100639.33704-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On 18/11/2022 11:06, AngeloGioacchino Del Regno wrote:
+> Migrate mediatek,cirq.txt to dt schema as mediatek,mtk-cirq.yaml.
+> While at it, I've also fixed some typos that were present in the
+> original txt binding, as it was suggesting that the compatible
+> string would have "mediatek,cirq" as compatible but, in reality,
+> that's supposed to be "mediatek,mtk-cirq" instead.
+> 
+> Little rewording on property descriptions also happened for
+> them to be more concise.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../interrupt-controller/mediatek,cirq.txt    | 33 ---------
+>  .../mediatek,mtk-cirq.yaml                    | 70 +++++++++++++++++++
+>  2 files changed, 70 insertions(+), 33 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,cirq.txt
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,mtk-cirq.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/mediatek,cirq.txt b/Documentation/devicetree/bindings/interrupt-controller/mediatek,cirq.txt
+> deleted file mode 100644
+> index 5865f4f2c69d..000000000000
+> --- a/Documentation/devicetree/bindings/interrupt-controller/mediatek,cirq.txt
+> +++ /dev/null
+> @@ -1,33 +0,0 @@
+> -* Mediatek 27xx cirq
+> -
+> -In Mediatek SOCs, the CIRQ is a low power interrupt controller designed to
+> -work outside MCUSYS which comprises with Cortex-Ax cores,CCI and GIC.
+> -The external interrupts (outside MCUSYS) will feed through CIRQ and connect
+> -to GIC in MCUSYS. When CIRQ is enabled, it will record the edge-sensitive
+> -interrupts and generate a pulse signal to parent interrupt controller when
+> -flush command is executed. With CIRQ, MCUSYS can be completely turned off
+> -to improve the system power consumption without losing interrupts.
+> -
+> -Required properties:
+> -- compatible: should be one of
+> -  - "mediatek,mt2701-cirq" for mt2701 CIRQ
+> -  - "mediatek,mt8135-cirq" for mt8135 CIRQ
+> -  - "mediatek,mt8173-cirq" for mt8173 CIRQ
+> -  and "mediatek,cirq" as a fallback.
+> -- interrupt-controller : Identifies the node as an interrupt controller.
+> -- #interrupt-cells : Use the same format as specified by GIC in arm,gic.txt.
+> -- reg: Physical base address of the cirq registers and length of memory
+> -  mapped region.
+> -- mediatek,ext-irq-range: Identifies external irq number range in different
+> -  SOCs.
+> -
+> -Example:
+> -	cirq: interrupt-controller@10204000 {
+> -		compatible = "mediatek,mt2701-cirq",
+> -			     "mediatek,mtk-cirq";
+> -		interrupt-controller;
+> -		#interrupt-cells = <3>;
+> -		interrupt-parent = <&sysirq>;
+> -		reg = <0 0x10204000 0 0x400>;
+> -		mediatek,ext-irq-start = <32 200>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/mediatek,mtk-cirq.yaml b/Documentation/devicetree/bindings/interrupt-controller/mediatek,mtk-cirq.yaml
+> new file mode 100644
+> index 000000000000..21e709169907
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/mediatek,mtk-cirq.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/mediatek,mtk-cirq.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek System Interrupt Controller
+> +
+> +maintainers:
+> +  - Youlin Pei <youlin.pei@mediatek.com>
+> +
+> +description:
+> +  In MediaTek SoCs, the CIRQ is a low power interrupt controller designed to
+> +  work outside of MCUSYS which comprises with Cortex-Ax cores, CCI and GIC.
+> +  The external interrupts (outside MCUSYS) will feed through CIRQ and connect
+> +  to GIC in MCUSYS. When CIRQ is enabled, it will record the edge-sensitive
+> +  interrupts and generate a pulse signal to parent interrupt controller when
+> +  flush command is executed. With CIRQ, MCUSYS can be completely turned off
+> +  to improve the system power consumption without losing interrupts.
+> +
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - mediatek,mt2701-cirq
+> +          - mediatek,mt8135-cirq
+> +          - mediatek,mt8173-cirq
+> +      - const: mediatek,mtk-cirq
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: Address and size of the CIRQ registers
 
-Implement IRQ support to monitor PMBUS regulator events.
+Drop description, it's obvious.
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus.h      |   2 +-
- drivers/hwmon/pmbus/pmbus_core.c | 155 ++++++++++++++++++++++++++++---
- 2 files changed, 144 insertions(+), 13 deletions(-)
+> +
+> +  '#interrupt-cells':
+> +    const: 3
+> +
+> +  interrupt-controller: true
+> +
+> +  mediatek,ext-irq-range:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    maxItems: 1
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index 10fb17879f8e..6b2e6cf93b19 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -26,7 +26,7 @@ enum pmbus_regs {
- 
- 	PMBUS_CAPABILITY		= 0x19,
- 	PMBUS_QUERY			= 0x1A,
--
-+	PMBUS_SMBALERT_MASK		= 0x1B,
- 	PMBUS_VOUT_MODE			= 0x20,
- 	PMBUS_VOUT_COMMAND		= 0x21,
- 	PMBUS_VOUT_TRIM			= 0x22,
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 7d7d10039987..4234297813bb 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3033,13 +3033,110 @@ const struct regulator_ops pmbus_regulator_ops = {
- };
- EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
- 
--static int pmbus_regulator_register(struct pmbus_data *data)
-+static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
- {
--	struct device *dev = data->dev;
-+	return pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
-+}
-+
-+static int pmbus_irq_subhandler(struct i2c_client *client, struct regulator_err_state *stat,
-+			       unsigned long *dev_mask)
-+{
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+	u8 page = rdev_get_id(stat->rdev);
-+	const struct pmbus_regulator_status_category *cat;
-+	const struct pmbus_regulator_status_assoc *bit;
-+	int status, i;
-+	int func = data->info->func[page];
-+
-+
-+	stat->notifs = 0;
-+	stat->errors = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
-+		cat = &pmbus_regulator_flag_map[i];
-+		if (!(func & cat->func))
-+			continue;
-+
-+		status = _pmbus_read_byte_data(client, page, cat->reg);
-+		if (status < 0) {
-+			mutex_unlock(&data->update_lock);
-+			return status;
-+		}
-+
-+		for (bit = cat->bits; bit->pflag; bit++) {
-+			if (status & bit->pflag) {
-+				stat->notifs |= bit->eflags;
-+				stat->errors |= bit->rflag;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int pmbus_fault_handler(int irq, struct regulator_irq_data *rid, unsigned long *dev_mask)
-+{
-+	struct regulator_err_state *stat;
-+	struct pmbus_data *data;
-+	struct device *dev;
-+	struct i2c_client *client;
-+	int status;
-+	u8 page;
-+	int i;
-+	int ret = REGULATOR_ERROR_CLEARED;
-+
-+	*dev_mask = 0;
-+	rid->opaque = 0;
-+
-+	for (i = 0; i < rid->num_states; i++) {
-+		stat  = &rid->states[i];
-+		dev = rdev_get_dev(stat->rdev);
-+		client = to_i2c_client(dev->parent);
-+		data = i2c_get_clientdata(client);
-+		page = rdev_get_id(stat->rdev);
-+
-+		mutex_lock(&data->update_lock);
-+		status = pmbus_irq_subhandler(client, stat, dev_mask);
-+		if (status < 0) {
-+			ret = REGULATOR_FAILED_RETRY;
-+			goto unlock;
-+		}
-+
-+		status = pmbus_read_status_byte(client, page);
-+		if (status < 0) {
-+			ret = REGULATOR_FAILED_RETRY;
-+			goto unlock;
-+		}
-+
-+		if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY))
-+			pmbus_clear_fault_page(client, page);
-+
-+	}
-+unlock:
-+	mutex_unlock(&data->update_lock);
-+	return ret;
-+}
-+
-+static int pmbus_regulator_register(struct i2c_client *client, struct pmbus_data *data)
-+{
-+	struct device *dev = &client->dev;
- 	const struct pmbus_driver_info *info = data->info;
- 	const struct pmbus_platform_data *pdata = dev_get_platdata(dev);
--	struct regulator_dev *rdev;
--	int i;
-+	const struct pmbus_regulator_status_category *cat;
-+	const struct pmbus_regulator_status_assoc *bit;
-+	int func;
-+	struct regulator_dev **rdevs;
-+	struct regulator_irq_desc pmbus_notif = {
-+		.name = "pmbus-irq",
-+		.map_event = pmbus_fault_handler,
-+	};
-+	void *irq_helper;
-+	int i, j, err, errs;
-+	u8 mask;
-+
-+	rdevs = devm_kzalloc(dev, sizeof(*rdevs) * info->num_regulators, GFP_KERNEL);
-+	if (!rdevs)
-+		return -ENOMEM;
- 
- 	for (i = 0; i < info->num_regulators; i++) {
- 		struct regulator_config config = { };
-@@ -3050,18 +3147,52 @@ static int pmbus_regulator_register(struct pmbus_data *data)
- 		if (pdata && pdata->reg_init_data)
- 			config.init_data = &pdata->reg_init_data[i];
- 
--		rdev = devm_regulator_register(dev, &info->reg_desc[i],
--					       &config);
--		if (IS_ERR(rdev))
--			return dev_err_probe(dev, PTR_ERR(rdev),
--					     "Failed to register %s regulator\n",
--					     info->reg_desc[i].name);
-+		rdevs[i] = devm_regulator_register(dev, &info->reg_desc[i], &config);
-+		if (IS_ERR(rdevs[i])) {
-+			dev_err(dev, "Failed to register %s regulator\n",
-+				info->reg_desc[i].name);
-+			return PTR_ERR(rdevs[i]);
-+		}
- 	}
- 
-+	if (client->irq > 0) {
-+		pmbus_notif.data = rdevs;
-+		errs = 0;
-+		for (i = 0; i < data->info->pages; i++) {
-+			func = data->info->func[i];
-+
-+			for (j = 0; j < ARRAY_SIZE(pmbus_regulator_flag_map); j++) {
-+				cat = &pmbus_regulator_flag_map[i];
-+				if (!(func & cat->func))
-+					continue;
-+				mask = 0;
-+				for (bit = cat->bits; bit->pflag; bit++) {
-+					errs |= bit->rflag;
-+					mask |= bit->pflag;
-+				}
-+				err = pmbus_write_smbalert_mask(client, i, cat->reg, ~mask);
-+				if (err)
-+					dev_err(dev, "Failed to set smbalert for reg 0x%02x\n",
-+						cat->reg);
-+			}
-+
-+		}
-+
-+		/* Register notifiers - can fail if IRQ is not given */
-+		irq_helper = devm_regulator_irq_helper(dev, &pmbus_notif, client->irq, 0, errs,
-+						      NULL, &rdevs[0], info->num_regulators);
-+		if (IS_ERR(irq_helper)) {
-+			if (PTR_ERR(irq_helper) == -EPROBE_DEFER) {
-+				return -EPROBE_DEFER;
-+			}
-+			dev_warn(dev, "IRQ disabled %pe\n", irq_helper);
-+		}
-+	}
-+	
- 	return 0;
- }
- #else
--static int pmbus_regulator_register(struct pmbus_data *data)
-+static int pmbus_regulator_register(struct i2c_client *client, struct pmbus_data *data)
- {
- 	return 0;
- }
-@@ -3425,7 +3556,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
- 		return PTR_ERR(data->hwmon_dev);
- 	}
- 
--	ret = pmbus_regulator_register(data);
-+	ret = pmbus_regulator_register(client, data);
- 	if (ret)
- 		return ret;
- 
--- 
-2.37.3
+This points it's array..
+
+> +    items:
+> +      items:
+
+But this it's matrix.
+
+> +        - description: First CIRQ interrupt
+> +        - description: Last CIRQ interrupt
+
+I guess it you should be just array with only one "items:" keyword.
+
+> +    description:
+> +      Identifies the range of external interrupts in different SoCs
+> +
+
+Best regards,
+Krzysztof
 
