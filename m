@@ -2,125 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCDB6349C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447506349CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbiKVWGS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Nov 2022 17:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
+        id S234971AbiKVWH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 17:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234875AbiKVWGM (ORCPT
+        with ESMTP id S234400AbiKVWHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 17:06:12 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388C56DCC5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:06:08 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-254-sgcAsR24PNu03owwWGE96w-1; Tue, 22 Nov 2022 22:06:05 +0000
-X-MC-Unique: sgcAsR24PNu03owwWGE96w-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
- 2022 22:06:04 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Tue, 22 Nov 2022 22:06:04 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dan Williams' <dan.j.williams@intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-CC:     "'ira.weiny@intel.com'" <ira.weiny@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Gregory Price <gregory.price@memverge.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: RE: [PATCH V2] PCI/DOE: Detect on stack work items automatically
-Thread-Topic: [PATCH V2] PCI/DOE: Detect on stack work items automatically
-Thread-Index: AQHY+uF8IwLsQKEiakO+LlTXtrnK365EZJiQgAcGD4iAABtQEA==
-Date:   Tue, 22 Nov 2022 22:06:04 +0000
-Message-ID: <f2beb27f87d44ae180d1fe9f040442a0@AcuMS.aculab.com>
-References: <20221118000524.1477383-1-ira.weiny@intel.com>
- <e59f83f3ca4149d098efe43b48fecd1b@AcuMS.aculab.com>
- <20221122171309.GA11310@wunner.de> <20221122171406.GC11310@wunner.de>
- <637d2f98db8b_12cdff29464@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <637d2f98db8b_12cdff29464@dwillia2-xfh.jf.intel.com.notmuch>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 22 Nov 2022 17:07:34 -0500
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F409DAB;
+        Tue, 22 Nov 2022 14:07:30 -0800 (PST)
+Received: by mail-io1-f47.google.com with SMTP id n188so11980416iof.8;
+        Tue, 22 Nov 2022 14:07:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+9Nr6gPVOX/6LCyJBvLH9UJlV747BhwLKeGilJxI7hM=;
+        b=N4NJD2T4VN4ZSmNpR1G8QAQEE1Rp4cVHG85U6wUCFzH06m/MUvLT9mwWyQxqrBnF3C
+         zfRRtLaAxJSawXc2XMIRyu8QmqS2GOWzTEi5putq5jE1YQZWXR+yY1GseUUWT7ZfvKZB
+         aM2RXRiMXqoXgcEhwY/yy0+8g8NdmLDFzzbLKBt5xnvnYaOTPZWJIs0xLdAssmZwgAUA
+         8RgQl15f7tmZb0ZE6puRl/RxczsSj2xEHuqJAqtXeazWo07zc1CImCSdXTMshh+YAOko
+         GElzNjiXBSyPXZSh/B+IfXqtWCScp/5RRYWnsZRbWeX8JMHatVuwS4tG5Js8Mft4npFm
+         ggrQ==
+X-Gm-Message-State: ANoB5pnBrtdtiCZVbq/NCEQOdhn/CYQti1hUZGaJ+TkRN4lq+vlZAGu5
+        dZze1bzPagoExi+ISa7z0A==
+X-Google-Smtp-Source: AA0mqf4V6ppRkdKRqtlLw69vA65riP97JWiM8WcMjwXpElslevptzfWytkuNVAbmbvpQ/TcmgGNdEw==
+X-Received: by 2002:a02:6662:0:b0:363:69a0:837f with SMTP id l34-20020a026662000000b0036369a0837fmr4983635jaf.57.1669154849246;
+        Tue, 22 Nov 2022 14:07:29 -0800 (PST)
+Received: from robh_at_kernel.org ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id w11-20020a056638024b00b0037609ad8485sm5775812jaq.69.2022.11.22.14.07.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 14:07:28 -0800 (PST)
+Received: (nullmailer pid 660771 invoked by uid 1000);
+        Tue, 22 Nov 2022 22:07:30 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: apple: Add t600x L1/L2 cache properties and nodes
+Date:   Tue, 22 Nov 2022 16:06:20 -0600
+Message-Id: <20221122220619.659174-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams
-> Sent: 22 November 2022 20:23
-...
-> > > > > Lukas pointed out that object_is_on_stack() is available to detect this
-> > > > > automatically.
-> > > > >
-> > > > > Use object_is_on_stack() to determine the correct init work function to
-> > > > > call.
-> > > >
-> > > > This is all a bit strange.
-> > > > The 'onstack' flag is needed for the diagnostic check:
-> > > > 	is_on_stack = object_is_on_stack(addr);
-> > > > 	if (is_on_stack == onstack)
-> > > > 		return;
-> > > > 	pr_warn(...);
-> > > > 	WARN_ON(1);
-> > > >
-> > > > So setting the flag to the location of the buffer just subverts the check.
-> > > > It that is sane there ought to be a proper way to do it.
-> > >
-> > > If object_is_on_stack() is sufficient to check whether a struct
-> > > is on the stack or not, why doesn't __init_work() use it to
-> > > auto-detect whether to call debug_object_init_on_stack() or
-> > > debug_object_init()?
-> > >
-> > > Forcing developers to use a specific initializer for something
-> > > that can be auto-detected is akin to treating them like kids
-> > > and telling them "You didn't say the magic word."
-> > >
-> > > What's the point?
-> 
-> I had this initial reaction as well, but INIT_WORK_ONSTACK() documents
-> an important detail of the object's lifetime. Here are 2 examples of
-> functions that would become trickier to read if the kernel did a
-> global s/INIT_WORK_ONSTACK()/INIT_WORK()/
-> 
->     synchronize_rcu_expedited_queue_work()
->     insert_wq_barrier()
-> 
-> ...where those take arguments that are known to come from the stack and
-> be used in async context.
+The t600x CPU nodes are missing the cache hierarchy information. The
+cache hierarchy on Arm can not be detected and needs to be described in
+DT. The OS scheduler can make use of this information for scheduling
+decisions.
 
-I suspect the check was added in response to some code that added
-on on-stack item and then slept after returning from that function.
+The cache size information is based on various articles about the
+processors. There's also an L3 system level cache (SLC). It's not
+described here because SLCs typically have some MMIO interface which
+would need to be described.
 
-One option would be to change the diagnostic check to:
-	is_on_stack != !object_is_on_stack(addr)
-and then pass in 2 so the test always succeeds.
-But I suspect that won't be liked.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Based on apple dts changes in linux-next.
 
-	David
+This fixes the warning: Unable to detect cache hierarchy for CPU %d
+---
+ arch/arm64/boot/dts/apple/t6002.dtsi        | 51 +++++++++++++++++++++
+ arch/arm64/boot/dts/apple/t600x-common.dtsi | 51 +++++++++++++++++++++
+ 2 files changed, 102 insertions(+)
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/arch/arm64/boot/dts/apple/t6002.dtsi b/arch/arm64/boot/dts/apple/t6002.dtsi
+index 3b1677ba5262..731d61fbb05f 100644
+--- a/arch/arm64/boot/dts/apple/t6002.dtsi
++++ b/arch/arm64/boot/dts/apple/t6002.dtsi
+@@ -29,6 +29,9 @@ cpu_e10: cpu@800 {
+ 			reg = <0x0 0x800>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_3>;
++			i-cache-size = <0x20000>;
++			d-cache-size = <0x10000>;
+ 		};
+ 
+ 		cpu_e11: cpu@801 {
+@@ -37,6 +40,9 @@ cpu_e11: cpu@801 {
+ 			reg = <0x0 0x801>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_3>;
++			i-cache-size = <0x20000>;
++			d-cache-size = <0x10000>;
+ 		};
+ 
+ 		cpu_p20: cpu@10900 {
+@@ -45,6 +51,9 @@ cpu_p20: cpu@10900 {
+ 			reg = <0x0 0x10900>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_4>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p21: cpu@10901 {
+@@ -53,6 +62,9 @@ cpu_p21: cpu@10901 {
+ 			reg = <0x0 0x10901>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_4>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p22: cpu@10902 {
+@@ -61,6 +73,9 @@ cpu_p22: cpu@10902 {
+ 			reg = <0x0 0x10902>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_4>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p23: cpu@10903 {
+@@ -69,6 +84,9 @@ cpu_p23: cpu@10903 {
+ 			reg = <0x0 0x10903>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_4>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p30: cpu@10a00 {
+@@ -77,6 +95,9 @@ cpu_p30: cpu@10a00 {
+ 			reg = <0x0 0x10a00>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_5>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p31: cpu@10a01 {
+@@ -85,6 +106,9 @@ cpu_p31: cpu@10a01 {
+ 			reg = <0x0 0x10a01>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_5>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p32: cpu@10a02 {
+@@ -93,6 +117,9 @@ cpu_p32: cpu@10a02 {
+ 			reg = <0x0 0x10a02>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_5>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p33: cpu@10a03 {
+@@ -101,6 +128,30 @@ cpu_p33: cpu@10a03 {
+ 			reg = <0x0 0x10a03>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_5>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
++		};
++
++		l2_cache_3: l2-cache-3 {
++			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
++			cache-size = <0x400000>;
++		};
++
++		l2_cache_4: l2-cache-4 {
++			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
++			cache-size = <0xc00000>;
++		};
++
++		l2_cache_5: l2-cache-5 {
++			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
++			cache-size = <0xc00000>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/apple/t600x-common.dtsi b/arch/arm64/boot/dts/apple/t600x-common.dtsi
+index f5fac1926a25..e2568d914719 100644
+--- a/arch/arm64/boot/dts/apple/t600x-common.dtsi
++++ b/arch/arm64/boot/dts/apple/t600x-common.dtsi
+@@ -21,6 +21,9 @@ cpu_e00: cpu@0 {
+ 			reg = <0x0 0x0>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_0>;
++			i-cache-size = <0x20000>;
++			d-cache-size = <0x10000>;
+ 		};
+ 
+ 		cpu_e01: cpu@1 {
+@@ -29,6 +32,9 @@ cpu_e01: cpu@1 {
+ 			reg = <0x0 0x1>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_0>;
++			i-cache-size = <0x20000>;
++			d-cache-size = <0x10000>;
+ 		};
+ 
+ 		cpu_p00: cpu@10100 {
+@@ -37,6 +43,9 @@ cpu_p00: cpu@10100 {
+ 			reg = <0x0 0x10100>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_1>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p01: cpu@10101 {
+@@ -45,6 +54,9 @@ cpu_p01: cpu@10101 {
+ 			reg = <0x0 0x10101>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_1>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p02: cpu@10102 {
+@@ -53,6 +65,9 @@ cpu_p02: cpu@10102 {
+ 			reg = <0x0 0x10102>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_1>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p03: cpu@10103 {
+@@ -61,6 +76,9 @@ cpu_p03: cpu@10103 {
+ 			reg = <0x0 0x10103>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_1>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p10: cpu@10200 {
+@@ -69,6 +87,9 @@ cpu_p10: cpu@10200 {
+ 			reg = <0x0 0x10200>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_2>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p11: cpu@10201 {
+@@ -77,6 +98,9 @@ cpu_p11: cpu@10201 {
+ 			reg = <0x0 0x10201>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_2>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p12: cpu@10202 {
+@@ -85,6 +109,9 @@ cpu_p12: cpu@10202 {
+ 			reg = <0x0 0x10202>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_2>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
+ 		};
+ 
+ 		cpu_p13: cpu@10203 {
+@@ -93,6 +120,30 @@ cpu_p13: cpu@10203 {
+ 			reg = <0x0 0x10203>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0 0>; /* To be filled by loader */
++			next-level-cache = <&l2_cache_2>;
++			i-cache-size = <0x30000>;
++			d-cache-size = <0x20000>;
++		};
++
++		l2_cache_0: l2-cache-0 {
++			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
++			cache-size = <0x400000>;
++		};
++
++		l2_cache_1: l2-cache-1 {
++			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
++			cache-size = <0xc00000>;
++		};
++
++		l2_cache_2: l2-cache-2 {
++			compatible = "cache";
++			cache-level = <2>;
++			cache-unified;
++			cache-size = <0xc00000>;
+ 		};
+ 	};
+ 
+-- 
+2.35.1
 
