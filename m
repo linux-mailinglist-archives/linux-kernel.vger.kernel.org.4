@@ -2,132 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF1263391D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F705633923
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbiKVJzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:55:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S232730AbiKVJ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233421AbiKVJy7 (ORCPT
+        with ESMTP id S229728AbiKVJ4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:54:59 -0500
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D659B19003;
-        Tue, 22 Nov 2022 01:54:58 -0800 (PST)
-Received: by mail-qk1-f174.google.com with SMTP id 8so9868820qka.1;
-        Tue, 22 Nov 2022 01:54:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wn85hJe4YJD3JoALwodoe0B1HoCXIOwjbx5dJ3CB4vM=;
-        b=3dzhIeWO7X2M96j0MZrTCKTWwMYZmqe+5mL/ggxLbZyIjcJ5Ip96NKM5nIlgMvaopj
-         szYZtTx8O+gPB0yLXTLi/6HojfCTa4y5fDJt5LtqvqDJFSkXeYq7sMm0VXqzOrZPmh20
-         yzK1Wb30z6Eakmep/1VwJ5uBMrYwoKpsXa0QuwTGAe7GiWGuY5HEZZBlESqcUcz57ZPy
-         ua0aQmixn5qjX6wMVH1Rz1ONKf+8vrqrzLI9Tbf9yulBaVwl87xsislmhmtXQgK8pvdZ
-         7EciwTsLO8ZtBCE1QY10g8AZT67DLRpaOjuvDy3G7Oz9uHpaqM6syIuO+sRE95o5+ac7
-         J87w==
-X-Gm-Message-State: ANoB5pmuCgZL6EnHs0t1BuQ4RIcj5zxECdUmU2rSe4dL31IRP5pTUDBR
-        Z2SW4Lt6Yua7WW3ubI2g4BirpAV6o1VEUQ==
-X-Google-Smtp-Source: AA0mqf5yq9cgv2D+lkgzq0eLjdk/cgP0h8W7urXDuXSABNN9b90M2p4DxRgwTf9Ig9hLbgCcc4f1mw==
-X-Received: by 2002:a37:aa51:0:b0:6ee:f54d:e17 with SMTP id t78-20020a37aa51000000b006eef54d0e17mr8318619qke.63.1669110897586;
-        Tue, 22 Nov 2022 01:54:57 -0800 (PST)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id k1-20020a05620a414100b006eea4b5abcesm9853516qko.89.2022.11.22.01.54.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 01:54:57 -0800 (PST)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-3876f88d320so139287337b3.6;
-        Tue, 22 Nov 2022 01:54:56 -0800 (PST)
-X-Received: by 2002:a05:690c:b81:b0:37e:6806:a5f9 with SMTP id
- ck1-20020a05690c0b8100b0037e6806a5f9mr5601587ywb.47.1669110896451; Tue, 22
- Nov 2022 01:54:56 -0800 (PST)
+        Tue, 22 Nov 2022 04:56:15 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8D248747;
+        Tue, 22 Nov 2022 01:56:13 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 66B6324E30E;
+        Tue, 22 Nov 2022 17:56:12 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 17:56:12 +0800
+Received: from [192.168.125.106] (113.72.144.23) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 17:56:11 +0800
+Message-ID: <0f9e423e-37c0-a838-bf25-f9b6784a31d0@starfivetech.com>
+Date:   Tue, 22 Nov 2022 17:55:57 +0800
 MIME-Version: 1.0
-References: <20221118145512.509950-1-gsomlo@gmail.com> <20221118145512.509950-13-gsomlo@gmail.com>
- <abb7d87a-46c7-fe7f-f943-4287d15a537f@kernel.org> <Y3vIi2OF5t4IrCS1@errol.ini.cmu.edu>
- <8dd90e39-087e-984c-c289-dbfa766359a8@kernel.org>
-In-Reply-To: <8dd90e39-087e-984c-c289-dbfa766359a8@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Nov 2022 10:54:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV3_YhF454J3ixRjOgWzJhL_Qr_XqxtSqxjF0qxGotFQw@mail.gmail.com>
-Message-ID: <CAMuHMdV3_YhF454J3ixRjOgWzJhL_Qr_XqxtSqxjF0qxGotFQw@mail.gmail.com>
-Subject: Re: [PATCH v5 12/14] serial: liteuart: add IRQ support for the RX path
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     "Gabriel L. Somlo" <gsomlo@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, kgugala@antmicro.com,
-        mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        ilpo.jarvinen@linux.intel.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 4/8] dt-bindings: sifive,ccache0: Support StarFive
+ JH7110 SoC
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-5-hal.feng@starfivetech.com> <Y3duiJguYE6VrVLP@spud>
+ <Y3dvCPP1g0LzzHFO@spud>
+ <a5193e23-efe1-fa65-15de-d53b80b87d63@starfivetech.com>
+ <Y3yRTuo69JUsfLqk@wendy>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <Y3yRTuo69JUsfLqk@wendy>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.23]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 8:44 AM Jiri Slaby <jirislaby@kernel.org> wrote:
-> On 21. 11. 22, 19:50, Gabriel L. Somlo wrote:
-> >>>    static void liteuart_timer(struct timer_list *t)
-> >>>    {
-> >>>     struct liteuart_port *uart = from_timer(uart, t, timer);
-> >>>     struct uart_port *port = &uart->port;
-> >>> -   liteuart_rx_chars(port);
-> >>> -
-> >>> +   liteuart_interrupt(0, port);
-> >>
-> >> Are you sure spin_lock() is safe from this path? I assume so, but have you
-> >> thought about it?
-> >
-> > I checked and at that point `in_serving_softirq()` is true.
-> >
-> > *However*, after studying spin_lock() and friends for a while, I'm
-> > not quite clear on whether that unequivocally translates
-> > to "yes, we're safe" :)
->
-> Depends whether some hard irq context is grabbing the port lock too. If
-> it does, it will spin forever waiting for this soft irq to finish (never
-> happens as it was interrupted).
->
-> > As such, I'm inclined to switch to `spin_lock_irqsave()` and
-> > `spin_unlock_irqrestore()` even in the interrupt handler, which is
-> > explicitly stated to be "safe from any context":
-> > https://www.kernel.org/doc/html/v4.15/kernel-hacking/locking.html#cheat-sheet-for-locking
->
->
->
-> > The alternative could be to set `TIMER_IRQSAFE` in `timer_setup()`,
-> > but no other tty driver seems to be doing that, so I'd be a bit off
-> > the beaten path there... :)
->
-> Ah, no.
->
-> > Please do let me know what you think about this, particularly if you
-> > consider going the spin_lock_irqsave-everywhere-just-to-be-safe route
-> > overkill... :)
->
-> If you are unsure about the other contexts, irqsave/restore is the way
-> to go. It can be lifted later, if someone investigates harder.
+On Tue, 22 Nov 2022 09:07:26 +0000, Conor Dooley wrote:
+> On Tue, Nov 22, 2022 at 04:40:23PM +0800, Hal Feng wrote:
+> > On Fri, 18 Nov 2022 19:39:52 +0800, Conor Dooley wrote:
+> > > On Fri, Nov 18, 2022 at 11:37:50AM +0000, Conor Dooley wrote:
+> > > > On Fri, Nov 18, 2022 at 09:17:10AM +0800, Hal Feng wrote:
+> > > > > From: Emil Renner Berthing <kernel@esmil.dk>
+> > > > > 
+> > > > > This cache controller is also used on the StarFive JH7110 SoC.
+> > > > 
+> > > > "... and configured identically to that of the FU740"?
+> > > > Anyways,
+> > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > > 
+> > > Actually, after looking at the next patch - why can you not fall back to
+> > > the fu740 one since you appear to have the same configuration as it?
+> > 
+> > Right, I will drop this patch and use "sifive,fu740-c000-ccache" as
+> > compatible in dts.
+> 
+> Uh, that's not quite what I was suggesting. Rather than using that one
+> in isolation, you can do the following in your dt:
+> "starfive,jh7110-ccache", "sifive,fu740-c000-ccache"
+> 
+> And then in the driver we need to make no changes - unless down the line
+> we find some sort of issue that requires special handling etc. There's
+> no harm in having a "starfive,jh7110-ccache" IMO.
 
-Inside the interrupt handler, plain spin_lock() should be OK.
-Inside the timer handler, I think you need to use spin_lock_irqsave(),
-as e.g. liteuart_set_termios() (and lots of code in serial_core.c)
-already uses spin_lock_irqsave().
-Besides, on non-SMP, spin_lock() doesn't do anything, so you need
-to rely on disabling the local interrupt.
+Just like what microchip did as blow?
 
-Gr{oetje,eeting}s,
+Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml:
+properties:
+  compatible:
+    oneOf:
+      - items:
+          - enum:
+              - sifive,ccache0
+              - sifive,fu540-c000-ccache
+              - sifive,fu740-c000-ccache
+              - starfive,jh7110-ccache
+          - const: cache
+      - items:
+          - const: microchip,mpfs-ccache
+          - const: sifive,fu540-c000-ccache
+          - const: cache
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Hal
