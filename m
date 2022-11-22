@@ -2,282 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FD2633AC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5423D633ACD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbiKVLKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S232955AbiKVLLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:11:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbiKVLKo (ORCPT
+        with ESMTP id S231318AbiKVLLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:10:44 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F121D2F64F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:10:41 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id f13so1533165lfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:10:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a+lumkSANeVYN39oKSfvZrAR/Mw6IxYn5W+438PdGoU=;
-        b=GpncHk39WOYTmUb3Rr+o4xTv2bRvSTGGcDX/29Os+HHdP2Y1LWP+6hxUdJjsvvuaCi
-         3WJgK23q7GcS1S0BVWjNRWqBKYUEselyQgin/9cX40QvnJudtpmSJiRXvC3bTHzFfJh/
-         shYj7o8cuBbW0Wkq2tauFVFhR2koue7P6pNa3lc0xJV8fP8IXBPfVaY8gmQ5B0eEdMk1
-         n65TIwn8lw781l+Ti4+48cCHHvCS7GM64Ns1R7K1lG7ZZiGaLoE0bDVDQOqCYLuJVwc0
-         KbYcxH7Kl7n4OHklKL+bL+qv6kb2UoZQX/5suvprSfjQxrEP4dPH6uOCamO2W4ZWxI+f
-         g9/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a+lumkSANeVYN39oKSfvZrAR/Mw6IxYn5W+438PdGoU=;
-        b=hFvkCoYb+Ionp5/j2r2y2e8lvL7muZRHOlUxegPjQ1YSPV5sLT2WQ//LFtTLc+QtZv
-         DX3W6M0p3lXNN4Q5lOXcqwOAVRkg5MlGVMLixCXkHOLxsNvf8iML4iJlv23VyYZtlVfp
-         iFy2WLNh6TC8fiP64NVPvCqFrOkIXlnD+6wpDS/lPibjGRwmlA9kuM1fYsQdRNpUS3lX
-         DoSXoRw6/VyI2b87mg7kRO8GlfiJAF7LRJxDsrrFCsOh5cYeL7Q2V6NEQ1n7j8kL6qIH
-         U3l4XRFb2s3689Zew+mMrPKnFhuRFFHems5M4N19mT/1+tqc9qjkbhSQU28BUOK+vx11
-         x/Tw==
-X-Gm-Message-State: ANoB5pmzklWwZ9f1FGjUMHb9xXRgYUsuxQNPat2wX2uIjAEN/nEQSJ1M
-        +uQWPBg6Y1SZhy87IUXBP+SaFw==
-X-Google-Smtp-Source: AA0mqf7czya88nL8uLXBENV8SqQL7ahBZMH/wfPdIKsODvU5jhTA4yZHA2oF8xUGBTDiY0eAjtCl5w==
-X-Received: by 2002:a05:6512:3147:b0:4a7:7daf:905b with SMTP id s7-20020a056512314700b004a77daf905bmr7353168lfi.665.1669115440128;
-        Tue, 22 Nov 2022 03:10:40 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05651205cf00b0049ad2619becsm2451218lfo.131.2022.11.22.03.10.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 03:10:39 -0800 (PST)
-Message-ID: <e74b7496-cd3d-0f20-0308-ce285e7e5dd6@linaro.org>
-Date:   Tue, 22 Nov 2022 12:10:38 +0100
+        Tue, 22 Nov 2022 06:11:41 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A22FC2F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:11:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=9JZdqk1OkpnE+3W0SvnflyFye5FL3u60bamjx34/b78=; b=LUX2HKqVNknim6KiolqvbXkiuY
+        BvCl1E+G0VASEycpMAoidS03bREnJWwdX08d0UpYBBdVGcQJ6X56MpjX7E2TG+6n316X6zjbRspnP
+        m6XE9+42gI4faYu59uOmc62Vr9VNar1mv9IIW59BCZgy14DEHEHC5bTyCBDnoPzcoRbjnPo/2uwbc
+        nHtkhAl9Nakf6X9aJNwZi82UGvJS542J8X9p7cCDyqNYFHAIPFEmNuxycDE4cg45aQrxFFRQjPzRs
+        4dS5NWo6TCE51Z2799DsAoDPI+kwTttWoRW6zym4hKsHkt+3DstJA0C6PHA8ES8Y78127NHeRIk61
+        Ii59ihvg==;
+Received: from [41.74.137.107] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oxRBH-006rnX-5W; Tue, 22 Nov 2022 12:11:11 +0100
+Date:   Tue, 22 Nov 2022 10:11:03 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Christopher Friedt <chrisfriedt@gmail.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Subject: Re: [PATCH v4 3/4] drm: initialize accel framework
+Message-ID: <20221122111103.h37v6n7uw44tqmdl@mail.igalia.com>
+References: <20221119204435.97113-1-ogabbay@kernel.org>
+ <20221119204435.97113-4-ogabbay@kernel.org>
+ <20221122105552.edse4v3zb5q23e3k@mail.igalia.com>
+ <CAFCwf128w3yAJVKAL+YrqLLSC6JGOWoEqqNipigcWruNBo30oQ@mail.gmail.com>
+ <CAFCwf11YaE5Euh0_zebbXYQZUuHb7K85b28XBdS5LLEqxLeNWg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next V3] dt-bindings: net: xlnx,axi-ethernet: convert
- bindings document to yaml
-Content-Language: en-US
-To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     michal.simek@xilinx.com, radhey.shyam.pandey@xilinx.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
-References: <20221122102437.1702630-1-sarath.babu.naidu.gaddam@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221122102437.1702630-1-sarath.babu.naidu.gaddam@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x3d3yt7bb3opu5vr"
+Content-Disposition: inline
+In-Reply-To: <CAFCwf11YaE5Euh0_zebbXYQZUuHb7K85b28XBdS5LLEqxLeNWg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 11:24, Sarath Babu Naidu Gaddam wrote:
-> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> 
-> Convert the bindings document for Xilinx AXI Ethernet Subsystem
-> from txt to yaml. No changes to existing binding description.
-> 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-> ---
-> 
-> Changes in V3:
-> 1) Moved RFC to PATCH.
-> 2) Addressed below review comments
-> 	a) Indentation.
-> 	b) maxItems:3 does not match your description.
-> 	c) Filename matching compatibles.
-> 
-> Changes in V2:
-> 1) remove .txt and change the name of file to xlnx,axiethernet.yaml.
-> 2) Fix DT check warning('device_type' does not match any of the regexes:
->    'pinctrl-[0-9]+' From schema: Documentation/devicetree/bindings/net
->     /xilinx_axienet.yaml).
-> ---
->  .../bindings/net/xilinx_axienet.txt           |  99 ------------
->  .../bindings/net/xlnx,axi-ethernet.yaml       | 150 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  3 files changed, 151 insertions(+), 99 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/xilinx_axienet.txt
->  create mode 100644 Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/xilinx_axienet.txt b/Documentation/devicetree/bindings/net/xilinx_axienet.txt
-> deleted file mode 100644
-> index 1aa4c6006cd0..000000000000
-> --- a/Documentation/devicetree/bindings/net/xilinx_axienet.txt
-> +++ /dev/null
-> @@ -1,99 +0,0 @@
-> -XILINX AXI ETHERNET Device Tree Bindings
-> ---------------------------------------------------------
-> -
-> -Also called  AXI 1G/2.5G Ethernet Subsystem, the xilinx axi ethernet IP core
-> -provides connectivity to an external ethernet PHY supporting different
-> -interfaces: MII, GMII, RGMII, SGMII, 1000BaseX. It also includes two
-> -segments of memory for buffering TX and RX, as well as the capability of
-> -offloading TX/RX checksum calculation off the processor.
-> -
-> -Management configuration is done through the AXI interface, while payload is
-> -sent and received through means of an AXI DMA controller. This driver
-> -includes the DMA driver code, so this driver is incompatible with AXI DMA
-> -driver.
-> -
-> -For more details about mdio please refer phy.txt file in the same directory.
-> -
-> -Required properties:
-> -- compatible	: Must be one of "xlnx,axi-ethernet-1.00.a",
-> -		  "xlnx,axi-ethernet-1.01.a", "xlnx,axi-ethernet-2.01.a"
-> -- reg		: Address and length of the IO space, as well as the address
-> -                  and length of the AXI DMA controller IO space, unless
-> -                  axistream-connected is specified, in which case the reg
-> -                  attribute of the node referenced by it is used.
-> -- interrupts	: Should be a list of 2 or 3 interrupts: TX DMA, RX DMA,
-> -		  and optionally Ethernet core. If axistream-connected is
-> -		  specified, the TX/RX DMA interrupts should be on that node
-> -		  instead, and only the Ethernet core interrupt is optionally
-> -		  specified here.
-> -- phy-handle	: Should point to the external phy device if exists. Pointing
-> -		  this to the PCS/PMA PHY is deprecated and should be avoided.
-> -		  See ethernet.txt file in the same directory.
-> -- xlnx,rxmem	: Set to allocated memory buffer for Rx/Tx in the hardware
-> -
-> -Optional properties:
-> -- phy-mode	: See ethernet.txt
-> -- xlnx,phy-type	: Deprecated, do not use, but still accepted in preference
-> -		  to phy-mode.
-> -- xlnx,txcsum	: 0 or empty for disabling TX checksum offload,
-> -		  1 to enable partial TX checksum offload,
-> -		  2 to enable full TX checksum offload
-> -- xlnx,rxcsum	: Same values as xlnx,txcsum but for RX checksum offload
-> -- xlnx,switch-x-sgmii : Boolean to indicate the Ethernet core is configured to
-> -		  support both 1000BaseX and SGMII modes. If set, the phy-mode
-> -		  should be set to match the mode selected on core reset (i.e.
-> -		  by the basex_or_sgmii core input line).
-> -- clock-names: 	  Tuple listing input clock names. Possible clocks:
-> -		  s_axi_lite_clk: Clock for AXI register slave interface
-> -		  axis_clk: AXI4-Stream clock for TXD RXD TXC and RXS interfaces
-> -		  ref_clk: Ethernet reference clock, used by signal delay
-> -			   primitives and transceivers
-> -		  mgt_clk: MGT reference clock (used by optional internal
-> -			   PCS/PMA PHY)
-> -
-> -		  Note that if s_axi_lite_clk is not specified by name, the
-> -		  first clock of any name is used for this. If that is also not
-> -		  specified, the clock rate is auto-detected from the CPU clock
-> -		  (but only on platforms where this is possible). New device
-> -		  trees should specify all applicable clocks by name - the
-> -		  fallbacks to an unnamed clock or to CPU clock are only for
-> -		  backward compatibility.
-> -- clocks: 	  Phandles to input clocks matching clock-names. Refer to common
-> -		  clock bindings.
-> -- axistream-connected: Reference to another node which contains the resources
-> -		       for the AXI DMA controller used by this device.
-> -		       If this is specified, the DMA-related resources from that
-> -		       device (DMA registers and DMA TX/RX interrupts) rather
-> -		       than this one will be used.
-> - - mdio		: Child node for MDIO bus. Must be defined if PHY access is
-> -		  required through the core's MDIO interface (i.e. always,
-> -		  unless the PHY is accessed through a different bus).
-> -
-> - - pcs-handle: 	  Phandle to the internal PCS/PMA PHY in SGMII or 1000Base-X
-> -		  modes, where "pcs-handle" should be used to point
-> -		  to the PCS/PMA PHY, and "phy-handle" should point to an
-> -		  external PHY if exists.
-> -
-> -Example:
-> -	axi_ethernet_eth: ethernet@40c00000 {
-> -		compatible = "xlnx,axi-ethernet-1.00.a";
-> -		device_type = "network";
-> -		interrupt-parent = <&microblaze_0_axi_intc>;
-> -		interrupts = <2 0 1>;
-> -		clock-names = "s_axi_lite_clk", "axis_clk", "ref_clk", "mgt_clk";
-> -		clocks = <&axi_clk>, <&axi_clk>, <&pl_enet_ref_clk>, <&mgt_clk>;
-> -		phy-mode = "mii";
-> -		reg = <0x40c00000 0x40000 0x50c00000 0x40000>;
-> -		xlnx,rxcsum = <0x2>;
-> -		xlnx,rxmem = <0x800>;
-> -		xlnx,txcsum = <0x2>;
-> -		phy-handle = <&phy0>;
-> -		axi_ethernetlite_0_mdio: mdio {
-> -			#address-cells = <1>;
-> -			#size-cells = <0>;
-> -			phy0: phy@0 {
-> -				device_type = "ethernet-phy";
-> -				reg = <1>;
-> -			};
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml b/Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
-> new file mode 100644
-> index 000000000000..5dc41ab7584b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
-> @@ -0,0 +1,150 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/xlnx,axi-ethernet.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: AXI 1G/2.5G Ethernet Subsystem
-> +
-> +description: |
-> +  Also called  AXI 1G/2.5G Ethernet Subsystem, the xilinx axi ethernet IP core
-> +  provides connectivity to an external ethernet PHY supporting different
-> +  interfaces: MII, GMII, RGMII, SGMII, 1000BaseX. It also includes two
-> +  segments of memory for buffering TX and RX, as well as the capability of
-> +  offloading TX/RX checksum calculation off the processor.
-> +
-> +  Management configuration is done through the AXI interface, while payload is
-> +  sent and received through means of an AXI DMA controller. This driver
-> +  includes the DMA driver code, so this driver is incompatible with AXI DMA
-> +  driver.
-> +
-> +
-> +allOf:
-> +  - $ref: ethernet-controller.yaml#
-> +
-> +maintainers:
-> +  - Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - xlnx,axi-ethernet-1.00.a
-> +      - xlnx,axi-ethernet-1.01.a
-> +      - xlnx,axi-ethernet-2.01.a
-> +
-> +  reg:
-> +    description:
-> +      Address and length of the IO space, as well as the address
-> +      and length of the AXI DMA controller IO space, unless
-> +      axistream-connected is specified, in which case the reg
-> +      attribute of the node referenced by it is used.
-> +    maxItems: 2
-> +
-> +  interrupts:
-> +    description:
-> +      Ethernet core interrupt is optional. If axistream-connected property is
-> +      present DMA node should contains TX/RX DMA interrupts else DMA interrupt
-> +      resources are mentioned on ethernet node.
-> +    maxItems: 3
 
-This does not fully match the old bindings and you did not mention in
-commit msg any changes during conversion. IOW, old binding allowed only
-core interrupt. You do not allow it. Was this your intention?
+--x3d3yt7bb3opu5vr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This affects both reg and interrupts which otherwise should have
-allOf:if:then constraints.
+11/22, Oded Gabbay wrote:
+> On Tue, Nov 22, 2022 at 12:59 PM Oded Gabbay <ogabbay@kernel.org> wrote:
+> >
+> > On Tue, Nov 22, 2022 at 12:56 PM Melissa Wen <mwen@igalia.com> wrote:
+> > >
+> > > On 11/19, Oded Gabbay wrote:
+> > > > Now that we have the accel framework code ready, let's call the
+> > > > accel functions from all the appropriate places. These places are t=
+he
+> > > > drm module init/exit functions, and all the drm_minor handling
+> > > > functions.
+> > >
+> > > Hi Oded,
+> > >
+> > > The proposal overall LGTM, but I didn't manage to compile the kernel
+> > > with your patch series when DRM is enabled but accel support doesn't.
+> > > Multiple missing link errors...
+> > >
+> > > Am I missing something? Can you take a look at it from this patch 3/4?
+> > >
+> > > Thanks,
+> > >
+> > > Melissa
+> > Looking at it now, thanks for letting me know.
+> > Oded
+> Found the issue, missing } at end of accel_debugfs_init() in
+> drm_accel.h. Only compiles when accel support isn't compiled in.
+> I'll fix it before sending the PR to Dave.
+> Much appreciated :)
+> Oded
 
+Oh, great! Just checked here and everything is fine now.
+With that, you can add my r-b for the entire series too
 
-Best regards,
-Krzysztof
+Reviewed-by: Melissa Wen <mwen@igalia.com>
 
+Thanks for working on it,
+
+Melissa
+
+>=20
+> >
+> > > >
+> > > > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+> > > > ---
+> > > >  drivers/gpu/drm/drm_drv.c   | 102 ++++++++++++++++++++++++++------=
+----
+> > > >  drivers/gpu/drm/drm_sysfs.c |  24 ++++++---
+> > > >  2 files changed, 91 insertions(+), 35 deletions(-)
+> > > >
+> > > > diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+> > > > index 8214a0b1ab7f..1aec019f6389 100644
+> > > > --- a/drivers/gpu/drm/drm_drv.c
+> > > > +++ b/drivers/gpu/drm/drm_drv.c
+> > > > @@ -35,6 +35,7 @@
+> > > >  #include <linux/slab.h>
+> > > >  #include <linux/srcu.h>
+> > > >
+> > > > +#include <drm/drm_accel.h>
+> > > >  #include <drm/drm_cache.h>
+> > > >  #include <drm/drm_client.h>
+> > > >  #include <drm/drm_color_mgmt.h>
+> > > > @@ -90,6 +91,8 @@ static struct drm_minor **drm_minor_get_slot(stru=
+ct drm_device *dev,
+> > > >               return &dev->primary;
+> > > >       case DRM_MINOR_RENDER:
+> > > >               return &dev->render;
+> > > > +     case DRM_MINOR_ACCEL:
+> > > > +             return &dev->accel;
+> > > >       default:
+> > > >               BUG();
+> > > >       }
+> > > > @@ -104,9 +107,13 @@ static void drm_minor_alloc_release(struct drm=
+_device *dev, void *data)
+> > > >
+> > > >       put_device(minor->kdev);
+> > > >
+> > > > -     spin_lock_irqsave(&drm_minor_lock, flags);
+> > > > -     idr_remove(&drm_minors_idr, minor->index);
+> > > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > > +     if (minor->type =3D=3D DRM_MINOR_ACCEL) {
+> > > > +             accel_minor_remove(minor->index);
+> > > > +     } else {
+> > > > +             spin_lock_irqsave(&drm_minor_lock, flags);
+> > > > +             idr_remove(&drm_minors_idr, minor->index);
+> > > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > > +     }
+> > > >  }
+> > > >
+> > > >  static int drm_minor_alloc(struct drm_device *dev, unsigned int ty=
+pe)
+> > > > @@ -123,13 +130,17 @@ static int drm_minor_alloc(struct drm_device =
+*dev, unsigned int type)
+> > > >       minor->dev =3D dev;
+> > > >
+> > > >       idr_preload(GFP_KERNEL);
+> > > > -     spin_lock_irqsave(&drm_minor_lock, flags);
+> > > > -     r =3D idr_alloc(&drm_minors_idr,
+> > > > -                   NULL,
+> > > > -                   64 * type,
+> > > > -                   64 * (type + 1),
+> > > > -                   GFP_NOWAIT);
+> > > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > > +     if (type =3D=3D DRM_MINOR_ACCEL) {
+> > > > +             r =3D accel_minor_alloc();
+> > > > +     } else {
+> > > > +             spin_lock_irqsave(&drm_minor_lock, flags);
+> > > > +             r =3D idr_alloc(&drm_minors_idr,
+> > > > +                     NULL,
+> > > > +                     64 * type,
+> > > > +                     64 * (type + 1),
+> > > > +                     GFP_NOWAIT);
+> > > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > > +     }
+> > > >       idr_preload_end();
+> > > >
+> > > >       if (r < 0)
+> > > > @@ -161,10 +172,14 @@ static int drm_minor_register(struct drm_devi=
+ce *dev, unsigned int type)
+> > > >       if (!minor)
+> > > >               return 0;
+> > > >
+> > > > -     ret =3D drm_debugfs_init(minor, minor->index, drm_debugfs_roo=
+t);
+> > > > -     if (ret) {
+> > > > -             DRM_ERROR("DRM: Failed to initialize /sys/kernel/debu=
+g/dri.\n");
+> > > > -             goto err_debugfs;
+> > > > +     if (minor->type =3D=3D DRM_MINOR_ACCEL) {
+> > > > +             accel_debugfs_init(minor, minor->index);
+> > > > +     } else {
+> > > > +             ret =3D drm_debugfs_init(minor, minor->index, drm_deb=
+ugfs_root);
+> > > > +             if (ret) {
+> > > > +                     DRM_ERROR("DRM: Failed to initialize /sys/ker=
+nel/debug/dri.\n");
+> > > > +                     goto err_debugfs;
+> > > > +             }
+> > > >       }
+> > > >
+> > > >       ret =3D device_add(minor->kdev);
+> > > > @@ -172,9 +187,13 @@ static int drm_minor_register(struct drm_devic=
+e *dev, unsigned int type)
+> > > >               goto err_debugfs;
+> > > >
+> > > >       /* replace NULL with @minor so lookups will succeed from now =
+on */
+> > > > -     spin_lock_irqsave(&drm_minor_lock, flags);
+> > > > -     idr_replace(&drm_minors_idr, minor, minor->index);
+> > > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > > +     if (minor->type =3D=3D DRM_MINOR_ACCEL) {
+> > > > +             accel_minor_replace(minor, minor->index);
+> > > > +     } else {
+> > > > +             spin_lock_irqsave(&drm_minor_lock, flags);
+> > > > +             idr_replace(&drm_minors_idr, minor, minor->index);
+> > > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > > +     }
+> > > >
+> > > >       DRM_DEBUG("new minor registered %d\n", minor->index);
+> > > >       return 0;
+> > > > @@ -194,9 +213,13 @@ static void drm_minor_unregister(struct drm_de=
+vice *dev, unsigned int type)
+> > > >               return;
+> > > >
+> > > >       /* replace @minor with NULL so lookups will fail from now on =
+*/
+> > > > -     spin_lock_irqsave(&drm_minor_lock, flags);
+> > > > -     idr_replace(&drm_minors_idr, NULL, minor->index);
+> > > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > > +     if (minor->type =3D=3D DRM_MINOR_ACCEL) {
+> > > > +             accel_minor_replace(NULL, minor->index);
+> > > > +     } else {
+> > > > +             spin_lock_irqsave(&drm_minor_lock, flags);
+> > > > +             idr_replace(&drm_minors_idr, NULL, minor->index);
+> > > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > > > +     }
+> > > >
+> > > >       device_del(minor->kdev);
+> > > >       dev_set_drvdata(minor->kdev, NULL); /* safety belt */
+> > > > @@ -603,6 +626,14 @@ static int drm_dev_init(struct drm_device *dev,
+> > > >       /* no per-device feature limits by default */
+> > > >       dev->driver_features =3D ~0u;
+> > > >
+> > > > +     if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
+> > > > +                             (drm_core_check_feature(dev, DRIVER_R=
+ENDER) ||
+> > > > +                             drm_core_check_feature(dev, DRIVER_MO=
+DESET))) {
+> > > > +
+> > > > +             DRM_ERROR("DRM driver can't be both a compute acceler=
+ation and graphics driver\n");
+> > > > +             return -EINVAL;
+> > > > +     }
+> > > > +
+> > > >       drm_legacy_init_members(dev);
+> > > >       INIT_LIST_HEAD(&dev->filelist);
+> > > >       INIT_LIST_HEAD(&dev->filelist_internal);
+> > > > @@ -628,15 +659,21 @@ static int drm_dev_init(struct drm_device *de=
+v,
+> > > >
+> > > >       dev->anon_inode =3D inode;
+> > > >
+> > > > -     if (drm_core_check_feature(dev, DRIVER_RENDER)) {
+> > > > -             ret =3D drm_minor_alloc(dev, DRM_MINOR_RENDER);
+> > > > +     if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL)) {
+> > > > +             ret =3D drm_minor_alloc(dev, DRM_MINOR_ACCEL);
+> > > >               if (ret)
+> > > >                       goto err;
+> > > > -     }
+> > > > +     } else {
+> > > > +             if (drm_core_check_feature(dev, DRIVER_RENDER)) {
+> > > > +                     ret =3D drm_minor_alloc(dev, DRM_MINOR_RENDER=
+);
+> > > > +                     if (ret)
+> > > > +                             goto err;
+> > > > +             }
+> > > >
+> > > > -     ret =3D drm_minor_alloc(dev, DRM_MINOR_PRIMARY);
+> > > > -     if (ret)
+> > > > -             goto err;
+> > > > +             ret =3D drm_minor_alloc(dev, DRM_MINOR_PRIMARY);
+> > > > +             if (ret)
+> > > > +                     goto err;
+> > > > +     }
+> > > >
+> > > >       ret =3D drm_legacy_create_map_hash(dev);
+> > > >       if (ret)
+> > > > @@ -883,6 +920,10 @@ int drm_dev_register(struct drm_device *dev, u=
+nsigned long flags)
+> > > >       if (ret)
+> > > >               goto err_minors;
+> > > >
+> > > > +     ret =3D drm_minor_register(dev, DRM_MINOR_ACCEL);
+> > > > +     if (ret)
+> > > > +             goto err_minors;
+> > > > +
+> > > >       ret =3D create_compat_control_link(dev);
+> > > >       if (ret)
+> > > >               goto err_minors;
+> > > > @@ -902,12 +943,13 @@ int drm_dev_register(struct drm_device *dev, =
+unsigned long flags)
+> > > >                driver->name, driver->major, driver->minor,
+> > > >                driver->patchlevel, driver->date,
+> > > >                dev->dev ? dev_name(dev->dev) : "virtual device",
+> > > > -              dev->primary->index);
+> > > > +              dev->primary ? dev->primary->index : dev->accel->ind=
+ex);
+> > > >
+> > > >       goto out_unlock;
+> > > >
+> > > >  err_minors:
+> > > >       remove_compat_control_link(dev);
+> > > > +     drm_minor_unregister(dev, DRM_MINOR_ACCEL);
+> > > >       drm_minor_unregister(dev, DRM_MINOR_PRIMARY);
+> > > >       drm_minor_unregister(dev, DRM_MINOR_RENDER);
+> > > >  out_unlock:
+> > > > @@ -950,6 +992,7 @@ void drm_dev_unregister(struct drm_device *dev)
+> > > >       drm_legacy_rmmaps(dev);
+> > > >
+> > > >       remove_compat_control_link(dev);
+> > > > +     drm_minor_unregister(dev, DRM_MINOR_ACCEL);
+> > > >       drm_minor_unregister(dev, DRM_MINOR_PRIMARY);
+> > > >       drm_minor_unregister(dev, DRM_MINOR_RENDER);
+> > > >  }
+> > > > @@ -1034,6 +1077,7 @@ static const struct file_operations drm_stub_=
+fops =3D {
+> > > >  static void drm_core_exit(void)
+> > > >  {
+> > > >       drm_privacy_screen_lookup_exit();
+> > > > +     accel_core_exit();
+> > > >       unregister_chrdev(DRM_MAJOR, "drm");
+> > > >       debugfs_remove(drm_debugfs_root);
+> > > >       drm_sysfs_destroy();
+> > > > @@ -1061,6 +1105,10 @@ static int __init drm_core_init(void)
+> > > >       if (ret < 0)
+> > > >               goto error;
+> > > >
+> > > > +     ret =3D accel_core_init();
+> > > > +     if (ret < 0)
+> > > > +             goto error;
+> > > > +
+> > > >       drm_privacy_screen_lookup_init();
+> > > >
+> > > >       drm_core_init_complete =3D true;
+> > > > diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysf=
+s.c
+> > > > index 430e00b16eec..b8da978d85bb 100644
+> > > > --- a/drivers/gpu/drm/drm_sysfs.c
+> > > > +++ b/drivers/gpu/drm/drm_sysfs.c
+> > > > @@ -19,6 +19,7 @@
+> > > >  #include <linux/kdev_t.h>
+> > > >  #include <linux/slab.h>
+> > > >
+> > > > +#include <drm/drm_accel.h>
+> > > >  #include <drm/drm_connector.h>
+> > > >  #include <drm/drm_device.h>
+> > > >  #include <drm/drm_file.h>
+> > > > @@ -471,19 +472,26 @@ struct device *drm_sysfs_minor_alloc(struct d=
+rm_minor *minor)
+> > > >       struct device *kdev;
+> > > >       int r;
+> > > >
+> > > > -     if (minor->type =3D=3D DRM_MINOR_RENDER)
+> > > > -             minor_str =3D "renderD%d";
+> > > > -     else
+> > > > -             minor_str =3D "card%d";
+> > > > -
+> > > >       kdev =3D kzalloc(sizeof(*kdev), GFP_KERNEL);
+> > > >       if (!kdev)
+> > > >               return ERR_PTR(-ENOMEM);
+> > > >
+> > > >       device_initialize(kdev);
+> > > > -     kdev->devt =3D MKDEV(DRM_MAJOR, minor->index);
+> > > > -     kdev->class =3D drm_class;
+> > > > -     kdev->type =3D &drm_sysfs_device_minor;
+> > > > +
+> > > > +     if (minor->type =3D=3D DRM_MINOR_ACCEL) {
+> > > > +             minor_str =3D "accel%d";
+> > > > +             accel_set_device_instance_params(kdev, minor->index);
+> > > > +     } else {
+> > > > +             if (minor->type =3D=3D DRM_MINOR_RENDER)
+> > > > +                     minor_str =3D "renderD%d";
+> > > > +             else
+> > > > +                     minor_str =3D "card%d";
+> > > > +
+> > > > +             kdev->devt =3D MKDEV(DRM_MAJOR, minor->index);
+> > > > +             kdev->class =3D drm_class;
+> > > > +             kdev->type =3D &drm_sysfs_device_minor;
+> > > > +     }
+> > > > +
+> > > >       kdev->parent =3D minor->dev->dev;
+> > > >       kdev->release =3D drm_sysfs_release;
+> > > >       dev_set_drvdata(kdev, minor);
+> > > > --
+> > > > 2.25.1
+> > > >
+
+--x3d3yt7bb3opu5vr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmN8rjEACgkQwqF3j0dL
+ehwWmg//VFJxGqBipB8Ez+XYyVCP+EzfZen6lRHEMXByxy5Y881/M3Gido4aAImv
+moFKRa0FZaMhlatjcBNQF2p4K1Ei6T7ITXyeDjS6HNJU+Ftme8C2KR29M5EuYZtH
+pTKoL2PLzYIEym+7hJmJ8+SiWBDyW2da0MQCV7+KamQwSwK0v3B9kK/mRQYjJvPO
+wkkfgnMoPcW0yjcHBtp4FwXpvwk9FJiz7wAUedncMa4+jjeH3YDlVE3/wvXO7ZD2
+XAgiTsjblnjFkVhEGvf9A5MDq+DIiQFw3doljAlyyxORaVQti3bkJEWI/T4Mp9ZT
+aqtP9rYA3qVeIR1YOnMMp8TPSgoxtjFhvPhNRdeJWse1mnJ7gLfHOUn2ctcRr91W
+XudgW4V2LbLNZSIoCnWSaNe0dHYRw2yUi/0vM2dGRrtmzn/coeyDOWM0GAl+N0A2
+4t95VQlSgSTiXX+ZOBUGyy9UxVzDShSxf3GMwmOsnPhtq0whG5fB1ovK+IU6eewm
+uzEa7F6OF2UAiWu4f47OQHicHVJKHmz4Gl9mTMoBRNpgYaC1KgN+QSN4PbI9536n
+C4Vm7hrARRTeS09RHqQJQKqRFKgOogEsdV8Rcc229lFdBTO5wUSpWnoYlJgh3QfD
+C6UJsTRKSYYrTd3m41nrZqdMHYMTpyaCFmz51LrJs2RwWfaws2I=
+=f8JT
+-----END PGP SIGNATURE-----
+
+--x3d3yt7bb3opu5vr--
