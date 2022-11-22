@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D70633197
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFFF63319B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbiKVAtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S231820AbiKVAuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKVAtT (ORCPT
+        with ESMTP id S229919AbiKVAuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:49:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5943C4044E
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:48:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669078102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N1lAtUfxSqu18fCCviIv82tE3o1gDbqJA8/vG7g+Iw4=;
-        b=fV8oVXJGP6oqARRZuegRWolSddoyeiVgrf52YY6RDS4NwWq/PvSxKcSDVGPIuu+Lghrgab
-        +AU6tPpB4LnGjK2gJxHnnOy7aGxzp28V8JCZ+IBB1emogU55J6OToIvg/buEuZuPS5mZkY
-        RWq3jOvqoHkgdJGj3tSgsPNoMLoZUGs=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-206-CbXC_njNOPmEDQHDSg2_7A-1; Mon, 21 Nov 2022 19:48:20 -0500
-X-MC-Unique: CbXC_njNOPmEDQHDSg2_7A-1
-Received: by mail-qk1-f199.google.com with SMTP id bk30-20020a05620a1a1e00b006fb2378c857so17405185qkb.18
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:48:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N1lAtUfxSqu18fCCviIv82tE3o1gDbqJA8/vG7g+Iw4=;
-        b=xWSc5KDkpXtatXCFtjjB2qd0QPjAC1YdUj3RuCcpoq8Zn63OnZqffRXDi82Rt15j3t
-         eG/tVxUeF7t/S8aBgAF2EtV0kwE2i2MAWpKgAxkD9/Wg4SWr6YvbSaqyL1WGE8psAUHT
-         xE79RsSL4vRaBuRrK+QRyP4o6xndV9xNTynOfFIZKQPJXuKdVUs8lX1REj9IzmvzTLly
-         BQQPiniF3CDRYgY//Q0Mk9rmfYjdxfMQUbVBdLg1BJ7kukBAV/yN3Bm+R1zQe7qX1mDG
-         PlnfnoYgFAHUpw+RLBnTgGMOOAOFJoGAqc/6vH+41QoZXBYRC8ihg8cWLQ+Cop4h7cNT
-         ZLfg==
-X-Gm-Message-State: ANoB5pmsSYm+rdIEXCSJ0S5vUjXf9MwMnv6iBWF4fHDQjdo8VDMjSImG
-        BoSyG6MtvEBLbCnN2rk9Q/04706gXp7keClsZfyxZb5kI0uwAcdbYQ524BlkUvdlP/qPeN/Om/y
-        X6KciYa1dDKhMhKecZHI5kDk4
-X-Received: by 2002:a05:620a:8086:b0:6fa:7b74:1cc1 with SMTP id ef6-20020a05620a808600b006fa7b741cc1mr3318047qkb.144.1669078099765;
-        Mon, 21 Nov 2022 16:48:19 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6qV3cnbP4oy61ujmZe64y9rbsAHEhhDhutJO9GEtcu+pUoCPG21F4vHc1eu9t0SH3F6onHJA==
-X-Received: by 2002:a05:620a:8086:b0:6fa:7b74:1cc1 with SMTP id ef6-20020a05620a808600b006fa7b741cc1mr3318008qkb.144.1669078099482;
-        Mon, 21 Nov 2022 16:48:19 -0800 (PST)
-Received: from [10.0.0.96] ([24.225.241.171])
-        by smtp.gmail.com with ESMTPSA id t18-20020a05620a451200b006fafc111b12sm9466619qkp.83.2022.11.21.16.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 16:48:19 -0800 (PST)
-Message-ID: <9c813d3e-96f9-218b-94a7-a5e47615d617@redhat.com>
-Date:   Mon, 21 Nov 2022 19:48:18 -0500
+        Mon, 21 Nov 2022 19:50:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C69F4044E;
+        Mon, 21 Nov 2022 16:50:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B350260A51;
+        Tue, 22 Nov 2022 00:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 100CFC433C1;
+        Tue, 22 Nov 2022 00:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669078216;
+        bh=oaaCKCKoyoc+e6B4sa8JTeueW5S4WbjiWN/m/BqMr4o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=gSngKmUoadOgDoqdy2eGUF0ondlWkpp6BY07Kj720aiC+it12iCp5QipY0JpHgjwC
+         QiDjsxqlwtCcVU9w9ho20/FK8kuECsx55OAbaje+mYPbkqC5MAllEFQbOBZph0EUE9
+         jAb3FbxgNY+66Tf/nkoB07xN/G2KdET7QJn1RK8ytvRG7yCaVaGH4qAq3UFzEhfP2n
+         23ezwp+psNj7grcV2OZlDYz9FAi+U0rYOkMgM57i3QwVWRw86VtMJYFqhgZH8/R2jZ
+         gcr5FypkD0F68ZMayVP+ajZlERxcyQWbbr3256+7kZZuW+nBn+RG8GlisUVHS4lBTd
+         PL4lawWrgqkJg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E4A81E29F3E;
+        Tue, 22 Nov 2022 00:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net] tipc: check skb_linearize() return value in
- tipc_disc_rcv()
-Content-Language: en-US
-To:     YueHaibing <yuehaibing@huawei.com>, ying.xue@windriver.com,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] Bluetooth: L2CAP: Fix u8 overflow
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <166907821592.6181.15285782519233443066.git-patchwork-notify@kernel.org>
+Date:   Tue, 22 Nov 2022 00:50:15 +0000
+References: <20221118200145.1741199-1-iam@sung-woo.kim>
+In-Reply-To: <20221118200145.1741199-1-iam@sung-woo.kim>
+To:     Sungwoo Kim <iam@sung-woo.kim>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221119072832.7896-1-yuehaibing@huawei.com>
-From:   Jon Maloy <jmaloy@redhat.com>
-In-Reply-To: <20221119072832.7896-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-On 11/19/22 02:28, YueHaibing wrote:
-> If skb_linearize() fails in tipc_disc_rcv(), we need to free the skb instead of
-> handle it.
->
-> Fixes: 25b0b9c4e835 ("tipc: handle collisions of 32-bit node address hash values")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->   net/tipc/discover.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/net/tipc/discover.c b/net/tipc/discover.c
-> index e8630707901e..e8dcdf267c0c 100644
-> --- a/net/tipc/discover.c
-> +++ b/net/tipc/discover.c
-> @@ -211,7 +211,10 @@ void tipc_disc_rcv(struct net *net, struct sk_buff *skb,
->   	u32 self;
->   	int err;
->   
-> -	skb_linearize(skb);
-> +	if (skb_linearize(skb)) {
-> +		kfree_skb(skb);
-> +		return;
-> +	}
->   	hdr = buf_msg(skb);
->   
->   	if (caps & TIPC_NODE_ID128)
-Acked-by: Jon Maloy <jmaloy@redhat.com>
+On Fri, 18 Nov 2022 15:01:47 -0500 you wrote:
+> By keep sending L2CAP_CONF_REQ packets, chan->num_conf_rsp increases
+> multiple times and eventually it will wrap around the maximum number
+> (i.e., 255).
+> This patch prevents this by adding a boundary check with
+> L2CAP_MAX_CONF_RSP
+> 
+> Btmon log:
+> Bluetooth monitor ver 5.64
+> = Note: Linux version 6.1.0-rc2 (x86_64)                               0.264594
+> = Note: Bluetooth subsystem version 2.22                               0.264636
+> @ MGMT Open: btmon (privileged) version 1.22                  {0x0001} 0.272191
+> = New Index: 00:00:00:00:00:00 (Primary,Virtual,hci0)          [hci0] 13.877604
+> @ RAW Open: 9496 (privileged) version 2.22                   {0x0002} 13.890741
+> = Open Index: 00:00:00:00:00:00                                [hci0] 13.900426
+> (...)
+> > ACL Data RX: Handle 200 flags 0x00 dlen 1033             #32 [hci0] 14.273106
+>         invalid packet size (12 != 1033)
+>         08 00 01 00 02 01 04 00 01 10 ff ff              ............
+> > ACL Data RX: Handle 200 flags 0x00 dlen 1547             #33 [hci0] 14.273561
+>         invalid packet size (14 != 1547)
+>         0a 00 01 00 04 01 06 00 40 00 00 00 00 00        ........@.....
+> > ACL Data RX: Handle 200 flags 0x00 dlen 2061             #34 [hci0] 14.274390
+>         invalid packet size (16 != 2061)
+>         0c 00 01 00 04 01 08 00 40 00 00 00 00 00 00 04  ........@.......
+> > ACL Data RX: Handle 200 flags 0x00 dlen 2061             #35 [hci0] 14.274932
+>         invalid packet size (16 != 2061)
+>         0c 00 01 00 04 01 08 00 40 00 00 00 07 00 03 00  ........@.......
+> = bluetoothd: Bluetooth daemon 5.43                                   14.401828
+> > ACL Data RX: Handle 200 flags 0x00 dlen 1033             #36 [hci0] 14.275753
+>         invalid packet size (12 != 1033)
+>         08 00 01 00 04 01 04 00 40 00 00 00              ........@...
+> 
+> [...]
+
+Here is the summary with links:
+  - Bluetooth: L2CAP: Fix u8 overflow
+    https://git.kernel.org/bluetooth/bluetooth-next/c/ae4569813a6e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
