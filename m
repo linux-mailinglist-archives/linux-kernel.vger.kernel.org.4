@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64D263348C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 05:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2AD63348E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 05:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiKVEv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 23:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
+        id S231895AbiKVEw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 23:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiKVEv0 (ORCPT
+        with ESMTP id S229750AbiKVEwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 23:51:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E9527B13
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 20:51:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 21 Nov 2022 23:52:23 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFC527B23;
+        Mon, 21 Nov 2022 20:52:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83968B81964
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:51:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF99C433C1;
-        Tue, 22 Nov 2022 04:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669092683;
-        bh=izAiYpr0FJNO6aLxkL3dB9GN7oXjpy9Mg8r0NpTkbUc=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGX1H33fbz4wgv;
+        Tue, 22 Nov 2022 15:52:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669092740;
+        bh=rp6Nsgm6fcD7cOsZIVlJFAzX3QoeC2dAZrx5St04Rvc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MhKfDAy1039lotfhH6RGPl+KOIp6mP3E/izoIZwhea2Hl8b5A+vCrpmfP55jttBkf
-         AmU5l8K97OChqZuWecQrp6qLdpDH8IH/xwtdwhddaZupiGr+Ced2sPymRyXIDTPb2e
-         LBKlrLSAmeayWmJF53AU6XMTwZ518nADPGNFUNKCuNynz8gTntv71pNQiKBNec/s5d
-         vDYELos/22rzSwtno4rt4Q2iPBOl+nSZlHNsVibm5aCVKW0np4wMabNDiMMKBGvRvt
-         MbEP73GH/GLWQrX6rJ8pr1lC5BoF0DT72+zeMwyuieYJ2HnatAkhj2CvxHGpCHJnH3
-         1nWyweXZ0y98A==
-Date:   Tue, 22 Nov 2022 13:51:19 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Li Hua <hucool.lihua@huawei.com>
-Cc:     <rostedt@goodmis.org>, <akpm@linux-foundation.org>,
-        <nathan@kernel.org>, <ananth@in.ibm.com>,
-        <linux-kernel@vger.kernel.org>, <weiyongjun1@huawei.com>,
-        <yusongping@huawei.com>
-Subject: Re: [PATCH] test_kprobes: Fix implicit declaration error of
- test_kprobes
-Message-Id: <20221122135119.2755825442e46e81be72e592@kernel.org>
-In-Reply-To: <20221121030620.63181-1-hucool.lihua@huawei.com>
-References: <20221121030620.63181-1-hucool.lihua@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        b=skNPp7tb51i4FbD4cykqiGQG00bzDwUKnyVL5YrJZfBV+MX2lwv0TuFLLm++X9F/H
+         ySV2e/591LqVhOwOsr6tDZ9z9fS7kOGpO/T9jcH8zqLChfIGs4K2lG+VFOosyR9DT/
+         Ne5/HP3JNYGgvcJSAi8NazZ9KInIBxtcr//F4QDt3B7QoSMx7dsP1EPr46VHjieS4U
+         uzFTuynEs+4jfAC9fa/WghBDJnMQgTH6YS4D2Qza2p+6V66Uvf46Ef8nTDq49DRwxu
+         q5wGa8ljcqTXwwMdXkaj+w/VDR9UqP60wCkGi+lxKCz9U6XJqzFLqthjjiAfj/3Spl
+         TdDtPXnvFqd5Q==
+Date:   Tue, 22 Nov 2022 15:52:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Chris Healy <healych@amazon.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the arm64 tree
+Message-ID: <20221122155216.47e0aca9@canb.auug.org.au>
+In-Reply-To: <e12a12a4-ab6c-ff4a-5cb8-10e498e696a5@amlogic.com>
+References: <20221122104136.601ba45e@canb.auug.org.au>
+        <e12a12a4-ab6c-ff4a-5cb8-10e498e696a5@amlogic.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Kr3wh5Y2ecqoL8K.3PylY/Q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,52 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 11:06:20 +0800
-Li Hua <hucool.lihua@huawei.com> wrote:
+--Sig_/Kr3wh5Y2ecqoL8K.3PylY/Q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> If KPROBES_SANITY_TEST and ARCH_CORRECT_STACKTRACE_ON_KRETPROBE is enabled, but
-> STACKTRACE is not set. Build failed as below:
-> 
-> lib/test_kprobes.c: In function ‘stacktrace_return_handler’:
-> lib/test_kprobes.c:228:8: error: implicit declaration of function ‘stack_trace_save’; did you mean ‘stacktrace_driver’? [-Werror=implicit-function-declaration]
->   ret = stack_trace_save(stack_buf, STACK_BUF_SIZE, 0);
->         ^~~~~~~~~~~~~~~~
->         stacktrace_driver
-> cc1: all warnings being treated as errors
-> scripts/Makefile.build:250: recipe for target 'lib/test_kprobes.o' failed
-> make[2]: *** [lib/test_kprobes.o] Error 1
-> 
-> To fix this error, Select STACKTRACE if ARCH_CORRECT_STACKTRACE_ON_KRETPROBE is enabled.
+Hi,
 
-Good catch!
+On Tue, 22 Nov 2022 12:17:24 +0800 Jiucheng Xu <jiucheng.xu@amlogic.com> wr=
+ote:
+>
+> Could you please share your compiler information, commit id and other
+>=20
+> environments info for me to reproduce the building error?
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+$ x86_64-linux-gnu-gcc --version
+x86_64-linux-gnu-gcc (Debian 12.2.0-3) 12.2.0
 
-Thanks!
+The head of the arm64 tree that I merged was
 
-> 
-> Fixes: 1f6d3a8f5e39 ("kprobes: Add a test case for stacktrace from kretprobe handler")
-> Signed-off-by: Li Hua <hucool.lihua@huawei.com>
-> ---
->  lib/Kconfig.debug | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index c3c0b077ade3..a1005415f0f4 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2107,6 +2107,7 @@ config KPROBES_SANITY_TEST
->  	depends on DEBUG_KERNEL
->  	depends on KPROBES
->  	depends on KUNIT
-> +	select STACKTRACE if ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
->  	default KUNIT_ALL_TESTS
->  	help
->  	  This option provides for testing basic kprobes functionality on
-> -- 
-> 2.17.1
-> 
+  27131b99f024 ("Merge branches 'for-next/acpi', 'for-next/asm-const', 'for=
+-next/cpufeature', 'for-next/dynamic-scs', 'for-next/errata', 'for-next/fps=
+imd', 'for-next/insn', 'for-next/kbuild', 'for-next/kdump', 'for-next/mm', =
+'for-next/perf', 'for-next/selftests', 'for-next/stacks', 'for-next/trivial=
+', 'for-next/uaccess' and 'for-next/undef-traps' into for-next/core")
 
+This is a cross build, host ppc64le, target x86_64 allmodconfig.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+drivers/perf/amlogic/meson_g12_ddr_pmu.c needs to include linux/io.h
+(and your test builds probably got it (or asm/io.h) via some other
+include file).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Kr3wh5Y2ecqoL8K.3PylY/Q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN8VYAACgkQAVBC80lX
+0GwQowf/UE7oCc3KNqNBMHm9fC+hbNKUj2t2HVQkOmrAEsY6ZANGNjaxsVcdAwmb
+UNKXkwZse8Mr6x984NHMrmaY4RJjooXM5DO+RJbJ/++pWopCeG5Jl2x9Le+zv5Dy
+foLJ/cSJeDRGhe/ibChrkxiRImIuBY+s1q935NzhCXM7c6y+Q3jqKKxwdkKsvPW5
+swloan6WDaQNi+MJ73k1cJvVNrsP5XhlFpnOGo7WCcDIyFSRVOYnBXzoJnB4ExrS
+0d8HrWCMSemSnDpYqUp4KZ9Dx2PxTDQp7Hs7KUFtw7MMJj0jJZpKuhj4d7ovOWEb
+2koLyHm4s0mnBjYol6FUzqDwcXAysA==
+=6UFc
+-----END PGP SIGNATURE-----
+
+--Sig_/Kr3wh5Y2ecqoL8K.3PylY/Q--
