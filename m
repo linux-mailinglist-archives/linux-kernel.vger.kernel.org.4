@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56BE63355B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43297633560
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiKVGd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 01:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
+        id S232140AbiKVGf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 01:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiKVGdY (ORCPT
+        with ESMTP id S229639AbiKVGfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 01:33:24 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC069FD2;
-        Mon, 21 Nov 2022 22:33:23 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AM64hxZ011778;
-        Tue, 22 Nov 2022 06:31:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=G6al7EgrFATCgp+KRSpg6rYdfJ14L7+oK1pxlH/1xPM=;
- b=FXhhwdJTxaPQFymKD/yRr2FSxLG6maIXss6h64W1jKPk2vV17490r82UXtWyDKljmE9s
- cyAKZIQtR25+FK68uVYVP4IA2TxSlT9EgICGNgpUa+IQnguEJaUC3dFV0u3VL0HEPVcp
- xRT3xQb+PfNKmQngNmJHTGmUN0kDG4QWX8IoOgPxv4Lhesy8a+bsBOXxgJCEo7CKflyG
- j9uO+zWaGrio7xuQywWHrbpeY3QEugfExXMEOFw9fge+qfRVyvDhM1JUrgJgAtGRi0wG
- eydy9eMMoxMYYUtrsxGc7lSP/EVltdBONEvHuOhqjiA8tOBvGEQ9lSnz2l5bjqHUekRI ZQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m0q6x86me-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 06:31:35 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AM6VYOu025299
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 06:31:34 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 21 Nov 2022 22:31:28 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <devicetree@vger.kernel.org>, <lgirdwood@gmail.co>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v2] ASoC: soc-pcm: Add NULL check in BE reparenting
-Date:   Tue, 22 Nov 2022 12:01:13 +0530
-Message-ID: <1669098673-29703-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 22 Nov 2022 01:35:25 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B62DD8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 22:35:24 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id t17so11756318pjo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 22:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BZcw3xphyFpaMwrz2/RfL1TkxCNnDZvBvwaHcEozeVo=;
+        b=gc9iRvo0HrISQTXfnCpl6IEX773OMidfAI9E+Bb7/VBj5N0v4YGejsaBNYalbQcr7P
+         ca7cJyaLQXrWjybpdkYaCoP5dOAVQ9l0p2JXEr9RDeLXUB4dSPZyPOcWNGS2RPBynVBP
+         Y803ZBp6/+ub5d150Lwt44vPD+OpF7ztHLoN0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BZcw3xphyFpaMwrz2/RfL1TkxCNnDZvBvwaHcEozeVo=;
+        b=uLUZvUKVJUBPFJiFqIiDJ/vm7G4TzuA6POHtoL4uoPUobcI8XNgavO6oUoe699k+6p
+         wFLgcswQfbdGI0M/yBeL8FCTE7avmzoGBxWORlmH/phcubNMkQyuVuAYmrk/yqb8S7zQ
+         bp24fyVJwfVli8rPhUvp4GhlF05EnP5nij0SPk42T8Fo5c6duMb95VrhybxIwkj36BeM
+         Z6o0jLHTeKSfW35sba9ifrDIAqwiilzGPQ8uDvvgu4AQmR4+YbEzlkx6zLgodqVUR1Pz
+         L6+7JXrDMGexn2ky4uhMe0xxuHshWX9HrDLDUf1I0AT6u5PgM29NVG/H5qLgLwky/wlf
+         tGdg==
+X-Gm-Message-State: ANoB5pmxsjtH0EEaBiuxiXs/yzJwHNgnHb53+BqRia38K06LV3tsaI4Z
+        qEY42ue3eJ25FqiP3iZI0GlR3Ox3MyricQ==
+X-Google-Smtp-Source: AA0mqf7R9zv+5zht7rNwqMkVgWWExmmyK2xXlbenlYgDUv8aZO3AGFXUNg4nEe2uDHIGcItotOUx9w==
+X-Received: by 2002:a17:90b:2542:b0:1fb:e7a:79b with SMTP id nw2-20020a17090b254200b001fb0e7a079bmr30708699pjb.93.1669098924054;
+        Mon, 21 Nov 2022 22:35:24 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902d48a00b0016d9b101413sm1472468plg.200.2022.11.21.22.35.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 22:35:23 -0800 (PST)
+Date:   Tue, 22 Nov 2022 15:35:18 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        minchan@kernel.org, ngupta@vflare.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y3xtpoQpb8DuiTlh@google.com>
+References: <20221119001536.2086599-1-nphamcs@gmail.com>
+ <20221119001536.2086599-7-nphamcs@gmail.com>
+ <Y3wwuMSy8YC86QAi@google.com>
+ <Y3w+C8ClzP6VbqrA@cmpxchg.org>
+ <Y3xFHIgkiZNYCbHi@google.com>
+ <Y3xnf7pR4vI7o9PV@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6Vcx3HIsNJoroU2495sFmzlrYThHOoL5
-X-Proofpoint-ORIG-GUID: 6Vcx3HIsNJoroU2495sFmzlrYThHOoL5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-22_03,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 spamscore=0 impostorscore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 phishscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211220047
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3xnf7pR4vI7o9PV@cmpxchg.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,31 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add NULL check in dpcm_be_reparent API, to handle
-kernel NULL pointer dereference error.
-The issue occurred in fuzzing test.
+On (22/11/22 01:09), Johannes Weiner wrote:
+> On Tue, Nov 22, 2022 at 12:42:20PM +0900, Sergey Senozhatsky wrote:
+> > On (22/11/21 22:12), Johannes Weiner wrote:
+> > > On Tue, Nov 22, 2022 at 11:15:20AM +0900, Sergey Senozhatsky wrote:
+> > > > On (22/11/18 16:15), Nhat Pham wrote:
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
-Changes Since V1:
-    -- Update commit title.
+[..]
 
- sound/soc/soc-pcm.c | 2 ++
- 1 file changed, 2 insertions(+)
+> > What I meant was: if zs_reclaim_page() makes only partial progress
+> > with the current LRU tail zspage and returns -EAGAIN, then we just
+> > don't increment `total` and continue looping in zs_zpool_shrink().
+> 
+> Hm, but it breaks on -EAGAIN, it doesn't continue.
 
-diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-index 493f003..a7810c7 100644
---- a/sound/soc/soc-pcm.c
-+++ b/sound/soc/soc-pcm.c
-@@ -1247,6 +1247,8 @@ static void dpcm_be_reparent(struct snd_soc_pcm_runtime *fe,
- 		return;
- 
- 	be_substream = snd_soc_dpcm_get_substream(be, stream);
-+	if (!be_substream)
-+		return;
- 
- 	for_each_dpcm_fe(be, stream, dpcm) {
- 		if (dpcm->fe == fe)
--- 
-2.7.4
+Yes. "What if it would continue". Would it make sense to not
+break on EAGAIN?
 
+	while (total < pages) {
+		ret = zs_reclaim_page(pool);
+		if (ret == -EAGAIN)
+			continue;
+		if (ret < 0)
+			break;
+		total++;
+	}
+
+Then we don't need retry loop in zs_reclaim_page().
