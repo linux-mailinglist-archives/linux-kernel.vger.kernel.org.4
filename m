@@ -2,125 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EBC633E56
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B21633E59
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbiKVOFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
+        id S234007AbiKVOFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiKVOFF (ORCPT
+        with ESMTP id S233990AbiKVOFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:05:05 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1A360365
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:03:34 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id jr19so9287314qtb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:03:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dPo1VJDCFCdypvY/4Rr9xvuWEvz7BM121VJBRjgU86o=;
-        b=iizsXhnKIIQ6of95eoBCkw5wSk6O2ftuDXtXJKqH2nkg4kMwL6naDeVJv8jtQXJx9H
-         80ZQEvMptfeFwueDySvCbN6IJAi0TEGv9eQcs68a4GfZGQwOY3DbX8GVBlppRbk6MnWj
-         /jNW7GetrgS5vYEGxRr/4egvF4XVmSsZdRUZ5/e1h/kd//YNsclkRqaOvqborCe9oE95
-         yvoOhhLqPetq6LoP3RxPPIjXLqZnpmpKgKLtYKWqmQdGn0MbP3/VakvQJWSHnbZ27uSe
-         9tnwAxvfEz+LVdOM1ThrKiXSEuNBMEdrvLITeUiNg7ipbuXXzykB/3dzkDgSJSfRCz8e
-         aWZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dPo1VJDCFCdypvY/4Rr9xvuWEvz7BM121VJBRjgU86o=;
-        b=czUpNapZkYNPm/BQ6wWajLYT7WQILkO2NSS94Ai0igsV3xCgDxn3gAM1SHRzkADcUk
-         c6g2u+iZrlQA8TbfTeV6D2AqYFPuRyuZ/rZSD9knZhH1RXX2oT8El7pbPoIFiJ84lmzJ
-         zskvinH1WCWCPyMrUlr6PUBHbwa9uicLa3glWdQn/0QDqvEh0hPrDRp0c/xXjiKB6kKJ
-         8BG+3asHRpjZMU8yOJL5FE0eSM01yt9OoXUbYtZyM1ogqa2qdwfEdBXt0d5wNvGnmuT7
-         KhG1qlGXH2EivENXtC4Qa/o9SOC2d4m0sWtCAflL1JiJvQg4I8z3wreTQzuubWe1DFZt
-         Rc9g==
-X-Gm-Message-State: ANoB5pmLqt/UJyIEmz79za8M9oUmfngSVA2dY4y1uvhry0rUb1Mfp/yV
-        APrB4oGyLwnVbmRQ9bfdCbVNQQ==
-X-Google-Smtp-Source: AA0mqf79mbqp/6RdyjDQA49XKwtdlQKw/ojQCaMF8zu8rpCbJ4qZ2RqG+xeldZ68B7PzlT1pTZIvwA==
-X-Received: by 2002:ac8:60d3:0:b0:3a5:4678:5b24 with SMTP id i19-20020ac860d3000000b003a546785b24mr21815284qtm.411.1669125813304;
-        Tue, 22 Nov 2022 06:03:33 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id bi41-20020a05620a31a900b006f956766f76sm10344180qkb.1.2022.11.22.06.03.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 06:03:32 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1oxTs3-009j8v-S2;
-        Tue, 22 Nov 2022 10:03:31 -0400
-Date:   Tue, 22 Nov 2022 10:03:31 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Wang Yufen <wangyufen@huawei.com>
-Cc:     leon@kernel.org, markzhang@nvidia.com, haakon.bugge@oracle.com,
-        mbloch@nvidia.com, sean.hefty@intel.com, rolandd@cisco.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] infiniband: cma: fix the dev refcnt leak
-Message-ID: <Y3zWs1m7m5D3+BJW@ziepe.ca>
-References: <1669099673-12213-1-git-send-email-wangyufen@huawei.com>
+        Tue, 22 Nov 2022 09:05:09 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223C167F61;
+        Tue, 22 Nov 2022 06:04:24 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AME4BaY029913;
+        Tue, 22 Nov 2022 08:04:11 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669125851;
+        bh=a6KIhoL/FHnn9qdoY7rmWPJhql70rszn2U4cEmRZrEg=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=lv2Zu3g5unm5HBcHPo4N2mtkZO3YrTzmO893TawHeORq15HMozn07PQjrBGPiolrr
+         IbxsF+od/I6tsOC+Jv+En9cLl6PPabCLTlW0DwUkvXhzxwigE4qKOtlAJeF+JCmg2A
+         vdZ4f3W2tPcqcdFG70202u/Ui82bpP/ROoYc9gXs=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AME4BRJ006878
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Nov 2022 08:04:11 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 22
+ Nov 2022 08:04:10 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 22 Nov 2022 08:04:10 -0600
+Received: from [10.24.69.141] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AME46uM128116;
+        Tue, 22 Nov 2022 08:04:07 -0600
+Message-ID: <e5de300b-3410-edc1-1e22-ee3d43fe783e@ti.com>
+Date:   Tue, 22 Nov 2022 19:34:06 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1669099673-12213-1-git-send-email-wangyufen@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 6/8] arm64: dts: ti: k3-j721s2: Add support for OSPI
+ Flashes
+Content-Language: en-US
+To:     Matt Ranostay <mranostay@ti.com>, <nm@ti.com>, <afd@ti.com>,
+        <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-vadapalli@ti.com>,
+        <r-gunasekaran@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Vaishnav Achath <vaishnav.a@ti.com>
+References: <20221122101616.770050-1-mranostay@ti.com>
+ <20221122101616.770050-7-mranostay@ti.com>
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+In-Reply-To: <20221122101616.770050-7-mranostay@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 02:47:53PM +0800, Wang Yufen wrote:
-> Syzbot report the following issue:
->   infiniband syj1: RDMA CMA: cma_listen_on_dev, error -98
->   unregister_netdevice: waiting for vlan0 to become free. Usage count = 2
+
+
+On 22/11/22 15:46, Matt Ranostay wrote:
+> From: Aswath Govindraju <a-govindraju@ti.com>
 > 
-> The causes are as follows:
+> J721S2 has an OSPI NOR flash on its SOM connected the OSPI0 instance and a
+> QSPI NOR flash on the common processor board connected to the OSPI1
+> instance. Add support for the same
 > 
-> rdma_listen()
->   rdma_bind_addr()
->     cma_acquire_dev_by_src_ip()
->       cma_attach_to_dev()
->         _cma_attach_to_dev()
->           cma_dev_get()
-> 
->   cma_check_port()
->   <--The return value is -98， goto err
-> 
-> err:
-> <-- The error handling here is missing the operation of cma_release_dev.
-> 
-> To fix, add cma_release_dev to error handing.
-> 
-> Fixes: e51060f08a61 ("IB: IP address based RDMA connection manager")
-> Reported-by: syzbot+5e70d01ee8985ae62a3b@syzkaller.appspotmail.com
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
 > ---
->  drivers/infiniband/core/cma.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  .../dts/ti/k3-j721s2-common-proc-board.dts    | 34 +++++++++++++++
+>  arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  | 42 +++++++++++++++++++
+>  2 files changed, 76 insertions(+)
 > 
-> diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-> index 26d1772..3a50a8e 100644
-> --- a/drivers/infiniband/core/cma.c
-> +++ b/drivers/infiniband/core/cma.c
-> @@ -4049,6 +4049,9 @@ int rdma_listen(struct rdma_cm_id *id, int backlog)
->  	return 0;
->  err:
->  	id_priv->backlog = 0;
-> +	if (id_priv->cma_dev)
-> +		cma_release_dev(id_priv);
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+> index c787d46f89de..0503e690cfaf 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+> @@ -206,6 +206,20 @@ mcu_mcan1_gpio_pins_default: mcu-mcan1-gpio-pins-default {
+>  			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) WKUP_GPIO0_2 */
+>  		>;
+>  	};
 > +
+> +	mcu_fss0_ospi1_pins_default: mcu-fss0-ospi1-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x040, PIN_OUTPUT, 0) /* (A19) MCU_OSPI1_CLK */
+> +			J721S2_WKUP_IOPAD(0x05c, PIN_OUTPUT, 0) /* (D20) MCU_OSPI1_CSn0 */
+> +			J721S2_WKUP_IOPAD(0x060, PIN_OUTPUT, 0) /* (C21) MCU_OSPI1_CSn1 */
+> +			J721S2_WKUP_IOPAD(0x04c, PIN_INPUT, 0) /* (D21) MCU_OSPI1_D0 */
+> +			J721S2_WKUP_IOPAD(0x050, PIN_INPUT, 0) /* (G20) MCU_OSPI1_D1 */
+> +			J721S2_WKUP_IOPAD(0x054, PIN_INPUT, 0) /* (C20) MCU_OSPI1_D2 */
+> +			J721S2_WKUP_IOPAD(0x058, PIN_INPUT, 0) /* (A20) MCU_OSPI1_D3 */
+> +			J721S2_WKUP_IOPAD(0x048, PIN_INPUT, 0) /* (B19) MCU_OSPI1_DQS */
+> +			J721S2_WKUP_IOPAD(0x044, PIN_INPUT, 0) /* (B20) MCU_OSPI1_LBCLKO */
+> +		>;
+> +	};
+>  };
+>  
+>  &main_gpio2 {
+> @@ -340,6 +354,26 @@ &usb0 {
+>  	maximum-speed = "high-speed";
+>  };
+>  
+> +&ospi1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mcu_fss0_ospi1_pins_default>;
+> +
+> +	flash@0{
+> +		compatible = "jedec,spi-nor";
+> +		reg = <0x0>;
+> +		spi-tx-bus-width = <1>;
+> +		spi-rx-bus-width = <4>;
+> +		spi-max-frequency = <40000000>;
+> +		cdns,tshsl-ns = <60>;
+> +		cdns,tsd2d-ns = <60>;
+> +		cdns,tchsh-ns = <60>;
+> +		cdns,tslch-ns = <60>;
+> +		cdns,read-delay = <2>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +	};
+> +};
+> +
+>  &mcu_mcan0 {
+>  	status = "okay";
+>  	pinctrl-names = "default";
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+> index 6930efff8a5a..2ffea00e19d7 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+> @@ -39,6 +39,28 @@ transceiver0: can-phy0 {
+>  	};
+>  };
+>  
+> +&wkup_pmx0 {
+> +	mcu_fss0_ospi0_pins_default: mcu-fss0-ospi0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721S2_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (D19) MCU_OSPI0_CLK */
+> +			J721S2_WKUP_IOPAD(0x02c, PIN_OUTPUT, 0) /* (F15) MCU_OSPI0_CSn0 */
+> +			J721S2_WKUP_IOPAD(0x030, PIN_OUTPUT, 0) /* (G17) MCU_OSPI0_CSn1 */
+> +			J721S2_WKUP_IOPAD(0x038, PIN_OUTPUT, 0) /* (F14) MCU_OSPI0_CSn2 */
+> +			J721S2_WKUP_IOPAD(0x03c, PIN_OUTPUT, 0) /* (F17) MCU_OSPI0_CSn3 */
+> +			J721S2_WKUP_IOPAD(0x00c, PIN_INPUT, 0) /* (C19) MCU_OSPI0_D0 */
+> +			J721S2_WKUP_IOPAD(0x010, PIN_INPUT, 0) /* (F16) MCU_OSPI0_D1 */
+> +			J721S2_WKUP_IOPAD(0x014, PIN_INPUT, 0) /* (G15) MCU_OSPI0_D2 */
+> +			J721S2_WKUP_IOPAD(0x018, PIN_INPUT, 0) /* (F18) MCU_OSPI0_D3 */
+> +			J721S2_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (E19) MCU_OSPI0_D4 */
+> +			J721S2_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (G19) MCU_OSPI0_D5 */
+> +			J721S2_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (F19) MCU_OSPI0_D6 */
+> +			J721S2_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (F20) MCU_OSPI0_D7 */
+> +			J721S2_WKUP_IOPAD(0x008, PIN_INPUT, 0) /* (E18) MCU_OSPI0_DQS */
+> +			J721S2_WKUP_IOPAD(0x004, PIN_INPUT, 0) /* (E20) MCU_OSPI0_LBCLKO */
+> +		>;
+> +	};
+> +};
+> +
+>  &main_pmx0 {
+>  	main_i2c0_pins_default: main-i2c0-pins-default {
+>  		pinctrl-single,pins = <
+> @@ -79,3 +101,23 @@ &main_mcan16 {
+>  	pinctrl-names = "default";
+>  	phys = <&transceiver0>;
+>  };
+> +
+> +&ospi0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
+> +
+> +	flash@0 {
+> +		compatible = "jedec,spi-nor";
+> +		reg = <0x0>;
+> +		spi-tx-bus-width = <8>;
+> +		spi-rx-bus-width = <8>;
+> +		spi-max-frequency = <25000000>;
+> +		cdns,tshsl-ns = <60>;
+> +		cdns,tsd2d-ns = <60>;
+> +		cdns,tchsh-ns = <60>;
+> +		cdns,tslch-ns = <60>;
+> +		cdns,read-delay = <4>;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +	};
 
-I'm not sure about this, the dev is released during _destroy_id()
+Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
 
-Is something leaking an entire CM id or is there something wrong with
-_destroy_id() ?
+> +};
 
-Jason
+-- 
+Regards,
+Vaishnav
