@@ -2,120 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F29D6335C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4DC6335CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbiKVHSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S230377AbiKVHTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiKVHSr (ORCPT
+        with ESMTP id S230009AbiKVHS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:18:47 -0500
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B09B29818;
-        Mon, 21 Nov 2022 23:18:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1669101514; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=JJyCwxsJ/i+ixev69VwzYTiV2wuJNJgtT9F6BL9qltFU7wJVa5wR7HW4ZVlJli/gNzaBboU8/Ru7AGRwZKtgKOO0aOTqYxAiF9oFMyEcX/vEFBNzSZyO3NdXyamWzL2Px7hJAPT6Mk+pKb3r8vq5+Gq6dsuUWWgszGu8rCxIf1o=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1669101514; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=81+xlIqsl8cG7bxBR3sGfI5lOeqiGbfvoGg16RAnG2s=; 
-        b=eguW4huBwt6/N2Z1PQbnRf3Yo91Bt7nQcBQZSRrrFb418mZsL7/yxDCKc1vMJPLQ8Vfe0+3Dy8mAHrbjX+82HY8G83th0xlBJ+TxrkW34AZn9f6ikCJn38m2uq+E/pEVnCFPW3X6SRq1xouUSdcIV7Ne/50OA/TbWf7/JbFKGz8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669101514;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=81+xlIqsl8cG7bxBR3sGfI5lOeqiGbfvoGg16RAnG2s=;
-        b=TKklBAFP9bWoQfIdfM5vWo5gJ/CCV03rQBLVxX9Zoz0Kp3tcs5laeWU5lT709bgu
-        bgDlofypXi71ALPVQMbFDSKSwlYa0hrzARem+Dhx9ZIRceQcMxMjcU3CTkNLhDRrEFf
-        mNZVrkQ8aiK/1Ozcaoh+8mNLJVKcsAgbTamcx9V8=
-Received: from edelgard.fodlan.icenowy.me (112.94.100.29 [112.94.100.29]) by mx.zohomail.com
-        with SMTPS id 1669101513524595.8333664570052; Mon, 21 Nov 2022 23:18:33 -0800 (PST)
-Message-ID: <b924d37d716fa8b1fd93102b1d51fac221f43d59.camel@icenowy.me>
-Subject: Re: [PATCH 2/3] dt-bindings: timer: sifive,clint: add compatible
- for OpenC906
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 22 Nov 2022 02:18:59 -0500
+Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5CA3123B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:18:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+         message-id:subject:cc:to:from:date:from;
+        bh=Irzd9p8+2HaCNO0Vn7tqqCeUCmTdBbt/zWJHz9qjP1c=;
+        b=lJrIorXCx0ilwJuwWQE/gouCXs9jdvjGu2hOJkQ4Ozi495WYG+B4K2lUOcPD9V78Zmd7aL2nqx+m5
+         137Wx+2DAej8WLMp6457IMwMuDJP2u1Ap8bqEZhUXqcOSAFXkialwQAsIPl46fyAGeWrr2HOZICnYZ
+         7YtkjKhHbW8B3kr4bFX7MtA30XHMPuI/eWCYK0ebioDU1Fx+dpe9pjK97O8EgY6pFXAybWQGLass3C
+         ivcNX99Zo+ifr1rHGo2Xb3ykEb9W5FjAtoCEKZjw8/IixQRLODygQ4r26xKxORp+j11TG3mRAo5gJj
+         FS+4hRfSJpSeIvCpBkvR+mtWSyfXVjQ==
+X-MSG-ID: ea7fdbdd-6a35-11ed-b61c-0050569d3a82
+Date:   Tue, 22 Nov 2022 08:18:51 +0100
+From:   David Jander <david@protonic.nl>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Quentin Schulz <foss+kernel@0leil.net>,
+        "Angus Ainslie (Purism)" <angus@akkea.ca>,
+        Shawn Guo <shawnguo@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Date:   Tue, 22 Nov 2022 15:18:28 +0800
-In-Reply-To: <98005150-83a7-5439-0db1-d93d459c3809@linaro.org>
-References: <20221121041757.418645-1-uwu@icenowy.me>
-         <20221121041757.418645-3-uwu@icenowy.me>
-         <98005150-83a7-5439-0db1-d93d459c3809@linaro.org>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Heiko Stuebner <heiko@sntech.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH RFC v2 5/7] arm64: dts: imx: fix touchscreen reset GPIO
+ polarity
+Message-ID: <20221122081851.6cb762d8@erd992>
+In-Reply-To: <CAOMZO5BzWsHAy7KjZe+KEiXVq-Mfpggqjk0vswuzx7nkups3gA@mail.gmail.com>
+References: <20221103-upstream-goodix-reset-v2-0-2c38fb03a300@theobroma-systems.com>
+        <20221103-upstream-goodix-reset-v2-5-2c38fb03a300@theobroma-systems.com>
+        <CAOMZO5BzWsHAy7KjZe+KEiXVq-Mfpggqjk0vswuzx7nkups3gA@mail.gmail.com>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-11-21=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 11:06 +0100=EF=BC=
-=8CKrzysztof Kozlowski=E5=86=99=E9=81=93=EF=BC=9A
-> On 21/11/2022 05:17, Icenowy Zheng wrote:
-> > T-Head OpenC906 is a open-source-licensed fixed-configuration of
-> > C906,
-> > which is now public and able to be integrated.
-> >=20
-> > Add a compatible for the CLINT shipped as part of OpenC906, which
-> > should
-> > just be ordinary C9xx CLINT.
-> >=20
-> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+On Mon, 21 Nov 2022 15:18:32 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
+
+> [Adding Angus and David]
+
+Thanks. This was apparently necessary ;-)
+
+> On Mon, Nov 21, 2022 at 3:12 PM Quentin Schulz <foss+kernel@0leil.net> wrote:
+> >
+> > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> >
+> > The reset line is active low for the Goodix touchscreen controller so
+> > let's fix the polarity in the Device Tree node.
+> >
+> > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 > > ---
-> > =C2=A0Documentation/devicetree/bindings/timer/sifive,clint.yaml | 1 +
-> > =C2=A01 file changed, 1 insertion(+)
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > index aada6957216c..86703e995e31 100644
-> > --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > @@ -35,6 +35,7 @@ properties:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: s=
-ifive,clint0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 - thead,openc906-clint
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 - allwinner,sun20i-d1-clint
->=20
-> Add entries sorted alphabetically. This should be squashed with
-> previous
-> patch.
+> >  arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts         | 2 +-
+> >  arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts b/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
+> > index 9fbbbb556c0b3..df7e5ae9698e1 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
+> > @@ -107,7 +107,7 @@ touchscreeen@5d {
+> >                 interrupt-parent = <&gpio1>;
+> >                 interrupts = <8 IRQ_TYPE_NONE>;
+> >                 irq-gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
+> > -               reset-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
+> > +               reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
 
-I make it a seperated patch because I think it's a questionable
-approach.
+NACK!
 
-If you think it's okay, I will just squash it and put it as the second
-patch in the next iteration, with adding openc906-plic as the first
-one.
+The PRT8MM has an inverter in the reset line. The reason for that is that the
+reset line needs to be inactive when the driving side is unpowered.
+The DT was correct, this change will break it.
 
->=20
-> Best regards,
-> Krzysztof
->=20
+> >         };
+> >
+> >         temp-sense@70 {
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts b/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts
+> > index 6445c6b90b5bb..b038300812b1e 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts
+> > @@ -542,7 +542,7 @@ touchscreen@5d {
+> >                 pinctrl-0 = <&pinctrl_ts>;
+> >                 interrupt-parent = <&gpio3>;
+> >                 interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+> > -               reset-gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
+> > +               reset-gpios = <&gpio1 5 GPIO_ACTIVE_LOW>;
+> >                 irq-gpios = <&gpio3 0 GPIO_ACTIVE_HIGH>;
+> >                 touchscreen-size-x = <720>;
+> >                 touchscreen-size-y = <1440>;
+> >
+> > --
+> > b4 0.10.1  
 
+Best regards,
+
+-- 
+David Jander
+Protonic Holland.
