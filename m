@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DBE633863
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2469633868
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbiKVJ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
+        id S231583AbiKVJ23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiKVJ1v (ORCPT
+        with ESMTP id S232986AbiKVJ2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:27:51 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0B462EE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:27:29 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id x66so5231247pfx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:27:29 -0800 (PST)
+        Tue, 22 Nov 2022 04:28:18 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6F42FFFC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:28:16 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id a1-20020a17090abe0100b00218a7df7789so5709767pjs.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:28:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eATo/hld30hJMYbs854XvpQGAeslm1I6YJ3BHDFYFEg=;
-        b=Dh3UF3El3dMJ6YHfGqSY2/yW/4eIWI4c2NX7FXI3gZTQg52GpepQx2iYs+axwGyBch
-         xiLrUm+XzFNiFGIfuuQRPX9rt6coTdn4F9lkTciXMvemJQXPzHd68W7F/hIphcnaTbBV
-         8cByzmD0CZttP5yYv4Rs0IuLYG/6TWS6YFUemU+GT8E0CXUkzN22hbt4eFMS2TinVBRl
-         x0SmsG5H6gYOAnieaxxv5MxW4lHVdXfqFXPd2AI4NhLFOiybEtgqwU5eZikBFTVreFz9
-         L5njN1gHd6uREwoD6fbog1A8q5qxdd1uYNjAqvPpzZnWJaClkz1cMnLhqB2DWZd8wFyp
-         Q9Zg==
+        bh=/GVFeQ7YQxZxifzanltQSzgNMaKfrPVzQi5mw4Z3bF4=;
+        b=InlihnCtBXub3e4GGhMCBwY1/GPSUE/nd2yAnHD2vdhAGxwrNEgB9rOSw/YuihxPJ6
+         O5k7Bggkul+2KPHCPA6WcrVckzd2qSw+plh8tGOMIKHtSnWM6C7k9BLbfWCInLryFm8C
+         1E9oidtS4WE1nQFGv44edb8P6ZIZUuJF9/Mz4cy/zHLq+niDa+k1gx0yzALzi5+GGYw5
+         96h9zc3fgKrj9tms7P58EBKRhwy+rtwSKsE//H6ooFmZqOuvrQ8E6eCvkQQYAiftlLNe
+         x9fSp9HeDFyHBvg0P838npW4aMYcTU9dPK1ANnA+r8myNRq8G5jQY3hY7xl9Kroh2GxH
+         +JDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eATo/hld30hJMYbs854XvpQGAeslm1I6YJ3BHDFYFEg=;
-        b=HvrAGx6QTcpdHjYda2SfTtGPYxZyxQWV0JXncRNHovsYvF2Rv3OvEal2/jlzgc2kjR
-         EoKdNrFKYPQ3tLo0rEWmfDt87tn6cFRhlOtupTKVGbRKSmvXYrwWkjVaj2UVfHj9ZkGn
-         ynHZnI1J5vCwtUEYB6jwN/aEfg1IOGFH1/OP4Se1CZmhv1SzibKhOiOBZX5NzsZoKKmT
-         jV8FfXdZtH96S5af+kmERBgsKxdH958+TfjExJ97QhqVv9ESB1P2TTfXIXujjeeevtt8
-         m4JQDUIttpcC9DvhXJHtCTXbg4npQt0wXnYwZ9k4+WykFXRUm3ZYKQfGByGEkroTmDCc
-         b/4w==
-X-Gm-Message-State: ANoB5pl83uMjVQWZh8ygHDqnXl3QDjR5ELPVCTtUFax4Xy9M2mALITCF
-        o+DE0pgLNfN0MqnPJxNMjTEXT8S+pOVX4A==
-X-Google-Smtp-Source: AA0mqf5FEiWQeGphury5+1tD79SfHYxjMoofOiV7AmZQVVrt3KAqnKKRF05vDd/tj0redx0XMfIMUw==
-X-Received: by 2002:aa7:9293:0:b0:56b:9bf4:c1c4 with SMTP id j19-20020aa79293000000b0056b9bf4c1c4mr14057458pfa.67.1669109249227;
-        Tue, 22 Nov 2022 01:27:29 -0800 (PST)
+        bh=/GVFeQ7YQxZxifzanltQSzgNMaKfrPVzQi5mw4Z3bF4=;
+        b=ACKQ2CgqQJKfQFGSH1naSf7hvOwdWkiIvn+BK/TMDXAk4/mo5pb895uPhxkr+ROW4U
+         IXO+XxPcxuvE90RGlXAh5mOFK/5cNJFYZZa8XzAGoxHQVWyixitJBRoT/utCTYKwuAD3
+         9dPwpIDUu7Fck2792/QvtRMllloHSLUc4Vi065QWLXLB/AbgpVRlPfypbCJPTA2kCkPc
+         aJYYvN9ZHI27fHRBwVXa01iAVg6jnX5jTCIMlkSrcQ3GxP7mLJ4HS73eGLu+LLZXWbS3
+         ICJtOIR6ZqRc2ctigboI62gMhH483TkXuJ+qR4NonSTUGxnMeJTXgTnJCN5FLFV0AtNM
+         1f/A==
+X-Gm-Message-State: ANoB5pnEIH0WlYyETp+Y+JYF8qW8jJQb6iX0/D65cET2tgdAjdhTiNxW
+        fJnXk2rwIZLcoccxlTqklLC9X2Me4xPUQQ==
+X-Google-Smtp-Source: AA0mqf5voQeb5q+y0iCbkC5x9G+rL6VjFxbtDwT+AZaXlqsIb0KbSzfOgfT4Fyt5x0BQg7QWOATYDQ==
+X-Received: by 2002:a17:902:a984:b0:188:feab:4fd3 with SMTP id bh4-20020a170902a98400b00188feab4fd3mr4013430plb.167.1669109296171;
+        Tue, 22 Nov 2022 01:28:16 -0800 (PST)
 Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id g10-20020a170902d1ca00b00178acc7ef16sm9678567plb.253.2022.11.22.01.27.26
+        by smtp.gmail.com with ESMTPSA id e7-20020aa798c7000000b0056d98e31439sm10558784pfm.140.2022.11.22.01.28.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 01:27:28 -0800 (PST)
+        Tue, 22 Nov 2022 01:28:15 -0800 (PST)
 From:   Akihiko Odaki <akihiko.odaki@daynix.com>
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         intel-wired-lan@lists.osuosl.org,
@@ -61,9 +61,9 @@ Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Yan Vugenfirer <yan@daynix.com>,
         Yuri Benditovich <yuri.benditovich@daynix.com>,
         Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH] igbvf: Regard vf reset nack as success
-Date:   Tue, 22 Nov 2022 18:27:07 +0900
-Message-Id: <20221122092707.30981-1-akihiko.odaki@daynix.com>
+Subject: [PATCH] igb: Enable SR-IOV after reinit
+Date:   Tue, 22 Nov 2022 18:28:03 +0900
+Message-Id: <20221122092803.31083-1-akihiko.odaki@daynix.com>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,53 +77,236 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vf reset nack actually represents the reset operation itself is
-performed but no address is not assigned. Therefore, e1000_reset_hw_vf
-should fill the "perm_addr" with the zero address and return success on
-such an occassion. This prevents its callers in netdev.c from saying PF
-still resetting, and instead allows them to correctly report that no
-address is assigned.
+Enabling SR-IOV causes the virtual functions to make requests to the
+PF via the mailbox. Notably, E1000_VF_RESET request will happen during
+the initialization of the VF. However, unless the reinit is done, the
+VMMB interrupt, which delivers mailbox interrupt from VF to PF will be
+kept masked and such requests will be silently ignored.
 
+Enable SR-IOV at the very end of the procedure to configure the device
+for SR-IOV so that the PF is configured properly for SR-IOV when a VF is
+activated.
+
+Fixes: fa44f2f185f7 ("igb: Enable SR-IOV configuration via PCI sysfs interface")
 Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 ---
- drivers/net/ethernet/intel/igbvf/vf.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/intel/igb/igb_main.c | 135 ++++++++++------------
+ 1 file changed, 58 insertions(+), 77 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igbvf/vf.c b/drivers/net/ethernet/intel/igbvf/vf.c
-index b8ba3f94c363..2691ae2a8002 100644
---- a/drivers/net/ethernet/intel/igbvf/vf.c
-+++ b/drivers/net/ethernet/intel/igbvf/vf.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright(c) 2009 - 2018 Intel Corporation. */
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index cfe6bf6e2336..74694a27e35d 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -109,6 +109,7 @@ static void igb_free_all_rx_resources(struct igb_adapter *);
+ static void igb_setup_mrqc(struct igb_adapter *);
+ static int igb_probe(struct pci_dev *, const struct pci_device_id *);
+ static void igb_remove(struct pci_dev *pdev);
++static void igb_init_queue_configuration(struct igb_adapter *adapter);
+ static int igb_sw_init(struct igb_adapter *);
+ int igb_open(struct net_device *);
+ int igb_close(struct net_device *);
+@@ -175,9 +176,7 @@ static void igb_nfc_filter_restore(struct igb_adapter *adapter);
  
-+#include <linux/etherdevice.h>
-+
- #include "vf.h"
+ #ifdef CONFIG_PCI_IOV
+ static int igb_vf_configure(struct igb_adapter *adapter, int vf);
+-static int igb_pci_enable_sriov(struct pci_dev *dev, int num_vfs);
+-static int igb_disable_sriov(struct pci_dev *dev);
+-static int igb_pci_disable_sriov(struct pci_dev *dev);
++static int igb_disable_sriov(struct pci_dev *dev, bool reinit);
+ #endif
  
- static s32 e1000_check_for_link_vf(struct e1000_hw *hw);
-@@ -131,11 +133,18 @@ static s32 e1000_reset_hw_vf(struct e1000_hw *hw)
- 		/* set our "perm_addr" based on info provided by PF */
- 		ret_val = mbx->ops.read_posted(hw, msgbuf, 3);
- 		if (!ret_val) {
--			if (msgbuf[0] == (E1000_VF_RESET |
--					  E1000_VT_MSGTYPE_ACK))
-+			switch (msgbuf[0]) {
-+			case E1000_VF_RESET | E1000_VT_MSGTYPE_ACK:
- 				memcpy(hw->mac.perm_addr, addr, ETH_ALEN);
--			else
-+				break;
+ static int igb_suspend(struct device *);
+@@ -3616,7 +3615,7 @@ static int igb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	kfree(adapter->shadow_vfta);
+ 	igb_clear_interrupt_scheme(adapter);
+ #ifdef CONFIG_PCI_IOV
+-	igb_disable_sriov(pdev);
++	igb_disable_sriov(pdev, false);
+ #endif
+ 	pci_iounmap(pdev, adapter->io_addr);
+ err_ioremap:
+@@ -3631,7 +3630,38 @@ static int igb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ }
+ 
+ #ifdef CONFIG_PCI_IOV
+-static int igb_disable_sriov(struct pci_dev *pdev)
++static int igb_sriov_reinit(struct pci_dev *dev)
++{
++	struct net_device *netdev = pci_get_drvdata(dev);
++	struct igb_adapter *adapter = netdev_priv(netdev);
++	struct pci_dev *pdev = adapter->pdev;
 +
-+			case E1000_VF_RESET | E1000_VT_MSGTYPE_NACK:
-+				eth_zero_addr(hw->mac.perm_addr);
-+				break;
++	rtnl_lock();
 +
-+			default:
- 				ret_val = -E1000_ERR_MAC_INIT;
-+			}
- 		}
++	if (netif_running(netdev))
++		igb_close(netdev);
++	else
++		igb_reset(adapter);
++
++	igb_clear_interrupt_scheme(adapter);
++
++	igb_init_queue_configuration(adapter);
++
++	if (igb_init_interrupt_scheme(adapter, true)) {
++		rtnl_unlock();
++		dev_err(&pdev->dev, "Unable to allocate memory for queues\n");
++		return -ENOMEM;
++	}
++
++	if (netif_running(netdev))
++		igb_open(netdev);
++
++	rtnl_unlock();
++
++	return 0;
++}
++
++static int igb_disable_sriov(struct pci_dev *pdev, bool reinit)
+ {
+ 	struct net_device *netdev = pci_get_drvdata(pdev);
+ 	struct igb_adapter *adapter = netdev_priv(netdev);
+@@ -3665,10 +3695,10 @@ static int igb_disable_sriov(struct pci_dev *pdev)
+ 		adapter->flags |= IGB_FLAG_DMAC;
  	}
  
+-	return 0;
++	return reinit ? igb_sriov_reinit(pdev) : 0;
+ }
+ 
+-static int igb_enable_sriov(struct pci_dev *pdev, int num_vfs)
++static int igb_enable_sriov(struct pci_dev *pdev, int num_vfs, bool reinit)
+ {
+ 	struct net_device *netdev = pci_get_drvdata(pdev);
+ 	struct igb_adapter *adapter = netdev_priv(netdev);
+@@ -3733,12 +3763,6 @@ static int igb_enable_sriov(struct pci_dev *pdev, int num_vfs)
+ 			"Unable to allocate memory for VF MAC filter list\n");
+ 	}
+ 
+-	/* only call pci_enable_sriov() if no VFs are allocated already */
+-	if (!old_vfs) {
+-		err = pci_enable_sriov(pdev, adapter->vfs_allocated_count);
+-		if (err)
+-			goto err_out;
+-	}
+ 	dev_info(&pdev->dev, "%d VFs allocated\n",
+ 		 adapter->vfs_allocated_count);
+ 	for (i = 0; i < adapter->vfs_allocated_count; i++)
+@@ -3746,6 +3770,17 @@ static int igb_enable_sriov(struct pci_dev *pdev, int num_vfs)
+ 
+ 	/* DMA Coalescing is not supported in IOV mode. */
+ 	adapter->flags &= ~IGB_FLAG_DMAC;
++
++	if (reinit) {
++		err = igb_sriov_reinit(pdev);
++		if (err)
++			goto err_out;
++	}
++
++	/* only call pci_enable_sriov() if no VFs are allocated already */
++	if (!old_vfs)
++		err = pci_enable_sriov(pdev, adapter->vfs_allocated_count);
++
+ 	goto out;
+ 
+ err_out:
+@@ -3816,7 +3851,7 @@ static void igb_remove(struct pci_dev *pdev)
+ 
+ #ifdef CONFIG_PCI_IOV
+ 	rtnl_lock();
+-	igb_disable_sriov(pdev);
++	igb_disable_sriov(pdev, false);
+ 	rtnl_unlock();
+ #endif
+ 
+@@ -3865,7 +3900,7 @@ static void igb_probe_vfs(struct igb_adapter *adapter)
+ 	igb_reset_interrupt_capability(adapter);
+ 
+ 	pci_sriov_set_totalvfs(pdev, 7);
+-	igb_enable_sriov(pdev, max_vfs);
++	igb_enable_sriov(pdev, max_vfs, false);
+ 
+ #endif /* CONFIG_PCI_IOV */
+ }
+@@ -9475,71 +9510,17 @@ static void igb_shutdown(struct pci_dev *pdev)
+ 	}
+ }
+ 
+-#ifdef CONFIG_PCI_IOV
+-static int igb_sriov_reinit(struct pci_dev *dev)
+-{
+-	struct net_device *netdev = pci_get_drvdata(dev);
+-	struct igb_adapter *adapter = netdev_priv(netdev);
+-	struct pci_dev *pdev = adapter->pdev;
+-
+-	rtnl_lock();
+-
+-	if (netif_running(netdev))
+-		igb_close(netdev);
+-	else
+-		igb_reset(adapter);
+-
+-	igb_clear_interrupt_scheme(adapter);
+-
+-	igb_init_queue_configuration(adapter);
+-
+-	if (igb_init_interrupt_scheme(adapter, true)) {
+-		rtnl_unlock();
+-		dev_err(&pdev->dev, "Unable to allocate memory for queues\n");
+-		return -ENOMEM;
+-	}
+-
+-	if (netif_running(netdev))
+-		igb_open(netdev);
+-
+-	rtnl_unlock();
+-
+-	return 0;
+-}
+-
+-static int igb_pci_disable_sriov(struct pci_dev *dev)
+-{
+-	int err = igb_disable_sriov(dev);
+-
+-	if (!err)
+-		err = igb_sriov_reinit(dev);
+-
+-	return err;
+-}
+-
+-static int igb_pci_enable_sriov(struct pci_dev *dev, int num_vfs)
+-{
+-	int err = igb_enable_sriov(dev, num_vfs);
+-
+-	if (err)
+-		goto out;
+-
+-	err = igb_sriov_reinit(dev);
+-	if (!err)
+-		return num_vfs;
+-
+-out:
+-	return err;
+-}
+-
+-#endif
+ static int igb_pci_sriov_configure(struct pci_dev *dev, int num_vfs)
+ {
+ #ifdef CONFIG_PCI_IOV
+-	if (num_vfs == 0)
+-		return igb_pci_disable_sriov(dev);
+-	else
+-		return igb_pci_enable_sriov(dev, num_vfs);
++	int err;
++
++	if (num_vfs == 0) {
++		return igb_disable_sriov(dev, true);
++	} else {
++		err = igb_enable_sriov(dev, num_vfs, true);
++		return err ? err : num_vfs;
++	}
+ #endif
+ 	return 0;
+ }
 -- 
 2.38.1
 
