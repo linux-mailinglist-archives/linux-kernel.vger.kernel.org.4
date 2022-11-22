@@ -2,535 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1542A634B0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B67C634B10
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbiKVXZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 18:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S235213AbiKVX1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 18:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233996AbiKVXZn (ORCPT
+        with ESMTP id S234264AbiKVX13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 18:25:43 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4E2C4C0C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 15:25:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=CJDoejL3oaRXnz3Cc3qbLd1i+O6K7R5SkeBH/2XHZtg=; b=Es1LmJQd5+ZrHSBOYeJpzS7q9U
-        GQWHjznt3H2hGqlzXHWJN5Npbbh8nY29ZDGAEoHr/+RAuX26DOXMme1l30/Sy1HTAiuyo42KjS6Ah
-        RXa0vV5KT+bRgBuZdYhoWMW2LDrkmVAg6bb6uqQCm739laaVYqO66BxHnOFEdcjJQtFXqn2yGdJyW
-        HU7rwf3y9ikX/EDE+v1CcMhBcVI8kVqwqOpIN6FIDAHZOMkZY5cvoU5XPUlL01rn2ZOH9wnWKECmr
-        HkjfouV1BZL3YSENR43pKEuufh1YjNQHY96nOjiWT5OH3CavlW76FAcZFLAleJP6pe2KAZ0Azg1kz
-        7SgslPCA==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxce4-00CJS2-ME; Tue, 22 Nov 2022 23:25:40 +0000
-Message-ID: <489001aa-0cb4-9d92-d03f-2b984a765a7a@infradead.org>
-Date:   Tue, 22 Nov 2022 15:25:38 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] kernfs: fix all kernel-doc warnings and multiple typos
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>
-References: <20221112031456.22980-1-rdunlap@infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20221112031456.22980-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 18:27:29 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC5312A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 15:27:25 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id f90-20020a17090a706300b0021891e06ac9so5325184pjk.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 15:27:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=b1fbKiUHSCNwPD8ziga3iKV48CqpH2MMrAKLftLto7I=;
+        b=TNJuE9QixngDemTVcV8LxdV9Fc52J6wh30nypLm9Byy5taJTMboNJGYein5Jm0EtNn
+         bZkVlSNr8Zoc/0Y8aysen+Hb44BiQfCFs57jmoz7AoImdPJVZaU57hBhATNiJwWjjZCb
+         zLuWiMmnBoAGSzyGxKyfTTVDj5Ev8jaGAHmMDCC6y4VWb6Peu7wqTZyltIOqdqhlEhhX
+         omZilehQqyOoRnxENDx4qlUNiShSJGIKeGGE9hzzR4G+3DrjCUZ5hrC0Rb+e7Km2+tOo
+         I+k1EzjkpWSGWD9FF2lTfhkqkP1WJKWKqaZdPFzVhHlw21kfiu4XwH0RpPc6VBV83bGd
+         SLxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b1fbKiUHSCNwPD8ziga3iKV48CqpH2MMrAKLftLto7I=;
+        b=AusGHCCO6Q7Ls2GCh7oNbaol/sYcBm9ICyO6TYFjzq0QJHtv7dAZz9JvLuv7ri9glF
+         sWjsyodWpa1WmhWvnqOkfNbYEpTk3g3VX8E6BQqhIm+tVIJgq22sJ2xjuSe+VSWmeEDM
+         FTBeLxUmdeexnT7SNl6zhKuULuis86woWkASjYlhcHTtZgSXnvMNGE2i9RY9rePy+C07
+         xD96PU8myoQiAk2hFx6w8gc8x1TXWcjSVG833TsMj7GwNNfpjnuPvTGPhZfzPGXnM8t1
+         JoNkt4yKmLLGqbPlhKCvxsu9Eb/jLT2UAj8FQ+kG0tSurVAPqIOQ76CbnIJCT5dejpU9
+         0rJw==
+X-Gm-Message-State: ANoB5pmieO4ZTQ7yus/H2l7eDsAkEUagqa97roHCBBbXliWAnHnYkIaH
+        JCu+cgccMlN8xpj0BB6HgiJJ60YekDd2wheV
+X-Google-Smtp-Source: AA0mqf6FQtZ/FC14BI/LmA3GHrODClsyJxiEHgSkSaK+rKUrqXT72zONjUrwb1XbcUGgh/e7cT/maB0aslhmNMbM
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:902:e550:b0:184:dc59:cc9f with SMTP
+ id n16-20020a170902e55000b00184dc59cc9fmr8913296plf.89.1669159644696; Tue, 22
+ Nov 2022 15:27:24 -0800 (PST)
+Date:   Tue, 22 Nov 2022 23:27:21 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221122232721.2306102-1-yosryahmed@google.com>
+Subject: [PATCH] mm: memcg: fix stale protection of reclaim target memcg
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chris Down <chris@chrisdown.name>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+During reclaim, mem_cgroup_calculate_protection() is used to determine
+the effective protection (emin and elow) values of a memcg. The
+protection of the reclaim target is ignored, but we cannot set their
+effective protection to 0 due to a limitation of the current
+implementation (see comment in mem_cgroup_protection()). Instead,
+we leave their effective protection values unchaged, and later ignore it
+in mem_cgroup_protection().
 
-On 11/11/22 19:14, Randy Dunlap wrote:
-> Fix kernel-doc warnings. Many of these are about a function's
-> return value, so use the kernel-doc Return: format to fix those
-> 
-> Use % prefix on numeric constant values.
-> 
-> dir.c: fix typos/spellos
-> file.c fix typo: s/taret/target/
-> 
-> Fix all of these kernel-doc warnings:
-> 
-> dir.c:305: warning: missing initial short description on line:
->  *      kernfs_name_hash
-> 
-> dir.c:137: warning: No description found for return value of 'kernfs_path_from_node_locked'
-> dir.c:196: warning: No description found for return value of 'kernfs_name'
-> dir.c:224: warning: No description found for return value of 'kernfs_path_from_node'
-> dir.c:292: warning: No description found for return value of 'kernfs_get_parent'
-> dir.c:312: warning: No description found for return value of 'kernfs_name_hash'
-> dir.c:404: warning: No description found for return value of 'kernfs_unlink_sibling'
-> dir.c:588: warning: No description found for return value of 'kernfs_node_from_dentry'
-> dir.c:806: warning: No description found for return value of 'kernfs_find_ns'
-> dir.c:879: warning: No description found for return value of 'kernfs_find_and_get_ns'
-> dir.c:904: warning: No description found for return value of 'kernfs_walk_and_get_ns'
-> dir.c:927: warning: No description found for return value of 'kernfs_create_root'
-> dir.c:996: warning: No description found for return value of 'kernfs_root_to_node'
-> dir.c:1016: warning: No description found for return value of 'kernfs_create_dir_ns'
-> dir.c:1048: warning: No description found for return value of 'kernfs_create_empty_dir'
-> dir.c:1306: warning: No description found for return value of 'kernfs_next_descendant_post'
-> dir.c:1568: warning: No description found for return value of 'kernfs_remove_self'
-> dir.c:1630: warning: No description found for return value of 'kernfs_remove_by_name_ns'
-> dir.c:1667: warning: No description found for return value of 'kernfs_rename_ns'
-> 
-> file.c:66: warning: No description found for return value of 'of_on'
-> file.c:88: warning: No description found for return value of 'kernfs_deref_open_node_locked'
-> file.c:1036: warning: No description found for return value of '__kernfs_create_file'
-> 
-> inode.c:100: warning: No description found for return value of 'kernfs_setattr'
-> 
-> mount.c:160: warning: No description found for return value of 'kernfs_root_from_sb'
-> mount.c:198: warning: No description found for return value of 'kernfs_node_dentry'
-> mount.c:302: warning: No description found for return value of 'kernfs_super_ns'
-> mount.c:318: warning: No description found for return value of 'kernfs_get_tree'
-> 
-> symlink.c:28: warning: No description found for return value of 'kernfs_create_link'
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Tejun Heo <tj@kernel.org>
-> ---
->  fs/kernfs/dir.c             |   82 ++++++++++++++++++++--------------
->  fs/kernfs/file.c            |   18 ++++---
->  fs/kernfs/inode.c           |    8 +--
->  fs/kernfs/kernfs-internal.h |    2 
->  fs/kernfs/mount.c           |   10 ++--
->  fs/kernfs/symlink.c         |    2 
->  6 files changed, 74 insertions(+), 48 deletions(-)
-> 
-> diff -- a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-> --- a/fs/kernfs/dir.c
-> +++ b/fs/kernfs/dir.c
-> @@ -125,9 +125,9 @@ static struct kernfs_node *kernfs_common
->   * kn_to:   /n1/n2/n3         [depth=3]
->   * result:  /../..
->   *
-> - * [3] when @kn_to is NULL result will be "(null)"
-> + * [3] when @kn_to is %NULL result will be "(null)"
->   *
-> - * Returns the length of the full path.  If the full length is equal to or
-> + * Return: the length of the full path.  If the full length is equal to or
->   * greater than @buflen, @buf contains the truncated path with the trailing
->   * '\0'.  On error, -errno is returned.
->   */
-> @@ -185,10 +185,12 @@ static int kernfs_path_from_node_locked(
->   * @buflen: size of @buf
->   *
->   * Copies the name of @kn into @buf of @buflen bytes.  The behavior is
-> - * similar to strlcpy().  It returns the length of @kn's name and if @buf
-> - * isn't long enough, it's filled upto @buflen-1 and nul terminated.
-> + * similar to strlcpy().
->   *
-> - * Fills buffer with "(null)" if @kn is NULL.
-> + * Fills buffer with "(null)" if @kn is %NULL.
-> + *
-> + * Return: the length of @kn's name and if @buf isn't long enough,
-> + * it's filled up to @buflen-1 and nul terminated.
->   *
->   * This function can be called from any context.
->   */
-> @@ -215,7 +217,7 @@ int kernfs_name(struct kernfs_node *kn,
->   * path (which includes '..'s) as needed to reach from @from to @to is
->   * returned.
->   *
-> - * Returns the length of the full path.  If the full length is equal to or
-> + * Return: the length of the full path.  If the full length is equal to or
->   * greater than @buflen, @buf contains the truncated path with the trailing
->   * '\0'.  On error, -errno is returned.
->   */
-> @@ -287,6 +289,8 @@ out:
->   *
->   * Determines @kn's parent, pins and returns it.  This function can be
->   * called from any context.
-> + *
-> + * Return: parent node of @kn
->   */
->  struct kernfs_node *kernfs_get_parent(struct kernfs_node *kn)
->  {
-> @@ -302,11 +306,11 @@ struct kernfs_node *kernfs_get_parent(st
->  }
->  
->  /**
-> - *	kernfs_name_hash
-> + *	kernfs_name_hash - calculate hash of @ns + @name
->   *	@name: Null terminated string to hash
->   *	@ns:   Namespace tag to hash
->   *
-> - *	Returns 31 bit hash of ns + name (so it fits in an off_t )
-> + *	Return: 31-bit hash of ns + name (so it fits in an off_t)
->   */
->  static unsigned int kernfs_name_hash(const char *name, const void *ns)
->  {
-> @@ -354,8 +358,8 @@ static int kernfs_sd_compare(const struc
->   *	Locking:
->   *	kernfs_rwsem held exclusive
->   *
-> - *	RETURNS:
-> - *	0 on susccess -EEXIST on failure.
-> + *	Return:
-> + *	%0 on success, -EEXIST on failure.
->   */
->  static int kernfs_link_sibling(struct kernfs_node *kn)
->  {
-> @@ -394,8 +398,10 @@ static int kernfs_link_sibling(struct ke
->   *	@kn: kernfs_node of interest
->   *
->   *	Try to unlink @kn from its sibling rbtree which starts from
-> - *	kn->parent->dir.children.  Returns %true if @kn was actually
-> - *	removed, %false if @kn wasn't on the rbtree.
-> + *	kn->parent->dir.children.
-> + *
-> + *	Return: %true if @kn was actually removed,
-> + *	%false if @kn wasn't on the rbtree.
->   *
->   *	Locking:
->   *	kernfs_rwsem held exclusive
-> @@ -419,10 +425,10 @@ static bool kernfs_unlink_sibling(struct
->   *	@kn: kernfs_node to get an active reference to
->   *
->   *	Get an active reference of @kn.  This function is noop if @kn
-> - *	is NULL.
-> + *	is %NULL.
->   *
-> - *	RETURNS:
-> - *	Pointer to @kn on success, NULL on failure.
-> + *	Return:
-> + *	Pointer to @kn on success, %NULL on failure.
->   */
->  struct kernfs_node *kernfs_get_active(struct kernfs_node *kn)
->  {
-> @@ -442,7 +448,7 @@ struct kernfs_node *kernfs_get_active(st
->   *	@kn: kernfs_node to put an active reference to
->   *
->   *	Put an active reference to @kn.  This function is noop if @kn
-> - *	is NULL.
-> + *	is %NULL.
->   */
->  void kernfs_put_active(struct kernfs_node *kn)
->  {
-> @@ -464,7 +470,7 @@ void kernfs_put_active(struct kernfs_nod
->   * kernfs_drain - drain kernfs_node
->   * @kn: kernfs_node to drain
->   *
-> - * Drain existing usages and nuke all existing mmaps of @kn.  Mutiple
-> + * Drain existing usages and nuke all existing mmaps of @kn.  Multiple
->   * removers may invoke this function concurrently on @kn and all will
->   * return after draining is complete.
->   */
-> @@ -577,7 +583,7 @@ EXPORT_SYMBOL_GPL(kernfs_put);
->   * kernfs_node_from_dentry - determine kernfs_node associated with a dentry
->   * @dentry: the dentry in question
->   *
-> - * Return the kernfs_node associated with @dentry.  If @dentry is not a
-> + * Return: the kernfs_node associated with @dentry.  If @dentry is not a
->   * kernfs one, %NULL is returned.
->   *
->   * While the returned kernfs_node will stay accessible as long as @dentry
-> @@ -684,8 +690,8 @@ struct kernfs_node *kernfs_new_node(stru
->   * @id's lower 32bits encode ino and upper gen.  If the gen portion is
->   * zero, all generations are matched.
->   *
-> - * RETURNS:
-> - * NULL on failure. Return a kernfs node with reference counter incremented
-> + * Return: %NULL on failure,
-> + * otherwise a kernfs node with reference counter incremented.
->   */
->  struct kernfs_node *kernfs_find_and_get_node_by_id(struct kernfs_root *root,
->  						   u64 id)
-> @@ -733,8 +739,8 @@ err_unlock:
->   *	function increments nlink of the parent's inode if @kn is a
->   *	directory and link into the children list of the parent.
->   *
-> - *	RETURNS:
-> - *	0 on success, -EEXIST if entry with the given name already
-> + *	Return:
-> + *	%0 on success, -EEXIST if entry with the given name already
->   *	exists.
->   */
->  int kernfs_add_one(struct kernfs_node *kn)
-> @@ -797,8 +803,9 @@ out_unlock:
->   * @name: name to look for
->   * @ns: the namespace tag to use
->   *
-> - * Look for kernfs_node with name @name under @parent.  Returns pointer to
-> - * the found kernfs_node on success, %NULL on failure.
-> + * Look for kernfs_node with name @name under @parent.
-> + *
-> + * Return: pointer to the found kernfs_node on success, %NULL on failure.
->   */
->  static struct kernfs_node *kernfs_find_ns(struct kernfs_node *parent,
->  					  const unsigned char *name,
-> @@ -871,8 +878,9 @@ static struct kernfs_node *kernfs_walk_n
->   * @ns: the namespace tag to use
->   *
->   * Look for kernfs_node with name @name under @parent and get a reference
-> - * if found.  This function may sleep and returns pointer to the found
-> - * kernfs_node on success, %NULL on failure.
-> + * if found.  This function may sleep.
-> + *
-> + * Return: pointer to the found kernfs_node on success, %NULL on failure.
->   */
->  struct kernfs_node *kernfs_find_and_get_ns(struct kernfs_node *parent,
->  					   const char *name, const void *ns)
-> @@ -896,8 +904,9 @@ EXPORT_SYMBOL_GPL(kernfs_find_and_get_ns
->   * @ns: the namespace tag to use
->   *
->   * Look for kernfs_node with path @path under @parent and get a reference
-> - * if found.  This function may sleep and returns pointer to the found
-> - * kernfs_node on success, %NULL on failure.
-> + * if found.  This function may sleep.
-> + *
-> + * Return: pointer to the found kernfs_node on success, %NULL on failure.
->   */
->  struct kernfs_node *kernfs_walk_and_get_ns(struct kernfs_node *parent,
->  					   const char *path, const void *ns)
-> @@ -919,7 +928,7 @@ struct kernfs_node *kernfs_walk_and_get_
->   * @flags: KERNFS_ROOT_* flags
->   * @priv: opaque data associated with the new directory
->   *
-> - * Returns the root of the new hierarchy on success, ERR_PTR() value on
-> + * Return: the root of the new hierarchy on success, ERR_PTR() value on
->   * failure.
->   */
->  struct kernfs_root *kernfs_create_root(struct kernfs_syscall_ops *scops,
-> @@ -991,6 +1000,8 @@ void kernfs_destroy_root(struct kernfs_r
->  /**
->   * kernfs_root_to_node - return the kernfs_node associated with a kernfs_root
->   * @root: root to use to lookup
-> + *
-> + * Return: @root's kernfs_node
->   */
->  struct kernfs_node *kernfs_root_to_node(struct kernfs_root *root)
->  {
-> @@ -1007,7 +1018,7 @@ struct kernfs_node *kernfs_root_to_node(
->   * @priv: opaque data associated with the new directory
->   * @ns: optional namespace tag of the directory
->   *
-> - * Returns the created node on success, ERR_PTR() value on failure.
-> + * Return: the created node on success, ERR_PTR() value on failure.
->   */
->  struct kernfs_node *kernfs_create_dir_ns(struct kernfs_node *parent,
->  					 const char *name, umode_t mode,
-> @@ -1041,7 +1052,7 @@ struct kernfs_node *kernfs_create_dir_ns
->   * @parent: parent in which to create a new directory
->   * @name: name of the new directory
->   *
-> - * Returns the created node on success, ERR_PTR() value on failure.
-> + * Return: the created node on success, ERR_PTR() value on failure.
->   */
->  struct kernfs_node *kernfs_create_empty_dir(struct kernfs_node *parent,
->  					    const char *name)
-> @@ -1300,6 +1311,8 @@ static struct kernfs_node *kernfs_leftmo
->   * Find the next descendant to visit for post-order traversal of @root's
->   * descendants.  @root is included in the iteration and the last node to be
->   * visited.
-> + *
-> + * Return: the next descendant to visit or %NULL when done.
->   */
->  static struct kernfs_node *kernfs_next_descendant_post(struct kernfs_node *pos,
->  						       struct kernfs_node *root)
-> @@ -1563,6 +1576,8 @@ void kernfs_unbreak_active_protection(st
->   * the whole kernfs_ops which won the arbitration.  This can be used to
->   * guarantee, for example, all concurrent writes to a "delete" file to
->   * finish only after the whole operation is complete.
-> + *
-> + * Return: %true if @kn is removed by this call, otherwise %false.
->   */
->  bool kernfs_remove_self(struct kernfs_node *kn)
->  {
-> @@ -1623,7 +1638,8 @@ bool kernfs_remove_self(struct kernfs_no
->   * @ns: namespace tag of the kernfs_node to remove
->   *
->   * Look for the kernfs_node with @name and @ns under @parent and remove it.
-> - * Returns 0 on success, -ENOENT if such entry doesn't exist.
-> + *
-> + * Return: %0 on success, -ENOENT if such entry doesn't exist.
->   */
->  int kernfs_remove_by_name_ns(struct kernfs_node *parent, const char *name,
->  			     const void *ns)
-> @@ -1661,6 +1677,8 @@ int kernfs_remove_by_name_ns(struct kern
->   * @new_parent: new parent to put @sd under
->   * @new_name: new name
->   * @new_ns: new namespace tag
-> + *
-> + * Return: %0 on success, -errno on failure.
->   */
->  int kernfs_rename_ns(struct kernfs_node *kn, struct kernfs_node *new_parent,
->  		     const char *new_name, const void *new_ns)
-> diff -- a/fs/kernfs/file.c b/fs/kernfs/file.c
-> --- a/fs/kernfs/file.c
-> +++ b/fs/kernfs/file.c
-> @@ -33,7 +33,7 @@ struct kernfs_open_node {
->   * pending queue is implemented as a singly linked list of kernfs_nodes.
->   * The list is terminated with the self pointer so that whether a
->   * kernfs_node is on the list or not can be determined by testing the next
-> - * pointer for NULL.
-> + * pointer for %NULL.
->   */
->  #define KERNFS_NOTIFY_EOL			((void *)&kernfs_notify_list)
->  
-> @@ -59,8 +59,10 @@ static inline struct mutex *kernfs_open_
->  }
->  
->  /**
-> - * of_on - Return the kernfs_open_node of the specified kernfs_open_file
-> - * @of: taret kernfs_open_file
-> + * of_on - Get the kernfs_open_node of the specified kernfs_open_file
-> + * @of: target kernfs_open_file
-> + *
-> + * Return: the kernfs_open_node of the kernfs_open_file
->   */
->  static struct kernfs_open_node *of_on(struct kernfs_open_file *of)
->  {
-> @@ -82,6 +84,8 @@ static struct kernfs_open_node *of_on(st
->   * outside RCU read-side critical section.
->   *
->   * The caller needs to make sure that kernfs_open_file_mutex is held.
-> + *
-> + * Return: @kn->attr.open when kernfs_open_file_mutex is held.
->   */
->  static struct kernfs_open_node *
->  kernfs_deref_open_node_locked(struct kernfs_node *kn)
-> @@ -548,11 +552,11 @@ out_unlock:
->   *	If @kn->attr.open exists, increment its reference count; otherwise,
->   *	create one.  @of is chained to the files list.
->   *
-> - *	LOCKING:
-> + *	Locking:
->   *	Kernel thread context (may sleep).
->   *
-> - *	RETURNS:
-> - *	0 on success, -errno on failure.
-> + *	Return:
-> + *	%0 on success, -errno on failure.
->   */
->  static int kernfs_get_open_node(struct kernfs_node *kn,
->  				struct kernfs_open_file *of)
-> @@ -1024,7 +1028,7 @@ const struct file_operations kernfs_file
->   * @ns: optional namespace tag of the file
->   * @key: lockdep key for the file's active_ref, %NULL to disable lockdep
->   *
-> - * Returns the created node on success, ERR_PTR() value on error.
-> + * Return: the created node on success, ERR_PTR() value on error.
->   */
->  struct kernfs_node *__kernfs_create_file(struct kernfs_node *parent,
->  					 const char *name,
-> diff -- a/fs/kernfs/inode.c b/fs/kernfs/inode.c
-> --- a/fs/kernfs/inode.c
-> +++ b/fs/kernfs/inode.c
-> @@ -94,7 +94,7 @@ int __kernfs_setattr(struct kernfs_node
->   * @kn: target node
->   * @iattr: iattr to set
->   *
-> - * Returns 0 on success, -errno on failure.
-> + * Return: %0 on success, -errno on failure.
->   */
->  int kernfs_setattr(struct kernfs_node *kn, const struct iattr *iattr)
->  {
-> @@ -239,11 +239,11 @@ static void kernfs_init_inode(struct ker
->   *	allocated and basics are initialized.  New inode is returned
->   *	locked.
->   *
-> - *	LOCKING:
-> + *	Locking:
->   *	Kernel thread context (may sleep).
->   *
-> - *	RETURNS:
-> - *	Pointer to allocated inode on success, NULL on failure.
-> + *	Return:
-> + *	Pointer to allocated inode on success, %NULL on failure.
->   */
->  struct inode *kernfs_get_inode(struct super_block *sb, struct kernfs_node *kn)
->  {
-> diff -- a/fs/kernfs/mount.c b/fs/kernfs/mount.c
-> --- a/fs/kernfs/mount.c
-> +++ b/fs/kernfs/mount.c
-> @@ -153,7 +153,7 @@ static const struct export_operations ke
->   * kernfs_root_from_sb - determine kernfs_root associated with a super_block
->   * @sb: the super_block in question
->   *
-> - * Return the kernfs_root associated with @sb.  If @sb is not a kernfs one,
-> + * Return: the kernfs_root associated with @sb.  If @sb is not a kernfs one,
->   * %NULL is returned.
->   */
->  struct kernfs_root *kernfs_root_from_sb(struct super_block *sb)
-> @@ -167,7 +167,7 @@ struct kernfs_root *kernfs_root_from_sb(
->   * find the next ancestor in the path down to @child, where @parent was the
->   * ancestor whose descendant we want to find.
->   *
-> - * Say the path is /a/b/c/d.  @child is d, @parent is NULL.  We return the root
-> + * Say the path is /a/b/c/d.  @child is d, @parent is %NULL.  We return the root
->   * node.  If @parent is b, then we return the node for c.
->   * Passing in d as @parent is not ok.
->   */
-> @@ -192,6 +192,8 @@ static struct kernfs_node *find_next_anc
->   * kernfs_node_dentry - get a dentry for the given kernfs_node
->   * @kn: kernfs_node for which a dentry is needed
->   * @sb: the kernfs super_block
-> + *
-> + * Return: the dentry pointer
->   */
->  struct dentry *kernfs_node_dentry(struct kernfs_node *kn,
->  				  struct super_block *sb)
-> @@ -296,7 +298,7 @@ static int kernfs_set_super(struct super
->   * kernfs_super_ns - determine the namespace tag of a kernfs super_block
->   * @sb: super_block of interest
->   *
-> - * Return the namespace tag associated with kernfs super_block @sb.
-> + * Return: the namespace tag associated with kernfs super_block @sb.
->   */
->  const void *kernfs_super_ns(struct super_block *sb)
->  {
-> @@ -313,6 +315,8 @@ const void *kernfs_super_ns(struct super
->   * implementation, which should set the specified ->@fs_type and ->@flags, and
->   * specify the hierarchy and namespace tag to mount via ->@root and ->@ns,
->   * respectively.
-> + *
-> + * Return: %0 on success, -errno on failure.
->   */
->  int kernfs_get_tree(struct fs_context *fc)
->  {
-> diff -- a/fs/kernfs/symlink.c b/fs/kernfs/symlink.c
-> --- a/fs/kernfs/symlink.c
-> +++ b/fs/kernfs/symlink.c
-> @@ -19,7 +19,7 @@
->   * @name: name of the symlink
->   * @target: target node for the symlink to point to
->   *
-> - * Returns the created node on success, ERR_PTR() value on error.
-> + * Return: the created node on success, ERR_PTR() value on error.
->   * Ownership of the link matches ownership of the target.
->   */
->  struct kernfs_node *kernfs_create_link(struct kernfs_node *parent,
-> diff -- a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
-> --- a/fs/kernfs/kernfs-internal.h
-> +++ b/fs/kernfs/kernfs-internal.h
-> @@ -58,7 +58,7 @@ struct kernfs_root {
->   * kernfs_root - find out the kernfs_root a kernfs_node belongs to
->   * @kn: kernfs_node of interest
->   *
-> - * Return the kernfs_root @kn belongs to.
-> + * Return: the kernfs_root @kn belongs to.
->   */
->  static inline struct kernfs_root *kernfs_root(struct kernfs_node *kn)
->  {
+However, mem_cgroup_protection() is called later in
+shrink_lruvec()->get_scan_count(), which is after the
+mem_cgroup_below_{min/low}() checks in shrink_node_memcgs(). As a
+result, the stale effective protection values of the target memcg may
+lead us to skip reclaiming from the target memcg entirely, before
+calling shrink_lruvec(). This can be even worse with recursive
+protection, where the stale target memcg protection can be higher than
+its standalone protection.
 
-any comments on this patch?
-Thanks.
+An example where this can happen is as follows. Consider the following
+hierarchy with memory_recursiveprot:
+ROOT
+ |
+ A (memory.min = 50M)
+ |
+ B (memory.min = 10M, memory.high = 40M)
 
+Consider the following scenarion:
+- B has memory.current = 35M.
+- The system undergoes global reclaim (target memcg is NULL).
+- B will have an effective min of 50M (all of A's unclaimed protection).
+- B will not be reclaimed from.
+- Now allocate 10M more memory in B, pushing it above it's high limit.
+- The system undergoes memcg reclaim from B (target memcg is B)
+- In shrink_node_memcgs(), we call mem_cgroup_calculate_protection(),
+  which immediately returns for B without doing anything, as B is the
+  target memcg, relying on mem_cgroup_protection() to ignore B's stale
+  effective min (still 50M).
+- Directly after mem_cgroup_calculate_protection(), we will call
+  mem_cgroup_below_min(), which will read the stale effective min for B
+  and skip it (instead of ignoring its protection as intended). In this
+  case, it's really bad because we are not just considering B's
+  standalone protection (10M), but we are reading a much higher stale
+  protection (50M) which will cause us to not reclaim from B at all.
+
+This is an artifact of commit 45c7f7e1ef17 ("mm, memcg: decouple
+e{low,min} state mutations from protection checks") which made
+mem_cgroup_calculate_protection() only change the state without
+returning any value. Before that commit, we used to return
+MEMCG_PROT_NONE for the target memcg, which would cause us to skip the
+mem_cgroup_below_{min/low}() checks. After that commit we do not return
+anything and we end up checking the min & low effective protections for
+the target memcg, which are stale.
+
+Add mem_cgroup_ignore_protection() that checks if we are reclaiming from
+the target memcg, and call it in mem_cgroup_below_{min/low}() to ignore
+the stale protection of the target memcg.
+
+Fixes: 45c7f7e1ef17 ("mm, memcg: decouple e{low,min} state mutations from protection checks")
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+---
+ include/linux/memcontrol.h | 33 +++++++++++++++++++++++++++------
+ mm/vmscan.c                | 11 ++++++-----
+ 2 files changed, 33 insertions(+), 11 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index e1644a24009c..22c9c9f9c6b1 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -625,18 +625,32 @@ static inline bool mem_cgroup_supports_protection(struct mem_cgroup *memcg)
+ 
+ }
+ 
+-static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
++static inline bool mem_cgroup_ignore_protection(struct mem_cgroup *target,
++						struct mem_cgroup *memcg)
+ {
+-	if (!mem_cgroup_supports_protection(memcg))
++	/*
++	 * The target memcg's protection is ignored, see
++	 * mem_cgroup_calculate_protection() and mem_cgroup_protection()
++	 */
++	return target == memcg;
++}
++
++static inline bool mem_cgroup_below_low(struct mem_cgroup *target,
++					struct mem_cgroup *memcg)
++{
++	if (!mem_cgroup_supports_protection(memcg) ||
++	    mem_cgroup_ignore_protection(target, memcg))
+ 		return false;
+ 
+ 	return READ_ONCE(memcg->memory.elow) >=
+ 		page_counter_read(&memcg->memory);
+ }
+ 
+-static inline bool mem_cgroup_below_min(struct mem_cgroup *memcg)
++static inline bool mem_cgroup_below_min(struct mem_cgroup *target,
++					struct mem_cgroup *memcg)
+ {
+-	if (!mem_cgroup_supports_protection(memcg))
++	if (!mem_cgroup_supports_protection(memcg) ||
++	    mem_cgroup_ignore_protection(target, memcg))
+ 		return false;
+ 
+ 	return READ_ONCE(memcg->memory.emin) >=
+@@ -1209,12 +1223,19 @@ static inline void mem_cgroup_calculate_protection(struct mem_cgroup *root,
+ {
+ }
+ 
+-static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
++static inline bool mem_cgroup_ignore_protection(struct mem_cgroup *target,
++						struct mem_cgroup *memcg)
++{
++	return false;
++}
++static inline bool mem_cgroup_below_low(struct mem_cgroup *target,
++					struct mem_cgroup *memcg)
+ {
+ 	return false;
+ }
+ 
+-static inline bool mem_cgroup_below_min(struct mem_cgroup *memcg)
++static inline bool mem_cgroup_below_min(struct mem_cgroup *target,
++					struct mem_cgroup *memcg)
+ {
+ 	return false;
+ }
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 04d8b88e5216..79ef0fe67518 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -4486,7 +4486,7 @@ static bool age_lruvec(struct lruvec *lruvec, struct scan_control *sc, unsigned
+ 
+ 	mem_cgroup_calculate_protection(NULL, memcg);
+ 
+-	if (mem_cgroup_below_min(memcg))
++	if (mem_cgroup_below_min(NULL, memcg))
+ 		return false;
+ 
+ 	need_aging = should_run_aging(lruvec, max_seq, min_seq, sc, swappiness, &nr_to_scan);
+@@ -5047,8 +5047,9 @@ static unsigned long get_nr_to_scan(struct lruvec *lruvec, struct scan_control *
+ 	DEFINE_MAX_SEQ(lruvec);
+ 	DEFINE_MIN_SEQ(lruvec);
+ 
+-	if (mem_cgroup_below_min(memcg) ||
+-	    (mem_cgroup_below_low(memcg) && !sc->memcg_low_reclaim))
++	if (mem_cgroup_below_min(sc->target_mem_cgroup, memcg) ||
++	    (mem_cgroup_below_low(sc->target_mem_cgroup, memcg) &&
++	     !sc->memcg_low_reclaim))
+ 		return 0;
+ 
+ 	*need_aging = should_run_aging(lruvec, max_seq, min_seq, sc, can_swap, &nr_to_scan);
+@@ -6048,13 +6049,13 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
+ 
+ 		mem_cgroup_calculate_protection(target_memcg, memcg);
+ 
+-		if (mem_cgroup_below_min(memcg)) {
++		if (mem_cgroup_below_min(target_memcg, memcg)) {
+ 			/*
+ 			 * Hard protection.
+ 			 * If there is no reclaimable memory, OOM.
+ 			 */
+ 			continue;
+-		} else if (mem_cgroup_below_low(memcg)) {
++		} else if (mem_cgroup_below_low(target_memcg, memcg)) {
+ 			/*
+ 			 * Soft protection.
+ 			 * Respect the protection only as long as
 -- 
-~Randy
+2.38.1.584.g0f3c55d4c2-goog
+
