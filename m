@@ -2,155 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09886334F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 06:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE606334EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 06:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbiKVF4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 00:56:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S231935AbiKVF40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 00:56:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbiKVF4S (ORCPT
+        with ESMTP id S231981AbiKVF4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 00:56:18 -0500
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAE7264BB;
-        Mon, 21 Nov 2022 21:55:51 -0800 (PST)
-Received: by mail-qk1-f180.google.com with SMTP id z1so9592916qkl.9;
-        Mon, 21 Nov 2022 21:55:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f0Q962li9LjosC9Js/NBZYh/Sr3ElN5/7bG9cHOxkEk=;
-        b=7T3tnxDltr3TEe+SxNJcWvo9QgGJUWYSK7ZS8hSrLOnEiiuowi0KAKocF5B3yM7nan
-         POoXWbtVr+5tDdmO0cEhyt45ldbKvun9vl5RFwxx8fc4jy8NMgfErW9bA5b8xpmCj5Yb
-         8EGGdy+Vrm7sYgEYuFYnQaF+zA78BB9KR3yz1QQ5c+nKeIf6kvJcVm2Z5beuy8ecdWVH
-         zkzuPp3ACy7gK6EPIQNzO4PklekE+/g+2i4NsuAgKuVUHP70T4F74oqmuAcbLC3X8/M5
-         oC7d1MCgehnKe5w60z3kk12PdoInyNEo//MKWU9RyijsCCzrUUTVFVR/qY2n1shqXuns
-         IQng==
-X-Gm-Message-State: ANoB5plZiEWINZzQX+vwjFPptvyWbSPqv1ycc7iTh7v9XsLTUkohW4gW
-        b6+3iM+SwacTOdbjmzu+34WIwcVLhu16ZwD2
-X-Google-Smtp-Source: AA0mqf6RYsEO5WXghiscHTWjQSrF4m5R8Qk12w1GtS6kEOn1Tw755P+2NGexrmXwOARb9PfkZKQH6g==
-X-Received: by 2002:a05:620a:2214:b0:6fa:e58e:64e3 with SMTP id m20-20020a05620a221400b006fae58e64e3mr19752385qkh.430.1669096550615;
-        Mon, 21 Nov 2022 21:55:50 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:3170])
-        by smtp.gmail.com with ESMTPSA id y28-20020a37f61c000000b006fa22f0494bsm9280633qkj.117.2022.11.21.21.55.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 21:55:50 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, yhs@fb.com, song@kernel.org, sdf@google.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
-        haoluo@google.com, tj@kernel.org, kernel-team@fb.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Add selftests for bpf_cgroup_ancestor() kfunc
-Date:   Mon, 21 Nov 2022 23:54:58 -0600
-Message-Id: <20221122055458.173143-5-void@manifault.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221122055458.173143-1-void@manifault.com>
-References: <20221122055458.173143-1-void@manifault.com>
+        Tue, 22 Nov 2022 00:56:05 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AC62654E;
+        Mon, 21 Nov 2022 21:55:32 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 73B0B24DCA6;
+        Tue, 22 Nov 2022 13:55:29 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 13:55:29 +0800
+Received: from [192.168.125.106] (113.72.144.23) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 13:55:28 +0800
+Message-ID: <62d63104-e392-b002-717d-682193d21c27@starfivetech.com>
+Date:   Tue, 22 Nov 2022 13:55:14 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 13/14] reset: starfive: Add StarFive JH7110 reset
+ driver
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221118010627.70576-1-hal.feng@starfivetech.com>
+ <20221118010627.70576-14-hal.feng@starfivetech.com>
+ <CAJM55Z8Vfoi5bPLNUOX-F5R5hfwg_20HiGLyjcmziYMiz24xBQ@mail.gmail.com>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <CAJM55Z8Vfoi5bPLNUOX-F5R5hfwg_20HiGLyjcmziYMiz24xBQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.23]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bpf_cgroup_ancestor() allows BPF programs to access the ancestor of a
-struct cgroup *. This patch adds selftests that validate its expected
-behavior.
+On Sat, 19 Nov 2022 01:14:50 +0800, Emil Renner Berthing wrote:
+> On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
+>> diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
+>> new file mode 100644
+>> index 000000000000..00f3b4ecfb02
+>> --- /dev/null
+>> +++ b/drivers/reset/starfive/reset-starfive-jh7110.c
+>> @@ -0,0 +1,67 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/*
+>> + * Reset driver for the StarFive JH7110 SoC
+>> + *
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> + * Copyright (C) 2022 Hal Feng <hal.feng@starfivetech.com>
+>> + */
+>> +
+>> +#include <linux/auxiliary_bus.h>
+>> +
+>> +#include "reset-starfive-jh71x0.h"
+>> +
+>> +#include <dt-bindings/reset/starfive-jh7110.h>
+>> +
+>> +static int jh7110_reset_probe(struct auxiliary_device *adev,
+>> +                             const struct auxiliary_device_id *id)
+>> +{
+>> +       struct reset_info *info = (struct reset_info *)(id->driver_data);
+>> +       void __iomem *base = dev_get_drvdata(adev->dev.parent);
+>> +
+>> +       if (!info || !base)
+>> +               return -ENODEV;
+>> +
+>> +       return reset_starfive_jh71x0_register(&adev->dev, adev->dev.parent->of_node,
+>> +                                             base + info->assert_offset,
+>> +                                             base + info->status_offset,
+>> +                                             info->asserted,
+>> +                                             info->nr_resets,
+>> +                                             false);
+>> +}
+>> +
+>> +static const struct reset_info jh7110_sys_info = {
+>> +       .nr_resets = JH7110_SYSRST_END,
+>> +       .assert_offset = 0x2F8,
+>> +       .status_offset = 0x308,
+>> +       .asserted = NULL,
+>> +};
+>> +
+>> +static const struct reset_info jh7110_aon_info = {
+>> +       .nr_resets = JH7110_AONRST_END,
+>> +       .assert_offset = 0x38,
+>> +       .status_offset = 0x3C,
+>> +       .asserted = NULL,
+>> +};
+> 
+> It doesn't seem like syscrg, aoncrg or stgcrg have any inverted lines.
+> Do you know if any other CRGs do? If not you can just leave out the
+> .asserted member and always pass NULL.
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
- .../selftests/bpf/progs/cgrp_kfunc_common.h   |  1 +
- .../selftests/bpf/progs/cgrp_kfunc_success.c  | 45 +++++++++++++++++++
- 3 files changed, 47 insertions(+)
+All JH7110 CRGs don't have inverted lines, and it could be modified as
+what you said.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-index a59b166bbcc4..973f0c5af965 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-@@ -86,6 +86,7 @@ static const char * const success_tests[] = {
- 	"test_cgrp_acquire_leave_in_map",
- 	"test_cgrp_xchg_release",
- 	"test_cgrp_get_release",
-+	"test_cgrp_get_ancestors",
- };
- 
- static struct {
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-index 3f18def0e45c..7d30855bfe78 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-@@ -23,6 +23,7 @@ struct hash_map {
- struct cgroup *bpf_cgroup_acquire(struct cgroup *p) __ksym;
- struct cgroup *bpf_cgroup_kptr_get(struct cgroup **pp) __ksym;
- void bpf_cgroup_release(struct cgroup *p) __ksym;
-+struct cgroup *bpf_cgroup_ancestor(struct cgroup *cgrp, int level) __ksym;
- 
- static inline struct __cgrps_kfunc_map_value *cgrps_kfunc_map_value_lookup(struct cgroup *cgrp)
- {
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_success.c b/tools/testing/selftests/bpf/progs/cgrp_kfunc_success.c
-index 9f4569f7598b..0c23ea32df9f 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_success.c
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_success.c
-@@ -123,3 +123,48 @@ int BPF_PROG(test_cgrp_get_release, struct cgroup *cgrp, const char *path)
- 
- 	return 0;
- }
-+
-+SEC("tp_btf/cgroup_mkdir")
-+int BPF_PROG(test_cgrp_get_ancestors, struct cgroup *cgrp, const char *path)
-+{
-+	struct cgroup *self, *ancestor1, *invalid;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	self = bpf_cgroup_ancestor(cgrp, cgrp->level);
-+	if (!self) {
-+		err = 1;
-+		return 0;
-+	}
-+
-+	if (self->self.id != cgrp->self.id) {
-+		bpf_cgroup_release(self);
-+		err = 2;
-+		return 0;
-+	}
-+	bpf_cgroup_release(self);
-+
-+	ancestor1 = bpf_cgroup_ancestor(cgrp, cgrp->level - 1);
-+	if (!ancestor1) {
-+		err = 3;
-+		return 0;
-+	}
-+	bpf_cgroup_release(ancestor1);
-+
-+	invalid = bpf_cgroup_ancestor(cgrp, 10000);
-+	if (invalid) {
-+		bpf_cgroup_release(invalid);
-+		err = 4;
-+		return 0;
-+	}
-+
-+	invalid = bpf_cgroup_ancestor(cgrp, -1);
-+	if (invalid) {
-+		bpf_cgroup_release(invalid);
-+		err = 5;
-+		return 0;
-+	}
-+
-+	return 0;
-+}
--- 
-2.38.1
+> 
+>> +static const struct auxiliary_device_id jh7110_reset_ids[] = {
+>> +       {
+>> +               .name = "clk_starfive_jh71x0.reset-sys",
+>> +               .driver_data = (kernel_ulong_t)&jh7110_sys_info,
+>> +       },
+>> +       {
+>> +               .name = "clk_starfive_jh71x0.reset-aon",
+>> +               .driver_data = (kernel_ulong_t)&jh7110_aon_info,
+>> +       },
+>> +       { /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(auxiliary, jh7110_reset_ids);
+>> +
+>> +static struct auxiliary_driver jh7110_reset_driver = {
+>> +       .probe          = jh7110_reset_probe,
+>> +       .id_table       = jh7110_reset_ids,
+>> +};
+>> +module_auxiliary_driver(jh7110_reset_driver);
+>> +
+>> +MODULE_DESCRIPTION("StarFive JH7110 Reset Driver");
+>> +MODULE_AUTHOR("Hal Feng <hal.feng@starfivetech.com>");
+>> +MODULE_LICENSE("GPL");
+>> diff --git a/drivers/reset/starfive/reset-starfive-jh71x0.h b/drivers/reset/starfive/reset-starfive-jh71x0.h
+>> index e6b27110de48..63a94ee1b395 100644
+>> --- a/drivers/reset/starfive/reset-starfive-jh71x0.h
+>> +++ b/drivers/reset/starfive/reset-starfive-jh71x0.h
+>> @@ -6,6 +6,13 @@
+>>  #ifndef __RESET_STARFIVE_JH71X0_H
+>>  #define __RESET_STARFIVE_JH71X0_H
+>>
+>> +struct reset_info {
+>> +       unsigned int nr_resets;
+>> +       unsigned int assert_offset;
+>> +       unsigned int status_offset;
+>> +       const u32 *asserted;
+>> +};
+> 
+> This struct isn't used outside of reset-starfive-jh7110.c, so no need
+> to define it in this header.
+> Also consider calling it jh7110_reset_info so it blends in with the
+> functions defined in that file.
 
+Maybe it can be used in JH7100 audio reset?
+
+Best regards,
+Hal
+
+> 
+>>  int reset_starfive_jh71x0_register(struct device *dev, struct device_node *of_node,
+>>                                    void __iomem *assert, void __iomem *status,
+>>                                    const u32 *asserted, unsigned int nr_resets,
