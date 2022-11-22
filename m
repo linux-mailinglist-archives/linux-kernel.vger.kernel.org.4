@@ -2,109 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F2563359A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA8B6335B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbiKVHCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S232301AbiKVHMI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Nov 2022 02:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiKVHCI (ORCPT
+        with ESMTP id S229750AbiKVHMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:02:08 -0500
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC39F23BF0;
-        Mon, 21 Nov 2022 23:02:07 -0800 (PST)
-Received: by mail-ej1-f44.google.com with SMTP id f27so33722478eje.1;
-        Mon, 21 Nov 2022 23:02:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=obhyf6FbeDYJ4EzUmao9xEvzmssDDgcxntsnLOZ5F7g=;
-        b=ZgQzUOvf1AG4XRU9QvCfO/xuBT0LzT8i9dqulbVwlbeSvr/oyg53SSDEpHRO7NkaUe
-         +X6qF0eceb33pRteladirlW+QNZAOiEjN0BfaAcr+yXxGQltSRB7cUExmmUHYBWadI6+
-         JqhHvkpC/QbOoZudGzre1BIheWOC+l15RIfrdohHoAeeHvdvuzOx8VoLkZHPX5GvcuRi
-         mAMOiPWa78P7kZtRPSwui55xBDK1wahWRrM1jvR3NQghapkbck5Zh3KqBeyB98/lryjC
-         0EahdalbLMUW7IyW8QoeKbzPIqIe1WWioHrck2pCwaIzGJUCmx/Zu/7VX2AI+As0/Uem
-         gEJA==
-X-Gm-Message-State: ANoB5pn5cDU1cbokLHDIrkOllXbOB5u/f14R3saCPeD4qt/t7G4dfr2q
-        NMN7n9tWODXchD/DnWfXeeX4NPqKYYrSsA==
-X-Google-Smtp-Source: AA0mqf6K+SNMjIbRwN8XBuKJx8oR6/cRUUp23vgQyzgzvpU6h2PPnNCsBeh2ys7OQ9298Isleb1DzA==
-X-Received: by 2002:a17:907:c208:b0:7ad:79c0:547a with SMTP id ti8-20020a170907c20800b007ad79c0547amr8621315ejc.41.1669100526244;
-        Mon, 21 Nov 2022 23:02:06 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id b14-20020a17090636ce00b007a8de84ce36sm5751620ejc.206.2022.11.21.23.02.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 23:02:05 -0800 (PST)
-Message-ID: <f95ef7b7-cc23-9fed-5d05-1aa66aaeb86a@kernel.org>
-Date:   Tue, 22 Nov 2022 08:02:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v5 2/3] tty: serial: use uart_port_tx() helper
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     afaerber@suse.de, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, festevam@gmail.com,
-        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        liviu.dudau@arm.com, lorenzo.pieralisi@arm.com, mani@kernel.org,
-        nicolas.ferre@microchip.com, richard.genoud@gmail.com,
-        s.hauer@pengutronix.de, shawnguo@kernel.org, sudeep.holla@arm.com,
-        tklauser@distanz.ch, vz@mleia.com
-References: <20221004104927.14361-3-jirislaby@kernel.org>
- <20221121202724.1708460-1-michael@walle.cc>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221121202724.1708460-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 02:12:06 -0500
+X-Greylist: delayed 557 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 23:12:03 PST
+Received: from mx3.uni-regensburg.de (mx3.uni-regensburg.de [194.94.157.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3691E30572;
+        Mon, 21 Nov 2022 23:12:03 -0800 (PST)
+Received: from mx3.uni-regensburg.de (localhost [127.0.0.1])
+        by localhost (Postfix) with SMTP id 499246000052;
+        Tue, 22 Nov 2022 08:02:41 +0100 (CET)
+Received: from gwsmtp.uni-regensburg.de (gwsmtp1.uni-regensburg.de [132.199.5.51])
+        by mx3.uni-regensburg.de (Postfix) with ESMTP id 175566000051;
+        Tue, 22 Nov 2022 08:02:41 +0100 (CET)
+Received: from uni-regensburg-smtp1-MTA by gwsmtp.uni-regensburg.de
+        with Novell_GroupWise; Tue, 22 Nov 2022 08:02:41 +0100
+Message-Id: <637C740F020000A10004FEA6@gwsmtp.uni-regensburg.de>
+X-Mailer: Novell GroupWise Internet Agent 18.4.1 
+Date:   Tue, 22 Nov 2022 08:02:39 +0100
+From:   "Ulrich Windl" <Ulrich.Windl@rz.uni-regensburg.de>
+To:     "open-iscsi" <open-iscsi@googlegroups.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <michael.christie@oracle.com>,
+        "Chris Leech" <cleech@redhat.com>, "Lee Duncan" <lduncan@suse.com>
+Cc:     <linfeilong@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>
+Subject: Antw: [EXT] Re: [PATCH v6] scsi:iscsi: Fix multiple iscsi
+ session unbind event sent to userspace
+References: <20221108014414.3510940-1-haowenchao@huawei.com>
+ <ad54a5dc-b18f-e0e6-4391-1214e5729562@oracle.com>
+ <89692b2b-90f7-e8e8-fa77-f14dbe996b72@huawei.com>
+In-Reply-To: <89692b2b-90f7-e8e8-fa77-f14dbe996b72@huawei.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 21. 11. 22, 21:27, Michael Walle wrote:
-> This will break serial output for the userspace on my board
-> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt*dts). The uart_port_tx()
-> helper will call __port->ops->stop_tx(__port) if uart_circ_chars_pending()
-> returns 0. But the code above, doesn't do that. In fact, removing the
-> stop_tx() call in the helper macro, will fix the console output.
+>>> "'Wenchao Hao' via open-iscsi" <open-iscsi@googlegroups.com> schrieb am
+21.11.2022 um 15:17 in Nachricht
+<89692b2b-90f7-e8e8-fa77-f14dbe996b72@huawei.com>:
+> On 2022/11/9 11:47, Mike Christie wrote:
+>> On 11/7/22 7:44 PM, Wenchao Hao wrote:
+>>> I found an issue that kernel would send ISCSI_KEVENT_UNBIND_SESSION
+>>> for multiple times which should be fixed.
+>>>  
+>>> +static char *iscsi_session_target_state_names[] = {
+>>> +	"UNBOUND",
+>>> +	"ALLOCATED",
+>>> +	"SCANNED",
+>>> +	"UNBINDING",
+>>> +};
+>> 
+>> I think maybe Lee meant you to do something like:
+>> 
+>> static int iscsi_target_state_to_name[] = {
+>> 	[ISCSI_SESSION_TARGET_UNBOUND] = "UNBOUND",
+>> 	[ISCSI_SESSION_TARGET_ALLOCATED] = "ALLOCATED",
+>> 	.....
+>> 
+>> 
 > 
-> Any ideas how to fix that?
+> Define array as following and remove previous helper function:
+> 
+> static char *iscsi_session_target_state_name[] = {
+>        [ISCSI_SESSION_TARGET_UNBOUND]   = "UNBOUND",
+>        [ISCSI_SESSION_TARGET_ALLOCATED] = "ALLOCATED",
+>        [ISCSI_SESSION_TARGET_SCANNED]   = "SCANNED",
+>        [ISCSI_SESSION_TARGET_UNBINDING] = "UNBINDING",
+> };
+> 
+> Reference the array directly:
 
-Hm, so ATMEL_US_TXRDY is removed from tx_done_mask in stop_tx, but not 
-added back in start_tx. So the tx interrupt is never handled (the tx 
-tasklet is not scheduled to send the queue chars) in 
-atmel_handle_transmit().
+Actually I think with a modern optimizing compiler there should be little difference in the code created.
 
-Any chance, the below fixes it?
+> 
+> static ssize_t
+> show_priv_session_target_state(struct device *dev, struct device_attribute 
+> *attr,
+>                        char *buf)
+> {
+>        struct iscsi_cls_session *session = iscsi_dev_to_session(dev->parent);
+>        return sysfs_emit(buf, "%s\n",
+>                        
+> iscsi_session_target_state_name[session->target_state]);
+> }
+> 
+>>> +	spin_lock_irqsave(&session->lock, flags);
+>>> +	if (session->target_state == ISCSI_SESSION_TARGET_ALLOCATED) {
+>>> +		spin_unlock_irqrestore(&session->lock, flags);
+>>> +		if (session->ida_used)
+>>> +			ida_free(&iscsi_sess_ida, session->target_id);
+>>> +		ISCSI_DBG_TRANS_SESSION(session, "Donot unbind sesison: allocated\n");
+>> 
+>> Could you change the error message to "Skipping target unbinding: Session 
+> not yet scanned.\n"
+>> 
+>>> +		goto unbind_session_exit;
+>>> +	}
+>> 
+>> Just add a newline/return here.
+> 
+> Actually we should skip unbind this session if call into 
+> __iscsi_unbind_session() with target state
+> is ALLOCATED. So I removed the check, and check only one condition in 
+> __iscsi_unbind_session(): if the
+> target state is SCANNED.
+> 
+>> 
+>> I think you want to move both state checks to after the we take the host 
+> lock and
+>> session lock after the line above. You don't have to take the lock multiple 
+> times
+>> and we can drop the target_id == ISCSI_MAX_TARGET since it would then rely 
+> on the
+>> state checks (I left out the ISCSI_DBG_TRANS_SESSION because I'm lazy):
+>> 
+>> 	bool remove_target = false;
+>> .....
+>> 
+>> 
+> I think it's not necessary to add a flag remove_target, here is my changes 
+> for function __iscsi_unbind_session:
+> 
+> @@ -1966,23 +1977,28 @@ static void __iscsi_unbind_session(struct 
+> work_struct *work)
+>         /* Prevent new scans and make sure scanning is not in progress */
+>         mutex_lock(&ihost->mutex);
+>         spin_lock_irqsave(&session->lock, flags);
+> -       if (session->target_id == ISCSI_MAX_TARGET) {
+> +       if (session->target_state != ISCSI_SESSION_TARGET_SCANNED) {
+>                 spin_unlock_irqrestore(&session->lock, flags);
+>                 mutex_unlock(&ihost->mutex);
+> -               goto unbind_session_exit;
+> +               ISCSI_DBG_TRANS_SESSION(session, "Skipping target unbinding: 
+> Session is %s.\n",
+> +                                       
+> iscsi_session_target_state_name[session->target_state]);
+> +               return;
+>         }
+> -
+>         target_id = session->target_id;
+>         session->target_id = ISCSI_MAX_TARGET;
+> +       session->target_state = ISCSI_SESSION_TARGET_UNBINDING;
+>         spin_unlock_irqrestore(&session->lock, flags);
+>         mutex_unlock(&ihost->mutex);
+>  
+>         scsi_remove_target(&session->dev);
+>  
+> +       spin_lock_irqsave(&session->lock, flags);
+> +       session->target_state = ISCSI_SESSION_TARGET_UNBOUND;
+> +       spin_unlock_irqrestore(&session->lock, flags);
+> +
+>         if (session->ida_used)
+>                 ida_free(&iscsi_sess_ida, target_id);
+>  
+> -unbind_session_exit:
+>         iscsi_session_event(session, ISCSI_KEVENT_UNBIND_SESSION);
+>         ISCSI_DBG_TRANS_SESSION(session, "Completed target removal\n");
+>  }
+> 
+> And the function looks like following after change:
+> 
+> static void __iscsi_unbind_session(struct work_struct *work)
+> {
+> 	struct iscsi_cls_session *session =
+> 			container_of(work, struct iscsi_cls_session,
+> 				     unbind_work);
+> 	struct Scsi_Host *shost = iscsi_session_to_shost(session);
+> 	struct iscsi_cls_host *ihost = shost->shost_data;
+> 	unsigned long flags;
+> 	unsigned int target_id;
+> 
+> 	ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
+> 
+> 	/* Prevent new scans and make sure scanning is not in progress */
+> 	mutex_lock(&ihost->mutex);
+> 	spin_lock_irqsave(&session->lock, flags);
+> 	if (session->target_state != ISCSI_SESSION_TARGET_SCANNED) {
+> 		spin_unlock_irqrestore(&session->lock, flags);
+> 		mutex_unlock(&ihost->mutex);
+> 		ISCSI_DBG_TRANS_SESSION(session, "Skipping target unbinding: Session is 
+> %s.\n",
+> 					iscsi_session_target_state_name[session->target_state]);
+> 		return;
+> 	}
+> 	target_id = session->target_id;
+> 	session->target_id = ISCSI_MAX_TARGET;
+> 	session->target_state = ISCSI_SESSION_TARGET_UNBINDING;
+> 	spin_unlock_irqrestore(&session->lock, flags);
+> 	mutex_unlock(&ihost->mutex);
+> 
+> 	scsi_remove_target(&session->dev);
+> 
+> 	spin_lock_irqsave(&session->lock, flags);
+> 	session->target_state = ISCSI_SESSION_TARGET_UNBOUND;
+> 	spin_unlock_irqrestore(&session->lock, flags);
+> 
+> 	if (session->ida_used)
+> 		ida_free(&iscsi_sess_ida, target_id);
+> 
+> 	iscsi_session_event(session, ISCSI_KEVENT_UNBIND_SESSION);
+> 	ISCSI_DBG_TRANS_SESSION(session, "Completed target removal\n");
+> }
+> 
+> 
+> 
+> -- 
+> You received this message because you are subscribed to the Google Groups 
+> "open-iscsi" group.
+> To unsubscribe from this group and stop receiving emails from it, send an 
+> email to open-iscsi+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit 
+> https://groups.google.com/d/msgid/open-iscsi/89692b2b-90f7-e8e8-fa77-f14dbe99 
+> 6b72%40huawei.com.
 
-diff --git a/drivers/tty/serial/atmel_serial.c 
-b/drivers/tty/serial/atmel_serial.c
-index 11bf2466390e..395370e0c77b 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -596,6 +596,8 @@ static void atmel_start_tx(struct uart_port *port)
-                 /* re-enable PDC transmit */
-                 atmel_uart_writel(port, ATMEL_PDC_PTCR, ATMEL_PDC_TXTEN);
 
-+       atmel_port->tx_done_mask |= ATMEL_US_TXRDY;
-+
-         /* Enable interrupts */
-         atmel_uart_writel(port, ATMEL_US_IER, atmel_port->tx_done_mask);
-
-
-thanks,
--- 
-js
 
