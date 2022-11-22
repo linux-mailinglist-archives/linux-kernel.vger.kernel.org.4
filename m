@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4256E633F34
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F65E633F37
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbiKVOsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S233188AbiKVOsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:48:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbiKVOsV (ORCPT
+        with ESMTP id S233162AbiKVOsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:48:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8B62606;
-        Tue, 22 Nov 2022 06:48:20 -0800 (PST)
+        Tue, 22 Nov 2022 09:48:45 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2CA2606
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:48:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36B3161733;
-        Tue, 22 Nov 2022 14:48:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E235EC433D6;
-        Tue, 22 Nov 2022 14:48:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2EA67CE1D3D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:48:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AB7C433C1;
+        Tue, 22 Nov 2022 14:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669128499;
-        bh=lqCUWdMmeZtamXQEK/uSvDyJ1N+krRb43evlfpRGSZs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d0fdR4ivk8mJ4v0r1rJsp6WCI3EU7K/tUh595I3GwFieuAQHMyGmgY5LBpa1seKdQ
-         vSrlvi7NAL5KWYM6Ux5Ksb+6/faI94FqMijFBnY5u5cP8qMzVEYUi2nNOdrnFaL4Fc
-         KcowLouD0A+ZQ0+LTp/SEGtTTEum05N1sIk/zGFfcwKZ4Ksk2BmijqRsaCjkIFPoI1
-         UVaCCQn27h+vkXj0xZgp5RJASAgCoOtamEyEa/g4d0yybXGqEyRPlxrBuiTGekLIRc
-         6QGKhejqw4g7PZzT07liwrL+xQBNPNEQ6WZ3R7vPhM+Pm0Kss83bnBEqiDWWuIY5/g
-         bT7KVaS8d1CRw==
-Date:   Tue, 22 Nov 2022 16:48:15 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Peter Kosyh <pkosyh@yandex.ru>
-Cc:     Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] mlx4: use snprintf() instead of sprintf() for safety
-Message-ID: <Y3zhL0/OItHF1R03@unreal>
-References: <20221122130453.730657-1-pkosyh@yandex.ru>
+        s=k20201202; t=1669128520;
+        bh=H5yrJKp7IZ87cLQJKQXNDqJd6jBA32LmwBeh/HfHH2w=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=d2kuog9NAF3d688Expouf0jXiAbwY/5aL0M30bbseV7liEMBibzt4IOF72Ovh4+xL
+         qD17J7uD+nsKg7aQpACaTY7aDmfCnKSiu2TFUHKFSC60XT+TRIgj+vCwufwfDPSKXC
+         mjGp8CIK+LbWA0m1+CPoPU9Ox5ok7hCLcOgwoSnxSvAbkbqwJUZviorfgwFByEeVRv
+         EeEguzDWnf355Zfy7083KXUFQQGVfXOoaeDAqAy6Pi5Oqr3HfYEa+Z3xvQYKuuuDxA
+         O7mpZd3d7YAK58da6NXrshPzTQDhsIOPuV0roOnSvOKAv4rqSNWyRyJWaJCZi5L+n6
+         EZoROpiliEIjA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id AC3EB5C09C9; Tue, 22 Nov 2022 06:48:39 -0800 (PST)
+Date:   Tue, 22 Nov 2022 06:48:39 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: next-20221122: tinyconfig: ppc n s390:
+ kernel/printk/printk.c:95:1: error: type specifier missing, defaults to
+ 'int'; ISO C99 and later do not support implicit int
+ [-Werror,-Wimplicit-int]
+Message-ID: <20221122144839.GI4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CA+G9fYvCWwndXdsvuW7iJ25wgfN6_iMY-OC_z6ufSwiJkzFFMw@mail.gmail.com>
+ <87o7szoyij.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221122130453.730657-1-pkosyh@yandex.ru>
+In-Reply-To: <87o7szoyij.fsf@jogness.linutronix.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,46 +63,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 04:04:53PM +0300, Peter Kosyh wrote:
-> Use snprintf() to avoid the potential buffer overflow. Although in the
-> current code this is hardly possible, the safety is unclean.
+On Tue, Nov 22, 2022 at 03:33:16PM +0106, John Ogness wrote:
+> Hi Petr,
+> 
+> On 2022-11-22, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > Today's Linux next 20221122 tag clang-15 tinyconfig builds fails on
+> > powerpc and s390 architectures.
+> 
+> The problem is that CONFIG_SRCU is not selected. This must be selected
+> by any modules that requires SRCU. However, printk.c is _always_ built
+> into the kernel (even if !CONFIG_PRINTK). The registration of consoles
+> and the console list (which uses SRCU) is _always_ built into the
+> kernel.
+> 
+> So should CONFIG_SRCU now always be active?
+> 
+> @paulmck: Do you have a problem with permanently activating CONFIG_SRCU?
 
-Let's fix the tools instead. The kernel code is correct.
+The people wanting it separate back in the day were those wanting very
+tiny kernels.  I have not heard from them in a long time, so maybe it
+is now OK to just make SRCU unconditional.
 
-Thanks
-
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Peter Kosyh <pkosyh@yandex.ru>
-> ---
->  drivers/net/ethernet/mellanox/mlx4/main.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx4/main.c b/drivers/net/ethernet/mellanox/mlx4/main.c
-> index d3fc86cd3c1d..0616d352451b 100644
-> --- a/drivers/net/ethernet/mellanox/mlx4/main.c
-> +++ b/drivers/net/ethernet/mellanox/mlx4/main.c
-> @@ -3057,7 +3057,8 @@ static int mlx4_init_port_info(struct mlx4_dev *dev, int port)
->  		info->base_qpn = mlx4_get_base_qpn(dev, port);
->  	}
->  
-> -	sprintf(info->dev_name, "mlx4_port%d", port);
-> +	snprintf(info->dev_name, sizeof(info->dev_name),
-> +		 "mlx4_port%d", port);
->  	info->port_attr.attr.name = info->dev_name;
->  	if (mlx4_is_mfunc(dev)) {
->  		info->port_attr.attr.mode = 0444;
-> @@ -3077,7 +3078,8 @@ static int mlx4_init_port_info(struct mlx4_dev *dev, int port)
->  		return err;
->  	}
->  
-> -	sprintf(info->dev_mtu_name, "mlx4_port%d_mtu", port);
-> +	snprintf(info->dev_mtu_name, sizeof(info->dev_mtu_name),
-> +		 "mlx4_port%d_mtu", port);
->  	info->port_mtu_attr.attr.name = info->dev_mtu_name;
->  	if (mlx4_is_mfunc(dev)) {
->  		info->port_mtu_attr.attr.mode = 0444;
-> -- 
-> 2.38.1
-> 
+							Thanx, Paul
