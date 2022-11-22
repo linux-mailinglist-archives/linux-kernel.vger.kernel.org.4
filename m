@@ -2,151 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4166362A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B68D6362E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238009AbiKWPCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S238322AbiKWPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237496AbiKWPCF (ORCPT
+        with ESMTP id S238540AbiKWPJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:02:05 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0725F2F3A4;
-        Wed, 23 Nov 2022 07:02:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669215725; x=1700751725;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cu3IGHk+KWNT4/J9/yQSAfLQbKsbIpwvyl5b794H6aw=;
-  b=bB6AxfCUBvndPrkYs4+8EVAERCMFneLV4Fhy7QzMhWbWxuRxe4g907hF
-   1zyAODwz217vS3AS2BUWDUSIjQ0zoL3m95ujEo9YuqlB/AROHmu8YPg9T
-   MMIO8E/9g27scjjfRwvfBP+joWOu7dfidSjA106JAnWTV/tr3YE8eVyN9
-   Dz6UNDss2Y2zzRE0VU1iaN+1XxWu+MnjXA0ZHzkcghzl3vBd0/ixyO3H7
-   9u1iA8NqpZDt9lpgx0Zz6rtYjBejCS8RjCMq1ihSn0M0G8+VwjsgpC9hn
-   sZiENVUmdr/Q+Z6SocNtEvXljORT3WbCIEETtIZU9qyats+bc9VT2WV4M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="378341376"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="378341376"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 07:01:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="635941367"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="635941367"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 23 Nov 2022 07:01:55 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxrG5-00GKhH-1v;
-        Wed, 23 Nov 2022 17:01:53 +0200
-Date:   Wed, 23 Nov 2022 17:01:53 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, broonie@kernel.org
-Subject: Re: [PATCH v3 3/9] gpio: 104-dio-48e: Migrate to the regmap-irq API
-Message-ID: <Y3414YhVjqKakddV@smile.fi.intel.com>
-References: <cover.1669100542.git.william.gray@linaro.org>
- <80fc819bcafe9697b6e02c0750d3cf0ea4ec9e1b.1669100542.git.william.gray@linaro.org>
+        Wed, 23 Nov 2022 10:09:00 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B98697F0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:08:17 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id s4so11374568qtx.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+S7mFwOjPwIOTHt6SuUNUfln0CNGkBMEDjngY+UgUuw=;
+        b=rzZ+y6MWMosxPSSLwzCaISThrED4G5+KW6v323GlLLMD+syvy4SFu0r6eNrMbH57sd
+         uMZXQ1S2+vrMF8Wq25KawQXHdvH68RxHeGEk484kuMYOA+QApc5NgjNr/e6EWPs6nyDX
+         kCengAM3vFGiyuzEP+bZWGM6bkmBOTL1D07J/t94+2HuS/Ic/dVLYnOyLsMp06vGPwc/
+         VXk87fMZ9jDpHO3oDrGCPbIeetmZTquIiluoxMRHf+GKyz/nRElElgM7Z0rdir/tly0U
+         kPv29RU8QOzUFa72Uxd3+3//mcjj2fG77rzINTQWO8nhD7vHUr4IOvppHgMLOdwsntSC
+         HfHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+S7mFwOjPwIOTHt6SuUNUfln0CNGkBMEDjngY+UgUuw=;
+        b=15VcD9M03NwUBy6fD1NaS5AGdCnu/4lApVbiyNrjARdqk45z8WEfNtlWkH/VBVDim+
+         dW8H9HsXZYU/ePAPw80PmKBx9oSsPgrxxPYrKbuk9QSR2ojbmxTrdcF3eUmS8ZDMPMEu
+         XI5y31hOVKS0qCatPTo7tOoOyZvOhyVD0jyNh91oE0osBgXmCeBC6Ea/VcV3j+YIeeNl
+         hDyyRepPDIdSkkIgADnF0HnylmgXyNkaXXHf3hE8mBfMp/oZCifHr3e3MDYZXT0Zt8dL
+         8Ls0SKi/H6YKeFSTr2lP5X0R20cqk5CRyDPTmHo+RVSCZqFlDuB60E8AbyXdvI5YhgbE
+         jG0Q==
+X-Gm-Message-State: ANoB5pmqNrF6XkJckDZDJvJRV9zxg/b3NldytNsRfvFcN7B7g8uAgFgR
+        chlaTu+8lE9S7zpoABm3BjUo8w==
+X-Google-Smtp-Source: AA0mqf6lbGcYJ1up0v8P7VKqnSrzjDshqpztg9z1N3SWYybjjY8vuJvLTB0jH62UATdfYKb42oe7/w==
+X-Received: by 2002:a05:622a:4a11:b0:3a5:1cc6:ae12 with SMTP id fv17-20020a05622a4a1100b003a51cc6ae12mr26699265qtb.103.1669216096994;
+        Wed, 23 Nov 2022 07:08:16 -0800 (PST)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05620a284900b006f9ddaaf01esm12455343qkp.102.2022.11.23.07.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 07:08:16 -0800 (PST)
+Date:   Tue, 22 Nov 2022 02:41:14 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     jic23@kernel.org, alexandre.torgue@foss.st.com,
+        olivier.moysan@foss.st.com, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] counter: stm32-lptimer-cnt: fix the check on arr and cmp
+ registers update
+Message-ID: <Y3x9GgxsdJM7NTjY@fedora>
+References: <20221123133609.465614-1-fabrice.gasnier@foss.st.com>
+ <Y3x59hNekCDuOFXT@fedora>
+ <Y3x7YIBDT3xTeqtk@fedora>
+ <c4792fd3-73e3-20ee-cd7a-a8d00eb877f9@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MBQTBXmEy5ZnhVes"
 Content-Disposition: inline
-In-Reply-To: <80fc819bcafe9697b6e02c0750d3cf0ea4ec9e1b.1669100542.git.william.gray@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c4792fd3-73e3-20ee-cd7a-a8d00eb877f9@foss.st.com>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 02:11:00AM -0500, William Breathitt Gray wrote:
-> The regmap API supports IO port accessors so we can take advantage of
-> regmap abstractions rather than handling access to the device registers
-> directly in the driver.
-> 
-> For the 104-dio-48e we have the following IRQ registers (0xB and 0xF):
-> 
->     Base Address +B (Write): Enable Interrupt
->     Base Address +B (Read): Disable Interrupt
->     Base Address +F (Read/Write): Clear Interrupt
-> 
-> Any write to 0xB will enable interrupts, while any read will disable
-> interrupts. Interrupts are cleared by a read or any write to 0xF.
-> There's no IRQ status register, so software has to assume that if an
-> interrupt is raised then it was for the 104-DIO-48E device.
 
-...
+--MBQTBXmEy5ZnhVes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +/* only bit 3 on each respective Port C supports interrupts */
-> +#define DIO48E_REGMAP_IRQ(_ppi) \
-> +	[19 + (_ppi) * 24] = { \
-> +		.mask = BIT(_ppi), \
-> +		.type = { .types_supported = IRQ_TYPE_EDGE_RISING, }, \
+On Wed, Nov 23, 2022 at 03:56:31PM +0100, Fabrice Gasnier wrote:
+> On 11/22/22 08:33, William Breathitt Gray wrote:
+> > On Tue, Nov 22, 2022 at 02:27:50AM -0500, William Breathitt Gray wrote:
+> >> On Wed, Nov 23, 2022 at 02:36:09PM +0100, Fabrice Gasnier wrote:
+> >>> The ARR (auto reload register) and CMP (compare) registers are
+> >>> successively written. The status bits to check the update of these
+> >>> registers are polled together with regmap_read_poll_timeout().
+> >>> The condition to end the loop may become true, even if one of the reg=
+ister
+> >>> isn't correctly updated.
+> >>> So ensure both status bits are set before clearing them.
+> >>>
+> >>> Fixes: d8958824cf07 ("iio: counter: Add support for STM32 LPTimer")
+> >>> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> >>> ---
+> >>>  drivers/counter/stm32-lptimer-cnt.c | 2 +-
+> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/st=
+m32-lptimer-cnt.c
+> >>> index d6b80b6dfc28..8439755559b2 100644
+> >>> --- a/drivers/counter/stm32-lptimer-cnt.c
+> >>> +++ b/drivers/counter/stm32-lptimer-cnt.c
+> >>> @@ -69,7 +69,7 @@ static int stm32_lptim_set_enable_state(struct stm3=
+2_lptim_cnt *priv,
+> >>> =20
+> >>>  	/* ensure CMP & ARR registers are properly written */
+> >>>  	ret =3D regmap_read_poll_timeout(priv->regmap, STM32_LPTIM_ISR, val,
+> >>> -				       (val & STM32_LPTIM_CMPOK_ARROK),
+> >>> +				       (val & STM32_LPTIM_CMPOK_ARROK) =3D=3D STM32_LPTIM_CMPOK_=
+ARROK,
+> >>
+> >> This is a reasonable fix, but I don't like seeing so much happening in
+> >> an argument list -- it's easy to misunderstand what's going on which c=
+an
+> >> lead to further bugs the future. Pull out this condition to a dedicated
+> >> bool variable with a comment explaining why we need the equivalence
+> >> check (i.e. to ensure both status bits are set and not just one).
+> >>
+> >> William Breathitt Gray
+> >=20
+> > Alternatively, you could pull out just (val & STM32_LPTIM_CMPOK_ARROK)
+> > to a separate variable and keep the equivalence condition inline if you
+> > think it'll be clearer that way.
+>=20
+> Hi William,
+>=20
+> I'm not sure to fully understand your proposal here.
+> Could you clarify ?
+>=20
+> regmap_read_poll_timeout() macro requires:
+>=20
+>  * @val: Unsigned integer variable to read the value into
+>  * @cond: Break condition (usually involving @val)
+>=20
+> So do you wish I introduce a macro that abstracts the condition check ?
+> (val & STM32_LPTIM_CMPOK_ARROK) =3D=3D STM32_LPTIM_CMPOK_ARROK
+>=20
+>=20
+> Best regards,
+> Fabrice
 
-When {} on a single line, the trailing comma is not needed.
+My apologies Fabrice, I realize now that regmap_read_poll_timeout() is a
+macro. Abstracting out the conditional would probably be more confusing
+than having it inline, so the way it is right now is probably fine after
+all.
 
-		.type = { .types_supported = IRQ_TYPE_EDGE_RISING }, \
+William Breathitt Gray
 
-would work as well.
+--MBQTBXmEy5ZnhVes
+Content-Type: application/pgp-signature; name="signature.asc"
 
-A nit: I would put \ on the same column by using TABs before each of them.
+-----BEGIN PGP SIGNATURE-----
 
->  	}
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY3x9GgAKCRC1SFbKvhIj
+Kz+lAQDMbIxU7BPDmxYGeA4ARRXDfefK7ZVmk8dutqzuUI9PMwD8CRczxb5A9kTp
+ZqBOIIef6M/iAzY6hZV01bnuvoOxhAo=
+=Crky
+-----END PGP SIGNATURE-----
 
-...
-
-> +	/* if all previously masked, enable interrupts when unmasking */
-> +	if (prev_mask == all_masked) {
-> +		err = regmap_write(map, DIO48E_ENABLE_INTERRUPT, 0x00);
-> +		if (err)
-> +			return err;
-> +	/* if all are currently masked, disable interrupts */
-> +	} else if (mask_buf == all_masked) {
-> +		err = regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
-> +		if (err)
-> +			return err;
-> +	}
-
-Haven't looked at the rest of the series, but if there is nothing with this
-code piece, the above can be optimized to
-
-	if (prev_mask == all_masked)
-		return regmap_write(map, DIO48E_ENABLE_INTERRUPT, 0x00);
-
-	if (mask_buf == all_masked)
-		return regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
-
-...
-
-> +	/* Initialize device interrupt state */
-> +	err = regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
-> +	if (err)
-> +		return err;
-
-Use ->init_hw() callback for this.
-
-...
-
-> +	err = devm_regmap_add_irq_chip(dev, map, irq[id], 0, 0, chip,
-> +				       &chip_data);
-
-I would leave this on one line. It's only 82.
-
-> +	if (err) {
-> +		dev_err(dev, "IRQ registration failed (%d)\n", err);
-> +		return err;
-> +	}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--MBQTBXmEy5ZnhVes--
