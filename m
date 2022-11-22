@@ -2,144 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2511634A54
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EE7634AA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234721AbiKVWzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 17:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
+        id S232774AbiKVXA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 18:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235295AbiKVWzT (ORCPT
+        with ESMTP id S229728AbiKVXAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 17:55:19 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4314DD7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:55:09 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3abc71aafcaso26084907b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:55:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vgVj81TaAJFPaup6fEizR2CqkCcmP7+hjUnyLuec4+o=;
-        b=RuJwiWKaa2cOkX9/h/pterDKBIAJDyCMl3Gr2uokUaHiSgUYf21FBwhwfxGjFmEaux
-         DBrN6a5QhNaok28H5BUN4BDVZPpvBg2kKMmzDbJkI3dN14ygAuhbKzSGa7RHQSIYVb6J
-         M26ETl80wMn5iENf8wxbk0Q+FoFB6tTXpvTjNWzl5v1R5ed7nRKbE/JX3ORhTe5mVAJX
-         FM9+59F9ZllVPLSRCp4yncMNAebZy8+1gwc+2Hg99EJhj9XIegPAVWMNOhNhYbwjRzXm
-         vci4H/4bdTkf3ixODqhpo65YzIV0aiMt9txB6cEo61dfu7HSU17O1o0AqK/FzDJa+1eI
-         sxRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vgVj81TaAJFPaup6fEizR2CqkCcmP7+hjUnyLuec4+o=;
-        b=e24txBey+nO7KTlfCtiIggZXSsUHIWTTJl7Ak4hHPZ+/+pwb5XBjGTU1rqeYgU3hPt
-         nw5UzWSAeAo/kVgeupqkv4u5uwKqM9Fp70d5adzaQ/Kqj9zI5ZGePyc7VrzWx2cGlrwA
-         dxyiQmiAC57oFRSubNmX6nwEadS8uS3sExJ9GIBKyU/EgWDMVw2lTOu3nwb42jcXuXyy
-         9DBIf+nbFOVDAmSv1LCaTbBPP+xv/RyAl588yvPgKe4cW0ZX1Q4+cYJba4FhGPBXWU/Q
-         Wcj+OIobs/wx+yAZMuSViYFusNMRI27zBfOjr4A4XTTpr/2OePQWi1EL+4lvnjfyNBak
-         pVNw==
-X-Gm-Message-State: ANoB5pmlhCJrNb6NZkaoC2nNJzlIT7CP/LFl1q/bECxT3O5X+rLIs6Sp
-        3oNqkQcXb0uXMZhLZMSUdAOvxOxqLGeqBzsnVDnPBQ==
-X-Google-Smtp-Source: AA0mqf5lWYRbouY3wvSyTTHF5VwEyw1ykqzKm2VlVp0D1XBZHCXBRTzTAdT5ZyzQLfVztmPc7a+6n8h/U/Z8cXwlc/M=
-X-Received: by 2002:a81:5f04:0:b0:393:ab0b:5a31 with SMTP id
- t4-20020a815f04000000b00393ab0b5a31mr22706109ywb.55.1669157708673; Tue, 22
- Nov 2022 14:55:08 -0800 (PST)
+        Tue, 22 Nov 2022 18:00:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52386240BC;
+        Tue, 22 Nov 2022 15:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF8196193E;
+        Tue, 22 Nov 2022 23:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 284AEC433D7;
+        Tue, 22 Nov 2022 23:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669158017;
+        bh=hDp7z6c183qc/dv5dfSlL+UMP/F5g0Wo+l1qAFqWm6k=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oOoOUiGvKEOcVv25z8utcdrvycZKqqlIvpOakpdlYJpJcDQdmwdsLHeeyGQ1brhMB
+         w8j2mv7nWwgmQV+Vwbjf45JulqTS+Lcq203hMq9n9RADjWfPGRD62hqVwEZHLmEVmc
+         Gt5YpxpR2NmBeF3ONKdUY8b3I9I2Hvm6so7N+NEy+IxJvf1yRy2sJ9iorGV7fj1iZY
+         IdTKa5A8Wx0m4aaWmURYDXzi5QEN2D4TgoWJsSB7zsv6Xz1zO+A39ZbU2X1eJkXKQt
+         odER13BvL7UWs1V2b3NodK8HGetWZgU93HL6SSgFZYxTyAY4eqVoqKpiqD2Gi4LgZD
+         bZFX2CeXoLg9A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 04E08E270E3;
+        Tue, 22 Nov 2022 23:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221112040452.644234-1-edumazet@google.com> <Y30gZm0mO4YNO85d@localhost.localdomain>
-In-Reply-To: <Y30gZm0mO4YNO85d@localhost.localdomain>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 22 Nov 2022 14:54:57 -0800
-Message-ID: <CANn89iL-hGPeaTzCibdaOoquAQYNYa8Fu337tqu98xyoZWarOQ@mail.gmail.com>
-Subject: Re: [PATCH -next] iommu/dma: avoid expensive indirect calls for sync operations
-To:     Michal Kubiak <michal.kubiak@intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-        iommu@lists.linux.dev, maciej.fijalkowski@intel.com,
-        magnus.karlsson@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/4] Support storing struct cgroup * objects as kptrs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166915801701.32558.522988930386371911.git-patchwork-notify@kernel.org>
+Date:   Tue, 22 Nov 2022 23:00:17 +0000
+References: <20221122055458.173143-1-void@manifault.com>
+In-Reply-To: <20221122055458.173143-1-void@manifault.com>
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, yhs@fb.com,
+        song@kernel.org, sdf@google.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, jolsa@kernel.org, haoluo@google.com,
+        tj@kernel.org, kernel-team@fb.com, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 11:18 AM Michal Kubiak <michal.kubiak@intel.com> wrote:
->
-> On Sat, Nov 12, 2022 at 04:04:52AM +0000, Eric Dumazet wrote:
-> > Quite often, NIC devices do not need dma_sync operations
-> > on x86_64 at least.
-> >
-> > Indeed, when dev_is_dma_coherent(dev) is true and
-> > dev_use_swiotlb(dev) is false, iommu_dma_sync_single_for_cpu()
-> > and friends do nothing.
-> >
-> > However, indirectly calling them when CONFIG_RETPOLINE=y
-> > consumes about 10% of cycles on a cpu receiving packets
-> > from softirq at ~100Gbit rate, as shown in [1]
-> >
-> > Even if/when CONFIG_RETPOLINE is not set, there
-> > is a cost of about 3%.
-> >
-> > This patch adds a copy of iommu_dma_ops structure,
-> > where sync_single_for_cpu, sync_single_for_device,
-> > sync_sg_for_cpu and sync_sg_for_device are unset.
->
->
-> Larysa from our team has found out this patch introduces also a
-> functional improvement for batch allocation in AF_XDP while iommmu is
-> turned on.
-> In 'xp_alloc_batch()' function there is a check if DMA needs a
-> synchronization. If so, batch allocation is not supported and we can
-> allocate only one buffer at a time.
->
-> The flag 'dma_need_sync' is being set according to the value returned by
-> the function 'dma_need_sync()' (from '/kernel/dma/mapping.c').
-> That function only checks if at least one of two DMA ops is defined:
-> 'ops->sync_single_for_cpu' or 'ops->sync_single_for_device'.
->
-> > +static const struct dma_map_ops iommu_nosync_dma_ops = {
-> > +     iommu_dma_ops_common_fields
-> > +
-> > +     .sync_single_for_cpu    = NULL,
-> > +     .sync_single_for_device = NULL,
-> > +     .sync_sg_for_cpu        = NULL,
-> > +     .sync_sg_for_device     = NULL,
-> > +};
-> > +#undef iommu_dma_ops_common_fields
-> > +
-> >  /*
-> >   * The IOMMU core code allocates the default DMA domain, which the underlying
-> >   * IOMMU driver needs to support via the dma-iommu layer.
-> > @@ -1586,7 +1612,8 @@ void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64 dma_limit)
-> >       if (iommu_is_dma_domain(domain)) {
-> >               if (iommu_dma_init_domain(domain, dma_base, dma_limit, dev))
-> >                       goto out_err;
-> > -             dev->dma_ops = &iommu_dma_ops;
-> > +             dev->dma_ops = dev_is_dma_sync_needed(dev) ?
-> > +                             &iommu_dma_ops : &iommu_nosync_dma_ops;
-> >       }
-> >
-> >       return;
->
->  This code removes defining 'sync_*' DMA ops if they are not actually
->  used. Thanks to that improvement the function 'dma_need_sync()' will
->  always return more meaningful information if any DMA synchronization is
->  actually needed for iommu.
->
->  Together with Larysa we have applied that patch and we can confirm it
->  helps for batch buffer allocation in AF_XDP ('xsk_buff_alloc_batch()'
->  call) when iommu is enabled.
+Hello:
 
-Thanks for testing !
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-I am quite busy relocating, I will address Christoph feedback next week.
+On Mon, 21 Nov 2022 23:54:54 -0600 you wrote:
+> In [0], we added support for storing struct task_struct * objects as
+> kptrs. This patch set extends this effort to also include storing struct
+> cgroup * object as kptrs.
+> 
+> As with tasks, there are many possible use cases for storing cgroups in
+> maps. During tracing, for example, it could be useful to query cgroup
+> statistics such as PSI averages, or tracking which tasks are migrating
+> to and from the cgroup.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,1/4] bpf: Enable cgroups to be used as kptrs
+    https://git.kernel.org/bpf/bpf-next/c/fda01efc6160
+  - [bpf-next,2/4] selftests/bpf: Add cgroup kfunc / kptr selftests
+    https://git.kernel.org/bpf/bpf-next/c/f583ddf15e57
+  - [bpf-next,3/4] bpf: Add bpf_cgroup_ancestor() kfunc
+    https://git.kernel.org/bpf/bpf-next/c/5ca786707829
+  - [bpf-next,4/4] selftests/bpf: Add selftests for bpf_cgroup_ancestor() kfunc
+    https://git.kernel.org/bpf/bpf-next/c/227a89cf5041
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
