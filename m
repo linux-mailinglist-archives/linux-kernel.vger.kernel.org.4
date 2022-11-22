@@ -2,147 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521BB6341DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186326341DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbiKVQs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S234213AbiKVQtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 11:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbiKVQsx (ORCPT
+        with ESMTP id S234127AbiKVQs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:48:53 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFCB6A68E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:48:52 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxWQM-0006Ic-4f; Tue, 22 Nov 2022 17:47:06 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxWQK-005t7P-10; Tue, 22 Nov 2022 17:47:04 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxWQJ-000q57-MW; Tue, 22 Nov 2022 17:47:03 +0100
-Date:   Tue, 22 Nov 2022 17:47:03 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 6/7] pwm: lpss: Add devm_pwm_lpss_probe() stub
-Message-ID: <20221122164703.e3z42rou7ivu3djv@pengutronix.de>
-References: <20221117110806.65470-1-andriy.shevchenko@linux.intel.com>
- <20221117110806.65470-7-andriy.shevchenko@linux.intel.com>
+        Tue, 22 Nov 2022 11:48:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 939646D494
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:48:56 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D20291FB;
+        Tue, 22 Nov 2022 08:49:02 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.32.179])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D5333F73D;
+        Tue, 22 Nov 2022 08:48:55 -0800 (PST)
+Date:   Tue, 22 Nov 2022 16:48:52 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, yusongping@huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: armv8_deprecated: fix unused-function error
+Message-ID: <Y3z9dEkMdCeWAWq0@FVFF77S0Q05N.cambridge.arm.com>
+References: <20221122032010.202956-1-renzhijie2@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rb5tprcr5gddrgn6"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221117110806.65470-7-andriy.shevchenko@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221122032010.202956-1-renzhijie2@huawei.com>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 22, 2022 at 03:20:10AM +0000, Ren Zhijie wrote:
+> If CONFIG_SWP_EMULATION is not set and
+> CONFIG_CP15_BARRIER_EMULATION is not set,
+> aarch64-linux-gnu complained about unused-function :
+> 
+> arch/arm64/kernel/armv8_deprecated.c:67:21: error: ‘aarch32_check_condition’ defined but not used [-Werror=unused-function]
+>  static unsigned int aarch32_check_condition(u32 opcode, u32 psr)
+>                      ^~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+> 
+> To fix this error, warp the definition of
+> aarch32_check_condition() by defined(CONFIG_SWP_EMULATION) ||
+> defined(CONFIG_CP15_BARRIER_EMULATION)
+> 
+> Fixes: 0c5f416219da ("arm64: armv8_deprecated: move aarch32 helper earlier")
 
---rb5tprcr5gddrgn6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This also depends on building with additional options to turn warnings into
+errors, no?
 
-On Thu, Nov 17, 2022 at 01:08:05PM +0200, Andy Shevchenko wrote:
-> In case the PWM LPSS module is not provided, allow users to be
-> compiled with the help of the devm_pwm_lpss_probe() stub.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Thierry Reding <thierry.reding@gmail.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
 > ---
->  include/linux/platform_data/x86/pwm-lpss.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/include/linux/platform_data/x86/pwm-lpss.h b/include/linux/p=
-latform_data/x86/pwm-lpss.h
-> index c852fe24fe2a..6ef21b8baec7 100644
-> --- a/include/linux/platform_data/x86/pwm-lpss.h
-> +++ b/include/linux/platform_data/x86/pwm-lpss.h
-> @@ -4,6 +4,8 @@
->  #ifndef __PLATFORM_DATA_X86_PWM_LPSS_H
->  #define __PLATFORM_DATA_X86_PWM_LPSS_H
-> =20
-> +#include <linux/err.h>
-> +#include <linux/kconfig.h>
->  #include <linux/types.h>
-> =20
->  struct device;
-> @@ -27,7 +29,16 @@ struct pwm_lpss_boardinfo {
->  	bool other_devices_aml_touches_pwm_regs;
->  };
-> =20
-> +#if IS_REACHABLE(CONFIG_PWM_LPSS)
->  struct pwm_lpss_chip *devm_pwm_lpss_probe(struct device *dev, void __iom=
-em *base,
->  					  const struct pwm_lpss_boardinfo *info);
-> +#else
-> +static inline
-> +struct pwm_lpss_chip *devm_pwm_lpss_probe(struct device *dev, void __iom=
-em *base,
-> +					  const struct pwm_lpss_boardinfo *info)
-> +{
-> +	return ERR_PTR(-ENODEV);
-> +}
-> +#endif	/* CONFIG_PWM_LPSS */
+>  arch/arm64/kernel/armv8_deprecated.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
+> index ed0788cf6bbb..3f29ceb6653a 100644
+> --- a/arch/arm64/kernel/armv8_deprecated.c
+> +++ b/arch/arm64/kernel/armv8_deprecated.c
+> @@ -64,6 +64,7 @@ struct insn_emulation {
+>  
+>  #define	ARM_OPCODE_CONDITION_UNCOND	0xf
+>  
+> +#if defined(CONFIG_SWP_EMULATION) || defined(CONFIG_CP15_BARRIER_EMULATION)
+>  static unsigned int aarch32_check_condition(u32 opcode, u32 psr)
+>  {
+>  	u32 cc_bits  = opcode >> 28;
+> @@ -76,6 +77,7 @@ static unsigned int aarch32_check_condition(u32 opcode, u32 psr)
+>  	}
+>  	return ARM_OPCODE_CONDTEST_UNCOND;
+>  }
+> +#endif
 
-Hmm, this is actually never used, because if
-!IS_REACHABLE(CONFIG_PWM_LPSS), the only caller (that is added in patch
-7) has:
+Could we mark this as '__maybe_unused' or 'inline' instead? I think that's
+preferable to the ifdeferry.
 
-	if (!IS_REACHABLE(CONFIG_PWM_LPSS))
-		return 0;
+Thanks,
+Mark.
 
-before devm_pwm_lpss_probe() is called.
-
-Not sure if it's safe to just drop this patch. The return value is
-neither -ENOSYS (which I would expect for a stub function like that) nor
--EINVAL (which for reasons unknown to me is used in the stub for
-pwmchip_add()).
-
-I would have a better feeling with -ENOSYS in your stub, but I don't
-feel really strong here.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---rb5tprcr5gddrgn6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN8/QEACgkQwfwUeK3K
-7AljCgf9H8/JxkHipEZ8Aa79BqTgZHZ1aAEQGc0UHy6EhjUXQfsBafl8GepzjEJK
-P0NYAWNFQPaGmrJ6sXkK2F3SQiSK6wg6ByzxqxIkA/6mgR7wOMlRHy+wHdlZRx2O
-oz+tNuuPGbNaoI4b3Cb0SpZ4WdkhbSSQQPowk6iKyHKsGEkj65bgR5Vepz03SeDO
-4tTECcpqTPkqKmeWf9zu0FScFybpLDv2qhhzVtDrXelYAhRIysd/NawvEcf6QN0t
-3+Ex63Kr/lof0zOEyNDXxqzJcfvu7PfssPhKk/Tkcy3aRjBYIjyXDZkBlGI2UI7P
-KhY11oGTg82MSaWbbMhTQeJuGCDtzQ==
-=FMlB
------END PGP SIGNATURE-----
-
---rb5tprcr5gddrgn6--
+>  
+>  #ifdef CONFIG_SWP_EMULATION
+>  /*
+> -- 
+> 2.17.1
+> 
