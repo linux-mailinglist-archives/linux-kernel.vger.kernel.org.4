@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7F063447C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9614963447F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbiKVTY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S234112AbiKVTZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234426AbiKVTYz (ORCPT
+        with ESMTP id S229481AbiKVTZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:24:55 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A88E7FF21;
-        Tue, 22 Nov 2022 11:24:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669145094; x=1700681094;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OKm7UJo5SyFqT5YmYkDdQ5nt3mpnIZkSEfunTTVs3qE=;
-  b=UKpm2Bq0PtKiHN2VGC8sSV3IwF8v5Qmu+080Zfb9h3+clw2zNJ1aT6ff
-   rP0oNdIPDKJSGJfoVrAKypuZN63BkyIy9fgETxz1lJaYEOyWsNFLt+pO9
-   X+K6/D9TfduQF82hOVxNfw1NiwruJi/xfAa0aQGlwH4bdeUX9VjHtzqMn
-   2lKzqjmhPRjsOI925lwY3r7v6DdAKRaeadNbSQg/F9irQvXfSjb9gujHT
-   l12bfP8vGsK2SbA1nE85KvDJv3MxhQgNyJAIB9lA+/P0vdUFH+upnIwzG
-   liMiqmuf3TQxGKIlVi789IhuYz4LmAQSUTU7JphQC3yyfBhPGyBqgE26K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="400187018"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="400187018"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 11:24:53 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="641525771"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="641525771"
-Received: from coltsavx-mobl1.amr.corp.intel.com (HELO [10.255.0.114]) ([10.255.0.114])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 11:24:47 -0800
-Message-ID: <b3938f3a-e4f8-675a-0c0e-4b4618019145@intel.com>
-Date:   Tue, 22 Nov 2022 11:24:48 -0800
+        Tue, 22 Nov 2022 14:25:33 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C887FF21;
+        Tue, 22 Nov 2022 11:25:32 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id n186so16862400oih.7;
+        Tue, 22 Nov 2022 11:25:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=09Fo0rR4StbdjPIIvlInIxSHew0e7ivCTP8R8vAEZ3Y=;
+        b=mUndDyNeXjHl/vP19NQ4bwpklc7wS/EV0Ci39R6mCfU+ZxAnNdZbU/36cdmGRifMcN
+         xzeEa2uMwqa1dKwsoh3qKVaQkCDmsxgHNYC1mpbtCEZIt4ZZ7OGdgdd3YEbaWrhFwIuK
+         4o45IeQ1Tmek/Jd6QWrtBJCLbIIYrJIOE6ClTzK7IauSF9VT5Yg3QoZQrObyxKe6yn0/
+         jqejpCxPOIp4DtUn8CMbZjKoP/Mo+yyarmZni20JTDTVHkSIPapnC7r/X0y/3Cxa8N1F
+         QvLN5GuMo+1ycb9EzV5h7bXZL/BA6gUFkbIzlxNz1zbJ+cvYGRARg3GuyBdgcx5qrnWQ
+         IckQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=09Fo0rR4StbdjPIIvlInIxSHew0e7ivCTP8R8vAEZ3Y=;
+        b=GInXFDXWz7Sk4S1UTP1A7x5CItkAoVvi2zW3Lw15YWhfbsKcYonOVBowgHtpfUCk6Y
+         qRpt3mQ3SVbvGM4Gt1JezsNbl3fCEr7KogR9efF11mnSg7tEkvGLA4RbHIcWgUd51h7G
+         6EPEfixNC6Sk/G4xTIZmCbxWW8HME1RmyMw4k7VneAlc1DZVsOgxUWI6ovlJIj/xpulC
+         SuOzhgYej7H16gkA27kLmvOePmvaahgOYXUar1FHB5+XGCKbZb66WqoSCVMcM5iQLcNm
+         vrMlL52MHmXwywilpghSf4TNOZBuwaRQBFnLZuYEQHnUSX2Ovvv1P8a0Evc4q/C1hE3E
+         uZTQ==
+X-Gm-Message-State: ANoB5pnCGGdqp3iD/LuPd1uoTw5pK94ux+DHDFDWu5pS8VW8TSG/2C90
+        AmdQ4mkEQjJfXkqSfRYJ1Vbf/YuCoiE=
+X-Google-Smtp-Source: AA0mqf6jwoymerXoL3TKr2O+FS3QfhwQkUTlFpCJoSPC9VFX60OhX6Tz5DTTYZX6ZvM7zf1RHow7+A==
+X-Received: by 2002:a54:4399:0:b0:355:bceb:2606 with SMTP id u25-20020a544399000000b00355bceb2606mr7342032oiv.188.1669145131637;
+        Tue, 22 Nov 2022 11:25:31 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i11-20020a9d53cb000000b00667ff6b7e9esm6491267oth.40.2022.11.22.11.25.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 11:25:30 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <25b37a72-4415-2ed5-0415-040af174a70a@roeck-us.net>
+Date:   Tue, 22 Nov 2022 11:25:29 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-mm@kvack.org, seanjc@google.com,
-        pbonzini@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1668988357.git.kai.huang@intel.com>
- <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
- <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
- <52b2be9b-defd-63ce-4cb2-96cd624a95a6@intel.com>
- <Y30fUS5/JClpBHVc@hirez.programming.kicks-ass.net>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y30fUS5/JClpBHVc@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221121122932.2493174-1-Naresh.Solanki@9elements.com>
+ <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v7 1/4] dt-bindings: hwmon: fan: Add fan binding to schema
+In-Reply-To: <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,78 +81,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 11:13, Peter Zijlstra wrote:
-> On Tue, Nov 22, 2022 at 07:14:14AM -0800, Dave Hansen wrote:
->> On 11/22/22 01:13, Peter Zijlstra wrote:
->>> On Mon, Nov 21, 2022 at 01:26:28PM +1300, Kai Huang wrote:
->>>> +/*
->>>> + * Call the SEAMCALL on all online CPUs concurrently.  Caller to check
->>>> + * @sc->err to determine whether any SEAMCALL failed on any cpu.
->>>> + */
->>>> +static void seamcall_on_each_cpu(struct seamcall_ctx *sc)
->>>> +{
->>>> +	on_each_cpu(seamcall_smp_call_function, sc, true);
->>>> +}
->>>
->>> Suppose the user has NOHZ_FULL configured, and is already running
->>> userspace that will terminate on interrupt (this is desired feature for
->>> NOHZ_FULL), guess how happy they'll be if someone, on another parition,
->>> manages to tickle this TDX gunk?
->>
->> Yeah, they'll be none too happy.
->>
->> But, what do we do?
+On 11/21/22 04:29, Naresh Solanki wrote:
+> Add common fan properties bindings to a schema.
 > 
-> Not intialize TDX on busy NOHZ_FULL cpus and hard-limit the cpumask of
-> all TDX using tasks.
-
-I don't think that works.  As I mentioned to Thomas elsewhere, you don't
-just need to initialize TDX on the CPUs where it is used.  Before the
-module will start working you need to initialize it on *all* the CPUs it
-knows about.  The module itself has a little counter where it tracks
-this and will refuse to start being useful until it gets called
-thoroughly enough.
-
->> There are technical solutions like detecting if NOHZ_FULL is in play and
->> refusing to initialize TDX.  There are also non-technical solutions like
->> telling folks in the documentation that they better modprobe kvm early
->> if they want to do TDX, or their NOHZ_FULL apps will pay.
+> Bindings for fan controllers can reference the common schema for the
+> fan
 > 
-> Surely modprobe kvm isn't the point where TDX gets loaded? Because
-> that's on boot for everybody due to all the auto-probing nonsense.
+> child nodes:
 > 
-> I was expecting TDX to not get initialized until the first TDX using KVM
-> instance is created. Am I wrong?
-
-I went looking for it in this series to prove you wrong.  I failed.  :)
-
-tdx_enable() is buried in here somewhere:
-
-> https://lore.kernel.org/lkml/CAAhR5DFrwP+5K8MOxz5YK7jYShhaK4A+2h1Pi31U_9+Z+cz-0A@mail.gmail.com/T/
-
-I don't have the patience to dig it out today, so I guess we'll have Kai
-tell us.
-
->> We could also force the TDX module to be loaded early in boot before
->> NOHZ_FULL is in play, but that would waste memory on TDX metadata even
->> if TDX is never used.
+>    patternProperties:
+>      "^fan@[0-2]":
+>        type: object
+>        $ref: fan-common.yaml#
 > 
-> I'm thikning it makes sense to have a tdx={off,on-demand,force} toggle
-> anyway.
-
-Yep, that makes total sense.  Kai had one in an earlier version but I
-made him throw it out because it wasn't *strictly* required and this set
-is fat enough.
-
->> How do NOHZ_FULL folks deal with late microcode updates, for example?
->> Those are roughly equally disruptive to all CPUs.
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>   .../devicetree/bindings/hwmon/fan-common.yaml | 47 +++++++++++++++++++
+>   1 file changed, 47 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
 > 
-> I imagine they don't do that -- in fact I would recommend we make the
-> whole late loading thing mutually exclusive with nohz_full; can't have
-> both.
+> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> new file mode 100644
+> index 000000000000..0535d37624cc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Common fan properties
+> +
+> +maintainers:
+> +  - Naresh Solanki <naresh.solanki@9elements.com>
+> +
+> +properties:
+> +  max-rpm:
+> +    description:
+> +      Max RPM supported by fan.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  min-rpm:
+> +    description:
+> +      Min RPM supported by fan.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pulses-per-revolution:
+> +    description:
+> +      The number of pulse from fan sensor per revolution.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  target-rpm:
+> +    description:
+> +      Target RPM the fan should be configured during driver probe.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pwms:
+> +    description:
+> +      PWM provider.
+> +
+> +  label:
+> +    description:
+> +      Optional fan label
+> +
+> +  fan-supply:
+> +    description:
+> +      Power supply for fan.
+> +
+> +additionalProperties: true
+> +
+> +...
 
-So, if we just use schedule_on_cpu() for now and have the TDX code wait,
-will a NOHZ_FULL task just block the schedule_on_cpu() indefinitely?
+Still, from my second reply to v6:
 
-That doesn't seem like _horrible_ behavior to start off with for a
-minimal series.
+ > Another property which is definitely missing and needed
+ > will be DC vs. PWM control. That is currently pwm[1-*]_mode
+ > in sysfs attributes, but it is really a fan attribute.
+ >
+ > Many fans are DC controlled, so this property is absolutely
+ > necessary.
+
+Plus, with DC control there is no pwm. It would be absolutely wrong
+to declare that a fan controller MUST be pwm based.
+
+Ultimately, there are three types of fan controllers:
+
+- PWM control, such as MAX6639
+- DC control, such as MAX6620 or MAX6650/6651
+- Configurable, such as MAX1669 or pretty much all fan controllers
+   included in SuperIO chips
+
+Generic fan control bindings simply _have_ to take this into account.
+
+Guenter
+
