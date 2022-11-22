@@ -2,188 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8026F633244
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33D3633245
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiKVBk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
+        id S232340AbiKVBlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:41:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbiKVBk5 (ORCPT
+        with ESMTP id S232315AbiKVBk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:40:57 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811C9B9489;
-        Mon, 21 Nov 2022 17:40:55 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d1so10444133wrs.12;
-        Mon, 21 Nov 2022 17:40:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=54RP2IWIIhy2xxrG6c6vLV9h3bx5Ywa0moelQvuO0uI=;
-        b=EtFDMxmvIub6AsvD5gUZq2j5iVqjX7b7XEX5dtvzYtqsqABsmsM4uIIZWxNPm9dISL
-         fK7m5cnFEK2m/3pm4yVvUsnyMgB7C0F+Z2yN7uo9lmxccGBUlVsGtqskMGcmA/RT2joC
-         obhoRSzaSLN2YtWMgaEq9BSTIcc3q02Wiv2Bk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=54RP2IWIIhy2xxrG6c6vLV9h3bx5Ywa0moelQvuO0uI=;
-        b=K6QGCXhXDXol8wUNQrcKsPaMN0E5YTcAkh4f5McC+DJaOvcCBrhOJvHtdwUWFHa5sk
-         urTFZXX8zpxBRQTRs4864qi+ZuuAZOBvhbGCAqDuYLHCWMaF0BVm6601Q+ioNgnOIblr
-         qX5hE7bPeRwom2IQD6yeB21qawQzJ0EELWs7aKbMyM724EOUBwM4ZPMZ6PAkcZFJON05
-         gDJceN6ufqLhLs60GEJxmlf+HC5bd0tfVMqAICp0a4RZjzW6FvDmi0iGs4PLvgVd3cme
-         2HpJIbPyffhuGLjRtvG9HGQ4WMvJxP4/9/BQ1Oh24CjGL9wg8BDytwx8ZS28NU0Ux9Tz
-         fudQ==
-X-Gm-Message-State: ANoB5pmCCZ37sRguw12oWrpOJ81WWYSm8Bq25ezNTsxEy4uFZtIfXo+G
-        SoChY2ZMtlZWmeQ7seEQ+gxVhmWLvw3QmAUOlEU=
-X-Google-Smtp-Source: AA0mqf4wL1IspdUOJeOJ/cWD2vinkqtYh79NadtQHo1Z0VjTDwiPzWDFg7XEJZqop4Z+XKeKlDDYRDYQS7jNsQKKF7w=
-X-Received: by 2002:a5d:6642:0:b0:236:6a28:eeda with SMTP id
- f2-20020a5d6642000000b002366a28eedamr12437764wrw.315.1669081253980; Mon, 21
- Nov 2022 17:40:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
-In-Reply-To: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 22 Nov 2022 01:40:42 +0000
-Message-ID: <CACPK8XdXrAPMdnn0T6GQiYEK3R4MvwprOZu_Yvmv=WVOfivROg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] Nuvoton WPCM450 clock and reset driver
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
-        devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org,
-        Patrick Venture <venture@google.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, Avi Fishman <avifishman70@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 20:40:59 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFD4B9489
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:40:58 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NGRmT2429z8RV6M;
+        Tue, 22 Nov 2022 09:40:57 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2AM1eph3031714;
+        Tue, 22 Nov 2022 09:40:52 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 22 Nov 2022 09:40:52 +0800 (CST)
+Date:   Tue, 22 Nov 2022 09:40:52 +0800 (CST)
+X-Zmail-TransId: 2afa637c28a4368ff278
+X-Mailer: Zmail v1.0
+Message-ID: <202211220940526866294@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <shawnguo@kernel.org>
+Cc:     <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <chi.minghao@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIXSBidXM6IGlteC13ZWltOiB1c2UgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2AM1eph3031714
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 637C28A9.000 by FangMail milter!
+X-FangMail-Envelope: 1669081257/4NGRmT2429z8RV6M/637C28A9.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 637C28A9.000/4NGRmT2429z8RV6M
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Nov 2022 at 16:21, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.ne=
-t> wrote:
->
-> This series adds support for the clock and reset controller in the Nuvoto=
-n
-> WPCM450 SoC. This means that the clock rates for peripherals will be calc=
-ulated
-> automatically based on the clock tree as it was preconfigured by the boot=
-loader.
-> The 24 MHz dummy clock, that is currently in the devicetree, is no longer=
- needed.
-> Somewhat unfortunately, this also means that there is a breaking change o=
-nce
-> the devicetree starts relying on the clock driver, but I find it acceptab=
-le in
-> this case, because WPCM450 is still at a somewhat early stage.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
->
->
-> Upstreaming plan (although other suggestions are welcome):
->
-> Once reviewed,
->
-> - The ARM/dts changes should go through Joel Stanley's bmc tree
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/bus/imx-weim.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-I've picked up the standalone patch ("Add clock controller node").
+diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+index 828c66bbaa67..2a6b4f676458 100644
+--- a/drivers/bus/imx-weim.c
++++ b/drivers/bus/imx-weim.c
+@@ -263,7 +263,6 @@ static int weim_parse_dt(struct platform_device *pdev)
+ static int weim_probe(struct platform_device *pdev)
+ {
+ 	struct weim_priv *priv;
+-	struct resource *res;
+ 	struct clk *clk;
+ 	void __iomem *base;
+ 	int ret;
+@@ -273,8 +272,7 @@ static int weim_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
 
-> - The clocksource/timer changes should probably go via Daniel Lezcano and=
- TIP
-> - The clock controller bindings and driver should go through the clk tree
+ 	/* get the resource */
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	base = devm_ioremap_resource(&pdev->dev, res);
++	base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(base))
+ 		return PTR_ERR(base);
 
-Stephen, do you plan on merging this driver for v6.2?
-
-Alternatively, could we get an ack from you and merge this entire
-series through Arnd, where we have precedent for merging these initial
-support cross-tree patch sets?
-
-
-
-> - It probably makes sense to delay the final ARM/dts patch ("ARM: dts:
->   wpcm450: Switch clocks to clock controller") until next cycle to make
->   sure it is merged after the clock driver.
->
->
-> v5:
-> - Dropped patch 2 (watchdog: npcm: Enable clock if provided), which
->   was since merged upstream
-> - Added patch 2 (clocksource: timer-npcm7xx: Enable timer 1 clock before =
-use) again,
->   because I wasn't able to find it in linux-next
-> - Switched the driver to using struct clk_parent_data
-> - Rebased on 6.1-rc3
->
-> v4:
-> - https://lore.kernel.org/lkml/20220610072141.347795-1-j.neuschaefer@gmx.=
-net/
-> - Leave WDT clock running during after restart handler
-> - Fix reset controller initialization
-> - Dropped patch 2/7 (clocksource: timer-npcm7xx: Enable timer 1 clock bef=
-ore use),
->   as it was applied by Daniel Lezcano
->
-> v3:
-> - https://lore.kernel.org/lkml/20220508194333.2170161-1-j.neuschaefer@gmx=
-.net/
-> - Changed "refclk" string to "ref"
-> - Fixed some dead code in the driver
-> - Added clk_prepare_enable call to the watchdog restart handler
-> - Added a few review tags
->
-> v2:
-> - https://lore.kernel.org/lkml/20220429172030.398011-1-j.neuschaefer@gmx.=
-net/
-> - various small improvements
->
-> v1:
-> - https://lore.kernel.org/lkml/20220422183012.444674-1-j.neuschaefer@gmx.=
-net/
->
-> Jonathan Neusch=C3=A4fer (6):
->   dt-bindings: timer: nuvoton,npcm7xx-timer: Allow specifying all clocks
->   clocksource: timer-npcm7xx: Enable timer 1 clock before use
->   dt-bindings: clock: Add Nuvoton WPCM450 clock/reset controller
->   ARM: dts: wpcm450: Add clock controller node
->   clk: wpcm450: Add Nuvoton WPCM450 clock/reset controller driver
->   [NOT FOR MERGE] ARM: dts: wpcm450: Switch clocks to clock controller
->
->  .../bindings/clock/nuvoton,wpcm450-clk.yaml   |  66 +++
->  .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   8 +-
->  arch/arm/boot/dts/nuvoton-wpcm450.dtsi        |  29 +-
->  drivers/clk/Makefile                          |   1 +
->  drivers/clk/clk-wpcm450.c                     | 375 ++++++++++++++++++
->  drivers/clocksource/timer-npcm7xx.c           |  10 +
->  drivers/reset/Kconfig                         |   2 +-
->  .../dt-bindings/clock/nuvoton,wpcm450-clk.h   |  67 ++++
->  8 files changed, 549 insertions(+), 9 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,wpcm4=
-50-clk.yaml
->  create mode 100644 drivers/clk/clk-wpcm450.c
->  create mode 100644 include/dt-bindings/clock/nuvoton,wpcm450-clk.h
->
-> --
-> 2.35.1
->
+-- 
+2.25.1
