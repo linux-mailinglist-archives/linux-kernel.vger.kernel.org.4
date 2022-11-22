@@ -2,97 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4E66344D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 518206344D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234502AbiKVTsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S234770AbiKVTs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234569AbiKVTsh (ORCPT
+        with ESMTP id S234578AbiKVTso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:48:37 -0500
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3565E3F0;
-        Tue, 22 Nov 2022 11:48:32 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 59DE42800B6EB;
-        Tue, 22 Nov 2022 20:48:29 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 4D2C5A3DD6; Tue, 22 Nov 2022 20:48:29 +0100 (CET)
-Date:   Tue, 22 Nov 2022 20:48:29 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Gregory Price <gregory.price@memverge.com>,
-        "Li, Ming4" <ming4.li@intel.com>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH] PCI/DOE: Remove asynchronous task support
-Message-ID: <20221122194829.GB20515@wunner.de>
-References: <20221119222527.1799836-1-ira.weiny@intel.com>
- <IA1PR11MB6171B27750AB469AFE47CD5E890A9@IA1PR11MB6171.namprd11.prod.outlook.com>
- <20221121110714.0000720a@Huawei.com>
- <IA1PR11MB6171444A263C4ABB216FF1F5890A9@IA1PR11MB6171.namprd11.prod.outlook.com>
- <20221121174148.0000647d@Huawei.com>
+        Tue, 22 Nov 2022 14:48:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DEA57B78;
+        Tue, 22 Nov 2022 11:48:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 007EA61759;
+        Tue, 22 Nov 2022 19:48:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8418C433D6;
+        Tue, 22 Nov 2022 19:48:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669146518;
+        bh=fELDYP7X7g2hQl01HL1seDQ0enwlGxaSh2Vjv+ZYToU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=d9awUBACiXT6NtF2V4ad/eJjEaQCigkXO/j1aQoYsuFW6RdPlhNvCz352QKphf6uv
+         YeHKeIHQLBktbxEvc0HOp+LzekGhy5IIrfe6vuqQZ0djQb/haE5Rq+vjd2jxYOP3AB
+         bzUfe4vQLX7dcyuwlXhqofokrNoUPDH4XD832fhZ31mJAv3yjMpbSoctQF0+vJNA5a
+         pJLEyOhcaZTvflI94IT8T66up2b/V6KJpR60+xl9uz4atP+qUNuq9fJzOYRWnXvWX5
+         yXFFaeNg50ZldZGB7nOgFqPk1bBpqglkmqfDflyfWghPpY5OZ37nRSKAcdsfSWB67p
+         TOTO1D6eWMa7Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>,
+        stable@vger.kernel.org
+Subject: [PATCH mm-hotfixes-unstable] mm/damon/sysfs: fix wrong empty schemes assumption under online tuning in damon_sysfs_set_schemes()
+Date:   Tue, 22 Nov 2022 19:48:31 +0000
+Message-Id: <20221122194831.3472-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121174148.0000647d@Huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 05:41:48PM +0000, Jonathan Cameron wrote:
-> On Mon, 21 Nov 2022 14:17:37 +0000 "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com> wrote:
-> > It's good that this potential issue has been noticed. I think moving
-> > the 'find' logic and the xarray from CXL to the PCI core should save
-> > a lot of such duplicated works for other drivers using DOE.
-> > 
-> > One more though:
-> > For a driver, I think it's only interested in getting a DOE mailbox
-> > from a PCI device with specified VID+protocol and using it.
-> > The driver doesn't care how is the DOE mailbox instance created and
-> > the driver also doesn't want to maintain it.
+Commit da87878010e5 ("mm/damon/sysfs: support online inputs update")
+made 'damon_sysfs_set_schemes()' to be called for running DAMON context,
+which could have schemes.  In the case, DAMON sysfs interface is
+supposed to update, remove, or add schemes to reflect the sysfs files.
+However, the code is assuming the DAMON context wouldn't have schemes at
+all, and therefore creates and adds new schemes.  As a result, the code
+doesn't work as intended for online schemes tuning and could have more
+than expected memory footprint.   The schemes are all in the DAMON
+context, so it doesn't leak the memory, though.
 
-Totally agree on all of your above points Qiuxu.
+Remove the wrong asssumption (the DAMON context wouldn't have schemes)
+in 'damon_sysfs_set_schemes()' to fix the bug.
 
+Fixes: da87878010e5 ("mm/damon/sysfs: support online inputs update")
+Cc: <stable@vger.kernel.org> # 5.19.y
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/sysfs.c | 46 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 44 insertions(+), 2 deletions(-)
 
-> > After using the DOE mailbox instance then the driver puts it back.
+diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+index 5ce403378c20..07e5f1bdf025 100644
+--- a/mm/damon/sysfs.c
++++ b/mm/damon/sysfs.c
+@@ -2283,12 +2283,54 @@ static struct damos *damon_sysfs_mk_scheme(
+ 			&wmarks);
+ }
+ 
++static void damon_sysfs_update_scheme(struct damos *scheme,
++		struct damon_sysfs_scheme *sysfs_scheme)
++{
++	struct damon_sysfs_access_pattern *access_pattern =
++		sysfs_scheme->access_pattern;
++	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
++	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
++	struct damon_sysfs_watermarks *sysfs_wmarks = sysfs_scheme->watermarks;
++
++	scheme->pattern.min_sz_region = access_pattern->sz->min;
++	scheme->pattern.max_sz_region = access_pattern->sz->max;
++	scheme->pattern.min_nr_accesses = access_pattern->nr_accesses->min;
++	scheme->pattern.max_nr_accesses = access_pattern->nr_accesses->max;
++	scheme->pattern.min_age_region = access_pattern->age->min;
++	scheme->pattern.max_age_region = access_pattern->age->max;
++
++	scheme->action = sysfs_scheme->action;
++
++	scheme->quota.ms = sysfs_quotas->ms;
++	scheme->quota.sz = sysfs_quotas->sz;
++	scheme->quota.reset_interval = sysfs_quotas->reset_interval_ms;
++	scheme->quota.weight_sz = sysfs_weights->sz;
++	scheme->quota.weight_nr_accesses = sysfs_weights->nr_accesses;
++	scheme->quota.weight_age = sysfs_weights->age;
++
++	scheme->wmarks.metric = sysfs_wmarks->metric;
++	scheme->wmarks.interval = sysfs_wmarks->interval_us;
++	scheme->wmarks.high = sysfs_wmarks->high;
++	scheme->wmarks.mid = sysfs_wmarks->mid;
++	scheme->wmarks.low = sysfs_wmarks->low;
++}
++
+ static int damon_sysfs_set_schemes(struct damon_ctx *ctx,
+ 		struct damon_sysfs_schemes *sysfs_schemes)
+ {
+-	int i;
++	struct damos *scheme, *next;
++	int i = 0;
++
++	damon_for_each_scheme_safe(scheme, next, ctx) {
++		if (i < sysfs_schemes->nr)
++			damon_sysfs_update_scheme(scheme,
++					sysfs_schemes->schemes_arr[i]);
++		else
++			damon_destroy_scheme(scheme);
++		i++;
++	}
+ 
+-	for (i = 0; i < sysfs_schemes->nr; i++) {
++	for (; i < sysfs_schemes->nr; i++) {
+ 		struct damos *scheme, *next;
+ 
+ 		scheme = damon_sysfs_mk_scheme(sysfs_schemes->schemes_arr[i]);
+-- 
+2.25.1
 
-That won't be necessary I think.  The PCI core allocates all existing
-DOE mailboxes and enumerates the supported protocols.  Drivers just
-ask the PCI core for a mailbox supporting a specific protocol and
-are free to use that as long as the PCI device exists.
-
-
-> There is also a dance around interrupts (once those are supported
-> for DOEs in general).  Until the PCI driver has requested interrupts
-> we can't use them for DOE, but we may want to poll it before that
-> stage then switch over.
-
-Thomas Gleixner has returned to his patch sets for dynamic MSI-X
-allocation.  We'll be able to leverage that to request an interrupt
-in the PCI core for DOE before a driver is bound.  And a driver
-can then get additional MSI-X vectors if needed.  Will only work
-for MSI-X though, not MSI.
-
-Thanks,
-
-Lukas
