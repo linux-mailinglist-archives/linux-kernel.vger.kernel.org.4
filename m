@@ -2,71 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE5B633CDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEE9633CCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbiKVMtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S232952AbiKVMqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbiKVMtl (ORCPT
+        with ESMTP id S232729AbiKVMqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:49:41 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A26606AB;
-        Tue, 22 Nov 2022 04:49:40 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGkbL2hcyzHw4C;
-        Tue, 22 Nov 2022 20:49:02 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 20:49:38 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <mani@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] cpufreq: qcom-hw: Fix memory leak in qcom_cpufreq_hw_driver_probe()
-Date:   Tue, 22 Nov 2022 20:46:27 +0800
-Message-ID: <20221122124627.174403-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 22 Nov 2022 07:46:37 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F435914A;
+        Tue, 22 Nov 2022 04:46:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=vv6m9biE4Z2OXrFYdjKygGiyDF
+        HmEGbtxyodsXFLla2N9vRI5uc1Uc/WwCqA7uLl4zpxWxNFhKZbS+kjbz4xGeVbJK1ryDjSfzzQUHM
+        Kyg9tAZvsKvsU9aD0o5nz416qw7GfxOrgtUt3CJJEZChwo7eVgsNqMyFiLvJteqYDT3B+xt6djfff
+        JSdw5g5rD87hF8UY130eXlJF2bilwzqHH3Dw5u9EmUJVr0IaV7w5cYtiEgvVrUq3mbgokjQeM7h0f
+        0oRS+kpts3rnHiwuas6U0/s8ODEWWO0J3OztuYeOhvUsd0P3F6OjNy9geJ/TT+l3LCsR1jFhVuc66
+        9I93fOQQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxSfU-009Nkf-C1; Tue, 22 Nov 2022 12:46:28 +0000
+Date:   Tue, 22 Nov 2022 04:46:28 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] mm: Move FOLL_* defs to mm_types.h
+Message-ID: <Y3zEpABh/+jui71a@infradead.org>
+References: <166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk>
+ <166869688542.3723671.10243929000823258622.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166869688542.3723671.10243929000823258622.stgit@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If devm_clk_hw_register() fails, clk_init.name should be freed before
-return error, otherwise will cause memory leak issue, fix it.
+Looks good:
 
-Fixes: 84063a1cbe9e ("cpufreq: qcom-hw: Add CPU clock provider support")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 1bd1e9ae5308..340fed35e45d 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -723,6 +723,7 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 		ret = devm_clk_hw_register(dev, &data->cpu_clk);
- 		if (ret < 0) {
- 			dev_err(dev, "Failed to register clock %d: %d\n", i, ret);
-+			kfree(clk_init.name);
- 			return ret;
- 		}
- 
--- 
-2.17.1
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>
