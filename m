@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B709663403E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609CF634050
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbiKVPfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S232791AbiKVPgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKVPfP (ORCPT
+        with ESMTP id S232849AbiKVPfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:35:15 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40E2697ED;
-        Tue, 22 Nov 2022 07:35:13 -0800 (PST)
+        Tue, 22 Nov 2022 10:35:52 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BF3716D8;
+        Tue, 22 Nov 2022 07:35:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669131313; x=1700667313;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QhFQ1vvgWJPcpF58xWVY2cCZqGcl+FTrvlc1UL7N3w0=;
-  b=j7UA7UP+Q5zsxG1RqVs9XwX37ODWcb5/c1L13pUfo9vHx7XRasBmIfGM
-   OkmuDeXJAj7QKd6wDpNDI77UGtSBbdtmcUUgqAY3F72Yl52YD26cT4T7z
-   ta0ndf4KmJDiiE/+87r8+uzNQ7VxVqEqoZo3Ou3qdYSJf87WiXVin90md
-   dWVBNY6CU3HExyGJEZniAAHjWqPF5mlsz/ZRcyk8JKK9YuewkU19BsI06
-   hZANuiFxW7t7emLcMD70ou6SjKvsG4tkdE4Lwe7iyTeq+KNT8OuZAElYn
-   5BZtNphUDJQslq5w9dZXEGmKag82EM/9qqYYUdVaAG/6ZvDKvQRJb01B/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="315662392"
+  t=1669131337; x=1700667337;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2tW2G1a+1TR8Etq8K8ec13/rDo30wsBLYx7iORND+kY=;
+  b=DiDdvOVivO+wOoiOJDU5c1Maa7/lzAJNMaDhRH/aDflTV//NYyx51e5F
+   FOQX6oBnZW0Jj814nMl8sAz94v4uwNsipO9cS0lBDDrnBHnUS2IBGbDkn
+   gNbZAqwLUxqEcY1bM8ZtGejGG8EUXfs/Z0iUqQ2KxsyDqvzOusIIQARWK
+   sIjOIAatk/OvkaekOgjb+cSjuhuc6OMBNtqy2v8b55QG0UTr75Kl9g8xF
+   PZgngfTH5rLSWL+RtIhhb48VPVBpeJ7Lp7Xp5r/U/q5x04My/qnKpdJAT
+   23gOAOZ4zPPyJ3KNVgQWi5KBreF1/IKg/V2V2aKOqZS8wRZw041W0AlXW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="314991383"
 X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="315662392"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:35:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="747395669"
+   d="scan'208";a="314991383"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:35:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="592179088"
 X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="747395669"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Nov 2022 07:35:00 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6623724A; Tue, 22 Nov 2022 17:35:26 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v3 4/4] xhci: Convert to use list_count()
-Date:   Tue, 22 Nov 2022 17:35:16 +0200
-Message-Id: <20221122153516.52577-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221122153516.52577-1-andriy.shevchenko@linux.intel.com>
-References: <20221122153516.52577-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="592179088"
+Received: from lcano-mobl1.amr.corp.intel.com (HELO [10.255.231.75]) ([10.255.231.75])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:35:34 -0800
+Message-ID: <19d93ff0-df0d-dc9d-654b-a9ca6f7be1d0@intel.com>
+Date:   Tue, 22 Nov 2022 07:35:33 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v7 04/20] x86/virt/tdx: Add skeleton to initialize TDX on
+ demand
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com,
+        tony.luck@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <d26254af8e5b3dcca8a070703c5d6d04f48d47a9.1668988357.git.kai.huang@intel.com>
+ <Y3yQKDZFC8+oCyqK@hirez.programming.kicks-ass.net> <87edtvgu1l.ffs@tglx>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <87edtvgu1l.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,41 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list API now provides the list_count() to help with counting
-existing nodes in the list. Utilise it.
+On 11/22/22 02:31, Thomas Gleixner wrote:
+> Nothing in the TDX specs and docs mentions physical hotplug or a
+> requirement for invoking seamcall on the world.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v3: no change
-v2: no change
- drivers/usb/host/xhci-ring.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+The TDX module source is actually out there[1] for us to look at.  It's
+in a lovely, convenient zip file, but you can read it if sufficiently
+motivated.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index ad81e9a508b1..817c31e3b0c8 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2532,7 +2532,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	union xhci_trb *ep_trb;
- 	int status = -EINPROGRESS;
- 	struct xhci_ep_ctx *ep_ctx;
--	struct list_head *tmp;
- 	u32 trb_comp_code;
- 	int td_num = 0;
- 	bool handling_skipped_tds = false;
-@@ -2580,10 +2579,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	}
- 
- 	/* Count current td numbers if ep->skip is set */
--	if (ep->skip) {
--		list_for_each(tmp, &ep_ring->td_list)
--			td_num++;
--	}
-+	if (ep->skip)
-+		td_num += list_count(&ep_ring->td_list);
- 
- 	/* Look for common error cases */
- 	switch (trb_comp_code) {
--- 
-2.35.1
+It has this lovely nugget in it:
+
+WARNING!!! Proprietary License!!  Avert your virgin eyes!!!
+
+>     if (tdx_global_data_ptr->num_of_init_lps < tdx_global_data_ptr->num_of_lps)
+>     {
+>         TDX_ERROR("Num of initialized lps %d is smaller than total num of lps %d\n",
+>                     tdx_global_data_ptr->num_of_init_lps, tdx_global_data_ptr->num_of_lps);
+>         retval = TDX_SYS_CONFIG_NOT_PENDING;
+>         goto EXIT;
+>     }
+
+tdx_global_data_ptr->num_of_init_lps is incremented at TDH.SYS.INIT
+time.  That if() is called at TDH.SYS.CONFIG time to help bring the
+module up.
+
+So, I think you're right.  I don't see the docs that actually *explain*
+this "you must seamcall all the things" requirement.
+
+1.
+https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
+
 
