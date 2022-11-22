@@ -2,88 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5086348C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EF16348C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234714AbiKVUwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
+        id S234758AbiKVU5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:57:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbiKVUwm (ORCPT
+        with ESMTP id S233828AbiKVU4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:52:42 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AA51AF2A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:52:39 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id a1-20020a17090abe0100b00218a7df7789so7341687pjs.5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:52:39 -0800 (PST)
+        Tue, 22 Nov 2022 15:56:52 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD12F79E2C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:56:50 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id x16so7675762ilm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:56:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xe5lv1QsTYxiW+46jd84oLWYNOjdtqx5LsHPiQT+CbY=;
-        b=jHr87EqrXczQan3cj3wKvuAcmEXgUT0owrBovzhrjOOZz83aqN2FXomVGU4sO8TKl9
-         RIIVJ4g4bh3i9/d99KPEbeIjhBp+ON/N+0xqVAjlfXbk85E4NhQstANHw2EQxSeiWTEI
-         k9vHnM9uP0PHr3VJB8THPKjYsb9whCcCn6WMRpulIMvZIgPHS7vd6oIMxwlWwrEJWBdM
-         C0RP4zEifu27siBCoe9LLdLbGe8aVnoTEMTkyNdISSQX7lapnos11FatL5D5jnzVS65B
-         1PmU5qm3JVPdVjAsE9w6kH/IvzZ8UKnx5TOC8wnUP28CR3xP4bG94DpfMVof93F8dZCi
-         Q1NA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KlMufq6wwOtc4XGTJGuBUwA4oTDJeZJWTn7LDaX9omo=;
+        b=cc48agsV/uOGmMsIxtLLEXqIc/tKDn7MSV+gANC7gdTPlIvVF8YI/++GcxTXOY5wMz
+         5Hcv5e/SblT6b22pBjcQ7fTC7BK1T+F59jdPEviqB/Tu/jwEbNI8jCrWbm6sdqcfOU1z
+         k7yL/j2qmH9wSR01r8qDn0ypEIbwmb99ruu35UY1zvqrTE9fkQdpoo/ftOuFuV6HmBPs
+         Tr4yETlCoCpE5OR8IN+a1YVsGSCpf3Nzc5EQ0LZ5ffg7Y5bFJAf0PzCqVPerNaHsc5zg
+         HfYGHcSZO+csoRtO/IYyWtJ2T3/ZHK9XvtR3/GvVcfHJnUxqIbsvSiLlxfa4TmTRDdle
+         CMCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xe5lv1QsTYxiW+46jd84oLWYNOjdtqx5LsHPiQT+CbY=;
-        b=TryVcEY7G1SxPPBK8p+B+Qqn8zB8SW0itDOXFgDZm2MTkaUDOoAta19s74mxlGPeX7
-         KG1dE5nmM0d/jeBgsDEzm8Ug4wRtNTr56bhtZC2hyy+foBE0CmCg5XPHe/rEMsU9OYW3
-         7j9tfZ/1dxk3F3Y0e/gz+rXFddHVx/oic5SeKwgr4+wZuPPFKCO9AZuiORmjHGcubqTs
-         nmWICowsTTV6017T0s/RUUVBHB/4pblaiUr9q4zNjGO7Nwq3/A5KGw6fePKqyYVmgxKa
-         XRbXL3utkAckrgZF6Swlt0PG37QHxyP3UCXj8FQEPcwHliGuFTgwk5nylU4aekomYGwK
-         NVWQ==
-X-Gm-Message-State: ANoB5pkctwZBx1+218dmNZkUQtII86gwySSd0RmJ+r3GbggzwLs3q5TO
-        JvoWyf0kgwwmGALPsvJB68eEzg==
-X-Google-Smtp-Source: AA0mqf4pAi46wp7LU6CBDjGxihAVeR6mOkIyT4rbAVPEqXby41bwTlpEfGplJ03ZvrSKZArwx/0Frw==
-X-Received: by 2002:a17:902:d349:b0:189:324:27cc with SMTP id l9-20020a170902d34900b00189032427ccmr5653079plk.70.1669150358926;
-        Tue, 22 Nov 2022 12:52:38 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f19-20020a17090a9b1300b0020d9306e735sm9950352pjp.20.2022.11.22.12.52.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 12:52:38 -0800 (PST)
-Date:   Tue, 22 Nov 2022 20:52:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: Re: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
- for NMI/IRQ reinjection
-Message-ID: <Y302kxLEhcp20d65@google.com>
-References: <BN6PR1101MB216141A21353AB84CEA541DFA8009@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y26jkHfK9INwU7Yy@hirez.programming.kicks-ass.net>
- <BN6PR1101MB2161E8217F50D18C56E5864EA8059@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y3IFo9NrAcYalBzM@hirez.programming.kicks-ass.net>
- <BN6PR1101MB2161299749E12D484DE9302BA8049@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y3NZQBJugRt07udw@hirez.programming.kicks-ass.net>
- <DM5PR1101MB2172D7D7BC49255DB3752802A8069@DM5PR1101MB2172.namprd11.prod.outlook.com>
- <Y3ZYiKbJacmejY3K@google.com>
- <BN6PR1101MB21611347D37CF40403B974EDA8099@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <BN6PR1101MB2161FCA1989E3C6499192028A80D9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KlMufq6wwOtc4XGTJGuBUwA4oTDJeZJWTn7LDaX9omo=;
+        b=GbOBOit5UGHGRJyhs3rEatJGUvJ8vnn+U1WHooeLULPnf/yIb53MI+Bjr4mLKruDSO
+         tnM3SI1J4oMyH5V8PyY4qGpI2OXLkidYSx6NMNm/a+RjNkYozI+Hc0YPqRU4GCkgPJoM
+         NIYMfYFgGUgSrFuu1sp9da3HI2a5I3dbIpx0JOxwfyOTglRrwM6HlXxH9T13LpDkS5sK
+         VpImesC8gdsMEqfqt/wtz/erbTnoqi/YKexYx7X/hni3JGm+298aSoUcruWkV/t1Poc2
+         zw3kydC6OG9DTDdeOMJa+lVcCuv9drNdbyvvNgidYMIkRpUmqUMpewXAVubIBZgR8vqB
+         WKdQ==
+X-Gm-Message-State: ANoB5pneGsUkitTMlTyqrWeaCn7AZJrsQfjaern/3tX9Y9JuCEy0CgPn
+        QG4SKEkj4QGAj5/TCExK3/1mzXhzS5xfOki2T+aOTA==
+X-Google-Smtp-Source: AA0mqf7MpSN1gs5UHuvg6Y+bJcDNPrwNMRrOYJimH4KCWL1V/xsX7F2M8ZSr2Uw3P0NmLLajaksjhrPeAmAmCr0plQ0=
+X-Received: by 2002:a05:6e02:11a3:b0:302:a9a5:d608 with SMTP id
+ 3-20020a056e0211a300b00302a9a5d608mr3748589ilj.141.1669150609835; Tue, 22 Nov
+ 2022 12:56:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN6PR1101MB2161FCA1989E3C6499192028A80D9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+References: <20221122021536.1629178-1-drosen@google.com> <CAOQ4uxiyRxsZjkku_V2dBMvh1AGiKQx-iPjsD5tmGPv1PgJHvQ@mail.gmail.com>
+In-Reply-To: <CAOQ4uxiyRxsZjkku_V2dBMvh1AGiKQx-iPjsD5tmGPv1PgJHvQ@mail.gmail.com>
+From:   Daniel Rosenberg <drosen@google.com>
+Date:   Tue, 22 Nov 2022 12:56:38 -0800
+Message-ID: <CA+PiJmRLTXfjJmgJm9VRBQeLVkWgaqSq0RMrRY1Vj7q6pV+omw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/21] FUSE BPF: A Stacked Filesystem Extension for FUSE
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,66 +69,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022, Li, Xin3 wrote:
-> > > > > > > And yes, the current code appears to suffer the same defect.
-> > >
-> > > That defect isn't going to be fixed simply by changing how KVM
-> > > forwards NMIs though.  IIUC, _everything_ between VM-Exit and the
-> > > invocation of the NMI handler needs to be noinstr.  On VM-Exit due to
-> > > NMI, NMIs are blocked.  If a #BP/#DB/#PF occurs before KVM gets to
-> > > kvm_x86_handle_exit_irqoff(), the subsequent IRET will unblock NMIs
-> > > before the original NMI is serviced, i.e. a second NMI could come in
-> > > at anytime regardless of how KVM forwards the NMI to the kernel.
-> > >
-> > > Is there any way to solve this without tagging everything noinstr?
-> > > There is a metric shit ton of code between VM-Exit and the handling of
-> > > NMIs, and much of that code is common helpers.  It might be possible
-> > > to hoist NMI handler much earlier, though we'd need to do a super
-> > > thorough audit to ensure all necessary host state is restored.
-> > 
-> > As NMI is the only vector with this potential issue, it sounds a good idea to only
-> > promote its handling.
-> > 
-> 
-> Hi Peter/Sean,
-> 
-> I prefer to move _everything_ between VM-Exit and the invocation of the NMI
-> handler into the noinstr section in the next patch set, how do you think?
+I've been running the generic xfstests against it, with some
+modifications to do things like mount/unmount the lower and upper fs
+at once. Most of the failures I see there are related to missing
+opcodes, like FUSE_SETLK, FUSE_GETLK, and FUSE_IOCTL. The main failure
+I have been seeing is generic/126, which is happening due to some
+additional checks we're doing in fuse_open_backing. I figured at some
+point we'd add some tests into libfuse, and that sounds like a good
+place to start.
 
-That's likely going to be beyond painful and will have a _lot_ of collateral
-damage in the sense that other paths will end up calling noinstr function just
-because of VMX.  E.g. hw_breakpoint_restore(), fpu_sync_guest_vmexit_xfd_state(),
-kvm_get_apic_mode(), multiple static calls in KVM... the list goes on and on and on.
-
-The ongoing maintenance for that would also be quite painful.
-
-Actually, SVM already enables NMIs far earlier, which means the probability of
-breaking something by moving NMI handling earlier is lower.  Not zero, as I don't
-trust that SVM gets all the corner right, but definitely low.
-
-E.g. this should be doable
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index cea8c07f5229..2fec93f38960 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7249,6 +7249,8 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
-        if (unlikely(vmx->exit_reason.failed_vmentry))
-                return EXIT_FASTPATH_NONE;
- 
-+       <handle NMIs here>
-+
-        vmx->loaded_vmcs->launched = 1;
- 
-        vmx_recover_nmi_blocking(vmx);
-
-
-thouh we'd like want a fair bit of refactoring so that all of vmx_vcpu_run() and
-svm_vcpu_run() don't need to be noinstr.
-
-Another wart that needs to be addressed is trace_kvm_exit().  IIRC, tracepoints
-must be outside of noinstr, though maybe I'm misremembering that.  And conversely,
-SVM doesn't trace exits that are handled in the fastpath.  Best option is probably
-to move VMX's trace_kvm_exit() call to vmx_handle_exit(), and then figure out a
-common way to trace exits that are handled in the fastpath (which can reside outside
-of the noinstr section).
+On Tue, Nov 22, 2022 at 3:13 AM Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> On Tue, Nov 22, 2022 at 4:15 AM Daniel Rosenberg <drosen@google.com> wrote:
+> >
+> > These patches extend FUSE to be able to act as a stacked filesystem. This
+> > allows pure passthrough, where the fuse file system simply reflects the lower
+> > filesystem, and also allows optional pre and post filtering in BPF and/or the
+> > userspace daemon as needed. This can dramatically reduce or even eliminate
+> > transitions to and from userspace.
+> >
+> > For this patch set, I have removed the code related to the bpf side of things
+> > since that is undergoing some large reworks to get it in line with the more
+> > recent BPF developements. This set of patches implements direct passthrough to
+> > the lower filesystem with no alteration. Looking at the v1 code should give a
+> > pretty good idea of what the general shape of the bpf calls will look like.
+> > Without the bpf side, it's like a less efficient bind mount. Not very useful
+> > on its own, but still useful to get eyes on it since the backing calls will be
+> > larglely the same when bpf is in the mix.
+> >
+> > This changes the format of adding a backing file/bpf slightly from v1. It's now
+> > a bit more modular. You add a block of data at the end of a lookup response to
+> > give the bpf fd and backing id, but there is now a type header to both blocks,
+> > and a reserved value for future additions. In the future, we may allow for
+> > multiple bpfs or backing files, and this will allow us to extend it without any
+> > UAPI breaking changes. Multiple BPFs would be useful for combining fuse-bpf
+> > implementations without needing to manually combine bpf fragments. Multiple
+> > backing files would allow implementing things like a limited overlayfs.
+> > In this patch set, this is only a single block, with only backing supported,
+> > although I've left the definitions reflecting the BPF case as well.
+> > For bpf, the plan is to have two blocks, with the bpf one coming first.
+> > Any further extensions are currently just speculative.
+> >
+> > You can run this without needing to set up a userspace daemon by adding these
+> > mount options: root_dir=[fd],no_daemon where fd is an open file descriptor
+> > pointing to the folder you'd like to use as the root directory. The fd can be
+> > immediately closed after mounting. This is useful for running various fs tests.
+> >
+>
+> Which tests did you run?
+>
+> My recommendation (if you haven't done that already):
+> Add a variant to libfuse test_passthrough (test_examples.py):
+> @pytest.mark.parametrize("name", ('passthrough', 'passthrough_plus',
+>                            'passthrough_fh', 'passthrough_ll',
+> 'passthrough_bpf'))
+>
+> and compose the no_daemon cmdline for the 'passthrough_bpf' mount.
+>
+> This gives pretty good basic test coverage for FUSE passthrough operations.
+>
+> I've extended test_passthrough_hp() for my libfuse_passthrough patches [1],
+> but it's the same principle.
+>
+> Thanks,
+> Amir.
+>
+> [1] https://github.com/amir73il/libfuse/commits/fuse_passthrough
+> * 'passthrough_module' uses 'libfuse_passthrough' which enables
+>    Allesio's FUSE_DEV_IOC_PASSTHROUGH_OPEN by default.
