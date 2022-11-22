@@ -2,79 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5A963365C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5E76335F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiKVHxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S232242AbiKVHiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbiKVHxg (ORCPT
+        with ESMTP id S229507AbiKVHiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:53:36 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F72C32070
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:53:35 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NGbxv3lTXzqSYG;
-        Tue, 22 Nov 2022 15:49:39 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 15:53:33 +0800
-Received: from linux-ibm.site (10.175.102.37) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 15:53:33 +0800
-From:   Hanjun Guo <guohanjun@huawei.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Won Chung <wonchung@google.com>,
-        "Hanjun Guo" <guohanjun@huawei.com>
-Subject: [PATCH] driver core: location: Free struct acpi_pld_info *pld before return false
-Date:   Tue, 22 Nov 2022 15:37:28 +0800
-Message-ID: <1669102648-11517-1-git-send-email-guohanjun@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
+        Tue, 22 Nov 2022 02:38:03 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEA62EF7A;
+        Mon, 21 Nov 2022 23:38:02 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id vv4so24510033ejc.2;
+        Mon, 21 Nov 2022 23:38:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FZbyfU/5XPRkx8d6jWoqG6QOs2Sad6DVEQvXwiCOOh0=;
+        b=R+tVETho4FKIVcWXANAt109MigQcn4SCHMisAVjuP/LBIL55wQF1K0VfjX0omq1X0e
+         eCALUXve1zyb4vRupRiFcItEG+SCzja5saSaNRmMLVe4ZEs8AHAc+z9JEWRNhYBDH6PX
+         vXtgJRsfjhYTfp/A8AHiwyq3L/V1iDoDLs4R3H9ebn2OMVf85+5qbvUbLR/hovR56xY8
+         AKiOZvqJpCSvDtHUr45Ej/8TKtj2X7UKrDR4/h1AlNKS5t4BfCL4Tx3oYVlYibYLKdIT
+         j9bsHUZHzb2vcnYwIBNniYZTjqOQl00hZ1lkHeYjrudkvS49oah3hStP7XqdgIVzU1LK
+         XifQ==
+X-Gm-Message-State: ANoB5pmpffqh8cB7687DPdHReUh2jNmCbOACcYFDQdsahzVrdUMsHWPf
+        /ZxbW1vJBd7VljniGo+Q3Tm3oKDJvuJU+w==
+X-Google-Smtp-Source: AA0mqf4NNRrZxVv/0q8JUh4PpI2elm99gd/na+ce9HFqGdofxdSe5clW87ZYq5NoXJG4ArwkqlS7Dw==
+X-Received: by 2002:a17:906:5a8b:b0:7a5:f8a5:6f80 with SMTP id l11-20020a1709065a8b00b007a5f8a56f80mr19481420ejq.202.1669102681013;
+        Mon, 21 Nov 2022 23:38:01 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b007b6ed81deecsm1575600ejg.96.2022.11.21.23.37.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 23:38:00 -0800 (PST)
+Message-ID: <2f242291-99b6-a50f-cd52-e7dfd8c88c8f@kernel.org>
+Date:   Tue, 22 Nov 2022 08:37:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.102.37]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: en-US
+To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        gregkh@linuxfoundation.org, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org, ilpo.jarvinen@linux.intel.com
+References: <20221118145512.509950-1-gsomlo@gmail.com>
+ <20221118145512.509950-10-gsomlo@gmail.com>
+ <44bf21b6-cbe4-4d73-0883-a9bcbd7d5971@kernel.org>
+ <1b5a963c-2a5b-54fe-784e-fcc4d06c347e@kernel.org>
+ <Y3uDZV8b+3GfQyUY@errol.ini.cmu.edu>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v5 09/14] serial: liteuart: fix rx loop variable types
+In-Reply-To: <Y3uDZV8b+3GfQyUY@errol.ini.cmu.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct acpi_pld_info *pld should be freed before the return of allocation
-failure, to prevent memory leak, add the ACPI_FREE() to fix it.
+On 21. 11. 22, 14:55, Gabriel L. Somlo wrote:
+> Hi Jiri,
+> 
+> Thanks for the feedback!
+> 
+> On Mon, Nov 21, 2022 at 09:45:05AM +0100, Jiri Slaby wrote:
+>> On 21. 11. 22, 9:37, Jiri Slaby wrote:
+>>> On 18. 11. 22, 15:55, Gabriel Somlo wrote:
+>>>> Update variable types to match the signature of uart_insert_char()
+>>>> which consumes them.
+>>>>
+>>>> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+>>>> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>>>> ---
+>>>>    drivers/tty/serial/liteuart.c | 3 +--
+>>>>    1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/tty/serial/liteuart.c
+>>>> b/drivers/tty/serial/liteuart.c
+>>>> index 81aa7c1da73c..42ac9aee050a 100644
+>>>> --- a/drivers/tty/serial/liteuart.c
+>>>> +++ b/drivers/tty/serial/liteuart.c
+>>>> @@ -73,8 +73,7 @@ static void liteuart_timer(struct timer_list *t)
+>>>>        struct liteuart_port *uart = from_timer(uart, t, timer);
+>>>>        struct uart_port *port = &uart->port;
+>>>>        unsigned char __iomem *membase = port->membase;
+>>>> -    int ch;
+>>>> -    unsigned long status;
+>>>> +    unsigned int status, ch;
+>>>
+>>> These should be u8 after all, right?
+> 
+> OK, so:
+> 
+>    - I can hard-code `status` as `1`, like so:
+> 
+> 	while(!litex_read8(membase + OFF_RXEMPTY) {
+> 		...
+> 		if (!(uart_handle_sysrq_char(port, ch)))
+> 			uart_insert_char(port, 1, 0, ch, TTY_NORMAL);
+> 
+>      ... since `status` would always be `1` inside the loop. So I'm
+>      basically going to get rid of it altogether.
 
-Fixes: bc443c31def5 ("driver core: location: Check for allocations failure")
-Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
----
- drivers/base/physical_location.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Yes, I had that in my mind. Except passing 1 to uart_insert_char() when 
+overflow is hardwired to 0 makes no sense IMO :).
 
-diff --git a/drivers/base/physical_location.c b/drivers/base/physical_location.c
-index 87af641..951819e 100644
---- a/drivers/base/physical_location.c
-+++ b/drivers/base/physical_location.c
-@@ -24,8 +24,11 @@ bool dev_add_physical_location(struct device *dev)
- 
- 	dev->physical_location =
- 		kzalloc(sizeof(*dev->physical_location), GFP_KERNEL);
--	if (!dev->physical_location)
-+	if (!dev->physical_location) {
-+		ACPI_FREE(pld);
- 		return false;
-+	}
-+
- 	dev->physical_location->panel = pld->panel;
- 	dev->physical_location->vertical_position = pld->vertical_position;
- 	dev->physical_location->horizontal_position = pld->horizontal_position;
+>    - `ch` is indeed *produced* by `litex_read8()`, which would make it
+>      `u8`. It is subsequently *consumed* by `uart_handle_sysrq_char()`
+>      and `uart_insert_char()`, which both expect `unsigned int`.
+
+Ignore uart_handle_sysrq_char and uart_insert_char. They should be fixed 
+one day. It should really be u8. All down the call chain (it magically 
+turns into int in the sysrq handlers, then char is expected).
+
+>      If you think it's better to go with the type when the value is
+>      produced (as opposed to when it's consumed), I'm OK with that for
+>      the upcoming v6 of the series... :)
+
+Yes, please. We should slowly convert _all_ of them.
+
+>> And can you change membase to u8 * too 8-)?
+> 
+> Hmmm, in `struct uart_port` (in include/linux/serial_core.h), the
+> `membase` field is declared as:
+> 
+> 	unsigned char __iomem   *membase;
+> 
+> which is why I'm thinking we should leave it as-is? Unless there are
+> plans (or a pending patch I'm unaware of) to switch the field in
+> include/linux/serial_core.h to `u8` as well? -- Please advise.
+
+Ah, then keep it. I somehow thought it's void *. And yes, even this 
+should be u8 __iomem *, eventually.
+
+thanks,
 -- 
-1.7.12.4
+js
+suse labs
 
