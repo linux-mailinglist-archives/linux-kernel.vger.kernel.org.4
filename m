@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5004B633BEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB7F633BEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbiKVL4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbiKVL4p (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233215AbiKVL4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 22 Nov 2022 06:56:45 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B3126AD4;
-        Tue, 22 Nov 2022 03:56:43 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 24B071C09DB; Tue, 22 Nov 2022 12:56:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1669118202;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=bLu/KvzJPCTB/Xa7S7YY3MbbLXv7uV0njFU8uvir2CM=;
-        b=EDHX+WnCmFMJzNVMipcOujGTEfG4y2dPEqZGEmYyyTFEzrhRwKwVpL+cN/UP3CC5OUPF97
-        qKfjzGpjBNGhmY4NmP8tNeoM6DwV2ah3XjObU60xPt4g3p1wSct8jluvAB5O3M+rMzWnJe
-        w9jN9XGLem7jr/QogEzlCixGhfV0H+U=
-Date:   Tue, 22 Nov 2022 12:56:41 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     kernel list <linux-kernel@vger.kernel.org>, josef@toxicpanda.com,
-        linux-block@vger.kernel.org, nbd@other.debian.org
-Subject: nbd: please don't spawn 16 threads when nbd is not even in use
-Message-ID: <Y3y4+QqOlF00X9ET@duo.ucw.cz>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232745AbiKVL4n (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 22 Nov 2022 06:56:43 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A4425C52
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:56:43 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id y5-20020a056602120500b006cf628c14ddso6948429iot.15
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:56:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k6KL60JRVFUuWneu7vnb+xiDyNkxZWMW6/O2rgIIB4s=;
+        b=fCjE68eSm5Vo3ft+LUfw9UALvNxmQ6x5vtjCf/Uvq63B+i69uy4AW3l6m3nrYmtCl6
+         C0RRsk0QWSYtsllcE6BqoGUPQ+25XVvitwXjtAXOkaFZrvFZYT1hZsAYMIeQIp0KgJRW
+         SmpbO6D+MbqEVu007W/TFoSkIjfots2mmFEdyUIjoVZ0Dz4YIpiMB7Y9gPssdG+4Phrr
+         R1iBBncy8FGXyC8lbBDeK70ByU7B2ru0kcHMXUQAcuJrZe9EOa58l1ZZQ3sobiIbli2o
+         40kqYYCjdmyNL7jYtC1cNXu3kUcvSaZwREkQngjlRNPfkHOxSqNuyf9xCOZo5689X3Or
+         SZ4A==
+X-Gm-Message-State: ANoB5pn6bvYobBl0X/syZsIBo1Rk6+MwpB5wyTcdUdVXTjSgacoZvUzZ
+        GDWHIkih/3pbzHygxPdOgMfbPBW1HcjEVRMVYTHBMwP8NIUA
+X-Google-Smtp-Source: AA0mqf4RUulN7NbwGV+q2t01Xu34QUSq7DfbfAcrVvifYtAJ0yS8wX0NiQdA7Mytga6ntN37WrF0oM/ywyiTsYFFD+eM1Sc6bAGo
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="xPdvxnZFnwXOEoiz"
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3f06:b0:363:aa8f:e316 with SMTP id
+ ck6-20020a0566383f0600b00363aa8fe316mr10496009jab.238.1669118202337; Tue, 22
+ Nov 2022 03:56:42 -0800 (PST)
+Date:   Tue, 22 Nov 2022 03:56:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000089deb205ee0ddd58@google.com>
+Subject: [syzbot] WARNING in btrfs_chunk_alloc
+From:   syzbot <syzbot+e8e56d5d31d38b5b47e7@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---xPdvxnZFnwXOEoiz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-Hi!
+HEAD commit:    eb7081409f94 Linux 6.1-rc6
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16aec855880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5db36e7087dcccae
+dashboard link: https://syzkaller.appspot.com/bug?extid=e8e56d5d31d38b5b47e7
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160ec4c3880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13940efd880000
 
-I see this... and it looks like there are 16 workqueues before nbd is
-even used. Surely there are better ways to do that?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/12e9c825ff47/disk-eb708140.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/107e5e091c9e/vmlinux-eb708140.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/605ab211617d/bzImage-eb708140.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/4d429a6dc170/mount_0.gz
 
-Best regards,
-								Pavel
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e8e56d5d31d38b5b47e7@syzkaller.appspotmail.com
 
-    257 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd0=
--recv                                             =20
-    260 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd1=
--recv                                             =20
-    263 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd2=
--recv                                             =20
-    266 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd3=
--recv                                             =20
-    269 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd4=
--recv                                             =20
-    272 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd5=
--recv                                             =20
-    275 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd6=
--recv                                             =20
-    278 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd7=
--recv                                             =20
-    281 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd8=
--recv                                             =20
-    284 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd9=
--recv                                             =20
-    287 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd1=
-0-recv                                            =20
-    290 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd1=
-1-recv                                            =20
-    293 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd1=
-2-recv                                            =20
-    296 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd1=
-3-recv                                            =20
-    299 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd1=
-4-recv                                            =20
-    302 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 nbd1=
-5-recv                                            =20
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 45 at fs/btrfs/block-group.c:3535 do_chunk_alloc fs/btrfs/block-group.c:3535 [inline]
+WARNING: CPU: 1 PID: 45 at fs/btrfs/block-group.c:3535 btrfs_chunk_alloc.cold+0x1a7/0x329 fs/btrfs/block-group.c:3777
+Modules linked in:
+CPU: 1 PID: 45 Comm: kworker/u4:3 Not tainted 6.1.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: events_unbound btrfs_async_reclaim_metadata_space
+RIP: 0010:do_chunk_alloc fs/btrfs/block-group.c:3535 [inline]
+RIP: 0010:btrfs_chunk_alloc.cold+0x1a7/0x329 fs/btrfs/block-group.c:3777
+Code: 89 c7 89 c6 88 44 24 4f e8 5d 2e c7 f7 45 84 ff 0f 84 6e 01 00 00 e8 df 31 c7 f7 44 89 f6 48 c7 c7 c0 5c 98 8a e8 fb a4 f2 ff <0f> 0b e9 10 ff ff ff e8 c4 31 c7 f7 48 8b 54 24 38 b8 ff ff 37 00
+RSP: 0018:ffffc90000d6fa70 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 00000000ffffffe4 RCX: 0000000000000000
+RDX: ffff888018452080 RSI: ffffffff8164973c RDI: fffff520001adf40
+RBP: ffff88807bed9800 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffff888075d88898
+R13: ffff888020971000 R14: ffffffffffffffe4 R15: 0000000075d88801
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa773a78250 CR3: 000000007d62e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ flush_space+0x9ce/0xe90 fs/btrfs/space-info.c:769
+ btrfs_async_reclaim_metadata_space+0x53f/0xc00 fs/btrfs/space-info.c:1083
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---xPdvxnZFnwXOEoiz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY3y4+QAKCRAw5/Bqldv6
-8hPjAKCzzoppkzpcMQzHpbLeYPjW5+/pfgCgn+QgASwdXiGIGIJSvP7peIs5mLo=
-=5DEI
------END PGP SIGNATURE-----
-
---xPdvxnZFnwXOEoiz--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
