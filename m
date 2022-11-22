@@ -2,178 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D09634185
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B62263418E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbiKVQ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:29:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S232706AbiKVQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 11:31:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiKVQ3U (ORCPT
+        with ESMTP id S232370AbiKVQa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:29:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE802F037;
-        Tue, 22 Nov 2022 08:29:19 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DF6E31F85D;
-        Tue, 22 Nov 2022 16:29:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669134557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i4/RJcDx5W5MDWxatsZO6Jcd+cYSccjZheprFRMkSho=;
-        b=X60dEluFtp4cLi1JihULzmkzaAA9/k4ioOG0n7SnZjElr35p11yH8f4Bssb8T6zKnqjhw2
-        BDEDmmllzzQfnE37AD6LBoQboXkTfOwklpWC3spbAYDRkpU5ZxaFtM8EabO2lg17w4JmPI
-        FG84E0lRMDGpjDhIqVm+gTJfS8SspQg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669134557;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i4/RJcDx5W5MDWxatsZO6Jcd+cYSccjZheprFRMkSho=;
-        b=tytwOJur3SCnNybSVppd+YvRZnEtonPJqvXEuE1IgRt5Krn2SkTFWXTND8eoiVlqfQBoI0
-        i1KrLu2gVmy/a2Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E82B13AA1;
-        Tue, 22 Nov 2022 16:29:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id h9BSEt34fGMmOQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 22 Nov 2022 16:29:17 +0000
-Message-ID: <8bb93984-a2f4-2029-7cec-bea659e77b6c@suse.cz>
-Date:   Tue, 22 Nov 2022 17:29:16 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH mm-unstable v1 09/20] mm/gup: reliable R/O long-term
- pinning in COW mappings
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tue, 22 Nov 2022 11:30:57 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756932BB09
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:30:56 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id 11-20020a63000b000000b004776fe2eebfso3489056pga.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+tKnyn/Cyv5SBwG1da8cKfhKhoYcRDt75vGeaxs9fk=;
+        b=MC7t/RjNxF4M05cdJCqZ+z9kLUErLG05/Djm9rojrB4WW9Xkf692T2wUv8dGxivXXK
+         f7lr2XG4p5fgwMoQuxeXhTTF+2JZv/6Cyoc0QvXtBf93MJ2LWULf42migXRaFcNniedh
+         FDceLzA9AXfL2F7RaJAEZJdmFSMPtExdpmAKEI94/qNrfcr4yJ5J3ddqsFEyijARrAmS
+         vEbQdBSiCB1ojNp1hgLKm0BYtCjRNun9LWEXlVfX2JoqPmT6ZOT33oa46K+keLIt9ZL3
+         hJPtQQdNUqc8gGZ5bkn3HkK0RBb5NeI3pCM710eufIFflGILZhd8KgqEL/H0lAFRA0fi
+         /Yug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+tKnyn/Cyv5SBwG1da8cKfhKhoYcRDt75vGeaxs9fk=;
+        b=zys5yjD8blrV89p70wdINEB09+yVKYnO4qtPbebGKMD/G8Vbzccb9tjVavZWcxNktF
+         leq+TETh4CeMGVhf8RAiE/SaW9HvFkBVzAw2Lu3v7nkB8KHn6lJOOoR3F3IaOknA25My
+         NT0FblaADCMDkbwf+pp4MoEBwQlbhVqpjr5CZWjPy+mbKzBM09P4RhVpOqT9ni1ySFoU
+         pdPsEiC0njC10fuxHUfBpy68KR0ODfDftdGcaJdJ+nh55haOOIdxKdTlax4q4MbKlwza
+         fjQX95VvDwlfa9/rejTaXkJ74rMKasS93MW2NOncNvU4uTd/Nh2Nn8xRpWBBDa/apuJN
+         GdYA==
+X-Gm-Message-State: ANoB5pmAjn4MXS68HP/xgPHY0YM9o3vuYAj9M1zXYAx5UN3cGibLvroo
+        jZKlxO1nGtvkrjjuGHFH+IOsucEz+IVp7A==
+X-Google-Smtp-Source: AA0mqf6psx92ZT/st1c7JFGzjLbYxXaAUphXGERJq21OYZf+61cRy9bY1cYqYRj1EfZdazcQiZXiMalJgigTvA==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a17:90a:df8c:b0:20a:fee1:8f69 with SMTP
+ id p12-20020a17090adf8c00b0020afee18f69mr2340761pjv.0.1669134655640; Tue, 22
+ Nov 2022 08:30:55 -0800 (PST)
+Date:   Tue, 22 Nov 2022 16:30:53 +0000
+In-Reply-To: <Y3xya5802BhoFin0@cmpxchg.org>
+Mime-Version: 1.0
+References: <5f52de70-975-e94f-f141-543765736181@google.com>
+ <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <20221121165938.oid3pemsfkaeq3ws@google.com>
+ <Y3vI58VtjiAkorUX@cmpxchg.org> <Y3xk1hX5QrCZMT4q@casper.infradead.org> <Y3xya5802BhoFin0@cmpxchg.org>
+Message-ID: <20221122163053.gngosdbd3stksk6c@google.com>
+Subject: Re: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Hugh Dickins <hughd@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
         John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Matthew Wilcox <willy@infradead.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-10-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221116102659.70287-10-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 11:26, David Hildenbrand wrote:
-> We already support reliable R/O pinning of anonymous memory. However,
-> assume we end up pinning (R/O long-term) a pagecache page or the shared
-> zeropage inside a writable private ("COW") mapping. The next write access
-> will trigger a write-fault and replace the pinned page by an exclusive
-> anonymous page in the process page tables to break COW: the pinned page no
-> longer corresponds to the page mapped into the process' page table.
+On Tue, Nov 22, 2022 at 01:55:39AM -0500, Johannes Weiner wrote:
+> On Tue, Nov 22, 2022 at 05:57:42AM +0000, Matthew Wilcox wrote:
+> > On Mon, Nov 21, 2022 at 01:52:23PM -0500, Johannes Weiner wrote:
+> > > That leaves clearing writeback. This can't hold the page lock due to
+> > > the atomic context, so currently we need to take lock_page_memcg() as
+> > > the lock of last resort.
+> > > 
+> > > I wonder if we can have cgroup take the xalock instead: writeback
+> > > ending on file pages always acquires the xarray lock. Swap writeback
+> > > currently doesn't, but we could make it so (swap_address_space).
+> > > 
+> > > The only thing that gives me pause is the !mapping check in
+> > > __folio_end_writeback. File and swapcache pages usually have mappings,
+> > > and truncation waits for writeback to finish before axing
+> > > page->mapping. So AFAICS this can only happen if we call end_writeback
+> > > on something that isn't under writeback - in which case the test_clear
+> > > will fail and we don't update the stats anyway. But I want to be sure.
+> > > 
+> > > Does anybody know from the top of their heads if a page under
+> > > writeback could be without a mapping in some weird cornercase?
+> > 
+> > I can't think of such a corner case.  We should always wait for
+> > writeback to finish before removing the page from the page cache;
+> > the writeback bit used to be (and kind of still is) an implicit
+> > reference to the page, which means that we can't remove the page
+> > cache's reference to the page without waiting for writeback.
 > 
-> Now that FAULT_FLAG_UNSHARE can break COW on anything mapped into a
-> COW mapping, let's properly break COW first before R/O long-term
-> pinning something that's not an exclusive anon page inside a COW
-> mapping. FAULT_FLAG_UNSHARE will break COW and map an exclusive anon page
-> instead that can get pinned safely.
+> Great, thanks!
 > 
-> With this change, we can stop using FOLL_FORCE|FOLL_WRITE for reliable
-> R/O long-term pinning in COW mappings.
+> > > If we could ensure that the NR_WRITEBACK decs are always protected by
+> > > the xalock, we could grab it from mem_cgroup_move_account(), and then
+> > > kill lock_page_memcg() altogether.
+> > 
+> > I'm not thrilled by this idea, but I'm not going to veto it.
 > 
-> With this change, the new R/O long-term pinning tests for non-anonymous
-> memory succeed:
->   # [RUN] R/O longterm GUP pin ... with shared zeropage
->   ok 151 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with memfd
->   ok 152 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with tmpfile
->   ok 153 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with huge zeropage
->   ok 154 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with memfd hugetlb (2048 kB)
->   ok 155 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with memfd hugetlb (1048576 kB)
->   ok 156 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with shared zeropage
->   ok 157 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with memfd
->   ok 158 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with tmpfile
->   ok 159 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with huge zeropage
->   ok 160 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with memfd hugetlb (2048 kB)
->   ok 161 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with memfd hugetlb (1048576 kB)
->   ok 162 Longterm R/O pin is reliable
+> Ok, I'm also happy to drop this one.
 > 
-> Note 1: We don't care about short-term R/O-pinning, because they have
-> snapshot semantics: they are not supposed to observe modifications that
-> happen after pinning.
-> 
-> As one example, assume we start direct I/O to read from a page and store
-> page content into a file: modifications to page content after starting
-> direct I/O are not guaranteed to end up in the file. So even if we'd pin
-> the shared zeropage, the end result would be as expected -- getting zeroes
-> stored to the file.
-> 
-> Note 2: For shared mappings we'll now always fallback to the slow path to
-> lookup the VMA when R/O long-term pining. While that's the necessary price
-> we have to pay right now, it's actually not that bad in practice: most
-> FOLL_LONGTERM users already specify FOLL_WRITE, for example, along with
-> FOLL_FORCE because they tried dealing with COW mappings correctly ...
-> 
-> Note 3: For users that use FOLL_LONGTERM right now without FOLL_WRITE,
-> such as VFIO, we'd now no longer pin the shared zeropage. Instead, we'd
-> populate exclusive anon pages that we can pin. There was a concern that
-> this could affect the memlock limit of existing setups.
-> 
-> For example, a VM running with VFIO could run into the memlock limit and
-> fail to run. However, we essentially had the same behavior already in
-> commit 17839856fd58 ("gup: document and work around "COW can break either
-> way" issue") which got merged into some enterprise distros, and there were
-> not any such complaints. So most probably, we're fine.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> Certainly, the rmap one is the lowest-hanging fruit. I have the patch
+> rebased against Hugh's series in mm-unstable; I'll wait for that to
+> settle down, and then send an updated version to Andrew.
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
+I am planning to initiate the deprecation of the move charge
+functionality of v1. So I would say let's go with low hanging fruit for
+now and let slow process of deprecation remove the remaining cases.
