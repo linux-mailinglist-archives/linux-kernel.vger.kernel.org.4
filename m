@@ -2,186 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D8A633F4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACBC633F5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbiKVOuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S233524AbiKVOv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:51:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbiKVOuJ (ORCPT
+        with ESMTP id S232762AbiKVOvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:50:09 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D64663CE;
-        Tue, 22 Nov 2022 06:50:08 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 683391F85D;
-        Tue, 22 Nov 2022 14:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669128607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TuOeD9hS5w47LsnqcPKQtrXy6koctaIzcHPxwbxmwbA=;
-        b=aGZachSXiRVjKPJsrWk8CPop2PpOEMJr7spf/DAJ5bmOd/2f4r4PDMztApEKo2PcSlvmxW
-        kUYly+UTyuJUxKmOQFyKK0uK83vpsu8HLfHf74wJV6xsDgOcFpyyuGww7bQkx1IkhT+zig
-        CKpIYly4TJFynSwnq3h8C8XfDQxdhu4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669128607;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TuOeD9hS5w47LsnqcPKQtrXy6koctaIzcHPxwbxmwbA=;
-        b=3O83wprOyy/Za1HsOlbBbN841s6+bHjQppNWEZSAiaC61+01222yq5NJYcQdKsFuOVce+G
-        lcMh2DB+p4IaJ9Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BDF4713AA1;
-        Tue, 22 Nov 2022 14:50:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xuSnLZ7hfGM/fwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 22 Nov 2022 14:50:06 +0000
-Message-ID: <d40947e4-06c4-8413-9d53-e4926abd9559@suse.cz>
-Date:   Tue, 22 Nov 2022 15:50:06 +0100
+        Tue, 22 Nov 2022 09:51:53 -0500
+Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D9B9663D2;
+        Tue, 22 Nov 2022 06:51:51 -0800 (PST)
+Received: from localhost.biz (unknown [10.81.81.211])
+        by gw.red-soft.ru (Postfix) with ESMTPA id 427563E1A6E;
+        Tue, 22 Nov 2022 17:51:49 +0300 (MSK)
+From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
+To:     Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>
+Cc:     Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+        Josef Bacik <josef@toxicpanda.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH v3] btrfs: Replace strncpy() with strscpy()
+Date:   Tue, 22 Nov 2022 17:51:08 +0300
+Message-Id: <20221122145108.3710710-1-artem.chernyshev@red-soft.ru>
+X-Mailer: git-send-email 2.30.3
+In-Reply-To: <20221121185427.GB5824@twin.jikos.cz>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH mm-unstable v1 07/20] mm: don't call vm_ops->huge_fault()
- in wp_huge_pmd()/wp_huge_pud() for private mappings
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-8-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221116102659.70287-8-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 173685 [Nov 22 2022]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: artem.chernyshev@red-soft.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;red-soft.ru:7.1.1;localhost.biz:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2022/11/22 09:40:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2022/11/22 11:32:00 #20598255
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 11:26, David Hildenbrand wrote:
-> If we already have a PMD/PUD mapped write-protected in a private mapping
-> and we want to break COW either due to FAULT_FLAG_WRITE or
-> FAULT_FLAG_UNSHARE, there is no need to inform the file system just like on
-> the PTE path.
-> 
-> Let's just split (->zap) + fallback in that case.
-> 
-> This is a preparation for more generic FAULT_FLAG_UNSHARE support in
-> COW mappings.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+Using strncpy() on NUL-terminated strings are deprecated.
+To avoid possible forming of non-terminated string
+strscpy() could be used.
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Nits:
+Fixes: 475f63874d73 ("btrfs: new ioctls for scrub")
+Fixes: 606686eeac45 ("Btrfs: use rcu to protect device->name")
+Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
+---
+V1->V2 Fixed typo in subject
+V2->V3 Added fix for ioctl.c
 
-> ---
->  mm/memory.c | 24 +++++++++++++++---------
->  1 file changed, 15 insertions(+), 9 deletions(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index c35e6cd32b6a..d47ad33c6487 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4802,6 +4802,7 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
->  static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->  {
->  	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
-> +	vm_fault_t ret;
->  
->  	if (vma_is_anonymous(vmf->vma)) {
->  		if (likely(!unshare) &&
-> @@ -4809,11 +4810,13 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->  			return handle_userfault(vmf, VM_UFFD_WP);
->  		return do_huge_pmd_wp_page(vmf);
->  	}
-> -	if (vmf->vma->vm_ops->huge_fault) {
-> -		vm_fault_t ret = vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PMD);
->  
-> -		if (!(ret & VM_FAULT_FALLBACK))
-> -			return ret;
-> +	if (vmf->vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) {
-> +		if (vmf->vma->vm_ops->huge_fault) {
+ fs/btrfs/ioctl.c      | 5 ++---
+ fs/btrfs/rcu-string.h | 5 ++++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-I guess it could have been a single if with && and the reduced identation
-could fit keeping 'ret' declaration inside.
-AFAICS the later patches don't build more on top of this anyway.
-But also fine keeping as is.
-
-(the hunk below same)
-
-> +			ret = vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PMD);
-> +			if (!(ret & VM_FAULT_FALLBACK))
-> +				return ret;
-> +		}
->  	}
->  
->  	/* COW or write-notify handled on pte level: split pmd. */
-> @@ -4839,14 +4842,17 @@ static vm_fault_t wp_huge_pud(struct vm_fault *vmf, pud_t orig_pud)
->  {
->  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) &&			\
->  	defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD)
-> +	vm_fault_t ret;
-> +
->  	/* No support for anonymous transparent PUD pages yet */
->  	if (vma_is_anonymous(vmf->vma))
->  		goto split;
-> -	if (vmf->vma->vm_ops->huge_fault) {
-> -		vm_fault_t ret = vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PUD);
-> -
-> -		if (!(ret & VM_FAULT_FALLBACK))
-> -			return ret;
-> +	if (vmf->vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) {
-> +		if (vmf->vma->vm_ops->huge_fault) {
-> +			ret = vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PUD);
-> +			if (!(ret & VM_FAULT_FALLBACK))
-> +				return ret;
-> +		}
->  	}
->  split:
->  	/* COW or write-notify not handled on PUD level: split pud.*/
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index d5dd8bed1488..fdf62d514662 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -3748,9 +3748,8 @@ static long btrfs_ioctl_dev_info(struct btrfs_fs_info *fs_info,
+ 	di_args->total_bytes = btrfs_device_get_total_bytes(dev);
+ 	memcpy(di_args->uuid, dev->uuid, sizeof(di_args->uuid));
+ 	if (dev->name) {
+-		strncpy(di_args->path, rcu_str_deref(dev->name),
+-				sizeof(di_args->path) - 1);
+-		di_args->path[sizeof(di_args->path) - 1] = 0;
++		strscpy(di_args->path, rcu_str_deref(dev->name),
++				sizeof(di_args->path));
+ 	} else {
+ 		di_args->path[0] = '\0';
+ 	}
+diff --git a/fs/btrfs/rcu-string.h b/fs/btrfs/rcu-string.h
+index 5c1a617eb25d..d9894da7a05a 100644
+--- a/fs/btrfs/rcu-string.h
++++ b/fs/btrfs/rcu-string.h
+@@ -18,7 +18,10 @@ static inline struct rcu_string *rcu_string_strdup(const char *src, gfp_t mask)
+ 					 (len * sizeof(char)), mask);
+ 	if (!ret)
+ 		return ret;
+-	strncpy(ret->str, src, len);
++	if (WARN_ON(strscpy(ret->str, src, len) < 0)) {
++		kfree(ret);
++		return NULL;
++	}
+ 	return ret;
+ }
+ 
+-- 
+2.30.3
 
