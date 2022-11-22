@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EFE63314F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD05633150
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiKVAYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S230152AbiKVAYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiKVAY1 (ORCPT
+        with ESMTP id S231614AbiKVAYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:24:27 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87092BEB42;
-        Mon, 21 Nov 2022 16:24:26 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 5100032009B5;
-        Mon, 21 Nov 2022 19:24:24 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 21 Nov 2022 19:24:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1669076663; x=1669163063; bh=Je
-        9S5pZ8EyiMqK1xbe6/5zr4qNlvKvr93DChjxiAVt4=; b=PrgW4w+9T36uTagTcG
-        DjuC/DKB/qod8O6Ab5ag9KRtZ6RQtKP/iuauByNe51gZ28Im2l2Sgx4MtQr4W0QU
-        6c9JYOMzl1zQA0hT8J6sNApeVInfSRACqKgpxF6nNmexDm3R9CtLlcfUYmkuku2+
-        62iXPO01NV17lZiO68Lv7t9KpXe+/jOoKhdC/0ce/1HgMlbF+II7pBfYi19XlZLb
-        S+gotbNeB6q38ZT1E3+gVD39RpJeuQkbSfnw5JIYXlbZpinnFrhd74zAasVFqF/O
-        w6gnVR2bwl0W+ReRnd8v+p4ylyIp+ZUl6M4VWSH3Z+n3IJM3NacgoGgI9h5gY635
-        OR9g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669076663; x=1669163063; bh=Je9S5pZ8EyiMqK1xbe6/5zr4qNlv
-        Kvr93DChjxiAVt4=; b=bCORFpPvnGwyahVwCiYhm+8wPJG9H/WawgxDZU6Uf9qQ
-        KfL+5SLRXQ9emqLalBhYvrVbKiHv6Fhf3rg4IzE2RTL2yHWw8oDh+7bLA5aC8TAf
-        OTwTUqReBTozxETh7x4jHlIAbPYhfRQ3b2/4OzNFQyTiTL40kGYf1rgK7NInN3SZ
-        5c1C5Y89Rc/ZiDgat75rMWctdksayTEeMsVYCbPrJsEt8k1MtOSJCoAXYTJBRXLs
-        WtFwlSo8gvMAY2fOU16DA1jxe8KuKntX5gzdHC4yeoSUMv72C2xIKvUkZ8892KHz
-        RQYD9LDAMkVggVOmy0ckCTU5n+0EyHkTr89cBz0eyg==
-X-ME-Sender: <xms:txZ8Y6rOINf9Iu_Fb0mqmBuJpwiSITipXIGsstg6SRqGCS0-9Q-UsA>
-    <xme:txZ8Y4rWUkssecG44BQoEz47swOHK52mowVHyzYVDv7Yk_AOiQRz0OhakY5YxyIdW
-    dUA1ddLBJiNoMaavpo>
-X-ME-Received: <xmr:txZ8Y_OsnenBAjXRxDiRcpIidUwjd8eSQPDk4dsLeH_5T3XRSfCRYPiGafG8aKymsEFIKQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheejgddvvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:txZ8Y55hbJDgu8qyI8jfliGsdlH637Dw3TKDt1S0QpLzc8HmdgD2WA>
-    <xmx:txZ8Y55IxRuShIiK28Dj3rgl_BN-VTiLLVWXWE65TJkjKghQ5iDvKg>
-    <xmx:txZ8Y5h7zIjLVBTVQreLo8y0UGay1WyZJkO027Jt9qsdqEyY01csnA>
-    <xmx:txZ8Y4LTB_Q6VYtprrdunhn5sZZM0TzRsoE1dQw2DrTqIU6bQ77OUA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Nov 2022 19:24:23 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id A7279109A30; Tue, 22 Nov 2022 03:24:21 +0300 (+03)
-Date:   Tue, 22 Nov 2022 03:24:21 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Message-ID: <20221122002421.qg4h47cjoc2birvb@box.shutemov.name>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-4-decui@microsoft.com>
+        Mon, 21 Nov 2022 19:24:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D26BF58A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:24:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B896B818BB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 00:24:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D79C433C1;
+        Tue, 22 Nov 2022 00:24:25 +0000 (UTC)
+Date:   Mon, 21 Nov 2022 19:24:23 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>, Chris Mason <clm@meta.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] error-injection: Add prompt for function error
+ injection
+Message-ID: <20221121192423.1ab25c4d@gandalf.local.home>
+In-Reply-To: <CAADnVQLJFnu6gARdZ7ckgxeGaSv70jHBiQo+W=zDKO0-ELFGcQ@mail.gmail.com>
+References: <20221121104403.1545f9b5@gandalf.local.home>
+        <Y3vSQo85ofkfD/L8@zn.tnic>
+        <CAADnVQLJFnu6gARdZ7ckgxeGaSv70jHBiQo+W=zDKO0-ELFGcQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121195151.21812-4-decui@microsoft.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:51:48AM -0800, Dexuan Cui wrote:
-> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
-> allocates buffers using vzalloc(), and needs to share the buffers with the
-> host OS by calling set_memory_decrypted(), which is not working for
-> vmalloc() yet. Add the support by handling the pages one by one.
+On Mon, 21 Nov 2022 15:36:08 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Why do you use vmalloc here in the first place?
+> The commit log is bogus and the lack of understanding what
+> bpf and error injection hooks are used for expressed
+> in this thread is quite sad.
+> Disabling error injection makes the system _less_ secure.
 
-Will you also adjust direct mapping to have shared bit set?
+Please specify.
 
-If not, we will have problems with load_unaligned_zeropad() when it will
-access shared pages via non-shared mapping.
+As Masami replied, you are abusing this feature for some arcane way to do
+security. It's "error injection" how does enabling this improve security???
 
-If direct mapping is adjusted, we will get direct mapping fragmentation.
+-- Steve
 
-Maybe tap into swiotlb buffer using DMA API?
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> But giving people an option to reduce security is a decision
+> that every distro and data center has to make on their own.
+
