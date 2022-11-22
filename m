@@ -2,176 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CDD634416
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 19:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E154634424
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 19:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234673AbiKVS4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 13:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
+        id S233571AbiKVS6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 13:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiKVSzv (ORCPT
+        with ESMTP id S232341AbiKVS5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 13:55:51 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B728C4AF
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:55:49 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id t4so11390449wmj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:55:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JPghztDyNLrGZj1mqaJMElT+/qfziwsQcb93YPm7Lak=;
-        b=dO73XNvLNUxhRWlOwGNlJpCjt4PXa88+Qjbo4PFwSZnzShYdiUS0WwRSvALrE/jBfQ
-         CgWtYXSTCk0GPD2GmPJTp0jvNFCTo2S8Ymz98NFuvFl7RpSXRtjYibGjf76lrTRaucfa
-         AKO1xsNMoULLDmXtifVslscIuTs30JbOq4ZE8eB5F2f0mYhoV6dNlcFZJOz0psyyTPZS
-         Gx7CaYT1oMxBcO7PtxUttbLYOrW7lqwGDFbKGlEC9PBtEB7EPdtM9paGiOYWOL0ieG51
-         YlfjrdaCorVbWzKheC88eTN2505iTCOvKaN6Dkqqsi9gFaShSA+x0/SabPvsbYt1utsc
-         gppA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JPghztDyNLrGZj1mqaJMElT+/qfziwsQcb93YPm7Lak=;
-        b=7wzih0MboGthysEHUjmKzfBQ0PEblOfqK7qJlvDNaGHU1XEd5TfgdHQnDamNQb0gdD
-         I9vzGg02vcYKhtuXpFQIdZnfGF9jywd16IrHbve4lnic5JHZ7sMGBirsYeo8MgFNr223
-         ebk6yqAQCtlI5gjH2G2QAemqo1M4o8CL/V4y+hqDUNrTSg/5kDAASuk4Rs7VKUj4Ai2u
-         tH51XntelfFkELFV6AD9U5emqXKnGD2n1la6+rp+YDgU1JWAV105uNLaMk2C6mrfioeA
-         4jrqstrcdZnmWP5aXRJOiBdqSd+Pa489Zz60+PGwAx9N31T3J1BKXQMfmWPBgJ70ebz0
-         KCXA==
-X-Gm-Message-State: ANoB5pk5x2jhwUELZ/0YzzjIvpMv9jpN26rh1hMfDPduT9Rkw00CMYzb
-        6EQTbgqzlF9KnMGqbgGUh8HnTzoMIakh8A==
-X-Google-Smtp-Source: AA0mqf7GN7b0ubP0erqtiVeGiIvEiAPWeOgyxmeOqIJg0KPRqKFVYwrI9eWZOiIQR1aFEWiXhoJE/g==
-X-Received: by 2002:a05:600c:3d0c:b0:3cf:f66c:9246 with SMTP id bh12-20020a05600c3d0c00b003cff66c9246mr5429143wmb.27.1669143348802;
-        Tue, 22 Nov 2022 10:55:48 -0800 (PST)
-Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id c18-20020adffb12000000b002365730eae8sm14478044wrr.55.2022.11.22.10.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 10:55:48 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Dmitry Safonov <dima@arista.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
-Subject: [PATCH v5 5/5] net/tcp: Separate initialization of twsk
-Date:   Tue, 22 Nov 2022 18:55:34 +0000
-Message-Id: <20221122185534.308643-6-dima@arista.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221122185534.308643-1-dima@arista.com>
-References: <20221122185534.308643-1-dima@arista.com>
+        Tue, 22 Nov 2022 13:57:34 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2078CB95;
+        Tue, 22 Nov 2022 10:56:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=O1MgWVbKEiQxc1NtVXEwlq5tlyYdHJmAX2jcpySlm8I=; b=21hbNGOhxupqlC08N5xsqTqqWT
+        y7YJduKNetEpcoBjmSesCIAOitN83qeUo2oqdB0XT6Aq9t54rGY1q1FXviG5hqFVstC0aeBGfcBPj
+        wD3S4KRAQv/o0PkDcdHuTXrABb/Kp+2pLJRzihXd68bwN5lGoZ+WkG6QmgrcpgzxL/HOjbCVUI4sz
+        pb85XaRJikcn0v9yHXKuKoG+16s6IhfnDfIbBwkR0hYWIKU0J8V0+u/2loxYuXcsO40jc6i4PRlYt
+        OsIXgZCpE9CQBb26lyzjIUHqCVP90aa0KmccAca4R0qk+GLxI7hEvCGL3NZJaf2m7cWLSn8zcicb7
+        antIW2mg==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxYRw-00BR4d-3M; Tue, 22 Nov 2022 18:56:52 +0000
+Message-ID: <0cf1d78a-8781-e31e-00a3-3ca68af5a025@infradead.org>
+Date:   Tue, 22 Nov 2022 10:56:50 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 17/17] efi: x86: Make the deprecated EFI handover
+ protocol optional
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>
+References: <20221122161017.2426828-1-ardb@kernel.org>
+ <20221122161017.2426828-18-ardb@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221122161017.2426828-18-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert BUG_ON() to WARN_ON_ONCE() and warn as well for unlikely
-static key int overflow error-path.
 
-Signed-off-by: Dmitry Safonov <dima@arista.com>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
----
- net/ipv4/tcp_minisocks.c | 61 +++++++++++++++++++++++-----------------
- 1 file changed, 35 insertions(+), 26 deletions(-)
 
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index 50f91c10eb7b..1cfafad9ba29 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -240,6 +240,40 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
- }
- EXPORT_SYMBOL(tcp_timewait_state_process);
- 
-+static void tcp_time_wait_init(struct sock *sk, struct tcp_timewait_sock *tcptw)
-+{
-+#ifdef CONFIG_TCP_MD5SIG
-+	const struct tcp_sock *tp = tcp_sk(sk);
-+	struct tcp_md5sig_key *key;
-+
-+	/*
-+	 * The timewait bucket does not have the key DB from the
-+	 * sock structure. We just make a quick copy of the
-+	 * md5 key being used (if indeed we are using one)
-+	 * so the timewait ack generating code has the key.
-+	 */
-+	tcptw->tw_md5_key = NULL;
-+	if (!static_branch_unlikely(&tcp_md5_needed.key))
-+		return;
-+
-+	key = tp->af_specific->md5_lookup(sk, sk);
-+	if (key) {
-+		tcptw->tw_md5_key = kmemdup(key, sizeof(*key), GFP_ATOMIC);
-+		if (!tcptw->tw_md5_key)
-+			return;
-+		if (!tcp_alloc_md5sig_pool())
-+			goto out_free;
-+		if (!static_key_fast_inc_not_negative(&tcp_md5_needed.key.key))
-+			goto out_free;
-+	}
-+	return;
-+out_free:
-+	WARN_ON_ONCE(1);
-+	kfree(tcptw->tw_md5_key);
-+	tcptw->tw_md5_key = NULL;
-+#endif
-+}
-+
- /*
-  * Move a socket to time-wait or dead fin-wait-2 state.
-  */
-@@ -282,32 +316,7 @@ void tcp_time_wait(struct sock *sk, int state, int timeo)
- 		}
- #endif
- 
--#ifdef CONFIG_TCP_MD5SIG
--		/*
--		 * The timewait bucket does not have the key DB from the
--		 * sock structure. We just make a quick copy of the
--		 * md5 key being used (if indeed we are using one)
--		 * so the timewait ack generating code has the key.
--		 */
--		do {
--			tcptw->tw_md5_key = NULL;
--			if (static_branch_unlikely(&tcp_md5_needed.key)) {
--				struct tcp_md5sig_key *key;
--
--				key = tp->af_specific->md5_lookup(sk, sk);
--				if (key) {
--					tcptw->tw_md5_key = kmemdup(key, sizeof(*key), GFP_ATOMIC);
--					if (!tcptw->tw_md5_key)
--						break;
--					BUG_ON(!tcp_alloc_md5sig_pool());
--					if (!static_key_fast_inc_not_negative(&tcp_md5_needed.key.key)) {
--						kfree(tcptw->tw_md5_key);
--						tcptw->tw_md5_key = NULL;
--					}
--				}
--			}
--		} while (0);
--#endif
-+		tcp_time_wait_init(sk, tcptw);
- 
- 		/* Get the TIME_WAIT timeout firing. */
- 		if (timeo < rto)
+On 11/22/22 08:10, Ard Biesheuvel wrote:
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 8c6da5e42d5a6c25..121f1fdca3145fd2 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1981,6 +1981,23 @@ config EFI_STUB
+>  
+>  	  See Documentation/admin-guide/efi-stub.rst for more information.
+>  
+> +config EFI_HANDOVER_PROTOCOL
+> +	bool "EFI handover protocol (DEPRECATED)"
+> +	depends on EFI_STUB
+> +	default y
+> +	help
+> +	  Select this in order to include support for the deprecated EFI
+> +	  handover protocol, which defines alternative entry points into the
+> +	  EFI stub.  This is a practice that has no basis in the UEFI
+> +	  specification, and requires a priori knowledge on the part of the
+> +	  bootloader about Linux/x86 specific ways of passing the command line
+> +	  and initrd, and where in memory those assets may be loaded.
+> +
+> +	  If in doubt, say Y. Even though he corresponding support is not
+
+	                                  the
+
+> +	  present in upstream GRUB or other bootloaders, most distros build
+> +	  GRUB with numerous downstream patches applied, and may rely on the
+> +	  handover protocol as as result.
+
 -- 
-2.38.1
-
+~Randy
