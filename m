@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200B0633AB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2622633AB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbiKVLCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S232806AbiKVLC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbiKVLCe (ORCPT
+        with ESMTP id S232858AbiKVLCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:02:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6D638BB
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:02:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34F616160E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:02:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926D4C433C1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669114950;
-        bh=GBbyR90uPkkY9uQHcMLNsONxrGwJbliVqQEjjoEjnxw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rfbivQDMXLp5UZqwbuLeox3SpmxiIgL1eSVglkW/KT3oiaMBFSsiUICIxIo7oZWoc
-         KR/iwzYU6dt23ahwdJ700ZP5EeKIOVTrW0H7oZijZ/32dL2sEMQUVpcwD5+y+s814V
-         5W53qJ4bGLPpgmCDz9OeErl4XsMaTbv9P0CnKlSGNBIabruUCbEHWf099ieJMVUita
-         uHzmy/yRlupXsmmWdwFWbD6ZYE2ec+IvOM7L/IhYZsIRix2rvZrLTkbkzY5gTksCKW
-         YXrm/TCggSVSxa1iZhNaDJAVz9A4iCccdKxzhdsD/4x6sckJCuPDX3cwAyWq6S5QZg
-         53zOn6x/I8lMQ==
-Received: by mail-yb1-f176.google.com with SMTP id b131so16877015yba.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:02:30 -0800 (PST)
-X-Gm-Message-State: ANoB5plsitcDi010buY/55303A+mCVYbjPTARleCZy9X6S3EFopxqnaK
-        bXZ6zTbzI8h9HFa9DiSrr1N3OCaBWnzHgbaPK0s=
-X-Google-Smtp-Source: AA0mqf5hMrrMNCvNxlpyfe6aYfWDg6SJ/M9j8B31KhM7qkWYUso8QjZ2ioqucKgYAtxSOSUY7Zpq0d2qrVhQpB5sgb8=
-X-Received: by 2002:a25:cf8d:0:b0:6be:b9e1:8454 with SMTP id
- f135-20020a25cf8d000000b006beb9e18454mr20512320ybg.94.1669114949504; Tue, 22
- Nov 2022 03:02:29 -0800 (PST)
+        Tue, 22 Nov 2022 06:02:52 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D086AFD2E
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:02:46 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id r8so6932834ljn.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:02:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WLUdigsApmRK74tKDjONSTE2dMi6WHx5zi8E0wjDf2Y=;
+        b=LRFka4TnsqZBKvaCuN+bPxENtgjSKcVFXnRvPHryrCPnVdt9dSHiIKcL/r/tVfsPlP
+         eKtCKhwXTM/jDD/WGL546uvNJN17g7IQonRwdZPsfrGvIiHXqxYFd0IyO/KZhHpVvFmq
+         K+vsDgKSkaAyNMP688NdlXI1ydEBpf4ySOkkYtV3ywxMcuLP/GWxAh0FNp5LIzbvkoyN
+         p1xn5774qN4kGrygDa8ElEiz2qFF7JsHffs4q5xvB+5zwDhGNov6Ipy3uUG5wz6EcBQf
+         hocpxC7y8JW1AZlUKl2FKoiNeWnVslDfPAmYz17BPHSCzEORSsHzrgOAZ1xS2NwfjNkl
+         otMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WLUdigsApmRK74tKDjONSTE2dMi6WHx5zi8E0wjDf2Y=;
+        b=483pj/cauPYu7npYzFFVBbz3E3hYd9/5zetH99WMD5pFRu4FZsPYi0C33xPrhjSURM
+         owBDPkpAMe9ODfkNkonWpAHJgdKm8/BrJgNFqFhFMjiHeg7ET8FwDHuVAPq4z3kgvvO3
+         dvQtNLExT14oOmRi69VIn6f8vqt/1xiOeKxN4/5H3YY5kqF8fURnegrVAgzIvc1aRsO0
+         tBdeSNk8+qhzEYz3wav3lBnh54HOyeJk/4oDvyEQ4d+11Vm551EfUiD3In0dfhgjD1c7
+         vCCBFxxOZo3otXVGlpqUCQXJ9MXgr5jqjMJ6ozwbt/T0WKY20jqLlOFA2Vz+1LoStBj0
+         HsGw==
+X-Gm-Message-State: ANoB5pkjYDjnLwUDb4ZnxKVjaWw71ceJwG0spqFV+3WpLjjOSpRMhjai
+        iNA5zIaFRzeA4Q4oVbK44lj5Bg==
+X-Google-Smtp-Source: AA0mqf7vvF2BfXvTbPIQ/acLujnLA0PSEBSsit/7dUyYrj/tz7iYaoGNrDleBKloFAvsRnGQDkevcQ==
+X-Received: by 2002:a05:651c:b21:b0:277:b04:ffe8 with SMTP id b33-20020a05651c0b2100b002770b04ffe8mr7794982ljr.136.1669114964740;
+        Tue, 22 Nov 2022 03:02:44 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 19-20020ac25f53000000b0049d83646ce7sm2410812lfz.110.2022.11.22.03.02.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 03:02:44 -0800 (PST)
+Message-ID: <79831a58-0b67-920f-3c07-d304dff5af0c@linaro.org>
+Date:   Tue, 22 Nov 2022 12:02:40 +0100
 MIME-Version: 1.0
-References: <20221119204435.97113-1-ogabbay@kernel.org> <20221119204435.97113-4-ogabbay@kernel.org>
- <20221122105552.edse4v3zb5q23e3k@mail.igalia.com> <CAFCwf128w3yAJVKAL+YrqLLSC6JGOWoEqqNipigcWruNBo30oQ@mail.gmail.com>
-In-Reply-To: <CAFCwf128w3yAJVKAL+YrqLLSC6JGOWoEqqNipigcWruNBo30oQ@mail.gmail.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Tue, 22 Nov 2022 13:02:03 +0200
-X-Gmail-Original-Message-ID: <CAFCwf11YaE5Euh0_zebbXYQZUuHb7K85b28XBdS5LLEqxLeNWg@mail.gmail.com>
-Message-ID: <CAFCwf11YaE5Euh0_zebbXYQZUuHb7K85b28XBdS5LLEqxLeNWg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] drm: initialize accel framework
-To:     Melissa Wen <mwen@igalia.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jiho Chu <jiho.chu@samsung.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Christopher Friedt <chrisfriedt@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 07/10] dt-bindings: phy: Add Cadence HDP-TX DP PHY
+Content-Language: en-US
+To:     Sandor Yu <Sandor.yu@nxp.com>, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kishon@ti.com, vkoul@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        alexander.stein@ew.tq-group.com
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com, oliver.brown@nxp.com
+References: <cover.1669013346.git.Sandor.yu@nxp.com>
+ <5f8a3f15f744e201171c20505e1e3c47f5a27dce.1669013346.git.Sandor.yu@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5f8a3f15f744e201171c20505e1e3c47f5a27dce.1669013346.git.Sandor.yu@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,302 +83,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 12:59 PM Oded Gabbay <ogabbay@kernel.org> wrote:
->
-> On Tue, Nov 22, 2022 at 12:56 PM Melissa Wen <mwen@igalia.com> wrote:
-> >
-> > On 11/19, Oded Gabbay wrote:
-> > > Now that we have the accel framework code ready, let's call the
-> > > accel functions from all the appropriate places. These places are the
-> > > drm module init/exit functions, and all the drm_minor handling
-> > > functions.
-> >
-> > Hi Oded,
-> >
-> > The proposal overall LGTM, but I didn't manage to compile the kernel
-> > with your patch series when DRM is enabled but accel support doesn't.
-> > Multiple missing link errors...
-> >
-> > Am I missing something? Can you take a look at it from this patch 3/4?
-> >
-> > Thanks,
-> >
-> > Melissa
-> Looking at it now, thanks for letting me know.
-> Oded
-Found the issue, missing } at end of accel_debugfs_init() in
-drm_accel.h. Only compiles when accel support isn't compiled in.
-I'll fix it before sending the PR to Dave.
-Much appreciated :)
-Oded
+On 21/11/2022 08:23, Sandor Yu wrote:
+> Add bindings for Cadence HDP-TX DisplayPort PHY.
+> 
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> --->  .../bindings/phy/cdns,hdptx-dp-phy.yaml       | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
+> new file mode 100644
+> index 000000000000..b997c15ff0bb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/cdns,hdptx-dp-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence HDP-TX(HDMI/DisplayPort) PHY for DisplayPort protocol
+> +
+> +maintainers:
+> +  - Sandor Yu <sandor.yu@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cdns,hdptx-dp-phy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: PHY reference clock.
+> +      - description: APB clock.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: refclk
+> +      - const: apbclk
 
->
-> > >
-> > > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
-> > > ---
-> > >  drivers/gpu/drm/drm_drv.c   | 102 ++++++++++++++++++++++++++----------
-> > >  drivers/gpu/drm/drm_sysfs.c |  24 ++++++---
-> > >  2 files changed, 91 insertions(+), 35 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
-> > > index 8214a0b1ab7f..1aec019f6389 100644
-> > > --- a/drivers/gpu/drm/drm_drv.c
-> > > +++ b/drivers/gpu/drm/drm_drv.c
-> > > @@ -35,6 +35,7 @@
-> > >  #include <linux/slab.h>
-> > >  #include <linux/srcu.h>
-> > >
-> > > +#include <drm/drm_accel.h>
-> > >  #include <drm/drm_cache.h>
-> > >  #include <drm/drm_client.h>
-> > >  #include <drm/drm_color_mgmt.h>
-> > > @@ -90,6 +91,8 @@ static struct drm_minor **drm_minor_get_slot(struct drm_device *dev,
-> > >               return &dev->primary;
-> > >       case DRM_MINOR_RENDER:
-> > >               return &dev->render;
-> > > +     case DRM_MINOR_ACCEL:
-> > > +             return &dev->accel;
-> > >       default:
-> > >               BUG();
-> > >       }
-> > > @@ -104,9 +107,13 @@ static void drm_minor_alloc_release(struct drm_device *dev, void *data)
-> > >
-> > >       put_device(minor->kdev);
-> > >
-> > > -     spin_lock_irqsave(&drm_minor_lock, flags);
-> > > -     idr_remove(&drm_minors_idr, minor->index);
-> > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     if (minor->type == DRM_MINOR_ACCEL) {
-> > > +             accel_minor_remove(minor->index);
-> > > +     } else {
-> > > +             spin_lock_irqsave(&drm_minor_lock, flags);
-> > > +             idr_remove(&drm_minors_idr, minor->index);
-> > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     }
-> > >  }
-> > >
-> > >  static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
-> > > @@ -123,13 +130,17 @@ static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
-> > >       minor->dev = dev;
-> > >
-> > >       idr_preload(GFP_KERNEL);
-> > > -     spin_lock_irqsave(&drm_minor_lock, flags);
-> > > -     r = idr_alloc(&drm_minors_idr,
-> > > -                   NULL,
-> > > -                   64 * type,
-> > > -                   64 * (type + 1),
-> > > -                   GFP_NOWAIT);
-> > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     if (type == DRM_MINOR_ACCEL) {
-> > > +             r = accel_minor_alloc();
-> > > +     } else {
-> > > +             spin_lock_irqsave(&drm_minor_lock, flags);
-> > > +             r = idr_alloc(&drm_minors_idr,
-> > > +                     NULL,
-> > > +                     64 * type,
-> > > +                     64 * (type + 1),
-> > > +                     GFP_NOWAIT);
-> > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     }
-> > >       idr_preload_end();
-> > >
-> > >       if (r < 0)
-> > > @@ -161,10 +172,14 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
-> > >       if (!minor)
-> > >               return 0;
-> > >
-> > > -     ret = drm_debugfs_init(minor, minor->index, drm_debugfs_root);
-> > > -     if (ret) {
-> > > -             DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/dri.\n");
-> > > -             goto err_debugfs;
-> > > +     if (minor->type == DRM_MINOR_ACCEL) {
-> > > +             accel_debugfs_init(minor, minor->index);
-> > > +     } else {
-> > > +             ret = drm_debugfs_init(minor, minor->index, drm_debugfs_root);
-> > > +             if (ret) {
-> > > +                     DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/dri.\n");
-> > > +                     goto err_debugfs;
-> > > +             }
-> > >       }
-> > >
-> > >       ret = device_add(minor->kdev);
-> > > @@ -172,9 +187,13 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
-> > >               goto err_debugfs;
-> > >
-> > >       /* replace NULL with @minor so lookups will succeed from now on */
-> > > -     spin_lock_irqsave(&drm_minor_lock, flags);
-> > > -     idr_replace(&drm_minors_idr, minor, minor->index);
-> > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     if (minor->type == DRM_MINOR_ACCEL) {
-> > > +             accel_minor_replace(minor, minor->index);
-> > > +     } else {
-> > > +             spin_lock_irqsave(&drm_minor_lock, flags);
-> > > +             idr_replace(&drm_minors_idr, minor, minor->index);
-> > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     }
-> > >
-> > >       DRM_DEBUG("new minor registered %d\n", minor->index);
-> > >       return 0;
-> > > @@ -194,9 +213,13 @@ static void drm_minor_unregister(struct drm_device *dev, unsigned int type)
-> > >               return;
-> > >
-> > >       /* replace @minor with NULL so lookups will fail from now on */
-> > > -     spin_lock_irqsave(&drm_minor_lock, flags);
-> > > -     idr_replace(&drm_minors_idr, NULL, minor->index);
-> > > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     if (minor->type == DRM_MINOR_ACCEL) {
-> > > +             accel_minor_replace(NULL, minor->index);
-> > > +     } else {
-> > > +             spin_lock_irqsave(&drm_minor_lock, flags);
-> > > +             idr_replace(&drm_minors_idr, NULL, minor->index);
-> > > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
-> > > +     }
-> > >
-> > >       device_del(minor->kdev);
-> > >       dev_set_drvdata(minor->kdev, NULL); /* safety belt */
-> > > @@ -603,6 +626,14 @@ static int drm_dev_init(struct drm_device *dev,
-> > >       /* no per-device feature limits by default */
-> > >       dev->driver_features = ~0u;
-> > >
-> > > +     if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
-> > > +                             (drm_core_check_feature(dev, DRIVER_RENDER) ||
-> > > +                             drm_core_check_feature(dev, DRIVER_MODESET))) {
-> > > +
-> > > +             DRM_ERROR("DRM driver can't be both a compute acceleration and graphics driver\n");
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > >       drm_legacy_init_members(dev);
-> > >       INIT_LIST_HEAD(&dev->filelist);
-> > >       INIT_LIST_HEAD(&dev->filelist_internal);
-> > > @@ -628,15 +659,21 @@ static int drm_dev_init(struct drm_device *dev,
-> > >
-> > >       dev->anon_inode = inode;
-> > >
-> > > -     if (drm_core_check_feature(dev, DRIVER_RENDER)) {
-> > > -             ret = drm_minor_alloc(dev, DRM_MINOR_RENDER);
-> > > +     if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL)) {
-> > > +             ret = drm_minor_alloc(dev, DRM_MINOR_ACCEL);
-> > >               if (ret)
-> > >                       goto err;
-> > > -     }
-> > > +     } else {
-> > > +             if (drm_core_check_feature(dev, DRIVER_RENDER)) {
-> > > +                     ret = drm_minor_alloc(dev, DRM_MINOR_RENDER);
-> > > +                     if (ret)
-> > > +                             goto err;
-> > > +             }
-> > >
-> > > -     ret = drm_minor_alloc(dev, DRM_MINOR_PRIMARY);
-> > > -     if (ret)
-> > > -             goto err;
-> > > +             ret = drm_minor_alloc(dev, DRM_MINOR_PRIMARY);
-> > > +             if (ret)
-> > > +                     goto err;
-> > > +     }
-> > >
-> > >       ret = drm_legacy_create_map_hash(dev);
-> > >       if (ret)
-> > > @@ -883,6 +920,10 @@ int drm_dev_register(struct drm_device *dev, unsigned long flags)
-> > >       if (ret)
-> > >               goto err_minors;
-> > >
-> > > +     ret = drm_minor_register(dev, DRM_MINOR_ACCEL);
-> > > +     if (ret)
-> > > +             goto err_minors;
-> > > +
-> > >       ret = create_compat_control_link(dev);
-> > >       if (ret)
-> > >               goto err_minors;
-> > > @@ -902,12 +943,13 @@ int drm_dev_register(struct drm_device *dev, unsigned long flags)
-> > >                driver->name, driver->major, driver->minor,
-> > >                driver->patchlevel, driver->date,
-> > >                dev->dev ? dev_name(dev->dev) : "virtual device",
-> > > -              dev->primary->index);
-> > > +              dev->primary ? dev->primary->index : dev->accel->index);
-> > >
-> > >       goto out_unlock;
-> > >
-> > >  err_minors:
-> > >       remove_compat_control_link(dev);
-> > > +     drm_minor_unregister(dev, DRM_MINOR_ACCEL);
-> > >       drm_minor_unregister(dev, DRM_MINOR_PRIMARY);
-> > >       drm_minor_unregister(dev, DRM_MINOR_RENDER);
-> > >  out_unlock:
-> > > @@ -950,6 +992,7 @@ void drm_dev_unregister(struct drm_device *dev)
-> > >       drm_legacy_rmmaps(dev);
-> > >
-> > >       remove_compat_control_link(dev);
-> > > +     drm_minor_unregister(dev, DRM_MINOR_ACCEL);
-> > >       drm_minor_unregister(dev, DRM_MINOR_PRIMARY);
-> > >       drm_minor_unregister(dev, DRM_MINOR_RENDER);
-> > >  }
-> > > @@ -1034,6 +1077,7 @@ static const struct file_operations drm_stub_fops = {
-> > >  static void drm_core_exit(void)
-> > >  {
-> > >       drm_privacy_screen_lookup_exit();
-> > > +     accel_core_exit();
-> > >       unregister_chrdev(DRM_MAJOR, "drm");
-> > >       debugfs_remove(drm_debugfs_root);
-> > >       drm_sysfs_destroy();
-> > > @@ -1061,6 +1105,10 @@ static int __init drm_core_init(void)
-> > >       if (ret < 0)
-> > >               goto error;
-> > >
-> > > +     ret = accel_core_init();
-> > > +     if (ret < 0)
-> > > +             goto error;
-> > > +
-> > >       drm_privacy_screen_lookup_init();
-> > >
-> > >       drm_core_init_complete = true;
-> > > diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-> > > index 430e00b16eec..b8da978d85bb 100644
-> > > --- a/drivers/gpu/drm/drm_sysfs.c
-> > > +++ b/drivers/gpu/drm/drm_sysfs.c
-> > > @@ -19,6 +19,7 @@
-> > >  #include <linux/kdev_t.h>
-> > >  #include <linux/slab.h>
-> > >
-> > > +#include <drm/drm_accel.h>
-> > >  #include <drm/drm_connector.h>
-> > >  #include <drm/drm_device.h>
-> > >  #include <drm/drm_file.h>
-> > > @@ -471,19 +472,26 @@ struct device *drm_sysfs_minor_alloc(struct drm_minor *minor)
-> > >       struct device *kdev;
-> > >       int r;
-> > >
-> > > -     if (minor->type == DRM_MINOR_RENDER)
-> > > -             minor_str = "renderD%d";
-> > > -     else
-> > > -             minor_str = "card%d";
-> > > -
-> > >       kdev = kzalloc(sizeof(*kdev), GFP_KERNEL);
-> > >       if (!kdev)
-> > >               return ERR_PTR(-ENOMEM);
-> > >
-> > >       device_initialize(kdev);
-> > > -     kdev->devt = MKDEV(DRM_MAJOR, minor->index);
-> > > -     kdev->class = drm_class;
-> > > -     kdev->type = &drm_sysfs_device_minor;
-> > > +
-> > > +     if (minor->type == DRM_MINOR_ACCEL) {
-> > > +             minor_str = "accel%d";
-> > > +             accel_set_device_instance_params(kdev, minor->index);
-> > > +     } else {
-> > > +             if (minor->type == DRM_MINOR_RENDER)
-> > > +                     minor_str = "renderD%d";
-> > > +             else
-> > > +                     minor_str = "card%d";
-> > > +
-> > > +             kdev->devt = MKDEV(DRM_MAJOR, minor->index);
-> > > +             kdev->class = drm_class;
-> > > +             kdev->type = &drm_sysfs_device_minor;
-> > > +     }
-> > > +
-> > >       kdev->parent = minor->dev->dev;
-> > >       kdev->release = drm_sysfs_release;
-> > >       dev_set_drvdata(kdev, minor);
-> > > --
-> > > 2.25.1
-> > >
+Drop "clk" suffix.
+
+
+Best regards,
+Krzysztof
+
