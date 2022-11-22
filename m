@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A73963342D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA0763343F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbiKVDpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
+        id S232348AbiKVDwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232295AbiKVDpv (ORCPT
+        with ESMTP id S232242AbiKVDwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:45:51 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240F728E21
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:45:50 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGVX03BqFzRpPY;
-        Tue, 22 Nov 2022 11:45:20 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 11:45:48 +0800
-Received: from [10.67.108.193] (10.67.108.193) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 11:45:48 +0800
-Subject: Re: [PATCH v2] rapidio: fix possible UAF when kfifo_alloc() fails
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     <mporter@kernel.crashing.org>, <alex.bou9@gmail.com>,
-        <yangyingliang@huawei.com>, <jakobkoschel@gmail.com>,
-        <jhubbard@nvidia.com>, <error27@gmail.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221119040335.46794-1-wangweiyang2@huawei.com>
- <20221121140410.dfe2816f743c62fe0c71639d@linux-foundation.org>
-From:   wangweiyang <wangweiyang2@huawei.com>
-Message-ID: <54d0de14-afcb-e3c7-16f9-df1b1f2a7e30@huawei.com>
-Date:   Tue, 22 Nov 2022 11:45:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Mon, 21 Nov 2022 22:52:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AFE2B182;
+        Mon, 21 Nov 2022 19:52:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Nf/bUURZpgL7+v01nDvViY+Mr2gn9Uq0Zv4IVJAqBIY=; b=pOnuFxI6xpMtGusD1QKOmUNaiu
+        2G5WRi+pfuY2r1ILekGYfv+DmeMOEpo/9ZdfvtpgAw1Y1jnj/LcGblh8MiyfMovp8mLvKNdfUP/qI
+        8R/UAAI5nVvaOQ8pSKG/rbuZ0VicxWqV4T1YGGVkt/RUglsV4NUqDoSiw0gmoccxvMxcYQ+10mgyq
+        9B34ZIPM7+a/xi7vJHzDVB3NuDEFPfxL2tnCXZYEm1Px1iwHfqivbQNmLDdAhN6o8QmYRAyDENCDX
+        RC3YVkPwPWNjGb/sgJLU0O4zrABPqKl4Vd/vL10iTc0IngH+XcCfs+tFpuOER1DxHIoO9jhrM1FLP
+        7+QDvHAQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxKJn-005uRS-KD; Tue, 22 Nov 2022 03:51:31 +0000
+Date:   Tue, 22 Nov 2022 03:51:31 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Martin Brandenburg <martin@omnibond.com>,
+        "Darrick J. Wong" <djwong@kernel.org>, hch@lst.de,
+        linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, cluster-devel@redhat.com,
+        linux-nfs@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        devel@lists.orangefs.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH] filelock: move file locking definitions to separate
+ header file
+Message-ID: <Y3xHQwM3UiD/SK0K@casper.infradead.org>
+References: <20221120210004.381842-1-jlayton@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20221121140410.dfe2816f743c62fe0c71639d@linux-foundation.org>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.193]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221120210004.381842-1-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On Sun, Nov 20, 2022 at 03:59:57PM -0500, Jeff Layton wrote:
+> Move the file locking definitions to a new header file, and add the
+> appropriate #include directives to the source files that need them. By
+> doing this we trim down fs.h a bit and limit the amount of rebuilding
+> that has to be done when we make changes to the file locking APIs.
 
-on 2022/11/22 6:04, Andrew Morton wrote:
-> On Sat, 19 Nov 2022 12:03:35 +0800 Wang Weiyang <wangweiyang2@huawei.com> wrote:
-> 
->> If kfifo_alloc() fails in mport_cdev_open(), goto err_fifo and just free
->> priv. But priv is still in the chdev->file_list, then list traversal
->> may cause UAF. This fixes the following smatch warning:
->>
->> drivers/rapidio/devices/rio_mport_cdev.c:1930 mport_cdev_open() warn: '&priv->list' not removed from list
->>
->> ...
->>
->> Changes in v2:
->> - Avoid adding the new instance onto the list until the new instance
->>   has been fully initialized.
-> 
-> But it still isn't fully initialized.
+I'm in favour of this in general, but I think there's a few implicit
+includes.  Can you create a test.c that only #include
+<linnux/filelock.h> and see if there's anything missing?
 
-Yes, I ignored that the initialization is still going on.
+> +	wait_queue_head_t fl_wait;
+> +	struct file *fl_file;
 
-> 
->>  drivers/rapidio/devices/rio_mport_cdev.c | 7 +++----
->>  1 file changed, 3 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/rapidio/devices/rio_mport_cdev.c b/drivers/rapidio/devices/rio_mport_cdev.c
->> index 3cc83997a1f8..86b28c4cd906 100644
->> --- a/drivers/rapidio/devices/rio_mport_cdev.c
->> +++ b/drivers/rapidio/devices/rio_mport_cdev.c
->> @@ -1904,10 +1904,6 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
->>  
->>  	priv->md = chdev;
->>  
->> -	mutex_lock(&chdev->file_mutex);
->> -	list_add_tail(&priv->list, &chdev->file_list);
->> -	mutex_unlock(&chdev->file_mutex);
->> -
->>  	INIT_LIST_HEAD(&priv->db_filters);
->>  	INIT_LIST_HEAD(&priv->pw_filters);
->>  	spin_lock_init(&priv->fifo_lock);
->> @@ -1920,6 +1916,9 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
->>  		ret = -ENOMEM;
->>  		goto err_fifo;
->>  	}
->> +	mutex_lock(&chdev->file_mutex);
->> +	list_add_tail(&priv->list, &chdev->file_list);
->> +	mutex_unlock(&chdev->file_mutex);
->>  
->>  #ifdef CONFIG_RAPIDIO_DMA_ENGINE
->>  	INIT_LIST_HEAD(&priv->async_list);
-> 
-> Here we're still setting up state at *priv.  I'm thinking the list
-> addition shouldn't occur until after the 
-> 
-> 	filp->private_data = priv;
-> 
-> Or just prior to it.  I'm not sure what the atomicity rules are for
-> file.private versus mport_dev.file_list.
+These two seem undefined at this point.
 
-I prefer to put the list addition just prior to the
+> +	struct fasync_struct *	fl_fasync; /* for lease break notifications */
 
-	filp->private_data = priv;
+Likewise.
 
-to keep mport_cdev_release() in reverse order of init. If it's ok with
-you, I'll send a new patch later.
-
-> .
-> 
