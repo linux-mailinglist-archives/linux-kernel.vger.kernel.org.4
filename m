@@ -2,229 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D67633D2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB844633D2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbiKVNKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S232684AbiKVNLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKVNKv (ORCPT
+        with ESMTP id S232656AbiKVNK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:10:51 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on060c.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::60c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5911013F42;
-        Tue, 22 Nov 2022 05:10:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eMUYV2uzcgrIjNtY0WKVlyfdDSWqX/t60ZSjC9dc09IvuiwRhEMusTntlQ+xlJcsymaopRtK/DT1mdtEfOTNY6eTzuwbb+HDHPQ6uz7sBFvEWjE7rywZL15WSooocDuLbx5kSrBwyddchzUMYDcxrjP9HZCqk1Mcl4oEY3bfq0Py69CkQBgDwtu4wxkRK5SwPEp+cVS9eYulY+zCq6F0sraSP1DMLkZoXaOB7zRb80XS1mAEl5l8ilOJYC6GGeapEKJW+6i9EtO9iFz4yEJ8f5GV4BsHHKiz24XRioHdQBLOmcrYQ6qlHFS/2OwCcBOw+xAEXXoaBY1LUYydM9XH9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7pilCjfNoEN0ona8D5ktY0pwQk/BNrpnLISQymw+qJ0=;
- b=ZqeyBMZv9Xre44SgS7ROuDTewPhzZ8ywa+jwElkF5wrSSQuNyWZgyJkBgqkKfg81sNdYqk2p7VAPE9TRWmPVcWTXP69JyHb22jOL+hOX/SbRdN3lEI9pk73bzzQ+7qLholErXKiBiy7VHBBw5nk7v2eooAgbRmdH5uQ6dv4R+WkBS/6MYmR4dc20QKw7TJOjFCXfMfmknQW0pNUCrPJ5MXPWcG3uzhyJeTNHIGhcMVH2bTj86SQ8lrmqgHFLVaPxd4Sqge/GbFPOWGU9IF5r8nZkSs+FraD2CS7fjrliySHkGy/RPojYlndavpEJVZ33mNlV4bY8NzFfPBR2jrm/NQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7pilCjfNoEN0ona8D5ktY0pwQk/BNrpnLISQymw+qJ0=;
- b=DZuwNaIzuJxQOe+Kf/hJl9iOvv+y4HIObjtK4YLFkTp4lUq9OywgBJJPApz2tDkD7ldKW7kzQhV+vAxwNxaoSGNy7xyxPgTlWetOopCUWIagwc2LtpYs/hwYQHDgMelr+jzH+Ed+PD/szzmSzq71EcpoawtkfuKz4e9Op5RYhsA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PA4PR04MB8030.eurprd04.prod.outlook.com (2603:10a6:102:cc::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 13:10:45 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::9317:77dc:9be2:63b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::9317:77dc:9be2:63b%7]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
- 13:10:44 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: enetc: preserve TX ring priority across reconfiguration
-Date:   Tue, 22 Nov 2022 15:09:36 +0200
-Message-Id: <20221122130936.1704151-1-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AS4P250CA0004.EURP250.PROD.OUTLOOK.COM
- (2603:10a6:20b:5df::12) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+        Tue, 22 Nov 2022 08:10:56 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C18E2645;
+        Tue, 22 Nov 2022 05:10:55 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AMAgXdu013705;
+        Tue, 22 Nov 2022 13:10:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=hQ3fVymP4HFlZ5VZh4VL4SoYVcWFpM4fBoyY3KbIllw=;
+ b=fCQdtovJW9AM2EGOqGXskr2oOyevGuf1X8WxtrvDicgUlW2gFUCQfkq9b1cyg1GwYNr/
+ qxsOepoe6u1g8rdoqmmSzxQcglFix+nuhsmTsb0yLZSHNXLfJ98uKKgwcxK+kRofDYdD
+ uRy6qNCiwUZ4j0J0x5s/BFy/GAiqtwvI6TFXWDGCwz4OAgs2KDOFg4K0dE6qZJkYfJHc
+ PlwFpTpdxL2iIgbjLJKxpzvlJ/SWa2XIMpZLCjktV8+sqltSwGNK6xzYEbfXKuSlw6Bc
+ G51a6o4Hqg94Hs/OeZmafcxSqwYtcs8TX0qkfbH8lU/bsnc4kZWSZwwkJSgPuj15hUs3 0g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0tqaq3av-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 13:10:49 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AMCgFQt022109;
+        Tue, 22 Nov 2022 13:10:49 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0tqaq38w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 13:10:49 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AMD6OaT000661;
+        Tue, 22 Nov 2022 13:10:46 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3kxps934ns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 13:10:46 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AMDBNIT42926526
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Nov 2022 13:11:23 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4804AE04D;
+        Tue, 22 Nov 2022 13:10:42 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 18530AE045;
+        Tue, 22 Nov 2022 13:10:42 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.10.123])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Nov 2022 13:10:42 +0000 (GMT)
+Message-ID: <e735fa2cde6e9c92dda134634cb3d67b64b23fe9.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/9] Documentation: KVM: s390: Describe
+ KVM_S390_MEMOP_F_CMPXCHG
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Tue, 22 Nov 2022 14:10:41 +0100
+In-Reply-To: <f96b50e2-24ac-4016-d3f1-ffc375516e7c@redhat.com>
+References: <20221117221758.66326-1-scgl@linux.ibm.com>
+         <20221117221758.66326-3-scgl@linux.ibm.com>
+         <f96b50e2-24ac-4016-d3f1-ffc375516e7c@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PA4PR04MB8030:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0e4ad879-334a-40cf-4bcf-08dacc8af6e9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1eZRAf5ecEtGzDoLyqCGZGgcyny82KgdX9lKJ9zDWmJFzPOjkdc55dkhgSfOVNcd9VwplRZn5urp8RZ/W/x5pIRgl7mEqMLRPqdcxH9WNxq+4ucjnE8cWzp9WDwPy0/wINiP1QC/3G8Fzfncwvm//cpDyPM64OrNzIDhsfM5v+WWs+moRghUwdvDPlv+xISayv14ruIcaFs2C6sQXdsn1eRexcl+T5unV7URM95dKq9qMKajkGaINS2Uh5MueuFf0cA4vSx0a2zcR0fh8G+iWUcidhoM3cpnnLPglHx7VuWXDt0mTHDFp7QmofHbk0Sxb3cduXn1L1buQQl66SeOmR5lXyIvmRex3iJRsWegtHvJSEYii/90IqsLaiZ/9Np9DiODsK6/fPcRy5VvnZ7eJHhJj0+DgSZDWDi7453ZWx9qnD9gzfnwpXCxEBX+GA+lthqCr172oUAy8+YiODLQKOqYhq6UUVUePoxxC3tsQVtbNpXvcbmQcY2cNUElwCiVX3s238k+KunFgyK2fu4FyCsZG4a5zSk7kKXu3l8YKUCn6No1/qU/zeIHbByfs8ImJW8H/kj5DN1bt+gfcO8HObdfoBjQFCGLkxtNLk2zu8tfVvKuYMd3tdWtJ6h4C6BZqF7VrYKFn/av6ziOclNxyUzOxnsbZbkbMS8dFDbIOZiezWweyTcktcalWopIkPW9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(39860400002)(366004)(136003)(451199015)(36756003)(86362001)(52116002)(44832011)(5660300002)(26005)(2906002)(38100700002)(2616005)(186003)(83380400001)(6512007)(1076003)(38350700002)(54906003)(6486002)(66556008)(6916009)(6506007)(8936002)(41300700001)(66476007)(4326008)(478600001)(6666004)(8676002)(66946007)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WXMy0CtI07Uk+rW4BCuvXf23FdTDQVZByrd8mKgCq1XGyvLg5rZt9s9VVPGj?=
- =?us-ascii?Q?A0EWD23UheNzEkfeXFIVwsvUEFk0ndbm3d+KK6qkr3bzju9Zt3dqb6pjb/NZ?=
- =?us-ascii?Q?x8zPhlyDehEuiwqaxQPo+jv06ZyiqYfDZtko7RoK4wGa5LHIn34FVN/rGTDB?=
- =?us-ascii?Q?IdVx5P0vUI6RcoO4GqiW7UDhZn7qMg+wYZDarU6qmX4XNlqLiv6FH6l0L7mg?=
- =?us-ascii?Q?0GugrcvpwN9obmoEe5/Vj6d6OnxVBmNYCy02IjgcDrxllgWhtCeP/HAoaQPT?=
- =?us-ascii?Q?buGXk/ofkKVcu0fGi4IbExUwnbcruk1fMBgxVzKpPzTIwzCsGnleHeaqiiFK?=
- =?us-ascii?Q?440dtQe0DahP37byjyX5VkyuMUtM8oQRiz1Yz0Z3Sz5Gzz7eP63uf1I+hbPt?=
- =?us-ascii?Q?xqKVH4fGpS/DVI1VMaZ6Pr0+QTYvnjwROGkz3jOdjSll4BNhRV+ZzKsIRsU6?=
- =?us-ascii?Q?L2NWRGiR259oGigUpM0dRtqQ+ahKYqhHrjPq+8dte8q2vfECklSrM2XLQZjC?=
- =?us-ascii?Q?ynfRHzwCklwbe1ixQNyW0VYTuDEdCbeIS7DzD95RQtS1mvOIbLDhgT3u1A0K?=
- =?us-ascii?Q?x/UBhEJRGpZybapnC5qCWckeexptY3V5vQwooGoXhMymLJWFnbslRwFRJWeg?=
- =?us-ascii?Q?zQKuOs9Kqt1O7cinZfKlxotzE4wlF1iXs7i/e2gekBuarox6lG8uWmq39mpy?=
- =?us-ascii?Q?ISnukoQ9kldNHe7mc7ql9YGbeYey+p47YSCfF19piY4NXLlwnlZDLYcPzR+w?=
- =?us-ascii?Q?Bk6PNCEtVJS85sJKu9udUmBB3j/3Yteg0UkYHvPhT5znGGAO0aShfW4TqjpN?=
- =?us-ascii?Q?RmbxWoISQG/NbInAeFpfIRZRBB5ZiLB0d4LGuICXJooCTz4NzBWBOhubjqla?=
- =?us-ascii?Q?3peSy8ScM1YRnY6R2rBBbKSedRY9QQmkZAnzWJNuf4c2ny1tj4xi4QgMk53i?=
- =?us-ascii?Q?GH//zH3CJa+PP8QZqWDnp3jmCcbRbcYWTuZG+oKn60EOGeNsJI1ByIKtXukQ?=
- =?us-ascii?Q?fN7ite6NEcsxU8kWkBfdctJcKduj+RnxtcoMBxSqEmWWl9hD6TiCR8c/yx9o?=
- =?us-ascii?Q?1F7je63YyQMdTKRM1Yz70sb1s8RBDJe8lOB3E087p8oZ3fd451hbbAxp1BvG?=
- =?us-ascii?Q?70QG653Wp4F02EfdyGzUrfGRnhvbqlNQ/hQ9Sh6+Yw/jhHoZHC81VxA8tug4?=
- =?us-ascii?Q?mmuffp/MkShq5YSJs7M05RgGqKJSctK3+XTESz7GP+VOl+AhVzTQ9KY27nbu?=
- =?us-ascii?Q?iZm+wbefgzh/yoaOlGzpwi5013eva5fSOxticBqNvFfp2pEO0jlw/ENqiJTB?=
- =?us-ascii?Q?Nt9NVQxkXn3wIui8/qWTQxdCv2xuYMSmcYXxL99zO13UGkGKeJoRyzOAAkr+?=
- =?us-ascii?Q?Px77gXHV6kxBj6TX/zQndqnK/rpkqPjE4nixGLLjVRtjbx9LyNBJ9xnwzXNP?=
- =?us-ascii?Q?Z6Fr2AMM2pvJmbnTsyiy16OzvQjQQ6iSBIQ4w6e0nnTbMNkW/pQhi2IV0pvJ?=
- =?us-ascii?Q?twoNfS5RQKHCnc9B/vUxDPFRORgj7jQ5Efp59Tm2cbeHT86NslAztV9bQYH+?=
- =?us-ascii?Q?cisZUyrah6u17mg1qEzS8V9nzKVe3WWYHn6kFDaKqYtrQwVHL6MuqKBjboqB?=
- =?us-ascii?Q?2w=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e4ad879-334a-40cf-4bcf-08dacc8af6e9
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2022 13:10:44.8571
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2ZoZcwcseY6aTCI6kRNtKGbJdClidHw+z3f1LeTI0tQeT/kzkW2gcozO+M8GovgCxNkpoW6maiRyUio0ch9CqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB8030
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: eXYljfTqPOrYrIkozEPhxBDypaqjOjXw
+X-Proofpoint-ORIG-GUID: MH03WnBZBvlQkASGvVvGlFEGTrL5rQwE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-22_06,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=763 mlxscore=0 priorityscore=1501
+ spamscore=0 impostorscore=0 phishscore=0 malwarescore=0 adultscore=0
+ bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211220096
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the blamed commit, a rudimentary reallocation procedure for RX buffer
-descriptors was implemented, for the situation when their format changes
-between normal (no PTP) and extended (PTP).
+On Tue, 2022-11-22 at 08:47 +0100, Thomas Huth wrote:
+> On 17/11/2022 23.17, Janis Schoetterl-Glausch wrote:
+> > Describe the semantics of the new KVM_S390_MEMOP_F_CMPXCHG flag for
+> > absolute vm write memops which allows user space to perform (storage key
+> > checked) cmpxchg operations on guest memory.
+> > 
+> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> > ---
+> ...
+> >   Supported flags:
+> >     * ``KVM_S390_MEMOP_F_CHECK_ONLY``
+> >     * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
+> > +  * ``KVM_S390_MEMOP_F_CMPXCHG``
+> > +
+> > +The semantics of the flags common with logical acesses are as for logical
+> > +accesses.
+> > +
+> > +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
+> 
+> I'd maybe merge this with the last sentence:
+> 
+> For write accesses, the KVM_S390_MEMOP_F_CMPXCHG flag is supported if 
+> KVM_CAP_S390_MEM_OP_EXTENSION has bit 1 (i.e. bit with value 2) set.
 
-enetc_hwtstamp_set() calls enetc_close() and enetc_open() in a sequence,
-and this sequence loses information which was previously configured in
-the TX BDR Mode Register, specifically via the enetc_set_bdr_prio() call.
-The TX ring priority is configured by tc-mqprio and tc-taprio, and
-affects important things for TSN such as the TX time of packets. The
-issue manifests itself most visibly by the fact that isochron --txtime
-reports premature packet transmissions when PTP is first enabled on an
-enetc interface.
+Ok.
+> 
+> ... and speaking of that, I wonder whether it's maybe a good idea to 
+> introduce some #defines for bit 1 / value 2, to avoid the confusion ?
 
-Save the TX ring priority in a new field in struct enetc_bdr (occupies a
-2 byte hole on arm64) in order to make this survive a ring reconfiguration.
+Not sure, I don't feel it's too complicated. Where would you define it?
+Next to the mem_op struct? KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG?
+> 
+> > +In this case, instead of doing an unconditional write, the access occurs only
+> > +if the target location contains the "size" byte long value pointed to by
+> > +"old_p". This is performed as an atomic cmpxchg.
+> 
+> I had to read the first sentence twice to understand it ... maybe it's 
+> easier to understand if you move the "size" part to the second sentence:
+> 
+> In this case, instead of doing an unconditional write, the access occurs 
+> only if the target location contains value pointed to by "old_p". This is 
+> performed as an atomic cmpxchg with the length specified by the "size" 
+> parameter.
+> 
+> ?
 
-Fixes: 434cebabd3a2 ("enetc: Add dynamic allocation of extended Rx BD rings")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
- drivers/net/ethernet/freescale/enetc/enetc.c  |  8 ++++---
- drivers/net/ethernet/freescale/enetc/enetc.h  |  1 +
- .../net/ethernet/freescale/enetc/enetc_qos.c  | 21 ++++++++++++-------
- 3 files changed, 19 insertions(+), 11 deletions(-)
+Ok.
+> 
+> > "size" must be a power of two
+> > +up to and including 16.
+> > +The value at the target location is written to the location "old_p" points to.
+> 
+> IMHO something like this would be better:
+> 
+> The value at the target location is replaced with the value from the 
+> location that "old_p" points to.
 
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-index b4988fe6bb93..9c0ab983b6e9 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-@@ -2061,7 +2061,7 @@ static void enetc_setup_txbdr(struct enetc_hw *hw, struct enetc_bdr *tx_ring)
- 	/* enable Tx ints by setting pkt thr to 1 */
- 	enetc_txbdr_wr(hw, idx, ENETC_TBICR0, ENETC_TBICR0_ICEN | 0x1);
- 
--	tbmr = ENETC_TBMR_EN;
-+	tbmr = ENETC_TBMR_EN | ENETC_TBMR_SET_PRIO(tx_ring->prio);
- 	if (tx_ring->ndev->features & NETIF_F_HW_VLAN_CTAG_TX)
- 		tbmr |= ENETC_TBMR_VIH;
- 
-@@ -2464,7 +2464,8 @@ int enetc_setup_tc_mqprio(struct net_device *ndev, void *type_data)
- 		/* Reset all ring priorities to 0 */
- 		for (i = 0; i < priv->num_tx_rings; i++) {
- 			tx_ring = priv->tx_ring[i];
--			enetc_set_bdr_prio(hw, tx_ring->index, 0);
-+			tx_ring->prio = 0;
-+			enetc_set_bdr_prio(hw, tx_ring->index, tx_ring->prio);
- 		}
- 
- 		return 0;
-@@ -2483,7 +2484,8 @@ int enetc_setup_tc_mqprio(struct net_device *ndev, void *type_data)
- 	 */
- 	for (i = 0; i < num_tc; i++) {
- 		tx_ring = priv->tx_ring[i];
--		enetc_set_bdr_prio(hw, tx_ring->index, i);
-+		tx_ring->prio = i;
-+		enetc_set_bdr_prio(hw, tx_ring->index, tx_ring->prio);
- 	}
- 
- 	/* Reset the number of netdev queues based on the TC count */
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.h b/drivers/net/ethernet/freescale/enetc/enetc.h
-index ea3ceed5bfa9..40bcd68c0c49 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.h
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.h
-@@ -95,6 +95,7 @@ struct enetc_bdr {
- 		void __iomem *rcir;
- 	};
- 	u16 index;
-+	u16 prio;
- 	int bd_count; /* # of BDs */
- 	int next_to_use;
- 	int next_to_clean;
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc_qos.c b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-index a842e1999122..fcebb54224c0 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-@@ -137,6 +137,7 @@ int enetc_setup_tc_taprio(struct net_device *ndev, void *type_data)
- 	struct tc_taprio_qopt_offload *taprio = type_data;
- 	struct enetc_ndev_priv *priv = netdev_priv(ndev);
- 	struct enetc_hw *hw = &priv->si->hw;
-+	struct enetc_bdr *tx_ring;
- 	int err;
- 	int i;
- 
-@@ -145,16 +146,20 @@ int enetc_setup_tc_taprio(struct net_device *ndev, void *type_data)
- 		if (priv->tx_ring[i]->tsd_enable)
- 			return -EBUSY;
- 
--	for (i = 0; i < priv->num_tx_rings; i++)
--		enetc_set_bdr_prio(hw, priv->tx_ring[i]->index,
--				   taprio->enable ? i : 0);
-+	for (i = 0; i < priv->num_tx_rings; i++) {
-+		tx_ring = priv->tx_ring[i];
-+		tx_ring->prio = taprio->enable ? i : 0;
-+		enetc_set_bdr_prio(hw, tx_ring->index, tx_ring->prio);
-+	}
- 
- 	err = enetc_setup_taprio(ndev, taprio);
--
--	if (err)
--		for (i = 0; i < priv->num_tx_rings; i++)
--			enetc_set_bdr_prio(hw, priv->tx_ring[i]->index,
--					   taprio->enable ? 0 : i);
-+	if (err) {
-+		for (i = 0; i < priv->num_tx_rings; i++) {
-+			tx_ring = priv->tx_ring[i];
-+			tx_ring->prio = taprio->enable ? 0 : i;
-+			enetc_set_bdr_prio(hw, tx_ring->index, tx_ring->prio);
-+		}
-+	}
- 
- 	return err;
- }
--- 
-2.34.1
+I'm trying to say the opposite :).
+I went with this:
+
+If the exchange did not take place because the target value doesn't match the
+old value, KVM_S390_MEMOP_R_NO_XCHG is returned.
+In this case the value "old_addr" points to is replaced by the target value.
+> 
+> > +If the exchange did not take place because the target value doesn't match the
+> > +old value KVM_S390_MEMOP_R_NO_XCHG is returned.
+> > +The KVM_S390_MEMOP_F_CMPXCHG flag is supported if KVM_CAP_S390_MEM_OP_EXTENSION
+> > +has bit 1 (i.e. bit with value 2) set.
+> 
+>   Thomas
+> 
+> PS: Please take my suggestions with a grain of salt ... I'm not a native 
+> speaker either.
+> 
 
