@@ -2,114 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67BA633EFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2385F633DCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233945AbiKVObP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
+        id S233726AbiKVNgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233953AbiKVObH (ORCPT
+        with ESMTP id S233809AbiKVNfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:31:07 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304CF6A6B7;
-        Tue, 22 Nov 2022 06:31:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rSYIGGtjZljFBal86Avbxge1dAX05jgxf9qrktsTsB8=; b=MX800+aYXTdyYof4USzixvuPvg
-        9FbkPgWEf4yn5YKSZ6YZvZYMUIrJ83siHY3JDQnjBib+dAZOvIjPcv4rwFWWZmC8nuU/CNyqTv37J
-        LI9uahtiyTlFT5sg3l2Jt6DAPlbV/eGuCYZHMx1mJgP8y9VUP0QV5AhKWiiwBT3/TtAdOZxoHUjGo
-        wBjoV4n84SXGRfQJ1FQgM2titKAX9RMXtyQrLP2E1UPM76R5ywtg8b8JzSylFz4KM6CKbhsW2RDhw
-        2Wuo/c750D1OMJECUK35f1MTpZl3Tuqe5CqaKSXYSU2Si3ILxqlcvyZFxEYL6RqkDNw1VeQ19rA9/
-        QwSDYHeg==;
-Received: from [177.102.6.147] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oxTR5-006yBT-L8; Tue, 22 Nov 2022 14:35:39 +0100
-Message-ID: <831175d7-1b30-de61-d6c5-cbb91e4fdcfb@igalia.com>
-Date:   Tue, 22 Nov 2022 10:35:34 -0300
+        Tue, 22 Nov 2022 08:35:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5AC51C26
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:35:51 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxTR4-0004Q1-Ha; Tue, 22 Nov 2022 14:35:38 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxTR1-005rZK-1b; Tue, 22 Nov 2022 14:35:35 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxTR1-000o5d-AE; Tue, 22 Nov 2022 14:35:35 +0100
+Date:   Tue, 22 Nov 2022 14:35:34 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        linux-iio@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH 567/606] staging: iio: ad5933: Convert to i2c's
+ .probe_new()
+Message-ID: <20221122133534.zoosrjjszpgmgb64@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-568-uwe@kleine-koenig.org>
+ <Y3y/DxNp+cYu7GTH@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH V3 11/11] panic: Fixes the panic_print NMI backtrace
- setting
-Content-Language: en-US
-To:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        feng.tang@intel.com
-Cc:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net
-References: <20220819221731.480795-1-gpiccoli@igalia.com>
- <20220819221731.480795-12-gpiccoli@igalia.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220819221731.480795-12-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ulcjetf4btcckz7d"
+Content-Disposition: inline
+In-Reply-To: <Y3y/DxNp+cYu7GTH@kroah.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
-> Commit 8d470a45d1a6 ("panic: add option to dump all CPUs backtraces in panic_print")
-> introduced a setting for the "panic_print" kernel parameter to allow
-> users to request a NMI backtrace on panic. Problem is that the panic_print
-> handling happens after the secondary CPUs are already disabled, hence
-> this option ended-up being kind of a no-op - kernel skips the NMI trace
-> in idling CPUs, which is the case of offline CPUs.
-> 
-> Fix it by checking the NMI backtrace bit in the panic_print prior to
-> the CPU disabling function.
-> 
-> Fixes: 8d470a45d1a6 ("panic: add option to dump all CPUs backtraces in panic_print")
-> Cc: Feng Tang <feng.tang@intel.com>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> 
-> ---
-> 
-> V3:
-> - No changes.
-> 
-> V2:
-> - new patch, there was no V1 of this one.
-> 
-> Hi folks, thanks upfront for reviews. This is a new patch, fixing an issue
-> I found in my tests, so I shoved it into this fixes series.
-> 
-> Notice that while at it, I got rid of the "crash_kexec_post_notifiers"
-> local copy in panic(). This was introduced by commit b26e27ddfd2a
-> ("kexec: use core_param for crash_kexec_post_notifiers boot option"),
-> but it is not clear from comments or commit message why this local copy
-> is required.
-> 
-> My understanding is that it's a mechanism to prevent some concurrency,
-> in case some other CPU modify this variable while panic() is running.
-> I find it very unlikely, hence I removed it - but if people consider
-> this copy needed, I can respin this patch and keep it, even providing a
-> comment about that, in order to be explict about its need.
-> 
-> Let me know your thoughts! Cheers,
-> 
-> Guilherme
-> 
-> 
 
-Hi folks, bi-monthly ping - apologies for the noise heh
+--ulcjetf4btcckz7d
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Is there anything suggested so we can get this fix merged in 6.2? Any
-suggestions / reviews are much appreciated.
+Hello Greg,
 
-Tnx in advance,
+On Tue, Nov 22, 2022 at 01:22:39PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Nov 18, 2022 at 11:45:01PM +0100, Uwe Kleine-K=F6nig wrote:
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > that explicitly in the probe function.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >  drivers/staging/iio/impedance-analyzer/ad5933.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/drivers/staging/iio/impedance-analyzer/ad5933.c b/drivers/=
+staging/iio/impedance-analyzer/ad5933.c
+> > index f177b20f0f2d..b3152f7153fb 100644
+> > --- a/drivers/staging/iio/impedance-analyzer/ad5933.c
+> > +++ b/drivers/staging/iio/impedance-analyzer/ad5933.c
+> > @@ -674,9 +674,9 @@ static void ad5933_clk_disable(void *data)
+> >  	clk_disable_unprepare(st->mclk);
+> >  }
+> > =20
+> > -static int ad5933_probe(struct i2c_client *client,
+> > -			const struct i2c_device_id *id)
+> > +static int ad5933_probe(struct i2c_client *client)
+> >  {
+> > +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
+>=20
+> Breaks the build in my tree as this function is not in Linus's tree yet
+> :(
 
+As pointed out in the cover letter[1] you want to make sure that
 
-Guilherme
+	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client_d=
+evice_id_helper-immutable
+
+is part of your tree first. So either pull that into your tree, or wait
+until this hits Linus's tree.
+
+Best regards
+Uwe
+
+[1] https://lore.kernel.org/linux-kernel/20221118224540.619276-1-uwe@kleine=
+-koenig.org
+    (It wasn't sent to every thread participant because that would have
+    been too many.)
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ulcjetf4btcckz7d
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN80CAACgkQwfwUeK3K
+7Al35ggAnqzvJT6O1dZcuSdZThRtBdo5YPsZq63WDB/TRDChLUiYlceIBo9rzETz
+t3nH4M6MjjxnOWepddEk/P2hqOl7Bw6h9oarQZvWf2sYdHtoqRkPoSthUjz+glrB
+UWDIIA5F4SeaXakKujDbz4YcIHsEXnnnWuut10edAIkeMWgwIvZzN/sJNXF2pvrh
+QVU7kpB5yWmp0O5ieU3itSPAHwWb4FQFWWi35AS0tJOYQpOuKoHT+HrcYBWKq/mf
+nK3ijGYIRwRVgIDlS6F9tRtoU3eAFJ4ctnztSwoNcZ0giVZbHWoCOIK0WaAlDqNS
+JSXk/So3urvJXWDkg+4T7xEuwZVfxA==
+=mV0I
+-----END PGP SIGNATURE-----
+
+--ulcjetf4btcckz7d--
