@@ -2,224 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1AD633116
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ADC633119
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiKVABJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:01:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S231561AbiKVABg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:01:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiKVABH (ORCPT
+        with ESMTP id S229739AbiKVAB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:01:07 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA8D60DE;
-        Mon, 21 Nov 2022 16:01:06 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 2D9713200955;
-        Mon, 21 Nov 2022 19:01:04 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 21 Nov 2022 19:01:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1669075263; x=1669161663; bh=GK
-        SMfwfa6pvS7PvzoP8mseYARhi9iWIxIIuJD0eitWc=; b=orVuwZMczxVq2gUe/a
-        dop2fVTslC2Cy5fdFaM3NxzXZvAyYUL/XjiDWBAe4k1v8CTuaFsSppcG2QOzOY+Z
-        LSb8GcdQyEgLCWELb5clRk158apyliXJ3UTFcCRbyNE6dPaVfwf+ZZ2aajFD3ZE3
-        grNDEmobQEQEmnZ5LoTVOYj+tAWiBUA1LQkWlcXG+RMzE2T5k74BNhP5ix197oc0
-        DUkXlvPqafIJAUUMTPR+kvbdg1+sQQG5D2SeFCBqnJsqB0xFjcDapsdL0vv6ywZO
-        0Bx4fadysR7WK1z5LlLJ4G3ZgXM/K7N0ShKtRvDiy8VGxACVhbCrvGupVHkoP3XW
-        D/vQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669075263; x=1669161663; bh=GKSMfwfa6pvS7PvzoP8mseYARhi9
-        iWIxIIuJD0eitWc=; b=tgdJZIruVcbtfE3KGqPvwv8H8u/bNfLZYWisPp2Ue39V
-        /wbZTZM3/edKRRtx6ZpkXB3USIV3S2NMzSIRUpJkxphuMvvkKpzz8zj4rrp1EGK/
-        8Ffk8xhbWrSCUQEMDCZ3egxbnk/pQIsW5E0OggNpb0Gf/sT1b5tro6XvDhCl134g
-        K9dwutKll5XwH6151CVf4vlTtMroOkQDIHY1rp3g3hQEDcVBJguijXSTnSTP9GqT
-        RP2DSsP7h4llzQjW+B6+ZGiC0f6Wt7nKoRXflYNycHaV9ZUu8Q8vNcRl0495tMSN
-        DT8JnoqnbiCzbJu3dCiZqryWe3SxR0yivK+BqCeeeg==
-X-ME-Sender: <xms:PhF8Y3SCGTQi_61VHIM9A4-hn0uWzKWI-z6KneGf0vAvrTLsrhWi7g>
-    <xme:PhF8Y4zf9jzU_8nQS1WbudCdeKn20i-GjDvGh0edCsylpg86aUpn2zUvCWbIvIBX8
-    Y9zcS0RFNkVH9FbX-U>
-X-ME-Received: <xmr:PhF8Y81OZTbfz2dUI28sE9eYIULnQi6ZhlTtiw7oipLtpp7h2-BrWMZTqB69d77_c8ACCg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheejgddujecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:PhF8Y3Anzt0AXzs1x20pdIZ_13BamP2A7Iz1zg5YAaJOSXuCGP2IVQ>
-    <xmx:PhF8YwgvuV9QJdATtuHdVd8qy2LP5Anznui6cfbU-M01uathlkjLNw>
-    <xmx:PhF8Y7rSYO6aKj5YlemT-DAsbaywQyPzeekmgHVhstgr67CCmlyX1g>
-    <xmx:PxF8Y4SFPnPXaMwaMfDg1gwvPeU77-DDo0jq_xVdqanSgjX3ITHN0g>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Nov 2022 19:01:01 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 576EE109A30; Tue, 22 Nov 2022 03:01:00 +0300 (+03)
-Date:   Tue, 22 Nov 2022 03:01:00 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
-Message-ID: <20221122000100.bizske6iltfgdwcu@box.shutemov.name>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-3-decui@microsoft.com>
+        Mon, 21 Nov 2022 19:01:26 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FFE1D30E;
+        Mon, 21 Nov 2022 16:01:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669075285; x=1700611285;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=KU/CRJB7Vj28ZaeK9I1pB2j2Ru6zyl9zX8tH9IWzeZE=;
+  b=XNfRikY9WpToJR9S1SwKkkkoRZQGuEM+O6QVgViSnNHTcejOGRz+PveN
+   ohyLnuefgyNEIQVqmot7eam/tFEey1YnQHNw14rr3cmcX5hs0Mbsj7Fbd
+   obfRadZ1e1d+ukk7Hx1ULpXGBBRa4TbgNhNZseU6nx+nE/bdqGedVLYH7
+   ZpQKeobIgP6AfTq5Wzcojv7sVij+QFz104/B6yySoR0Ctxk+Qm/t1pzPr
+   V0OQ+CPIN5hJOuHOmOHqKpEp5MTZqWlFscUE0hv9LrWY2b3vy5YpxkD6R
+   EUDI2vj8ZEGnH17ilGnhbK8yQQNhJ1hmoNzoXGjCHVjB/dJQbruTRYflO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="314839358"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="314839358"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 16:01:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="635353758"
+X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
+   d="scan'208";a="635353758"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2022 16:01:24 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 21 Nov 2022 16:01:24 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 21 Nov 2022 16:01:24 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 21 Nov 2022 16:01:23 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VW0qOXWF5/4iY7olSvwK4XifbM973ja4kW2Eg1sUHIukRVKQQCkMdSPB0vH2fUiU1lGj8h0/vRZoN9NlazQgehYkZtltzS3M8o5OROElV0PY9Aa2XD0Yl4cz3dJFTjcsC3VlUmIS4I0gbJRLegkKzN4J/8D/yK6SSyd2D53T2wII0VjPgRJRQehbwaOtaLfkiZUEIwbTjvcgmIt1ZEKbRBWBjiWhz6+U3JBM8bIKz2Dnsi+M8DS8zydMMjmcNWjAwzebZ9NzlHglDhvctuT9IULRQfW1wecEh/L0X2uRCjSuZVRMMNFGAn361e0lyVDn6bsV62p3SnrJdaMAhuDE/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KU/CRJB7Vj28ZaeK9I1pB2j2Ru6zyl9zX8tH9IWzeZE=;
+ b=IHGn550tfEGQySpCkuqcS6Ae9B2mMDHGJTRxa9WOQ7ubLZScnNijvraZ0AkXKLqxTuzFy4g5vKTHkwtSsiTXhh7orD1VIEqJI4rmSXvc7FbncHxwXQBK1Ain5T+CbMsEOzKNL/9fI185RQSheRtIGdbuMuxQy6OViudcz3LSF42FVHFjcvQjC/r9toBqlx+4Rs1WCeStiog0KpViL07jBMzRjRezXMYCrRRQPpKuz3EbUkkzDHHS1NGjqHeb/1Kx4/NoGQ+OhysAeOfphN1FCwGkCijgCEKjkE/oDi0IFsYiAf9DlMBjI5KRkLXdFgqTQWECoP/ZU2L/xmL8X1k/QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by DM6PR11MB4593.namprd11.prod.outlook.com (2603:10b6:5:2a3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
+ 2022 00:01:19 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
+ 00:01:19 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v7 01/20] x86/tdx: Define TDX supported page sizes as
+ macros
+Thread-Topic: [PATCH v7 01/20] x86/tdx: Define TDX supported page sizes as
+ macros
+Thread-Index: AQHY/T28NJwJCQ29uEGaaLK5clcXr65KDO+AgAADrAA=
+Date:   Tue, 22 Nov 2022 00:01:19 +0000
+Message-ID: <9e27993791738d37e9aa650e982a7230500b913e.camel@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+         <d6c6e664c445e9ccf1528625f0e21bbb8471d35f.1668988357.git.kai.huang@intel.com>
+         <6260c853-3c6c-7302-677e-1910918c69b7@intel.com>
+In-Reply-To: <6260c853-3c6c-7302-677e-1910918c69b7@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DM6PR11MB4593:EE_
+x-ms-office365-filtering-correlation-id: dc9ad6ab-6d82-4a4a-7eee-08dacc1caf2d
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nGGjlTq8opyjYkyLJYpCxIDx5Y5wK1I04RlzeqCipCbjsHMk+9E2UbBRti/zhCIBbiSFVljow8O+2XxbATg7aH6hIjcEyVcYL53y+jL1s1qtE2JkVr7Lc70gR8tepktPhU+TdYfKmNV93GKUnwU2Gvzt5aH6j3bWxF0gX7v/OiIz5NOMKPc6dcg//QBjuXeSKv0JT4J+m2eUR1X4C0rK7q+XLII7jH5c9D9rfiwGrZUGMTJBwv1gxTGeS20DR9YEUZXjvyuMlfTRJD9jCSonmuGOluTZ9JVzWb3LUSf1qk1mr1gVT0ijTXyIDs0OvSz+tAaOJzOOL+rU6kP6I/WG8g16fzUppXpQahFIUoLt4Y7ZpwrcDg4/XJhHx8lk81JL7wT6DZAzwhP7q1R7f0/NevVGzP/EYlXQ/1JA+Z55HFBLY/5yT/JZwgCOqqa30AKmXVr1sixMTgTawz857ZdVQJYFNQxn8pbDkizDJfUN8XVRXDGdA2jl2UmMHMzWFI3mJgWdbqlD5bnA98YypEjMR0bgVl7piScdHI/4sh7whdSchsXbanZa5p7wVtlesdBhyT+hJYlzD+5o1lyl8NwuhrzGaxOmWVDNatySts4/8jddQCHAwyuS7m4gpwVB6dcVWvrGj7UNjPreaUmDhh7Q4VNaQIB2fA5NVBXpl7TgzuiogldKQF94GHj6z9w2/Hhn1BdDy1aNck0aV7U1e6PM8g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199015)(36756003)(86362001)(38070700005)(64756008)(76116006)(4744005)(5660300002)(7416002)(2906002)(4001150100001)(26005)(2616005)(186003)(6512007)(122000001)(38100700002)(82960400001)(53546011)(91956017)(54906003)(66556008)(6486002)(71200400001)(6506007)(41300700001)(8936002)(66476007)(110136005)(66446008)(66946007)(4326008)(478600001)(8676002)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TUd2bDJMRC9nMjd2WEo0VkVteERINy9aZm0rUE9CbCtMUHlndXY3RXhveWlU?=
+ =?utf-8?B?bUl1UndiWDJBMHlsS0VTYlJUUkNQWTJMZ0loMmU1NFJxdjgzUjRxbEFBbWNZ?=
+ =?utf-8?B?QmZkR1ZscWxnY28zS3ZLSFhBL21UQnUxT005eUJvczNoZGR0V2l4R2J3MlNP?=
+ =?utf-8?B?SXY3a0FSaXBWVVRwQVFqSlhZR0h5ZW1CMEM5OVZwSGJPd1I1R1g1ZTVYek83?=
+ =?utf-8?B?bnlaeXQzNjBPUVFuM1ptUEtxM2I3ZnJNN0lzdXplQytGdlNORnlCcUJUdkFK?=
+ =?utf-8?B?TzR5WHpvdG5oUmNUUERTLzMyd0RHUFJ6RUVVMTZxNTgyVk42ZGNCbEJhWDV3?=
+ =?utf-8?B?eHlYSFFoTjFrY01GT0xXZTNhbkloQXA5UzdJVVpLRjVzTTJQZzFuL2YwZno4?=
+ =?utf-8?B?bVF6Tzg1N2xwWWQxRkdwYS9hanhWaXB4NDVPbGFucERneXMyTlhGWDd3Vi90?=
+ =?utf-8?B?M0liTWdyamJJcFNvMkRLKy9WazBKbzRaVk9iQzJlSytQbkVBTGQ3VWp0ODFE?=
+ =?utf-8?B?QWxILzVlWGQrSVZzYUFEa3dla1l3Mk5XSGZWcW1Pem9kQVNoZklGTlpycmUx?=
+ =?utf-8?B?YWdEcHBKOFdCZzRlSHl6aCtFaVQ0Sk0rLzArZFIycVJuUm1PcStaRExkQjRH?=
+ =?utf-8?B?NmdZekR2ZEprdElFUzcyczVYQmQ4YWtpdUpWMC92bFZ3MVVsYmFtSVlkcjRl?=
+ =?utf-8?B?NHAwaFZkZ0tRcXBGWll4RDh4WEpiQ1ZwSUV0RlFOS0FySGZWbjF6MGJ0Z2ZD?=
+ =?utf-8?B?eExoQmFiQWw4VjJGUHlXVklsb1hMd2tmTVhlZHljTFN5ZCtMZFl1K1pqejlJ?=
+ =?utf-8?B?QkZNNWNwcjlmN1JNUmU2RmVoUmlJMmR4Zk9rV0xlQlFYVE9MT3dERm45Znha?=
+ =?utf-8?B?Unp3OWR5NnZUbW5LSE1qL1RaaGJaUUZvWW9UYXNiREMyYmVjY2RoTUFIcWJm?=
+ =?utf-8?B?QkZMZEhUaXpJY0ZjRDAxanVXeUdhb2JWbm9ETW5mMVM0dEw0dWlnRUwyWWZs?=
+ =?utf-8?B?Q0ExOUdTSkN5NWVtWXJtNDFHSDgrRjFxUmxGWXlKLzRESEg1RENsbDJRbmZ3?=
+ =?utf-8?B?TlJ6ekZrTVZKazEyVE9mbXVtSXYyY3I3dmQrTGVqRE8vMy9ab1AxSHBoZndJ?=
+ =?utf-8?B?TExXcU9UMmFLbTBnL2tDQ3hvQkNwRUxsSk1QRDkwKzdmQkh4dzZwbWVoYjkv?=
+ =?utf-8?B?eDNkV0hrUjFnNEllUDg2cWpicms1Zkc0T1BJUzlXczU1eTVuOWxFVmhQbkVj?=
+ =?utf-8?B?VGwzeUduNEkxZy9CWFVRa2U1b2pyMEt2eFQvZE5DQ0J0WUlzNGRHaVNxc25V?=
+ =?utf-8?B?L1Q4dklsYTJjSDgxbjhWNlFrOE52UWs5eVBEQm5qVk1hMWJ4VUJEbkFGQVhM?=
+ =?utf-8?B?K25rT3BJMkRvK1ovSDFrTDZWSmN1TGhVS3NucytnWjBNSlVRMFBGSU5YdjNi?=
+ =?utf-8?B?a0RvMVV6YzdhT1BNTXBHbVh3QzJBRmhWSXdUQlU3ajkyZnhDNWN6RW4wZFVS?=
+ =?utf-8?B?Q282U0pRZC8wQjlRMGNrRERNakpTWHlteko4cTlpZmI0eHBDQTE2YVBKcVFy?=
+ =?utf-8?B?bGtZb3BuZFg1TUVHaVFQY0xSUzRINDV2ZmdtT1hKTmRnN0xJdW9MS0pWT2VV?=
+ =?utf-8?B?RkwxcHFrcWZtdHZUZ3JabWpKbWpvSDBGcUFKS0ZvRXZFRVlHTVNIUjcxTlVU?=
+ =?utf-8?B?K2NUNWxWMk9rNmkwZmJzTjFUeTNtYWlTQVFDeTI1Ym5XVko0S01icGEwdHk2?=
+ =?utf-8?B?ZzkyeEV3MGUzZHNIUXRJZ3Jka1NGSzYxaVVtb2J1L2Y0c3l1cE9DcGFWOUhi?=
+ =?utf-8?B?MDJ1Zi9Ec3pDZFp2N1pjM0wwd1g3ZHRMTzU4RndDb09Mbm5YcEhIOHlOSHJ3?=
+ =?utf-8?B?VzEyN0tSTGkydmg0a2FBTFRNLzBVZGhXWkZtSDIwMFp0cWpXbEljOUYyczJq?=
+ =?utf-8?B?MHJLajY2bWc4eEs0T3NzYzdVVTdwcFVvT1hRT05OQmpGcUM0OXpYWU5UL3pj?=
+ =?utf-8?B?cG9xWDBTRTdrK09FU2RqNjBoZ3U4MlBNa3g3N09lS0ZoMGhEYTc0STM4c2Na?=
+ =?utf-8?B?TFpQSzFYVGI1Y1o5U2Z4aUVWSWxPUGMzcHVoUHhUd25WSWxFLzkyL3c5ZCsx?=
+ =?utf-8?B?NW9YMEVwbjhGMzNvR2FFbVM1dC9WT0VUTmF6ZG1pdlRpOUF2T01qTmJXdjJ0?=
+ =?utf-8?B?WHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DF26DBDE4D2DBE4E812D0972742C18F8@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121195151.21812-3-decui@microsoft.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc9ad6ab-6d82-4a4a-7eee-08dacc1caf2d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 00:01:19.5866
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZU1h8KtGvhuHVtM/sBJSW+pEKncK43lsxYvfIaqSzmMw70uDD/9g5junx82JXDpx2CfxC9jo/aliZDbTi8OLoA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4593
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:51:47AM -0800, Dexuan Cui wrote:
-> GHCI spec for TDX 1.0 says that the MapGPA call may fail with the R10
-> error code = TDG.VP.VMCALL_RETRY (1), and the guest must retry this
-> operation for the pages in the region starting at the GPA specified
-> in R11.
-> 
-> When a TDX guest runs on Hyper-V, Hyper-V returns the retry error
-> when hyperv_init() -> swiotlb_update_mem_attributes() ->
-> set_memory_decrypted() decrypts up to 1GB of swiotlb bounce buffers.
-> 
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> ---
->  arch/x86/coco/tdx/tdx.c | 65 +++++++++++++++++++++++++++++++++++++----
->  1 file changed, 59 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 3fee96931ff5..46971cc7d006 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -20,6 +20,8 @@
->  /* TDX hypercall Leaf IDs */
->  #define TDVMCALL_MAP_GPA		0x10001
->  
-> +#define TDVMCALL_STATUS_RETRY		1
-> +
->  /* MMIO direction */
->  #define EPT_READ	0
->  #define EPT_WRITE	1
-> @@ -52,6 +54,25 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
->  	return __tdx_hypercall(&args, 0);
->  }
->  
-> +static inline u64 _tdx_hypercall_output_r11(u64 fn, u64 r12, u64 r13, u64 r14,
-> +					    u64 r15, u64 *r11)
-> +{
-> +	struct tdx_hypercall_args args = {
-> +		.r10 = TDX_HYPERCALL_STANDARD,
-> +		.r11 = fn,
-> +		.r12 = r12,
-> +		.r13 = r13,
-> +		.r14 = r14,
-> +		.r15 = r15,
-> +	};
-> +
-> +	u64 ret;
-> +
-> +	ret = __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
-> +	*r11 = args.r11;
-> +	return ret;
-> +}
-> +
-
-I'm not convinced it deserves a separate helper for one user.
-Does it look that ugly if tdx_map_gpa() uses __tdx_hypercall() directly?
-
->  /* Called from __tdx_hypercall() for unrecoverable failure */
->  void __tdx_hypercall_failed(void)
->  {
-> @@ -691,6 +712,43 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
->  	return true;
->  }
->  
-> +/*
-> + * Notify the VMM about page mapping conversion. More info about ABI
-> + * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> + * section "TDG.VP.VMCALL<MapGPA>"
-> + */
-> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
-> +{
-> +	u64 ret, r11;
-> +
-> +	while (1) {
-
-Endless? Maybe an upper limit if no progress?
-
-> +		ret = _tdx_hypercall_output_r11(TDVMCALL_MAP_GPA, start,
-> +						end - start, 0, 0, &r11);
-> +		if (!ret)
-> +			break;
-> +
-> +		if (ret != TDVMCALL_STATUS_RETRY)
-> +			break;
-> +
-> +		/*
-> +		 * The guest must retry the operation for the pages in the
-> +		 * region starting at the GPA specified in R11. Make sure R11
-> +		 * contains a sane value.
-> +		 */
-> +		if ((r11 & ~cc_mkdec(0)) < (start & ~cc_mkdec(0)) ||
-> +		    (r11 & ~cc_mkdec(0)) >= (end  & ~cc_mkdec(0)))
-> +			return false;
-
-Emm. All of them suppose to have shared bit set, why not compare directly
-without cc_mkdec() dance?
-
-> +
-> +		start = r11;
-> +
-> +		/* Set the shared (decrypted) bit. */
-> +		if (!enc)
-> +			start |= cc_mkdec(0);
-> +	}
-> +
-> +	return !ret;
-> +}
-> +
->  /*
->   * Inform the VMM of the guest's intent for this physical page: shared with
->   * the VMM or private to the guest.  The VMM is expected to change its mapping
-> @@ -707,12 +765,7 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
->  		end   |= cc_mkdec(0);
->  	}
->  
-> -	/*
-> -	 * Notify the VMM about page mapping conversion. More info about ABI
-> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> -	 * section "TDG.VP.VMCALL<MapGPA>"
-> -	 */
-> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
-> +	if (!tdx_map_gpa(start, end, enc))
->  		return false;
->  
->  	/* private->shared conversion  requires only MapGPA call */
-> -- 
-> 2.25.1
-> 
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+T24gTW9uLCAyMDIyLTExLTIxIGF0IDE1OjQ4IC0wODAwLCBIYW5zZW4sIERhdmUgd3JvdGU6DQo+
+IE9uIDExLzIwLzIyIDE2OjI2LCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4gKy8qDQo+ID4gKyAqIFRE
+WCBzdXBwb3J0ZWQgcGFnZSBzaXplcyAoNEsvMk0vMUcpLg0KPiA+ICsgKg0KPiA+ICsgKiBUaG9z
+ZSB2YWx1ZXMgYXJlIHBhcnQgb2YgdGhlIFREWCBtb2R1bGUgQUJJLiAgRG8gbm90IGNoYW5nZSB0
+aGVtLg0KPiA+ICsgKi8NCj4gPiArI2RlZmluZSBURFhfUFNfNEsJMA0KPiA+ICsjZGVmaW5lIFRE
+WF9QU18yTQkxDQo+ID4gKyNkZWZpbmUgVERYX1BTXzFHCTINCj4gDQo+IFRoYXQgY29tbWVudCBj
+YW4ganVzdCBiZToNCj4gDQo+IC8qIFREWCBzdXBwb3J0ZWQgcGFnZSBzaXplcyBmcm9tIHRoZSBU
+RFggbW9kdWxlIEFCSS4gKi8NCj4gDQo+IEkgdGhpbmsgZm9sa3MgdW5kZXJzdGFuZCB0aGF0IHRo
+ZSBrZXJuZWwgY2FuJ3Qgd2lsbHkgbmlsbHkgY2hhbmdlIEFCSQ0KPiB2YWx1ZXMuDQoNClRoYW5r
+cy4gIFdpbGwgZG8uDQo=
