@@ -2,148 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A631E633338
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F3F63333F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbiKVCVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 21:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S231899AbiKVC0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbiKVCVZ (ORCPT
+        with ESMTP id S232701AbiKVCZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:21:25 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FE72036D;
-        Mon, 21 Nov 2022 18:17:40 -0800 (PST)
-X-UUID: 53452f68fdd5447cb992ece0fd039a80-20221122
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=VDymyQAetc3WEtO27z94FAZO4pTlwjOlBCBrAhSOXn4=;
-        b=NEcBQQVaHh/gqjO9PGuVjtNL/5Gwlfbfv/P+3CF5uuwh3xiqtej0/Zd0N/IcoRAT39vJJn3t+v/wB+vJavJEN/dOEc/NUmuBJiKaDRV2FtNtkamFNFlc7+nGu31tSCG5YUhisM+T2/GZASQsATXGO6g0yKkE4mvXjCNDZGaF2OE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:db0bf781-6641-4807-860b-75e724fdbe99,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:95
-X-CID-INFO: VERSION:1.1.12,REQID:db0bf781-6641-4807-860b-75e724fdbe99,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:95
-X-CID-META: VersionHash:62cd327,CLOUDID:9acb6e2f-2938-482e-aafd-98d66723b8a9,B
-        ulkID:221121105616SQ0WFPLA,BulkQuantity:4,Recheck:0,SF:28|17|19|48,TC:nil,
-        Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:41,QS:nil,BEC:nil,COL:0
-X-UUID: 53452f68fdd5447cb992ece0fd039a80-20221122
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <sujuan.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1697112962; Tue, 22 Nov 2022 10:17:34 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 22 Nov 2022 10:17:33 +0800
-Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Tue, 22 Nov 2022 10:17:31 +0800
-From:   Sujuan Chen <sujuan.chen@mediatek.com>
-To:     <netdev@vger.kernel.org>
-CC:     Felix Fietkau <nbd@nbd.name>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        Bo Jiao <bo.jiao@mediatek.com>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Sujuan Chen <sujuan.chen@mediatek.com>
-Subject: [PATCH,RESEND] net: ethernet: mtk_wed: add wcid overwritten support for wed v1
-Date:   Tue, 22 Nov 2022 10:17:29 +0800
-Message-ID: <217932f091aa9d9cb5e876a2e958ca25f80f80b2.1668997816.git.sujuan.chen@mediatek.com>
-X-Mailer: git-send-email 2.17.0
+        Mon, 21 Nov 2022 21:25:45 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDDEF60A9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:21:55 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3a7081e3b95so27247227b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:21:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DKbxaJtTyZO5Z9ZBbZTMOsOtk3yKuoTVReeAVGJ3Pdw=;
+        b=th40tW4wJgE8ZiaU/N3/Vp/zUV3VRt5UMK0PdcOPvQHtQP2r/uyRVg0+OO5SlBIcQC
+         jws9pp8MNuXe4Tdy0WIAs8zTg18CNBl9qIqzEuxRbUhiHcHEB1+BVhMCCq8zRb5l2NH7
+         LI9dCeopLGYOyUDchySF3vlWK2NmFiSreav5Ti8C6PO9iry70Du6sNSWK+12+1638g/8
+         iIy6Uylx15vNePLram5wH1FQjOjZFb382lZ5JQ8EbvOh9GFkaEL2x5MP+UIZui0LF4v/
+         CJzHTw3pV5UULKOtO66iJpIzm5PjlLCMgVVg2xs7UWrmuBuA691D6TI71Pg2psEwuZwL
+         kZrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DKbxaJtTyZO5Z9ZBbZTMOsOtk3yKuoTVReeAVGJ3Pdw=;
+        b=mgr+j8Fks5TbdTjwR2OL/GlCaNWKVXPdma2El/tmHcv5oxTUeA8nVrQFrhXINVCkLg
+         xMHE/+yV/7pCk2dWG8NzXxMl8RCxpa/2wM/Ws6HPZBLDFDneMqrYSnZdp/lJhY/IngO8
+         RnhivANN3ZVZqwFe8eAOEe0yyqW2RBc2B1bTtr79Rd9MmGNfJaI4vrI4gjVlkhKw21eW
+         truzg6IrhiJ6OKxDjHawCgXLB4OINGRhohh4Z9Z3XBx4tX6LnYJgQkt/a+UrfIxrA+Y4
+         I+1fdA0AxeRETGAPi+Y6IxmBTl5J6VRh0kXHJFoQ989RUAHWs+4xHPIOMq6O7bbE8zp/
+         +w5Q==
+X-Gm-Message-State: ANoB5pnJk3caYpy8D2VxPxrEMAFLxBzaO/vO7r8hfqkLt/i8+loWjTR2
+        zvIPxuQ4A4zNIZaTt+FnO4BsOWrasfLKwQcHCFm0fw==
+X-Google-Smtp-Source: AA0mqf6ObbGFOG0xl7JeJ2WAVW0SXydm9VOOQCDq40H+EH4fN1M84S3y4P3BkTpJTxJHwIE4iR7GZri9IbvoRetEYZE=
+X-Received: by 2002:a81:7b89:0:b0:388:dd9b:f3ee with SMTP id
+ w131-20020a817b89000000b00388dd9bf3eemr2279367ywc.164.1669083714099; Mon, 21
+ Nov 2022 18:21:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-2-davidgow@google.com>
+In-Reply-To: <20221119081252.3864249-2-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 21 Nov 2022 18:21:43 -0800
+Message-ID: <CAGS_qxqAUiMfKe2ksnqQtyWv0BWYLA4_uGqpu76d=Oh42mAUgQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kunit: Use the static key when retrieving the
+ current test
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sadiya Kazi <sadiyakazi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All wed versions should enable wcid overwritten feature,
-since the wcid size is controlled by the wlan driver.
+On Sat, Nov 19, 2022 at 12:13 AM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> In order to detect if a KUnit test is running, and to access its
+> context, the 'kunit_test' member of the current task_struct is used.
+> Usually, this is accessed directly or via the kunit_fail_current_task()
+> function.
+>
+> In order to speed up the case where no test is running, add a wrapper,
+> kunit_get_current_test(), which uses the static key to fail early.
+> Equally, Speed up kunit_fail_current_test() by using the static key.
+>
+> This should make it convenient for code to call this
+> unconditionally in fakes or error paths, without worrying that this will
+> slow the code down significantly.
+>
+> If CONFIG_KUNIT=n (or m), this compiles away to nothing. If
+> CONFIG_KUNIT=y, it will compile down to a NOP (on most architectures) if
+> no KUnit test is currently running.
+>
+> Note that kunit_get_current_test() does not work if KUnit is built as a
+> module. This mirrors the existing restriction on kunit_fail_current_test().
+>
+> Note that the definition of kunit_fail_current_test() still wraps an
+> empty, inline function if KUnit is not built-in. This is to ensure that
+> the printf format string __attribute__ will still work.
+>
+> Also update the documentation to suggest users use the new
+> kunit_get_current_test() function, update the example, and to describe
+> the behaviour when KUnit is disabled better.
+>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Sadiya Kazi <sadiyakazi@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Tested-by: Sujuan Chen <sujuan.chen@mediatek.com>
-Co-developed-by: Bo Jiao <bo.jiao@mediatek.com>
-Signed-off-by: Bo Jiao <bo.jiao@mediatek.com>
-Signed-off-by: Sujuan Chen <sujuan.chen@mediatek.com>
----
- drivers/net/ethernet/mediatek/mtk_wed.c      | 9 ++++++---
- drivers/net/ethernet/mediatek/mtk_wed_regs.h | 2 ++
- include/linux/soc/mediatek/mtk_wed.h         | 3 +++
- 3 files changed, 11 insertions(+), 3 deletions(-)
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_wed.c b/drivers/net/ethernet/mediatek/mtk_wed.c
-index 7d8842378c2b..a20093803e04 100644
---- a/drivers/net/ethernet/mediatek/mtk_wed.c
-+++ b/drivers/net/ethernet/mediatek/mtk_wed.c
-@@ -526,9 +526,9 @@ mtk_wed_dma_disable(struct mtk_wed_device *dev)
- 			MTK_WED_WPDMA_RX_D_RX_DRV_EN);
- 		wed_clr(dev, MTK_WED_WDMA_GLO_CFG,
- 			MTK_WED_WDMA_GLO_CFG_TX_DDONE_CHK);
--
--		mtk_wed_set_512_support(dev, false);
- 	}
-+
-+	mtk_wed_set_512_support(dev, false);
- }
- 
- static void
-@@ -1290,9 +1290,10 @@ mtk_wed_start(struct mtk_wed_device *dev, u32 irq_mask)
- 		if (mtk_wed_rro_cfg(dev))
- 			return;
- 
--		mtk_wed_set_512_support(dev, dev->wlan.wcid_512);
- 	}
- 
-+	mtk_wed_set_512_support(dev, dev->wlan.wcid_512);
-+
- 	mtk_wed_dma_enable(dev);
- 	dev->running = true;
- }
-@@ -1338,6 +1339,8 @@ mtk_wed_attach(struct mtk_wed_device *dev)
- 	dev->irq = hw->irq;
- 	dev->wdma_idx = hw->index;
- 	dev->version = hw->version;
-+	if (hw->version != 1)
-+		dev->rev_id = wed_r32(dev, MTK_WED_REV_ID);
- 
- 	if (hw->eth->dma_dev == hw->eth->dev &&
- 	    of_dma_is_coherent(hw->eth->dev->of_node))
-diff --git a/drivers/net/ethernet/mediatek/mtk_wed_regs.h b/drivers/net/ethernet/mediatek/mtk_wed_regs.h
-index 9e39dace95eb..873d50b9a6e6 100644
---- a/drivers/net/ethernet/mediatek/mtk_wed_regs.h
-+++ b/drivers/net/ethernet/mediatek/mtk_wed_regs.h
-@@ -20,6 +20,8 @@ struct mtk_wdma_desc {
- 	__le32 info;
- } __packed __aligned(4);
- 
-+#define MTK_WED_REV_ID					0x004
-+
- #define MTK_WED_RESET					0x008
- #define MTK_WED_RESET_TX_BM				BIT(0)
- #define MTK_WED_RESET_TX_FREE_AGENT			BIT(4)
-diff --git a/include/linux/soc/mediatek/mtk_wed.h b/include/linux/soc/mediatek/mtk_wed.h
-index 8294978f4bca..1b1ef57609f7 100644
---- a/include/linux/soc/mediatek/mtk_wed.h
-+++ b/include/linux/soc/mediatek/mtk_wed.h
-@@ -85,6 +85,9 @@ struct mtk_wed_device {
- 	int irq;
- 	u8 version;
- 
-+	/* used by wlan driver */
-+	u32 rev_id;
-+
- 	struct mtk_wed_ring tx_ring[MTK_WED_TX_QUEUES];
- 	struct mtk_wed_ring rx_ring[MTK_WED_RX_QUEUES];
- 	struct mtk_wed_ring txfree_ring;
--- 
-2.18.0
+Looks good to me, but some small optional nits about the Documentation.
 
+I'm a bit sad that the kunit_fail_current_test() macro is now a bit
+more complicated (has two definitions).
+Optional: perhaps it's long enough now that we should have a comment
+after the #endif, i.e.
+#endif   /* IS_BUILTIN(CONFIG_KUNIT) */
+
+<snip>
+
+>
+> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> index 2737863ef365..e70014b82350 100644
+> --- a/Documentation/dev-tools/kunit/usage.rst
+> +++ b/Documentation/dev-tools/kunit/usage.rst
+> @@ -625,17 +625,21 @@ as shown in next section: *Accessing The Current Test*.
+>  Accessing The Current Test
+>  --------------------------
+>
+> -In some cases, we need to call test-only code from outside the test file.
+> -For example, see example in section *Injecting Test-Only Code* or if
+> -we are providing a fake implementation of an ops struct. Using
+> -``kunit_test`` field in ``task_struct``, we can access it via
+> -``current->kunit_test``.
+> +In some cases, we need to call test-only code from outside the test file,
+> +for example,  when providing a fake implementation of a function, or to fail
+
+nit: there are two spaces after "for example, "
+
+Personal preference: I'd rather keep "For example," as the start of a
+new sentence.
+
+> +any current test from within an error handler.
+> +We can do this via the ``kunit_test`` field in ``task_struct``, which we can
+> +access using the ``kunit_get_current_test`` function in ``kunit/test-bug.h``.
+
+Personal preference: kunit_get_current_test()
+IMO that would make it easier to pick up when the reader is quickly
+scanning over.
+
+>
+> -The example below includes how to implement "mocking":
+> +``kunit_get_current_test`` requires KUnit be built-in to the kernel, i.e.
+> +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
+> +or no test is currently running, in which case it will quickly return ``NULL``.
+
+I find this sentence a bit confusing.
+
+I think it's trying to convey that
+* it can be called no matter how the kernel is built or what cmdline
+args are given
+* but it doesn't work properly for CONFIG_KUNIT=m
+* for CONFIG_KUNIT=n, it's a static inline func that just returns NULL
+* when booting with `kunit.enabled=0`, it's fast (thanks to static keys)
+
+But the current wording basically says "the func requires
+CONFIG_KUNIT=y" then says it's safe to call it even if CONFIG_KUNIT=n.
+It feels a bit whiplashy.
+
+Should this be reworded to say the function can be used regardless of
+whether KUnit is enabled but add a `note` block about how it doesn't
+properly for CONFIG_KUNIT=m?
+
+> +
+> +The example below uses this to implement a "mock" implementation of a function, ``foo``:
+>
+>  .. code-block:: c
+>
+> -       #include <linux/sched.h> /* for current */
+> +       #include <kunit/test-bug.h> /* for kunit_get_current_test */
+>
+>         struct test_data {
+>                 int foo_result;
+> @@ -644,7 +648,7 @@ The example below includes how to implement "mocking":
+>
+>         static int fake_foo(int arg)
+>         {
+> -               struct kunit *test = current->kunit_test;
+> +               struct kunit *test = kunit_get_current_test();
+>                 struct test_data *test_data = test->priv;
+>
+>                 KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
+> @@ -675,7 +679,7 @@ Each test can have multiple resources which have string names providing the same
+>  flexibility as a ``priv`` member, but also, for example, allowing helper
+>  functions to create resources without conflicting with each other. It is also
+>  possible to define a clean up function for each resource, making it easy to
+> -avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/test.rst.
+> +avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/resource.rst.
+
+Oops, thanks for cleaning this up.
+I guess I forgot to update this when splitting out resource.rst or my
+change raced with the rewrite of this file.
+
+>
+>  Failing The Current Test
+>  ------------------------
+> @@ -703,3 +707,6 @@ structures as shown below:
+>         static void my_debug_function(void) { }
+>         #endif
+>
+> +Note that ``kunit_fail_current_test`` requires KUnit be built-in to the kernel, i.e.
+> +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
+> +or no test is currently running, but will do nothing.
+
+This is the same wording as above.
+I think it's clearer since what it's trying to convey is simpler, so
+it's probably fine.
+
+But if we do end up thinking of a good way to reword the previous bit,
+we might want to reword it here too.
