@@ -2,91 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895876344A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5381B6344B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234819AbiKVTdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
+        id S232665AbiKVTh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234429AbiKVTdc (ORCPT
+        with ESMTP id S232491AbiKVThz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:33:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D1B25C54;
-        Tue, 22 Nov 2022 11:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ewJjoQL0S/lNHIZz4LCupDwv1iWHwoScCQKkcN/XzFc=; b=XGQjjLHE+GaPoNGTYy+4Y4JZUB
-        4pNmj0d+J/kKV64iJu24lV5KDMwqdkvtAcBsOeTU8BCoVLEX80t8HT/mXERtoMZoszHaSyl46vXgR
-        qqSGV/dVD4Lm2ESzNtDhKR4dthTkq9qiaqDY71OMiGA2JQM/aVK+KDaOAXv88pgeIU01UjyeSVbza
-        J4bKeyIlTTfz/J9MMOB0GIXNiWF9aY5neZuJ4k+wSGl0gj8mgZ61Dn/rnymADGESZbiCUYdSDbDMf
-        gZihxDBp/9gFFZbubVMwJdacxj3Ul1WYGqlMYPNYD9WZbK+ENe9VkGDNZZm0Idh333+OohG04qCKS
-        +G76noiQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxZ1A-003Z8D-VR; Tue, 22 Nov 2022 19:33:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 50A20300445;
-        Tue, 22 Nov 2022 20:33:16 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 349572D2BCFAF; Tue, 22 Nov 2022 20:33:16 +0100 (CET)
-Date:   Tue, 22 Nov 2022 20:33:16 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-mm@kvack.org, seanjc@google.com,
-        pbonzini@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
-Message-ID: <Y30j/EJ9Y1/gWcXo@hirez.programming.kicks-ass.net>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
- <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
- <52b2be9b-defd-63ce-4cb2-96cd624a95a6@intel.com>
- <Y30fUS5/JClpBHVc@hirez.programming.kicks-ass.net>
- <b3938f3a-e4f8-675a-0c0e-4b4618019145@intel.com>
+        Tue, 22 Nov 2022 14:37:55 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB4B220FE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:37:54 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id d6so25049958lfs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:37:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9AgAZ70TrtdzOoBdfiah///XbtqvmKlASUxc0HY4vfg=;
+        b=PPusKsb75SMY/Pl8RNjMt0TEs608oGnvVRmD1no7NYu9GmKsxFm1Hn0YGi0sCT2SDT
+         4Iws8zh5UkoPU8t989AySG8Kb4Ziki8ppBI2gYsrUEuNmViGo5t4GeIkEw50+MrAAaAe
+         UshKght/wjdAKP2K324GTWMCkYfnzJPYs9QedYivQ+vzEcdVswjuMDNcCaDz85XxU/qO
+         wXuCziS3KuhCeAgzmfsHI+3wc8gsPaXwMU8St4YT3SYpbsq2O53V6SfgCH0ExSaEQHxy
+         1gM+KPnryXNI6ceg0obzRNJROLuOkKAZOBMUbKjgG6nq2XZVihiQ9sRyVsUHzm/k0+So
+         JsMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9AgAZ70TrtdzOoBdfiah///XbtqvmKlASUxc0HY4vfg=;
+        b=Ci++PmnWtW0ulZuCQT8dKdYctQd91fHKjgZtnLOT1yUJmF05DZCJFFbsDYW6jC+jih
+         mYMmykg3KpqCY3VIV02T9PZLmehNpQLSf+nrFCvrQurCAXOP666TcWHSepsgdmmFO49p
+         ukJa556NB+R/7JTQEZK3KFeGRUGtCpAXavgUk3tPu+UUJYglupsm0RG4MA8+rDUSJNq1
+         2AV+aL76/ul0z0J95HVEcI3+x2I8ZJCxfvJVY29IPmr6aPH6BnKGkeoG6c5vYeOYd1Fo
+         d+t0wtwN2WRAdo96PMXK1CAKlT33A/5eogtYHz2ZTSMS2bIHYHmUW18zQr0nM6VDaMMC
+         YWsg==
+X-Gm-Message-State: ANoB5pmM8iT+kRmsauiCfTm5sirHM0ACeks9KLYrV/npL40uRe7Yk0Hs
+        oRGJGoV38i36OqHtwZtSFXUcDebMWsHDf+5InEG1eg==
+X-Google-Smtp-Source: AA0mqf6lJbsg3Mf7sHEAxAHI68jovsObt9+78eaUvEuy5xlubIQAjvmFRd8VQdqJoWKfaqIqgG9D7QYeKRcddA3QBJk=
+X-Received: by 2002:a19:384c:0:b0:494:7055:b085 with SMTP id
+ d12-20020a19384c000000b004947055b085mr4857802lfj.109.1669145872368; Tue, 22
+ Nov 2022 11:37:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b3938f3a-e4f8-675a-0c0e-4b4618019145@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Ackerley Tng <ackerleytng@google.com>
+Date:   Tue, 22 Nov 2022 11:37:41 -0800
+Message-ID: <CAEvNRgG0u_DoaTYntu18cSb=ceDDeKKNZdfTPuqp6Q_dmJLiVg@mail.gmail.com>
+Subject: Re: [PATCH v10 047/108] KVM: x86/tdp_mmu: Don't zap private pages for
+ unsupported cases
+To:     isaku.yamahata@intel.com
+Cc:     David Matlack <dmatlack@google.com>,
+        Erdem Aktas <erdemaktas@google.com>, isaku.yamahata@gmail.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, Sagi Shahar <sagis@google.com>,
+        sean.j.christopherson@intel.com,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 11:24:48AM -0800, Dave Hansen wrote:
+Subject: Re: [PATCH v10 047/108] KVM: x86/tdp_mmu: Don't zap private
+pages for unsupported cases
 
-> > Not intialize TDX on busy NOHZ_FULL cpus and hard-limit the cpumask of
-> > all TDX using tasks.
-> 
-> I don't think that works.  As I mentioned to Thomas elsewhere, you don't
-> just need to initialize TDX on the CPUs where it is used.  Before the
-> module will start working you need to initialize it on *all* the CPUs it
-> knows about.  The module itself has a little counter where it tracks
-> this and will refuse to start being useful until it gets called
-> thoroughly enough.
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+>
+> TDX supports only write-back(WB) memory type for private memory
+> architecturally so that (virtualized) memory type change doesn't make sense
+> for private memory.  Also currently, page migration isn't supported for TDX
+> yet. (TDX architecturally supports page migration. it's KVM and kernel
+> implementation issue.)
+>
+> Regarding memory type change (mtrr virtualization and lapic page mapping
+> change), pages are zapped by kvm_zap_gfn_range().  On the next KVM page
+> fault, the SPTE entry with a new memory type for the page is populated.
+> Regarding page migration, pages are zapped by the mmu notifier. On the next
+> KVM page fault, the new migrated page is populated.  Don't zap private
+> pages on unmapping for those two cases.
+>
+> When deleting/moving a KVM memory slot, zap private pages. Typically
+> tearing down VM.  Don't invalidate private page tables. i.e. zap only leaf
+> SPTEs for KVM mmu that has a shared bit mask. The existing
+> kvm_tdp_mmu_invalidate_all_roots() depends on role.invalid with read-lock
+> of mmu_lock so that other vcpu can operate on KVM mmu concurrently.  It
+> marks the root page table invalid and zaps SPTEs of the root page
+> tables. The TDX module doesn't allow to unlink a protected root page table
+> from the hardware and then allocate a new one for it. i.e. replacing a
+> protected root page table.  Instead, zap only leaf SPTEs for KVM mmu with a
+> shared bit mask set.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c     | 85 ++++++++++++++++++++++++++++++++++++--
+>  arch/x86/kvm/mmu/tdp_mmu.c | 24 ++++++++---
+>  arch/x86/kvm/mmu/tdp_mmu.h |  5 ++-
+>  3 files changed, 103 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index faf69774c7ce..0237e143299c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1577,8 +1577,38 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+>  if (kvm_memslots_have_rmaps(kvm))
+>  flush = kvm_handle_gfn_range(kvm, range, kvm_zap_rmap);
+>
+> - if (is_tdp_mmu_enabled(kvm))
+> - flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
+> + if (is_tdp_mmu_enabled(kvm)) {
+> + bool zap_private;
 
-That's bloody terrible, that is. How are we going to make that work with
-the SMT mitigation crud that forces the SMT sibilng offline?
+We should initialize zap_private to true, otherwise zap_private is
+uninitialized in call
 
-Then the counters don't match and TDX won't work.
+    kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, zap_private)
 
-Can we get this limitiation removed and simply let the module throw a
-wobbly (error) when someone tries and use TDX without that logical CPU
-having been properly initialized?
+if the condition
+
+    if (kvm_slot_can_be_private(range->slot)) {
+
+evaluates to false.
+
+> +
+> + if (kvm_slot_can_be_private(range->slot)) {
+> + if (range->flags & KVM_GFN_RANGE_FLAGS_RESTRICTED_MEM)
+> + /*
+> + * For private slot, the callback is triggered
+> + * via falloc.  Mode can be allocation or punch
+> + * hole.  Because the private-shared conversion
+> + * is done via
+> + * KVM_MEMORY_ENCRYPT_REG/UNREG_REGION, we can
+> + * ignore the request from restrictedmem.
+> + */
+> + return flush;
+> + else if (range->flags & KVM_GFN_RANGE_FLAGS_SET_MEM_ATTR) {
+> + if (range->attr == KVM_MEM_ATTR_SHARED)
+> + zap_private = true;
+> + else {
+> + WARN_ON_ONCE(range->attr != KVM_MEM_ATTR_PRIVATE);
+> + zap_private = false;
+> + }
+> + } else
+> + /*
+> + * kvm_unmap_gfn_range() is called via mmu
+> + * notifier.  For now page migration for private
+> + * page isn't supported yet, don't zap private
+> + * pages.
+> + */
+> + zap_private = false;
+> + }
+> + flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, zap_private);
+> + }
+>
+>  return flush;
+>  }
