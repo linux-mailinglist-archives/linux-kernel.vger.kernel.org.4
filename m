@@ -2,146 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB156347FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA706347EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234823AbiKVUSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:18:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S234322AbiKVURu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:17:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbiKVUSL (ORCPT
+        with ESMTP id S234775AbiKVURp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:18:11 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAFEBC82
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:18:09 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhX-0006Qx-Bo; Tue, 22 Nov 2022 21:17:03 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhR-005v1B-UM; Tue, 22 Nov 2022 21:16:58 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxZhS-000s7U-3N; Tue, 22 Nov 2022 21:16:58 +0100
-Date:   Tue, 22 Nov 2022 21:16:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        alsa-devel@alsa-project.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Purism Kernel Team <kernel@puri.sm>,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <20221122201654.5rdaisqho33buibj@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221122185818.3740200d@jic23-huawei>
+        Tue, 22 Nov 2022 15:17:45 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4152DDE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:17:41 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id y4so14746604plb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:17:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fOGHLP5HIj9i23WKx8F5fFOZNnqfBffKUE8KWY64clY=;
+        b=NzS91rjsOTy4kDCWDLyGmvr/liq0C+vIn2YjV7FPq/+cVzAyEUBzFgeBbzmM0vCVV/
+         Y+iw3mdzeZeuWffmnbFvxcH2BksFpC6t5Fyggd/KXkRP/EITa9rqx6cMOQ9+wGoz91/j
+         OVqTCPzqQZSDVS16WuvYwfmJ7QgcEpvttLaBcXeCJgaLi9qDwnl1qgpjK2gp0+3kvQQG
+         /mIrAG/w1qw1D7RFPu2V0lET6GHsd8sD3mcatlRrY/L3YkkDCu+/KEtC/arvJ5/+0HSr
+         Y8L1g6NUlRa7OMA9O6QfvUcUd3k1j1T0kVhad4BkwxWF43mdVjBtDCyvOQDMcWX3U9kc
+         9x7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fOGHLP5HIj9i23WKx8F5fFOZNnqfBffKUE8KWY64clY=;
+        b=HEMga9gluY+EtzJklxInhSQwgrEQY2Df5G2a4rhDxMTTTsws4Upjlu8eSQtjoIMCag
+         hOw9zV0+RvX1qlV0MY2onaKg1A8P/svtBhtO//VRIbgRosiu3g4BzMhmvs4NcIIkobhA
+         azk0wMBCjerz8KoeCeLEbnSxRpgkb6jS3frUnri+gQj8pHjTRyDgGqYGZIJOdrDwxazu
+         b1j0SMePU75uvZJ/ANxHg1WCRmcVFMlzUPLiRBd4J/ObdOQ1vE3qfP8ND9pMHwZ50wVJ
+         9XyCf1VTtKWexuWBUjWTETJqf8yeruzoGCqBdTzpJ4y7lTk+IWYYeOusgNZkPvuN5r+5
+         wG2g==
+X-Gm-Message-State: ANoB5pnVt0+L4prBPQHCTG+C89AVHTzdwsM/gKEYvqy8pG9/ZMqiFniK
+        wfPCRzM029HCIPJwHhRU3vc=
+X-Google-Smtp-Source: AA0mqf5/yZRUWfzUlv412lMPgmSdCkAtoLh+djHTvtSi4lmtwQ3l5XgkObKKpA/+gUDC4sw7olEwdQ==
+X-Received: by 2002:a17:902:cccd:b0:186:fd58:c706 with SMTP id z13-20020a170902cccd00b00186fd58c706mr5786135ple.4.1669148261037;
+        Tue, 22 Nov 2022 12:17:41 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:bb3])
+        by smtp.gmail.com with ESMTPSA id y15-20020a17090264cf00b00188f9534a3esm11050639pli.87.2022.11.22.12.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 12:17:40 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 22 Nov 2022 10:17:39 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v5 3/5] workqueue: Make too_many_workers() return the
+ worker excess
+Message-ID: <Y30uY/Y8pffIhrUp@slm.duckdns.org>
+References: <20221122192937.2386494-1-vschneid@redhat.com>
+ <20221122192937.2386494-4-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t3mjk627u66tfbb3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221122185818.3740200d@jic23-huawei>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221122192937.2386494-4-vschneid@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---t3mjk627u66tfbb3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Nov 22, 2022 at 07:29:35PM +0000, Valentin Schneider wrote:
+...
+> The function currently returns true when
+>   (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO >= nr_busy
+> thus, the desired number of idle workers is expressed by
+>   (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO == nr_busy - 1
+> IOW
+>    nr_idle == ((nr_busy - 1) / MAX_IDLE_WORKERS_RATIO) + 2
+> +/* How many idle workers should we get rid of, if any? */
+> +static unsigned int worker_cull_count(struct worker_pool *pool)
 
-On Tue, Nov 22, 2022 at 06:58:18PM +0000, Jonathan Cameron wrote:
->=20
-> Queued all of the below:
-> with one tweaked as per your suggestion and the highlighted one dropped o=
-n basis
-> I was already carrying the equivalent - as you pointed out.
->=20
-> I was already carrying the required dependency.
->=20
-> Includes the IIO ones in staging.
->=20
-> Thanks,
->=20
-> Jonathan
->=20
-> p.s. I perhaps foolishly did this in a highly manual way so as to
-> also pick up Andy's RB.  So might have dropped one...
+Can we name it nr_workers_to_cull()?
 
-You could have done:
+>  {
+>  	bool managing = pool->flags & POOL_MANAGER_ACTIVE;
+>  	int nr_idle = pool->nr_idle + managing; /* manager is considered idle */
+>  	int nr_busy = pool->nr_workers - nr_idle;
+>  
+> -	return nr_idle > 2 && (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO >= nr_busy;
+> +	lockdep_assert_held(&pool->lock);
+> +
+> +	/*
+> +	 * We keep at least 2 spare idle workers, but overall aim to keep at
+> +	 * most (1 / MAX_IDLE_WORKERS_RATIO) workers idle.
+> +	 */
+> +	return max(0, nr_idle - 2 - ((nr_busy - 1) / MAX_IDLE_WORKERS_RATIO));
 
-	H=3D$(git rev-parse @)
-	b4 am -P 49-190 20221118224540.619276-1-uwe@kleine-koenig.org
-	git am ...
-	git filter-branch -f --msg-filter "grep -v 'Signed-off-by: Jonathan'; echo=
- 'Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>'; echo '=
-Signed-off-by: Jonathan Cameron <jic23@kernel.org>'" $H..
+I think we can do away with the subtraction on nr_busy. I don't think it'd
+make any material difference, so maybe we can do:
 
-(untested, but you get the idea).
+        return max(0, nr_idle - 2 - nr_busy / MAX_IDLE_WORKERS_RATIO);
 
-> Definitely would have been better as one patch per subsystem with
-> a cover letter suitable for replies like Andy's to be picked up
-> by b4.
+Thanks.
 
-Next time I will go for one series per subsystem which I like better
-than one patch per subsystem.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---t3mjk627u66tfbb3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9LjMACgkQwfwUeK3K
-7An96wf/RMtsCSXVJy8BDrXiXMhey9OEm8p08ulRn0lKYlG54KR8nU/s77uuMjGS
-99aUfUU56Abxk02DuBv6N5Bax8nlFyIlUgkfaYPP9iN1TkF5XiucQ0Se4/haYL4A
-q11UqWIcKBS+5BL3K6Bl1Cqv4dPYpRvs99X3jlU6JmhFqJPPhPgAu0p74arSvLie
-kN6wgOGVdCjZTRD+Z7FxfIQPZqvVo7anPAynyk7XfgTXMSAK80JPR2UeMfvQ7yr2
-W28htsacTaJSnPOb1VIrhN8OytpxASYa120EJ8augNmBXC0IzvjosWI0LZnNljAU
-izPd/d6lzDCP0Mz/LU9QCBYUR1jxuQ==
-=KmMu
------END PGP SIGNATURE-----
-
---t3mjk627u66tfbb3--
+-- 
+tejun
