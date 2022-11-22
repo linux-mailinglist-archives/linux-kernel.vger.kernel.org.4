@@ -2,82 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932B2634023
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9363C634026
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbiKVP00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:26:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S233411AbiKVP1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiKVP0W (ORCPT
+        with ESMTP id S233996AbiKVP1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:26:22 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9ED5DBB1;
-        Tue, 22 Nov 2022 07:26:21 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4883021F44;
-        Tue, 22 Nov 2022 15:26:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669130780;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5GGE7FC0VbB9ME+IIY26UDo8Q/8t4dYyVs/bf50QXJc=;
-        b=I3aeFRqRUnN2wMgV/xasqgLeSP1x8Z/ulzGWShP9nINc4tcJ0wrjhcx7zVdEqbx1+g1z9U
-        Gwq6r15krk/L2NExIG94NJArgapusYM9anBKsutrGCO1bQXt7FBxjy+s4SJuArwZsDzZox
-        Lcfe2p1csPxuJvr2F9ma226d1L59wVA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669130780;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5GGE7FC0VbB9ME+IIY26UDo8Q/8t4dYyVs/bf50QXJc=;
-        b=vHgDAT6ikewgH9hIhpgb8W7bSpmJwdgE8gXx+8dQyTzYAqqIsY93TfRROcSSpx+twIj3dr
-        lZAannsW11a9kSDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 161AE13B01;
-        Tue, 22 Nov 2022 15:26:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7SExBBzqfGOXFgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 22 Nov 2022 15:26:20 +0000
-Date:   Tue, 22 Nov 2022 16:25:50 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [PATCH v2] btrfs: normalize the error handling branch in
- btrfs_init_sysfs()
-Message-ID: <20221122152550.GF5824@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20221122115002.1831-1-thunder.leizhen@huawei.com>
+        Tue, 22 Nov 2022 10:27:01 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BB160E90
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:27:00 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id b29so14650108pfp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:27:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3eN8PG1tu0zv6ECYGZ0bUFaylUuOM6J9ZGH6Fn6kJHo=;
+        b=MF2ry8jCjEfJSczD2TlSQRhxgxw/769GkaMOON9oAkxuEIN97YK7PZjef+RkvUqmn6
+         c7AjFerXB1PJT2u2UzDPulK7aXgB17t38IkHEMHHKIogmM4cbG1WwJK6iglP6/5mXOrt
+         JmUu/ADf6amE5NTKz6Npi0hz37SGswSnxd+WcFtY0rB4YMUuwQ2w+DwouTzl4kNxpGZr
+         CrgSBr2d6j1OSLNtjFltNveJZwLExs/unNW9lRX31lK/abl95eV/kH0TDAvbWCtkhje9
+         EkbTVXMgxMLewSuaN4hKU4P4MDuGb074N7xhcU37E00p2MKSPiBCSK+7zoaWT6ce5axZ
+         o2ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3eN8PG1tu0zv6ECYGZ0bUFaylUuOM6J9ZGH6Fn6kJHo=;
+        b=7DNRiFcKn62eVJU/zYUJOP/LtFv+l03SGnFvSITL0Ar6810JPcBAvQ7Yty4swvxQ7R
+         11v1E8t7MzR8hcxGd45KxHDf0P7XiJUwv55xX1+Q9Z4S45hLcgt1KgkOBG0wQ30xGhQu
+         1EQoa2jDVDjhbXwZNN+GlocMQAyDoQQUSLetyOQeeOkJD+sXL1fgBlITs4e1UXx+fhiJ
+         Unk6KV1N6AyfRc5VJwH6XEtwzcDK9n+DTnB+8uPIfjJWVelKX1Usts489CNY/DEAT3Dz
+         8JVqOEmwEOSvYfj0Q5ULLbDRI32cY3V3oxQbWfgiB2AfQMpL5IW1ndgI6ldQkq6Dbbu1
+         wNsw==
+X-Gm-Message-State: ANoB5pkATP4yAY3rq+M6zYmnJKzn3LTyg1rBUsP3ccoLSyNzurBG/d9C
+        bfrcX5LMD03MOwo+yngLP7ibabxkaMx9qg==
+X-Google-Smtp-Source: AA0mqf62k0bqINVN7BK4sgHzvRy7LZL/c5HZpP1IiynzWyp5FdyrjeP2xnyMjAcErD7lncdNpbEc4w==
+X-Received: by 2002:a62:5e41:0:b0:56b:db09:a235 with SMTP id s62-20020a625e41000000b0056bdb09a235mr6211427pfb.20.1669130820272;
+        Tue, 22 Nov 2022 07:27:00 -0800 (PST)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id m9-20020a170902f64900b00176d218889esm12161633plg.228.2022.11.22.07.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 07:26:59 -0800 (PST)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yan Vugenfirer <yan@daynix.com>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH v2] igbvf: Regard vf reset nack as success
+Date:   Wed, 23 Nov 2022 00:26:30 +0900
+Message-Id: <20221122152630.76190-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122115002.1831-1-thunder.leizhen@huawei.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 07:50:02PM +0800, Zhen Lei wrote:
-> Although kset_unregister() can eventually remove all attribute files,
-> explicitly rolling back with the matching function makes the code logic
-> look clearer.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+vf reset nack actually represents the reset operation itself is
+performed but no address is assigned. Therefore, e1000_reset_hw_vf
+should fill the "perm_addr" with the zero address and return success on
+such an occasion. This prevents its callers in netdev.c from saying PF
+still resetting, and instead allows them to correctly report that no
+address is assigned.
 
-Added to misc-next, thanks.
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+---
+ drivers/net/ethernet/intel/igbvf/vf.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/igbvf/vf.c b/drivers/net/ethernet/intel/igbvf/vf.c
+index b8ba3f94c363..2691ae2a8002 100644
+--- a/drivers/net/ethernet/intel/igbvf/vf.c
++++ b/drivers/net/ethernet/intel/igbvf/vf.c
+@@ -1,6 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright(c) 2009 - 2018 Intel Corporation. */
+ 
++#include <linux/etherdevice.h>
++
+ #include "vf.h"
+ 
+ static s32 e1000_check_for_link_vf(struct e1000_hw *hw);
+@@ -131,11 +133,18 @@ static s32 e1000_reset_hw_vf(struct e1000_hw *hw)
+ 		/* set our "perm_addr" based on info provided by PF */
+ 		ret_val = mbx->ops.read_posted(hw, msgbuf, 3);
+ 		if (!ret_val) {
+-			if (msgbuf[0] == (E1000_VF_RESET |
+-					  E1000_VT_MSGTYPE_ACK))
++			switch (msgbuf[0]) {
++			case E1000_VF_RESET | E1000_VT_MSGTYPE_ACK:
+ 				memcpy(hw->mac.perm_addr, addr, ETH_ALEN);
+-			else
++				break;
++
++			case E1000_VF_RESET | E1000_VT_MSGTYPE_NACK:
++				eth_zero_addr(hw->mac.perm_addr);
++				break;
++
++			default:
+ 				ret_val = -E1000_ERR_MAC_INIT;
++			}
+ 		}
+ 	}
+ 
+-- 
+2.38.1
+
