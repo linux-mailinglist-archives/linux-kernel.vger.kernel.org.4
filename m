@@ -2,84 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44ED8633357
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B33633363
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiKVCaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 21:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S230142AbiKVCe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiKVC3f (ORCPT
+        with ESMTP id S231902AbiKVCeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:29:35 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198B261749
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:29:01 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so10768954pjh.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ajce.in; s=google;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zzSpYLOL2FTbKVX+L0OU5nCGrpRqUSbDGNsoeqBPfw0=;
-        b=FwXxYNc8K0gjJ73i4gGkiLWSDm415BPlTIekV/j4ioZnmTeF+/33uvI5bXxqq0PWCj
-         RjhLK7HshsxiGMGX9knG4jAeqJ6h3tzjf4sOrN1UrzJPR2zjn2O7JiB86olIwELzRCNi
-         o8yG6L0CTma3CXVLy5NZalBTfdfo9qRPIM9g8zJNbnQQZBawNELz9rY6mhG7umTuU61R
-         TTYanQ2opEzc604ZWd387Hy1X8bF5kYs6E2TAyMj9SxdohpxccoNRqOiPFvngJC2s1a3
-         R0DRF8/IHdGk6Wg1EJaQxFT1VtGxVf5P6BRRiS20canY9Wj4JsM9oqjVrjloKI4JEcZQ
-         uESg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zzSpYLOL2FTbKVX+L0OU5nCGrpRqUSbDGNsoeqBPfw0=;
-        b=Hih3Kuy2h36mX6PDCiNUOMMVy/DuyRc7Nga3Uds9/1GQVUD5NYtBM2bDyhRvqfchZM
-         6z2eGAXMEYuNsbdx+b8sLh1/WIi9YrOLJg8M+P8EPhw5GOiqzjYSrbc+Ra2nf5s2onoV
-         9+wwW2PxZlFlZBphCC6vaq4zGMQ5rEU1Xj9IddL7eczT0DdHohz/BTuikPaLiXeIB+J/
-         HE2kNIGHNimlc6OOVxgrAvsrDuJHpBDUCYzCfQhGY7xzxeBGxOuYOD8GUcFGGO7E9aaL
-         C9ujPO76li849ZLpxMSCM5OFztPSkYU7QwTzQCjLhd4/8fBtdBpxIH5sW0bcQPIPyRSi
-         2+HQ==
-X-Gm-Message-State: ANoB5pm7bs1baOI0x7RXK0dwYmAMl6QANjYAYmIT9DuPJs9Qw7EbON0p
-        Q3Qvhjdi5V7am2wFXFvFwp8CCSrL9xkJpHkTrfatLDnBwkE7UZHFeRXz/KjqIyUOauRd+PVg21H
-        n11RiCF7fm2JHXZF0ZkBguUEI4Td5ApcDXw==
-X-Google-Smtp-Source: AA0mqf5eZiOdDndKC1rEL5FgBQ3mVRl3/6wg+f5czJ5Wry0mwEE8d7SXS0Vi1WpilQ4pn+d8arAjGWyvhjaeb8YpGD8=
-X-Received: by 2002:a17:902:e886:b0:185:4ec3:c703 with SMTP id
- w6-20020a170902e88600b001854ec3c703mr3528526plg.165.1669084140593; Mon, 21
- Nov 2022 18:29:00 -0800 (PST)
+        Mon, 21 Nov 2022 21:34:21 -0500
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097A8C6552;
+        Mon, 21 Nov 2022 18:34:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1669084454;
+        bh=y8dUXG0ahbuBDGFtK8vzBr0rki8EaISmtZV4JDV5Ex4=;
+        h=From:To:Cc:Subject:Date;
+        b=EzRLpXckSXsSHKZjCy1yekdLxaZdaJ5XS2PEsUSl0F8qptyTKMJJWYTmCHxABusbC
+         pfKz0yCTbz3DKEcT4bpvVmR+buRGnto++i1IkByoSuu4LB4yjrssSzubJs8m5AKuS9
+         D8QiBanNJfsHHX8rZcY3HtrK0TEBfx0IDIHRRZsc=
+Received: from rtoax.. ([111.199.191.46])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id 839B8C0D; Tue, 22 Nov 2022 10:32:57 +0800
+X-QQ-mid: xmsmtpt1669084377tei36yvy4
+Message-ID: <tencent_F9E2E81922B0C181D05B96DAE5AB0ACE6B06@qq.com>
+X-QQ-XMAILINFO: MR/iVh5QLeieyr2QbsunDongdfzrhGIJ+bLN3f9g6GP6VMWWTSIqSORQAwardf
+         gyqdivnb8+TAgRm4HcBEvXm9JxHQdTYp1WMyqPqToc3Va9C9roGeL7LcV0zRiuFRXS7FSXPwhJYY
+         0fEbD/938JUdWjr8AyvfLMU9d43oHhUymu4aucqj+VHQ90UhTMC5c7a43582b5h69/e/GwkEk1/t
+         uv8sIBRHdU1o/H2EN1FdEnMlXLt3ou6xkR6SuyMOWPgx5xGv3KTHGk8Tl0IzQLi79+qLAvOKRvuX
+         F3eogBbYxwCwnRNQtxezdWC18wCilxfo1PxU6ovvypvQUV48sFnnVGTOBSP+KfTJFX82z3mbTLuS
+         jkFFoPD8hk4MKPc0Q69d1nU4ImAiLxAvaplLPt4Ve56K+JoD3mnptPviQD+46D1U9QctdcyGDsUq
+         T1qtw7wFq4WGw/NyN34ky+hPCxf8a/W3l4WNA9rFEYW/OQK4UhkekCi2IosmCLV+csJipRls5IwE
+         gOV3FjrqJW+520iiK/oml5MHdwBMVB4PgynawVEOdytwaVNvjudOgajJLO51CavsewSWTVMwJ9HB
+         Gv9mRfIzxjiwyfSCedfChZvMlkwhhbWWTQPzlp+H2DJTFYGIjuIPaULLKdfPqO25WZdWFikjVNsg
+         XKN4xiC87SIuRxWKqc6StxmNMj7jb58DcWpT0O755/HcczMsIYK/Fd3vbiehwQvV15PLrWSNhc9S
+         NKUTeKc4IOeFcFIZU/i0t2PiHNgp2vOKUwyOO3wg6SMrbJsZFlN0FXenBLl0yhyST6y4vQ89G7Yr
+         eS3iBTUvzPKb4ya5Dl4R8K3iocp35eZLfEMiQjAF6a4v+E0XcjlE9fdgoWHHpOlI18iKwW5XolRu
+         TbGTlNZKfbiZS51f/l8pdW/FujIHcZ8yROq/0kIKJCblzUYcgxt7aL7RK5kIl4FgVCLM5unveBP5
+         kTiicu+VMOpR9415xBm1IhGLVKm9FoUPLLybhh4aNZyWghbCmtLyg89v1ghVAgPAHvK8CvoPk=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     ast@kernel.org
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        netdev@vger.kernel.org (open list:XDP (eXpress Data Path)),
+        bpf@vger.kernel.org (open list:XDP (eXpress Data Path)),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next] samples/bpf: xdp_router_ipv4_user: Fix write overflow
+Date:   Tue, 22 Nov 2022 10:32:56 +0800
+X-OQ-MSGID: <20221122023256.386424-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Received: by 2002:a05:7300:6149:b0:84:e6dd:62cd with HTTP; Mon, 21 Nov 2022
- 18:29:00 -0800 (PST)
-From:   "KEN EMMANUEL JOSE B.Tech MA 2019-2023" 
-        <kenemmanueljose2023@ma.ajce.in>
-Date:   Tue, 22 Nov 2022 07:59:00 +0530
-Message-ID: <CAByN7qSCFvECYScnshzL1SXQ3NcRbStFT6RsWKEaUXYNJaP8zA@mail.gmail.com>
-Subject: Re: justina kayumba
-To:     plauzi <plauzi@gmx.de>, cielo17 <cielo17@gmx.de>,
-        anawarp <anawarp@gmx.de>,
-        linux kernel <linux-kernel@vger.kernel.org>,
-        2 <2@news.t-online.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,GB_FAKE_RF_SHORT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_TONOM_EQ_TOLOC_SHRT_SHRTNER autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-https://bit.ly/3GwZ2qV
+From: Rong Tao <rongtao@cestc.cn>
 
+prefix_key->data allocates three bytes using alloca(), but four bytes are
+accessed in the program.
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ samples/bpf/xdp_router_ipv4_user.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/samples/bpf/xdp_router_ipv4_user.c b/samples/bpf/xdp_router_ipv4_user.c
+index 683913bbf279..9d41db09c480 100644
+--- a/samples/bpf/xdp_router_ipv4_user.c
++++ b/samples/bpf/xdp_router_ipv4_user.c
+@@ -162,7 +162,7 @@ static void read_route(struct nlmsghdr *nh, int nll)
+ 				__be32 gw;
+ 			} *prefix_value;
+ 
+-			prefix_key = alloca(sizeof(*prefix_key) + 3);
++			prefix_key = alloca(sizeof(*prefix_key) + 4);
+ 			prefix_value = alloca(sizeof(*prefix_value));
+ 
+ 			prefix_key->prefixlen = 32;
 -- 
-Disclaimer:
-"The information contained herein (including any accompanying 
-documents) is confidential and is intended solely for the addressee(s). If 
-you have erroneously received this message, please immediately delete it 
-and notify the sender. Also, if you are not the intended recipient, you are 
-hereby notified that any disclosure, copying, distribution or taking any 
-action in reliance on the contents of this message or any accompanying 
-document is strictly prohibited and is unlawful. The organization is not 
-responsible for any damage caused by a virus or alteration of the e-mail by 
-a third party or otherwise. Email security protocols used DMARC, SPF and 
-DKIM.
+2.38.1
+
