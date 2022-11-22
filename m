@@ -2,194 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035556331B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BDE6331C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbiKVBAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S231848AbiKVBDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiKVBAr (ORCPT
+        with ESMTP id S231825AbiKVBD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:00:47 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549CAE0B5F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:00:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669078845; x=1700614845;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PvQkjA4ehVkncDHpcFGDoc74XyVF6zcYCVSLM05CSs4=;
-  b=j4rXSF1ONJ7Fj1rRxEoPZ0nC5KcC1NI89SFzbVHuNefPcC43QmVDsm8r
-   sVyA3VQoHdAc7IWaknjMPttxBVM+kcVuG5GUtvrOMJ+iutQnpk61S40Ho
-   SicWW43oT+36Pb1d+LN+NN/4oSl2Jm6o5B/Loqy4tkP+BbmSb22/ngmCN
-   olJEo3+ngOB1riv2XzL51ivUgnjwhQ39Omz1v2RL6cd0fe6j7fVYwFdcw
-   eQdQzQ/wz3M7JvDyDT+ZzUTvgcL1qjdA4gPehbJTwr+2Q0Fo7y/qEmN2V
-   StSAc6zGc6pDFtC3rl5KpmWmOkXoJ2kMLsrfUyfzHyscBsvPJOwKq/zWP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="377957332"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="377957332"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 17:00:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="747133853"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="747133853"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Nov 2022 17:00:43 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oxHeU-0000uV-38;
-        Tue, 22 Nov 2022 01:00:42 +0000
-Date:   Tue, 22 Nov 2022 09:00:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- ee92fa03918d114d3ac9c36a8bf2c032ede75a3b
-Message-ID: <637c1f34.3JeQKYPcN7AOBzLp%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 21 Nov 2022 20:03:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EECAEA48
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:02:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669078943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TCliI++SK2VwVV/mu+efqGEn8wYMsS23lZMFREzOpN0=;
+        b=BSwQtWjKyOJegHRiB1FVNg5+j4jxWlYhN0lq4FfqA4MewWDycq8hMSH1ofI/V3gkrsp1fi
+        w+HPEvv9TXxKTs5PBbYz0Zon5Qef9k4Vwm/F0m3ZmOSHYQ7mRb/CnG9S9inbFx/HneBIZ9
+        tcTld50RHYYiWBBD5ZlustumT3+zoeI=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-564-i3jr5StxOiaVgXUvqvKDLg-1; Mon, 21 Nov 2022 20:02:22 -0500
+X-MC-Unique: i3jr5StxOiaVgXUvqvKDLg-1
+Received: by mail-pf1-f199.google.com with SMTP id x11-20020a056a000bcb00b0056c6ec11eefso8440524pfu.14
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:02:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TCliI++SK2VwVV/mu+efqGEn8wYMsS23lZMFREzOpN0=;
+        b=AFyko6ye48v/q51cVT9iE+IkOuLOGJlvbOW3VawxtZK+vxpJDaVVYiKMFg4bXmDlZ0
+         fF8zoJyhGzfkXXu6bLqchil70FFMD3PYb6l8DurLpp/lxon7NUSS31CacpiAFJBoVeM0
+         pi0RKFE2cEAMFkblolBE16/bIZI1436eZVn/1ZWVffHVtNQDekPrFP0h1kywDCmRhxm1
+         eBVnlE/00dCJi3xitmicuyYbgktB43y0Q70B1w0rF+GaKJaudFEQ7ck5loWD4rCETgsR
+         WKOhiAqmf+5dq0V2zwzfBagl9ln1TJrqXTdGid9+JqXAFVQEN9c6qMYYl2OYe4bGY75Z
+         Cgwg==
+X-Gm-Message-State: ANoB5pky3SOwtjcZ6DqL7IIQX9ox3aIa6yEkla3j5euN6FZ8pHmWeIQR
+        6S+lRWd4OnHhy8pbj5RE/XYtVXBVOEyMM1xVtp6x7381Hi0Vz/trBDgwSK7f4WK/c9DDZWsXhH4
+        Hdx2u0F0MMHlZx3JpotJNzFj9rM2lfi5yY1CwMZ8BOfDqeY83Ojei82Pi5tcy69lDsnO7C/f+lw
+        ==
+X-Received: by 2002:a17:902:aa44:b0:189:fdf:a3d9 with SMTP id c4-20020a170902aa4400b001890fdfa3d9mr12342230plr.9.1669078940935;
+        Mon, 21 Nov 2022 17:02:20 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5O6IFyyfSw7LoXbfb4uwV76C9iA2jeH6mN+OGq5TnncolVxXSYhHP5kr4vQZ22bw1Qb6nxaQ==
+X-Received: by 2002:a17:902:aa44:b0:189:fdf:a3d9 with SMTP id c4-20020a170902aa4400b001890fdfa3d9mr12342192plr.9.1669078940509;
+        Mon, 21 Nov 2022 17:02:20 -0800 (PST)
+Received: from [10.72.12.200] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id om10-20020a17090b3a8a00b001fde655225fsm521612pjb.2.2022.11.21.17.02.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 17:02:19 -0800 (PST)
+Subject: Re: [PATCH v2] ceph: make sure directories aren't complete after
+ setting crypt context
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221121180004.8038-1-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <fbce8a0b-340b-0d82-ffbc-1245e30876f9@redhat.com>
+Date:   Tue, 22 Nov 2022 09:02:15 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221121180004.8038-1-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/cleanups
-branch HEAD: ee92fa03918d114d3ac9c36a8bf2c032ede75a3b  x86/kaslr: Fix process_mem_region()'s return value
 
-elapsed time: 3365m
+On 22/11/2022 02:00, Luís Henriques wrote:
+> When setting a directory's crypt context, __ceph_dir_clear_complete() needs
+> to be used otherwise, if it was complete before, any old dentry that's still
+> around will be valid.
+>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+> Hi Xiubo!
+>
+> I've added the __fscrypt_prepare_readdir() wrapper as you suggested, but I
+> had to change it slightly because we also need to handle the error cases.
+>
+> Changes since v1:
+> - Moved the __ceph_dir_clear_complete() call from ceph_crypt_get_context()
+>    to ceph_lookup().
+> - Added an __fscrypt_prepare_readdir() wrapper to check key status changes
+>
+>   fs/ceph/dir.c | 31 ++++++++++++++++++++++++++++---
+>   1 file changed, 28 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+> index edc2bf0aab83..2cac7e3ab352 100644
+> --- a/fs/ceph/dir.c
+> +++ b/fs/ceph/dir.c
+> @@ -763,6 +763,27 @@ static bool is_root_ceph_dentry(struct inode *inode, struct dentry *dentry)
+>   		strncmp(dentry->d_name.name, ".ceph", 5) == 0;
+>   }
+>   
+> +/*
+> + * Simple wrapper around __fscrypt_prepare_readdir() that will return:
+> + *
+> + * - '1' if directory was locked and key is now loaded (i.e. dir is unlocked),
+> + * - '0' if directory is still locked, or
+> + * - an error (< 0) if __fscrypt_prepare_readdir() fails.
+> + */
+> +static int ceph_fscrypt_prepare_readdir(struct inode *dir)
+> +{
+> +	bool had_key = fscrypt_has_encryption_key(dir);
+> +	int err;
+> +
+> +	err = __fscrypt_prepare_readdir(dir);
+> +	if (err)
+> +		return err;
+> +	/* is directory now unlocked? */
+> +	if (!had_key && fscrypt_has_encryption_key(dir))
+> +		return 1;
+> +	return 0;
+> +}
+> +
+>   /*
+>    * Look up a single dir entry.  If there is a lookup intent, inform
+>    * the MDS so that it gets our 'caps wanted' value in a single op.
+> @@ -784,10 +805,14 @@ static struct dentry *ceph_lookup(struct inode *dir, struct dentry *dentry,
+>   		return ERR_PTR(-ENAMETOOLONG);
+>   
+>   	if (IS_ENCRYPTED(dir)) {
+> -		err = __fscrypt_prepare_readdir(dir);
+> -		if (err)
+> +		err = ceph_fscrypt_prepare_readdir(dir);
+> +		if (err < 0)
+>   			return ERR_PTR(err);
+> -		if (!fscrypt_has_encryption_key(dir)) {
+> +		if (err) {
+> +			/* directory just got unlocked */
+> +			__ceph_dir_clear_complete(ceph_inode(dir));
 
-configs tested: 110
-configs skipped: 78
+Luis,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Could we just move this into ceph_fscrypt_prepare_readdir() ? IMO we 
+should always clear the complete flag always whenever the key is first 
+loaded.
 
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                            allnoconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-i386                             allyesconfig
-i386                                defconfig
-sh                            migor_defconfig
-sh                          urquell_defconfig
-arm                                 defconfig
-arm                              allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-i386                 randconfig-a014-20221121
-i386                 randconfig-a011-20221121
-i386                 randconfig-a013-20221121
-i386                 randconfig-a016-20221121
-i386                 randconfig-a012-20221121
-i386                 randconfig-a015-20221121
-arc                              allyesconfig
-i386                          randconfig-c001
-x86_64               randconfig-a011-20221121
-x86_64               randconfig-a014-20221121
-x86_64               randconfig-a012-20221121
-x86_64               randconfig-a013-20221121
-x86_64               randconfig-a016-20221121
-x86_64               randconfig-a015-20221121
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-mips                      loongson3_defconfig
-csky                                defconfig
-powerpc                      ppc6xx_defconfig
-sh                             espt_defconfig
-arm                              allmodconfig
-arm                           corgi_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-s390                 randconfig-r044-20221121
-riscv                randconfig-r042-20221121
-arc                  randconfig-r043-20221121
-arc                  randconfig-r043-20221120
-powerpc                     sequoia_defconfig
-arm                        shmobile_defconfig
-arm                      footbridge_defconfig
-powerpc                       eiger_defconfig
-sh                        sh7763rdp_defconfig
-m68k                            q40_defconfig
-powerpc                 mpc85xx_cds_defconfig
-powerpc                 mpc837x_mds_defconfig
-ia64                             allmodconfig
-m68k                          hp300_defconfig
-arm                        realview_defconfig
-powerpc                    sam440ep_defconfig
-sh                         ap325rxa_defconfig
-arm                            hisi_defconfig
-sh                          sdk7786_defconfig
-sparc                       sparc64_defconfig
-sh                          rsk7264_defconfig
-sh                           se7712_defconfig
-m68k                        m5272c3_defconfig
-arm                         nhk8815_defconfig
-arm64                               defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-ia64                                defconfig
-sparc                               defconfig
-x86_64                                  kexec
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20221120
+> +		} else {
+> +			/* no encryption key */
 
-clang tested configs:
-x86_64               randconfig-a002-20221121
-x86_64               randconfig-a001-20221121
-x86_64               randconfig-a004-20221121
-x86_64               randconfig-a006-20221121
-x86_64               randconfig-a005-20221121
-x86_64               randconfig-a003-20221121
-i386                 randconfig-a001-20221121
-i386                 randconfig-a005-20221121
-i386                 randconfig-a006-20221121
-i386                 randconfig-a004-20221121
-i386                 randconfig-a003-20221121
-i386                 randconfig-a002-20221121
-x86_64                        randconfig-k001
-arm                                 defconfig
-arm                          pxa168_defconfig
-riscv                          rv32_defconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc                    mvme5100_defconfig
-arm                         bcm2835_defconfig
-arm                         lpc32xx_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-powerpc                    gamecube_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                        neponset_defconfig
-powerpc                     ksi8560_defconfig
+I think you also need to fix all the other places, which are calling the 
+__fscrypt_prepare_readdir() or fscrypt_prepare_readdir() in ceph. 
+Because we don't know the ceph_lookup() will always be the first caller 
+to trigger __fscrypt_prepare_readdir() for a dir.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks!
+
+- Xiubo
+
+>   			spin_lock(&dentry->d_lock);
+>   			dentry->d_flags |= DCACHE_NOKEY_NAME;
+>   			spin_unlock(&dentry->d_lock);
+>
+
