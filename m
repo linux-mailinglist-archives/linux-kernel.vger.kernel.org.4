@@ -2,169 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47629633CCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C38C633CCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbiKVMrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
+        id S233163AbiKVMrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233237AbiKVMrH (ORCPT
+        with ESMTP id S233072AbiKVMrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:47:07 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7773B5BD47;
-        Tue, 22 Nov 2022 04:47:06 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C9BE1FB;
-        Tue, 22 Nov 2022 04:47:12 -0800 (PST)
-Received: from [10.57.71.118] (unknown [10.57.71.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AED973F73B;
-        Tue, 22 Nov 2022 04:47:01 -0800 (PST)
-Message-ID: <916a6953-d9b4-c257-c08b-f5277ead71af@arm.com>
-Date:   Tue, 22 Nov 2022 12:46:56 +0000
+        Tue, 22 Nov 2022 07:47:17 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3451C402
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:47:16 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3A92E21D3F;
+        Tue, 22 Nov 2022 12:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669121235; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YsI7A9SUK5qB234FSuBPSK2EHGVG9qNw7j4AtLZMBFs=;
+        b=HcI0V97JVESYsYCFrZMA/9XvAVxNCGjH531cFEv8+9xWNpmt9D+e/kJ+ADeycemTTztcdD
+        1pBn8cOQ0yiSWUGagYyz+qRPQju7a+IIWQyxk5MIsYdMbEKzpAcNwK69SL5gXPH3rNSRiA
+        0bRVi+M2wb9wNR4jnIHvyhfPLfQyViI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DEDFA13B01;
+        Tue, 22 Nov 2022 12:47:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6TL5NNLEfGMtNAAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 22 Nov 2022 12:47:14 +0000
+Message-ID: <f56663a5-30bd-fa59-34cb-883bf53088d5@suse.com>
+Date:   Tue, 22 Nov 2022 13:47:14 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH RFC v2 5/7] arm64: dts: imx: fix touchscreen reset GPIO
- polarity
-Content-Language: en-GB
-To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        David Jander <david@protonic.nl>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Quentin Schulz <foss+kernel@0leil.net>,
-        "Angus Ainslie (Purism)" <angus@akkea.ca>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Samuel Holland <samuel@sholland.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org
-References: <20221103-upstream-goodix-reset-v2-0-2c38fb03a300@theobroma-systems.com>
- <20221103-upstream-goodix-reset-v2-5-2c38fb03a300@theobroma-systems.com>
- <CAOMZO5BzWsHAy7KjZe+KEiXVq-Mfpggqjk0vswuzx7nkups3gA@mail.gmail.com>
- <20221122081851.6cb762d8@erd992>
- <907b9321-14dc-dc99-80fc-e1a20ee33a1e@theobroma-systems.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <907b9321-14dc-dc99-80fc-e1a20ee33a1e@theobroma-systems.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 0/5] x86: Switch X86_FEATURE_XENPV to
+ cpu_feature_enabled() use
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Pu Wen <puwen@hygon.cn>
+References: <20221104072701.20283-1-jgross@suse.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20221104072701.20283-1-jgross@suse.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------BM67QrvznezM2snUWc094p0n"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-22 09:58, Quentin Schulz wrote:
-> Hi David,
-> 
-> Thanks Fabio for the Cc.
-> 
-> On 11/22/22 08:18, David Jander wrote:
->> On Mon, 21 Nov 2022 15:18:32 -0300
->> Fabio Estevam <festevam@gmail.com> wrote:
->>
->>> [Adding Angus and David]
->>
->> Thanks. This was apparently necessary ;-)
->>
->>> On Mon, Nov 21, 2022 at 3:12 PM Quentin Schulz 
->>> <foss+kernel@0leil.net> wrote:
->>>>
->>>> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
->>>>
->>>> The reset line is active low for the Goodix touchscreen controller so
->>>> let's fix the polarity in the Device Tree node.
->>>>
->>>> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
->>>> ---
->>>>   arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts         | 2 +-
->>>>   arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dts | 2 +-
->>>>   2 files changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts 
->>>> b/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
->>>> index 9fbbbb556c0b3..df7e5ae9698e1 100644
->>>> --- a/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
->>>> +++ b/arch/arm64/boot/dts/freescale/imx8mm-prt8mm.dts
->>>> @@ -107,7 +107,7 @@ touchscreeen@5d {
->>>>                  interrupt-parent = <&gpio1>;
->>>>                  interrupts = <8 IRQ_TYPE_NONE>;
->>>>                  irq-gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
->>>> -               reset-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
->>>> +               reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
->>
->> NACK!
->>
->> The PRT8MM has an inverter in the reset line. The reason for that is 
->> that the
->> reset line needs to be inactive when the driving side is unpowered.
->> The DT was correct, this change will break it.
->>
-> 
-> The DT was correct. The implementation in the driver is changed (the 
-> polarity is swapped) in this patch series, therefore the DT isn't 
-> correct anymore, hence this patch.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------BM67QrvznezM2snUWc094p0n
+Content-Type: multipart/mixed; boundary="------------DY0Si20AgKhX1epXJ30fV0Ic";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+ x86@kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Pu Wen <puwen@hygon.cn>
+Message-ID: <f56663a5-30bd-fa59-34cb-883bf53088d5@suse.com>
+Subject: Re: [PATCH v2 0/5] x86: Switch X86_FEATURE_XENPV to
+ cpu_feature_enabled() use
+References: <20221104072701.20283-1-jgross@suse.com>
+In-Reply-To: <20221104072701.20283-1-jgross@suse.com>
 
-I'm not sure it's quite that simple... FWIW I'm using an add-on LCD 
-module with a GT9271[1] (and I won't be the only one - Raspberry Pi and 
-other SBC users using DT overlays or custom-built DTBs are a whole other 
-can of worms here), where GPIO_ACTIVE_LOW is correctly specified per the 
-schematics, thus "wrong" for the current driver behaviour, yet it *is* 
-working OK as-is. I guess that's because /RSTB ends up driven low for 
-long enough between the current "deassertion" by 
-gpiod_direction_output(1) and gpiod_direction_input() allowing the 
-external pull-up to take it high again.
+--------------DY0Si20AgKhX1epXJ30fV0Ic
+Content-Type: multipart/mixed; boundary="------------E5GA5WyRnhJiGBCZDpezveYm"
 
-Robin.
+--------------E5GA5WyRnhJiGBCZDpezveYm
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-[1] 
-https://www.friendlyelec.com/index.php?route=product/product&path=81&product_id=230
+T24gMDQuMTEuMjIgMDg6MjYsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IE1ha2UgZXNwZWNp
+YWxseSBrZXJuZWxzIHdpdGhvdXQgQ09ORklHX1hFTl9QViBtb3JlIGVmZmljaWVudCBieQ0K
+PiB1c2luZyBjcHVfZmVhdHVyZV9lbmFibGVkKFg4Nl9GRUFUVVJFX1hFTlBWKSBpbnN0ZWFk
+IG9mIGJvb3RfY3B1X2hhcygpDQo+IGFuZCBmcmllbmRzLg0KPiANCj4gQ2hhbmdlcyBpbiBW
+MjoNCj4gLSBuZXcgcGF0Y2ggNA0KPiANCj4gSnVlcmdlbiBHcm9zcyAoNSk6DQo+ICAgIHg4
+NjogYWRkIFg4Nl9GRUFUVVJFX1hFTlBWIHRvIGRpc2FibGVkLWZlYXR1cmVzLmgNCj4gICAg
+eDg2OiByZW1vdmUgdW5uZWVkZWQgNjQtYml0IGRlcGVuZGVuY3kgaW4gYXJjaF9lbnRlcl9m
+cm9tX3VzZXJfbW9kZSgpDQo+ICAgIHg4NjogZHJvcCAzMi1iaXQgWGVuIFBWIGd1ZXN0IGNv
+ZGUgaW4gdXBkYXRlX3Rhc2tfc3RhY2soKQ0KPiAgICB4ODY6IHJlbW92ZSBYODZfRkVBVFVS
+RV9YRU5QViB1c2FnZSBpbiBzZXR1cF9jcHVfZW50cnlfYXJlYSgpDQo+ICAgIHg4Njogc3dp
+dGNoIHRvIGNwdV9mZWF0dXJlX2VuYWJsZWQoKSBmb3IgWDg2X0ZFQVRVUkVfWEVOUFYNCj4g
+DQo+ICAgYXJjaC94ODYvaW5jbHVkZS9hc20vZGlzYWJsZWQtZmVhdHVyZXMuaCB8IDggKysr
+KysrKy0NCj4gICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9lbnRyeS1jb21tb24uaCAgICAgIHwg
+NCArKy0tDQo+ICAgYXJjaC94ODYvaW5jbHVkZS9hc20vc3dpdGNoX3RvLmggICAgICAgICB8
+IDcgKystLS0tLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9jcHUvYW1kLmMgICAgICAgICAgICAg
+ICAgfCAyICstDQo+ICAgYXJjaC94ODYva2VybmVsL2NwdS9idWdzLmMgICAgICAgICAgICAg
+ICB8IDIgKy0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L2h5Z29uLmMgICAgICAgICAgICAg
+IHwgMiArLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9wcm9jZXNzXzY0LmMgICAgICAgICAgICAg
+fCA0ICsrLS0NCj4gICBhcmNoL3g4Ni9rZXJuZWwvdG9wb2xvZ3kuYyAgICAgICAgICAgICAg
+IHwgMiArLQ0KPiAgIGFyY2gveDg2L21tL2NwdV9lbnRyeV9hcmVhLmMgICAgICAgICAgICAg
+fCA4ICsrLS0tLS0tDQo+ICAgOSBmaWxlcyBjaGFuZ2VkLCAxOSBpbnNlcnRpb25zKCspLCAy
+MCBkZWxldGlvbnMoLSkNCj4gDQoNClRoZSBwYXRjaGVzIGhhdmUgYWxsIGFuICJBY2siIGJ5
+IERhdmUuIEkgdGhpbmsgdGhpcyBzZXJpZXMgc2hvdWxkIGdvIGluDQp2aWEgdGhlIHRpcCB0
+cmVlLCBubz8NCg0KDQpKdWVyZ2VuDQo=
+--------------E5GA5WyRnhJiGBCZDpezveYm
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> See 
-> https://lore.kernel.org/linux-input/20221103-upstream-goodix-reset-v2-0-2c38fb03a300@theobroma-systems.com/ for the whole patch series.
-> 
-> This DT patch alone is obviously incorrect, but the context around it 
-> matters. I could/should have made it all into one big patch, the 
-> question is then how this big tree-crossing patch would be merged into 
-> Linux (if there's consensus). We're not there yet.
-> 
-> For some additional background on the discussion that was had in the v1:
-> https://lore.kernel.org/all/267de96a-0129-a97d-9bf6-e1001b422a1a@theobroma-systems.com/
-> I messed up the Cc list in the v1, apologies for the missing context in 
-> the archived mails, I think one should be able to understand the 
-> important bits by reading the answers in-mail. There, Dmitry, Hans and I 
-> discussed the meaning of the active level of GPIOs/reset lines and I 
-> expressed the reasons for such a change (which are also listed in the 
-> cover letter of this patch series).
-> 
-> As stated in v1 cover letter, no implementation will satisfy every one. 
-> We either make the DT binding implementation specific (which is what it 
-> shouldn't be), or we swap the polarity in the Linux implementation and 
-> thus the DT but then break DT backward compatibility.
-> 
-> Cheers,
-> Quentin
-> 
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------E5GA5WyRnhJiGBCZDpezveYm--
+
+--------------DY0Si20AgKhX1epXJ30fV0Ic--
+
+--------------BM67QrvznezM2snUWc094p0n
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmN8xNIFAwAAAAAACgkQsN6d1ii/Ey+X
+Zgf+Kyl5SsflAy66qlgC+7jxck3nSUVruLb5t+QS9ovIZUCboi2QQopfEtZqI2aNaAVuQSUjNTKQ
+tJnBHduslM0ZEdNA9o3bOTKajo4Uweh7ruP5lq93jsaSc2cvj0TnjSbStk8O1b+VN+vaAO94vmwG
+qVUZ1stQtYRQ1x92zvMYX5Nk1oRlcSIBsVjSk23QU0D4+iFqUpV+/Jo8u+YKrxp7gZulXpD3vUMX
+AeegrU2HZKPHDsuD9ax3LFZ/YIILqJCxdrkIjNb+DhynYR9GsQqvPYWa9mMId/kyvCvhX3Rv1lpi
+UZezHAhtybIkPo77jldrjQQKu+IsDgKSSINmXwx58g==
+=gZnK
+-----END PGP SIGNATURE-----
+
+--------------BM67QrvznezM2snUWc094p0n--
