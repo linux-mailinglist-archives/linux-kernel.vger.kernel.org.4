@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13FE633C24
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61443633C28
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbiKVMLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S233662AbiKVMMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbiKVMLM (ORCPT
+        with ESMTP id S233638AbiKVML6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:11:12 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F064877B;
-        Tue, 22 Nov 2022 04:11:10 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        Tue, 22 Nov 2022 07:11:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD34909A;
+        Tue, 22 Nov 2022 04:11:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NGjld0LlWz8RV7H;
-        Tue, 22 Nov 2022 20:11:09 +0800 (CST)
-Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
-        by mse-fl1.zte.com.cn with SMTP id 2AMCAvUB099604;
-        Tue, 22 Nov 2022 20:10:57 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Tue, 22 Nov 2022 20:11:00 +0800 (CST)
-Date:   Tue, 22 Nov 2022 20:11:00 +0800 (CST)
-X-Zmail-TransId: 2b04637cbc54ffffffffd22e5c5b
-X-Mailer: Zmail v1.0
-Message-ID: <202211222011006572179@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <mingo@redhat.com>
-Cc:     <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <irogers@google.com>, <james.clark@arm.com>,
-        <kan.liang@linux.intel.com>, <zhengjun.xing@linux.intel.com>,
-        <cjense@google.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHBlcmYgc3RhdDogdXNlIHN5c2ZzX3N0cmVxKCkgaW5zdGVhZCBvZiBzdHJuY21wKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2AMCAvUB099604
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 637CBC5D.000 by FangMail milter!
-X-FangMail-Envelope: 1669119069/4NGjld0LlWz8RV7H/637CBC5D.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 637CBC5D.000/4NGjld0LlWz8RV7H
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 927CFB81A2B;
+        Tue, 22 Nov 2022 12:11:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0CAC433D6;
+        Tue, 22 Nov 2022 12:11:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669119115;
+        bh=/z2qc1uI3NebpB+3mdpORi9OgnUkruCxcihYdbzhGfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LCSLPsPV1TsmwjswLnlBTU41wJkwd41DU8kdtiaYBnVJv634uH9MOk0NoA76eC+oi
+         U+46gP8aiYGvbh662QqZpD3JKN5vslPYicfa2JdHCc/Xe8+8i1xExPBi4+D5PL+Qgg
+         r/aatccaQB9XqeQ7zIcWRIifspD1wk2xkDbdia71FlCG5GB2F6tAQwnvATm/Wqp6Ix
+         Uju7+L5Ei4rvBK0k4elikJeTwLpDrPNV96uxJnkKYuDLgh6f+UDLNLivieY6GYG+7W
+         +MmQylF8N2Rhbhm8KAeOcBCyqtzNcKtvF4XX56z0p7ktYsk67LO1Y3uyJZG7Z8uAFI
+         PCCM3MfhUGTjQ==
+Date:   Tue, 22 Nov 2022 12:11:49 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jerome Neanne <jerome.neanne@baylibre.com>,
+        Andrew Davis <afd@ti.com>, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] dt-bindings: Move fixed string node names under
+ 'properties'
+Message-ID: <Y3y8hTosK8UNTL7K@sirena.org.uk>
+References: <20221118223708.1721134-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lDjTxj1SUPsxEEKH"
+Content-Disposition: inline
+In-Reply-To: <20221118223708.1721134-1-robh@kernel.org>
+X-Cookie: That's what she said.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
 
-Replace the open-code with sysfs_streq().
+--lDjTxj1SUPsxEEKH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- tools/perf/util/stat-display.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On Fri, Nov 18, 2022 at 04:37:07PM -0600, Rob Herring wrote:
+> Fixed string node names should be under 'properties' rather than
+> 'patternProperties'. Additionally, without beginning and end of line
+> anchors, any prefix or suffix is allowed on the specified node name.
+> These cases don't appear to want a prefix or suffix, so move them under
+> 'properties'.
 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index f5501760ff2e..1fd9f7e9d2a1 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -463,7 +463,7 @@ static bool valid_only_metric(const char *unit)
- static const char *fixunit(char *buf, struct evsel *evsel,
- 			   const char *unit)
- {
--	if (!strncmp(unit, "of all", 6)) {
-+	if (sysfs_streq(unit, "of all")) {
- 		snprintf(buf, 1024, "%s %s", evsel__name(evsel),
- 			 unit);
- 		return buf;
-@@ -767,8 +767,7 @@ static void uniquify_event_name(struct evsel *counter)
- 	int ret = 0;
+Acked-by: Mark Brown <broonie@kernel.org>
 
- 	if (counter->uniquified_name || counter->use_config_name ||
--	    !counter->pmu_name || !strncmp(counter->name, counter->pmu_name,
--					   strlen(counter->pmu_name)))
-+	    !counter->pmu_name || sysfs_streq(counter->name, counter->pmu_name))
- 		return;
+--lDjTxj1SUPsxEEKH
+Content-Type: application/pgp-signature; name="signature.asc"
 
- 	config = strchr(counter->name, '/');
--- 
-2.15.2
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN8vIQACgkQJNaLcl1U
+h9Ae0Qf/emE9/oA+dPnGHlis/IeySfRJD4RM1Am+LSJBAqwrpx85Z6Q2H2bURwJQ
+ZWw+Q234RANSgC5arbh8/luVB0Z0UYs21FfnyBefSZvA5FlW1JHt+jpHcM6f9fdS
+vB8r+afbJpNRpfQG3OUg9uIcugKdi3uie/TGzzILDNa9OvJ+FHZG6m5RrPO31xMQ
+S4CYuu/MJFRq92V7Ra2SOxHjAn+p3kjXzCizHBdcia0DQRdRGORVZPzBqVpSGxhb
+QEaiE7P+yYW9oQy8sVIb/ChjUMjY4w3SJr/+IAIhrpxV4DtueO7Gc+rP47PsHDoA
+I13D2nJht2ZuzW11fCfbkTnuYTY0HA==
+=4gKN
+-----END PGP SIGNATURE-----
+
+--lDjTxj1SUPsxEEKH--
