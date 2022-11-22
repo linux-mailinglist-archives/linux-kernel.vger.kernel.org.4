@@ -2,94 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A216C633D57
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CE6633D5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbiKVNQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S233760AbiKVNRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbiKVNQM (ORCPT
+        with ESMTP id S233714AbiKVNQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:16:12 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450402793F;
-        Tue, 22 Nov 2022 05:16:10 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8BF7D58045D;
-        Tue, 22 Nov 2022 08:16:07 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 22 Nov 2022 08:16:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1669122967; x=1669130167; bh=Fsuy/mZZ5T
-        5z+jQhn8xTVdY1LMGSEK1rG+fURdRPHdE=; b=WHL0dDUY9huUqeJ3XElkRvY99G
-        5KKp34kqvZzwAXdz3qWSTP8dkduKL4X6BZrHOUjjKhHFrbnOafMSX40l9hgSvGYd
-        llKjD8KuxUZ5LhSSdvGWRtY2Gnl4Egjxhnw7US/YqRHdhR/w9SCtA3p4WqeD6aH5
-        qd37+5xOqS25Lbv7SM5hRwV1HCbUtrXMUJR55HsgtZWEkXEZg8Ph4IbmSnyFoYZ/
-        OJQN2VQJETBIKGVKNzY2YutaJoXd6ze/IfpET6/cIPNPO3S4n2OKfphnRGHb0UL+
-        X+d73WODat2vuPj8if2mWEGkOdbZM0JeHRjf9SSlw5mTA2Gd9BPmzw4OMTmg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669122967; x=1669130167; bh=Fsuy/mZZ5T5z+jQhn8xTVdY1LMGS
-        EK1rG+fURdRPHdE=; b=qHd2V94U8jhBOKm1F7zG+lP/0ILwVHOalPWyK84pceBd
-        UChe3Mf4j27Hui5G+5GS29eMaylydiIUnLzfbXHH0I21p1BH+8dAuVHfI8suGZY0
-        PgrRJKZb4aogD3REueoucsglMtfXJ/jT5OfK+2wwZo6U+ADoTNYirlm6Y8/NFUe0
-        R0qt/VLUqmbvopkmPdgQJR5SMcFBbGGX3gdtbGg5IHZjYKyhxUXZDxOHnB/fE5+Z
-        Lp+PYcph9ac+hcCx38TM75RZtbPrR9mWdv7ICcEfyuCTwBW6IqsiddfjmdTnm3E/
-        w3iCi1e7ozKZUqqDPCl/jJi9iTtnR28ICXUrEyFjcg==
-X-ME-Sender: <xms:lct8Y2KIz5BbdA7Y0eEPA5En7mn2GEt8jhrByQ2yONAtxwh01FB3Fw>
-    <xme:lct8Y-I5MxsZRT8j4kyxa66PaWA8bZo1UDUarFGnwFhGlIRqB3GbWf0W-b6a65IfS
-    2jI0XJkXWLQySxPhaM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheelgddvudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:lct8Y2sJieowFyuaIn7MFFzTsfhKZmpFGTW0srEMHdPs_irOCAEXzw>
-    <xmx:lct8Y7aQVrgFCgyf3CmQdlDJJ2Iry5NEwXwRZZmmPhiafTvZFVsMdw>
-    <xmx:lct8Y9bl6rpaXksVoY01AWgzzkjax4Tu3vysj6w-KHPP3DDLO44xbQ>
-    <xmx:l8t8YxL9v1HssDbcgzDPEdxXDokY03uaja4qBZkPqf9YxCXxT44WGQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C95B5B60098; Tue, 22 Nov 2022 08:16:05 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <024e0a68-bb79-4e2e-84f8-f44afb759cdd@app.fastmail.com>
-In-Reply-To: <20221122125244.175295-1-tudor.ambarus@microchip.com>
-References: <20221122125244.175295-1-tudor.ambarus@microchip.com>
-Date:   Tue, 22 Nov 2022 14:15:45 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Tudor Ambarus" <tudor.ambarus@microchip.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-Cc:     herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
-        "Mark Brown" <broonie@kernel.org>, qyousef@layalina.io,
-        "Atish Patra" <atishp@atishpatra.org>,
-        "Anup Patel" <anup@brainfault.org>, tkhai@ya.ru,
-        quic_abhinavk@quicinc.com, vasily.averin@linux.dev,
-        baolin.wang@linux.alibaba.com, colin.i.king@gmail.com,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        pratyush@kernel.org, "Michael Walle" <michael@walle.cc>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        "Richard Weinberger" <richard@nod.at>
-Subject: Re: [PATCH] MAINTAINERS: Update email of Tudor Ambarus
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Tue, 22 Nov 2022 08:16:58 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56FBE43;
+        Tue, 22 Nov 2022 05:16:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5YKddbVH+BPkPtVxrSUx3wA/jy8L3/XYxRl/IOTGxlk=; b=oJOoz2DfzxaiKweE3bwmPSkfvo
+        zr4WGycVik6FM1VQKYwEF8sYkdE9ZEpIyaLdqfyq7ME8DBpd1qEZgABtbYyjhWiKsVvj/Tw/wrN2V
+        pf0mIPqbfz4st/D4FDN6hBo7P7duphvCzcejlAvKykrsIcW6Ngegr1LBQQfxk8duVsh3IgIU8EERM
+        j28zcIlspf1e9pxe9UgkP84wM3cMAj9hHxyJor7YpZOS2mN5ewtSNG82hRV4RgoGvRqawcFmFJOOA
+        rwpf7ApQg2k/RJ2VHSvAhke21xulK4q0dfNlmBFn6tOBXoI9vdl7Y66FxVtNF5pnjzt5FfIZctA6u
+        BI4bkHog==;
+Received: from [177.102.6.147] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oxT8q-006x5N-8b; Tue, 22 Nov 2022 14:16:48 +0100
+Message-ID: <d32e7b3d-31f3-9699-1eee-c1e3b2839fe2@igalia.com>
+Date:   Tue, 22 Nov 2022 10:16:41 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH] ftrace: Prevent RCU stall on PREEMPT_VOLUNTARY kernels
+Content-Language: en-US
+To:     rostedt@goodmis.org
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20221115204847.593616-1-gpiccoli@igalia.com>
+ <20221116153620.353819e9c6acb1bf39adeca2@kernel.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221116153620.353819e9c6acb1bf39adeca2@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,32 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022, at 13:52, Tudor Ambarus wrote:
-> My professional email will change and the microchip one will bounce after
-> mid-november of 2022.
->
-> Update the MAINTAINERS file, the YAML bindings, MODULE_AUTHOR entries and
-> author mentions, and add an entry in the .mailmap file.
->
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+On 16/11/2022 03:36, Masami Hiramatsu (Google) wrote:
+> On Tue, 15 Nov 2022 17:48:47 -0300
+> "Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
+> 
+>> The function match_records() may take a while due to a large
+>> number of string comparisons, so when in PREEMPT_VOLUNTARY
+>> kernels we could face RCU stalls due to that.
+>>
+>> Add a cond_resched() to prevent that.
+>>
+>> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+>> Acked-by: Paul E. McKenney <paulmck@kernel.org> # from RCU CPU stall warning perspective
+>> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> This looks good to me.
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Thanks!
+> 
 
-I can take this through the fixes branch of the SoC tree if that
-works for everyone. Alternatively, I can take only the MAINTAINERS
-and .mailmap bits and expect the other changes to get merged
-by the devicetree and crypto maintainers for 6.2.
+Hi Steve, apologies for the ping, just want to ask you if you plan to
+take this one or should I change something? Thanks in advance,
 
-      Arnd
 
-> ---
->  .mailmap                                               |  1 +
->  .../bindings/crypto/atmel,at91sam9g46-aes.yaml         |  2 +-
->  .../bindings/crypto/atmel,at91sam9g46-sha.yaml         |  2 +-
->  .../bindings/crypto/atmel,at91sam9g46-tdes.yaml        |  2 +-
->  .../devicetree/bindings/spi/atmel,at91rm9200-spi.yaml  |  2 +-
->  .../devicetree/bindings/spi/atmel,quadspi.yaml         |  2 +-
->  MAINTAINERS                                            | 10 +++++-----
->  drivers/crypto/atmel-ecc.c                             |  4 ++--
->  drivers/crypto/atmel-i2c.c                             |  4 ++--
->  drivers/crypto/atmel-i2c.h                             |  2 +-
->  10 files changed, 16 insertions(+), 15 deletions(-)
->
+Guilherme
