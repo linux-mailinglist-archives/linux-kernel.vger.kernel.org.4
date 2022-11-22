@@ -2,137 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0C16335B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8636335B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbiKVHLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S232230AbiKVHLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiKVHLL (ORCPT
+        with ESMTP id S229750AbiKVHLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:11:11 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C56E30F61
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:11:10 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id n12so33612210eja.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:11:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+YQZ2hTVZG//Smv0UAJil8HcNjDm9fqYOaWpiHV3raQ=;
-        b=RIUIkfrIA9DeE/cXt6YCUZ14WVUaMQTT10RshgDoBVM0bqyZhY99kvEX1J8x0Trsit
-         V/N+2Sn3MZuIEBmwrzUYlfSA+7hF+zw0eEZbW5rsidZnFIiFV43ym5oNIoKwvwzbSrDz
-         0GRG8b3K7Rw0umPsICLDwJKfgMJmZYx5Yx4+VSFJOS+EPZG1uuvzDWCeTPhackYoGC1e
-         2KzqByEDOt96I19cl5znJ0yGBUgnns7qJ7bODtMLLJJnSaf/OHyU1sg285qNfiaviy7A
-         /Y2aqvMBmdCxTtVbTX7SJ0phTYROtGb4Nk9bVjn+l9UhrmT8i3C3+59AfZAYGP0g7FTI
-         V9lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+YQZ2hTVZG//Smv0UAJil8HcNjDm9fqYOaWpiHV3raQ=;
-        b=edC09BJ3TX+7aUFUeQenXMg7BOMJ5bSR42slCEJXbNkTctFYR/S/tYOx8D1wlti8PB
-         2WPzfygcFh8Pap8JtVehgrWlZ9lx/ZfxP8EPTaCCozXBd0jz9JlpKb5anE7qrni2BMqY
-         fLxeUF2jceqb/A4oXbOp9zt1TEaBlSJG/xaHpEDhL93/GnM4QdGoUn2Firj1RvpTay+i
-         qh0R8fY7C+487nJDJ7MuPZvxH8QLn+UjJgHMZdiA5hIxq6oyG539Zlx56BzZfVhPDeNA
-         9moaQKUBl3aN1yCo9NduLLJ42E4M+XHmQ4ig2+EbFobHj3iBitqyuB0qkREih+/MZk1X
-         Y40g==
-X-Gm-Message-State: ANoB5pljv0Z66sKjK7+wD0vZ0vvUefFs+FImSUpy/pcxAq4koTNAery3
-        +03NYHSGtykRUZUnEU4Dg4I=
-X-Google-Smtp-Source: AA0mqf7wO9QHpkg9aMg6mqgapaLMG0G1cFWqGX1z0bJ8RWlMKLSg7ZGmwTP6HdXSPNhDDLLyazCFPQ==
-X-Received: by 2002:a17:906:945a:b0:7a8:3597:34a8 with SMTP id z26-20020a170906945a00b007a8359734a8mr2136771ejx.628.1669101068857;
-        Mon, 21 Nov 2022 23:11:08 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id q16-20020a17090676d000b0077d37a5d401sm5758693ejn.33.2022.11.21.23.11.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 23:11:08 -0800 (PST)
-Date:   Tue, 22 Nov 2022 10:11:05 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>
-Subject: drivers/cpuidle/cpuidle-riscv-sbi.c:506 sbi_genpd_probe() warn:
- missing error code 'ret'
-Message-ID: <202211220541.Ck9NkitJ-lkp@intel.com>
+        Tue, 22 Nov 2022 02:11:44 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3CB303EF;
+        Mon, 21 Nov 2022 23:11:42 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VVR4.1Q_1669101096;
+Received: from 30.221.132.69(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VVR4.1Q_1669101096)
+          by smtp.aliyun-inc.com;
+          Tue, 22 Nov 2022 15:11:38 +0800
+Message-ID: <74d26daa-69cb-41bf-5a33-229c95521536@linux.alibaba.com>
+Date:   Tue, 22 Nov 2022 15:11:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH RFC 0/6] Add metrics for neoverse-n2
+To:     James Clark <james.clark@arm.com>,
+        nick Forrington <Nick.Forrington@arm.com>,
+        Jumana MP <Jumana.MP@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Will Deacon <will@kernel.org>, Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <d6553087-9157-21e8-6980-31bc8e44f066@arm.com>
+ <d334a33c-b171-8381-3f75-e47392b6cba5@linux.alibaba.com>
+ <107dda1a-6053-ea35-1e29-96ee6d049eb1@arm.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <107dda1a-6053-ea35-1e29-96ee6d049eb1@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
-commit: f81f7861ee2aaa6f652f18e8f622547bdd379724 cpuidle: riscv: support non-SMP config
-date:   7 months ago
-config: riscv-randconfig-m031-20221121
-compiler: riscv64-linux-gcc (GCC) 12.1.0
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
 
-smatch warnings:
-drivers/cpuidle/cpuidle-riscv-sbi.c:506 sbi_genpd_probe() warn: missing error code 'ret'
+在 2022/11/21 下午7:51, James Clark 写道:
+> 
+> 
+> On 16/11/2022 15:26, Jing Zhang wrote:
+>>
+>>
+>> 在 2022/11/16 下午7:19, James Clark 写道:
+>>>
+>>>
+>>> On 31/10/2022 11:11, Jing Zhang wrote:
+>>>> This series add six metricgroups for neoverse-n2, among which, the
+>>>> formula of topdown L1 is from the document:
+>>>> https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
+>>>>
+>>>> Since neoverse-n2 does not yet support topdown L2, metricgroups such
+>>>> as Cache, TLB, Branch, InstructionsMix, and PEutilization are added to
+>>>> help further analysis of performance bottlenecks.
+>>>>
+>>>
+>>> Hi Jing,
+>>>
+>>> Thanks for working on this, these metrics look ok to me in general,
+>>> although we're currently working on publishing standardised metrics
+>>> across all new cores as part of a new project in Arm. This will include
+>>> N2, and our ones are very similar (or almost identical) to yours,
+>>> barring slightly different group names, metric names, and differences in
+>>> things like outputting topdown metrics as percentages.
+>>>
+>>> We plan to publish our standard metrics some time in the next 2 months.
+>>> Would you consider holding off on merging this change so that we have
+>>> consistant group names and units going forward? Otherwise N2 would be> the odd one out. I will send you the metrics when they are ready, and we
+>>> will have a script to generate perf jsons from them, so you can review.
+>>>
+>>
+>> Do you mean that after you release the new standard metrics, I remake my
+>> patch referring to them, such as consistent group names and unit?
+> 
+> Hi Jing,
+> 
+> I was planning to submit the patch myself, but there will be a script to
+> generate perf json files, so no manual work would be needed. Although
+> this is complicated by the fact that we won't be publishing the fixed
+> TopdownL1 metrics that you have for the existing N2 silicon so there
+> would be a one time copy paste to fix that part.
+> 
+>>
+>>
+>>> We also have a slightly different forumula for one of the top down
+>>> metrics which I think would be slightly more accurate. We don't have
+>>
+>>
+>> The v2 version of the patchset updated the formula of topdown L1.
+>> Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
+>>
+>> The formula of the v2 version is more accurate than v1, and it has been
+>> verified in our test environment. Can you share your formula first and we
+>> can discuss it together? :)
+> 
+> I was looking at v2 but replied to the root of the thread by mistake. I
+> also had it the wrong way round. So your version corrects for the errata
+> on the current version of N2 (as you mentioned in the commit message).
+> Our version would be if there is a future new silicon revision with that
+> fixed, but it does have an extra improvement by subtracting the branch
+> mispredicts.
+> 
+> Perf doesn't currently match the jsons based on silicon revision, so
+> we'd have to add something in for that if a fixed silicon version is
+> released. But this is another problem for another time.
+> 
 
-vim +/ret +506 drivers/cpuidle/cpuidle-riscv-sbi.c
+Hi James,
 
-6abf32f1d9c500 Anup Patel 2022-02-10  481  static int sbi_genpd_probe(struct device_node *np)
-6abf32f1d9c500 Anup Patel 2022-02-10  482  {
-6abf32f1d9c500 Anup Patel 2022-02-10  483  	struct device_node *node;
-6abf32f1d9c500 Anup Patel 2022-02-10  484  	int ret = 0, pd_count = 0;
-6abf32f1d9c500 Anup Patel 2022-02-10  485  
-6abf32f1d9c500 Anup Patel 2022-02-10  486  	if (!np)
-6abf32f1d9c500 Anup Patel 2022-02-10  487  		return -ENODEV;
-6abf32f1d9c500 Anup Patel 2022-02-10  488  
-6abf32f1d9c500 Anup Patel 2022-02-10  489  	/*
-6abf32f1d9c500 Anup Patel 2022-02-10  490  	 * Parse child nodes for the "#power-domain-cells" property and
-6abf32f1d9c500 Anup Patel 2022-02-10  491  	 * initialize a genpd/genpd-of-provider pair when it's found.
-6abf32f1d9c500 Anup Patel 2022-02-10  492  	 */
-6abf32f1d9c500 Anup Patel 2022-02-10  493  	for_each_child_of_node(np, node) {
-6abf32f1d9c500 Anup Patel 2022-02-10  494  		if (!of_find_property(node, "#power-domain-cells", NULL))
-6abf32f1d9c500 Anup Patel 2022-02-10  495  			continue;
-6abf32f1d9c500 Anup Patel 2022-02-10  496  
-6abf32f1d9c500 Anup Patel 2022-02-10  497  		ret = sbi_pd_init(node);
-6abf32f1d9c500 Anup Patel 2022-02-10  498  		if (ret)
-6abf32f1d9c500 Anup Patel 2022-02-10  499  			goto put_node;
-6abf32f1d9c500 Anup Patel 2022-02-10  500  
-6abf32f1d9c500 Anup Patel 2022-02-10  501  		pd_count++;
-6abf32f1d9c500 Anup Patel 2022-02-10  502  	}
-6abf32f1d9c500 Anup Patel 2022-02-10  503  
-6abf32f1d9c500 Anup Patel 2022-02-10  504  	/* Bail out if not using the hierarchical CPU topology. */
-6abf32f1d9c500 Anup Patel 2022-02-10  505  	if (!pd_count)
-6abf32f1d9c500 Anup Patel 2022-02-10 @506  		goto no_pd;
+Let's do what Ian said, and you can improve it later with the standard metrics,
+after the fixed silicon version is released.
 
-Error code?
 
-6abf32f1d9c500 Anup Patel 2022-02-10  507  
-6abf32f1d9c500 Anup Patel 2022-02-10  508  	/* Link genpd masters/subdomains to model the CPU topology. */
-6abf32f1d9c500 Anup Patel 2022-02-10  509  	ret = dt_idle_pd_init_topology(np);
-6abf32f1d9c500 Anup Patel 2022-02-10  510  	if (ret)
-6abf32f1d9c500 Anup Patel 2022-02-10  511  		goto remove_pd;
-6abf32f1d9c500 Anup Patel 2022-02-10  512  
-6abf32f1d9c500 Anup Patel 2022-02-10  513  	return 0;
-6abf32f1d9c500 Anup Patel 2022-02-10  514  
-6abf32f1d9c500 Anup Patel 2022-02-10  515  put_node:
-6abf32f1d9c500 Anup Patel 2022-02-10  516  	of_node_put(node);
-6abf32f1d9c500 Anup Patel 2022-02-10  517  remove_pd:
-6abf32f1d9c500 Anup Patel 2022-02-10  518  	sbi_pd_remove();
-6abf32f1d9c500 Anup Patel 2022-02-10  519  	pr_err("failed to create CPU PM domains ret=%d\n", ret);
-6abf32f1d9c500 Anup Patel 2022-02-10  520  no_pd:
-6abf32f1d9c500 Anup Patel 2022-02-10  521  	return ret;
-6abf32f1d9c500 Anup Patel 2022-02-10  522  }
+> This is the frontend bound metric we have for future revisions:
+> 
+> 	"100 * ( (STALL_SLOT_FRONTEND/(CPU_CYCLES * 5)) - ((BR_MIS_PRED *
+> 4)/CPU_CYCLES) )"
+> 
+> Other changes are, for example, your 'wasted' metric, we have
+> 'bad_speculation', and without the
+> cycles subtraction:
+> 
+> 	100 * ( ((1 - (OP_RETIRED/OP_SPEC)) * (1 - (STALL_SLOT/(CPU_CYCLES *
+> 5)))) + ((BR_MIS_PRED * 4)/CPU_CYCLES) )
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks for sharing your metric version, But I still wonder, is BR_MIS_PRED not classified
+as frontend bound? How do you judge the extra improvement by subtracting branch mispredicts?
 
+> And some more details filled in around the units, for example:
+> 
+>     {
+>         "MetricName": "bad_speculation",
+>         "MetricExpr": "100 * ( ((1 - (OP_RETIRED/OP_SPEC)) * (1 -
+> (STALL_SLOT/(CPU_CYCLES * 5)))) + ((BR_MIS_PRED * 4)/CPU_CYCLES) )",
+>         "BriefDescription": "Bad Speculation",
+>         "PublicDescription": "This metric is the percentage of total
+> slots that executed operations and didn't retire due to a pipeline
+> flush.\nThis indicates cycles that were utilized but inefficiently.",
+>         "MetricGroup": "TopdownL1",
+>         "ScaleUnit": "1percent of slots"
+>     },
+> 
+
+My "wasted" metric was changed according to the arm documentation description, it was originally
+"bad_speculation".  I will change "wasted" back to "bad_speculation", if you wish.
+
+
+Thanks,
+Jing
+
+
+> So ignoring the errata issue, the main reason to hold off is for
+> consistency and churn because these metrics in this format will be
+> released for all cores going forwards.
+> 
+> Thanks
+> James
+> 
