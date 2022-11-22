@@ -2,106 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609CF634050
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EC1634052
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbiKVPgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
+        id S232701AbiKVPgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbiKVPfw (ORCPT
+        with ESMTP id S234034AbiKVPgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:35:52 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BF3716D8;
-        Tue, 22 Nov 2022 07:35:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669131337; x=1700667337;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2tW2G1a+1TR8Etq8K8ec13/rDo30wsBLYx7iORND+kY=;
-  b=DiDdvOVivO+wOoiOJDU5c1Maa7/lzAJNMaDhRH/aDflTV//NYyx51e5F
-   FOQX6oBnZW0Jj814nMl8sAz94v4uwNsipO9cS0lBDDrnBHnUS2IBGbDkn
-   gNbZAqwLUxqEcY1bM8ZtGejGG8EUXfs/Z0iUqQ2KxsyDqvzOusIIQARWK
-   sIjOIAatk/OvkaekOgjb+cSjuhuc6OMBNtqy2v8b55QG0UTr75Kl9g8xF
-   PZgngfTH5rLSWL+RtIhhb48VPVBpeJ7Lp7Xp5r/U/q5x04My/qnKpdJAT
-   23gOAOZ4zPPyJ3KNVgQWi5KBreF1/IKg/V2V2aKOqZS8wRZw041W0AlXW
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="314991383"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="314991383"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:35:36 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="592179088"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="592179088"
-Received: from lcano-mobl1.amr.corp.intel.com (HELO [10.255.231.75]) ([10.255.231.75])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:35:34 -0800
-Message-ID: <19d93ff0-df0d-dc9d-654b-a9ca6f7be1d0@intel.com>
-Date:   Tue, 22 Nov 2022 07:35:33 -0800
+        Tue, 22 Nov 2022 10:36:02 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80AA70193
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:35:43 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id y12-20020a056e021bec00b00302a7d5bc83so8956324ilv.16
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:35:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FybAGmp4BbsPjSoEeGjsL2UWXFm29CqL7tXapCANqIc=;
+        b=k7mSU/V6j7AwqUg/LFU/4aDZJvq3a65CMs4gS4rONoSCV2DxytH8c5wPapPq052Q0l
+         yuX4JZUfhOW/QWV6ae2IqryuyEi7P/scNx44LD5aQcRTlJFNNXxcLWa6ImlbTGbkFcrW
+         KTtSRicCXQCDQgtI3YB0g3u7rQ7cjGQrIEBe6bSqMRI0lG2EgLsa6SD9NZvZV1fhNGxE
+         kNAPAabuNksP4GU93LygqT7nP5KA1VGt1UA0X7L/Hd8hSBzcptELIpePtY9qgQGf0olX
+         L80uMmGOPaihg+W0pAhymuQS4i/JyOkwMa/oO/ffNSVsSSXEBU9IMczJti4aRzqZW0VA
+         4TBQ==
+X-Gm-Message-State: ANoB5pn26GNH91RzZFNDHKiUrLZ0pXF3pF9JOojU2n3vIOqsJ9xOHbSP
+        w83AlojSHK39QDoG9SmVoPiyG48KOg7sRrN8SeAY6IlUyZz1
+X-Google-Smtp-Source: AA0mqf5g7k/nFJPRGTnZdfeeydh62nJVXo1KeUOY4LE5TL48czuCU3II59FpuD8+o24q7J6r7iFr+EoA3rSuYkEnEjXJw9BuTqpf
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 04/20] x86/virt/tdx: Add skeleton to initialize TDX on
- demand
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com,
-        tony.luck@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1668988357.git.kai.huang@intel.com>
- <d26254af8e5b3dcca8a070703c5d6d04f48d47a9.1668988357.git.kai.huang@intel.com>
- <Y3yQKDZFC8+oCyqK@hirez.programming.kicks-ass.net> <87edtvgu1l.ffs@tglx>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <87edtvgu1l.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:a604:0:b0:6de:353:ab43 with SMTP id
+ q4-20020a5ea604000000b006de0353ab43mr2182230ioi.40.1669131343153; Tue, 22 Nov
+ 2022 07:35:43 -0800 (PST)
+Date:   Tue, 22 Nov 2022 07:35:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cad14205ee10ec87@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in p9_client_disconnect
+From:   syzbot <syzbot+ea8b28e8dca42fc3bcbe@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, davem@davemloft.net, edumazet@google.com,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 02:31, Thomas Gleixner wrote:
-> Nothing in the TDX specs and docs mentions physical hotplug or a
-> requirement for invoking seamcall on the world.
+Hello,
 
-The TDX module source is actually out there[1] for us to look at.  It's
-in a lovely, convenient zip file, but you can read it if sufficiently
-motivated.
+syzbot found the following issue on:
 
-It has this lovely nugget in it:
+HEAD commit:    a77d28d13789 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=113a41f9880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c4c990190d758078
+dashboard link: https://syzkaller.appspot.com/bug?extid=ea8b28e8dca42fc3bcbe
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-WARNING!!! Proprietary License!!  Avert your virgin eyes!!!
+Unfortunately, I don't have any reproducer for this issue yet.
 
->     if (tdx_global_data_ptr->num_of_init_lps < tdx_global_data_ptr->num_of_lps)
->     {
->         TDX_ERROR("Num of initialized lps %d is smaller than total num of lps %d\n",
->                     tdx_global_data_ptr->num_of_init_lps, tdx_global_data_ptr->num_of_lps);
->         retval = TDX_SYS_CONFIG_NOT_PENDING;
->         goto EXIT;
->     }
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7c4b04ddbeb3/disk-a77d28d1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3ecedb0cf6ca/vmlinux-a77d28d1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/44c59c4393c7/Image-a77d28d1.gz.xz
 
-tdx_global_data_ptr->num_of_init_lps is incremented at TDH.SYS.INIT
-time.  That if() is called at TDH.SYS.CONFIG time to help bring the
-module up.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ea8b28e8dca42fc3bcbe@syzkaller.appspotmail.com
 
-So, I think you're right.  I don't see the docs that actually *explain*
-this "you must seamcall all the things" requirement.
+Unable to handle kernel paging request at virtual address 0032503900080052
+Mem abort info:
+  ESR = 0x0000000096000044
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000044
+  CM = 0, WnR = 1
+[0032503900080052] address between user and kernel address ranges
+Internal error: Oops: 0000000096000044 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3127 Comm: syz-executor.1 Not tainted 6.1.0-rc6-syzkaller-32651-ga77d28d13789 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : p9_client_disconnect+0x1c/0x30 net/9p/client.c:1067
+lr : p9_client_disconnect+0x18/0x30 net/9p/client.c:1065
+sp : ffff800013c43ca0
+x29: ffff800013c43ca0 x28: ffff0000f2cc8000 x27: 0000000000000000
+x26: 00000000000000c0 x25: 0000000000000002 x24: ffff80000d3ad050
+x23: ffff80000d3a9000 x22: 0000000000000000 x21: 0000000000000000
+x20: ffff000105870300 x19: 3032503900080002 x18: 0000000000000369
+x17: 53006964623d4d45 x16: ffff80000dc18158 x15: ffff0000f2cc8000
+x14: 0000000000000008 x13: 00000000ffffffff x12: ffff0000f2cc8000
+x11: ff8080000be9c0e0 x10: 0000000000000000 x9 : ffff80000be9c0e0
+x8 : 0000000000000002 x7 : ffff80000c058c98 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0000f2cc8000 x1 : ffff80000cede3e6 x0 : 3032503900080002
+Call trace:
+ p9_client_disconnect+0x1c/0x30
+ v9fs_session_cancel+0x20/0x30 fs/9p/v9fs.c:530
+ v9fs_kill_super+0x2c/0x50 fs/9p/vfs_super.c:225
+ deactivate_locked_super+0x70/0xe8 fs/super.c:332
+ deactivate_super+0xd0/0xd4 fs/super.c:363
+ cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
+ __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+ task_work_run+0x100/0x148 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: 910003fd aa0003f3 9710261f 52800048 (b9005268) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	910003fd 	mov	x29, sp
+   4:	aa0003f3 	mov	x19, x0
+   8:	9710261f 	bl	0xfffffffffc409884
+   c:	52800048 	mov	w8, #0x2                   	// #2
+* 10:	b9005268 	str	w8, [x19, #80] <-- trapping instruction
 
-1.
-https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
