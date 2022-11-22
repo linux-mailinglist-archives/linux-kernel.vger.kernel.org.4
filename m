@@ -2,98 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A1B633E27
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B26633E10
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbiKVNxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S233873AbiKVNtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbiKVNxl (ORCPT
+        with ESMTP id S233868AbiKVNtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:53:41 -0500
-X-Greylist: delayed 308 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 05:53:39 PST
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2165B66CAC;
-        Tue, 22 Nov 2022 05:53:38 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowAD3_Owo03xjp0jmAA--.15220S2;
-        Tue, 22 Nov 2022 21:48:24 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     srinivas.pandruvada@linux.intel.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] HID: intel_ish-hid: Add check for ishtp_dma_tx_map
-Date:   Tue, 22 Nov 2022 21:48:23 +0800
-Message-Id: <20221122134823.540-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 22 Nov 2022 08:49:49 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BE158BCB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:49:47 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id b29so14386829pfp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:49:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+P2ivfSFXLbWzT9PHNfJTpLAcw4nHOZdoUpRgaAM1gU=;
+        b=fDTk2qBn/jf665HzklH6UgrbxkjDpJ1nhbZZBgIiVScnJcuXM3dqCYTfA66iUL7d1x
+         xgp39O/842vNtoP/98WyzKWLw/dcDoDblPngnaWUJY6UCUjh+MNdk9IWbRswPEOumalm
+         nG1/Fn8QT3qrhSs4GytV3EDzuY3esaC2eBpPKzpeZZheNCn2OqaExxIvpoX+lud+gMOs
+         v9gaaMdzSvUCSBUMK0suNy/jtdG6sm37k/K7+kZlYmpo1ebgMYGur7k6cVJnoZZI2Ugn
+         EyLqmBY8YLX09KmIwumwT7K7E+ZCgi4aqO7TAH0fx6gcN0yt1Wz33S9O9NPWy3nO4+CS
+         RF6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+P2ivfSFXLbWzT9PHNfJTpLAcw4nHOZdoUpRgaAM1gU=;
+        b=HQVvGjlA7SaUn8yx4fox93ILKHw3+NtEGa3d2E+T1X2qYVknZKxFil72VjB7ICYY6e
+         coQyf98m17jJInTF0tB+pqurbemgj+rhlWQWbyH1jNIO1kbjuGRG6HhZbw1ZR6zHPCm2
+         TsZaKXnC2prfYiRNfdef9jUNKrDWR2plwhwGLidOLEWeX5iXwoy6Rn5tg7GB8AXYbKrS
+         rWpRATXZdIN9sxJZQv/xMJBd/kBa/XPrmWcxplmvQufwOr2waqxAmL3aFmqmUzLex27n
+         nJ8yTyZWS2VhVAt4JsAJPWsv1itLAKfaPDKLY1+vKKki3x5CjX5EHrhOaYnIpYYLsrl2
+         Y0jw==
+X-Gm-Message-State: ANoB5pnR4qR3RQVvpJX075Inhq09XKorKyWy5C3TNdSXTmwMj/bFQUOt
+        jkjkBWAJPsAHLcbbj25g6lvYMmx9knL7
+X-Google-Smtp-Source: AA0mqf6xYGN0spP0aEoAK/0g3HTZzm3Evd3m91jBxcfLOeUT1xue0xoWw7S+r9p8/Vt32ziS0YkKpA==
+X-Received: by 2002:aa7:9e5d:0:b0:54c:9e75:ab7 with SMTP id z29-20020aa79e5d000000b0054c9e750ab7mr4471439pfq.82.1669124987338;
+        Tue, 22 Nov 2022 05:49:47 -0800 (PST)
+Received: from thinkpad ([59.92.98.84])
+        by smtp.gmail.com with ESMTPSA id jb4-20020a170903258400b00186b86ed450sm11953991plb.156.2022.11.22.05.49.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 05:49:46 -0800 (PST)
+Date:   Tue, 22 Nov 2022 19:19:41 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     vidyas@nvidia.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, lpieralisi@kernel.org,
+        bhelgaas@google.com
+Subject: Re: [PATCH v4 2/5] PCI: tegra194: Move dw_pcie_ep_linkup() to
+ threaded IRQ handler
+Message-ID: <20221122134941.GC157542@thinkpad>
+References: <20221025145101.116393-1-manivannan.sadhasivam@linaro.org>
+ <20221025145101.116393-3-manivannan.sadhasivam@linaro.org>
+ <20221114110654.GL3869@thinkpad>
+ <20221114110820.GM3869@thinkpad>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAD3_Owo03xjp0jmAA--.15220S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFW8Aw4rXFyDCr43tF43Wrg_yoW8GFW5pF
-        4rJFyYkryjvw1xu34xJ3W5u3WruwnYgrW8GrZ7Kw1UZ3W3tF1UG3WDJFyYgr1vgF45J34I
-        9FsIyay3CF48XaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xr4l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUjyxRUUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221114110820.GM3869@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the kcalloc may return NULL pointer,
-it should be better to check the ishtp_dma_tx_map
-before use in order to avoid NULL pointer dereference.
+On Mon, Nov 14, 2022 at 04:38:20PM +0530, Manivannan Sadhasivam wrote:
+> On Mon, Nov 14, 2022 at 04:37:00PM +0530, Manivannan Sadhasivam wrote:
+> > On Tue, Oct 25, 2022 at 08:20:58PM +0530, Manivannan Sadhasivam wrote:
+> > > dw_pcie_ep_linkup() may take more time to execute depending on the EPF
+> > > driver implementation. Calling this API in the hard IRQ handler is not
+> > > encouraged since the hard IRQ handlers are supposed to complete quickly.
+> > > 
+> > > So move the dw_pcie_ep_linkup() call to threaded IRQ handler.
+> > > 
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
+> Sorry for resending it (something messed up with my email client).
+> 
+> Vidya, can you please review this patch?
+> 
 
-Fixes: 3703f53b99e4 ("HID: intel_ish-hid: ISH Transport layer")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/hid/intel-ish-hid/ishtp/dma-if.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Ping!
 
-diff --git a/drivers/hid/intel-ish-hid/ishtp/dma-if.c b/drivers/hid/intel-ish-hid/ishtp/dma-if.c
-index 40554c8daca0..00046cbfd4ed 100644
---- a/drivers/hid/intel-ish-hid/ishtp/dma-if.c
-+++ b/drivers/hid/intel-ish-hid/ishtp/dma-if.c
-@@ -104,6 +104,11 @@ void *ishtp_cl_get_dma_send_buf(struct ishtp_device *dev,
- 	int required_slots = (size / DMA_SLOT_SIZE)
- 		+ 1 * (size % DMA_SLOT_SIZE != 0);
- 
-+	if (!dev->ishtp_dma_tx_map) {
-+		dev_err(dev->devc, "Fail to allocate Tx map\n");
-+		return NULL;
-+	}
-+
- 	spin_lock_irqsave(&dev->ishtp_dma_tx_lock, flags);
- 	for (i = 0; i <= (dev->ishtp_dma_num_slots - required_slots); i++) {
- 		free = 1;
-@@ -150,6 +155,11 @@ void ishtp_cl_release_dma_acked_mem(struct ishtp_device *dev,
- 		return;
- 	}
- 
-+	if (!dev->ishtp_dma_tx_map) {
-+		dev_err(dev->devc, "Fail to allocate Tx map\n");
-+		return;
-+	}
-+
- 	i = (msg_addr - dev->ishtp_host_dma_tx_buf) / DMA_SLOT_SIZE;
- 	spin_lock_irqsave(&dev->ishtp_dma_tx_lock, flags);
- 	for (j = 0; j < acked_slots; j++) {
+Thanks,
+Mani
+
+> Thanks,
+> Mani
+> 
+> > > ---
+> > >  drivers/pci/controller/dwc/pcie-tegra194.c | 9 +++++++--
+> > >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> > > index 1b6b437823d2..a0d231b7a435 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> > > @@ -287,6 +287,7 @@ struct tegra_pcie_dw {
+> > >  	struct gpio_desc *pex_refclk_sel_gpiod;
+> > >  	unsigned int pex_rst_irq;
+> > >  	int ep_state;
+> > > +	long link_status;
+> > >  };
+> > >  
+> > >  static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
+> > > @@ -450,9 +451,13 @@ static void pex_ep_event_hot_rst_done(struct tegra_pcie_dw *pcie)
+> > >  static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
+> > >  {
+> > >  	struct tegra_pcie_dw *pcie = arg;
+> > > +	struct dw_pcie_ep *ep = &pcie->pci.ep;
+> > >  	struct dw_pcie *pci = &pcie->pci;
+> > >  	u32 val, speed;
+> > >  
+> > > +	if (test_and_clear_bit(0, &pcie->link_status))
+> > > +		dw_pcie_ep_linkup(ep);
+> > > +
+> > >  	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+> > >  		PCI_EXP_LNKSTA_CLS;
+> > >  	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+> > > @@ -499,7 +504,6 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
+> > >  static irqreturn_t tegra_pcie_ep_hard_irq(int irq, void *arg)
+> > >  {
+> > >  	struct tegra_pcie_dw *pcie = arg;
+> > > -	struct dw_pcie_ep *ep = &pcie->pci.ep;
+> > >  	int spurious = 1;
+> > >  	u32 status_l0, status_l1, link_status;
+> > >  
+> > > @@ -515,7 +519,8 @@ static irqreturn_t tegra_pcie_ep_hard_irq(int irq, void *arg)
+> > >  			link_status = appl_readl(pcie, APPL_LINK_STATUS);
+> > >  			if (link_status & APPL_LINK_STATUS_RDLH_LINK_UP) {
+> > >  				dev_dbg(pcie->dev, "Link is up with Host\n");
+> > > -				dw_pcie_ep_linkup(ep);
+> > > +				set_bit(0, &pcie->link_status);
+> > > +				return IRQ_WAKE_THREAD;
+> > >  			}
+> > >  		}
+> > >  
+> > > -- 
+> > > 2.25.1
+> > > 
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
+
 -- 
-2.25.1
-
+மணிவண்ணன் சதாசிவம்
