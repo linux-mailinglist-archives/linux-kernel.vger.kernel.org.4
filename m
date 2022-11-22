@@ -2,46 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF906348EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C01A6348EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234659AbiKVVFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
+        id S234423AbiKVVJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbiKVVFO (ORCPT
+        with ESMTP id S231773AbiKVVJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:05:14 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D838E7C00D;
-        Tue, 22 Nov 2022 13:05:12 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id F107D1C09DB; Tue, 22 Nov 2022 22:05:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1669151109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ttJdIr7VJP72KR28pV2fqwcDiwD/jJbuWCy8v5aljwI=;
-        b=MGLRveaPtLAn1l3DCG/w1EmQQTFxekG3EIlyiVNlB7kLwxC2Pkd7N63JKM4fX2ha30kYhd
-        ZTOAHAVURCGhAfJi3xUXAyUeiBB/xM+vXe1piICnX17egz8bcizMMnyDI25cH4LL1I0MuR
-        Ue+CDl0VqGQUUfsVjkCCZ9wI0s3dBF4=
-Date:   Tue, 22 Nov 2022 22:05:09 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] leds: leds-wm831x-status: init chip_pdata before access
-Message-ID: <Y305hfVdhs9zwOi/@duo.ucw.cz>
-References: <20221122204837.11611-1-skhan@linuxfoundation.org>
+        Tue, 22 Nov 2022 16:09:05 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF997C699
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:09:04 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxaVh-0004KZ-0K; Tue, 22 Nov 2022 22:08:53 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxaVe-005vUt-SJ; Tue, 22 Nov 2022 22:08:51 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxaVf-000sEv-38; Tue, 22 Nov 2022 22:08:51 +0100
+Date:   Tue, 22 Nov 2022 22:08:50 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Crt Mori <cmo@melexis.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 186/606] iio: temperature: mlx90632: Convert to i2c's
+ .probe_new()
+Message-ID: <20221122210850.kjtildbt5wbpcjes@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-187-uwe@kleine-koenig.org>
+ <CAKv63uvVsLhbt9y0fWxPWp005rnWzCn6Vm0UmOnW08B87fkCzw@mail.gmail.com>
+ <20221119100250.iw757ovgwjbwr2ho@pengutronix.de>
+ <CAKv63uti8o2i-SFsJ7iK+R0N1go1tzVKpWZHbaRD3Wta2mXuZQ@mail.gmail.com>
+ <20221122183557.07a9e095@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="FhXHQk6+4qe/wr65"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5nqu22jwzukrrpph"
 Content-Disposition: inline
-In-Reply-To: <20221122204837.11611-1-skhan@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221122183557.07a9e095@jic23-huawei>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,63 +66,122 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---FhXHQk6+4qe/wr65
-Content-Type: text/plain; charset=us-ascii
+--5nqu22jwzukrrpph
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
-
-> wm831x_status_probe() accesses status from chip_pdata before
-> initializing it. Fix it.
+On Tue, Nov 22, 2022 at 06:35:57PM +0000, Jonathan Cameron wrote:
+> On Sun, 20 Nov 2022 10:49:20 +0100
+> Crt Mori <cmo@melexis.com> wrote:
 >=20
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> > Ok. Acked-by: Crt Mori <cmo@melexis.com>
+> > (resending since previous mail was not delivered because it was not pla=
+intext)
+> >=20
+> > On Sat, 19 Nov 2022 at 11:02, Uwe Kleine-K=F6nig
+> > <u.kleine-koenig@pengutronix.de> wrote:
+> > >
+> > > Hello,
+> > >
+> > > On Sat, Nov 19, 2022 at 12:04:41AM +0100, Crt Mori wrote: =20
+> > > > On Fri, 18 Nov 2022 at 23:46, Uwe Kleine-K=F6nig <uwe@kleine-koenig=
+=2Eorg> wrote: =20
+> > > > >
+> > > > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > > >
+> > > > > .probe_new() doesn't get the i2c_device_id * parameter, so determ=
+ine
+> > > > > that explicitly in the probe function.
+> > > > >
+> > > > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > > > ---
+> > > > >  drivers/iio/temperature/mlx90632.c | 12 ++++++++++--
+> > > > >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/tem=
+perature/mlx90632.c
+> > > > > index f1f5ebc145b1..19e30cfca8a7 100644
+> > > > > --- a/drivers/iio/temperature/mlx90632.c
+> > > > > +++ b/drivers/iio/temperature/mlx90632.c
+> > > > > @@ -1168,9 +1168,9 @@ static int mlx90632_enable_regulator(struct=
+ mlx90632_data *data)
+> > > > >         return ret;
+> > > > >  }
+> > > > >
+> > > > > -static int mlx90632_probe(struct i2c_client *client,
+> > > > > -                         const struct i2c_device_id *id)
+> > > > > +static int mlx90632_probe(struct i2c_client *client)
+> > > > >  {
+> > > > > +       const struct i2c_device_id *id =3D i2c_client_get_device_=
+id(client);
+> > > > >         struct mlx90632_data *mlx90632;
+> > > > >         struct iio_dev *indio_dev;
+> > > > >         struct regmap *regmap;
+> > > > > @@ -1337,7 +1337,15 @@ static struct i2c_driver mlx90632_driver =
+=3D {
+> > > > >                 .of_match_table =3D mlx90632_of_match,
+> > > > >                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
+> > > > >         },
+> > > > > +<<<<<<< ours =20
+> > > >
+> > > > Maybe some of the merge artifacts left (also below)? =20
+> > >
+> > > *groan*, ok, thanks for pointing out the obvious. Fixed in my tree. F=
+tr,
+> > > the fixup is:
+> > >
+> > > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/tempera=
+ture/mlx90632.c
+> > > index 19e30cfca8a7..753b7a4ccfdd 100644
+> > > --- a/drivers/iio/temperature/mlx90632.c
+> > > +++ b/drivers/iio/temperature/mlx90632.c
+> > > @@ -1337,15 +1337,7 @@ static struct i2c_driver mlx90632_driver =3D {
+> > >                 .of_match_table =3D mlx90632_of_match,
+> > >                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
+> > >         },
+> > > -<<<<<<< ours
+> > > -       .probe =3D mlx90632_probe,
+> > > -||||||| base
+> > > -       .probe =3D mlx90632_probe,
+> > > -       .remove =3D mlx90632_remove,
+> > > -=3D=3D=3D=3D=3D=3D=3D
+> > >         .probe_new =3D mlx90632_probe,
+> > > -       .remove =3D mlx90632_remove, =20
+> > > ->>>>>>> theirs =20
+> > >         .id_table =3D mlx90632_id,
+> > >  };
+> > >  module_i2c_driver(mlx90632_driver);
+> > >
+> > > When (and if) I'll resend the series, the fixed version will be
+> > > included. (Unless someone picks up the broken patch with the above
+> > > fixup of course :-)
+> Who would be crazy enough to do that?
+>=20
+> (fixed up whilst applying)
 
-Does it? ARRAY_SIZE() will be compile-time constant, no?
+Thanks, people seem really eager to prevent me resending the series :-)
 
-What is the bug? Did you test the code?
-
-Best regards,
-								Pavel
-
-
-> +++ b/drivers/leds/leds-wm831x-status.c
-> @@ -212,7 +212,7 @@ static int wm831x_status_probe(struct platform_device=
- *pdev)
->  	struct wm831x_status_pdata pdata;
->  	struct wm831x_status *drvdata;
->  	struct resource *res;
-> -	int id =3D pdev->id % ARRAY_SIZE(chip_pdata->status);
-> +	int id;
->  	int ret;
-> =20
->  	res =3D platform_get_resource(pdev, IORESOURCE_REG, 0);
-> @@ -229,9 +229,10 @@ static int wm831x_status_probe(struct platform_devic=
-e *pdev)
->  	drvdata->wm831x =3D wm831x;
->  	drvdata->reg =3D res->start;
-> =20
-> -	if (dev_get_platdata(wm831x->dev))
-> +	if (dev_get_platdata(wm831x->dev)) {
->  		chip_pdata =3D dev_get_platdata(wm831x->dev);
-> -	else
-> +		id =3D pdev->id % ARRAY_SIZE(chip_pdata->status);
-> +	} else
->  		chip_pdata =3D NULL;
-> =20
->  	memset(&pdata, 0, sizeof(pdata));
+Best regards
+Uwe
 
 --=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---FhXHQk6+4qe/wr65
+--5nqu22jwzukrrpph
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY305hQAKCRAw5/Bqldv6
-8vzcAKCF1Sez4V/92wP9hgxf2QbQ2Je2mgCgtnjWyFA3hXxYfD2gV32HBrCRHL8=
-=ZoaS
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9OmAACgkQwfwUeK3K
+7AkMOwgAmm2WQ+U/T+iTdGY6eO7gSW57L1NjBEcqx0ttNn7Ejr4W9QDI9thb2M2B
+2/veKoZZDv1RmWEOluogOdc2SD1RDcibUzM6l1l7Tq5GpY7BQwMb/FCzQ9WNnR+R
+FVAXqJINljxau605PX1XLeDAFvzWwIbyGcdnApgLrvzqdv11PBUFqc0DE77So5i4
+/KJkuMpZFlK7ugNRi7Rqm8GnHs/EzWQhXy/D3UgDpmZlrc9fCa8TeSWkeThBjbmo
+g+kX+IiCFDRTUIeTa1Bs5QkIDBDg1bcAraq2ogw9pBoVp1G1mmCvC0MuFzaTgNCM
+xY96FY8XwDGRWZr4VVpBEHgVp4kOww==
+=36po
 -----END PGP SIGNATURE-----
 
---FhXHQk6+4qe/wr65--
+--5nqu22jwzukrrpph--
