@@ -2,105 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC2D633FE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92219633FEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbiKVPOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S233584AbiKVPPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbiKVPOU (ORCPT
+        with ESMTP id S232779AbiKVPPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:14:20 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBA2248F0;
-        Tue, 22 Nov 2022 07:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669130060; x=1700666060;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=r2krHQGmMwXskHlRA/gzgQj5fk0U4oZy2ymf007Yg90=;
-  b=Om3ssplW7cuvyeHGz7LLUt/fEAbe2FNPK9nC8cZwsSlwaEwrVeC8aSZc
-   +SZnGkMHcJ0RRdpsZXZoXCjHhJfDfy7u9c0Ti/EXBRGaDTX5gG3GHy2Pf
-   6LfUu1XjvivRQhqkiU9RSp7YA8huLtkNcQqi5uJZQevsVyzuApNRMiDCH
-   ctsVRaCL04Koj9X3H328yOF8Fx7PPWzvVp0xc2pCD1NdrXsbXW3j7zMJp
-   J2o0MEhAoY/rt+HaemD5wDbcugyI+/ajCKC9xbBg1SwwKHqdJj7VXpKNR
-   GZHy6GVn2JpP8PFlEX/5dj/LniKuOCIx2GehDZWLpBMkjYzJB7gtdM0hD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="375979955"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="375979955"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:14:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="886568675"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="886568675"
-Received: from lcano-mobl1.amr.corp.intel.com (HELO [10.255.231.75]) ([10.255.231.75])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:14:15 -0800
-Message-ID: <52b2be9b-defd-63ce-4cb2-96cd624a95a6@intel.com>
-Date:   Tue, 22 Nov 2022 07:14:14 -0800
+        Tue, 22 Nov 2022 10:15:36 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6643C6FA;
+        Tue, 22 Nov 2022 07:15:35 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AMEX8k6015368;
+        Tue, 22 Nov 2022 15:15:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=rhBffdYPdTlauIRdEqJ7HG27aUNvBoJ3ie8MoayMT0A=;
+ b=Wzi0acL257X8dP/rxKmZmg57Y+ydh0es7VHIINK7/7cFxyJd7CIpXs4ncHfO6JjPpa2z
+ KxdbbeHYIU//WczBldj/Ak0evZQvSELJEKEDAsee8heHL/49xXM8t0za2xj6AIDeMLC1
+ aflp/o42v5+IfxGOPKimLJd5pVdFRseXvdlTcs2WUAVWCCeZkW57sQK2HMJhW5pmj7Dj
+ 96RCz+TBEd21bZBvSnHkczCatnGJ/avSWdmi/5qX91RL/QxD0maOravzZ7XqXUg8Qs9J
+ fznNFslcDKUoJ540AsQs7NBiqipTIUKj/nIa7DZ4bNoCpHcSFPZLZ7W59eWQFW91YwEL aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0x7ywpq1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 15:15:12 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AMCMT7p024785;
+        Tue, 22 Nov 2022 15:15:11 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0x7ywpp4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 15:15:11 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AMF5AFb014275;
+        Tue, 22 Nov 2022 15:15:09 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kxps8vdww-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 15:15:09 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AMFFlAI51511710
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Nov 2022 15:15:47 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7C9F2A4040;
+        Tue, 22 Nov 2022 15:15:06 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C13F9A4051;
+        Tue, 22 Nov 2022 15:15:05 +0000 (GMT)
+Received: from localhost (unknown [9.171.79.173])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 22 Nov 2022 15:15:05 +0000 (GMT)
+Date:   Tue, 22 Nov 2022 16:15:04 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, Matthew Garrett <mjg59@srcf.ucam.org>,
+        Jiri Bohac <jbohac@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        Philipp Rudo <prudo@redhat.com>, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Matthew Garrett <mjg59@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>
+Subject: Re: [PATCH] lockdown: s390: kexec_file: don't skip signature
+ verification when not secure IPLed
+Message-ID: <your-ad-here.call-01669130104-ext-3635@work.hours>
+References: <20221121072715.836323-1-coxu@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com,
-        tony.luck@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1668988357.git.kai.huang@intel.com>
- <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
- <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221121072715.836323-1-coxu@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Xmuclpu3WEszRI2qNbRBVQlm7RMy6X6b
+X-Proofpoint-ORIG-GUID: hqOy_mHrsET4QwN4av8WH--pPNhPAy8G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-22_09,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ bulkscore=0 suspectscore=0 priorityscore=1501 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211220113
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 01:13, Peter Zijlstra wrote:
-> On Mon, Nov 21, 2022 at 01:26:28PM +1300, Kai Huang wrote:
->> +/*
->> + * Call the SEAMCALL on all online CPUs concurrently.  Caller to check
->> + * @sc->err to determine whether any SEAMCALL failed on any cpu.
->> + */
->> +static void seamcall_on_each_cpu(struct seamcall_ctx *sc)
->> +{
->> +	on_each_cpu(seamcall_smp_call_function, sc, true);
->> +}
-> 
-> Suppose the user has NOHZ_FULL configured, and is already running
-> userspace that will terminate on interrupt (this is desired feature for
-> NOHZ_FULL), guess how happy they'll be if someone, on another parition,
-> manages to tickle this TDX gunk?
+On Mon, Nov 21, 2022 at 03:27:15PM +0800, Coiby Xu wrote:
+> --- a/arch/s390/kernel/machine_kexec_file.c
+> +++ b/arch/s390/kernel/machine_kexec_file.c
+> @@ -33,10 +33,6 @@ int s390_verify_sig(const char *kernel, unsigned long kernel_len)
+>  	unsigned long sig_len;
+>  	int ret;
+>  
+> -	/* Skip signature verification when not secure IPLed. */
+> -	if (!ipl_secure_flag)
+> -		return 0;
 
-Yeah, they'll be none too happy.
+Looking at s390_verify_sig() especially before commit 0828c4a39be5
+("kexec, KEYS, s390: Make use of built-in and secondary keyring for
+signature verification") I think this condition actually expresses
+2 things:
+1. the firmware is secure IPL capable and secure IPL keys are
+   provided and present in platform keyring.
+2. secure IPL is enabled.
 
-But, what do we do?
-
-There are technical solutions like detecting if NOHZ_FULL is in play and
-refusing to initialize TDX.  There are also non-technical solutions like
-telling folks in the documentation that they better modprobe kvm early
-if they want to do TDX, or their NOHZ_FULL apps will pay.
-
-We could also force the TDX module to be loaded early in boot before
-NOHZ_FULL is in play, but that would waste memory on TDX metadata even
-if TDX is never used.
-
-How do NOHZ_FULL folks deal with late microcode updates, for example?
-Those are roughly equally disruptive to all CPUs.
+Wouldn't this change have implications for machines with older firmware
+which doesn't support secure IPL? In this case platform keyring won't
+have any secure IPL keys (since firmware doesn't provide them)
+and any properly signed kernels will be rejected for kexec in this
+function. Unless secure IPL keys are also present in built-in or secondary
+keyring (which is possible after commit 0828c4a39be5) - is that what
+distributions normally do?
