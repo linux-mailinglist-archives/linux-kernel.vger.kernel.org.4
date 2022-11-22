@@ -2,53 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460D7633694
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45554633695
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiKVIFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S232676AbiKVIFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiKVIE6 (ORCPT
+        with ESMTP id S230242AbiKVIFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:04:58 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84FA43E0A1;
-        Tue, 22 Nov 2022 00:04:53 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 2762F8061;
-        Tue, 22 Nov 2022 07:54:39 +0000 (UTC)
-Date:   Tue, 22 Nov 2022 10:04:51 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] ARM: dts: am335x: Fix TDA998x ports addressing
-Message-ID: <Y3yCoyWp6a9K7e/5@atomide.com>
-References: <e9ac64d29bc18b3b394fd9a2abbfeafacc624f98.1669047037.git.geert+renesas@glider.be>
+        Tue, 22 Nov 2022 03:05:01 -0500
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8429621E12;
+        Tue, 22 Nov 2022 00:04:59 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 4F23D28011610;
+        Tue, 22 Nov 2022 09:04:55 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 40428196CA; Tue, 22 Nov 2022 09:04:55 +0100 (CET)
+Date:   Tue, 22 Nov 2022 09:04:55 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v1 0/2] PCI: hotplug: Add checks to avoid doing hotplug
+ on PCIe Upstream Ports
+Message-ID: <20221122080455.GA27182@wunner.de>
+References: <5623410.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e9ac64d29bc18b3b394fd9a2abbfeafacc624f98.1669047037.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5623410.DvuYhMxLoT@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Geert Uytterhoeven <geert+renesas@glider.be> [221121 16:01]:
-> Fix addressing in the NXP TDA998x HDMI transmitters' subnodes:
->   - Add missing #{address,size}-cells properties to ports capsule,
->   - Add missing reg properties to port child nodes,
->   - Drop bogus unit addresses from endpoint grandchildren nodes.
+On Mon, Nov 21, 2022 at 07:13:15PM +0100, Rafael J. Wysocki wrote:
+> PCIe Upstream Ports are not hotplug-capable by definition, but it turns out
+> that in some cases, if the system is configured in a particularly interesting
+> way, the kernel may be made attempt to operate an Upstream Port as a hotplug
+> one which causes functional issues to appear.
+> 
+> The following 2 patches amend the code to prevent this behavior from occurring.
 
-Thanks applying into omap-for-v6.2/dt.
+Both patches LGTM.
 
-Regards,
+The spec reference for this change is PCIe r6.0.1 sec 7.5.3.2:
 
-Tony
+The Slot Implemented bit in the PCI Express Capabilities register
+is only valid for Downstream Ports and undefined on Upstream Ports.
+
+The Slot Capabilities / Control / Status registers are only operable
+if the Slot Implemented bit is valid and set.  PCIe hotplug depends
+on those registers.
+
+(pcie_capability_reg_implemented() in drivers/pci/access.c returns false
+for the Slot Capabilities / Control / Status registers unless the port
+is a Root or Downstream Port.  Reads of those registers thus always
+return 0.)
+
+(Root Ports are Downstream Ports per the definition of "Downstream"
+on page 94 of the PCIe r6.0.1 Base Spec.)
+
+Thanks,
+
+Lukas
