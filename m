@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92219633FEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FCC633FEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbiKVPPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S233589AbiKVPQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:16:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiKVPPg (ORCPT
+        with ESMTP id S232779AbiKVPQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:15:36 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6643C6FA;
-        Tue, 22 Nov 2022 07:15:35 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AMEX8k6015368;
-        Tue, 22 Nov 2022 15:15:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=rhBffdYPdTlauIRdEqJ7HG27aUNvBoJ3ie8MoayMT0A=;
- b=Wzi0acL257X8dP/rxKmZmg57Y+ydh0es7VHIINK7/7cFxyJd7CIpXs4ncHfO6JjPpa2z
- KxdbbeHYIU//WczBldj/Ak0evZQvSELJEKEDAsee8heHL/49xXM8t0za2xj6AIDeMLC1
- aflp/o42v5+IfxGOPKimLJd5pVdFRseXvdlTcs2WUAVWCCeZkW57sQK2HMJhW5pmj7Dj
- 96RCz+TBEd21bZBvSnHkczCatnGJ/avSWdmi/5qX91RL/QxD0maOravzZ7XqXUg8Qs9J
- fznNFslcDKUoJ540AsQs7NBiqipTIUKj/nIa7DZ4bNoCpHcSFPZLZ7W59eWQFW91YwEL aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0x7ywpq1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 15:15:12 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AMCMT7p024785;
-        Tue, 22 Nov 2022 15:15:11 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0x7ywpp4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 15:15:11 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AMF5AFb014275;
-        Tue, 22 Nov 2022 15:15:09 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3kxps8vdww-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 15:15:09 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AMFFlAI51511710
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Nov 2022 15:15:47 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C9F2A4040;
-        Tue, 22 Nov 2022 15:15:06 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C13F9A4051;
-        Tue, 22 Nov 2022 15:15:05 +0000 (GMT)
-Received: from localhost (unknown [9.171.79.173])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 22 Nov 2022 15:15:05 +0000 (GMT)
-Date:   Tue, 22 Nov 2022 16:15:04 +0100
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, Matthew Garrett <mjg59@srcf.ucam.org>,
-        Jiri Bohac <jbohac@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Philipp Rudo <prudo@redhat.com>, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        Matthew Garrett <mjg59@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>
-Subject: Re: [PATCH] lockdown: s390: kexec_file: don't skip signature
- verification when not secure IPLed
-Message-ID: <your-ad-here.call-01669130104-ext-3635@work.hours>
-References: <20221121072715.836323-1-coxu@redhat.com>
+        Tue, 22 Nov 2022 10:16:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7763F2A27D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:15:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669130131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hK0ObLejkUdO2kT5TG9vuCU2RH+H4+xSCZQ9aj/PoXU=;
+        b=YHGsAZurgKTwVkNI3Bzrgr4OycK/e3+aJL6t9Kex5X6yV35pwx87uBIJSZrd/K8orxqqY7
+        YdApDA7kBLMaS9fN4pAXSV+PGT6hz//zue0Tc7hgESiifAJCZkRX9tHARZZPYeb+s3SIap
+        PVvxF1WYyC+lUZTLJOUc+v8W5TlH3s4=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-605-8Y12jp4KPXmuo9FhfQlkrg-1; Tue, 22 Nov 2022 10:15:30 -0500
+X-MC-Unique: 8Y12jp4KPXmuo9FhfQlkrg-1
+Received: by mail-wr1-f69.google.com with SMTP id a13-20020adfbc4d000000b00241dda05c3dso1590342wrh.17
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:15:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hK0ObLejkUdO2kT5TG9vuCU2RH+H4+xSCZQ9aj/PoXU=;
+        b=6dWR41Iy2v+1LNWC8AGdifFxQKndE4OWbr/PjNVcrAsQH1dM2PU8djcZauvU4idm8z
+         uwXbg1oA1DR+iEMqCOq7wbljFNNibOrx7PMJuwJ2Pw9yvUC1GIgcqC/M2aWIxSkxHBYe
+         JODmwhUPoKipyLWv1vdtz9bsBMiHdKpW/TGwUjASZvR8fD30vUq8kcnWUsFt6cfR3RoI
+         tIavleU/IlDx4ypjdmG9o1ckYb2PMijTme7vRnBAAlxNsaeFny3stYiCxukdgHDiwkK0
+         nM0Y4KLgBg7gz799NdoXzkHcgAhd7owwPaZBvtT37jDAJlCwHX1D9CSNTU5ViWjhVOWi
+         gVYA==
+X-Gm-Message-State: ANoB5plelBAeqAFkO2O/WpYRXCJC5KTBLwo5qgWe8Vq0KJ2wG+9RQwY8
+        A90qVo8AOeC1C+4NH+IN7nQEBEmY3+hMJkmiHkWrRWj1EvQIcz21YVVMNx66zKOcsvCMW5DxlyM
+        8HiFu9YGW7SLUyPi7zUoGmbsi
+X-Received: by 2002:a7b:c3c9:0:b0:3cf:5442:bbe with SMTP id t9-20020a7bc3c9000000b003cf54420bbemr20606643wmj.2.1669130129160;
+        Tue, 22 Nov 2022 07:15:29 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5SOw1y9jXJkuwchkA+/tOO86TqATmbtRGdYrHaEKbQW+CeSO9KlzdRp2zdpCm9yQDtyT4spw==
+X-Received: by 2002:a7b:c3c9:0:b0:3cf:5442:bbe with SMTP id t9-20020a7bc3c9000000b003cf54420bbemr20606627wmj.2.1669130128874;
+        Tue, 22 Nov 2022 07:15:28 -0800 (PST)
+Received: from [192.168.8.105] (tmo-116-109.customers.d1-online.com. [80.187.116.109])
+        by smtp.gmail.com with ESMTPSA id f28-20020a5d58fc000000b0022e36c1113fsm14093648wrd.13.2022.11.22.07.15.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 07:15:28 -0800 (PST)
+Message-ID: <61474ecb-fa2a-e651-9157-b73b6b5a8295@redhat.com>
+Date:   Tue, 22 Nov 2022 16:15:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221121072715.836323-1-coxu@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Xmuclpu3WEszRI2qNbRBVQlm7RMy6X6b
-X-Proofpoint-ORIG-GUID: hqOy_mHrsET4QwN4av8WH--pPNhPAy8G
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-22_09,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 spamscore=0 phishscore=0
- bulkscore=0 suspectscore=0 priorityscore=1501 clxscore=1011
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211220113
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3] virtio_console: Introduce an ID allocator for virtual
+ console numbers
+Content-Language: en-US
+To:     =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
+        Amit Shah <amit@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20221122134643.376184-1-clg@kaod.org>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <20221122134643.376184-1-clg@kaod.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,29 +86,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 03:27:15PM +0800, Coiby Xu wrote:
-> --- a/arch/s390/kernel/machine_kexec_file.c
-> +++ b/arch/s390/kernel/machine_kexec_file.c
-> @@ -33,10 +33,6 @@ int s390_verify_sig(const char *kernel, unsigned long kernel_len)
->  	unsigned long sig_len;
->  	int ret;
->  
-> -	/* Skip signature verification when not secure IPLed. */
-> -	if (!ipl_secure_flag)
-> -		return 0;
+On 22/11/2022 14.46, Cédric Le Goater wrote:
+> When a virtio console port is initialized, it is registered as an hvc
+> console using a virtual console number. If a KVM guest is started with
+> multiple virtio console devices, the same vtermno (or virtual console
+> number) can be used to allocate different hvc consoles, which leads to
+> various communication problems later on.
+> 
+> This is also reported in debugfs :
+> 
+>    # grep vtermno /sys/kernel/debug/virtio-ports/*
+>    /sys/kernel/debug/virtio-ports/vport1p1:console_vtermno: 1
+>    /sys/kernel/debug/virtio-ports/vport2p1:console_vtermno: 1
+>    /sys/kernel/debug/virtio-ports/vport3p1:console_vtermno: 2
+>    /sys/kernel/debug/virtio-ports/vport4p1:console_vtermno: 3
+> 
+> Replace the next_vtermno global with an ID allocator and start the
+> allocation at 1 as it is today. Also recycle IDs when a console port
+> is removed.
+> 
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> ---
+> 
+>   Changes in v3:
+>   - made use of ida_alloc_min()
+>   - free ID in case of error
+>   
+>   Changes in v2:
+>   - introduced an ID allocator
+> 
+>   drivers/char/virtio_console.c | 26 +++++++++++---------------
+>   1 file changed, 11 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+> index 9fa3c76a267f..6a821118d553 100644
+> --- a/drivers/char/virtio_console.c
+> +++ b/drivers/char/virtio_console.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/fs.h>
+>   #include <linux/splice.h>
+>   #include <linux/pagemap.h>
+> +#include <linux/idr.h>
+>   #include <linux/init.h>
+>   #include <linux/list.h>
+>   #include <linux/poll.h>
+> @@ -48,22 +49,11 @@ struct ports_driver_data {
+>   	/* List of all the devices we're handling */
+>   	struct list_head portdevs;
+>   
+> -	/*
+> -	 * This is used to keep track of the number of hvc consoles
+> -	 * spawned by this driver.  This number is given as the first
+> -	 * argument to hvc_alloc().  To correctly map an initial
+> -	 * console spawned via hvc_instantiate to the console being
+> -	 * hooked up via hvc_alloc, we need to pass the same vtermno.
+> -	 *
+> -	 * We also just assume the first console being initialised was
+> -	 * the first one that got used as the initial console.
+> -	 */
+> -	unsigned int next_vtermno;
+> -
+>   	/* All the console devices handled by this driver */
+>   	struct list_head consoles;
+>   };
+> -static struct ports_driver_data pdrvdata = { .next_vtermno = 1};
+> +
+> +static struct ports_driver_data pdrvdata;
+>   
+>   static DEFINE_SPINLOCK(pdrvdata_lock);
+>   static DECLARE_COMPLETION(early_console_added);
+> @@ -89,6 +79,8 @@ struct console {
+>   	u32 vtermno;
+>   };
+>   
+> +static DEFINE_IDA(vtermno_ida);
+> +
+>   struct port_buffer {
+>   	char *buf;
+>   
+> @@ -1244,18 +1236,21 @@ static int init_port_console(struct port *port)
+>   	 * pointers.  The final argument is the output buffer size: we
+>   	 * can do any size, so we put PAGE_SIZE here.
+>   	 */
+> -	port->cons.vtermno = pdrvdata.next_vtermno;
+> +	ret = ida_alloc_min(&vtermno_ida, 1, GFP_KERNEL);
+> +	if (ret < 0)
+> +		return ret;
+>   
+> +	port->cons.vtermno = ret;
+>   	port->cons.hvc = hvc_alloc(port->cons.vtermno, 0, &hv_ops, PAGE_SIZE);
+>   	if (IS_ERR(port->cons.hvc)) {
+>   		ret = PTR_ERR(port->cons.hvc);
+>   		dev_err(port->dev,
+>   			"error %d allocating hvc for port\n", ret);
+>   		port->cons.hvc = NULL;
+> +		ida_free(&vtermno_ida, port->cons.vtermno);
+>   		return ret;
+>   	}
+>   	spin_lock_irq(&pdrvdata_lock);
+> -	pdrvdata.next_vtermno++;
+>   	list_add_tail(&port->cons.list, &pdrvdata.consoles);
+>   	spin_unlock_irq(&pdrvdata_lock);
+>   	port->guest_connected = true;
+> @@ -1532,6 +1527,7 @@ static void unplug_port(struct port *port)
+>   		list_del(&port->cons.list);
+>   		spin_unlock_irq(&pdrvdata_lock);
+>   		hvc_remove(port->cons.hvc);
+> +		ida_free(&vtermno_ida, port->cons.vtermno);
+>   	}
+>   
+>   	remove_port_data(port);
 
-Looking at s390_verify_sig() especially before commit 0828c4a39be5
-("kexec, KEYS, s390: Make use of built-in and secondary keyring for
-signature verification") I think this condition actually expresses
-2 things:
-1. the firmware is secure IPL capable and secure IPL keys are
-   provided and present in platform keyring.
-2. secure IPL is enabled.
+Reviewed-by: Thomas Huth <thuth@redhat.com>
 
-Wouldn't this change have implications for machines with older firmware
-which doesn't support secure IPL? In this case platform keyring won't
-have any secure IPL keys (since firmware doesn't provide them)
-and any properly signed kernels will be rejected for kexec in this
-function. Unless secure IPL keys are also present in built-in or secondary
-keyring (which is possible after commit 0828c4a39be5) - is that what
-distributions normally do?
