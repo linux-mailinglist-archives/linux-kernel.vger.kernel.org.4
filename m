@@ -2,509 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583716338DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DE66338E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbiKVJmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
+        id S232341AbiKVJoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233309AbiKVJmL (ORCPT
+        with ESMTP id S229527AbiKVJoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:42:11 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D8E4FFA7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:42:10 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id z6so8908006qtv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:42:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wtRRKej5/9yOCimTMhlLaKPup3+BU7GKT4Qoy8ygbuM=;
-        b=IxWfCfWX5pFR+HboAXEJRyomLXkrfim1eewbFErf5shbc3RbgMKZ9e2pdS56GDfZvi
-         /jNXDOJGkbp7PojNVFZ0hTyNbQyqEv8MrkqYNAtYVXUZUecdtSTwQXdFmi0TRsy7aXVC
-         6s8QP7y+F+yUMQaxK5Dl5iCbK0l/7trqng5mO4U8nmYlfevBeUT75ZnN2z4ygq8KdIDk
-         KUoEoUvJUbWKImIt6bxqO/vfHj8G08p3I+yOVM5BBfwmm+NnRwg2jocctN4RihZT3wY6
-         DdnfARzBKA6cWWrMRQYg3/jTE65//uOagmLhRIJNYRxCgdrvjjhJqs9kE77Km8vLN+2u
-         6/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wtRRKej5/9yOCimTMhlLaKPup3+BU7GKT4Qoy8ygbuM=;
-        b=H2nWxzSnHzo7VcMaifiT3lP1FxnVKEb4JP/UYFv7UBSEOx6YdID7Mvb2JlJpkcXbha
-         HwDQtwOyzUJLFHpPZoieC8IXY9sYjwypv2xtgJKBHfYci6Jt7ErZEgrhmvFosN+4kD1s
-         dnODSLqD5ZkkvKL3RZ7sXztQW+6MbUcoly+Hup+otK6zKpOtakevQPKfmFpOqpMi6Zdi
-         Hw5qAIZy9z+Qh0EGEl2Q7BT4UiOXfkUYZmxXgP7HTQFRzzCGOcYN+OVUSP35MOTSRrMc
-         TwBCSEHUhMUDTiOHpY6zOJkmY4u9YpuUKYyeuRefo5Sg9igxss77XmPlBsR3lk2s5TC+
-         5fdw==
-X-Gm-Message-State: ANoB5plvUXX98UIyMLjRom0U4fa2rBD4CUO21THlTCaF7LLiL1ohXRZ9
-        AhcOlloUzBJUMlzoTwMHPRlZrQ==
-X-Google-Smtp-Source: AA0mqf4dcRJnLHIxNKUIi1sLgVrJ6nhH7YyI5kDqocGQMo/fw/eoYPkITzeXm36BbTbALbddKnNhjA==
-X-Received: by 2002:ac8:7595:0:b0:3a5:226e:2677 with SMTP id s21-20020ac87595000000b003a5226e2677mr21290782qtq.141.1669110128172;
-        Tue, 22 Nov 2022 01:42:08 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id t8-20020a37ea08000000b006b9c9b7db8bsm9816817qkj.82.2022.11.22.01.42.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 01:42:07 -0800 (PST)
-Date:   Tue, 22 Nov 2022 01:42:04 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>, Yu Zhao <yuzhao@google.com>,
-        Dan Carpenter <error27@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 1/3] mm,thp,rmap: subpages_mapcount of PTE-mapped
- subpages
-In-Reply-To: <a5849eca-22f1-3517-bf29-95d982242742@google.com>
-Message-ID: <eec17e16-4e1-7c59-f1bc-5bca90dac919@google.com>
-References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <a5849eca-22f1-3517-bf29-95d982242742@google.com>
+        Tue, 22 Nov 2022 04:44:16 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6883715739
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:43:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1669110197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZJt8UO5HCN244lOs57k4IKcNhRBmsr6a2T34jRgGHOw=;
+        b=R1A2u0UU3QHC4cHmuj73dv85/9epa89VX0H6sxWHilHja80wZUp/hSdL9NpQmKSvUdcYDj
+        qFFnGHBRtfC/jtakyjopaktu+iWg0Cm+IzqgRZAxbDdOc8ZOvqms02mCfo9mWoqmCpYQN3
+        xSFj50LrrD2NDAQ6XC2iZaatxGzKjrxx85JSBVrNn3rAVI1da4fAIyW9rcDcnK4W/IOptv
+        +orRVGB4CWMCBRf35BA79FB18vKMuvy3O1Jm8y42RSlBp/Egav73Fure1EnvZpeI4miYP4
+        +0CtsYvC09s0xtLwkTBKupNJNrkObuHEtxhl7uNGJsRKHGVrZhDGpfZ0YKcyvA==
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com
+ (mail-sn1nam02lp2042.outbound.protection.outlook.com [104.47.57.42]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-15-EL0DA8YfN_2CArK8py74vg-1; Tue, 22 Nov 2022 04:43:16 -0500
+X-MC-Unique: EL0DA8YfN_2CArK8py74vg-1
+Received: from MN2PR19MB3693.namprd19.prod.outlook.com (2603:10b6:208:18a::19)
+ by IA1PR19MB6499.namprd19.prod.outlook.com (2603:10b6:208:3ad::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
+ 2022 09:43:12 +0000
+Received: from MN2PR19MB3693.namprd19.prod.outlook.com
+ ([fe80::3696:7b21:2a3f:1503]) by MN2PR19MB3693.namprd19.prod.outlook.com
+ ([fe80::3696:7b21:2a3f:1503%7]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
+ 09:43:12 +0000
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
+Subject: Re: [PATCH v3 1/4] x86/of: Convert Intel's APIC bindings to YAML
+ schema
+Thread-Topic: [PATCH v3 1/4] x86/of: Convert Intel's APIC bindings to YAML
+ schema
+Thread-Index: AQHY/kRfW1rEdSurPU+OlYduityf0q5Kp+8AgAAJMgA=
+Date:   Tue, 22 Nov 2022 09:43:12 +0000
+Message-ID: <b790fa4b-e2d8-ad21-09a3-6b92c863343f@maxlinear.com>
+References: <cover.1669100394.git.rtanwar@maxlinear.com>
+ <0cf089495a422b945ac4fc9c980ddb5429a711c3.1669100394.git.rtanwar@maxlinear.com>
+ <Y3yR+Ouc7l9RvB8K@smile.fi.intel.com>
+In-Reply-To: <Y3yR+Ouc7l9RvB8K@smile.fi.intel.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR19MB3693:EE_|IA1PR19MB6499:EE_
+x-ms-office365-filtering-correlation-id: 489c7d8c-c867-41c2-34fd-08dacc6df8b1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: hnTbb+2z3/RnE1LdkQgt94ZCitWf14xRgDCBCklCJQ8RlCx9+R8oMiWFk2rgupJ0OtkB2NLUaz+5LBawQQwDHXSLQwGUDqV5p65mx784JkiV0SISr1Iit0KgjRgNuOGbDDSuCEy8+K2IPUP1MmFVNG5oQA6jeRYICXTB8RfW02f40MaWXcotl4MOde/iSYPD2KnO6e4mEf+6TjpEJ5DNzlqakU+TYLHRkV6x9/34j9uNpKl65f1zjExqIG7I/XFs29KXdwD/pbMA6C6SYlDB/R5sx+lGgR2EKmOs90gn6btNWT2ElDEPmYRUOXMSvFuVK8vHbvhkjOc/gRrOc+VthVfx051oEeTvo8gvAoL8kMxsnwRP6dkGNxHMyCeg6zQSCshav90gJ9sFjzWtTjJV9dVdOz5Jjj6VVa1Z5gTbv7QzgkvnWgJJJAinbbflI/Nt4Vv/o7UVQ86Rwoi7RKuLwaG7aYa66V2pkN0aLY0QCrW8b6DZ77JeYgtvIne+7Rjj4pxY4iTfswhtNS/NWTsHsP4mqvZHL96bXr32MTdpf/0IJRB7XwEmSgZn+cWxBjR0RCpYT8ThXN82eaAFcY8sBZB0R0tcW2fStUASJDNXlAXMnBLFOFJswCHgbqbTixm6A8MP5Z7v1X7FYumQf9+W6Lv7jG3v5VmcKB288pH+I6d+pQaYzbWR6KJm4rcIh66fgjVTC5LNWbnZi5g/9chZh/NORHclvAAxc9wZPLU+eco0oGq/7jCtd5eczkjbNWsHMH03951gk8CHC/st/DBQvjknSALgURTSTPF8uY+dCUoi2rkRPNj0CJnBfWns7w0pfBOwNq7w3uPxPGizS8V7rg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR19MB3693.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39850400004)(346002)(136003)(396003)(366004)(451199015)(36756003)(31686004)(5660300002)(7416002)(83380400001)(2906002)(76116006)(91956017)(66946007)(66476007)(4326008)(8676002)(66446008)(66556008)(64756008)(8936002)(107886003)(6506007)(6916009)(54906003)(31696002)(316002)(86362001)(38070700005)(26005)(71200400001)(53546011)(41300700001)(2616005)(6512007)(186003)(122000001)(478600001)(966005)(6486002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QzF4V0ltaXMyeE9KUVk1K0J4a0tBanBScE9xang3WTRZdHRYQzZXNTJzR3NS?=
+ =?utf-8?B?ZVdXY08xb2NUNzFabDd0aFBHd2c5cnRFMFZUaDN1WmN5NWpWb3o0UHRIZXNO?=
+ =?utf-8?B?aHZPQnVHK0pjNXZ1b3VYVWJ2cE41NkZzdldHaC8rNE51M1ZJdTM1dm1Jd2Iy?=
+ =?utf-8?B?WVVhdHd3WUNuKzhTZXF6S2NRR29KNExEOGljL01Xak5HSFpiNjNrU2dJajdE?=
+ =?utf-8?B?emRhaXY4UGhpYmtmNnVoUFhmV1puWDdlVlkxUHkvRW9RTUlMKytsbi85c3gr?=
+ =?utf-8?B?M1Npakhadzl2cTZDQ1BCdXNkRHlLNFZqZU90dG5RYW5Dc1ZDOGdmK0hSODBN?=
+ =?utf-8?B?NTE0dmY4TE9BMnlHVmVxOUFpeDQ5R1Y4Wmx5VWFQMVVKWU42ZEM5SzlaUit5?=
+ =?utf-8?B?cTJ1OVZsZWFNNUcwZ0d6UWZwNXMzNVhENzlPMHI2OVA1SnZVaWJPTDV0ZnpK?=
+ =?utf-8?B?TjZoNDBYdVBsckRHTCs2Mm04cXJXcy8rNit2N0lnVUNNQ2ZMekJnOFhIbVVU?=
+ =?utf-8?B?Y2JRQjVkZVVrT2ZzNTFaNWZsN004OFIvZ3VNUmJMQU9PbGFUZENsWWEvT3hq?=
+ =?utf-8?B?a3BqTFdhSXluQXlGbnBOU1g1WkVuaG5zQTF3Mmd2elIzRHFVNVNDMkl6dXpw?=
+ =?utf-8?B?MWJGMHljL0tkZTExWEpYMFMvZDloMHpDU3l6YXR1K05UaS9KS1RGNFhpREhQ?=
+ =?utf-8?B?ZnJ6eEF3VkpJdURmRE9GTHVBRHZ6b1h4aTBxZWd3V0tIWWhhbENjcFFDcmNj?=
+ =?utf-8?B?c3NZYkdOV25DNEdBM2xUWEdmais1TWpmNjh2Q0hTdTVHdnVVOWVhTTdXMFhu?=
+ =?utf-8?B?eWRvUFVpOUpCN3NYaGw1TGVEc3BHYUJsUjZDWEh2L1JYR3JVYWtwTlVnSER2?=
+ =?utf-8?B?Nmg5UXZ2N0dyNExFOWRRUFFiYTlaN1NzVDBjK2xsRXp5UGNZdlpnNUIxWFAw?=
+ =?utf-8?B?RWk2YkU4VDRpaTNiZ2tOQnJFUFUyaHV2K1ptdGc2TUNQVnR4K2FjVnpZTitt?=
+ =?utf-8?B?ZGZuNzlXdGxaN3pqZHJ3eDZVWElBUHErSk1aZkVBKzJTS0dGTzU2Q1hUMHRC?=
+ =?utf-8?B?d29rUVJWdVZwSE1yazB6Mk5jb3UxTkNxZGJmUGtoWWpJNEhJVUZlK3gwMEtM?=
+ =?utf-8?B?alQrMzdVSnFiTjZ5NXJjRFkyLytqN1RSQ0lMUlREV05vakkwTWtjVVVXRllT?=
+ =?utf-8?B?NGcwSERFUEVuZ09Ec0hIaTNKVk1XZzhoL1krUHJzbXBtOVdVbnJSUGZlWTFo?=
+ =?utf-8?B?UlBNM2NYRzA5N0hlSit4U2ZpQmlPYTZpcnRudWo2NmZKY1l2UTJyRzQ1SEhQ?=
+ =?utf-8?B?TjkvclBTcmJScVVmd2hDMCsrY2o4ZnV0b0laL3ZCTHBEVDkrVXJxbVA1akpn?=
+ =?utf-8?B?bU9LREgxcnM5MVV3WS9RdW85OXoySmM1TmMrWnhzdnN5WXJyVTd5MkZpTUFs?=
+ =?utf-8?B?RnkrSzBESHJlU0Y0N0JFQU9nS3c2clZnMDVJeklQd1VDS0JxM0k5NU5sb2xR?=
+ =?utf-8?B?dTFVcFlJN3h5R01OYlUyUkxZRGRza0ttNVRIRVFPcTdGL2VrcEJVeGVmSFhH?=
+ =?utf-8?B?SSttQXVhN2lKazJ4V3FLbkZIa0FzdGRacDYxQjZsU0w1MTFlQ01PUFovTmV2?=
+ =?utf-8?B?SjlOUEkrSDc5dWQyWlpvelhmYWJ3L29jblUvS2IzeE9Oc1FDMGJQQStIbmRn?=
+ =?utf-8?B?ekxDMzQ1N08rL1NDSHpBRW8xUzdyVSsxREhlWE1JUVU1WTZTaUlwaU50WDF5?=
+ =?utf-8?B?L2lxamlMdWdhK3BGNmd1OGhla1Q0YW9QUWNURVE4eUkzOGNpVkNBNTlrdWpF?=
+ =?utf-8?B?S2hXMXdRQzB4VjJ1YUhBRU9rQWpGY0tEV3lDclBaR2Q1QiszOTdYOFNZdDZR?=
+ =?utf-8?B?NkxNQWVmMWhHMURIN0xVQ0dRakxKTWRxbGRyZXU5M1Qxdjg4V0o1a0E1TjFQ?=
+ =?utf-8?B?ekpYeXQwRUIyWVFrbjd3VlN2N3ByMCtpU2RjMWdocEMzcDdTd2hlTE0rT0ND?=
+ =?utf-8?B?MUVodEt3bXRvLzRXWkg0R1ZWTWVadStuekR2OVhzbktlSUNMVnZodFlJNzJM?=
+ =?utf-8?B?cnVxMkVVLzI4Rm9PWk1YUllibU00SjhnSFlmRVN6QXlKSkpGTGk3c1JyYXpt?=
+ =?utf-8?B?RE0rZXlCNGZyaFVidldabEtpdHhxbDF4YjA2NmVwK2d3dGxmYWdneTZxRVha?=
+ =?utf-8?B?REE9PQ==?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: maxlinear.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR19MB3693.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 489c7d8c-c867-41c2-34fd-08dacc6df8b1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 09:43:12.1586
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: dac28005-13e0-41b8-8280-7663835f2b1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pbNR0nSBMHk9ZBkyl9M4QiT1akyeCZlRg0nix75/cCasWCBEmJ8bI3G8NI7bj09c/sHP2S+ei2nleBQ0jEfk/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR19MB6499
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <0E787628C11CBB4BA46E00531FB54082@namprd19.prod.outlook.com>
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following suggestion from Linus, instead of counting every PTE map of a
-compound page in subpages_mapcount, just count how many of its subpages
-are PTE-mapped: this yields the exact number needed for NR_ANON_MAPPED
-and NR_FILE_MAPPED stats, without any need for a locked scan of subpages;
-and requires updating the count less often.
-
-This does then revert total_mapcount() and folio_mapcount() to needing a
-scan of subpages; but they are inherently racy, and need no locking, so
-Linus is right that the scans are much better done there.  Plus (unlike
-in 6.1 and previous) subpages_mapcount lets us avoid the scan in the
-common case of no PTE maps.  And page_mapped() and folio_mapped() remain
-scanless and just as efficient with the new meaning of subpages_mapcount:
-those are the functions which I most wanted to remove the scan from.
-
-The updated page_dup_compound_rmap() is no longer suitable for use by
-anon THP's __split_huge_pmd_locked(); but page_add_anon_rmap() can be
-used for that, so long as its VM_BUG_ON_PAGE(!PageLocked) is deleted.
-
-Evidence is that this way goes slightly faster than the previous
-implementation for most cases; but significantly faster in the (now
-scanless) pmds after ptes case, which started out at 870ms and was
-brought down to 495ms by the previous series, now takes around 105ms.
-
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
-v2: fix uninitialized 'first', reported by Yu Zhao and Dan Carpenter
-    moved "mapped by PTE" comments above the !compound tests, per Kirill
-    removed a newline (which goes away in the next patch), per Kirill
-
- Documentation/mm/transhuge.rst |   3 +-
- include/linux/mm.h             |  52 ++++++-----
- include/linux/rmap.h           |   9 +-
- mm/huge_memory.c               |   2 +-
- mm/rmap.c                      | 160 ++++++++++++++-------------------
- 5 files changed, 107 insertions(+), 119 deletions(-)
-
-diff --git a/Documentation/mm/transhuge.rst b/Documentation/mm/transhuge.rst
-index 1e2a637cc607..af4c9d70321d 100644
---- a/Documentation/mm/transhuge.rst
-+++ b/Documentation/mm/transhuge.rst
-@@ -122,7 +122,8 @@ pages:
- 
-   - map/unmap of sub-pages with PTE entry increment/decrement ->_mapcount
-     on relevant sub-page of the compound page, and also increment/decrement
--    ->subpages_mapcount, stored in first tail page of the compound page.
-+    ->subpages_mapcount, stored in first tail page of the compound page, when
-+    _mapcount goes from -1 to 0 or 0 to -1: counting sub-pages mapped by PTE.
-     In order to have race-free accounting of sub-pages mapped, changes to
-     sub-page ->_mapcount, ->subpages_mapcount and ->compound_mapcount are
-     are all locked by bit_spin_lock of PG_locked in the first tail ->flags.
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 8fe6276d8cc2..c9e46d4d46f2 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -828,7 +828,7 @@ static inline int head_compound_mapcount(struct page *head)
- }
- 
- /*
-- * Sum of mapcounts of sub-pages, does not include compound mapcount.
-+ * Number of sub-pages mapped by PTE, does not include compound mapcount.
-  * Must be called only on head of compound page.
-  */
- static inline int head_subpages_mapcount(struct page *head)
-@@ -864,23 +864,7 @@ static inline int page_mapcount(struct page *page)
- 	return head_compound_mapcount(page) + mapcount;
- }
- 
--static inline int total_mapcount(struct page *page)
--{
--	if (likely(!PageCompound(page)))
--		return atomic_read(&page->_mapcount) + 1;
--	page = compound_head(page);
--	return head_compound_mapcount(page) + head_subpages_mapcount(page);
--}
--
--/*
-- * Return true if this page is mapped into pagetables.
-- * For compound page it returns true if any subpage of compound page is mapped,
-- * even if this particular subpage is not itself mapped by any PTE or PMD.
-- */
--static inline bool page_mapped(struct page *page)
--{
--	return total_mapcount(page) > 0;
--}
-+int total_compound_mapcount(struct page *head);
- 
- /**
-  * folio_mapcount() - Calculate the number of mappings of this folio.
-@@ -897,8 +881,20 @@ static inline int folio_mapcount(struct folio *folio)
- {
- 	if (likely(!folio_test_large(folio)))
- 		return atomic_read(&folio->_mapcount) + 1;
--	return atomic_read(folio_mapcount_ptr(folio)) + 1 +
--		atomic_read(folio_subpages_mapcount_ptr(folio));
-+	return total_compound_mapcount(&folio->page);
-+}
-+
-+static inline int total_mapcount(struct page *page)
-+{
-+	if (likely(!PageCompound(page)))
-+		return atomic_read(&page->_mapcount) + 1;
-+	return total_compound_mapcount(compound_head(page));
-+}
-+
-+static inline bool folio_large_is_mapped(struct folio *folio)
-+{
-+	return atomic_read(folio_mapcount_ptr(folio)) +
-+		atomic_read(folio_subpages_mapcount_ptr(folio)) >= 0;
- }
- 
- /**
-@@ -909,7 +905,21 @@ static inline int folio_mapcount(struct folio *folio)
-  */
- static inline bool folio_mapped(struct folio *folio)
- {
--	return folio_mapcount(folio) > 0;
-+	if (likely(!folio_test_large(folio)))
-+		return atomic_read(&folio->_mapcount) >= 0;
-+	return folio_large_is_mapped(folio);
-+}
-+
-+/*
-+ * Return true if this page is mapped into pagetables.
-+ * For compound page it returns true if any sub-page of compound page is mapped,
-+ * even if this particular sub-page is not itself mapped by any PTE or PMD.
-+ */
-+static inline bool page_mapped(struct page *page)
-+{
-+	if (likely(!PageCompound(page)))
-+		return atomic_read(&page->_mapcount) >= 0;
-+	return folio_large_is_mapped(page_folio(page));
- }
- 
- static inline struct page *virt_to_head_page(const void *x)
-diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-index 011a7530dc76..5dadb9a3e010 100644
---- a/include/linux/rmap.h
-+++ b/include/linux/rmap.h
-@@ -204,14 +204,15 @@ void hugepage_add_anon_rmap(struct page *, struct vm_area_struct *,
- void hugepage_add_new_anon_rmap(struct page *, struct vm_area_struct *,
- 		unsigned long address);
- 
--void page_dup_compound_rmap(struct page *page, bool compound);
-+void page_dup_compound_rmap(struct page *page);
- 
- static inline void page_dup_file_rmap(struct page *page, bool compound)
- {
--	if (PageCompound(page))
--		page_dup_compound_rmap(page, compound);
--	else
-+	/* Is page being mapped by PTE? */
-+	if (likely(!compound))
- 		atomic_inc(&page->_mapcount);
-+	else
-+		page_dup_compound_rmap(page);
- }
- 
- /**
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 30056efc79ad..3dee8665c585 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2215,7 +2215,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		BUG_ON(!pte_none(*pte));
- 		set_pte_at(mm, addr, pte, entry);
- 		if (!pmd_migration)
--			page_dup_compound_rmap(page + i, false);
-+			page_add_anon_rmap(page + i, vma, addr, false);
- 		pte_unmap(pte);
- 	}
- 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 4833d28c5e1a..e813785da613 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1117,55 +1117,36 @@ static void unlock_compound_mapcounts(struct page *head,
- 	bit_spin_unlock(PG_locked, &head[1].flags);
- }
- 
--/*
-- * When acting on a compound page under lock_compound_mapcounts(), avoid the
-- * unnecessary overhead of an actual atomic operation on its subpage mapcount.
-- * Return true if this is the first increment or the last decrement
-- * (remembering that page->_mapcount -1 represents logical mapcount 0).
-- */
--static bool subpage_mapcount_inc(struct page *page)
--{
--	int orig_mapcount = atomic_read(&page->_mapcount);
--
--	atomic_set(&page->_mapcount, orig_mapcount + 1);
--	return orig_mapcount < 0;
--}
--
--static bool subpage_mapcount_dec(struct page *page)
--{
--	int orig_mapcount = atomic_read(&page->_mapcount);
--
--	atomic_set(&page->_mapcount, orig_mapcount - 1);
--	return orig_mapcount == 0;
--}
--
--/*
-- * When mapping a THP's first pmd, or unmapping its last pmd, if that THP
-- * also has pte mappings, then those must be discounted: in order to maintain
-- * NR_ANON_MAPPED and NR_FILE_MAPPED statistics exactly, without any drift,
-- * and to decide when an anon THP should be put on the deferred split queue.
-- * This function must be called between lock_ and unlock_compound_mapcounts().
-- */
--static int nr_subpages_unmapped(struct page *head, int nr_subpages)
-+int total_compound_mapcount(struct page *head)
- {
--	int nr = nr_subpages;
-+	int mapcount = head_compound_mapcount(head);
-+	int nr_subpages;
- 	int i;
- 
--	/* Discount those subpages mapped by pte */
-+	/* In the common case, avoid the loop when no subpages mapped by PTE */
-+	if (head_subpages_mapcount(head) == 0)
-+		return mapcount;
-+	/*
-+	 * Add all the PTE mappings of those subpages mapped by PTE.
-+	 * Limit the loop, knowing that only subpages_mapcount are mapped?
-+	 * Perhaps: given all the raciness, that may be a good or a bad idea.
-+	 */
-+	nr_subpages = thp_nr_pages(head);
- 	for (i = 0; i < nr_subpages; i++)
--		if (atomic_read(&head[i]._mapcount) >= 0)
--			nr--;
--	return nr;
-+		mapcount += atomic_read(&head[i]._mapcount);
-+
-+	/* But each of those _mapcounts was based on -1 */
-+	mapcount += nr_subpages;
-+	return mapcount;
- }
- 
- /*
-- * page_dup_compound_rmap(), used when copying mm, or when splitting pmd,
-+ * page_dup_compound_rmap(), used when copying mm,
-  * provides a simple example of using lock_ and unlock_compound_mapcounts().
-  */
--void page_dup_compound_rmap(struct page *page, bool compound)
-+void page_dup_compound_rmap(struct page *head)
- {
- 	struct compound_mapcounts mapcounts;
--	struct page *head;
- 
- 	/*
- 	 * Hugetlb pages could use lock_compound_mapcounts(), like THPs do;
-@@ -1176,20 +1157,15 @@ void page_dup_compound_rmap(struct page *page, bool compound)
- 	 * Note that hugetlb does not call page_add_file_rmap():
- 	 * here is where hugetlb shared page mapcount is raised.
- 	 */
--	if (PageHuge(page)) {
--		atomic_inc(compound_mapcount_ptr(page));
--		return;
--	}
-+	if (PageHuge(head)) {
-+		atomic_inc(compound_mapcount_ptr(head));
-+	} else if (PageTransHuge(head)) {
-+		/* That test is redundant: it's for safety or to optimize out */
- 
--	head = compound_head(page);
--	lock_compound_mapcounts(head, &mapcounts);
--	if (compound) {
-+		lock_compound_mapcounts(head, &mapcounts);
- 		mapcounts.compound_mapcount++;
--	} else {
--		mapcounts.subpages_mapcount++;
--		subpage_mapcount_inc(page);
-+		unlock_compound_mapcounts(head, &mapcounts);
- 	}
--	unlock_compound_mapcounts(head, &mapcounts);
- }
- 
- /**
-@@ -1304,35 +1280,34 @@ void page_add_anon_rmap(struct page *page,
- 	struct compound_mapcounts mapcounts;
- 	int nr = 0, nr_pmdmapped = 0;
- 	bool compound = flags & RMAP_COMPOUND;
--	bool first;
-+	bool first = true;
- 
- 	if (unlikely(PageKsm(page)))
- 		lock_page_memcg(page);
--	else
--		VM_BUG_ON_PAGE(!PageLocked(page), page);
- 
--	if (likely(!PageCompound(page))) {
-+	/* Is page being mapped by PTE? Is this its first map to be added? */
-+	if (likely(!compound)) {
- 		first = atomic_inc_and_test(&page->_mapcount);
- 		nr = first;
-+		if (first && PageCompound(page)) {
-+			struct page *head = compound_head(page);
-+
-+			lock_compound_mapcounts(head, &mapcounts);
-+			mapcounts.subpages_mapcount++;
-+			nr = !mapcounts.compound_mapcount;
-+			unlock_compound_mapcounts(head, &mapcounts);
-+		}
-+	} else if (PageTransHuge(page)) {
-+		/* That test is redundant: it's for safety or to optimize out */
- 
--	} else if (compound && PageTransHuge(page)) {
- 		lock_compound_mapcounts(page, &mapcounts);
- 		first = !mapcounts.compound_mapcount;
- 		mapcounts.compound_mapcount++;
- 		if (first) {
--			nr = nr_pmdmapped = thp_nr_pages(page);
--			if (mapcounts.subpages_mapcount)
--				nr = nr_subpages_unmapped(page, nr_pmdmapped);
-+			nr_pmdmapped = thp_nr_pages(page);
-+			nr = nr_pmdmapped - mapcounts.subpages_mapcount;
- 		}
- 		unlock_compound_mapcounts(page, &mapcounts);
--	} else {
--		struct page *head = compound_head(page);
--
--		lock_compound_mapcounts(head, &mapcounts);
--		mapcounts.subpages_mapcount++;
--		first = subpage_mapcount_inc(page);
--		nr = first && !mapcounts.compound_mapcount;
--		unlock_compound_mapcounts(head, &mapcounts);
- 	}
- 
- 	VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
-@@ -1411,28 +1386,29 @@ void page_add_file_rmap(struct page *page,
- 	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
- 	lock_page_memcg(page);
- 
--	if (likely(!PageCompound(page))) {
-+	/* Is page being mapped by PTE? Is this its first map to be added? */
-+	if (likely(!compound)) {
- 		first = atomic_inc_and_test(&page->_mapcount);
- 		nr = first;
-+		if (first && PageCompound(page)) {
-+			struct page *head = compound_head(page);
-+
-+			lock_compound_mapcounts(head, &mapcounts);
-+			mapcounts.subpages_mapcount++;
-+			nr = !mapcounts.compound_mapcount;
-+			unlock_compound_mapcounts(head, &mapcounts);
-+		}
-+	} else if (PageTransHuge(page)) {
-+		/* That test is redundant: it's for safety or to optimize out */
- 
--	} else if (compound && PageTransHuge(page)) {
- 		lock_compound_mapcounts(page, &mapcounts);
- 		first = !mapcounts.compound_mapcount;
- 		mapcounts.compound_mapcount++;
- 		if (first) {
--			nr = nr_pmdmapped = thp_nr_pages(page);
--			if (mapcounts.subpages_mapcount)
--				nr = nr_subpages_unmapped(page, nr_pmdmapped);
-+			nr_pmdmapped = thp_nr_pages(page);
-+			nr = nr_pmdmapped - mapcounts.subpages_mapcount;
- 		}
- 		unlock_compound_mapcounts(page, &mapcounts);
--	} else {
--		struct page *head = compound_head(page);
--
--		lock_compound_mapcounts(head, &mapcounts);
--		mapcounts.subpages_mapcount++;
--		first = subpage_mapcount_inc(page);
--		nr = first && !mapcounts.compound_mapcount;
--		unlock_compound_mapcounts(head, &mapcounts);
- 	}
- 
- 	if (nr_pmdmapped)
-@@ -1471,29 +1447,29 @@ void page_remove_rmap(struct page *page,
- 
- 	lock_page_memcg(page);
- 
--	/* page still mapped by someone else? */
--	if (likely(!PageCompound(page))) {
-+	/* Is page being unmapped by PTE? Is this its last map to be removed? */
-+	if (likely(!compound)) {
- 		last = atomic_add_negative(-1, &page->_mapcount);
- 		nr = last;
-+		if (last && PageCompound(page)) {
-+			struct page *head = compound_head(page);
-+
-+			lock_compound_mapcounts(head, &mapcounts);
-+			mapcounts.subpages_mapcount--;
-+			nr = !mapcounts.compound_mapcount;
-+			unlock_compound_mapcounts(head, &mapcounts);
-+		}
-+	} else if (PageTransHuge(page)) {
-+		/* That test is redundant: it's for safety or to optimize out */
- 
--	} else if (compound && PageTransHuge(page)) {
- 		lock_compound_mapcounts(page, &mapcounts);
- 		mapcounts.compound_mapcount--;
- 		last = !mapcounts.compound_mapcount;
- 		if (last) {
--			nr = nr_pmdmapped = thp_nr_pages(page);
--			if (mapcounts.subpages_mapcount)
--				nr = nr_subpages_unmapped(page, nr_pmdmapped);
-+			nr_pmdmapped = thp_nr_pages(page);
-+			nr = nr_pmdmapped - mapcounts.subpages_mapcount;
- 		}
- 		unlock_compound_mapcounts(page, &mapcounts);
--	} else {
--		struct page *head = compound_head(page);
--
--		lock_compound_mapcounts(head, &mapcounts);
--		mapcounts.subpages_mapcount--;
--		last = subpage_mapcount_dec(page);
--		nr = last && !mapcounts.compound_mapcount;
--		unlock_compound_mapcounts(head, &mapcounts);
- 	}
- 
- 	if (nr_pmdmapped) {
--- 
-2.35.3
+T24gMjIvMTEvMjAyMiA1OjExIHBtLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+IFRoaXMgZW1h
+aWwgd2FzIHNlbnQgZnJvbSBvdXRzaWRlIG9mIE1heExpbmVhci4NCj4gDQo+IE9uIFR1ZSwgTm92
+IDIyLCAyMDIyIGF0IDAzOjM5OjA3UE0gKzA4MDAsIFJhaHVsIFRhbndhciB3cm90ZToNCj4gID4g
+SW50ZWwncyBBUElDIGZhbWlseSBvZiBpbnRlcnJ1cHQgY29udHJvbGxlcnMgc3VwcG9ydCBsb2Nh
+bCBBUElDDQo+ICA+IChsYXBpYykgJiBJL08gQVBJQyAoaW9hcGljKS4gQ29udmVydCBleGlzdGlu
+ZyBiaW5kaW5ncyBmb3IgbGFwaWMNCj4gID4gJiBpb2FwaWMgZnJvbSB0ZXh0IHRvIFlBTUwgc2No
+ZW1hLiBTZXBhcmF0ZSBsYXBpYyAmIGlvYXBpYyBzY2hlbWFzLg0KPiAgPiBBZGRkaXRpb25hbGx5
+LCBhZGQgZGVzY3JpcHRpb24gd2hpY2ggd2FzIG1pc3NpbmcgaW4gdGV4dCBmaWxlIGFuZA0KPiAg
+PiBhZGQgZmV3IG1vcmUgcmVxdWlyZWQgc3RhbmRhcmQgcHJvcGVydGllcyB3aGljaCB3ZXJlIGFs
+c28gbWlzc2luZw0KPiAgPiBpbiB0ZXh0IGZpbGUuDQo+IA0KPiAuLi4NCj4gDQo+ICA+ICsjIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMCBPUiBCU0QtMi1DbGF1c2UpDQo+ICA+ICsl
+WUFNTCAxLjINCj4gID4gKy0tLQ0KPiAgPiArJGlkOiANCj4gImh0dHA6Ly9kZXZpY2V0cmVlLm9y
+Zy9zY2hlbWFzL2ludGVycnVwdC1jb250cm9sbGVyL2ludGVsLGNlNDEwMC1pb2FwaWMueWFtbCMg
+PGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL2ludGVycnVwdC1jb250cm9sbGVyL2ludGVs
+LGNlNDEwMC1pb2FwaWMueWFtbCM+Ig0KPiAgPiArJHNjaGVtYTogImh0dHA6Ly9kZXZpY2V0cmVl
+Lm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIyANCj4gPGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9t
+ZXRhLXNjaGVtYXMvY29yZS55YW1sIz4iDQo+ICA+ICsNCj4gID4gK3RpdGxlOiBJbnRlbCBJL08g
+QWR2YW5jZWQgUHJvZ3JhbW1hYmxlIEludGVycnVwdCBDb250cm9sbGVyIChJTyBBUElDKQ0KPiAN
+Cj4gID4gK21haW50YWluZXJzOg0KPiAgPiArIC0gU2ViYXN0aWFuIEFuZHJ6ZWogU2lld2lvciA8
+YmlnZWFzeUBsaW51dHJvbml4LmRlPg0KPiANCj4gSSdtIG5vdCBzdXJlLCB5b3UgbmVlZCB0byBo
+YXZlIGEgY29uZmlybWF0aW9uIGJlZm9yZSBwdXR0aW5nIHNvbWVvbmUncyANCj4gbmFtZSBoZXJl
+Lg0KPiBZb3VycyBpcyBlYXNpZXIgdG8gYWRkLg0KPg0KDQpXZWxsIG5vdGVkLCB3aWxsIHVwZGF0
+ZS4NCg0KDQoNCj4gID4gK2Rlc2NyaXB0aW9uOiB8DQo+ICA+ICsgSW50ZWwncyBBZHZhbmNlZCBQ
+cm9ncmFtbWFibGUgSW50ZXJydXB0IENvbnRyb2xsZXIgKEFQSUMpIGlzIGENCj4gID4gKyBmYW1p
+bHkgb2YgaW50ZXJydXB0IGNvbnRyb2xsZXJzLiBUaGUgQVBJQyBpcyBhIHNwbGl0DQo+ICA+ICsg
+YXJjaGl0ZWN0dXJlIGRlc2lnbiwgd2l0aCBhIGxvY2FsIGNvbXBvbmVudCAoTEFQSUMpIGludGVn
+cmF0ZWQNCj4gID4gKyBpbnRvIHRoZSBwcm9jZXNzb3IgaXRzZWxmIGFuZCBhbiBleHRlcm5hbCBJ
+L08gQVBJQy4gTG9jYWwgQVBJQw0KPiAgPiArIChsYXBpYykgcmVjZWl2ZXMgaW50ZXJydXB0cyBm
+cm9tIHRoZSBwcm9jZXNzb3IncyBpbnRlcnJ1cHQgcGlucywNCj4gID4gKyBmcm9tIGludGVybmFs
+IHNvdXJjZXMgYW5kIGZyb20gYW4gZXh0ZXJuYWwgSS9PIEFQSUMgKGlvYXBpYykuDQo+ICA+ICsg
+QW5kIGl0IHNlbmRzIHRoZXNlIHRvIHRoZSBwcm9jZXNzb3IgY29yZSBmb3IgaGFuZGxpbmcuDQo+
+IA0KPiAgPiArIFNlZSBodHRwczovL3Bkb3MuY3NhaWwubWl0LmVkdS82LjgyOC8yMDA4L3JlYWRp
+bmdzL2lhMzIvSUEzMi0zQS5wZGYgDQo+IDxodHRwczovL3Bkb3MuY3NhaWwubWl0LmVkdS82Ljgy
+OC8yMDA4L3JlYWRpbmdzL2lhMzIvSUEzMi0zQS5wZGY+DQo+IA0KPiBEdW5ubyBpZiBzY2hlbWEg
+aGFzIHNwZWNpYWwgZm9ybWF0IGZvciBkYXRhIHNoZWV0IGxpbmtzLi4uDQo+IA0KDQoNCkV4YW1w
+bGUtc2NoZW1hIHNheXMgdGhpcyBpcyB0aGUgcGxhY2UgdG8gcHV0IFVSTCdzLi4NCg0KDQoNCj4g
+ID4gKyBDaGFwdGVyIDggZm9yIG1vcmUgZGV0YWlscy4NCj4gID4gKw0KPiAgPiArIE1hbnkgb2Yg
+dGhlIEludGVsJ3MgZ2VuZXJpYyBkZXZpY2VzIGxpa2UgaHBldCwgaW9hcGljLCBsYXBpYyBoYXZl
+DQo+ICA+ICsgdGhlIGNlNDEwMCBuYW1lIGluIHRoZWlyIGNvbXBhdGlibGUgcHJvcGVydHkgbmFt
+ZXMgYmVjYXVzZSB0aGV5DQo+IA0KPiAgPiArIGZpcnN0IGFwcGVhcmVkIGluIENFNDEwMCBTb0Mu
+IFNlZSBiaW5kaW5ncy94ODYvY2U0MTAwLnR4dCBmb3IgbW9yZQ0KPiANCj4gU2hvdWxkbid0IHlv
+dSBjaGFuZ2UgdGhpcz8NCj4gDQoNCg0KRG8geW91IG1lYW4gY2hhbmdlIGNvbXBhdGliaWxpdHkg
+cHJvcGVydHkgcHJlZml4IGZyb20gDQoiaW50ZWwsY2U0MTAwLWlvYXBpYyIgdG8gImludGVsLGlv
+YXBpYyI/IElmIHllcywgdGhlbiBpIHRvdGFsbHkgYWdyZWUgDQphbmQgaSB3aWxsIGNoYW5nZSBp
+dCAoaW5jbHVkaW5nIG5ldyBmaWxlIG5hbWVzICYgYWxsIG90aGVyIHJlZmVyZW5jZXMgdG8gDQpj
+ZTQxMDApLiBJZiBub3QsIHBsZWFzZSBjbGFyaWZ5IG1vcmUuLg0KDQoNCj4gID4gKyBkZXRhaWxz
+IG9uIGl0Lg0KPiAgPiArDQo+ICA+ICsgVGhpcyBzY2hlbWEgZGVmaW5lcyBiaW5kaW5ncyBmb3Ig
+SS9PIEFQSUMgaW50ZXJydXB0IGNvbnRyb2xsZXIuDQo+IA0KPiAuLi4NCj4gDQo+ICA+ICttYWlu
+dGFpbmVyczoNCj4gID4gKyAtIFNlYmFzdGlhbiBBbmRyemVqIFNpZXdpb3IgPGJpZ2Vhc3lAbGlu
+dXRyb25peC5kZT4NCj4gID4gKw0KPiAgPiArDQo+ICA+ICtkZXNjcmlwdGlvbjogfA0KPiAgPiAr
+IEludGVsJ3MgQWR2YW5jZWQgUHJvZ3JhbW1hYmxlIEludGVycnVwdCBDb250cm9sbGVyIChBUElD
+KSBpcyBhDQo+ICA+ICsgZmFtaWx5IG9mIGludGVycnVwdCBjb250cm9sbGVycy4gVGhlIEFQSUMg
+aXMgYSBzcGxpdA0KPiAgPiArIGFyY2hpdGVjdHVyZSBkZXNpZ24sIHdpdGggYSBsb2NhbCBjb21w
+b25lbnQgKExBUElDKSBpbnRlZ3JhdGVkDQo+ICA+ICsgaW50byB0aGUgcHJvY2Vzc29yIGl0c2Vs
+ZiBhbmQgYW4gZXh0ZXJuYWwgSS9PIEFQSUMuIExvY2FsIEFQSUMNCj4gID4gKyAobGFwaWMpIHJl
+Y2VpdmVzIGludGVycnVwdHMgZnJvbSB0aGUgcHJvY2Vzc29yJ3MgaW50ZXJydXB0IHBpbnMsDQo+
+ICA+ICsgZnJvbSBpbnRlcm5hbCBzb3VyY2VzIGFuZCBmcm9tIGFuIGV4dGVybmFsIEkvTyBBUElD
+IChpb2FwaWMpLg0KPiAgPiArIEFuZCBpdCBzZW5kcyB0aGVzZSB0byB0aGUgcHJvY2Vzc29yIGNv
+cmUgZm9yIGhhbmRsaW5nLg0KPiAgPiArIFNlZSBodHRwczovL3Bkb3MuY3NhaWwubWl0LmVkdS82
+LjgyOC8yMDA4L3JlYWRpbmdzL2lhMzIvSUEzMi0zQS5wZGYgDQo+IDxodHRwczovL3Bkb3MuY3Nh
+aWwubWl0LmVkdS82LjgyOC8yMDA4L3JlYWRpbmdzL2lhMzIvSUEzMi0zQS5wZGY+DQo+ICA+ICsg
+Q2hhcHRlciA4IGZvciBtb3JlIGRldGFpbHMuDQo+ICA+ICsNCj4gID4gKyBNYW55IG9mIHRoZSBJ
+bnRlbCdzIGdlbmVyaWMgZGV2aWNlcyBsaWtlIGhwZXQsIGlvYXBpYywgbGFwaWMgaGF2ZQ0KPiAg
+PiArIHRoZSBjZTQxMDAgbmFtZSBpbiB0aGVpciBjb21wYXRpYmxlIHByb3BlcnR5IG5hbWVzIGJl
+Y2F1c2UgdGhleQ0KPiAgPiArIGZpcnN0IGFwcGVhcmVkIGluIENFNDEwMCBTb0MuIFNlZSBiaW5k
+aW5ncy94ODYvY2U0MTAwLnR4dCBmb3IgbW9yZQ0KPiAgPiArIGRldGFpbHMgb24gaXQuDQo+ICA+
+ICsNCj4gID4gKyBUaGlzIHNjaGVtYSBkZWZpbmVzIGJpbmRpbmdzIGZvciBsb2NhbCBBUElDIGlu
+dGVycnVwdCBjb250cm9sbGVyLg0KPiANCj4gU2FtZSB0d28gY29tbWVudHMgYXMgcGVyIGFib3Zl
+Lg0KPg0KDQoNCldlbGwgbm90ZWQuDQoNCg0KPiAtLSANCj4gV2l0aCBCZXN0IFJlZ2FyZHMsDQo+
+IEFuZHkgU2hldmNoZW5rbw0KPiANCg0K
 
