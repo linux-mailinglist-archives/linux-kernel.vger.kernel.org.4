@@ -2,173 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8668A6338FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94881633907
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbiKVJsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:48:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
+        id S233448AbiKVJue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233357AbiKVJs2 (ORCPT
+        with ESMTP id S233443AbiKVJuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:48:28 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663DF2F034;
-        Tue, 22 Nov 2022 01:48:27 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id v7so10323334wmn.0;
-        Tue, 22 Nov 2022 01:48:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tl1tm9PBQRn+U8KTXYVM7yfK2dKQwpuC0dLGysAV9zQ=;
-        b=HncGcit0JoF2eoepnzm5Rv32O9ZhxWzVNhT7fpQi/1ZmJGUeAbzWvDcx9M3pZ3oIwx
-         ldJmCOWN4Z6eqtDSMq5LPBLAbtiUjRYIswQgC1C0R0psNdmJTMCo1rejd6YUYDz+cVeH
-         sC/A5nf8K7kNntAGI0Iv2CziEE67b/UBccc2zi5HKiRavU4EZ+KxmgVCf9UJRc7dhK4p
-         6NqWVOu6DBKbyqlcI3v+sA9I6nxvOHLtHR1XEnUgs5bG1JjTbHJreWkKf4Z+iahunve6
-         LLwr54w5OIK7goNbOfvqBmRG7xdHslCdi32FSwsk2KL+mGk3ADXGg2mmApbLaCP8IBVV
-         asxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tl1tm9PBQRn+U8KTXYVM7yfK2dKQwpuC0dLGysAV9zQ=;
-        b=RjvrSrq9Ak0QSCAVw3AUwZ2PIpMrgsLwZZh5PaW78XfzSJcEBtZdDfpxWh+7RDS84r
-         96RZA7DxBe+h5O135b3P4VFB0Rp5f+e0BM+jmXzDzayLSSxzpalqaFxsP+fqqqJ2sWcq
-         RQqgjM5bzqhWoOtpwmkCM6A08RmmGpG92YA4BnHGi4cHSDbBDYwe9/c97DEB0cROHoNE
-         aX9pZnBwG7ELCxxkjidusLIJUwk0iy4v4KmUUvFZA1RZS5u6YGSFsmBGsNXF3ZrC/3W4
-         98LZjJ1SWhxokjOWcGtScLqzaZy6UK1KhtORsW2qTWhjjwZkcrvurK9dh2nwpVUW6lct
-         VcRw==
-X-Gm-Message-State: ANoB5pl7+p3EsACZZ2umSz+8KWRwqwEGp45ayOafpx1ksSAJMviJ+mss
-        f1AqPkFzqAyO+HNTpf7wcoA=
-X-Google-Smtp-Source: AA0mqf4VO8MfjcSudJMvl2CWKuZCsx4k/rCFtYAaXTgc4VK3ZNFtczyk6V0r6HIhWkk5vTZ91wqM2g==
-X-Received: by 2002:a05:600c:4151:b0:3cf:6fd1:d94e with SMTP id h17-20020a05600c415100b003cf6fd1d94emr15195821wmm.61.1669110505672;
-        Tue, 22 Nov 2022 01:48:25 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id o18-20020a05600c4fd200b003cfa26c410asm23525460wmq.20.2022.11.22.01.48.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 01:48:24 -0800 (PST)
-Message-ID: <412024b7-c4ce-bae6-edd0-b415c930c088@gmail.com>
-Date:   Tue, 22 Nov 2022 10:48:22 +0100
+        Tue, 22 Nov 2022 04:50:14 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44B72F3B7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:49:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1669110549;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=++6jCyUWhgl+AO9BCP35VWtiY3btW+9+fbAeJFJTpxI=;
+        b=k1puzlLO/94LNt0YPeqRL0LUqY0riVeJhRRrs7kGi8QFCGB7f6vah4g38XJq8nmduOv2tM
+        QxnOfAaiVmIcJ8J6uDUFGFGVTwoanMvBkVyVU/VL4M4FAq2jjnAZhYoE9h7JYHcPcRiFls
+        utHWfxQnH+hZNNOdZklkObR2FpiDfYklmYF+LG9AszBvmuMUR9aWHlaQlIgZx/6yzem9TF
+        4+809sjnka0hwoS62kRp/DSNBHHx3C2sPDNapH5bQC2Qthydnupy3Rby0PLQlqded1CT8j
+        sKPWe8p1vt+m4U1KnkNwab6oDwK6A+XlEpG8bBG/DGRxrmH0OY5dYin7o9qIkg==
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-364-x1h5qp3HNR270WJcm6yohA-1; Tue, 22 Nov 2022 04:49:07 -0500
+X-MC-Unique: x1h5qp3HNR270WJcm6yohA-1
+Received: from MN2PR19MB3693.namprd19.prod.outlook.com (2603:10b6:208:18a::19)
+ by DM4PR19MB6122.namprd19.prod.outlook.com (2603:10b6:8:6d::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5834.11; Tue, 22 Nov 2022 09:49:05 +0000
+Received: from MN2PR19MB3693.namprd19.prod.outlook.com
+ ([fe80::3696:7b21:2a3f:1503]) by MN2PR19MB3693.namprd19.prod.outlook.com
+ ([fe80::3696:7b21:2a3f:1503%7]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
+ 09:49:05 +0000
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
+Subject: Re: [PATCH v3 0/4] x86/of: Fix a bug in x86 arch OF support
+Thread-Topic: [PATCH v3 0/4] x86/of: Fix a bug in x86 arch OF support
+Thread-Index: AQHY/kRd6x7F/veGJUyUIWlGtgApL65KqhWAgAAIsIA=
+Date:   Tue, 22 Nov 2022 09:49:04 +0000
+Message-ID: <a7a1b539-bd69-0227-ea93-b90f2e3ef2cd@maxlinear.com>
+References: <cover.1669100394.git.rtanwar@maxlinear.com>
+ <Y3yTxRAVSOJTMuUu@smile.fi.intel.com>
+In-Reply-To: <Y3yTxRAVSOJTMuUu@smile.fi.intel.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR19MB3693:EE_|DM4PR19MB6122:EE_
+x-ms-office365-filtering-correlation-id: 4e0ffc08-d418-42c4-1ec3-08dacc6ecaf8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: v1kqiP46Ta00adSelINkgUheCQBmhExsE50PyKF/UCrAaIHysOJixBvXgMQFSoeEdc/FPi4a+zj4OIttcFhiXnGgxUTJNvppSZUuncQ6xKahHYqBM1q8hZ7ExVVEXVS80qpqSvcT5GYBxEDoZDwJmnPV+UpssdbgqyzDwc9sun1qbH/nODsEG88Otjmsm8KhwT0Aid474p8ycjzuIg9lmAzA/3i+bpgdzJEGCqEl8KdBLUYq/fDDLuv4poogziE2xpyujkNICvup9OG0YF1/coguofPuK16R0fHVMur9/WazB/mTtoiiBGlrpcJJEstfHL1KfsaryYwGH9sg95qHo3/ZxjawYPHwtZp4Tg7pX57tzDi2X6BpDh8B39XJR9wq18i/Y6HrwIxtZBTIY8pudoDoKNF+Girnl1vgO0v+jYVHY0B7rIEWyyHZsiSE33WFMQadmFqHMdNMnzBBJv2wUkdLe/xx8u6MsMX+HkF/T8uxlSD89I4lAoed3S0sQ2UgthHVBFbvH87cJf7mA/jthtyAChx/VYzPxa1f7sl+EzfCOJwnXOlvLkhjw/bwkVsuQ8UOD/j2s8sgPcU/oLGYSgjzeor8UJhp63xSrrMyQH1pMD3OfRUSb6L4/fQI8t0LTwOsLl+9/JHgymohuYmtvA6bydbqzP6tDPHoz1F9nzd47FlWrfwrqq1dVBBOx0bFSTpJlwCEEEjOwcawbOnCTcCUrayP3sAyfwBzi4dThQ7NFnL/S99E/mSXuDaAoynKppXRY97OZQ39ZEIsysmISg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR19MB3693.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(366004)(39850400004)(346002)(451199015)(38100700002)(122000001)(186003)(478600001)(31696002)(86362001)(54906003)(38070700005)(8676002)(4326008)(53546011)(6486002)(6506007)(107886003)(8936002)(64756008)(71200400001)(76116006)(66446008)(66946007)(7416002)(316002)(66556008)(41300700001)(66476007)(5660300002)(6916009)(2616005)(91956017)(83380400001)(4744005)(2906002)(6512007)(36756003)(31686004)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZFlaeW9tWEM2YjQvb3JjRFdaM0YrY3BhTGtSNkliTVJSRWpKTTVKeTVKNW00?=
+ =?utf-8?B?UGk0bzhieHhPZkFZbHZsNCtkSU8wVmJKbWp4VS92OFlZakludGRuZXdSYmYy?=
+ =?utf-8?B?UEVwZVViSHRMRXRhSkZxU05NZkhKY3Nza0tWSFNwenlXakVmSkt1TkRYWUVC?=
+ =?utf-8?B?MnZMa2Q4SG5MbFhPaEUxMGJZVmJWYURxSE94bWdLTHNpNHJkTkFrRGRUUzR6?=
+ =?utf-8?B?S0FMUTVvajFPQ2RzdjJaUklmSUZPOTdza1NRKys2cGlnVnZXaS9FOGJKTjZT?=
+ =?utf-8?B?RS9aNEVmYjBEMWp4dVhFRUVHQWRyNDZRaFlod2hwWlFkaGN6R2M0U0hEVmYr?=
+ =?utf-8?B?OTltZGVLbUZvdXR2VzEyMWxJQVpscTZBTEdJazRmYmRRZ211S1Z1dVQvYTRT?=
+ =?utf-8?B?aVFMVFIvaFMrc3ppaXVYY3c1SGFWUEQwQzFZS01oaldXaHZxTjNKWXFZaVdy?=
+ =?utf-8?B?TFJoOUMzWENRaUtVRE53Tkc1NEN5TWdueXhrZnNwNkNzQXAvTFJWaFNuRzFY?=
+ =?utf-8?B?OVdUWEFJR0FNUjZsQ3lpN0RRd1JkYjdlaUtva2xkbEI5N0hVTnJnemNrN283?=
+ =?utf-8?B?R3lKSUtHekhUYmljbTBIcUxrYVprSS9JSlh3SjNKSnhHMWZ6MGRWaFJrcytZ?=
+ =?utf-8?B?UmRKbndOM0RDVXd2Q0JCQkNwb2NDSzFYa280N05qcEd0RVd3V1poTk5rNTRR?=
+ =?utf-8?B?bzE3YzZDRFdRSHUxMWtxVktEcU9KbDJBdWpGQ1VCSEh1RFpXUE5wSEJ5dVhO?=
+ =?utf-8?B?NDQ5dk11dHQyVTlGQjUrK0JoZDZpQ1BXQVFESy9KWHpxUHdkb1lCWDZwZjNp?=
+ =?utf-8?B?MFlGSTZYYXJUb241ZGJRZHA5aU9XVjdiNGJEdjRMb045cXV5R0lmN3NUVWc5?=
+ =?utf-8?B?MEZ4VGtWZ1ZCTVhZdC9Sc25SUTZJZWpPZVEwaTdrRmVLZ0g3UFc1QXZobjhG?=
+ =?utf-8?B?ZVFDcmttTnRqODcxTXNSalRtZmJpWTdFSThEWG95UVBRUFZ6cUcvWnM4Mlhw?=
+ =?utf-8?B?ZTZyUi9vdkxnTWc5c1RhMzA2d1E4S0dIeVhNSEg5MGtRUnVRcElCM1czbGlw?=
+ =?utf-8?B?VHc4Z203RzgxNkxIM3ViZUYwOE5oSTBPWTNEd3NmSmltWDFKVHJKTEg3OUVq?=
+ =?utf-8?B?OW9UK2VHTHJBWnA1L1NabUMvckRvTG1RQWdMdGNpSm02WTEwZzE3cE1BRVRS?=
+ =?utf-8?B?UXRZTkY5eE1XajNHZ25OWjMxaTNLV2U3QXdPeGsrU1lyZktRblNtaDhmZkxM?=
+ =?utf-8?B?bi9JbXNqbGZFQUNrc2MwM1IvSWpjYjAxai8vSGU2a2F5MjFvMkR5b0FpY3RM?=
+ =?utf-8?B?MmhEVS9ScGNSSVNrZEcxWE84RTFXM0xPRzJxMk0rS29EUFA0SDJlck4xdE1I?=
+ =?utf-8?B?VUNmdXl3N3FEcXlyTXIrYkNkb2pKUGFUY05VRkhZdmU3SzA5cC83RWRla3dj?=
+ =?utf-8?B?QjhkZFBHSTdsS3NVQnVwWUFETEs5YXRicTBRbzNCcE1JV2FXQ1lNQnc4SGts?=
+ =?utf-8?B?Y2NzQm5mSHNPejFxcGFzOGxHdDhHcDFIbEVnYU14YmVVRURxamVqUkQxZ0sw?=
+ =?utf-8?B?MFpCUzNtY1hqMFZ2YWd3WWFJSVdzdTY3OE93cTAvRzA4Q2hVeHhPdWtXNHAy?=
+ =?utf-8?B?Z005bEZzM3ZjVW93aUNaRWoweXVmamkvNHZkaUNxaklpNndjTDY0U3VSQTZP?=
+ =?utf-8?B?cVk5eTRQd0lZVHhGazZWaTc5M0xsVTRIWWZUOWdtbUhtNktkSndXaGh3TDlQ?=
+ =?utf-8?B?b1ZxWnBObVNjSHNRdTFEQWc0dFNkU1hTRTBXdWVxTEVRdk1ySVZrZUU5eVRx?=
+ =?utf-8?B?OWlmMEYxZUJzaldDdjhRYnpqeUQwUk5rSWVpZkxENEd0UXY4K2hPODJCQ1Rr?=
+ =?utf-8?B?SERNWm9IbEFVUDBDV1VJai84MTBkU0hCTDhGeTVqYVdxRmVlemhJeU0vMnZR?=
+ =?utf-8?B?WlN5c1JYSlRWbHdQVDUwZjBFcnBRTFlHRHUyV3J1b3Z0cHlFcE9GWGlOT2VD?=
+ =?utf-8?B?bFdhTEcxT1VpcDhwRkdMQW5KOEFzUnIvN3NjTGRGajFJWkljNDdaVURqb1Jm?=
+ =?utf-8?B?ekNQYnp5Yjd5YmYxZEd3dE14dWg3YjF3YWRYZWxkZlJ6WnpoUktoZ3pZSU5N?=
+ =?utf-8?B?d0NTV2U0U2FpV3FhYjQ0KzlJVDF2TVMyUVUzeFgyZW5pZUxOUmVLN25RNDBC?=
+ =?utf-8?B?RFE9PQ==?=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 1/1] pinctrl: meditatek: Startup with the IRQs disabled
+X-OriginatorOrg: maxlinear.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR19MB3693.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e0ffc08-d418-42c4-1ec3-08dacc6ecaf8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 09:49:04.9605
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: dac28005-13e0-41b8-8280-7663835f2b1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: x+fjTakFzBR0yl8wSXiFWHQ+W98bQl+bwJ+qXYDshFy2u4gLTcPf3YnNca2jF+BErYjN5+Mr8I567bWarFHZaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR19MB6122
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
 Content-Language: en-US
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sean Wang <sean.wang@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ross Zwisler <zwisler@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-References: <20221122-mtk-pinctrl-v1-0-bedf5655a3d2@chromium.org>
- <20221122-mtk-pinctrl-v1-1-bedf5655a3d2@chromium.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221122-mtk-pinctrl-v1-1-bedf5655a3d2@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <5AE8D1E93CC23F448AF035582D55234D@namprd19.prod.outlook.com>
+Content-Transfer-Encoding: base64
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+T24gMjIvMTEvMjAyMiA1OjE4IHBtLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+IFRoaXMgZW1h
+aWwgd2FzIHNlbnQgZnJvbSBvdXRzaWRlIG9mIE1heExpbmVhci4NCj4gDQo+IA0KPiBPbiBUdWUs
+IE5vdiAyMiwgMjAyMiBhdCAwMzozOTowNlBNICswODAwLCBSYWh1bCBUYW53YXIgd3JvdGU6DQo+
+IA0KPj4gUmFodWwgVGFud2FyICg0KToNCj4+ICAgIHg4Ni9vZjogQ29udmVydCBJbnRlbCdzIEFQ
+SUMgYmluZGluZ3MgdG8gWUFNTCBzY2hlbWENCj4+ICAgIHg4Ni9vZjogSW50cm9kdWNlIG5ldyBv
+cHRpb25hbCBib29sIHByb3BlcnR5IGZvciBsYXBpYw0KPiANCj4gWW91IG5lZWQgcHJvcGVybHkg
+cHJlZml4IHRoZSBmaXJzdCB0d28gcGF0Y2hlcy4gSSBndWVzcyBpdCdzIHNvbWV0aGluZyBsaWtl
+DQo+ICJkdC1iaW5kaW5nczogeDg2OiBpb2FwaWM6Ii4NCj4gDQoNClllcywgaSBqdXN0IGNoZWNr
+ZWQgdGhlIGdpdCBsb2cgb2YgZGV2aWNldHJlZS5jIGFuZCB1c2VkIHNhbWUgcHJlZml4ZXMgDQpo
+ZXJlLiBUaGFua3MgZm9yIGNvcnJlY3RpbmcgaXQuIEkgd2lsbCB1cGRhdGUgaXQuDQoNClJlZ2Fy
+ZHMsDQpSYWh1bA0KDQoNCj4gLS0NCj4gV2l0aCBCZXN0IFJlZ2FyZHMsDQo+IEFuZHkgU2hldmNo
+ZW5rbw0KPiANCj4gDQo+IA0KDQo=
 
-
-On 22/11/2022 00:38, Ricardo Ribalda wrote:
-> If the system is restarted via kexec(), the peripherals do not start
-> with a known state.
-> 
-> If the previous system had enabled an IRQs we will receive unexected
-> IRQs that can lock the system.
-> 
-> [   28.109251] watchdog: BUG: soft lockup - CPU#0 stuck for 26s!
-> [swapper/0:0]
-> [   28.109263] Modules linked in:
-> [   28.109273] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
-> 5.15.79-14458-g4b9edf7b1ac6 #1 9f2e76613148af94acccd64c609a552fb4b4354b
-> [   28.109284] Hardware name: Google Elm (DT)
-> [   28.109290] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS
-> 		BTYPE=--)
-> [   28.109298] pc : __do_softirq+0xa0/0x388
-> [   28.109309] lr : __do_softirq+0x70/0x388
-> [   28.109316] sp : ffffffc008003ee0
-> [   28.109321] x29: ffffffc008003f00 x28: 000000000000000a x27:
-> 0000000000000080
-> [   28.109334] x26: 0000000000000001 x25: ffffffefa7b350c0 x24:
-> ffffffefa7b47480
-> [   28.109346] x23: ffffffefa7b3d000 x22: 0000000000000000 x21:
-> ffffffefa7b0fa40
-> [   28.109358] x20: ffffffefa7b005b0 x19: ffffffefa7b47480 x18:
-> 0000000000065b6b
-> [   28.109370] x17: ffffffefa749c8b0 x16: 000000000000018c x15:
-> 00000000000001b8
-> [   28.109382] x14: 00000000000d3b6b x13: 0000000000000006 x12:
-> 0000000000057e91
-> [   28.109394] x11: 0000000000000000 x10: 0000000000000000 x9 :
-> ffffffefa7b47480
-> [   28.109406] x8 : 00000000000000e0 x7 : 000000000f424000 x6 :
-> 0000000000000000
-> [   28.109418] x5 : ffffffefa7dfaca0 x4 : ffffffefa7dfadf0 x3 :
-> 000000000000000f
-> [   28.109429] x2 : 0000000000000000 x1 : 0000000000000100 x0 :
-> 0000000001ac65c5
-> [   28.109441] Call trace:
-> [   28.109447]  __do_softirq+0xa0/0x388
-> [   28.109454]  irq_exit+0xc0/0xe0
-> [   28.109464]  handle_domain_irq+0x68/0x90
-> [   28.109473]  gic_handle_irq+0xac/0xf0
-> [   28.109480]  call_on_irq_stack+0x28/0x50
-> [   28.109488]  do_interrupt_handler+0x44/0x58
-> [   28.109496]  el1_interrupt+0x30/0x58
-> [   28.109506]  el1h_64_irq_handler+0x18/0x24
-> [   28.109512]  el1h_64_irq+0x7c/0x80
-> [   28.109519]  arch_local_irq_enable+0xc/0x18
-> [   28.109529]  default_idle_call+0x40/0x140
-> [   28.109539]  do_idle+0x108/0x290
-> [   28.109547]  cpu_startup_entry+0x2c/0x30
-> [   28.109554]  rest_init+0xe8/0xf8
-> [   28.109562]  arch_call_rest_init+0x18/0x24
-> [   28.109571]  start_kernel+0x338/0x42c
-> [   28.109578]  __primary_switched+0xbc/0xc4
-> [   28.109588] Kernel panic - not syncing: softlockup: hung tasks
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> 
-> diff --git a/drivers/pinctrl/mediatek/mtk-eint.c b/drivers/pinctrl/mediatek/mtk-eint.c
-> index 65d312967619..27f0a54e12bf 100644
-> --- a/drivers/pinctrl/mediatek/mtk-eint.c
-> +++ b/drivers/pinctrl/mediatek/mtk-eint.c
-> @@ -303,12 +303,15 @@ static struct irq_chip mtk_eint_irq_chip = {
->   
->   static unsigned int mtk_eint_hw_init(struct mtk_eint *eint)
->   {
-> -	void __iomem *reg = eint->base + eint->regs->dom_en;
-> +	void __iomem *dom_en = eint->base + eint->regs->dom_en;
-> +	void __iomem *mask_set = eint->base + eint->regs->mask_set;
->   	unsigned int i;
->   
->   	for (i = 0; i < eint->hw->ap_num; i += 32) {
-> -		writel(0xffffffff, reg);
-> -		reg += 4;
-> +		writel(0xffffffff, dom_en);
-> +		writel(0xffffffff, mask_set);
-> +		dom_en += 4;
-> +		mask_set += 4;
->   	}
->   
->   	return 0;
-> 
