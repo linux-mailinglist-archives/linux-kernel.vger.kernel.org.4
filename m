@@ -2,90 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4281F63326B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E852633274
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbiKVBxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        id S232386AbiKVB4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbiKVBxE (ORCPT
+        with ESMTP id S231895AbiKVB41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:53:04 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E12A14089
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:53:04 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 6so12794974pgm.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:53:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ef/dYlQV746zV7HsmZzIsfpA9DBWh47fHQKVjHWsG88=;
-        b=V6nNGPcFRhv76hz2oLZ/b6dKT4Xqgd4inWcYruCRq3jx5s2Q/qdoUPWg4Z3DMoqEP0
-         i2/lXnAb1xVNy1Nv2WPPVqzHUNlWWj2RymrXHzL5TBvkz92yBFZAS6ryH7HDMOgBLQDD
-         5HvnRK8rznhlMEmONhLUbPz5bpTONhZVe1JRw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ef/dYlQV746zV7HsmZzIsfpA9DBWh47fHQKVjHWsG88=;
-        b=QaRdm5dM9zX+nhTHXOmU+ih1mE3E6sxs8wC0AgfqmNyoh+K4YunF5K4Bit3O+uS7F1
-         lHM27SNz4vhAFE0IH49vgpv3ud4aqQ0lOrzC8rP/56U3TyB/zsGnjaCAwqFJ/VmOMFsh
-         aZYFjF71ig/V4HliOy/AiPXtRgWkyuE/59Ss1T0KrwRaWwZx2/UWOKYfFjlUdlWxYtM/
-         my825YMHOzuuh7Y/yCRfxFbSYLB6DvWfSV5/ZW4xfi+NRRWnlXeZ+ECAri7vBWsFvI6s
-         q9PkBOzlwmAqybJACgzmsmyT8aawAXJTR6a9piGaGMtC98XUw9ALLSbvWB802hpqUDAE
-         V9IA==
-X-Gm-Message-State: ANoB5pkfLB1oQJaZPeXII+lBXXaf3/vOpC26cHAnHumSMBl8IRj1k4Oj
-        eO9V5KWUN6PcAkiGL6WNkDgjUU70TQ0zCA==
-X-Google-Smtp-Source: AA0mqf5GK8otzLcc9t67L1TQtul/q99BZTHqxni4KNOyckphWFo+Ssx3RHdXJ/yWR5TT6Ni6gKblbg==
-X-Received: by 2002:a65:6d95:0:b0:46f:f482:6920 with SMTP id bc21-20020a656d95000000b0046ff4826920mr1372675pgb.327.1669081983563;
-        Mon, 21 Nov 2022 17:53:03 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
-        by smtp.gmail.com with ESMTPSA id z29-20020aa7991d000000b0056da63c8515sm9620767pff.91.2022.11.21.17.53.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 17:53:03 -0800 (PST)
-Date:   Tue, 22 Nov 2022 10:52:58 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v6 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
- zspages in LRU order
-Message-ID: <Y3wreqR1IRWFtSUz@google.com>
-References: <20221119001536.2086599-1-nphamcs@gmail.com>
- <20221119001536.2086599-5-nphamcs@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119001536.2086599-5-nphamcs@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 20:56:27 -0500
+X-Greylist: delayed 100 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 17:56:22 PST
+Received: from zg8tmty1ljiyny4xntuumtyw.icoremail.net (zg8tmty1ljiyny4xntuumtyw.icoremail.net [165.227.155.160])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8CD7317889;
+        Mon, 21 Nov 2022 17:56:22 -0800 (PST)
+Received: from 102.wangsu.com (unknown [59.61.78.232])
+        by app2 (Coremail) with SMTP id SyJltADnLkvJK3xjPGsAAA--.529S2;
+        Tue, 22 Nov 2022 09:54:17 +0800 (CST)
+From:   Pengcheng Yang <yangpc@wangsu.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Pengcheng Yang <yangpc@wangsu.com>
+Subject: [PATCH RESEND bpf 0/4] bpf, sockmap: Fix some issues with using apply_bytes
+Date:   Tue, 22 Nov 2022 09:53:59 +0800
+Message-Id: <1669082043-2508-1-git-send-email-yangpc@wangsu.com>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: SyJltADnLkvJK3xjPGsAAA--.529S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr1xGrWxtF4rZw1rCryfZwb_yoWxtrXEvr
+        W8tr98GrW8ZF18CayY9rZ8AF97Ga1DZrykGF9Iqry2gry8Zrn8Grs5Zr9Yyry8G3yYkr92
+        gr1kGrWkJr1jgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUUUUUUU
+X-CM-SenderInfo: p1dqw1nf6zt0xjvxhudrp/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/18 16:15), Nhat Pham wrote:
-[..]
-> @@ -1249,6 +1267,15 @@ void *zs_map_object(struct zs_pool *pool, unsigned long handle,
->  	obj_to_location(obj, &page, &obj_idx);
->  	zspage = get_zspage(page);
-> 
-> +#ifdef CONFIG_ZPOOL
-> +	/* Move the zspage to front of pool's LRU */
-> +	if (mm == ZS_MM_WO) {
-> +		if (!list_empty(&zspage->lru))
-> +			list_del(&zspage->lru);
-> +		list_add(&zspage->lru, &pool->lru);
-> +	}
-> +#endif
+Patch 0001~0003 fixes three issues with using apply_bytes when redirecting.
+Patch 0004 adds ingress tests for txmsg with apply_bytes in selftests.
 
-Do we consider pages that were mapped for MM_RO/MM_RW as cold?
-I wonder why, we use them, so technically they are not exactly
-"least recently used".
+Pengcheng Yang (4):
+  bpf, sockmap: Fix repeated calls to sock_put() when msg has more_data
+  bpf, sockmap: Fix missing BPF_F_INGRESS flag when using apply_bytes
+  bpf, sockmap: Fix data loss caused by using apply_bytes on ingress
+    redirect
+  selftests/bpf: Add ingress tests for txmsg with apply_bytes
+
+ include/linux/skmsg.h                      |  1 +
+ net/core/skmsg.c                           |  1 +
+ net/ipv4/tcp_bpf.c                         |  9 +++++++--
+ net/tls/tls_sw.c                           |  1 +
+ tools/testing/selftests/bpf/test_sockmap.c | 18 ++++++++++++++++++
+ 5 files changed, 28 insertions(+), 2 deletions(-)
+
+-- 
+1.8.3.1
+
