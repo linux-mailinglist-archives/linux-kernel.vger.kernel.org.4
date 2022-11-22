@@ -2,183 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADD4633C72
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC292633C75
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbiKVM2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S232618AbiKVM2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiKVM15 (ORCPT
+        with ESMTP id S233765AbiKVM20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:27:57 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8555213E9C;
-        Tue, 22 Nov 2022 04:27:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669120073; x=1700656073;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Y/8E7lM2FYXG7OVZdD4/JamFVEBuUNQaRVQdD9CEyeI=;
-  b=UmJCgfF9waNWplCtp5XSQk6RZm8fHuL10SooXjBH8ci1bpDb4xFqCrzs
-   se2RtUbUBvQMJi5AHVjUt8k+0+Xhudxe+x/VNcEDi/GLGz3BY5eWHetTz
-   vDbCv0DBOOJkYOxn2sfeHtnV151xGU06R2A2Cc6XSVSppSsgeRLtPcE+c
-   eERFwou55ldFtIlr9FNI7Bzw+3/rT8E85VGFmJP+bQ7ZXoW/CoAYeU3Js
-   zZqbHtx4z+q62GNWXXuEICRUrEUh+oFq/etmw/Bj0dneWF9HgfitXv3V3
-   OdJ9RO69IoM+qKE4XaE9MB0rVGbKw+daEWHNzu4hzht7xwUPm2cb9tsHR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="297157607"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="297157607"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 04:27:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="641400458"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="641400458"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP; 22 Nov 2022 04:27:53 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 04:27:52 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 22 Nov 2022 04:27:52 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 22 Nov 2022 04:27:18 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KDhzBvwIjuL6ybnD1dywzSHubClO4ipMvGK52LN+iCypY0mIj+GqGK7jj3PdwnoIWlge3xijBfFnr+Dt2fdAnjJeZxicL/zuhSunG8efmbW5MTV9wpaIore7kfREnHVFLFBlei1VDB9UVQ/myjWv0ATiXAGmAYja6uE16X7WrZByBQGQyJazovBlnB92K2xKgY/qDTMGztlfOyWJsNkMT97mqKY/Q0STaT1HrKvXkPmMAhs0A/KpY6cmysvbc328OL51vQx8+yZp3iCAKCh1fT8wu03D97quRin4UpXhGe3FYXU5EOoFlhC/IDrhYrTVkXFp4ct0+xIjTT6GNoyiEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bhp0F0h46AQAV9u+8Z1CKeBex1n/w46aANpeDeINgBU=;
- b=b3iLSMAtsq6Ch3n5aeOhywAOeiTXbO4oGF8fq8Me+AlVeeoYp3bnR9cN7AiuIdWOr3GZdsNOO8URQZ7yvqcjVWw2O/ZH+6JkhelziTNv6r/66wbG8AqF4ig39ND4jb/fLUM07Q01PQ9wzu5sLEFHEHVcHu3918vnKiOsVfAjQ9yU1qzpK/nloMRjgGUKexhb/5jMfIoYjxW7mahuhcEPRyYBk5XpRYw8P8GNGyHIUkqyyT8+OlMUhLFgarhLAtWo9EhCGFFguLKA0e30E5nG+WEuB6ZozdyuvpQ5XKC3minRqqGkIubj/ABOVm2180ksrWHGIKvIWyvQ5ymr8HIu4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- SA2PR11MB4780.namprd11.prod.outlook.com (2603:10b6:806:11d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 12:27:17 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::5f39:1ef:13a5:38b6]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::5f39:1ef:13a5:38b6%6]) with mapi id 15.20.5834.009; Tue, 22 Nov 2022
- 12:27:17 +0000
-Date:   Tue, 22 Nov 2022 13:27:04 +0100
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-CC:     Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Yevhen Orlov <yevhen.orlov@plvision.eu>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: marvell: prestera: add missing
- unregister_netdev() in prestera_port_create()
-Message-ID: <Y3zAGJhQVEnzQhAH@boxer>
-References: <1669115432-36841-1-git-send-email-zhangchangzhong@huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1669115432-36841-1-git-send-email-zhangchangzhong@huawei.com>
-X-ClientProxiedBy: FR3P281CA0135.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:94::19) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+        Tue, 22 Nov 2022 07:28:26 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3DC4C262;
+        Tue, 22 Nov 2022 04:28:25 -0800 (PST)
+Date:   Tue, 22 Nov 2022 12:28:20 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669120102;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gMhYDeW6cO8i9Z//LZXm6hhlJ2+VSC3EwZFBBVTwq24=;
+        b=PxopwqDCvXYSeYW1C1FSrvHPY/c2Nipl1U4jazlsGG8GNcd4l2gFxNGvrhDg1Sk8IL/34s
+        lfE+3gbkKanrahRQlkNsZzog4ELsXY86AP0W2awSujHclTXxyuh8KntugaduR0Wsq1oC2b
+        btwofzNf7XMbqSWvVca0BLcBi2mfG1II/FDzinzvaFfmyofbbmYfaZQtxD1teHZnv8h2ip
+        LDN+o3N1jHHok6vtpf/Az9KMx9HVdA+eIt2+dZbtCjbp81Ezvfo1PLSypJzhOQvrN+Pdqb
+        yvCG7hsBojq2Sr5d3FaWH6tSu5QqTMMWBU+r5zxWHDB+Fsvdjf0Z68oyyHqo4Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669120102;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gMhYDeW6cO8i9Z//LZXm6hhlJ2+VSC3EwZFBBVTwq24=;
+        b=cih7vO3LYLTHmxiOw9QYg6hLazcc7dJXtpNOt/SH+f4IFcSwX6kCjSgjtkCDCqYRnCnqEN
+        8o/7FI52Kn1MRzAg==
+From:   "tip-bot2 for Julian Pidancet" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/alternatives] x86/alternative: Consistently patch SMP locks
+ in vmlinux and modules
+Cc:     Julian Pidancet <julian.pidancet@oracle.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221027204906.511277-1-julian.pidancet@oracle.com>
+References: <20221027204906.511277-1-julian.pidancet@oracle.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA2PR11MB4780:EE_
-X-MS-Office365-Filtering-Correlation-Id: 56c9a023-a3cd-4068-c642-08dacc84e49b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T6syR8V3Xf2NTMnkg3MTFJRXMReThLGzA136HmDZLIq9UbhPukPgjhzqibigLJlMrGalzK1E4vmE/PJk5DkzyvswTA4X0OJ4yIpTiJ+v+5+GAAuGWn1tJMbMQO/pyTSrUf+irO5V9qcdS5vYf8JpsJ5lmx1/QhJH1HPaZP4uNPC+ZMbUfogOEWDh7/kfDO88HNoM+rXv4Cy3Zutb8oZ2alyAAbWRwVCaK6m7OzOmdaxb79073+I/xbJdIwyclAXnCMYIhHEx9Igud5L6DMZR2wxUPR0gY49a4AXGr0Yyx8QD6Q8ZMR3ntA/X+49D5iQfxbtTNZZgKYQlURBfSC4/5kkU0dmSAk0lwbizhPtgkOpV77x1vGq2na9tGPe0wJf53bdyEcWjqFsuR9UA5s+NXnxcxBREDwJ33B4nH4bv5VVGLTURyBzHkrmQxKApGjOGRRdSMRkUm4ybsLOdjH+jojiA+Umd3jgi+qzXJLrmZUmNvlTVKSn/IDowtuu0DaOifBm92+6Ie31vXaRaFCtZqNIEpfTKLDTIgWFZ8MqFj4sh5ci+S6QW7axEKEVV4M/g5dHxE5MlCgHVQwttmP18X6fKnX/8aMS39S5104uV6H79Q3aApxPQs/EsMtRa3QR7uafYgMz2wBpkomsBsineCA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199015)(86362001)(41300700001)(66476007)(38100700002)(44832011)(2906002)(82960400001)(7416002)(33716001)(5660300002)(8936002)(6916009)(478600001)(6666004)(6506007)(4326008)(6512007)(6486002)(9686003)(66946007)(66556008)(8676002)(316002)(54906003)(26005)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+KJadKdUj0u6Us69pu4aIQCP6eUF2wyrDAj0D1Mj91QKMP0czXbyA0OQQlga?=
- =?us-ascii?Q?nCl/wlVT2FUm7N8d8dbXNJbfpKXPYq5qhUzBNeebzT81ps2suwuDvO2mhKS/?=
- =?us-ascii?Q?7rKOUPnJXXS1k3tgclDfWUVydGVzRoHNVES+fwwrND6yFDjiuXAXRVb0vxCX?=
- =?us-ascii?Q?45M/TkHo3TeFIvM0uWeA/8q2Xv0t/NPHzcvqWSOMu/V6lfC7qsV1f2hmEir6?=
- =?us-ascii?Q?1FzxP7XQ8Lvy5QpE1BlKrFdxfM/6yye1atc6mIsmXzYdXeyogQNR8WcjcwsH?=
- =?us-ascii?Q?2EDavOZ9VnXAG/AriqlkJPEyrUHA3/Lt3CbFBn9T7DagErrlyjk3CVVGKwD0?=
- =?us-ascii?Q?1eP40hv0nQ13PQpZjmZ+Ymq3DNTSVGsG+q8TL5Fdvwon3dUWxflV8wyjlHBC?=
- =?us-ascii?Q?k8l2b8SQzkiFnibvg5L4WlNWDZMIuDZCxGL1Za21rTWoc58S5qTnQTK3HBeZ?=
- =?us-ascii?Q?EJWi0ILepCN9QHPb+3YOHcLIVJCWHc2BwrNJMyBci72/ilJoG+gqBc0lgvNi?=
- =?us-ascii?Q?Raq7nAuChhQhICUmk2rpZ591qW9v7+QIsvlsyfY9tq0lPWG3Sgr0AouFQOGH?=
- =?us-ascii?Q?x8qvy6zhKoUL190kSCkqe1rVnMNJlsWtYJNFkrCNzgzmVPiO1kYyYwKm9tg7?=
- =?us-ascii?Q?2uUNaAwyfPwm/XCB9x2+3P1IFO1LcY6RK/gQtZouS//5lWektaHi4FpYSZU8?=
- =?us-ascii?Q?oVT1TjA+BqPFiNHB0ACL17mpNmZawekpJnPGr0L4Us2GwtC1g/iBUf374+jh?=
- =?us-ascii?Q?3VN6BE+awjRYvUtG2HztDRuHjAUubbf4/H2Y0vGblOordHoVsFjWiUKh6u2/?=
- =?us-ascii?Q?amMH37OJld1EAAIOl+AweDCr623oGPKUZKo+KxQWIVGZ1gOjh0VlHi4R4Axi?=
- =?us-ascii?Q?KEFrDeWjdM9CCLi4yZT6VD+su3T+qvMNDFEbiY9L7v4YXfdrmjozaukKXAwR?=
- =?us-ascii?Q?5kE8IAp8IvSXnbaK4yP5qMcZPXlCtiB1yCd2YMPqkImxqtnckZZcYf2tQX+I?=
- =?us-ascii?Q?pATayI3YHlqNLat1MsqdA7j2uQ6xaZui/1hDL4Ml1pRGcInw/NvzwU6BYCqm?=
- =?us-ascii?Q?7fsQVhv3AXrMKnwpdlpSoXfH6560jyYM9fixz9rf/KqnQYZJkLJNi1MhXScf?=
- =?us-ascii?Q?0zrTkDV7LETHbUOYo0RqjSw+Hr6Y3oj+rwUN1WTJGCvOHzz88dnfhjaAa3bI?=
- =?us-ascii?Q?Z6MIfoWOjSr9vK7mHNEcKbF4NjcNV90HYlHuOlTtdPZAQbkTkgESuIv7t4wC?=
- =?us-ascii?Q?AnXTlGNFJKD+QW/9oocS8yTBNydOGiMD1RMnDF3gAdhsElumDsku5eC92k9z?=
- =?us-ascii?Q?XMjPjkqzMe+jlVXgOnbV1Girs5uw+H+eWMSA0/WB4XE7PPVLlIiV/nrg1OoH?=
- =?us-ascii?Q?Xk2SHl6MazXg6EzjLcygivVw5otW34LdgGQVJDPEhnv+ghcf1RyKH+uLcjue?=
- =?us-ascii?Q?TENyKY5OFQgTZpnV6eKFeW9iYYYPukR1de7KeafBgMVpTa0sSbx6dPHjjeR5?=
- =?us-ascii?Q?i7ojr965aavCb4fDc4gCn4vH33Dh5+xCWsvttm+NafxM441LX2rqcGJ11yJx?=
- =?us-ascii?Q?3mj8LYegoPjgsUM0UeFzie6qJLx6ecRML+EF1HAFS8FSkBDSpRthyKhAiVq6?=
- =?us-ascii?Q?5A=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56c9a023-a3cd-4068-c642-08dacc84e49b
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2022 12:27:17.0603
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SspCDrbSRyLtxs4a6w6KbpU7OX7pLsR20i9zQjLkXEkCyhym1XD+uYaKboRikQOtef5cONmWQ/66OodP9v6+FiUYx/lemPxy6+jZvsrePbo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4780
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166912010097.4906.7346211098182590940.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 07:10:31PM +0800, Zhang Changzhong wrote:
-> If prestera_port_sfp_bind() fails, unregister_netdev() should be called
-> in error handling path.
-> 
-> Compile tested only.
-> 
-> Fixes: 52323ef75414 ("net: marvell: prestera: add phylink support")
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+The following commit has been merged into the x86/alternatives branch of tip:
 
-Makes sense and fixes commit is correct.
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Commit-ID:     0b1a2171551e05c45ad999e403272ddafa7286c8
+Gitweb:        https://git.kernel.org/tip/0b1a2171551e05c45ad999e403272ddafa7286c8
+Author:        Julian Pidancet <julian.pidancet@oracle.com>
+AuthorDate:    Thu, 27 Oct 2022 22:49:06 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 22 Nov 2022 13:13:55 +01:00
 
-> ---
->  drivers/net/ethernet/marvell/prestera/prestera_main.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> index 24f9d60..47796e4 100644
-> --- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> @@ -746,6 +746,7 @@ static int prestera_port_create(struct prestera_switch *sw, u32 id)
->  	return 0;
->  
->  err_sfp_bind:
-> +	unregister_netdev(dev);
->  err_register_netdev:
->  	prestera_port_list_del(port);
->  err_port_init:
-> -- 
-> 2.9.5
-> 
+x86/alternative: Consistently patch SMP locks in vmlinux and modules
+
+alternatives_smp_module_add() restricts patching of SMP lock prefixes to
+the text address range passed as an argument.
+
+For vmlinux, patching all the instructions located between the _text and
+_etext symbols is allowed. That includes the .text section but also
+other sections such as .text.hot and .text.unlikely.
+
+As per the comment inside the 'struct smp_alt_module' definition, the
+original purpose of this restriction is to avoid patching the init code
+because in the case when one boots with a single CPU, the LOCK prefixes
+to the locking primitives are removed.
+
+Later on, when other CPUs are onlined, those LOCK prefixes get added
+back in but by that time the .init code is very likely removed so
+patching that would be a bad idea.
+
+For modules, the current code only allows patching instructions located
+inside the .text segment, excluding other sections such as .text.hot or
+.text.unlikely, which may need patching.
+
+Make patching of the kernel core and modules more consistent by
+allowing all text sections of modules except .init.text to be patched in
+module_finalize().
+
+For that, use mod->core_layout.base/mod->core_layout.text_size as the
+address range allowed to be patched, which include all the code sections
+except the init code.
+
+  [ bp: Massage and expand commit message. ]
+
+Signed-off-by: Julian Pidancet <julian.pidancet@oracle.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20221027204906.511277-1-julian.pidancet@oracle.com
+---
+ arch/x86/kernel/module.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index c032edc..b1e6e45 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -251,14 +251,12 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *me)
+ {
+-	const Elf_Shdr *s, *text = NULL, *alt = NULL, *locks = NULL,
+-		*para = NULL, *orc = NULL, *orc_ip = NULL,
+-		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL;
++	const Elf_Shdr *s, *alt = NULL, *locks = NULL, *para = NULL,
++		*orc = NULL, *orc_ip = NULL, *retpolines = NULL,
++		*returns = NULL, *ibt_endbr = NULL;
+ 	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+ 
+ 	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
+-		if (!strcmp(".text", secstrings + s->sh_name))
+-			text = s;
+ 		if (!strcmp(".altinstructions", secstrings + s->sh_name))
+ 			alt = s;
+ 		if (!strcmp(".smp_locks", secstrings + s->sh_name))
+@@ -302,12 +300,13 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		void *iseg = (void *)ibt_endbr->sh_addr;
+ 		apply_ibt_endbr(iseg, iseg + ibt_endbr->sh_size);
+ 	}
+-	if (locks && text) {
++	if (locks) {
+ 		void *lseg = (void *)locks->sh_addr;
+-		void *tseg = (void *)text->sh_addr;
++		void *text = me->core_layout.base;
++		void *text_end = text + me->core_layout.text_size;
+ 		alternatives_smp_module_add(me, me->name,
+ 					    lseg, lseg + locks->sh_size,
+-					    tseg, tseg + text->sh_size);
++					    text, text_end);
+ 	}
+ 
+ 	if (orc && orc_ip)
