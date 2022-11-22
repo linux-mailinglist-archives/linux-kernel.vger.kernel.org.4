@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C416332DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EEF6332DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbiKVCQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 21:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S229817AbiKVCQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiKVCP4 (ORCPT
+        with ESMTP id S232361AbiKVCP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:15:56 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FDBE0CB2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:15:54 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-39967085ae9so75175667b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:15:54 -0800 (PST)
+        Mon, 21 Nov 2022 21:15:57 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065A0E14D7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:15:57 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id l7-20020a170902f68700b001890d921b36so6209888plg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:15:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QwnVufQmqgsD71rU58/FXnZ6Kqu/OdIMDvlzn78hKF0=;
-        b=k4vZ9/HUzOIP2zBuWKoMtl7qYaF7WljtXH1qLMOjUPNFZJcho4S6mcX9oJEpI4eEhd
-         jQaDsDTCWLUiqZD9gEJJFxO5PXor/IPqkbWeHOf7/uBxPI/E42dhTBwWw9pGFQOWfXAz
-         XDQ8fyBePklEduv9JeWkDQ4ti9U2YQjgKEpwKg/jWHBZfFhH4Wu+UWVBtFUv25SKyusZ
-         fSg7ZhiEjA0ThA2qFhWu1e3M4PLIRyFPrs/duf2FcIkJ/FvMpg33uhosLAvbGHdEgxYZ
-         /ZnujCg1Q8yPcTksxCuAuCvR2S9fKlQMl0DKNoWVw/W4d1VCUoEAFxKyWrQ4PB5xS8r4
-         TzGA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JJiNTZDAcyBcjnZ9p/mphnfF01eV5b88yfC5YuUnZmM=;
+        b=cfFs8F08u2LB6NT9MopIhiguqfQ7WXtFPUO7m1nt1MVmOu8TptOmISB0P+7KLmTetQ
+         Dx6lCs7ljbXbkaXpWqn/sW+iZOX+CNmO7ANeKRWLmvWd0aGdTYHO92RDZ1f/BrwkmBDP
+         esLlCvlF97McdXxQ7QmYwruQ2pTwIQx0q70gHeZE2pWIzYszefNf0R6ekyDZrQ3Bt13l
+         YT3P4alOgbtMQFtKHuealnqJv7qBSCbl1waS4ud1ps5m+emFEYQ+c1p9be6XzvR0zo+O
+         dLPKt+o3ppBSzUto+aIhc/AtAxi6lFKW2dBnHW+Fj58e8ptadwzho1KMyUrjYFPCbA6U
+         jTbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QwnVufQmqgsD71rU58/FXnZ6Kqu/OdIMDvlzn78hKF0=;
-        b=Xj8XwZwyxy/tB3L8vQyXOPg88MKA2+s8x9trJGYy3ed6+IRI+/c1fnBOPjKua4xc3B
-         SXA00jtVcHnMEbgJiC8/l35luWUQdKQ10bCO70RytQilZZh8QGl32b/5mUWdbOiGyySN
-         OVxdtANbH0J4AptH3mqoB5zV2uPiMt/ySLQs6Zrp2m1dqLa0NBD+NEKJPzwv39MpquEd
-         5G44/d4yHA7JarQl72kcR5zrFW+HEfGIfLWOZtgwjhga3YAmgZimpl9UOvSM7Jz19RiM
-         s46hVznaszIyHL9Fb/yojr9TMtPNH+koe4kWU5lFWiiupCsvqbQIe7DYWDTQqEyil6cy
-         WzVQ==
-X-Gm-Message-State: ANoB5pmk9XAZziJ+GhX0kr6ta59LVRL9CI1lWrHKDr0TSnBB/t+Q65Kd
-        /LZcKJ8U9odcFRryjzRj0md4U3XOo4k=
-X-Google-Smtp-Source: AA0mqf4z6uMzBSUfVnuK3UoNIzNb/xg7g2J6WN3bup/hKRF8Re0V4qO2ezY0m7hXj/NH+yxnxq3+nl70YfU=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JJiNTZDAcyBcjnZ9p/mphnfF01eV5b88yfC5YuUnZmM=;
+        b=u5aa+65t5mHgwBIBA/zkLZluA0hwH/sgqD/uTBy9134iYzV7ro0azJ48C64rH9xd53
+         WU/8mKnTimDw8IwJgnMXZrtX9EnuRhaMXTMqfCVG4n/uVXSeu8W7VPUFUJa7tWZPK52b
+         0YGC+2c8DCO4WNzDYJ912R7b7jpBxdIn9s6G1LINPlWyCl84dpdT6y7FyP3ps5MWHvJD
+         pW275r4r9B2ELBCC7xjLW4KVQsNbPt9wwS2q7pI+zUWm8RWc7Mhc/a1c0iDdvG24N7bK
+         apy2b1j2zutzAU5MIVAbZJ3xY7vs80SWr3IZDaq14JyBCkqwSDP9K4f6HKabWXdgNElm
+         C1ug==
+X-Gm-Message-State: ANoB5pnF0Txb9w18T1G3PoNrIJpANHTWWfHAYvf4QUqvln8P4zVTBuiv
+        8RADPi5zhTKaT/7fUyA7ir6S/m47+GE=
+X-Google-Smtp-Source: AA0mqf73qIstQw2HWTMqtYCCQgojy0QXuvOTHs6hL/WCgKQAuOC6w/AOOmJG1SLeSt+nZlnhLKI8SHSucd4=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:200:8539:aadd:13be:6e82])
- (user=drosen job=sendgmr) by 2002:a81:d449:0:b0:38f:af02:ee94 with SMTP id
- g9-20020a81d449000000b0038faf02ee94mr3ywl.230.1669083353587; Mon, 21 Nov 2022
- 18:15:53 -0800 (PST)
-Date:   Mon, 21 Nov 2022 18:15:15 -0800
+ (user=drosen job=sendgmr) by 2002:a65:67c5:0:b0:477:76c0:1d13 with SMTP id
+ b5-20020a6567c5000000b0047776c01d13mr3165786pgs.55.1669083356254; Mon, 21 Nov
+ 2022 18:15:56 -0800 (PST)
+Date:   Mon, 21 Nov 2022 18:15:16 -0800
+In-Reply-To: <20221122021536.1629178-1-drosen@google.com>
 Mime-Version: 1.0
+References: <20221122021536.1629178-1-drosen@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221122021536.1629178-1-drosen@google.com>
-Subject: [RFC PATCH v2 00/21] FUSE BPF: A Stacked Filesystem Extension for FUSE
+Message-ID: <20221122021536.1629178-2-drosen@google.com>
+Subject: [RFC PATCH v2 01/21] fs: Generic function to convert iocb to rw flags
 From:   Daniel Rosenberg <drosen@google.com>
 To:     Miklos Szeredi <miklos@szeredi.hu>
 Cc:     Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@android.com,
-        Daniel Rosenberg <drosen@google.com>
+        Alessio Balsini <balsini@google.com>,
+        Alessio Balsini <balsini@android.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -68,99 +71,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These patches extend FUSE to be able to act as a stacked filesystem. This
-allows pure passthrough, where the fuse file system simply reflects the lower
-filesystem, and also allows optional pre and post filtering in BPF and/or the
-userspace daemon as needed. This can dramatically reduce or even eliminate
-transitions to and from userspace.
+From: Alessio Balsini <balsini@google.com>
 
-For this patch set, I have removed the code related to the bpf side of things
-since that is undergoing some large reworks to get it in line with the more
-recent BPF developements. This set of patches implements direct passthrough to
-the lower filesystem with no alteration. Looking at the v1 code should give a
-pretty good idea of what the general shape of the bpf calls will look like.
-Without the bpf side, it's like a less efficient bind mount. Not very useful
-on its own, but still useful to get eyes on it since the backing calls will be
-larglely the same when bpf is in the mix.
+OverlayFS implements its own function to translate iocb flags into rw
+flags, so that they can be passed into another vfs call.
+With commit ce71bfea207b4 ("fs: align IOCB_* flags with RWF_* flags")
+Jens created a 1:1 matching between the iocb flags and rw flags,
+simplifying the conversion.
 
-This changes the format of adding a backing file/bpf slightly from v1. It's now
-a bit more modular. You add a block of data at the end of a lookup response to
-give the bpf fd and backing id, but there is now a type header to both blocks,
-and a reserved value for future additions. In the future, we may allow for
-multiple bpfs or backing files, and this will allow us to extend it without any
-UAPI breaking changes. Multiple BPFs would be useful for combining fuse-bpf
-implementations without needing to manually combine bpf fragments. Multiple
-backing files would allow implementing things like a limited overlayfs.
-In this patch set, this is only a single block, with only backing supported,
-although I've left the definitions reflecting the BPF case as well.
-For bpf, the plan is to have two blocks, with the bpf one coming first.
-Any further extensions are currently just speculative.
+Reduce the OverlayFS code by making the flag conversion function generic
+and reusable.
 
-You can run this without needing to set up a userspace daemon by adding these
-mount options: root_dir=[fd],no_daemon where fd is an open file descriptor
-pointing to the folder you'd like to use as the root directory. The fd can be
-immediately closed after mounting. This is useful for running various fs tests.
+Signed-off-by: Alessio Balsini <balsini@android.com>
+---
+ fs/overlayfs/file.c | 23 +++++------------------
+ include/linux/fs.h  |  5 +++++
+ 2 files changed, 10 insertions(+), 18 deletions(-)
 
-The main changes for v2:
--Refactored code to remove many of the ifdefs
--Adjusted attr related code per Amir's suggestions
--Added ioctl interface for responding to fuse requests (required for backing)
--Adjusted lookup add-on block for adding backing file/bpf
--Moved bpf related patches to the end of the stack (not included currently)
-
-TODO:
-override_creds to interact with backing files in the same context the daemon
-would
-
-Implement backing calls for other FUSE operations (i.e. File Locking/tmp files)
-
-Convert BPF over to more modern version
-
-Alessio Balsini (1):
-  fs: Generic function to convert iocb to rw flags
-
-Daniel Rosenberg (20):
-  fuse-bpf: Update fuse side uapi
-  fuse-bpf: Prepare for fuse-bpf patch
-  fuse: Add fuse-bpf, a stacked fs extension for FUSE
-  fuse-bpf: Add ioctl interface for /dev/fuse
-  fuse-bpf: Don't support export_operations
-  fuse-bpf: Add support for FUSE_ACCESS
-  fuse-bpf: Partially add mapping support
-  fuse-bpf: Add lseek support
-  fuse-bpf: Add support for fallocate
-  fuse-bpf: Support file/dir open/close
-  fuse-bpf: Support mknod/unlink/mkdir/rmdir
-  fuse-bpf: Add support for read/write iter
-  fuse-bpf: support FUSE_READDIR
-  fuse-bpf: Add support for sync operations
-  fuse-bpf: Add Rename support
-  fuse-bpf: Add attr support
-  fuse-bpf: Add support for FUSE_COPY_FILE_RANGE
-  fuse-bpf: Add xattr support
-  fuse-bpf: Add symlink/link support
-  fuse-bpf: allow mounting with no userspace daemon
-
- fs/fuse/Kconfig           |    8 +
- fs/fuse/Makefile          |    1 +
- fs/fuse/backing.c         | 3118 +++++++++++++++++++++++++++++++++++++
- fs/fuse/control.c         |    2 +-
- fs/fuse/dev.c             |   83 +-
- fs/fuse/dir.c             |  326 ++--
- fs/fuse/file.c            |   62 +-
- fs/fuse/fuse_i.h          |  424 ++++-
- fs/fuse/inode.c           |  264 +++-
- fs/fuse/ioctl.c           |    2 +-
- fs/fuse/readdir.c         |    5 +
- fs/fuse/xattr.c           |   18 +
- fs/overlayfs/file.c       |   23 +-
- include/linux/fs.h        |    5 +
- include/uapi/linux/fuse.h |   24 +-
- 15 files changed, 4154 insertions(+), 211 deletions(-)
- create mode 100644 fs/fuse/backing.c
-
-
-base-commit: 23a60a03d9a9980d1e91190491ceea0dc58fae62
+diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+index a1a22f58ba18..287ae968852a 100644
+--- a/fs/overlayfs/file.c
++++ b/fs/overlayfs/file.c
+@@ -15,6 +15,8 @@
+ #include <linux/fs.h>
+ #include "overlayfs.h"
+ 
++#define OVL_IOCB_MASK (IOCB_DSYNC | IOCB_HIPRI | IOCB_NOWAIT | IOCB_SYNC)
++
+ struct ovl_aio_req {
+ 	struct kiocb iocb;
+ 	refcount_t ref;
+@@ -240,22 +242,6 @@ static void ovl_file_accessed(struct file *file)
+ 	touch_atime(&file->f_path);
+ }
+ 
+-static rwf_t ovl_iocb_to_rwf(int ifl)
+-{
+-	rwf_t flags = 0;
+-
+-	if (ifl & IOCB_NOWAIT)
+-		flags |= RWF_NOWAIT;
+-	if (ifl & IOCB_HIPRI)
+-		flags |= RWF_HIPRI;
+-	if (ifl & IOCB_DSYNC)
+-		flags |= RWF_DSYNC;
+-	if (ifl & IOCB_SYNC)
+-		flags |= RWF_SYNC;
+-
+-	return flags;
+-}
+-
+ static inline void ovl_aio_put(struct ovl_aio_req *aio_req)
+ {
+ 	if (refcount_dec_and_test(&aio_req->ref)) {
+@@ -315,7 +301,8 @@ static ssize_t ovl_read_iter(struct kiocb *iocb, struct iov_iter *iter)
+ 	old_cred = ovl_override_creds(file_inode(file)->i_sb);
+ 	if (is_sync_kiocb(iocb)) {
+ 		ret = vfs_iter_read(real.file, iter, &iocb->ki_pos,
+-				    ovl_iocb_to_rwf(iocb->ki_flags));
++				    iocb_to_rw_flags(iocb->ki_flags,
++						     OVL_IOCB_MASK));
+ 	} else {
+ 		struct ovl_aio_req *aio_req;
+ 
+@@ -379,7 +366,7 @@ static ssize_t ovl_write_iter(struct kiocb *iocb, struct iov_iter *iter)
+ 	if (is_sync_kiocb(iocb)) {
+ 		file_start_write(real.file);
+ 		ret = vfs_iter_write(real.file, iter, &iocb->ki_pos,
+-				     ovl_iocb_to_rwf(ifl));
++				     iocb_to_rw_flags(ifl, OVL_IOCB_MASK));
+ 		file_end_write(real.file);
+ 		/* Update size */
+ 		ovl_copyattr(inode);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index e654435f1651..c913106fdd65 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -3434,6 +3434,11 @@ static inline int kiocb_set_rw_flags(struct kiocb *ki, rwf_t flags)
+ 	return 0;
+ }
+ 
++static inline rwf_t iocb_to_rw_flags(int ifl, int iocb_mask)
++{
++	return ifl & iocb_mask;
++}
++
+ static inline ino_t parent_ino(struct dentry *dentry)
+ {
+ 	ino_t res;
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
