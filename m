@@ -2,163 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C60633910
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D71863391C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbiKVJwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S233166AbiKVJzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233453AbiKVJv4 (ORCPT
+        with ESMTP id S232554AbiKVJy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:51:56 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1F431212
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:51:56 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id jr19so8924843qtb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:51:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=d3Ih39NMegZAhP2Qu/k/4zxkPIuPc7SBENROtpvFlxw=;
-        b=DSEt13C4pf2sdQMt8lU0G2oqdagEd8Wg/0MSUb37Kr7CrOmTWHPLhkVpmbZciGuNS9
-         C8t/tI1CS+zRtzxXE5QADcgZLSJCWgPDlj8nmToiDwBydTdUx1eGXnzTKx6d4qr5lTrE
-         DuYsCDI7UEpY3hZJVcgesjAvUuLBj83LldT8WJXRuWNH1z5a4+JfDyC2Uok9yQhaQxqn
-         WTODQQSG5ouJQ13FeuU9VI7mf+8wihbLKoDgPFO4RdB0noECutAd9ilXZ7o85DkLcqsm
-         FJ13Eaqs7CwdkfpBYOyVsc04MGLxm70lB2bNnbYxQOtH2Waeb8NcJ9OdQ84F03J/3/GY
-         72Mg==
+        Tue, 22 Nov 2022 04:54:57 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A8219003
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:54:56 -0800 (PST)
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EC11A3F367
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:54:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669110892;
+        bh=HrNRI9fm8I0LThHGHUBPDlRXDYp2/ZQuA5vUnE2da2k=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=plcwTDQok4/ot1omim3xzUtlk65gTUF9oNViFrnDLc1x9/TL6X92jMrOAwxcD5P5E
+         0FM16FX6bDNzDeWqJjAKyXWq7b5lYFOSRIaKzXgOYtgIkVMwHD2loUJXZv/6zWB6yV
+         1I8XwWp4eH9aPLQfKX1jMRgN0feLsNmfMmywPGbzWHfNmxcAoHgIdIn96SpJ9XdLI1
+         9WdiY+hyziF+tJ6lG9VZO854Wn+DuRPz3mAbWwthHPRKwClc07xdDuWgGaAlVBdEHS
+         nixs9NBB0YM1KX8QEWgOyS5QlaxzhhzVauaUuwaOQCZUxP79Ya+E3dohbkpx3a/rDj
+         Kz3lEptGOU0fw==
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-348608c1cd3so137546197b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:54:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d3Ih39NMegZAhP2Qu/k/4zxkPIuPc7SBENROtpvFlxw=;
-        b=AIff07qs4IsHLGl+ZEloJQHL+eSTxyj9mV6EfqGg0iE81HUxvEllRIhQWUcYGDW0Tf
-         G+QOZQduKJvE8q3wGyEu+OXqiqpZGlKgOxmAkL6d+flvJmHpnSqW24tvDs+2Qv03iwMb
-         JZ02xIPZFWCx0lnw5TqfZLdNx7ci86o7TiSRgLwV1AM59Se9pPWl3Ne2yde80zA+VwNC
-         i9vXSBPbou9KRPr6SWsiDWL907CPCtb4Nlh7pkP1z/TQkeW+6hgzk1BITHHtQFzUWfFH
-         J4h+Zn1A5BWDxnRp2gKjmepm2DgEJnpyNovZpT9KdUNiF3hsptVBFPXutksA4UyF1V7G
-         Rb0g==
-X-Gm-Message-State: ANoB5pkbBv+ZAycUygc+uTezebTTudLNOwkPc0Er6kM94mFrx91oH+4+
-        unbJlhzrZD1Qv7gDI5egU6TJQA==
-X-Google-Smtp-Source: AA0mqf4JAFxf1BA3eOCanBBGSqdFaxKzFrzfW6x8iVMu2sZfmFx/p6NkCnNFdJDaTwbFQrMWZ+/NGw==
-X-Received: by 2002:a05:622a:18a7:b0:3a5:62b5:9093 with SMTP id v39-20020a05622a18a700b003a562b59093mr10794835qtc.252.1669110715048;
-        Tue, 22 Nov 2022 01:51:55 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id ci14-20020a05622a260e00b00398df095cf5sm1349951qtb.34.2022.11.22.01.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 01:51:53 -0800 (PST)
-Date:   Tue, 22 Nov 2022 01:51:50 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>, Yu Zhao <yuzhao@google.com>,
-        Dan Carpenter <error27@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 3/3] mm,thp,rmap: clean up the end of
- __split_huge_pmd_locked()
-In-Reply-To: <a5849eca-22f1-3517-bf29-95d982242742@google.com>
-Message-ID: <d43748aa-fece-e0b9-c4ab-f23c9ebc9011@google.com>
-References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <a5849eca-22f1-3517-bf29-95d982242742@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HrNRI9fm8I0LThHGHUBPDlRXDYp2/ZQuA5vUnE2da2k=;
+        b=lFmJaCBWiuN/mhr+c5SyXEYOFApUNmDqM7jbnZEYwk4GY78kp1uDuzNoU/h/J7BFrZ
+         TaDAWIAmCMvQhV8RjBWMf9iIKxKZQllOLxZRDmfMW2hLl8oqQKLYDy9hIA5Tv9Vq+SRM
+         Ft4CwkT7LozzoIDq7VKkCo3jNhNARH7gMiPnM2gucgZ5GvgExvDZZMmHVRnirOeVbYuo
+         SaKOuRUcKGd4FWaMEMmJUMQ54BDMZV2G7YMCCrRHxKU4VorgO6XPlCBtqCJIf3mLyzw3
+         0ZNLQJY+1MSiugnTKdbAANsq+BBUMrrK6VMFGLhSisoDhskpevIzCx46cGwgTVef/4E8
+         qBaA==
+X-Gm-Message-State: ANoB5pmx1rfQb2JCn1Jn6kJuXdApbK9LfldpL8NJ8P97iLX/usFSQnpI
+        INRSoaRpLYweQJ1fz49hNJq55F1uVFQhqlcKOZlMOSFSO9PGjlejh6GOGWbkN8DM0RKl+xG1uB8
+        7luUk7I76DyS3H0LSxB635TVrC0FTxfO8b0cQG9ywRc4yJMQF0LGT5CnSJA==
+X-Received: by 2002:a05:690c:582:b0:391:fccf:db48 with SMTP id bo2-20020a05690c058200b00391fccfdb48mr20755481ywb.257.1669110891989;
+        Tue, 22 Nov 2022 01:54:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6OK15UZBqnryc+w5BhbprE3eAfz63iGGiAiaXGRZC0tWbzgLL947UV8Nm6SDyTrSz6leyms8QhLAhqXN7lRyE=
+X-Received: by 2002:a05:690c:582:b0:391:fccf:db48 with SMTP id
+ bo2-20020a05690c058200b00391fccfdb48mr20755458ywb.257.1669110891749; Tue, 22
+ Nov 2022 01:54:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-6-hal.feng@starfivetech.com> <Y3dwdXExRRltyp8A@spud> <b4afb821-f899-a2b6-46e1-a31b5e3f974e@starfivetech.com>
+In-Reply-To: <b4afb821-f899-a2b6-46e1-a31b5e3f974e@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Tue, 22 Nov 2022 10:54:34 +0100
+Message-ID: <CAJM55Z_LqTNEoo7CF-zfwqbKPTXEjji7aeLLeEgcLnacZ0z1Og@mail.gmail.com>
+Subject: Re: [PATCH v2 5/8] soc: sifive: ccache: Add StarFive JH7110 support
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     Conor Dooley <conor@kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's hard to add a page_add_anon_rmap() into __split_huge_pmd_locked()'s
-HPAGE_PMD_NR set_pte_at() loop, without wincing at the "freeze" case's
-HPAGE_PMD_NR page_remove_rmap() loop below it.
+On Tue, 22 Nov 2022 at 10:03, Hal Feng <hal.feng@starfivetech.com> wrote:
+>
+> On Fri, 18 Nov 2022 19:45:57 +0800, Conor Dooley wrote:
+> > Hey Emil/Hal,
+> >
+> > On Fri, Nov 18, 2022 at 09:17:11AM +0800, Hal Feng wrote:
+> > > From: Emil Renner Berthing <kernel@esmil.dk>
+> > >
+> > > This adds support for the StarFive JH7110 SoC which also
+> > > features this SiFive cache controller.
+> > >
+> > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> > > ---
+> > >  arch/riscv/Kconfig.socs            | 1 +
+> > >  drivers/soc/Makefile               | 2 +-
+> > >  drivers/soc/sifive/Kconfig         | 2 +-
+> > >  drivers/soc/sifive/sifive_ccache.c | 1 +
+> > >  4 files changed, 4 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+> > > index 69774bb362d6..5a40e05f8cab 100644
+> > > --- a/arch/riscv/Kconfig.socs
+> > > +++ b/arch/riscv/Kconfig.socs
+> > > @@ -22,6 +22,7 @@ config SOC_STARFIVE
+> > >     bool "StarFive SoCs"
+> > >     select PINCTRL
+> > >     select RESET_CONTROLLER
+> > > +   select SIFIVE_CCACHE
+> >
+> > Please no. I am trying to get rid of these selects + I cannot figure out
+> > why this driver is so important that you *need* to select it. Surely the
+> > SoC is useable without it>
+> > Is this a hang over from your vendor tree that uses the driver to do
+> > non-coherent stuff for the jh7100?
+>
+> I have tested that the board can successfully boot up without the cache
+> driver. The `select` can be removed for JH7110. @Emil, what do you think
+> of this?
 
-It's just a mistake to add rmaps in the "freeze" (insert migration entries
-prior to splitting huge page) case: the pmd_migration case already avoids
-doing that, so just follow its lead.  page_add_ref() versus put_page()
-likewise.  But why is one more put_page() needed in the "freeze" case?
-Because it's removing the pmd rmap, already removed when pmd_migration
-(and freeze and pmd_migration are mutually exclusive cases).
+Yes, for the JH7110 this is not strictly needed, just like the
+Unmatched board. For the StarFive JH7100 it is though.
+So if you're only adding support for the JH7110 then it's not needed.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
-v2: same as v1, plus Ack from Kirill
+> >
+> > >     select SIFIVE_PLIC
+> > >     help
+> > >       This enables support for StarFive SoC platform hardware.
+> > > diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> > > index 69ba6508cf2c..534669840858 100644
+> > > --- a/drivers/soc/Makefile
+> > > +++ b/drivers/soc/Makefile
+> > > @@ -26,7 +26,7 @@ obj-y                             += qcom/
+> > >  obj-y                              += renesas/
+> > >  obj-y                              += rockchip/
+> > >  obj-$(CONFIG_SOC_SAMSUNG)  += samsung/
+> > > -obj-$(CONFIG_SOC_SIFIVE)   += sifive/
+> > > +obj-y                              += sifive/
+> >
+> > This bit is fine.
+> >
+> > >  obj-y                              += sunxi/
+> > >  obj-$(CONFIG_ARCH_TEGRA)   += tegra/
+> > >  obj-y                              += ti/
+> > > diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
+> > > index ed4c571f8771..e86870be34c9 100644
+> > > --- a/drivers/soc/sifive/Kconfig
+> > > +++ b/drivers/soc/sifive/Kconfig
+> > > @@ -1,6 +1,6 @@
+> > >  # SPDX-License-Identifier: GPL-2.0
+> > >
+> > > -if SOC_SIFIVE
+> > > +if SOC_SIFIVE || SOC_STARFIVE
+> >
+> > As I suppose is this - but hardly scalable. I suppose it doesn't really
+> > matter.
+> >
+> > >  config SIFIVE_CCACHE
+> > >     bool "Sifive Composable Cache controller"
+> > > diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
+> > > index 1c171150e878..9489d1a90fbc 100644
+> > > --- a/drivers/soc/sifive/sifive_ccache.c
+> > > +++ b/drivers/soc/sifive/sifive_ccache.c
+> > > @@ -107,6 +107,7 @@ static const struct of_device_id sifive_ccache_ids[] = {
+> > >     { .compatible = "sifive,fu540-c000-ccache" },
+> > >     { .compatible = "sifive,fu740-c000-ccache" },
+> > >     { .compatible = "sifive,ccache0" },
+> > > +   { .compatible = "starfive,jh7110-ccache" },
+> >
+> > Per my second reply to the previous patch, I am not sure why you do not
+> > just have a fallback compatible in the binding/dt for the fu740 ccache
+> > since you appear to have identical configuration?
+>
+> Yeah, I will use the compatible of fu740 and modify this patch.
 
- mm/huge_memory.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+No, the JH7110 should not pretend to be a fu740, but if you add
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 3dee8665c585..ab5ab1a013e1 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2135,7 +2135,6 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		uffd_wp = pmd_uffd_wp(old_pmd);
- 
- 		VM_BUG_ON_PAGE(!page_count(page), page);
--		page_ref_add(page, HPAGE_PMD_NR - 1);
- 
- 		/*
- 		 * Without "freeze", we'll simply split the PMD, propagating the
-@@ -2155,6 +2154,8 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
- 		if (freeze && anon_exclusive && page_try_share_anon_rmap(page))
- 			freeze = false;
-+		if (!freeze)
-+			page_ref_add(page, HPAGE_PMD_NR - 1);
- 	}
- 
- 	/*
-@@ -2210,27 +2211,21 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 				entry = pte_mksoft_dirty(entry);
- 			if (uffd_wp)
- 				entry = pte_mkuffd_wp(entry);
-+			page_add_anon_rmap(page + i, vma, addr, false);
- 		}
- 		pte = pte_offset_map(&_pmd, addr);
- 		BUG_ON(!pte_none(*pte));
- 		set_pte_at(mm, addr, pte, entry);
--		if (!pmd_migration)
--			page_add_anon_rmap(page + i, vma, addr, false);
- 		pte_unmap(pte);
- 	}
- 
- 	if (!pmd_migration)
- 		page_remove_rmap(page, vma, true);
-+	if (freeze)
-+		put_page(page);
- 
- 	smp_wmb(); /* make pte visible before pmd */
- 	pmd_populate(mm, pmd, pgtable);
--
--	if (freeze) {
--		for (i = 0; i < HPAGE_PMD_NR; i++) {
--			page_remove_rmap(page + i, vma, false);
--			put_page(page + i);
--		}
--	}
- }
- 
- void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
--- 
-2.35.3
+compatible = "starfive,jh7110-ccache", "sifive,ccache0";
 
+then this driver should still match "sifive,ccache0" without adding
+the "starfive,jh7110-ccache" entry.
+
+>
+> Best regards,
+> Hal
