@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2622633AB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3648633AB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbiKVLC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S232924AbiKVLDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232858AbiKVLCw (ORCPT
+        with ESMTP id S232502AbiKVLDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:02:52 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D086AFD2E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:02:46 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id r8so6932834ljn.8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:02:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WLUdigsApmRK74tKDjONSTE2dMi6WHx5zi8E0wjDf2Y=;
-        b=LRFka4TnsqZBKvaCuN+bPxENtgjSKcVFXnRvPHryrCPnVdt9dSHiIKcL/r/tVfsPlP
-         eKtCKhwXTM/jDD/WGL546uvNJN17g7IQonRwdZPsfrGvIiHXqxYFd0IyO/KZhHpVvFmq
-         K+vsDgKSkaAyNMP688NdlXI1ydEBpf4ySOkkYtV3ywxMcuLP/GWxAh0FNp5LIzbvkoyN
-         p1xn5774qN4kGrygDa8ElEiz2qFF7JsHffs4q5xvB+5zwDhGNov6Ipy3uUG5wz6EcBQf
-         hocpxC7y8JW1AZlUKl2FKoiNeWnVslDfPAmYz17BPHSCzEORSsHzrgOAZ1xS2NwfjNkl
-         otMA==
+        Tue, 22 Nov 2022 06:03:14 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE71515810;
+        Tue, 22 Nov 2022 03:03:12 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id i9so422807qkl.5;
+        Tue, 22 Nov 2022 03:03:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WLUdigsApmRK74tKDjONSTE2dMi6WHx5zi8E0wjDf2Y=;
-        b=483pj/cauPYu7npYzFFVBbz3E3hYd9/5zetH99WMD5pFRu4FZsPYi0C33xPrhjSURM
-         owBDPkpAMe9ODfkNkonWpAHJgdKm8/BrJgNFqFhFMjiHeg7ET8FwDHuVAPq4z3kgvvO3
-         dvQtNLExT14oOmRi69VIn6f8vqt/1xiOeKxN4/5H3YY5kqF8fURnegrVAgzIvc1aRsO0
-         tBdeSNk8+qhzEYz3wav3lBnh54HOyeJk/4oDvyEQ4d+11Vm551EfUiD3In0dfhgjD1c7
-         vCCBFxxOZo3otXVGlpqUCQXJ9MXgr5jqjMJ6ozwbt/T0WKY20jqLlOFA2Vz+1LoStBj0
-         HsGw==
-X-Gm-Message-State: ANoB5pkjYDjnLwUDb4ZnxKVjaWw71ceJwG0spqFV+3WpLjjOSpRMhjai
-        iNA5zIaFRzeA4Q4oVbK44lj5Bg==
-X-Google-Smtp-Source: AA0mqf7vvF2BfXvTbPIQ/acLujnLA0PSEBSsit/7dUyYrj/tz7iYaoGNrDleBKloFAvsRnGQDkevcQ==
-X-Received: by 2002:a05:651c:b21:b0:277:b04:ffe8 with SMTP id b33-20020a05651c0b2100b002770b04ffe8mr7794982ljr.136.1669114964740;
-        Tue, 22 Nov 2022 03:02:44 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 19-20020ac25f53000000b0049d83646ce7sm2410812lfz.110.2022.11.22.03.02.41
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=70ARIUnRx9Xu999wkVwCnI7RfU9fwwzEFy/tAdBx9cM=;
+        b=HwwrfgTownnhf/qEKM+b/+d9abMnOIbT8w3B4EMDy+9xcjLqBPIeU/KzLrmNqy5h2g
+         28+1CvgdHrhM8NHFXRtdQdGjVhVvCSGaRFyOmhSrPBxk+p+Y4JouCHDBbSoRIGGa+ArV
+         5boSdWqWAA0ea5+DJ/wwBXtcWp6MJASvTuupO3zczM24BKP3+jo9f7ixH/hgt8EdGRHX
+         I13H4vOCFjrFNbknPdomjQ3yXF8cw3lD1AnSQoNWhwyYcyJ7xn6qG7Ku2RhC9RpE7ANi
+         xUmRydCfMmWd4aLgSqKyuzdlLIG7ZFU7q9D++gnNflr0rfK+BlI5YmznEW341JHaG7kS
+         M4eQ==
+X-Gm-Message-State: ANoB5pk1p07UIlMB7amarMApMXEWzbuld3uVr1LBWXiuiiVhzQOYqEjo
+        udaiKRZExXb7hLkJV1uzjD4WfMdZVyblSg==
+X-Google-Smtp-Source: AA0mqf4QjLRh7tFydPXRZ4rW6IO6uQwPQlLVuubqBSvfHiZaMNvcHP8SiCm99AlAlY88Nhx76qGTvA==
+X-Received: by 2002:a05:620a:c0f:b0:6ef:1a88:fae5 with SMTP id l15-20020a05620a0c0f00b006ef1a88fae5mr5134200qki.329.1669114991453;
+        Tue, 22 Nov 2022 03:03:11 -0800 (PST)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id k18-20020a05620a415200b006e54251993esm10088322qko.97.2022.11.22.03.03.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 03:02:44 -0800 (PST)
-Message-ID: <79831a58-0b67-920f-3c07-d304dff5af0c@linaro.org>
-Date:   Tue, 22 Nov 2022 12:02:40 +0100
+        Tue, 22 Nov 2022 03:03:11 -0800 (PST)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-398cff43344so91043097b3.0;
+        Tue, 22 Nov 2022 03:03:11 -0800 (PST)
+X-Received: by 2002:a05:690c:b01:b0:370:202b:f085 with SMTP id
+ cj1-20020a05690c0b0100b00370202bf085mr21324954ywb.502.1669114990799; Tue, 22
+ Nov 2022 03:03:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 07/10] dt-bindings: phy: Add Cadence HDP-TX DP PHY
-Content-Language: en-US
-To:     Sandor Yu <Sandor.yu@nxp.com>, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kishon@ti.com, vkoul@kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        alexander.stein@ew.tq-group.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com, oliver.brown@nxp.com
-References: <cover.1669013346.git.Sandor.yu@nxp.com>
- <5f8a3f15f744e201171c20505e1e3c47f5a27dce.1669013346.git.Sandor.yu@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5f8a3f15f744e201171c20505e1e3c47f5a27dce.1669013346.git.Sandor.yu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYv-DpXNR846B0-K9wsDJVZVYE3KwioUYYLMd_Ts=gP-3w@mail.gmail.com>
+In-Reply-To: <CA+G9fYv-DpXNR846B0-K9wsDJVZVYE3KwioUYYLMd_Ts=gP-3w@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 22 Nov 2022 12:02:59 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVSSdshxASS7-5rrstAcmA7gHb5zHETxj6q6L2mKQO5VQ@mail.gmail.com>
+Message-ID: <CAMuHMdVSSdshxASS7-5rrstAcmA7gHb5zHETxj6q6L2mKQO5VQ@mail.gmail.com>
+Subject: Re: next: mips: gcc-12-bcm63xx_defconfig failed
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org, lkft-triage@lists.linaro.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 08:23, Sandor Yu wrote:
-> Add bindings for Cadence HDP-TX DisplayPort PHY.
-> 
-> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
-> --->  .../bindings/phy/cdns,hdptx-dp-phy.yaml       | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
-> new file mode 100644
-> index 000000000000..b997c15ff0bb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/cdns,hdptx-dp-phy.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/cdns,hdptx-dp-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cadence HDP-TX(HDMI/DisplayPort) PHY for DisplayPort protocol
-> +
-> +maintainers:
-> +  - Sandor Yu <sandor.yu@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cdns,hdptx-dp-phy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: PHY reference clock.
-> +      - description: APB clock.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: refclk
-> +      - const: apbclk
+On Tue, Nov 22, 2022 at 9:59 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+> Today's Linux next 20221122 tag mips bcm63xx_defconfig build fails,
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=mips
+> CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc'
+> io_uring/io_uring.c: In function 'io_eventfd_ops':
+> io_uring/io_uring.c:498:17: error: implicit declaration of function
+> 'eventfd_signal_mask'; did you mean 'eventfd_signal'?
+> [-Werror=implicit-function-declaration]
+>   498 |                 eventfd_signal_mask(ev_fd->cq_ev_fd, 1,
+> EPOLL_URING_WAKE);
+>       |                 ^~~~~~~~~~~~~~~~~~~
+>       |                 eventfd_signal
+> cc1: some warnings being treated as errors
+> make[3]: *** [scripts/Makefile.build:252: io_uring/io_uring.o] Error 1
+>
+> log:
+> https://builds.tuxbuild.com/2HtTq82BIEEuUvHRpsnQuSFdite/
+>
+> Build history:
+> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221122/testrun/13121877/suite/build/test/gcc-12-bcm63xx_defconfig/history/
 
-Drop "clk" suffix.
+noreply@ellerman.id.au reported a similar failure for m5272c3_defconfig,
+which I have bisected to commit 261187e66de362de ("io_uring: pass in
+EPOLL_URING_WAKE for eventfd signaling and wakeups").  That patch
+does not seem to have been posted to a public mailing list archived by lore?
+Oh, it was, but using a different subject
+https://lore.kernel.org/all/20221120172807.358868-4-axboe@kernel.dk
+Difficult to track without a Links: tag...
 
+Gr{oetje,eeting}s,
 
-Best regards,
-Krzysztof
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
