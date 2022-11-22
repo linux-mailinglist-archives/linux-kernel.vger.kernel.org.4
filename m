@@ -2,138 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C45633601
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 672C2633603
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiKVHll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S232476AbiKVHl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbiKVHlb (ORCPT
+        with ESMTP id S232467AbiKVHlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:41:31 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495BD30550
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:41:30 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j16so22305459lfe.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:41:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vZgEuShZPFvGmlrbVu6jnnJSD8pbk7ahYnQJQ5wn0pk=;
-        b=Mk8EUJ3Sx3oXYHl0xM9T+/JmMikNxAA2Jrijsah9gHwhOsarE7+/7rCOMgRVdAi7he
-         gaBKk2R37J1zzOGVATS8wpJjoOveMvsWH54RGMYWhoN2mFEyUG9pEy/E/HzTVTiMoY05
-         vPYpwi0km37F0pHzCWXY8b9paAgeF87jdox71Tildp7I8n1GDimBZ6+Plo0ymvElmMTZ
-         41zSo/Gxf44sC1e41wOXEVJchH/l7efH/9D5Fu3bwhbGkcNaDtwjTENM0u/iKV8XCDZA
-         pC4osLGbF0ZX1vfmVE+/163BmTggGjlGrnLQneRP5jYptizwJgIjFy8wPtl9fv5UsuYS
-         clig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vZgEuShZPFvGmlrbVu6jnnJSD8pbk7ahYnQJQ5wn0pk=;
-        b=OwTYgea7F7S2YrC698DzD5ujp8Vz2UMbyg7MvpfbE8/V+oYkdA1O2s2QeWWcp+lHCt
-         0rn48rB8y/YFWL+DYGW+RrvJlD3+Ops2c7Hsd8zaTv2RhMRte+/0dZllMiMK0KidJXUu
-         ioF920SImLOgBgIfII0g69W07aqRX70emRdnP+65AfY57XfErOK9QmuYa/XBC5GSz2d7
-         DvjFtuGTQVNgCJSatOcGo/xgb06XuFQsOB2hfeOQjXY65FvgKriZuNtVWH/nHjDeC7JP
-         zB4YnTKyTv3RRTGEWpP/BjRDwJRGctrH4WKHQUI4q6TQEhXjcWq5bf49c0MxfUsZNMZ0
-         Ue4w==
-X-Gm-Message-State: ANoB5pkMp+SGsbL7JdCsaJhKVmo5UdEwdpqnk/BoBEASpv9hwAeE7InU
-        lKlZqa6rIrRZA1NU6JGvQICqwQ==
-X-Google-Smtp-Source: AA0mqf7TStaiGDTFZUcD6Pjywwt89ly9JYpeR/JJ6ptzRJUT6v6QpzUVC8GK8nCrwcmjKs0mJw01tw==
-X-Received: by 2002:a19:4f52:0:b0:4a6:2ff5:ddd2 with SMTP id a18-20020a194f52000000b004a62ff5ddd2mr8167514lfk.166.1669102888604;
-        Mon, 21 Nov 2022 23:41:28 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y22-20020a2eb016000000b0026daf4fc0f7sm1758305ljk.92.2022.11.21.23.41.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 23:41:27 -0800 (PST)
-Message-ID: <f59e53b0-0915-e8e9-7e49-05ca6a9eac95@linaro.org>
-Date:   Tue, 22 Nov 2022 08:41:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 07/14] dt-bindings: clock: Add StarFive JH7110 system
- and always-on clock definitions
-Content-Language: en-US
-To:     Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        Tue, 22 Nov 2022 02:41:47 -0500
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB10430557;
+        Mon, 21 Nov 2022 23:41:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1669102896; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=YqA87QW/3JpiBXgyEi1gDKmIXTOzfkgeskrWThHVTE0RU4KYBbUSNif8Yq3An2qcs6xPdK+de0Uq0akZOx6zd6elX4WnE4uj6F41Kx1qiPo40yjj+QuF663EwFt6y8bCPOwQM7c4ZOsqQXfQ4alnyxi6oUw1VqaUE6ItRGgIc00=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1669102896; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=b7Rx3DilGCP5lCz1j9EnhzYAfhA1dEnQkYpfsFyULHI=; 
+        b=cO7egFhVwCWN1RbtDPLu8iKeqwMuCrqrCstEi/qtFyXJnQQt7fGUUmrIRIB/JGajK2Cq7nIMTlp7pQcK7mq0tlXsGHiQFeh+SQtLqv/NlWy3e4u8+FCeFf+tYiLbXeZOEO4ZJk6R0Ts4qg9mMBOOTXeZ0qrDx99AjTxX6nsdnfI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669102896;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Date:Date:From:From:To:To:CC:Subject:Subject:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+        bh=b7Rx3DilGCP5lCz1j9EnhzYAfhA1dEnQkYpfsFyULHI=;
+        b=QGs2QRaSj4ngLjmlTGF03F2rC6ETgz/rwmuxWNjPybZ3seTFe5ktcgC+muA7qRfs
+        +VRS/cQffh9aLTVBt7HrZt2P0YX6G0q7wbFRCle038WN1Zyv9C1H5tbY67otH9MNJjo
+        MKadpz7RZ2mNgx9JbscAoCJYULO9PRJMLc7GJE0w=
+Received: from [127.0.0.1] (112.94.100.29 [112.94.100.29]) by mx.zohomail.com
+        with SMTPS id 1669102895638415.06106473348734; Mon, 21 Nov 2022 23:41:35 -0800 (PST)
+Date:   Tue, 22 Nov 2022 15:41:27 +0800
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20221118010627.70576-1-hal.feng@starfivetech.com>
- <20221118010627.70576-8-hal.feng@starfivetech.com>
- <4d1fbddc-ee8b-1ab3-d1a9-8496bda3f668@linaro.org>
- <1db979d5-1fb6-f3c9-8ce0-e3e2e23e5d14@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1db979d5-1fb6-f3c9-8ce0-e3e2e23e5d14@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+CC:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_2/3=5D_dt-bindings=3A_timer=3A_si?= =?US-ASCII?Q?five=2Cclint=3A_add_compatible_for_OpenC906?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <d0f3ce4f-5676-f5e1-f04f-dd069679b2d3@linaro.org>
+References: <20221121041757.418645-1-uwu@icenowy.me> <20221121041757.418645-3-uwu@icenowy.me> <98005150-83a7-5439-0db1-d93d459c3809@linaro.org> <b924d37d716fa8b1fd93102b1d51fac221f43d59.camel@icenowy.me> <d0f3ce4f-5676-f5e1-f04f-dd069679b2d3@linaro.org>
+Message-ID: <81C2234E-C92D-4F78-8295-7C6DD0A9BBC4@icenowy.me>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 02:02, Hal Feng wrote:
-> On Mon, 21 Nov 2022 09:45:11 +0100, Krzysztof Kozlowski wrote:
->> On 18/11/2022 02:06, Hal Feng wrote:
->>> From: Emil Renner Berthing <kernel@esmil.dk>
->>>
->>> Add all clock outputs for the StarFive JH7110 system (SYS) and
->>> always-on (AON) clock generator.
->>>
->>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->>> ---
->>>  MAINTAINERS                                 |   5 +-
->>>  include/dt-bindings/clock/starfive-jh7110.h | 234 ++++++++++++++++++++
->>>  2 files changed, 237 insertions(+), 2 deletions(-)
->>>  create mode 100644 include/dt-bindings/clock/starfive-jh7110.h
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index e6f1060e7964..e97dac9c0ee4 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -19598,12 +19598,13 @@ M:	Ion Badulescu <ionut@badula.org>
->>>  S:	Odd Fixes
->>>  F:	drivers/net/ethernet/adaptec/starfire*
->>>  
->>> -STARFIVE JH7100 CLOCK DRIVERS
->>> +STARFIVE CLOCK DRIVERS
->>>  M:	Emil Renner Berthing <kernel@esmil.dk>
->>> +M:	Hal Feng <hal.feng@starfivetech.com>
->>>  S:	Maintained
->>>  F:	Documentation/devicetree/bindings/clock/starfive,jh7100-*.yaml
->>>  F:	drivers/clk/starfive/
->>> -F:	include/dt-bindings/clock/starfive-jh7100*.h
->>> +F:	include/dt-bindings/clock/starfive*
->>>  
->>>  STARFIVE JH7100 PINCTRL DRIVER
->>>  M:	Emil Renner Berthing <kernel@esmil.dk>
->>> diff --git a/include/dt-bindings/clock/starfive-jh7110.h b/include/dt-bindings/clock/starfive-jh7110.h
->>
->> Filename based / the same as compatible (or bindings filename).
-> 
-> Should I split this file into two files for "SYSCRG" and "AONCRG", which
-> maybe named as "starfive-jh7110-sys.h" and "starfive-jh7110-aon.h". Ditto
-> for the patch 8.
 
-Does not have to be, but anyway naming must follow compatible naming, so
-vendor,soc-device.
 
-Best regards,
-Krzysztof
+=E4=BA=8E 2022=E5=B9=B411=E6=9C=8822=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=88=
+3:35:48, Krzysztof Kozlowski <krzysztof=2Ekozlowski@linaro=2Eorg> =E5=86=99=
+=E5=88=B0:
+>On 22/11/2022 08:18, Icenowy Zheng wrote:
+>> =E5=9C=A8 2022-11-21=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 11:06 +0100=EF=
+=BC=8CKrzysztof Kozlowski=E5=86=99=E9=81=93=EF=BC=9A
+>>> On 21/11/2022 05:17, Icenowy Zheng wrote:
+>>>> T-Head OpenC906 is a open-source-licensed fixed-configuration of
+>>>> C906,
+>>>> which is now public and able to be integrated=2E
+>>>>
+>>>> Add a compatible for the CLINT shipped as part of OpenC906, which
+>>>> should
+>>>> just be ordinary C9xx CLINT=2E
+>>>>
+>>>> Signed-off-by: Icenowy Zheng <uwu@icenowy=2Eme>
+>>>> ---
+>>>> =C2=A0Documentation/devicetree/bindings/timer/sifive,clint=2Eyaml | 1=
+ +
+>>>> =C2=A01 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git
+>>>> a/Documentation/devicetree/bindings/timer/sifive,clint=2Eyaml
+>>>> b/Documentation/devicetree/bindings/timer/sifive,clint=2Eyaml
+>>>> index aada6957216c=2E=2E86703e995e31 100644
+>>>> --- a/Documentation/devicetree/bindings/timer/sifive,clint=2Eyaml
+>>>> +++ b/Documentation/devicetree/bindings/timer/sifive,clint=2Eyaml
+>>>> @@ -35,6 +35,7 @@ properties:
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const:=
+ sifive,clint0
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 - thead,openc906-clint
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 - allwinner,sun20i-d1-clint
+>>>
+>>> Add entries sorted alphabetically=2E This should be squashed with
+>>> previous
+>>> patch=2E
+>>=20
+>> I make it a seperated patch because I think it's a questionable
+>> approach=2E
+>>=20
+>> If you think it's okay, I will just squash it and put it as the second
+>> patch in the next iteration, with adding openc906-plic as the first
+>> one=2E
+>
+>What is a questionable approach? Why commit msg is not saying this?
 
+Ah I mentioned it in the cover letter=2E The problem is just I doubt wheth=
+er
+binding strings for single SoCs are necessary=2E
+
+>
+>Best regards,
+>Krzysztof
+>
