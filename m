@@ -2,133 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D2F63378A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8B5633790
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbiKVIwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S232398AbiKVIyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbiKVIwr (ORCPT
+        with ESMTP id S232885AbiKVIyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:52:47 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71995558E;
-        Tue, 22 Nov 2022 00:52:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1669107165; x=1700643165;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=NJKojUVVwfNiBj6nGyV2BiX29XXsfamg3FpOm3EoRFg=;
-  b=Gt3LBIz9oHgyzomZwcxeqav31aVyo6XiXNPK+XKmS61/rcy/b2FgBFvl
-   A1OIWRl+Wt2PafYKJsyiisBVfpl63hNiXhMPZ6D6pi4eLjg/iumGvmgMJ
-   5FV+6yDLUqO2hDePwzTVGR9L/gIycojND194Ud/1FHEq5ZP8w4AbZyqr/
-   G+Gm2vCiE7nMwZ/Pw3ENJ3Dv4YG2g7Itueiz64sQJKFtMlLIs++as7MhX
-   6K3phmMrUNqpUbkJ9814Mi0OgukDtYGHBHebYMiJf4Rh7mgYbYCl1sq8U
-   0lKHoOHXTNVLCwvlg/+ixRmLMmNnZEudvqxtd9rkrfS0nHm2gkEjoNymp
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,183,1665439200"; 
-   d="scan'208";a="27501948"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 22 Nov 2022 09:52:42 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 22 Nov 2022 09:52:42 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 22 Nov 2022 09:52:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1669107162; x=1700643162;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=NJKojUVVwfNiBj6nGyV2BiX29XXsfamg3FpOm3EoRFg=;
-  b=HXl9zXP+aCc45pS/jaSoSRLNYYPTiNQqVUhyQLLm9f9eVdXTBT/H9XrL
-   vVkOBVA3TiO5wbRe/1R3qQEPV+0DkrPsvS86zvlnQoV4RYy3Svzlb5flV
-   7iSi+/KwWNSkmlCH2qF/wZIxvTb59iVbiNwtJWFyM2cVn9WFMmwBW0tuI
-   mNvgDfLhvKC3iFio1hwh4H9jqx3u6opOequa7edR0CsddIIRdMNSVBX8p
-   XqlxOm1gFKmz2VQr9q1a6OKow3Avg7xriBQJRh4LpfRJ5NgWVIW3qB8Jh
-   ZuEVdW6Gb843ST4sclTMrDWeLFJLg37uaBEq9S1lz1VbEjOZDqM+kT7rf
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,183,1665439200"; 
-   d="scan'208";a="27501947"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 22 Nov 2022 09:52:42 +0100
-Received: from [192.168.2.129] (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 52450280056;
-        Tue, 22 Nov 2022 09:52:42 +0100 (CET)
-Message-ID: <bce6407bc42eeec8f459f09bc1326761327c98ec.camel@ew.tq-group.com>
-Subject: Re: 8250_omap: incorrect RS485 RTS on close during transmission
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>
-Cc:     Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 22 Nov 2022 09:52:40 +0100
-In-Reply-To: <f7cf39a9c152031a09608a68115e32988617f626.camel@ew.tq-group.com>
-References: <f7cf39a9c152031a09608a68115e32988617f626.camel@ew.tq-group.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Tue, 22 Nov 2022 03:54:02 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3E2DD4;
+        Tue, 22 Nov 2022 00:54:00 -0800 (PST)
+Received: from [192.168.10.9] (unknown [39.45.241.105])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE3616602A89;
+        Tue, 22 Nov 2022 08:53:56 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669107239;
+        bh=8ZEvrn+4mbqku0WNRgI9tdJCkGeYKUqf7aXJXCGXOEc=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=H/LSoreWTskXcbuNcSY+biZE1CZrnl06I5k9aU13bMl3fHDzbhrGsyrbmPWABc3o0
+         OLC6tUMM9GqwP6qic+HevPlAXgNLCVtDICcvIEw8NZLrfDcg5uISB7/LrHoerMRM9o
+         NMjmLIcbpk6Bm3nU+6qRwtukRbsFGsjaiQ/hdJg1OKuYkqTUllSf4Iiac8R0akBWjW
+         RIpgIQTSRH9T5P/2JxX44I2R9U3NjzWOcYn611fjRk4Yv5Q3B1UEWnWC48WtLXpkie
+         o5GdgFLi/pNApb2n3B0cSq62GewRdHIEf+8ZHJMlh8pGMlGG8pVNLvDk8fPja36uNZ
+         KgMRUUXnYr0aA==
+Message-ID: <e6523c46-df2e-6f73-1f69-c53e4f86ad50@collabora.com>
+Date:   Tue, 22 Nov 2022 13:53:52 +0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Mel Gorman <mgorman@suse.de>, Peter Xu <peterx@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>, kernel@collabora.com,
+        stable@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: set the vma flags dirty before testing if it is
+ mergeable
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cyrill Gorcunov <gorcunov@gmail.com>
+References: <20221122082442.1938606-1-usama.anjum@collabora.com>
+ <b1bc82e2-a789-85f4-d428-c5f1b451f4b7@redhat.com>
+ <4ebdbc0f-6352-5020-3f74-94e6c3743a1d@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <4ebdbc0f-6352-5020-3f74-94e6c3743a1d@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-11-18 at 12:57 +0100, Matthias Schiffer wrote:
-> Hi Lukas,
->=20
-> I've discovered a new issue with EM485 in 8250_omap (and probably other
-> serial drivers as well?): When closing the TTY device while there is
-> still an ongoing transmission, the RTS pin will get stuck active until
-> the TTY is opened again. This can be easily reproduced by running `cat
-> /dev/zero > /dev/ttySx` and then stopping it using Ctrl-C.
->=20
-> The issue exists in current mainline (6.1-rc5+), and applying "serial:
-> 8250: 8250_omap: Avoid RS485 RTS glitch on ->set_termios()" from next
-> doesn't solve it. I think it should work with "serial: 8250: 8250_omap:
-> Support native RS485", but we also need RS485 on AM57xx CPUs, which
-> don't have native RS485.
->=20
-> I intend to look into this myself next week, but as you've worked on
-> this code a lot lately, maybe you already have an idea how to fix it?
->=20
-> Regards,
-> Matthias
->=20
+On 11/22/22 1:49 PM, Muhammad Usama Anjum wrote:
+> On 11/22/22 1:36 PM, David Hildenbrand wrote:
+>> On 22.11.22 09:24, Muhammad Usama Anjum wrote:
+>>> The VM_SOFTDIRTY should be set in the vma flags to be tested if new
+>>> allocation should be merged in previous vma or not. With this patch,
+>>> the new allocations are merged in the previous VMAs.
+>>>
+>>> I've tested it by reverting the commit 34228d473efe ("mm: ignore
+>>> VM_SOFTDIRTY on VMA merging") and after adding this following patch,
+>>> I'm seeing that all the new allocations done through mmap() are merged
+>>> in the previous VMAs. The number of VMAs doesn't increase drastically
+>>> which had contributed to the crash of gimp. If I run the same test after
+>>> reverting and not including this patch, the number of VMAs keep on
+>>> increasing with every mmap() syscall which proves this patch.
+>>>
+>>> The commit 34228d473efe ("mm: ignore VM_SOFTDIRTY on VMA merging")
+>>> seems like a workaround. But it lets the soft-dirty and non-soft-dirty
+>>> VMA to get merged. It helps in avoiding the creation of too many VMAs.
+>>> But it creates the problem while adding the feature of clearing the
+>>> soft-dirty status of only a part of the memory region.
+>>>
+>>> Cc: <stable@vger.kernel.org>
+>>> Fixes: d9104d1ca966 ("mm: track vma changes with VM_SOFTDIRTY bit")
+>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>> ---
+>>> We need more testing of this patch.
+>>>
+>>> While implementing clear soft-dirty bit for a range of address space, I'm
+>>> facing an issue. The non-soft dirty VMA gets merged sometimes with the soft
+>>> dirty VMA. Thus the non-soft dirty VMA become dirty which is undesirable.
+>>> When discussed with the some other developers they consider it the
+>>> regression. Why the non-soft dirty page should appear as soft dirty when it
+>>> isn't soft dirty in reality? I agree with them. Should we revert
+>>> 34228d473efe or find a workaround in the IOCTL?
+>>>
+>>> * Revert may cause the VMAs to expand in uncontrollable situation where the
+>>> soft dirty bit of a lot of memory regions or the whole address space is
+>>> being cleared again and again. AFAIK normal process must either be only
+>>> clearing a few memory regions. So the applications should be okay. There is
+>>> still chance of regressions if some applications are already using the
+>>> soft-dirty bit. I'm not sure how to test it.
+>>>
+>>> * Add a flag in the IOCTL to ignore the dirtiness of VMA. The user will
+>>> surely lose the functionality to detect reused memory regions. But the
+>>> extraneous soft-dirty pages would not appear. I'm trying to do this in the
+>>> patch series [1]. Some discussion is going on that this fails with some
+>>> mprotect use case [2]. I still need to have a look at the mprotect selftest
+>>> to see how and why this fails. I think this can be implemented after some
+>>> more work probably in mprotect side.
+>>>
+>>> [1]
+>>> https://lore.kernel.org/all/20221109102303.851281-1-usama.anjum@collabora.com/
+>>> [2]
+>>> https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com/
+>>> ---
+>>>   mm/mmap.c | 21 +++++++++++----------
+>>>   1 file changed, 11 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/mm/mmap.c b/mm/mmap.c
+>>> index f9b96b387a6f..6934b8f61fdc 100644
+>>> --- a/mm/mmap.c
+>>> +++ b/mm/mmap.c
+>>> @@ -1708,6 +1708,15 @@ unsigned long mmap_region(struct file *file,
+>>> unsigned long addr,
+>>>           vm_flags |= VM_ACCOUNT;
+>>>       }
+>>>   +    /*
+>>> +     * New (or expanded) vma always get soft dirty status.
+>>> +     * Otherwise user-space soft-dirty page tracker won't
+>>> +     * be able to distinguish situation when vma area unmapped,
+>>> +     * then new mapped in-place (which must be aimed as
+>>> +     * a completely new data area).
+>>> +     */
+>>> +    vm_flags |= VM_SOFTDIRTY;
+>>> +
+>>>       /*
+>>>        * Can we just expand an old mapping?
+>>>        */
+>>> @@ -1823,15 +1832,6 @@ unsigned long mmap_region(struct file *file,
+>>> unsigned long addr,
+>>>       if (file)
+>>>           uprobe_mmap(vma);
+>>>   -    /*
+>>> -     * New (or expanded) vma always get soft dirty status.
+>>> -     * Otherwise user-space soft-dirty page tracker won't
+>>> -     * be able to distinguish situation when vma area unmapped,
+>>> -     * then new mapped in-place (which must be aimed as
+>>> -     * a completely new data area).
+>>> -     */
+>>> -    vma->vm_flags |= VM_SOFTDIRTY;
+>>> -
+>>>       vma_set_page_prot(vma);
+>>
+>> vma_set_page_prot(vma) has to be called after adjusting vma->vm_flags.
+>>
+>> Did not look into the details here, but that jumped at me.
+> vma_set_page_prot() also needs to be removed from here as it was being
+> called after updating the vm_flags. I'll remove it. vma_set_page_prot() was
+> added in a separate commit 64e455079e1b. I'll send a v2 in a while.
+Just had another look. vm_flags is being modified just above
+vma_set_page_prot(). So we don't need to remove it.
 
-Okay, I've narrowed down the issue to uart_shutdown() ->
-uart_port_shutdown() - here, ops->shutdown() is called, which clears
-the FIFOs (in the case of the default 8250_port and 8250_omap)
-implementations, but doesn't wait for the clear to finish, and doesn't
-call ops->stop_tx().
-
-I believe a similar problem can occur in uart_suspend_port(). Here,
-ops->stop_tx() is called before ops->shutdown(), but stop_tx() is a no-
-op when the TX FIFO is not empty (again, for the 8250 case - I haven't
-really looked at other drivers).
-
-Given that EM485 is handled in 8250_port by __stop_tx(), which is
-called both internally in the 8250 driver and from the serial core
-through stop_tx(), it is not clear to me what the correct layer to fix
-this is. Two ideas:
-
-(1) Have ops->shutdown() wait until the TX FIFO is empty. Call
-ops->stop_tx() after ops->shutdown() in serial core. For this to work,
-calling stop_tx() after shutdown() must be allowed in all drivers; I'm
-not sure if this is currently the case, and if it is desirable at all.
-
-(2) Do the whole handling in the driver's ops->shutdown(), do not
-further involve the serial core.
-
-So far, I've implemented (1) locally for 8250_omap, and together with
-"serial: 8250: 8250_omap: Avoid RS485 RTS glitch on ->set_termios()" it
-fixes the issue on my test devices, but I'm not too happy about the
-"shutdown then tx_stop" order of calls. So maybe (2) is the better
-solution after all?
+-- 
+BR,
+Muhammad Usama Anjum
