@@ -2,293 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8342963340B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A73963342D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiKVDls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S232251AbiKVDpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbiKVDlp (ORCPT
+        with ESMTP id S232295AbiKVDpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:41:45 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B9927CE8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:41:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669088504; x=1700624504;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PTzYkU4N5hBIC7qgiTBBdpFbvgItOs7Ji9ERs06HXeE=;
-  b=MakYrq0FRuiQZUCPoiduYvYfqPIQYL6/fDZ1GHBnm3Y/y6KMt2oMjfxr
-   eldK/vYJmQYsuggHdnQDFxDMDwOx8VpPPg9Cn3U1NHKfeIA/lM2NuXx0r
-   v9TjrdTR7ttrFEEOPepCV4kYsus13AYrZCqmGw25KEN+u6647QNbutdWZ
-   PYXORcqKlm8KgAxDG7jW49SZtf7mNlPJ/d4zG+RQK165TTGC/ZUUxNW7D
-   Co7ndnKHBW9OGdDwJS1gGxElV10Rhl5ft14FUHzUYYzqoj+oW2TxZM11N
-   /29BKz4O182XCO1KluVjLYeAtF9T2xbmrVFAHMbRgsmCmQuzo8deo7HaJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="315540250"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="315540250"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 19:41:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="704810940"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="704810940"
-Received: from otc-nc-03.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.110])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Nov 2022 19:41:43 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     "Robin Murphy" <robin.murphy@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Yuzhang Luo <yuzhang.luo@intel.com>
-Subject: [PATCH] iommu/vt-d: Add a fix for devices need extra dtlb flush
-Date:   Mon, 21 Nov 2022 19:45:29 -0800
-Message-Id: <20221122034529.3311562-1-jacob.jun.pan@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 21 Nov 2022 22:45:51 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240F728E21
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:45:50 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGVX03BqFzRpPY;
+        Tue, 22 Nov 2022 11:45:20 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 11:45:48 +0800
+Received: from [10.67.108.193] (10.67.108.193) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 11:45:48 +0800
+Subject: Re: [PATCH v2] rapidio: fix possible UAF when kfifo_alloc() fails
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <mporter@kernel.crashing.org>, <alex.bou9@gmail.com>,
+        <yangyingliang@huawei.com>, <jakobkoschel@gmail.com>,
+        <jhubbard@nvidia.com>, <error27@gmail.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221119040335.46794-1-wangweiyang2@huawei.com>
+ <20221121140410.dfe2816f743c62fe0c71639d@linux-foundation.org>
+From:   wangweiyang <wangweiyang2@huawei.com>
+Message-ID: <54d0de14-afcb-e3c7-16f9-df1b1f2a7e30@huawei.com>
+Date:   Tue, 22 Nov 2022 11:45:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221121140410.dfe2816f743c62fe0c71639d@linux-foundation.org>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.193]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QAT devices on Intel Sapphire Rapids and Emerald Rapids has a defect in
-address translation service (ATS). These devices may inadvertently issue
-ATS invalidation completion before posted writes initiated with
-translated address that utilized translations matching the invalidation
-address range, violating the invalidation completion ordering.
+Hi Andrew,
 
-An additional device TLB invalidation is needed to ensure no more posted
-writes with translated address following the invalidation completion.
+on 2022/11/22 6:04, Andrew Morton wrote:
+> On Sat, 19 Nov 2022 12:03:35 +0800 Wang Weiyang <wangweiyang2@huawei.com> wrote:
+> 
+>> If kfifo_alloc() fails in mport_cdev_open(), goto err_fifo and just free
+>> priv. But priv is still in the chdev->file_list, then list traversal
+>> may cause UAF. This fixes the following smatch warning:
+>>
+>> drivers/rapidio/devices/rio_mport_cdev.c:1930 mport_cdev_open() warn: '&priv->list' not removed from list
+>>
+>> ...
+>>
+>> Changes in v2:
+>> - Avoid adding the new instance onto the list until the new instance
+>>   has been fully initialized.
+> 
+> But it still isn't fully initialized.
 
-Without this fix, DMA writes with translated address can happen after
-device TLB invalidation is completed. Random data corruption can occur
-as the DMA buffer gets reused after invalidation.
+Yes, I ignored that the initialization is still going on.
 
-This patch adds a flag to mark the need for an extra flush based on given
-device IDs, this flag is set during initialization when ATS support is
-enabled.
+> 
+>>  drivers/rapidio/devices/rio_mport_cdev.c | 7 +++----
+>>  1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/rapidio/devices/rio_mport_cdev.c b/drivers/rapidio/devices/rio_mport_cdev.c
+>> index 3cc83997a1f8..86b28c4cd906 100644
+>> --- a/drivers/rapidio/devices/rio_mport_cdev.c
+>> +++ b/drivers/rapidio/devices/rio_mport_cdev.c
+>> @@ -1904,10 +1904,6 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
+>>  
+>>  	priv->md = chdev;
+>>  
+>> -	mutex_lock(&chdev->file_mutex);
+>> -	list_add_tail(&priv->list, &chdev->file_list);
+>> -	mutex_unlock(&chdev->file_mutex);
+>> -
+>>  	INIT_LIST_HEAD(&priv->db_filters);
+>>  	INIT_LIST_HEAD(&priv->pw_filters);
+>>  	spin_lock_init(&priv->fifo_lock);
+>> @@ -1920,6 +1916,9 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
+>>  		ret = -ENOMEM;
+>>  		goto err_fifo;
+>>  	}
+>> +	mutex_lock(&chdev->file_mutex);
+>> +	list_add_tail(&priv->list, &chdev->file_list);
+>> +	mutex_unlock(&chdev->file_mutex);
+>>  
+>>  #ifdef CONFIG_RAPIDIO_DMA_ENGINE
+>>  	INIT_LIST_HEAD(&priv->async_list);
+> 
+> Here we're still setting up state at *priv.  I'm thinking the list
+> addition shouldn't occur until after the 
+> 
+> 	filp->private_data = priv;
+> 
+> Or just prior to it.  I'm not sure what the atomicity rules are for
+> file.private versus mport_dev.file_list.
 
-At runtime, this flag is used to control the extra dTLB flush. The
-overhead of checking this unlikely true flag is smaller than checking
-PCI device IDs every time.
+I prefer to put the list addition just prior to the
 
-Device TLBs are invalidated under the following six conditions:
-1. Device driver does DMA API unmap IOVA
-2. Device driver unbind a PASID from a process, sva_unbind_device()
-3. PASID is torn down, after PASID cache is flushed. e.g. process
-exit_mmap() due to crash
-4. Under SVA usage, called by mmu_notifier.invalidate_range() where
-VM has to free pages that were unmapped
-5. userspace driver unmaps a DMA buffer
-6. Cache invalidation in vSVA usage (upcoming)
+	filp->private_data = priv;
 
-For #1 and #2, device drivers are responsible for stopping DMA traffic
-before unmap/unbind. For #3, iommu driver gets mmu_notifier to
-invalidate TLB the same way as normal user unmap which will do an extra
-invalidation. The dTLB invalidation after PASID cache flush does not
-need an extra invalidation.
+to keep mport_cdev_release() in reverse order of init. If it's ok with
+you, I'll send a new patch later.
 
-Therefore, we only need to deal with #4 and #5 in this patch. #1 is also
-covered by this patch due to common code path with #5.
-
-Tested-by: Yuzhang Luo <yuzhang.luo@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
----
- drivers/iommu/intel/iommu.c | 100 +++++++++++++++++++++++++++++-------
- drivers/iommu/intel/iommu.h |   3 ++
- drivers/iommu/intel/svm.c   |   4 +-
- 3 files changed, 87 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 996a8b5ee5ee..6254788330b8 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1396,6 +1396,39 @@ static void domain_update_iotlb(struct dmar_domain *domain)
- 	spin_unlock_irqrestore(&domain->lock, flags);
- }
- 
-+/*
-+ * Check that the device does not live on an external facing PCI port that is
-+ * marked as untrusted. Such devices should not be able to apply quirks and
-+ * thus not be able to bypass the IOMMU restrictions.
-+ */
-+static bool risky_device(struct pci_dev *pdev)
-+{
-+	if (pdev->untrusted) {
-+		pci_info(pdev,
-+			 "Skipping IOMMU quirk for dev [%04X:%04X] on untrusted PCI link\n",
-+			 pdev->vendor, pdev->device);
-+		pci_info(pdev, "Please check with your BIOS/Platform vendor about this\n");
-+		return true;
-+	}
-+	return false;
-+}
-+
-+/* Impacted QAT device IDs ranging from 0x4940 to 0x4943 */
-+#define BUGGY_QAT_DEVID_MASK 0x494c
-+static bool dev_needs_extra_dtlb_flush(struct pci_dev *pdev)
-+{
-+	if (pdev->vendor != PCI_VENDOR_ID_INTEL)
-+		return false;
-+
-+	if ((pdev->device & 0xfffc) != BUGGY_QAT_DEVID_MASK)
-+		return false;
-+
-+	if (risky_device(pdev))
-+		return false;
-+
-+	return true;
-+}
-+
- static void iommu_enable_pci_caps(struct device_domain_info *info)
- {
- 	struct pci_dev *pdev;
-@@ -1478,6 +1511,7 @@ static void __iommu_flush_dev_iotlb(struct device_domain_info *info,
- 	qdep = info->ats_qdep;
- 	qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
- 			   qdep, addr, mask);
-+	quirk_dev_tlb(info, addr, mask, PASID_RID2PASID, qdep);
- }
- 
- static void iommu_flush_dev_iotlb(struct dmar_domain *domain,
-@@ -4490,9 +4524,10 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
- 	if (dev_is_pci(dev)) {
- 		if (ecap_dev_iotlb_support(iommu->ecap) &&
- 		    pci_ats_supported(pdev) &&
--		    dmar_ats_supported(pdev, iommu))
-+		    dmar_ats_supported(pdev, iommu)) {
- 			info->ats_supported = 1;
--
-+			info->dtlb_extra_inval = dev_needs_extra_dtlb_flush(pdev);
-+		}
- 		if (sm_supported(iommu)) {
- 			if (pasid_supported(iommu)) {
- 				int features = pci_pasid_features(pdev);
-@@ -4680,23 +4715,6 @@ static bool intel_iommu_is_attach_deferred(struct device *dev)
- 	return translation_pre_enabled(info->iommu) && !info->domain;
- }
- 
--/*
-- * Check that the device does not live on an external facing PCI port that is
-- * marked as untrusted. Such devices should not be able to apply quirks and
-- * thus not be able to bypass the IOMMU restrictions.
-- */
--static bool risky_device(struct pci_dev *pdev)
--{
--	if (pdev->untrusted) {
--		pci_info(pdev,
--			 "Skipping IOMMU quirk for dev [%04X:%04X] on untrusted PCI link\n",
--			 pdev->vendor, pdev->device);
--		pci_info(pdev, "Please check with your BIOS/Platform vendor about this\n");
--		return true;
--	}
--	return false;
--}
--
- static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
- 				       unsigned long iova, size_t size)
- {
-@@ -4931,3 +4949,47 @@ static void __init check_tylersburg_isoch(void)
- 	pr_warn("Recommended TLB entries for ISOCH unit is 16; your BIOS set %d\n",
- 	       vtisochctrl);
- }
-+
-+/*
-+ * Here we deal with a device TLB defect where device may inadvertently issue ATS
-+ * invalidation completion before posted writes initiated with translated address
-+ * that utilized translations matching the invalidation address range, violating
-+ * the invalidation completion ordering.
-+ * Therefore, any use cases that cannot guarantee DMA is stopped before unmap is
-+ * vulnerable to this defect. In other words, any dTLB invalidation initiated not
-+ * under the control of the trusted/privileged host device driver must use this
-+ * quirk.
-+ * Device TLBs are invalidated under the following six conditions:
-+ * 1. Device driver does DMA API unmap IOVA
-+ * 2. Device driver unbind a PASID from a process, sva_unbind_device()
-+ * 3. PASID is torn down, after PASID cache is flushed. e.g. process
-+ *    exit_mmap() due to crash
-+ * 4. Under SVA usage, called by mmu_notifier.invalidate_range() where
-+ *    VM has to free pages that were unmapped
-+ * 5. Userspace driver unmaps a DMA buffer
-+ * 6. Cache invalidation in vSVA usage (upcoming)
-+ *
-+ * For #1 and #2, device drivers are responsible for stopping DMA traffic
-+ * before unmap/unbind. For #3, iommu driver gets mmu_notifier to
-+ * invalidate TLB the same way as normal user unmap which will use this quirk.
-+ * The dTLB invalidation after PASID cache flush does not need this quirk.
-+ *
-+ * As a reminder, #6 will *NEED* this quirk as we enable nested translation.
-+ */
-+void quirk_dev_tlb(struct device_domain_info *info, unsigned long address,
-+		   unsigned long mask, u32 pasid, u16 qdep)
-+{
-+	u16 sid;
-+
-+	if (likely(!info->dtlb_extra_inval))
-+		return;
-+
-+	sid = PCI_DEVID(info->bus, info->devfn);
-+	if (pasid == PASID_RID2PASID) {
-+		qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
-+				   qdep, address, mask);
-+	} else {
-+		qi_flush_dev_iotlb_pasid(info->iommu, sid, info->pfsid,
-+					 pasid, qdep, address, mask);
-+	}
-+}
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 92023dff9513..09b989bf545f 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -623,6 +623,7 @@ struct device_domain_info {
- 	u8 pri_enabled:1;
- 	u8 ats_supported:1;
- 	u8 ats_enabled:1;
-+	u8 dtlb_extra_inval:1;	/* Quirk for devices need extra flush */
- 	u8 ats_qdep;
- 	struct device *dev; /* it's NULL for PCIe-to-PCI bridge */
- 	struct intel_iommu *iommu; /* IOMMU used by this device */
-@@ -728,6 +729,8 @@ void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
- void qi_flush_dev_iotlb_pasid(struct intel_iommu *iommu, u16 sid, u16 pfsid,
- 			      u32 pasid, u16 qdep, u64 addr,
- 			      unsigned int size_order);
-+void quirk_dev_tlb(struct device_domain_info *info, unsigned long address,
-+		   unsigned long pages, u32 pasid, u16 qdep);
- void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did, u64 granu,
- 			  u32 pasid);
- 
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index 7d08eb034f2d..117430b97ba9 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -184,10 +184,12 @@ static void __flush_svm_range_dev(struct intel_svm *svm,
- 		return;
- 
- 	qi_flush_piotlb(sdev->iommu, sdev->did, svm->pasid, address, pages, ih);
--	if (info->ats_enabled)
-+	if (info->ats_enabled) {
- 		qi_flush_dev_iotlb_pasid(sdev->iommu, sdev->sid, info->pfsid,
- 					 svm->pasid, sdev->qdep, address,
- 					 order_base_2(pages));
-+		quirk_dev_tlb(info, address, order_base_2(pages), svm->pasid, sdev->qdep);
-+	}
- }
- 
- static void intel_flush_svm_range_dev(struct intel_svm *svm,
--- 
-2.25.1
-
+> .
+> 
