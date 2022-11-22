@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99F263420A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D6A634213
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiKVQ7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S233693AbiKVRAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 12:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234410AbiKVQ66 (ORCPT
+        with ESMTP id S234416AbiKVRAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:58:58 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C0C45A1D;
-        Tue, 22 Nov 2022 08:58:57 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id t62so16438536oib.12;
-        Tue, 22 Nov 2022 08:58:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bt8Ttpp6RbBrNJPZBjc452dc15WNtqXh5ouNAwptrR8=;
-        b=IMUaGlI5ct9+fTRZFPz5w3/ewKXGBmwF/9xJ9eRKHJ6lzzRfTs4f8VfKzaQhPcxCaW
-         wJoXG5N6/3PVCuU0EjvNBxboe7qXbT8RAh+HInM3no5X+7ADBJ16oFMD4MyXpCjFezBG
-         CMOBNINgmES71Grrrsx+0nBIUqSc2K61GRmnQVP6U1o09f+s6g5PCiLa6J4tSC/Iuib6
-         A6WZhPdGOg7JJskOTQLjfd/OOCdIVPDlCHd0YGmgDyzNFJQXx30DtO0SWO9bpyp0Xe19
-         I7t4UwUC8sQS+gzaTAQhGYqFEYEqrrNd8gBQrztW5QA2/Gmrknq4/xX2bFLqVJSAo/fp
-         VSoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bt8Ttpp6RbBrNJPZBjc452dc15WNtqXh5ouNAwptrR8=;
-        b=6QVTGqKbuGerBt84DTo0Ib5nxaCLwit8v0fOBgYm6LdGPAqTzhnfxm7nb9rYs15MWm
-         IsFX021mlpRzMpGtpxYZ3j1S9fRJeqHAlhYQ9zWZaK7eXKJ/GgMljPsbHp5wc0I4J6Ba
-         VGzw9CK7rgTqHgx8vU8cVK6mw2pRU3edHSTMdQ1nNZJoROAJSFr3kaS6rRB6/Gwn54Cw
-         uwbVoKSbEB+5rfKydT0HA12Joc3JTqSxKmnfnY4WeyIOiZQg6B0bMBdGr5jBhLJt25Bi
-         RdszCEgikmd/RFSoRBShEir+S/ojSihAuJ8KmayXpr9dbJjTGZvQcQPlAxF1lMTAJx4s
-         sJWw==
-X-Gm-Message-State: ANoB5pkjW0dSpu1zLjc+CW+0TyNrL0xLBES9tfex8eefiKtBWTTMEaM1
-        sjP+ydszv7pxHTLOrL6I/I4=
-X-Google-Smtp-Source: AA0mqf7I0kCnZpHhGo+5q4TZb+OVIaKeQcdzSim4jf4oSAmlCOKoBOJt7PIVYVSMiAMlDF+VNLWnuQ==
-X-Received: by 2002:a05:6808:218:b0:35a:202f:1bcf with SMTP id l24-20020a056808021800b0035a202f1bcfmr3442263oie.32.1669136336404;
-        Tue, 22 Nov 2022 08:58:56 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056871068a00b0013d7fffbc3csm7700496oao.58.2022.11.22.08.58.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 08:58:55 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4edd6e3e-b37e-f5ed-8bdc-47c5b0cf2e9d@roeck-us.net>
-Date:   Tue, 22 Nov 2022 08:58:52 -0800
+        Tue, 22 Nov 2022 12:00:46 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18B742F67F;
+        Tue, 22 Nov 2022 09:00:43 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 2AMGxCjf016272;
+        Tue, 22 Nov 2022 17:59:12 +0100
+Date:   Tue, 22 Nov 2022 17:59:12 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: Re: Optimising csum_fold()
+Message-ID: <20221122165912.GD15368@1wt.eu>
+References: <e77165c267df486f914f8013fede1d32@AcuMS.aculab.com>
+ <20221122162451.GB15368@1wt.eu>
+ <f2ad1680da754f0eab1083d651c8f71c@AcuMS.aculab.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 4.19 00/34] 4.19.266-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221121124150.886779344@linuxfoundation.org>
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221121124150.886779344@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f2ad1680da754f0eab1083d651c8f71c@AcuMS.aculab.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 04:43, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.266 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Nov 22, 2022 at 04:55:27PM +0000, David Laight wrote:
+> From: Willy Tarreau <w@1wt.eu>
+> > Sent: 22 November 2022 16:25
+> > 
+> > On Tue, Nov 22, 2022 at 01:08:23PM +0000, David Laight wrote:
+> > > There are currently 20 copies of csum_fold(), some in C some in assembler.
+> > > The default C version (in asm-generic/checksum.h) is pretty horrid.
+> > > Some of the asm versions (including x86 and x86-64) aren't much better.
+> > >
+> > > There are 3 pretty good C versions:
+> > >   1:	(~sum - rol32(sum, 16)) >> 16
+> > >   2:  ~(sum + rol32(sum, 16)) >> 16
+> > >   3:  (u16)~((sum + rol32(sum, 16)) >> 16)
+> > > All three are (usually) 4 arithmetic instructions.
+> > >
+> > > The first two have the advantage that the high bits are zero.
+> > > Relevant when the value is being checked rather than set.
+> > >
+> > > The first one can generate better instruction scheduling (the rotate
+> > > and invert can be executed in the same clock).
+> > >
+> > > The 3rd one saves an instruction on arm, but may need masking.
+> > > (I've not compiled an arm kernel to see how often that happens.)
+> > >
+> > > The only architectures where (I think) the current asm code is better
+> > > than the C above are sparc and sparc64.
+> > > Sparc doesn't have a rotate instruction, but does have a carry flag.
+> > > This makes the current asm version one instruction shorter.
+> > >
+> > > For architectures like mips and risc-v which have neither rotate
+> > > instructions nor carry flags the C is as good as the current asm.
+> > > The rotate is 3 instructions - the same as the extra cmp+add.
+> > >
+> > > Changing everything to use [1] would improve quite a few architectures
+> > > while only adding 1 clock to some paths in arm/arm64 and sparc.
+> > >
+> > > Unfortunately it is all currently a mess.
+> > > Most architectures don't include asm-generic/checksum.h at all.
+> > >
+> > > Thoughts?
+> > 
+> > Then why not just have one version per arch, the most efficient one,
+> > and use it everywhere ? The simple fact that we're discussing the
+> > tradeoffs means that if we don't want to compromise performance here
+> > (which I assume to be the case), then it needs to be per-arch and
+> > that's all. At least that's the way I understand it.
 > 
-> Responses should be made by Wed, 23 Nov 2022 12:41:40 +0000.
-> Anything received after that time might be too late.
-> 
+> At the moment there are a lot of arch-specific ones that are
+> definitely sub-optimal.
 
-Build results:
-	total: 157 pass: 157 fail: 0
-Qemu test results:
-	total: 423 pass: 423 fail: 0
+Yes very likely!
 
+> I started doing some patches, my x86-64 kernel in about 4k
+> smaller with [1].
+> I was going to post the patches to asm-generic an x86.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+I mean, maybe we could have your 3 versions with different names
+in asm-generic, and have each asm file define csum_fold() to one
+of them. That would limit the spreadth of variants and the auditing
+difficulty.
 
-Guenter
-
+Willy
