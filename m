@@ -2,88 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9D16335D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3139B6335DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbiKVHXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
+        id S232372AbiKVHeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:34:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiKVHXC (ORCPT
+        with ESMTP id S232360AbiKVHd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:23:02 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC9B101FB;
-        Mon, 21 Nov 2022 23:22:59 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id d7so9681050qkk.3;
-        Mon, 21 Nov 2022 23:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7TwzpFsFQClSwuKQTXmRtSYacFGh+27tuORQa4kKv5I=;
-        b=mA7aJhcq06ImGokynYxotESuqynecZKKDYx4ub48VcZOFRKkDdur39R/JJfnAk58tK
-         oHQNyuaJh8XXlJwjR1+33qwCB6dKNOnmPnaIAXaEO7lyp2jbbocJuqiRd+DzpL1Q2Nn1
-         4QO7d/2t2e2rj0eRXUVAbnhPVJk0QC2hra460FKmZhe+RUTkwuPijCVQx8BRDfFINiia
-         A1UD/F3ZmKrt+3CeAdiOv299Ws02Sx3jlUqi+n9YXlAcJUz5UdZ+K/fkY9voUb4Fv2s1
-         rlGQVbCzPABFSLGoVr+lU7T7/MfcnP1nJjMnHvx+GvzMXufVa8NzYCQYMbrxFi64G3QA
-         6bdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7TwzpFsFQClSwuKQTXmRtSYacFGh+27tuORQa4kKv5I=;
-        b=Q1849dNgFNPquezxgr/GWNa7usz57XmZV8uwzGFH61zBFN4MvxjbanqJWT8tMZOFZR
-         vWfg4Ah/ZMYDY+Y+mANk/V0YetmU6kQL18UiWJgAYOfFYqa3TN3XwkF7nbjs6gv892Fp
-         urkg+0dER7pkMSH5xq5OgReHRyJZeaoquxfusM7QHZg6mBzMpqQM1Yx8cIDNyraWNwlI
-         VsEqsGLPYcSYPFxdR4vgPKHI19jKutSgPmbYI6Lj5MS5Ekb4QL1DkWs3nG2CV9u3Hg4M
-         CJ6a1J0i7LoEKe/Hf5Wb7YNQzuyUEwWCmZqek0ESHMKmt0vK1qoHU2MZXN794WdII1CZ
-         M0Gg==
-X-Gm-Message-State: ANoB5pnh2xKFzKnho0sqd4t344Xvhe34hzNS/6bZSa5DvoMJqq4AqS6K
-        WMqzCAD9YfOOhOFq3mYCHj4=
-X-Google-Smtp-Source: AA0mqf6a2BBw7C+lLin2nyBRusno/c+zXxhOMqbNCqG4uo/1+vPPilx/DBvJlWuDIixI5pUfhE7j6w==
-X-Received: by 2002:a37:4655:0:b0:6ee:6fb0:c4ef with SMTP id t82-20020a374655000000b006ee6fb0c4efmr2908350qka.173.1669101778217;
-        Mon, 21 Nov 2022 23:22:58 -0800 (PST)
-Received: from p200300f6ef01c100bbfed85b414bb2c3.dip0.t-ipconnect.de (p200300f6ef01c100bbfed85b414bb2c3.dip0.t-ipconnect.de. [2003:f6:ef01:c100:bbfe:d85b:414b:b2c3])
-        by smtp.gmail.com with ESMTPSA id l15-20020a05620a28cf00b006bb2cd2f6d1sm9622910qkp.127.2022.11.21.23.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 23:22:57 -0800 (PST)
-Message-ID: <1939e7e7dd3f935a0222c1fd0318b58de0cbdb3c.camel@gmail.com>
-Subject: Re: [PATCH] iio: use devm_platform_get_and_ioremap_resource()
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     ye.xingchen@zte.com.cn, lars@metafoo.de
-Cc:     michael.hennerich@analog.com, jic23@kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chi.minghao@zte.com.cn
-Date:   Tue, 22 Nov 2022 08:24:28 +0100
-In-Reply-To: <202211220935338446115@zte.com.cn>
-References: <202211220935338446115@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 
+        Tue, 22 Nov 2022 02:33:58 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26CC17057;
+        Mon, 21 Nov 2022 23:33:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669102437; x=1700638437;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GlheoP3S8KQYlEN0ZjlBFqE/Uf9kh5WCBdTEusKSsHE=;
+  b=UkZN1cTzD5/gIu4fr20ZcOanEOieuyFkWTXjlZVsGBwjet9KFdWnfZwk
+   PJoplC4nONg5gS8402cQu2f1nDOxoPwG/nZSR1FxKEntfOU6iQgh+il9L
+   nBCr3mWmRs8NTB5YD5b+c/0ILWayXey164ZP+94721uiGbDIOZWoZi8Ez
+   6aEfDF9fSjSNQ8lqupG/KZQ9aMkHt9MTM/+1gFlNgvbEjj5v6DI/G1SlX
+   lKdJW0M6CRgeOmiMGX7/QFoK74p8reePa61x9ejXZ2PTnbcR2TwFXpHoZ
+   6I1AEV7Pt8tavFQ9oEyvrvacrtRsFtcCSROb8AITW6gUfLWKkfbypxHB+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="313785041"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="313785041"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 23:33:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="641323236"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="641323236"
+Received: from a0cec8d9c8fc.jf.intel.com ([10.45.77.137])
+  by orsmga002.jf.intel.com with ESMTP; 21 Nov 2022 23:33:56 -0800
+From:   Chen Hu <hu1.chen@intel.com>
+Cc:     hu1.chen@intel.com, jpoimboe@kernel.org, memxor@gmail.com,
+        bpf@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH bpf v2] selftests/bpf: Fix "missing ENDBR" BUG for destructor kfunc
+Date:   Mon, 21 Nov 2022 23:32:43 -0800
+Message-Id: <20221122073244.21279-1-hu1.chen@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-22 at 09:35 +0800, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->=20
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->=20
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
+With CONFIG_X86_KERNEL_IBT enabled, the test_verifier triggers the
+following BUG:
 
-Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+  traps: Missing ENDBR: bpf_kfunc_call_test_release+0x0/0x30
+  ------------[ cut here ]------------
+  kernel BUG at arch/x86/kernel/traps.c:254!
+  invalid opcode: 0000 [#1] PREEMPT SMP
+  <TASK>
+   asm_exc_control_protection+0x26/0x50
+  RIP: 0010:bpf_kfunc_call_test_release+0x0/0x30
+  Code: 00 48 c7 c7 18 f2 e1 b4 e8 0d ca 8c ff 48 c7 c0 00 f2 e1 b4 c3
+	0f 1f 44 00 00 66 0f 1f 00 0f 1f 44 00 00 0f 0b 31 c0 c3 66 90
+       <66> 0f 1f 00 0f 1f 44 00 00 48 85 ff 74 13 4c 8d 47 18 b8 ff ff ff
+   bpf_map_free_kptrs+0x2e/0x70
+   array_map_free+0x57/0x140
+   process_one_work+0x194/0x3a0
+   worker_thread+0x54/0x3a0
+   ? rescuer_thread+0x390/0x390
+   kthread+0xe9/0x110
+   ? kthread_complete_and_exit+0x20/0x20
+
+This is because there are no compile-time references to the destructor
+kfuncs, bpf_kfunc_call_test_release() for example. So objtool marked
+them sealable and ENDBR in the functions were sealed (converted to NOP)
+by apply_ibt_endbr().
+
+This fix creates dummy compile-time references to destructor kfuncs so
+ENDBR stay there.
+
+Fixes: 05a945deefaa ("selftests/bpf: Add verifier tests for kptr")
+Signed-off-by: Chen Hu <hu1.chen@intel.com>
+Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+---
+v2:
+- Use generic macro name and place the macro after function body as
+- suggested by Jiri Olsa
+
+v1: https://lore.kernel.org/all/20221121085113.611504-1-hu1.chen@intel.com/
+
+ include/linux/btf_ids.h | 7 +++++++
+ net/bpf/test_run.c      | 4 ++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 2aea877d644f..db02691b506d 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -266,4 +266,11 @@ MAX_BTF_TRACING_TYPE,
+ 
+ extern u32 btf_tracing_ids[];
+ 
++#if defined(CONFIG_X86_KERNEL_IBT) && !defined(__DISABLE_EXPORTS)
++#define FUNC_IBT_NOSEAL(name)					\
++	asm(IBT_NOSEAL(#name));
++#else
++#define FUNC_IBT_NOSEAL(name)
++#endif /* CONFIG_X86_KERNEL_IBT */
++
+ #endif
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 13d578ce2a09..07263b7cc12d 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -597,10 +597,14 @@ noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
+ 	refcount_dec(&p->cnt);
+ }
+ 
++FUNC_IBT_NOSEAL(bpf_kfunc_call_test_release)
++
+ noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
+ {
+ }
+ 
++FUNC_IBT_NOSEAL(bpf_kfunc_call_memb_release)
++
+ noinline void bpf_kfunc_call_memb1_release(struct prog_test_member1 *p)
+ {
+ 	WARN_ON_ONCE(1);
+-- 
+2.34.1
 
