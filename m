@@ -2,215 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B3B63432C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 19:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2628D634336
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 19:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiKVSBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 13:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S234086AbiKVSEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 13:04:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbiKVSBa (ORCPT
+        with ESMTP id S229481AbiKVSEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 13:01:30 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A2682BB
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:01:28 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3abc71aafcaso19370857b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6B0NrMvYa9h30nShzcOWnnoLa9VhsXqCL7iaXLlPHUo=;
-        b=iWPChtAoKFdKhqcc/DN3txXed0Dwlsv6aeY/kU0GIAptMe3AhWO8wNTMkP814+mpot
-         Lw+8OhB61MCpzcW/qHOQt9y0qCwc2TeVUQZL6D4AaTgJnk4brkjJmPWHb9ErENo8EMPV
-         vNAw2U5rYK5vDLFMMjyG/YPN8oDJszHjXswrS7dU4RuyirXZUZn3LSiKEZH67u0ITTlB
-         vm7GHgRSaPuARILnXSmyQdd3uOb1udK3X9qB19+nwQzHalBvF2/CKdn9VUtUr2dTyGfD
-         Ub/JVtM14HO5rq2oN6TgFpsme/nE5KtZ05qtTeNRWANWEX7Ghk/R9QA5RRdfaycx8rvi
-         csrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6B0NrMvYa9h30nShzcOWnnoLa9VhsXqCL7iaXLlPHUo=;
-        b=52NdoXHXel79Q/UNKnIWbO6EL1uLla7/e5VAfufYZv0zqpqprch/j9SfJzYdZY3qTT
-         YYKtGMLVIHqjpKCLHeco1+H5AR3z8QCN5VxoEBO3tS82uCvyDIeyejv7rFj4EkbDFtsN
-         lTLb2zxHQHmRKVE9EDp2ygMn9AaFqqJPZ19r2oCzv0Gv7HxmC6MOLsMmBGxZbFBLEnYy
-         GJW3cUz26fRPaA/8DCfhS8bFLsgdYbDOCzTN7QhKLvhhaBCoY1Jzp5ofuIwFDFxmYt/H
-         rINzuyzjhZi1M49ih2ZTQg64Kx+mTsdffQpphm+jNmpofdpnPW0K5/oOr0PaZr9Xa0E/
-         81HA==
-X-Gm-Message-State: ANoB5pniqMDrTrgF0rz72DB2CetmfGEMBB5f1fbOjxYXhPP/obl9tcFZ
-        rv4edGPtAts7VfoTrcfV2xLpTZc3VnIMNcnPvwWl+g==
-X-Google-Smtp-Source: AA0mqf4Nx1p+QeB+x8oyriiysv0tI4zAGBzohwN/TWpubU148DMkvHTEfKohRc437Kc40T/hVsvx+Bc3QdOFRwtDMfE=
-X-Received: by 2002:a05:690c:a92:b0:36c:aaa6:e571 with SMTP id
- ci18-20020a05690c0a9200b0036caaa6e571mr23063228ywb.467.1669140087308; Tue, 22
- Nov 2022 10:01:27 -0800 (PST)
+        Tue, 22 Nov 2022 13:04:50 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D1669DFC;
+        Tue, 22 Nov 2022 10:04:49 -0800 (PST)
+Date:   Tue, 22 Nov 2022 18:04:46 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669140288;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TM9Haxtja/rzotjBDL/zaDOhtdRf7kjx78vBOLGk9f8=;
+        b=jrht4SGaTiyC/2ftjGt73WocBAavHHSeLtcZ/ptd6YE75KknzoavcGbUYu0CaTn65RWagY
+        jZ/lyQkpo7FdgITx6OCp/N6RN6utL0HbYnb9XHwLWTcxntxXz37zdsDyYNDFzQEBEWgqD8
+        5KiIp0Xc/AAal0e7Irq8IDA3SajkK4i6zF4Qn1NXDs6s5hRe/F2yoQuC3RRVmMobj+bMOu
+        NQXGym8QT8iFJTtxv6ZOQqAxSNt6a5TBnyAfLN/d2vZ3Sz4I5nAKhXFziaOocWfxdqlA4W
+        qFyCv1IvMwoNhCPADB9yptGWezQQVWYCO2tJqGPNebEzfhHWXFseDmSCr+HqfQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669140288;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TM9Haxtja/rzotjBDL/zaDOhtdRf7kjx78vBOLGk9f8=;
+        b=2gdgU5tIEm7HbhTPFqEZSWVk6aGU65XJ1OBs+qZrJO+MarWtY2TVLRjHcVbHS23mCAIScp
+        LSDXP2rjGV+G0gAw==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/cpu: Switch to cpu_feature_enabled() for X86_FEATURE_XENPV
+Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221104072701.20283-6-jgross@suse.com>
+References: <20221104072701.20283-6-jgross@suse.com>
 MIME-Version: 1.0
-References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
-In-Reply-To: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 22 Nov 2022 10:01:16 -0800
-Message-ID: <CANn89iLzARPp6jW1xS0rf+-wS_RnwK-Kfgs9uQFYan2AHPRQFA@mail.gmail.com>
-Subject: Re: Low TCP throughput due to vmpressure with swap enabled
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <166914028671.4906.3926993921929501636.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 4:53 PM Ivan Babrou <ivan@cloudflare.com> wrote:
->
-> Hello,
->
-> We have observed a negative TCP throughput behavior from the following commit:
->
-> * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
->
-> It landed back in 2016 in v4.5, so it's not exactly a new issue.
->
-> The crux of the issue is that in some cases with swap present the
-> workload can be unfairly throttled in terms of TCP throughput.
+The following commit has been merged into the x86/cpu branch of tip:
 
-I guess defining 'fairness' in such a scenario is nearly impossible.
+Commit-ID:     6007878a782eb96f50a71c3a06cf3e931cf8aac1
+Gitweb:        https://git.kernel.org/tip/6007878a782eb96f50a71c3a06cf3e931cf8aac1
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Fri, 04 Nov 2022 08:27:01 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 22 Nov 2022 16:18:19 +01:00
 
-Have you tried changing /proc/sys/net/ipv4/tcp_rmem  (and/or tcp_wmem) ?
-Defaults are quite conservative.
-If for your workload you want to ensure a minimum amount of memory per
-TCP socket,
-that might be good enough.
+x86/cpu: Switch to cpu_feature_enabled() for X86_FEATURE_XENPV
 
-Of course, if your proxy has to deal with millions of concurrent TCP
-sockets, I fear this is not an option.
+Convert the remaining cases of static_cpu_has(X86_FEATURE_XENPV) and
+boot_cpu_has(X86_FEATURE_XENPV) to use cpu_feature_enabled(), allowing
+more efficient code in case the kernel is configured without
+CONFIG_XEN_PV.
 
->
-> I am able to reproduce this issue in a VM locally on v6.1-rc6 with 8
-> GiB of RAM with zram enabled.
->
-> The setup is fairly simple:
->
-> 1. Run the following go proxy in one cgroup (it has some memory
-> ballast to simulate useful memory usage):
->
-> * https://gist.github.com/bobrik/2c1a8a19b921fefe22caac21fda1be82
->
-> sudo systemd-run --scope -p MemoryLimit=6G go run main.go
->
-> 2. Run the following fio config in another cgroup to simulate mmapped
-> page cache usage:
->
-> [global]
-> size=8g
-> bs=256k
-> iodepth=256
-> direct=0
-> ioengine=mmap
-> group_reporting
-> time_based
-> runtime=86400
-> numjobs=8
-> name=randread
-> rw=randread
->
-> [job1]
-> filename=derp
->
-> sudo systemd-run --scope fio randread.fio
->
-> 3. Run curl to request a large file via proxy:
->
-> curl -o /dev/null http://localhost:4444
->
-> 4. Observe low throughput. The numbers here are dependent on your
-> location, but in my VM the throughput drops from 60MB/s to 10MB/s
-> depending on whether fio is running or not.
->
-> I can see that this happens because of the commit I mentioned with
-> some perf tracing:
->
-> sudo perf probe --add 'vmpressure:48 memcg->css.cgroup->kn->id scanned
-> vmpr_scanned=vmpr->scanned reclaimed vmpr_reclaimed=vmpr->reclaimed'
-> sudo perf probe --add 'vmpressure:72 memcg->css.cgroup->kn->id'
->
-> I can record the probes above during curl runtime:
->
-> sudo perf record -a -e probe:vmpressure_L48,probe:vmpressure_L72 -- sleep 5
->
-> Line 48 allows me to observe scanned and reclaimed page counters, line
-> 72 is the actual throttling.
->
-> Here's an example trace showing my go proxy cgroup:
->
-> kswapd0 89 [002] 2351.221995: probe:vmpressure_L48: (ffffffed2639dd90)
-> id=0xf23 scanned=0x140 vmpr_scanned=0x0 reclaimed=0x0
-> vmpr_reclaimed=0x0
-> kswapd0 89 [007] 2351.333407: probe:vmpressure_L48: (ffffffed2639dd90)
-> id=0xf23 scanned=0x2b3 vmpr_scanned=0x140 reclaimed=0x0
-> vmpr_reclaimed=0x0
-> kswapd0 89 [007] 2351.333408: probe:vmpressure_L72: (ffffffed2639de2c) id=0xf23
->
-> We scanned lots of pages, but weren't able to reclaim anything.
->
-> When throttling happens, it's in tcp_prune_queue, where rcv_ssthresh
-> (TCP window clamp) is set to 4 x advmss:
->
-> * https://elixir.bootlin.com/linux/v5.15.76/source/net/ipv4/tcp_input.c#L5373
->
-> else if (tcp_under_memory_pressure(sk))
-> tp->rcv_ssthresh = min(tp->rcv_ssthresh, 4U * tp->advmss);
->
-> I can see plenty of memory available in both my go proxy cgroup and in
-> the system in general:
->
-> $ free -h
-> total used free shared buff/cache available
-> Mem: 7.8Gi 4.3Gi 104Mi 0.0Ki 3.3Gi 3.3Gi
-> Swap: 11Gi 242Mi 11Gi
->
-> It just so happens that all of the memory is hot and is not eligible
-> to be reclaimed. Since swap is enabled, the memory is still eligible
-> to be scanned. If swap is disabled, then my go proxy is not eligible
-> for scanning anymore (all memory is anonymous, nowhere to reclaim it),
-> so the whole issue goes away.
->
-> Punishing well behaving programs like that doesn't seem fair. We saw
-> production metals with 200GB page cache out of 384GB of RAM, where a
-> well behaved proxy with 60GB of RAM + 15GB of swap is throttled like
-> that. The fact that it only happens with swap makes it extra weird.
->
-> I'm not really sure what to do with this. From our end we'll probably
-> just pass cgroup.memory=nosocket in cmdline to disable this behavior
-> altogether, since it's not like we're running out of TCP memory (and
-> we can deal with that better if it ever comes to that). There should
-> probably be a better general case solution.
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/r/20221104072701.20283-6-jgross@suse.com
+---
+ arch/x86/kernel/cpu/amd.c    | 2 +-
+ arch/x86/kernel/cpu/bugs.c   | 2 +-
+ arch/x86/kernel/cpu/hygon.c  | 2 +-
+ arch/x86/kernel/process_64.c | 4 ++--
+ arch/x86/kernel/topology.c   | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
-Probably :)
-
->
-> I don't know how widespread this issue can be. You need a fair amount
-> of page cache pressure to try to go to anonymous memory for reclaim to
-> trigger this.
->
-> Either way, this seems like a bit of a landmine.
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 860b602..697fe88 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -985,7 +985,7 @@ static void init_amd(struct cpuinfo_x86 *c)
+ 			set_cpu_cap(c, X86_FEATURE_3DNOWPREFETCH);
+ 
+ 	/* AMD CPUs don't reset SS attributes on SYSRET, Xen does. */
+-	if (!cpu_has(c, X86_FEATURE_XENPV))
++	if (!cpu_feature_enabled(X86_FEATURE_XENPV))
+ 		set_cpu_bug(c, X86_BUG_SYSRET_SS_ATTRS);
+ 
+ 	/*
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index e254f07..9e84b68 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1302,7 +1302,7 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
+ 		return SPECTRE_V2_CMD_AUTO;
+ 	}
+ 
+-	if (cmd == SPECTRE_V2_CMD_IBRS && boot_cpu_has(X86_FEATURE_XENPV)) {
++	if (cmd == SPECTRE_V2_CMD_IBRS && cpu_feature_enabled(X86_FEATURE_XENPV)) {
+ 		pr_err("%s selected but running as XenPV guest. Switching to AUTO select\n",
+ 		       mitigation_options[i].option);
+ 		return SPECTRE_V2_CMD_AUTO;
+diff --git a/arch/x86/kernel/cpu/hygon.c b/arch/x86/kernel/cpu/hygon.c
+index 21fd425..1c27645 100644
+--- a/arch/x86/kernel/cpu/hygon.c
++++ b/arch/x86/kernel/cpu/hygon.c
+@@ -339,7 +339,7 @@ static void init_hygon(struct cpuinfo_x86 *c)
+ 	set_cpu_cap(c, X86_FEATURE_ARAT);
+ 
+ 	/* Hygon CPUs don't reset SS attributes on SYSRET, Xen does. */
+-	if (!cpu_has(c, X86_FEATURE_XENPV))
++	if (!cpu_feature_enabled(X86_FEATURE_XENPV))
+ 		set_cpu_bug(c, X86_BUG_SYSRET_SS_ATTRS);
+ 
+ 	check_null_seg_clears_base(c);
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 6b3418b..e2f4691 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -165,7 +165,7 @@ static noinstr unsigned long __rdgsbase_inactive(void)
+ 
+ 	lockdep_assert_irqs_disabled();
+ 
+-	if (!static_cpu_has(X86_FEATURE_XENPV)) {
++	if (!cpu_feature_enabled(X86_FEATURE_XENPV)) {
+ 		native_swapgs();
+ 		gsbase = rdgsbase();
+ 		native_swapgs();
+@@ -190,7 +190,7 @@ static noinstr void __wrgsbase_inactive(unsigned long gsbase)
+ {
+ 	lockdep_assert_irqs_disabled();
+ 
+-	if (!static_cpu_has(X86_FEATURE_XENPV)) {
++	if (!cpu_feature_enabled(X86_FEATURE_XENPV)) {
+ 		native_swapgs();
+ 		wrgsbase(gsbase);
+ 		native_swapgs();
+diff --git a/arch/x86/kernel/topology.c b/arch/x86/kernel/topology.c
+index 8617d1e..1b83377 100644
+--- a/arch/x86/kernel/topology.c
++++ b/arch/x86/kernel/topology.c
+@@ -106,7 +106,7 @@ int arch_register_cpu(int num)
+ 	 * Xen PV guests don't support CPU0 hotplug at all.
+ 	 */
+ 	if (c->x86_vendor != X86_VENDOR_INTEL ||
+-	    boot_cpu_has(X86_FEATURE_XENPV))
++	    cpu_feature_enabled(X86_FEATURE_XENPV))
+ 		cpu0_hotpluggable = 0;
+ 
+ 	/*
