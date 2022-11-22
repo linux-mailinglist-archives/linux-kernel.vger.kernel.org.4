@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2D9633807
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3A9633816
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbiKVJK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S233168AbiKVJNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233148AbiKVJKe (ORCPT
+        with ESMTP id S232786AbiKVJNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:10:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451F618B13;
-        Tue, 22 Nov 2022 01:10:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=04mH2hDCkvHpLAW6koCu4FNsbF6qrp83kpM2X4j6UkE=; b=k9zuYNijeiPPZQgyzXcFeWVzjf
-        2kRDb8PjFNnE3rml8UaKa2fpc2ojYbhduPE/0bMcz9S3UjP4c3qRlLNCJKEGJdXarG9GScWgmn7Tt
-        vRktddCb9AdXAYCNM16jwhdF0wkK9N5B1dQl4GAufPTiQP9Qx3OSqnQ22tmQyECNSjZBVjb+fnING
-        x7igpnSIxEqEwPu7Fc+rSWOo0FI5GGRFCJ0Kv9/qjws+Kp5WirAQriU844RUHMwkuq+EEor4RTOoO
-        GuTlt3CeDJ7Avm1OIUXK6L7KyYMtSxQcVgK6xlZ1raqY51Db6NnBU3mPRgFvHwl8eQghb987Yb0iB
-        14zkWEOA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxPIR-00699A-NU; Tue, 22 Nov 2022 09:10:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9DD45300282;
-        Tue, 22 Nov 2022 10:10:20 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 835852D669367; Tue, 22 Nov 2022 10:10:20 +0100 (CET)
-Date:   Tue, 22 Nov 2022 10:10:20 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
-Message-ID: <Y3yR/NQwLYfIqode@hirez.programming.kicks-ass.net>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
+        Tue, 22 Nov 2022 04:13:39 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301FFC3F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:13:37 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGdp341R1zHw6Y;
+        Tue, 22 Nov 2022 17:12:59 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 17:13:35 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.or>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH --next] tracing: Make tracepoint_print_iter static
+Date:   Tue, 22 Nov 2022 17:10:31 +0800
+Message-ID: <20221122091031.71248-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 01:26:28PM +1300, Kai Huang wrote:
+After change in commit 4239174570da ("tracing: Make tracepoint_printk a
+static_key"), this symbol is not used outside of the file, so mark it
+static.
 
-> +/*
-> + * Data structure to make SEAMCALL on multiple CPUs concurrently.
-> + * @err is set to -EFAULT when SEAMCALL fails on any cpu.
-> + */
-> +struct seamcall_ctx {
-> +	u64 fn;
-> +	u64 rcx;
-> +	u64 rdx;
-> +	u64 r8;
-> +	u64 r9;
-> +	atomic_t err;
-> +};
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ kernel/trace/trace.c | 2 +-
+ kernel/trace/trace.h | 2 --
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-> @@ -166,6 +180,25 @@ static int __always_unused seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->  	}
->  }
->  
-> +static void seamcall_smp_call_function(void *data)
-> +{
-> +	struct seamcall_ctx *sc = data;
-> +	int ret;
-> +
-> +	ret = seamcall(sc->fn, sc->rcx, sc->rdx, sc->r8, sc->r9, NULL, NULL);
-> +	if (ret)
-> +		atomic_set(&sc->err, -EFAULT);
-> +}
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 47a44b055a1d..11a7214a2f49 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -85,7 +85,7 @@ void __init disable_tracing_selftest(const char *reason)
+ #endif
+ 
+ /* Pipe tracepoints to printk */
+-struct trace_iterator *tracepoint_print_iter;
++static struct trace_iterator *tracepoint_print_iter;
+ int tracepoint_printk;
+ static bool tracepoint_printk_stop_on_boot __initdata;
+ static DEFINE_STATIC_KEY_FALSE(tracepoint_printk_key);
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 54ee5711c729..d9b470a0adf2 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1941,8 +1941,6 @@ static inline void tracer_hardirqs_on(unsigned long a0, unsigned long a1) { }
+ static inline void tracer_hardirqs_off(unsigned long a0, unsigned long a1) { }
+ #endif
+ 
+-extern struct trace_iterator *tracepoint_print_iter;
+-
+ /*
+  * Reset the state of the trace_iterator so that it can read consumed data.
+  * Normally, the trace_iterator is used for reading the data when it is not
+-- 
+2.17.1
 
-Can someone explain me this usage of atomic_t, please?
