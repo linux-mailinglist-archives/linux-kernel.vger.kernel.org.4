@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A29E6332D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C416332DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbiKVCOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 21:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
+        id S232465AbiKVCQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:16:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiKVCOJ (ORCPT
+        with ESMTP id S231678AbiKVCP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:14:09 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908B5E0CB5;
-        Mon, 21 Nov 2022 18:14:07 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGSV96m2CzRpcc;
-        Tue, 22 Nov 2022 10:13:37 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 10:14:05 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 10:14:05 +0800
-Subject: Re: [PATCH v8 0/6] rcu: Add RCU stall diagnosis information
-To:     <paulmck@kernel.org>
-CC:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Robert Elliott <elliott@hpe.com>
-References: <20221119092508.1766-1-thunder.leizhen@huawei.com>
- <20221121222910.GP4001@paulmck-ThinkPad-P17-Gen-1>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <6877d891-7314-d9b3-5e1a-3e6bd239489b@huawei.com>
-Date:   Tue, 22 Nov 2022 10:14:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20221121222910.GP4001@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 21 Nov 2022 21:15:56 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FDBE0CB2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:15:54 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-39967085ae9so75175667b3.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:15:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QwnVufQmqgsD71rU58/FXnZ6Kqu/OdIMDvlzn78hKF0=;
+        b=k4vZ9/HUzOIP2zBuWKoMtl7qYaF7WljtXH1qLMOjUPNFZJcho4S6mcX9oJEpI4eEhd
+         jQaDsDTCWLUiqZD9gEJJFxO5PXor/IPqkbWeHOf7/uBxPI/E42dhTBwWw9pGFQOWfXAz
+         XDQ8fyBePklEduv9JeWkDQ4ti9U2YQjgKEpwKg/jWHBZfFhH4Wu+UWVBtFUv25SKyusZ
+         fSg7ZhiEjA0ThA2qFhWu1e3M4PLIRyFPrs/duf2FcIkJ/FvMpg33uhosLAvbGHdEgxYZ
+         /ZnujCg1Q8yPcTksxCuAuCvR2S9fKlQMl0DKNoWVw/W4d1VCUoEAFxKyWrQ4PB5xS8r4
+         TzGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QwnVufQmqgsD71rU58/FXnZ6Kqu/OdIMDvlzn78hKF0=;
+        b=Xj8XwZwyxy/tB3L8vQyXOPg88MKA2+s8x9trJGYy3ed6+IRI+/c1fnBOPjKua4xc3B
+         SXA00jtVcHnMEbgJiC8/l35luWUQdKQ10bCO70RytQilZZh8QGl32b/5mUWdbOiGyySN
+         OVxdtANbH0J4AptH3mqoB5zV2uPiMt/ySLQs6Zrp2m1dqLa0NBD+NEKJPzwv39MpquEd
+         5G44/d4yHA7JarQl72kcR5zrFW+HEfGIfLWOZtgwjhga3YAmgZimpl9UOvSM7Jz19RiM
+         s46hVznaszIyHL9Fb/yojr9TMtPNH+koe4kWU5lFWiiupCsvqbQIe7DYWDTQqEyil6cy
+         WzVQ==
+X-Gm-Message-State: ANoB5pmk9XAZziJ+GhX0kr6ta59LVRL9CI1lWrHKDr0TSnBB/t+Q65Kd
+        /LZcKJ8U9odcFRryjzRj0md4U3XOo4k=
+X-Google-Smtp-Source: AA0mqf4z6uMzBSUfVnuK3UoNIzNb/xg7g2J6WN3bup/hKRF8Re0V4qO2ezY0m7hXj/NH+yxnxq3+nl70YfU=
+X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:200:8539:aadd:13be:6e82])
+ (user=drosen job=sendgmr) by 2002:a81:d449:0:b0:38f:af02:ee94 with SMTP id
+ g9-20020a81d449000000b0038faf02ee94mr3ywl.230.1669083353587; Mon, 21 Nov 2022
+ 18:15:53 -0800 (PST)
+Date:   Mon, 21 Nov 2022 18:15:15 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221122021536.1629178-1-drosen@google.com>
+Subject: [RFC PATCH v2 00/21] FUSE BPF: A Stacked Filesystem Extension for FUSE
+From:   Daniel Rosenberg <drosen@google.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@android.com,
+        Daniel Rosenberg <drosen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,104 +68,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+These patches extend FUSE to be able to act as a stacked filesystem. This
+allows pure passthrough, where the fuse file system simply reflects the lower
+filesystem, and also allows optional pre and post filtering in BPF and/or the
+userspace daemon as needed. This can dramatically reduce or even eliminate
+transitions to and from userspace.
+
+For this patch set, I have removed the code related to the bpf side of things
+since that is undergoing some large reworks to get it in line with the more
+recent BPF developements. This set of patches implements direct passthrough to
+the lower filesystem with no alteration. Looking at the v1 code should give a
+pretty good idea of what the general shape of the bpf calls will look like.
+Without the bpf side, it's like a less efficient bind mount. Not very useful
+on its own, but still useful to get eyes on it since the backing calls will be
+larglely the same when bpf is in the mix.
+
+This changes the format of adding a backing file/bpf slightly from v1. It's now
+a bit more modular. You add a block of data at the end of a lookup response to
+give the bpf fd and backing id, but there is now a type header to both blocks,
+and a reserved value for future additions. In the future, we may allow for
+multiple bpfs or backing files, and this will allow us to extend it without any
+UAPI breaking changes. Multiple BPFs would be useful for combining fuse-bpf
+implementations without needing to manually combine bpf fragments. Multiple
+backing files would allow implementing things like a limited overlayfs.
+In this patch set, this is only a single block, with only backing supported,
+although I've left the definitions reflecting the BPF case as well.
+For bpf, the plan is to have two blocks, with the bpf one coming first.
+Any further extensions are currently just speculative.
+
+You can run this without needing to set up a userspace daemon by adding these
+mount options: root_dir=[fd],no_daemon where fd is an open file descriptor
+pointing to the folder you'd like to use as the root directory. The fd can be
+immediately closed after mounting. This is useful for running various fs tests.
+
+The main changes for v2:
+-Refactored code to remove many of the ifdefs
+-Adjusted attr related code per Amir's suggestions
+-Added ioctl interface for responding to fuse requests (required for backing)
+-Adjusted lookup add-on block for adding backing file/bpf
+-Moved bpf related patches to the end of the stack (not included currently)
+
+TODO:
+override_creds to interact with backing files in the same context the daemon
+would
+
+Implement backing calls for other FUSE operations (i.e. File Locking/tmp files)
+
+Convert BPF over to more modern version
+
+Alessio Balsini (1):
+  fs: Generic function to convert iocb to rw flags
+
+Daniel Rosenberg (20):
+  fuse-bpf: Update fuse side uapi
+  fuse-bpf: Prepare for fuse-bpf patch
+  fuse: Add fuse-bpf, a stacked fs extension for FUSE
+  fuse-bpf: Add ioctl interface for /dev/fuse
+  fuse-bpf: Don't support export_operations
+  fuse-bpf: Add support for FUSE_ACCESS
+  fuse-bpf: Partially add mapping support
+  fuse-bpf: Add lseek support
+  fuse-bpf: Add support for fallocate
+  fuse-bpf: Support file/dir open/close
+  fuse-bpf: Support mknod/unlink/mkdir/rmdir
+  fuse-bpf: Add support for read/write iter
+  fuse-bpf: support FUSE_READDIR
+  fuse-bpf: Add support for sync operations
+  fuse-bpf: Add Rename support
+  fuse-bpf: Add attr support
+  fuse-bpf: Add support for FUSE_COPY_FILE_RANGE
+  fuse-bpf: Add xattr support
+  fuse-bpf: Add symlink/link support
+  fuse-bpf: allow mounting with no userspace daemon
+
+ fs/fuse/Kconfig           |    8 +
+ fs/fuse/Makefile          |    1 +
+ fs/fuse/backing.c         | 3118 +++++++++++++++++++++++++++++++++++++
+ fs/fuse/control.c         |    2 +-
+ fs/fuse/dev.c             |   83 +-
+ fs/fuse/dir.c             |  326 ++--
+ fs/fuse/file.c            |   62 +-
+ fs/fuse/fuse_i.h          |  424 ++++-
+ fs/fuse/inode.c           |  264 +++-
+ fs/fuse/ioctl.c           |    2 +-
+ fs/fuse/readdir.c         |    5 +
+ fs/fuse/xattr.c           |   18 +
+ fs/overlayfs/file.c       |   23 +-
+ include/linux/fs.h        |    5 +
+ include/uapi/linux/fuse.h |   24 +-
+ 15 files changed, 4154 insertions(+), 211 deletions(-)
+ create mode 100644 fs/fuse/backing.c
 
 
-On 2022/11/22 6:29, Paul E. McKenney wrote:
-> On Sat, Nov 19, 2022 at 05:25:02PM +0800, Zhen Lei wrote:
->> v7 --> v8:
->> 1. Change call jiffies64_to_msecs() to call jiffies_to_msecs().
->> 2. Mention that rcupdate.rcu_cpu_stall_cputime overrides
->>    CONFIG_RCU_CPU_STALL_CPUTIME behaviour in the Kconfig help text.
->> 3. Fix a make htmldocs warning, change "|...|" to ":...:".
->>
->> v6 --> v7:
->> 1. Use kcpustat_field() to obtain the cputime.
->> 2. Make the output start with "\t" to match other related prints.
->> 3. Aligns the output of the last line of RCU stall.
->>
->> v5 --> v6:
->> 1. When there are more than two continuous RCU stallings, correctly handle the
->>    value of the second and subsequent sampling periods. Update comments and
->>    document.
->>    Thanks to Elliott, Robert for the test.
->> 2. Change "rcu stall" to "RCU stall".
->>
->> v4 --> v5:
->> 1. Resolve a git am conflict. No code change.
->>
->> v3 --> v4:
->> 1. Rename rcu_cpu_stall_deep_debug to rcu_cpu_stall_cputime.
->>
->> v2 --> v3:
->> 1. Fix the return type of kstat_cpu_irqs_sum()
->> 2. Add Kconfig option CONFIG_RCU_CPU_STALL_DEEP_DEBUG and boot parameter
->>    rcupdate.rcu_cpu_stall_deep_debug.
->> 3. Add comments and normalize local variable name
->>
->> v1 --> v2:
->> 1. Fixed a bug in the code. If the rcu stall is detected by another CPU,
->>    kcpustat_this_cpu cannot be used.
->> @@ -451,7 +451,7 @@ static void print_cpu_stat_info(int cpu)
->>         if (r->gp_seq != rdp->gp_seq)
->>                 return;
->>
->> -       cpustat = kcpustat_this_cpu->cpustat;
->> +       cpustat = kcpustat_cpu(cpu).cpustat;
->> 2. Move the start point of statistics from rcu_stall_kick_kthreads() to
->>    rcu_implicit_dynticks_qs(), removing the dependency on irq_work.
->>
->> v1:
->> In some extreme cases, such as the I/O pressure test, the CPU usage may
->> be 100%, causing RCU stall. In this case, the printed information about
->> current is not useful. Displays the number and usage of hard interrupts,
->> soft interrupts, and context switches that are generated within half of
->> the CPU stall timeout, can help us make a general judgment. In other
->> cases, we can preliminarily determine whether an infinite loop occurs
->> when local_irq, local_bh or preempt is disabled.
-> 
-> Queued for further review and testing, thank you!
-> 
-> I did the usual wordsmithing, so please check to see if I messed
-> something up.
-
-Thanks for your help.
-
-Sorry, I think I missed a word in the commit message of patch 5/6.
-
-This commit documents the additional RCU CPU stall warning output produced
-- by kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y.
-+ by kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
-+ rcupdate.rcu_cpu_stall_cputime=1.
-
-> 
-> 							Thanx, Paul
-> 
->> Zhen Lei (6):
->>   genirq: Fix the return type of kstat_cpu_irqs_sum()
->>   sched: Add helper kstat_cpu_softirqs_sum()
->>   sched: Add helper nr_context_switches_cpu()
->>   rcu: Add RCU stall diagnosis information
->>   doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
->>   rcu: Align the output of RCU stall
->>
->>  Documentation/RCU/stallwarn.rst               | 88 +++++++++++++++++++
->>  .../admin-guide/kernel-parameters.txt         |  6 ++
->>  include/linux/kernel_stat.h                   | 14 ++-
->>  kernel/rcu/Kconfig.debug                      | 13 +++
->>  kernel/rcu/rcu.h                              |  1 +
->>  kernel/rcu/tree.c                             | 18 ++++
->>  kernel/rcu/tree.h                             | 19 ++++
->>  kernel/rcu/tree_stall.h                       | 35 +++++++-
->>  kernel/rcu/update.c                           |  2 +
->>  kernel/sched/core.c                           |  5 ++
->>  10 files changed, 198 insertions(+), 3 deletions(-)
->>
->> -- 
->> 2.25.1
->>
-> .
-> 
-
+base-commit: 23a60a03d9a9980d1e91190491ceea0dc58fae62
 -- 
-Regards,
-  Zhen Lei
+2.38.1.584.g0f3c55d4c2-goog
+
