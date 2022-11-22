@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82009633D41
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4A0633D3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbiKVNNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S233147AbiKVNM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233390AbiKVNNH (ORCPT
+        with ESMTP id S233190AbiKVNMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:13:07 -0500
-Received: from outbound-smtp19.blacknight.com (outbound-smtp19.blacknight.com [46.22.139.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989562654A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:13:04 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp19.blacknight.com (Postfix) with ESMTPS id 467661C3841
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:13:03 +0000 (GMT)
-Received: (qmail 22136 invoked from network); 22 Nov 2022 13:13:03 -0000
-Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 22 Nov 2022 13:13:02 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 2/2] mm/page_alloc: Simplify locking during free_unref_page_list
-Date:   Tue, 22 Nov 2022 13:12:29 +0000
-Message-Id: <20221122131229.5263-3-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221122131229.5263-1-mgorman@techsingularity.net>
-References: <20221122131229.5263-1-mgorman@techsingularity.net>
+        Tue, 22 Nov 2022 08:12:45 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC7F5F5A;
+        Tue, 22 Nov 2022 05:12:44 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NGl2w0DgVzJnm9;
+        Tue, 22 Nov 2022 21:09:28 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 21:12:43 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 21:12:42 +0800
+Subject: Re: [PATCH v2] device property: fix of node refcount leak in
+ fwnode_graph_get_next_endpoint()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <djrscally@gmail.com>, <heikki.krogerus@linux.intel.com>,
+        <sakari.ailus@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>
+References: <20221122120039.760773-1-yangyingliang@huawei.com>
+ <Y3zGjLsDmVv0ErVR@smile.fi.intel.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <75602dce-0780-e51a-c8c9-d1820ddf3e2b@huawei.com>
+Date:   Tue, 22 Nov 2022 21:12:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3zGjLsDmVv0ErVR@smile.fi.intel.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While freeing a large list, the zone lock will be released and reacquired
-to avoid long hold times since commit c24ad77d962c ("mm/page_alloc.c: avoid
-excessive IRQ disabled times in free_unref_page_list()"). As suggested
-by Vlastimil Babka, the lockrelease/reacquire logic can be simplified by
-reusing the logic that acquires a different lock when changing zones.
 
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
----
- mm/page_alloc.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+On 2022/11/22 20:54, Andy Shevchenko wrote:
+> On Tue, Nov 22, 2022 at 08:00:39PM +0800, Yang Yingliang wrote:
+>> The 'parent' returned by fwnode_graph_get_port_parent()
+>> with refcount incremented when 'prev' is not null, it
+> NULL
+>
+>> needs be put when finish using it.
+>>
+>> Because the parent is const, introduce a new variable to
+>> store the returned fwnode, then put it before returning
+>> from fwnode_graph_get_next_endpoint().
+> ...
+>
+>>   fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
+>>   			       struct fwnode_handle *prev)
+>>   {
+>> +	struct fwnode_handle *ep, *port_parent = NULL;
+>>   	const struct fwnode_handle *parent;
+>> -	struct fwnode_handle *ep;
+>>   
+>>   	/*
+>>   	 * If this function is in a loop and the previous iteration returned
+>>   	 * an endpoint from fwnode->secondary, then we need to use the secondary
+>>   	 * as parent rather than @fwnode.
+>>   	 */
+>> -	if (prev)
+>> -		parent = fwnode_graph_get_port_parent(prev);
+>> -	else
+>> +	if (prev) {
+>> +		port_parent = fwnode_graph_get_port_parent(prev);
+>> +		parent = port_parent;
+>> +	} else {
+>>   		parent = fwnode;
+>> +	}
+>>   	if (IS_ERR_OR_NULL(parent))
+>>   		return NULL;
+>>   
+>>   	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
+>> -	if (ep)
+>> +	if (ep) {
+>> +		fwnode_handle_put(port_parent);
+>>   		return ep;
+>> +	}
+>>   
+>> -	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+>> +	ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+>> +	fwnode_handle_put(port_parent);
+>> +	return ep;
+> It seems too complicated for the simple fix.
+>
+> As I said, just drop const qualifier and add fwnode_handle_get() in the 'else'
+> branch. This will allow you to drop if (prev) at the end.
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 445066617204..08e32daf0918 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3518,13 +3518,19 @@ void free_unref_page_list(struct list_head *list)
- 		list_del(&page->lru);
- 		migratetype = get_pcppage_migratetype(page);
- 
--		/* Different zone, different pcp lock. */
--		if (zone != locked_zone) {
-+		/*
-+		 * Either different zone requiring a different pcp lock or
-+		 * excessive lock hold times when freeing a large list of
-+		 * pages.
-+		 */
-+		if (zone != locked_zone || batch_count == SWAP_CLUSTER_MAX) {
- 			if (pcp) {
- 				pcp_spin_unlock(pcp);
- 				pcp_trylock_finish(UP_flags);
- 			}
- 
-+			batch_count = 0;
-+
- 			/*
- 			 * trylock is necessary as pages may be getting freed
- 			 * from IRQ or SoftIRQ context after an IO completion.
-@@ -3539,7 +3545,6 @@ void free_unref_page_list(struct list_head *list)
- 				continue;
- 			}
- 			locked_zone = zone;
--			batch_count = 0;
- 		}
- 
- 		/*
-@@ -3551,19 +3556,7 @@ void free_unref_page_list(struct list_head *list)
- 
- 		trace_mm_page_free_batched(page);
- 		free_unref_page_commit(zone, pcp, page, migratetype, 0);
--
--		/*
--		 * Guard against excessive lock hold times when freeing
--		 * a large list of pages. Lock will be reacquired if
--		 * necessary on the next iteration.
--		 */
--		if (++batch_count == SWAP_CLUSTER_MAX) {
--			pcp_spin_unlock(pcp);
--			pcp_trylock_finish(UP_flags);
--			batch_count = 0;
--			pcp = NULL;
--			locked_zone = NULL;
--		}
-+		batch_count++;
- 	}
- 
- 	if (pcp) {
--- 
-2.35.3
+fwnode is const, fwnode_handle_get doesn't accept this type.
 
+>
