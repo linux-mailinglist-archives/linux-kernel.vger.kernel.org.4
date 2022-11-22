@@ -2,165 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1A7633FCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6F1633FD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiKVPFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
+        id S233757AbiKVPGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233478AbiKVPFk (ORCPT
+        with ESMTP id S232341AbiKVPGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:05:40 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5140CD8;
-        Tue, 22 Nov 2022 07:05:38 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id c1so23971666lfi.7;
-        Tue, 22 Nov 2022 07:05:38 -0800 (PST)
+        Tue, 22 Nov 2022 10:06:06 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9AA6565
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:06:06 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id c203so14601175pfc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:06:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=joRULvf1dWJkA5gWRTFhFCk8AeaMUxC+7TLKjnw2DLE=;
-        b=ER2Fw8emECT/rQge+eiBNkkviWG3kjbWsZCbV4x/Kgaljhp2rzXGAQygNJar3+6u44
-         QevH09MxTl6kJbQ0qPaESjwxa4GjqJr5YoXGhhnbrnofLSwud68+an31l+2EwkoR/nKs
-         Jg/cq7+qg2c1ILnIHDzqchGtMVrSKVGnJqH2FWFWAtbSvYbvhMwEa8bHPst5szIVBUuz
-         E85pH8kn9kRscODxb12XOnTFG+LM/br7nINFu+sS95yQ+OAwa+nmSbUSpQRV2lK1igRp
-         pQYKCnvgr/K31pf+OvF/dh9Xe0hZmw9rDcyEPaxUi6by+xYUymVne6HaWNeGLjtJRNg8
-         JEXw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KFm/hQzp85f9PkuPkdfd/PZMWkQMCDrrQWUl2fEW03w=;
+        b=LNABZeRJscon/VHkVveJ+lRDsjpGyOiP9IOwSqUmzdQKKCR9YcvxcJDwYKXoQ31puT
+         1HqnkQrRZ/k+3TSJjAgBQ+Kr38QRdX+vbD6LLNCI4Rm1RvfZc5Z5vyUACqBpPu6rIRLx
+         t1GdVd7Fk8spxfx32ehpulaunieqgpV/uNMX7QABg6IveP4V2P3HH3odTGTN9wqWK6VZ
+         A4hS2GeaolVs6tDiYvsBXUu7E2cey22hii5xm78bilr9FXr7EO8qryDnZYSSc35X1Z9Y
+         8PQchihQYpWbWxOsbrC6xgoiwPI0pxmnMZSkMshttOyJ7AVkTteMKSdJBxceEsC4VpbH
+         ToWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=joRULvf1dWJkA5gWRTFhFCk8AeaMUxC+7TLKjnw2DLE=;
-        b=UP1bQPiizPVTUBdOK/rc5VVxB5SaBYHppTcGii8JM1vSZP3bEorzwpojRmZquDI74J
-         umTHlAsKQjV4OO6ToIWai6AH2I9K43teIImDJoU8cRw1iPlMWzE4TJ/9Ngp26paa7g1L
-         M84p6+IWIZVG49md4XFQQ2gVUszQDq+oz0zmy1i27T3mUMS3dx+ovPDb3Wwtxd+19wCl
-         ko9X1Fhpo4ncAUG8quGYbyCI/bnxTSAiRkEssJRnUsbQFRpJKKEx7Qc5dGImfZEp62kk
-         pD5AXRzrIeBBW0AbOyipG7jIYdH3v3om0FESBo3Y7huR4JVEjBVYb+yzedAaxzy0QEF7
-         laNg==
-X-Gm-Message-State: ANoB5plbH5FD0Qwp1pgvwZEYLxzJQ6vv7V4JD79BbzmH4yz7fLSh43sw
-        IJydtlyRyJ9uG7yHHrEgR1w=
-X-Google-Smtp-Source: AA0mqf5OHYaGctuWCwcgr2ujiVoDrGqiB2RNftQYRObwVAsJZmt9XYndfhnGYv2vqwN8PdQGXddxvA==
-X-Received: by 2002:ac2:4a6a:0:b0:4b1:753b:e66f with SMTP id q10-20020ac24a6a000000b004b1753be66fmr2180872lfp.276.1669129536433;
-        Tue, 22 Nov 2022 07:05:36 -0800 (PST)
-Received: from razdolb (95-31-185-17.broadband.corbina.ru. [95.31.185.17])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05651205c600b0049478cc4eb9sm2499071lfo.230.2022.11.22.07.05.35
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KFm/hQzp85f9PkuPkdfd/PZMWkQMCDrrQWUl2fEW03w=;
+        b=jrnWy7OzuIWgykGTMJw2r/2BxtbqYW4fJqI4BwkjU+ZmL5IYlxX2IU4B0GEur15LHa
+         RPHEnPkY55u9F3hOHFReHKsW3FZ9ULTpodFpv0SZzjjvLbW6hqmecIS5OXGiVZiBh5ic
+         aCED1qxW5mOuwYvPRD+ekl0UkYEWLHuN8Ulc9sqavx+ynv3wvXh03iRp2FRDt4FYMpmH
+         QhoJU2Qc/ev/D24y+9v4AUxotpNDwv+/qM0bh0l/hsYKJ/oVYRLyqKIl+ew6bXRy1MrE
+         rEjlHfbk4vBJ44575uCMv7ePOb6Y1XltI6IFGSR1IZRavdYKtgt7zxkxb+K/vV+2o47k
+         b3PA==
+X-Gm-Message-State: ANoB5pkkJvZa3BNvApcLKypqiyQgEo1V3mOxZS0KfnZrvooX/a2KI2XQ
+        zst//D4hfr4IvwYHcro6Y1/L
+X-Google-Smtp-Source: AA0mqf5GjmHRR2cgKROAhBGQlpp08yLh0IhPhYqC84bGzFy5Jw1en3ayBeCra6H6haMqnZOZo68kzg==
+X-Received: by 2002:a63:e44:0:b0:475:2f61:bbc3 with SMTP id 4-20020a630e44000000b004752f61bbc3mr5548600pgo.435.1669129565476;
+        Tue, 22 Nov 2022 07:06:05 -0800 (PST)
+Received: from thinkpad ([59.92.98.84])
+        by smtp.gmail.com with ESMTPSA id b15-20020a1709027e0f00b001869394a372sm12022018plm.201.2022.11.22.07.05.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 07:05:35 -0800 (PST)
-References: <20220919210025.2376254-1-Jason@zx2c4.com>
- <32f8797a-4b65-69df-ee8e-7891a6b4f1af@arm.com>
- <YzMm4d3sZBHpitm9@aurel32.net> <YzNTB+RQK6yITi7/@Red>
- <YzNthZ0MtfwjIqdH@aurel32.net> <YzVNBcF7TCDldPwF@Red>
- <87y1sasrf2.fsf@gmail.com> <Y3zOn5IO1ziJXKUT@Red>
-User-agent: mu4e 1.9.0; emacs 28.2
-From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     Corentin LABBE <clabbe@baylibre.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Lin Jinhan <troy.lin@rock-chips.com>, wevsty <ty@wevs.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lin Huang <hl@rock-chips.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH] hw_random: rockchip: import driver from vendor tree
-Date:   Tue, 22 Nov 2022 18:04:00 +0300
-In-reply-to: <Y3zOn5IO1ziJXKUT@Red>
-Message-ID: <877cznni69.fsf@gmail.com>
+        Tue, 22 Nov 2022 07:06:04 -0800 (PST)
+Date:   Tue, 22 Nov 2022 20:35:55 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 1/2] ufs: host: ufs-qcom: Clear qunipro_g4_sel for HW
+ version major 5
+Message-ID: <20221122150555.GE157542@thinkpad>
+References: <20221116121732.2731448-1-abel.vesa@linaro.org>
+ <20221116121732.2731448-2-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221116121732.2731448-2-abel.vesa@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 16, 2022 at 02:17:31PM +0200, Abel Vesa wrote:
+> On SM8550, depending on the Qunipro, we can run with G5 or G4.
+> For now, when the major version is 5 or above, we go with G5.
+> Therefore, we need to specifically tell UFS HC that.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  drivers/ufs/host/ufs-qcom.c | 4 ++++
+>  drivers/ufs/host/ufs-qcom.h | 2 ++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index ca60a5b0292b..72334aefe81c 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -227,6 +227,10 @@ static void ufs_qcom_select_unipro_mode(struct ufs_qcom_host *host)
+>  	ufshcd_rmwl(host->hba, QUNIPRO_SEL,
+>  		   ufs_qcom_cap_qunipro(host) ? QUNIPRO_SEL : 0,
+>  		   REG_UFS_CFG1);
+> +
+> +	if (host->hw_ver.major == 0x05)
+> +		ufshcd_rmwl(host->hba, QUNIPRO_G4_SEL, 0, REG_UFS_CFG0);
 
-On 2022-11-22 at 14:29 +01, Corentin LABBE <clabbe@baylibre.com> wrote:
+So this means, G5 will be used all the time even if the UFS device doesn't
+support it (ie., G4 device), which is not ideal.
 
-> Le Wed, Nov 16, 2022 at 09:04:07PM +0300, Mikhail Rudenko a =C3=A9crit :
->>
->> On 2022-09-29 at 09:45 +02, LABBE Corentin <clabbe@baylibre.com> wrote:
->> > Le Tue, Sep 27, 2022 at 11:39:17PM +0200, Aurelien Jarno a =C3=A9crit :
->> >> On 2022-09-27 21:46, LABBE Corentin wrote:
->> >> > Le Tue, Sep 27, 2022 at 06:37:53PM +0200, Aurelien Jarno a =C3=A9cr=
-it :
->> >> > > On 2022-09-20 10:35, Robin Murphy wrote:
->> >> > > > On 2022-09-19 22:00, Jason A. Donenfeld wrote:
->> >> > > > > The Rockchip driver has long existed out of tree, but not ups=
-tream.
->> >> > > > > There is support for it upstream in u-boot, but not in Linux =
-proper.
->> >> > > > > This commit imports the GPLv2 driver written by Lin Jinhan, t=
-ogether
->> >> > > > > with the DTS and config blobs from Wevsty.
->> >> > > >
->> >> > > > Note that Corentin has a series enabling the full crypto driver=
- for
->> >> > > > RK3328 and RK3399[1], so it would seem more sensible to add TRN=
-G support
->> >> > > > to that. Having confliciting compatibles for the same hardware =
-that
->> >> > > > force the user to change their DT to choose one functionality o=
-r the
->> >> > > > other isn't good (plus there's also no binding for this one).
->> >> > >
->> >> > > It might make sense for the cryptov1-rng driver (I haven't checke=
-d). For
->> >> > > the cryptov2-rng driver, I looked at the RK3568 TRM (I can't find=
- the
->> >> > > RK3588 one), and from what I understand crypto and TRNG are two
->> >> > > different devices, using different address spaces, clock, reset a=
-nd
->> >> > > interrupts. The vendor kernel uses two different drivers.
->> >> > >
->> >> >
->> >> > I confirm that TRNG is not on the same IP on rk3568, something I di=
-dnt remark when doing my V2 driver. (I need to remove rng clock from rk3568=
- dt).
->> >> > But the rk3588 crypto IP and the TRNG are in the same device.
->> >>
->> >> Ok, thanks for confirming about the rk3568. It seems the only one in =
-the
->> >> family with separate devices for TRNG and crypto. Does it means we ne=
-ed
->> >> a separate TRNG driver only for it? Or could we handle it the same way
->> >> than for instance rk3588 anyway?
->> >
->> > I just got now the part 1 of rk3588 TRM which I has missing and it sho=
-w some conflicting information.
->> > rk3588 seems to have both a dedicated TRNG (TRNG_NS/TRNG_S) with dedic=
-ated address space and a TRNG inside the crypto IP.
->> > But for the moment, the TRNG inside crypto IP seems defective.
->>
->> So what's the ultimate decision? Does anyone work on merging this into
->> the existing crypto driver? I have a use case with an rk3399-based board,
->> where having hardware rng enhances boot times dramatically (at least for
->> some userspaces; see also [1]).
->>
->> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D216502
->>
->
-> Hello
->
-> I started to work on adding RNG to rk3288_crypto.
-> I need to publish the work on my github and take time to send it for revi=
-ew.
+Since you have already based this series on my UFS gear 4 series, you should
+resend this on top of my next version that I'm about to submit. There I have
+proposed reinitializing the UFS device after switching to max gear supported by
+both controller and device.
 
-Glad to hear you are working on this. Please cc me when posting patches :)
+Based on that information, you could do:
 
->
-> Regards
+```
+	if (host->hw_ver.major == 0x05) {
+		if (host->hs_hear == UFS_HS_G5)
+			ufshcd_rmwl(host->hba, QUNIPRO_G4_SEL, 0, REG_UFS_CFG0);
+		else
+			ufshcd_rmwl(host->hba, QUNIPRO_G4_SEL, 1, REG_UFS_CFG0);
+	}
+```
 
---
-Best regards,
-Mikhail Rudenko
+By this way, if the device doesn't support G5, G4 will be used.
+
+Btw, please use a valid definition instead of 0/1 above.
+
+> +
+>  	/* make sure above configuration is applied before we return */
+>  	mb();
+>  }
+> diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
+> index 751ded3e3531..10621055bf7f 100644
+> --- a/drivers/ufs/host/ufs-qcom.h
+> +++ b/drivers/ufs/host/ufs-qcom.h
+> @@ -36,6 +36,7 @@ enum {
+>  	/* On older UFS revisions, this register is called "RETRY_TIMER_REG" */
+>  	REG_UFS_PARAM0                      = 0xD0,
+>  	REG_UFS_PA_LINK_STARTUP_TIMER       = 0xD8,
+> +	REG_UFS_CFG0                        = 0xD8,
+
+Hmm, so what is the offset of REG_UFS_PA_LINK_STARTUP_TIMER?
+
+>  	REG_UFS_CFG1                        = 0xDC,
+>  	REG_UFS_CFG2                        = 0xE0,
+>  	REG_UFS_HW_VERSION                  = 0xE4,
+> @@ -75,6 +76,7 @@ enum {
+>  
+>  /* bit definitions for REG_UFS_CFG1 register */
+>  #define QUNIPRO_SEL		BIT(0)
+> +#define QUNIPRO_G4_SEL		BIT(5)
+
+Since this bit belongs to CFG0 register, it should be added separately and not
+with CFG1 definitions.
+
+Thanks,
+Mani
+
+>  #define UFS_PHY_SOFT_RESET	BIT(1)
+>  #define UTP_DBG_RAMS_EN		BIT(17)
+>  #define TEST_BUS_EN		BIT(18)
+> -- 
+> 2.34.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
