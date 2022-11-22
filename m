@@ -2,109 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE41634430
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843E9634431
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbiKVTAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S234089AbiKVTBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiKVS75 (ORCPT
+        with ESMTP id S233560AbiKVTB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 13:59:57 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C056AE66
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:59:56 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id p4so15358490vsa.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9DTsq3fTwNbT6i34craZmfTRExedmDHXASu4ap4JQWc=;
-        b=euKH/+vJIk4jb5GYcwTIndpZtGrvZkOBeSQRk87xMjmZTH+RQ1pCNwnXJLB8r/oQO0
-         x4NbvARykKT5UQRTYNFqc4c4y2HLtlQ0gwBrOUmgIYxYGKBvSsLiYFxxHey3fT3w/9Vj
-         HOQ7Qj5hpRKUloDQyonDJ8F2dOblLZMmhxyUfbRFBcyPMZ2uFWy1Izg4UvFn7gsqx2n1
-         ym1wloPvHbcVO13o21Vg+S93Kbo51YjBNfIYA2HBOkKEPJ/Z6SJ4/BP/QvHgGdHCxwvD
-         QGOm47FEhjAWZAXMx2WhoKZKfiBjRMtZfj9QV6t+NhIB5xXw6qp1E8JC0TJGvherHUzh
-         c4Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9DTsq3fTwNbT6i34craZmfTRExedmDHXASu4ap4JQWc=;
-        b=ZRSH6u8IA1hsO38wVYV/jc0a13nKjuEZFpeFhcXlb8l0TvOOm+vAKhiD2hrAF9mUuf
-         uWgomsKP2yq7GmKZeaQCBsD5wJxMRvfjJ0iaF1Sp/t5MxQhJWWe9MZvBQ/1CItZ0LVGw
-         t6A+rxLjfZmWjLquwfxkHVxgUk/1kkX9RIDpxgtDMPtmbDdAv9p1d+YRZbJOu1we/LNL
-         lWjUrIvaNzwVxjXjwffoizUGmSzB2yF4Ypz69ZovOZ0ywCSfAhYfK9cc319ke+ZSNpPw
-         H5zvUXHihEq4ZF3WkOxT+KGftvePVUh5+/9Ke+hW89FNIWNi7kIMfVsHD9anVD2m0bnd
-         ODNg==
-X-Gm-Message-State: ANoB5pmZvVNELfdgGgotMMDj1NhcctK+jnHv/V2wH8jvZasyK0uhAPNF
-        1a3pmWceFN9Sni51UiPm/oApl3GdwBJs9KPklm1Ddg==
-X-Google-Smtp-Source: AA0mqf7Uzxc/Jj31rG85oI1E9wRDLbPWhLS/I4nmAkG7IG1izVik37RCH407Iffcv4TAVFRK9egw/NuOlJWDujTFTMo=
-X-Received: by 2002:a67:f8d4:0:b0:3aa:1a3a:6447 with SMTP id
- c20-20020a67f8d4000000b003aa1a3a6447mr4323889vsp.50.1669143595264; Tue, 22
- Nov 2022 10:59:55 -0800 (PST)
+        Tue, 22 Nov 2022 14:01:26 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4430985A22
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:01:25 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AMJ17V9115963;
+        Tue, 22 Nov 2022 13:01:08 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669143668;
+        bh=/ZJ6T2ahRQhBVE5COvKTmRQ6z48VdpgiNuqOeVcBpDE=;
+        h=Date:From:To:CC:Subject;
+        b=P6Ibj/6UKA/+JwieOFYyFhzK2wh3qiCXLOQVfI/hmc5mwViDaYM4mvoJOgSLB7rYu
+         8kMBYnj/WARgk1z0HXUaT+Yuc62aLAwq1ROi8TmKfnIjCL5cvt56EAY4i/3K+sYVsx
+         MXuyMOYIo18xlVx9GH2OX51Myr/HX30ERYib4psE=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AMJ17OP049318
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Nov 2022 13:01:07 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 22
+ Nov 2022 13:01:07 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 22 Nov 2022 13:01:07 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AMJ17i4121996;
+        Tue, 22 Nov 2022 13:01:07 -0600
+Date:   Tue, 22 Nov 2022 13:01:07 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>
+Subject: [GIT PULL 1/4] ARM: keystone: TI Updates for v6.2
+Message-ID: <20221122185650.nrh7s2g5obndj5vj@dental>
 MIME-Version: 1.0
-References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
-In-Reply-To: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 22 Nov 2022 11:59:18 -0700
-Message-ID: <CAOUHufbQ_JjW=zXEi10+=LQOREOPHrK66Rqayr=sFUH_tQbW1w@mail.gmail.com>
-Subject: Re: Low TCP throughput due to vmpressure with swap enabled
-To:     Ivan Babrou <ivan@cloudflare.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x6koo7lvvytqnm4n"
+Content-Disposition: inline
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 5:53 PM Ivan Babrou <ivan@cloudflare.com> wrote:
->
-> Hello,
->
-> We have observed a negative TCP throughput behavior from the following commit:
->
-> * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
->
-> It landed back in 2016 in v4.5, so it's not exactly a new issue.
->
-> The crux of the issue is that in some cases with swap present the
-> workload can be unfairly throttled in terms of TCP throughput.
->
-> I am able to reproduce this issue in a VM locally on v6.1-rc6 with 8
-> GiB of RAM with zram enabled.
+--x6koo7lvvytqnm4n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ivan,
+Hi,
 
-If it's not too much trouble, could you try again with the following?
-  CONFIG_LRU_GEN=y
-  CONFIG_LRU_GEN_ENABLED=y
+Please find the keystone2 related changes for v6.2-rc1 below.
 
-I haven't tried it myself. But I'll fix whatever doesn't work for you,
-since your team is on the top of my customer list :)
+---
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-Thanks.
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-keysto=
+ne-soc-for-v6.2
+
+for you to fetch changes up to 7e8edf55cf729367afdb5e9a8b182f1d47897800:
+
+  ARM: keystone: Replace platform SMP with PSCI (2022-10-27 20:12:27 -0500)
+
+----------------------------------------------------------------
+ARM: keystone: TI Updates for v6.2
+
+Updates:
+* Switch over to standard PSCI for keystone2 platforms.
+
+----------------------------------------------------------------
+Andrew Davis (1):
+      ARM: keystone: Replace platform SMP with PSCI
+
+ arch/arm/mach-keystone/Makefile   |  4 +---
+ arch/arm/mach-keystone/keystone.c |  2 --
+ arch/arm/mach-keystone/keystone.h |  5 -----
+ arch/arm/mach-keystone/platsmp.c  | 41 -----------------------------------=
+----
+ arch/arm/mach-keystone/smc.S      | 26 -------------------------
+ 5 files changed, 1 insertion(+), 77 deletions(-)
+ delete mode 100644 arch/arm/mach-keystone/platsmp.c
+ delete mode 100644 arch/arm/mach-keystone/smc.S
+
+--=20
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
+
+--x6koo7lvvytqnm4n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmN9HGwACgkQ3bWEnRc2
+JJ1NexAAq5hDhDGxOtm04tSNKG8fDsxWxYxmVmd9QeSC4YO9s4GnoCpoENcLTSL4
+JqeBtkvejLCwEu6Jq7CXeoHM7aBKVMyanAUZnJpIptYWsXRN731ZHg7M9Vrg6AOG
+cl05IkchJZ5p7Fd7woAjaukLBZ0GyYFQnOQ3vKuSU02DdpOYpLmHTqV4FZEhS+B4
+6xHOujE78wIaDvHM9zitAfodYoMeU+5XE+55lOR9YmXG6efYtNOg0A8HLZuFQXua
+F2lmmDuaJzmZ8UMpNLPnccJAJkreU/3QSF+fxbd2VA5OR71W/m4LGyeQcfzw+cmU
+HFEflc9NVm+ausoAmstunv9HZjrf7B5rob9eM+41U9cR5OuhXvZxy2/ToQnwN9MA
+y25OucpCXEIa5XsjTLaFUGyNAEj8dNKxTwwU8w13GcX1CKc4diLigi9XEyTz4z+D
+L7vDgELFk2gKlQfJz4Nglz89FS4FH2kMeCtbkncsTV4ohAfMT+SI2XLxzI1C52Dt
++xNnFRSqAkDvsT4A2VOCAsP4cXWeTG9gyr3hNFDugDWrlE/YeiKULXk3PGFVSE41
+jxobTeqSXZwro01xZ85HBCLx5jRvAK/mTZ9UQRETQtoV3NbGhmfj5XesuD8hvHqt
+AnovNiiUdv6lpRYBVCv7ttMV5/mpvFyrR2n3lDE05wyOiJd4VEY=
+=R+Vx
+-----END PGP SIGNATURE-----
+
+--x6koo7lvvytqnm4n--
