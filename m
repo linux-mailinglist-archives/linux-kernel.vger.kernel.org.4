@@ -2,145 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB64E6335BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A436335C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbiKVHPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:15:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
+        id S232229AbiKVHP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiKVHPt (ORCPT
+        with ESMTP id S232160AbiKVHPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:15:49 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE3A31355
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:15:47 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id vv4so24408163ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:15:47 -0800 (PST)
+        Tue, 22 Nov 2022 02:15:53 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794533121B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:15:52 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id b62so13373768pgc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:15:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aPBOnq4MV/RdGaWML7PRDRza9Xxp38iF/6zbFkVySgQ=;
-        b=XX8ziX+YjfmKOJxT7i71FLz24K+pKc8qQZzFCKWTQ4cyVG1FOzQckq6m9nWgcMo9+b
-         v7bxz5/CxkHLNsliL8OCG/hNQWUwNZEq4b8TecZNjFrwC2VqPYNBuOUTff7dkkV3SFDd
-         RBsN7GVEnTNLyJlmKgUcpRayxLERqJEcBgi1+e/s8G/uWYuG33ywfZF+d63yigQ3Vmvn
-         c2P5ZOIMpb/1W0kteEJ1kWAh0AMOEBhlV72ItmscCpuKEn+Z0R8cRRLpB1gOz2o+Lm6D
-         RvzXfQU9b7Yti8mQ/LRmShCZRsv1LS337D30jmCThUUvoVCThen/IFzHrXeKCCAva3d2
-         XUGw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9cH3XUOlDzLJq6dhclj6pjTqONBWIigRQAqYPPPqneg=;
+        b=Vnm+P7TjjenvMiUbjymitiEvEMZiWLaP4jiBbrVu3fciCG3Vdy7UFfLtAIkdDsLNw9
+         GR/9D5fb4a64eMzKQFRRR/MxGlBG8+Sud+/1KAi1CODGiltst5PVnHUVMBtxZSBbAHSD
+         FCneXl6zoV52BYzLxZVbT0UMf+dXk9XWZl8kX7Q97nER9DuPZFcz8i28OBa1DJAYHcum
+         t7EXzgxwamH0E2Zj8r07RdSboaj61octPpoELFLpL9r9VaHdDM0a5AgiUYMtnLsqC2XS
+         32/OOZjU6OLA9lENFi/i+I7KdK3ifVzC7k0VfJWUIlChT8MEx8EY6RBvhP700Y2EXrpQ
+         fzNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aPBOnq4MV/RdGaWML7PRDRza9Xxp38iF/6zbFkVySgQ=;
-        b=lBk9N+Ka/TPS7aWBLVawu7OcTPKA0m52bgZCqZXyuX+5v3iPFrjXKxIPQlXj4zlXdZ
-         I4jS5MgGqhp7u2NfBhPAGZ4c96K2p7CJ8yOULYIoNJ9yIwZyGiQK2ICP6OPTuceQVlnP
-         bnUlz1zbdq2AqZCjBfbqtl8otGHwryQOGDh6uDMGiRl29ZrLHa3DUNz06dT3mtaOjYCT
-         kTBxnon3lZZeKBFeRq1KGJ088CdH9KzWKYfyU5gGBzXhHtrEiIYQ5KpOvdGasGUyfMnN
-         gmrJrofwrIyosJAQb3msBKepPsyipCLZnmwCi8GFtXMLj53kdE8tfr7CTmqNMopcdlTn
-         JIFw==
-X-Gm-Message-State: ANoB5pkiF3Tabgdm1wqWHe3IFoeyEf3A3EgOIfwYIg0wYry4Kw3vIIvZ
-        25nhMUTGFY69Fnl0rJlJI+M=
-X-Google-Smtp-Source: AA0mqf5unCjHuqdcJSjeP1V5neGbUuDTfChH3gpaM4/PwGVXIraGDY+33eTqW3BgS5s+8Hg/UkItmw==
-X-Received: by 2002:a17:906:706:b0:7ac:2e16:eb05 with SMTP id y6-20020a170906070600b007ac2e16eb05mr19494203ejb.26.1669101346255;
-        Mon, 21 Nov 2022 23:15:46 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id x9-20020a170906b08900b007aef930360asm5817871ejy.59.2022.11.21.23.15.45
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9cH3XUOlDzLJq6dhclj6pjTqONBWIigRQAqYPPPqneg=;
+        b=2FD6HrNzvR5eWPupkbIJsunwqNwUAj6tjlD+95SuBj1p9R2i1lrVTbWRkVw/ElySiX
+         5g2CxtNGgvK/27J0SbyzFbZjDEyYsXKIjzJWnrv+vJhoA5aTJwdDSsel+wmqipNq/d9s
+         cGXI+DgvKrGzyw2rzGb2y++mijNWL1CMA20IfjgFYhGi+YAWY0VTa1tCfAwgeDN1+Hi9
+         LfvKvoC046I7eJmCsZtKEyQQ+icZt+yNtZJpBb72lBOkiREkQNHczSjDtk9m0scnvOFm
+         FJTiPJea1vdJ3Q4Yc7lE27En8PxTcRfzCo9JSnQkJjEmSkZ/1fz4r/skqgvnJ3cBRUT+
+         721A==
+X-Gm-Message-State: ANoB5pk8MGJOUn2tw4pOQDEAAe9tj0/DPimNBbq+jTucawIoIpq1kcL1
+        IS/FOFYkLG2GCtZcvFpVzaQ=
+X-Google-Smtp-Source: AA0mqf5BmIdUoBXZWyijBTwSaemPvbbOOQ9M7FUnjJIPKdl8xZw74f8fH9XG1g0nPL2wzvxP9H7aQg==
+X-Received: by 2002:a63:ff17:0:b0:470:8f8d:eb51 with SMTP id k23-20020a63ff17000000b004708f8deb51mr7337369pgi.69.1669101351597;
+        Mon, 21 Nov 2022 23:15:51 -0800 (PST)
+Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
+        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b00186b06963f9sm10988969plk.180.2022.11.21.23.15.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 23:15:45 -0800 (PST)
-Date:   Tue, 22 Nov 2022 10:15:43 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Divya Koppera <Divya.Koppera@microchip.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing
- zero to 'PTR_ERR'
-Message-ID: <202211220844.eKHGXYnF-lkp@intel.com>
+        Mon, 21 Nov 2022 23:15:51 -0800 (PST)
+From:   Nadav Amit <nadav.amit@gmail.com>
+X-Google-Original-From: Nadav Amit
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>
+Subject: [PATCH] x86/lib: Do not use local symbols with SYM_CODE_START_LOCAL()
+Date:   Mon, 21 Nov 2022 23:15:47 -0800
+Message-Id: <20221122071547.165296-1-namit@vmware.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
-commit: ece19502834d84ece2e056db28257ca2aa6e4d48 net: phy: micrel: 1588 support for LAN8814 phy
-config: openrisc-randconfig-m041-20221121
-compiler: or1k-linux-gcc (GCC) 12.1.0
+From: Nadav Amit <namit@vmware.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+When SYM_CODE_START_LOCAL() is used, the symbols are local but should be
+saved to the object. In contrast, using ".L" label prefix causes the
+symbols not to be saved in the object.
 
-New smatch warnings:
-drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing zero to 'PTR_ERR'
+Since it is preferable to be able to map instruction pointers back to
+symbols, the local symbol should be saved in the object. Therefore, when
+SYM_CODE_START_LOCAL() is used, the ".L" label prefix should not be
+used.
 
-Old smatch warnings:
-drivers/net/phy/micrel.c:1750 ksz886x_cable_test_get_status() error: uninitialized symbol 'ret'.
+Two symbols, however, have both SYM_CODE_START_LOCAL() and ".L" prefix:
+.Lbad_put_user_clac and .Lcopy_user_handle_tail. Remove the ".L" prefix
+from them.
 
-vim +/PTR_ERR +2613 drivers/net/phy/micrel.c
+No functional change, other then emitting these symbols into the object,
+is intended.
 
-ece19502834d84e Divya Koppera 2022-03-04  2589  static int lan8814_ptp_probe_once(struct phy_device *phydev)
-ece19502834d84e Divya Koppera 2022-03-04  2590  {
-ece19502834d84e Divya Koppera 2022-03-04  2591  	struct lan8814_shared_priv *shared = phydev->shared->priv;
-ece19502834d84e Divya Koppera 2022-03-04  2592  
-ece19502834d84e Divya Koppera 2022-03-04  2593  	/* Initialise shared lock for clock*/
-ece19502834d84e Divya Koppera 2022-03-04  2594  	mutex_init(&shared->shared_lock);
-ece19502834d84e Divya Koppera 2022-03-04  2595  
-ece19502834d84e Divya Koppera 2022-03-04  2596  	shared->ptp_clock_info.owner = THIS_MODULE;
-ece19502834d84e Divya Koppera 2022-03-04  2597  	snprintf(shared->ptp_clock_info.name, 30, "%s", phydev->drv->name);
-ece19502834d84e Divya Koppera 2022-03-04  2598  	shared->ptp_clock_info.max_adj = 31249999;
-ece19502834d84e Divya Koppera 2022-03-04  2599  	shared->ptp_clock_info.n_alarm = 0;
-ece19502834d84e Divya Koppera 2022-03-04  2600  	shared->ptp_clock_info.n_ext_ts = 0;
-ece19502834d84e Divya Koppera 2022-03-04  2601  	shared->ptp_clock_info.n_pins = 0;
-ece19502834d84e Divya Koppera 2022-03-04  2602  	shared->ptp_clock_info.pps = 0;
-ece19502834d84e Divya Koppera 2022-03-04  2603  	shared->ptp_clock_info.pin_config = NULL;
-ece19502834d84e Divya Koppera 2022-03-04  2604  	shared->ptp_clock_info.adjfine = lan8814_ptpci_adjfine;
-ece19502834d84e Divya Koppera 2022-03-04  2605  	shared->ptp_clock_info.adjtime = lan8814_ptpci_adjtime;
-ece19502834d84e Divya Koppera 2022-03-04  2606  	shared->ptp_clock_info.gettime64 = lan8814_ptpci_gettime64;
-ece19502834d84e Divya Koppera 2022-03-04  2607  	shared->ptp_clock_info.settime64 = lan8814_ptpci_settime64;
-ece19502834d84e Divya Koppera 2022-03-04  2608  	shared->ptp_clock_info.getcrosststamp = NULL;
-ece19502834d84e Divya Koppera 2022-03-04  2609  
-ece19502834d84e Divya Koppera 2022-03-04  2610  	shared->ptp_clock = ptp_clock_register(&shared->ptp_clock_info,
-ece19502834d84e Divya Koppera 2022-03-04  2611  					       &phydev->mdio.dev);
-ece19502834d84e Divya Koppera 2022-03-04  2612  	if (IS_ERR_OR_NULL(shared->ptp_clock)) {
+Signed-off-by: Nadav Amit <namit@vmware.com>
+---
+ arch/x86/lib/copy_user_64.S | 16 ++++++++--------
+ arch/x86/lib/putuser.S      | 24 ++++++++++++------------
+ 2 files changed, 20 insertions(+), 20 deletions(-)
 
-This should be if (IS_ERR(shared->ptp_clock)) {
-
-The ptp_clock_register() will only return NULL if it has been disabled
-in the .config.  Ideally the driver would just add checks for NULL where
-necessary and continue without the clock.  But if it's not possible then
-the driver should add a depend in the Kconfig.  Otherwise the driver
-will be built in a way that it can never be used.
-
-ece19502834d84e Divya Koppera 2022-03-04 @2613  		phydev_err(phydev, "ptp_clock_register failed %lu\n",
-ece19502834d84e Divya Koppera 2022-03-04  2614  			   PTR_ERR(shared->ptp_clock));
-ece19502834d84e Divya Koppera 2022-03-04  2615  		return -EINVAL;
-ece19502834d84e Divya Koppera 2022-03-04  2616  	}
-ece19502834d84e Divya Koppera 2022-03-04  2617  
-ece19502834d84e Divya Koppera 2022-03-04  2618  	phydev_dbg(phydev, "successfully registered ptp clock\n");
-ece19502834d84e Divya Koppera 2022-03-04  2619  
-ece19502834d84e Divya Koppera 2022-03-04  2620  	shared->phydev = phydev;
-ece19502834d84e Divya Koppera 2022-03-04  2621  
-ece19502834d84e Divya Koppera 2022-03-04  2622  	/* The EP.4 is shared between all the PHYs in the package and also it
-ece19502834d84e Divya Koppera 2022-03-04  2623  	 * can be accessed by any of the PHYs
-ece19502834d84e Divya Koppera 2022-03-04  2624  	 */
-ece19502834d84e Divya Koppera 2022-03-04  2625  	lanphy_write_page_reg(phydev, 4, LTC_HARD_RESET, LTC_HARD_RESET_);
-ece19502834d84e Divya Koppera 2022-03-04  2626  	lanphy_write_page_reg(phydev, 4, PTP_OPERATING_MODE,
-ece19502834d84e Divya Koppera 2022-03-04  2627  			      PTP_OPERATING_MODE_STANDALONE_);
-ece19502834d84e Divya Koppera 2022-03-04  2628  
-ece19502834d84e Divya Koppera 2022-03-04  2629  	return 0;
-ece19502834d84e Divya Koppera 2022-03-04  2630  }
-
+diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
+index 9dec1b38a98f..92b4c17c95cd 100644
+--- a/arch/x86/lib/copy_user_64.S
++++ b/arch/x86/lib/copy_user_64.S
+@@ -83,7 +83,7 @@ SYM_FUNC_START(copy_user_generic_unrolled)
+ 
+ 30:	shll $6,%ecx
+ 	addl %ecx,%edx
+-	jmp .Lcopy_user_handle_tail
++	jmp copy_user_handle_tail
+ 
+ 	_ASM_EXTABLE_CPY(1b, 30b)
+ 	_ASM_EXTABLE_CPY(2b, 30b)
+@@ -139,7 +139,7 @@ SYM_FUNC_START(copy_user_generic_string)
+ 
+ 11:	leal (%rdx,%rcx,8),%ecx
+ 12:	movl %ecx,%edx		/* ecx is zerorest also */
+-	jmp .Lcopy_user_handle_tail
++	jmp copy_user_handle_tail
+ 
+ 	_ASM_EXTABLE_CPY(1b, 11b)
+ 	_ASM_EXTABLE_CPY(3b, 12b)
+@@ -169,7 +169,7 @@ SYM_FUNC_START(copy_user_enhanced_fast_string)
+ 	RET
+ 
+ 12:	movl %ecx,%edx		/* ecx is zerorest also */
+-	jmp .Lcopy_user_handle_tail
++	jmp copy_user_handle_tail
+ 
+ 	_ASM_EXTABLE_CPY(1b, 12b)
+ SYM_FUNC_END(copy_user_enhanced_fast_string)
+@@ -190,7 +190,7 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
+  * Output:
+  * eax uncopied bytes or 0 if successful.
+  */
+-SYM_CODE_START_LOCAL(.Lcopy_user_handle_tail)
++SYM_CODE_START_LOCAL(copy_user_handle_tail)
+ 	cmp $X86_TRAP_MC,%eax
+ 	je 3f
+ 
+@@ -209,9 +209,9 @@ SYM_CODE_START_LOCAL(.Lcopy_user_handle_tail)
+ 
+ .Lcopy_user_handle_align:
+ 	addl %ecx,%edx			/* ecx is zerorest also */
+-	jmp .Lcopy_user_handle_tail
++	jmp copy_user_handle_tail
+ 
+-SYM_CODE_END(.Lcopy_user_handle_tail)
++SYM_CODE_END(copy_user_handle_tail)
+ 
+ /*
+  * Finish memcpy of less than 64 bytes.  #AC should already be set.
+@@ -252,7 +252,7 @@ SYM_CODE_START_LOCAL(copy_user_short_string)
+ 40:	leal (%rdx,%rcx,8),%edx
+ 	jmp 60f
+ 50:	movl %ecx,%edx		/* ecx is zerorest also */
+-60:	jmp .Lcopy_user_handle_tail
++60:	jmp copy_user_handle_tail
+ 
+ 	_ASM_EXTABLE_CPY(18b, 40b)
+ 	_ASM_EXTABLE_CPY(19b, 40b)
+@@ -382,7 +382,7 @@ SYM_FUNC_START(__copy_user_nocache)
+ 	movl %ecx,%edx
+ .L_fixup_handle_tail:
+ 	sfence
+-	jmp .Lcopy_user_handle_tail
++	jmp copy_user_handle_tail
+ 
+ 	_ASM_EXTABLE_CPY(1b, .L_fixup_4x8b_copy)
+ 	_ASM_EXTABLE_CPY(2b, .L_fixup_4x8b_copy)
+diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
+index 32125224fcca..3c33071cec97 100644
+--- a/arch/x86/lib/putuser.S
++++ b/arch/x86/lib/putuser.S
+@@ -137,22 +137,22 @@ SYM_FUNC_START(__put_user_nocheck_8)
+ SYM_FUNC_END(__put_user_nocheck_8)
+ EXPORT_SYMBOL(__put_user_nocheck_8)
+ 
+-SYM_CODE_START_LOCAL(.Lbad_put_user_clac)
++SYM_CODE_START_LOCAL(bad_put_user_clac)
+ 	ASM_CLAC
+ .Lbad_put_user:
+ 	movl $-EFAULT,%ecx
+ 	RET
+-SYM_CODE_END(.Lbad_put_user_clac)
++SYM_CODE_END(bad_put_user_clac)
+ 
+-	_ASM_EXTABLE_UA(1b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(2b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(3b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(4b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(5b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(6b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(7b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(9b, .Lbad_put_user_clac)
++	_ASM_EXTABLE_UA(1b, bad_put_user_clac)
++	_ASM_EXTABLE_UA(2b, bad_put_user_clac)
++	_ASM_EXTABLE_UA(3b, bad_put_user_clac)
++	_ASM_EXTABLE_UA(4b, bad_put_user_clac)
++	_ASM_EXTABLE_UA(5b, bad_put_user_clac)
++	_ASM_EXTABLE_UA(6b, bad_put_user_clac)
++	_ASM_EXTABLE_UA(7b, bad_put_user_clac)
++	_ASM_EXTABLE_UA(9b, bad_put_user_clac)
+ #ifdef CONFIG_X86_32
+-	_ASM_EXTABLE_UA(8b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(10b, .Lbad_put_user_clac)
++	_ASM_EXTABLE_UA(8b, bad_put_user_clac)
++	_ASM_EXTABLE_UA(10b, bad_put_user_clac)
+ #endif
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
 
