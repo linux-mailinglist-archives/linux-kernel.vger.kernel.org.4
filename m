@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE69634992
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98BB634977
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbiKVVnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S235077AbiKVVkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:40:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235185AbiKVVnY (ORCPT
+        with ESMTP id S232572AbiKVVkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:43:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6899911446;
-        Tue, 22 Nov 2022 13:43:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05FE3618EE;
-        Tue, 22 Nov 2022 21:43:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD0AC433B5;
-        Tue, 22 Nov 2022 21:43:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669153389;
-        bh=Us36PTZHvI11zr97GUDhlESW/qDe06eNQv+kgcGZ7hw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cn52BcXR2eRR5iYnzWMd7jMC+FPriDPeGS+qQMHqbyrbPJQsMRaa5fRTdFzBDFroU
-         gvp2oZit0j1hjurttMDmLMamdhPlvjUhELicWkQ28iwBv3ZW+HqzBxG8YqNbNZtmNy
-         7sQjU2zOn69+XRpNjnKqt+n2Y6JvreSAfNOXNmQJamclcEwjcUoYqhNrTeP0IrkJ4a
-         xEUEBehW0SlDirBBnLvjunXryZUqHshaDOZ7lpUr4w7NL8nj4h/vpuND6k4zTKq9W3
-         XaTCA95oa/Gqc3yrh4GJM3w0QQbKnm5lkSIWY0UFZcDyZiyRztcQzS1ZpZnO1cjmtG
-         B27GR5gbHSRFA==
-Received: by mail-lf1-f50.google.com with SMTP id c1so25487048lfi.7;
-        Tue, 22 Nov 2022 13:43:09 -0800 (PST)
-X-Gm-Message-State: ANoB5pl6E+ELxq0jLHXC4yxe0TJFJTNq2yRXSNWIeQR3eYwVxdbJcZmD
-        K0N4zdWT5BicP/HUalEHDw0msI0VgJ70ZhjU2XI=
-X-Google-Smtp-Source: AA0mqf7scteqcIYLXwi5rWvAgaAyNNSA69LziUV6JQP2iw0ZWMY8BQ5LgaUuEmf0PhjW2ZTnvtzUZ7YwDGu4H9qKD40=
-X-Received: by 2002:a05:6512:15a8:b0:4a6:3ed2:3717 with SMTP id
- bp40-20020a05651215a800b004a63ed23717mr2797186lfb.637.1669153387377; Tue, 22
- Nov 2022 13:43:07 -0800 (PST)
+        Tue, 22 Nov 2022 16:40:03 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB45C5B72;
+        Tue, 22 Nov 2022 13:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669153199; x=1700689199;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SObOV4ZVsIhR7Pxn0ehVi6XI7f+9C+SzUdrriWqtbxU=;
+  b=KC9tI+yl4ON/W8dci5vDn4ChTJLw1w0PG2cUZwYhhDL/36B+vyTmES8m
+   lkLnQ8d5IRZCIRDfYhK8OjMH04S69i1KVwwQtRQsxGVGC6vRVtHwWY+aY
+   FhLvJXmQgiywl3nx2txTYTjduJHuVJphwzTS3OL5nEqGGWpvVr23ZNQPC
+   J2Xb4seTt3XqO16fYl3N9ubdeCoR6dayK8OseHtqru71Mdb+uHDTvvZb0
+   Tyz/vkeKcLfW2iR+cP2LDJAmnbP0lzGkcfbM6/Qf+S7xVYzTVEgnAGUJ+
+   9etWcM9XFXsRL2zHi/IY/k3UCwah6HbbY7Q6prPsWAQIbhKTpqCyF3nyM
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,185,1665471600"; 
+   d="scan'208";a="190137418"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 14:39:59 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 22 Nov 2022 14:39:54 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 22 Nov 2022 14:39:51 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <alexandr.lobakin@intel.com>, <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v4 0/7] net: lan966x: Extend xdp support
+Date:   Tue, 22 Nov 2022 22:44:06 +0100
+Message-ID: <20221122214413.3446006-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <20221122161017.2426828-1-ardb@kernel.org> <5750d157-43dd-6f3d-1407-f41af3cff207@amd.com>
- <CAMj1kXHUQFAcRKzRkuGG3Rsyrexdi7_NUS1-aXrS36LP4Q=rxw@mail.gmail.com>
-In-Reply-To: <CAMj1kXHUQFAcRKzRkuGG3Rsyrexdi7_NUS1-aXrS36LP4Q=rxw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 22 Nov 2022 22:42:50 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFX3df00cv5hwij396jS2AOgVGavDM-8hRii49Omn5=pw@mail.gmail.com>
-Message-ID: <CAMj1kXFX3df00cv5hwij396jS2AOgVGavDM-8hRii49Omn5=pw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/17] x86: head_64.S spring cleaning
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 at 22:37, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Tue, 22 Nov 2022 at 21:48, Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> >
-> > On 11/22/22 10:10, Ard Biesheuvel wrote:
-> > > After doing some cleanup work on the EFI code in head_64.S, the mixed
-> > > mode code in particular, I noticed that the memory encryption pieces
-> > > could use some attention as well, so I cleaned that up too.
-> > >
-> > > Changes since v2:
-> > > - add some clarifying comments to the EFI mixed mode changes
-> > > - include patch to make the EFI handover protocol optional that was sent
-> > >    out separately before
-> > > - rebase onto tip/master
-> > >
-> > > Changes since v1:
-> > > - at Boris's request, split the patches into smaller ones that are
-> > >    easier to review
-> > >
-> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > Cc: Ingo Molnar <mingo@redhat.com>
-> > > Cc: Borislav Petkov <bp@alien8.de>
-> > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > > Cc: Michael Roth <michael.roth@amd.com>
-> >
-> > This causes an SEV guest to blow up on boot in the early boot code. It
-> > looks like the stack pointer is not valid and it triple faults on a pushq
-> > instruction (pushq $__KERNEL_CS in arch/x86/boot/compressed/head_64.S of
-> > startup_64).
-> >
->
-> Thanks for the report.
->
-> So the mystery here (at least to me) is that all the changes are to
-> the 32-bit code, and startup_64 reloads the stack pointer from the
-> symbol
->
-> Does your config have CONFIG_EFI_MIXED enabled?
->
-> Can I reproduce this fully emulated with QEMU? Or do I need a SEV host?
->
+Extend the current support of XDP in lan966x with the action XDP_TX and
+XDP_REDIRECT.
+The first patches just prepare the things such that it would be easier
+to add XDP_TX and XDP_REDIRECT actions. Like adding XDP_PACKET_HEADROOM,
+introduce helper functions, use the correct dma_dir for the page pool
+The last 2 patches introduce the XDP actions XDP_TX and XDP_REDIRECT.
 
-Also, mind giving this a quick spin?
+v3->v4:
+- use napi_consume_skb instead of dev_kfree_skb_any
+- arrange members in struct lan966x_tx_dcb_buf not to have holes
+- fix when xdp program is added the check for determining if page pool
+  needs to be recreated was wrong
+- change type for len in lan966x_tx_dcb_buf to u32
 
-diff --git a/drivers/firmware/efi/libstub/x86-stub.c
-b/drivers/firmware/efi/libstub/x86-stub.c
-index cb5f0befee57..1af11d34bc6c 100644
---- a/drivers/firmware/efi/libstub/x86-stub.c
-+++ b/drivers/firmware/efi/libstub/x86-stub.c
-@@ -23,7 +23,7 @@
+v2->v3:
+- make sure to update rxq memory model
+- update the page pool direction if there is any xdp program
+- in case of action XDP_TX give back to reuse the page
+- in case of action XDP_REDIRECT, remap the frame and make sure to
+  unmap it when is transmitted.
 
- const efi_system_table_t *efi_system_table;
- const efi_dxe_services_table_t *efi_dxe_table;
--u32 image_offset;
-+u32 __section(".data") image_offset;
- static efi_loaded_image_t *image = NULL;
+v1->v2:
+- use skb_reserve of using skb_put and skb_pull
+- make sure that data_len doesn't include XDP_PACKET_HEADROOM
 
- static efi_status_t
+Horatiu Vultur (7):
+  net: lan966x: Add XDP_PACKET_HEADROOM
+  net: lan966x: Introduce helper functions
+  net: lan966x: Add len field to lan966x_tx_dcb_buf
+  net: lan966x: Update rxq memory model
+  net: lan966x: Update dma_dir of page_pool_params
+  net: lan966x: Add support for XDP_TX
+  net: lan966x: Add support for XDP_REDIRECT
 
-Thanks,
-Ard.
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 265 +++++++++++++++---
+ .../ethernet/microchip/lan966x/lan966x_main.c |   5 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  25 +-
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  |  70 ++++-
+ 4 files changed, 314 insertions(+), 51 deletions(-)
+
+-- 
+2.38.0
+
