@@ -2,139 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D8D63328D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458EB6332A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbiKVCAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 21:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S232455AbiKVCEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbiKVCAp (ORCPT
+        with ESMTP id S232359AbiKVCES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:00:45 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A447E1BF9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:00:42 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so15920143pjc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:00:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2GgGmvs1Ahyu1NYakfF+wQ+EN1WPJgC73ojob9sWD98=;
-        b=dsoyxVjsPJfZziaOkScC4QipgGCf6lVyEbE1SA654Cz0zY8WMRj6lwljMm+u6ZCsQO
-         WRrTsQbqydqD8J5efIQlZ4gypoMnATwKKygGkpiPbP/JCY/LOZXUgVZfo8I8V6XnZ+Up
-         Gb6OF+tlx/vNAV44rRH3EYtLQgIQNRRKdShs8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2GgGmvs1Ahyu1NYakfF+wQ+EN1WPJgC73ojob9sWD98=;
-        b=qYjPlIkmXfnogc0106Eddl+uGrdvCFtG01bQlyL+Fo79hwY5506mGdqtwiBOBOHCa3
-         hTF1U2DR7uCz1Bmpolp1XuroZ7IUUwRZ0viiZQVhGToNEtQH979U/SutSvyX7ftlqxvd
-         WV7J4AA0RNZ/bolZilYmR0pjeGoUs39zzZq7k0xCN5N3JDC82ANmI94Y7YFWOcwXGM05
-         c5K8uDdtvGFOTyZFIwtn9muK4TGwOCtxQIJ8t6Vfdi2pnrXz6717SrCy3nmOOYd4HdXm
-         SsYRCv6pAA2MDCXCHnlgg2SPhV0SaFtiH4oEeAe9HvwVVLcrh75K0EHMITFka9TLLwAG
-         DzIg==
-X-Gm-Message-State: ANoB5pnmw2Sk/oEeGjZqlE+2VlSzOP1IUw5xlrmkAV0YIXL8t91JP7Xw
-        mgWWuED4wE6vOGVYUFZpMOvXfA==
-X-Google-Smtp-Source: AA0mqf6JDSNeMlNvF1qrQEZMqBsk4ekWK1mjYFEz9mL/IzY8wFaO4iJifcFUMt5P9r1RcbptHaucPQ==
-X-Received: by 2002:a17:90a:708a:b0:20a:eaab:137 with SMTP id g10-20020a17090a708a00b0020aeaab0137mr23591043pjk.206.1669082442001;
-        Mon, 21 Nov 2022 18:00:42 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
-        by smtp.gmail.com with ESMTPSA id p67-20020a625b46000000b0056bd59eaef0sm9327024pfb.4.2022.11.21.18.00.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 18:00:41 -0800 (PST)
-Date:   Tue, 22 Nov 2022 11:00:36 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
- zsmalloc
-Message-ID: <Y3wtREWjDI3UeYWF@google.com>
-References: <20221119001536.2086599-1-nphamcs@gmail.com>
- <20221119001536.2086599-7-nphamcs@gmail.com>
+        Mon, 21 Nov 2022 21:04:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07C0DEAC8;
+        Mon, 21 Nov 2022 18:04:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D2A9B8136A;
+        Tue, 22 Nov 2022 02:04:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3870EC433C1;
+        Tue, 22 Nov 2022 02:04:13 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mx625ZE9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669082651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OTrT7Oy+UwX6tDTXDcuWMWfrXPh69Y+d/UxvhkUJhAQ=;
+        b=mx625ZE9WhJJXgLhEe74RQYgx+11/NV6nAKPCkZrbjtl8nAz3nnmCVZijkACKdDgP9isRW
+        pBvqNF1MkR2u+m1SCr7OzkjfdsBf6reldCixRUPOM+KNhDiNqQpZOpoZPviIVdsCyYu/3b
+        MphBDiqw4UlMY1Gp7GvTyrh7NaaLK/g=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ef1f4edb (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 22 Nov 2022 02:04:10 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-efi@vger.kernel.org, linux-crypto@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        ardb@kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v3 0/5] Use EFI variables for random seed
+Date:   Tue, 22 Nov 2022 03:03:59 +0100
+Message-Id: <20221122020404.3476063-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119001536.2086599-7-nphamcs@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/18 16:15), Nhat Pham wrote:
-> +static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
-> +{
-> +	int i, obj_idx, ret = 0;
-> +	unsigned long handle;
-> +	struct zspage *zspage;
-> +	struct page *page;
-> +	enum fullness_group fullness;
-> +
-> +	/* Lock LRU and fullness list */
-> +	spin_lock(&pool->lock);
-> +	if (list_empty(&pool->lru)) {
-> +		spin_unlock(&pool->lock);
-> +		return -EINVAL;
-> +	}
-> +
-> +	for (i = 0; i < retries; i++) {
-> +		struct size_class *class;
-> +
-> +		zspage = list_last_entry(&pool->lru, struct zspage, lru);
-> +		list_del(&zspage->lru);
-> +
-> +		/* zs_free may free objects, but not the zspage and handles */
-> +		zspage->under_reclaim = true;
-> +
-> +		class = zspage_class(pool, zspage);
-> +		fullness = get_fullness_group(class, zspage);
-> +
-> +		/* Lock out object allocations and object compaction */
-> +		remove_zspage(class, zspage, fullness);
-> +
-> +		spin_unlock(&pool->lock);
-> +
-> +		/* Lock backing pages into place */
-> +		lock_zspage(zspage);
-> +
-> +		obj_idx = 0;
-> +		page = zspage->first_page;
+EFI has a rather unique benefit that it has access to some limited
+non-volatile storage, where the kernel can store a random seed. This
+series wires that up, with EFISTUB reading the seed and passing it to
+the kernel, and with the kernel writing a new seed when the RNG is
+initialized.
 
-A nit: we usually call get_first_page() in such cases.
+Patches 1 and 2 are to go through Ard's EFI tree, while patches 3, 4,
+and 5 are to go through my RNG tree.
 
-> +		while (1) {
-> +			handle = find_alloced_obj(class, page, &obj_idx);
-> +			if (!handle) {
-> +				page = get_next_page(page);
-> +				if (!page)
-> +					break;
-> +				obj_idx = 0;
-> +				continue;
-> +			}
-> +
-> +			/*
-> +			 * This will write the object and call zs_free.
-> +			 *
-> +			 * zs_free will free the object, but the
-> +			 * under_reclaim flag prevents it from freeing
-> +			 * the zspage altogether. This is necessary so
-> +			 * that we can continue working with the
-> +			 * zspage potentially after the last object
-> +			 * has been freed.
-> +			 */
-> +			ret = pool->zpool_ops->evict(pool->zpool, handle);
-> +			if (ret)
-> +				goto next;
-> +
-> +			obj_idx++;
-> +		}
+Jason A. Donenfeld (5):
+  efi: vars: prohibit reading random seed variables
+  efi: stub: use random seed from EFI variable
+  random: add back async readiness notifier
+  vsprintf: initialize siphash key using notifier
+  efi: random: refresh non-volatile random seed when RNG is initialized
+
+ drivers/char/random.c                 | 22 +++++++++++
+ drivers/firmware/efi/efi.c            | 19 +++++++++
+ drivers/firmware/efi/libstub/random.c | 55 +++++++++++++++++++++------
+ fs/efivarfs/inode.c                   |  4 ++
+ fs/efivarfs/super.c                   |  3 ++
+ include/linux/random.h                |  1 +
+ lib/vsprintf.c                        | 14 +++----
+ 7 files changed, 97 insertions(+), 21 deletions(-)
+
+-- 
+2.38.1
+
