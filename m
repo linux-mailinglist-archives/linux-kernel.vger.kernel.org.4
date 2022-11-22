@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515BC6335AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 222DB6335B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 08:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbiKVHG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 02:06:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
+        id S231318AbiKVHK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 02:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbiKVHGp (ORCPT
+        with ESMTP id S229459AbiKVHKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:06:45 -0500
-Received: from out199-6.us.a.mail.aliyun.com (out199-6.us.a.mail.aliyun.com [47.90.199.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4887F2A97E;
-        Mon, 21 Nov 2022 23:06:42 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVR3yub_1669100796;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVR3yub_1669100796)
-          by smtp.aliyun-inc.com;
-          Tue, 22 Nov 2022 15:06:37 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     "Theodore Y. Ts o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v2 2/2] fscrypt: Add SM4 XTS/CTS symmetric algorithm support
-Date:   Tue, 22 Nov 2022 15:06:32 +0800
-Message-Id: <20221122070632.21910-3-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20221122070632.21910-1-tianjia.zhang@linux.alibaba.com>
-References: <20221122070632.21910-1-tianjia.zhang@linux.alibaba.com>
+        Tue, 22 Nov 2022 02:10:21 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F5D303E8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:10:20 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id k2so9647721qkk.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 23:10:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N0ePOSWm5GF0+U93OsaUkQqKYc/c980Yryga0ApomJ0=;
+        b=2AS8IwguOVXBUzclfYlmbCqYBHG0NHX+aQ3smSIgb1aDeYTSneuiqM1lRUGI57ueox
+         CqNiKQS4Fh73VOCUKCay2gN86S67NKcmRzh59+aE0F+8CEHW17KDjcgc3Y2pwd4iqLXv
+         c/Rj/NjZQxPWUSyb5EoJhC28oN8FRjqEJZr/GAVCIHgXlEBL6zaCpWhJ6zatcfn37Lau
+         MhBjtdfecBLj+BGLoU7nSLzYEvIcJoUB+U+3r0XAoUOcOPGi3v+JBUWygJEnWWhSq64o
+         IxPLC0b0ZpggBGiTcu4sLDvQihOYIH9gAmToKUy6SvAuf5tU07VZm6FKmKmE96VmhXPZ
+         bWZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N0ePOSWm5GF0+U93OsaUkQqKYc/c980Yryga0ApomJ0=;
+        b=6BIX3RONwwQxmHPb2Yqf9piclb2RoP9iLf7gJbYOHwyooecE0mHyV6WEXbNC4r23D8
+         T+PxyeNzmCOZXAC4H8L/4MxWkykFabNWirJPMwzd+hMcukijhHKe8JR98YTlXgrkqzxg
+         EhRwz6zYhYHgg/F3F+zAP4rB7vbulXj9kYNuep4FVMrvdbCG68IpibtjSllh0t5WOmiU
+         wnRSBPTMVoDpGkAn3uqjQWO59wN4x7CehSXqjIifn6KKgabOkdNiSlhIj2I2rUC3dIPk
+         xNIGOrmgW9UL5kvTwVP6uUjiVuYAZ5KFVSaVTQ1tEA2i7gZxX5DkA1lDsEFCtOMDi00O
+         WtmQ==
+X-Gm-Message-State: ANoB5pk3850zxXsTc3zZy3a6EfeZbBnNl+Kg/U7270anALcQqguvi7Tn
+        QUwlntLy3O8EG/CUhyudFUU11A==
+X-Google-Smtp-Source: AA0mqf5uIsVlGin2a0JGaSWWceiuaeqiHi/K1ZQltP+24OvdER1NKz2UraFtIV1/KNqJPuv6DHNY8w==
+X-Received: by 2002:a05:620a:1423:b0:6f3:e3b7:6a5b with SMTP id k3-20020a05620a142300b006f3e3b76a5bmr19599460qkj.607.1669100986453;
+        Mon, 21 Nov 2022 23:09:46 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id x13-20020a05620a448d00b006fa4ac86bfbsm9604082qkp.55.2022.11.21.23.09.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 23:09:45 -0800 (PST)
+Date:   Tue, 22 Nov 2022 02:10:11 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        minchan@kernel.org, ngupta@vflare.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y3x109XxGY02Y7Vp@cmpxchg.org>
+References: <20221119001536.2086599-1-nphamcs@gmail.com>
+ <20221119001536.2086599-7-nphamcs@gmail.com>
+ <Y3wwuMSy8YC86QAi@google.com>
+ <Y3w+C8ClzP6VbqrA@cmpxchg.org>
+ <Y3xFHIgkiZNYCbHi@google.com>
+ <Y3xnf7pR4vI7o9PV@cmpxchg.org>
+ <Y3xtpoQpb8DuiTlh@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3xtpoQpb8DuiTlh@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM4 is a symmetric algorithm widely used in China, this patch enables
-to use SM4-XTS mode to encrypt file content, and use SM4-CBC-CTS to
-encrypt filename.
+On Tue, Nov 22, 2022 at 03:35:18PM +0900, Sergey Senozhatsky wrote:
+> On (22/11/22 01:09), Johannes Weiner wrote:
+> > On Tue, Nov 22, 2022 at 12:42:20PM +0900, Sergey Senozhatsky wrote:
+> > > On (22/11/21 22:12), Johannes Weiner wrote:
+> > > > On Tue, Nov 22, 2022 at 11:15:20AM +0900, Sergey Senozhatsky wrote:
+> > > > > On (22/11/18 16:15), Nhat Pham wrote:
+> 
+> [..]
+> 
+> > > What I meant was: if zs_reclaim_page() makes only partial progress
+> > > with the current LRU tail zspage and returns -EAGAIN, then we just
+> > > don't increment `total` and continue looping in zs_zpool_shrink().
+> > 
+> > Hm, but it breaks on -EAGAIN, it doesn't continue.
+> 
+> Yes. "What if it would continue". Would it make sense to not
+> break on EAGAIN?
+> 
+> 	while (total < pages) {
+> 		ret = zs_reclaim_page(pool);
+> 		if (ret == -EAGAIN)
+> 			continue;
+> 		if (ret < 0)
+> 			break;
+> 		total++;
+> 	}
+> 
+> Then we don't need retry loop in zs_reclaim_page().
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- Documentation/filesystems/fscrypt.rst |  1 +
- fs/crypto/keysetup.c                  | 15 +++++++++++++++
- fs/crypto/policy.c                    |  4 ++++
- include/uapi/linux/fscrypt.h          |  2 ++
- 4 files changed, 22 insertions(+)
+But that's an indefinite busy-loop?
 
-diff --git a/Documentation/filesystems/fscrypt.rst b/Documentation/filesystems/fscrypt.rst
-index 5ba5817c17c2..af27e7b2c74f 100644
---- a/Documentation/filesystems/fscrypt.rst
-+++ b/Documentation/filesystems/fscrypt.rst
-@@ -336,6 +336,7 @@ Currently, the following pairs of encryption modes are supported:
- 
- - AES-256-XTS for contents and AES-256-CTS-CBC for filenames
- - AES-128-CBC for contents and AES-128-CTS-CBC for filenames
-+- SM4-XTS for contents and SM4-CTS-CBC for filenames
- - Adiantum for both contents and filenames
- - AES-256-XTS for contents and AES-256-HCTR2 for filenames (v2 policies only)
- 
-diff --git a/fs/crypto/keysetup.c b/fs/crypto/keysetup.c
-index f7407071a952..24e55c95abc3 100644
---- a/fs/crypto/keysetup.c
-+++ b/fs/crypto/keysetup.c
-@@ -44,6 +44,21 @@ struct fscrypt_mode fscrypt_modes[] = {
- 		.security_strength = 16,
- 		.ivsize = 16,
- 	},
-+	[FSCRYPT_MODE_SM4_XTS] = {
-+		.friendly_name = "SM4-XTS",
-+		.cipher_str = "xts(sm4)",
-+		.keysize = 32,
-+		.security_strength = 16,
-+		.ivsize = 16,
-+		.blk_crypto_mode = BLK_ENCRYPTION_MODE_SM4_XTS,
-+	},
-+	[FSCRYPT_MODE_SM4_CTS] = {
-+		.friendly_name = "SM4-CTS",
-+		.cipher_str = "cts(cbc(sm4))",
-+		.keysize = 16,
-+		.security_strength = 16,
-+		.ivsize = 16,
-+	},
- 	[FSCRYPT_MODE_ADIANTUM] = {
- 		.friendly_name = "Adiantum",
- 		.cipher_str = "adiantum(xchacha12,aes)",
-diff --git a/fs/crypto/policy.c b/fs/crypto/policy.c
-index 46757c3052ef..8e69bc0c35cd 100644
---- a/fs/crypto/policy.c
-+++ b/fs/crypto/policy.c
-@@ -71,6 +71,10 @@ static bool fscrypt_valid_enc_modes_v1(u32 contents_mode, u32 filenames_mode)
- 	    filenames_mode == FSCRYPT_MODE_AES_128_CTS)
- 		return true;
- 
-+	if (contents_mode == FSCRYPT_MODE_SM4_XTS &&
-+	    filenames_mode == FSCRYPT_MODE_SM4_CTS)
-+		return true;
-+
- 	if (contents_mode == FSCRYPT_MODE_ADIANTUM &&
- 	    filenames_mode == FSCRYPT_MODE_ADIANTUM)
- 		return true;
-diff --git a/include/uapi/linux/fscrypt.h b/include/uapi/linux/fscrypt.h
-index a756b29afcc2..47dbd1994bfe 100644
---- a/include/uapi/linux/fscrypt.h
-+++ b/include/uapi/linux/fscrypt.h
-@@ -26,6 +26,8 @@
- #define FSCRYPT_MODE_AES_256_CTS		4
- #define FSCRYPT_MODE_AES_128_CBC		5
- #define FSCRYPT_MODE_AES_128_CTS		6
-+#define FSCRYPT_MODE_SM4_XTS			7
-+#define FSCRYPT_MODE_SM4_CTS			8
- #define FSCRYPT_MODE_ADIANTUM			9
- #define FSCRYPT_MODE_AES_256_HCTR2		10
- /* If adding a mode number > 10, update FSCRYPT_MODE_MAX in fscrypt_private.h */
--- 
-2.24.3 (Apple Git-128)
-
+I don't see what the problem with limited retrying in
+zs_reclaim_page() is. It's robust and has worked for years.
