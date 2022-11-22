@@ -2,99 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FB0633186
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5FF63318B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiKVAo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S230086AbiKVArG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:47:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiKVAoy (ORCPT
+        with ESMTP id S231899AbiKVApa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:44:54 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3374313F2F;
-        Mon, 21 Nov 2022 16:44:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669077894; x=1700613894;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vQu+Ql6V2W8MdI2sO01U5UcW0Jf0jzenhcur0b9+iUY=;
-  b=ncFQK+6KFgytMgcc+Ewt/XD6k3hiie1U7GyDYDW1cFSYPrX+CEJc+Xrm
-   U+4QSMjwkVHsqHKlqkUhzr0laEd1YsXthL7pMyuhg9x5bMUl4Hl+N+Tew
-   EKbqX+ovVvYY7h4r/GHLW1rSeIYEEC1pDuKulK0mywP4tDY5+T051QLLx
-   gjxCildlytdctAxGsIr0LsqqC8a+e8MJ0byGwxZ4OG4twKA6Ax76PjJ1f
-   eH6mJGm2mpdfmY9tDHgPAFpVJtgMCUOvALc9TKyJKVaG2rWnQrBgibViI
-   56PkvpywKK7KSeFFBFOM5opfOCVYFOy7hGLFL143uKgvxAf6KDliLtBM0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="297053116"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="297053116"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 16:44:53 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="783652648"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="783652648"
-Received: from ticela-or-327.amr.corp.intel.com (HELO [10.209.6.63]) ([10.209.6.63])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 16:44:51 -0800
-Message-ID: <c564a7fe-2e33-a071-e333-39163471c678@intel.com>
-Date:   Mon, 21 Nov 2022 16:44:50 -0800
+        Mon, 21 Nov 2022 19:45:30 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1766A13F2F;
+        Mon, 21 Nov 2022 16:45:29 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C2AE032009D7;
+        Mon, 21 Nov 2022 19:45:27 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 21 Nov 2022 19:45:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669077927; x=
+        1669164327; bh=fDo4wIRpT/cr00JSFZyRJXJl6OzORncK/vIgc7ZRQkk=; b=J
+        6CnMjqONXI2E8ioFDyVdFNnyvY9ueuRBNt/1e26aLfKYAlgFhVS2hel8L1xo8We4
+        NTYSTpdzySKpFbIhsX4pkj8++3yIFa1rLeE5J3mz0FM4zKmk7yQNSbGolsbMFq5r
+        M8mXmPB9g4HGNKO1FdbHFuHpvPJbEkd++eT++A2EQxdsIR/uc+7Qzvd20inmEnJs
+        2mPE3SKyf4UX8km4FaZG+ZcQZtF2Tlfc3/EK721qDYW+mIgWsTnoe9sJQrrEjLm4
+        af7LtAi+BSe9MStIZi77K8M41RGKWjO8FKWj4AR0jhOm0n55EwepzYPq1lHHEDrE
+        8hShbPP0pCwmsedUWfJvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669077927; x=
+        1669164327; bh=fDo4wIRpT/cr00JSFZyRJXJl6OzORncK/vIgc7ZRQkk=; b=V
+        nJZxtfGEVMrF6eg8Ky2o+OwLEwr0qWH4WDtXfKZW4ubG0wPZhoUTcUtV/aF7stxL
+        5R531aiFniq99980T+GAVs9G7ZaEHCJYi6IGjvjG0sMDCvJJu52oDmirdPXZNTss
+        2yxe0hUdqK1pvbH78w/FwN3N8gB7ev+5uZGXQo0QNAcFZWeZC8bvcUCsfIzZIdOY
+        f7TERsbeOhzNMG+BysOGxzQ029YLfXWGWf5TP2DvwPsHIw4BuWdlzHT2q0FAW4Gj
+        gJhOmIBCd+zQHH/GVUhCF369+g60Ohdd9AC7TzYquTDwaXfmPDKLnkGcwugLlc7Q
+        k3z8lJ7qxKAh6LoCc3aOA==
+X-ME-Sender: <xms:pht8YyN3rNC6uJQ2Z3tbMqBvJReCw8urSh3znvc6odcyNAuEhCZzVg>
+    <xme:pht8Yw9IskL-BeP9Cllr-RUzsAzpj5cMnVTiSE1rnIu05wRQtkBwbBW5vw3qzWMvd
+    2N2Uvn3Zyo1xfKy6Q>
+X-ME-Received: <xmr:pht8Y5SA2vkiZu8yuAFfA_h9yIiBZ18polg7Aya-z4cFMzkJwOn1mnYPmp-QBRqXUdE6YhIGUX9Xv1VcvyBUTHVHkpgMn3HT4VkgPacarLTIKUnZNcj1-nW1tQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheejgddviecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepudeuuefgleeludegueegvdeggffhveejgfeileejveegiefhffev
+    ieffiedvkeehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
+    nhgurdhorhhg
+X-ME-Proxy: <xmx:pht8Yysj4datzUUG5edxXJy2MuVRIzBoK2sHeXWKZttbNul8Qj4niw>
+    <xmx:pht8Y6dfXLUOLPyz43Ob75QLXwnUyqWdhTq1F9D8JvtGxnO83rtwow>
+    <xmx:pht8Y21gH7eBzGzthxlJ7A7Ps2F61GJc1hmGOMMa3qxvSUASe4NmVQ>
+    <xmx:pxt8Y7UpRk1RyeyLvm3OglNzb_1tlIWhO1LTvdikdXxmkhbY5AVQqQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Nov 2022 19:45:26 -0500 (EST)
+Message-ID: <bf6d3b1f-f703-4a25-833e-972a44a04114@sholland.org>
+Date:   Mon, 21 Nov 2022 18:45:25 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 03/20] x86/virt/tdx: Disable TDX if X2APIC is not
- enabled
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
 Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <c5f484c1a87ee052597fd5f539cf021f158755b9.1668988357.git.kai.huang@intel.com>
- <87e17024-755d-e195-d9ea-ef62a4de6aa8@intel.com>
- <f9918596c4013444428899aca2cfa73b1f18c703.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <f9918596c4013444428899aca2cfa73b1f18c703.camel@intel.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor@kernel.org>
+Cc:     anup@brainfault.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com
+References: <20221121205647.23343-1-palmer@rivosinc.com>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+In-Reply-To: <20221121205647.23343-1-palmer@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 16:30, Huang, Kai wrote:
-> 
-> How about still having a patch to make INTEL_TDX_HOST depend on X86_X2APIC but
-> with something below in the changelog?
-> 
-> "
-> TDX capable platforms are locked to X2APIC mode and cannot fall back to the
-> legacy xAPIC mode when TDX is enabled by the BIOS.   It doesn't make sense to
-> turn on INTEL_TDX_HOST while X86_X2APIC is not enabled.  Make INTEL_TDX_HOST
-> depend on X86_X2APIC.
+Hi Palmer,
 
-That's fine and it makes logical sense as a dependency.  TDX host
-support requires x2APIC.  Period.
+On 11/21/22 14:56, Palmer Dabbelt wrote:
+> From: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> As per [1], whether or not the core can wake up from non-retentive
+> suspend is a platform-specific detail.  We don't have any way to encode
+> that, so just stop using them until we've sorted that out.
+
+We do have *exactly* a way to encode that. Specifically, the existence
+or non-existence of a non-retentive CPU suspend state in the DT.
+
+If a hart has no way of resuming from non-retentive suspend (i.e. a
+complete lack of interrupt delivery in non-retentive suspend), then it
+makes zero sense to advertise such a suspend state in the DT. Therefore,
+if the state exists in the DT, you can assume there is *some* interrupt
+that can wake up the hart. And I would extend that to assume at least
+one of those wakeup-capable interrupts is a timer interrupt, although
+not necessarily the architectural timer interrupt.
+
+> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
+
+This comment refers specifically to the architectural timer interrupt,
+not interrupts more generally.
+
+> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> ---
+> 
+> This should allow us to revert 232ccac1bd9b ("clocksource/drivers/riscv:
+> Events are stopped during CPU suspend"), which fixes suspend on the D1
+> but breaks timers everywhere.
+
+I understand that reverting 232ccac1bd9b is the easiest way to fix the
+issues you and others are seeing. I do not have any functioning RISC-V
+hardware with SMP, so it is hard for me to help debug the root issue in
+the Linux timer code. I do not know why turning on the C3STOP flag
+breaks RCU stall detection or clock_nanosleep(), but I agree that
+breakage should not happen.
+
+So while I still think 232ccac1bd9b is the right change to make from a
+"following the spec" standpoint, I am okay with reverting it for
+pragmatic reasons. Since the D1 has another timer driver that is
+currently used in preference to the RISC-V/SBI timer triver, reverting
+232ccac1bd9b does not break non-retentive suspend for the D1.
+
+But please do not make the change below. It is unnecessarily broad, and
+will break something that works fine right now. If the DT advertises a
+CPU suspend state that cannot be woken up from at all, then that is a
+bug in the DT. Linux should not try to work around that.
+
+So revert 232ccac1bd9b for now, and we can figure out what to do about
+the DT property, but please do not merge this.
+
+Regards,
+Samuel
+
+> ---
+>  drivers/cpuidle/cpuidle-riscv-sbi.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> index 05fe2902df9a..9d1063a54495 100644
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -214,6 +214,17 @@ static bool sbi_suspend_state_is_valid(u32 state)
+>  	if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
+>  	    state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
+>  		return false;
+> +
+> +	/*
+> +	 * Whether or not RISC-V systems deliver interrupts to harts in a
+> +	 * non-retentive suspend state is a platform-specific detail.  This can
+> +	 * leave the hart unable to wake up, so just mark these states as
+> +	 * unsupported until we have a mechanism to expose these
+> +	 * platform-specific details to Linux.
+> +	 */
+> +	if (state & SBI_HSM_SUSP_NON_RET_BIT)
+> +		return false;
+> +
+>  	return true;
+>  }
+>  
+
