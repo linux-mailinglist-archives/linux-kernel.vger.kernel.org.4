@@ -2,151 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B718663388F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D611E633898
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiKVJdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S232748AbiKVJeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbiKVJdd (ORCPT
+        with ESMTP id S231923AbiKVJeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:33:33 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5404C644C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:33:32 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id c15so8901670qtw.8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=m0GDJhfeb/mlDuXgY9TptD7saYe6PZinj6F8K2HKaeU=;
-        b=Yh5afxIF4nlJ5tGvdSmhfMKs2zILGlBSVIL6Dq8svTLaZHbiVmfrTeSTd8e+VFVvst
-         3erxOjcuLZe1zhu4vW5V2FMYdoqnAyzGkmSS116EBggRl4QM2sJmFknFJXbXyQe/QgUI
-         jartFLar8+ghwZmgy2UPOsDpCVGvHLnrwgpr8lTj2kDN/LztPZP9s4j5rs6eA62W3XCS
-         XomsQLw4VX5GCBbdWgFTc2M88EcFeyEBemXHdHoGfHWJmV3whtY014IHkiRYExZSASq6
-         RSCpprBqiuPj8HU71hKDjHKiFHtYJZuydkXMf1qj4o//thj4EMkxAiA4/tBWhPv01ekX
-         Unuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m0GDJhfeb/mlDuXgY9TptD7saYe6PZinj6F8K2HKaeU=;
-        b=mgW0ApnpZiz+MUR+IUAoTKJYvkDaNwlzqrt1VYcAHB35ABbvgPFX2s0sA8Rq76dYAd
-         7vhPw+gHatJX7ZI8SRdvtxxSeITbsx+2vm77xK/+A0g3ELYwJApSgec4igvvOGoKaCYl
-         XHBiNZ02V/AbtGvIjMslvTW2zFG4LdBelajiSyfgFFFzxm64HOhDpKDC2+JLD7o/FK1s
-         YCYSfdnuUJXnkl9WF3iy4pWXxEjoomSvbQ3m5TcJXEdUsDAedIM+GEU/2Jq0ic578w8m
-         yyMHeTKyStTc2EympKMyLOFlNFQCFQhuDHEuHLiywafsQ+7Dvsyv6avzVgcvHqDeBmQq
-         LE0g==
-X-Gm-Message-State: ANoB5plEJtepIf/Kk4vnmRYVQlpgBJlX4oFSEXcdbm+Ukyv87rQNvHZW
-        OZQAKZb0TftpqbWt4qshCmT4xkIBoFtM5A==
-X-Google-Smtp-Source: AA0mqf54sB+Y5VKy2px/uKlEV8Zla8rGrgID1JcbJZtAIcoGIvncgsDgYkhDbtN2sgc7G9bAfT7YEw==
-X-Received: by 2002:a05:622a:4d94:b0:3a5:fb6c:d96a with SMTP id ff20-20020a05622a4d9400b003a5fb6cd96amr21306888qtb.185.1669109611343;
-        Tue, 22 Nov 2022 01:33:31 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id t20-20020a05620a451400b006ceb933a9fesm10089200qkp.81.2022.11.22.01.33.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 01:33:30 -0800 (PST)
-Date:   Tue, 22 Nov 2022 01:33:27 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 2/3] mm,thp,rmap: subpages_mapcount COMPOUND_MAPPED if
- PMD-mapped
-In-Reply-To: <20221121130900.xb224cesbzfptldo@box.shutemov.name>
-Message-ID: <cdf37e1a-598f-4ec0-3f3f-13acd9acc994@google.com>
-References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <25a09a7a-81a9-e9c2-7567-c94ce18ac2@google.com> <20221121130900.xb224cesbzfptldo@box.shutemov.name>
+        Tue, 22 Nov 2022 04:34:15 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92C6644C;
+        Tue, 22 Nov 2022 01:34:14 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AM8d916028851;
+        Tue, 22 Nov 2022 09:34:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=waIgJpgjNqSFfMmI93mxxF++m/jo6IpqkSlWNClHgSI=;
+ b=J5AwhQNsQb2eid9FLXbarvCI7GIrmGZVFvU1tm6IHAGMYdHTIxBRjLH7SrfyWf2lvBi4
+ V/N4Wula+o25rreYd+AKYmaBzKVBHcTT7UnaQK7S20DG6IA2IwoR83n9t65zhIkaez7n
+ BHe9QKynsxh9NTZI/3TKA1QTfVIJzHVOvM7URNkfic+TL2j0VgH1uxU1+OAVi+Yw/nQ+
+ XDnG00DZM6avfhCoDSqVjSpr9qm0YEQdP9MgqoaX4Kd7DTq1ubmDQ5AZjQ0QolhWQBPP
+ Oe20NfXNWCbIFK8nVX8h+Mc6quao+WF7dlW54WMP0eYHdRJj0oTgkQ3P/BfOe+FTqhMf rA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0rhdcwem-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 09:34:09 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AM7mVF9009259;
+        Tue, 22 Nov 2022 09:34:09 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0rhdcwdt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 09:34:08 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AM9LU7R031077;
+        Tue, 22 Nov 2022 09:34:07 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3kxps92vuj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 09:34:06 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AM9Y3tq6423140
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Nov 2022 09:34:03 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7BE30A4059;
+        Tue, 22 Nov 2022 09:34:03 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C97D3A4051;
+        Tue, 22 Nov 2022 09:34:02 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.44.213])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Nov 2022 09:34:02 +0000 (GMT)
+Message-ID: <71d10db8151c3b78d84a252a688e2892448eaa95.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 5/9] KVM: s390: selftest: memop: Move testlist into
+ main
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Tue, 22 Nov 2022 10:34:02 +0100
+In-Reply-To: <c801611e-61db-73d2-2ff1-cd06350215b2@redhat.com>
+References: <20221117221758.66326-1-scgl@linux.ibm.com>
+         <20221117221758.66326-6-scgl@linux.ibm.com>
+         <c801611e-61db-73d2-2ff1-cd06350215b2@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: TE8dwqfOiCUvqpW2CEZMTngHlClnv3fj
+X-Proofpoint-GUID: ZUply-oT0HlAwhb8_mCmPxmc8BeHrB4S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-22_04,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 clxscore=1015 adultscore=0 phishscore=0 spamscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211220070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022, Kirill A. Shutemov wrote:
-> On Fri, Nov 18, 2022 at 01:14:17AM -0800, Hugh Dickins wrote:
-> > Can the lock_compound_mapcount() bit_spin_lock apparatus be removed now?
-> > Yes.  Not by atomic64_t or cmpxchg games, those get difficult on 32-bit;
-> > but if we slightly abuse subpages_mapcount by additionally demanding that
-> > one bit be set there when the compound page is PMD-mapped, then a cascade
-> > of two atomic ops is able to maintain the stats without bit_spin_lock.
+On Tue, 2022-11-22 at 08:52 +0100, Thomas Huth wrote:
+> On 17/11/2022 23.17, Janis Schoetterl-Glausch wrote:
+> > This allows checking if the necessary requirements for a test case are
+> > met via an arbitrary expression. In particular, it is easy to check if
+> > certain bits are set in the memop extension capability.
+> > 
+> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> > ---
+> >   tools/testing/selftests/kvm/s390x/memop.c | 132 +++++++++++-----------
+> >   1 file changed, 66 insertions(+), 66 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> > index 286185a59238..10f34c629cac 100644
+> > --- a/tools/testing/selftests/kvm/s390x/memop.c
+> > +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> > @@ -690,87 +690,87 @@ static void test_errors(void)
+> >   	kvm_vm_free(t.kvm_vm);
+> >   }
+> >   
+[...]
+> > 
+> > +	} testlist[] = {
+> > +		{
+> > +			.name = "simple copy",
+> > +			.test = test_copy,
+> > +			.requirements_met = true,
+> > +		},
+> > +		{
+> > +			.name = "generic error checks",
+> > +			.test = test_errors,
+> > +			.requirements_met = true,
+> > +		},
+> > +		{
+> > +			.name = "copy with storage keys",
+> > +			.test = test_copy_key,
+> > +			.requirements_met = extension_cap > 0,
+> > +		},
+> > +		{
+> > +			.name = "copy with key storage protection override",
+> > +			.test = test_copy_key_storage_prot_override,
+> > +			.requirements_met = extension_cap > 0,
+> > +		},
+> > +		{
+> > +			.name = "copy with key fetch protection",
+> > +			.test = test_copy_key_fetch_prot,
+> > +			.requirements_met = extension_cap > 0,
+> > +		},
+> > +		{
+> > +			.name = "copy with key fetch protection override",
+> > +			.test = test_copy_key_fetch_prot_override,
+> > +			.requirements_met = extension_cap > 0,
+> > +		},
+> > +		{
+> > +			.name = "error checks with key",
+> > +			.test = test_errors_key,
+> > +			.requirements_met = extension_cap > 0,
+> > +		},
+> > +		{
+> > +			.name = "termination",
+> > +			.test = test_termination,
+> > +			.requirements_met = extension_cap > 0,
+> > +		},
+> > +		{
+> > +			.name = "error checks with key storage protection override",
+> > +			.test = test_errors_key_storage_prot_override,
+> > +			.requirements_met = extension_cap > 0,
+> > +		},
+> > +		{
+> > +			.name = "error checks without key fetch prot override",
+> > +			.test = test_errors_key_fetch_prot_override_not_enabled,
+> > +			.requirements_met = extension_cap > 0,
+> > +		},
+> > +		{
+> > +			.name = "error checks with key fetch prot override",
+> > +			.test = test_errors_key_fetch_prot_override_enabled,
+> > +			.requirements_met = extension_cap > 0,
 > 
-> Yay! New home for PageDoubleMap()! :P
+> I wonder whether it would rather make sense to check for "extension_cap & 1" 
+> instead of "extension_cap > 0" ?
 
-:) You only asked for one bit for PageDoubleMap, I've been greedier;
-so it's not surprising if it has worked out better now.
-
-...
-
-> Jokes aside, looks neat.
+The cap should always have been a bitmap, but unfortunately I didn't initially
+define it as one, the storage key extension must be supported if the cap > 0.
+So the test reflects that and may catch an error in the future.
 > 
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-
-Thanks; but I'm very glad that Linus expressed his dissatisfaction
-with the first implementation, this one does feel much better.
-
+> Anyway:
+> Reviewed-by: Thomas Huth <thuth@redhat.com>
 > 
-> As always few minor nits below.
-...
-> > @@ -893,8 +902,12 @@ static inline int total_mapcount(struct page *page)
-> >  
-> >  static inline bool folio_large_is_mapped(struct folio *folio)
-> >  {
-> > -	return atomic_read(folio_mapcount_ptr(folio)) +
-> > -		atomic_read(folio_subpages_mapcount_ptr(folio)) >= 0;
-> > +	/*
-> > +	 * Reading folio_mapcount_ptr() below could be omitted if hugetlb
-> > +	 * participated in incrementing subpages_mapcount when compound mapped.
-> > +	 */
-> > +	return atomic_read(folio_mapcount_ptr(folio)) >= 0 ||
-> > +		atomic_read(folio_subpages_mapcount_ptr(folio)) > 0;
-> 
-> Maybe check folio_subpages_mapcount_ptr() first? It would avoid
-> folio_mapcount_ptr() read for everything, but hugetlb.
-
-Okay: I'm not convinced, but don't mind switching those around: done.
-
-> > --- a/mm/debug.c
-> > +++ b/mm/debug.c
-> > @@ -97,7 +97,7 @@ static void __dump_page(struct page *page)
-> >  		pr_warn("head:%p order:%u compound_mapcount:%d subpages_mapcount:%d compound_pincount:%d\n",
-> >  				head, compound_order(head),
-> >  				head_compound_mapcount(head),
-> > -				head_subpages_mapcount(head),
-> > +				head_subpages_mapcount(head) & SUBPAGES_MAPPED,
-> 
-> Looks like applying the SUBPAGES_MAPPED mask belong to the
-> head_subpages_mapcount() helper, not to the caller.
-
-Yes, that would be more consistent, helper function doing the massage.
-Done.  __dump_page() then remains unchanged, but free_tail_pages_check()
-uses subpages_mapcount_ptr(head_page) to check the whole field is zero.
-
-v2 coming up - thanks.
-
-Hugh
+Thanks!
