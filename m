@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BB56339EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EEF6339F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232970AbiKVKXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S233650AbiKVKYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiKVKWL (ORCPT
+        with ESMTP id S233080AbiKVKWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:22:11 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395F111818
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:54 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id o30so10380017wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:54 -0800 (PST)
+        Tue, 22 Nov 2022 05:22:12 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24757E03B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:55 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id p16so10366745wmc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j23hZnphv0jcgZfiOY9qWXNDpMCFFj9PRM3bEUKGmc4=;
-        b=fDNYsQ3j2gLDbZskMdzxyTjl8yIPfTyD01yYPRdSjW+X6zPNqK3ztySziZezPu419E
-         suCJQuvywgERUuFjcEnHi4Z1QQWUyfFO4bjGUFByDMTU2ML1XaBgAmunf8cy0bjbUiW6
-         daoPwkNXiRew7YerkscSIQfCA1vTfCA/zQEJYA+Gy88c/te+ILvMNZbT6x+k+h8ZXa58
-         AhXsEKNQkEnyM1McFXynLRGACGVnivDCet0jtDLXhYTpNVJlBqHoZ63GGUSki5MbqFCA
-         mruZWz6KtrRz2f/+SjzX2D9ZkEppU8HB1XaTcih4ryJpVJ1rEiWyU2v/OrqDDX3QhTzV
-         PjKg==
+        bh=M3G5fO4wTgQLmAcQSoo34y5bVfGZW9g4LW34a2D3VvA=;
+        b=KJyK8MfSWfrc4rC2Zkedu9dXmu7sCfaGzpAr/Fb2RwQf+OEOysG8VS/C1CdLRuu8oU
+         FkjQ5bQiMByI94zbTMKQB6WG3DPe93S7NyYzXMES+UPGNu+8CS4bnqSQhoZqJO8Cu2UF
+         l6z0ay3iLonF8ILw4uB6Qbs3owHDZ6547HxsQUrHmYxicToSx5IJ/IzHlZIxHog2JtCD
+         A/dkTVnlWljJHmXfF2oPAGqnKoijFOV/Kd2dfhM2JeA4YphuJ57UGQaL7sWREcKmc/yr
+         /byQ+DSr1pfCMqfdWOMPUonOp6AJIn2MZB6WAFPLrq2vUOUaQuDhlEQgcVy2Q3081PL1
+         A6dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j23hZnphv0jcgZfiOY9qWXNDpMCFFj9PRM3bEUKGmc4=;
-        b=YcWTIjHau2Mjo9oB97NqOOTh/2B0GRXDlUThKzLKv/4yuZK7wW+9i6IQ9Lbpt3X1R1
-         osCEEx8biL/APMawGHHzg4LJgmZeNGtf9QUamPiFo0V43zOfpW1GuUrMvWo8cWHq4l/M
-         /Tum0zNajEGc+2xAtrx8ryq+7u8H8LHgzaw4HxBcbdr2JQqofRbZQX83EGuv9Ux1IS6a
-         gfSEvkiFsz6aw4EBX1rCLvlEE+W3wgNbwFEnh5gpVYDDpMVDgxP8IeeNda9z1JYaLMju
-         Q3fq4WWzWZajmDN1FEdsGuK+F7n4M5DEfBAK2q5ukuYuocehpY+DPCVsPgdeRSMGh7WI
-         ryOQ==
-X-Gm-Message-State: ANoB5plNkW20CLauyUooJewrC1uBSUyDapxh02YpgVxGFNfFNa46+Bn/
-        89bLpePT817KK8VZ3UOZtIB7eQ==
-X-Google-Smtp-Source: AA0mqf6F5CKYp1cj3ICGkEzObFA7z8uPbsQFkopSwvQDdKVO4tzZn/XDhXCeCyEy5WVeeswdbWEjag==
-X-Received: by 2002:a7b:cb98:0:b0:3cf:9a12:e645 with SMTP id m24-20020a7bcb98000000b003cf9a12e645mr8714322wmi.59.1669112512755;
-        Tue, 22 Nov 2022 02:21:52 -0800 (PST)
+        bh=M3G5fO4wTgQLmAcQSoo34y5bVfGZW9g4LW34a2D3VvA=;
+        b=FVtuf2Gl+y2oKXexLEFAox2xZfmd+MUtD5i/F1QrnipTgzDHqnWgnF6pfyWe7KarmP
+         YJmr2JNC/o5xZEyYuz2lI90ORsFM9dXeFYN10hyDi3llvWMCd8mBeLyup6kpdVtptgxf
+         7ysk2t819l+CBQw+aZP6TfX36L97kfvO2UVUZ+xtnedxlZNntQpUnY4j3DOjkoItHr7q
+         NzGkfgXarzbqA+2iF6QT71YIZ8r/FGqk3hdg+STJzWqmwK7gPHmeY+Av2DxzOgRXyWSr
+         NpOiSP89HekxlxAB/R8uZ66ALNL4RqmKUVMs2txNS1SN36aSqxUNhr3hOI4THLYUfWHC
+         yQow==
+X-Gm-Message-State: ANoB5pmKtQw/Wi270hlWpkOxTlGa6P/2rnWdgfnaGS1SC3dDqIIyX3RV
+        e4nH6LTkYMIKzIPB3JQG8T0cGg==
+X-Google-Smtp-Source: AA0mqf7UtJVhOpuxEfqOmfdJ7uiz6mBk4TYK5xLxPVNQC24s+U4cvUEeWY4TYjct7XiOmHDXomcxgg==
+X-Received: by 2002:a1c:f616:0:b0:3cf:b1c2:c911 with SMTP id w22-20020a1cf616000000b003cfb1c2c911mr8610482wmc.16.1669112513688;
+        Tue, 22 Nov 2022 02:21:53 -0800 (PST)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:e011:9e81:66f1:3415])
-        by smtp.gmail.com with ESMTPSA id o3-20020a5d4083000000b002366e8eee11sm13432873wrp.101.2022.11.22.02.21.51
+        by smtp.gmail.com with ESMTPSA id o3-20020a5d4083000000b002366e8eee11sm13432873wrp.101.2022.11.22.02.21.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 02:21:52 -0800 (PST)
+        Tue, 22 Nov 2022 02:21:53 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -62,9 +62,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-serial@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2 12/15] tty: serial: provide devm_uart_add_one_port()
-Date:   Tue, 22 Nov 2022 11:21:22 +0100
-Message-Id: <20221122102125.142075-13-brgl@bgdev.pl>
+Subject: [PATCH v2 13/15] tty: serial: qcom-geni-serial: use devres for uart port management
+Date:   Tue, 22 Nov 2022 11:21:23 +0100
+Message-Id: <20221122102125.142075-14-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221122102125.142075-1-brgl@bgdev.pl>
 References: <20221122102125.142075-1-brgl@bgdev.pl>
@@ -81,94 +81,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Provide a devres variant of uart_add_one_port() that removes the managed
-port at device detach.
+Shrink and simplify the probe() and remove() code by using the managed
+variant of uart_add_one_port.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- .../driver-api/driver-model/devres.rst        |  3 ++
- drivers/tty/serial/serial_core.c              | 36 +++++++++++++++++++
- include/linux/serial_core.h                   |  6 ++++
- 3 files changed, 45 insertions(+)
+ drivers/tty/serial/qcom_geni_serial.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-index 56082265e8e5..5d07a8c1eadb 100644
---- a/Documentation/driver-api/driver-model/devres.rst
-+++ b/Documentation/driver-api/driver-model/devres.rst
-@@ -436,6 +436,9 @@ RTC
- SERDEV
-   devm_serdev_device_open()
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 82242a40a95a..53d09da0854a 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -1454,7 +1454,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 	uport->private_data = &port->private_data;
+ 	platform_set_drvdata(pdev, port);
  
-+SERIAL
-+  devm_uart_add_one_port()
-+
- SLAVE DMA ENGINE
-   devm_acpi_dma_controller_register()
+-	ret = uart_add_one_port(drv, uport);
++	ret = devm_uart_add_one_port(&pdev->dev, drv, uport);
+ 	if (ret)
+ 		return ret;
  
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 179ee199df34..005190b279b3 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -3217,6 +3217,42 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
+@@ -1463,7 +1463,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 			IRQF_TRIGGER_HIGH, port->name, uport);
+ 	if (ret) {
+ 		dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
+-		uart_remove_one_port(drv, uport);
+ 		return ret;
+ 	}
+ 
+@@ -1480,7 +1479,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 						port->wakeup_irq);
+ 		if (ret) {
+ 			device_init_wakeup(&pdev->dev, false);
+-			uart_remove_one_port(drv, uport);
+ 			return ret;
+ 		}
+ 	}
+@@ -1490,12 +1488,8 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 
+ static int qcom_geni_serial_remove(struct platform_device *pdev)
+ {
+-	struct qcom_geni_serial_port *port = platform_get_drvdata(pdev);
+-	struct uart_driver *drv = port->private_data.drv;
+-
+ 	dev_pm_clear_wake_irq(&pdev->dev);
+ 	device_init_wakeup(&pdev->dev, false);
+-	uart_remove_one_port(drv, &port->uport);
+ 
+ 	return 0;
  }
- EXPORT_SYMBOL(uart_remove_one_port);
- 
-+struct uart_port_devres {
-+	struct uart_driver *drv;
-+	struct uart_port *port;
-+};
-+
-+static void devm_uart_remove_one_port(struct device *dev, void *data)
-+{
-+	struct uart_port_devres *res = data;
-+
-+	uart_remove_one_port(res->drv, res->port);
-+}
-+
-+int devm_uart_add_one_port(struct device *dev,
-+			   struct uart_driver *drv, struct uart_port *port)
-+{
-+	struct uart_port_devres *res;
-+	int ret;
-+
-+	res = devres_alloc(devm_uart_remove_one_port, sizeof(*res), GFP_KERNEL);
-+	if (!res)
-+		return -1;
-+
-+	ret = uart_add_one_port(drv, port);
-+	if (ret) {
-+		devres_free(res);
-+		return -1;
-+	}
-+
-+	res->drv = drv;
-+	res->port = port;
-+	devres_add(dev, res);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(devm_uart_add_one_port);
-+
- /**
-  * uart_match_port - are the two ports equivalent?
-  * @port1: first port
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index d657f2a42a7b..d0911f04706e 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -771,6 +771,12 @@ int uart_remove_one_port(struct uart_driver *reg, struct uart_port *port);
- bool uart_match_port(const struct uart_port *port1,
- 		const struct uart_port *port2);
- 
-+/*
-+ * UART devres
-+ */
-+int devm_uart_add_one_port(struct device *dev,
-+			   struct uart_driver *drv, struct uart_port *port);
-+
- /*
-  * Power Management
-  */
 -- 
 2.37.2
 
