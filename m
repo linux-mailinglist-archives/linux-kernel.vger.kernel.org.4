@@ -2,121 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395C5633F2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A39B633F2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbiKVOpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S233039AbiKVOqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbiKVOpJ (ORCPT
+        with ESMTP id S231956AbiKVOqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:45:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9214D53EC0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:44:15 -0800 (PST)
+        Tue, 22 Nov 2022 09:46:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF87F53ED1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:45:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669128254;
+        s=mimecast20190719; t=1669128341;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DOTrbU/zp22wPSskCmpvwxHNiz91TXL6UQP9VfM7zZI=;
-        b=afvh0ZdS3eZNis/acyO5gGCNjh5BydAm+JF7VztMexaN/ZtsfinzzumuqFT0kGTlmUwI/7
-        m+jtgpFVDEycJnI9WClYB96bJt6p2Rqtfz850V1jUeZtrfqKneoBvpWtBYIkzBfxiNP2x6
-        4ckJOY9GA/Qe2T2iZgGn0dherjvmCXk=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Fsk8lK1WZRQU/UZ9z9wF0cgfgcye32uUCeIAZWJu+G8=;
+        b=BWKtCE0GHZG2KmmeS/VU09I5dP8HkyG13+QHdV6yGXlXdmXbEMYpjv2r4Wbj7newY6rvoc
+        5KxI0yIVNpJ0RlsazMueTkVP4fEiniSTo/K89+JxF34Rl9Ua6TLF+JejE3O89EQt9yY9v1
+        UaMtE0tv0Bij9RZmNX1bjTN3SsJBtT4=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-396-hmtCvizUPrC6ubysPUUEyA-1; Tue, 22 Nov 2022 09:44:13 -0500
-X-MC-Unique: hmtCvizUPrC6ubysPUUEyA-1
-Received: by mail-ej1-f69.google.com with SMTP id xc12-20020a170907074c00b007416699ea14so8368810ejb.19
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:44:13 -0800 (PST)
+ us-mta-643-i2m6bOkGPpG0EX5IXUvpxg-1; Tue, 22 Nov 2022 09:45:40 -0500
+X-MC-Unique: i2m6bOkGPpG0EX5IXUvpxg-1
+Received: by mail-qt1-f197.google.com with SMTP id ay12-20020a05622a228c00b003a52bd33749so14545000qtb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:45:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DOTrbU/zp22wPSskCmpvwxHNiz91TXL6UQP9VfM7zZI=;
-        b=TzHMDxfEh7MxGAoCmC6MN0c4VEGm+UkxuLuLJhzUylzAcDmiyqOyH2xV6D/95SVhMg
-         JCw8GkpIwa1lae0g4WTELDYtgQGTZ/N9FbjyGEm0+RXTKFVNHT/5hDlfPn1tTsa0Rt2O
-         mlTwBsKLQPcbQ27dKGUO2a3fQ8BXXLpCf9IRzhrNkjcanjPpzvUE+t4DW371CxT/jld/
-         uwKeIEHBD5HMJL44B1qDXzCOyLoS4XnMwor8YpfXMLYtTOK+KUzJ4URJbI2A+M6ApJyG
-         zWMlgTiZNm9hYA9HTXkP1hD9p8UK7VqxRTvkiIKiT6LG5ETfVDQMtwOqy2LJ4+d0gS6+
-         MGJQ==
-X-Gm-Message-State: ANoB5pkv3zfqYYd+y9YOojshrRz6w60Nw24FfUuCws2TPv87Ww71oVSY
-        QPYXNlhC/QDVKne/Tpmydm7tsOIwfULIEtItNDVmbS1KWCbxk4K9vPujDtCBzY3c5trK7eZSGMB
-        z6/rod0VMpxnESiChp3catRtf
-X-Received: by 2002:a17:906:eb04:b0:7ae:77ef:d048 with SMTP id mb4-20020a170906eb0400b007ae77efd048mr3812872ejb.740.1669128252358;
-        Tue, 22 Nov 2022 06:44:12 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf72PFdgk+/lBfsLT/u6KTtWXMDQcVEwzELUErmlK8MzhONJFc1zB3wqW5q26zETlXANiPDbnA==
-X-Received: by 2002:a17:906:eb04:b0:7ae:77ef:d048 with SMTP id mb4-20020a170906eb0400b007ae77efd048mr3812860ejb.740.1669128252117;
-        Tue, 22 Nov 2022 06:44:12 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id f24-20020a17090631d800b0078db18d7972sm6105509ejf.117.2022.11.22.06.44.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 06:44:11 -0800 (PST)
-Message-ID: <8648a01c-ee70-7c69-f24c-3a30866ae08f@redhat.com>
-Date:   Tue, 22 Nov 2022 15:44:10 +0100
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fsk8lK1WZRQU/UZ9z9wF0cgfgcye32uUCeIAZWJu+G8=;
+        b=I5RIpVJPadB0dm2KxY4KsRzrwo4/l+QG6PCFJx+d5+Z+LRbck4mcgjcY6APcpH+19I
+         ekHg8J7Fke4sVH/4DWPtygL0sr7D/SDyzmyVwGG7EHCt2DJ/gmMbLwXrs9qBIg5f8H7u
+         dQ6JSvnSGMN42cm9DJgXUhf8ga7QUqIyVlpYr4onSmMVRudCfIXx4CBQ76CvasR9Q+K/
+         dSDXaJ0xEHO/yT57VGwDnApcyQ1xiybLs366nRbUd9WW4xA4AwuuKC5PEWpB91xp3OOZ
+         ubSbbKjau/1Qfu+jLSafc7mOKJTAb6eBf6wK7pUMQo9N/i9mJV+5Bo5G8gaBd8WeDLY6
+         mbRg==
+X-Gm-Message-State: ANoB5pnVNUYf4+Cjv9cXQeBdofNZMtk74KsCRRGr8B546vq5Fm2w1grK
+        uHyTdHO0AZOVbX/gCELjNP8znKgZvSf70FBPRe4Y1+B2HQAjqFoYsmUMEI/Tg6fBmluRg9RJaOr
+        rffgBzedY1vXGGX4G8/JutTHC
+X-Received: by 2002:a05:6214:2c1f:b0:4c6:a598:4fba with SMTP id lc31-20020a0562142c1f00b004c6a5984fbamr3559301qvb.109.1669128340110;
+        Tue, 22 Nov 2022 06:45:40 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4sT+9GO6rCCDeZuoCM4ESitr28a4vZ41vYnM9Xlcil3b+82C888e2UG6BQpNHKoBjjojQ3jQ==
+X-Received: by 2002:a05:6214:2c1f:b0:4c6:a598:4fba with SMTP id lc31-20020a0562142c1f00b004c6a5984fbamr3559276qvb.109.1669128339875;
+        Tue, 22 Nov 2022 06:45:39 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
+        by smtp.gmail.com with ESMTPSA id bm3-20020a05620a198300b006ecfb2c86d3sm10181194qkb.130.2022.11.22.06.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 06:45:39 -0800 (PST)
+Message-ID: <5718ba71a8755040f61ed7b2f688b1067ca56594.camel@redhat.com>
+Subject: Re: [PATCH net-next 2/2] bonding: fix link recovery in mode 2 when
+ updelay is nonzero
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jonathan Toppins <jtoppins@redhat.com>, netdev@vger.kernel.org,
+        Jay Vosburgh <j.vosburgh@gmail.com>
+Cc:     Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Date:   Tue, 22 Nov 2022 15:45:35 +0100
+In-Reply-To: <1fe036eb-5207-eccd-0cb3-aa22f5d130ce@redhat.com>
+References: <cover.1668800711.git.jtoppins@redhat.com>
+         <cb89b92af89973ee049a696c362b4a2abfdd9b82.1668800711.git.jtoppins@redhat.com>
+         <38fbc36783d583f805f30fb3a55a8a87f67b59ac.camel@redhat.com>
+         <1fe036eb-5207-eccd-0cb3-aa22f5d130ce@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH linux-next] vboxfs: use strscpy() is more robust and safer
-To:     yang.yang29@zte.com.cn
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn
-References: <202211220858139474929@zte.com.cn>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <202211220858139474929@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 11/22/22 01:58, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
+On Tue, 2022-11-22 at 08:36 -0500, Jonathan Toppins wrote:
+> On 11/22/22 05:59, Paolo Abeni wrote:
+> > Hello,
+> > 
+> > On Fri, 2022-11-18 at 15:30 -0500, Jonathan Toppins wrote:
+> > > Before this change when a bond in mode 2 lost link, all of its slaves
+> > > lost link, the bonding device would never recover even after the
+> > > expiration of updelay. This change removes the updelay when the bond
+> > > currently has no usable links. Conforming to bonding.txt section 13.1
+> > > paragraph 4.
+> > > 
+> > > Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+> > 
+> > Why are you targeting net-next? This looks like something suitable to
+> > the -net tree to me. If, so could you please include a Fixes tag?
+> > 
+> > Note that we can add new self-tests even via the -net tree.
+> > 
 > 
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL terminated strings.
-> 
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
+> I could not find a reasonable fixes tag for this, hence why I targeted 
+> the net-next tree.
 
-Thanks, patch looks good to me:
+When in doubt I think it's preferrable to point out a commit surely
+affected by the issue - even if that is possibly not the one
+introducing the issue - than no Fixes as all. The lack of tag will make
+more difficult the work for stable teams.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+In this specific case I think that:
 
-Regards,
+Fixes: 41f891004063 ("bonding: ignore updelay param when there is no active slave")
 
-Hans
+should be ok, WDYT? if you agree would you mind repost for -net?
 
+Thanks,
 
-
-> ---
->  fs/vboxsf/super.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
-> index d2f6df69f611..1fb8f4df60cb 100644
-> --- a/fs/vboxsf/super.c
-> +++ b/fs/vboxsf/super.c
-> @@ -176,7 +176,7 @@ static int vboxsf_fill_super(struct super_block *sb, struct fs_context *fc)
->  	}
->  	folder_name->size = size;
->  	folder_name->length = size - 1;
-> -	strlcpy(folder_name->string.utf8, fc->source, size);
-> +	strscpy(folder_name->string.utf8, fc->source, size);
->  	err = vboxsf_map_folder(folder_name, &sbi->root);
->  	kfree(folder_name);
->  	if (err) {
+Paolo
 
