@@ -2,133 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A048063396E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6773063396F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbiKVKLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:11:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+        id S233467AbiKVKLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbiKVKLL (ORCPT
+        with ESMTP id S233469AbiKVKL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:11:11 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A4153EE8;
-        Tue, 22 Nov 2022 02:11:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2kluR8XS/5l2vEzd270Z9ykwF5m8DT9IrYcaeynxfAY=; b=d6+qGB5BG/okyjo+T6PgxWuj8F
-        NiFipH0849DEGMlf5aUr7bJHGWYBrgu0/Ge7R6qXNkY3IGC8R2UzcvbH9B4Y7s/IUzdzSSt1J34re
-        w/ptngkZSYG/iTiBptnCDbEnHiJY/9YAsp3c9Mb9/So0DzVoImDGM9KcUbLVXZiQaig8Rb27KHize
-        X9G4UbIITIeQKHqOxFO+ciMp6bORDsUNhKLBnzWI4irR7rteseajYbJ6SahLvAhs63rhgBUYeEo07
-        xs9dx9aTWKxrYoUw4FCqqXM91+Hnt00h1cY3uokF/3aQwH3NZUeWhlwR8xhpQI9bM4Vrg6mKmtz/N
-        tmQc6P1w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxQEs-003P1G-RT; Tue, 22 Nov 2022 10:10:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 80540300244;
-        Tue, 22 Nov 2022 11:10:48 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5BA3E2D66D658; Tue, 22 Nov 2022 11:10:48 +0100 (CET)
-Date:   Tue, 22 Nov 2022 11:10:48 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
- initializing TDX module as TDX memory
-Message-ID: <Y3ygKH0/rdhKwv4m@hirez.programming.kicks-ass.net>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
+        Tue, 22 Nov 2022 05:11:28 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533F754B3D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:11:21 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id h21-20020a05660224d500b006debd7dedccso3119578ioe.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:11:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m+PjVHTh1krt4Sf8cWM+AKO9LG/6NPuUny+28uZGvz0=;
+        b=7jKPIh22AbmgG0iiIrw0JGK+cxaKtpzbhmzO3eqmBOZtdgM9eOmI6PArnf9Vqbs7i+
+         odL3mDODEiVQEt4ZqqRWmuM6XnuOOCy0ACFkAFN5kaQcJL2piDCGj2ZzytorvCdPBNSH
+         ZBIv3wfjfqBQGpUZXqX3ItjTssrzNOZSJx1NLwI1FYigj8g/1qK1VoFVpK+SO4CgfHHc
+         hQIxwyTnw+s7iBUxCaWhW8W/FmGeQgkUFnIG5g19NWMx+ISy8eXAWC/tPQ+JM+H7sYSs
+         hqGJJylDuoQBoXkeRO8uZ7H5hQJ3QNowaQ2OPMk1xVRZj7BR/gsz3NVOEHlYsJZQouzy
+         /Lww==
+X-Gm-Message-State: ANoB5pmmlDbCKgyVosvRpXHWxGAshH5Ir27szqjEN4H3t9JW0Lv/+o4M
+        4mW/MvbQGosnYnKW6LTfiFfvfRwC/je1tOELpEq9gpXlffa8
+X-Google-Smtp-Source: AA0mqf6tz6DazWUy2GRuQA9AwpmCJb4FZk/kmuMMYIW9wvuNSUfDuyejQaj8Fcjn4t5bJPKZEJPaEbx/6kZvUx/EcKyZ0mzEOHx7
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3d83:b0:375:8feb:71ae with SMTP id
+ ci3-20020a0566383d8300b003758feb71aemr10737515jab.79.1669111880723; Tue, 22
+ Nov 2022 02:11:20 -0800 (PST)
+Date:   Tue, 22 Nov 2022 02:11:20 -0800
+In-Reply-To: <20221122091648.5301-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bdb2d605ee0c64d9@google.com>
+Subject: Re: [syzbot] WARNING in notify_change (2)
+From:   syzbot <syzbot+462da39f0667b357c4b6@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 01:26:32PM +1300, Kai Huang wrote:
+Hello,
 
-> +static int build_tdx_memory(void)
-> +{
-> +	unsigned long start_pfn, end_pfn;
-> +	int i, nid, ret;
-> +
-> +	for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
-> +		/*
-> +		 * The first 1MB may not be reported as TDX convertible
-> +		 * memory.  Manually exclude them as TDX memory.
-> +		 *
-> +		 * This is fine as the first 1MB is already reserved in
-> +		 * reserve_real_mode() and won't end up to ZONE_DMA as
-> +		 * free page anyway.
-> +		 */
-> +		start_pfn = max(start_pfn, (unsigned long)SZ_1M >> PAGE_SHIFT);
-> +		if (start_pfn >= end_pfn)
-> +			continue;
-> +
-> +		/* Verify memory is truly TDX convertible memory */
-> +		if (!pfn_range_covered_by_cmr(start_pfn, end_pfn)) {
-> +			pr_info("Memory region [0x%lx, 0x%lx) is not TDX convertible memorry.\n",
-> +					start_pfn << PAGE_SHIFT,
-> +					end_pfn << PAGE_SHIFT);
-> +			return -EINVAL;
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Given how tdx_cc_memory_compatible() below relies on tdx_memlist being
-empty; this error patch is wrong and should goto err.
+Reported-and-tested-by: syzbot+462da39f0667b357c4b6@syzkaller.appspotmail.com
 
-> +		}
-> +
-> +		/*
-> +		 * Add the memory regions as TDX memory.  The regions in
-> +		 * memblock has already guaranteed they are in address
-> +		 * ascending order and don't overlap.
-> +		 */
-> +		ret = add_tdx_memblock(start_pfn, end_pfn, nid);
-> +		if (ret)
-> +			goto err;
-> +	}
-> +
-> +	return 0;
-> +err:
-> +	free_tdx_memory();
-> +	return ret;
-> +}
+Tested on:
 
-> +bool tdx_cc_memory_compatible(unsigned long start_pfn, unsigned long end_pfn)
-> +{
-> +	struct tdx_memblock *tmb;
-> +
-> +	/* Empty list means TDX isn't enabled successfully */
-> +	if (list_empty(&tdx_memlist))
-> +		return true;
-> +
-> +	list_for_each_entry(tmb, &tdx_memlist, list) {
-> +		/*
-> +		 * The new range is TDX memory if it is fully covered
-> +		 * by any TDX memory block.
-> +		 */
-> +		if (start_pfn >= tmb->start_pfn && end_pfn <= tmb->end_pfn)
-> +			return true;
-> +	}
-> +	return false;
-> +}
+commit:         eb708140 Linux 6.1-rc6
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=13043963880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8232c7627e3f923
+dashboard link: https://syzkaller.appspot.com/bug?extid=462da39f0667b357c4b6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=147a9d63880000
+
+Note: testing is done by a robot and is best-effort only.
