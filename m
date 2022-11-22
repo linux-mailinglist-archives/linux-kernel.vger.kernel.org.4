@@ -2,61 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4016333C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8916333C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbiKVDMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
+        id S231855AbiKVDMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiKVDM3 (ORCPT
+        with ESMTP id S231747AbiKVDMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:12:29 -0500
-Received: from n169-110.mail.139.com (n169-110.mail.139.com [120.232.169.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16D5312
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:12:26 -0800 (PST)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM:                                                                                        
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[2409:8a00:1832:dc00:2ea6:d2e9:4f09:cd3])
-        by rmsmtp-lg-appmail-02-12080 (RichMail) with SMTP id 2f30637c3dfd103-4a606;
-        Tue, 22 Nov 2022 11:11:59 +0800 (CST)
-X-RM-TRANSID: 2f30637c3dfd103-4a606
-Date:   Tue, 22 Nov 2022 11:11:58 +0800
-From:   Wang Honghui <honghui.wang@139.com>
-To:     linux-kernel@vger.kernel.org
-Subject: [PATCH] Correct syntax error.
-Message-ID: <Y3w9/vvMQW3Fc3dG@TP-P15V.lan>
+        Mon, 21 Nov 2022 22:12:06 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B681178B2;
+        Mon, 21 Nov 2022 19:12:05 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NGTn06sVmz15Mn8;
+        Tue, 22 Nov 2022 11:11:32 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 11:12:01 +0800
+Subject: Re: [PATCH -next] crypto: ccree - Fix section mismatch due to
+ cc_debugfs_global_fini()
+To:     <s.shtylyov@omp.ru>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <yoshihiro.shimoda.uh@renesas.com>
+CC:     <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221122030542.23920-1-yuehaibing@huawei.com>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <e3a466e7-5c5d-1288-9918-982edf597c24@huawei.com>
+Date:   Tue, 22 Nov 2022 11:12:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221122030542.23920-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Wang Honghui <honghui.wang@139.com>
----
- kernel/printk/printk_ringbuffer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sorry， Pls ignore this.
 
-diff --git a/kernel/printk/printk_ringbuffer.c b/kernel/printk/printk_ringbuffer.c
-index 2b7b6ddab4f7..2dc4d5a1f1ff 100644
---- a/kernel/printk/printk_ringbuffer.c
-+++ b/kernel/printk/printk_ringbuffer.c
-@@ -203,7 +203,7 @@
-  *	prb_rec_init_wr(&r, 5);
-  *
-  *	// try to extend, but only if it does not exceed 32 bytes
-- *	if (prb_reserve_in_last(&e, &test_rb, &r, printk_caller_id()), 32) {
-+ *	if (prb_reserve_in_last(&e, &test_rb, &r, printk_caller_id(), 32)) {
-  *		snprintf(&r.text_buf[r.info->text_len],
-  *			 r.text_buf_size - r.info->text_len, "hello");
-  *
--- 
-2.34.1
-
-
+On 2022/11/22 11:05, YueHaibing wrote:
+> cc_debugfs_global_fini() is marked with __exit now, however it is used
+> in __init ccree_init() for cleanup. Remove the __exit annotation to fix
+> build warning:
+>
+> WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in reference: init_module (section: .init.text) -> cc_debugfs_global_fini (section: .exit.text)
+>
+> Fixes: 4f1c596df706 ("crypto: ccree - Remove debugfs when platform_driver_register failed")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/crypto/ccree/cc_debugfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_debugfs.c
+> index 7083767602fc..8f008f024f8f 100644
+> --- a/drivers/crypto/ccree/cc_debugfs.c
+> +++ b/drivers/crypto/ccree/cc_debugfs.c
+> @@ -55,7 +55,7 @@ void __init cc_debugfs_global_init(void)
+>  	cc_debugfs_dir = debugfs_create_dir("ccree", NULL);
+>  }
+>  
+> -void __exit cc_debugfs_global_fini(void)
+> +void cc_debugfs_global_fini(void)
+>  {
+>  	debugfs_remove(cc_debugfs_dir);
+>  }
