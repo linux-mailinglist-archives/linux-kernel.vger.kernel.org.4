@@ -2,124 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8A2634070
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D69163406F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233862AbiKVPk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:40:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S233480AbiKVPjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbiKVPkR (ORCPT
+        with ESMTP id S232632AbiKVPjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:40:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4039ADF4E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:39:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669131566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pFMQg1WGJdofDL9AFGBJOdk7f5Ay22oSAcjU2kzdoHg=;
-        b=XffsvvXHu1GAVx8B7n5JDO9dqttF2R0Qo8/RiueudVgSD5iqJ6uDeyCCJJHkihhXCc81zX
-        tJjkBQ3USUkUqMO/0LKTWhV7g/m4pW+iuD4Y//22CTziR7EbySUCV6NrS9Uk+Wicx4/Cj5
-        RKHA567RpTARO+6BD+seP3xGC0h2dJU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-606-FNCUMzeBO9G0PXlUn5VfSA-1; Tue, 22 Nov 2022 10:39:15 -0500
-X-MC-Unique: FNCUMzeBO9G0PXlUn5VfSA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D949229DD983;
-        Tue, 22 Nov 2022 15:39:14 +0000 (UTC)
-Received: from [10.22.17.223] (unknown [10.22.17.223])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 39C73C159CD;
-        Tue, 22 Nov 2022 15:39:14 +0000 (UTC)
-Message-ID: <a7fb3cac-176f-3928-f3a3-23c25ab9677e@redhat.com>
-Date:   Tue, 22 Nov 2022 10:39:12 -0500
+        Tue, 22 Nov 2022 10:39:39 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5F443ACA
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:39:38 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id d3so18413115ljl.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:39:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ds8Sy9Qo0VlxaGfYZfQDdKcBEoXNjqFnH02Jzco/bEA=;
+        b=lk1QsjWdooS9s/Fhmb9/UR2iEAgaGSjYskun7Wnkf/gMr57Ths5J3/laG66JVjx0s7
+         r6SPRs/z6fKrAtfGZOu+Lrg8JyO7a9VdoZF8FXMhujUwbioAGHZCjp24aokB6xo4Mim2
+         PfAIUfSGsVn+NHg1Q+R0PiWmZhS5Y8w/a7OJF5r1WSM5uhPuw511WBMoZ0wpvLDBl6FE
+         BOBW+eShfw/V+dMLlSGDW3fJWoNzZYdX8pNMnPW2Myk3OizgIgayS+cPqogQchx8AFwL
+         tCn5Ejgh7kWV8J+ZxdiyzddH9iyRR4iaWAPSPp6X5qyPrVgkfNEblOI/z1THa46PFv/G
+         Ub2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ds8Sy9Qo0VlxaGfYZfQDdKcBEoXNjqFnH02Jzco/bEA=;
+        b=nzgRFllADXF5zzspeuXRy8zR4cGmXGz6gI1ZkCAKOX/4PZZcsZXjbi5vsGW5ahrFTc
+         qK7iakgZxlz6YV9BHTkI8KYD2tcpK7rJlMSU5deUKLpZ08jBoHaCyEM5nkiiKz8ioM2Y
+         EJpHgeE0aRxrecNEz63l+jUTD3GHNurLXKvxefOlNYEKQJCX2lE7uJjtNCEG1CE5LE/X
+         wdRk1D68VjWluvGLt4atXc7m/oy2WABlAoUYVaVDFooOj7gE0Pfb9qeKjgb6aq2AHIK4
+         UgKixNx+b8CdiD5w1mSdHJGM3h3fNdhHWDzV6uIMqCBZTzyparZWBA59ZqGkWpPep0Qx
+         JaAQ==
+X-Gm-Message-State: ANoB5plYDFkxST77m3ba/qkvf4aiP51tmkYnrp4Mkd17I1+JLkt6YBVV
+        rcPsOuuS/stnvEXCPKTA5oL4yg==
+X-Google-Smtp-Source: AA0mqf5pPAK3W4v8an/eR+cieEGeNBfDtiHWiAnML0e5MFDjyCE5sQTecKnWv5WEaFVv9FlPUuqd/A==
+X-Received: by 2002:a05:651c:10a1:b0:26e:a:b5c9 with SMTP id k1-20020a05651c10a100b0026e000ab5c9mr2069061ljn.481.1669131576967;
+        Tue, 22 Nov 2022 07:39:36 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c4-20020ac25304000000b0049fff3f645esm2507227lfh.70.2022.11.22.07.39.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 07:39:36 -0800 (PST)
+Message-ID: <17b4eb3a-97ab-905d-f8f2-eb5669e4854f@linaro.org>
+Date:   Tue, 22 Nov 2022 16:39:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/1] sched: fix user_mask double free
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4] dt-bindings: iio: adc: ad7923: adjust documentation
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221122140543.11230-1-edmund.berenson@emlix.com>
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>, wangbiao3@xiaomi.com
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, brauner@kernel.org, bsegall@google.com,
-        linux-kernel@vger.kernel.org, wenjieli@qti.qualcomm.com,
-        chenguanyou@xiaomi.com, Will Deacon <will@kernel.org>
-References: <cover.1669020858.git.wangbiao3@xiaomi.com>
- <b8970a530d420109ee9fe0b268e097fb839211b0.1669020858.git.wangbiao3@xiaomi.com>
- <Y3zXDZeTUgDz2hJ8@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y3zXDZeTUgDz2hJ8@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221122140543.11230-1-edmund.berenson@emlix.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22/11/2022 15:05, Edmund Berenson wrote:
+> - The ad7927 is fully compatible with ad7928 driver, add
+> documentation for device.
+> - ad7923 and ad7924 are treated the same in the driver, show
+> the relationship in the documentation.
+> 
+> Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+> ---
+>  .../bindings/iio/adc/adi,ad7923.yaml          | 25 ++++++++++++-------
+>  1 file changed, 16 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+> index 07f9d1c09c7d..b6e2f1b41739 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
+> @@ -11,7 +11,7 @@ maintainers:
+>  
+>  description: |
+>    Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
+> -   AD7918, AD7928 8 Channels ADCs.
+> +   AD7918, AD7927, AD7928 8 Channels ADCs.
+>  
+>    Specifications about the part can be found at:
+>      https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
+> @@ -20,14 +20,21 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - adi,ad7904
+> -      - adi,ad7914
+> -      - adi,ad7923
+> -      - adi,ad7924
+> -      - adi,ad7908
+> -      - adi,ad7918
+> -      - adi,ad7928
+> +    oneOf:
+> +      - const: adi,ad7904
+> +      - const: adi,ad7908
+> +      - const: adi,ad7914
+> +      - const: adi,ad7918
+> +      - const: adi,ad7923
 
-On 11/22/22 09:05, Peter Zijlstra wrote:
-> So you failed:
->
->   - to Cc the original author of this code (Will Deacon)
->   - to report what version this is against (apparently Linus' tree)
->   - to check if this still applies to the latest tree (it doesn't)
->   - to Cc the author of the code it now conflicts with (Waiman)
->   - write something coherent in the changelog.
->   - to include a Fixes tag.
->
-> Still, let me try and make sense of things...
->
-> On Mon, Nov 21, 2022 at 06:04:20PM +0800, wangbiao3@xiaomi.com wrote:
->> From: wangbiao3 <wangbiao3@xiaomi.com>
->>
->> Clone/Fork a new task,call dup_task_struct->arch_dup_task_struct(tsk,orig)
->> which copy the data of parent/sibling task inclding p->user_cpus_ptr,so
->> the user_cpus_ptr of newtask is the same with orig task's.When
->> dup_task_struct call dup_user_cpus_ptr(tsk, orig, node),it return 0
->> dircetly if src->user_cpus_ptris free by other task,in this case ,
->> the newtask's address of user_cpus_ptr is not changed.
-> (even just inserting some whitespace would've made it so much easier to
-> read)
->
-> But, the only way that would be possible is if
-> force_compatible_cpus_allowed_ptr() were to be called on !current, and
-> that just doesn't happen, the only callsite is:
->
-> arch/arm64/kernel/process.c:                    force_compatible_cpus_allowed_ptr(current);
->
-> And you can't be in fork() and exec() at the same time.
->
-> If it were possible to call restrict_cpus_allowed_ptr() on a non-current
-> task then yes, absolutely, which is why:
->
->    8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
->
-> also wraps the thing in pi_lock, but looking at it now, perhaps it needs
-> to do the alloc/copy first and swap under pi_lock instead.
+Keep all others as enum.
 
-With the latest change, user_cpus_ptr, once set, will not be cleared 
-until when the task dies. That is why I don't recheck if user_cpus_ptr 
-is NULL under pi_lock. The user_cpus_ptr value can certainly changes 
-during its lifetime, but it will be stable under pi_lock. 
-clear_user_cpus_ptr() is called by release_user_cpus_ptr() only. As said 
-before, it is only call when the task dies at free_task() and so there 
-shouldn't be any other racing conditions that can happen at the same time.
 
-David, can you try the latest tip tree to see if the problem is still 
-reproducible ?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks,
-Longman
+Best regards,
+Krzysztof
 
