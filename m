@@ -2,90 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D7E6341FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FECF634203
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbiKVQ6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S231993AbiKVQ6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 11:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbiKVQ6Q (ORCPT
+        with ESMTP id S234374AbiKVQ6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:58:16 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D1C1ADB9;
-        Tue, 22 Nov 2022 08:57:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Z2J/AOx23miWElPmE+7zDiqIr927sWbMxM+vCpv8Szo=; b=wTtbG4QhN7bfXNkk5Lo4RVfuaq
-        ZxHvocPeWadBgn/JFrjJ2RElxv3AzRYNQwycazhkpATW1uTxbxStM0GmQ75nLVgGlZ+O+ym+klS0z
-        Cm9hG4G7V3+oqlbQblo8aNmQAqb78/oJYjH+sm+dpW9fYGLmocYm4+/9C+OGUvQ3917A8vlXDUlNM
-        4J8zQwm5A5iQNa7QHsUQnL1/lP4SOdG91Loikz90io5tazIE1JHT9oBaJL1ADokpG8e1tCsfdoBAG
-        EQuJTM8rGkMDHns0UrOsUAN0q6J3+xOfXjZuFXdRweMyPeaHLg4Bx8clpx07A1I1AW5QjgDBpTDfs
-        AwAq39vQ==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxWao-00AtEM-BC; Tue, 22 Nov 2022 16:57:54 +0000
-Message-ID: <5e27ba9e-69a1-bf70-941e-88637b4f5a3c@infradead.org>
-Date:   Tue, 22 Nov 2022 08:57:52 -0800
+        Tue, 22 Nov 2022 11:58:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C882EF6C;
+        Tue, 22 Nov 2022 08:58:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B39D9B81CB2;
+        Tue, 22 Nov 2022 16:58:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C88BC433D6;
+        Tue, 22 Nov 2022 16:58:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669136309;
+        bh=BweFA7Hldv6dYWUI7Rx0+i0hiB7jKeQrUbpDoH8sLV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=06LcMx17g7Oy6wt+mN8VCOFHE7Ip0WhnTZUFxu0KfudLF9BnqWY+cpa6cIK2hYz7m
+         CESNjInlHOCTehM7Rk4oZVaxq1QsgkSlH+rcEyyTu0ksA6vXBdgA0P/Lp18SU9vjn6
+         fc66hpwATtqYNfrHp1hTS4ggwGn193q16X9goe1Y=
+Date:   Tue, 22 Nov 2022 17:58:26 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v2 12/15] tty: serial: provide devm_uart_add_one_port()
+Message-ID: <Y3z/sqRZ3A/j8TIv@kroah.com>
+References: <20221122102125.142075-1-brgl@bgdev.pl>
+ <20221122102125.142075-13-brgl@bgdev.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: Build regressions/improvements in v6.1-rc6
-Content-Language: en-US
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-um@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
-References: <CAHk-=wjKJyzfJmOzBdEOqCFRc8Fh-rdGM4tvMXfW0WXbbHwV0w@mail.gmail.com>
- <20221122105054.4062213-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2211221154280.284524@ramsan.of.borg>
- <CADnq5_PvouSKugXxJXqkVeZf+kbP8+hhUKFgVALSO=MOW3jzvA@mail.gmail.com>
- <021efb6c9295402cf05406bb319c441c0b0229b3.camel@sipsolutions.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <021efb6c9295402cf05406bb319c441c0b0229b3.camel@sipsolutions.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221122102125.142075-13-brgl@bgdev.pl>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/22/22 07:00, Johannes Berg wrote:
-> On Tue, 2022-11-22 at 08:55 -0500, Alex Deucher wrote:
->>>
->>>    + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer:  => 94:18
->>>    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]:  => 1934:1
->>>
->>> um-x86_64/um-all{mod,yes}config (in kfd_cpumask_to_apic_id())
->>
->> Presumably cpu_data is not defined on um-x86_64?  Does it even make
->> sense to build drivers on um-x86_64?
+On Tue, Nov 22, 2022 at 11:21:22AM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Drivers in general yes ;-)
-> 
-> This driver, probably not.
-> 
-> But the issue is that a lot of drivers "depends on X86_64" or such,
-> where only "X86" is the arch symbol. You could add "X86 && X86_64" to
-> really build on x86 64-bit only.
-> 
-> I didn't check this driver, but this has mostly popped up since UM got
-> PCI support some time ago (which I added.)
+> Provide a devres variant of uart_add_one_port() that removes the managed
+> port at device detach.
 
-I have patches for lots of these issues, but some people said that they
-would want to build DRM drivers for use with KUNIT (i.e. UML), so I thought
-that meant my patches were not needed.
+Ick, no, please let's keep devm away from the serial layer like this.
 
--- 
-~Randy
+I would need a LOT of justification for why this is needed, not just one
+driver that wants to use it, sorry.
+
+Please do not make this part of the series for this driver, but do it
+separately, later, if you still want it.
+
+thanks,
+
+greg k-h
