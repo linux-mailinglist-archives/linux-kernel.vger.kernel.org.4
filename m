@@ -2,186 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C01A6348EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411916348F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbiKVVJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S233213AbiKVVKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbiKVVJF (ORCPT
+        with ESMTP id S232783AbiKVVKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:09:05 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF997C699
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:09:04 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxaVh-0004KZ-0K; Tue, 22 Nov 2022 22:08:53 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxaVe-005vUt-SJ; Tue, 22 Nov 2022 22:08:51 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxaVf-000sEv-38; Tue, 22 Nov 2022 22:08:51 +0100
-Date:   Tue, 22 Nov 2022 22:08:50 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Crt Mori <cmo@melexis.com>, Lars-Peter Clausen <lars@metafoo.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 186/606] iio: temperature: mlx90632: Convert to i2c's
- .probe_new()
-Message-ID: <20221122210850.kjtildbt5wbpcjes@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-187-uwe@kleine-koenig.org>
- <CAKv63uvVsLhbt9y0fWxPWp005rnWzCn6Vm0UmOnW08B87fkCzw@mail.gmail.com>
- <20221119100250.iw757ovgwjbwr2ho@pengutronix.de>
- <CAKv63uti8o2i-SFsJ7iK+R0N1go1tzVKpWZHbaRD3Wta2mXuZQ@mail.gmail.com>
- <20221122183557.07a9e095@jic23-huawei>
+        Tue, 22 Nov 2022 16:10:31 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBAE7CB95;
+        Tue, 22 Nov 2022 13:10:30 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id f9so10896209pgf.7;
+        Tue, 22 Nov 2022 13:10:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C+KEqUPpt9nBZhy2l32eLRwk2q2Rg4+1eaxUkvjjhgg=;
+        b=hC1R8VpRUm1vtCVrxmHeI+RFvGrfUTgxzJDsTjqJnYDMfgLrcdlSQuqYhPvY/Ngiq8
+         YsJqRaFeRDIFWRDrW9MQKFf+YhGpvvEE5JQp6I7LE/fbFPycigIFZVC50Mn7T81Rc0ip
+         SpacCnKP0Cv8PWm/lx6EslA0e0XeGhuBFY1S80wuP3an5Ehy7+Du23j1TktTHFLf3g/X
+         xqpe587AjbUhmVWzf7e8zF8uXlCPo3vftSKmyF+LypLxS97o0nf1yo/ZCnmc70DYJF2C
+         xCNElSexSwgXjaNE3Ig8aTcZB/CYj0DlUtMBK+bALBMYuDlHh711uqPYnLmKjKocyIR5
+         DyOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C+KEqUPpt9nBZhy2l32eLRwk2q2Rg4+1eaxUkvjjhgg=;
+        b=iMwfLciWIW2zFcp08JYbyorkU/18boVs50jlDqcjgrQ43oKz9KeDpZ+uW0+uoctAD9
+         p7OlD+f4lKqPurUiEfz9DYtMVDLAcTBWTiRL2L89bMKJY1GTxTK10JRZZwFUQx2tlmEB
+         HqSFGglmlRn6MelvE9Px2ZMG9dxmpNvF4GsEBS4qv50l+R5bFBIivf7f8CVgpANiVJMB
+         96Xi54+lFCFm/3lmXtekLM8M17yzRZ5M9e71fSZHnrB5XBd3G5KA5E0M9LmBpvoWuFdW
+         4Q/WwELjuG1XAtxiCEkpBSL4Bwo9gVRTNZvUU6r82KQaxOMifTlEfHjHaAoiwVJnzYvQ
+         He6g==
+X-Gm-Message-State: ANoB5pkORTFZkm4VSqpcreETztTfkPc8ne2KJKz+rXsYFgS6y111cKEC
+        9iOGyRqBHuJJv7qM1Dqz3Zg=
+X-Google-Smtp-Source: AA0mqf6TsDpRKKyxDHKrpggRE8TEmiZt0DJaKX3yDhZBcH1LKsFTJaLXufIb42rblcCx6ncdMDdGYQ==
+X-Received: by 2002:a62:16d3:0:b0:562:c1d4:e287 with SMTP id 202-20020a6216d3000000b00562c1d4e287mr5701810pfw.80.1669151430256;
+        Tue, 22 Nov 2022 13:10:30 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:bb3])
+        by smtp.gmail.com with ESMTPSA id h9-20020a170902f54900b00176a2d23d1asm12659611plf.56.2022.11.22.13.10.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 13:10:29 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 22 Nov 2022 11:10:28 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
+ warnning
+Message-ID: <Y306xJV6aNXd94kb@slm.duckdns.org>
+References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
+ <20221104023938.2346986-5-yukuai1@huaweicloud.com>
+ <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
+ <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5nqu22jwzukrrpph"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221122183557.07a9e095@jic23-huawei>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 17, 2022 at 07:28:50PM +0800, Yu Kuai wrote:
+> Hi, Tejun!
+> 
+> 在 2022/11/15 6:07, Tejun Heo 写道:
+> 
+> > 
+> > Any chance I can persuade you into updating match_NUMBER() helpers to not
+> > use match_strdup()? They can easily disable irq/preemption and use percpu
+> > buffers and we won't need most of this patchset.
+> 
+> Does the following patch match your proposal?
+> 
+> diff --git a/lib/parser.c b/lib/parser.c
+> index bcb23484100e..ded652471919 100644
+> --- a/lib/parser.c
+> +++ b/lib/parser.c
+> @@ -11,6 +11,24 @@
+>  #include <linux/slab.h>
+>  #include <linux/string.h>
+> 
+> +#define U64_MAX_SIZE 20
+> +
+> +static DEFINE_PER_CPU(char, buffer[U64_MAX_SIZE]);
+> +
+> +static char *get_buffer(void)
+> +{
+> +       preempt_disable();
+> +       local_irq_disable();
+> +
+> +       return this_cpu_ptr(buffer);
+> +}
+> +
+> +static void put_buffer(void)
+> +{
+> +       local_irq_enable();
+> +       preempt_enable();
+> +}
+> +
+> 
+> Then match_strdup() and kfree() in match_NUMBER() can be replaced with
+> get_buffer() and put_buffer().
 
---5nqu22jwzukrrpph
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry about the late reply. Yeah, something like this.
 
-On Tue, Nov 22, 2022 at 06:35:57PM +0000, Jonathan Cameron wrote:
-> On Sun, 20 Nov 2022 10:49:20 +0100
-> Crt Mori <cmo@melexis.com> wrote:
->=20
-> > Ok. Acked-by: Crt Mori <cmo@melexis.com>
-> > (resending since previous mail was not delivered because it was not pla=
-intext)
-> >=20
-> > On Sat, 19 Nov 2022 at 11:02, Uwe Kleine-K=F6nig
-> > <u.kleine-koenig@pengutronix.de> wrote:
-> > >
-> > > Hello,
-> > >
-> > > On Sat, Nov 19, 2022 at 12:04:41AM +0100, Crt Mori wrote: =20
-> > > > On Fri, 18 Nov 2022 at 23:46, Uwe Kleine-K=F6nig <uwe@kleine-koenig=
-=2Eorg> wrote: =20
-> > > > >
-> > > > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > > > >
-> > > > > .probe_new() doesn't get the i2c_device_id * parameter, so determ=
-ine
-> > > > > that explicitly in the probe function.
-> > > > >
-> > > > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > > > > ---
-> > > > >  drivers/iio/temperature/mlx90632.c | 12 ++++++++++--
-> > > > >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/tem=
-perature/mlx90632.c
-> > > > > index f1f5ebc145b1..19e30cfca8a7 100644
-> > > > > --- a/drivers/iio/temperature/mlx90632.c
-> > > > > +++ b/drivers/iio/temperature/mlx90632.c
-> > > > > @@ -1168,9 +1168,9 @@ static int mlx90632_enable_regulator(struct=
- mlx90632_data *data)
-> > > > >         return ret;
-> > > > >  }
-> > > > >
-> > > > > -static int mlx90632_probe(struct i2c_client *client,
-> > > > > -                         const struct i2c_device_id *id)
-> > > > > +static int mlx90632_probe(struct i2c_client *client)
-> > > > >  {
-> > > > > +       const struct i2c_device_id *id =3D i2c_client_get_device_=
-id(client);
-> > > > >         struct mlx90632_data *mlx90632;
-> > > > >         struct iio_dev *indio_dev;
-> > > > >         struct regmap *regmap;
-> > > > > @@ -1337,7 +1337,15 @@ static struct i2c_driver mlx90632_driver =
-=3D {
-> > > > >                 .of_match_table =3D mlx90632_of_match,
-> > > > >                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
-> > > > >         },
-> > > > > +<<<<<<< ours =20
-> > > >
-> > > > Maybe some of the merge artifacts left (also below)? =20
-> > >
-> > > *groan*, ok, thanks for pointing out the obvious. Fixed in my tree. F=
-tr,
-> > > the fixup is:
-> > >
-> > > diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/tempera=
-ture/mlx90632.c
-> > > index 19e30cfca8a7..753b7a4ccfdd 100644
-> > > --- a/drivers/iio/temperature/mlx90632.c
-> > > +++ b/drivers/iio/temperature/mlx90632.c
-> > > @@ -1337,15 +1337,7 @@ static struct i2c_driver mlx90632_driver =3D {
-> > >                 .of_match_table =3D mlx90632_of_match,
-> > >                 .pm     =3D pm_ptr(&mlx90632_pm_ops),
-> > >         },
-> > > -<<<<<<< ours
-> > > -       .probe =3D mlx90632_probe,
-> > > -||||||| base
-> > > -       .probe =3D mlx90632_probe,
-> > > -       .remove =3D mlx90632_remove,
-> > > -=3D=3D=3D=3D=3D=3D=3D
-> > >         .probe_new =3D mlx90632_probe,
-> > > -       .remove =3D mlx90632_remove, =20
-> > > ->>>>>>> theirs =20
-> > >         .id_table =3D mlx90632_id,
-> > >  };
-> > >  module_i2c_driver(mlx90632_driver);
-> > >
-> > > When (and if) I'll resend the series, the fixed version will be
-> > > included. (Unless someone picks up the broken patch with the above
-> > > fixup of course :-)
-> Who would be crazy enough to do that?
->=20
-> (fixed up whilst applying)
+Thanks.
 
-Thanks, people seem really eager to prevent me resending the series :-)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---5nqu22jwzukrrpph
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9OmAACgkQwfwUeK3K
-7AkMOwgAmm2WQ+U/T+iTdGY6eO7gSW57L1NjBEcqx0ttNn7Ejr4W9QDI9thb2M2B
-2/veKoZZDv1RmWEOluogOdc2SD1RDcibUzM6l1l7Tq5GpY7BQwMb/FCzQ9WNnR+R
-FVAXqJINljxau605PX1XLeDAFvzWwIbyGcdnApgLrvzqdv11PBUFqc0DE77So5i4
-/KJkuMpZFlK7ugNRi7Rqm8GnHs/EzWQhXy/D3UgDpmZlrc9fCa8TeSWkeThBjbmo
-g+kX+IiCFDRTUIeTa1Bs5QkIDBDg1bcAraq2ogw9pBoVp1G1mmCvC0MuFzaTgNCM
-xY96FY8XwDGRWZr4VVpBEHgVp4kOww==
-=36po
------END PGP SIGNATURE-----
-
---5nqu22jwzukrrpph--
+-- 
+tejun
