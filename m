@@ -2,153 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FE56338EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE956338EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233372AbiKVJrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S233384AbiKVJrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiKVJqx (ORCPT
+        with ESMTP id S233248AbiKVJrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:46:53 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91F412619
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:46:52 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id p21so13107786plr.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:46:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fb2a2qPkiNyV79EPxFgoQUH1bBZRJ4pPl8l2Hu7egWs=;
-        b=qkbeDWaMEih+xSYda34uaUzUrXMbtjUx6DZiDrTlV3PKpZtjBHk3b7xM2iVwoRB4a+
-         IrBsAc0gcc2G/JprUzBk1toHVkr5LQLp5qHmRn6wGF4LCqIhV/qMZL6UQ7yOFinI/VnS
-         R/vVv3UK5jVy7/jZ2DZEtKTPGDbupucmn5N/6dI4mgAX9DtHKZNSfl7OT/15R5XkkQqu
-         /vbEk9P4Zf0h2Ac3E/UDTlFpKjOdiirCZfIViNQTaRq6YAoLtHv4D5hcvhwxnrU43JbK
-         nuPXwh+/fWsGu7R9/9M8smCG5JZqVk/E7dECDpzFvEr0De6usViiCOvv/idyUCMvxmzM
-         O3Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fb2a2qPkiNyV79EPxFgoQUH1bBZRJ4pPl8l2Hu7egWs=;
-        b=oocwSeeIAFggT5YMi0Vn1vEkkB/yA6uveGceD0oKn23Ie0AHNbtwp1Cleqm4kaaINS
-         FvT2RKPbnzsmj8mU4cLKQHoS8h0JBwJFpfBSo8ejYGm7W0a5dscrMPRhcmOQ9Cx4Z0Gj
-         WHiZFg39r3sfY29Gza8oyPQcV0/KJPPECK1zH5pQEnpfEl3+Dmc0S0B4Zr7ZRo+V1yps
-         9yVu78XZ5KKMjqIyNe3QgoVfcH3/FG0mIVi+BRKzPHLuHJ8rgT13yYixkUB2JwAtH/CY
-         6nnNflJ94yUB2vKSATjHSfo7BDy/5RCxTxwd4PFVyVzz2DIvim6uhEInNGS/eXImSZkv
-         61bw==
-X-Gm-Message-State: ANoB5pnSvUk3HRK8mbwpsgl9NgWVHm/X7HvzRRMbVkqv5HEAbXKaeJN+
-        b8BrrAWgAQ4pn3N4KwZd9YSVZRJTa/zktfheALlDbCZOlOw=
-X-Google-Smtp-Source: AA0mqf7IOUg8BcWStSC1num5dHrWSE+I+Al0NduEjlhEQtr6fNKF9LF2IPsvZnwLi5cQQHMQjf+Ua0MktKrb0TlETIY=
-X-Received: by 2002:a17:902:ca04:b0:17f:7f7e:70c7 with SMTP id
- w4-20020a170902ca0400b0017f7f7e70c7mr5070065pld.107.1669110411632; Tue, 22
- Nov 2022 01:46:51 -0800 (PST)
+        Tue, 22 Nov 2022 04:47:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258C7120B0;
+        Tue, 22 Nov 2022 01:47:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B662C615E3;
+        Tue, 22 Nov 2022 09:46:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01D6C433D6;
+        Tue, 22 Nov 2022 09:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669110419;
+        bh=FRhndoOcferDeIuztrGP96RT7Ozf4cEJuLD549BxEBw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O8wBRVoXoLFM0Bdtanbdd1H4aj0MBq9HnKke7wOuFCjA+de3MNvhce2l7DNhiiZV+
+         BABDd9UYq8zPT7Jqxl56iGI+3JBelUaZzEf7UaTWFwVrqG4cFte07Ax+upMwop53jJ
+         qC+3BCEPp5I+3uWIR6EoEaNo03ejBpXHrU64Bh1KNhLJKzIRgYM5TOEuksgz5uHx6u
+         80zwwgk8/9K7wPWkrvxt/HjgzX+HEQMnrc/iOylk8wG9OYZAymX6HvwsSd3iWKuH3T
+         /mgDOSZD+QdZXmH9l1ljWGDFyeAntmlDejK/lwV+e6u0WXPJ5j0Ofm2ulZSLXA71yt
+         /tk7ZjA6yF4+Q==
+Date:   Tue, 22 Nov 2022 10:46:53 +0100
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Sujuan Chen <sujuan.chen@mediatek.com>
+Cc:     netdev@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        linux-kernel@vger.kernel.org, Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Evelyn Tsai <evelyn.tsai@mediatek.com>,
+        Bo Jiao <bo.jiao@mediatek.com>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH,RESEND] net: ethernet: mtk_wed: add wcid overwritten
+ support for wed v1
+Message-ID: <Y3yajX0EF/aU5HJr@localhost.localdomain>
+References: <217932f091aa9d9cb5e876a2e958ca25f80f80b2.1668997816.git.sujuan.chen@mediatek.com>
 MIME-Version: 1.0
-References: <20221122075440.1165172-1-suagrfillet@gmail.com> <Y3yO+ii+NEVPTYFo@wendy>
-In-Reply-To: <Y3yO+ii+NEVPTYFo@wendy>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Tue, 22 Nov 2022 09:46:40 +0000
-Message-ID: <CAAYs2=h7jQMAHyixusGneXSvHACaS+7YDxNE5pCfJotjHpOkxA@mail.gmail.com>
-Subject: Re: [PATCH] riscv/ftrace: fix ftrace_modify_call bug
-To:     Conor Dooley <conor.dooley@microchip.com>, guoren@kernel.org
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MyQooNMZNzUlLsws"
+Content-Disposition: inline
+In-Reply-To: <217932f091aa9d9cb5e876a2e958ca25f80f80b2.1668997816.git.sujuan.chen@mediatek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor Dooley <conor.dooley@microchip.com> =E4=BA=8E2022=E5=B9=B411=E6=9C=88=
-22=E6=97=A5=E5=91=A8=E4=BA=8C 08:57=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Nov 22, 2022 at 03:54:40PM +0800, Song Shuai wrote:
-> > With this commit (riscv: ftrace: Reduce the detour code size to half)
->
-> AFAICT the above patch has not been applied & this patch here should be
-> folded into the offending patch?
-> I've marked this one as "Not Applicable" in patchwork as a result, but
-> let me know if that is an incorrect assumption.
->
-> Thanks,
-> Conor.
->
-Hi, Conor:
 
-Sorry to disturb you with this patch without against the merged commit list=
-,
+--MyQooNMZNzUlLsws
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch actually is created for fixing (riscv: ftrace: Reduce the
-detour code size to half)
-which has not been merged yet.
+> All wed versions should enable wcid overwritten feature,
+> since the wcid size is controlled by the wlan driver.
+>=20
+> Tested-by: Sujuan Chen <sujuan.chen@mediatek.com>
+> Co-developed-by: Bo Jiao <bo.jiao@mediatek.com>
+> Signed-off-by: Bo Jiao <bo.jiao@mediatek.com>
+> Signed-off-by: Sujuan Chen <sujuan.chen@mediatek.com>
+> ---
+>  drivers/net/ethernet/mediatek/mtk_wed.c      | 9 ++++++---
+>  drivers/net/ethernet/mediatek/mtk_wed_regs.h | 2 ++
+>  include/linux/soc/mediatek/mtk_wed.h         | 3 +++
+>  3 files changed, 11 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/mediatek/mtk_wed.c b/drivers/net/ethern=
+et/mediatek/mtk_wed.c
+> index 7d8842378c2b..a20093803e04 100644
+> --- a/drivers/net/ethernet/mediatek/mtk_wed.c
+> +++ b/drivers/net/ethernet/mediatek/mtk_wed.c
+> @@ -526,9 +526,9 @@ mtk_wed_dma_disable(struct mtk_wed_device *dev)
+>  			MTK_WED_WPDMA_RX_D_RX_DRV_EN);
+>  		wed_clr(dev, MTK_WED_WDMA_GLO_CFG,
+>  			MTK_WED_WDMA_GLO_CFG_TX_DDONE_CHK);
+> -
+> -		mtk_wed_set_512_support(dev, false);
+>  	}
+> +
+> +	mtk_wed_set_512_support(dev, false);
+>  }
+> =20
+>  static void
+> @@ -1290,9 +1290,10 @@ mtk_wed_start(struct mtk_wed_device *dev, u32 irq_=
+mask)
+>  		if (mtk_wed_rro_cfg(dev))
+>  			return;
+> =20
+> -		mtk_wed_set_512_support(dev, dev->wlan.wcid_512);
+>  	}
+> =20
+> +	mtk_wed_set_512_support(dev, dev->wlan.wcid_512);
+> +
+>  	mtk_wed_dma_enable(dev);
+>  	dev->running =3D true;
+>  }
+> @@ -1338,6 +1339,8 @@ mtk_wed_attach(struct mtk_wed_device *dev)
+>  	dev->irq =3D hw->irq;
+>  	dev->wdma_idx =3D hw->index;
+>  	dev->version =3D hw->version;
+> +	if (hw->version !=3D 1)
+> +		dev->rev_id =3D wed_r32(dev, MTK_WED_REV_ID);
 
-As Guo replied, he will fold it in the target patch. You can ignore
-this one. Sorry again.
+nitpick: since rev_id is valid just for hw->version > 1 and it will be used=
+ by
+mt76 in the future, you can move it few lines below where we already check
+hw->version and get rid of the unnecessary if condition. Something like:
 
-BTW, for dispelling your confusion about my email name.
-Actually, it was misspelled when registering, but I keep it for daily use.
-So you can send it without concern. :P
+	if (hw->version =3D=3D 1) {
+		...
+	} else {
+		dev->rev_id =3D wed_r32(dev, MTK_WED_REV_ID);
+		ret =3D mtk_wed_wo_init(hw);
+	}
 
--- Song
+Regards,
+Lorenzo
+> =20
+>  	if (hw->eth->dma_dev =3D=3D hw->eth->dev &&
+>  	    of_dma_is_coherent(hw->eth->dev->of_node))
+> diff --git a/drivers/net/ethernet/mediatek/mtk_wed_regs.h b/drivers/net/e=
+thernet/mediatek/mtk_wed_regs.h
+> index 9e39dace95eb..873d50b9a6e6 100644
+> --- a/drivers/net/ethernet/mediatek/mtk_wed_regs.h
+> +++ b/drivers/net/ethernet/mediatek/mtk_wed_regs.h
+> @@ -20,6 +20,8 @@ struct mtk_wdma_desc {
+>  	__le32 info;
+>  } __packed __aligned(4);
+> =20
+> +#define MTK_WED_REV_ID					0x004
+> +
+>  #define MTK_WED_RESET					0x008
+>  #define MTK_WED_RESET_TX_BM				BIT(0)
+>  #define MTK_WED_RESET_TX_FREE_AGENT			BIT(4)
+> diff --git a/include/linux/soc/mediatek/mtk_wed.h b/include/linux/soc/med=
+iatek/mtk_wed.h
+> index 8294978f4bca..1b1ef57609f7 100644
+> --- a/include/linux/soc/mediatek/mtk_wed.h
+> +++ b/include/linux/soc/mediatek/mtk_wed.h
+> @@ -85,6 +85,9 @@ struct mtk_wed_device {
+>  	int irq;
+>  	u8 version;
+> =20
+> +	/* used by wlan driver */
+> +	u32 rev_id;
+> +
+>  	struct mtk_wed_ring tx_ring[MTK_WED_TX_QUEUES];
+>  	struct mtk_wed_ring rx_ring[MTK_WED_RX_QUEUES];
+>  	struct mtk_wed_ring txfree_ring;
+> --=20
+> 2.18.0
+>=20
 
+--MyQooNMZNzUlLsws
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Sorry for bothering you with the
-> > patched, ftrace bug occurred When hosting kprobe and function tracer
-> > at the same function.
-> >
-> > Obviously, the variable caller in ftrace_modify_call was assigned by
-> > rec->ip with 4 offset failing the code replacing at function entry.
-> > And the caller should be assigned by rec->ip directly to indicate
-> > the function entry.
-> >
-> > The following is the ftrace bug log.
-> >
-> > ```
-> > [  419.632855] 00000000f8776803: expected (ffe00297 1a4282e7) but got (=
-1a8282e7 f0227179)
-> > [  419.633390] ------------[ ftrace bug ]------------
-> > [  419.633553] ftrace failed to modify
-> > [  419.633569] [<ffffffff802091cc>] kernel_read+0x0/0x52
-> > [  419.633863]  actual:   97:02:e0:ff:e7:82:82:1a
-> > [  419.634087] Updating ftrace call site to call a different ftrace fun=
-ction
-> > [  419.634279] ftrace record flags: e0000002
-> > [  419.634487]  (2) R
-> > [  419.634487]  expected tramp: ffffffff800093cc
-> > [  419.634935] ------------[ cut here ]------------
-> > ```
-> >
-> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > ---
-> >  arch/riscv/kernel/ftrace.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-> > index 8c77f236fc71..61b24d767e2e 100644
-> > --- a/arch/riscv/kernel/ftrace.c
-> > +++ b/arch/riscv/kernel/ftrace.c
-> > @@ -132,7 +132,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsi=
-gned long old_addr,
-> >                      unsigned long addr)
-> >  {
-> >       unsigned int call[2];
-> > -     unsigned long caller =3D rec->ip + 4;
-> > +     unsigned long caller =3D rec->ip;
-> >       int ret;
-> >
-> >       make_call_t0(caller, old_addr, call);
-> > --
-> > 2.20.1
-> >
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY3yaigAKCRA6cBh0uS2t
+rEr4AP9K5LW+TfRnHDcSOOOP+dKxO6PgQE0ugOWGTgAXgNlp1wEA/2aDm26mVuQz
+kYSSHOserEgot90J1cmRQ3i0vhn8WAE=
+=aXsx
+-----END PGP SIGNATURE-----
+
+--MyQooNMZNzUlLsws--
