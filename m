@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D866339D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52B26339D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233490AbiKVKWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S233507AbiKVKWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiKVKVw (ORCPT
+        with ESMTP id S232894AbiKVKVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:21:52 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A9C20367
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:45 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id i12so20113319wrb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:45 -0800 (PST)
+        Tue, 22 Nov 2022 05:21:54 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B8D205FC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:46 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id e11so11061306wru.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7EJrTQIS5zIHcJVe/CbMMVgFbpImlTtQ6/Fo8uf0cQs=;
-        b=FYfzwS4CBrRcXV5ZFnLGwjwIz55YZzRUisru4kJviiTfhx0Xb7YABMkuRTXPsZQtuZ
-         Tgl+WByJ+uyYYK4OhOAotaGNnq5eawB9MQ7SzTc2PqanALdWpXM5uvw+U++3rjvruaVc
-         UnlpPICZ2pLTyb/GWYXsKowF2O7698PNkDgCMiX0yrA3+NmSajm7YgRohZgmIcbm4t7p
-         RjFFyr5yBvekdoQgybn0OQzdPNlp+ilYm2ahefYR5hDjRqQZxrk4O2hwQpWv1ka+jbAA
-         leihr0Z3RpKbmLuhIaXy3omF+C1kWJ0KQoyFpTNy+508uT0DJKmuxpUKQfFjHwmJW/x/
-         eGXg==
+        bh=DkZacf9TX3zvyVeUrL+nHxYirMYsPuTeW+Zo+lEbcT0=;
+        b=n46/Bzxpis8t8nDSvP5/hO7IKMa4gViNFmxoDwApmrQQ6Ykxt19O5+rHwlaAUQAqZk
+         iuYeqvWzkokkzx6wJYg6HzRUZ897kPhbw2m5ptzMlfGq7urRU5jxt+psRLdHW1a231Rf
+         XycpjPPCw2gIksQVYCZQ0xIiAXy+LIdCiWrDzIIIeXSOtaNa8+10/itmrVumwmBRNAqd
+         SqKulZuEBarl6TGWAMSGdR6U1PmVk0svLGKx71c3mCkJnIwjsW7HIDLd7q0q740QUMfL
+         OmZOuRsoM3GixuE9AEMvYBY1YxJLXGcstJMLvOqFRY8U65iry7NJ3dg8h58d1D3CbI9q
+         9/Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7EJrTQIS5zIHcJVe/CbMMVgFbpImlTtQ6/Fo8uf0cQs=;
-        b=OH3jJwyE6pVIUgiofY3PcfxGsrsma6f30TZW8qfHp5J3HzvY+TG1lSwh9jEmFBbwNu
-         hKHufSa1h5W5sUiWyODDMuli/w+RDVzK8LLq79uhcft7LtK3nVn/vX3QvKTlo3g9XTYj
-         8Ds6vCUKQk7/v8VuKuNR1BA2Ut05bZfrYNShineM0kldTgLoonAzoEi0EtDp26Hzx6LU
-         5vYkaV8AOmfgzVVAGNNf5mwmtRZZ8ZQGOA6tSp2HVeOaPJvlqOxNn9rHTN+9/z3Ul8i5
-         PPVc1usMhkZklX4Xi5cJjlU7dPsTlKF9SaZEL3vX0QQj+RiZrJ6KVEgDlbMlMC3HuDt2
-         Le1A==
-X-Gm-Message-State: ANoB5pltRhseUcAIGnMsPD3Hv3+Qm0kfqQxnzP12keQ52jKa0YnCdMCG
-        n1WsDCFPIvPZAQQHLqPJZ5K+aw==
-X-Google-Smtp-Source: AA0mqf67QEyEJPYa/qS7uOsPGrGtvHyweo/xX/z+5S9QkzWHxxr4eJ+2ayueoMezsRbkHG6APMIBUQ==
-X-Received: by 2002:adf:e190:0:b0:241:d451:7fc9 with SMTP id az16-20020adfe190000000b00241d4517fc9mr3861780wrb.223.1669112503975;
-        Tue, 22 Nov 2022 02:21:43 -0800 (PST)
+        bh=DkZacf9TX3zvyVeUrL+nHxYirMYsPuTeW+Zo+lEbcT0=;
+        b=fiBbgkZgwjtQaCHYnC/yclpz5lyEurAfyLWBok2QS1S99Bx29sVI0u84nRS9hqRZLq
+         KmsnF1an4hhPIba/cUz/IXJSoxWokz846aQGJ9LrvBErwxSUHlTjHqzlUqlMwxZPghq1
+         G2myaRyVpru0ZKDy2LCxHpy7ejNif/3enNXOVyi9VrZ5va1dWegTgnL6GxrQqc2TDp+l
+         87bBZk2XJlF1Gx2TrRweLMOaPicoK5I9aHo5TnBpjqXQcRzj+rIDGgoly6nVM81ZjIJI
+         SiydQRvLa5kUbudsXY0YY6vfcAYuBMtt9yR0psFrJCDv+TjZ6d/EATjDfmNjfZbvFS2V
+         9/qg==
+X-Gm-Message-State: ANoB5plhlg+g9vGphT1ulziWvh/SmXYzFfU6jv95EhVwJv8DUSb4TmSB
+        U5pSWpGNl4ODiJFPfwtB7huRtw==
+X-Google-Smtp-Source: AA0mqf79F6mX4CkVqrYCXZQP8pXylPsPd3TBFWNdCA10kLpH21KcxpRq8wxFJEhVQSNwXsNadYHyBQ==
+X-Received: by 2002:a5d:4484:0:b0:241:9b26:d18e with SMTP id j4-20020a5d4484000000b002419b26d18emr13311986wrq.548.1669112504996;
+        Tue, 22 Nov 2022 02:21:44 -0800 (PST)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:e011:9e81:66f1:3415])
-        by smtp.gmail.com with ESMTPSA id o3-20020a5d4083000000b002366e8eee11sm13432873wrp.101.2022.11.22.02.21.42
+        by smtp.gmail.com with ESMTPSA id o3-20020a5d4083000000b002366e8eee11sm13432873wrp.101.2022.11.22.02.21.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 02:21:43 -0800 (PST)
+        Tue, 22 Nov 2022 02:21:44 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -63,17 +63,17 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-serial@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v2 03/15] tty: serial: qcom-geni-serial: align #define values
-Date:   Tue, 22 Nov 2022 11:21:13 +0100
-Message-Id: <20221122102125.142075-4-brgl@bgdev.pl>
+Subject: [PATCH v2 04/15] tty: serial: qcom-geni-serial: improve the to_dev_port() macro
+Date:   Tue, 22 Nov 2022 11:21:14 +0100
+Message-Id: <20221122102125.142075-5-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221122102125.142075-1-brgl@bgdev.pl>
 References: <20221122102125.142075-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,107 +82,169 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Keep the #define symbols aligned for better readability.
+The member we want to resolve in struct qcom_geni_serial_port is called
+uport so we don't need an additional redundant parameter in this macro.
+
+While at it: turn the macro into a static inline function.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/tty/serial/qcom_geni_serial.c | 62 +++++++++++++--------------
- 1 file changed, 31 insertions(+), 31 deletions(-)
+ drivers/tty/serial/qcom_geni_serial.c | 36 ++++++++++++++-------------
+ 1 file changed, 19 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 7af5df6833c7..97ee7c074b79 100644
+index 97ee7c074b79..e4139718e084 100644
 --- a/drivers/tty/serial/qcom_geni_serial.c
 +++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -39,57 +39,57 @@
- #define SE_UART_MANUAL_RFR		0x2ac
+@@ -133,8 +133,10 @@ static const struct uart_ops qcom_geni_uart_pops;
+ static struct uart_driver qcom_geni_console_driver;
+ static struct uart_driver qcom_geni_uart_driver;
  
- /* SE_UART_TRANS_CFG */
--#define UART_TX_PAR_EN		BIT(0)
--#define UART_CTS_MASK		BIT(1)
-+#define UART_TX_PAR_EN			BIT(0)
-+#define UART_CTS_MASK			BIT(1)
+-#define to_dev_port(ptr, member) \
+-		container_of(ptr, struct qcom_geni_serial_port, member)
++static inline struct qcom_geni_serial_port *to_dev_port(struct uart_port *uport)
++{
++	return container_of(uport, struct qcom_geni_serial_port, uport);
++}
  
- /* SE_UART_TX_STOP_BIT_LEN */
--#define TX_STOP_BIT_LEN_1	0
--#define TX_STOP_BIT_LEN_2	2
-+#define TX_STOP_BIT_LEN_1		0
-+#define TX_STOP_BIT_LEN_2		2
+ static struct qcom_geni_serial_port qcom_geni_uart_ports[GENI_UART_PORTS] = {
+ 	[0] = {
+@@ -175,7 +177,7 @@ static struct qcom_geni_serial_port qcom_geni_console_port = {
+ static int qcom_geni_serial_request_port(struct uart_port *uport)
+ {
+ 	struct platform_device *pdev = to_platform_device(uport->dev);
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
  
- /* SE_UART_RX_TRANS_CFG */
--#define UART_RX_PAR_EN		BIT(3)
-+#define UART_RX_PAR_EN			BIT(3)
+ 	uport->membase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(uport->membase))
+@@ -212,7 +214,7 @@ static void qcom_geni_serial_set_mctrl(struct uart_port *uport,
+ 							unsigned int mctrl)
+ {
+ 	u32 uart_manual_rfr = 0;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
  
- /* SE_UART_RX_WORD_LEN */
--#define RX_WORD_LEN_MASK	GENMASK(9, 0)
-+#define RX_WORD_LEN_MASK		GENMASK(9, 0)
+ 	if (uart_console(uport))
+ 		return;
+@@ -253,7 +255,7 @@ static bool qcom_geni_serial_poll_bit(struct uart_port *uport,
+ 	struct qcom_geni_private_data *private_data = uport->private_data;
  
- /* SE_UART_RX_STALE_CNT */
--#define RX_STALE_CNT		GENMASK(23, 0)
-+#define RX_STALE_CNT			GENMASK(23, 0)
+ 	if (private_data->drv) {
+-		port = to_dev_port(uport, uport);
++		port = to_dev_port(uport);
+ 		baud = port->baud;
+ 		if (!baud)
+ 			baud = 115200;
+@@ -506,7 +508,7 @@ static int handle_rx_console(struct uart_port *uport, u32 bytes, bool drop)
+ 	u32 i;
+ 	unsigned char buf[sizeof(u32)];
+ 	struct tty_port *tport;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
  
- /* SE_UART_TX_PARITY_CFG/RX_PARITY_CFG */
--#define PAR_CALC_EN		BIT(0)
--#define PAR_EVEN		0x00
--#define PAR_ODD			0x01
--#define PAR_SPACE		0x10
-+#define PAR_CALC_EN			BIT(0)
-+#define PAR_EVEN			0x00
-+#define PAR_ODD				0x01
-+#define PAR_SPACE			0x10
+ 	tport = &uport->state->port;
+ 	for (i = 0; i < bytes; ) {
+@@ -549,7 +551,7 @@ static int handle_rx_console(struct uart_port *uport, u32 bytes, bool drop)
+ static int handle_rx_uart(struct uart_port *uport, u32 bytes, bool drop)
+ {
+ 	struct tty_port *tport;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
+ 	u32 num_bytes_pw = port->tx_fifo_width / BITS_PER_BYTE;
+ 	u32 words = ALIGN(bytes, num_bytes_pw) / num_bytes_pw;
+ 	int ret;
+@@ -598,7 +600,7 @@ static void qcom_geni_serial_stop_tx(struct uart_port *uport)
+ {
+ 	u32 irq_en;
+ 	u32 status;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
  
- /* SE_UART_MANUAL_RFR register fields */
--#define UART_MANUAL_RFR_EN	BIT(31)
--#define UART_RFR_NOT_READY	BIT(1)
--#define UART_RFR_READY		BIT(0)
-+#define UART_MANUAL_RFR_EN		BIT(31)
-+#define UART_RFR_NOT_READY		BIT(1)
-+#define UART_RFR_READY			BIT(0)
+ 	irq_en = readl(uport->membase + SE_GENI_M_IRQ_EN);
+ 	irq_en &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN);
+@@ -627,7 +629,7 @@ static void qcom_geni_serial_handle_rx(struct uart_port *uport, bool drop)
+ 	u32 last_word_byte_cnt;
+ 	u32 last_word_partial;
+ 	u32 total_bytes;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
  
- /* UART M_CMD OP codes */
--#define UART_START_TX		0x1
-+#define UART_START_TX			0x1
- /* UART S_CMD OP codes */
--#define UART_START_READ		0x1
--
--#define UART_OVERSAMPLING	32
--#define STALE_TIMEOUT		16
--#define DEFAULT_BITS_PER_CHAR	10
--#define GENI_UART_CONS_PORTS	1
--#define GENI_UART_PORTS		3
--#define DEF_FIFO_DEPTH_WORDS	16
--#define DEF_TX_WM		2
--#define DEF_FIFO_WIDTH_BITS	32
--#define UART_RX_WM		2
-+#define UART_START_READ			0x1
-+
-+#define UART_OVERSAMPLING		32
-+#define STALE_TIMEOUT			16
-+#define DEFAULT_BITS_PER_CHAR		10
-+#define GENI_UART_CONS_PORTS		1
-+#define GENI_UART_PORTS			3
-+#define DEF_FIFO_DEPTH_WORDS		16
-+#define DEF_TX_WM			2
-+#define DEF_FIFO_WIDTH_BITS		32
-+#define UART_RX_WM			2
+ 	status = readl(uport->membase +	SE_GENI_RX_FIFO_STATUS);
+ 	word_cnt = status & RX_FIFO_WC_MSK;
+@@ -649,7 +651,7 @@ static void qcom_geni_serial_stop_rx(struct uart_port *uport)
+ {
+ 	u32 irq_en;
+ 	u32 status;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
+ 	u32 s_irq_status;
  
- /* SE_UART_LOOPBACK_CFG */
--#define RX_TX_SORTED	BIT(0)
--#define CTS_RTS_SORTED	BIT(1)
--#define RX_TX_CTS_RTS_SORTED	(RX_TX_SORTED | CTS_RTS_SORTED)
-+#define RX_TX_SORTED			BIT(0)
-+#define CTS_RTS_SORTED			BIT(1)
-+#define RX_TX_CTS_RTS_SORTED		(RX_TX_SORTED | CTS_RTS_SORTED)
+ 	irq_en = readl(uport->membase + SE_GENI_S_IRQ_EN);
+@@ -687,7 +689,7 @@ static void qcom_geni_serial_start_rx(struct uart_port *uport)
+ {
+ 	u32 irq_en;
+ 	u32 status;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
  
- /* UART pin swap value */
--#define DEFAULT_IO_MACRO_IO0_IO1_MASK		GENMASK(3, 0)
-+#define DEFAULT_IO_MACRO_IO0_IO1_MASK	GENMASK(3, 0)
- #define IO_MACRO_IO0_SEL		0x3
--#define DEFAULT_IO_MACRO_IO2_IO3_MASK		GENMASK(15, 4)
-+#define DEFAULT_IO_MACRO_IO2_IO3_MASK	GENMASK(15, 4)
- #define IO_MACRO_IO2_IO3_SWAP		0x4640
+ 	status = readl(uport->membase + SE_GENI_STATUS);
+ 	if (status & S_GENI_CMD_ACTIVE)
+@@ -707,7 +709,7 @@ static void qcom_geni_serial_start_rx(struct uart_port *uport)
+ static void qcom_geni_serial_handle_tx(struct uart_port *uport, bool done,
+ 		bool active)
+ {
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
+ 	struct circ_buf *xmit = &uport->state->xmit;
+ 	size_t avail;
+ 	size_t remaining;
+@@ -803,7 +805,7 @@ static irqreturn_t qcom_geni_serial_isr(int isr, void *dev)
+ 	struct uart_port *uport = dev;
+ 	bool drop_rx = false;
+ 	struct tty_port *tport = &uport->state->port;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
  
- /* We always configure 4 bytes per FIFO word */
+ 	if (uport->suspended)
+ 		return IRQ_NONE;
+@@ -869,7 +871,7 @@ static void qcom_geni_serial_shutdown(struct uart_port *uport)
+ 
+ static int qcom_geni_serial_port_setup(struct uart_port *uport)
+ {
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
+ 	u32 rxstale = DEFAULT_BITS_PER_CHAR * STALE_TIMEOUT;
+ 	u32 proto;
+ 	u32 pin_swap;
+@@ -917,7 +919,7 @@ static int qcom_geni_serial_port_setup(struct uart_port *uport)
+ static int qcom_geni_serial_startup(struct uart_port *uport)
+ {
+ 	int ret;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
+ 
+ 	if (!port->setup) {
+ 		ret = qcom_geni_serial_port_setup(uport);
+@@ -1003,7 +1005,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+ 	u32 stop_bit_len;
+ 	unsigned int clk_div;
+ 	u32 ser_clk_cfg;
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
+ 	unsigned long clk_rate;
+ 	u32 ver, sampling_rate;
+ 	unsigned int avg_bw_core;
+@@ -1288,7 +1290,7 @@ static struct uart_driver qcom_geni_uart_driver = {
+ static void qcom_geni_serial_pm(struct uart_port *uport,
+ 		unsigned int new_state, unsigned int old_state)
+ {
+-	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
++	struct qcom_geni_serial_port *port = to_dev_port(uport);
+ 
+ 	/* If we've never been called, treat it as off */
+ 	if (old_state == UART_PM_STATE_UNDEFINED)
 -- 
 2.37.2
 
