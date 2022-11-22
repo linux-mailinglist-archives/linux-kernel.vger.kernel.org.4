@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3E56337FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A27106337F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbiKVJIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:08:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
+        id S233126AbiKVJIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbiKVJID (ORCPT
+        with ESMTP id S233100AbiKVJH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:08:03 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F5C20995;
-        Tue, 22 Nov 2022 01:07:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669108080; x=1700644080;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EE5pcTfSPr5DaXNcKToRfW2ELh+2i5w5CLa+8PM/AcM=;
-  b=dZQEWPxRcpRsz1CE7g/vow61goWKQ7Hg7tX2vOd3CmViXFzXg5EN9Rta
-   ApzxhozudYhSupDNYmZdiPv1QGf19JwkTLHQmSZkZ+69rNwQD0KlZkHnM
-   PHzWtoz9a23pvwPfZKDmCI4JDo/UuT67ojib5vWoon9i+pI2/JcYTMMyh
-   ENuOW/IBSOWrE33LzK+N38pi9K0uYdPjqJcZo4J96METI0uhNs5lsrPSh
-   J+in3FUsbpacrimIyyVlrSkRVzyeBvGQiIjcE1/zAiY3kP0TB44ssvyVU
-   cyvdkZBZC3ZKSSfy1BfaSKXalZdX7uSlCgTjobpE+qa2hY1Bz3JnP4ziX
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="190021134"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 02:07:59 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 02:07:47 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 22 Nov 2022 02:07:44 -0700
-Date:   Tue, 22 Nov 2022 09:07:26 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Hal Feng <hal.feng@starfivetech.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/8] dt-bindings: sifive,ccache0: Support StarFive
- JH7110 SoC
-Message-ID: <Y3yRTuo69JUsfLqk@wendy>
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
- <20221118011714.70877-5-hal.feng@starfivetech.com>
- <Y3duiJguYE6VrVLP@spud>
- <Y3dvCPP1g0LzzHFO@spud>
- <a5193e23-efe1-fa65-15de-d53b80b87d63@starfivetech.com>
+        Tue, 22 Nov 2022 04:07:56 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB5213E3C;
+        Tue, 22 Nov 2022 01:07:55 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id fz10so8885740qtb.3;
+        Tue, 22 Nov 2022 01:07:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+me+gK92AeljrWBvAVG/MPMCTgxhzzYX45cfGkqB9FI=;
+        b=P8uJvE6M453q/yaKyiUoqkYAq38q7RROsYrI8WSGSahQ+P9lP8q+8LttjtzI0DXy4B
+         DWZ/5q30+0mfwEbfOPYxYDx6b9xEFjxQSM0fWaPijhuVVw4xL4C6nys1/M1CnUZdROV+
+         JfgT0pLoFZXtqNDbRQrHUZu8eidDnAHEJF7sIheQQKIbmtdktzr2lmEB6P7xrjNB7Z6m
+         3vMQC5H5ZOM9MKhoYAVYE11WKywZu/gAHEJaQeCCnYZaHClW7+s0UrEqLV25v5IcRQQK
+         Su5cTB7MCwIlRv+ZKJkNLaBB540cRI/WE6u1pp6LeOyar2xFebZ5HEFDbZkYMgG8fQfb
+         Sa3Q==
+X-Gm-Message-State: ANoB5pm0XkHEdsnH0lHSV2H+QxWy4LGyGGiRRCeTvqMa7RJ77MHSz8Pn
+        KcSW/RwB1N5zJpZe7o+ezsy/aAEKw61b2Q==
+X-Google-Smtp-Source: AA0mqf6AL1ZlFa3kiRXsCQnyXAu3JFQ2OdTNRM52D6hFwZUWTf3EfEQo5NWRT2xotyBNK/iQMZmUTw==
+X-Received: by 2002:a05:622a:5a15:b0:3a5:3388:4089 with SMTP id fy21-20020a05622a5a1500b003a533884089mr20598633qtb.601.1669108073884;
+        Tue, 22 Nov 2022 01:07:53 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id de13-20020a05620a370d00b006e99290e83fsm9936515qkb.107.2022.11.22.01.07.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 01:07:53 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3691e040abaso137949847b3.9;
+        Tue, 22 Nov 2022 01:07:52 -0800 (PST)
+X-Received: by 2002:a05:690c:b81:b0:37e:6806:a5f9 with SMTP id
+ ck1-20020a05690c0b8100b0037e6806a5f9mr5473386ywb.47.1669108072643; Tue, 22
+ Nov 2022 01:07:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <a5193e23-efe1-fa65-15de-d53b80b87d63@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221122030555.26612-1-yuehaibing@huawei.com>
+In-Reply-To: <20221122030555.26612-1-yuehaibing@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 22 Nov 2022 10:07:41 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVjzL5PSBYKfE05xcCVMX+LTwCDNq0iWk-z2WAFyDZ4mw@mail.gmail.com>
+Message-ID: <CAMuHMdVjzL5PSBYKfE05xcCVMX+LTwCDNq0iWk-z2WAFyDZ4mw@mail.gmail.com>
+Subject: Re: [PATCH -next] crypto: ccree - Fix section mismatch due to cc_debugfs_global_fini()
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     gilad@benyossef.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, cuigaosheng1@huawei.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 04:40:23PM +0800, Hal Feng wrote:
-> On Fri, 18 Nov 2022 19:39:52 +0800, Conor Dooley wrote:
-> > On Fri, Nov 18, 2022 at 11:37:50AM +0000, Conor Dooley wrote:
-> > > On Fri, Nov 18, 2022 at 09:17:10AM +0800, Hal Feng wrote:
-> > > > From: Emil Renner Berthing <kernel@esmil.dk>
-> > > > 
-> > > > This cache controller is also used on the StarFive JH7110 SoC.
-> > > 
-> > > "... and configured identically to that of the FU740"?
-> > > Anyways,
-> > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > Actually, after looking at the next patch - why can you not fall back to
-> > the fu740 one since you appear to have the same configuration as it?
-> 
-> Right, I will drop this patch and use "sifive,fu740-c000-ccache" as
-> compatible in dts.
+On Tue, Nov 22, 2022 at 4:12 AM YueHaibing <yuehaibing@huawei.com> wrote:
+> cc_debugfs_global_fini() is marked with __exit now, however it is used
+> in __init ccree_init() for cleanup. Remove the __exit annotation to fix
+> build warning:
+>
+> WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in reference: init_module (section: .init.text) -> cc_debugfs_global_fini (section: .exit.text)
+>
+> Fixes: 4f1c596df706 ("crypto: ccree - Remove debugfs when platform_driver_register failed")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Uh, that's not quite what I was suggesting. Rather than using that one
-in isolation, you can do the following in your dt:
-"starfive,jh7110-ccache", "sifive,fu740-c000-ccache"
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-And then in the driver we need to make no changes - unless down the line
-we find some sort of issue that requires special handling etc. There's
-no harm in having a "starfive,jh7110-ccache" IMO.
+Gr{oetje,eeting}s,
 
-Thanks,
-Conor.
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
