@@ -2,82 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E423463491D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2483634925
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbiKVVWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S234978AbiKVVX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234581AbiKVVWK (ORCPT
+        with ESMTP id S234338AbiKVVXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:22:10 -0500
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6928FB09;
-        Tue, 22 Nov 2022 13:22:08 -0800 (PST)
-Received: by mail-io1-f47.google.com with SMTP id 11so11945567iou.0;
-        Tue, 22 Nov 2022 13:22:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=61D4QX3fnERtNT3uDo8U48CODKORmNXYk2VXpv6fxMw=;
-        b=pQwzKaUiVeLB7ximJf7CsxX/gmA9/iUFI+PJOKsCi3AmQxuTPq5PwYq7ZxbLF+LsCL
-         vvFpDJj6Xp0N9SJATIHXnJyY4shNSw2fRGjNWT1RiRB+8oeQx7tLpFmncp+EcZx67sRH
-         T122AYMYzG+1mq8qDvluybI00tsuBUJNk92MpBophz/iGo06I+xnunpz4nDXuBTNE+GC
-         9Zz9lG9BRtHGOIR8ewsQOrQN2UdWjcu0sJQfznFiWS6WmSZDKkkFkVh/B92FV5oZoQ/D
-         s1V3uKPa481EhCXpZmlEC2tAwi+4py0lPC95A1TshWsXJc/WVSg3mcx+nVCsf50lKlfm
-         UoAQ==
-X-Gm-Message-State: ANoB5pkOMMBda72SFPKFMisemRSlqg5nykmLJCtAGN8FWtT3DMMlobdO
-        CIcA2awCXJGexIUnNrB7mg==
-X-Google-Smtp-Source: AA0mqf4v2DouMGNBCh4G7qwa+WVcDYj6HDZnTd0nEL3jjFPQr73sjhri5ATcCl/bPpKRqRMOKNPfsQ==
-X-Received: by 2002:a05:6638:1916:b0:363:95e3:c813 with SMTP id p22-20020a056638191600b0036395e3c813mr11847700jal.263.1669152128096;
-        Tue, 22 Nov 2022 13:22:08 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id o11-20020a0566022e0b00b006c5247c8f81sm5693719iow.48.2022.11.22.13.22.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 13:22:07 -0800 (PST)
-Received: (nullmailer pid 597043 invoked by uid 1000);
-        Tue, 22 Nov 2022 21:22:09 -0000
-Date:   Tue, 22 Nov 2022 15:22:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 5/5] driver core: pass a const * into of_device_uevent()
-Message-ID: <20221122212209.GA583854-robh@kernel.org>
-References: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
- <20221121094649.1556002-5-gregkh@linuxfoundation.org>
+        Tue, 22 Nov 2022 16:23:52 -0500
+Received: from mailout-pe-b.jellyfish.systems (mailout-pe-b.jellyfish.systems [198.54.127.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E52C8221F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:23:49 -0800 (PST)
+Received: from output-router-58994b6955-tvtjg (unknown [10.35.5.64])
+        by mailout-pe-b.jellyfish.systems (Postfix) with ESMTPA id 4NGy1D3bhlzDqRJ;
+        Tue, 22 Nov 2022 21:23:44 +0000 (UTC)
+Received: from MTA-13.privateemail.com (unknown [10.50.14.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by NEW-01.privateemail.com (Postfix) with ESMTPS id 69A7F18000CF;
+        Tue, 22 Nov 2022 16:23:44 -0500 (EST)
+Received: from mta-13.privateemail.com (localhost [127.0.0.1])
+        by mta-13.privateemail.com (Postfix) with ESMTP id 42DAD18000B2;
+        Tue, 22 Nov 2022 16:23:44 -0500 (EST)
+Received: from bpappas-XPS-13-9310.wppl.org (unknown [131.226.25.151])
+        by mta-13.privateemail.com (Postfix) with ESMTPA id 13FFF18000AF;
+        Tue, 22 Nov 2022 16:23:36 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
+        s=default; t=1669152224;
+        bh=p+WdSq8yxg9uUyI+r1wYQtUA9kjPikh1LL+rjuRzmRs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Y12Uka78C9YKBxcVP02/1A+LDIeSO889SgUBn2zf6Mb2OzqeWOqBV0BmrC38GVWq3
+         bYCa44M4geuAe2/I9m5/3XBl6IulPjm0J6vZZlDtGemTVHM8tYdZZWqUS6tpqCX5zQ
+         ODy0dFV0jZAVjY2cnHBoZwSfVV/eRq/VChxhaE8omcc+bRscK9xN/eikksngZtTHBH
+         t/Zt98qAP2g7do7iOeWAJT9J447YTqSrH3FULVoRnK9cTRgMaE6/9/Sap6d2OEV+gM
+         lkaDq3TbnBO+DLSvOZpacFMAwSmsajtbhnevq6f7XRSCynOBmOallgx1MCcbdqf7BV
+         /tQluWC0IWoEQ==
+From:   Brent Pappas <bpappas@pappasbrent.com>
+To:     mchehab@kernel.org
+Cc:     sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Brent Pappas <bpappas@pappasbrent.com>
+Subject: [PATCH] staging: media: atomisp: Remove unused macro PAGE_VALID
+Date:   Tue, 22 Nov 2022 16:22:41 -0500
+Message-Id: <20221122212240.12654-1-bpappas@pappasbrent.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121094649.1556002-5-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:46:49AM +0100, Greg Kroah-Hartman wrote:
-> of_device_uevent() does not modify the struct device * passed into it,
-> so make it a const * to enforce this.  Also the documentation for the
-> function was really wrong so fix that up at the same time.
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/of/device.c       | 6 +++---
->  include/linux/of_device.h | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Remove the unused macro PAGE_VALID.
 
-Looks like I can take this one?
+Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+---
+ drivers/staging/media/atomisp/include/mmu/isp_mmu.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-The same could be done for several other functions in of/device.c.
+diff --git a/drivers/staging/media/atomisp/include/mmu/isp_mmu.h b/drivers/staging/media/atomisp/include/mmu/isp_mmu.h
+index 268560954792..77546c773754 100644
+--- a/drivers/staging/media/atomisp/include/mmu/isp_mmu.h
++++ b/drivers/staging/media/atomisp/include/mmu/isp_mmu.h
+@@ -124,7 +124,6 @@ struct isp_mmu {
+ 	((pte) & ISP_PTE_VALID_MASK(mmu))
+ 
+ #define	NULL_PAGE	((phys_addr_t)(-1) & ISP_PAGE_MASK)
+-#define	PAGE_VALID(page)	((page) != NULL_PAGE)
+ 
+ /*
+  * init mmu with specific mmu driver.
+-- 
+2.34.1
+
