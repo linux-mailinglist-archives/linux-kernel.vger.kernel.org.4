@@ -2,93 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F930633F21
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014F6633F22
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiKVOkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
+        id S232384AbiKVOlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiKVOkT (ORCPT
+        with ESMTP id S231465AbiKVOlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:40:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4D62B1AD;
-        Tue, 22 Nov 2022 06:40:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17D2C61741;
-        Tue, 22 Nov 2022 14:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D752C433D6;
-        Tue, 22 Nov 2022 14:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669128017;
-        bh=ZdUOPikyCG80XtHDnM2rGG9TSWAkvMCXAo+3DdnnZnY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Z3U1U0YaPUGWa+E3QQtLfU26qUd7pWht5fsQmND3VCvU/L7pi5f6PIWpruwvuA7D8
-         LgI+JPMKQoa08L0kJhOky7Jbv3aPYxaEZ2gH1BWTMsqr3f28RgjYvxtSEvkqbE6EyZ
-         aH1l8QQ03gEyUMM9Sc9r8O5ZdyA2X2ahJv1vJ3iOKIy/3DwYFqcV1szwkeWUuNnAcj
-         waizuuLBDFN+jNZd1N5rG8FrOt6358KQF+kjka2teqkRkbXIenk+cIdQa04kJQwloj
-         uMrslTew19gILSsG3xDK9Ehlj13n/qxa7pFJ99SBc8HuT0YlR3AGE5SJHLu2IxSPvk
-         sAaPxQ1XJknxQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5FCE4E270E3;
-        Tue, 22 Nov 2022 14:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 22 Nov 2022 09:41:20 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857262B1AD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:41:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669128079; x=1700664079;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bK6gdeOX6vdZom/X/FOQf0HjnPrZORGDVtA/PeDw1uY=;
+  b=TMEcw7m4kzB8Q07QQWGli2PmNDdkUeVDcsH+hz8asw4pfF+a6AcLp7RO
+   VHr8KsNnm/zaYgksNgDHvzZ14mAvastoXPXxFwTqcsC97DbQY/k6YQ5Ip
+   VYL0kix4aScZduKFVeoOodjUloXXsoEum86Qw8ZOQExCtWay7lSLIXudi
+   a6OYS4gJnvgTxUV0Wajn6B4dc1yMgijWHkiDdlfflZOPW4X3ouJ7IV8bp
+   sxfVqs7s91fkeYj7kQUfbYYNcybJI/sIdytgscT/5MUVYpSa7WZAJsrT+
+   NyOC16UYiXVSljIBT5VXJNwkIOkSO3Za1ElXqBflqM8AGllS/X4bYoMju
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="400117952"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="400117952"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 06:41:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="747376851"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="747376851"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Nov 2022 06:41:18 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oxUSb-0001Zh-1a;
+        Tue, 22 Nov 2022 14:41:17 +0000
+Date:   Tue, 22 Nov 2022 22:41:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/core] BUILD SUCCESS
+ d474d92d70250d43e7ce0c7cb8623f31ee7c40f6
+Message-ID: <637cdf89.RUTHvJuFN6m84Ale%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net-next 0/3] cleanup ocelot_stats exposure
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166912801738.31871.6233306488148993395.git-patchwork-notify@kernel.org>
-Date:   Tue, 22 Nov 2022 14:40:17 +0000
-References: <20221119231406.3167852-1-colin.foster@in-advantage.com>
-In-Reply-To: <20221119231406.3167852-1-colin.foster@in-advantage.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, edumazet@google.com, davem@davemloft.net,
-        f.fainelli@gmail.com, andrew@lunn.ch, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.manoil@nxp.com,
-        vladimir.oltean@nxp.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git irq/core
+branch HEAD: d474d92d70250d43e7ce0c7cb8623f31ee7c40f6  x86/apic: Remove X86_IRQ_ALLOC_CONTIGUOUS_VECTORS
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+elapsed time: 7160m
 
-On Sat, 19 Nov 2022 15:14:03 -0800 you wrote:
-> The ocelot_stats structures became redundant across all users. Replace
-> this redundancy with a static const struct. After doing this, several
-> definitions inside include/soc/mscc/ocelot.h no longer needed to be
-> shared. Patch 2 removes them.
-> 
-> Checkpatch throws an error for a complicated macro not in parentheses. I
-> understand the reason for OCELOT_COMMON_STATS was to allow expansion, but
-> interestingly this patch set is essentially reverting the ability for
-> expansion. I'm keeping the macro in this set, but am open to remove it,
-> since it doesn't _actually_ provide any immediate benefits anymore.
-> 
-> [...]
+configs tested: 56
+configs skipped: 2
 
-Here is the summary with links:
-  - [v2,net-next,1/3] net: mscc: ocelot: remove redundant stats_layout pointers
-    https://git.kernel.org/netdev/net-next/c/33d5eeb9a684
-  - [v2,net-next,2/3] net: mscc: ocelot: remove unnecessary exposure of stats structures
-    https://git.kernel.org/netdev/net-next/c/a3bb8f521fd8
-  - [v2,net-next,3/3] net: mscc: ocelot: issue a warning if stats are incorrectly ordered
-    https://git.kernel.org/netdev/net-next/c/877e7b7c3b12
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-You are awesome, thank you!
+gcc tested configs:
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a011-20221121
+i386                 randconfig-a013-20221121
+i386                 randconfig-a012-20221121
+ia64                             allmodconfig
+i386                 randconfig-a016-20221121
+i386                 randconfig-a014-20221121
+i386                 randconfig-a015-20221121
+arc                  randconfig-r043-20221121
+riscv                randconfig-r042-20221121
+s390                 randconfig-r044-20221121
+x86_64                           rhel-8.3-syz
+x86_64                           rhel-8.3-kvm
+x86_64                         rhel-8.3-kunit
+i386                                defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+i386                             allyesconfig
+x86_64               randconfig-a012-20221121
+x86_64                           allyesconfig
+x86_64               randconfig-a011-20221121
+x86_64               randconfig-a013-20221121
+x86_64               randconfig-a014-20221121
+x86_64               randconfig-a015-20221121
+x86_64               randconfig-a016-20221121
+arm                                 defconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221121
+hexagon              randconfig-r045-20221121
+x86_64               randconfig-a004-20221121
+x86_64               randconfig-a001-20221121
+x86_64               randconfig-a003-20221121
+x86_64               randconfig-a002-20221121
+x86_64               randconfig-a005-20221121
+x86_64               randconfig-a006-20221121
+i386                 randconfig-a004-20221121
+i386                 randconfig-a001-20221121
+i386                 randconfig-a003-20221121
+i386                 randconfig-a005-20221121
+i386                 randconfig-a002-20221121
+i386                 randconfig-a006-20221121
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
