@@ -2,426 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03207634B50
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DF0634B52
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234947AbiKVXoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 18:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S234937AbiKVXon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 18:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234837AbiKVXoO (ORCPT
+        with ESMTP id S234982AbiKVXok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 18:44:14 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3CCC72C6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 15:44:12 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id p8so25794874lfu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 15:44:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kh8Ee2itXlT1W2A9GPivBdVAR6dBJYKfAjyordieSas=;
-        b=tUnDceBneI/xb6U6ZgifgmFPCbzdTXEzVGzuZx+4EC6gfwGS7n4q6wcsqioozllw8n
-         hlZ13cZzQ3gR76HOdyyuOnyxKqYtq4qrs/5TKtrVQQDTDycCjzcojAxfqP9di1Yjt1gO
-         Bhc/KkTu1TA3CW5QHzq5mclTJfOFzXn9wHo3ioAsqhfrtZLCTl5oaJ/9DwNNybU+qvE5
-         aDRI+ztBpyAwGEMWEh/8UHf6atPhcZxEjZYp+Zt6wFFf7o99K6uZ1U7IOU7HMMOfN76J
-         C3mkFbXMx22CtqSioUcT27lWxQlYbMDKPCRTRpjozJjV1Ueu0Hlj5Y9xjx2nCgF+IHHm
-         oAtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kh8Ee2itXlT1W2A9GPivBdVAR6dBJYKfAjyordieSas=;
-        b=PGbxIZ0wotjeUOgkCW3S23LokR0rbCuwEKuUWvsuq5U2r1vHL+YtsVjJ48TSpoKlAp
-         INAE+FI/5moBBx+fd7h8BucEil5uDx846+xoySkDQLxMm1SxjpAhwqmgxjW0o8Kw/JNd
-         ApptLmYg7EM0K07+9ObAVBMqVnXVJETqt9F/flximTYJgt62rgDKnLWipZv+TW7wHypt
-         /DigYt44KYD5xyAfquXXtbHJSP9c7uPey1LYcrzEePFYmNFbv/CDYcAvlsZKBkxtRsat
-         mHI3lONLj4y1BDFVAhY5SIlRNqUaXV5bfHoRO7NJqgSkJHiFO6XptkXzoSWLvoUTA8NZ
-         JY4Q==
-X-Gm-Message-State: ANoB5pn5MlX1OsVGEyHjehu/m1BgqA7PtxEwueD3GEJhBSGZTnFvWLy3
-        mh4w9Q4CRfdCyVEqHN5Hu1BK+g==
-X-Google-Smtp-Source: AA0mqf7KeM67mfMhxnKbiHYPFesXCdeJFMp6RXRQ1IjKk15muxSFfoiJJfAVbp/Q2Sv4C0u+nPG82g==
-X-Received: by 2002:ac2:51b6:0:b0:4ae:8510:646f with SMTP id f22-20020ac251b6000000b004ae8510646fmr8965170lfk.432.1669160650397;
-        Tue, 22 Nov 2022 15:44:10 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a302:8a1a::1? (dzpbkzhtyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:a302:8a1a::1])
-        by smtp.gmail.com with ESMTPSA id z27-20020a2ebe1b000000b0027760138c53sm2002063ljq.72.2022.11.22.15.44.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 15:44:09 -0800 (PST)
-Message-ID: <425eb237-ac31-2c32-3ad4-542048eee344@linaro.org>
-Date:   Wed, 23 Nov 2022 01:44:09 +0200
+        Tue, 22 Nov 2022 18:44:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED389C723E;
+        Tue, 22 Nov 2022 15:44:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95FDFB81CEF;
+        Tue, 22 Nov 2022 23:44:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50CF7C433D7;
+        Tue, 22 Nov 2022 23:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669160675;
+        bh=s223SP/RFpQY9lN8EX5vF1WrFIPun8dMRy1bOsGbAoc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qYSBPvDPItWGMvlA77rGvB7+sa4DKveQ/aAPrBMFC1HzImpQ75hrlOXVBO/RTWRsZ
+         PMKB5MHlU4iaOJXk9F9VxHM6o9r73VLgf9ZpYYbcnMvFMS/CjlTjt2ScbCekeO8q7L
+         Q5+y4FhxGZWdO6GbbPj53V35FEkqWAbUdptnYc1JZ/99YVwE18D/DB6b8tWI3dGvoq
+         qoq3BrR3FdGuciro3kB9MczF0chyIEkxaM24CkwNwdEMriKGEGRTKO5+SZC9c8u+8Q
+         9Hk3ZT65eImsO0WbWaNmZJOucDW6amjs8vWO9zbeWMEMOcyO/SId9XTaZ4zCmEtzKY
+         ByyoviCE0dXDg==
+Received: by mail-vs1-f48.google.com with SMTP id 124so2726319vsv.4;
+        Tue, 22 Nov 2022 15:44:35 -0800 (PST)
+X-Gm-Message-State: ANoB5plEIr2/zUwS5+hhDv2Qh0Dz8Y6N9PHZ86kh6+ldt5CsWDqcSyED
+        tmJcb5p1Ty7KaD1p9ELyGROFLti8Tg9Cv2Wlug==
+X-Google-Smtp-Source: AA0mqf6P+opwsUO66iJ1El9JrVnB1tLV47UN9xEcWQO0bvTAgyfeeZBhMkAXsXAjF0Exc1LyI6sR9OTxKeZqP4PgXwM=
+X-Received: by 2002:a05:6102:3003:b0:3aa:2ac7:5956 with SMTP id
+ s3-20020a056102300300b003aa2ac75956mr6359328vsa.6.1669160674196; Tue, 22 Nov
+ 2022 15:44:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: display/msm: add support for the display
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Adam Skladowski <a_skl39@protonmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-References: <20221120133744.24808-1-a39.skl@gmail.com>
- <20221120133744.24808-2-a39.skl@gmail.com>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221120133744.24808-2-a39.skl@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <8b976cf546bad3aa159a6f05cd3c15d1@walle.cc> <20221118214036.1269005-1-michael@walle.cc>
+ <CAL_JsqKnuycUSHfxxcZMcidELA-ttZUv5NhV5ApkpUQMsc-aQQ@mail.gmail.com> <fc101fbe1d8c94587a22d24a96e4dfb7@walle.cc>
+In-Reply-To: <fc101fbe1d8c94587a22d24a96e4dfb7@walle.cc>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 22 Nov 2022 17:44:26 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+CT00AHOK8Nxe_kUa6F_OcgxW4BL10iWWwKCJNwbTsAw@mail.gmail.com>
+Message-ID: <CAL_Jsq+CT00AHOK8Nxe_kUa6F_OcgxW4BL10iWWwKCJNwbTsAw@mail.gmail.com>
+Subject: Re: [PATCH] of: property: special #nvmem-cell-cells handling
+To:     Michael Walle <michael@walle.cc>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/11/2022 15:37, Adam Skladowski wrote:
-> Add DPU and MDSS schemas to describe MDSS and DPU blocks on the Qualcomm
-> SM6115 platform.
-> Configuration for DSI/PHY is shared with QCM2290 so compatibles are reused.
-> Lack of dsi phy supply in example is intended
-> due to fact on qcm2290, sm6115 and sm6125
-> this phy is supplied via power domain, not regulator.
-> 
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
-> ---
->   .../bindings/display/msm/qcom,sm6115-dpu.yaml |  87 ++++++++
->   .../display/msm/qcom,sm6115-mdss.yaml         | 187 ++++++++++++++++++
->   2 files changed, 274 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml
->   create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml
-> new file mode 100644
-> index 000000000000..cc77675ec4f6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-dpu.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/msm/qcom,sm6115-dpu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Display DPU dt properties for SM6115 target
-> +
-> +maintainers:
-> +  - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> +
-> +$ref: /schemas/display/msm/dpu-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: qcom,sm6115-dpu
-> +
-> +  reg:
-> +    items:
-> +      - description: Address offset and size for mdp register set
-> +      - description: Address offset and size for vbif register set
-> +
-> +  reg-names:
-> +    items:
-> +      - const: mdp
-> +      - const: vbif
-> +
-> +  clocks:
-> +    items:
-> +      - description: Display AXI clock from gcc
-> +      - description: Display AHB clock from dispcc
-> +      - description: Display core clock from dispcc
-> +      - description: Display lut clock from dispcc
-> +      - description: Display rotator clock from dispcc
-> +      - description: Display vsync clock from dispcc
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bus
-> +      - const: iface
-> +      - const: core
-> +      - const: lut
-> +      - const: rot
-> +      - const: vsync
+On Fri, Nov 18, 2022 at 4:03 PM Michael Walle <michael@walle.cc> wrote:
+>
+> Am 2022-11-18 22:52, schrieb Rob Herring:
+> > On Fri, Nov 18, 2022 at 3:40 PM Michael Walle <michael@walle.cc> wrote:
+> >>
+> >> Since recently, there is a new #nvmem-cell-cells. To be backwards
+> >> compatible this is optional. Therefore, we need special handling and
+> >> cannot use DEFINE_SIMPLE_PROP() anymore.
+> >>
+> >> Signed-off-by: Michael Walle <michael@walle.cc>
+> >> ---
+> >> This patch will be part of the following series:
+> >> https://lore.kernel.org/linux-arm-kernel/20221118185118.1190044-1-michael@walle.cc/
+> >>
+> >>  drivers/of/property.c | 17 ++++++++++++++++-
+> >>  1 file changed, 16 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> >> index 967f79b59016..93c0ea662336 100644
+> >> --- a/drivers/of/property.c
+> >> +++ b/drivers/of/property.c
+> >> @@ -1305,7 +1305,6 @@ DEFINE_SIMPLE_PROP(dmas, "dmas", "#dma-cells")
+> >>  DEFINE_SIMPLE_PROP(power_domains, "power-domains",
+> >> "#power-domain-cells")
+> >>  DEFINE_SIMPLE_PROP(hwlocks, "hwlocks", "#hwlock-cells")
+> >>  DEFINE_SIMPLE_PROP(extcon, "extcon", NULL)
+> >> -DEFINE_SIMPLE_PROP(nvmem_cells, "nvmem-cells", NULL)
+> >>  DEFINE_SIMPLE_PROP(phys, "phys", "#phy-cells")
+> >>  DEFINE_SIMPLE_PROP(wakeup_parent, "wakeup-parent", NULL)
+> >>  DEFINE_SIMPLE_PROP(pinctrl0, "pinctrl-0", NULL)
+> >> @@ -1381,6 +1380,22 @@ static struct device_node
+> >> *parse_interrupts(struct device_node *np,
+> >>         return of_irq_parse_one(np, index, &sup_args) ? NULL :
+> >> sup_args.np;
+> >>  }
+> >>
+> >> +static struct device_node *parse_nvmem_cells(struct device_node *np,
+> >> +                                            const char *prop_name,
+> >> int index)
+> >> +{
+> >> +       struct of_phandle_args sup_args;
+> >> +
+> >> +       if (strcmp(prop_name, "nvmem-cells"))
+> >> +               return NULL;
+> >> +
+> >> +       if (of_parse_phandle_with_optional_args(np, prop_name,
+> >> +                                               "#nvmem-cell-cells",
+> >> index,
+> >> +                                               &sup_args))
+> >> +               return NULL;
+> >> +
+> >> +       return sup_args.np;
+> >> +}
+> >
+> > There's a couple of other cases like that (MSI IIRC), so can we
+> > generalize this to work in more than 1 case?
+>
+> You mean addding a new DEFINE_SIMPLE_PROP_OPTIONAL_ARGS()?
 
-Please add:
+Actually, I think you can just do something like the below. I don't
+think we need to separately handle an optional #.*-cells and a
+required one. It's really just validation which we do already both
+with the tools and when the subsystems parse these bindings. Of
+course, if we need to handle cases other than 0 default cells, we'll
+have to restructure the define some to pass the default cells.
 
-required:
-   - compatible
-   - reg
-   - reg-names
-   - clocks
-   - clock-names
+diff --git a/drivers/of/property.c b/drivers/of/property.c
+index 967f79b59016..198f56633eb0 100644
+--- a/drivers/of/property.c
++++ b/drivers/of/property.c
+@@ -1254,7 +1254,7 @@ static struct device_node
+*parse_suffix_prop_cells(struct device_node *np,
+        if (strcmp_suffix(prop_name, suffix))
+                return NULL;
 
-Per Krzysztof's request these requirements are migrating from dpu-common 
-to individual dpu schemas
-
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,sm6115-dispcc.h>
-> +    #include <dt-bindings/clock/qcom,gcc-sm6115.h>
-> +    #include <dt-bindings/power/qcom-rpmpd.h>
-> +
-> +    display-controller@5e01000 {
-> +        compatible = "qcom,sm6115-dpu";
-> +        reg = <0x05e01000 0x8f000>,
-> +              <0x05eb0000 0x2008>;
-> +        reg-names = "mdp", "vbif";
-> +
-> +        clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_MDP_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_ROT_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +        clock-names = "bus", "iface", "core", "lut", "rot", "vsync";
-> +
-> +        operating-points-v2 = <&mdp_opp_table>;
-> +        power-domains = <&rpmpd SM6115_VDDCX>;
-> +
-> +        interrupt-parent = <&mdss>;
-> +        interrupts = <0>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +                endpoint {
-> +                    remote-endpoint = <&dsi0_in>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> new file mode 100644
-> index 000000000000..af721aa05b22
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> @@ -0,0 +1,187 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/msm/qcom,sm6115-mdss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SM6115 Display MDSS
-> +
-> +maintainers:
-> +  - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> +
-> +description:
-> +  Device tree bindings for MSM Mobile Display Subsystem(MDSS) that encapsulates
-> +  sub-blocks like DPU display controller and DSI. Device tree bindings of MDSS
-> +  are mentioned for SM6115 target.
-> +
-> +$ref: /schemas/display/msm/mdss-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: qcom,sm6115-mdss
-> +
-> +  clocks:
-> +    items:
-> +      - description: Display AHB clock from gcc
-> +      - description: Display AXI clock
-> +      - description: Display core clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: iface
-> +      - const: bus
-> +      - const: core
-> +
-> +  iommus:
-> +    maxItems: 2
-> +
-> +patternProperties:
-> +  "^display-controller@[0-9a-f]+$":
-> +    type: object
-> +    properties:
-> +      compatible:
-> +        const: qcom,sm6115-dpu
-> +
-> +  "^dsi@[0-9a-f]+$":
-> +    type: object
-> +    properties:
-> +      compatible:
-> +        const: qcom,dsi-ctrl-6g-qcm2290
-> +
-> +  "^phy@[0-9a-f]+$":
-> +    type: object
-> +    properties:
-> +      compatible:
-> +        const: qcom,dsi-phy-14nm-2290
-
-required:
-   compatible
-
-The same story
-
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,sm6115-dispcc.h>
-> +    #include <dt-bindings/clock/qcom,gcc-sm6115.h>
-> +    #include <dt-bindings/clock/qcom,rpmcc.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/power/qcom-rpmpd.h>
-> +
-> +    mdss@5e00000 {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        compatible = "qcom,sm6115-mdss";
-> +        reg = <0x05e00000 0x1000>;
-> +        reg-names = "mdss";
-> +        power-domains = <&dispcc MDSS_GDSC>;
-> +        clocks = <&gcc GCC_DISP_AHB_CLK>,
-> +                 <&gcc GCC_DISP_HF_AXI_CLK>,
-> +                 <&dispcc DISP_CC_MDSS_MDP_CLK>;
-> +        clock-names = "iface", "bus", "core";
-> +
-> +        interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <1>;
-> +
-> +        iommus = <&apps_smmu 0x420 0x2>,
-> +                 <&apps_smmu 0x421 0x0>;
-> +        ranges;
-> +
-> +        display-controller@5e01000 {
-> +            compatible = "qcom,sm6115-dpu";
-> +            reg = <0x05e01000 0x8f000>,
-> +                  <0x05eb0000 0x2008>;
-> +            reg-names = "mdp", "vbif";
-> +
-> +            clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_MDP_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_ROT_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +            clock-names = "bus", "iface", "core", "lut", "rot", "vsync";
-> +
-> +            operating-points-v2 = <&mdp_opp_table>;
-> +            power-domains = <&rpmpd SM6115_VDDCX>;
-> +
-> +            interrupt-parent = <&mdss>;
-> +            interrupts = <0>;
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    dpu_intf1_out: endpoint {
-> +                        remote-endpoint = <&dsi0_in>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +
-> +        dsi@5e94000 {
-> +            compatible = "qcom,dsi-ctrl-6g-qcm2290";
-> +            reg = <0x05e94000 0x400>;
-> +            reg-names = "dsi_ctrl";
-> +
-> +            interrupt-parent = <&mdss>;
-> +            interrupts = <4>;
-> +
-> +            clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_ESC0_CLK>,
-> +                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +                     <&gcc GCC_DISP_HF_AXI_CLK>;
-> +            clock-names = "byte",
-> +                          "byte_intf",
-> +                          "pixel",
-> +                          "core",
-> +                          "iface",
-> +                          "bus";
-> +            assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>, <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
-> +            assigned-clock-parents = <&dsi0_phy 0>, <&dsi0_phy 1>;
-> +
-> +            operating-points-v2 = <&dsi_opp_table>;
-> +            power-domains = <&rpmpd SM6115_VDDCX>;
-> +            phys = <&dsi0_phy>;
-> +            phy-names = "dsi";
-
-phy-names are being phased out, please drop this line.
-
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    dsi0_in: endpoint {
-> +                        remote-endpoint = <&dpu_intf1_out>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +                    dsi0_out: endpoint {
-> +                    };
-> +                };
-> +            };
-> +        };
-> +
-> +        dsi0_phy: phy@5e94400 {
-> +            compatible = "qcom,dsi-phy-14nm-2290";
-> +            reg = <0x05e94400 0x100>,
-> +                  <0x05e94500 0x300>,
-> +                  <0x05e94800 0x188>;
-> +            reg-names = "dsi_phy",
-> +                        "dsi_phy_lane",
-> +                        "dsi_pll";
-> +
-> +            #clock-cells = <1>;
-> +            #phy-cells = <0>;
-> +
-> +            clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>, <&rpmcc RPM_SMD_XO_CLK_SRC>;
-> +            clock-names = "iface", "ref";
-> +        };
-> +    };
-> +...
-
--- 
-With best wishes
-Dmitry
-
+-       if (of_parse_phandle_with_args(np, prop_name, cells_name, index,
++       if (__of_parse_phandle_with_args(np, prop_name, cells_name, 0, index,
+                                       &sup_args))
+                return NULL;
