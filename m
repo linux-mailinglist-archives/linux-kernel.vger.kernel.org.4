@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21972634A52
+	by mail.lfdr.de (Postfix) with ESMTP id C2511634A54
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235159AbiKVWzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 17:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
+        id S234721AbiKVWzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 17:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235308AbiKVWzP (ORCPT
+        with ESMTP id S235295AbiKVWzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 17:55:15 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA05D235
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:54:55 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id c7-20020a170903234700b0018729febd96so12473430plh.19
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:54:55 -0800 (PST)
+        Tue, 22 Nov 2022 17:55:19 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4314DD7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:55:09 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3abc71aafcaso26084907b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:55:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CPjzMg27nsggyssWlNTVqAdofNU6F96gO6p2IIRQk5M=;
-        b=SGVC0BD1YliTiWMIJWZXNMQlsIXRWnLU/5veN8ZD5UKOWOyjuM7aLFNgGBiAbylFp2
-         9mChjb2FfHD+O5dctg1wpnQo3WYZjL3KTkA/8zz2mfvkQHjQARf5v5XpYemA+e/SkNpD
-         UisNmhrXN1j40KoZ0rNhD/FNprmaAXBrf2URzOJhZCqVZmoJ8c7J/JpBh6WLoupZgd3n
-         X41sQDiTK6defUGTdcoOcjhnQ6vAN5AYkhE53vi8+m9qwmjD2r0OWqwN59peD96l/97d
-         MWyxzkhYLtTpuBKUSmnM7iFJZVDIu3iqxD7molmaEdDyFu44ulprv+qY5X8l0IT53VoS
-         mmQA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vgVj81TaAJFPaup6fEizR2CqkCcmP7+hjUnyLuec4+o=;
+        b=RuJwiWKaa2cOkX9/h/pterDKBIAJDyCMl3Gr2uokUaHiSgUYf21FBwhwfxGjFmEaux
+         DBrN6a5QhNaok28H5BUN4BDVZPpvBg2kKMmzDbJkI3dN14ygAuhbKzSGa7RHQSIYVb6J
+         M26ETl80wMn5iENf8wxbk0Q+FoFB6tTXpvTjNWzl5v1R5ed7nRKbE/JX3ORhTe5mVAJX
+         FM9+59F9ZllVPLSRCp4yncMNAebZy8+1gwc+2Hg99EJhj9XIegPAVWMNOhNhYbwjRzXm
+         vci4H/4bdTkf3ixODqhpo65YzIV0aiMt9txB6cEo61dfu7HSU17O1o0AqK/FzDJa+1eI
+         sxRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CPjzMg27nsggyssWlNTVqAdofNU6F96gO6p2IIRQk5M=;
-        b=uOMNrqtETCs+TQ70CPYNqbDxQQVBsIoKbu2V4RqM8XE0vWBlmIITLsKUgPs4sOoi4e
-         NqSS4cDDJic3w/AzqPpAtJ17pUTUGmUFiDkYKQbTZVDPJ4LM9aQu96d44fGtD4T3AzfD
-         z4cIrSNy6Yx7Wwzj+dhSB9PVwzbWC8tyXpAcwndUwteAO8isM58m1/0o+Rl1lnc5ystG
-         2SG56EJSWTVZsuiXQQo5YZ3KlPivlCIfLI7CeOD7bmBW/lZdMtn2NWtStIi6e8OWpac+
-         STNz/UBHWJUkkVD11y8AKCgLz7Chg2YhsNZektuu1xAaTCQoTP1VRLV4TQHs3Ai9i0Kx
-         Pllg==
-X-Gm-Message-State: ANoB5pmbgGnyUgb4bpBVBzJRX7KzFFnbHWIfu9VZus8MIwMv4tMTLixE
-        JPEjS2fCjf2fVxNIhZre4m9eK0ZyNN5QRzI=
-X-Google-Smtp-Source: AA0mqf6dt/I3YMYEPf//iDeyEt8ma9uMDG8TKQr0w1uAP4PK1B8ZTSUxRuz7gesc9hX5Jp6Mgo01SqoODZHFnQA9
-X-Received: from joefradley-custom-96.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:831])
- (user=joefradley job=sendgmr) by 2002:a17:902:6505:b0:172:7a15:9a61 with SMTP
- id b5-20020a170902650500b001727a159a61mr9143392plk.71.1669157695439; Tue, 22
- Nov 2022 14:54:55 -0800 (PST)
-Date:   Tue, 22 Nov 2022 14:54:49 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221122225450.789234-1-joefradley@google.com>
-Subject: [PATCH] crypto: x86/curve25519 - disable gcov
-From:   Joe Fradley <joefradley@google.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     kernel-team@android.com, Joe Fradley <joefradley@google.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vgVj81TaAJFPaup6fEizR2CqkCcmP7+hjUnyLuec4+o=;
+        b=e24txBey+nO7KTlfCtiIggZXSsUHIWTTJl7Ak4hHPZ+/+pwb5XBjGTU1rqeYgU3hPt
+         nw5UzWSAeAo/kVgeupqkv4u5uwKqM9Fp70d5adzaQ/Kqj9zI5ZGePyc7VrzWx2cGlrwA
+         dxyiQmiAC57oFRSubNmX6nwEadS8uS3sExJ9GIBKyU/EgWDMVw2lTOu3nwb42jcXuXyy
+         9DBIf+nbFOVDAmSv1LCaTbBPP+xv/RyAl588yvPgKe4cW0ZX1Q4+cYJba4FhGPBXWU/Q
+         Wcj+OIobs/wx+yAZMuSViYFusNMRI27zBfOjr4A4XTTpr/2OePQWi1EL+4lvnjfyNBak
+         pVNw==
+X-Gm-Message-State: ANoB5pmlhCJrNb6NZkaoC2nNJzlIT7CP/LFl1q/bECxT3O5X+rLIs6Sp
+        3oNqkQcXb0uXMZhLZMSUdAOvxOxqLGeqBzsnVDnPBQ==
+X-Google-Smtp-Source: AA0mqf5lWYRbouY3wvSyTTHF5VwEyw1ykqzKm2VlVp0D1XBZHCXBRTzTAdT5ZyzQLfVztmPc7a+6n8h/U/Z8cXwlc/M=
+X-Received: by 2002:a81:5f04:0:b0:393:ab0b:5a31 with SMTP id
+ t4-20020a815f04000000b00393ab0b5a31mr22706109ywb.55.1669157708673; Tue, 22
+ Nov 2022 14:55:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20221112040452.644234-1-edumazet@google.com> <Y30gZm0mO4YNO85d@localhost.localdomain>
+In-Reply-To: <Y30gZm0mO4YNO85d@localhost.localdomain>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 22 Nov 2022 14:54:57 -0800
+Message-ID: <CANn89iL-hGPeaTzCibdaOoquAQYNYa8Fu337tqu98xyoZWarOQ@mail.gmail.com>
+Subject: Re: [PATCH -next] iommu/dma: avoid expensive indirect calls for sync operations
+To:     Michal Kubiak <michal.kubiak@intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
+        iommu@lists.linux.dev, maciej.fijalkowski@intel.com,
+        magnus.karlsson@intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +73,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-curve25519-x86_64.c fails to build when CONFIG_GCOV_KERNEL is enabled.
-The error is "inline assembly requires more registers than available"
-thrown from the `fsqr()` function. Therefore, excluding this file from
-GCOV profiling until this issue is resolved. Thereby allowing
-CONFIG_GCOV_PROFILE_ALL to be enabled for x86.
+On Tue, Nov 22, 2022 at 11:18 AM Michal Kubiak <michal.kubiak@intel.com> wrote:
+>
+> On Sat, Nov 12, 2022 at 04:04:52AM +0000, Eric Dumazet wrote:
+> > Quite often, NIC devices do not need dma_sync operations
+> > on x86_64 at least.
+> >
+> > Indeed, when dev_is_dma_coherent(dev) is true and
+> > dev_use_swiotlb(dev) is false, iommu_dma_sync_single_for_cpu()
+> > and friends do nothing.
+> >
+> > However, indirectly calling them when CONFIG_RETPOLINE=y
+> > consumes about 10% of cycles on a cpu receiving packets
+> > from softirq at ~100Gbit rate, as shown in [1]
+> >
+> > Even if/when CONFIG_RETPOLINE is not set, there
+> > is a cost of about 3%.
+> >
+> > This patch adds a copy of iommu_dma_ops structure,
+> > where sync_single_for_cpu, sync_single_for_device,
+> > sync_sg_for_cpu and sync_sg_for_device are unset.
+>
+>
+> Larysa from our team has found out this patch introduces also a
+> functional improvement for batch allocation in AF_XDP while iommmu is
+> turned on.
+> In 'xp_alloc_batch()' function there is a check if DMA needs a
+> synchronization. If so, batch allocation is not supported and we can
+> allocate only one buffer at a time.
+>
+> The flag 'dma_need_sync' is being set according to the value returned by
+> the function 'dma_need_sync()' (from '/kernel/dma/mapping.c').
+> That function only checks if at least one of two DMA ops is defined:
+> 'ops->sync_single_for_cpu' or 'ops->sync_single_for_device'.
+>
+> > +static const struct dma_map_ops iommu_nosync_dma_ops = {
+> > +     iommu_dma_ops_common_fields
+> > +
+> > +     .sync_single_for_cpu    = NULL,
+> > +     .sync_single_for_device = NULL,
+> > +     .sync_sg_for_cpu        = NULL,
+> > +     .sync_sg_for_device     = NULL,
+> > +};
+> > +#undef iommu_dma_ops_common_fields
+> > +
+> >  /*
+> >   * The IOMMU core code allocates the default DMA domain, which the underlying
+> >   * IOMMU driver needs to support via the dma-iommu layer.
+> > @@ -1586,7 +1612,8 @@ void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64 dma_limit)
+> >       if (iommu_is_dma_domain(domain)) {
+> >               if (iommu_dma_init_domain(domain, dma_base, dma_limit, dev))
+> >                       goto out_err;
+> > -             dev->dma_ops = &iommu_dma_ops;
+> > +             dev->dma_ops = dev_is_dma_sync_needed(dev) ?
+> > +                             &iommu_dma_ops : &iommu_nosync_dma_ops;
+> >       }
+> >
+> >       return;
+>
+>  This code removes defining 'sync_*' DMA ops if they are not actually
+>  used. Thanks to that improvement the function 'dma_need_sync()' will
+>  always return more meaningful information if any DMA synchronization is
+>  actually needed for iommu.
+>
+>  Together with Larysa we have applied that patch and we can confirm it
+>  helps for batch buffer allocation in AF_XDP ('xsk_buff_alloc_batch()'
+>  call) when iommu is enabled.
 
-Signed-off-by: Joe Fradley <joefradley@google.com>
----
- arch/x86/crypto/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks for testing !
 
-diff --git a/arch/x86/crypto/Makefile b/arch/x86/crypto/Makefile
-index 3b1d701a4f6c..3e7a329235bd 100644
---- a/arch/x86/crypto/Makefile
-+++ b/arch/x86/crypto/Makefile
-@@ -107,3 +107,6 @@ quiet_cmd_perlasm = PERLASM $@
-       cmd_perlasm = $(PERL) $< > $@
- $(obj)/%.S: $(src)/%.pl FORCE
- 	$(call if_changed,perlasm)
-+
-+# Disable GCOV in odd or sensitive code
-+GCOV_PROFILE_curve25519-x86_64.o := n
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
+I am quite busy relocating, I will address Christoph feedback next week.
