@@ -2,118 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B9E633E83
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A555633E8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbiKVOIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S234047AbiKVOJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234060AbiKVOIK (ORCPT
+        with ESMTP id S233747AbiKVOJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:08:10 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0EDC67106;
-        Tue, 22 Nov 2022 06:06:27 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78BE91FB;
-        Tue, 22 Nov 2022 06:06:33 -0800 (PST)
-Received: from [10.57.36.169] (unknown [10.57.36.169])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A3ED13F73D;
-        Tue, 22 Nov 2022 06:06:24 -0800 (PST)
-Message-ID: <2f65e490-c264-9771-b120-e5ce76376170@arm.com>
-Date:   Tue, 22 Nov 2022 14:06:23 +0000
+        Tue, 22 Nov 2022 09:09:27 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E5E17A9F;
+        Tue, 22 Nov 2022 06:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669126072; x=1700662072;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=IHxOYkLfkkrc/bieTDxjR1LwY2YqYpBSUyTZJebUioA=;
+  b=e8CNtRp6BK33OSW+orrY3o3KRW3cwtsq6MFQtWr8zRvq9LiKdWk6od4k
+   uQRdedepGL1LPLOiDcQdBcwxrNvx7mK2EDe8FzunFUqcBX0gjcpYlHWnh
+   eQpDVVU0/HRg/k4Lrhdhr0WlZZGlYuPoCRgrwUy/+lDo+P57kWUEz6PxY
+   /YVgTr2nrFEBtyjPrtV2tt9ilEKWey/IT0yMxt5jQsO3tj3x067UsgjRM
+   Ih5saFeRAg3h28KhA9Vn0XpzCyns9xFqcT3GPROPVskq8GZwcY2G7klPX
+   hcuuM+n1v4w//GKSHVsCgRFiwMcuJxDDoHu7BiLZp5y42cRbgKiS0w8WD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="313851205"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="313851205"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 06:07:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="619223198"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="619223198"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 22 Nov 2022 06:07:12 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oxTva-00FrCW-31;
+        Tue, 22 Nov 2022 16:07:10 +0200
+Date:   Tue, 22 Nov 2022 16:07:10 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djrscally@gmail.com, heikki.krogerus@linux.intel.com,
+        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Subject: Re: [PATCH v2] device property: fix of node refcount leak in
+ fwnode_graph_get_next_endpoint()
+Message-ID: <Y3zXjpY2/Le/3J9q@smile.fi.intel.com>
+References: <20221122120039.760773-1-yangyingliang@huawei.com>
+ <Y3zGjLsDmVv0ErVR@smile.fi.intel.com>
+ <75602dce-0780-e51a-c8c9-d1820ddf3e2b@huawei.com>
+ <Y3zLwj/G/E3kZsJE@smile.fi.intel.com>
+ <26c0d10a-5dd8-6cea-57b3-eea63099baa1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH v13 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     hejunhao <hejunhao3@huawei.com>, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        jonathan.cameron@huawei.com, john.garry@huawei.com
-Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        lpieralisi@kernel.org, linuxarm@huawei.com, yangyicong@huawei.com,
-        liuqi115@huawei.com, f.fangjian@huawei.com,
-        prime.zeng@hisilicon.com
-References: <20221114090316.63157-1-hejunhao3@huawei.com>
- <20221114090316.63157-2-hejunhao3@huawei.com>
- <92291cb2-859c-a994-b05d-806def431376@arm.com>
- <c07e6417-7a37-3cf5-d3dd-b3ce7b3c20b1@huawei.com>
- <1c8da30c-d798-729d-c8e5-73a07f8b9f18@arm.com>
- <95024107-94d2-6114-4c50-b152c4da362b@huawei.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <95024107-94d2-6114-4c50-b152c4da362b@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <26c0d10a-5dd8-6cea-57b3-eea63099baa1@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 13:23, hejunhao wrote:
-> 
-> On 2022/11/21 18:47, Suzuki Kuruppassery Poulose wrote:
->> On 18/11/2022 12:45, hejunhao wrote:
->>> Hi Suzuki ,
->>>
->>>
->>> On 2022/11/15 19:06, Suzuki K Poulose wrote:
->>>> On 14/11/2022 09:03, Junhao He wrote:
->>>>> From: Qi Liu <liuqi115@huawei.com>
->>>>>
->>
->>>>> +static void smb_init_hw(struct smb_drv_data *drvdata)
->>>>> +{
->>>>> +    /* First disable SMB and clear the status of SMB buffer */
->>>>> +    smb_reset_buffer_status(drvdata);
->>>>> +    smb_disable_hw(drvdata);
->>>>> +    smb_purge_data(drvdata);
->>>>> +
->>>>> +    writel(SMB_LB_CFG_LO_DEFAULT, drvdata->base + SMB_LB_CFG_LO_REG);
->>>>> +    writel(SMB_LB_CFG_HI_DEFAULT, drvdata->base + SMB_LB_CFG_HI_REG);
->>>>> +    writel(SMB_GLB_CFG_DEFAULT, drvdata->base + SMB_GLB_CFG_REG);
->>>>> +    writel(SMB_GLB_INT_CFG, drvdata->base + SMB_GLB_INT_REG);
->>>>> +    writel(SMB_LB_INT_CTRL_CFG, drvdata->base + SMB_LB_INT_CTRL_REG);
->>>>
->>>> Does this come with interrupt on overflow ? Do we not use this ?
->>>>
->>> When the buffer overflow, no interrupt will come.
->>> Interrupt will upgrade SMB_LB_INT_STS_REG register status if start 
->>> trace.
->>> Thanks.
->>>> Rest looks fine to me.
->>
->> What is the purpose of the "Interrupt" on the SMB ? It is not clear to
->> me.
-> The SMB_LB_INT_CTRL_REG register control the validity of both real-time
-> events and interrupts. When logical buffer status changes causes to 
-> issue an
-> interrupt at the same time as it issues a real-time event.
-> Real-time events are used in SMB driver, which needs to get the buffer 
-> status.
-> Interrupts are used in debugger mode and cannot be registered in kernel.
->   ..._BUF_NOTE_MASK control which events flags or interrupts are valid.
+On Tue, Nov 22, 2022 at 09:41:28PM +0800, Yang Yingliang wrote:
+> On 2022/11/22 21:16, Andy Shevchenko wrote:
+> > On Tue, Nov 22, 2022 at 09:12:41PM +0800, Yang Yingliang wrote:
+> > > On 2022/11/22 20:54, Andy Shevchenko wrote:
+> > > > On Tue, Nov 22, 2022 at 08:00:39PM +0800, Yang Yingliang wrote:
 
-Please add this to a comment in the code above the register write.
+...
 
-Thanks
-Suzuki
+> > > > It seems too complicated for the simple fix.
+> > > > 
+> > > > As I said, just drop const qualifier and add fwnode_handle_get() in the 'else'
+> > > > branch. This will allow you to drop if (prev) at the end.
+> > > fwnode is const, fwnode_handle_get doesn't accept this type.
+> > I'm talking about parent.
+> You suggested this:
+> 
+> "Instead you might consider to replace
+> 
+> 	parent = fwnode;
+> 
+> by
+> 
+> 	parent = fwnode_handle_get(fwnode);"
+> 
+> 
+> It has compile warning:
+> drivers/base/property.c: In function ‘fwnode_graph_get_next_endpoint’:
+> drivers/base/property.c:1004:30: warning: passing argument 1 of ‘fwnode_handle_get’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+>    parent = fwnode_handle_get(fwnode);
+>                               ^~~~~~
+> drivers/base/property.c:809:63: note: expected ‘struct fwnode_handle *’ but argument is of type ‘const struct fwnode_handle *’
+>  struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode)
+> 
+> ~~~~~~~~~~~~~~~~~~~~~~^~~~~~
 
-> 
-> Thanks.
-> 
-> Best regards,
-> Junhao.
-> 
->> Suzuki
->>
->> _______________________________________________
->> CoreSight mailing list -- coresight@lists.linaro.org
->> To unsubscribe send an email to coresight-leave@lists.linaro.org
-> 
+I see what you mean. Thank you for clarification.
+
+So, it seems a bit twisted.
+
+If prev == NULL, can the
+
+        ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, NULL);
+
+return NULL?
+
+If no, we may move this case directly to the 'else' branch and return from there.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
