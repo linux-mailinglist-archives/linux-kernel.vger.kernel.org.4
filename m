@@ -2,116 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9BF634A2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CBC634A2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234712AbiKVWlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 17:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S235094AbiKVWmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 17:42:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbiKVWlJ (ORCPT
+        with ESMTP id S234457AbiKVWmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 17:41:09 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5C8BA58F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:41:08 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AMMf2u5114514;
-        Tue, 22 Nov 2022 16:41:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1669156862;
-        bh=FVSNJYAF6x9Zrz7oPPeq6zFHcpkG3DTdVSTIsHxVqIs=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=uoZISZtVp65h2PbP+87H2FuY7BYO3k/lCDybFhkVtZmvUxNNX2ZRoRbk3nOGQa53w
-         oj9FCgg94a8TsxfxgulG0DrwwHWR87yJoMwxAVEBiz0Boh8hq7LaH0TLP9ZpEjG84H
-         ZYMzuzzd3ybrJOdDKANI9h2VDoFPnP0IuOjlUt5Q=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AMMf2hl014428
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Nov 2022 16:41:02 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 22
- Nov 2022 16:41:02 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 22 Nov 2022 16:41:02 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AMMf2wm017651;
-        Tue, 22 Nov 2022 16:41:02 -0600
-Date:   Tue, 22 Nov 2022 16:41:02 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Kevin Hilman <khilman@baylibre.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <nfrayer@baylibre.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <glaroque@baylibre.com>
-Subject: Re: [PATCH v6 0/2] soc: ti: k3-socinfo: Add module build support to
- the k3 socinfo driver
-Message-ID: <20221122224102.xchwn5d3k64bedgj@antitoxic>
-References: <20221117095419.171906-1-nfrayer@baylibre.com>
- <166906774215.20855.4956750581421635106.b4-ty@ti.com>
- <7ha64iaf6t.fsf@baylibre.com>
+        Tue, 22 Nov 2022 17:42:49 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053806381
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:42:48 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id 71-20020a17090a09cd00b00218adeb3549so247526pjo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:42:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OHmFcekX2nghj6K3yYTF3UfA+z88ogrDddAGW0uTMMQ=;
+        b=IZKEJ/eyL163tLYNjYsB6V+Orch889GjNf75EuwI63y8CtzNejtTFnpeIeN82rEtAh
+         GuzVPJ7PFL5wxV+GoJu2XOVSS/jCtS9Gsx6x0tOeMfnvLE7gF1VrZaicwq/loQAD1sJr
+         jSVHnKHktTPdY2YU2RUUYv19mr+Gt7goHhsbzgWuvvMYnsgWSxnVosDrOXl2KDrdaK0H
+         31CfwldjP721BvpPL+txGx8Jp3w2P9RUg4AJ/DojrHApn7Sk2vOh3wZdNwIBt0cl7nS9
+         dQqG+JymcXtfL/AbRdBt8VEFWzVyr34eBCaUG9p4EMeVFaWuX5hL8anJvtoTFLjIlCrU
+         GDIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OHmFcekX2nghj6K3yYTF3UfA+z88ogrDddAGW0uTMMQ=;
+        b=rZxk5cg1WArv704Q/XdZciAea+9+drbrdgkfCwpQ7V/Hz2nMdoDboJSMuKVW9Eho9y
+         ATW8Ktud7Zr7ggBKG6O9Ubjvl0fYX02R1c/dMKudOuoF3leTvefiSmcxJUT6f/k0/hBu
+         wbEmLjrfqu0vzWDveXzaRi613CfbSTQ6RI1GJxzVATUYACN7ERnIiU7TnLwz2N0YTX7u
+         w2LN1CF6gttyiFePkA4x9QDMQvnHHbsZiEGWCT9QknNpJv3uZc8NhQ8tjDnKyJOnYzWk
+         qSKzTufzx2AKG+uaOcu8pwd5XO4QDRkp4GWZ+BtyM2Mw8vx6wyU0Nxh8L/3eNppfjMHJ
+         Meiw==
+X-Gm-Message-State: ANoB5pkgrAIjw8LrKXOsxXbE5aU7rTotcMfc+a9Kup1dID3h6zPXLruT
+        VsglixtD1cbuKl605uF9L3nudw==
+X-Google-Smtp-Source: AA0mqf58wviWfQsfRaSAqOlo8p4navvCEjA52xb4TnyBjrYz+0CHYg862H1If5As/w3Bn21CvgHgIA==
+X-Received: by 2002:a17:902:ce90:b0:186:6d34:b7b5 with SMTP id f16-20020a170902ce9000b001866d34b7b5mr9088185plg.37.1669156967537;
+        Tue, 22 Nov 2022 14:42:47 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-65-106.pa.vic.optusnet.com.au. [49.186.65.106])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170903124500b00186c3afb49esm12607967plh.209.2022.11.22.14.42.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 14:42:46 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oxbyV-00HR09-OU; Wed, 23 Nov 2022 09:42:43 +1100
+Date:   Wed, 23 Nov 2022 09:42:43 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Oliver Sang <oliver.sang@intel.com>
+Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Zirong Lang <zlang@redhat.com>,
+        linux-xfs@vger.kernel.org, ying.huang@intel.com,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] xfs: account extra freespace btree splits for multiple
+ allocations
+Message-ID: <20221122224243.GS3600936@dread.disaster.area>
+References: <20221109034802.40322-1-hsiangkao@linux.alibaba.com>
+ <202211220854.48dad6fd-oliver.sang@intel.com>
+ <Y3wm8hwPMXcFNjiO@B-P7TQMD6M-0146.local>
+ <Y3yeVzzt5WIIHfhm@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <7ha64iaf6t.fsf@baylibre.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3yeVzzt5WIIHfhm@xsang-OptiPlex-9020>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12:48-20221122, Kevin Hilman wrote:
-> Hi Nishanth,
+On Tue, Nov 22, 2022 at 06:03:03PM +0800, Oliver Sang wrote:
+> hi Gao Xiang,
 > 
-> Nishanth Menon <nm@ti.com> writes:
+> On Tue, Nov 22, 2022 at 09:33:38AM +0800, Gao Xiang wrote:
+> > On Tue, Nov 22, 2022 at 09:09:34AM +0800, kernel test robot wrote:
+> > > 
+> > > please be noted we noticed Gao Xiang and Dave Chinner have already had lots of
+> > > discussion around this patch, which seems there is maybe new version later.
+> > > we just sent out this report FYI the possible performance impact of this patch.
+> > > 
+> > > 
+> > > Greeting,
+> > > 
+> > > FYI, we noticed a -15.1% regression of fxmark.ssd_xfs_MWCM_72_directio.works/sec due to commit:
+> > 
+> > Thanks for your report!
+> > 
+> > At a glance, I have no idea why this commit can have performance
+> > impacts.  Is the result stable?
 > 
-> > Hi Nicolas Frayer,
-> >
-> > On Thu, 17 Nov 2022 10:54:17 +0100, Nicolas Frayer wrote:
-> >> In order for the TI K3 SoC info driver to be built as a module, the
-> >> following changes have been made:
-> >> - Converted memory allocations to devm and added the remove callback
-> >> - Added necessary code to build the driver as a module
-> >> 
-> >> v2->v3:
-> >> dropped module conversion part of this series while other driver
-> >> dependencies on socinfo are worked out.
-> >> A dependency issue is introduced by changing subsys_initcall()
-> >> to module_platform_driver(). Some drivers using the socinfo information
-> >> probe before the socinfo driver itself and it makes their probe fail.
-> >> 
-> >> [...]
-> >
-> > I have applied the following to branch ti-drivers-soc-next on [1].
-> > Thank you!
+> in our tests, the result is quite stable.
+>      45589           -15.1%      38687 ±  2%  fxmark.ssd_xfs_MWCM_72_directio.works/sec
 > 
-> Sorry for the churn here, but I think these need to be reverted.
+> and detail data is as below:
+> for this commit:
+>   "fxmark.ssd_xfs_MWCM_72_directio.works/sec": [
+>     39192.224368,
+>     39665.690567,
+>     38980.680601,
+>     37298.99538,
+>     37483.256377,
+>     39504.606569
+>   ],
 > 
-> We've discoverd some more complexities/issues when socinfo is modular,
-> and I think the socinfo core code needs some work before this can
-> actually work reliably for all socinfo users.
-> 
-> Basically, I think we need to finish converting all the socinfo users to
-> modules before we can be sure of all the corner cases when socinfo
-> itself is a module.
-> 
-> Sorry about this churn, but I think it's better to be a bit conservative
-> here and revert before this lands in mainline.
+> for parent:
+>   "fxmark.ssd_xfs_MWCM_72_directio.works/sec": [
+>     45381.458009,
+>     45314.376204,
+>     45724.688965,
+>     45751.955937,
+>     45614.323267,
+>     45747.216475
+>   ],
 
-Understood, and thanks for the headsup and explanation offline (explains
-why I had'nt caught it in my regression checks). I have
-dropped the series (since we managed to catch it just in time before
-arnd picked it up), updated the next and send out a new PR.
+This MWCM workload uses a shared directory. Every worker thread (72
+of them) iterates creating a new file, writes 4kB of data to it and
+then closes it. There is no synchronisation between worker threads.
 
+The worker threads will lockstep on the directory lock for file
+creation, they will all attempt to allocate data in the same AG as
+the file is created. Hence writeback will race with file creation
+for AG locks, too.  Once the first AG is full, they will all attempt
+to allocate in the next AG (file creation and writeback).
+
+IOWs, this workload will race to fill AGs, will exercise the "AG
+full so skip to next AG" allocator fallbacks, etc.
+
+Changing where/how AGs are considered full will impact how the AG
+selection is made. I'm betting that there's a mismatch between the
+code that selects the initial AG for allocation (from
+xfs_bmap_btalloc() via the nullfb case) and the code that selects
+the actual AG for allocation (xfs_alloc_vextent() w/ NEAR_BNO
+policy) as a result of this change. This then results in
+xfs_alloc_vextent() trying to initially allocate from an AG that
+xfs_alloc_fix_freelist() considers to be full, so it skips the
+initial selected AG and starts searching for an AG it can allocate
+into.
+
+Combine that with AGF lock contention from 70+ tasks all trying to
+allocate in the same location...
+
+Cheers,
+
+Dave.
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Dave Chinner
+david@fromorbit.com
