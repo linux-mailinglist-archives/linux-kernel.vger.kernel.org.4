@@ -2,156 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031696336F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D240C633710
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiKVIZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S232757AbiKVI2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiKVIZl (ORCPT
+        with ESMTP id S232627AbiKVI2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:25:41 -0500
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD32B40461;
-        Tue, 22 Nov 2022 00:25:39 -0800 (PST)
-Received: by mail-ej1-f47.google.com with SMTP id f18so34082690ejz.5;
-        Tue, 22 Nov 2022 00:25:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rqzJXVCIFXT+ImcuK6zLC9C+IpbEl4M5NWl8PhnWNgo=;
-        b=PYm31l6uBTsU14LOqwru6wKUn8SNtjyY6PW/1OQBKgLQLAu6eulVVu+7LaCLcoheKD
-         STH8PMY3llbq8+DUywI9pxQPAhL2Du05tZw67C5Kf3qNhpFVX1IKn602IEZq7FgVwvZN
-         MTwAfUkR8XGYcJZuBtI7bfDKU8UVpWmdM37GZx2C+ze1dRBT8lp37qcRDfwdGnyPBYoz
-         rGUEzejK3LoL2Nemw9WjmZw2JBifLRm2nmHbYxF5pyIbxamzVEcYdJai9/1YrlIIep/G
-         kVi0zUmgenZlCYcirq6mIrA4PJW0VrNBaILviycqwrW+ON7vcRPHqahHRJ+uFY9FNqbu
-         tfQQ==
-X-Gm-Message-State: ANoB5pm7XED2g+Ysn/2T68GvSlChS9JDqLwhNNjnPl7NDPvrAIGYa2lj
-        fhqFyosKwlqN7AztAE6djVc=
-X-Google-Smtp-Source: AA0mqf4rqYMo51srxf/7UurVAPmcfYjv2eV6nPzemuxUog61X+TJcq5AjJ/Pon56VIFK1GDG8x3qEg==
-X-Received: by 2002:a17:907:1dc6:b0:78d:8533:be13 with SMTP id og6-20020a1709071dc600b0078d8533be13mr18662937ejc.716.1669105538479;
-        Tue, 22 Nov 2022 00:25:38 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id m17-20020a170906161100b0073dc5bb7c32sm5802902ejd.64.2022.11.22.00.25.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 00:25:38 -0800 (PST)
-Message-ID: <ca8e1e8c-fe50-ca94-7cb8-9044f8cc16d0@kernel.org>
-Date:   Tue, 22 Nov 2022 09:25:36 +0100
+        Tue, 22 Nov 2022 03:28:30 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A591021256;
+        Tue, 22 Nov 2022 00:28:28 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AM7ZtRn017062;
+        Tue, 22 Nov 2022 03:28:26 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3m0q23he36-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 03:28:25 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2AM8SOgt028617
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Nov 2022 03:28:24 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 22 Nov
+ 2022 03:28:23 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 22 Nov 2022 03:28:23 -0500
+Received: from rbolboac.ad.analog.com ([10.48.65.139])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2AM8SFcW016751;
+        Tue, 22 Nov 2022 03:28:18 -0500
+From:   Ramona Bolboaca <ramona.bolboaca@analog.com>
+To:     <jic23@kernel.org>, <nuno.sa@analog.com>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Ramona Bolboaca <ramona.bolboaca@analog.com>
+Subject: [PATCH v6 0/9] Add '__adis_enable_irq()'
+Date:   Tue, 22 Nov 2022 10:27:48 +0200
+Message-ID: <20221122082757.449452-1-ramona.bolboaca@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v5 2/3] tty: serial: use uart_port_tx() helper
-Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     afaerber@suse.de, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, festevam@gmail.com,
-        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        liviu.dudau@arm.com, lorenzo.pieralisi@arm.com, mani@kernel.org,
-        nicolas.ferre@microchip.com, richard.genoud@gmail.com,
-        s.hauer@pengutronix.de, shawnguo@kernel.org, sudeep.holla@arm.com,
-        tklauser@distanz.ch, vz@mleia.com
-References: <20221004104927.14361-3-jirislaby@kernel.org>
- <20221121202724.1708460-1-michael@walle.cc>
- <f95ef7b7-cc23-9fed-5d05-1aa66aaeb86a@kernel.org>
- <0ef4f1e6d92601a39fe0d1c316506c12@walle.cc>
- <325fdfbf37b155c41e2b45bcddd96e9b@walle.cc>
- <0faeb934-a2c9-fcc2-6961-d3f1bbf37fa2@kernel.org>
-In-Reply-To: <0faeb934-a2c9-fcc2-6961-d3f1bbf37fa2@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: GHReRTSVjqlJ4hwzGQVs6SjR0_gHPXot
+X-Proofpoint-ORIG-GUID: GHReRTSVjqlJ4hwzGQVs6SjR0_gHPXot
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-22_04,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=717 adultscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211220062
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 11. 22, 9:23, Jiri Slaby wrote:
-> On 22. 11. 22, 9:18, Michael Walle wrote:
->> Am 2022-11-22 09:09, schrieb Michael Walle:
->>> Hi,
->>>
->>> Am 2022-11-22 08:02, schrieb Jiri Slaby:
->>>> On 21. 11. 22, 21:27, Michael Walle wrote:
->>>>> This will break serial output for the userspace on my board
->>>>> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt*dts). The 
->>>>> uart_port_tx()
->>>>> helper will call __port->ops->stop_tx(__port) if 
->>>>> uart_circ_chars_pending()
->>>>> returns 0. But the code above, doesn't do that. In fact, removing the
->>>>> stop_tx() call in the helper macro, will fix the console output.
->>>>>
->>>>> Any ideas how to fix that?
->>>>
->>>> Hm, so ATMEL_US_TXRDY is removed from tx_done_mask in stop_tx, but not
->>>> added back in start_tx. So the tx interrupt is never handled (the tx
->>>> tasklet is not scheduled to send the queue chars) in
->>>> atmel_handle_transmit().
->>>>
->>>> Any chance, the below fixes it?
->>>>
->>>> diff --git a/drivers/tty/serial/atmel_serial.c
->>>> b/drivers/tty/serial/atmel_serial.c
->>>> index 11bf2466390e..395370e0c77b 100644
->>>> --- a/drivers/tty/serial/atmel_serial.c
->>>> +++ b/drivers/tty/serial/atmel_serial.c
->>>> @@ -596,6 +596,8 @@ static void atmel_start_tx(struct uart_port *port)
->>>>                 /* re-enable PDC transmit */
->>>>                 atmel_uart_writel(port, ATMEL_PDC_PTCR, 
->>>> ATMEL_PDC_TXTEN);
->>>>
->>>> +       atmel_port->tx_done_mask |= ATMEL_US_TXRDY;
->>>> +
->>>>         /* Enable interrupts */
->>>>         atmel_uart_writel(port, ATMEL_US_IER, 
->>>> atmel_port->tx_done_mask);
->>>>
->>>>
->>>> thanks,
->>>
->>> Unfortunately, that doesn't help. Btw, some characters are transmitted:
->>>
->>>
->>> [    6.219356] Key type dns_resolver registered
->>> [    6.223679] Registering SWP/SWPB emulation handler
->>> [    6.247530] Loading compiled-in X.509 certificates
->>> [    6.288467] Freeing unused kernel image (initmem) memory: 1024K
->>> [    6.297789] Run /init as init process
->>> WbSOROSOSOSOSOStarting linuxptp system clock synchronization: O
->>>
->>> -michael
->>
->> But you made me look at atmel_stop_tx() and there is this:
->>
->>         /*
->>      * Disable the transmitter.
->>      * This is mandatory when DMA is used, otherwise the DMA buffer
->>      * is fully transmitted.
->>      */
->>      atmel_uart_writel(port, ATMEL_US_CR, ATMEL_US_TXDIS);
->>
->> Removing that write, will also fix the problem. Could it be, that
->> the transmit is still active (via DMA) but the driver will call
->> tx_stop() and then stop the transmission in the background?
-> 
-> Yes, that was exactly the next step to try. The datasheet doesn't tell 
-> much what happens when TXDIS is written while the characters are 
-> transmitted.
+Added implementation for '__adis_enable_irq()' and called it instead of
+'adis_enable_irq()' inside '__adis_initial_startup()'.
+Replaced 'adis_initial_startup()' calls in probe, with its unlocked
+variant.
 
-Side note: your usart doesn't use dma. It's PIO (hence all that 
-uart_tx_helper()). And the attached patch doesn't touch TXDIS for 
-non-DMA case. I.e. it should transmit the final character (and nothing 
-more).
+changes in v3:
+ new patches: 1,2
+ changed commit message for patches 2-9
+
+changes in v4:
+ squashed patches 1 & 2 from v3
+
+changes in v5:
+ fix compilation error
+
+ changes in v6:
+  changed commit message of patch 1: added more information related to the fix
+
+Ramona Bolboaca (9):
+  iio: adis: add '__adis_enable_irq()' implementation
+  iio: accel: adis16201: Call '__adis_initial_startup()' in probe
+  iio: accel: adis16209: Call '__adis_initial_startup()' in probe
+  iio: gyro: adis16136: Call '__adis_initial_startup()' in probe
+  iio: gyro: adis16260: Call '__adis_initial_startup()' in probe
+  iio: imu: adis16400: Call '__adis_initial_startup()' in probe
+  staging: iio: accel: adis16203: Call '__adis_initial_startup()'
+  staging: iio: accel: adis16240: Call '__adis_initial_startup()'
+  iio: imu: adis: Remove adis_initial_startup function
+
+ drivers/iio/accel/adis16201.c         |  2 +-
+ drivers/iio/accel/adis16209.c         |  2 +-
+ drivers/iio/gyro/adis16136.c          |  2 +-
+ drivers/iio/gyro/adis16260.c          |  2 +-
+ drivers/iio/imu/adis.c                | 28 ++++++++++-----------------
+ drivers/iio/imu/adis16400.c           |  2 +-
+ drivers/staging/iio/accel/adis16203.c |  2 +-
+ drivers/staging/iio/accel/adis16240.c |  2 +-
+ include/linux/iio/imu/adis.h          | 17 ++++++++--------
+ 9 files changed, 25 insertions(+), 34 deletions(-)
 
 -- 
-js
+2.25.1
 
