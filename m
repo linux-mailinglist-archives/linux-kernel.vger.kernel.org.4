@@ -2,132 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42272634944
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E65634947
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbiKVV2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S235023AbiKVV30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:29:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234907AbiKVV2j (ORCPT
+        with ESMTP id S233174AbiKVV3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:28:39 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68EA8C783
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:28:37 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so11565071ile.15
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:28:37 -0800 (PST)
+        Tue, 22 Nov 2022 16:29:25 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CD322529;
+        Tue, 22 Nov 2022 13:29:23 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k7so14877286pll.6;
+        Tue, 22 Nov 2022 13:29:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XYbx+av6DBnORVcQ2ULxfCSTDy21R06QMcTObHYEV34=;
+        b=YGgKFSzVDtg4WqE7blC+H6hUzPYoBzvcBGqcO8VWfLHbMTqWNn4bE7btkALc2ygD5T
+         D2Xj8asn40IU8QFMvKIiMRt9BNe+DUkTI09kpbDa7g6S4DYFTI1rHz51KuXDTKNuj/Sh
+         Njuax5n6GHUJW8GAskJ2gtcmll/eWEZMsPzskTGXNZq1xDdhzPToaaPHs1DMAxoR4CXC
+         g4T4/4TWRfjOCE9jGNmZHF8RmxInIK24wUW/svb5XVdP3I4wtMt1v020nT6Bdw3YBKkC
+         HS1n2b8c0YyB6P4nGoAjBTrENJqPW49nR/dgfsFdWHaBGUsSvvgdvsl3W2dE202ZTirX
+         l7Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1BxnaN+kby2QoU1gsXQmJvuJ4fwkuZ15Ed9J43+NGoA=;
-        b=65l2h4V5JtKmgypzhf3PHQa9gzINWHLfnotzSNCU8/Oqi7IepbnKZ4yBhTyMk2ZW8O
-         7J+xejAK02whtVBuhSBUvXvurqzNbNzQROdcSx95J4XXRS2+JhmnOuYeMx4cE4lZRtLY
-         RJhK7N19Nnhx9BWbTEcyTU6aZg30tuZTNxFEvtOMgqXgj7JEcn3NJfjFelhHs6mOCT+n
-         mSWuvDxGiYkfmq8o5Hepat/ke88qEnToJZxXnI5RFjgW6Tr1z4Dc/UEdLpB1OWbOShZ5
-         tSjkrFT2gg2tMLws49SeSk4/FeGj99C7oT+7Ud/FYnOJDQ/rusHmeyQa+4COs4wyCqRK
-         /QNA==
-X-Gm-Message-State: ANoB5plKReWfrAJ/zZeilpoJe9m5BN0jqOIqfvbdV7RIi3zlODu6z/i4
-        IBvgc29PGvUs+7ulbEpHYxyG1RjaR8V0Meco6IZjZKi2SIS0
-X-Google-Smtp-Source: AA0mqf5ocmJekITAuBLG1Gb6K9/qaAqAo2KuMEnYw0GbGaW2w9xPXu6d8udpVHvzvbaRmAeDL6OPlAvVKWfwEbhh2SzBHrnEvaqs
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XYbx+av6DBnORVcQ2ULxfCSTDy21R06QMcTObHYEV34=;
+        b=Z4qVrnG+f8eVTaMAD6HKNcG2lG/JqKDgsknZGsDf5iEOPG8WjcW5lZ5+qQlNqq2W4q
+         HIF1vFvjdmCwzy+En5TV7ywd5pKQVr9yLDx6e9gMHT2nshQgPIo/UrPaoo1HIXnZO2nI
+         5wX3fcZ1euBcvj72g+aoL2AGo8UL1l+XkF4jXjHPKmivI+fIR/BFlq7n7G6ATUXOkaka
+         SZ+ppCEL2uau4Q4nkmkII+JSEEJ6mAeFgRuD8A6bSIatgwQHe8vOJZ0Q5u/+SG7Q1iu6
+         EDgasuDmXdd3fQRWgEtIuHbjxFKSiffJMuSv7tBR+DbSKSlwOdJh9inJAIE8F2tup0ar
+         dp+A==
+X-Gm-Message-State: ANoB5pnv3f4K6FFt/Su6w1gueIlgrR4RciXU1KeFujBheSGtZvqzWqyD
+        HnitSks1RqjXHZUmhiLNRS0=
+X-Google-Smtp-Source: AA0mqf5KzdFRzATj/MphE9mRIT5fns0fCeoG8/eWEzDJc/WpbIxhsTPN2fpHhxYabp11HdHmpTseJw==
+X-Received: by 2002:a17:903:2407:b0:17f:3da:f19d with SMTP id e7-20020a170903240700b0017f03daf19dmr8588893plo.147.1669152562517;
+        Tue, 22 Nov 2022 13:29:22 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:bb3])
+        by smtp.gmail.com with ESMTPSA id b8-20020aa78ec8000000b005627ddbc7a4sm11086709pfr.191.2022.11.22.13.29.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 13:29:22 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 22 Nov 2022 11:29:20 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Intel-gfx@lists.freedesktop.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
+        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Brian Welty <brian.welty@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: Re: [RFC 11/13] cgroup/drm: Introduce weight based drm cgroup control
+Message-ID: <Y30/MIsLmVAZ7pQi@slm.duckdns.org>
+References: <20221109161141.2987173-1-tvrtko.ursulin@linux.intel.com>
+ <20221109161141.2987173-12-tvrtko.ursulin@linux.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c809:0:b0:302:b4c8:dd5d with SMTP id
- v9-20020a92c809000000b00302b4c8dd5dmr7436451iln.126.1669152517070; Tue, 22
- Nov 2022 13:28:37 -0800 (PST)
-Date:   Tue, 22 Nov 2022 13:28:37 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000db25f305ee15daf0@google.com>
-Subject: [syzbot] WARNING in xfs_qm_dqget_cache_insert
-From:   syzbot <syzbot+6ae213503fb12e87934f@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109161141.2987173-12-tvrtko.ursulin@linux.intel.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Nov 09, 2022 at 04:11:39PM +0000, Tvrtko Ursulin wrote:
+> +DRM scheduling soft limits
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Because of the heterogenous hardware and driver DRM capabilities, soft limits
+> +are implemented as a loose co-operative (bi-directional) interface between the
+> +controller and DRM core.
+> +
+> +The controller configures the GPU time allowed per group and periodically scans
+> +the belonging tasks to detect the over budget condition, at which point it
+> +invokes a callback notifying the DRM core of the condition.
+> +
+> +DRM core provides an API to query per process GPU utilization and 2nd API to
+> +receive notification from the cgroup controller when the group enters or exits
+> +the over budget condition.
+> +
+> +Individual DRM drivers which implement the interface are expected to act on this
+> +in the best-effort manner only. There are no guarantees that the soft limits
+> +will be respected.
 
-syzbot found the following issue on:
+Soft limits is a bit of misnomer and can be confused with best-effort limits
+such as memory.high. Prolly best to not use the term.
 
-HEAD commit:    eb7081409f94 Linux 6.1-rc6
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=100fe5ed880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
-dashboard link: https://syzkaller.appspot.com/bug?extid=6ae213503fb12e87934f
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15c00fe9880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1052d639880000
+> +static bool
+> +__start_scanning(struct drm_cgroup_state *root, unsigned int period_us)
+> +{
+> +	struct cgroup_subsys_state *node;
+> +	bool ok = false;
+> +
+> +	rcu_read_lock();
+> +
+> +	css_for_each_descendant_post(node, &root->css) {
+> +		struct drm_cgroup_state *drmcs = css_to_drmcs(node);
+> +
+> +		if (!css_tryget_online(node))
+> +			goto out;
+> +
+> +		drmcs->active_us = 0;
+> +		drmcs->sum_children_weights = 0;
+> +
+> +		if (node == &root->css)
+> +			drmcs->per_s_budget_ns =
+> +				DIV_ROUND_UP_ULL(NSEC_PER_SEC * period_us,
+> +						 USEC_PER_SEC);
+> +		else
+> +			drmcs->per_s_budget_ns = 0;
+> +
+> +		css_put(node);
+> +	}
+> +
+> +	css_for_each_descendant_post(node, &root->css) {
+> +		struct drm_cgroup_state *drmcs = css_to_drmcs(node);
+> +		struct drm_cgroup_state *parent;
+> +		u64 active;
+> +
+> +		if (!css_tryget_online(node))
+> +			goto out;
+> +		if (!node->parent) {
+> +			css_put(node);
+> +			continue;
+> +		}
+> +		if (!css_tryget_online(node->parent)) {
+> +			css_put(node);
+> +			goto out;
+> +		}
+> +		parent = css_to_drmcs(node->parent);
+> +
+> +		active = drmcs_get_active_time_us(drmcs);
+> +		if (active > drmcs->prev_active_us)
+> +			drmcs->active_us += active - drmcs->prev_active_us;
+> +		drmcs->prev_active_us = active;
+> +
+> +		parent->active_us += drmcs->active_us;
+> +		parent->sum_children_weights += drmcs->weight;
+> +
+> +		css_put(node);
+> +		css_put(&parent->css);
+> +	}
+> +
+> +	ok = true;
+> +
+> +out:
+> +	rcu_read_unlock();
+> +
+> +	return ok;
+> +}
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4a019f55c517/disk-eb708140.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/eb36e890aa8b/vmlinux-eb708140.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/feee2c23ec64/bzImage-eb708140.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/d8a4f3231ed0/mount_0.gz
+A more conventional and scalable way to go about this would be using an
+rbtree keyed by virtual time. Both CFS and blk-iocost are examples of this,
+but I think for drm, it can be a lot simpler.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6ae213503fb12e87934f@syzkaller.appspotmail.com
+Thanks.
 
-XFS (loop0): Ending clean mount
-XFS (loop0): Quotacheck needed: Please wait.
-XFS (loop0): Quotacheck: Done.
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3655 at fs/xfs/xfs_dquot.c:801 xfs_qm_dqget_cache_insert+0xff/0x110
-Modules linked in:
-CPU: 1 PID: 3655 Comm: syz-executor106 Not tainted 6.1.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:xfs_qm_dqget_cache_insert+0xff/0x110 fs/xfs/xfs_dquot.c:801
-Code: 38 c1 7c a3 48 89 ef e8 5f 46 a1 fe eb 99 44 89 e1 80 e1 07 80 c1 03 38 c1 7c a8 4c 89 e7 e8 d8 45 a1 fe eb 9e e8 f1 2d 4d fe <0f> 0b eb b8 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 55 41 57 41 56
-RSP: 0018:ffffc90003c7f710 EFLAGS: 00010293
-RAX: ffffffff833d6a7f RBX: 000000000000ee01 RCX: ffff888021afba80
-RDX: 0000000000000000 RSI: ffffffff8d794b70 RDI: 00000000fffffff4
-RBP: ffff888023674680 R08: 0000000000000005 R09: ffffffff833d69c8
-R10: 0000000000000002 R11: ffff888021afba80 R12: ffff8880779c8800
-R13: ffff888023674680 R14: ffff8880779c88f0 R15: 00000000fffffff4
-FS:  0000555556ce6300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f0ba7315000 CR3: 0000000079452000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- xfs_qm_dqget+0x2dd/0x510 fs/xfs/xfs_dquot.c:874
- xfs_qm_vop_dqalloc+0x598/0xe70 fs/xfs/xfs_qm.c:1679
- xfs_setattr_nonsize+0x41a/0x1220 fs/xfs/xfs_iops.c:702
- xfs_vn_setattr+0x2f5/0x340 fs/xfs/xfs_iops.c:1022
- notify_change+0xe38/0x10f0 fs/attr.c:420
- chown_common+0x586/0x8f0 fs/open.c:736
- do_fchownat+0x165/0x240 fs/open.c:767
- __do_sys_lchown fs/open.c:792 [inline]
- __se_sys_lchown fs/open.c:790 [inline]
- __x64_sys_lchown+0x81/0x90 fs/open.c:790
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0ba7363a09
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc267deac8 EFLAGS: 00000246 ORIG_RAX: 000000000000005e
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f0ba7363a09
-RDX: 0000000000000000 RSI: 000000000000ee01 RDI: 0000000020000100
-RBP: 00007ffc267deaf0 R08: 0000000000000002 R09: 00007ffc267deb00
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-R13: 00007ffc267deb30 R14: 00007ffc267deb10 R15: 0000000000000002
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+tejun
