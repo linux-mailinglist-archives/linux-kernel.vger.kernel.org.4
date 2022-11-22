@@ -2,140 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067F2633BF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AB2633BF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbiKVL7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S233482AbiKVMAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbiKVL7f (ORCPT
+        with ESMTP id S231583AbiKVMAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:59:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8D513EB0;
-        Tue, 22 Nov 2022 03:59:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13A7BB81A09;
-        Tue, 22 Nov 2022 11:59:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D863C433D6;
-        Tue, 22 Nov 2022 11:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669118371;
-        bh=awIitadsf/uo1C7l6pvVh4QYBC6b2uHMr5qvDAo+Zvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BZo7+YFb6KE0Xfg4iZY0adz7ph8k7Q2yTgCQ4Ul963JgXTlUMRMPubmkI7sdeReax
-         LXPv/DojlpOddNPYtD3tC2LK5BitNd7sKQC4Ou1/DK3lCtN3SVY4EjAQgPLHpBVbiw
-         VdFFpvzc4qT//7YyxvfpKIG53GdweNBlIwYqL8laUivXCD7etXBqlE84kK0IPNkyMQ
-         0zmt9RnbhQ63aTIzPOepNaM9o6as3tpIY1ieWgknUqbBxRDl3Pa1eDo0f/aBw44Crg
-         6fdsV1qErdGzV17ISPIJz0xEXIxzFC2rgQVWo+hoJo91DuzfvwraSZ45IuDkTj5Up7
-         oTUAPJ5j9+xeg==
-Date:   Tue, 22 Nov 2022 12:59:28 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Robert Elliott <elliott@hpe.com>
-Subject: Re: [PATCH v8 0/6] rcu: Add RCU stall diagnosis information
-Message-ID: <20221122115928.GA1158713@lothringen>
-References: <20221119092508.1766-1-thunder.leizhen@huawei.com>
+        Tue, 22 Nov 2022 07:00:19 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3F218AE;
+        Tue, 22 Nov 2022 04:00:15 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MNt0C-1oZIJS1gBE-00OIfY; Tue, 22
+ Nov 2022 12:59:59 +0100
+Message-ID: <351a524a-3739-e9f3-3b20-0854e8b2a1af@gmx.com>
+Date:   Tue, 22 Nov 2022 19:59:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119092508.1766-1-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] btrfs: normalize the error handling branch in
+ btrfs_init_sysfs()
+To:     Zhen Lei <thunder.leizhen@huawei.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221122115002.1831-1-thunder.leizhen@huawei.com>
+Content-Language: en-US
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20221122115002.1831-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Rv7u5fK2t4aiAyK9OInAXgLL4BGT/xivFuzt5wm/jtBRjO5DY9L
+ gTfu/p2CaJQdPn2b3M1zpuF143Zg+kMQ6AcaEWhput4avG8i65bKaESvE6dpkJzC0qKQSck
+ f8xAV/HfY2iSMYM5rKV80OAe183CNaYY//UCeW6ofXIVSmOaY1ILsgffqLzlNu5LgivjL4C
+ 76f64K07CCgoxem3ZCUYg==
+UI-OutboundReport: notjunk:1;M01:P0:tHUVKFLNqMQ=;Nq+/Vd6hju5hh2jLnYbYmllmq1q
+ kpcN3X+FbzdBAH6UFMy4ZbDpvIHCCSf2eWUutVGi4o2j+Qq2cPQQG4PRQq/wHGu7/R7NPjubY
+ MBcmRe1MLsEmWOcNCVCCXNq9+zfPk7UrGph1hNlYA27MMqhvBqlmgzeGCswuRPpii71WLDEtT
+ hJz+eIlnP0pE68PJmsMKY4JjdSWkXFQBIbLutkhuqEbgG+J2zHfmCkuL8T9TgqTeioNDg4paa
+ IFMC84ISTVSQOsma1Om8kwoXEhYAWq/ufivYSrBkjW6hyYpb9P/sryzVG0PCpmtCmQehHPWIW
+ V9P00LCO+D4gpyadxyVlrmxBHJNM/dri9rvpX/vwPgysrrFkUScSfzXIqZeDBc/EvDB6PgdAH
+ CjjfI1qzahMeblm/biQQ9GlGOT0D+I9K1uzYkfm7sLRAFdpnPTKrZ70AEgEbeaAimVXn06lVb
+ x4umAzLipUc9yq199KvP3IWdtOJF/QI2fp8wna8wWobsXxXABRgnp1jaQR0IIMShGA+qc0MQi
+ 9VMKhTX/NRIFqkZ2fb89TjNbILdQ0BbcWbQwvauEv7bP0cWOjOuOKBfM5IzodrcBnASqulFVl
+ OubbUSMY6G9ij8KM/fSK4EY6nLHFA2oWNAJK5OoxSNRo/nIMIEQUF8KLB7hta3HQyCvmrJ9MR
+ WZFOs9IJjkNJOMXuuCFayDGmQOmSf9zT5ExkbRtlQliwI1VwxsS5b4IiyhxPhmO0JEQKWUwQe
+ PYwMSLi4pl0k834yAYCGbZxLVgtO/eXe/IflzJQaAa4a16t4+sZOyPoBh3BgFuUU/legbq33b
+ gGJJUInTOvzLtNcjrjMrpVFquQ+6+mjb3edETwTbZpolAAECwklI+BknsYxwEadJeAbrf+Y03
+ Nj3EcnH/Uk8HsMtn9NBeVoBh2NBDI0Uo1j3TXxTAFrL9xYo70yJg9ZFf9IdwzQdchsLjLKwwg
+ zUxj0JbWlev3A5pbP551hZcKrzU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 05:25:02PM +0800, Zhen Lei wrote:
-> v7 --> v8:
-> 1. Change call jiffies64_to_msecs() to call jiffies_to_msecs().
-> 2. Mention that rcupdate.rcu_cpu_stall_cputime overrides
->    CONFIG_RCU_CPU_STALL_CPUTIME behaviour in the Kconfig help text.
-> 3. Fix a make htmldocs warning, change "|...|" to ":...:".
+
+
+On 2022/11/22 19:50, Zhen Lei wrote:
+> Although kset_unregister() can eventually remove all attribute files,
+> explicitly rolling back with the matching function makes the code logic
+> look clearer.
 > 
-> v6 --> v7:
-> 1. Use kcpustat_field() to obtain the cputime.
-> 2. Make the output start with "\t" to match other related prints.
-> 3. Aligns the output of the last line of RCU stall.
-> 
-> v5 --> v6:
-> 1. When there are more than two continuous RCU stallings, correctly handle the
->    value of the second and subsequent sampling periods. Update comments and
->    document.
->    Thanks to Elliott, Robert for the test.
-> 2. Change "rcu stall" to "RCU stall".
-> 
-> v4 --> v5:
-> 1. Resolve a git am conflict. No code change.
-> 
-> v3 --> v4:
-> 1. Rename rcu_cpu_stall_deep_debug to rcu_cpu_stall_cputime.
-> 
-> v2 --> v3:
-> 1. Fix the return type of kstat_cpu_irqs_sum()
-> 2. Add Kconfig option CONFIG_RCU_CPU_STALL_DEEP_DEBUG and boot parameter
->    rcupdate.rcu_cpu_stall_deep_debug.
-> 3. Add comments and normalize local variable name
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+
+Thanks,
+Qu
+
+> ---
+>   fs/btrfs/sysfs.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
 > 
 > v1 --> v2:
-> 1. Fixed a bug in the code. If the rcu stall is detected by another CPU,
->    kcpustat_this_cpu cannot be used.
-> @@ -451,7 +451,7 @@ static void print_cpu_stat_info(int cpu)
->         if (r->gp_seq != rdp->gp_seq)
->                 return;
+> 1. Add sysfs_unmerge_group() to unmerge group first.
+> 2. Update subject and commit message, no resource leaks.
 > 
-> -       cpustat = kcpustat_this_cpu->cpustat;
-> +       cpustat = kcpustat_cpu(cpu).cpustat;
-> 2. Move the start point of statistics from rcu_stall_kick_kthreads() to
->    rcu_implicit_dynticks_qs(), removing the dependency on irq_work.
-> 
-> v1:
-> In some extreme cases, such as the I/O pressure test, the CPU usage may
-> be 100%, causing RCU stall. In this case, the printed information about
-> current is not useful. Displays the number and usage of hard interrupts,
-> soft interrupts, and context switches that are generated within half of
-> the CPU stall timeout, can help us make a general judgment. In other
-> cases, we can preliminarily determine whether an infinite loop occurs
-> when local_irq, local_bh or preempt is disabled.
-> 
-> Zhen Lei (6):
->   genirq: Fix the return type of kstat_cpu_irqs_sum()
->   sched: Add helper kstat_cpu_softirqs_sum()
->   sched: Add helper nr_context_switches_cpu()
->   rcu: Add RCU stall diagnosis information
->   doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
->   rcu: Align the output of RCU stall
-
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-
-Thanks!
-
-> 
->  Documentation/RCU/stallwarn.rst               | 88 +++++++++++++++++++
->  .../admin-guide/kernel-parameters.txt         |  6 ++
->  include/linux/kernel_stat.h                   | 14 ++-
->  kernel/rcu/Kconfig.debug                      | 13 +++
->  kernel/rcu/rcu.h                              |  1 +
->  kernel/rcu/tree.c                             | 18 ++++
->  kernel/rcu/tree.h                             | 19 ++++
->  kernel/rcu/tree_stall.h                       | 35 +++++++-
->  kernel/rcu/update.c                           |  2 +
->  kernel/sched/core.c                           |  5 ++
->  10 files changed, 198 insertions(+), 3 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+> diff --git a/fs/btrfs/sysfs.c b/fs/btrfs/sysfs.c
+> index 699b54b3acaae0b..74fef1f49c358cd 100644
+> --- a/fs/btrfs/sysfs.c
+> +++ b/fs/btrfs/sysfs.c
+> @@ -2321,8 +2321,11 @@ int __init btrfs_init_sysfs(void)
+>   
+>   #ifdef CONFIG_BTRFS_DEBUG
+>   	ret = sysfs_create_group(&btrfs_kset->kobj, &btrfs_debug_feature_attr_group);
+> -	if (ret)
+> -		goto out2;
+> +	if (ret) {
+> +		sysfs_unmerge_group(&btrfs_kset->kobj,
+> +				    &btrfs_static_feature_attr_group);
+> +		goto out_remove_group;
+> +	}
+>   #endif
+>   
+>   	return 0;
