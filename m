@@ -2,161 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5017633DFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E074633DF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiKVNoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
+        id S233232AbiKVNnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233890AbiKVNoC (ORCPT
+        with ESMTP id S232159AbiKVNnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:44:02 -0500
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BD95ADC9;
-        Tue, 22 Nov 2022 05:43:44 -0800 (PST)
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 2AMDhMCE026379;
-        Tue, 22 Nov 2022 22:43:22 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2AMDhMCE026379
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669124603;
-        bh=debR7Axr9vWzmGEzm6RKm0/7bq+bZwYlzS5EA+xN66M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bUlu+HyimqqSDVq6nFj7EWp9wBTWXMvIpMqWhrCkfImqMJrYebPtBAsgf4tiSkw01
-         tCiiME9ocpfXhjpEBfvpasdcSAiFWpUd7lwYqvvMup7m99UWhaGCeUoAs8TWcEmHqY
-         nyNc+Zb6teUuODyeKKaoiwAsaWLS7Am0J9Ji1Eu85pobvmZTDDkNSWIU2JDgh7YV/x
-         FDyehDM/vRREOG6/cwgWKgMZmZmzojhMnvkSM+/TDQeFw0wnDTsTPXbRer8BwNERO1
-         3cpSjyZ2N12Q6Q78367PCGoJv5m04QEtd1heocU4GaIbSFtyQsTVCx821nX6po1Yo+
-         z+Cw+PoxI/Nxw==
-X-Nifty-SrcIP: [209.85.160.52]
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-142306beb9aso17220389fac.11;
-        Tue, 22 Nov 2022 05:43:22 -0800 (PST)
-X-Gm-Message-State: ANoB5pkRS85Nz0TMTtGHD6/nPn24lnKkKX0BYke5NWmiJS6CJ65UGs4+
-        mMts9+JNydsSGKCPT0TnRLmRwMydDLXI25Qv7C4=
-X-Google-Smtp-Source: AA0mqf5G7XS07KWcTncFAOXKKft/Z+UfTElbwysGn6sMGNdL6nva2laIZJrm2jUDk5VCLVoUt8XZ9LLDasP5d3Q/ERE=
-X-Received: by 2002:a05:6870:3b06:b0:13b:5d72:d2c6 with SMTP id
- gh6-20020a0568703b0600b0013b5d72d2c6mr1940035oab.287.1669124601696; Tue, 22
- Nov 2022 05:43:21 -0800 (PST)
+        Tue, 22 Nov 2022 08:43:12 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5131A079
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:43:10 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id i12so20910124wrb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:43:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linbit-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aKWA+AP/j4No4bfih7dsLGLYEDSONTbhMU2EZnn42zY=;
+        b=yXqcBlksNnAzv0JPWlfp4srNfOhY8LdfdyUH6IMUrCMEgBmllXo1rkX45wgp8bEyPn
+         o8ZDOeQQWwfFcchSgMN2v/yoREFBb5mk5cZKlSvgr9G2bHzEJPK2C2Shly8AlYNQzPIZ
+         tGFZxm+Hr6bZzvic10oX82/fbGRTgUiLr8j2zz9tOxRkl+n/T2TVumlxlbXW9IcDT9+y
+         m/Q7WWyJlkk6fpEHUeJUH6ixlNsCx8eCN2LaSbFmUnW455OcLSLiBSLit2flL0IzhgUr
+         jZfeYc2AmokRQ6JFxZWYiu46OczuCtDIIQ9DWeS7ZZET2H8ZVybDb4vdLbQjiHa9jNKY
+         Pciw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aKWA+AP/j4No4bfih7dsLGLYEDSONTbhMU2EZnn42zY=;
+        b=EVVPsDgmmUXzXCq2JZCI7tvXWe2lbI9qENpYf5P1FvP8sjxGdwt/5aFZTXmISm/rup
+         4OMX4UjAiOTcGCLiNc/EAQfedGvYEX3MxOiv6dumCNJfKm6LJ5po5Dn9nYDqksqjev95
+         LKmDi1xTJfwv0t7lmtFXXgr1Ue8InxlcB+1jeNapuCtq3vRp4SxkAPltG/lUNkbJM8Gi
+         6zTx0fLdjsbjOQ9K3SHGEDxqjSsxE0XseVkSccGK+eCiiPubCAnQLWDYZMCsMrQJIs4C
+         IxsI2qMnNxDbbTJRv0psKmOjvNDfVZeGNz5iODAtIvUgSR+CYqVEzEv1EdmmbJjPSFLn
+         y+gg==
+X-Gm-Message-State: ANoB5pmanI7UGdVmQxzlgBY1Hxmhdu/WnhNFzcuxqkoPpBYf4ENTGwPe
+        UKxdPn2Cb297niT51BOr2u1LiA==
+X-Google-Smtp-Source: AA0mqf4wL76N4ZHZjvU2VZRB4kqJFOiavA4tPlcNIaqg/Z8JbxDOHK1GZZE8Q6cTqcXM4fihVgKIeQ==
+X-Received: by 2002:a05:6000:1148:b0:236:71cd:1a71 with SMTP id d8-20020a056000114800b0023671cd1a71mr14335072wrx.712.1669124589239;
+        Tue, 22 Nov 2022 05:43:09 -0800 (PST)
+Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
+        by smtp.gmail.com with ESMTPSA id p6-20020a1c5446000000b003b47e75b401sm21437729wmi.37.2022.11.22.05.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 05:43:08 -0800 (PST)
+From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        linux-block@vger.kernel.org,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+Subject: [PATCH 0/4] lru_cache improvements, DRBD license identifiers
+Date:   Tue, 22 Nov 2022 14:42:57 +0100
+Message-Id: <20221122134301.69258-1-christoph.boehmwalder@linbit.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221115110158.2207117-1-alexandre.belloni@bootlin.com> <Y3vSErWtH6L6GmMn@google.com>
-In-Reply-To: <Y3vSErWtH6L6GmMn@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 22 Nov 2022 22:42:45 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATZzPVQtCfQFkBbieNVWSmxgCjkAKegw=1MizZVft0b7g@mail.gmail.com>
-Message-ID: <CAK7LNATZzPVQtCfQFkBbieNVWSmxgCjkAKegw=1MizZVft0b7g@mail.gmail.com>
-Subject: Re: [PATCH v2] init/Kconfig: fix CC_HAS_ASM_GOTO_TIED_OUTPUT test
- with dash
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     alexandre.belloni@bootlin.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 4:31 AM Sean Christopherson <seanjc@google.com> wro=
-te:
->
-> +Masahiro and build, as I don't think this should go through the KVM tree=
- (which
-> is also partly why no one has responded).
+Here are some improvements to the lru_cache; mostly just cleanups that
+we missed to send upstream over the years.
 
+The last patch makes the SPDX license headers in DRBD consistent so
+that they all represent GPL 2.0.
 
-Presumably this was sent to the author and the commiter of
-1aa0e8b144b6474c4914439d232d15bfe883636b
+Christoph Böhmwalder (2):
+  lru_cache: remove compiled out code
+  drbd: use consistent license
 
-If Paolo does not pick this up, I can.
+Joel Colledge (1):
+  lru_cache: remove unused lc_private, lc_set, lc_index_of
 
+Lars Ellenberg (1):
+  lru_cache: use atomic operations when accessing lc->flags, always
 
-Now applied to linux-kbuild/fixes. Thanks.
+ drivers/block/drbd/Kconfig             |  2 +-
+ drivers/block/drbd/Makefile            |  2 +-
+ drivers/block/drbd/drbd_actlog.c       |  2 +-
+ drivers/block/drbd/drbd_bitmap.c       |  2 +-
+ drivers/block/drbd/drbd_debugfs.c      |  2 +-
+ drivers/block/drbd/drbd_debugfs.h      |  2 +-
+ drivers/block/drbd/drbd_int.h          |  2 +-
+ drivers/block/drbd/drbd_interval.c     |  2 +-
+ drivers/block/drbd/drbd_interval.h     |  2 +-
+ drivers/block/drbd/drbd_main.c         |  2 +-
+ drivers/block/drbd/drbd_nl.c           |  2 +-
+ drivers/block/drbd/drbd_nla.c          |  2 +-
+ drivers/block/drbd/drbd_nla.h          |  2 +-
+ drivers/block/drbd/drbd_proc.c         |  2 +-
+ drivers/block/drbd/drbd_protocol.h     |  2 +-
+ drivers/block/drbd/drbd_receiver.c     |  2 +-
+ drivers/block/drbd/drbd_req.c          |  2 +-
+ drivers/block/drbd/drbd_req.h          |  2 +-
+ drivers/block/drbd/drbd_state.c        |  2 +-
+ drivers/block/drbd/drbd_state.h        |  2 +-
+ drivers/block/drbd/drbd_state_change.h |  2 +-
+ drivers/block/drbd/drbd_strings.c      |  2 +-
+ drivers/block/drbd/drbd_strings.h      |  2 +-
+ drivers/block/drbd/drbd_vli.h          |  2 +-
+ drivers/block/drbd/drbd_worker.c       |  2 +-
+ include/linux/lru_cache.h              |  3 --
+ lib/lru_cache.c                        | 59 +-------------------------
+ 27 files changed, 27 insertions(+), 85 deletions(-)
 
+-- 
+2.38.1
 
-
-> On a related topic, should init/Kconfig be added to the KCONFIG MAINTAINE=
-RS entry?
-
-
-No, I do not think so.
-
-init/Kconfig contains a lot, which I am not responsible for.
-
-
-
-
-
-
-
-> Or is there a better owner for this?
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 046ff06ff97f..ffff36e16b88 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11040,6 +11040,7 @@ T:      git git://git.kernel.org/pub/scm/linux/ke=
-rnel/git/masahiroy/linux-kbuild.git
->  F:     Documentation/kbuild/kconfig*
->  F:     scripts/Kconfig.include
->  F:     scripts/kconfig/
-> +F:     init/Kconfig
->
->  KCOV
->  R:     Dmitry Vyukov <dvyukov@google.com>
->
-> On Tue, Nov 15, 2022, alexandre.belloni@bootlin.com wrote:
-> > From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> >
-> > When using dash as /bin/sh, the CC_HAS_ASM_GOTO_TIED_OUTPUT test fails
-> > with a syntax error which is not the one we are looking for:
-> >
-> > <stdin>: In function =E2=80=98foo=E2=80=99:
-> > <stdin>:1:29: warning: missing terminating " character
-> > <stdin>:1:29: error: missing terminating " character
-> > <stdin>:2:5: error: expected =E2=80=98:=E2=80=99 before =E2=80=98+=E2=
-=80=99 token
-> > <stdin>:2:7: warning: missing terminating " character
-> > <stdin>:2:7: error: missing terminating " character
-> > <stdin>:2:5: error: expected declaration or statement at end of input
-> >
-> > Removing '\n' solves this.
-> >
-> > Fixes: 1aa0e8b144b6 ("Kconfig: Add option for asm goto w/ tied outputs =
-to workaround clang-13 bug")
-> > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > ---
-> >  init/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 694f7c160c9c..13e93bcbc807 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -87,7 +87,7 @@ config CC_HAS_ASM_GOTO_OUTPUT
-> >  config CC_HAS_ASM_GOTO_TIED_OUTPUT
-> >       depends on CC_HAS_ASM_GOTO_OUTPUT
-> >       # Detect buggy gcc and clang, fixed in gcc-11 clang-14.
-> > -     def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[b=
-ar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -=
-c -o /dev/null)
-> > +     def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[b=
-ar]) - .": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -c =
--o /dev/null)
->
-> Tested a variety of compiler versions via godbolt, and the results are th=
-e same
-> for all cases, so with the caveat that I am far from a shell expert:
->
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-
-
-
---=20
-Best Regards
-Masahiro Yamada
