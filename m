@@ -2,216 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580B3633580
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B97A633536
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbiKVGwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 01:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S229817AbiKVGYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 01:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiKVGwI (ORCPT
+        with ESMTP id S229459AbiKVGYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 01:52:08 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE8C21267
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 22:52:01 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.98.54]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MdeSt-1pWyxB1h7h-00Zfg3; Tue, 22 Nov 2022 07:48:52 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 0CF153C0C9;
-        Tue, 22 Nov 2022 07:48:48 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 629E01D3; Tue, 22 Nov 2022 07:48:45 +0100 (CET)
-Date:   Tue, 22 Nov 2022 07:48:45 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH v2 1/4] tools lib subcmd: Add install target
-Message-ID: <Y3xwzWWhfEJb7NW4@bergen.fjasle.eu>
-References: <20221122001125.765003-1-irogers@google.com>
- <20221122001125.765003-2-irogers@google.com>
+        Tue, 22 Nov 2022 01:24:53 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08662D765;
+        Mon, 21 Nov 2022 22:24:51 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGZ3T5WvHzRpNR;
+        Tue, 22 Nov 2022 14:24:21 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 14:24:50 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 14:24:49 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <pavel@ucw.cz>, <andersson@kernel.org>, <swboyd@chromium.org>,
+        <quic_c_skakit@quicinc.com>, <marijn.suijten@somainline.org>
+CC:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Subject: [PATCH] leds: call of_node_put() when breaking out of for_each_available_child_of_node()
+Date:   Tue, 22 Nov 2022 06:50:02 +0000
+Message-ID: <20221122065002.2327772-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+IdZ9uQRmRzT7yid"
-Content-Disposition: inline
-In-Reply-To: <20221122001125.765003-2-irogers@google.com>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:djFM0F/iHlPwfweK9hV693j0VUg3AiA3QSL0PCwLnyFUqj+2hnm
- VbpQRMzmBr553ZxZUuc/tB1IeEimov0KUwKGqPXbJ/sFboUrQQ3S+BSWjGZsN0pWfFklyQF
- idKKjxjKSLdyGMIV7hbyYSirI1AQ280HtNUmugdvEUt1c888K1ZNNyVVPJ/7HBF+RfAci++
- UgP4aQBCMrYa/cOxrba1Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:u6UR9YM4Phc=:Z7OPmeZOyP9vmyLJzsRJXY
- ArSZKDxXI+RH4EuzlqqAD+xeLVkcoajz7RyFBTS36zYJNVzvkG0cQwNVy068dd6rQYQiz8RPf
- Te+6Fw94gLYmTjQIE0w12AQWqkEk/Ds52fB5SczOGH/7VSaZ0s0sjVFAkJKDiXbu8dYcBG/P7
- OqsYnCk3H1nwLWrj+E+GTbbOEE1S+myEas7RygaUJkAf6yjufgHXLGCWS2pRUPev15ja9zHX1
- bXPu/JpHCiN7ZeK+4o+CZKCCtc2yhsnxh1NepyqiHn2f1mcvm/xB2i3L5XRCZpvKjCAUB4nVF
- RDebsMB39ag4RDxCXVZ1REJTGUT3H8EtDefUKmp3ZMgiVAgewWB8jT+5RL4QK1dcSNopZI90W
- kJgUq7Hse1+f3FGooeTwz+27VrFhbEyTw7Wb/GQC237MaJP4bNr0mDSzsU5A2dE5X/COr+ow7
- lYvcb2n3BLIt6yKi2KEbbJH/1/rEvC8wCCYmdEB9f4cj8+/inbevWMrotVNZ6FyqFLaQffL6F
- E20fStXH8Br3yETg4boMwuJjDk9F7C+d5gTnRfDVuunOmQhovlidulweuSKGEz//88sVPxumB
- c0cGdxLx+qv9VNzmAF/ylYSahewseHumhr+3kRGACFjLvxRO7/2jkhW9chsdZYowt5rpDxfRO
- R+3YCf5A//VUXnZxMUQOa2OBYPlxZVtEu6hWJ/1mM5Gww6cuSB6SUBNO9z2Vl8wZyDHmzhbwm
- rQSssQ2puMnNab0EkSPH+HRitveH0TYU9TTsjziUBBVF7PeL1GEVxKc/j/QYD77pTOrowpbS3
- j+KqMh0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: ZhangPeng <zhangpeng362@huawei.com>
 
---+IdZ9uQRmRzT7yid
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since for_each_available_child_of_node() will increase the refcount of
+node, we need to call of_node_put() manually when breaking out of the
+iteration.
 
-On Mon 21 Nov 2022 16:11:22 GMT, Ian Rogers wrote:
-> This allows libsubcmd to be installed as a dependency.
->=20
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/subcmd/Makefile | 49 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->=20
-> diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-> index 8f1a09cdfd17..e96566f8991c 100644
-> --- a/tools/lib/subcmd/Makefile
-> +++ b/tools/lib/subcmd/Makefile
-> @@ -17,6 +17,15 @@ RM =3D rm -f
-> =20
->  MAKEFLAGS +=3D --no-print-directory
-> =20
-> +INSTALL =3D install
-> +
-> +# Use DESTDIR for installing into a different root directory.
-> +# This is useful for building a package. The program will be
-> +# installed in this directory as if it was the root directory.
-> +# Then the build tool can move it later.
-> +DESTDIR ?=3D
-> +DESTDIR_SQ =3D '$(subst ','\'',$(DESTDIR))'
-> +
->  LIBFILE =3D $(OUTPUT)libsubcmd.a
-> =20
->  CFLAGS :=3D -ggdb3 -Wall -Wextra -std=3Dgnu99 -fPIC
-> @@ -48,6 +57,18 @@ CFLAGS +=3D $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
-> =20
->  SUBCMD_IN :=3D $(OUTPUT)libsubcmd-in.o
-> =20
-> +ifeq ($(LP64), 1)
-> +  libdir_relative =3D lib64
-> +else
-> +  libdir_relative =3D lib
-> +endif
-> +
-> +prefix ?=3D
-> +libdir =3D $(prefix)/$(libdir_relative)
-> +
-> +# Shell quotes
-> +libdir_SQ =3D $(subst ','\'',$(libdir))
-> +
->  all:
-> =20
->  export srctree OUTPUT CC LD CFLAGS V
-> @@ -61,6 +82,34 @@ $(SUBCMD_IN): FORCE
->  $(LIBFILE): $(SUBCMD_IN)
->  	$(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $(SUBCMD_IN)
-> =20
-> +define do_install_mkdir
-> +	if [ ! -d '$(DESTDIR_SQ)$1' ]; then             \
-> +		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$1'; \
-> +	fi
-> +endef
-> +
-> +define do_install
-> +	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-> +		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-> +	fi;                                             \
-> +	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-> +endef
-> +
-> +install_lib: $(LIBFILE)
-> +	$(call QUIET_INSTALL, $(LIBFILE)) \
-> +		$(call do_install_mkdir,$(libdir_SQ)); \
-> +		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
-> +
+Fixes: 24e2d05d1b68 ("leds: Add driver for Qualcomm LPG")
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+---
+ drivers/leds/rgb/leds-qcom-lpg.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-Sorry for being late.
+diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
+index 02f51cc61837..8075115cef58 100644
+--- a/drivers/leds/rgb/leds-qcom-lpg.c
++++ b/drivers/leds/rgb/leds-qcom-lpg.c
+@@ -1084,7 +1084,7 @@ static int lpg_add_led(struct lpg *lpg, struct device_node *np)
+ 	ret = of_property_read_u32(np, "color", &color);
+ 	if (ret < 0 && ret != -EINVAL) {
+ 		dev_err(lpg->dev, "failed to parse \"color\" of %pOF\n", np);
+-		return ret;
++		goto err_put_np_node;
+ 	}
+ 
+ 	if (color == LED_COLOR_ID_RGB)
+@@ -1093,21 +1093,25 @@ static int lpg_add_led(struct lpg *lpg, struct device_node *np)
+ 		num_channels = 1;
+ 
+ 	led = devm_kzalloc(lpg->dev, struct_size(led, channels, num_channels), GFP_KERNEL);
+-	if (!led)
+-		return -ENOMEM;
++	if (!led) {
++		ret = -ENOMEM
++		goto err_put_np_node;
++	}
+ 
+ 	led->lpg = lpg;
+ 	led->num_channels = num_channels;
+ 
+ 	if (color == LED_COLOR_ID_RGB) {
+ 		info = devm_kcalloc(lpg->dev, num_channels, sizeof(*info), GFP_KERNEL);
+-		if (!info)
+-			return -ENOMEM;
++		if (!info) {
++			ret = -ENOMEM
++			goto err_put_np_node;
++		}
+ 		i = 0;
+ 		for_each_available_child_of_node(np, child) {
+ 			ret = lpg_parse_channel(lpg, child, &led->channels[i]);
+ 			if (ret < 0)
+-				return ret;
++				goto err_put_child_node;
+ 
+ 			info[i].color_index = led->channels[i]->color;
+ 			info[i].intensity = 0;
+@@ -1129,7 +1133,7 @@ static int lpg_add_led(struct lpg *lpg, struct device_node *np)
+ 	} else {
+ 		ret = lpg_parse_channel(lpg, np, &led->channels[0]);
+ 		if (ret < 0)
+-			return ret;
++			goto err_put_np_node;
+ 
+ 		cdev = &led->cdev;
+ 		cdev->brightness_set = lpg_brightness_single_set;
+@@ -1161,7 +1165,15 @@ static int lpg_add_led(struct lpg *lpg, struct device_node *np)
+ 		ret = devm_led_classdev_register_ext(lpg->dev, &led->cdev, &init_data);
+ 	if (ret)
+ 		dev_err(lpg->dev, "unable to register %s\n", cdev->name);
++	else
++		return ret;
++
++err_put_np_node:
++	of_node_put(np);
++	return ret;
+ 
++err_put_child_node:
++	of_node_put(child);
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
 
-Is there a specific reason why you do not use 'mkdir -p=20
-$(DESTDIR)/$(2); cp $(1) $(2)' or 'install $(addprefix -m,$(3)) -D $(1)=20
-$(2)' for the install rules (cp.  scripts/Makefile.{dtb,mod}inst)?
-
-I think you could get rid of mkdir calls and the ..._SQ handling when=20
-using one of them.
-
-> +install_headers:
-> +	$(call QUIET_INSTALL, headers) \
-
-Unlikely, but if one of the install commands fails, you probably want=20
-make to exit with an error.  Might you want to add 'set -e; \' here?
-
-Kind regards,
-Nicolas
-
-
-> +		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
-> +		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
-> +		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
-> +		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
-> +		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
-> +
-> +install: install_lib install_headers
-> +
->  clean:
->  	$(call QUIET_CLEAN, libsubcmd) $(RM) $(LIBFILE); \
->  	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d |=
- xargs $(RM)
-> --=20
-> 2.38.1.584.g0f3c55d4c2-goog
-
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
-
---+IdZ9uQRmRzT7yid
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmN8cMgACgkQB1IKcBYm
-EmkAGxAA1FXhnrYxDoXdXg2/x/OvJ9A4W7F6x9ljqdoRbCeeqPvreyROIn9FYxtM
-bLwHnQGsfV03CN1y5de7cVQlNb4U66QRbABlcKB9LHnrtyivod1rJZh/uBPiXc7J
-rDAI2TeGKxBCkizmA5iOX09sFCuEYwtxg3/fx7GMiMLf1Z0oE6LqZBq2NePm+dzm
-7r0hofgVqE3mRgrtuQQWPMjOivSere4V7mnXQ35/2ZL7elqe+RQyQFA2N6e55/jY
-LjGc2wgbJUa753I9gZWi5QK+F1GlvTTpE0kegt21sxLFnMNr2XfUBl6oOuyuJIEy
-HWk4KH0h7t555b19NqPilHPBqtwK55YHhvkgXiDBvWNIwy/kYAcfd6Us9KhZu81v
-FkcwePGSZqChSnEmB6b7YoW8nsmtn0pkV5IQTrVl05WALiahvQ8/yqNQEW6FDZcy
-TMNUa62kNvIsBQPJlUvxVPdcnEeJYUFNU3XBKHUKRo8Z8CydiMl24JZkDjue92WW
-EkHOHhYC4xo3DVfd/OcOmOU0amzOAI3oE9B1CT952s9CMPFANdlXDxeRSwJSw7Yw
-96Qdjuw6ALdJxV47b3g3vF2gbg+Zrkhp9lE7K4Evul+uVGqoPaIiLaSGJs0eTNSL
-ofWXc8woohn5bygIQLzoF/qih+S4GiPgA48af+60KX/TssoIY24=
-=da3y
------END PGP SIGNATURE-----
-
---+IdZ9uQRmRzT7yid--
