@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7E063399C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59FA63399E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbiKVKRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:17:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S233472AbiKVKRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbiKVKRE (ORCPT
+        with ESMTP id S233512AbiKVKRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:17:04 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918A854B25;
-        Tue, 22 Nov 2022 02:16:55 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AMAGoih096025;
-        Tue, 22 Nov 2022 04:16:50 -0600
+        Tue, 22 Nov 2022 05:17:06 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE77554D1;
+        Tue, 22 Nov 2022 02:16:59 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AMAGsws116962;
+        Tue, 22 Nov 2022 04:16:54 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1669112210;
-        bh=664ekDjiGwxoAdpJEQPqESRVJIF1G47RriN6f9uEIx4=;
+        s=ti-com-17Q1; t=1669112214;
+        bh=Q+QMvPeLlcBvjDSfmGIGLrMc1QSDQX9bUOXq6vu3/pQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=sZzbImbHgdaolLmqKI77wQoMGQ0q6QqyBlzhwlm9999KjTeKBtmYLJCUECjLns0R1
-         rINN4x1joRTCYxmJyMQlRVC8o7s5Ds0v02THNPKC1M31+LbHeipGp8VQ1Dj+ArnecX
-         IQ2pAKAdANvhIo7q+reoKOsHLDI648gH3jcLyZJE=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AMAGokl017906
+        b=fag/lo4z8KrE1vj5lCnVDi+3W/CLq/ca+NsBs993M2qS1fVOZVZ71O4Z3V4ZV0c4l
+         DViocQexAb4Z77vTepoJ2z8Mb3mDrvuX7R1s58VMJXdpsq3gzN+HBaxEcw5FKD3/uO
+         uitr3nbEn2X/VBQ0FYnNYfxbf6rru3wa8YuNbJAA=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AMAGsmC019885
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Nov 2022 04:16:50 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 22 Nov 2022 04:16:54 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 22
- Nov 2022 04:16:49 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ Nov 2022 04:16:54 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 22 Nov 2022 04:16:49 -0600
+ Frontend Transport; Tue, 22 Nov 2022 04:16:54 -0600
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AMAGkHN088950;
-        Tue, 22 Nov 2022 04:16:48 -0600
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AMAGp5Q088978;
+        Tue, 22 Nov 2022 04:16:53 -0600
 From:   Matt Ranostay <mranostay@ti.com>
 To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <s-vadapalli@ti.com>, <r-gunasekaran@ti.com>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 6/8] arm64: dts: ti: k3-j721s2: Add support for OSPI Flashes
-Date:   Tue, 22 Nov 2022 02:16:14 -0800
-Message-ID: <20221122101616.770050-7-mranostay@ti.com>
+Subject: [PATCH v7 7/8] arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
+Date:   Tue, 22 Nov 2022 02:16:15 -0800
+Message-ID: <20221122101616.770050-8-mranostay@ti.com>
 X-Mailer: git-send-email 2.38.GIT
 In-Reply-To: <20221122101616.770050-1-mranostay@ti.com>
 References: <20221122101616.770050-1-mranostay@ti.com>
@@ -67,126 +67,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Aswath Govindraju <a-govindraju@ti.com>
 
-J721S2 has an OSPI NOR flash on its SOM connected the OSPI0 instance and a
-QSPI NOR flash on the common processor board connected to the OSPI1
-instance. Add support for the same
+Add PCIe1 RC device tree node for the single PCIe instance present on
+the j721s2.
 
+Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 Signed-off-by: Matt Ranostay <mranostay@ti.com>
 ---
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 34 +++++++++++++++
- arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  | 42 +++++++++++++++++++
- 2 files changed, 76 insertions(+)
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index c787d46f89de..0503e690cfaf 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -206,6 +206,20 @@ mcu_mcan1_gpio_pins_default: mcu-mcan1-gpio-pins-default {
- 			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) WKUP_GPIO0_2 */
- 		>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+index 2858ba589d54..27631ef32bf5 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+@@ -841,6 +841,47 @@ serdes0: serdes@5060000 {
+ 		};
  	};
-+
-+	mcu_fss0_ospi1_pins_default: mcu-fss0-ospi1-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x040, PIN_OUTPUT, 0) /* (A19) MCU_OSPI1_CLK */
-+			J721S2_WKUP_IOPAD(0x05c, PIN_OUTPUT, 0) /* (D20) MCU_OSPI1_CSn0 */
-+			J721S2_WKUP_IOPAD(0x060, PIN_OUTPUT, 0) /* (C21) MCU_OSPI1_CSn1 */
-+			J721S2_WKUP_IOPAD(0x04c, PIN_INPUT, 0) /* (D21) MCU_OSPI1_D0 */
-+			J721S2_WKUP_IOPAD(0x050, PIN_INPUT, 0) /* (G20) MCU_OSPI1_D1 */
-+			J721S2_WKUP_IOPAD(0x054, PIN_INPUT, 0) /* (C20) MCU_OSPI1_D2 */
-+			J721S2_WKUP_IOPAD(0x058, PIN_INPUT, 0) /* (A20) MCU_OSPI1_D3 */
-+			J721S2_WKUP_IOPAD(0x048, PIN_INPUT, 0) /* (B19) MCU_OSPI1_DQS */
-+			J721S2_WKUP_IOPAD(0x044, PIN_INPUT, 0) /* (B20) MCU_OSPI1_LBCLKO */
-+		>;
-+	};
- };
  
- &main_gpio2 {
-@@ -340,6 +354,26 @@ &usb0 {
- 	maximum-speed = "high-speed";
- };
- 
-+&ospi1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_fss0_ospi1_pins_default>;
++	pcie1_rc: pcie@2910000 {
++		compatible = "ti,j7200-pcie-host", "ti,j721e-pcie-host";
++		reg = <0x00 0x02910000 0x00 0x1000>,
++		      <0x00 0x02917000 0x00 0x400>,
++		      <0x00 0x0d800000 0x00 0x00800000>,
++		      <0x00 0x18000000 0x00 0x00001000>;
++		reg-names = "intd_cfg", "user_cfg", "reg", "cfg";
++		interrupt-names = "link_state";
++		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
++		device_type = "pci";
++		ti,syscon-pcie-ctrl = <&scm_conf 0x074>;
++		max-link-speed = <3>;
++		num-lanes = <4>;
++		power-domains = <&k3_pds 276 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 276 41>;
++		clock-names = "fck";
++		#address-cells = <3>;
++		#size-cells = <2>;
++		bus-range = <0x0 0xff>;
++		vendor-id = <0x104c>;
++		device-id = <0xb013>;
++		msi-map = <0x0 &gic_its 0x0 0x10000>;
++		dma-coherent;
++		ranges = <0x01000000 0x0 0x18001000  0x00 0x18001000  0x0 0x0010000>,
++			 <0x02000000 0x0 0x18011000  0x00 0x18011000  0x0 0x7fef000>;
++		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
++		#interrupt-cells = <1>;
++		interrupt-map-mask = <0 0 0 7>;
++		interrupt-map = <0 0 0 1 &pcie1_intc 0>, /* INT A */
++				<0 0 0 2 &pcie1_intc 0>, /* INT B */
++				<0 0 0 3 &pcie1_intc 0>, /* INT C */
++				<0 0 0 4 &pcie1_intc 0>; /* INT D */
 +
-+	flash@0{
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <1>;
-+		spi-rx-bus-width = <4>;
-+		spi-max-frequency = <40000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <2>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
++		pcie1_intc: interrupt-controller {
++			interrupt-controller;
++			#interrupt-cells = <1>;
++			interrupt-parent = <&gic500>;
++			interrupts = <GIC_SPI 324 IRQ_TYPE_EDGE_RISING>;
++		};
 +	};
-+};
 +
- &mcu_mcan0 {
- 	status = "okay";
- 	pinctrl-names = "default";
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-index 6930efff8a5a..2ffea00e19d7 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-@@ -39,6 +39,28 @@ transceiver0: can-phy0 {
- 	};
- };
- 
-+&wkup_pmx0 {
-+	mcu_fss0_ospi0_pins_default: mcu-fss0-ospi0-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x000, PIN_OUTPUT, 0) /* (D19) MCU_OSPI0_CLK */
-+			J721S2_WKUP_IOPAD(0x02c, PIN_OUTPUT, 0) /* (F15) MCU_OSPI0_CSn0 */
-+			J721S2_WKUP_IOPAD(0x030, PIN_OUTPUT, 0) /* (G17) MCU_OSPI0_CSn1 */
-+			J721S2_WKUP_IOPAD(0x038, PIN_OUTPUT, 0) /* (F14) MCU_OSPI0_CSn2 */
-+			J721S2_WKUP_IOPAD(0x03c, PIN_OUTPUT, 0) /* (F17) MCU_OSPI0_CSn3 */
-+			J721S2_WKUP_IOPAD(0x00c, PIN_INPUT, 0) /* (C19) MCU_OSPI0_D0 */
-+			J721S2_WKUP_IOPAD(0x010, PIN_INPUT, 0) /* (F16) MCU_OSPI0_D1 */
-+			J721S2_WKUP_IOPAD(0x014, PIN_INPUT, 0) /* (G15) MCU_OSPI0_D2 */
-+			J721S2_WKUP_IOPAD(0x018, PIN_INPUT, 0) /* (F18) MCU_OSPI0_D3 */
-+			J721S2_WKUP_IOPAD(0x01c, PIN_INPUT, 0) /* (E19) MCU_OSPI0_D4 */
-+			J721S2_WKUP_IOPAD(0x020, PIN_INPUT, 0) /* (G19) MCU_OSPI0_D5 */
-+			J721S2_WKUP_IOPAD(0x024, PIN_INPUT, 0) /* (F19) MCU_OSPI0_D6 */
-+			J721S2_WKUP_IOPAD(0x028, PIN_INPUT, 0) /* (F20) MCU_OSPI0_D7 */
-+			J721S2_WKUP_IOPAD(0x008, PIN_INPUT, 0) /* (E18) MCU_OSPI0_DQS */
-+			J721S2_WKUP_IOPAD(0x004, PIN_INPUT, 0) /* (E20) MCU_OSPI0_LBCLKO */
-+		>;
-+	};
-+};
-+
- &main_pmx0 {
- 	main_i2c0_pins_default: main-i2c0-pins-default {
- 		pinctrl-single,pins = <
-@@ -79,3 +101,23 @@ &main_mcan16 {
- 	pinctrl-names = "default";
- 	phys = <&transceiver0>;
- };
-+
-+&ospi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+		spi-max-frequency = <25000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <4>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+	};
-+};
+ 	main_mcan0: can@2701000 {
+ 		compatible = "bosch,m_can";
+ 		reg = <0x00 0x02701000 0x00 0x200>,
 -- 
 2.38.GIT
 
