@@ -2,173 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391F763391B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD4A63390F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233430AbiKVJzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
+        id S233405AbiKVJv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbiKVJy5 (ORCPT
+        with ESMTP id S232624AbiKVJv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:54:57 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AAE183AC;
-        Tue, 22 Nov 2022 01:54:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669110896; x=1700646896;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=rJIOCd9N5PvCN1hTjd1er2T0b67rVXxGjK1ymZuckrA=;
-  b=b7vNNj68/Ax6Wu+zUkZ0SXMQh1/D6weUFJgdYBLzCTERYsopZyfn5lCS
-   AC5ecYKuoLjRaZJZIaCJyMYgtoLp+2hrSPIat/rojvvpMC4JUxNDKZvHs
-   eap8QuRh1CaW9CPTvZZXcUarJiOCcg++ZFyjPQcJtrQGojRB2+DkqJdLd
-   F47Tqt43uU6ADr8efBIq8G/OXHLz905oPtZ2kiJ6v4cWM4S04SVTi15D9
-   7Z5ZsqycGoIBpky9UGhIirnF4SffdLXYY34xzc7v6Qm8Hi3CpYd4P0vHX
-   10Kfn/yMCEM1UgspnjZAYFYYaXzhbEu16Wo3B0QiRxglJWxOqaKKGjwyZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="314927693"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="314927693"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 01:54:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="635489296"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="635489296"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 22 Nov 2022 01:54:45 -0800
-Date:   Tue, 22 Nov 2022 17:50:22 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Alex =?utf-8?B?QmVubu+/vWU=?= <alex.bennee@linaro.org>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Message-ID: <20221122095022.GA617784@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
- <87cz9o9mr8.fsf@linaro.org>
- <20221116031441.GA364614@chaop.bj.intel.com>
- <87mt8q90rw.fsf@linaro.org>
- <20221117134520.GD422408@chaop.bj.intel.com>
- <87a64p8vof.fsf@linaro.org>
- <20221118013201.GA456562@chaop.bj.intel.com>
- <87o7t475o7.fsf@linaro.org>
- <Y3er0M5Rpf1X97W/@google.com>
+        Tue, 22 Nov 2022 04:51:26 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F232C11E
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:51:25 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id io19so13116116plb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:51:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cJPRFWUS+kHDlUMP7u9x/6fCJJ/tjVlV+kEOIve76tU=;
+        b=gpr1s7j38CU30DZx7QJ6i6Zckn7o9X6P7nSjOVTuO7Cn4+ARAsx4uVCSiPN9mC8Rvn
+         GFG7bKKGccODi9sVbEf+zvp7a0M+CI4GAxUAwGeH2Cm0X4YFUiWBSvNRv4RJ6yDBcuFE
+         8advTVWWv5OEyK2WO49jYEM6NHwE235MBMBx1Y3IsOwIO1Vkk+4bf9HDJQ7QgTSB1M8G
+         hxSePriwPMdMeVybnw06OfDp6Pq3tA6utRmDBsD9ViTc1saKDwLBOdS37WER8+bORgp8
+         Bf0dXNGCaUuYmzXlLd/HG/szwbb5ikY4M641gylv5dO8wujIecIv/0LUB3ppw5pzGNyX
+         IZyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cJPRFWUS+kHDlUMP7u9x/6fCJJ/tjVlV+kEOIve76tU=;
+        b=1Rq1/udSqaNAvuXNHye3rehWlHE69IbgbD8JpBxvxzimBKfZC9rE/ZtdhzWQr7kTYk
+         8V2hYfI5nToeSOLiFHr3EvORZIuZpEAcKMbAXT5N1gfqQm06DzecrpmqbkxV5g7bMdp/
+         5KVSoPb1qXi/rNX9nG/dI/PNX9X5zTELQk5HglqYzkEd2tVMY3g5fgXRwZAclNJj2F0A
+         b3XxqJKf/0NeqzDDpy9SdaoPjn9hlTU91QR4nEeG+nBlPAfuTI0qbrq31J1z5s9CUHd8
+         PyvvJB94UIOau2N10wiGq5z/IolwDa0n3Etimcu/U2I6H5FcAzqdTeSKMfJk2fHJD2W9
+         B+1g==
+X-Gm-Message-State: ANoB5pm+ZeWVoycKhN7McpuM5fF4yQIgp9H2/xfeJYeOw+1SRn4XaDie
+        aTN0Sc4JXmlNLKtiatzRECk9mfdaGcppTWsjzag=
+X-Google-Smtp-Source: AA0mqf54aYRkWpRvkuoQXCzil+q3LvsUhNdPKvB9vzawCX6CVfErmT6Mt+YkCcRXw4+YOMrssCEvNc/Lhu2hRRJ56g4=
+X-Received: by 2002:a17:902:ca04:b0:17f:7f7e:70c7 with SMTP id
+ w4-20020a170902ca0400b0017f7f7e70c7mr5083919pld.107.1669110684712; Tue, 22
+ Nov 2022 01:51:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3er0M5Rpf1X97W/@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122075440.1165172-1-suagrfillet@gmail.com>
+ <CAJF2gTQWuu2wUk-7WhFdov0PG5R1z_F_+OLqHM0nGnMiC1Yi_w@mail.gmail.com>
+ <CAAYs2=iSTTuthLhwiyw08yG2q=yLrdKPmvbG2rS7uibzhe-wXQ@mail.gmail.com> <CAJF2gTT=r4VeWqpe+Tw2JDdTDU+r2mJiPmHq_i8eV5YRmrrLRA@mail.gmail.com>
+In-Reply-To: <CAJF2gTT=r4VeWqpe+Tw2JDdTDU+r2mJiPmHq_i8eV5YRmrrLRA@mail.gmail.com>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Tue, 22 Nov 2022 09:51:11 +0000
+Message-ID: <CAAYs2=gBfKPBMBVpkOYfixavkANhBnArSdCdHDgv8219sR4BzA@mail.gmail.com>
+Subject: Re: [PATCH] riscv/ftrace: fix ftrace_modify_call bug
+To:     Guo Ren <guoren@kernel.org>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 03:59:12PM +0000, Sean Christopherson wrote:
-> On Fri, Nov 18, 2022, Alex Benn?e wrote:
-> > 
-> > Chao Peng <chao.p.peng@linux.intel.com> writes:
-> > 
-> > > On Thu, Nov 17, 2022 at 03:08:17PM +0000, Alex Benn?e wrote:
-> > >> >> I think this should be explicit rather than implied by the absence of
-> > >> >> another flag. Sean suggested you might want flags for RWX failures so
-> > >> >> maybe something like:
-> > >> >> 
-> > >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
-> > >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
-> > >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
-> > >> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
-> > >> >
-> > >> > Yes, but I would not add 'SHARED' to RWX, they are not share memory
-> > >> > specific, private memory can also set them once introduced.
-> > >> 
-> > >> OK so how about:
-> > >> 
-> > >>  	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
-> > >>  	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
-> > >>  	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
-> > >>         KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
-> > >>         KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
-> > >
-> > > We don't actually need a new bit, the opposite side of private is
-> > > shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
-> > > 'shared'.
-> > 
-> > If that is always true and we never expect a 3rd type of memory that is
-> > fine. But given we are leaving room for expansion having an explicit bit
-> > allows for that as well as making cases of forgetting to set the flags
-> > more obvious.
-> 
-> Hrm, I'm on the fence.
-> 
-> A dedicated flag isn't strictly needed, e.g. even if we end up with 3+ types in
-> this category, the baseline could always be "private".
+Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8822=E6=97=A5=E5=
+=91=A8=E4=BA=8C 09:29=E5=86=99=E9=81=93=EF=BC=9A
+>
+>
+>
+> On Tue, Nov 22, 2022 at 5:11 PM Song Shuai <suagrfillet@gmail.com> wrote:
+>>
+>> Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8822=E6=97=A5=
+=E5=91=A8=E4=BA=8C 08:57=E5=86=99=E9=81=93=EF=BC=9A
+>> >
+>> > On Tue, Nov 22, 2022 at 3:54 PM Song Shuai <suagrfillet@gmail.com> wro=
+te:
+>> > >
+>> > > With this commit (riscv: ftrace: Reduce the detour code size to half=
+)
+>> > > patched, ftrace bug occurred When hosting kprobe and function tracer
+>> > > at the same function.
+>> > >
+>> > > Obviously, the variable caller in ftrace_modify_call was assigned by
+>> > > rec->ip with 4 offset failing the code replacing at function entry.
+>> > > And the caller should be assigned by rec->ip directly to indicate
+>> > > the function entry.
+>> > Thank you, it's my fault, but I think the problem is:
+>> >
+>> > Before (riscv: ftrace: Reduce the detour code size to half)
+>> >      0: REG_S  ra, -SZREG(sp)
+>> >      4: auipc  ra, ?          <- We need "rec->ip + 4" here
+>> >      8: jalr   ?(ra)
+>> >     12: REG_L  ra, -SZREG(sp)
+>> >
+>> > After (riscv: ftrace: Reduce the detour code size to half)
+>> >      0: auipc  t0, ?  <- We needn't "rec->ip + 4" anymore
+>> >      4: jalr   t0, ?(t0)
+>> >
+>> > I copied rec->ip + 4 blindly, then caused the bug. Right?
+>> >
+>> Yes, you're right.
+>>
+>> Here's my simple test case for your convenience.
+>> ```
+>> echo kernel_read > set_ftrace_filter
+>> echo function > current_tracer
+>> echo 'p:myp kernel_read' > kprobe_events
+>> echo 1 > events/kprobes/myp/enable # ftrace bug
+>
+>
+> Thx, I would fold the patch into (riscv: ftrace: Reduce the detour code s=
+ize to half). And add Co-developed-by: Song Shuai <suagrfillet@gmail.com> t=
+ag on that.
+>
+> I would send the v3 series involving your patches.
+>
+That's an honor for me.
 
-The baseline for the current code is actually "shared".
-
-> 
-> I do like being explicit, and adding a PRIVATE flag costs KVM practically nothing
-> to implement and maintain, but evetually we'll up with flags that are paired with
-> an implicit state, e.g. see the many #PF error codes in x86.  In other words,
-> inevitably KVM will need to define the default/base state of the access, at which
-> point the base state for SHARED vs. PRIVATE is "undefined".  
-
-Current memory conversion for confidential usage is bi-directional so we
-already need both private and shared states and if we use one bit for
-both "shared" and "private" then we will have to define the default
-state, e.g, currently the default state is "shared" when we define
-
-	KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
-
-> 
-> The RWX bits are in the same boat, e.g. the READ flag isn't strictly necessary.
-> I was thinking more of the KVM_SET_MEMORY_ATTRIBUTES ioctl(), which does need
-> the full RWX gamut, when I typed out that response.
-
-For KVM_SET_MEMORY_ATTRIBUTES it's reasonable to add RWX bits and match
-that to the permission bits definition in EPT entry.
-
-> 
-> So I would say if we add an explicit READ flag, then we might as well add an explicit
-> PRIVATE flag too.  But if we omit PRIVATE, then we should omit READ too.
-
-Since we assume the default state is shared, so we actually only need a
-PRIVATE flag, e.g. there is no SHARED flag and will ignore the RWX for now.
-
-Chao
+Thanks,
+Song
+>>
+>> ```
+>> > >
+>> > > The following is the ftrace bug log.
+>> > >
+>> > > ```
+>> > > [  419.632855] 00000000f8776803: expected (ffe00297 1a4282e7) but go=
+t (1a8282e7 f0227179)
+>> > > [  419.633390] ------------[ ftrace bug ]------------
+>> > > [  419.633553] ftrace failed to modify
+>> > > [  419.633569] [<ffffffff802091cc>] kernel_read+0x0/0x52
+>> > > [  419.633863]  actual:   97:02:e0:ff:e7:82:82:1a
+>> > > [  419.634087] Updating ftrace call site to call a different ftrace =
+function
+>> > > [  419.634279] ftrace record flags: e0000002
+>> > > [  419.634487]  (2) R
+>> > > [  419.634487]  expected tramp: ffffffff800093cc
+>> > > [  419.634935] ------------[ cut here ]------------
+>> > > ```
+>> > >
+>> > > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+>> > > ---
+>> > >  arch/riscv/kernel/ftrace.c | 2 +-
+>> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> > >
+>> > > diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+>> > > index 8c77f236fc71..61b24d767e2e 100644
+>> > > --- a/arch/riscv/kernel/ftrace.c
+>> > > +++ b/arch/riscv/kernel/ftrace.c
+>> > > @@ -132,7 +132,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, u=
+nsigned long old_addr,
+>> > >                        unsigned long addr)
+>> > >  {
+>> > >         unsigned int call[2];
+>> > > -       unsigned long caller =3D rec->ip + 4;
+>> > > +       unsigned long caller =3D rec->ip;
+>> > >         int ret;
+>> > >
+>> > >         make_call_t0(caller, old_addr, call);
+>> > > --
+>> > > 2.20.1
+>> > >
+>> >
+>> >
+>> > --
+>> > Best Regards
+>> >  Guo Ren
+>> Thanks,
+>> Song
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
