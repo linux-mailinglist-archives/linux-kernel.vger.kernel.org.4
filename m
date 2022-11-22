@@ -2,83 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44F06341DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EE76341E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbiKVQtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S234162AbiKVQun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 11:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234293AbiKVQtI (ORCPT
+        with ESMTP id S232355AbiKVQuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:49:08 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1215E7298F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:49:06 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so11742792wmg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:49:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z3fcqOHVduVIIg4z4ijk3ykjn2RM3trgK5/ehZ3bY1M=;
-        b=GdK7IiaGPYoYt2Cullz/bFXz5P3zaEbhbB2t0ZpbwFzBQeOMMKazdbcRBwospX37Ui
-         pqMiIGLcaq9zFfPEICfldvKXfL31lnz0AaqH4lHRW1xbnHaDy/Lg4rdvd7XQjNxtq+ay
-         1iqBc+fexaXnaY8vB2aO3JXyzKh/ipGhRImpUWnP3k8BcfmZebvEe4wqfSsUE5LZmN+8
-         LmM6RhNUPnWyN7PHzsyFSneAEOivB3ucTrbdj4p7TsX7scxtByO6GWlpXTANw65+rSSo
-         fJQ6zBeq9qJWeAL4dyugp+BKONx4Qikr+2fGiGvQOWJomWt9c7/sR/U9dBCEYOn2FDML
-         9FtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z3fcqOHVduVIIg4z4ijk3ykjn2RM3trgK5/ehZ3bY1M=;
-        b=Qq1dhlRTFZN8SiUR3FaC2MfIhTFWOKCW1m03Hk0CGPgCtg60EjbXt2Ji04NqccCkg9
-         Ta4ydFcm7G3nSPF9cWNTCrlJisSkmxnzgLhAmavTEgQzZ+BQsoTp9KB20lknoEhCD1qM
-         ioMENNbMTXoCSd/8iqqdObrlRKPw68O5LXCa5m3EywidDzn923Oegw5Pq3/54Uqj/RBm
-         zyFqiRN+ABuoHULF3EpnKbYPr61vmhEswoyBz5KRfQwde7q+BoDyfdwMbx1XHl2tY6aU
-         qFVs5rSgOWX1XMuAF19HQo+zeR7bj43ylwbii3Uc6XVHuEkG85xavskBLqxPPmh29SRp
-         rAdw==
-X-Gm-Message-State: ANoB5pk30uUiXYkzlS0EUbCdSSYWVrp+P1XNugybtc3tALE82XXrSpG0
-        eMEswK0bTpeueFUPWwRiZtA=
-X-Google-Smtp-Source: AA0mqf5ZtsT30GoUH/4TBViJcG2p2xVpb/2WXR2KXr7wvrCOOAoP5enGR17CBNRPJryrNLruXod8Yg==
-X-Received: by 2002:a05:600c:3590:b0:3d0:1489:78c4 with SMTP id p16-20020a05600c359000b003d0148978c4mr5836156wmq.167.1669135744520;
-        Tue, 22 Nov 2022 08:49:04 -0800 (PST)
-Received: from [192.168.0.25] ([37.222.251.204])
-        by smtp.gmail.com with ESMTPSA id x9-20020a5d6509000000b0023c8026841csm14497653wru.23.2022.11.22.08.49.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 08:49:03 -0800 (PST)
-Message-ID: <f51c7f56-4c62-0351-3b01-ae2f6432fb05@gmail.com>
-Date:   Tue, 22 Nov 2022 17:49:01 +0100
+        Tue, 22 Nov 2022 11:50:40 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BE76C729;
+        Tue, 22 Nov 2022 08:50:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669135839; x=1700671839;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=puqtoUPvntcrMHUyIfxv2XTasYKx66NRxAdTJ/YKsJo=;
+  b=B0RO81aP0AKXo6JdOrrYUo70nZJTQ/JsyOuUN3q11s3vvUvevukKQLvs
+   bWWB57NQKaAb1M8lLhNQtyHBLs9FsuFmoft0fRqXgfjZhXGmXAzgH9Cy9
+   SQcHvR9XR//yIl3KMmFPdTLjz1LEw98GEc7zg2Krg2wYOG/AxvGdsDPmq
+   eggR792mCyzNYo5QPQxDAjkDrY45N+6/F7zNRB/geK0ltUAQqki3BdZFV
+   rX14B66tOI0F0rtQNxTFCTYGRrtZjR2aKD1VfbQ8rHuvI4b7oCu5/Mp0/
+   m9u86vEg17sBHrZ9BevQyISd9dnNeKCLQppwdSDK2IKcJNfmkTX56qahA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="315680098"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="315680098"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 08:50:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="592201627"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="592201627"
+Received: from lcano-mobl1.amr.corp.intel.com (HELO [10.255.231.75]) ([10.255.231.75])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 08:50:23 -0800
+Message-ID: <f743a4df-f285-3f07-02ef-b908020e0c93@intel.com>
+Date:   Tue, 22 Nov 2022 08:50:23 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 5/6] iommu/mediatek: Improve safety for mediatek,smi
- property in larb nodes
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v7 02/20] x86/virt/tdx: Detect TDX during kernel boot
 Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com, chengci.xu@mediatek.com,
-        youlin.pei@mediatek.com, anan.sun@mediatek.com,
-        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20221018024258.19073-1-yong.wu@mediatek.com>
- <20221018024258.19073-6-yong.wu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221018024258.19073-6-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <aaee2d5332a97c840ad401ba935842a998a877ec.1668988357.git.kai.huang@intel.com>
+ <e758572a-5bb1-092a-10f6-591fb4526997@intel.com>
+ <9db9599fba11490cebbe59cbb7c145e9c119ab0f.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <9db9599fba11490cebbe59cbb7c145e9c119ab0f.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,107 +85,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/10/2022 04:42, Yong Wu wrote:
-> No functional change. Just improve safety from dts.
+On 11/22/22 03:28, Huang, Kai wrote:
+>>> +	/*
+>>> +	 * KeyID 0 is for TME.  MKTME KeyIDs start from 1.  TDX private
+>>> +	 * KeyIDs start after the last MKTME KeyID.
+>>> +	 */
+>>
+>> Is the TME key a "MKTME KeyID"?
 > 
-> All the larbs that connect to one IOMMU must connect with the same
-> smi-common. This patch checks all the mediatek,smi property for each
-> larb, If their mediatek,smi are different, it will return fails.
-> Also avoid there is no available smi-larb nodes.
-> 
-> Suggested-by: Guenter Roeck <groeck@chromium.org>
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> I don't think so.  Hardware handles TME KeyID 0 differently from non-0 MKTME
+> KeyIDs.  And PCONFIG only accept non-0 KeyIDs.
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Let's say we have 4 MKTME hardware bits, we'd have:
 
-> ---
->   drivers/iommu/mtk_iommu.c | 53 +++++++++++++++++++++++++++------------
->   1 file changed, 37 insertions(+), 16 deletions(-)
+   0: TME Key
+1->3: MKTME Keys
+4->7: TDX Private Keys
+
+First, the MSR values:
+
+> +        * IA32_MKTME_KEYID_PARTIONING:
+> +        *   Bit [31:0]:        Number of MKTME KeyIDs.
+> +        *   Bit [63:32]:       Number of TDX private KeyIDs.
+
+These would be:
+
+	Bit [ 31:0] = 3
+	Bit [63:22] = 4
+
+And in the end the variables:
+
+	tdx_keyid_start would be 4 and tdx_keyid_num would be 4.
+
+Right?
+
+That's a bit wonky for my brain because I guess I know too much about
+the internal implementation and how the key space is split up.  I guess
+I (wrongly) expected Bit[31:0]==Bit[63:22].
+
+
+
+>>> +static void __init clear_tdx(void)
+>>> +{
+>>> +	tdx_keyid_start = tdx_keyid_num = 0;
+>>> +}
+>>
+>> This is where a comment is needed and can actually help.
+>>
+>> /*
+>>  * tdx_keyid_start/num indicate that TDX is uninitialized.  This
+>>  * is used in TDX initialization error paths to take it from
+>>  * initialized -> uninitialized.
+>>  */
 > 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 9cbff48f03c0..f7ac102e343f 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -1042,7 +1042,7 @@ static const struct component_master_ops mtk_iommu_com_ops = {
->   static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **match,
->   				  struct mtk_iommu_data *data)
->   {
-> -	struct device_node *larbnode, *smicomm_node, *smi_subcomm_node;
-> +	struct device_node *larbnode, *frst_avail_smicomm_node = NULL;
->   	struct platform_device *plarbdev, *pcommdev;
->   	struct device_link *link;
->   	int i, larb_nr, ret;
-> @@ -1054,6 +1054,7 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   		return -EINVAL;
->   
->   	for (i = 0; i < larb_nr; i++) {
-> +		struct device_node *smicomm_node, *smi_subcomm_node;
->   		u32 id;
->   
->   		larbnode = of_parse_phandle(dev->of_node, "mediatek,larbs", i);
-> @@ -1094,27 +1095,47 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   			goto err_larbdev_put;
->   		}
->   
-> +		/* Get smi-(sub)-common dev from the last larb. */
-> +		smi_subcomm_node = of_parse_phandle(larbnode, "mediatek,smi", 0);
-> +		if (!smi_subcomm_node) {
-> +			ret = -EINVAL;
-> +			goto err_larbdev_put;
-> +		}
+> Just want to point out after removing the !x2apic_enabled() check, the only
+> thing need to do here is to detect/record the TDX KeyIDs.
+> 
+> And the purpose of this TDX boot-time initialization code is to provide
+> platform_tdx_enabled() function so that kexec() can use.
+> 
+> To distinguish boot-time TDX initialization from runtime TDX module
+> initialization, how about change the comment to below?
+> 
+> static void __init clear_tdx(void)
+> {
+>         /*
+>          * tdx_keyid_start and nr_tdx_keyids indicate that TDX is not
+>          * enabled by the BIOS.  This is used in TDX boot-time
+>          * initializatiton error paths to take it from enabled to not
+>          * enabled.
+>          */
+>         tdx_keyid_start = nr_tdx_keyids = 0;
+> }
+> 
+> [...]
+
+I honestly have no idea what "boot-time TDX initialization" is versus
+"runtime TDX module initialization".  This doesn't hel.
+
+> And below is the updated patch.  How does it look to you?
+
+Let's see...
+
+...
+> +static u32 tdx_keyid_start __ro_after_init;
+> +static u32 nr_tdx_keyids __ro_after_init;
 > +
-> +		/*
-> +		 * It may have two level smi-common. the node is smi-sub-common if it
-> +		 * has a new mediatek,smi property. otherwise it is smi-commmon.
-> +		 */
-> +		smicomm_node = of_parse_phandle(smi_subcomm_node, "mediatek,smi", 0);
-> +		if (smicomm_node)
-> +			of_node_put(smi_subcomm_node);
-> +		else
-> +			smicomm_node = smi_subcomm_node;
+> +static int __init record_keyid_partitioning(void)
+> +{
+> +       u32 nr_mktme_keyids;
+> +       int ret;
 > +
-> +		/*
-> +		 * All the larbs that connect to one IOMMU must connect with the same
-> +		 * smi-common.
-> +		 */
-> +		if (!frst_avail_smicomm_node) {
-> +			frst_avail_smicomm_node = smicomm_node;
-> +		} else if (frst_avail_smicomm_node != smicomm_node) {
-> +			dev_err(dev, "mediatek,smi property is not right @larb%d.", id);
-> +			of_node_put(smicomm_node);
-> +			ret = -EINVAL;
-> +			goto err_larbdev_put;
-> +		} else {
-> +			of_node_put(smicomm_node);
-> +		}
+> +       /*
+> +        * IA32_MKTME_KEYID_PARTIONING:
+> +        *   Bit [31:0]:        Number of MKTME KeyIDs.
+> +        *   Bit [63:32]:       Number of TDX private KeyIDs.
+> +        */
+> +       ret = rdmsr_safe(MSR_IA32_MKTME_KEYID_PARTITIONING, &nr_mktme_keyids,
+> +                       &nr_tdx_keyids);
+> +       if (ret)
+> +               return -ENODEV;
 > +
->   		component_match_add(dev, match, component_compare_dev, &plarbdev->dev);
->   		platform_device_put(plarbdev);
->   	}
->   
-> -	/* Get smi-(sub)-common dev from the last larb. */
-> -	smi_subcomm_node = of_parse_phandle(larbnode, "mediatek,smi", 0);
-> -	if (!smi_subcomm_node)
-> +	if (!frst_avail_smicomm_node)
->   		return -EINVAL;
->   
-> -	/*
-> -	 * It may have two level smi-common. the node is smi-sub-common if it
-> -	 * has a new mediatek,smi property. otherwise it is smi-commmon.
-> -	 */
-> -	smicomm_node = of_parse_phandle(smi_subcomm_node, "mediatek,smi", 0);
-> -	if (smicomm_node)
-> -		of_node_put(smi_subcomm_node);
-> -	else
-> -		smicomm_node = smi_subcomm_node;
-> -
-> -	pcommdev = of_find_device_by_node(smicomm_node);
-> -	of_node_put(smicomm_node);
-> +	pcommdev = of_find_device_by_node(frst_avail_smicomm_node);
-> +	of_node_put(frst_avail_smicomm_node);
->   	if (!pcommdev)
->   		return -ENODEV;
->   	data->smicomm_dev = &pcommdev->dev;
+> +       if (!nr_tdx_keyids)
+> +               return -ENODEV;
+> +
+> +       /* TDX KeyIDs start after the last MKTME KeyID. */
+> +       tdx_keyid_start++;
+
+tdx_keyid_start is uniniitalized here.  So, it'd be 0, then ++'d.
+
+Kai, please take a moment and slow down.  This isn't a race.  I offered
+some replacement code here, which you've discarded, missed or ignored
+and in the process broken this code.
+
+This approach just wastes reviewer time.  It's not working for me.
+
+I'm going to make a suggestion (aka. a demand): You can post these
+patches at most once a week.  You get a whole week to (carefully)
+incorporate reviewer feedback, make the patch better, and post a new
+version.  Need more time?  Go ahead and take it.  Take as much time as
+you want.
+
+
