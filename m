@@ -2,141 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6306F633989
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B5563398D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbiKVKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S232483AbiKVKQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbiKVKQa (ORCPT
+        with ESMTP id S232695AbiKVKQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:16:30 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C163FBB6;
-        Tue, 22 Nov 2022 02:16:24 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 37BC624DE73;
-        Tue, 22 Nov 2022 18:16:22 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
- 2022 18:16:22 +0800
-Received: from [192.168.125.106] (113.72.144.23) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
- 2022 18:16:21 +0800
-Message-ID: <b57bdf1c-19f4-3d70-7618-16817669abc5@starfivetech.com>
-Date:   Tue, 22 Nov 2022 18:16:07 +0800
+        Tue, 22 Nov 2022 05:16:32 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AF23FBB6;
+        Tue, 22 Nov 2022 02:16:31 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AMAGL3s008091;
+        Tue, 22 Nov 2022 04:16:21 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1669112181;
+        bh=tYP7bqAx/cpfj7hfCOdeukndTpMlP7LdDZ9xIHmCnMU=;
+        h=From:To:CC:Subject:Date;
+        b=e5LZ9zz6NyRdyw8/xyTU4WYJo0JJCMkfyCeo2vsohsX5PuIFrVpYBN4l+OWAkZjpM
+         xF3etaJVlHhE/JgIi1ZQkJkAAB+7hsojNPKp5RjkrzMHkfsAkuIib8oTosefDVmFjJ
+         Z0QXZLfGOVjiu3tG+7AHOzFoH/Xv0WIFq3y9t0DA=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AMAGL0q079438
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Nov 2022 04:16:21 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 22
+ Nov 2022 04:16:21 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 22 Nov 2022 04:16:21 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AMAGING029863;
+        Tue, 22 Nov 2022 04:16:19 -0600
+From:   Matt Ranostay <mranostay@ti.com>
+To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-vadapalli@ti.com>, <r-gunasekaran@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 0/8] arm64: j721s2: Add support for additional IPs
+Date:   Tue, 22 Nov 2022 02:16:08 -0800
+Message-ID: <20221122101616.770050-1-mranostay@ti.com>
+X-Mailer: git-send-email 2.38.GIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 4/8] dt-bindings: sifive,ccache0: Support StarFive
- JH7110 SoC
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
- <20221118011714.70877-5-hal.feng@starfivetech.com> <Y3duiJguYE6VrVLP@spud>
- <Y3dvCPP1g0LzzHFO@spud>
- <a5193e23-efe1-fa65-15de-d53b80b87d63@starfivetech.com>
- <Y3yRTuo69JUsfLqk@wendy>
- <0f9e423e-37c0-a838-bf25-f9b6784a31d0@starfivetech.com>
- <Y3yd+tfFl4yvXOx6@wendy>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <Y3yd+tfFl4yvXOx6@wendy>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.144.23]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 10:01:30 +0000, Conor Dooley wrote:
-> On Tue, Nov 22, 2022 at 05:55:57PM +0800, Hal Feng wrote:
-> > On Tue, 22 Nov 2022 09:07:26 +0000, Conor Dooley wrote:
-> > > On Tue, Nov 22, 2022 at 04:40:23PM +0800, Hal Feng wrote:
-> > > > On Fri, 18 Nov 2022 19:39:52 +0800, Conor Dooley wrote:
-> > > > > On Fri, Nov 18, 2022 at 11:37:50AM +0000, Conor Dooley wrote:
-> > > > > > On Fri, Nov 18, 2022 at 09:17:10AM +0800, Hal Feng wrote:
-> > > > > > > From: Emil Renner Berthing <kernel@esmil.dk>
-> > > > > > > 
-> > > > > > > This cache controller is also used on the StarFive JH7110 SoC.
-> > > > > > 
-> > > > > > "... and configured identically to that of the FU740"?
-> > > > > > Anyways,
-> > > > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > > > > 
-> > > > > Actually, after looking at the next patch - why can you not fall back to
-> > > > > the fu740 one since you appear to have the same configuration as it?
-> > > > 
-> > > > Right, I will drop this patch and use "sifive,fu740-c000-ccache" as
-> > > > compatible in dts.
-> > > 
-> > > Uh, that's not quite what I was suggesting. Rather than using that one
-> > > in isolation, you can do the following in your dt:
-> > > "starfive,jh7110-ccache", "sifive,fu740-c000-ccache"
-> > > 
-> > > And then in the driver we need to make no changes - unless down the line
-> > > we find some sort of issue that requires special handling etc. There's
-> > > no harm in having a "starfive,jh7110-ccache" IMO.
-> > 
-> > Just like what microchip did as blow?
+The following series of patches add support for the following
+on J721S2 common processor board,
 
-below
+- USB
+- SerDes
+- OSPI
+- PCIe
 
-> > 
-> > Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml:
-> > properties:
-> >   compatible:
-> >     oneOf:
-> >       - items:
-> >           - enum:
-> >               - sifive,ccache0
-> >               - sifive,fu540-c000-ccache
-> >               - sifive,fu740-c000-ccache
-> >               - starfive,jh7110-ccache
-> >           - const: cache
-> >       - items:
-> >           - const: microchip,mpfs-ccache
-> >           - const: sifive,fu540-c000-ccache
-> >           - const: cache
-> 
-> No, I don't think this is correct either. You'd do something like:
-> 
-> >       - items:
-> >           - const: starfive,jh7110-ccache
-> >           - const: sifive,fu740-c000-ccache
-> >           - const: cache
+Changes from v1:
+* Resolve issues with dt schema reporting
+* Minor changes related to consistency on node naming and value
 
-Yeah, this is what I mean. Thanks.
+Changes from v2:
+* Added PCIe RC + EP enablement patchsets
+* Added device-id for j722s2 PCIe host in dt documentation
+* Reworked SERDES + WIZ enablement patchset to use properies for clocks
+  defines versus entire devicetree nodes. Results in cleaner code that
+  doesn't break dt-schema or the driver functionality.
 
-Best regards,
-Hal
+Changes from v3:
+* Rebased changes on top of '[PATCH 00/12] TI J7x Disable Incomplete DT Nodes'
+* Removed "dt-bindings: PCI: Add host mode device-id for j721s2 platform" patch and
+  send it own series to avoid a dependency that would hold up other patches in this
+  series
 
-> 
-> And then the driver needs no changes.
+Changes from v4:
+* Add my Signed-off-by lines to all patchsets
+
+Changes from v5:
+* Removed Cc from commit messages to reduce clutter
+* Squashed changes for device tree nodes that get modified latter in the patchset
+  series
+
+Changes from v6:
+* Changes to ti,j721s2-wiz-10g compatible string from ti,am64-wiz-10g but
+  requires this series to be merged first
+  Ref: https://lore.kernel.org/linux-arm-kernel/20221122092203.762308-1-mranostay@ti.com/
+* Removed unused pcie1_ep based on feedback
+* Switch from incorrect "ti,j721e-system-controller", "syscon", "simple-mfd" compatible for
+  SPI node to "simple-bus"
+
+Aswath Govindraju (7):
+  arm64: dts: ti: k3-j721s2-main: Add support for USB
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support of OSPI
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add USB support
+  arm64: dts: ti: k3-j721s2: Add support for OSPI Flashes
+  arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
+
+Matt Ranostay (1):
+  arm64: dts: ti: k3-j721s2-main: Add SERDES and WIZ device tree node
+
+ .../dts/ti/k3-j721s2-common-proc-board.dts    |  85 +++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 137 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  40 +++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  42 ++++++
+ 4 files changed, 304 insertions(+)
+
+-- 
+2.38.GIT
 
