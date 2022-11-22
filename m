@@ -2,88 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB7C633E07
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627D2633E08
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233842AbiKVNqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
+        id S233858AbiKVNrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233589AbiKVNq2 (ORCPT
+        with ESMTP id S233895AbiKVNq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:46:28 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9D85E3EA;
-        Tue, 22 Nov 2022 05:46:27 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id b11so13305251pjp.2;
-        Tue, 22 Nov 2022 05:46:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uVTM4A73qJGSSEloWNLoqvF5MY8jd3iZQoKxxU2Mn44=;
-        b=n1uPwGarX993N3niKUyWMplrgd30jCR09b8RxbKnmLZHi26Z6w5oRDEodA/jhkNWmu
-         kRtNWvzxuLPpp6UWErGjbIcwTVG5xegoqyCH5ArX0TV8XJzaYGlyfsY0XmNGfwfayT/L
-         h4NXCXOkV1kivV8DUtUCW2X0vIBH7yHaKnqr8K5AfEksDfHySFcTPz7A/NSQTSr5kJNW
-         JOBtKM4IHPRJxf8U7xdBjQw2013as9wB3JZfIuaIQMZoRroTVG2oD047GwYJrOBE69xp
-         e94ZCusqpC8lUDK2oYYancD1JRAFE8/HY1fJjVIi7P3YMfYl1lqF06zFUmcmAUI/H9CV
-         e53w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uVTM4A73qJGSSEloWNLoqvF5MY8jd3iZQoKxxU2Mn44=;
-        b=4J6fgmNrElsrRMlQ5kzQeTvb3CLUHejbk9oH58EFiaw48wKhewn3mDMXddrkm3x4ZK
-         eGN3Cexqd0x4H0ePWpsDy23AErz+mCeBi42SvFgUPtg1ComnuQspfKZeQXrR1J26spVZ
-         7R3OQnr0U7M9R3a0T3YABmhNrZQuAc+PhstXxrHSP0NQWaZceo2jy9WLwXaR2GkAJa8Q
-         4EFiH4r1wvmsQKwAA81Kljj/aColY5M6BqR47vzoyKQ3+3T4gAEnPA7cBwQlZIuL3i/e
-         fqIoLkcAw4T2l4SRM7ZoXoipE/UQScpXkrWHoNRMDdElTAVYDHI+ERHTdkqTZ1xM4QZC
-         7Ivg==
-X-Gm-Message-State: ANoB5pmo8s5chGeSvqYN3uPGcpKKxLq78gABFtZGtqnlgWzhXqNqLAuq
-        m+KlTaOee6hbZQdrTb23w6CSpJi1KjcOXib/
-X-Google-Smtp-Source: AA0mqf6mBuVBnHthUDZGJp4gDXN9r+8/41ANiXXoYROa2Ht1Ikc9yTyJpUdZx6kFEKWWVOZBOGVSaA==
-X-Received: by 2002:a17:902:b40b:b0:188:75bb:36d4 with SMTP id x11-20020a170902b40b00b0018875bb36d4mr4724061plr.55.1669124786804;
-        Tue, 22 Nov 2022 05:46:26 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id t8-20020a1709027fc800b00186c37270f6sm11921165plb.24.2022.11.22.05.46.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 05:46:25 -0800 (PST)
-Message-ID: <2f3c100f-355d-e4f2-ff42-2cb076e8aa86@gmail.com>
-Date:   Tue, 22 Nov 2022 21:46:14 +0800
+        Tue, 22 Nov 2022 08:46:56 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7753A5ADC9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:46:55 -0800 (PST)
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4NGlt333Hxz4xN4;
+        Wed, 23 Nov 2022 00:46:51 +1100 (AEDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGlt02xw7z4xGj;
+        Wed, 23 Nov 2022 00:46:48 +1100 (AEDT)
+From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To:     Amit Shah <amit@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Subject: [PATCH v3] virtio_console: Introduce an ID allocator for virtual console numbers
+Date:   Tue, 22 Nov 2022 14:46:43 +0100
+Message-Id: <20221122134643.376184-1-clg@kaod.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC PATCH V2 16/18] x86/sev: Initialize #HV doorbell and handle
- interrupt requests
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        srutherford@google.com, akpm@linux-foundation.org,
-        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
-        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
-        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
-        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
-        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
-        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
-        fenghua.yu@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-17-ltykernel@gmail.com>
- <116799e9-8b14-66d6-d494-66272faec9e9@amd.com>
-Content-Language: en-US
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <116799e9-8b14-66d6-d494-66272faec9e9@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,35 +48,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/2022 11:05 PM, Kalra, Ashish wrote:
->> +static void do_exc_hv(struct pt_regs *regs)
->> +{
->> +    union hv_pending_events pending_events;
->> +    u8 vector;
->> +
->> +    while (sev_hv_pending()) {
->> +        asm volatile("cli" : : : "memory");
->> +
-> 
-> Do we really need to disable interrupts here, #HV exception will be 
-> dispatched via an interrupt gate in the IDT, so interrupts should be 
-> implicitly disabled, right ?
->>    panic("Unexpected vector %d\n", vector);
->> +                unreachable();
->> +            }
->> +        } else {
->> +            common_interrupt(regs, pending_events.vector);
->> +        }
->> +
->> +        asm volatile("sti" : : : "memory");
-> 
-> Again, why do we need to re-enable interrupts here (in this loop), 
-> interrupts will get re-enabled in the irqentry_exit() code path ?
+When a virtio console port is initialized, it is registered as an hvc
+console using a virtual console number. If a KVM guest is started with
+multiple virtio console devices, the same vtermno (or virtual console
+number) can be used to allocate different hvc consoles, which leads to
+various communication problems later on.
 
-Hi Ashish:
-	Thanks for your review.	check_hv_pending() is also called in the
-native_irq_enable() to handle some pending interrupt requests after re
--enabling interrupt. For such case, disables irq when handle exception
-or interrupt event.
+This is also reported in debugfs :
 
+  # grep vtermno /sys/kernel/debug/virtio-ports/*
+  /sys/kernel/debug/virtio-ports/vport1p1:console_vtermno: 1
+  /sys/kernel/debug/virtio-ports/vport2p1:console_vtermno: 1
+  /sys/kernel/debug/virtio-ports/vport3p1:console_vtermno: 2
+  /sys/kernel/debug/virtio-ports/vport4p1:console_vtermno: 3
+
+Replace the next_vtermno global with an ID allocator and start the
+allocation at 1 as it is today. Also recycle IDs when a console port
+is removed.
+
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+---
+
+ Changes in v3:
+ - made use of ida_alloc_min()
+ - free ID in case of error 
+ 
+ Changes in v2:
+ - introduced an ID allocator
+
+ drivers/char/virtio_console.c | 26 +++++++++++---------------
+ 1 file changed, 11 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+index 9fa3c76a267f..6a821118d553 100644
+--- a/drivers/char/virtio_console.c
++++ b/drivers/char/virtio_console.c
+@@ -13,6 +13,7 @@
+ #include <linux/fs.h>
+ #include <linux/splice.h>
+ #include <linux/pagemap.h>
++#include <linux/idr.h>
+ #include <linux/init.h>
+ #include <linux/list.h>
+ #include <linux/poll.h>
+@@ -48,22 +49,11 @@ struct ports_driver_data {
+ 	/* List of all the devices we're handling */
+ 	struct list_head portdevs;
+ 
+-	/*
+-	 * This is used to keep track of the number of hvc consoles
+-	 * spawned by this driver.  This number is given as the first
+-	 * argument to hvc_alloc().  To correctly map an initial
+-	 * console spawned via hvc_instantiate to the console being
+-	 * hooked up via hvc_alloc, we need to pass the same vtermno.
+-	 *
+-	 * We also just assume the first console being initialised was
+-	 * the first one that got used as the initial console.
+-	 */
+-	unsigned int next_vtermno;
+-
+ 	/* All the console devices handled by this driver */
+ 	struct list_head consoles;
+ };
+-static struct ports_driver_data pdrvdata = { .next_vtermno = 1};
++
++static struct ports_driver_data pdrvdata;
+ 
+ static DEFINE_SPINLOCK(pdrvdata_lock);
+ static DECLARE_COMPLETION(early_console_added);
+@@ -89,6 +79,8 @@ struct console {
+ 	u32 vtermno;
+ };
+ 
++static DEFINE_IDA(vtermno_ida);
++
+ struct port_buffer {
+ 	char *buf;
+ 
+@@ -1244,18 +1236,21 @@ static int init_port_console(struct port *port)
+ 	 * pointers.  The final argument is the output buffer size: we
+ 	 * can do any size, so we put PAGE_SIZE here.
+ 	 */
+-	port->cons.vtermno = pdrvdata.next_vtermno;
++	ret = ida_alloc_min(&vtermno_ida, 1, GFP_KERNEL);
++	if (ret < 0)
++		return ret;
+ 
++	port->cons.vtermno = ret;
+ 	port->cons.hvc = hvc_alloc(port->cons.vtermno, 0, &hv_ops, PAGE_SIZE);
+ 	if (IS_ERR(port->cons.hvc)) {
+ 		ret = PTR_ERR(port->cons.hvc);
+ 		dev_err(port->dev,
+ 			"error %d allocating hvc for port\n", ret);
+ 		port->cons.hvc = NULL;
++		ida_free(&vtermno_ida, port->cons.vtermno);
+ 		return ret;
+ 	}
+ 	spin_lock_irq(&pdrvdata_lock);
+-	pdrvdata.next_vtermno++;
+ 	list_add_tail(&port->cons.list, &pdrvdata.consoles);
+ 	spin_unlock_irq(&pdrvdata_lock);
+ 	port->guest_connected = true;
+@@ -1532,6 +1527,7 @@ static void unplug_port(struct port *port)
+ 		list_del(&port->cons.list);
+ 		spin_unlock_irq(&pdrvdata_lock);
+ 		hvc_remove(port->cons.hvc);
++		ida_free(&vtermno_ida, port->cons.vtermno);
+ 	}
+ 
+ 	remove_port_data(port);
+-- 
+2.38.1
 
