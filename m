@@ -2,174 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1A8633D1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0816E633D1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiKVNHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S233372AbiKVNHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233640AbiKVNHh (ORCPT
+        with ESMTP id S229505AbiKVNHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:07:37 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244AF38A1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:07:32 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id n205so15756529oib.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:07:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sHcsAnPoB5K6nlfDb8qSDTmr2dnvL5PwfuPRo7G6IRI=;
-        b=LCvLO+3owJfkfVOd6g6RcWpfhCiSkvOXq57fz+1N/hl/Fyu6QvtwznVQeEYsjJ593h
-         s2s4JT1JCdH9uVxvNO0dDG1D+f4K0I41O1bAbUgg15aIpgttkSd7xNHDxOdHzFDmfDtt
-         LktDifMmX5WApSSEzGQYfTV3Qc01tD47i5iWplimx3sj0Ss7ToL9P29R7bnJfS+bAc5k
-         BVXmT64w5e1lu+Hp+GiJeol+ThAWmj+/qa9WWyWM1YTVC0QQIEt3EhNbdjAqxzeNmvyD
-         yYLHlxeJdYFZoLEsHdqJQgl3hcRMI3Ei3A2KCFcmgR56W7H1cC3Z9dWOXlgN0qPrUEw9
-         A8Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sHcsAnPoB5K6nlfDb8qSDTmr2dnvL5PwfuPRo7G6IRI=;
-        b=cSCoTmoZXmKOAAAH7x2YOODpc4GHFU06vnXLhpqF1xOMk+YPAOUAzBg87byE75OR6R
-         cC3as9cHnnsPeWraiv5W8fXtT11iVoFSFORZK5kqaFTO0yfQVj6D3N9+b7+986NrHNNW
-         CA3umUZ7NNlcdJ/hDMUC0gISdPUlGB4Mil+X1JVXPm1IWxwC9wGamwW7VH1Lhlc3JQKO
-         LmIe4QU+DKcJguPvl/DMceD+OqdmN4l8ArZtanipb36U0ZYr7AhEX7bnwxQbmEkHekw6
-         u7iPoDaeX6uyQC3fvcXK//eri5T78kro+RrCiNuMErpgLzpapyeKziOs0ng16XzmM/Ts
-         iOCA==
-X-Gm-Message-State: ANoB5pnW+j8MlT6jhge0YDvrdS7j8UgusXni9MWtj/s69/2lAuUmEALj
-        hy+UL7Om4KbfN6GL/mFVY81uHgi0UX41VTHryil6/w==
-X-Google-Smtp-Source: AA0mqf63tSh3bBeSOdovOohNEXjPjZCTjy6r7yiO2GT42YU8s0rH2NV+8zEBTSYcSkJmPRRlh6F5TcD5hva2+urEWjk=
-X-Received: by 2002:a05:6808:1115:b0:359:cb71:328b with SMTP id
- e21-20020a056808111500b00359cb71328bmr11135034oih.282.1669122451909; Tue, 22
- Nov 2022 05:07:31 -0800 (PST)
+        Tue, 22 Nov 2022 08:07:11 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8DF62072;
+        Tue, 22 Nov 2022 05:07:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669122430; x=1700658430;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=13YUW771QBcON+nmTqGzaH6KQD1PytOjrL6vf8Gczwk=;
+  b=dkbSM5QkM7sH8M+BvN90iLnDE/D+ElsbpyLfQwMkdnbvL7HlbfWJIHZ/
+   d/+E+IgZbCXkGVbA+6cXp79Stfl2W3A7Lo2yWZdwz/tiv/a3x2xT2n47n
+   hm+WWCSLaVImYyt4nZWfF/qcLyNUagNombtsPdwSbIjrGvnAQZ0Z969fS
+   mFtF5LtkAQhuLnDfLtH3lJpSyP57iGgASg2AJH44nWLiu7FHPYor5avU6
+   n7N4ZjxCxEgsi7JlIJd+nh5//BR/wh/CXvsxMxTNA089vn11wZ7nwRNih
+   YICb9wsoMhga1Hn0A+sI4dbu6UcSzDYbOwJlTVT6TLdg5uwjVIqhkoyBr
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="301358043"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="301358043"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 05:07:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="619206109"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="619206109"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 22 Nov 2022 05:07:08 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D206B128; Tue, 22 Nov 2022 15:07:33 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH v2 1/3] clk: fractional-divider: Split out clk_fd_get_div() helper
+Date:   Tue, 22 Nov 2022 15:07:30 +0200
+Message-Id: <20221122130732.48537-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <00000000000023209305ed71c833@google.com> <20221115091825.2381-1-hdanton@sina.com>
- <CACT4Y+Z0OqaK0iCqWbez1aYw1zqtSZxNFbYe9jm_p2VToh2-oA@mail.gmail.com>
-In-Reply-To: <CACT4Y+Z0OqaK0iCqWbez1aYw1zqtSZxNFbYe9jm_p2VToh2-oA@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 22 Nov 2022 14:07:20 +0100
-Message-ID: <CACT4Y+a1uFJHWX0kWTyYV-KycuaZWjjnfPZ4xHP_SQP-+f1dFA@mail.gmail.com>
-Subject: Re: [syzbot] possible deadlock in nci_set_local_general_bytes
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     syzbot <syzbot+8768e9ec924b08e63f82@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 at 10:35, Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Tue, 15 Nov 2022 at 10:18, Hillf Danton <hdanton@sina.com> wrote:
-> >
-> > On 14 Nov 2022 09:43:48 -0800
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    1621b6eaebf7 Merge branch 'for-next/fixes' into for-kernelci
-> > > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=119413e1880000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=8768e9ec924b08e63f82
-> > > userspace arch: arm64
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1097e935880000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177b5b15880000
-> >
-> > In the open path, register nci device without mci_mutex held in bid to break
-> > the lock chain.
->
-> This should be fixed by the following commit when/if it's merged. The
-> commit removes nci_mutex.
->
-> nfc: Allow to create multiple virtual nci devices
-> https://lore.kernel.org/all/20221104170422.979558-1-dvyukov@google.com/
+Split out clk_fd_get_div() helper for the future use elsewhere.
 
-#syz fix: NFC: nci: Allow to create multiple virtual nci devices
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: no changes
+ drivers/clk/clk-fractional-divider.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-> > #syz test https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git  1621b6eaebf7
-> >
-> > --- x/drivers/nfc/virtual_ncidev.c
-> > +++ y/drivers/nfc/virtual_ncidev.c
-> > @@ -15,6 +15,7 @@
-> >
-> >  enum virtual_ncidev_mode {
-> >         virtual_ncidev_enabled,
-> > +       virtual_ncidev_enabling,
-> >         virtual_ncidev_disabled,
-> >         virtual_ncidev_disabling,
-> >  };
-> > @@ -128,6 +129,7 @@ static ssize_t virtual_ncidev_write(stru
-> >
-> >  static int virtual_ncidev_open(struct inode *inode, struct file *file)
-> >  {
-> > +       struct nci_dev *new;
-> >         int ret = 0;
-> >
-> >         mutex_lock(&nci_mutex);
-> > @@ -135,24 +137,27 @@ static int virtual_ncidev_open(struct in
-> >                 mutex_unlock(&nci_mutex);
-> >                 return -EBUSY;
-> >         }
-> > +       state = virtual_ncidev_enabling;
-> > +       mutex_unlock(&nci_mutex);
-> >
-> > -       ndev = nci_allocate_device(&virtual_nci_ops, VIRTUAL_NFC_PROTOCOLS,
-> > -                                  0, 0);
-> > -       if (!ndev) {
-> > -               mutex_unlock(&nci_mutex);
-> > -               return -ENOMEM;
-> > +       ret = -ENOMEM;
-> > +       new = nci_allocate_device(&virtual_nci_ops, VIRTUAL_NFC_PROTOCOLS, 0, 0);
-> > +       if (new) {
-> > +               ret = nci_register_device(new);
-> > +               if (ret)
-> > +                       nci_free_device(new);
-> >         }
-> >
-> > -       ret = nci_register_device(ndev);
-> > -       if (ret < 0) {
-> > -               nci_free_device(ndev);
-> > -               mutex_unlock(&nci_mutex);
-> > -               return ret;
-> > +       mutex_lock(&nci_mutex);
-> > +       if (ret)
-> > +               state = virtual_ncidev_disabled;
-> > +       else {
-> > +               ndev = new;
-> > +               state = virtual_ncidev_enabled;
-> >         }
-> > -       state = virtual_ncidev_enabled;
-> >         mutex_unlock(&nci_mutex);
-> >
-> > -       return 0;
-> > +       return ret;
-> >  }
-> >
-> >  static int virtual_ncidev_close(struct inode *inode, struct file *file)
-> > @@ -167,9 +172,9 @@ static int virtual_ncidev_close(struct i
-> >                 nci_free_device(ndev);
-> >
-> >                 mutex_lock(&nci_mutex);
-> > +               state = virtual_ncidev_disabled;
-> >         }
-> >
-> > -       state = virtual_ncidev_disabled;
-> >         mutex_unlock(&nci_mutex);
-> >
-> >         return 0;
-> > --
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20221115091825.2381-1-hdanton%40sina.com.
+diff --git a/drivers/clk/clk-fractional-divider.c b/drivers/clk/clk-fractional-divider.c
+index 8efa5142ff8c..5c6f1d0f8fb4 100644
+--- a/drivers/clk/clk-fractional-divider.c
++++ b/drivers/clk/clk-fractional-divider.c
+@@ -40,6 +40,7 @@
+ 
+ #include <linux/clk-provider.h>
+ #include <linux/io.h>
++#include <linux/math.h>
+ #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/slab.h>
+@@ -63,14 +64,12 @@ static inline void clk_fd_writel(struct clk_fractional_divider *fd, u32 val)
+ 		writel(val, fd->reg);
+ }
+ 
+-static unsigned long clk_fd_recalc_rate(struct clk_hw *hw,
+-					unsigned long parent_rate)
++static void clk_fd_get_div(struct clk_hw *hw, struct u32_fract *fract)
+ {
+ 	struct clk_fractional_divider *fd = to_clk_fd(hw);
+ 	unsigned long flags = 0;
+ 	unsigned long m, n;
+ 	u32 val;
+-	u64 ret;
+ 
+ 	if (fd->lock)
+ 		spin_lock_irqsave(fd->lock, flags);
+@@ -92,11 +91,22 @@ static unsigned long clk_fd_recalc_rate(struct clk_hw *hw,
+ 		n++;
+ 	}
+ 
+-	if (!n || !m)
++	fract->numerator = m;
++	fract->denominator = n;
++}
++
++static unsigned long clk_fd_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
++{
++	struct u32_fract fract;
++	u64 ret;
++
++	clk_fd_get_div(hw, &fract);
++
++	if (!fract.numerator || !fract.denominator)
+ 		return parent_rate;
+ 
+-	ret = (u64)parent_rate * m;
+-	do_div(ret, n);
++	ret = (u64)parent_rate * fract.numerator;
++	do_div(ret, fract.denominator);
+ 
+ 	return ret;
+ }
+-- 
+2.35.1
+
