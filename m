@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048026348A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDEE6348A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbiKVUmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S235063AbiKVUmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234468AbiKVUkW (ORCPT
+        with ESMTP id S234921AbiKVUk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:40:22 -0500
+        Tue, 22 Nov 2022 15:40:28 -0500
 Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9EA7721A;
-        Tue, 22 Nov 2022 12:39:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4297EC81;
+        Tue, 22 Nov 2022 12:39:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
         s=smtpout1; t=1669149595;
-        bh=RT5zTNt+b0dcxGolKxL6wWKrezXmEB7dqcTheMOw884=;
+        bh=iVMCYAmS3XeOy575q0F4bpZRCi+r4Ash4gZrAlnOTWg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ujG03NqI1iqdY873NCE8qMSNYp+S7TvN7gPDH9xMjAKgZG0HHocfuyjQFJKyJQczV
-         QdRCwTfba90an/tkqpcLObr9pDFP4+kXLzrKqSgXPafh6kKjq0Ib1bBXTt//Zo2+AL
-         ai+/d95qVuXlJ9lmksS1AvY3iyPamfvI2zFBpOND5mZX9kkKkPAHycGC2WXrDg4WAK
-         DmZdSP1rhyuXAOA9F2v8n8QSYaDscDAdfy7GSTTFt7kT1kD67CT54HmA5eJTBlCnsV
-         JDGW8CdEXCzjXxsCASQH5AzAqFV1P2MfGQAp9RZiQw54JWbS/QZJt9UKqgWliUJNvj
-         BoN02AJN98SOQ==
+        b=gx0rqgoxO0RU2ChrQS5GdeCgyTs7X06YQ32SKanbAgP9TUBQPQ3aO8onXBX6NzdCr
+         nJGH6oDE2qg2UL/93XRX1Kl0DjLdX+LL/AYVt09pfybJXdrXjMAQqb72wTUs7QwSpr
+         AEQPxbJG+UodnZv3Xvhw/nFVZZB2DSI3tNe+gzn+FXHlsxtUbkfLm0oSlqG2XIyg7K
+         yi1FZsU3wZ1myE0nueEdI4w01QyjuVdnJQfjv/ffA7XzqgEggIL5w5F7HrtIrYLiDH
+         lXAnyF2Tso7tZPX4GixpweFxsBbxAv4GY8bt1rDyxUW6orhC0yMGiy90Oz5/GsAWMZ
+         BOKbFomzp3bqQ==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NGx2f5MY3zXJc;
-        Tue, 22 Nov 2022 15:39:54 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NGx2g16fnzXLS;
+        Tue, 22 Nov 2022 15:39:55 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
@@ -40,9 +40,9 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Alexander Mikhalitsyn <alexander@mihalicyn.com>,
         Chris Kennelly <ckennelly@google.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 25/30] rseq: Extend struct rseq with per-memory-map NUMA-aware Concurrency ID
-Date:   Tue, 22 Nov 2022 15:39:27 -0500
-Message-Id: <20221122203932.231377-26-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 26/30] selftests/rseq: x86: Implement rseq_load_u32_u32
+Date:   Tue, 22 Nov 2022 15:39:28 -0500
+Message-Id: <20221122203932.231377-27-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221122203932.231377-1-mathieu.desnoyers@efficios.com>
 References: <20221122203932.231377-1-mathieu.desnoyers@efficios.com>
@@ -57,79 +57,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose a per-memory-map NUMA-aware concurrency ID to userspace. Each
-concurrency ID stays associated with the same NUMA node except in case
-of NUMA topology reconfiguration.
+Allow loading a pair of u32 within a rseq critical section. It can be
+used in situations where both rseq_abi()->mm_numa_cid and
+rseq_abi()->node_id need to be sampled atomically with respect to
+preemption, signal delivery and migration.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- include/uapi/linux/rseq.h |  9 +++++++++
- kernel/rseq.c             | 10 +++++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ tools/testing/selftests/rseq/rseq-x86-bits.h | 43 ++++++++++++++++++++
+ tools/testing/selftests/rseq/rseq.h          | 14 +++++++
+ 2 files changed, 57 insertions(+)
 
-diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-index c233aae5eac9..5779249ed37f 100644
---- a/include/uapi/linux/rseq.h
-+++ b/include/uapi/linux/rseq.h
-@@ -148,6 +148,15 @@ struct rseq {
- 	 */
- 	__u32 mm_cid;
+diff --git a/tools/testing/selftests/rseq/rseq-x86-bits.h b/tools/testing/selftests/rseq/rseq-x86-bits.h
+index 8a9431eec467..fdf5ef398393 100644
+--- a/tools/testing/selftests/rseq/rseq-x86-bits.h
++++ b/tools/testing/selftests/rseq/rseq-x86-bits.h
+@@ -990,4 +990,47 @@ int RSEQ_TEMPLATE_IDENTIFIER(rseq_cmpeqv_trymemcpy_storev)(intptr_t *v, intptr_t
  
-+	/*
-+	 * Restartable sequences mm_numa_cid field. Updated by the kernel.
-+	 * Read by user-space with single-copy atomicity semantics. This field
-+	 * should only be read by the thread which registered this data
-+	 * structure.  Aligned on 32-bit. Contains the current thread's
-+	 * NUMA-aware concurrency ID (allocated uniquely within a memory map).
-+	 */
-+	__u32 mm_numa_cid;
+ #endif
+ 
++#if defined(RSEQ_TEMPLATE_CPU_ID_NONE) && defined(RSEQ_TEMPLATE_MO_RELAXED)
 +
- 	/*
- 	 * Flexible array member at end of structure, after last feature field.
- 	 */
-diff --git a/kernel/rseq.c b/kernel/rseq.c
-index cb2512ab3256..58b09de0de47 100644
---- a/kernel/rseq.c
-+++ b/kernel/rseq.c
-@@ -91,14 +91,17 @@ static int rseq_update_cpu_node_id(struct task_struct *t)
- 	u32 cpu_id = raw_smp_processor_id();
- 	u32 node_id = cpu_to_node(cpu_id);
- 	u32 mm_cid = task_mm_cid(t);
-+	u32 mm_numa_cid = task_mm_numa_cid(t);
++#define RSEQ_ARCH_HAS_LOAD_U32_U32
++
++static inline __attribute__((always_inline))
++int RSEQ_TEMPLATE_IDENTIFIER(rseq_load_u32_u32)(uint32_t *dst1, uint32_t *src1,
++		      uint32_t *dst2, uint32_t *src2)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_ASM_TP_SEGMENT:RSEQ_CS_OFFSET(%[rseq_offset]))
++		RSEQ_INJECT_ASM(3)
++		"movl %[src1], %%eax\n\t"
++		"movl %%eax, %[dst1]\n\t"
++		"movl %[src2], %%eax\n\t"
++		"movl %%eax, %[dst2]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(4)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [rseq_offset]		"r" (rseq_offset),
++		  /* final store input */
++		  [dst1]		"m" (*dst1),
++		  [src1]		"m" (*src1),
++		  [dst2]		"m" (*dst2),
++		  [src2]		"m" (*src2)
++		: "memory", "cc", "rax"
++		  RSEQ_INJECT_CLOBBER
++		: abort
++	);
++	rseq_after_asm_goto();
++	return 0;
++abort:
++	rseq_after_asm_goto();
++	RSEQ_INJECT_FAILED
++	return -1;
++}
++
++#endif /* defined(RSEQ_TEMPLATE_CPU_ID_NONE) && defined(RSEQ_TEMPLATE_MO_RELAXED) */
++
+ #include "rseq-bits-reset.h"
+diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
+index d7364ea4d201..b6095c2a5da6 100644
+--- a/tools/testing/selftests/rseq/rseq.h
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -381,4 +381,18 @@ int rseq_cmpeqv_trymemcpy_storev(enum rseq_mo rseq_mo, enum rseq_percpu_mode per
+ 	}
+ }
  
- 	WARN_ON_ONCE((int) mm_cid < 0);
-+	WARN_ON_ONCE((int) mm_numa_cid < 0);
- 	if (!user_write_access_begin(rseq, t->rseq_len))
- 		goto efault;
- 	unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
- 	unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
- 	unsafe_put_user(node_id, &rseq->node_id, efault_end);
- 	unsafe_put_user(mm_cid, &rseq->mm_cid, efault_end);
-+	unsafe_put_user(mm_numa_cid, &rseq->mm_numa_cid, efault_end);
- 	/*
- 	 * Additional feature fields added after ORIG_RSEQ_SIZE
- 	 * need to be conditionally updated only if
-@@ -117,7 +120,7 @@ static int rseq_update_cpu_node_id(struct task_struct *t)
- static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
- {
- 	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0,
--	    mm_cid = 0;
-+	    mm_cid = 0, mm_numa_cid = 0;
- 
- 	/*
- 	 * Reset cpu_id_start to its initial state (0).
-@@ -141,6 +144,11 @@ static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
- 	 */
- 	if (put_user(mm_cid, &t->rseq->mm_cid))
- 		return -EFAULT;
-+	/*
-+	 * Reset mm_numa_cid to its initial state (0).
-+	 */
-+	if (put_user(mm_numa_cid, &t->rseq->mm_numa_cid))
-+		return -EFAULT;
- 	/*
- 	 * Additional feature fields added after ORIG_RSEQ_SIZE
- 	 * need to be conditionally reset only if
++#ifdef RSEQ_ARCH_HAS_LOAD_U32_U32
++
++static inline __attribute__((always_inline))
++int rseq_load_u32_u32(enum rseq_mo rseq_mo,
++		      uint32_t *dst1, uint32_t *src1,
++		      uint32_t *dst2, uint32_t *src2)
++{
++	if (rseq_mo != RSEQ_MO_RELAXED)
++		return -1;
++	return rseq_load_u32_u32_relaxed(dst1, src1, dst2, src2);
++}
++
++#endif
++
+ #endif  /* RSEQ_H_ */
 -- 
 2.25.1
 
