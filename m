@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B236334FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 06:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95972633502
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiKVF7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 00:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S231368AbiKVGAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 01:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbiKVF7V (ORCPT
+        with ESMTP id S229481AbiKVGA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 00:59:21 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417E312A9A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 21:57:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=H/dabyszLrJLcZ4mnIdkzcDGXW3b0QS/17vlN2tcOYk=; b=qgAqZiQIlxnncE0oOqdTVVQyUq
-        zdR88DGEE+hpdJp4oF0A5V6ykerYoL5iDYsc5A+An0Nu3u5bFKb9qpgLOjD6aRn4PSBiWvuKfIG/M
-        3r0gANmpwOfh0uJh439/kL0P5RJQsDMnutkBUN9CAW3N2SHISwkoAHUrovW2PHenKjSETdcPQMsQ8
-        Y7hAt2lHksolpozX32NJEBcKtL15WkLNfEYAZCl2S/kU5yCNI4kEhG2rO7huIHNQnKQbgM5VmT8LA
-        l9amt7FI+6dJwnoxBt+gx3l/Xrcg5ilTASVpJ4Wdt4Kq9RI1+Tn1rwea+zTlB/BQjQSiWQidytv5r
-        m3iYB0iQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxMHu-005zsc-6U; Tue, 22 Nov 2022 05:57:42 +0000
-Date:   Tue, 22 Nov 2022 05:57:42 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mina Almasry <almasrymina@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
-Message-ID: <Y3xk1hX5QrCZMT4q@casper.infradead.org>
-References: <5f52de70-975-e94f-f141-543765736181@google.com>
- <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
- <20221121165938.oid3pemsfkaeq3ws@google.com>
- <Y3vI58VtjiAkorUX@cmpxchg.org>
+        Tue, 22 Nov 2022 01:00:29 -0500
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DE31E8;
+        Mon, 21 Nov 2022 22:00:27 -0800 (PST)
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 2AM605e4031335;
+        Tue, 22 Nov 2022 15:00:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2AM605e4031335
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1669096806;
+        bh=PyZIW+rJXpJC9QFi7cRxeAWYBzbIAT6tmqqq7AILiPo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ih4tke9QNgKCzXLdo2rmvAun8YSAQsePR7nVPxV+9M8W24yBZ2MHEjhslYv0pSRGI
+         VC/KD8AbYCjwfIO7oDnrDEhXrIy039LPJHiWrljq7xAlX2CSVj0+ZMqs3dcv4oiW4Q
+         aL5RIrwp/9qm4kLjsC3wGTyjUHLBtzjzs3B0Pv3AVDGnqQ2L77TMHGsVAxEGhNRS5E
+         IqeJA496c7H0RdmmM831RkLUBGa6OMGNiNfnUFdb8WbvqdzNU/NhDELQDacW03qWse
+         7EDQmayxda/K/MDmzjTY/K/WxD/1XTGTM6rX2QMrtA1/VkRjcpV9Rj9P8vC5bS6OFl
+         3jMcvsQLYC7PQ==
+X-Nifty-SrcIP: [209.85.167.171]
+Received: by mail-oi1-f171.google.com with SMTP id n205so14867143oib.1;
+        Mon, 21 Nov 2022 22:00:06 -0800 (PST)
+X-Gm-Message-State: ANoB5pmnVolBjRNtpxFV3L8yZHq/ucFkROPFlUzxVdmHm7D865sd6jS5
+        wtgGMvXp4ejBYJ6EMe67rz89AeYMsN0IGKYZjVU=
+X-Google-Smtp-Source: AA0mqf6TVoNvonbiM6Z1RvZ7iYSva9PFEYE9Wl4nqoqyVuMX+kPOUqc129NrBwTfVwmkJ1W558O3KhZkv0A9L795iAI=
+X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
+ ay9-20020a056808300900b0035494a6a721mr2132007oib.194.1669096804938; Mon, 21
+ Nov 2022 22:00:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3vI58VtjiAkorUX@cmpxchg.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221119225650.1044591-1-alobakin@pm.me> <20221119225650.1044591-2-alobakin@pm.me>
+ <68ceddec-7af9-983d-c8be-7e0dc109df88@ti.com>
+In-Reply-To: <68ceddec-7af9-983d-c8be-7e0dc109df88@ti.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 22 Nov 2022 14:59:28 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT_PuL0vuYaPxKZ3AfrojBC2tEXUA7Gqs2VuVuoTVoXmQ@mail.gmail.com>
+Message-ID: <CAK7LNAT_PuL0vuYaPxKZ3AfrojBC2tEXUA7Gqs2VuVuoTVoXmQ@mail.gmail.com>
+Subject: Re: [PATCH 01/18] block/rnbd: fix mixed module-builtin object
+To:     Andrew Davis <afd@ti.com>
+Cc:     Alexander Lobakin <alobakin@pm.me>, linux-kbuild@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 01:52:23PM -0500, Johannes Weiner wrote:
-> That leaves clearing writeback. This can't hold the page lock due to
-> the atomic context, so currently we need to take lock_page_memcg() as
-> the lock of last resort.
-> 
-> I wonder if we can have cgroup take the xalock instead: writeback
-> ending on file pages always acquires the xarray lock. Swap writeback
-> currently doesn't, but we could make it so (swap_address_space).
-> 
-> The only thing that gives me pause is the !mapping check in
-> __folio_end_writeback. File and swapcache pages usually have mappings,
-> and truncation waits for writeback to finish before axing
-> page->mapping. So AFAICS this can only happen if we call end_writeback
-> on something that isn't under writeback - in which case the test_clear
-> will fail and we don't update the stats anyway. But I want to be sure.
-> 
-> Does anybody know from the top of their heads if a page under
-> writeback could be without a mapping in some weird cornercase?
+On Tue, Nov 22, 2022 at 6:18 AM Andrew Davis <afd@ti.com> wrote:
+>
+> On 11/19/22 5:04 PM, Alexander Lobakin wrote:
+> > From: Masahiro Yamada <masahiroy@kernel.org>
+> >
+> > With CONFIG_BLK_DEV_RNBD_CLIENT=m and CONFIG_BLK_DEV_RNBD_SERVER=y
+> > (or vice versa), rnbd-common.o is linked to a module and also to
+> > vmlinux even though CFLAGS are different between builtins and modules.
+> >
+> > This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
+> > Fixing mixed module-builtin objects").
+> >
+> > Turn rnbd_access_mode_str() into an inline function.
+> >
+>
+> Why inline? All you should need is "static" to keep these internal to
+> each compilation unit. Inline also bloats the object files when the
+> function is called from multiple places. Let the compiler decide when
+> to inline.
+>
+> Andrew
 
-I can't think of such a corner case.  We should always wait for
-writeback to finish before removing the page from the page cache;
-the writeback bit used to be (and kind of still is) an implicit
-reference to the page, which means that we can't remove the page
-cache's reference to the page without waiting for writeback.
 
-> If we could ensure that the NR_WRITEBACK decs are always protected by
-> the xalock, we could grab it from mem_cgroup_move_account(), and then
-> kill lock_page_memcg() altogether.
+Since it is a header file.
 
-I'm not thrilled by this idea, but I'm not going to veto it.
+
+In header files, "static inline" should be always used.
+Never "static".
+
+
+If a header is included from a C file and there is a function
+that is not used from that C file,
+"static" would emit -Wunused-function warning
+(-Wunused-function is enabled by -Wall, which is the case
+for the kernel build).
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
