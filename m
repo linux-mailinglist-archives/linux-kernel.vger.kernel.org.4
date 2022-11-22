@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82EBF633C1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2AB633C21
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbiKVMJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:09:37 -0500
+        id S232919AbiKVMJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:09:47 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233597AbiKVMJa (ORCPT
+        with ESMTP id S233626AbiKVMJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:09:30 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFB349B4F;
-        Tue, 22 Nov 2022 04:09:29 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NGjjg5NNXz8QrkZ;
-        Tue, 22 Nov 2022 20:09:27 +0800 (CST)
-Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
-        by mse-fl2.zte.com.cn with SMTP id 2AMC9KZH006279;
-        Tue, 22 Nov 2022 20:09:20 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Tue, 22 Nov 2022 20:09:23 +0800 (CST)
-Date:   Tue, 22 Nov 2022 20:09:23 +0800 (CST)
-X-Zmail-TransId: 2b04637cbbf3ffffffffe6ce2da8
-X-Mailer: Zmail v1.0
-Message-ID: <202211222009239312149@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <peppe.cavallaro@st.com>
-Cc:     <alexandre.torgue@foss.st.com>, <joabreu@synopsys.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIG5ldDogc3RtbWFjOiB1c2Ugc3lzZnNfc3RyZXEoKSBpbnN0ZWFkIG9mIHN0cm5jbXAoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AMC9KZH006279
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 637CBBF7.000 by FangMail milter!
-X-FangMail-Envelope: 1669118967/4NGjjg5NNXz8QrkZ/637CBBF7.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 637CBBF7.000/4NGjjg5NNXz8QrkZ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 07:09:35 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201A24732C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:09:34 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id d20so17660125ljc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5ZD3VVVFh1AU2zjGJYTB+TJZq374XTiT14bnR+oy1JI=;
+        b=BkDpER8hmrv73TFgPEFSoFkepvVOtf2iT3bLQkDy6otKfLhdsFd2n1gpNV0dh0WMrs
+         9HeG/GMquZSssZ8nVoehhaGt3nU9Et1p0SOzg8PSP7Uy2peKg4WkKSTDFTrhkGO9E7BY
+         JssNK3ZDRtAOGl3FWPodSzHywXOhGXiHhGF3LzhaJgcI5P/VsEHnIN5kgZhBY7Y0fUxy
+         KcsrtZWxe+hJkNKTdMtAtqMiBQCkIp10dx0nQ2mxtokZgPI78VwU0rSRT5ai990NO4dm
+         ruDtEQFTGeEBCHhcMhSuY+K98J8W1i8laytUo7liglT+uB+jd3X4AH5otfbgC8R1b3lZ
+         wUOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ZD3VVVFh1AU2zjGJYTB+TJZq374XTiT14bnR+oy1JI=;
+        b=5PTODm/T83nOPin30+h7rFqNuhi9Dg2BzA1SL9+5XSQoZ10WwCOd2RWAYDDRbdQxPN
+         0JAp2UzUgHZxKMD24PSbqlBm2qknt43ZLNChzUuJch+Pc5kBGgZIqyVZaco2ScGfjG2m
+         cinfK4mC45aOY0mvX61qOFrIZrA73+cOOXj0/QPdv3piFFc2jvnhdECu5JT+/j2Df1F8
+         MPci9X9a4qJ7ucQK1CfibgOgZmgoYBZYhiGJG4CfHplGQZ925jkih0/G99eq73oOPlZr
+         2pxz/YzmJEzgfQvM+dysvCkF9DAK2G2GZi1FzM+7OxdQPcIS8HE1vLa/CzZZqLfYa66h
+         bg9g==
+X-Gm-Message-State: ANoB5pla9ZvMfoDzlxuphSS9wxSABFkpNfC3IHmLyCQgSoUb8j8zCkJ6
+        Gm0Jd8Xh83GIVCQjkP7nDC2xCg==
+X-Google-Smtp-Source: AA0mqf59Pdk52BV2iOIAuYFJocChXfShRihfZCTI4sAzzMyEyuHu7qXMgqPLoXtliUHsiZH6Um8/Kg==
+X-Received: by 2002:a2e:3a1a:0:b0:278:f073:d3c0 with SMTP id h26-20020a2e3a1a000000b00278f073d3c0mr7940111lja.357.1669118972347;
+        Tue, 22 Nov 2022 04:09:32 -0800 (PST)
+Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
+        by smtp.gmail.com with ESMTPSA id y25-20020a2e7d19000000b0026dd4be2290sm1836111ljc.90.2022.11.22.04.09.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 04:09:31 -0800 (PST)
+Message-ID: <d8094c01-38d7-d758-16e0-13939af422c6@linaro.org>
+Date:   Tue, 22 Nov 2022 13:09:30 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] ARM: dts: qcom: msm8974-castor: Enable charging over
+ USB
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Julian Weigt <juw@posteo.de>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221121213019.324558-1-luca@z3ntu.xyz>
+ <20221121213019.324558-2-luca@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221121213019.324558-2-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
 
-Replace the open-code with sysfs_streq().
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+On 21.11.2022 22:30, Luca Weiss wrote:
+> From: Julian Weigt <juw@posteo.de>
+> 
+> Set usb-charge-current-limit to higher value so that the device can be
+> charged over USB.
+> 
+> Signed-off-by: Julian Weigt <juw@posteo.de>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 0a9d13d7976f..4167e768a86a 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7562,31 +7562,31 @@ static int __init stmmac_cmdline_opt(char *str)
- 	if (!str || !*str)
- 		return 1;
- 	while ((opt = strsep(&str, ",")) != NULL) {
--		if (!strncmp(opt, "debug:", 6)) {
-+		if (sysfs_streq(opt, "debug:")) {
- 			if (kstrtoint(opt + 6, 0, &debug))
- 				goto err;
--		} else if (!strncmp(opt, "phyaddr:", 8)) {
-+		} else if (sysfs_streq(opt, "phyaddr:")) {
- 			if (kstrtoint(opt + 8, 0, &phyaddr))
- 				goto err;
--		} else if (!strncmp(opt, "buf_sz:", 7)) {
-+		} else if (sysfs_streq(opt, "buf_sz:")) {
- 			if (kstrtoint(opt + 7, 0, &buf_sz))
- 				goto err;
--		} else if (!strncmp(opt, "tc:", 3)) {
-+		} else if (sysfs_streq(opt, "tc:")) {
- 			if (kstrtoint(opt + 3, 0, &tc))
- 				goto err;
--		} else if (!strncmp(opt, "watchdog:", 9)) {
-+		} else if (sysfs_streq(opt, "watchdog:")) {
- 			if (kstrtoint(opt + 9, 0, &watchdog))
- 				goto err;
--		} else if (!strncmp(opt, "flow_ctrl:", 10)) {
-+		} else if (sysfs_streq(opt, "flow_ctrl:")) {
- 			if (kstrtoint(opt + 10, 0, &flow_ctrl))
- 				goto err;
--		} else if (!strncmp(opt, "pause:", 6)) {
-+		} else if (sysfs_streq(opt, "pause:", 6)) {
- 			if (kstrtoint(opt + 6, 0, &pause))
- 				goto err;
--		} else if (!strncmp(opt, "eee_timer:", 10)) {
-+		} else if (sysfs_streq(opt, "eee_timer:")) {
- 			if (kstrtoint(opt + 10, 0, &eee_timer))
- 				goto err;
--		} else if (!strncmp(opt, "chain_mode:", 11)) {
-+		} else if (sysfs_streq(opt, "chain_mode:")) {
- 			if (kstrtoint(opt + 11, 0, &chain_mode))
- 				goto err;
- 		}
--- 
-2.15.2
+Konrad
+>  arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> index 2725bd343f3a..0f2154a57a59 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> +++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> @@ -575,6 +575,7 @@ &smbb {
+>  	qcom,fast-charge-safe-current = <1500000>;
+>  	qcom,fast-charge-current-limit = <1500000>;
+>  	qcom,dc-current-limit = <1800000>;
+> +	usb-charge-current-limit = <1800000>;
+>  	qcom,fast-charge-safe-voltage = <4400000>;
+>  	qcom,fast-charge-high-threshold-voltage = <4350000>;
+>  	qcom,fast-charge-low-threshold-voltage = <3400000>;
