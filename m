@@ -2,209 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA420634801
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E09634802
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbiKVUTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
+        id S234182AbiKVUWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbiKVUTm (ORCPT
+        with ESMTP id S232355AbiKVUWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:19:42 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764DE27FE4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:19:41 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id q83so17003537oib.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:19:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JJeM2QZ9j6Bl1KYDD45QbX15tSP8xUPz8dxNHtRGie0=;
-        b=SJhuMMaSp6msJ0PsB556c5ah3uZu7a10YngHgwsZfuGDB8+IF/LJYOqzGIhX52Sqnh
-         acj5Uc5MxbBqHpuvgO/xmEsUWBOXnTL9JOwQmaT4jWTgAYV8Zf/vt4UFcQx7lPJOyCex
-         y81jzFq1ki8KZ+JPC9h/sjVY4plAq19ncn+IccWU0PzEpSNsk1FXhp44fZvll2ffWsRz
-         Vz1ZzxFiAIOh97C7LqM0knQbx+mo59/ByP/U7J5Q2HXKa8BzC9Mtu6NlEgAUR2+Tj2l9
-         OL2xSSxY6WsL0FGRgRLj6ByyizeMe1cqwJmp6pttKjVEFi5kchTfcPhiv3Vbu5CdOMOb
-         azww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JJeM2QZ9j6Bl1KYDD45QbX15tSP8xUPz8dxNHtRGie0=;
-        b=TFReexyD+nyj57o21+0EQyLYn6w2i7abcWwlTMFt3JMb56wvfLoGos5HHgNnhU75Rh
-         JNGL0FfczNqNBfKwgyIUMO5djkib0NYWXYd9EbyF29PFY1rBzYMM5BlbqQiovDSUiRav
-         fp2KOFBohiNVIE+xwwJCrBkKCwrXfs1YYFQegJJ3TOtnDGQilbmz9fy5KIwaweCwkhpz
-         glsToPvCNudoydUxV0yaBeshM7c4QdutgPJ9BDQPuZ5BYrwJgpifU5ftq41SHQs6tifg
-         BrsS72GQNMjY5nrX4rZocFOODdB6aSxxGJLiAMnMhfOVqbF1ro/pE9fhqUZnur468UA/
-         A0og==
-X-Gm-Message-State: ANoB5pnbnkvySEI/MSMH3UqPo55YpPafgUZGO48R7t9l0mYul7dcxMcl
-        C+wMys1oNxUO+dhRiBp6BY9FKkWpElkyq4ZJx/dW2g==
-X-Google-Smtp-Source: AA0mqf6ZAbjJ7gQ7mlzp85IXiOHOKc/bQHBSbghmcmvRAlU5CeViWuctX+g7H3VZdwHKT6naUZDnNUpPqjg627seies=
-X-Received: by 2002:a54:441a:0:b0:35a:4390:1b8b with SMTP id
- k26-20020a54441a000000b0035a43901b8bmr2549926oiw.122.1669148380657; Tue, 22
- Nov 2022 12:19:40 -0800 (PST)
+        Tue, 22 Nov 2022 15:22:06 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A33B4F2D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:22:05 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxZmE-00074p-O1; Tue, 22 Nov 2022 21:21:54 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxZmC-005v1n-Gq; Tue, 22 Nov 2022 21:21:53 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxZmC-000s8U-Kc; Tue, 22 Nov 2022 21:21:52 +0100
+Date:   Tue, 22 Nov 2022 21:21:48 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 6/7] pwm: lpss: Add devm_pwm_lpss_probe() stub
+Message-ID: <20221122202148.5bwmrblpmzzgndyt@pengutronix.de>
+References: <20221117110806.65470-1-andriy.shevchenko@linux.intel.com>
+ <20221117110806.65470-7-andriy.shevchenko@linux.intel.com>
+ <20221122164703.e3z42rou7ivu3djv@pengutronix.de>
+ <Y30IaslnbeKBkMhM@smile.fi.intel.com>
+ <20221122181444.m74fa47ejp7nvgxj@pengutronix.de>
+ <Y30V1aJcbyjC+Chu@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
- <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com> <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 22 Nov 2022 15:19:28 -0500
-Message-ID: <CA+GJov7v8hbJ6A2ehfpZvG3+e181D0JrJRYDTQc9_QMM4G0HQA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
-To:     Daniel Latypov <dlatypov@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, isabbasso@riseup.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ytt66jt4j43s74gl"
+Content-Disposition: inline
+In-Reply-To: <Y30V1aJcbyjC+Chu@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 12:14 PM Daniel Latypov <dlatypov@google.com> wrote=
-:
->
-> On Tue, Nov 22, 2022 at 1:17 AM Anders Roxell <anders.roxell@linaro.org> =
-wrote:
-> >
-> > On Mon, 21 Nov 2022 at 19:48, Rae Moar <rmoar@google.com> wrote:
-> > >
-> > > Change KUnit test output to better comply with KTAP v1 specifications
-> > > found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-> > > 1) Use "KTAP version 1" instead of "TAP version 14" as test output he=
-ader
-> > > 2) Remove '-' between test number and test name on test result lines
-> > > 2) Add KTAP version lines to each subtest header as well
-> > >
-> > > Note that the new KUnit output still includes the =E2=80=9C# Subtest=
-=E2=80=9D line now
-> > > located after the KTAP version line. This does not completely match t=
-he
-> > > KTAP v1 spec but since it is classified as a diagnostic line, it is n=
-ot
-> > > expected to be disruptive or break any existing parsers. This
-> > > =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
-> > > (https://testanything.org/tap-version-14-specification.html)
-> > > and it is used to define the test name before the results.
-> > >
-> > > Original output:
-> > >
-> > >  TAP version 14
-> > >  1..1
-> > >    # Subtest: kunit-test-suite
-> > >    1..3
-> > >    ok 1 - kunit_test_1
-> > >    ok 2 - kunit_test_2
-> > >    ok 3 - kunit_test_3
-> > >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
-> > >  # Totals: pass:3 fail:0 skip:0 total:3
-> > >  ok 1 - kunit-test-suite
-> > >
-> > > New output:
-> > >
-> > >  KTAP version 1
-> > >  1..1
-> > >    KTAP version 1
-> > >    # Subtest: kunit-test-suite
-> > >    1..3
-> > >    ok 1 kunit_test_1
-> > >    ok 2 kunit_test_2
-> > >    ok 3 kunit_test_3
-> > >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
-> > >  # Totals: pass:3 fail:0 skip:0 total:3
-> > >  ok 1 kunit-test-suite
-> > >
-> > > Signed-off-by: Rae Moar <rmoar@google.com>
-> > > Reviewed-by: Daniel Latypov <dlatypov@google.com>
-> > > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > I tried this patch, see the full boot log [1] and I can still see some
-> >  tests that output the "old" format with 'ok 1 - kunit_test_1', for exa=
-mple
-> >
-> > ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
-> >
-> > Isn't this something that should be converted too?
 
-Hello! Sorry for missing that. You are definitely right. Those results shou=
-ld
-be converted as well.
+--ytt66jt4j43s74gl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> Yes, thanks for catching that.
-> That's what I get from only looking over the diff this time since I
-> thought I remembered the code...
->
-> We also want this diff to fix a) debugfs, b) subtests.
->
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index 1048ef1b8d6e..de0ee2e03ed6 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file
-> *seq, void *v)
->         kunit_suite_for_each_test_case(suite, test_case)
->                 debugfs_print_result(seq, suite, test_case);
->
-> -       seq_printf(seq, "%s %d - %s\n",
-> +       seq_printf(seq, "%s %d %s\n",
->                    kunit_status_to_ok_not_ok(success), 1, suite->name);
->         return 0;
->  }
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 19344cb501c5..c9d57a1d9524 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -556,7 +556,7 @@ int kunit_run_tests(struct kunit_suite *suite)
->
->                                 kunit_log(KERN_INFO, &test,
->                                           KUNIT_SUBTEST_INDENT
-> KUNIT_SUBTEST_INDENT
-> -                                         "%s %d - %s",
-> +                                         "%s %d %s",
->
-> kunit_status_to_ok_not_ok(test.status),
->                                           test.param_index + 1, param_des=
-c);
->
-> Daniel
+Hello Andy,
 
-Thanks Daniel!
+On Tue, Nov 22, 2022 at 08:32:53PM +0200, Andy Shevchenko wrote:
+> On Tue, Nov 22, 2022 at 07:14:44PM +0100, Uwe Kleine-K=F6nig wrote:
+> > I just tested compiling your series without patch #6, x86_64 allmodconf=
+ig + PWM=3Dn.
+> >=20
+> > nm doesn't report the need for devm_pwm_lpss_probe in
+> > drivers/pinctrl/intel/pinctrl-intel.o.
+>=20
+> Sounds like you are right. I tried a brief test with m/m, y/m, m/y, and m=
+/n
+> variants between PINCTRL_INTEL and PWM_LPSS and all were built fine.
+>=20
+> That said, I will drop this patch and send a PR with the rest.
 
-I think that should do the trick with the addition of adding the "KTAP
-version 1" line, which you can do with the following diff:
+Sounds good.
 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index c9d57a1d9524..1c9d8d962d67 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -543,6 +543,8 @@ int kunit_run_tests(struct kunit_suite *suite)
-                        /* Get initial param. */
-                        param_desc[0] =3D '\0';
-                        test.param_value =3D
-test_case->generate_params(NULL, param_desc);
-+                       kunit_log(KERN_INFO, &test,
-KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-+                                 "KTAP version 1\n");
-                        kunit_log(KERN_INFO, &test,
-KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-                                  "# Subtest: %s", test_case->name);
+> Thank you for thorough review!
 
-Going to run through some more examples to make sure this version
-works otherwise I will make a v3 with the addition of fixing any merge
-conflicts.
+Thank you for the interesting thread. I like our conversations.
 
-Rae
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ytt66jt4j43s74gl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN9L1kACgkQwfwUeK3K
+7AlGOAgAiU/tVEdVGf0exlKW+U02g+oMusq248bduYJE3tm5/iDJE/hScnnSAex1
+tYQOcuj8S/V2CPoXvY3HEaKehTsYsE/WGKmzKsj5PhWw3a5qRt9Ey2OR+839QO75
+nAvd6qlwJPIPVdJYYMh1QN16jpOKdztJd4pg4B1Td+VMNJn++rMsObJxFISYgKOO
+XvvaJUgv9FLiTMHGAgwcxHNOcwi8G3KRgT7BybmcQlGOIgmEu49XdC+SYya29y3d
+5vGyifBhSrTBzJNAAY//ebTBY1p+B1llzZ+98Q3I8/Ex9zrFUcdWJhTlYpfzD+4a
+qir8d18aFx9NPKGBOrfW6doeCo7qIw==
+=EM4w
+-----END PGP SIGNATURE-----
+
+--ytt66jt4j43s74gl--
