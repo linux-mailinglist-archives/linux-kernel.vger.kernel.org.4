@@ -2,85 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB97C633499
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 06:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D557633493
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 05:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiKVFA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 00:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S231324AbiKVEzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 23:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKVFAZ (ORCPT
+        with ESMTP id S230139AbiKVEzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 00:00:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BFE2B18B;
-        Mon, 21 Nov 2022 21:00:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53773B81981;
-        Tue, 22 Nov 2022 05:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EB9CCC433D7;
-        Tue, 22 Nov 2022 05:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669093222;
-        bh=Nw9mFixIF/Xa0Jyd7h5JrAq/FwFUkDEwGJxSoeOW1iM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CQNUrNa0EEvmgMqZri94xt7ErkXdPiMkj/ieDejdYEwPkrbJcrzcv28cji5fo1Xmm
-         GVO5kUZFBCO2kdY3E37qKTJd7df1d0jj2PNVmkms8mShL1RS5yaojqw/fgONXfx6SL
-         ycpPpVEvP0M23JsVfQ3OXFARoUzXEeeW8lddB+pow8yJ7D6+ml7SsZ6mC4xGBN66C0
-         LwocVB8YcC1twnFYsHmVGpr0jXBH6xDcrejubnkjhkwkRN4pAEpgnesGRT/4QYWSjF
-         j7ALdZtay0ZyrTJE2v5LFUViNhLfYTk3RvrFqiX338tyecjU+Pu8EsXTxY0yc85Pwv
-         s0RUIVaj3k5+w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD2AAE29F3F;
-        Tue, 22 Nov 2022 05:00:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 21 Nov 2022 23:55:09 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F132A70E;
+        Mon, 21 Nov 2022 20:55:08 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NGX3y0LWmzRpQd;
+        Tue, 22 Nov 2022 12:54:38 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 12:55:06 +0800
+Received: from build.huawei.com (10.175.101.6) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 12:55:05 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "Mike Christie" <michael.christie@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <liuzhiqiang26@huawei.com>,
+        <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
+Subject: [PATCH] scsi:iscsi: rename iscsi_set_param to iscsi_if_set_param
+Date:   Tue, 22 Nov 2022 18:11:05 +0000
+Message-ID: <20221122181105.4123935-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] tipc: check skb_linearize() return value in
- tipc_disc_rcv()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166909322182.4259.9413800654731726777.git-patchwork-notify@kernel.org>
-Date:   Tue, 22 Nov 2022 05:00:21 +0000
-References: <20221119072832.7896-1-yuehaibing@huawei.com>
-In-Reply-To: <20221119072832.7896-1-yuehaibing@huawei.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+There are two iscsi_set_param() functions individually defined
+in libiscsi.c and scsi_transport_iscsi.c which is confused.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+So rename the one in scsi_transport_iscsi.c to iscsi_if_set_param().
 
-On Sat, 19 Nov 2022 15:28:32 +0800 you wrote:
-> If skb_linearize() fails in tipc_disc_rcv(), we need to free the skb instead of
-> handle it.
-> 
-> Fixes: 25b0b9c4e835 ("tipc: handle collisions of 32-bit node address hash values")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  net/tipc/discover.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+---
+ drivers/scsi/scsi_transport_iscsi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [net] tipc: check skb_linearize() return value in tipc_disc_rcv()
-    https://git.kernel.org/netdev/net/c/cd0f64211622
-
-You are awesome, thank you!
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index cd3db9684e52..c3fe5ecfee59 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2988,7 +2988,7 @@ iscsi_if_destroy_conn(struct iscsi_transport *transport, struct iscsi_uevent *ev
+ }
+ 
+ static int
+-iscsi_set_param(struct iscsi_transport *transport, struct iscsi_uevent *ev)
++iscsi_if_set_param(struct iscsi_transport *transport, struct iscsi_uevent *ev)
+ {
+ 	char *data = (char*)ev + sizeof(*ev);
+ 	struct iscsi_cls_conn *conn;
+@@ -3941,7 +3941,7 @@ iscsi_if_recv_msg(struct sk_buff *skb, struct nlmsghdr *nlh, uint32_t *group)
+ 			err = -EINVAL;
+ 		break;
+ 	case ISCSI_UEVENT_SET_PARAM:
+-		err = iscsi_set_param(transport, ev);
++		err = iscsi_if_set_param(transport, ev);
+ 		break;
+ 	case ISCSI_UEVENT_CREATE_CONN:
+ 	case ISCSI_UEVENT_DESTROY_CONN:
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.3
 
