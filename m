@@ -2,130 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDDD6333AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F5C6333B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiKVDFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S232141AbiKVDF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiKVDFj (ORCPT
+        with ESMTP id S232070AbiKVDFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:05:39 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477D21057D;
-        Mon, 21 Nov 2022 19:05:38 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 03279890;
-        Tue, 22 Nov 2022 04:05:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669086336;
-        bh=OP7Y7hsHz9XtzH4OrAc1DG1nsm5BYY0TnHJs66LwpeA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ksEO7afwDfYQYLJcky9l5GiNb3FvnZiznXhKNyHfvPS+3j7Wy/APE98cIlCvCFA8G
-         URnoxdxXbXbeqdZ9BqABrFKnQUNm0HiyvAd0CCFNt43PkZgDUcA5r9BqJzIlNbHewe
-         /O5dUMsFzRHTQC3towY+Wt6Wty4luAbWXpoTk8aA=
-Date:   Tue, 22 Nov 2022 05:05:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Subject: Re: [PATCH v1 6/8] drm: rcar-du: Add r8a779g0 support
-Message-ID: <Y3w8cBh0uVaSPonO@pendragon.ideasonboard.com>
-References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com>
- <20221117122547.809644-7-tomi.valkeinen@ideasonboard.com>
- <166869771876.50677.1905794243575000038@Monstersaurus>
+        Mon, 21 Nov 2022 22:05:54 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCE71261C;
+        Mon, 21 Nov 2022 19:05:53 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NGTZg6FvyzJnkn;
+        Tue, 22 Nov 2022 11:02:35 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 22 Nov
+ 2022 11:05:45 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <s.shtylyov@omp.ru>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <yoshihiro.shimoda.uh@renesas.com>
+CC:     <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] crypto: ccree - Fix section mismatch due to cc_debugfs_global_fini()
+Date:   Tue, 22 Nov 2022 11:05:42 +0800
+Message-ID: <20221122030542.23920-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <166869771876.50677.1905794243575000038@Monstersaurus>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:08:38PM +0000, Kieran Bingham wrote:
-> Quoting Tomi Valkeinen (2022-11-17 12:25:45)
-> > From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> > 
-> > Add support for DU on r8a779g0, which is identical to DU on r8a779a0.
-> > 
-> > Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> > ---
-> >  drivers/gpu/drm/rcar-du/rcar_du_drv.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > index d003e8d9e7a2..b1761d4ec4e5 100644
-> > --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-> > @@ -524,6 +524,27 @@ static const struct rcar_du_device_info rcar_du_r8a779a0_info = {
-> >         .dsi_clk_mask =  BIT(1) | BIT(0),
-> >  };
-> >  
-> > +static const struct rcar_du_device_info rcar_du_r8a779g0_info = {
-> > +       .gen = 3,
-> 
-> Given that this is the V4H ... I wonder if this should be bumped
-> already. I guess that has knock on effects through the driver though...
+cc_debugfs_global_fini() is marked with __exit now, however it is used
+in __init ccree_init() for cleanup. Remove the __exit annotation to fix
+build warning:
 
-rcar_du_group_setup_didsr() would need to be fixed to test gen >= 3
-instead of gen == 3. That seems to be the only problematic location. It
-could thus fairly easily be done in v2, but we can also delay it.
+WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in reference: init_module (section: .init.text) -> cc_debugfs_global_fini (section: .exit.text)
 
-> Aside from that, Which may need more work to handle correctly:
-> 
-> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Fixes: 4f1c596df706 ("crypto: ccree - Remove debugfs when platform_driver_register failed")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/crypto/ccree/cc_debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> > +       .features = RCAR_DU_FEATURE_CRTC_IRQ
-> > +                 | RCAR_DU_FEATURE_VSP1_SOURCE
-> > +                 | RCAR_DU_FEATURE_NO_BLENDING,
-> > +       .channels_mask = BIT(1) | BIT(0),
-> > +       .routes = {
-> > +               /* R8A779G0 has two MIPI DSI outputs. */
-> > +               [RCAR_DU_OUTPUT_DSI0] = {
-> > +                       .possible_crtcs = BIT(0),
-> > +                       .port = 0,
-> > +               },
-> > +               [RCAR_DU_OUTPUT_DSI1] = {
-> > +                       .possible_crtcs = BIT(1),
-> > +                       .port = 1,
-> > +               },
-> > +       },
-> > +       .num_rpf = 5,
-> > +       .dsi_clk_mask =  BIT(1) | BIT(0),
-> > +};
-> > +
-> >  static const struct of_device_id rcar_du_of_table[] = {
-> >         { .compatible = "renesas,du-r8a7742", .data = &rcar_du_r8a7790_info },
-> >         { .compatible = "renesas,du-r8a7743", .data = &rzg1_du_r8a7743_info },
-> > @@ -549,6 +570,7 @@ static const struct of_device_id rcar_du_of_table[] = {
-> >         { .compatible = "renesas,du-r8a77990", .data = &rcar_du_r8a7799x_info },
-> >         { .compatible = "renesas,du-r8a77995", .data = &rcar_du_r8a7799x_info },
-> >         { .compatible = "renesas,du-r8a779a0", .data = &rcar_du_r8a779a0_info },
-> > +       { .compatible = "renesas,du-r8a779g0", .data = &rcar_du_r8a779g0_info },
-> >         { }
-> >  };
-> >  
-
+diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_debugfs.c
+index 7083767602fc..8f008f024f8f 100644
+--- a/drivers/crypto/ccree/cc_debugfs.c
++++ b/drivers/crypto/ccree/cc_debugfs.c
+@@ -55,7 +55,7 @@ void __init cc_debugfs_global_init(void)
+ 	cc_debugfs_dir = debugfs_create_dir("ccree", NULL);
+ }
+ 
+-void __exit cc_debugfs_global_fini(void)
++void cc_debugfs_global_fini(void)
+ {
+ 	debugfs_remove(cc_debugfs_dir);
+ }
 -- 
-Regards,
+2.17.1
 
-Laurent Pinchart
