@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96959633D87
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1408633D91
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbiKVNX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S232938AbiKVNZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbiKVNXv (ORCPT
+        with ESMTP id S233816AbiKVNY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:23:51 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B719313EA8;
-        Tue, 22 Nov 2022 05:23:46 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NGlGt4Mw9zqSLS;
-        Tue, 22 Nov 2022 21:19:50 +0800 (CST)
-Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 21:23:44 +0800
-Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
- (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 22 Nov
- 2022 21:23:44 +0800
-Subject: Re: [PATCH v13 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>,
-        <mathieu.poirier@linaro.org>, <mike.leach@linaro.org>,
-        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
-        <john.garry@huawei.com>
-References: <20221114090316.63157-1-hejunhao3@huawei.com>
- <20221114090316.63157-2-hejunhao3@huawei.com>
- <92291cb2-859c-a994-b05d-806def431376@arm.com>
- <c07e6417-7a37-3cf5-d3dd-b3ce7b3c20b1@huawei.com>
- <1c8da30c-d798-729d-c8e5-73a07f8b9f18@arm.com>
-CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <lpieralisi@kernel.org>,
-        <linuxarm@huawei.com>, <yangyicong@huawei.com>,
-        <liuqi115@huawei.com>, <f.fangjian@huawei.com>,
-        <prime.zeng@hisilicon.com>
-From:   hejunhao <hejunhao3@huawei.com>
-Message-ID: <95024107-94d2-6114-4c50-b152c4da362b@huawei.com>
-Date:   Tue, 22 Nov 2022 21:23:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Tue, 22 Nov 2022 08:24:56 -0500
+Received: from mail-40130.protonmail.ch (mail-40130.protonmail.ch [185.70.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B20654D8;
+        Tue, 22 Nov 2022 05:24:53 -0800 (PST)
+Date:   Tue, 22 Nov 2022 13:24:45 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1669123491; x=1669382691;
+        bh=jfqqTP5BWjnX4gaBhfE4ZQlDKqyMGBo+E5+/v+guTYs=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=slIgGITvleEUSSC+bLRBijj+rlSvQvnI/z3gaeFy+1v7+eCsuVwr4fe0tDLNjRKKf
+         pDHoPeYeNtKEUsKtPKNe2amL1i7maLS6hH4dgWUEIHtfM53cboWYnZad79WLmbmPjf
+         41pWiKmGtOR74LV+F9oC36z2BR74QG/KfxPNZ4X8daOtxiO8Q9ruse/RVMnscn33br
+         6I/0TaCW2mKIcNAWK7V4IThMZU08D7f+S2ndS+lSWpOwpHZK91y+AAjZabuz3jNBkk
+         9D4kY4dZ41YRxD59vvxN+gL4j8lY+1opjsE2glUImqjazN7jrjFZcppkYo44fYPXgY
+         UIhXHNHJlq9QQ==
+To:     linux-kernel@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/4] dt-bindings: qcom: Document msm8916-acer-a1-724
+Message-ID: <20221122132336.257496-1-linmengbo0689@protonmail.com>
+In-Reply-To: <20221122132142.257241-1-linmengbo0689@protonmail.com>
+References: <20221121133732.207820-1-linmengbo0689@protonmail.com> <20221122132142.257241-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-In-Reply-To: <1c8da30c-d798-729d-c8e5-73a07f8b9f18@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.44]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Document the new acer,a1-724 device tree bindings used in its device tree.
 
-On 2022/11/21 18:47, Suzuki Kuruppassery Poulose wrote:
-> On 18/11/2022 12:45, hejunhao wrote:
->> Hi Suzuki ,
->>
->>
->> On 2022/11/15 19:06, Suzuki K Poulose wrote:
->>> On 14/11/2022 09:03, Junhao He wrote:
->>>> From: Qi Liu <liuqi115@huawei.com>
->>>>
->
->>>> +static void smb_init_hw(struct smb_drv_data *drvdata)
->>>> +{
->>>> +    /* First disable SMB and clear the status of SMB buffer */
->>>> +    smb_reset_buffer_status(drvdata);
->>>> +    smb_disable_hw(drvdata);
->>>> +    smb_purge_data(drvdata);
->>>> +
->>>> +    writel(SMB_LB_CFG_LO_DEFAULT, drvdata->base + SMB_LB_CFG_LO_REG);
->>>> +    writel(SMB_LB_CFG_HI_DEFAULT, drvdata->base + SMB_LB_CFG_HI_REG);
->>>> +    writel(SMB_GLB_CFG_DEFAULT, drvdata->base + SMB_GLB_CFG_REG);
->>>> +    writel(SMB_GLB_INT_CFG, drvdata->base + SMB_GLB_INT_REG);
->>>> +    writel(SMB_LB_INT_CTRL_CFG, drvdata->base + SMB_LB_INT_CTRL_REG);
->>>
->>> Does this come with interrupt on overflow ? Do we not use this ?
->>>
->> When the buffer overflow, no interrupt will come.
->> Interrupt will upgrade SMB_LB_INT_STS_REG register status if start 
->> trace.
->> Thanks.
->>> Rest looks fine to me.
->
-> What is the purpose of the "Interrupt" on the SMB ? It is not clear to
-> me.
-The SMB_LB_INT_CTRL_REG register control the validity of both real-time
-events and interrupts. When logical buffer status changes causes to issue an
-interrupt at the same time as it issues a real-time event.
-Real-time events are used in SMB driver, which needs to get the buffer 
-status.
-Interrupts are used in debugger mode and cannot be registered in kernel.
-  ..._BUF_NOTE_MASK control which events flags or interrupts are valid.
+Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks.
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentatio=
+n/devicetree/bindings/arm/qcom.yaml
+index 463509f0f23a..83f6748979a9 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -180,6 +180,7 @@ properties:
+=20
+       - items:
+           - enum:
++              - acer,a1-724
+               - alcatel,idol347
+               - asus,z00l
+               - huawei,g7
+--=20
+2.30.2
 
-Best regards,
-Junhao.
-
-> Suzuki
->
-> _______________________________________________
-> CoreSight mailing list -- coresight@lists.linaro.org
-> To unsubscribe send an email to coresight-leave@lists.linaro.org
 
