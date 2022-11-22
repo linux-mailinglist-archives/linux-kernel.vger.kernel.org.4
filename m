@@ -2,216 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16E56333A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 934A16333B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbiKVDCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:02:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
+        id S232145AbiKVDHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiKVDCR (ORCPT
+        with ESMTP id S232032AbiKVDHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:02:17 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330621D0FE;
-        Mon, 21 Nov 2022 19:02:16 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 59597890;
-        Tue, 22 Nov 2022 04:02:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669086134;
-        bh=Ca28UhB9SgGZCoIjPHP31lx8i8vFUKXIOsQCRggn/e4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EDkXlHOouhQxm769dalIKJYAfmOUhg16wBVrnznOGYY6ycfoMc443QSCCG6JqfV+a
-         j8ZOdf6bD9GuzsLukgPMocbsTmY8gtJZNN8kGQ/5TXyjI1/n88Kr355D21joCOEDpd
-         fYYo+Ym1bs9AuNZLoa7B2qC1kxjn475/hvjZo67M=
-Date:   Tue, 22 Nov 2022 05:01:59 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Subject: Re: [PATCH v1 5/8] arm64: dts: renesas: white-hawk-cpu: Add DP
- output support
-Message-ID: <Y3w7p0EGMLILUdaA@pendragon.ideasonboard.com>
-References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com>
- <20221117122547.809644-6-tomi.valkeinen@ideasonboard.com>
+        Mon, 21 Nov 2022 22:07:14 -0500
+X-Greylist: delayed 183 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 19:07:12 PST
+Received: from n169-113.mail.139.com (n169-113.mail.139.com [120.232.169.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F511209A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:07:11 -0800 (PST)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM:                                                                                        
+X-RM-SPAM-FLAG: 00000005
+Received: from localhost (unknown[2409:8a00:1832:dc00:2ea6:d2e9:4f09:cd3])
+        by rmsmtp-lg-appmail-34-12048 (RichMail) with SMTP id 2f10637c3c25e14-477af;
+        Tue, 22 Nov 2022 11:04:06 +0800 (CST)
+X-RM-TRANSID: 2f10637c3c25e14-477af
+Date:   Tue, 22 Nov 2022 11:04:05 +0800
+From:   Wang Honghui <honghui.wang@139.com>
+To:     linux-kernel@vger.kernel.org
+Subject: Correct syntax error
+Message-ID: <Y3w8JZjR5LygcClz@TP-P15V.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/mixed; boundary="emLd45ZwqBqQW4n1"
 Content-Disposition: inline
-In-Reply-To: <20221117122547.809644-6-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
 
-Thank you for the patch.
+--emLd45ZwqBqQW4n1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Nov 17, 2022 at 02:25:44PM +0200, Tomi Valkeinen wrote:
-> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> 
-> Add DT nodes needed for the mini DP connector. The DP is driven by
-> sn65dsi86, which in turn gets the pixel data from the SoC via DSI.
-> 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+printk_ringbuffer.c
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+--emLd45ZwqBqQW4n1
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-Correct-grammar-errors.patch"
 
-> ---
->  .../dts/renesas/r8a779g0-white-hawk-cpu.dtsi  | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi b/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
-> index c10740aee9f6..8aab859aac7a 100644
-> --- a/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
-> @@ -97,6 +97,15 @@ memory@600000000 {
->  		reg = <0x6 0x00000000 0x1 0x00000000>;
->  	};
->  
-> +	reg_1p2v: regulator-1p2v {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "fixed-1.2V";
-> +		regulator-min-microvolt = <1200000>;
-> +		regulator-max-microvolt = <1200000>;
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +	};
-> +
->  	reg_1p8v: regulator-1p8v {
->  		compatible = "regulator-fixed";
->  		regulator-name = "fixed-1.8V";
-> @@ -114,6 +123,24 @@ reg_3p3v: regulator-3p3v {
->  		regulator-boot-on;
->  		regulator-always-on;
->  	};
-> +
-> +	mini-dp-con {
-> +		compatible = "dp-connector";
-> +		label = "CN5";
-> +		type = "mini";
-> +
-> +		port {
-> +			mini_dp_con_in: endpoint {
-> +				remote-endpoint = <&sn65dsi86_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	sn65dsi86_refclk: clk-x6 {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <38400000>;
-> +	};
->  };
->  
->  &avb0 {
-> @@ -134,6 +161,23 @@ phy0: ethernet-phy@0 {
->  	};
->  };
->  
-> +&dsi0 {
-> +	status = "okay";
-> +
-> +	ports {
-> +		port@1 {
-> +			dsi0_out: endpoint {
-> +				remote-endpoint = <&sn65dsi86_in>;
-> +				data-lanes = <1 2 3 4>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&du {
-> +	status = "okay";
-> +};
-> +
->  &extal_clk {
->  	clock-frequency = <16666666>;
->  };
-> @@ -172,6 +216,51 @@ eeprom@50 {
->  	};
->  };
->  
-> +&i2c1 {
-> +	pinctrl-0 = <&i2c1_pins>;
-> +	pinctrl-names = "default";
-> +
-> +	status = "okay";
-> +	clock-frequency = <400000>;
-> +
-> +	bridge@2c {
-> +		compatible = "ti,sn65dsi86";
-> +		reg = <0x2c>;
-> +
-> +		clocks = <&sn65dsi86_refclk>;
-> +		clock-names = "refclk";
-> +
-> +		interrupt-parent = <&intc_ex>;
-> +		interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +		enable-gpios = <&gpio1 26 GPIO_ACTIVE_HIGH>;
-> +
-> +		vccio-supply = <&reg_1p8v>;
-> +		vpll-supply = <&reg_1p8v>;
-> +		vcca-supply = <&reg_1p2v>;
-> +		vcc-supply = <&reg_1p2v>;
-> +
-> +		ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@0 {
-> +				reg = <0>;
-> +				sn65dsi86_in: endpoint {
-> +					remote-endpoint = <&dsi0_out>;
-> +				};
-> +			};
-> +
-> +			port@1 {
-> +				reg = <1>;
-> +				sn65dsi86_out: endpoint {
-> +					remote-endpoint = <&mini_dp_con_in>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
->  &mmc0 {
->  	pinctrl-0 = <&mmc_pins>;
->  	pinctrl-1 = <&mmc_pins>;
-> @@ -221,6 +310,11 @@ i2c0_pins: i2c0 {
->  		function = "i2c0";
->  	};
->  
-> +	i2c1_pins: i2c1 {
-> +		groups = "i2c1";
-> +		function = "i2c1";
-> +	};
-> +
->  	keys_pins: keys {
->  		pins = "GP_5_0", "GP_5_1", "GP_5_2";
->  		bias-pull-up;
+From 8d1e2b96c62d06bb691802a06501762da606e97e Mon Sep 17 00:00:00 2001
+From: Wang Honghui <honghui.wang@139.com>
+Date: Mon, 21 Nov 2022 16:58:00 +0800
+Subject: [PATCH] Correct syntax error.
 
+Signed-off-by: Wang Honghui <honghui.wang@139.com>
+---
+ kernel/printk/printk_ringbuffer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/printk/printk_ringbuffer.c b/kernel/printk/printk_ringbuffer.c
+index 2b7b6ddab4f7..2dc4d5a1f1ff 100644
+--- a/kernel/printk/printk_ringbuffer.c
++++ b/kernel/printk/printk_ringbuffer.c
+@@ -203,7 +203,7 @@
+  *	prb_rec_init_wr(&r, 5);
+  *
+  *	// try to extend, but only if it does not exceed 32 bytes
+- *	if (prb_reserve_in_last(&e, &test_rb, &r, printk_caller_id()), 32) {
++ *	if (prb_reserve_in_last(&e, &test_rb, &r, printk_caller_id(), 32)) {
+  *		snprintf(&r.text_buf[r.info->text_len],
+  *			 r.text_buf_size - r.info->text_len, "hello");
+  *
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
+
+--emLd45ZwqBqQW4n1--
+
