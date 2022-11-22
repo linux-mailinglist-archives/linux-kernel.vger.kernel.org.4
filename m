@@ -2,98 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8DD633757
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB611633753
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbiKVImo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
+        id S232518AbiKVImO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiKVImg (ORCPT
+        with ESMTP id S232973AbiKVImD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:42:36 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E6991;
-        Tue, 22 Nov 2022 00:42:26 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 00F68A16;
-        Tue, 22 Nov 2022 09:42:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669106544;
-        bh=nDX429cvmSfpNqL7ldm3Nf0LSI65LZrA71ihpOhaQUM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MfhFVla0VBq06phjBEMN7R4Xvyh+DmA10/WZOEd3BBUmDpYq1CPQ/D25BZ1+qUWAO
-         zXvrYdPYrmojO0rSjiyhGL4EFd3eRpqVaqZjuNU6rGrWKHBtJ86YQliqDN8WH6kKVu
-         UjlCfNTuFKBOiieC7nrygKddbxLoKPI0K+OYsX8Q=
-Message-ID: <cd2b6725-ab9f-45f6-b660-b43d6da0c562@ideasonboard.com>
-Date:   Tue, 22 Nov 2022 10:42:21 +0200
+        Tue, 22 Nov 2022 03:42:03 -0500
+Received: from out28-172.mail.aliyun.com (out28-172.mail.aliyun.com [115.124.28.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF1D40902;
+        Tue, 22 Nov 2022 00:42:01 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07454813|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00569678-0.10483-0.889473;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.QE5BpFo_1669106515;
+Received: from sun-VirtualBox..(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.QE5BpFo_1669106515)
+          by smtp.aliyun-inc.com;
+          Tue, 22 Nov 2022 16:41:58 +0800
+From:   Frank <Frank.Sae@motor-comm.com>
+To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     yinghong.zhang@motor-comm.com, fei.zhang@motor-comm.com,
+        hua.sun@motor-comm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Frank <Frank.Sae@motor-comm.com>
+Subject: [PATCH net-next v2] net: phy: add Motorcomm YT8531S phy id.
+Date:   Tue, 22 Nov 2022 16:42:32 +0800
+Message-Id: <20221122084232.3886-1-Frank.Sae@motor-comm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 6/8] drm: rcar-du: Add r8a779g0 support
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com>
- <20221117122547.809644-7-tomi.valkeinen@ideasonboard.com>
- <166869771876.50677.1905794243575000038@Monstersaurus>
- <Y3w8cBh0uVaSPonO@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y3w8cBh0uVaSPonO@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 05:05, Laurent Pinchart wrote:
-> On Thu, Nov 17, 2022 at 03:08:38PM +0000, Kieran Bingham wrote:
->> Quoting Tomi Valkeinen (2022-11-17 12:25:45)
->>> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
->>>
->>> Add support for DU on r8a779g0, which is identical to DU on r8a779a0.
->>>
->>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
->>> ---
->>>   drivers/gpu/drm/rcar-du/rcar_du_drv.c | 22 ++++++++++++++++++++++
->>>   1 file changed, 22 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
->>> index d003e8d9e7a2..b1761d4ec4e5 100644
->>> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
->>> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
->>> @@ -524,6 +524,27 @@ static const struct rcar_du_device_info rcar_du_r8a779a0_info = {
->>>          .dsi_clk_mask =  BIT(1) | BIT(0),
->>>   };
->>>   
->>> +static const struct rcar_du_device_info rcar_du_r8a779g0_info = {
->>> +       .gen = 3,
->>
->> Given that this is the V4H ... I wonder if this should be bumped
->> already. I guess that has knock on effects through the driver though...
+We added patch for motorcomm.c to support YT8531S. This patch has
+been tested on AM335x platform which has one YT8531S interface
+card and passed all test cases.
+The tested cases indluding: YT8531S UTP function with support of
+10M/100M/1000M; YT8531S Fiber function with support of 100M/1000M;
+and YT8531S Combo function that supports auto detection of media type.
+ 
+Since most functions of YT8531S are similar to YT8521 and we reuse some
+codes for YT8521 in the patch file.
+
+Signed-off-by: Frank <Frank.Sae@motor-comm.com>
+---
+patch v2:
+Hi Andrew,
+ Thanks very much and based on your comments we modified the patch v2 as below.
+
+> > 2.31.0.windows.1
 > 
-> rcar_du_group_setup_didsr() would need to be fixed to test gen >= 3
-> instead of gen == 3. That seems to be the only problematic location. It
-> could thus fairly easily be done in v2, but we can also delay it.
+> Does that mean you are hosting your Linux builds on Windows machine?
 
-Ok, I can fix that here.
+ The issue is fixed.
+ 
+ drivers/net/phy/Kconfig     |  2 +-
+ drivers/net/phy/motorcomm.c | 52 +++++++++++++++++++++++++++++++++----
+ 2 files changed, 48 insertions(+), 6 deletions(-)
 
-  Tomi
+diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+index 040c8bf6d05b..af00cf44cd97 100644
+--- a/drivers/net/phy/Kconfig
++++ b/drivers/net/phy/Kconfig
+@@ -260,7 +260,7 @@ config MOTORCOMM_PHY
+ 	tristate "Motorcomm PHYs"
+ 	help
+ 	  Enables support for Motorcomm network PHYs.
+-	  Currently supports the YT8511, YT8521 Gigabit Ethernet PHYs.
++	  Currently supports the YT8511, YT8521, YT8531S Gigabit Ethernet PHYs.
+ 
+ config NATIONAL_PHY
+ 	tristate "National Semiconductor PHYs"
+diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
+index bd1ab5d0631f..685190db72de 100644
+--- a/drivers/net/phy/motorcomm.c
++++ b/drivers/net/phy/motorcomm.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+- * Motorcomm 8511/8521 PHY driver.
++ * Motorcomm 8511/8521/8531S PHY driver.
+  *
+  * Author: Peter Geis <pgwipeout@gmail.com>
+  * Author: Frank <Frank.Sae@motor-comm.com>
+@@ -12,9 +12,10 @@
+ #include <linux/phy.h>
+ 
+ #define PHY_ID_YT8511		0x0000010a
+-#define PHY_ID_YT8521				0x0000011A
++#define PHY_ID_YT8521		0x0000011A
++#define PHY_ID_YT8531S		0x4F51E91A
+ 
+-/* YT8521 Register Overview
++/* YT8521/YT8531S Register Overview
+  *	UTP Register space	|	FIBER Register space
+  *  ------------------------------------------------------------
+  * |	UTP MII			|	FIBER MII		|
+@@ -147,7 +148,7 @@
+ #define YT8521_LINK_TIMER_CFG2_REG		0xA5
+ #define YT8521_LTCR_EN_AUTOSEN			BIT(15)
+ 
+-/* 0xA000, 0xA001, 0xA003 ,and 0xA006 ~ 0xA00A  are common ext registers
++/* 0xA000, 0xA001, 0xA003, 0xA006 ~ 0xA00A and 0xA012 are common ext registers
+  * of yt8521 phy. There is no need to switch reg space when operating these
+  * registers.
+  */
+@@ -221,6 +222,9 @@
+  */
+ #define YTPHY_WCR_TYPE_PULSE			BIT(0)
+ 
++#define YT8531S_SYNCE_CFG_REG			0xA012
++#define YT8531S_SCR_SYNCE_ENABLE		BIT(6)
++
+ /* Extended Register  end */
+ 
+ struct yt8521_priv {
+@@ -647,6 +651,26 @@ static int yt8521_probe(struct phy_device *phydev)
+ 	return 0;
+ }
+ 
++/**
++ * yt8531s_probe() - read chip config then set suitable polling_mode
++ * @phydev: a pointer to a &struct phy_device
++ *
++ * returns 0 or negative errno code
++ */
++static int yt8531s_probe(struct phy_device *phydev)
++{
++	int ret;
++
++	/* Disable SyncE clock output by default */
++	ret = ytphy_modify_ext_with_lock(phydev, YT8531S_SYNCE_CFG_REG,
++					 YT8531S_SCR_SYNCE_ENABLE, 0);
++	if (ret < 0)
++		return ret;
++
++	/* same as yt8521_probe */
++	return yt8521_probe(phydev);
++}
++
+ /**
+  * ytphy_utp_read_lpa() - read LPA then setup lp_advertising for utp
+  * @phydev: a pointer to a &struct phy_device
+@@ -1750,11 +1774,28 @@ static struct phy_driver motorcomm_phy_drvs[] = {
+ 		.suspend	= yt8521_suspend,
+ 		.resume		= yt8521_resume,
+ 	},
++	{
++		PHY_ID_MATCH_EXACT(PHY_ID_YT8531S),
++		.name		= "YT8531S Gigabit Ethernet",
++		.get_features	= yt8521_get_features,
++		.probe		= yt8531s_probe,
++		.read_page	= yt8521_read_page,
++		.write_page	= yt8521_write_page,
++		.get_wol	= ytphy_get_wol,
++		.set_wol	= ytphy_set_wol,
++		.config_aneg	= yt8521_config_aneg,
++		.aneg_done	= yt8521_aneg_done,
++		.config_init	= yt8521_config_init,
++		.read_status	= yt8521_read_status,
++		.soft_reset	= yt8521_soft_reset,
++		.suspend	= yt8521_suspend,
++		.resume		= yt8521_resume,
++	},
+ };
+ 
+ module_phy_driver(motorcomm_phy_drvs);
+ 
+-MODULE_DESCRIPTION("Motorcomm 8511/8521 PHY driver");
++MODULE_DESCRIPTION("Motorcomm 8511/8521/8531S PHY driver");
+ MODULE_AUTHOR("Peter Geis");
+ MODULE_AUTHOR("Frank");
+ MODULE_LICENSE("GPL");
+@@ -1762,6 +1803,7 @@ MODULE_LICENSE("GPL");
+ static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
+ 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
+ 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8521) },
++	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531S) },
+ 	{ /* sentinal */ }
+ };
+ 
+-- 
+2.34.1
 
