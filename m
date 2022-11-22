@@ -2,129 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411916348F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FC26348F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbiKVVKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39772 "EHLO
+        id S234650AbiKVVK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbiKVVKb (ORCPT
+        with ESMTP id S234668AbiKVVKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:10:31 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBAE7CB95;
-        Tue, 22 Nov 2022 13:10:30 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id f9so10896209pgf.7;
-        Tue, 22 Nov 2022 13:10:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C+KEqUPpt9nBZhy2l32eLRwk2q2Rg4+1eaxUkvjjhgg=;
-        b=hC1R8VpRUm1vtCVrxmHeI+RFvGrfUTgxzJDsTjqJnYDMfgLrcdlSQuqYhPvY/Ngiq8
-         YsJqRaFeRDIFWRDrW9MQKFf+YhGpvvEE5JQp6I7LE/fbFPycigIFZVC50Mn7T81Rc0ip
-         SpacCnKP0Cv8PWm/lx6EslA0e0XeGhuBFY1S80wuP3an5Ehy7+Du23j1TktTHFLf3g/X
-         xqpe587AjbUhmVWzf7e8zF8uXlCPo3vftSKmyF+LypLxS97o0nf1yo/ZCnmc70DYJF2C
-         xCNElSexSwgXjaNE3Ig8aTcZB/CYj0DlUtMBK+bALBMYuDlHh711uqPYnLmKjKocyIR5
-         DyOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+KEqUPpt9nBZhy2l32eLRwk2q2Rg4+1eaxUkvjjhgg=;
-        b=iMwfLciWIW2zFcp08JYbyorkU/18boVs50jlDqcjgrQ43oKz9KeDpZ+uW0+uoctAD9
-         p7OlD+f4lKqPurUiEfz9DYtMVDLAcTBWTiRL2L89bMKJY1GTxTK10JRZZwFUQx2tlmEB
-         HqSFGglmlRn6MelvE9Px2ZMG9dxmpNvF4GsEBS4qv50l+R5bFBIivf7f8CVgpANiVJMB
-         96Xi54+lFCFm/3lmXtekLM8M17yzRZ5M9e71fSZHnrB5XBd3G5KA5E0M9LmBpvoWuFdW
-         4Q/WwELjuG1XAtxiCEkpBSL4Bwo9gVRTNZvUU6r82KQaxOMifTlEfHjHaAoiwVJnzYvQ
-         He6g==
-X-Gm-Message-State: ANoB5pkORTFZkm4VSqpcreETztTfkPc8ne2KJKz+rXsYFgS6y111cKEC
-        9iOGyRqBHuJJv7qM1Dqz3Zg=
-X-Google-Smtp-Source: AA0mqf6TsDpRKKyxDHKrpggRE8TEmiZt0DJaKX3yDhZBcH1LKsFTJaLXufIb42rblcCx6ncdMDdGYQ==
-X-Received: by 2002:a62:16d3:0:b0:562:c1d4:e287 with SMTP id 202-20020a6216d3000000b00562c1d4e287mr5701810pfw.80.1669151430256;
-        Tue, 22 Nov 2022 13:10:30 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:bb3])
-        by smtp.gmail.com with ESMTPSA id h9-20020a170902f54900b00176a2d23d1asm12659611plf.56.2022.11.22.13.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 13:10:29 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 22 Nov 2022 11:10:28 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
- warnning
-Message-ID: <Y306xJV6aNXd94kb@slm.duckdns.org>
-References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
- <20221104023938.2346986-5-yukuai1@huaweicloud.com>
- <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
- <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
+        Tue, 22 Nov 2022 16:10:55 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D2E7CB97
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:10:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6dPZRBVDncbKAsAtZalrSR3psk0nbnHpzr/Zu2o2Hjk=; b=qTSmc/SW3xqZ589OMJfYmo5pJ2
+        xArLSRGgxN5wsCIwQy4C1WqaM6Vn4I2woblv063J2ZBcP8gMHO2k8q6sREtBFOQR6fc8NlgmElRNp
+        FntXusr9FdKXS5AfbxqJd5tihS0xWzbRWfnBDzahzUSQC1FbMswKwrsIbPnGk06+00ziSUvTZhjaD
+        Xt+cho0dYgxAulC3lhsAzKo+1Cx3RUYlKPCLGjd1pixKT33T98F1QKFSG4G/s4n0LaXv5hsswJF6/
+        UvO5jb6eVTFwygXgREOe/ir9e2A0ODyPQNwItq0194r1+HrpneYy9INB92cFcr2OR36n2kFgRO+N7
+        xLKjSRsw==;
+Received: from [2a01:799:95e:1700:6395:ccbd:d000:d42b] (port=62028)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oxaXa-0006jg-5j; Tue, 22 Nov 2022 22:10:50 +0100
+Message-ID: <182643db-e5f4-2277-a971-0f159849dadf@tronnes.org>
+Date:   Tue, 22 Nov 2022 22:10:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: git send-email friendly smtp provider anyone?
+To:     dri-devel@lists.freedesktop.org
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+References: <1bc45775-0667-01f8-36e1-9f65d3081092@tronnes.org>
+ <20221121151922.jaal6ym7z2ejju4q@houat>
+ <de12952f-8346-8995-236d-69dcb70f19f6@tronnes.org>
+ <20221122155122.edxtmsqpjxgj4dsj@meerkat.local>
+ <3b06dfd5-0eb4-dbfc-6ba8-077b1a92865b@tronnes.org>
+ <20221122185001.q6hmeblp64jqdzvz@meerkat.local>
+ <02bc2442-e3b3-d720-9d13-ffcdfd760fb8@tronnes.org>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <02bc2442-e3b3-d720-9d13-ffcdfd760fb8@tronnes.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 07:28:50PM +0800, Yu Kuai wrote:
-> Hi, Tejun!
-> 
-> 在 2022/11/15 6:07, Tejun Heo 写道:
-> 
-> > 
-> > Any chance I can persuade you into updating match_NUMBER() helpers to not
-> > use match_strdup()? They can easily disable irq/preemption and use percpu
-> > buffers and we won't need most of this patchset.
-> 
-> Does the following patch match your proposal?
-> 
-> diff --git a/lib/parser.c b/lib/parser.c
-> index bcb23484100e..ded652471919 100644
-> --- a/lib/parser.c
-> +++ b/lib/parser.c
-> @@ -11,6 +11,24 @@
->  #include <linux/slab.h>
->  #include <linux/string.h>
-> 
-> +#define U64_MAX_SIZE 20
-> +
-> +static DEFINE_PER_CPU(char, buffer[U64_MAX_SIZE]);
-> +
-> +static char *get_buffer(void)
-> +{
-> +       preempt_disable();
-> +       local_irq_disable();
-> +
-> +       return this_cpu_ptr(buffer);
-> +}
-> +
-> +static void put_buffer(void)
-> +{
-> +       local_irq_enable();
-> +       preempt_enable();
-> +}
-> +
-> 
-> Then match_strdup() and kfree() in match_NUMBER() can be replaced with
-> get_buffer() and put_buffer().
 
-Sorry about the late reply. Yeah, something like this.
 
-Thanks.
+Den 22.11.2022 20.22, skrev Noralf Trønnes:
+> 
+> 
+> Den 22.11.2022 19.50, skrev Konstantin Ryabitsev:
+>> On Tue, Nov 22, 2022 at 06:42:19PM +0100, Noralf Trønnes wrote:
+>>> The first thing that strikes me is that everyone mentioned in one of the
+>>> patches get the entire patchset, even stable@vger.kernel.org (cc'ed in a
+>>> fixes patch). The first patch touches a core file and as a result a few
+>>> drivers, so I've cc'ed the driver maintainers in that patch, but now
+>>> they get the entire patchset where 5 of 6 patches is about a driver that
+>>> I maintain. So from their point of view, they see a patchset about a
+>>> driver they don't care about and a patch touching a core file, but from
+>>> the subject it's not apparent that it touches their driver. I'm afraid
+>>> that this might result in none of them looking at that patch. In this
+>>> particular case it's not that important, but in another case it might be.
+>>
+>> I did some (unscientific) polling among kernel maintainers and, by a vast
+>> margin, they always prefer to receive the entire series instead of
+>> cherry-picked patches -- having the entire series helps provide important
+>> context for the change they are looking at.
+>>
+>> So, this is deliberate and, for now at least, not configurable. Unless you're
+>> sending 100+ patch series, I doubt anyone will have any problem with receiving
+>> the whole series instead of individual patches.
+>>
+>>> As for the setting up the web endpoint, should I just follow the b4 docs
+>>> on that?
+>>>
+>>> I use b4 version 0.10.1, is that recent enough?
+>>
+>> Yes. There will be a 0.10.2 in the near future, but the incoming fixes
+>> shouldn't make much difference for the b4 send code.
+>>
+> 
+> This is what I got:
+> 
+> $ b4 send --web-auth-verify <challenge string from email>
+> Signing challenge
+> Submitting verification to https://lkml.kernel.org/_b4_submit
+> Traceback (most recent call last):
+>   File "/home/pi/.local/bin/b4", line 8, in <module>
+>     sys.exit(cmd())
+>   File "/home/pi/.local/lib/python3.10/site-packages/b4/command.py",
+> line 341, in cmd
+>     cmdargs.func(cmdargs)
+>   File "/home/pi/.local/lib/python3.10/site-packages/b4/command.py",
+> line 86, in cmd_send
+>     b4.ez.cmd_send(cmdargs)
+>   File "/home/pi/.local/lib/python3.10/site-packages/b4/ez.py", line
+> 1102, in cmd_send
+>     auth_verify(cmdargs)
+>   File "/home/pi/.local/lib/python3.10/site-packages/b4/ez.py", line
+> 188, in auth_verify
+>     res = ses.post(endpoint, json=req)
+>   File "/usr/lib/python3/dist-packages/requests/sessions.py", line 590,
+> in post
+>     return self.request('POST', url, data=data, json=json, **kwargs)
+>   File "/usr/lib/python3/dist-packages/requests/sessions.py", line 528,
+> in request
+>     prep = self.prepare_request(req)
+>   File "/usr/lib/python3/dist-packages/requests/sessions.py", line 456,
+> in prepare_request
+>     p.prepare(
+>   File "/usr/lib/python3/dist-packages/requests/models.py", line 319, in
+> prepare
+>     self.prepare_body(data, files, json)
+>   File "/usr/lib/python3/dist-packages/requests/models.py", line 469, in
+> prepare_body
+>     body = complexjson.dumps(json)
+>   File "/usr/lib/python3.10/json/__init__.py", line 231, in dumps
+>     return _default_encoder.encode(obj)
+>   File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
+>     chunks = self.iterencode(o, _one_shot=True)
+>   File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
+>     return _iterencode(o, 0)
+>   File "/usr/lib/python3.10/json/encoder.py", line 179, in default
+>     raise TypeError(f'Object of type {o.__class__.__name__} '
+> TypeError: Object of type bytes is not JSON serializable
+> 
 
--- 
-tejun
+Konstantin found a workaround, so I was able to push the patches.
+
+Here's the result if anyone is interested in seeing the result of using
+b4 and the web endpoint:
+https://lore.kernel.org/dri-devel/20221122-gud-shadow-plane-v1-0-9de3afa3383e@tronnes.org/
+
+Patchwork gave me a new submitter ID:
+https://patchwork.freedesktop.org/series/111222/
+
+Noralf.
