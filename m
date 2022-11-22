@@ -2,70 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D4663476D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F9D634770
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234707AbiKVUMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S234733AbiKVUMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234696AbiKVUMd (ORCPT
+        with ESMTP id S234754AbiKVUMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:12:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2705FBD7;
-        Tue, 22 Nov 2022 12:12:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C46FCB81D85;
-        Tue, 22 Nov 2022 20:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2456AC433C1;
-        Tue, 22 Nov 2022 20:12:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669147944;
-        bh=ErWQ6/edZDHfnmUj1x+2RpXl4f9HPSeF5jQRSQKBKOo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Dh3PsVIvtCZ+ztGKmg8rwGcRRizt+CZnrruVT6xkYS/H+N3oig4wWQ+sPu2sGhmjn
-         qoM3ahO/U8f6t9q+EiuZ9Ka25iUR5L0PtRUkxGNgYz/e/2DCJ10W62hYmUTk3MIu5K
-         YuYbbXCAKNRc4KTZAew2/NwG7p0aGGWOOcC30VLl1KBKhK7+6kLjb3bCznVadPT5PQ
-         apqLyBvq26P4OoK2E8SDcu1SAi3bZVnOa56y8xLGomOPEGejGQ6iWGH8pl7e+DbRJ9
-         o1upCLxtGFnj1GhAQHnrDXMxCjQNRnt1Es1ls9yHGaYlyazofQmAjSaSoGeaZPvHPV
-         t7tw6LN00wxOQ==
-Date:   Tue, 22 Nov 2022 12:12:23 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Peter Kosyh <pkosyh@yandex.ru>, Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] mlx4: use snprintf() instead of sprintf() for safety
-Message-ID: <20221122121223.265d6d97@kernel.org>
-In-Reply-To: <Y3zhL0/OItHF1R03@unreal>
-References: <20221122130453.730657-1-pkosyh@yandex.ru>
-        <Y3zhL0/OItHF1R03@unreal>
+        Tue, 22 Nov 2022 15:12:46 -0500
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF3F7A192
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:12:38 -0800 (PST)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 722A11C8116A;
+        Wed, 23 Nov 2022 04:12:36 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Wed, 23 Nov
+ 2022 04:12:36 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Wed, 23 Nov 2022 04:12:35 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 2301663A0A; Tue, 22 Nov 2022 22:12:35 +0200 (IST)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <arnd@arndb.de>,
+        <hasegawa-hitomi@fujitsu.com>, <marcan@marcan.st>,
+        <nicolas.ferre@microchip.com>, <conor.dooley@microchip.com>,
+        <heiko@sntech.de>, <sven@svenpeter.dev>,
+        <briannorris@chromium.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <openbmc@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1 0/2] soc: add NPCM LPC BPC driver support 
+Date:   Tue, 22 Nov 2022 22:12:30 +0200
+Message-ID: <20221122201232.107065-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 16:48:15 +0200 Leon Romanovsky wrote:
-> On Tue, Nov 22, 2022 at 04:04:53PM +0300, Peter Kosyh wrote:
-> > Use snprintf() to avoid the potential buffer overflow. Although in the
-> > current code this is hardly possible, the safety is unclean.  
-> 
-> Let's fix the tools instead. The kernel code is correct.
+This patch set adds LPC BIOS Post code (BPC) support for the
+Nuvoton NPCM Baseboard Management Controller (BMC).
 
-I'm guessing the code is correct because port can't be a high value?
-Otherwise, if I'm counting right, large enough port representation
-(e.g. 99999999) could overflow the string. If that's the case - how
-would they "fix the tool" to know the port is always a single digit?
+Nuvoton BMC NPCM LPC BIOS Post Code (BPC) monitoring two
+configurable I/O addresses written by the host on the
+Low Pin Count (LPC) bus, the capture data stored in 128-word FIFO.
+
+NPCM BPC can support capture double words.
+
+The NPCM LPC BPC driver tested on NPCM750 Olympus board and NPCM845 EVB.
+
+Tomer Maimon (2):
+  dt-binding: soc: nuvoton: Add NPCM BPC LPC documentation
+  soc: nuvoton: add NPCM LPC BPC driver
+
+ .../bindings/soc/nuvoton/npcm-lpc-bpc.yaml    | 112 +++++
+ drivers/soc/Kconfig                           |   1 +
+ drivers/soc/Makefile                          |   1 +
+ drivers/soc/nuvoton/Kconfig                   |  24 ++
+ drivers/soc/nuvoton/Makefile                  |   3 +
+ drivers/soc/nuvoton/npcm-lpc-bpc.c            | 396 ++++++++++++++++++
+ 6 files changed, 537 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml
+ create mode 100644 drivers/soc/nuvoton/Kconfig
+ create mode 100644 drivers/soc/nuvoton/Makefile
+ create mode 100644 drivers/soc/nuvoton/npcm-lpc-bpc.c
+
+-- 
+2.33.0
+
