@@ -2,129 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DF7633459
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 05:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F395633460
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 05:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbiKVEOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 23:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
+        id S231825AbiKVERp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 23:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbiKVEOq (ORCPT
+        with ESMTP id S231690AbiKVERg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 23:14:46 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC41C2715C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 20:14:44 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id y12-20020a056e021bec00b00302a7d5bc83so8008878ilv.16
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 20:14:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cmBiWl7MojFdFQWzS0NYKr93ECkxmAAwII0lr2qqI5A=;
-        b=Sq4JHsRNDHEb/Bp6UBjc4KwwvwzA6bkETGkcwf8NzqGDjBak06+nWZAM4BnFtOmC0T
-         E8VQri60Go3op1a1Ze0VZpRN6fxyOUykeZHltrNYW7ROrIC7tsEpl8NBMzEzuE74pCda
-         ZmXyx/nRdg98FNQ2K329Fi0oVAbI5L4Y7EDg/o2s3ow3a/XzI/sDLu11uJQhp0k72yrx
-         LHnjLzB9wsZKfmObRbskCoN3HikI+6yRlM7IXLCoxusmJPYWArVj3pefw66HtaHBD28j
-         8FD5TxpS+IUQpguDgAFDUsyXugWpbJimD0vNNa9uXc0rPr3GjyLwqCRyeWQdw1PQn9Us
-         V3PA==
-X-Gm-Message-State: ANoB5pk+c4vbnmFE/ZpXq2psjIdEuXWYjgRtOkwgS5qXcSvR8xgV5b8l
-        4axczulJS5cJzrpg0qKacYHtna9hNgFQ8ysfu/wQxsEOccfI
-X-Google-Smtp-Source: AA0mqf7G6+RxnGcNJq4WkqlmBAQeyasx5E3A8Ke6o80wRpSz4i0T0HPPv8/FLTEJAXoKo5suyuHWV0U2l+DmMU8QRpbJjqL5ZIqk
+        Mon, 21 Nov 2022 23:17:36 -0500
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024772CE3F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 20:16:38 -0800 (PST)
+Received: from [10.88.19.158] (10.88.19.158) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2507.13; Tue, 22 Nov 2022
+ 12:16:35 +0800
+Message-ID: <e12a12a4-ab6c-ff4a-5cb8-10e498e696a5@amlogic.com>
+Date:   Tue, 22 Nov 2022 12:17:24 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a02:6f0b:0:b0:363:6b4c:eb45 with SMTP id
- x11-20020a026f0b000000b003636b4ceb45mr5022415jab.90.1669090484063; Mon, 21
- Nov 2022 20:14:44 -0800 (PST)
-Date:   Mon, 21 Nov 2022 20:14:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000066965b05ee07692d@google.com>
-Subject: [syzbot] WARNING in notify_change (2)
-From:   syzbot <syzbot+462da39f0667b357c4b6@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: linux-next: build failure after merge of the arm64 tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC:     Chris Healy <healych@amazon.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221122104136.601ba45e@canb.auug.org.au>
+From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
+In-Reply-To: <20221122104136.601ba45e@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.88.19.158]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Stephen,
 
-syzbot found the following issue on:
+Could you please share your compiler information, commit id and other
 
-HEAD commit:    eb7081409f94 Linux 6.1-rc6
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=144359f9880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8232c7627e3f923
-dashboard link: https://syzkaller.appspot.com/bug?extid=462da39f0667b357c4b6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a17fe9880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13e6c4c3880000
+environments info for me to reproduce the building error?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/77fa14383845/disk-eb708140.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/26d9898f9467/vmlinux-eb708140.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a5e417bc4c34/bzImage-eb708140.xz
+Thanks,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+462da39f0667b357c4b6@syzkaller.appspotmail.com
+Jiucheng
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3638 at fs/attr.c:327 notify_change+0xf16/0x1440 fs/attr.c:327
-Modules linked in:
-CPU: 0 PID: 3638 Comm: syz-executor162 Not tainted 6.1.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:notify_change+0xf16/0x1440 fs/attr.c:327
-Code: 70 97 0a 00 e8 7b d7 9c ff 48 8b 7d c8 48 89 de e8 bf ce f2 01 44 89 fe 48 89 df e8 b4 12 f3 01 e9 aa f6 ff ff e8 5a d7 9c ff <0f> 0b e9 d9 f1 ff ff e8 4e d7 9c ff 44 8b 7d b0 4c 89 ea 48 b8 00
-RSP: 0018:ffffc90003bef820 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888075b73be8 RCX: 0000000000000000
-RDX: ffff88801c2657c0 RSI: ffffffff81e342b6 RDI: 0000000000000007
-RBP: ffffc90003bef890 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffffc90003bef8e8
-R13: ffff888073fe0000 R14: 0000000000000000 R15: 0000000000004200
-FS:  00007f689a75a700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f689a718718 CR3: 00000000176f8000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __remove_privs fs/inode.c:2013 [inline]
- __file_remove_privs+0x415/0x600 fs/inode.c:2034
- file_modified_flags+0xa4/0x320 fs/inode.c:2148
- fuse_file_fallocate+0x4d4/0x930 fs/fuse/file.c:3004
- vfs_fallocate+0x48b/0xe00 fs/open.c:323
- ioctl_preallocate+0x18e/0x200 fs/ioctl.c:290
- file_ioctl fs/ioctl.c:330 [inline]
- do_vfs_ioctl+0x12e9/0x1600 fs/ioctl.c:849
- __do_sys_ioctl fs/ioctl.c:868 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x10c/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f689a7a85b9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f689a75a2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f689a8344c0 RCX: 00007f689a7a85b9
-RDX: 00000000200001c0 RSI: 0000000040305828 RDI: 0000000000000004
-RBP: 00007f689a8020d4 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
-R13: 00007f689a7fe0c8 R14: 00007f689a8000d0 R15: 00007f689a8344c8
- </TASK>
+On 2022/11/22 7:41, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the arm64 tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/perf/amlogic/meson_g12_ddr_pmu.c: In function 'dmc_g12_get_freq_quick':
+> drivers/perf/amlogic/meson_g12_ddr_pmu.c:135:15: error: implicit declaration of function 'readl' [-Werror=implicit-function-declaration]
+>    135 |         val = readl(info->pll_reg);
+>        |               ^~~~~
+> drivers/perf/amlogic/meson_g12_ddr_pmu.c: In function 'dmc_g12_counter_enable':
+> drivers/perf/amlogic/meson_g12_ddr_pmu.c:204:9: error: implicit declaration of function 'writel' [-Werror=implicit-function-declaration]
+>    204 |         writel(clock_count, info->ddr_reg[0] + DMC_MON_G12_TIMER);
+>        |         ^~~~~~
+>
+> Caused by commit
+>
+>    2016e2113d35 ("perf/amlogic: Add support for Amlogic meson G12 SoC DDR PMU driver")
+>
+> I have used the arm64 tree from next-20221121 for today.
+>
+-- 
+Thanks,
+Jiucheng
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
