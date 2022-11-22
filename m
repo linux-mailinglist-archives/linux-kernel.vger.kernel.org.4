@@ -2,204 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B54633FCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1A7633FCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiKVPFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S233460AbiKVPFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbiKVPFJ (ORCPT
+        with ESMTP id S233478AbiKVPFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:05:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68806CA34
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:03:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669129425;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=In9GuqAn29oXIcP45h0iG42nfIf4b++tYbTcRtB/XTA=;
-        b=UoDFTxlRvUIM05y6A5yE5XXaLyXml2Cxe/arzQDZlxTTH03LIX4fJuqGecGKCSdtWpxTll
-        eTQrSjBNwxzy/eO7lNVPU9AMbvZFYHNy4wCKbGmA5VkBXaTWNgFxvkEJlos+G2BJI9LvnJ
-        J1A4Vg21FuvaOs8zOXXKeoocJNIeCFs=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-216-qFeraKSAPjaWyOIDUIhJuw-1; Tue, 22 Nov 2022 10:03:43 -0500
-X-MC-Unique: qFeraKSAPjaWyOIDUIhJuw-1
-Received: by mail-wr1-f72.google.com with SMTP id g14-20020adfa48e000000b00241bfca9693so3360459wrb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:03:43 -0800 (PST)
+        Tue, 22 Nov 2022 10:05:40 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5140CD8;
+        Tue, 22 Nov 2022 07:05:38 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id c1so23971666lfi.7;
+        Tue, 22 Nov 2022 07:05:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=joRULvf1dWJkA5gWRTFhFCk8AeaMUxC+7TLKjnw2DLE=;
+        b=ER2Fw8emECT/rQge+eiBNkkviWG3kjbWsZCbV4x/Kgaljhp2rzXGAQygNJar3+6u44
+         QevH09MxTl6kJbQ0qPaESjwxa4GjqJr5YoXGhhnbrnofLSwud68+an31l+2EwkoR/nKs
+         Jg/cq7+qg2c1ILnIHDzqchGtMVrSKVGnJqH2FWFWAtbSvYbvhMwEa8bHPst5szIVBUuz
+         E85pH8kn9kRscODxb12XOnTFG+LM/br7nINFu+sS95yQ+OAwa+nmSbUSpQRV2lK1igRp
+         pQYKCnvgr/K31pf+OvF/dh9Xe0hZmw9rDcyEPaxUi6by+xYUymVne6HaWNeGLjtJRNg8
+         JEXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=In9GuqAn29oXIcP45h0iG42nfIf4b++tYbTcRtB/XTA=;
-        b=US03WvZ0wpf3YxAv/94LL+Mytav1udNIKWOCgcwTLVFUbThpatc5Xy+tqugXa18Az/
-         wXjfm3h5tN4XWy44Fw5mjfaizY0j5qa87zxaRVIXUVHwEydPw2Olw+fIlVue2N/5VqRY
-         69Pb0/l7P8ntEPQOE3nKfYt5u1FQC8+TScEIUmMQifutr7W2vYyhZlMF+41MrIQU/8r8
-         6c6UrZVlH6WXXVEAiXlIjUwoW0D9ItknU7+G3dZUWUpmbOo336i7hoZadGUFeCdWXISX
-         IMSC8uNRoRgYBd6/7amPU1FHTE2QVCPGZ7NJ/ncbg66FRORqtAphFaT/tAFRW3u71if1
-         JI2g==
-X-Gm-Message-State: ANoB5pnLRU0Q8rL/dJm+sJ9bZhDnA+IpJFSp8fNnKw6U5NECqDHeBPjJ
-        gEWfRT0dtMp+gDX7DXM8FQXntjpW9LLUQ9X6/XEuW1OsNZf4OgEuYsKuQ72lRQAWnVuSSO6Sc8+
-        rlaY+4xEwJhbWIXyIbBqtk+UP
-X-Received: by 2002:adf:ea4d:0:b0:22e:38b9:5d6d with SMTP id j13-20020adfea4d000000b0022e38b95d6dmr4031726wrn.276.1669129422177;
-        Tue, 22 Nov 2022 07:03:42 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf54snVDIVC/Upuxil+entzwHNnXxSae3W9n6F4Fs/sye/XpHsJ2iwBQKe4HoNog5OAYgHNY7A==
-X-Received: by 2002:adf:ea4d:0:b0:22e:38b9:5d6d with SMTP id j13-20020adfea4d000000b0022e38b95d6dmr4031700wrn.276.1669129421815;
-        Tue, 22 Nov 2022 07:03:41 -0800 (PST)
-Received: from ?IPV6:2003:cb:c706:c300:b066:75e3:f1d2:b69b? (p200300cbc706c300b06675e3f1d2b69b.dip0.t-ipconnect.de. [2003:cb:c706:c300:b066:75e3:f1d2:b69b])
-        by smtp.gmail.com with ESMTPSA id l13-20020a5d668d000000b00236488f62d6sm14289929wru.79.2022.11.22.07.03.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 07:03:41 -0800 (PST)
-Message-ID: <56fecbe9-ecf1-bdac-4e05-4767aa9d4386@redhat.com>
-Date:   Tue, 22 Nov 2022 16:03:39 +0100
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=joRULvf1dWJkA5gWRTFhFCk8AeaMUxC+7TLKjnw2DLE=;
+        b=UP1bQPiizPVTUBdOK/rc5VVxB5SaBYHppTcGii8JM1vSZP3bEorzwpojRmZquDI74J
+         umTHlAsKQjV4OO6ToIWai6AH2I9K43teIImDJoU8cRw1iPlMWzE4TJ/9Ngp26paa7g1L
+         M84p6+IWIZVG49md4XFQQ2gVUszQDq+oz0zmy1i27T3mUMS3dx+ovPDb3Wwtxd+19wCl
+         ko9X1Fhpo4ncAUG8quGYbyCI/bnxTSAiRkEssJRnUsbQFRpJKKEx7Qc5dGImfZEp62kk
+         pD5AXRzrIeBBW0AbOyipG7jIYdH3v3om0FESBo3Y7huR4JVEjBVYb+yzedAaxzy0QEF7
+         laNg==
+X-Gm-Message-State: ANoB5plbH5FD0Qwp1pgvwZEYLxzJQ6vv7V4JD79BbzmH4yz7fLSh43sw
+        IJydtlyRyJ9uG7yHHrEgR1w=
+X-Google-Smtp-Source: AA0mqf5OHYaGctuWCwcgr2ujiVoDrGqiB2RNftQYRObwVAsJZmt9XYndfhnGYv2vqwN8PdQGXddxvA==
+X-Received: by 2002:ac2:4a6a:0:b0:4b1:753b:e66f with SMTP id q10-20020ac24a6a000000b004b1753be66fmr2180872lfp.276.1669129536433;
+        Tue, 22 Nov 2022 07:05:36 -0800 (PST)
+Received: from razdolb (95-31-185-17.broadband.corbina.ru. [95.31.185.17])
+        by smtp.gmail.com with ESMTPSA id o6-20020a05651205c600b0049478cc4eb9sm2499071lfo.230.2022.11.22.07.05.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 07:05:35 -0800 (PST)
+References: <20220919210025.2376254-1-Jason@zx2c4.com>
+ <32f8797a-4b65-69df-ee8e-7891a6b4f1af@arm.com>
+ <YzMm4d3sZBHpitm9@aurel32.net> <YzNTB+RQK6yITi7/@Red>
+ <YzNthZ0MtfwjIqdH@aurel32.net> <YzVNBcF7TCDldPwF@Red>
+ <87y1sasrf2.fsf@gmail.com> <Y3zOn5IO1ziJXKUT@Red>
+User-agent: mu4e 1.9.0; emacs 28.2
+From:   Mikhail Rudenko <mike.rudenko@gmail.com>
+To:     Corentin LABBE <clabbe@baylibre.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Lin Jinhan <troy.lin@rock-chips.com>, wevsty <ty@wevs.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lin Huang <hl@rock-chips.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH] hw_random: rockchip: import driver from vendor tree
+Date:   Tue, 22 Nov 2022 18:04:00 +0300
+In-reply-to: <Y3zOn5IO1ziJXKUT@Red>
+Message-ID: <877cznni69.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH RFC 16/19] mm/frame-vector: remove FOLL_FORCE usage
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20221107161740.144456-1-david@redhat.com>
- <20221107161740.144456-17-david@redhat.com>
- <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
- <6175d780-3307-854c-448a-8e6c7ad0772c@xs4all.nl>
- <6ace6cd4-3e13-8ec1-4c2a-49e2e14e81a6@redhat.com>
- <4d3ef082-f7b3-2b6e-6fcf-5f991ffe14e9@xs4all.nl>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <4d3ef082-f7b3-2b6e-6fcf-5f991ffe14e9@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.11.22 15:07, Hans Verkuil wrote:
-> On 11/22/22 13:38, David Hildenbrand wrote:
->> On 22.11.22 13:25, Hans Verkuil wrote:
->>> Hi Tomasz, David,
->>>
->>> On 11/8/22 05:45, Tomasz Figa wrote:
->>>> Hi David,
->>>>
->>>> On Tue, Nov 8, 2022 at 1:19 AM David Hildenbrand <david@redhat.com> wrote:
->>>>>
->>>>> FOLL_FORCE is really only for debugger access. According to commit
->>>>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
->>>>> writable"), the pinned pages are always writable.
->>>>
->>>> Actually that patch is only a workaround to temporarily disable
->>>> support for read-only pages as they seemed to suffer from some
->>>> corruption issues in the retrieved user pages. We expect to support
->>>> read-only pages as hardware input after. That said, FOLL_FORCE doesn't
->>>> sound like the right thing even in that case, but I don't know the
->>>> background behind it being added here in the first place. +Hans
->>>> Verkuil +Marek Szyprowski do you happen to remember anything about it?
->>>
->>> I tracked the use of 'force' all the way back to the first git commit
->>> (2.6.12-rc1) in the very old video-buf.c. So it is very, very old and the
->>> reason is lost in the mists of time.
->>>
->>> I'm not sure if the 'force' argument of get_user_pages() at that time
->>> even meant the same as FOLL_FORCE today. From what I can tell it has just
->>> been faithfully used ever since, but I have my doubt that anyone understands
->>> the reason behind it since it was never explained.
->>>
->>> Looking at this old LWN article https://lwn.net/Articles/28548/ suggests
->>> that it might be related to calling get_user_pages for write buffers
->>> (non-zero write argument) where you also want to be able to read from the
->>> buffer. That is certainly something that some drivers need to do post-capture
->>> fixups.
->>>
->>> But 'force' was also always set for read buffers, and I don't know if that
->>> was something that was actually needed, or just laziness.
->>>
->>> I assume that removing FOLL_FORCE from 'FOLL_FORCE|FOLL_WRITE' will still
->>> allow drivers to read from the buffer?
->>
->> Yes. The only problematic corner case I can imagine is if someone has a
->> VMA without write permissions (no PROT_WRITE/VM_WRITE) and wants to pin
->> user space pages as a read buffer. We'd specify now FOLL_WRITE without
->> FOLL_FORCE and GUP would reject that: write access without write
->> permissions is invalid.
-> 
-> I do not believe this will be an issue.
-> 
->>
->> There would be no way around "fixing" this implementation to not specify
->> FOLL_WRITE when only reading from user-space pages. Not sure what the
->> implications are regarding that corruption that was mentioned in
->> 707947247e95.
-> 
-> Before 707947247e95 the FOLL_WRITE flag was only set for write buffers
-> (i.e. video capture, DMA_FROM_DEVICE), not for read buffers (video output,
-> DMA_TO_DEVICE). In the video output case there should never be any need
-> for drivers to write to the buffer to the best of my knowledge.
-> 
-> But I have had some complaints about that commit that it causes problems
-> in some scenarios, and it has been on my todo list for quite some time now
-> to dig deeper into this. I probably should prioritize this for this or
-> next week.
-> 
->>
->> Having said that, I assume such a scenario is unlikely -- but you might
->> know better how user space usually uses this interface. There would be
->> three options:
->>
->> 1) Leave the FOLL_FORCE hack in for now, which I *really* want to avoid.
->> 2) Remove FOLL_FORCE and see if anybody even notices (this patch) and
->>      leave the implementation as is for now.
->> 3) Remove FOLL_FORCE and fixup the implementation to only specify
->>      FOLL_WRITE if the pages will actually get written to.
->>
->> 3) would most probably ideal, however, I am no expert on that code and
->> can't do it (707947247e95 confuses me). So naive me would go with 2) first.
->>
-> 
-> Option 3 would be best. And 707947247e95 confuses me as well, and I actually
-> wrote it :-) I am wondering whether it was addressed at the right level, but
-> as I said, I need to dig a bit deeper into this.
 
-Cool, let me know if I can help!
+On 2022-11-22 at 14:29 +01, Corentin LABBE <clabbe@baylibre.com> wrote:
 
--- 
-Thanks,
+> Le Wed, Nov 16, 2022 at 09:04:07PM +0300, Mikhail Rudenko a =C3=A9crit :
+>>
+>> On 2022-09-29 at 09:45 +02, LABBE Corentin <clabbe@baylibre.com> wrote:
+>> > Le Tue, Sep 27, 2022 at 11:39:17PM +0200, Aurelien Jarno a =C3=A9crit :
+>> >> On 2022-09-27 21:46, LABBE Corentin wrote:
+>> >> > Le Tue, Sep 27, 2022 at 06:37:53PM +0200, Aurelien Jarno a =C3=A9cr=
+it :
+>> >> > > On 2022-09-20 10:35, Robin Murphy wrote:
+>> >> > > > On 2022-09-19 22:00, Jason A. Donenfeld wrote:
+>> >> > > > > The Rockchip driver has long existed out of tree, but not ups=
+tream.
+>> >> > > > > There is support for it upstream in u-boot, but not in Linux =
+proper.
+>> >> > > > > This commit imports the GPLv2 driver written by Lin Jinhan, t=
+ogether
+>> >> > > > > with the DTS and config blobs from Wevsty.
+>> >> > > >
+>> >> > > > Note that Corentin has a series enabling the full crypto driver=
+ for
+>> >> > > > RK3328 and RK3399[1], so it would seem more sensible to add TRN=
+G support
+>> >> > > > to that. Having confliciting compatibles for the same hardware =
+that
+>> >> > > > force the user to change their DT to choose one functionality o=
+r the
+>> >> > > > other isn't good (plus there's also no binding for this one).
+>> >> > >
+>> >> > > It might make sense for the cryptov1-rng driver (I haven't checke=
+d). For
+>> >> > > the cryptov2-rng driver, I looked at the RK3568 TRM (I can't find=
+ the
+>> >> > > RK3588 one), and from what I understand crypto and TRNG are two
+>> >> > > different devices, using different address spaces, clock, reset a=
+nd
+>> >> > > interrupts. The vendor kernel uses two different drivers.
+>> >> > >
+>> >> >
+>> >> > I confirm that TRNG is not on the same IP on rk3568, something I di=
+dnt remark when doing my V2 driver. (I need to remove rng clock from rk3568=
+ dt).
+>> >> > But the rk3588 crypto IP and the TRNG are in the same device.
+>> >>
+>> >> Ok, thanks for confirming about the rk3568. It seems the only one in =
+the
+>> >> family with separate devices for TRNG and crypto. Does it means we ne=
+ed
+>> >> a separate TRNG driver only for it? Or could we handle it the same way
+>> >> than for instance rk3588 anyway?
+>> >
+>> > I just got now the part 1 of rk3588 TRM which I has missing and it sho=
+w some conflicting information.
+>> > rk3588 seems to have both a dedicated TRNG (TRNG_NS/TRNG_S) with dedic=
+ated address space and a TRNG inside the crypto IP.
+>> > But for the moment, the TRNG inside crypto IP seems defective.
+>>
+>> So what's the ultimate decision? Does anyone work on merging this into
+>> the existing crypto driver? I have a use case with an rk3399-based board,
+>> where having hardware rng enhances boot times dramatically (at least for
+>> some userspaces; see also [1]).
+>>
+>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D216502
+>>
+>
+> Hello
+>
+> I started to work on adding RNG to rk3288_crypto.
+> I need to publish the work on my github and take time to send it for revi=
+ew.
 
-David / dhildenb
+Glad to hear you are working on this. Please cc me when posting patches :)
 
+>
+> Regards
+
+--
+Best regards,
+Mikhail Rudenko
