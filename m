@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD353634248
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6D3634240
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbiKVRO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 12:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S234458AbiKVRNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 12:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbiKVROz (ORCPT
+        with ESMTP id S234453AbiKVRNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 12:14:55 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBE9729B6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:14:54 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3a3961f8659so59114007b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Trw6pRag45zh7xbBzKuk9eUIAumLjV1FB/I5WWUMeXc=;
-        b=AJOsT7QLtuXDOuqy8Nd0IGY7ZchJBpJoPvWh9Vj61PSLn6YqfZr843CbYEjqCXumYy
-         dLBBDwqSL0uccXO8vUb4PtIE2gttVA6O8zx5TTZ9r5LikYoQkKw1la+JO08szC3HK4Yy
-         yFdEUjvlTsyRoNvmp5qFe8kHanUkkAh70rHNjqUaAxmzWHD+89FucUS22ae6nfITrfr6
-         txyfXpjPfdRBwebcTlBBIFyVRQX5VyCw18U9e5nb45jhFYFgljqjpSQHAi6JtUDKlHSJ
-         zU+gIisrqVQ9gVvfPpgdRcwB9vQ9W54orXzvWCm+XK1pw3HC+Qy4GDzWfY9RMX3V2sxg
-         0+5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Trw6pRag45zh7xbBzKuk9eUIAumLjV1FB/I5WWUMeXc=;
-        b=8Bc26jl2uqcX+5euKs+IvH1TifqkvOcxDIn6iAVHZILKfkIhagL1mg0Yy08iU7CA8T
-         NERvk6J/8Jx+ZM54vZDLckbfR/dQc5uO0YLPU0tyRQtfxtxhywIGYtG6E1vuxkPYkI63
-         CwQDdu1QCKFEK6rD5qkihVthVOZ8nQtZARtZ0k4yuiEFsDN6vxZIByNSHXLmsyGhMHCd
-         C3jNyP8cWD26IqYFaPr8XO6qZovpdyx0FqozBFgHDs7A3bwTPCbs4RQfPMfGTPC2uXN2
-         g/cARxDgQ7ELZGtDBMJNL9JKnO44fRImIWjhROiazh8rRrbIOgGVzy2d0LstihT6vdMk
-         Y24w==
-X-Gm-Message-State: ANoB5pmP5p8l8eT2MY0EkP+Mx3CpEMzYHJRxd2+/p7iQhOIjM5k6zfQF
-        bnOWVfp2Rv4sUG01Ggm4qmwS/cnGR/FkLuNyZTA5pA==
-X-Google-Smtp-Source: AA0mqf6oO1oQ43wqxjCiE8z46ZjJMYHiF0pORLs1DGtEER+w3Lkn9AfI1AOxTLN0CLxS1gKZ3D/+ojACQvYkZgRs7vs=
-X-Received: by 2002:a0d:dc05:0:b0:36a:bc93:587c with SMTP id
- f5-20020a0ddc05000000b0036abc93587cmr23162179ywe.59.1669137293721; Tue, 22
- Nov 2022 09:14:53 -0800 (PST)
+        Tue, 22 Nov 2022 12:13:15 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281216E577
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:13:14 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A2CC9100010;
+        Tue, 22 Nov 2022 17:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669137192;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=orfiAd5LKnRJ8BygCrbxkcrUjHZkPUXj65ZeSBEzh18=;
+        b=cz9rcVLrqKAKNA0xjGj7Jq9dKbvuQJrDUseq3OsMsnccavP74j/Zv0B2jl+nTp9U5H50ao
+        fzPWLBP2wPrJmNZ3Z0pTYM/+0XII6nDqRMSLrpBTD9001Dh5phd2No6Y+ECifNq7nAUnAs
+        ANyxt9fWW2mMHHhB2x9Gfc4QjtTzX9ektlxGiVYHJJ4lfF2oVqrgESQ80ZShg6TBt5o3Xe
+        oEsdqgSe/pQrMKAKv0RS5cTVa5WprTE7nJwgZPA83OwWdd21GYBN4VfjPlRYWF2A0YdmiD
+        HLL4m+FMNBU2ZgdVROuF+0ZoblGoqGBBjvqLjqHzTVnPJsHoDlTcjw1BURXvmA==
+Date:   Tue, 22 Nov 2022 18:14:52 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Re: [PATCH] ARM: at91: fix build for SAMA5D3 w/o L2 cache
+Message-ID: <20221122181452.6a386296@fixe.home>
+In-Reply-To: <075d8c0f-5448-73aa-bd3f-0d4e1216e87f@leemhuis.info>
+References: <b7f8dacc-5e1f-0eb2-188e-3ad9a9f7613d@axentia.se>
+        <075d8c0f-5448-73aa-bd3f-0d4e1216e87f@leemhuis.info>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
- <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
-In-Reply-To: <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 22 Nov 2022 09:14:42 -0800
-Message-ID: <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        davidgow@google.com, skhan@linuxfoundation.org,
-        mauro.chehab@linux.intel.com, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        isabbasso@riseup.net
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,100 +59,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 1:17 AM Anders Roxell <anders.roxell@linaro.org> wr=
-ote:
->
-> On Mon, 21 Nov 2022 at 19:48, Rae Moar <rmoar@google.com> wrote:
-> >
-> > Change KUnit test output to better comply with KTAP v1 specifications
-> > found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-> > 1) Use "KTAP version 1" instead of "TAP version 14" as test output head=
-er
-> > 2) Remove '-' between test number and test name on test result lines
-> > 2) Add KTAP version lines to each subtest header as well
-> >
-> > Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=
-=80=9D line now
-> > located after the KTAP version line. This does not completely match the
-> > KTAP v1 spec but since it is classified as a diagnostic line, it is not
-> > expected to be disruptive or break any existing parsers. This
-> > =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
-> > (https://testanything.org/tap-version-14-specification.html)
-> > and it is used to define the test name before the results.
-> >
-> > Original output:
-> >
-> >  TAP version 14
-> >  1..1
-> >    # Subtest: kunit-test-suite
-> >    1..3
-> >    ok 1 - kunit_test_1
-> >    ok 2 - kunit_test_2
-> >    ok 3 - kunit_test_3
-> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
-> >  # Totals: pass:3 fail:0 skip:0 total:3
-> >  ok 1 - kunit-test-suite
-> >
-> > New output:
-> >
-> >  KTAP version 1
-> >  1..1
-> >    KTAP version 1
-> >    # Subtest: kunit-test-suite
-> >    1..3
-> >    ok 1 kunit_test_1
-> >    ok 2 kunit_test_2
-> >    ok 3 kunit_test_3
-> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
-> >  # Totals: pass:3 fail:0 skip:0 total:3
-> >  ok 1 kunit-test-suite
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > Reviewed-by: Daniel Latypov <dlatypov@google.com>
-> > Reviewed-by: David Gow <davidgow@google.com>
->
-> I tried this patch, see the full boot log [1] and I can still see some
->  tests that output the "old" format with 'ok 1 - kunit_test_1', for examp=
-le
->
-> ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
->
-> Isn't this something that should be converted too?
+Le Tue, 22 Nov 2022 16:13:40 +0100,
+Thorsten Leemhuis <regressions@leemhuis.info> a =C3=A9crit :
 
-Yes, thanks for catching that.
-That's what I get from only looking over the diff this time since I
-thought I remembered the code...
+> Hi, this is your Linux kernel regression tracker.
+>=20
+> On 12.11.22 16:40, Peter Rosin wrote:
+> > The L2 cache is present on the newer SAMA5D2 and SAMA5D4 families, but
+> > apparently not for the older SAMA5D3. At least not always.
+> >=20
+> > Solves a build-time regression with the following symptom:
+> >=20
+> > sama5.c:(.init.text+0x48): undefined reference to `outer_cache'
+> >=20
+> > Fixes: 3b5a7ca7d252 ("ARM: at91: setup outer cache .write_sec() callbac=
+k if needed")
+> > Signed-off-by: Peter Rosin <peda@axentia.se> =20
+>=20
+> Cl=C3=A9ment L=C3=A9ger and Claudiu Beznea: what's up here? Is there a pa=
+rticular
+> reason why this patch did get any feedback from you by now? It's ten
+> days old and Peter already sent a kind of reminder a few days ago.
 
-We also want this diff to fix a) debugfs, b) subtests.
+Hi Thorsten,
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index 1048ef1b8d6e..de0ee2e03ed6 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file
-*seq, void *v)
-        kunit_suite_for_each_test_case(suite, test_case)
-                debugfs_print_result(seq, suite, test_case);
+Sorry for the lack of answer, I'm not sure about the best solution to
+tackle this problem. adding IS_ENABLED(CONFIG_OUTER_CACHE) seems like a
+good way to avoid modifying the whole configuration. If ok for Claudiu,
+I think it is the best thing to do since it will work for all cases.
 
--       seq_printf(seq, "%s %d - %s\n",
-+       seq_printf(seq, "%s %d %s\n",
-                   kunit_status_to_ok_not_ok(success), 1, suite->name);
-        return 0;
- }
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 19344cb501c5..c9d57a1d9524 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -556,7 +556,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+Cl=C3=A9ment
 
-                                kunit_log(KERN_INFO, &test,
-                                          KUNIT_SUBTEST_INDENT
-KUNIT_SUBTEST_INDENT
--                                         "%s %d - %s",
-+                                         "%s %d %s",
+>=20
+> Reminder, ideally this regression should be fixed by now. For details
+> see the section "Prioritize work on fixing regressions"  in
+> Documentation/process/handling-regressions.rst (
+> https://docs.kernel.org/process/handling-regressions.html )
+>=20
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>=20
+> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.
+>=20
+> > ---
+> >  arch/arm/mach-at91/sama5.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > Hi!
+> >=20
+> > I'm not sure this is the correct solution? Maybe SAMA5D3 should bring
+> > in CONFIG_OUTER_CACHE unconditionally instead? But that seems like a
+> > bigger change, and not just a tweak of the regressing commit...
+> >=20
+> > Cheers,
+> > Peter
+> >=20
+> > diff --git a/arch/arm/mach-at91/sama5.c b/arch/arm/mach-at91/sama5.c
+> > index 67ed68fbe3a5..bf2b5c6a18c6 100644
+> > --- a/arch/arm/mach-at91/sama5.c
+> > +++ b/arch/arm/mach-at91/sama5.c
+> > @@ -26,7 +26,7 @@ static void sama5_l2c310_write_sec(unsigned long val,=
+ unsigned reg)
+> >  static void __init sama5_secure_cache_init(void)
+> >  {
+> >  	sam_secure_init();
+> > -	if (sam_linux_is_optee_available())
+> > +	if (IS_ENABLED(CONFIG_OUTER_CACHE) && sam_linux_is_optee_available())
+> >  		outer_cache.write_sec =3D sama5_l2c310_write_sec;
+> >  }
+> >   =20
 
-kunit_status_to_ok_not_ok(test.status),
-                                          test.param_index + 1, param_desc)=
-;
 
-Daniel
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
