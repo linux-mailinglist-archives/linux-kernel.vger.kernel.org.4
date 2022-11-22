@@ -2,104 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EED6339C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2FA76339CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbiKVKWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S232828AbiKVKWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbiKVKV2 (ORCPT
+        with ESMTP id S233496AbiKVKVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:21:28 -0500
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCEFD7B;
-        Tue, 22 Nov 2022 02:20:42 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id B42BB3C0F8C;
-        Tue, 22 Nov 2022 10:20:41 +0000 (UTC)
-Received: from pdx1-sub0-mail-a305.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 149133C0A9D;
-        Tue, 22 Nov 2022 10:20:41 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1669112441; a=rsa-sha256;
-        cv=none;
-        b=l991j0ndctJJAKL1CVEFkMOfzSlZbXoH4aEl45t+N1uBz+AoZM1z7jfRm//9LSbSHJvWoF
-        XzFkbnMVzACZm7nHJsFzo9z/zvwFsrlOMDgyseEN7hvNBsuHCKIfGrAAAi5/E26ZA8uE7z
-        PTpuBb4s7yxk9BwUXwibZiDvLZCxRIqXsyfGYumANtU+z0Qn4B/a2yaMOx+gRjFrDrDxDT
-        bQv/OemMdBEFv/s21+cH+nPiPCsCJsy2VSa1KVFO1HSRbLvnPGyfl/sIgUoIqrs+ilMOpU
-        M/Z+JwnslOxXc2wOdKVfHlOChRuMVzD8EgiiWSIgX+uZY5L/9EQUc+EoE4BXdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1669112441;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=qiPhbkwAI/xsCItHsFRuVip1BIcjDwn1WOh9E0WKWWA=;
-        b=kjTb1EHAOocHKzoSaje4LBfxjDyL6VuYdhVcYqhUDiUKcPKtFDklNTBuvNuBY2Fc6Dd1Ju
-        u17lmk1LjdA3lifCpK34jDej+ASHl6DpkCufC6KiVixeqDOzY0sXmmw8NcS2DmtVZxOme1
-        adYylYcFjatCWzuWTqnH22zOAkfR215L8ygV++Ho30+4QNpgmRvNOQY9DTVvI4N/qydn3w
-        xCPOjsjk+URGWc7eQng8ZvC0CPBRhLVdhymW0XI1cECjBmLVAxWTZ2ef63MRtQ5r3S8kqw
-        ocyzxqfyCvhM9m8KqtG5cLXyDl5dFXX9sjnu2eWmw1VtRezGl+HC/c2Y2JU7ww==
-ARC-Authentication-Results: i=1;
-        rspamd-64c57ffbcf-gmhf8;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=siddhesh@gotplt.org
-X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|siddhesh@gotplt.org
-X-MailChannels-Auth-Id: dreamhost
-X-Vacuous-Robust: 5419300679b2401a_1669112441516_4245864710
-X-MC-Loop-Signature: 1669112441516:1950271019
-X-MC-Ingress-Time: 1669112441516
-Received: from pdx1-sub0-mail-a305.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.116.179.81 (trex/6.7.1);
-        Tue, 22 Nov 2022 10:20:41 +0000
-Received: from [192.168.0.182] (bras-base-toroon4834w-grc-23-76-68-24-147.dsl.bell.ca [76.68.24.147])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: siddhesh@gotplt.org)
-        by pdx1-sub0-mail-a305.dreamhost.com (Postfix) with ESMTPSA id 4NGgJ71dRvzSB;
-        Tue, 22 Nov 2022 02:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gotplt.org;
-        s=dreamhost; t=1669112440;
-        bh=qiPhbkwAI/xsCItHsFRuVip1BIcjDwn1WOh9E0WKWWA=;
-        h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
-        b=wJxTewb1A8WOR3hcBGdT/BQJa4rCcOq2EPVtOuauuy4Nn1tL60H1eWIEZt0ztOo9f
-         6qVD+rx2fNDVRlpaK8+lITQ+H1ZxUdeIvfuS7vtAy9PMaMc4eKK7SXzt/jC3U6oVEp
-         SU2LOHhwikC3m+Qu+9zf8BiCkOkjtZKoYagndAeU4FdapikRsUGEdESeiT4S4iLjrJ
-         uc+6UyEyG+aM5ONt/TM7PO/eK2ZXcff42739Jr0uCyCYnQe+epC8KJcphDPpR2OTZI
-         5t+/Qd0LlOvaaY21NpGfVH6DRlWVgfOfiaoehn8YZdmObYYuQ7n91xleGrzYENC74/
-         jpjLBabVpnvrg==
-Message-ID: <0da67f73-dd73-7e6d-74c2-14aec5d79902@gotplt.org>
-Date:   Tue, 22 Nov 2022 05:20:37 -0500
+        Tue, 22 Nov 2022 05:21:47 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FE813DD5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:42 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso10928058wmp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:21:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KCYmUoNLEWECSxLiDeK3zZweGQLAcBJOoW4I6ZR1gew=;
+        b=7qzSmY3gSjeDV3Y94wgusDWy2XGVnwPFbkeSC5S4ylmgG1n4TowscBx+PjSl/Wflk7
+         oWZqY8YGIVZ7do5yzReenaNh/xCrcPE/7+9cSU7nD53NAhHGo37KuiiPdi6Vq6qZMjpp
+         CjKHnqGQR+NaR8XJYpYkzf/GAysJiKEel4J8yyis6V1dIXBaF8DfZ2c9I5WRLIzZpQGY
+         7tRlhRF0Ui+sg+nTHd2Pys5B9gUATUqwSr0PllrsYtogcKzpbsZria+6tS8kstWM5hft
+         YZksrmwUrK6kX9I9F0+cY/zDetDJhr2m30E69ccGr0q5bwNUmzas9JPX85WT0FUcRZ1I
+         CeMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KCYmUoNLEWECSxLiDeK3zZweGQLAcBJOoW4I6ZR1gew=;
+        b=5qUm7QPelMcK94pxvaUnAOdo66uvb+0rDheVbSzcwgCspqoUf0XCgDTQB231AUAvnV
+         96qLZGx7Lw1K549Hsnn3wXqVXa+f15U5bhWzNDk5mVEUdO1PcZ2rClYyMHk5LKWEsaMc
+         seO4J14UoxRXcfxBk0oNqSmldaER5w5Vi48852N33EAjFLQngKEGE3SxJAhHvHPlDd+S
+         xDM6DADuZp2fNxXJ2seW5q5MlexfYF9c1wfnYmE/SV5jowvmv4klatlY2ZxSHdkrVTrP
+         ciLhQ/7OkWz0gp/HnGmqouLl6wOG8z2gBbfHGkz52Vniwa5g5OsQ/EzXGf8qOiIveiU7
+         OXlg==
+X-Gm-Message-State: ANoB5pkhcR0Ikzuhri8lX7YdibRKohY1pmj8J0gxRxXsOH5S52BbMk4P
+        oAZHgO/w6UmKAHhMQ4D3oG3RBwblLDG6pA==
+X-Google-Smtp-Source: AA0mqf7NHroE0cWTu2dxNSfxoeMDbw0wykM8B35qUHrtjNz23OEmkw3G+wIZ04aVmVQJuixcwvZlyw==
+X-Received: by 2002:a7b:c852:0:b0:3c6:a8c7:755e with SMTP id c18-20020a7bc852000000b003c6a8c7755emr5023586wml.167.1669112500866;
+        Tue, 22 Nov 2022 02:21:40 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:e011:9e81:66f1:3415])
+        by smtp.gmail.com with ESMTPSA id o3-20020a5d4083000000b002366e8eee11sm13432873wrp.101.2022.11.22.02.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 02:21:40 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v2 00/15] serial: qcom-geni-serial: implement support for SE DMA
+Date:   Tue, 22 Nov 2022 11:21:10 +0100
+Message-Id: <20221122102125.142075-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 4/4] fortify: Use __builtin_dynamic_object_size() when
- available
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        linux-kernel@vger.kernel.org
-References: <20220920192202.190793-1-keescook@chromium.org>
- <20220920192202.190793-5-keescook@chromium.org>
-From:   Siddhesh Poyarekar <siddhesh@gotplt.org>
-In-Reply-To: <20220920192202.190793-5-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,41 +77,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-20 15:22, Kees Cook wrote:
-> Since the commits starting with c37495d6254c ("slab: add __alloc_size
-> attributes for better bounds checking"), the compilers have runtime
-> allocation size hints available in some places. This was immediately
-> available to CONFIG_UBSAN_BOUNDS, but CONFIG_FORTIFY_SOURCE needed
-> updating to explicitly make use the hints via the associated
-> __builtin_dynamic_object_size() helper. Detect and use the builtin when
-> it is available, increasing the accuracy of the mitigation. When runtime
-> sizes are not available, __builtin_dynamic_object_size() falls back to
-> __builtin_object_size(), leaving the existing bounds checking unchanged.
-> 
-> Additionally update the VMALLOC_LINEAR_OVERFLOW LKDTM test to make the
-> hint invisible, otherwise the architectural defense is not exercised
-> (the buffer overflow is detected in the memset() rather than when it
-> crosses the edge of the allocation).
-> 
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Siddhesh Poyarekar <siddhesh@gotplt.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Tom Rix <trix@redhat.com>
-> Cc: linux-hardening@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/misc/lkdtm/heap.c           | 1 +
->   include/linux/compiler_attributes.h | 5 +++++
->   include/linux/fortify-string.h      | 7 +++++++
->   3 files changed, 13 insertions(+)
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Hi Kees,
+The goal of this series is to update the qcom-geni-serial driver to use
+the DMA mode of the QUPv3 serial engine. This is accomplished by the last
+patch in the series. The previous ones contain either various tweaks,
+reworks and refactoring or prepare the driver for adding DMA support.
 
-Circling back on this, I noticed that all but this patch got pulled into 
-Linus' tree.  Is there a reason why this has been held back?
+More work will follow on the serial engine in order to reduce code
+redundancy among its users and add support for SE DMA to the qcom GENI
+SPI driver.
 
-Thanks,
-Sid
+v1 -> v2:
+- turn to_dev_uport() macro into a static inline function
+- use CIRC_CNT_TO_END() and uart_xmit_advance() where applicable and don't
+  handle xmit->tail directly
+- drop sizeof() where BYTES_PER_FIFO_WORD can be used
+- further refactor qcom_geni_serial_handle_tx_fifo()
+- collect review tags
+
+Bartosz Golaszewski (15):
+  tty: serial: qcom-geni-serial: drop unneeded forward definitions
+  tty: serial: qcom-geni-serial: remove unused symbols
+  tty: serial: qcom-geni-serial: align #define values
+  tty: serial: qcom-geni-serial: improve the to_dev_port() macro
+  tty: serial: qcom-geni-serial: remove stray newlines
+  tty: serial: qcom-geni-serial: refactor qcom_geni_serial_isr()
+  tty: serial: qcom-geni-serial: remove unneeded tabs
+  tty: serial: qcom-geni-serial: refactor qcom_geni_serial_handle_tx()
+  tty: serial: qcom-geni-serial: drop the return value from handle_rx
+  tty: serial: qcom-geni-serial: use of_device_id data
+  tty: serial: qcom-geni-serial: stop operations in progress at shutdown
+  tty: serial: provide devm_uart_add_one_port()
+  tty: serial: qcom-geni-serial: use devres for uart port management
+  soc: qcom-geni-se: add more symbol definitions
+  tty: serial: qcom-geni-serial: add support for serial engine DMA
+
+ .../driver-api/driver-model/devres.rst        |   3 +
+ drivers/tty/serial/qcom_geni_serial.c         | 614 ++++++++++++------
+ drivers/tty/serial/serial_core.c              |  36 +
+ include/linux/qcom-geni-se.h                  |   3 +
+ include/linux/serial_core.h                   |   6 +
+ 5 files changed, 455 insertions(+), 207 deletions(-)
+
+-- 
+2.37.2
+
