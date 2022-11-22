@@ -2,267 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E2D633E02
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB7C633E07
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiKVNqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
+        id S233842AbiKVNqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:46:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbiKVNqH (ORCPT
+        with ESMTP id S233589AbiKVNq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:46:07 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A47DA5A6C0;
-        Tue, 22 Nov 2022 05:46:04 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E14051FB;
-        Tue, 22 Nov 2022 05:46:10 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EE0C3F73D;
-        Tue, 22 Nov 2022 05:46:02 -0800 (PST)
-Date:   Tue, 22 Nov 2022 13:46:00 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Huisong Li <lihuisong@huawei.com>
-Cc:     robbiek@xsightlabs.com, linux-acpi@vger.kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
-        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
-        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
-        wangkefeng.wang@huawei.com, huangdaode@huawei.com
-Subject: Re: [RFC V2] ACPI: PCC: Support shared interrupt for multiple
- subspaces
-Message-ID: <20221122134600.3cd44ssgamn362xz@bogus>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20221122033051.15507-1-lihuisong@huawei.com>
+        Tue, 22 Nov 2022 08:46:28 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9D85E3EA;
+        Tue, 22 Nov 2022 05:46:27 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id b11so13305251pjp.2;
+        Tue, 22 Nov 2022 05:46:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uVTM4A73qJGSSEloWNLoqvF5MY8jd3iZQoKxxU2Mn44=;
+        b=n1uPwGarX993N3niKUyWMplrgd30jCR09b8RxbKnmLZHi26Z6w5oRDEodA/jhkNWmu
+         kRtNWvzxuLPpp6UWErGjbIcwTVG5xegoqyCH5ArX0TV8XJzaYGlyfsY0XmNGfwfayT/L
+         h4NXCXOkV1kivV8DUtUCW2X0vIBH7yHaKnqr8K5AfEksDfHySFcTPz7A/NSQTSr5kJNW
+         JOBtKM4IHPRJxf8U7xdBjQw2013as9wB3JZfIuaIQMZoRroTVG2oD047GwYJrOBE69xp
+         e94ZCusqpC8lUDK2oYYancD1JRAFE8/HY1fJjVIi7P3YMfYl1lqF06zFUmcmAUI/H9CV
+         e53w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uVTM4A73qJGSSEloWNLoqvF5MY8jd3iZQoKxxU2Mn44=;
+        b=4J6fgmNrElsrRMlQ5kzQeTvb3CLUHejbk9oH58EFiaw48wKhewn3mDMXddrkm3x4ZK
+         eGN3Cexqd0x4H0ePWpsDy23AErz+mCeBi42SvFgUPtg1ComnuQspfKZeQXrR1J26spVZ
+         7R3OQnr0U7M9R3a0T3YABmhNrZQuAc+PhstXxrHSP0NQWaZceo2jy9WLwXaR2GkAJa8Q
+         4EFiH4r1wvmsQKwAA81Kljj/aColY5M6BqR47vzoyKQ3+3T4gAEnPA7cBwQlZIuL3i/e
+         fqIoLkcAw4T2l4SRM7ZoXoipE/UQScpXkrWHoNRMDdElTAVYDHI+ERHTdkqTZ1xM4QZC
+         7Ivg==
+X-Gm-Message-State: ANoB5pmo8s5chGeSvqYN3uPGcpKKxLq78gABFtZGtqnlgWzhXqNqLAuq
+        m+KlTaOee6hbZQdrTb23w6CSpJi1KjcOXib/
+X-Google-Smtp-Source: AA0mqf6mBuVBnHthUDZGJp4gDXN9r+8/41ANiXXoYROa2Ht1Ikc9yTyJpUdZx6kFEKWWVOZBOGVSaA==
+X-Received: by 2002:a17:902:b40b:b0:188:75bb:36d4 with SMTP id x11-20020a170902b40b00b0018875bb36d4mr4724061plr.55.1669124786804;
+        Tue, 22 Nov 2022 05:46:26 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id t8-20020a1709027fc800b00186c37270f6sm11921165plb.24.2022.11.22.05.46.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 05:46:25 -0800 (PST)
+Message-ID: <2f3c100f-355d-e4f2-ff42-2cb076e8aa86@gmail.com>
+Date:   Tue, 22 Nov 2022 21:46:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [RFC PATCH V2 16/18] x86/sev: Initialize #HV doorbell and handle
+ interrupt requests
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20221119034633.1728632-1-ltykernel@gmail.com>
+ <20221119034633.1728632-17-ltykernel@gmail.com>
+ <116799e9-8b14-66d6-d494-66272faec9e9@amd.com>
+Content-Language: en-US
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <116799e9-8b14-66d6-d494-66272faec9e9@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221122033051.15507-1-lihuisong@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 11:30:51AM +0800, Huisong Li wrote:
-> If the platform acknowledge interrupt is level triggered, then it can
-> be shared by multiple subspaces provided each one has a unique platform
-> interrupt ack preserve and ack set masks.
+On 11/21/2022 11:05 PM, Kalra, Ashish wrote:
+>> +static void do_exc_hv(struct pt_regs *regs)
+>> +{
+>> +    union hv_pending_events pending_events;
+>> +    u8 vector;
+>> +
+>> +    while (sev_hv_pending()) {
+>> +        asm volatile("cli" : : : "memory");
+>> +
 > 
-> If it can be shared, then we can request the irq with IRQF_SHARED and
-> IRQF_ONESHOT flags. The first one indicating it can be shared and the
-> latter one to keep the interrupt disabled until the hardirq handler
-> finished.
+> Do we really need to disable interrupts here, #HV exception will be 
+> dispatched via an interrupt gate in the IDT, so interrupts should be 
+> implicitly disabled, right ?
+>>    panic("Unexpected vector %d\n", vector);
+>> +                unreachable();
+>> +            }
+>> +        } else {
+>> +            common_interrupt(regs, pending_events.vector);
+>> +        }
+>> +
+>> +        asm volatile("sti" : : : "memory");
 > 
-> Further, since there is no way to detect if the interrupt is for a given
-> channel as the interrupt ack preserve and ack set masks are for clearing
-> the interrupt and not for reading the status, we need a way to identify
-> if the given channel is in use and expecting the interrupt.
-> 
-> The way and differences of identification interrupt of each types for a
-> given channel are as follows:
-> 1) type0, type1 and type5: do not support shared level triggered interrupt.
-> 2) type2: whether the interrupt belongs to a given channel is detected
->           based on the status field in Generic Communications Channel
->           Shared Memory Region during calling rx_callback in PCC client
->           code.
-> 3) type3: use the command complete register and chan_in_use flag to control
-> 4) type4: use the command complete register and need to set the
->           corresponding bit of salve subspace to 1 by default in platform.
-> 
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> Again, why do we need to re-enable interrupts here (in this loop), 
+> interrupts will get re-enabled in the irqentry_exit() code path ?
 
-While I am aware that there are parts of this patch that I have suggested or
-was part of the discussion, it doesn't mean you can add my sign-off without
-my consent. You have introduced new things here which I haven't seen or
-agreed to, so this sign-off is completely meaningless and wrong. Please
-don't do that in the future.
+Hi Ashish:
+	Thanks for your review.	check_hv_pending() is also called in the
+native_irq_enable() to handle some pending interrupt requests after re
+-enabling interrupt. For such case, disables irq when handle exception
+or interrupt event.
 
-> Signed-off-by: Robbie King <robbiek@xsightlabs.com>
-> ---
->  -v2: don't use platform interrupt ack register to identify if the given
->       channel should respond interrupt.
-> 
-> ---
->  drivers/mailbox/pcc.c | 130 +++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 116 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-> index 3c2bc0ca454c..674e214d64d1 100644
-> --- a/drivers/mailbox/pcc.c
-> +++ b/drivers/mailbox/pcc.c
-> @@ -80,6 +80,13 @@ struct pcc_chan_reg {
->  	u64 status_mask;
->  };
->  
-> +enum pcc_chan_mesg_dir {
-> +	PCC_ONLY_AP_TO_SCP,
-> +	PCC_ONLY_SCP_TO_AP,
 
-AP and SCP sounds very specific to your platform. The ACPI PCC spec doesn't
-talk about these or use these terminology IIUC. You need to refer AP as OSPM
-and SCP as platform.
-
-> +	PCC_BIDIRECTIONAL,
-
-Again I need to check about this in the specification.
-
-> +	PCC_DIR_UNKNOWN,
-> +};
-> +
->  /**
->   * struct pcc_chan_info - PCC channel specific information
->   *
-> @@ -91,6 +98,10 @@ struct pcc_chan_reg {
->   * @cmd_update: PCC register bundle for the command complete update register
->   * @error: PCC register bundle for the error status register
->   * @plat_irq: platform interrupt
-> + * @plat_irq_flags: platform interrupt flags
-> + * @chan_in_use: flag indicating whether the channel is in use or not when use
-> + *               platform interrupt, and only use it for PCC_ONLY_AP_TO_SCP
-> + * @mesg_dir: direction of message transmission supported by the channel
->   */
->  struct pcc_chan_info {
->  	struct pcc_mbox_chan chan;
-> @@ -100,12 +111,17 @@ struct pcc_chan_info {
->  	struct pcc_chan_reg cmd_update;
->  	struct pcc_chan_reg error;
->  	int plat_irq;
-> +	unsigned int plat_irq_flags;
-> +	bool chan_in_use;
-> +	u8 mesg_dir;
->  };
->  
->  #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
->  static struct pcc_chan_info *chan_info;
->  static int pcc_chan_count;
->  
-> +static int pcc_send_data(struct mbox_chan *chan, void *data);
-> +
->  /*
->   * PCC can be used with perf critical drivers such as CPPC
->   * So it makes sense to locally cache the virtual address and
-> @@ -221,6 +237,47 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
->  	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
->  }
->  
-> +static bool pcc_chan_plat_irq_can_be_shared(struct pcc_chan_info *pchan)
-> +{
-> +	return (pchan->plat_irq_flags & ACPI_PCCT_INTERRUPT_MODE) ==
-> +		ACPI_LEVEL_SENSITIVE;
-> +}
-> +
-> +static bool pcc_chan_need_rsp_irq(struct pcc_chan_info *pchan,
-> +				  u64 cmd_complete_reg_val)
-> +{
-> +	bool need_rsp;
-> +
-> +	if (!pchan->cmd_complete.gas)
-> +		return true;
-> +
-> +	cmd_complete_reg_val &= pchan->cmd_complete.status_mask;
-> +
-> +	switch (pchan->mesg_dir) {
-> +	case PCC_ONLY_AP_TO_SCP:
-> +		/*
-> +		 * For the communication from AP to SCP, if this channel is in
-> +		 * use, command complete bit is 1 indicates that the command
-> +		 * being executed has been completed.
-> +		 */
-> +		need_rsp = cmd_complete_reg_val != 0;
-> +		break;
-> +	case PCC_ONLY_SCP_TO_AP:
-> +		/*
-> +		 * For the communication from SCP to AP， if this channel is in
-> +		 * use, command complete bit is 0 indicates that the bit has
-> +		 * been cleared and AP should response the interrupt.
-> +		 */
-> +		need_rsp = cmd_complete_reg_val == 0;
-> +		break;
-> +	default:
-> +		need_rsp = true;
-> +		break;
-> +	}
-> +
-> +	return need_rsp;
-> +}
-> +
->  /**
->   * pcc_mbox_irq - PCC mailbox interrupt handler
->   * @irq:	interrupt number
-> @@ -232,37 +289,54 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
->  {
->  	struct pcc_chan_info *pchan;
->  	struct mbox_chan *chan = p;
-> +	static irqreturn_t rc;
->  	u64 val;
->  	int ret;
->  
->  	pchan = chan->con_priv;
-> +	if (pchan->mesg_dir == PCC_ONLY_AP_TO_SCP && !pchan->chan_in_use)
-> +		return IRQ_NONE;
->  
->  	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
->  	if (ret)
->  		return IRQ_NONE;
-> +	if (!pcc_chan_need_rsp_irq(pchan, val))
-> +		return IRQ_NONE;
->
-
-Not sure the login in pcc_chan_need_rsp_irq works for type1/2 channels
-or am I missing something.
-
-> -	if (val) { /* Ensure GAS exists and value is non-zero */
-> -		val &= pchan->cmd_complete.status_mask;
-> -		if (!val)
-> -			return IRQ_NONE;
-> +	ret = pcc_chan_reg_read(&pchan->error, &val);
-> +	if (ret) {
-> +		rc = IRQ_NONE;
-> +		goto out;
->  	}
->  
-> -	ret = pcc_chan_reg_read(&pchan->error, &val);
-> -	if (ret)
-> -		return IRQ_NONE;
->  	val &= pchan->error.status_mask;
->  	if (val) {
->  		val &= ~pchan->error.status_mask;
->  		pcc_chan_reg_write(&pchan->error, val);
-> -		return IRQ_NONE;
-> +		rc = IRQ_NONE;
-> +		goto out;
->  	}
->  
-> -	if (pcc_chan_reg_read_modify_write(&pchan->plat_irq_ack))
-> -		return IRQ_NONE;
-> +	if (pcc_chan_reg_read_modify_write(&pchan->plat_irq_ack)) {
-> +		rc = IRQ_NONE;
-> +		goto out;
-> +	}
->  
->  	mbox_chan_received_data(chan, NULL);
-> +	/*
-> +	 * For slave subspace, need to set the command complete bit and ring
-> +	 * doorbell after processing message.
-> +	 */
-> +	if (pchan->mesg_dir == PCC_ONLY_SCP_TO_AP)
-> +		pcc_send_data(chan, NULL);
-> +
-> +	rc = IRQ_HANDLED;
->
-
-Also I think it is better to split the support into 2 different patches.
-Add type 4 channel interrupt handling support and then handle interrupt
-sharing or vice-versa. I am struggling to follow this. I would also avoid
-goto in a interrupt handler unless absolutely necessary.
-
--- 
-Regards,
-Sudeep
