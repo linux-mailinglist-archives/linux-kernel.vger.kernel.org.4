@@ -2,115 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4689F6337E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58576337EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbiKVJGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S233097AbiKVJHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbiKVJGN (ORCPT
+        with ESMTP id S233151AbiKVJG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:06:13 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2765018E01;
-        Tue, 22 Nov 2022 01:06:12 -0800 (PST)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NGdZR21JWzJnnW;
-        Tue, 22 Nov 2022 17:02:55 +0800 (CST)
-Received: from [10.174.179.215] (10.174.179.215) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 17:06:09 +0800
-Subject: Re: [PATCH -next] Bluetooth: Fix Kconfig warning for BT_HIDP
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <jkosina@suse.cz>, <gregkh@linuxfoundation.org>,
-        <benjamin.tissoires@redhat.com>, <linux-bluetooth@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221122034246.24408-1-yuehaibing@huawei.com>
- <29fb52c0-155b-470e-10d5-5e3b2451272d@molgen.mpg.de>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <aa9f5313-df1f-bc9c-8fee-ed8b77099e17@huawei.com>
-Date:   Tue, 22 Nov 2022 17:06:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Tue, 22 Nov 2022 04:06:57 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19607E0B9;
+        Tue, 22 Nov 2022 01:06:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2R+QsgzdMLtZtdX7MDPOAzWGhgj7w7mqaDolO9dSzoU=; b=aKCtwOeT6UMICBexRtp8Be3vZI
+        +1181th7fR+Pp3NBDz92zNdTkJaL19MYJ6Ka9hMxCEOxQyQJplbKjPotYw3mYoix/DoXNWWBRuHtd
+        9xkbSYZBSeAqJMjE6dzaceWm7QxruU3sN3CqSWrdjWhPrt/7xSf2X09DcgtiMKrwnBfEa+IJ6biuR
+        tHtIMF5oQ4wJqSXwDxXAHdvoC6X8dm/QQQrMhyAeMpe7AE8Q1bwVK4a3aFWyu8CF/Mxz7d09yokUs
+        y7nJWINpw3ig/hWJIknyk2WyzfPxqor+5mic142cNfKnAkFWxK1iFlskUeWDaMIne7PEADeZVLLFz
+        9MvFxhDg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxPEl-003O0D-LH; Tue, 22 Nov 2022 09:06:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 26D7A3001D7;
+        Tue, 22 Nov 2022 10:06:38 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0BB832D669366; Tue, 22 Nov 2022 10:06:38 +0100 (CET)
+Date:   Tue, 22 Nov 2022 10:06:37 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
+        dave.hansen@intel.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v7 05/20] x86/virt/tdx: Implement functions to make
+ SEAMCALL
+Message-ID: <Y3yRHf982s/tNlvC@hirez.programming.kicks-ass.net>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <5977ec3c2e682e6927ce1c33e7fcac7fcfe2d346.1668988357.git.kai.huang@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <29fb52c0-155b-470e-10d5-5e3b2451272d@molgen.mpg.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5977ec3c2e682e6927ce1c33e7fcac7fcfe2d346.1668988357.git.kai.huang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 21, 2022 at 01:26:27PM +1300, Kai Huang wrote:
+> +/*
+> + * Wrapper of __seamcall() to convert SEAMCALL leaf function error code
+> + * to kernel error code.  @seamcall_ret and @out contain the SEAMCALL
+> + * leaf function return code and the additional output respectively if
+> + * not NULL.
+> + */
+> +static int __always_unused seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +				    u64 *seamcall_ret,
+> +				    struct tdx_module_output *out)
+> +{
 
-On 2022/11/22 16:31, Paul Menzel wrote:
-> Dear YueHaibing,
-> 
-> 
-> Thank you for your patch.
-> 
-> 
-> Am 22.11.22 um 04:42 schrieb YueHaibing:
-> 
-> Maybe use the more specific summary below:
-> 
-> Bluetooth: Add HID_SUPPORT dependency for BT_HIDP
-> 
->> commit 25621bcc8976 add HID_SUPPORT, and HID depends on it now.
-> 
-> add*s*
-> 
-> or
-> 
-> Commit 25621bcc8976 ("HID: Kconfig: split HID support and hid-core compilation") introduces the new Kconfig symbol HID_SUPPORT …
-> 
-> 
-
-Thanks for your review, v2 is on the way.
-
-> Kind regards,
-> 
-> Paul
-> 
-> 
->> Add HID_SUPPORT dependency for BT_HIDP to fix the warning:
->>
->> WARNING: unmet direct dependencies detected for HID
->>    Depends on [n]: HID_SUPPORT [=n]
->>    Selected by [m]:
->>    - BT_HIDP [=m] && NET [=y] && BT_BREDR [=y] && INPUT [=m]
->>
->> Fixes: 25621bcc8976 ("HID: Kconfig: split HID support and hid-core compilation")
->> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->> ---
->>   net/bluetooth/hidp/Kconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/net/bluetooth/hidp/Kconfig b/net/bluetooth/hidp/Kconfig
->> index 14100f341f33..6746be07e222 100644
->> --- a/net/bluetooth/hidp/Kconfig
->> +++ b/net/bluetooth/hidp/Kconfig
->> @@ -1,7 +1,7 @@
->>   # SPDX-License-Identifier: GPL-2.0-only
->>   config BT_HIDP
->>       tristate "HIDP protocol support"
->> -    depends on BT_BREDR && INPUT
->> +    depends on BT_BREDR && INPUT && HID_SUPPORT
->>       select HID
->>       help
->>         HIDP (Human Interface Device Protocol) is a transport layer
-> 
-> .
+What's the point of a 'static __always_unused' function again? Other
+than to test the DCE pass of a linker, that is?
