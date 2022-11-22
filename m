@@ -2,96 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A40633CA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87264633CA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiKVMhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S233796AbiKVMhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbiKVMh3 (ORCPT
+        with ESMTP id S233484AbiKVMhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:37:29 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CC818B;
-        Tue, 22 Nov 2022 04:37:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eEwn/jgijxzT0bTyhHon1GnPIusHbd+BLkxVvvIWLZE=; b=f5Vum9ZmrKnT1UDkwMjNUYBsm4
-        GIHnoIC9IcNcmKb51j0iGoXc9LjprOoe/m2MzzjYdHie3eZy9OZLefDRygrOShJTB7c9yoFhdFMbJ
-        L/XipT7GNdRPWsmr0SqCi+35+XBSUfP7yWGUakItGVjTngmXE+yfBu0wJOegJ31K7ugG8KCMFbBB3
-        aC4tXSCpCnanqdhGMOlpRPxFhpvUmwn1XmNaZy2D0r2H1Grwlvvy088D5h+OriypZ9bwnpjo/n2pL
-        XD+Hke7ddEE8xtToJFjAgFGSOLeC+6AsbQcY/RS2Lm2+A0Wm5qDWe/3h/I9INWtdU/6x8bpkD/eHT
-        noUdZM6w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxSWS-009DG6-9l; Tue, 22 Nov 2022 12:37:08 +0000
-Date:   Tue, 22 Nov 2022 04:37:08 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] init: move block device helpers from
- init/do_mounts.c
-Message-ID: <Y3zCdJr5dKsADsnM@infradead.org>
-References: <cover.1668644705.git.daniel@makrotopia.org>
- <e5e0ab0429b1fc8a4e3f9614d2d1cc43dea78093.1668644705.git.daniel@makrotopia.org>
- <Y3XM62P7CaeKXFsz@infradead.org>
- <Y3j+Pzy1JpqG8Yd8@makrotopia.org>
+        Tue, 22 Nov 2022 07:37:39 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4C61276D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:37:30 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id bp15so23347172lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:37:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w0KfeZQDt2kqu3VffioA4jWiWF7VwBC/2sPf+6WgA8Y=;
+        b=Ep+CKDHfxbAlJvVm1xz5mlueq8XD8NReNK/nzbSB66TA2xNxLeCPdBaKPDoUXu9OdP
+         lEKa8U1nWq4aTEu5Z9l2X+G8zwWB9jTkehn3NHWg7HbHmiulFiF70L8zov59zB0VpwPM
+         OLHbP6pfzojwYPq15JscKna1qhDZitmvKzNuo7CDPeUKo426fj98cvqDqLnmSwCdV8Ln
+         dJRelueSbxlgxQ3F5XjBTH7WNhTNdBBsOkfYS72WF0oykGbHUByWJH0elHQAKMRPa3TP
+         vJWcdIuqkZIq0SSFrDokdMfiffhf/0MsCyY8pitooI0ZUVbpvcFSGa7Anpw4HkBkzJeo
+         6gHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w0KfeZQDt2kqu3VffioA4jWiWF7VwBC/2sPf+6WgA8Y=;
+        b=RRBxYzs2VVK3YPj8F1xiVUUNUF1wRvsUrDeD0Lq7WBGpr40jBO4WXekmy6IxVOMn//
+         x23uhYXMYT3DxM/3DfPV10a02N/x0AjEYQjPBhvoJf9XOQvy9jU330K/vdErTio55SHA
+         QW00iE5RZ0D1uuD7C2W4dZ18eWxG+2jwP7u/6cFyYKRUqmCVDE1B+6g42/NsUDodT8AB
+         rt29sEf3EZN5VQxpr+Aq+fO1azOS4gox2LLJUE1Ahs9sL/02adPnIMP0vAZXk2eoSHBr
+         f3GPf9Hs/8HDQ9Bod96GeBwiNvq/FbTTsIiuTxMWDoTKa6eymH+ZJUrTm07GmzGKOSsC
+         C+Iw==
+X-Gm-Message-State: ANoB5pn1Tb1D5UpWVR33aPLq632Dax++EHjk9IEh6Z3lgnGhkRJQ9RVH
+        8c2QHaAZA2g3koftfKU2hv5kVg==
+X-Google-Smtp-Source: AA0mqf5ksyyVPOsBQE+sl3WYIWeFYnsvODRJ9lWHgaMW2xr2XTY9CKeudMn/yKtpF5uy64vWTFbrtw==
+X-Received: by 2002:a05:6512:4011:b0:4a2:8bfe:a03b with SMTP id br17-20020a056512401100b004a28bfea03bmr3681307lfb.210.1669120648462;
+        Tue, 22 Nov 2022 04:37:28 -0800 (PST)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id m19-20020a195213000000b004a46f92a15bsm2501844lfb.41.2022.11.22.04.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 04:37:27 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state"
+Date:   Tue, 22 Nov 2022 13:37:13 +0100
+Message-Id: <20221122123713.65631-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3j+Pzy1JpqG8Yd8@makrotopia.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 04:03:11PM +0000, Daniel Golle wrote:
-> That works, but has slightly less utility value than the partition
-> parser approach as in this way I cannot easily populate the PARTNAME
-> uevent which can later help userspace to identify a device by the FIT
-> subimage name -- I'd have to either invent a new bus_type or
-> device_type, both seem inappropriate and have unwanted side effects.
-> Or am I missing something and there is a way to use add_uevent_var()
-> for a disk_type device?
+Due to recent improvements of the cluster idle state support for Qcom based
+platforms, we are now able to support the deepest cluster idle state. Let's
+therefore revert the earlier workaround.
 
-You're not exposing a partition here - this is an image format that
-sits in a partition and we should not pretend that is a partition.
+This reverts commit cadaa773bcf1 ("arm64: dts: qcom: sm8250: Disable the
+not yet supported cluster idle state"), which is available from v6.1-rc6.
 
-> However, I don't see a way to avoid using (or duplicating)
-> devt_from_devname() to select the lower device somehow without having
-> to probe and parse *all* block devices present (which is, from what I
-> understood, what you want to avoid, and I agree that it is more safe to
-> not do that...)
-> 
-> Can you or anyone give some advise on how this should be done?
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
-Just set the block driver up from an initramfs, like we do for all
-modern stackable drivers.
+Note that, the improvements that I am referring to above, comes from the below
+series, which Bjorn has queued for v6.2.
 
-> Yet another (imho not terrible) problem is removal of the lower device.
-> Many of the supported SBC use a micro SD card to boot, which can be
-> removed by the user while the system is running (which is generally not
-> a good idea, but anyway). For partitions this is handled automatically
-> by blk_drop_partitions() called directly from genhd.c.
-> I'm currently playing with doing something similar using the bus device
-> removal notification, but it doesn't seem to work for all cases, e.g.
-> mmcblk device do not seem to have the ->bus pointer populated at all
-> (ie. disk_to_dev(disk)->bus == NULL for mmcblk devices).
+https://lore.kernel.org/linux-arm-kernel/20221018152837.619426-1-ulf.hansson@linaro.org/
 
-I have WIP patches that allow the claimer of a block device get
-resize and removal notification.  It's not going to land for 6.2,
-but I hope I have it ready in time for the next merge window.
+Kind regards
+Ulf Hansson
+
+---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index e276eed1f8e2..a5b62cadb129 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -334,7 +334,6 @@ CLUSTER_SLEEP_0: cluster-sleep-0 {
+ 				exit-latency-us = <6562>;
+ 				min-residency-us = <9987>;
+ 				local-timer-stop;
+-				status = "disabled";
+ 			};
+ 		};
+ 	};
+-- 
+2.34.1
+
