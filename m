@@ -2,157 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E699B6337D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E9A6337D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiKVJDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
+        id S233098AbiKVJDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233052AbiKVJDM (ORCPT
+        with ESMTP id S232590AbiKVJDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:03:12 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B049FD2D5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:03:07 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id g12so23626479wrs.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WlO7g4Lsw0W29NZcE0ra/AJVqpRBqZGwpRSfI2r7w5Y=;
-        b=XHn2YtjbLOJMoShQ8Uuzur7XQJyv9rqI/IfrS/8/o24iIBnkbh1vaoC1ZCUmfR+W5k
-         pR9cuxus/C9I5QoH4SuyXLUTEw0vDOKujndGzluBpFR1wU5MWxB+PGFxfLbzOjWSNGLy
-         LUtJHT02Z9pN5gCXFEBXY78s2tpJ9omwPiUbXfxCHmrcQW0742Hq0VvR8TYsLHg8YVkE
-         K240BL4nTxQxAAg2snoDSeJPwPfvwYTRFZHxjkJnUTFO9ioR9I1zmQEdALS7e/2Y/SEH
-         t8RNEoJvnXxpH56Fo7S3LJ6ip5AImo/i54tk1N9TIwsTVCgqx9JaT4HZNZTvXcJdcJm5
-         U6Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WlO7g4Lsw0W29NZcE0ra/AJVqpRBqZGwpRSfI2r7w5Y=;
-        b=kL36mMX3O8TFGZV+fo/NqJzS+JItgiXoN/kifrwkh2iBVOz44zCPOJkF4VoC1MFPXD
-         Seq264z3ZvmpraM1THInrPCD5kDexZkKGhckYsgOuukrVIavZmwYaOm8btdpLQlioFjT
-         0lxu74Ycuom8UtiSqatAvqRzL7nsxy4vF7AmCup+VH58HXDH3WW4ZPO3Qx3XwdNjPbpx
-         JvY6kEhn56UZdCXsP911DuemIYEXt7s+aLlHkQzX8G8GSFdDKX5JxS6JdEJMRigb7+rN
-         3l+cBGMFcYvo8u2qzn1Jxv43boDw9PR3jmhAp0L+RcnWOGiC01ISykBVBEAvn1vsyY0Z
-         6NWQ==
-X-Gm-Message-State: ANoB5plOdwst+osRrg6IHx4DzV7wnhsnozzn9sSpGqAZ6il9XrAF2he8
-        RH8yBILZW2jz4pg/l20Vhf58+yzSNx5iJ9ZF
-X-Google-Smtp-Source: AA0mqf68rXUfFCPbiYFPRAEVP2GsE6Sh7ZlYje0Rb53NCB/Hi0QUvgnkvfPQfNOqxHzkmQm0uYYymw==
-X-Received: by 2002:a5d:5744:0:b0:236:b7c6:7ef9 with SMTP id q4-20020a5d5744000000b00236b7c67ef9mr1729027wrw.10.1669107785740;
-        Tue, 22 Nov 2022 01:03:05 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id l12-20020a05600c2ccc00b003cf54b77bfesm21296686wmc.28.2022.11.22.01.03.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 01:03:05 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     broonie@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] hwmon: (pmbus/core): Implement regulator get_status
-Date:   Tue, 22 Nov 2022 10:03:02 +0100
-Message-Id: <20221122090302.3053092-1-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 04:03:25 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7DEC75B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:03:23 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221122090321epoutp01660ed243f1d34039e7e4ffb82a0f1793~p3LPG-hjo1844318443epoutp01R
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 09:03:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221122090321epoutp01660ed243f1d34039e7e4ffb82a0f1793~p3LPG-hjo1844318443epoutp01R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1669107801;
+        bh=p9LCVLTZUGHskW6P80iZkkOsBwgTL7D4TlYMb1/7yjc=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=D38PXV3Q02Ls+beYpQxX9/lA+prqrFCEV0TkIAgZNhmOmexkdyfSN1cR1fXrTHuJ8
+         It8sHZdartG3l2fG0CCclMSzJO1i0Ys8yyhNMIIkGmF/z4CUp5QbGvxe8f8p+qMl4H
+         oV5eSf0R90GWGnzP1dSSsuVw93YOZ9xeN/B5NaPI=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20221122090321epcas2p2b3dcb585fd8e66e0a2abf332f2147064~p3LO5okHY1823518235epcas2p2y;
+        Tue, 22 Nov 2022 09:03:21 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4NGdZw6cL0z4x9Q9; Tue, 22 Nov
+        2022 09:03:20 +0000 (GMT)
+X-AuditID: b6c32a47-079a4a8000002127-72-637c90583602
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A6.2D.08487.8509C736; Tue, 22 Nov 2022 18:03:20 +0900 (KST)
+Mime-Version: 1.0
+Subject: [RESEND][PATCH] f2fs: avoid victim selection from previous victim
+ section
+Reply-To: yonggil.song@samsung.com
+Sender: Yonggil Song <yonggil.song@samsung.com>
+From:   Yonggil Song <yonggil.song@samsung.com>
+To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20221122090320epcms2p2e5df6f7bb1c2d80ae69fd5e4f84b08be@epcms2p2>
+Date:   Tue, 22 Nov 2022 18:03:20 +0900
+X-CMS-MailID: 20221122090320epcms2p2e5df6f7bb1c2d80ae69fd5e4f84b08be
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBKsWRmVeSWpSXmKPExsWy7bCmuW7EhJpkg6un9SxOTz3LZPFk/Sxm
+        i0uL3C0u75rDZjH1/BEmB1aPTas62Tx2L/jM5NG3ZRWjx+dNcgEsUdk2GamJKalFCql5yfkp
+        mXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUBrlRTKEnNKgUIBicXFSvp2NkX5
+        pSWpChn5xSW2SqkFKTkF5gV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGRNuOhdM5ar4+uQTUwPj
+        Go4uRk4OCQETiX1HLrN1MXJxCAnsYJT4tuIoaxcjBwevgKDE3x3CIDXCAiESP9uXsYLYQgJK
+        EtcO9LJAxPUlNi9exg5iswnoSvzdsBzMFhF4xShxZrUoxHxeiRntT1kgbGmJ7cu3MkLYGhI/
+        lvUyQ9iiEjdXv2WHsd8fmw9VIyLReu8sVI2gxIOfu6HikhKLDp1ngrDzJf6uuM4GYddIbG1o
+        g4rrS1zr2Ai2l1fAV+Lijylg97MIqEo8e7oTqsZF4vLpj2C9zALyEtvfzmEGeZ1ZQFNi/S59
+        EFNCQFniyC0WiAo+iY7Df9lhvtox7wnUFDWJzZs2s0LYMhIXHrdBXekh8X7/IiZIqAVKvL34
+        l3UCo/wsRNjOQrJ3FsLeBYzMqxjFUguKc9NTi40KjOGxmZyfu4kRnOS03Hcwznj7Qe8QIxMH
+        4yFGCQ5mJRHees+aZCHelMTKqtSi/Pii0pzU4kOMpkAfT2SWEk3OB6bZvJJ4QxNLAxMzM0Nz
+        I1MDcyVx3q4ZWslCAumJJanZqakFqUUwfUwcnFINTAeefrydv/YwM/+H8Ke3Z2pyvMo7/iTy
+        p5BQ5/bE+1f+2urcW/riWx6Lc1fECa3Wn7Nnlf1/Fur6ur5BMmZ27erUiC5mHyffVsYrH39u
+        kaia4VTVNbE2aUImh3/Jok1fPx85Ysp11/F9doW9wzYx439Lw2ssWIW2NBTPaXzzRbl6yuQp
+        R9ZKJVULe2R9jr+fES3zyumFSF+G8maLqAMv634ozOj/McWhOFeDZ7bor1vF+mdsff3ehV76
+        8UXcd52OuKfymdyTf1J2ljW37mRUPmm8J9y1+/1JgwbDXzxT3rvsvSnEYfS+VM9AVdmveeXu
+        3O4lZ1+/vbFk+sGL/DFhfH2zHRg2Hs5Weat2cYZ+nRJLcUaioRZzUXEiAHDN5fT7AwAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221122090320epcms2p2e5df6f7bb1c2d80ae69fd5e4f84b08be
+References: <CGME20221122090320epcms2p2e5df6f7bb1c2d80ae69fd5e4f84b08be@epcms2p2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+When f2fs chooses GC victim in large section & LFS mode,
+next_victim_seg[gc_type] is referenced first. After segment is freed,
+next_victim_seg[gc_type] has the next segment number.
+However, next_victim_seg[gc_type] still has the last segment number
+even after the last segment of section is freed. In this case, when f2fs
+chooses a victim for the next GC round, the last segment of previous victim
+section is chosen as a victim.
 
-Add get_status for pmbus_regulator_ops.
+Initialize next_victim_seg[gc_type] to NULL_SEGNO for the last segment in
+large section.
 
+Fixes: e3080b0120a1 ("f2fs: support subsectional garbage collection")
+Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
 ---
-Changes:
-- use lock throughout the function
-- Avoid line continuation upto 100 column
-- Optimize use of & and | operator
-- Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
-  respective status register for fault.
-- Report regulator current status.
-- Utilize get_error_flag to check for regulator errors.
+ fs/f2fs/gc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 41 ++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 7ec04934747e..5df2aee549e6 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2851,6 +2851,46 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
- 	return 0;
- }
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 0f967b1e98f2..f1b68eda2235 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1749,8 +1749,9 @@ static int do_garbage_collect(struct f2fs_sb_info *sbi,
+ 				get_valid_blocks(sbi, segno, false) == 0)
+ 			seg_freed++;
  
-+static int pmbus_regulator_get_status(struct regulator_dev *rdev)
-+{
-+	struct device *dev = rdev_get_dev(rdev);
-+	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+	u8 page = rdev_get_id(rdev);
-+	int status, ret;
-+
-+	mutex_lock(&data->update_lock);
-+	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
-+	if (status < 0) {
-+		ret = status;
-+		goto unlock;
-+	}
-+
-+	if (status & PB_STATUS_OFF) {
-+		ret = REGULATOR_STATUS_OFF;
-+		goto unlock;
-+	}
-+
-+	/* If regulator is ON & reports power good then return ON */
-+	if (!(status & PB_STATUS_POWER_GOOD_N)) {
-+		ret = REGULATOR_STATUS_ON;
-+		goto unlock;
-+	}
-+
-+	if (rdev->desc->ops->get_error_flags)
-+		ret = rdev->desc->ops->get_error_flags(rdev, &status);
-+
-+	if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
-+	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP))
-+		ret = REGULATOR_STATUS_ERROR;
-+	else
-+		ret = REGULATOR_STATUS_UNDEFINED;
-+
-+unlock:
-+	mutex_unlock(&data->update_lock);
-+	return ret;
-+}
-+
- static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
- {
- 	struct pmbus_data *data = i2c_get_clientdata(client);
-@@ -2991,6 +3031,7 @@ const struct regulator_ops pmbus_regulator_ops = {
- 	.disable = pmbus_regulator_disable,
- 	.is_enabled = pmbus_regulator_is_enabled,
- 	.get_error_flags = pmbus_regulator_get_error_flags,
-+	.get_status = pmbus_regulator_get_status,
- 	.get_voltage = pmbus_regulator_get_voltage,
- 	.set_voltage = pmbus_regulator_set_voltage,
- 	.list_voltage = pmbus_regulator_list_voltage,
-
-base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
+-		if (__is_large_section(sbi) && segno + 1 < end_segno)
+-			sbi->next_victim_seg[gc_type] = segno + 1;
++		if (__is_large_section(sbi))
++			sbi->next_victim_seg[gc_type] =
++				(segno + 1 < end_segno) ? segno + 1 : NULL_SEGNO;
+ skip:
+ 		f2fs_put_page(sum_page, 0);
+ 	}
 -- 
-2.37.3
-
+2.34.1
