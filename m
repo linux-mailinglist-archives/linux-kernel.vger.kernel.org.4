@@ -2,120 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37CF633CC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722CE633CC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbiKVMmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S232482AbiKVMpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232729AbiKVMmK (ORCPT
+        with ESMTP id S229507AbiKVMpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:42:10 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1045F864
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:42:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669120929; x=1700656929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=70oScF9E2e8KOZen+yyr+BrcYQ7BJfDudm/5i0oxoBI=;
-  b=CeAULWNpQY+UCTbjjbJzoYkjl9YlSHKQrS7DTzed4JrcyKEvkYHh0uAk
-   7o0q/VPzposz0r0A5RZ+pQofQ/c2rG+iDs9tIubtEWLcRQjm/IA6AT1jE
-   KSqlTluI4qx0lCcJiagY85R6zAkW7ytV7lzAdJyLbl4CydutaJsHmyIuy
-   Y2RxABW9dRixOdE0bFKVkvn1s92QxcamxmEmcdh+HYFtBCklh5rQIzgQw
-   /4wy3y6ccxPH6jn4GmDdmfr2Dy7IpoG5uewlKDa8ZEQYDWyxOqXN/mc7c
-   h+cfqnJOHtZIqqeUkvJ7+sz8V0mmDomD9XZVOsEaHQaxo09/n/RSxw10d
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="301353286"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="301353286"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 04:42:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="766326547"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="766326547"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 22 Nov 2022 04:42:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxSbD-00Fpff-2g;
-        Tue, 22 Nov 2022 14:42:03 +0200
-Date:   Tue, 22 Nov 2022 14:42:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rahul Tanwar <rtanwar@maxlinear.com>
-Cc:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
-Subject: Re: [PATCH v3 0/4] x86/of: Fix a bug in x86 arch OF support
-Message-ID: <Y3zDm1zaqpn8uMiV@smile.fi.intel.com>
-References: <cover.1669100394.git.rtanwar@maxlinear.com>
- <Y3yTxRAVSOJTMuUu@smile.fi.intel.com>
- <a7a1b539-bd69-0227-ea93-b90f2e3ef2cd@maxlinear.com>
- <Y3yhFWQ7NHMArO74@smile.fi.intel.com>
- <fee4cf31-11be-9459-7d7b-ba8729dfb356@maxlinear.com>
+        Tue, 22 Nov 2022 07:45:02 -0500
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D011D1C402;
+        Tue, 22 Nov 2022 04:44:57 -0800 (PST)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 22 Nov 2022 20:44:54
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.14.30.50]
+Date:   Tue, 22 Nov 2022 20:44:54 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "Jinlong Chen" <nickyc975@zju.edu.cn>
+To:     "Christoph Hellwig" <hch@lst.de>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [RFC PATCH 0/2] elevator: restore old io scheduler on
+ failure in elevator_switch
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20221122122446.GA5068@lst.de>
+References: <cover.1668772991.git.nickyc975@zju.edu.cn>
+ <20221121071305.GB23882@lst.de>
+ <6d74b4a9.5489.1849f42de2d.Coremail.nickyc975@zju.edu.cn>
+ <20221122122446.GA5068@lst.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fee4cf31-11be-9459-7d7b-ba8729dfb356@maxlinear.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <7724857b.55d9.1849f5eb423.Coremail.nickyc975@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgD3_6tGxHxjlFJeCQ--.57695W
+X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgECB1ZdtcipPgABsm
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 10:45:12AM +0000, Rahul Tanwar wrote:
-> On 22/11/2022 6:15 pm, Andy Shevchenko wrote:
-> > On Tue, Nov 22, 2022 at 09:49:04AM +0000, Rahul Tanwar wrote:
-
-...
-
-> > I recommend to utilize my "smart" script [1] for sending series.
-> > (You may take an idea from it how to prepare the Cc list close to proper 
-> > one)
-> > 
-> > [1]: 
-> > https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh 
-> 
-> Agree on the Cc list being wrong. Thanks for the script.
-> 
-> Quite useful. Could not understand how the script works for multiple 
-> commits when you take count & version as inputs.
-
-It starts from the commit <COMMIT_HASH>~$count and goes up. So it's basically
-depth from the given commit (<COMMIT_HASH>).
-
-> Also, where does it 
-> create patches (format-patch)? It seems to get suitable to & cc list & 
-> send emails to them. And the input is COMMIT_HASH. How do i use it for a 
-> series with multiple commits & do i have to create patches on my own? 
-
-It creates patches automatically in the same was as it's done by
-`git format-patch`. That's why it accepts a lot of the parameters
-which you usually add there.
-
-Typical use for the series is
-
-  ge2maintainer.sh -v 1 -c 4 HEAD~0 --annotate --cover-letter
-
-Note, that your editor should be able to handle several files to edit
-(e.g. vim supports that mode).
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+PiBPbiBUdWUsIE5vdiAyMiwgMjAyMiBhdCAwODoxNDozMFBNICswODAwLCBKaW5sb25nIENoZW4g
+d3JvdGU6Cj4gPiBNb3N0bHkgZmFpbHVyZXMgc3BlY2lmaWMgdG8gdGhlIGludGVuZGVkIGlvIHNj
+aGVkdWxlciwgbGlrZSBjb25zdW1pbmcgbW9yZQo+ID4gcmVzb3VyY2VzIHRoYW4gdGhlIG9sZCBv
+bmUgdGhhdCB0aGUgc3lzdGVtIGNhbiBub3QgYWZmb3JkLiBCdXQgc3VyZSBpdCdzCj4gPiByYXJl
+LCBzbyBkbyB5b3UgdGhpbmsgSSBzaG91bGQganVzdCBjb3JyZWN0IHRoZSBvdXRkYXRlZCBkb2N1
+bWVudD8KPiAKPiBJJ2QgYmUgdGVtcHRlZCB0byBqdXN0IGRvY3VtZW50ZWQgdGhlIGJlaGF2aW9y
+LCBiZWNhdXNlIEkgdGhpbmsgdGhlCj4gY2hhbmNlcyBhcmUgaGlnaCB0aGF0IGlmIHN3aXRjaGlu
+ZyB0byBvbmUgc2NoZWR1bGUgd2lsbCBmYWlsIHRoYXQKPiBzd2l0Y2hpbmcgYmFjayB0byB0aGUg
+b2xkIG9uZSB3aWxsIGZhaWwgYXMgd2VsbC4gIEkndmUgZG9uZSBhIHF1aWNrCj4gYXVkaXQgb2Yg
+YWxsIHRocmVlIHNjaGVkdWxlcnMsIGFuZCB1bmxlc3MgSSBtaXNzZWQgc29tZXRoaW5nIHRoZXJl
+Cj4gYXJlIG5vIG90aGVyIGZhaWx1cmUgY2FzZXMgZXhjZXB0IGZvciBydW5uaW5nIG91dCBvZiBt
+ZW1vcnkuCj4gCj4gTWF5YmUgYSBwcmludGsgdG8gZG9jdW1lbnQgdGhhdCBzd2l0Y2hpbmcgdGhl
+IHNjaGVkdWxlciBmYWlsZWQgYXJlCj4gd2UgYXJlbid0IHVzaW5nIGFueSBzY2hlZHVsZXIgbm93
+IG1pZ2h0IGJlIHVzZWZ1bCwgdGhvdWdoLgoKT2ssIHRoZW4gSSdsbCBzZW5kIHR3byBwYXRjaGVz
+IHdpdGggdGhlIGRvY3VtZW50IHVwZGF0ZWQgYW5kIHRoZSBwcmludGsgYWRkZWQuCgpUaGFua3Mh
+CkppbmxvbmcgQ2hlbgo=
