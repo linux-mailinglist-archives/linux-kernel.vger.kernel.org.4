@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0CD6349F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2646349FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234416AbiKVWXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 17:23:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
+        id S234164AbiKVW0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 17:26:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234490AbiKVWXR (ORCPT
+        with ESMTP id S234549AbiKVW0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 17:23:17 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F3360693
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:23:15 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-125-mXs9r8MRP7yhSUvfo49emw-1; Tue, 22 Nov 2022 22:23:13 +0000
-X-MC-Unique: mXs9r8MRP7yhSUvfo49emw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
- 2022 22:23:11 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Tue, 22 Nov 2022 22:23:11 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Thomas Gleixner' <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Julia Lawall" <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [patch V2 09/17] timers: Rename del_timer_sync() to
- timer_delete_sync()
-Thread-Topic: [patch V2 09/17] timers: Rename del_timer_sync() to
- timer_delete_sync()
-Thread-Index: AQHY/ppUj/KI6nvrHEK9CVCVTxMIma5Lgybg
-Date:   Tue, 22 Nov 2022 22:23:11 +0000
-Message-ID: <2c42cb1fe1fa4b11ba3c0263d7886b68@AcuMS.aculab.com>
-References: <20221122171312.191765396@linutronix.de>
- <20221122173648.619071341@linutronix.de>
-In-Reply-To: <20221122173648.619071341@linutronix.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 22 Nov 2022 17:26:21 -0500
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3B87A376
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:26:19 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id xbiZoVuRqzQOKxbiZoPBam; Tue, 22 Nov 2022 23:26:18 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 22 Nov 2022 23:26:18 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <a3c848f9-d825-f9ff-eb6e-a3575d9871ff@wanadoo.fr>
+Date:   Tue, 22 Nov 2022 23:26:14 +0100
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] crypto: amlogic - Save a few bytes of memory
+Content-Language: fr, en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Corentin Labbe <clabbe@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org
+References: <c797dc5e9248498918916a6eeedaa25de2196e8c.1669154149.git.christophe.jaillet@wanadoo.fr>
+ <CAFBinCAEwYaEvmGjen_LPO52BcyUFD2EKtzzzfZ1rMuVuihEqA@mail.gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <CAFBinCAEwYaEvmGjen_LPO52BcyUFD2EKtzzzfZ1rMuVuihEqA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogVGhvbWFzIEdsZWl4bmVyDQo+IFNlbnQ6IDIyIE5vdmVtYmVyIDIwMjIgMTc6NDUNCj4g
-DQo+IFRoZSB0aW1lciByZWxhdGVkIGZ1bmN0aW9ucyBkbyBub3QgaGF2ZSBhIHN0cmljdCB0aW1l
-cl8gcHJlZml4ZWQgbmFtZXNwYWNlDQo+IHdoaWNoIGlzIHJlYWxseSBhbm5veWluZy4NCj4gDQo+
-IFJlbmFtZSBkZWxfdGltZXJfc3luYygpIHRvIHRpbWVyX2RlbGV0ZV9zeW5jKCkgYW5kIHByb3Zp
-ZGUgZGVsX3RpbWVyX3N5bmMoKQ0KPiBhcyBhIHdyYXBwZXIuIERvY3VtZW50IHRoYXQgZGVsX3Rp
-bWVyX3N5bmMoKSBpcyBub3QgZm9yIG5ldyBjb2RlLg0KDQpUbyBjaGFuZ2UgdGhlIGNvbG9bdV1y
-IG9mIHRoZSBiaWtlc2hlZCwgd291bGQgaXQgYmUgYmV0dGVyIHRvDQpuYW1lIHRoZSBmdW5jdGlv
-bnMgdGltZXJfc3RhcnQoKSBhbmQgdGltZXJfc3RvcFtfc3luY10oKS4NCg0KQW5kLCBhcyBJIGZv
-dW5kIG91dCBmb3IgYSBsb2NhbCBkcml2ZXIsIGFkZGluZyBpdGVtcyB0byB3b3JrIHF1ZXVlcw0K
-ZnJvbSB0aW1lciBjYWxsYmFja3MgcmVhbGx5IGlzbid0IGEgZ29vZCBpZGVhIGF0IGFsbCENClRo
-ZSBkZWxheWVkX3dvcmsgZnVuY3Rpb25zIGhhbmRsZSBpdCBhIGxvdCBiZXR0ZXIuDQoNCglEYXZp
-ZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQg
-RmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4
-NiAoV2FsZXMpDQo=
+Le 22/11/2022 à 23:02, Martin Blumenstingl a écrit :
+> On Tue, Nov 22, 2022 at 10:57 PM Christophe JAILLET
+> <christophe.jaillet@wanadoo.fr> wrote:
+>>
+>> There is no real point in allocating dedicated memory for the irqs array.
+>> MAXFLOW is only 2, so it is easier to allocated the needed space
+>> directly within the 'meson_dev' structure.
+>>
+>> This saves some memory allocation and avoids an indirection when using the
+>> irqs array.
+> ..and it even fixes a missing devm_kcalloc error check
+> 
+> Personally I prefer this approach over a patch that was sent earlier today: [0]
+
+Funny.
+A file untouched for about 18 months and 2 patches around the same line, 
+... the same day!
+
+> Corentin, Christophe, what do you think?
+
+Obviously, mine is better :)
+
+More seriously, I think it is mostly a mater of taste and that both are 
+fine. Neither one will make a real difference IRL.
+
+I guess that memory allocation failure in probe are unlikely and saving 
+64 bytes (40 for devm_ + 2 x 4 = 48, rounded to 64 bytes) won't make any 
+real difference.
+
+Up to you.
+
+CJ
+> 
+> 
+> Best regards,
+> Martin
+> 
+> 
+> [0] https://lore.kernel.org/linux-crypto/0df30bbf-3b7e-ed20-e316-41192bf3cc2b@linaro.org/T/#m6a45b44206c282f106d379b01d19027823c5d79b
+> 
 
