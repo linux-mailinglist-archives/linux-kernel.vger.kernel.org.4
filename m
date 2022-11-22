@@ -2,153 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB96633EE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47299633EE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbiKVO1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S233488AbiKVO2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiKVO1j (ORCPT
+        with ESMTP id S232744AbiKVO2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:27:39 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A52AE5C;
-        Tue, 22 Nov 2022 06:27:35 -0800 (PST)
-Date:   Tue, 22 Nov 2022 14:27:32 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669127254;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vG/st4G6W4vPzDUzOjmBSilspPfXfLK8NNMPkNliKwk=;
-        b=ZN04isOGDj2N9eSI34qr0LJjPEgDBNd1f8vA48y1SKm/ZXzyxAI1tdoqkw93DApLoGkAlk
-        LTgem6tOwrAJSIymrzBmZhT2rIt8DGvlV6+kqgnvbYK2ZaNOMRROVtJRzlMyMxIX7bTrNy
-        fR238PNVwSujeuwlKMpD8gsHzUf0IF2y6MY9khcUTcOXOHfO4a6cH6HcwACWm9wo9f6XIJ
-        Eax5xYPxn9jp6OekrxMYIXovHOSKNWi+txVu0UGnDjWOz9F16HlsIVEBkQfz3OYrX7xHWd
-        ix3hqzy+cBc6iIOWTLaKV6FnZA82a3c8+Y4qpTTMQ83OkvlQvGVqbkPOxY6DVQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669127254;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vG/st4G6W4vPzDUzOjmBSilspPfXfLK8NNMPkNliKwk=;
-        b=3XWhBM6kB1Jp3kTF5jkzy0dBkU/apgnY1dRl1c2Vi7Nv22eQ6/CFDzT+IaOaOsSInHDT7n
-        gU1dVTZeMQrRYpCQ==
-From:   "tip-bot2 for Julian Pidancet" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/alternatives] x86/alternative: Consistently patch SMP locks
- in vmlinux and modules
-Cc:     Julian Pidancet <julian.pidancet@oracle.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221027204906.511277-1-julian.pidancet@oracle.com>
-References: <20221027204906.511277-1-julian.pidancet@oracle.com>
+        Tue, 22 Nov 2022 09:28:37 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885CF6317B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:28:36 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id o17so1111243ilg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:28:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gzHNTCuPBl1243bm48FKjt2m0TJt4ZAgEwgFxeyfelg=;
+        b=AL3TCWiq8qz85gebwtmflSjU1TeY7vO9uOjerKfsr2hpsUEbbAdb0sqdA67uvzQ9Ul
+         2yOt1LsxjMfUGlR10Aa+2x4LTc+feZY0fLlDlrVwOpo1/pavzg0bx3YnicgigF7Caz06
+         rt1nVAb5bpishJPCpgh+eHrsesx3lf597h5C0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gzHNTCuPBl1243bm48FKjt2m0TJt4ZAgEwgFxeyfelg=;
+        b=fXfApMRZGW0rI3i1Yh14L/mXn2ktQz0a/du4eZknl1SOj7YOUcaaWUL0Oqfj8hHQew
+         N0WB9FXCFPPInszaj4rsSkjrsXDEw21rpXfCwNbGN+k6ybrjUiiMdPmCBxOj8UbgWaAP
+         CNUYYE+wZgR5qSwKvGbDDLRZnJzun78fJuXzU5xJsr1NugNHVMUE2UN1pKi7VHmn6qgB
+         oBN8kjjxN/QoOazGGN+mrcg2M2YlDOch4yb5xs7mPAuyIF8I8KbLchf9crfabirir175
+         bdgwdWUlzamcxK+r1jeMikbRX58tGXyda13SsHqL+9oo8C/4oAhPrdgHsdo1F6QPrEYI
+         aHhg==
+X-Gm-Message-State: ANoB5pmZSZ0QHJophOlt3+aJWxX1ZiqVwGl1rTM7A3g16stxdkCDCLSP
+        QAv0EnKpfwwba/5n6PAZLeVxjQ==
+X-Google-Smtp-Source: AA0mqf5gm7VUPG1g1odiwwIbuTVfM7E/P5h6sxqOsZuLoFOtjNCNF/RBNtatfOLOK9rJX+Jum4PaWQ==
+X-Received: by 2002:a92:1912:0:b0:302:5c57:c19d with SMTP id 18-20020a921912000000b003025c57c19dmr2821667ilz.226.1669127315866;
+        Tue, 22 Nov 2022 06:28:35 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id r13-20020a92440d000000b00300df8bfcf5sm4837898ila.14.2022.11.22.06.28.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 06:28:35 -0800 (PST)
+Date:   Tue, 22 Nov 2022 14:28:35 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Owen Yang <ecs.taipeikernel@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Bob Moragues <moragues@chromium.org>,
+        Harvey <hunge@google.com>, Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: Adding DT binding for
+ zombie
+Message-ID: <Y3zck7tPA5WFd0p1@google.com>
+References: <20221122203635.v2.1.Ie05fd439d0b271b927acb25c2a6e41af7a927e90@changeid>
 MIME-Version: 1.0
-Message-ID: <166912725270.4906.15781123390853216184.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221122203635.v2.1.Ie05fd439d0b271b927acb25c2a6e41af7a927e90@changeid>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/alternatives branch of tip:
+On which tree is this series based? My earlier reply bounced for Bjorn's
+old Linaro e-mail address, which suggests that the series might be based
+on an older kernel tree (maybe downstream Chrome OS v5.15?). Please make
+sure to base patches to upstream lists on the corresponding maintainer
+tree/branch or a recent kernel version/rc.
 
-Commit-ID:     be84d8ed3f04e9154a3a55e29a27dcd416f05b31
-Gitweb:        https://git.kernel.org/tip/be84d8ed3f04e9154a3a55e29a27dcd416f05b31
-Author:        Julian Pidancet <julian.pidancet@oracle.com>
-AuthorDate:    Thu, 27 Oct 2022 22:49:06 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 22 Nov 2022 15:16:16 +01:00
-
-x86/alternative: Consistently patch SMP locks in vmlinux and modules
-
-alternatives_smp_module_add() restricts patching of SMP lock prefixes to
-the text address range passed as an argument.
-
-For vmlinux, patching all the instructions located between the _text and
-_etext symbols is allowed. That includes the .text section but also
-other sections such as .text.hot and .text.unlikely.
-
-As per the comment inside the 'struct smp_alt_module' definition, the
-original purpose of this restriction is to avoid patching the init code
-because in the case when one boots with a single CPU, the LOCK prefixes
-to the locking primitives are removed.
-
-Later on, when other CPUs are onlined, those LOCK prefixes get added
-back in but by that time the .init code is very likely removed so
-patching that would be a bad idea.
-
-For modules, the current code only allows patching instructions located
-inside the .text segment, excluding other sections such as .text.hot or
-.text.unlikely, which may need patching.
-
-Make patching of the kernel core and modules more consistent by
-allowing all text sections of modules except .init.text to be patched in
-module_finalize().
-
-For that, use mod->core_layout.base/mod->core_layout.text_size as the
-address range allowed to be patched, which include all the code sections
-except the init code.
-
-  [ bp: Massage and expand commit message. ]
-
-Signed-off-by: Julian Pidancet <julian.pidancet@oracle.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20221027204906.511277-1-julian.pidancet@oracle.com
----
- arch/x86/kernel/module.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index c032edc..c8a25ae 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -251,14 +251,12 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		    const Elf_Shdr *sechdrs,
- 		    struct module *me)
- {
--	const Elf_Shdr *s, *text = NULL, *alt = NULL, *locks = NULL,
-+	const Elf_Shdr *s, *alt = NULL, *locks = NULL,
- 		*para = NULL, *orc = NULL, *orc_ip = NULL,
- 		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL;
- 	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
- 
- 	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
--		if (!strcmp(".text", secstrings + s->sh_name))
--			text = s;
- 		if (!strcmp(".altinstructions", secstrings + s->sh_name))
- 			alt = s;
- 		if (!strcmp(".smp_locks", secstrings + s->sh_name))
-@@ -302,12 +300,13 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		void *iseg = (void *)ibt_endbr->sh_addr;
- 		apply_ibt_endbr(iseg, iseg + ibt_endbr->sh_size);
- 	}
--	if (locks && text) {
-+	if (locks) {
- 		void *lseg = (void *)locks->sh_addr;
--		void *tseg = (void *)text->sh_addr;
-+		void *text = me->core_layout.base;
-+		void *text_end = text + me->core_layout.text_size;
- 		alternatives_smp_module_add(me, me->name,
- 					    lseg, lseg + locks->sh_size,
--					    tseg, tseg + text->sh_size);
-+					    text, text_end);
- 	}
- 
- 	if (orc && orc_ip)
+On Tue, Nov 22, 2022 at 08:37:02PM +0800, Owen Yang wrote:
+> Add an entry in the device tree binding for sc7280-zombie.
+> 
+> Documentation/devicetree/bindings/arm/qcom.yaml
+> 
+> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+> ---
+> 
+> Changes in v2:
+> - Move binding item to Google series bottom.
+> - Modify DT file for zombie.
+> 
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index c15a729a6852..f617923f7485 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -538,6 +538,16 @@ properties:
+>            - const: google,villager-sku512
+>            - const: qcom,sc7280
+>  
+> +      - description: Google Zombie (newest rev)
+> +        items:
+> +          - const: google,zombie
+> +          - const: qcom,sc7280
+> +
+> +      - description: Google Zombie with LTE (newest rev)
+> +        items:
+> +          - const: google,zombie-sku512
+> +          - const: qcom,sc7280
+> +
+>        - items:
+>            - enum:
+>                - xiaomi,lavender
+> -- 
+> 2.17.1
+> 
