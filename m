@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58576337EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E36BF6337EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiKVJHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S233121AbiKVJHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbiKVJG5 (ORCPT
+        with ESMTP id S233101AbiKVJHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:06:57 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19607E0B9;
-        Tue, 22 Nov 2022 01:06:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2R+QsgzdMLtZtdX7MDPOAzWGhgj7w7mqaDolO9dSzoU=; b=aKCtwOeT6UMICBexRtp8Be3vZI
-        +1181th7fR+Pp3NBDz92zNdTkJaL19MYJ6Ka9hMxCEOxQyQJplbKjPotYw3mYoix/DoXNWWBRuHtd
-        9xkbSYZBSeAqJMjE6dzaceWm7QxruU3sN3CqSWrdjWhPrt/7xSf2X09DcgtiMKrwnBfEa+IJ6biuR
-        tHtIMF5oQ4wJqSXwDxXAHdvoC6X8dm/QQQrMhyAeMpe7AE8Q1bwVK4a3aFWyu8CF/Mxz7d09yokUs
-        y7nJWINpw3ig/hWJIknyk2WyzfPxqor+5mic142cNfKnAkFWxK1iFlskUeWDaMIne7PEADeZVLLFz
-        9MvFxhDg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxPEl-003O0D-LH; Tue, 22 Nov 2022 09:06:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Tue, 22 Nov 2022 04:07:00 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FBD5E0B9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:06:59 -0800 (PST)
+Received: from 8bytes.org (p200300c27724780086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7724:7800:86ad:4f9d:2505:dd0d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 26D7A3001D7;
-        Tue, 22 Nov 2022 10:06:38 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0BB832D669366; Tue, 22 Nov 2022 10:06:38 +0100 (CET)
-Date:   Tue, 22 Nov 2022 10:06:37 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dave.hansen@intel.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v7 05/20] x86/virt/tdx: Implement functions to make
- SEAMCALL
-Message-ID: <Y3yRHf982s/tNlvC@hirez.programming.kicks-ass.net>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <5977ec3c2e682e6927ce1c33e7fcac7fcfe2d346.1668988357.git.kai.huang@intel.com>
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id 4444E2A00C3;
+        Tue, 22 Nov 2022 10:06:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1669108018;
+        bh=YMzGWhPNHQSsEJrQRHTYm0kZQxVf9iVfWhpNy5I0aes=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RI5lX9gu2h4vtZuRY7i78sVI3FQHuZGk4hHBg1ignvAqgLZFAgVt7TG98/CEHTsCq
+         WqjfNIicE8F0ZT0KNm0Wqs66x5hXHrsVzr/kzJt8+4bl0o2hWa0AJAQ/Rs7aQZUkNY
+         JAvxcRTTuJDlovD2b98Fzcga8xmzQMVEZ6N5jNsPcG9zH9AWj9Ssm3MDGed1G3dteX
+         n844OcgA9SwITw2SRFhkaxqV9LMpS2ORa2ZfvPcwntOgp/9iZMwE4OPtLiqqzBd111
+         uQsyTAMtwXWTf56FH1b6oPHSRrVlOh93l/PgR3aW1W4uie9jm1jzhtomo0rnRY5d8V
+         Gpoq2lp2CeZiQ==
+Date:   Tue, 22 Nov 2022 10:06:57 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] [PULL REQUEST] Intel IOMMU updates for Linux v6.2
+Message-ID: <Y3yRMXGPcYbXH9uL@8bytes.org>
+References: <20221122002949.148140-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5977ec3c2e682e6927ce1c33e7fcac7fcfe2d346.1668988357.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221122002949.148140-1-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 01:26:27PM +1300, Kai Huang wrote:
-> +/*
-> + * Wrapper of __seamcall() to convert SEAMCALL leaf function error code
-> + * to kernel error code.  @seamcall_ret and @out contain the SEAMCALL
-> + * leaf function return code and the additional output respectively if
-> + * not NULL.
-> + */
-> +static int __always_unused seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
-> +				    u64 *seamcall_ret,
-> +				    struct tdx_module_output *out)
-> +{
+Hi Baolu,
 
-What's the point of a 'static __always_unused' function again? Other
-than to test the DCE pass of a linker, that is?
+On Tue, Nov 22, 2022 at 08:29:42AM +0800, Lu Baolu wrote:
+> Lu Baolu (7):
+>   iommu/vt-d: Allocate pasid table in device probe path
+>   iommu/vt-d: Add device_block_translation() helper
+>   iommu/vt-d: Add blocking domain support
+>   iommu/vt-d: Rename iommu_disable_dev_iotlb()
+>   iommu/vt-d: Rename domain_add_dev_info()
+>   iommu/vt-d: Remove unnecessary domain_context_mapped()
+>   iommu/vt-d: Use real field for indication of first level
+
+Applied the first 6 patches. The last one has conflicts and doesn't
+apply on top of my x86/vt-d branch. Could you please have a look please?
+
+Thanks,
+
+	Joerg
