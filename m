@@ -2,88 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A90634AEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E673634AF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234924AbiKVXOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 18:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S235074AbiKVXRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 18:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232645AbiKVXOc (ORCPT
+        with ESMTP id S232645AbiKVXRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 18:14:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713B4C4945
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 15:14:30 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669158867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zS9dWEV/h5JIrsxFQ5b1PlCIyhlmU6h4P3CnzGwt0T0=;
-        b=b27rlAuygSqLkrwxyFvSZRDL436WYtIqaVVVuf8aCSK3PZkYsyj0VjtCV8ENICnjBGC+8g
-        PHAQ4wl6kMPqX+z+OqBhgZwSgj8gtD+/ZNHsa8sk8KcdWCqueMIpkd7u14UMPoG0vYsAX4
-        FdeRHCHyFCEnNaCKh5WkZ/f2VdycJbulBMfxd5aap6JY/1SvW5QNpLv23+d9XKgGoTnf1f
-        BqgdTbYsPcOPpipUVDys24AnSJSwxMT/Iksfh3x+8HF0K8e29ECZX2iSo9217fpWN/W7YY
-        4Vv5Ng7H1xxFBKW08XUnFPIbZNrD77xMCw3BPMblFjUpFgNHSuN3PlRv0k/R2Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669158867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zS9dWEV/h5JIrsxFQ5b1PlCIyhlmU6h4P3CnzGwt0T0=;
-        b=G8oemVjkccQozmMQSXzJn8EnblAmzlocK6v6ciEdhxMJc9A0D7tcyC+o+sW06NjwACYlxw
-        gibrUnDkd2q7U1Ag==
-To:     paulmck@kernel.org, Petr Mladek <pmladek@suse.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: next-20221122: tinyconfig: ppc n s390:
- kernel/printk/printk.c:95:1: error: type specifier missing, defaults to
- 'int'; ISO C99 and later do not support implicit int
- [-Werror,-Wimplicit-int]
-In-Reply-To: <20221122220053.GO4001@paulmck-ThinkPad-P17-Gen-1>
-References: <CA+G9fYvCWwndXdsvuW7iJ25wgfN6_iMY-OC_z6ufSwiJkzFFMw@mail.gmail.com>
- <87o7szoyij.fsf@jogness.linutronix.de>
- <20221122144839.GI4001@paulmck-ThinkPad-P17-Gen-1>
- <87leo3ovpw.fsf@jogness.linutronix.de> <Y3zw7nv5KJ32P4FG@alley>
- <20221122220053.GO4001@paulmck-ThinkPad-P17-Gen-1>
-Date:   Wed, 23 Nov 2022 00:20:19 +0106
-Message-ID: <87wn7m7fas.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 18:17:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16004C622A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 15:17:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A27DB61935
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 23:17:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67CF4C433D7;
+        Tue, 22 Nov 2022 23:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1669159040;
+        bh=tRxl97TXH1zQb1p9Wgh7fX6XVw3AYxkMguDDWCvykUk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uwYg2hnRmQeuHFDhUQ/xftb3p/N3e54S9xwTQE9POjfF3ijxzz1xP8ezx9p5p8oGH
+         +QNT/oa4dEzT4kuLPrmnwiTcevCagRD9ykVqV81X2/V5fkIvkfVD7hsg+0NNTK0B3H
+         ED9/OWBRNjrdy2uGVHa8GZb4jlo2Vqrykl4lUA3c=
+Date:   Tue, 22 Nov 2022 15:17:18 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        "Pekka Enberg" <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        <linux-mm@kvack.org>, <kasan-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next 1/2] mm/slab: add is_kmalloc_cache() helper macro
+Message-Id: <20221122151718.4f7ffcb656dd7dc0eceb0ad2@linux-foundation.org>
+In-Reply-To: <Y3xeYF5NipSbBFSZ@feng-clx>
+References: <20221121135024.1655240-1-feng.tang@intel.com>
+        <20221121121938.1f202880ffe6bb18160ef785@linux-foundation.org>
+        <Y3xeYF5NipSbBFSZ@feng-clx>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-22, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> And here is a first cut.  There will be more patches removing uses
-> of CONFIG_SRCU.
->
-> Thoughts?
+On Tue, 22 Nov 2022 13:30:19 +0800 Feng Tang <feng.tang@intel.com> wrote:
 
-I am happy with it. Thanks!
+> > If so, that's always best.  For (silly) example, consider the behaviour
+> > of
+> > 
+> > 	x = is_kmalloc_cache(s++);
+> > 
+> > with and without CONFIG_SLOB.
+> 
+> Another solution I can think of is putting the implementation into
+> slab_common.c, like the below?
 
->     rcu: Make SRCU mandatory
->     
->     Kernels configured with CONFIG_PRINTK=n and CONFIG_SRCU=n get build
->     failures.  This causes trouble for deep embedded systems.  But given
->     that there are more than 25 instances of "select SRCU" in the kernel,
->     it is hard to believe that there are many kernels running in production
->     without SRCU.  This commit therefore makes SRCU mandatory.  The SRCU
->     Kconfig option remains for backwards compatibility, and will be removed
->     when it is no longer used.
->     
->     Reported-by: John Ogness <john.ogness@linutronix.de>
->     Reported-by: Petr Mladek <pmladek@suse.com>
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+I'm not sure that's much of an improvement on the macro :(
 
-Reviewed-by: John Ogness <john.ogness@linutronix.de>
+How about we go with the macro and avoid the
+expression-with-side-effects gotcha (and the potential CONFIG_SLOB=n
+unused-variable gotcha)?  That would involve evaluating the arg within
+the CONFIG_SLOB=y version of the macro.
