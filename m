@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682266336BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08306336B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 09:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiKVILf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 03:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S232517AbiKVILZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 03:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiKVIL2 (ORCPT
+        with ESMTP id S231934AbiKVILW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 03:11:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC43B22504;
-        Tue, 22 Nov 2022 00:11:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E83696157D;
-        Tue, 22 Nov 2022 08:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34386C433D7;
-        Tue, 22 Nov 2022 08:11:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669104685;
-        bh=EPQQOwK7ri32REuTW/k8a/b1T3JLvCaSgiYITbKyPfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gg+GYSG/xWG6ymJX3J6bsCAexrMP0ko0dZ017PEuZ/2xXqqWCkrutCaX9qd7kR612
-         nFF7dXrkTUrDau1huCUyF+btCNRkvpdSCyejzBVpIgzVoTExQI1moRQcT+JA0+ztzB
-         O4MJe+A3N4lqogCefnk5gCxlO156adbYK0P0yi14r+UJnASmFLfoYso5ovpVoRg4+u
-         nuGMqpkqe24NDJ2xXcirfUkXbK+W8WuVkZstlXod6fVK8q0dmH66iJI7c3o+efMQBA
-         P95ZnTWgvkOf7pUb5VFEiO1Py7/BEOmkZQp/6G6+J3cBzXerjV3GFuCTIe8DRuys6W
-         aSC12Ip5/CELg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oxOMp-0005jB-0M; Tue, 22 Nov 2022 09:10:55 +0100
-Date:   Tue, 22 Nov 2022 09:10:55 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: phy: qcom,qmp-usb3-dp: Add sm6350
- compatible
-Message-ID: <Y3yED5jXn7/AwTS5@hovoldconsulting.com>
-References: <20221121075358.76582-1-luca.weiss@fairphone.com>
- <Y3sxqUu0dnaQfdFY@hovoldconsulting.com>
- <COINW4PF8OS8.2QJZZKVL58FJG@otso>
+        Tue, 22 Nov 2022 03:11:22 -0500
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8782622504;
+        Tue, 22 Nov 2022 00:11:21 -0800 (PST)
+Received: from [192.168.10.46] (unknown [130.180.211.218])
+        (Authenticated sender: daniel.lezcano@free.fr)
+        by smtp1-g21.free.fr (Postfix) with ESMTPA id F0F71B00593;
+        Tue, 22 Nov 2022 09:11:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1669104680;
+        bh=TISIpjZ7FC95oehxTvBSrsbcUOCPBMkAO4i/5N4DvUc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VW/dpyUQ8QFT3hzwNvPsqIeixeoH0hxJ45EAbxBGbvn7LABFC9YvKCjnITEAzwc/d
+         pVx+GxLVZi+crhPzyDE0HXHq5zGmz55mn0O3wF+iSbA1s5UcbnnPTrFZ/6bB81vqWq
+         KYPydpJ3sRCL3XQAdCgvtHAE02DoK0OwnAbJu4ldtWJw7oZW1xYBhAxUZ4+kbyGhe6
+         0rULxrVyk/3gQZfIvToQWq3B3GgVk+6j5QWm+xmNsnrzlUCTd00QCsDva8Hy34XLzm
+         SICzbU59uO1I7ZXR5BJFRR1P6qLQJEDHnE4HxSR0bWSev2ggHAIdAo1Xthd8tL2Zwi
+         +g6tzwCopIEiA==
+Message-ID: <973694d5-9a97-2239-be69-8f380d6e7130@free.fr>
+Date:   Tue, 22 Nov 2022 09:11:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <COINW4PF8OS8.2QJZZKVL58FJG@otso>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] clocksource/drivers/arm_arch_timer: Fix XGene-1 TVAL
+ register math error
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Joe Korty <joe.korty@concurrent-rt.com>, stable@vger.kernel.org
+References: <20221121145343.896018-1-maz@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@free.fr>
+In-Reply-To: <20221121145343.896018-1-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 08:55:31AM +0100, Luca Weiss wrote:
-> Hi Johan,
+On 21/11/2022 15:53, Marc Zyngier wrote:
+> From: Joe Korty <joe.korty@concurrent-rt.com>
 > 
-> On Mon Nov 21, 2022 at 9:07 AM CET, Johan Hovold wrote:
-> > On Mon, Nov 21, 2022 at 08:53:55AM +0100, Luca Weiss wrote:
-> > > Add the compatible describing the combo phy found on SM6350.
-> > > 
-> > > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-> > > index 97a7ecafbf85..68aecb638870 100644
-> > > --- a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-> > > +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-> > > @@ -18,6 +18,7 @@ properties:
-> > >        - qcom,sc8180x-qmp-usb3-dp-phy
-> > >        - qcom,sc8280xp-qmp-usb43dp-phy
-> > >        - qcom,sdm845-qmp-usb3-dp-phy
-> > > +      - qcom,sm6350-qmp-usb3-dp-phy
-> > >        - qcom,sm8250-qmp-usb3-dp-phy
-> > >    reg:
-> > >      items:
-> >
-> > The current USB3-DP bindings are broken and we should no be adding
-> > further compatibles here. Please consider rebasing on:
-> >
-> > 	https://lore.kernel.org/all/20221115144005.2478-1-johan+linaro@kernel.org/
+> The TVAL register is 32 bit signed.  Thus only the lower 31 bits are
+> available to specify when an interrupt is to occur at some time in the
+> near future.  Attempting to specify a larger interval with TVAL results
+> in a negative time delta which means the timer fires immediately upon
+> being programmed, rather than firing at that expected future time.
 > 
-> I'm not quite clear what you want me to do. Just rebase this change on
-> top of your patchset and resend or something else?
+> The solution is for Linux to declare that TVAL is a 31 bit register rather
+> than give its true size of 32 bits.  This prevents Linux from programming
+> TVAL with a too-large value.  Note that, prior to 5.16, this little trick
+> was the standard way to handle TVAL in Linux, so there is nothing new
+> happening here on that front.
+> 
+> The softlockup detector hides the issue, because it keeps generating
+> short timer deadlines that are within the scope of the broken timer.
+> 
+> Disable it, and you start using NO_HZ with much longer timer deadlines,
+> which turns into an interrupt flood:
+> 
+>   11: 1124855130  949168462  758009394   76417474  104782230   30210281
+>           310890 1734323687     GICv2  29 Level     arch_timer
+> 
+> And "much longer" isn't that long: it takes less than 43s to underflow
+> TVAL at 50MHz (the frequency of the counter on XGene-1).
+> 
+> Some comments on the v1 version of this patch by Marc Zyngier:
+> 
+>    XGene implements CVAL (a 64bit comparator) in terms of TVAL (a countdown
+>    register) instead of the other way around. TVAL being a 32bit register,
+>    the width of the counter should equally be 32.  However, TVAL is a
+>    *signed* value, and keeps counting down in the negative range once the
+>    timer fires.
+> 
+>    It means that any TVAL value with bit 31 set will fire immediately,
+>    as it cannot be distinguished from an already expired timer. Reducing
+>    the timer range back to a paltry 31 bits papers over the issue.
+> 
+>    Another problem cannot be fixed though, which is that the timer interrupt
+>    *must* be handled within the negative countdown period, or the interrupt
+>    will be lost (TVAL will rollover to a positive value, indicative of a
+>    new timer deadline).
+> 
+> Cc: stable@vger.kernel.org # 5.16+
+> Fixes: 012f18850452 ("clocksource/drivers/arm_arch_timer: Work around broken CVAL implementations")
+> Signed-off-by: Joe Korty <joe.korty@concurrent-rt.com>
+> Reviewed-by: Marc Zyngier <maz@kernel.org>
+> [maz: revamped the commit message]
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Link: https://lore.kernel.org/r/20221024165422.GA51107@zipoli.concurrent-rt.com
+> ---
 
-Yes, you should rebase this series on top of the above, add
-qcom,sm6350-qmp-usb3-dp-phy to the new (sc8280xp) schema, add a
-register offset table for QMP v3 to the PHY driver, and update the dts.
+Applied
 
-Note that the USB/DP configuration structures have been merged (and some
-config fields have already been removed in linux-next).
-
-Johan
