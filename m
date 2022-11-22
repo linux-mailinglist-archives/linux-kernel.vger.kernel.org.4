@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECC1633589
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC82633588
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiKVGzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 01:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S230284AbiKVGzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 01:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiKVGzR (ORCPT
+        with ESMTP id S229553AbiKVGzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 01:55:17 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE0E21269;
-        Mon, 21 Nov 2022 22:55:16 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id x21so16880343ljg.10;
-        Mon, 21 Nov 2022 22:55:16 -0800 (PST)
+        Tue, 22 Nov 2022 01:55:16 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0838F2018C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 22:55:15 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id fz10so8757877qtb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 22:55:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k92tQx0fKvMHg8ehwzrCax9mbJ5igeyBODg7YXcY9LY=;
-        b=MCJzztH1tGB9H8F2GdjiLIHJhDpNwjfLQ2xfN/Thx41yzYyieGXV24yZPyhb2klKnu
-         Bh3OXUBzl9pBN1ONCYOAvqzyPJeeqpNYFyrt6QZIxpDpevhSOSdol3Sf2cN2r957kjGq
-         a0BMJ+EHaGjkG1uboL0+mdGo38BeyIeoTXg4gFfpu9kNZudYfHDqx/pLPvXySD3W8vZT
-         jnB+M7P6PySzVAaWDsqBr8tq36zkFXekm+N5oBvKPZWZ0G2QNzVH2u2Ou6Cy4pmlUIU8
-         6bNVaLG/VNclIH+rC3oorw7tPf1i/pOcnE9xg41NBKs4iPnWJkHXlcspQrK55OwkI9HP
-         RsHg==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mYAqDDk/54FmeYnzSCfE4ubLGzPeGRlE3OkG0R3fi1g=;
+        b=0RLPsjsq8XFYFsbBP31qFJbsIjbs3BM99Hd75XBgqLbKxUqoZYlpPLWpIu4K7iAZsv
+         KDQoslmgNXaijNZMlDhzaIxhg47IL8/8frC1xBQcmS2HqfZH/6IaGb43LzLTqw0U8OoH
+         tlFJX/1st+DaU+CjYO3toBQqOhCyPMaYaI5dXW00F76nvY2xK4jIhi4AjA4EhPVnBIwY
+         6RorVI7v7SFsbixEWrgw7ilExM8XtSYriWyNCAlCdPrvWXVNadIoKpTqi+mGhP1qGPen
+         AL1uX7jTAc2Hd2OGYxYua2oCEhkSy+bPWR8kLdIrt/yhJp1pW/PX1my5Ob+oJbw2gr6x
+         QWjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k92tQx0fKvMHg8ehwzrCax9mbJ5igeyBODg7YXcY9LY=;
-        b=HnwS95yBzVXToNAfSenT+LLAJO+S/SI4FHyzB6ZYcjJIOAWItXtuwCWBBzPbY9f7U5
-         bJb6PTEZYLzMFKkqmHI7ChRVtz4nN4dNnYKxYhB7ihkay/WJiiJrBzleU2x+zQQKv6bt
-         i+pDwygj7SsuqmKnwScRwOxGvhUMUpW8s5otZg16zz6jxien7O/qaV4Al9kKYm6x5+HE
-         8M2PpCPVuPfzkwlLpVcYcDN9J8xt5lauiK9DZqLqGfZsiEy2xFtpkxqNj0+qIfy8LUhc
-         Hcyn/I/wHLfX+9cWLTJ5WTFYQq37Sohl26iQBZztQp+bvDviJtHwtC2lmc/9Q7nUowDe
-         Ym9Q==
-X-Gm-Message-State: ANoB5plHhNfOXLo5cdHmPD2Qzf7hwY6Js1CdbRyjKpp+CsMCGUo5uFSH
-        RvxIpehinNWQ7I2CBgYAJOk=
-X-Google-Smtp-Source: AA0mqf6qHmQ0prd/luuvk1GCvOoem5e38+FoV0+YK3zXpsgjInhLjVtBUX2+C4i0tcPGQULi/+/ErA==
-X-Received: by 2002:a2e:bd05:0:b0:277:6ad:b2fa with SMTP id n5-20020a2ebd05000000b0027706adb2famr2484099ljq.24.1669100114212;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mYAqDDk/54FmeYnzSCfE4ubLGzPeGRlE3OkG0R3fi1g=;
+        b=qzuWkIK5ngDd9Sbe5aLiKuy30GKY66DxWPHJrFV9RbeWtlzhirgZ67lxrTrUgFm6Zr
+         o+j8hZOC8IOZJoEXbc/6+BsfRs35VIoYWs5V1J5CELc6Hdhivj2knYZHpGCvwTIQ5TIy
+         20aoT/pDLeDJ3SHSV08AFRIaEKsrxZyr1qfLvmsqdbp9WPz6hyisvk6VBT7hgP8oPehS
+         2W1dAhUp9Ov55QbtRFSF+2oz5oQ2PTp5ydFmSNC7YmDNd5AZm/8iW95F8Uhz2+gkBlK+
+         Anqvk474dtdl9XtgInP4PlAqN5Gn+NqkB1A83GP6fNzI3agIvYIvjRwSDQyUJ4aOiCX9
+         GCSA==
+X-Gm-Message-State: ANoB5pmWHvOWWG9dRcgd3lPzrrriWY0ZKI22d8MDhfJsuDQOmAoX9IN3
+        n5rFAwjwMGYO54SXzz2j6ecUiw==
+X-Google-Smtp-Source: AA0mqf4P6pkD5sHhG+0KqzdmxYPTWy5bEJgBXaYTAAGJzSjBw9ZV52sjvx8xr6k9OKWhuzqNzcWbAw==
+X-Received: by 2002:a05:622a:5a96:b0:3a6:3b3a:e8cc with SMTP id fz22-20020a05622a5a9600b003a63b3ae8ccmr11975315qtb.373.1669100114196;
         Mon, 21 Nov 2022 22:55:14 -0800 (PST)
-Received: from mkor.rasu.local ([212.22.67.162])
-        by smtp.gmail.com with ESMTPSA id x10-20020a19f60a000000b00494935ddb88sm2355803lfe.240.2022.11.21.22.55.13
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id bl9-20020a05622a244900b0038b684a1642sm7888922qtb.32.2022.11.21.22.55.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 21 Nov 2022 22:55:13 -0800 (PST)
-From:   Maxim Korotkov <korotkov.maxim.s@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Maxim Korotkov <korotkov.maxim.s@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "Keller, Jacob E" <jacob.e.keller@intel.com>,
-        Tom Rix <trix@redhat.com>, Marco Bonelli <marco@mebeim.net>,
-        Edward Cree <ecree@solarflare.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH v2] ethtool: avoiding integer overflow in ethtool_phys_id()
-Date:   Tue, 22 Nov 2022 09:54:23 +0300
-Message-Id: <20221122065423.19458-1-korotkov.maxim.s@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Date:   Tue, 22 Nov 2022 01:55:39 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
+Message-ID: <Y3xya5802BhoFin0@cmpxchg.org>
+References: <5f52de70-975-e94f-f141-543765736181@google.com>
+ <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com>
+ <20221121165938.oid3pemsfkaeq3ws@google.com>
+ <Y3vI58VtjiAkorUX@cmpxchg.org>
+ <Y3xk1hX5QrCZMT4q@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3xk1hX5QrCZMT4q@casper.infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,32 +90,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The value of an arithmetic expression "n * id.data" is subject
-to possible overflow due to a failure to cast operands to a larger data
-type before performing arithmetic. Used macro for multiplication instead
-operator for avoiding overflow.
+On Tue, Nov 22, 2022 at 05:57:42AM +0000, Matthew Wilcox wrote:
+> On Mon, Nov 21, 2022 at 01:52:23PM -0500, Johannes Weiner wrote:
+> > That leaves clearing writeback. This can't hold the page lock due to
+> > the atomic context, so currently we need to take lock_page_memcg() as
+> > the lock of last resort.
+> > 
+> > I wonder if we can have cgroup take the xalock instead: writeback
+> > ending on file pages always acquires the xarray lock. Swap writeback
+> > currently doesn't, but we could make it so (swap_address_space).
+> > 
+> > The only thing that gives me pause is the !mapping check in
+> > __folio_end_writeback. File and swapcache pages usually have mappings,
+> > and truncation waits for writeback to finish before axing
+> > page->mapping. So AFAICS this can only happen if we call end_writeback
+> > on something that isn't under writeback - in which case the test_clear
+> > will fail and we don't update the stats anyway. But I want to be sure.
+> > 
+> > Does anybody know from the top of their heads if a page under
+> > writeback could be without a mapping in some weird cornercase?
+> 
+> I can't think of such a corner case.  We should always wait for
+> writeback to finish before removing the page from the page cache;
+> the writeback bit used to be (and kind of still is) an implicit
+> reference to the page, which means that we can't remove the page
+> cache's reference to the page without waiting for writeback.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Great, thanks!
 
-Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
----
- net/ethtool/ioctl.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> > If we could ensure that the NR_WRITEBACK decs are always protected by
+> > the xalock, we could grab it from mem_cgroup_move_account(), and then
+> > kill lock_page_memcg() altogether.
+> 
+> I'm not thrilled by this idea, but I'm not going to veto it.
 
-diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-index 6a7308de192d..f845e8be4d7c 100644
---- a/net/ethtool/ioctl.c
-+++ b/net/ethtool/ioctl.c
-@@ -2007,7 +2007,8 @@ static int ethtool_phys_id(struct net_device *dev, void __user *useraddr)
- 	} else {
- 		/* Driver expects to be called at twice the frequency in rc */
- 		int n = rc * 2, interval = HZ / n;
--		u64 count = n * id.data, i = 0;
-+		u64 count = mul_u32_u32(n,id.data);
-+		u64 i = 0;
- 
- 		do {
- 			rtnl_lock();
--- 
-2.17.1
+Ok, I'm also happy to drop this one.
 
+Certainly, the rmap one is the lowest-hanging fruit. I have the patch
+rebased against Hugh's series in mm-unstable; I'll wait for that to
+settle down, and then send an updated version to Andrew.
