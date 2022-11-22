@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36EE6349C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6A66349CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 23:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbiKVWGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 17:06:24 -0500
+        id S235060AbiKVWGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 17:06:33 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbiKVWGO (ORCPT
+        with ESMTP id S235156AbiKVWGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 17:06:14 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D173C7220
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:06:11 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id d192so15670532pfd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:06:11 -0800 (PST)
+        Tue, 22 Nov 2022 17:06:18 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AFFC7212
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:06:17 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id v28so15607581pfi.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 14:06:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MTwasftcYWGoOTE8NtdjlLPhFZo1K5FqzfQnri8pWqI=;
-        b=MsUJ2I6a4ufk8VL80LUg7X5dz5P321MFBR9qAYp30CBw34Zi5yXn1JbMB8zoTZH/gF
-         /vsTmHEWlIPIv7UADILPslwaI1eenMfK56llyah7PRD2FOw3ucNeO+1NeLGaElmW1ykU
-         JgzwzMMkr+ZM/kFNBtARIq6ALHXvreLLjKKUU=
+        bh=G2cfSN1kgZzRzJ6XKptvh9cmk5InXjmHdGYFjwKt+CY=;
+        b=Gf538M7G4fwP+edrCEnC1Y2/ZGyZwVr9nyc+6qCo64Sw5Ip01KNmQoCWjbabYRgX0Q
+         e1bqKvuoxHFYptZnI1X7utko1R5diccxqKmhigd6cixmgSnesF/kGYZ4QnN8BftRlN0Q
+         e++I4Ob8oO8dtXbSw0sP5PdtW7aJEzEVZYAII=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MTwasftcYWGoOTE8NtdjlLPhFZo1K5FqzfQnri8pWqI=;
-        b=OaW/dy3yBVFD6BSjFk5DeV2I2duwFuO/lyjjd4BcW7KZMuSqZyId3gYfe1TinhSuPc
-         zlDJuoIIT9Nzch4TKMCSezfH+jo8POxuccgRtPrI66n/3wbed6zWaP4y85psUFXFcWv5
-         BCa5BPN1OlK7yde2wBIu1QHyJKREfA/OwJow5gzP0och+Nys38AV9cwm8Wb0fV+eYLXj
-         M8tfLtxDIdfFnpR+Mssxvzmb7BonyPARzDSepiEBO92PHIwmTSGdJdN67yateuGX080D
-         H8d1v06NaoNUjUFAXW4S31gC9Z0D9gViZ6gjekwfrmErFSZchqkt6DNh/V3DycBLeo6m
-         Ltbw==
-X-Gm-Message-State: ANoB5pn+WZek3ck5rM6hOQBVokEm3vnrLCeNpAUzK8Or7TXSsYQAu7K1
-        X3DzzqM3OJyuux7Ici61t6YYjEXEGom12w==
-X-Google-Smtp-Source: AA0mqf6IASzDx6pIfEcciVvIvI7Vqy/uQHA9epznnO2/2iUSYy8BgdxIjZtO+aSu/RHhtUPo9hVpww==
-X-Received: by 2002:aa7:9159:0:b0:572:24c7:34da with SMTP id 25-20020aa79159000000b0057224c734damr5946459pfi.73.1669154770592;
-        Tue, 22 Nov 2022 14:06:10 -0800 (PST)
+        bh=G2cfSN1kgZzRzJ6XKptvh9cmk5InXjmHdGYFjwKt+CY=;
+        b=yZq5YJbA+UCedYHv0/ae5bqx1azk5ASb6Lx1URe+OR4ean9ZVH5yRBZQbRwMIE4VnD
+         pUZl/lS43am4K7a9EMqqMQDVwiw/OFJNZiEne9oapjxelgYKOvMbGzsFIe2KRQg4CNlF
+         yVReXYMNo8SKH3/yHN6nZO3G2c9KwtC+DEwXbkyEXjr8q28/vCo6thSZuNqPNu9OBG8u
+         +Rph7zY3AOfs8n95QIUHZt6hKSWmLW0kJ0/Kx/MhdEx8Vl3Q7wbYsXK0+YvMgZoUs3ZF
+         gdbMublWZ58qg0DGrJTiWRpq97UajIWXCkGCXAJAKkb8nKxBzRme8I/oUMIhx5BFfDBl
+         CzUw==
+X-Gm-Message-State: ANoB5pno06eJXCJo9ZORX0WOxUyOy+cI94ceAh4nD1eZ8LUBdG9pPPOM
+        37G1NCP2rwJETx4Zz5vCnOFxmEPuHL6Y3g==
+X-Google-Smtp-Source: AA0mqf6EwM9Hd8/cnPMD9sYsgVHpc52kVnzKPkEeBVdjtRQRTPfKkOsTCHxgYhVmek++4mJ2UPxcyg==
+X-Received: by 2002:a63:5724:0:b0:46f:9c0c:8674 with SMTP id l36-20020a635724000000b0046f9c0c8674mr7692092pgb.26.1669154777162;
+        Tue, 22 Nov 2022 14:06:17 -0800 (PST)
 Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id i24-20020a63e458000000b0042988a04bfdsm9640497pgk.9.2022.11.22.14.06.10
+        by smtp.gmail.com with ESMTPSA id i24-20020a63e458000000b0042988a04bfdsm9640497pgk.9.2022.11.22.14.06.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 14:06:10 -0800 (PST)
+        Tue, 22 Nov 2022 14:06:16 -0800 (PST)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         chrome-platform@lists.linux.dev
 Cc:     Prashant Malani <pmalani@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <groeck@chromium.org>
-Subject: [PATCH v2 1/2] usb: typec: Add partner PD object wrapper
-Date:   Tue, 22 Nov 2022 22:05:36 +0000
-Message-Id: <20221122220538.2991775-2-pmalani@chromium.org>
+Subject: [PATCH v2 2/2] platform/chrome: cros_ec_typec: Set parent of partner PD object
+Date:   Tue, 22 Nov 2022 22:05:37 +0000
+Message-Id: <20221122220538.2991775-3-pmalani@chromium.org>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 In-Reply-To: <20221122220538.2991775-1-pmalani@chromium.org>
 References: <20221122220538.2991775-1-pmalani@chromium.org>
@@ -73,77 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some port drivers may want to set a Type-C partner as a parent for a
-USB Power Delivery object, but the Type-C partner struct isn't exposed
-outside of the Type-C class driver. Add a wrapper to
-usb_power_delivery_register() which sets the provided Type-C partner
-as a parent to the USB PD object. This helps to avoid exposing the
-Type-C partner's device struct unnecessarily.
+In order to tell what Type-C device a PD object belongs to, its parent
+needs to be set. Use the Type-C partner USB PD registration wrapper
+to set the parent appropriately for PD objects which are created for
+connected Type-C partners.
 
-Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: Benson Leung <bleung@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Signed-off-by: Prashant Malani <pmalani@chromium.org>
 ---
 
 Changes since v1:
-- Patch first introduced in v2.
+- Use wrapper function introduced in Patch1 (v2).
+- Update commit message to reflect that we are using the wrapper.
 
- drivers/usb/typec/class.c | 19 +++++++++++++++++++
- include/linux/usb/typec.h |  4 ++++
- 2 files changed, 23 insertions(+)
+ drivers/platform/chrome/cros_ec_typec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index bd5e5dd70431..5897905cb4f0 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -821,6 +821,25 @@ void typec_partner_set_svdm_version(struct typec_partner *partner,
- }
- EXPORT_SYMBOL_GPL(typec_partner_set_svdm_version);
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index 2a7ff14dc37e..d5bc4021aca2 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -968,7 +968,7 @@ static void cros_typec_register_partner_pdos(struct cros_typec_data *typec,
+ 	if (!resp->source_cap_count && !resp->sink_cap_count)
+ 		return;
  
-+/**
-+ * typec_partner_usb_power_delivery_register - Register Type-C partner USB Power Delivery Support
-+ * @partner: Type-C partner device.
-+ * @desc: Description of the USB PD contract.
-+ *
-+ * This routine is a wrapper around usb_power_delivery_register(). It registers
-+ * USB Power Delivery Capabilities for a Type-C partner device. Specifically,
-+ * it sets the Type-C partner device as a parent for the resulting USB Power Delivery object.
-+ *
-+ * Returns handle to struct usb_power_delivery or ERR_PTR.
-+ */
-+struct usb_power_delivery *
-+typec_partner_usb_power_delivery_register(struct typec_partner *partner,
-+					  struct usb_power_delivery_desc *desc)
-+{
-+	return usb_power_delivery_register(&partner->dev, desc);
-+}
-+EXPORT_SYMBOL_GPL(typec_partner_usb_power_delivery_register);
-+
- /**
-  * typec_register_partner - Register a USB Type-C Partner
-  * @port: The USB Type-C Port the partner is connected to
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index 7751bedcae5d..8fa781207970 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -23,6 +23,7 @@ struct fwnode_handle;
- struct device;
- 
- struct usb_power_delivery;
-+struct usb_power_delivery_desc;
- 
- enum typec_port_type {
- 	TYPEC_PORT_SRC,
-@@ -327,6 +328,9 @@ void typec_partner_set_svdm_version(struct typec_partner *partner,
- 				    enum usb_pd_svdm_ver svdm_version);
- int typec_get_negotiated_svdm_version(struct typec_port *port);
- 
-+struct usb_power_delivery *typec_partner_usb_power_delivery_register(struct typec_partner *partner,
-+							struct usb_power_delivery_desc *desc);
-+
- int typec_port_set_usb_power_delivery(struct typec_port *port, struct usb_power_delivery *pd);
- int typec_partner_set_usb_power_delivery(struct typec_partner *partner,
- 					 struct usb_power_delivery *pd);
+-	port->partner_pd = usb_power_delivery_register(NULL, &desc);
++	port->partner_pd = typec_partner_usb_power_delivery_register(port->partner, &desc);
+ 	if (IS_ERR(port->partner_pd)) {
+ 		dev_warn(typec->dev, "Failed to register partner PD device, port: %d\n", port_num);
+ 		return;
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
