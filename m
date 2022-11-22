@@ -2,102 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8989C6340E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB526340EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233985AbiKVQHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
+        id S233999AbiKVQJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 11:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbiKVQGz (ORCPT
+        with ESMTP id S233004AbiKVQJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:06:55 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD5C266B;
-        Tue, 22 Nov 2022 08:06:53 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id cl5so25444523wrb.9;
-        Tue, 22 Nov 2022 08:06:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3ZbcLc1NbGI1l/6+xkDi6hPkSMpf2+osKsmf8F3UIjE=;
-        b=LCAPKLYWy0dhVyuIq+iK/LWvJaCX8mYkUgi+Q41DQscfJHn8cGkcVGgi9NSWMkbRH4
-         pGisczbWhz9o/4XJyA8xM9YGJSHuF50Qow+nDACZfJBLmLg/b0958oEwXRIRdEMG1fnL
-         HVh7a5QJm21LR6HAi4SDA5+eYH6vEoPCp/jCWRJXkLQzsUSkTzYAaxUxmIL6r9jcD4Tl
-         z4xPxxP1jWfsRpMVrH67zReB/S2kfZTins4DFH8k4eSiJusUa8eDEM3TBgceVwcEJlzR
-         BhhPFxKagG8uglWBZc5FJu1zotcEmI+KnZsEa29dvaFWY44wZVTCwudqE2TzDdezMSfW
-         Otuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3ZbcLc1NbGI1l/6+xkDi6hPkSMpf2+osKsmf8F3UIjE=;
-        b=PdhqS567wvmHbXg0abanrYp0P9dPUZwyKvc7C9UiMtNzdXVH9S4RFjlrrYE67/nNq1
-         vzLm64tUxY+0Tpn0bY2Z1sb6Uap4aG+jMgeTFfzRCIfb+GY72peclr0Ruyjs3rSv+X+J
-         pXrrqtosy4TSLD8hHj2UE0LAGAqhEQrLXyQ9QrM6geAEn3u/vwrejVWZOrpYef8S3vu2
-         yLPNkc8+/Cgxx6Zam8Y7zyah+Rpke+ZFs/a/+2XJMp1RcZxIVYsAESbgqcrCAxw3lQFX
-         kD6r6M5V8w+5Roe+TAXyrdZZCPeRDm3cZhUJWHDS4gm8RI4eZMIejLXluupm+W+dkGWX
-         KrRA==
-X-Gm-Message-State: ANoB5pnvHFrmgA5vjFy43Q1S2I6ZcAe8zCcfY90mNoFYvO2Wu3JP86Ft
-        nyoOHhSrhtoSWIZvo0ke4O8=
-X-Google-Smtp-Source: AA0mqf6q95ydA4o3WRI6W+Zm3qAD1Y8jZSn4otxBzjVGODu/y8GD4h5KA+8YMBGH6dZhyw2bGHzRag==
-X-Received: by 2002:adf:f612:0:b0:22e:5d66:dc5d with SMTP id t18-20020adff612000000b0022e5d66dc5dmr8876203wrp.175.1669133212263;
-        Tue, 22 Nov 2022 08:06:52 -0800 (PST)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id d7-20020adffbc7000000b00236c1f2cecesm16870029wrs.81.2022.11.22.08.06.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 08:06:51 -0800 (PST)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: Re: [PATCH v3 1/2] usb: serial: add support for CH348
-Date:   Tue, 22 Nov 2022 17:06:50 +0100
-Message-ID: <8903614.NSr7dpRq1j@archbook>
-In-Reply-To: <20221114073736.672194-2-clabbe@baylibre.com>
-References: <20221114073736.672194-1-clabbe@baylibre.com> <20221114073736.672194-2-clabbe@baylibre.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 11:09:10 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5461E59FE8;
+        Tue, 22 Nov 2022 08:09:09 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id C39C95C0227;
+        Tue, 22 Nov 2022 11:09:03 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 22 Nov 2022 11:09:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1669133343; x=1669219743; bh=wZK3t3HJow
+        uFDWWGw35sZXrKQvEJ+7CgMyEoa9LFdzU=; b=VJe90TpP8RTK/QIc9GYtYkcCUZ
+        +dEh/AVzio7FnM6vOUOGILTy/lJLNmo0eUoaRKaNX7wOMNDcj6PGsLzJdTKWIA1Y
+        ocL6zpc+LmWdC42Rv+vRiDp2qo+rMK/XIxkUIA5/5B6moDqi3JA2tIArMAXKVI5Z
+        y+w/3ANCtq+anryHgvhan6n7FNKAI/qagkicw5BqSnF58oR1uRSOIDcIKbBJvlMv
+        8ZR2kkDXqeCR8yMqw3O1QlH3/xQV1iEva4MJPhWidiQLRRPDRbN/CRPDtgEGRn+r
+        yKO+X6qSrDfHn9eMGl51NT10Fy43tHcDMYXosb/i32a5tteD94Bvm/dzxYZA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669133343; x=1669219743; bh=wZK3t3HJowuFDWWGw35sZXrKQvEJ
+        +7CgMyEoa9LFdzU=; b=syTAPF1p89+UW5y1g6ux+3sD01Vq+0vTrH29QD0K56Q4
+        4qlJyDdoP4QdH+3Ne2ukfRXOs7dE9f7PsBchYaHujQSBiQGEfTLGY5WNP/LhSLiw
+        MhJwu+fXEAtn8IjpK5r+Jf+vMNN88ucamngzqACpvy7pcDIUgDeVr9jnTS0TnTio
+        QmG/fCHy9SSCmedyJ9CvT07WXj4nSYJGyRGfCmfu/DUze087J3thanMdugavbvmx
+        ZHfEynqK8XaTfHt+MySem8E94qwhF34IVcJUNto3y7UGAM5raXJ3PC5Z+AbpqmhS
+        Ho3RpZX55HGGjD9p/Ymsed1kWAJOOk7g416Ej2kZUQ==
+X-ME-Sender: <xms:HPR8Y59nahcNQlPbRSw2ZhLllrILxCqX4KptV1oAoRkZtWv-E8kglA>
+    <xme:HPR8Y9sU8UHwlomzmoxPTqd5rvcLHOKcu0mnpWMfPIzxkrAT4b03uBHVruJqPCS7i
+    zanDoEMJKY0BG5n52o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheelgdehhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:HPR8Y3D7psfHuByn00UQVGrx961x3zFJEapQKjIcu3rqRI0b0FHAVg>
+    <xmx:HPR8Y9caIzjjfd0VGUuHaKuBB5_Gb6nO8tKKXtbIUeRx87TMG_X65A>
+    <xmx:HPR8Y-Nbh92Kn4Jb2763cnBuB_dd-6WEXdFdZZ3oGRzggfFjaOOV3g>
+    <xmx:H_R8Y612vjXIUfBgPxm_w4drjL-43f0_z7tiu2wiEghZoXvTUB-yvA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 76F69B6008D; Tue, 22 Nov 2022 11:09:00 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <9ef883a8-6832-4242-8687-0a07ef8f99d2@app.fastmail.com>
+In-Reply-To: <20221121171202.22080-13-vbabka@suse.cz>
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-13-vbabka@suse.cz>
+Date:   Tue, 22 Nov 2022 17:08:38 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Vlastimil Babka" <vbabka@suse.cz>,
+        "Christoph Lameter" <cl@linux.com>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Pekka Enberg" <penberg@kernel.org>
+Cc:     "Hyeonggon Yoo" <42.hyeyoo@gmail.com>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Matthew Wilcox" <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+        "Tony Lindgren" <tony@atomide.com>,
+        "Jonas Bonn" <jonas@southpole.se>,
+        "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        "Rich Felker" <dalias@libc.org>,
+        "Josh Triplett" <josh@joshtriplett.org>,
+        "Conor Dooley" <conor@kernel.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org
+Subject: Re: [PATCH 12/12] mm, slob: rename CONFIG_SLOB to CONFIG_SLOB_DEPRECATED
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 14. November 2022 08:37:35 CET Corentin Labbe wrote:
-> The CH348 is an USB octo port serial adapter.
-> This patch adds support for it.
-> 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+On Mon, Nov 21, 2022, at 18:12, Vlastimil Babka wrote:
+> As explained in [1], we would like to remove SLOB if possible.
 > ---
->  drivers/usb/serial/Kconfig  |   9 +
->  drivers/usb/serial/Makefile |   1 +
->  drivers/usb/serial/ch348.c  | 739 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 749 insertions(+)
->  create mode 100644 drivers/usb/serial/ch348.c
-> 
+>  arch/arm/configs/clps711x_defconfig            |  3 ++-
+>  arch/arm/configs/collie_defconfig              |  3 ++-
+>  arch/arm/configs/multi_v4t_defconfig           |  3 ++-
+>  arch/arm/configs/omap1_defconfig               |  3 ++-
+>  arch/arm/configs/pxa_defconfig                 |  3 ++-
+>  arch/arm/configs/tct_hammer_defconfig          |  3 ++-
+>  arch/arm/configs/xcep_defconfig                |  3 ++-
 
-Hello,
+These all seem fine to convert to SLUB_TINY
 
-Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+It might be a good idea to go through the arm defconfigs after
+6.2 (which will remove a bunch of them) and check which of
+the others should use it as well, but that of course is
+unrelated to the mechanical conversion you do here.
 
-Tested this on one port at 1.5mbaud/3.3V on a little board I
-designed myself, thank you very much for upstreaming this!
-
-I'll try to test more ports connected at the same time in the
-coming days, but right now it looks like everything is working
-as it should.
-
-Regards,
-Nicolas Frattaroli
-
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
