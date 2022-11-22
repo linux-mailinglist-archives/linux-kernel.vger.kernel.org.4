@@ -2,221 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04062633956
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671BD633972
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbiKVKHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S233265AbiKVKMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiKVKHq (ORCPT
+        with ESMTP id S232645AbiKVKLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:07:46 -0500
-Received: from mx0b-00549402.pphosted.com (mx0b-00549402.pphosted.com [205.220.178.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04FCA44B;
-        Tue, 22 Nov 2022 02:07:41 -0800 (PST)
-Received: from pps.filterd (m0233779.ppops.net [127.0.0.1])
-        by mx0b-00549402.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AM9L3gt025276;
-        Tue, 22 Nov 2022 10:07:03 GMT
-Received: from deu01-be0-obe.outbound.protection.outlook.com (mail-be0deu01lp2170.outbound.protection.outlook.com [104.47.7.170])
-        by mx0b-00549402.pphosted.com (PPS) with ESMTPS id 3kxrghhyex-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Nov 2022 10:07:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jND6P7Z6vpr5dAf6lgOVDfGBOYE2PAoey36iUE7J6ywg6focAm1s5wGoUh84+BArvjSVzFslsku97ZEzsMO6K5bfuG8RoRxgzqB8RJdJPjY0zKcBY1yHfetSgzgOIkmv1iZYVpRXkraxMqDoUk/e07/vjdPPD2tktTShIrnnGtDM/lIiAua+nG0G6o2AqB7AmkaeGkRgntoe0RhARP96bZXbe2lFAzqIvJtMX1cqT8FJFBfhs99spci9j8sPefLr3Ul8b5QGgflqD26ncjVATjmvFvsk917olfk2oeWZmjI0U1A6vknrbNyUU9zNWrFDAOCVUzmoxkyQ/NvA0M1hzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UjJGTPGn2pldtrVhkZ+Go8l+C5SPBS7pv2f3L7+qEKs=;
- b=Ayy1UNycVOo8u+hAqgus391L3kUFeB9/RxwNVLgKM9lctR2Rm2RvobH40Y4Q31gi0mKqu1HbMIHVjMvRNCnRCgYXWMoUNFouqW+XqMPwrsCeo/UpikqBYSGZfiE1zFhkOoFPnSgfdv3jeOstPuC9M1h77neKspf0OpqDsQSGNZrSWPQ7VWkHvzO1BNFou5hkUkgnRgu5sC8ize/zf5Jmv3s0tI19z0bcFeeVL0hGnNDEPZcgWlmyi7Qli+FlnReBpgqNtP8QdQxI6JIPYiTFDaIyrJsPTHwKNGePWwLPbXlNdYNb3Xjv8fC1rizkdKxwVVmt9Mwss+nKCd820FjlhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=tdk.com; dmarc=pass action=none header.from=tdk.com; dkim=pass
- header.d=tdk.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tdk.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UjJGTPGn2pldtrVhkZ+Go8l+C5SPBS7pv2f3L7+qEKs=;
- b=a3KkHgN/AwmIxjXILCPpZ+7ynr4f4pqbBwIV5rWKlqhgl4F+/cFJSzHAZsbuNy98kaoGHrG1OVPDuXroRqqBJRwn5t3mishcN6l3ogryGaKrUjcbKOesziJ/I5wqatJtTGeplt5PDejD2xIH9Wt3NI1wJl7dFrEsFwOElOTG7MNGBC8xFi8Su7/pGFTgkDz+EEsbTBlpNCbEESvXuZ2CMerx+0Z+x0HUP+je7piXL0HqQedWdER7sTogHCotUAcX7GM6UQBKhzahm1P8ETG1uTSOqFrhig9TvcViygRKSZ1eyHLi3gCfX/CZPC3mO1CAg7YboZrRe1CQWjvJndcuRQ==
-Received: from FR3P281MB1757.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:7c::11)
- by FR2P281MB2875.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:68::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 10:06:57 +0000
-Received: from FR3P281MB1757.DEUP281.PROD.OUTLOOK.COM
- ([fe80::5fdb:b2bf:a02d:80c9]) by FR3P281MB1757.DEUP281.PROD.OUTLOOK.COM
- ([fe80::5fdb:b2bf:a02d:80c9%5]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
- 10:06:56 +0000
-From:   Jean-Baptiste Maneyrol <Jean-Baptiste.Maneyrol@tdk.com>
-To:     =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Michael Srba <Michael.Srba@seznam.cz>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 109/606] iio: imu: inv_mpu6050: Convert to i2c's
- .probe_new()
-Thread-Topic: [PATCH 109/606] iio: imu: inv_mpu6050: Convert to i2c's
- .probe_new()
-Thread-Index: AQHY+5+tPwx+5WJP2EGA2M4jnJOfJK5KvEBd
-Date:   Tue, 22 Nov 2022 10:06:56 +0000
-Message-ID: <FR3P281MB1757B43210DEA557962CF9B5CE0D9@FR3P281MB1757.DEUP281.PROD.OUTLOOK.COM>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-110-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-110-uwe@kleine-koenig.org>
-Accept-Language: en-US, fr-FR
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: FR3P281MB1757:EE_|FR2P281MB2875:EE_
-x-ms-office365-filtering-correlation-id: 446bccca-c31d-4574-2e26-08dacc7149d1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ooijYY5WPMMm/cZHOFGw9sXvwVjHUdq/I2EotTSx24nS+1uWUWKNXYuucPG8FdT7Tzeq0oA0S43TrpuuWpC2SexSFiMzJPFAVd2bXQm1Gbeu4/WnOfHEk519Qy4SdYNBNoBanoveRjGwa6z0pPoHtjJX3J4TkMyECTDTaUIm+GTh/Qzi/po5ggSddEnMQyOxDE/xkuVe+Vwe4lb1Iwh+H+lJ7+nXiIAwK7x09nmAVgySt5AXuX13tYJBIv9ts5thIY4hfOkcY9Qm8PEj/S9DI+CYuTc1HQiTWNHDp/MRQGCBsgadYl2PYc0ei2Fbu5cVSokKIqM6SjZQ4h2Ej5q/dnwbWyRxoRU41YcLLu7P3iQCPiF3I+v6Syhyw094rk3OoZaqXYVqpHjiTzV27B9/wulzqtdObpa3HS5GI/E+Z6SniIpuuG5tkws2d+u11u8T8ZOgOdqneOaBv5aAxYJ/ZTJr1zYx3taKuE1S1l9Mjb2BuPLoBmhIP5YGg2PK+3tflYxAVDrkPwmOwcci3a0xvePulSlcf0/6Gba5QBMUvkFX4zXw2toBjx5bdzP41K/CIJgmUdq3KW8rZmayDiWUCis9qdtJQZJXOl0g+UWDaosSkSZv7zS3TZT2OP2gcP3lqcnCzPi5nN7D9WIkH37Hhdp+GjKysFYKqFN5ijzgOGcTcuyziP8FUUllWYkGCToGCdkmjack11TrxTXbXyjqYfnSPdnpfYKQLw+IxsniSHk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR3P281MB1757.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(39850400004)(376002)(346002)(366004)(451199015)(71200400001)(478600001)(38070700005)(6506007)(53546011)(7696005)(9686003)(83380400001)(2906002)(41300700001)(76116006)(122000001)(38100700002)(86362001)(54906003)(8676002)(4326008)(66476007)(66556008)(64756008)(91956017)(66446008)(316002)(66946007)(8936002)(66574015)(110136005)(5660300002)(7416002)(55016003)(52536014)(186003)(33656002)(142923001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?7WBrVpU4YO6BMbXMdhJWPd0jZGMyMh/qOQXljx/KXilH7EIZxyeyiOYcN/?=
- =?iso-8859-1?Q?iQ8+bEYwK7BvBT4A5sIWnQbT+fGQ6tQ2uTF+m11WqHSNIKEoXChJajRceb?=
- =?iso-8859-1?Q?uWpSa6eQYa4V4OufgikrDFjAMrqY0Eo0L/G/D/+WW9YRa4erBAAl56uOQ5?=
- =?iso-8859-1?Q?ZBkQN7nk8n8GLRcn6fWfKs1JIVIFj4OapcYPG17nHCMypchhLkQnNE/KL6?=
- =?iso-8859-1?Q?HMIseHbPqxpphnbIVOP0T+da3Lp9v+qe4YHdNzeRwBYeakAjCq4aqdopzs?=
- =?iso-8859-1?Q?HkrF1Z2Vit4k4OObyBHegvOxbqRoTVMwiYfsbcOY5DRYuZdvj7q+gT+Oq4?=
- =?iso-8859-1?Q?5pPrNGrIzOUaBzVS7fy+NSmnRin2vHZNNQLpVQIfIENS0aS1z3NNqJunAF?=
- =?iso-8859-1?Q?6EyaLSu1nx2ESHqhkCUUqSbkS7f9UYnMzhZ7O1ACztdVz0oaNfGGQ5YUiQ?=
- =?iso-8859-1?Q?T60oq7dzkOvQiltqRN81kzwzkrYubyIbLvepVte7wEkE/yUwvQDlrCkV4x?=
- =?iso-8859-1?Q?5jNLJ8K0bBXl1DrtPiT8CYIActojyTHsOZCDO8CsF6zvm35AOYTQ+9TWS+?=
- =?iso-8859-1?Q?Ye+dOuqrMx34k7mJhQiRrzC2RWJT/kzrA4FHtj9fw986FC/x04eGEhIp+G?=
- =?iso-8859-1?Q?MqslR0yp7BB7MnCpvuTVTagB9bpBRDEO4Yno3FR52OKzGGBEYp2Wh1+Koo?=
- =?iso-8859-1?Q?GO8+fUo+R87yW7qUyWjVRuyeXS6JOrI6oqO5cy6NIq0mXmOj62tlanl32e?=
- =?iso-8859-1?Q?FGF3w0dV5G1dtO3V1tCT/nF5T7Fzurjr6BXqOwzrhNaY7xcOYGDe4/dbyI?=
- =?iso-8859-1?Q?HRPyPpMVADmtnApl3ycBXqO3lDsL7nJoEtXQsyF4l3XmuvbnwkGknmybl6?=
- =?iso-8859-1?Q?cgVNHSUnMN4dRruoz95irNYC6YYOYPCH4ttwOQKkwHfcqfKMlSpZ+0Surm?=
- =?iso-8859-1?Q?rvLV783Rqqnrgc/ij7jvHJPbCHDkmGRQKC+BdiPXI5B12Mb2DiEpRqssnU?=
- =?iso-8859-1?Q?gZ8R9pdolTcwoqtIbKrAuIAC5L6hg2V2XfXBrUsNuyH6281inYpSIjAlNs?=
- =?iso-8859-1?Q?+I7coNKBoWWTSqstOTdOqaTtJ86gUC0xWC9Yr8EQydBPvGkIYcsYWG1jKE?=
- =?iso-8859-1?Q?hQJv483+pTbYUG0EuTJMffyQC03UVEA4ru6o3gbSV0wttgYomG/g1o6FOr?=
- =?iso-8859-1?Q?7Ics6wYAEevVzVC1serKF0E6s0kW4d2U8zaOCVx1b6NBKWkW3BbulETyS1?=
- =?iso-8859-1?Q?BkE1qyRRd9d78QWrgM1Fuv0AQ2MpwWhwPWz10JbkOzpZB1bjfAxvTKHWVa?=
- =?iso-8859-1?Q?1hmTe8JgxaK7sQL7O7vkLKEM0gA/UGCA2rbPIzUW0cJCGChPPNpBn/xkIC?=
- =?iso-8859-1?Q?X6VBxwD955/16Wdt+0gHxlVkvZvMeMxhpI18B3IYzMMFgfin2YSGFt1c8o?=
- =?iso-8859-1?Q?0w7GOgjdhpUJwzabSn2pVoPrn92UgyQbSh6vDfdpFCzPwcVyyRyYrT8FOL?=
- =?iso-8859-1?Q?w8zo1Xht7OBc403DBnnQbpYTC516YENvCzYc8t0AYA2yzJgRFNkboVqAyc?=
- =?iso-8859-1?Q?0xQZasGZxWEOyhVcaqzEkKZKcjkb8sQfLsB4xhwdwgHKitOm2BpjVF55H5?=
- =?iso-8859-1?Q?2xfDTi7Ziftf9XQ0JTtHjbvBS62kWmspmNv7EPYSGhJxyTtyp5j7tvsjPB?=
- =?iso-8859-1?Q?8k1loeMfDt51pNJ9lXn7Iyt/qxVCxamJ31uXWFF+oiYrTMY+43qUzfLZYR?=
- =?iso-8859-1?Q?v+XA=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 22 Nov 2022 05:11:47 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D918954B3C;
+        Tue, 22 Nov 2022 02:11:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669111904; x=1700647904;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=usjdVgC5nTrsMPk+N8fokwP8pD99HC8BUV8bc4gHSuA=;
+  b=HfctUD3QggyPX6zsCVtLICrnp+4l6+zBAxUgUW+joSiPYur6A/8YyUfA
+   LbkyemKdOvF6fezsw1CdCzRm4V4wxqxKEG+o8OxCyPjQXWkvBpUp//CLn
+   tAAe8Yuujo1pXALer2qrYmWbgSNwNzy9prgeigUgNhOxOZ90uExSDWF/0
+   hCYGlxcZmhvy+6T8Q3lgUOEB2jwAyC/NqILlLsfWIE9B/8gEdfQhvBmWW
+   nWlops7Wyoc9NQFW7FiAbgLd1I4rjHBkeLN7tX1Mi2ak6ztGss4bysTof
+   APsf1PZSb4sLGTl9WrXUlrhht7SqDvkchaHna8t0ixC1lOP4vKh3jcfRk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="400071024"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="400071024"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 02:11:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="704914294"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="704914294"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Nov 2022 02:11:28 -0800
+Date:   Tue, 22 Nov 2022 18:07:05 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
+Message-ID: <20221122100705.GA619277@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221111014244.1714148-1-vannapurve@google.com>
+ <20221111014244.1714148-2-vannapurve@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: tdk.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: FR3P281MB1757.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 446bccca-c31d-4574-2e26-08dacc7149d1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 10:06:56.7850
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 7e452255-946f-4f17-800a-a0fb6835dc6c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: a1SNy2+pm7EEWEIsLmBgEUFAr8wMwOnP+eKaNE7HUnnGS8gU+l84iDDRfz9kYmbsPDX8Vb6kvLLwnZfcDOc+eK+8l+iT5qAbAGzQrZE9fVQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB2875
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-22_04,2022-11-18_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111014244.1714148-2-vannapurve@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,=0A=
-=0A=
-looks good, thanks for the patch.=0A=
-=0A=
-Acked-by: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>=0A=
-=0A=
-Best regards,=0A=
-JB=0A=
-=0A=
-=0A=
-From: Uwe Kleine-K=F6nig <uwe@kleine-koenig.org>=0A=
-Sent: Friday, November 18, 2022 23:37=0A=
-To: Angel Iglesias <ang.iglesiasg@gmail.com>; Lee Jones <lee.jones@linaro.o=
-rg>; Grant Likely <grant.likely@linaro.org>; Wolfram Sang <wsa@kernel.org>;=
- Jonathan Cameron <jic23@kernel.org>; Andy Shevchenko <andriy.shevchenko@li=
-nux.intel.com>; Jean-Baptiste Maneyrol <Jean-Baptiste.Maneyrol@tdk.com>; Ha=
-ns Verkuil <hverkuil-cisco@xs4all.nl>; Michael Srba <Michael.Srba@seznam.cz=
->=0A=
-Cc: linux-i2c@vger.kernel.org <linux-i2c@vger.kernel.org>; kernel@pengutron=
-ix.de <kernel@pengutronix.de>; Uwe Kleine-K=F6nig <u.kleine-koenig@pengutro=
-nix.de>; Lars-Peter Clausen <lars@metafoo.de>; linux-iio@vger.kernel.org <l=
-inux-iio@vger.kernel.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.=
-kernel.org>=0A=
-Subject: [PATCH 109/606] iio: imu: inv_mpu6050: Convert to i2c's .probe_new=
-() =0A=
-=A0=0A=
-[CAUTION] This is an EXTERNAL email. Do not click links or open attachments=
- unless you recognize the sender and know the content is safe.=0A=
-=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>=0A=
-=0A=
-.probe_new() doesn't get the i2c_device_id * parameter, so determine=0A=
-that explicitly in the probe function.=0A=
-=0A=
-Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>=0A=
----=0A=
-=A0drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c | 6 +++---=0A=
-=A01 file changed, 3 insertions(+), 3 deletions(-)=0A=
-=0A=
-diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c b/drivers/iio/imu/in=
-v_mpu6050/inv_mpu_i2c.c=0A=
-index 7a8d60a5afa9..70eaa408e388 100644=0A=
---- a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c=0A=
-+++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c=0A=
-@@ -95,9 +95,9 @@ static int inv_mpu_i2c_aux_setup(struct iio_dev *indio_de=
-v)=0A=
-=A0 *=0A=
-=A0 *=A0 Returns 0 on success, a negative error code otherwise.=0A=
-=A0 */=0A=
--static int inv_mpu_probe(struct i2c_client *client,=0A=
--=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 cons=
-t struct i2c_device_id *id)=0A=
-+static int inv_mpu_probe(struct i2c_client *client)=0A=
-=A0{=0A=
-+=A0=A0=A0=A0=A0=A0 const struct i2c_device_id *id =3D i2c_client_get_devic=
-e_id(client);=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 const void *match;=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 struct inv_mpu6050_state *st;=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 int result;=0A=
-@@ -260,7 +260,7 @@ static const struct acpi_device_id inv_acpi_match[] =3D=
- {=0A=
-=A0MODULE_DEVICE_TABLE(acpi, inv_acpi_match);=0A=
-=A0=0A=
-=A0static struct i2c_driver inv_mpu_driver =3D {=0A=
--=A0=A0=A0=A0=A0=A0 .probe=A0=A0=A0=A0=A0=A0=A0=A0=A0 =3D=A0=A0=A0=A0=A0=A0=
- inv_mpu_probe,=0A=
-+=A0=A0=A0=A0=A0=A0 .probe_new=A0=A0=A0=A0=A0 =3D=A0=A0=A0=A0=A0=A0 inv_mpu=
-_probe,=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 .remove=A0=A0=A0=A0=A0=A0=A0=A0 =3D=A0=A0=A0=A0=A0=
-=A0 inv_mpu_remove,=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 .id_table=A0=A0=A0=A0=A0=A0 =3D=A0=A0=A0=A0=A0=A0 =
-inv_mpu_id,=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 .driver =3D {=0A=
--- =0A=
-2.38.1=0A=
+On Fri, Nov 11, 2022 at 01:42:39AM +0000, Vishal Annapurve wrote:
+> Introduce HAVE_KVM_PRIVATE_MEM_TESTING config to be able to test fd based
+> approach to support private memory with non-confidential selftest VMs.
+> To support this testing few important aspects need to be considered from
+> the perspective of selftests -
+> * KVM needs to know whether the access from guest VM is private or shared.
+> Confidential VMs (SNP/TDX) carry a dedicated bit in gpa that can be used by
+> KVM to deduce the nature of the access.
+> Non-confidential VMs don't have mechanism to carry/convey such an
+> information to KVM. So KVM just relies on what attributes are set by
+> userspace VMM keeping the userspace VMM in the TCB for the testing
+> purposes.
+> * arch_private_mem_supported is updated to allow private memory logic to
+> work with non-confidential vm selftests.
+> 
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c          | 4 ++++
+>  arch/x86/kvm/mmu/mmu_internal.h | 4 +++-
+>  virt/kvm/Kconfig                | 4 ++++
+>  virt/kvm/kvm_main.c             | 2 +-
+>  4 files changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 10017a9f26ee..b3118d00b284 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4280,6 +4280,10 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  
+>  	fault->gfn = fault->addr >> PAGE_SHIFT;
+>  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
+> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
+> +	fault->is_private = kvm_slot_can_be_private(fault->slot) &&
+> +			kvm_mem_is_private(vcpu->kvm, fault->gfn);
+> +#endif
+>  
+>  	if (page_fault_handle_page_track(vcpu, fault))
+>  		return RET_PF_EMULATE;
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index 5cdff5ca546c..2e759f39c2c5 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -188,7 +188,6 @@ struct kvm_page_fault {
+>  
+>  	/* Derived from mmu and global state.  */
+>  	const bool is_tdp;
+> -	const bool is_private;
+>  	const bool nx_huge_page_workaround_enabled;
+>  
+>  	/*
+> @@ -221,6 +220,9 @@ struct kvm_page_fault {
+>  	/* The memslot containing gfn. May be NULL. */
+>  	struct kvm_memory_slot *slot;
+>  
+> +	/* Derived from encryption bits of the faulting GPA for CVMs. */
+> +	bool is_private;
+
+Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
+it looks ugly I can remove the "const" in my code.
+
+Chao
+> +
+>  	/* Outputs of kvm_faultin_pfn.  */
+>  	kvm_pfn_t pfn;
+>  	hva_t hva;
+> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> index 69ca59e82149..300876afb0ca 100644
+> --- a/virt/kvm/Kconfig
+> +++ b/virt/kvm/Kconfig
+> @@ -93,3 +93,7 @@ config HAVE_KVM_RESTRICTED_MEM
+>  config KVM_GENERIC_PRIVATE_MEM
+>         bool
+>         depends on HAVE_KVM_RESTRICTED_MEM
+> +
+> +config HAVE_KVM_PRIVATE_MEM_TESTING
+> +       bool
+> +       depends on KVM_GENERIC_PRIVATE_MEM
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index dae6a2c196ad..54e57b7f1c15 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1750,7 +1750,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
+>  
+>  bool __weak kvm_arch_has_private_mem(struct kvm *kvm)
+>  {
+> -	return false;
+> +	return IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING);
+>  }
+>  
+>  static int check_memory_region_flags(struct kvm *kvm,
+> -- 
+> 2.38.1.431.g37b22c650d-goog
