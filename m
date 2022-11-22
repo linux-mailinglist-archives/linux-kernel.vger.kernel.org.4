@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0D1633C78
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E478D633C7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbiKVMaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S233755AbiKVMaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbiKVMaN (ORCPT
+        with ESMTP id S233692AbiKVMaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:30:13 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1931E450B3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:30:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1669120193; bh=ZQVTktCaJMSJoAUilenuVtVqaVzw6QgpmXOKe+X/kzo=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=KiJWlsdEVvQG1zWCPN+LFYJETHdaHmp5LE8Awln8pzvwV4FcSs/OemxhucwgKdc0r
-         ke2Rg8xLlCSIX/0GmrzDShWx9Uo8Xb4ujKzlqFPJZ8nbFHwd6HFjPgzi1kozqLjaES
-         9zPcPAABagXa+cpUenkRKPziveL00gzgZPk0fJ9c=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue, 22 Nov 2022 13:29:53 +0100 (CET)
-X-EA-Auth: Du6cW+R97fU19tg8ZpfTQyvMhiVbLDriT+NRPtYzKC4H6dSsFWPtqi4ukIDslkgLagjDOC+pFnGnV1YRwL4W3zGYh6ZdkLDo
-Date:   Tue, 22 Nov 2022 17:59:45 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: pi433: call set_lan_gain for receiver config
-Message-ID: <Y3zAucwpK9TUgrig@qemulion>
-References: <Y3kONX7KhQ1GX9QW@qemulion>
- <Y3y7v1WAumU1o5na@kroah.com>
+        Tue, 22 Nov 2022 07:30:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E0F5800E;
+        Tue, 22 Nov 2022 04:30:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2EEA6165E;
+        Tue, 22 Nov 2022 12:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 258BBC433D6;
+        Tue, 22 Nov 2022 12:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669120216;
+        bh=PConb+OMZDzF2yYOshF1EXc2IF5ZvEGsAJTxG/Cf7cA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HidIvQ8qT2C4uXv4caQt0QuetMAkQNFoT3pMLca0YO4CWGK4sMvfTxrf/8LWtfJCB
+         3UUuo+iXAeKvMb1Icttu6Thvpkgr/6gB66yRoEou1vMJXYTJQT5plhuWh3+R7UXpH+
+         x4ed6x7TeoURwULXNLtu4pPDGJvenSpnQi5eug1bIEC5riXEkOVpGxTfSw6kAgrUWN
+         p1/Nuzv5A8eFs7ntA0mK29NtqA41Dk7li+hvMppGYy52+3ZnKtsVygAuH8Fp3yfz0F
+         JFqhFP/AUmERTy6Xtm+NUKEDGl/n1vluaZjzCT4lQ6UUuDZ278rqdZk08eivuYQGyw
+         4qEtLxDF0jz/Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 077ABE29F42;
+        Tue, 22 Nov 2022 12:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3y7v1WAumU1o5na@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] samples: pktgen: Use "grep -E" instead of "egrep"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166912021602.19490.6125731777868995356.git-patchwork-notify@kernel.org>
+Date:   Tue, 22 Nov 2022 12:30:16 +0000
+References: <1668826504-32162-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1668826504-32162-1-git-send-email-yangtiezhu@loongson.cn>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, brouer@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 01:08:31PM +0100, Greg Kroah-Hartman wrote:
-> On Sat, Nov 19, 2022 at 10:41:17PM +0530, Deepak R Varma wrote:
-> > Value for the LNA gain is captured from the user as part of the struct
-> > pi433_rx_cfg, however, the corresponding function rf69_set_lna_gain() is
-> > never called to set it. Include a call to this function as part of
-> > setting up the rx configurations.
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >  drivers/staging/pi433/pi433_if.c | 3 +++
-> >  1 file changed, 3 insertions(+)
->
-> How was this change tested?
+Hello:
 
-Hi Greg,
-This was compile tested only.
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-As per your message on the other patch for this driver, I am holding back such
-patches until I have the ability to test the change with a real device myself.
+On Sat, 19 Nov 2022 10:55:04 +0800 you wrote:
+> The latest version of grep claims the egrep is now obsolete so the build
+> now contains warnings that look like:
+> 	egrep: warning: egrep is obsolescent; using grep -E
+> fix this up by moving the related file to use "grep -E" instead.
+> 
+>   sed -i "s/egrep/grep -E/g" `grep egrep -rwl samples/pktgen`
+> 
+> [...]
 
-I most welcome if there is any other feedback on the patches. It will help me
-consolidate the feedback and react to them in one go.
+Here is the summary with links:
+  - [net-next] samples: pktgen: Use "grep -E" instead of "egrep"
+    https://git.kernel.org/netdev/net-next/c/6dcd6d015220
 
-Thank you,
-./drv
-
->
-> thanks,
->
-> greg k-h
->
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
