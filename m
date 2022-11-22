@@ -2,130 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C3263384D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C4363384F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiKVJZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S232793AbiKVJZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232500AbiKVJZI (ORCPT
+        with ESMTP id S232834AbiKVJZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:25:08 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7D53FB9A;
-        Tue, 22 Nov 2022 01:25:06 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R531e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VVRfUdC_1669109100;
-Received: from 30.221.132.69(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VVRfUdC_1669109100)
-          by smtp.aliyun-inc.com;
-          Tue, 22 Nov 2022 17:25:02 +0800
-Message-ID: <a37ca1e6-7d22-3c80-98be-0dec37d76c9b@linux.alibaba.com>
-Date:   Tue, 22 Nov 2022 17:24:59 +0800
+        Tue, 22 Nov 2022 04:25:14 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE59C49B7E
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:25:11 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id bp15so22661199lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:25:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O8HnwlLIuUW6GQ7MF6wb6CuJekIWr1nSvjXjmRhkscs=;
+        b=IiWqDjT6H1cRpC90wd65AWT/9WXUU+5hNY7FkQZBesPVQr9IdCFRIGTV34ehmgTZZK
+         3Jus1oyGfk+IMtnQAxdJLPDiOq9V8rNWApdkLIk+5alXBEh5o14B1MyG8uWIV2dzOuG8
+         toUTbMdScxGAqDtDb0qvamE57LbdJBuSEqdLOyuNLT5l/LGKQEuiZyH71dfr2IUMi0q6
+         /HKVLbgm1JY3WWz3viCNGwcOBt3cG7lrcIpnxAeIs2ULThxcyFaW0M58yA0S7mFSw+xQ
+         UNrZYm4Z5E5U0rleIsGfQlNV5rp5siEptUh093+4dlwIS7VXqJ063vgla6ASbpcWJ7++
+         9+dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8HnwlLIuUW6GQ7MF6wb6CuJekIWr1nSvjXjmRhkscs=;
+        b=aYlK7Rd7TXvIFWVkRUP7fd8o2QPYRi66HC0ynVnFsDdtq+ONqDjhZi87Nzsyl/IT9R
+         6L+ekzRZfulNIApMMfaEZbxvxoamtZlHY8cYYNPrgPL2w71QQ0T0X3Skk1kKyEadC0+x
+         Hoy/dC5g4G5MZ7+5tUJ40CDoWOCmtW5luOuGvVkSJHGz+flSw4q4+BvU8kDEdmqlMg+b
+         3FZIqZ2HqKktcBb3QlRNExl95NQiJguYXzYoDSFlW2+UXdZuG7bsrI8V5+CuCcUzMyuQ
+         lDkeBgqMRQrxB3Inzx4kNFkLQcJ8iOOnJLx1bIGdKqmZlEmaKLcmxRarmKCwWq4O3gFF
+         XRTg==
+X-Gm-Message-State: ANoB5pkLQLigZy3GeetoVNCkPO4H9sDGX10qONxgmMWqQlcIFODkUUPT
+        sTbimGWedeicgLyTpxijAXOElQ==
+X-Google-Smtp-Source: AA0mqf5byVk5N0XWLkFNIEkusMvYIeYHdcBQgOYQ8RWpuWexV58KEhN68yvC6R+ZBH9j/xzMZoTDiw==
+X-Received: by 2002:ac2:4424:0:b0:4a2:2dc9:3e0e with SMTP id w4-20020ac24424000000b004a22dc93e0emr8339106lfl.272.1669109110296;
+        Tue, 22 Nov 2022 01:25:10 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q6-20020ac25fc6000000b004a45f2e49b1sm2378780lfg.273.2022.11.22.01.25.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 01:25:09 -0800 (PST)
+Message-ID: <09aaf26a-7377-a4f6-6145-5301304927b7@linaro.org>
+Date:   Tue, 22 Nov 2022 10:25:08 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [External] : [RFC PATCH v2 1/6] perf vendor events arm64: Add
- topdown L1 metrics for neoverse-n2
-To:     John Garry <john.g.garry@oracle.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1668411720-3581-2-git-send-email-renyu.zj@linux.alibaba.com>
- <590ff032-d271-48ee-a4d8-141cc070c335@oracle.com>
- <f3823c3e-d45e-40ce-1981-e726b4b6be62@linux.alibaba.com>
- <f6e26e2d-2f10-e973-6c9f-47594da2fc99@oracle.com>
- <cd016aa9-d43d-c585-0b77-a2e112777ec1@linux.alibaba.com>
- <abebb42b-62c1-30d7-ad9a-5fbf6c0edce1@oracle.com>
- <d904734a-e7c1-ca8e-7705-63fc4864ac4f@linux.alibaba.com>
- <75c4f0e6-3f28-a748-e891-7be6016ca28e@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <75c4f0e6-3f28-a748-e891-7be6016ca28e@oracle.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 1/2] dt-bindings: gce: add gce header file for mt8188
+Content-Language: en-US
+To:     =?UTF-8?B?RWx2aXMgV2FuZyAo546L5YabKQ==?= <Elvis.Wang@mediatek.com>,
+        "jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>,
+        =?UTF-8?B?WW9uZ3FpYW5nIE5pdSAo54mb5rC45by6KQ==?= 
+        <yongqiang.niu@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20221104074443.26172-1-Elvis.Wang@mediatek.com>
+ <20221104074443.26172-2-Elvis.Wang@mediatek.com>
+ <bdb46b7c-6e08-26cf-491d-ca68d36f29af@linaro.org>
+ <fcec5536-6ba8-9cac-2001-710a7170df70@gmail.com>
+ <5ad6c51677e1476d08ae6de6bd5021384a689b31.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5ad6c51677e1476d08ae6de6bd5021384a689b31.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22/11/2022 10:10, Elvis Wang (王军) wrote:
+> On Mon, 2022-11-07 at 12:18 +0100, Matthias Brugger wrote:
+>>
+>> On 06/11/2022 11:27, Krzysztof Kozlowski wrote:
+>>> On 04/11/2022 08:44, Elvis.Wang wrote:
+>>>> From: Elvis Wang <Elvis.Wang@mediatek.com>
+>>>>
+>>>> add gce header file to define the gce thread priority, gce subsys
+>>>> id,
+>>>> event and constant for mt8188.
+>>>>
+>>>> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
+>>>> ---
+>>>> Thanks for the reviews, I have removed the incorrect reviewed
+>>>> message.
+>>>> ---
+>>>>   include/dt-bindings/gce/mediatek,mt8188-gce.h | 966
+>>>> ++++++++++++++++++
+>>>>   1 file changed, 966 insertions(+)
+>>>>   create mode 100644 include/dt-bindings/gce/mediatek,mt8188-
+>>>> gce.h
+>>>>
+>>>> diff --git a/include/dt-bindings/gce/mediatek,mt8188-gce.h
+>>>> b/include/dt-bindings/gce/mediatek,mt8188-gce.h
+>>>> new file mode 100644
+>>>> index 000000000000..e2e2c56016a1
+>>>> --- /dev/null
+>>>> +++ b/include/dt-bindings/gce/mediatek,mt8188-gce.h
+>>>
+>>>
+>>> What is a "gce" subsystem or type of hardware? Why do you put
+>>> headers in
+>>> "gce"?
+>>>
+>>
+>> Yes, I think we should move all header files from the gce folder into
+>> the 
+>> mailbox folder.
+>>
+>> Regards,
+>> Matthias
+> 
+> There are still a lot of header files undre gce. If all of them are
+> moved, it will also involve the modification of yaml and corresponding
+> project dts files, which requires more effort. Can we deal with the
+> 8188 part first?
 
+Sure, just put the new bindings in proper location (mailbox if this is a
+Mailbox).
 
-在 2022/11/22 上午1:55, John Garry 写道:
-> On 21/11/2022 15:17, Jing Zhang wrote:
->> I'm sorry that I misunderstood the purpose of putting metric as arch_std_event at first,
->> and now it works after the modification over your suggestion.
->>
->> But there are also a few questions:
->>
->> 1. The value of the slot in the topdownL1 is various in different architectures, for example,
->> the slot is 5 on neoverse-n2. If I put topdownL1 metric as arch_std_event, then I need to
->> specify the slot to 5 in n2. I can specify slot values in metric like below, but is there any
->> other concise way to do this?
->>
->> diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
->> index 8ff1dfe..b473baf 100644
->> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
->> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
->> @@ -1,4 +1,23 @@
->> [
->> +       {
->> +               "MetricExpr": "5",
->> +               "PublicDescription": "A pipeline slot represents the hardware resources needed to process one uOp",
->> +               "BriefDescription": "A pipeline slot represents the hardware resources needed to process one uOp",
->> +               "MetricName": "slot"
-> 
-> Ehhh....I'm not sure if that is a good idea. Ian or anyone else have an opinion on this? It is possible to reuse metrics, so it should work, but...
-> 
-> One problem is that "slot" would show up as a metric, which you would not want.
-> 
-> Alternatively I was going to suggest that you can overwrite specific std arch event attributes. So for example of frontend_bound, you could have:
-> 
-> + b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
-> @@ -0,0 +1,30 @@
-> [
->     {
->     "ArchStdEvent": "FRONTEND_BOUND",
->         "MetricExpr": "(stall_slot_frontend - cpu_cycles) / (5 * cpu_cycles)",
->     },
-> 
->> +       }
->> +       {
->> +               "ArchStdEvent": "FRONTEND_BOUND"
->> +       },
->> +       {
->> +               "ArchStdEvent": "BACKEND_BOUND"
->> +       },
->> +       {
->> +               "ArchStdEvent": "WASTED"
->> +       },
->> +       {
->> +               "ArchStdEvent": "RETIRING"
->> +       },
->>
->>
->> 2. Should I add the topdownL1 metric to tools/perf/pmu-event/recommended.json,
->> or create a new json file to place the general metric?
-> 
-> It would not belong in recommended.json as that is specifically for arch-recommended events. It would really just depend on where the value comes from, i.e. arm arm or sbsa.
-> 
+Best regards,
+Krzysztof
 
-
-Thanks for your suggestion, I will send next patchset as you suggested.
