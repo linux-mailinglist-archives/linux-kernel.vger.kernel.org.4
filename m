@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8916333C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C877A6333BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbiKVDMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S231690AbiKVDLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbiKVDMG (ORCPT
+        with ESMTP id S229489AbiKVDLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:12:06 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B681178B2;
-        Mon, 21 Nov 2022 19:12:05 -0800 (PST)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NGTn06sVmz15Mn8;
-        Tue, 22 Nov 2022 11:11:32 +0800 (CST)
-Received: from [10.174.179.215] (10.174.179.215) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 11:12:01 +0800
-Subject: Re: [PATCH -next] crypto: ccree - Fix section mismatch due to
- cc_debugfs_global_fini()
-To:     <s.shtylyov@omp.ru>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <yoshihiro.shimoda.uh@renesas.com>
-CC:     <netdev@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221122030542.23920-1-yuehaibing@huawei.com>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <e3a466e7-5c5d-1288-9918-982edf597c24@huawei.com>
-Date:   Tue, 22 Nov 2022 11:12:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Mon, 21 Nov 2022 22:11:48 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DC1BC0A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:11:47 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id v8so9426523qkg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:11:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iHasZ5TNTFIcV1aNmBRElyhro7wai0QgU4JwVxsADWE=;
+        b=fNxFFhXMdghSK2qF0UWo1QJ05yD5iNRjEj5tmtEOUsBbFxaj1tXcMaEuvQzYCkAabq
+         l/eVSkCAAhOq5Gp1rOesNBaEAW3r6Rm/rDtgQf7kyy4Mmu/+MrkrBfTFEPFkjcHoysnt
+         f6Qi7Iz6YxEJKwPB7pp2vYU/3pwC1j5nnb5XTBvfBGYYKvlzYqbx1ie8xQMroZ40zXIn
+         80yeJdJJRdRoYoBfnQYV2ilfe6PCw1Hk/Z9e/UjnNpLmGmuZMY3br/z06V+xgaI6TsDj
+         pchkgHFP+IVZWhx3Wx/Mn54Td41K3iEQm4NLQCojX+fGuAK5bAPDAbwLOBth21jCZ4XJ
+         Aoyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iHasZ5TNTFIcV1aNmBRElyhro7wai0QgU4JwVxsADWE=;
+        b=2o9wvLWYqTFWshk8R6CUVmhc02EIerlnAv8wtGIwDnWVF5g5rAvx/hC+qH/yRBeitC
+         f9xL6r4cjMwbcBazr1Gp/9oXsVQ5PgZvkN+wdZ5RZZixWvlqvOiMMg+fud/GfiVOZRtR
+         ZWxWOxkYjAOgNIfpVBcN9z/TTtWb0wwQDArfSoDvyjCVxdy21huncTYT3FMbw7WL1sHA
+         T+CGaOHPzfAFwP1fBjrj6U1MeCyQDGj1s0xo9whdUOmnwHRaOKBdQfWem7AIK0MYSJyS
+         kFm1MJD9w0d0DLr+Gn7mMeZkNXOPi4h//ypf/QCSmByD4sLox6Lyb7WR4iAZ7Aoaf6Rj
+         yQVQ==
+X-Gm-Message-State: ANoB5pmF7ngL5/Uo9/LKqZuYSAXnFwUWtkhGxByEdvaC2LpRZljHLYc0
+        nqNNA7y4Y8Hj99h0XE01jqYL37nJIVVXTQ==
+X-Google-Smtp-Source: AA0mqf5Z2Vozl4gOnaKFDsiHthpk/cDNUJ2Q5EzCmvnce66G41XXifggMdqlH7hkJSgqnY9dxVNu0g==
+X-Received: by 2002:ae9:e714:0:b0:6fb:60da:96d0 with SMTP id m20-20020ae9e714000000b006fb60da96d0mr7214312qka.273.1669086706227;
+        Mon, 21 Nov 2022 19:11:46 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id h4-20020a05620a284400b006f9e103260dsm9313929qkp.91.2022.11.21.19.11.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 19:11:45 -0800 (PST)
+Date:   Mon, 21 Nov 2022 22:12:11 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        minchan@kernel.org, ngupta@vflare.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y3w+C8ClzP6VbqrA@cmpxchg.org>
+References: <20221119001536.2086599-1-nphamcs@gmail.com>
+ <20221119001536.2086599-7-nphamcs@gmail.com>
+ <Y3wwuMSy8YC86QAi@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20221122030542.23920-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3wwuMSy8YC86QAi@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,31 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry， Pls ignore this.
+On Tue, Nov 22, 2022 at 11:15:20AM +0900, Sergey Senozhatsky wrote:
+> On (22/11/18 16:15), Nhat Pham wrote:
+> > +
+> > +static int zs_zpool_shrink(void *pool, unsigned int pages,
+> > +			unsigned int *reclaimed)
+> > +{
+> > +	unsigned int total = 0;
+> > +	int ret = -EINVAL;
+> > +
+> > +	while (total < pages) {
+> > +		ret = zs_reclaim_page(pool, 8);
+> > +		if (ret < 0)
+> > +			break;
+> > +		total++;
+> > +	}
+> > +
+> > +	if (reclaimed)
+> > +		*reclaimed = total;
+> > +
+> > +	return ret;
+> > +}
+> 
+> A silly question: why do we need a retry loop in zs_reclaim_page()?
 
-On 2022/11/22 11:05, YueHaibing wrote:
-> cc_debugfs_global_fini() is marked with __exit now, however it is used
-> in __init ccree_init() for cleanup. Remove the __exit annotation to fix
-> build warning:
->
-> WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in reference: init_module (section: .init.text) -> cc_debugfs_global_fini (section: .exit.text)
->
-> Fixes: 4f1c596df706 ("crypto: ccree - Remove debugfs when platform_driver_register failed")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  drivers/crypto/ccree/cc_debugfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_debugfs.c
-> index 7083767602fc..8f008f024f8f 100644
-> --- a/drivers/crypto/ccree/cc_debugfs.c
-> +++ b/drivers/crypto/ccree/cc_debugfs.c
-> @@ -55,7 +55,7 @@ void __init cc_debugfs_global_init(void)
->  	cc_debugfs_dir = debugfs_create_dir("ccree", NULL);
->  }
->  
-> -void __exit cc_debugfs_global_fini(void)
-> +void cc_debugfs_global_fini(void)
->  {
->  	debugfs_remove(cc_debugfs_dir);
->  }
+Individual objects in a zspage can be busy (swapped in simultaneously
+for example), which will prevent the zspage from being freed. Zswap
+currently requests reclaim of one backend page at a time (another
+project...), so if we don't retry we're not meeting the reclaim goal
+and cause rejections for new stores. Rejections are worse than moving
+on to the adjacent LRU item, because a rejected page, which should be
+at the head of the LRU, bypasses the list and goes straight to swap.
+
+The number 8 is cribbed from zbud and z3fold. It works well in
+practice, but is as arbitrary as MAX_RECLAIM_RETRIES used all over MM.
+We may want to revisit it at some point, but we should probably do it
+for all backends then.
