@@ -2,133 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D69163406F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E3F634071
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbiKVPjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
+        id S233692AbiKVPlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbiKVPjj (ORCPT
+        with ESMTP id S232632AbiKVPl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:39:39 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5F443ACA
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:39:38 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id d3so18413115ljl.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:39:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ds8Sy9Qo0VlxaGfYZfQDdKcBEoXNjqFnH02Jzco/bEA=;
-        b=lk1QsjWdooS9s/Fhmb9/UR2iEAgaGSjYskun7Wnkf/gMr57Ths5J3/laG66JVjx0s7
-         r6SPRs/z6fKrAtfGZOu+Lrg8JyO7a9VdoZF8FXMhujUwbioAGHZCjp24aokB6xo4Mim2
-         PfAIUfSGsVn+NHg1Q+R0PiWmZhS5Y8w/a7OJF5r1WSM5uhPuw511WBMoZ0wpvLDBl6FE
-         BOBW+eShfw/V+dMLlSGDW3fJWoNzZYdX8pNMnPW2Myk3OizgIgayS+cPqogQchx8AFwL
-         tCn5Ejgh7kWV8J+ZxdiyzddH9iyRR4iaWAPSPp6X5qyPrVgkfNEblOI/z1THa46PFv/G
-         Ub2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ds8Sy9Qo0VlxaGfYZfQDdKcBEoXNjqFnH02Jzco/bEA=;
-        b=nzgRFllADXF5zzspeuXRy8zR4cGmXGz6gI1ZkCAKOX/4PZZcsZXjbi5vsGW5ahrFTc
-         qK7iakgZxlz6YV9BHTkI8KYD2tcpK7rJlMSU5deUKLpZ08jBoHaCyEM5nkiiKz8ioM2Y
-         EJpHgeE0aRxrecNEz63l+jUTD3GHNurLXKvxefOlNYEKQJCX2lE7uJjtNCEG1CE5LE/X
-         wdRk1D68VjWluvGLt4atXc7m/oy2WABlAoUYVaVDFooOj7gE0Pfb9qeKjgb6aq2AHIK4
-         UgKixNx+b8CdiD5w1mSdHJGM3h3fNdhHWDzV6uIMqCBZTzyparZWBA59ZqGkWpPep0Qx
-         JaAQ==
-X-Gm-Message-State: ANoB5plYDFkxST77m3ba/qkvf4aiP51tmkYnrp4Mkd17I1+JLkt6YBVV
-        rcPsOuuS/stnvEXCPKTA5oL4yg==
-X-Google-Smtp-Source: AA0mqf5pPAK3W4v8an/eR+cieEGeNBfDtiHWiAnML0e5MFDjyCE5sQTecKnWv5WEaFVv9FlPUuqd/A==
-X-Received: by 2002:a05:651c:10a1:b0:26e:a:b5c9 with SMTP id k1-20020a05651c10a100b0026e000ab5c9mr2069061ljn.481.1669131576967;
-        Tue, 22 Nov 2022 07:39:36 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c4-20020ac25304000000b0049fff3f645esm2507227lfh.70.2022.11.22.07.39.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 07:39:36 -0800 (PST)
-Message-ID: <17b4eb3a-97ab-905d-f8f2-eb5669e4854f@linaro.org>
-Date:   Tue, 22 Nov 2022 16:39:35 +0100
+        Tue, 22 Nov 2022 10:41:27 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904ADF4E;
+        Tue, 22 Nov 2022 07:41:25 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VVT0jdJ_1669131678;
+Received: from 30.32.124.28(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VVT0jdJ_1669131678)
+          by smtp.aliyun-inc.com;
+          Tue, 22 Nov 2022 23:41:20 +0800
+Message-ID: <180a34c2-f68d-6f4d-da74-7bbb80e9e65c@linux.alibaba.com>
+Date:   Tue, 22 Nov 2022 23:41:18 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4] dt-bindings: iio: adc: ad7923: adjust documentation
-To:     Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221122140543.11230-1-edmund.berenson@emlix.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221122140543.11230-1-edmund.berenson@emlix.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [External] : [RFC PATCH v2 1/6] perf vendor events arm64: Add
+ topdown L1 metrics for neoverse-n2
+To:     James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Ian Rogers <irogers@google.com>
+References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1668411720-3581-2-git-send-email-renyu.zj@linux.alibaba.com>
+ <590ff032-d271-48ee-a4d8-141cc070c335@oracle.com>
+ <f3823c3e-d45e-40ce-1981-e726b4b6be62@linux.alibaba.com>
+ <f6e26e2d-2f10-e973-6c9f-47594da2fc99@oracle.com>
+ <cd016aa9-d43d-c585-0b77-a2e112777ec1@linux.alibaba.com>
+ <abebb42b-62c1-30d7-ad9a-5fbf6c0edce1@oracle.com>
+ <d904734a-e7c1-ca8e-7705-63fc4864ac4f@linux.alibaba.com>
+ <75c4f0e6-3f28-a748-e891-7be6016ca28e@oracle.com>
+ <57315669-e6e7-08b8-a252-bc35d4fecc01@arm.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <57315669-e6e7-08b8-a252-bc35d4fecc01@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 15:05, Edmund Berenson wrote:
-> - The ad7927 is fully compatible with ad7928 driver, add
-> documentation for device.
-> - ad7923 and ad7924 are treated the same in the driver, show
-> the relationship in the documentation.
+
+
+在 2022/11/22 下午10:00, James Clark 写道:
 > 
-> Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
-> ---
->  .../bindings/iio/adc/adi,ad7923.yaml          | 25 ++++++++++++-------
->  1 file changed, 16 insertions(+), 9 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> index 07f9d1c09c7d..b6e2f1b41739 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-> @@ -11,7 +11,7 @@ maintainers:
->  
->  description: |
->    Analog Devices AD7904, AD7914, AD7923, AD7924 4 Channel ADCs, and AD7908,
-> -   AD7918, AD7928 8 Channels ADCs.
-> +   AD7918, AD7927, AD7928 8 Channels ADCs.
->  
->    Specifications about the part can be found at:
->      https://www.analog.com/media/en/technical-documentation/data-sheets/AD7923.pdf
-> @@ -20,14 +20,21 @@ description: |
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - adi,ad7904
-> -      - adi,ad7914
-> -      - adi,ad7923
-> -      - adi,ad7924
-> -      - adi,ad7908
-> -      - adi,ad7918
-> -      - adi,ad7928
-> +    oneOf:
-> +      - const: adi,ad7904
-> +      - const: adi,ad7908
-> +      - const: adi,ad7914
-> +      - const: adi,ad7918
-> +      - const: adi,ad7923
+> On 21/11/2022 17:55, John Garry wrote:
+>> On 21/11/2022 15:17, Jing Zhang wrote:
+>>> I'm sorry that I misunderstood the purpose of putting metric as
+>>> arch_std_event at first,
+>>> and now it works after the modification over your suggestion.
+>>>
+>>> But there are also a few questions:
+>>>
+>>> 1. The value of the slot in the topdownL1 is various in different
+>>> architectures, for example,
+>>> the slot is 5 on neoverse-n2. If I put topdownL1 metric as
+>>> arch_std_event, then I need to
+>>> specify the slot to 5 in n2. I can specify slot values in metric like
+>>> below, but is there any
+>>> other concise way to do this?
+>>>
+>>> diff --git
+>>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>> index 8ff1dfe..b473baf 100644
+>>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>> @@ -1,4 +1,23 @@
+>>> [
+>>> +       {
+>>> +               "MetricExpr": "5",
+>>> +               "PublicDescription": "A pipeline slot represents the
+>>> hardware resources needed to process one uOp",
+>>> +               "BriefDescription": "A pipeline slot represents the
+>>> hardware resources needed to process one uOp",
+>>> +               "MetricName": "slot"
+>>
+>> Ehhh....I'm not sure if that is a good idea. Ian or anyone else have an
+>> opinion on this? It is possible to reuse metrics, so it should work, but...
+>>
+>> One problem is that "slot" would show up as a metric, which you would
+>> not want.
+>>
+>> Alternatively I was going to suggest that you can overwrite specific std
+>> arch event attributes. So for example of frontend_bound, you could have:
+> 
+> I would agree with not having this and just hard coding the 5 wherever
+> it's needed. Once we have a few different sets of metrics in place maybe
+> we can start to look at deduplication, but for now I don't see the value.
+> 
+>>
+>> + b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>> @@ -0,0 +1,30 @@
+>> [
+>>     {
+>>     "ArchStdEvent": "FRONTEND_BOUND",
+>>         "MetricExpr": "(stall_slot_frontend - cpu_cycles) / (5 *
+>> cpu_cycles)",
+>>     },
+>>
+>>> +       }
+>>> +       {
+>>> +               "ArchStdEvent": "FRONTEND_BOUND"
+>>> +       },
+>>> +       {
+>>> +               "ArchStdEvent": "BACKEND_BOUND"
+>>> +       },
+>>> +       {
+>>> +               "ArchStdEvent": "WASTED"
+>>> +       },
+>>> +       {
+>>> +               "ArchStdEvent": "RETIRING"
+>>> +       },
+>>>
+>>>
+>>> 2. Should I add the topdownL1 metric to
+>>> tools/perf/pmu-event/recommended.json,
+>>> or create a new json file to place the general metric?
+>>
+>> It would not belong in recommended.json as that is specifically for
+>> arch-recommended events. It would really just depend on where the value
+>> comes from, i.e. arm arm or sbsa.
+>>
+> 
+> For what we're going to publish shortly we'll be generating a
+> metrics.json file for each CPU. It will be autogenerated so I don't
+> think duplication will be an issue and I'm expecting that there will be
+> differences in the topdown metrics between CPUs anyway. So I would also
+> vote to not put it in recommended.json
+> 
 
-Keep all others as enum.
+I will create a new sbsa.json file in tools/perf/pmu-events/arch/arm64/
+to place metrics that may be common between some CPUs, just like arch_std_event.
+If the topdown metrics are different in other CPUs, we can overwrite the
+metric expression.
+
+For example:
+
++++ b/tools/perf/pmu-events/arch/arm64/sbsa.json
+@@ -0,0 +1,9 @@
++[
++    {
++        "MetricExpr": "stall_slot_frontend / (slot * cpu_cycles)",
++        "PublicDescription": "Frontend bound L1 topdown metric",
++        "BriefDescription": "Frontend bound L1 topdown metric",
++        "MetricGroup": "TopDownL1",
++        "MetricName": "FRONTEND_BOUND"
++    }
++]
+
++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+@@ -0,0 +1,30 @@
++[
++   {
++   	"ArchStdEvent": "FRONTEND_BOUND",
++        "MetricExpr": "(stall_slot_frontend - cpu_cycles) / (5 * cpu_cycles)",
++   }
++]
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In addition, I can also add TLB, Cache, Branch, InstructionMix, PEutilization
+and other metric groups into sbsa.json, because they are also applicable to
+neoverse-n1. Above metrics are described in the documentation of neoverse-n1:
+https://developer.arm.com/documentation/PJDOC-466751330-547673/r4p1/
 
-Best regards,
-Krzysztof
 
+Thanks,
+Jing
+
+
+>>>
+>>> Looking forward to your reply.
+>>
