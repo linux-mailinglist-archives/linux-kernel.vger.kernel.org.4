@@ -2,122 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2146333D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF8E6333DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbiKVDVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S231905AbiKVDXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiKVDVm (ORCPT
+        with ESMTP id S229585AbiKVDXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:21:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD78F23384
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:21:41 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2A561FB;
-        Mon, 21 Nov 2022 19:21:47 -0800 (PST)
-Received: from [10.162.40.16] (unknown [10.162.40.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2939A3F587;
-        Mon, 21 Nov 2022 19:21:37 -0800 (PST)
-Message-ID: <0a961c6f-31bf-8952-7520-debe81d70b59@arm.com>
-Date:   Tue, 22 Nov 2022 08:51:35 +0530
+        Mon, 21 Nov 2022 22:23:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAC323E96;
+        Mon, 21 Nov 2022 19:23:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B354DB818E7;
+        Tue, 22 Nov 2022 03:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7469BC433B5;
+        Tue, 22 Nov 2022 03:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669087423;
+        bh=DcI3jpbZeUrmLT87izBp5WBbGwNkjVRNN7+XGyna5es=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=k1cs7edDz0xnvYOpfS5HsSH1ANIISihFTrHdc3cUcteXvHzCEi4cLOuokOKKQ8R0Q
+         btuSNiYsj8Ih9pX+3ebG7ilJ3vspqol31z7OjX1KS2yydBRZs8x46EdcC+hK9a1nMA
+         GexhR//Fm4oSeuvSBSi9teuSt5iI43QqPXMjEHmaGF1aVI6TpdjEEiZesI5yBjDXgn
+         uCNkopUU+TrCic9Wgzuf5FE6ds9wJUtvjrjAnYxofW5X6oa2Sx5lax89NB5NgNvxZH
+         wrkj/x+MntNyXzqgVmk2NRuoKMIU3YNTteF/vct/DNbz4SOZpqWGrTwSk7L6TSrYtq
+         Z7sVLvIH6pV2Q==
+Received: by mail-oi1-f179.google.com with SMTP id q186so14576663oia.9;
+        Mon, 21 Nov 2022 19:23:43 -0800 (PST)
+X-Gm-Message-State: ANoB5plP8GKevLcMSQCpVtAUqqwhdhbUL465xa+UeHPGo76CafHpA8mf
+        twH2hRLhwdH1cKhFWG81aYK0C6ANHw8TWfdmp3c=
+X-Google-Smtp-Source: AA0mqf6SFyUFLi7vgWUdB+aV/pcoO2TePj5/3C/Rl+IVoCpnUmLcKD3tCxIQzu6Mh9wyPb6s+yUUHCYTjxMRhsWm4bg=
+X-Received: by 2002:aca:111a:0:b0:34f:63a5:a654 with SMTP id
+ 26-20020aca111a000000b0034f63a5a654mr778598oir.257.1669087422582; Mon, 21 Nov
+ 2022 19:23:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/2] arm64/mm: fix incorrect file_map_count for
- non-leaf pmd/pud
-Content-Language: en-US
-To:     Liu Shixin <liushixin2@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Denys Vlasenko <dvlasenk@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        David Hildenbrand <dhildenb@redhat.com>,
-        Rafael Aquini <raquini@redhat.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221117075602.2904324-1-liushixin2@huawei.com>
- <20221117075602.2904324-2-liushixin2@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20221117075602.2904324-2-liushixin2@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6839:1a4e:0:0:0:0 with HTTP; Mon, 21 Nov 2022 19:23:42
+ -0800 (PST)
+In-Reply-To: <20221116122237.227736-1-xiujianfeng@huawei.com>
+References: <20221116122237.227736-1-xiujianfeng@huawei.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Tue, 22 Nov 2022 12:23:42 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd9FxT1qR_JPvYku1=AA9yY3Tx+2N=ruLYKJyQ55dzCAUQ@mail.gmail.com>
+Message-ID: <CAKYAXd9FxT1qR_JPvYku1=AA9yY3Tx+2N=ruLYKJyQ55dzCAUQ@mail.gmail.com>
+Subject: Re: [PATCH] ksmbd: Fix resource leak in ksmbd_session_rpc_open()
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
+        hyc.lee@gmail.com, lsahlber@redhat.com, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+2022-11-16 21:22 GMT+09:00, Xiu Jianfeng <xiujianfeng@huawei.com>:
+> When ksmbd_rpc_open() fails then it must call ksmbd_rpc_id_free() to
+> undo the result of ksmbd_ipc_id_alloc().
+>
+> Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 
-
-On 11/17/22 13:26, Liu Shixin wrote:
-> The page table check trigger BUG_ON() unexpectedly when collapse hugepage:
-> 
->  ------------[ cut here ]------------
->  kernel BUG at mm/page_table_check.c:82!
->  Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
->  Dumping ftrace buffer:
->     (ftrace buffer empty)
->  Modules linked in:
->  CPU: 6 PID: 68 Comm: khugepaged Not tainted 6.1.0-rc3+ #750
->  Hardware name: linux,dummy-virt (DT)
->  pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : page_table_check_clear.isra.0+0x258/0x3f0
->  lr : page_table_check_clear.isra.0+0x240/0x3f0
-> [...]
->  Call trace:
->   page_table_check_clear.isra.0+0x258/0x3f0
->   __page_table_check_pmd_clear+0xbc/0x108
->   pmdp_collapse_flush+0xb0/0x160
->   collapse_huge_page+0xa08/0x1080
->   hpage_collapse_scan_pmd+0xf30/0x1590
->   khugepaged_scan_mm_slot.constprop.0+0x52c/0xac8
->   khugepaged+0x338/0x518
->   kthread+0x278/0x2f8
->   ret_from_fork+0x10/0x20
-> [...]
-> 
-> Since pmd_user_accessible_page() doesn't check if a pmd is leaf, it
-> decrease file_map_count for a non-leaf pmd comes from collapse_huge_page().
-> and so trigger BUG_ON() unexpectedly.
-> 
-> Fix this problem by using pmd_leaf() insteal of pmd_present() in
-> pmd_user_accessible_page(). Moreover, use pud_leaf() for
-> pud_user_accessible_page() too.
-> 
-> Fixes: 42b2547137f5 ("arm64/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
-> Reported-by: Denys Vlasenko <dvlasenk@redhat.com>
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
->  arch/arm64/include/asm/pgtable.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 71a1af42f0e8..edf6625ce965 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -863,12 +863,12 @@ static inline bool pte_user_accessible_page(pte_t pte)
->  
->  static inline bool pmd_user_accessible_page(pmd_t pmd)
->  {
-> -	return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-> +	return pmd_leaf(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
->  }
->  
->  static inline bool pud_user_accessible_page(pud_t pud)
->  {
-> -	return pud_present(pud) && pud_user(pud);
-> +	return pud_leaf(pud) && pud_user(pud);
->  }
->  #endif
->  
+Thanks for your patch.
