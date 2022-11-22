@@ -2,176 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28F6633DAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB846633EF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233251AbiKVNaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S233814AbiKVOa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233202AbiKVNaU (ORCPT
+        with ESMTP id S233239AbiKVOa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:30:20 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7FF654DE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:30:18 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id p141so10897404iod.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:30:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dm0//d6JJKLg4z718XzAPVhh62trEUD6ZDpSJwczExg=;
-        b=BtF8ulQZQ4WXR4TMGpJnAXggX7Iyf3LmIN4v5nSyI/bX0bQrETvbHcz8yreip0lSar
-         GBwUwowvPSWfXP+ONRjQz/Fr6Yqkm9AnfX22hXG9/mXvJ7DL0FqVEctbecc6s2FpO4VE
-         awmQGKnECC+H0Zx0Fih2CBanENIboX45FNQeU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dm0//d6JJKLg4z718XzAPVhh62trEUD6ZDpSJwczExg=;
-        b=QkgoGWkdalTtC7Y6MRuwBKxcuqqKmlBcbTr/Yr8QL87+mGKVixvQLPsgeGswqmGsrm
-         Auin6vdjm/JB0HiZHeNz6UguvMaAgL9e5G9yIfG+TZs2YYKtHQ1j4GUUuZ0xsZv7JrWG
-         AgNqualf9yxuun3JpYeVfGUPEngNssH4nMcCOctfRzn4kGK5Y9lo4G6sHxnpsuuVJ80O
-         gNiXKl+vLGsmTLww61EPchZLa9JMvn7G/LVnz+aKLpxdz9DIFNOukzDNUfF0viFdtPUR
-         GubdT/SDBLkaaFfDEtTMTGEZ9dD/oMnv9QlRItlED5nqUJQ7NjJTgNS2fktrJxumOu8B
-         bYgg==
-X-Gm-Message-State: ANoB5pnFntximXfwkkmzDwIQO0vu0xw3v0YnZORiHs+5xETCd/3fAHCz
-        KYF+MRCFEKYkEMW/bbnXnG9RkQ==
-X-Google-Smtp-Source: AA0mqf7ciSA6ysbKaiV1F9m5x7GxJbpxiDud1qi2X/OVChX0uyWBaPCya1+b8FznPwhLnvSzubr/qQ==
-X-Received: by 2002:a02:6d53:0:b0:372:f7ed:9f78 with SMTP id e19-20020a026d53000000b00372f7ed9f78mr4228223jaf.245.1669123817846;
-        Tue, 22 Nov 2022 05:30:17 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id h16-20020a05660208d000b006a49722dc6dsm5207186ioz.11.2022.11.22.05.30.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 05:30:17 -0800 (PST)
-Date:   Tue, 22 Nov 2022 13:30:17 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Owen Yang <ecs.taipeikernel@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bob Moragues <moragues@chromium.org>,
-        Harvey <hunge@google.com>, Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: sc7280: Add DT for
- sc7280-herobrine-zombie
-Message-ID: <Y3zO6aY0xANk4Qlb@google.com>
-References: <20221122203635.v2.1.Ie05fd439d0b271b927acb25c2a6e41af7a927e90@changeid>
- <20221122203635.v2.2.I4d4d860a675d86d328135e5e5f88aefb69a852ab@changeid>
+        Tue, 22 Nov 2022 09:30:57 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9A36317F;
+        Tue, 22 Nov 2022 06:30:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9So0O8Pi8i8JHhFiG20jjK2ykR3NF1IMBTGdS9HzvSc=; b=gfoaakATo3McgEoQ5zIJQ3Gsom
+        dufqZdgPKM+yw0jFFN/K6+V7g7l5QwaZOV/0S2RmCXXt15cNLAvk2VhphewPoXa2YAcaOECIr2gzj
+        pP/kEwIlL2NbJOX4eTQidYlo/snxWt1FO1oIKfU5ewy12GTREQtKId7G2AJGDrYUl/GGDIwUtfuDy
+        vNGyHBkQ5D11aIgDyyyXqfReJn5NyJiQtwx9VSsqkqWz3H58/Q0jf0A88u5Ryn7UkSAYIOiFRY3MP
+        UITEbCNj1Wp77PuPX5qEZ7voLPw36j5yCi+XjucIaEBqYPOrBRSQhGun0A700bXW3ntCeLuarNZlC
+        SXGIR7Rw==;
+Received: from [177.102.6.147] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oxTM4-006y2D-7E; Tue, 22 Nov 2022 14:30:28 +0100
+Message-ID: <9d9823a9-255b-84c7-53b1-47fe51e1d756@igalia.com>
+Date:   Tue, 22 Nov 2022 10:30:22 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221122203635.v2.2.I4d4d860a675d86d328135e5e5f88aefb69a852ab@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3 07/11] notifiers: Add tracepoints to the notifiers
+ infrastructure
+Content-Language: en-US
+To:     Arjan van de Ven <arjan@linux.intel.com>,
+        Xiaoming Ni <nixiaoming@huawei.com>
+Cc:     Cong Wang <xiyou.wangcong@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        rostedt@goodmis.org, pmladek@suse.com, akpm@linux-foundation.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-8-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220819221731.480795-8-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 08:37:03PM +0800, Owen Yang wrote:
-> Add DT for sc7280-herobrine-zombie
+On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
+> Currently there is no way to show the callback names for registered,
+> unregistered or executed notifiers. This is very useful for debug
+> purposes, hence add this functionality here in the form of notifiers'
+> tracepoints, one per operation.
 > 
-> arch/arm64/boot/dts/qcom/Makefile
-> arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
-> arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
-> arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-
-Drop this
-
-> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+> Cc: Arjan van de Ven <arjan@linux.intel.com>
+> Cc: Cong Wang <xiyou.wangcong@gmail.com>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Xiaoming Ni <nixiaoming@huawei.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
 > ---
 > 
-> (no changes since v1)
-
-A diff between v1 and v2 shows that this is not correct, please provide
-accurate change logs
-
->  arch/arm64/boot/dts/qcom/Makefile             |   2 +
->  .../dts/qcom/sc7280-herobrine-zombie-lte.dts  |  15 +
->  .../boot/dts/qcom/sc7280-herobrine-zombie.dts |  16 +
->  .../dts/qcom/sc7280-herobrine-zombie.dtsi     | 310 ++++++++++++++++++
->  4 files changed, 343 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+> V3:
+> - Yet another major change - thanks to Arjan's great suggestion,
+> refactored the code to make use of tracepoints instead of guarding
+> the output with a Kconfig debug setting.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 384f2fa50646..e3226d7894ad 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -101,6 +101,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1-lte.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
-> new file mode 100644
-> index 000000000000..2f1da87e5005
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Zombie board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
-> +/dts-v1/;
-> +
-> +#include "sc7280-herobrine-zombie.dtsi"
-> +#include "sc7280-herobrine-lte-sku.dtsi"
-> +
-> +/ {
-> +	model = "Google Zombie with LTE";
-> +	compatible = "google,zombie-sku512", "qcom,sc7280";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
-> new file mode 100644
-> index 000000000000..0246c12b2f40
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
-> @@ -0,0 +1,16 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Zombie board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sc7280-herobrine-zombie.dtsi"
-> +#include "sc7280-herobrine-wifi-sku.dtsi"
-> +
-> +/ {
-> +	model = "Google Zombie";
-> +	compatible = "google,zombie", "qcom,sc7280";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-> new file mode 100644
-> index 000000000000..15832620ff5d
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-> @@ -0,0 +1,310 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Zombie board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
-> +/dts-v1/;
+> V2:
+> - Major improvement thanks to the great idea from Xiaoming - changed
+> all the ksym wheel reinvention to printk %ps modifier;
+> 
+> - Instead of ifdefs, using IS_ENABLED() - thanks Steven.
+> 
+> - Removed an unlikely() hint on debug path.
+> 
+> 
+>  include/trace/events/notifiers.h | 69 ++++++++++++++++++++++++++++++++
+>  kernel/notifier.c                |  6 +++
+>  2 files changed, 75 insertions(+)
+>  create mode 100644 include/trace/events/notifiers.h
+> 
 
-This was added in v2. It isn't needed, the .dts files which include this file
-already make this declaration.
+Hi Arjan / Xiaoming / all, monthly ping heh
+
+If there's any advice on how to move things here, I would appreciate!
+Thanks in advance and apologies for the re-pings.
+
+Cheers,
+
+
+Guilherme
