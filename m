@@ -2,168 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F25634195
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C60A63419B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 17:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234254AbiKVQdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 11:33:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S234037AbiKVQeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 11:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbiKVQdE (ORCPT
+        with ESMTP id S234259AbiKVQdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:33:04 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349D623BEA
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:32:55 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id 189-20020a1c02c6000000b003d02dd48c45so470642wmc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 08:32:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tP8o2qeHXoHC6ulVNsIBHcsYBkHGaXQH2ePC4lnEEXg=;
-        b=PYjoG1xoo59ZH+t/QsWjfv2FKr9FaZRvnkvbrQGj0ALZy6VUc62MnwiJqjedlETq6Y
-         oNxAFPDWaSKT03DWcBCAKD+eMpVQEOgrMrNnuCrDUPLdQ0FHxMrSCaMMQpuEIalRLN0D
-         u7zRUrGe6QULUakhwdeB3tnWXG6Vrw1QDVOLG8RDEjAd4i1xc3sIuMLu44uvK0gwIdYP
-         SYJe+l2UZPYKlfbtoTcJQjHzh+BQe3DFJRHmRth8lppKU+4fYWyK30q3Hs+O3H9QhMQv
-         V0OQaoTcaOSIDTsuUGp+/3xTRmGt0MVq3Iz3hisiK5QlZYSkH3yl2ehVQ0jw9NdGSbcs
-         bYXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tP8o2qeHXoHC6ulVNsIBHcsYBkHGaXQH2ePC4lnEEXg=;
-        b=owYppuOtF2IeD5WlDaOuJCZ+4j8s94zf7+JaWlTIXcLzOwq3TnLHq9bV53o/Fu0EcG
-         Z+MkODbRWlLH+RmforsXRS5e2kSnky6OSZm9xUE/etA8opru91b2lUtu6GTwYh8zRUjS
-         k1kG4TV4lY8FlVJxUNSAcmpi9sryB2KxLZHTyjHpG1W1wWJtyfVftioovXoIm/P50W77
-         kk64ckShvw7OhLQtb1swToq3CVRrVMS/n+xj5eil3b1bHszCYzHHWl0vr+UzHN8SiQ3C
-         fElv0gfxcwHBvhnZKghDJWbuSQPCeds+MvlHHk1I8kRyeA7gkW9Vq7ciY/g7iYSI8Bv6
-         QnLA==
-X-Gm-Message-State: ANoB5pmVL6j+DDsRAEE4kP1SIZuNUvA5RhHnmzEQyWCB5ZvdVO1Ow0jy
-        Fl/bW0W5OP51JRuAImw7P6s=
-X-Google-Smtp-Source: AA0mqf6SfVYhWPWFSmXZgMUDEYgeh//Ch89S4WClJdJLReB0bGvjBL3aIzmPYRi0FFtshEhJAG4pCA==
-X-Received: by 2002:a1c:4b0f:0:b0:3cf:735c:9d5a with SMTP id y15-20020a1c4b0f000000b003cf735c9d5amr10377045wma.113.1669134774264;
-        Tue, 22 Nov 2022 08:32:54 -0800 (PST)
-Received: from [192.168.0.25] ([37.222.251.204])
-        by smtp.gmail.com with ESMTPSA id b8-20020adff908000000b0022ca921dc67sm14162699wrr.88.2022.11.22.08.32.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 08:32:53 -0800 (PST)
-Message-ID: <de8a7833-6983-1d40-55b6-f985473d8201@gmail.com>
-Date:   Tue, 22 Nov 2022 17:32:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 3/6] iommu/mediatek: Add error path for loop of
- mm_dts_parse
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com, chengci.xu@mediatek.com,
-        youlin.pei@mediatek.com, anan.sun@mediatek.com,
-        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20221018024258.19073-1-yong.wu@mediatek.com>
- <20221018024258.19073-4-yong.wu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221018024258.19073-4-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 11:33:47 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F0E70A19;
+        Tue, 22 Nov 2022 08:33:42 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7E2685C00E8;
+        Tue, 22 Nov 2022 11:33:41 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 22 Nov 2022 11:33:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1669134821; x=1669221221; bh=pc4NDY6xTk
+        HaxDLkLDsVXDo3MteEDUFdw1xpmzDYbfM=; b=ekjInMMw830aiISwkYkDlomkxv
+        LwgcHF5IhLwOJsRoKEzeSJNscc3ql1pD4JCGrH2gqoPQs6shjkndoin4WNLpkCBb
+        YnwL9iW5PMzdZxClFe0lxdB/WqGEXE+4loTAa/dby3XMsR04qkYM3oUMs3IJR+Fq
+        lDqXV/3HXieuXAYGzLWCd66I7gNbTjehxb3IMxUfEMGM8daLgFMxVKoagyMHSilI
+        eNHX5GEgYpWyaFV0GyAyOkFrV1ItLTJW3qqobxCB2A/JHi7mb5RLA4pFprhptC4U
+        VIu9C5JJxRLv+YXdZOSaQpbc8V2XyC9nTC4UC3XGDl0Mf4Ts+SzS4uF/XhSg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669134821; x=1669221221; bh=pc4NDY6xTkHaxDLkLDsVXDo3MteE
+        DUFdw1xpmzDYbfM=; b=bd6pg2ol1IGfgetol9wblKdazAm8W6HmdfLKdOeFl3Bd
+        BjPosdt5y8G4WMhjCe2sGd1RlptZdCefxQaOoWA1FP+xNL5aKsycMFwa2yTpTCqv
+        4PF50VRBFXgqVlp33HRW73ZgNTs55OEzowTUOuYvPmL14HZyQsHnW9skqQf7kvXn
+        kapl4//CRWRhlSBm21Hd3xXcMHSJO1F1cVV475CeCT8cxuDKdeqxxxc0iljGAUml
+        nOZUuEjIoDo7bmtn4KGDv64EY9xYYTWu/j7x1ZaVZdzI+5dfWBDLAwPYyjE5j29P
+        NIyflEp+UIys0iXyvXjgCeGhTfmw0iZRR/IoAUgzUQ==
+X-ME-Sender: <xms:4vl8Y_pLQVQzdE6H4H1Svn2eDRQy_THKfXiXCSd8CsDtsu4_t5Av1g>
+    <xme:4vl8Y5oRfqgeBLb_j2HVEFjLh4XW3zerZ2ypsAUcqlnZWe5bXGUVuy26OgFBovhwR
+    YzEo3QGomuqoen8qA0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheelgdeitdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffjeetveeifeduffdugeehvdelffdtjedvgfejueffkeejkeetveettddvgfev
+    heenucffohhmrghinhepohhpvghnfihrthdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:4vl8Y8My1r5V5Qkxpj0mWJ_SAu0Zix0p-GE51K8dOVlRqvX3a2tVEA>
+    <xmx:4vl8Yy47dt1lkH-fmTdZFa18nmqMwbfZzQo1ZZBizmS_NuBGRcYlpA>
+    <xmx:4vl8Y-5KLjMghj1CJTBQHlc2yQX89QA8NznX0_8g3KqjXSnN3Moxkw>
+    <xmx:5fl8Y6FTiMkZcP97GUrQgryNI972sQJiGkaL95Se1jLwgtZXLH4LAQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 66842B60086; Tue, 22 Nov 2022 11:33:38 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <bc2f3ca9-e49a-4ca1-8b63-cbc7773d23d5@app.fastmail.com>
+In-Reply-To: <20221121171202.22080-1-vbabka@suse.cz>
+References: <20221121171202.22080-1-vbabka@suse.cz>
+Date:   Tue, 22 Nov 2022 17:33:17 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Vlastimil Babka" <vbabka@suse.cz>,
+        "Christoph Lameter" <cl@linux.com>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Pekka Enberg" <penberg@kernel.org>
+Cc:     "Hyeonggon Yoo" <42.hyeyoo@gmail.com>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Matthew Wilcox" <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Conor Dooley" <conor@kernel.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+        "Jonas Bonn" <jonas@southpole.se>,
+        "Josh Triplett" <josh@joshtriplett.org>,
+        "Kees Cook" <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        openrisc@lists.librecores.org, "Rich Felker" <dalias@libc.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
+        "Tony Lindgren" <tony@atomide.com>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>
+Subject: Re: [PATCH 00/12] Introduce CONFIG_SLUB_TINY and deprecate SLOB
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 21, 2022, at 18:11, Vlastimil Babka wrote:
+>
+> this continues the discussion from [1]. Reasons to remove SLOB are
+> outlined there and no-one has objected so far. The last patch of this
+> series therefore deprecates CONFIG_SLOB and updates all the defconfigs
+> using CONFIG_SLOB=y in the tree.
+>
+> There is a k210 board with 8MB RAM where switching to SLUB caused issues
+> [2] and the lkp bot wasn't also happy about code bloat [3]. To address
+> both, this series introduces CONFIG_SLUB_TINY to perform some rather
+> low-hanging fruit modifications to SLUB to reduce its memory overhead.
+> This seems to have been successful at least in the k210 case [4]. I
+> consider this as an acceptable tradeoff for getting rid of SLOB.
 
+I agree that this is a great success for replacing SLOB on the
+smallest machines that have 32MB or less and have to run a
+a highly customized kernel, and this is probably enough to
+have a drop-in replacement without making any currently working
+system worse.
 
-On 18/10/2022 04:42, Yong Wu wrote:
-> The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if the i+1
-> larb is parsed fail, we should put_device for the i..0 larbs.
-> 
-> There are two places need to comment:
-> 1) The larbid may be not linear mapping, we should loop whole
->     the array in the error path.
-> 2) I move this line position: "data->larb_imu[id].dev = &plarbdev->dev;"
->     before "if (!plarbdev->dev.driver)", That means set
->     data->larb_imu[id].dev before the error path. then we don't need
->     "platform_device_put(plarbdev)" again in probe_defer case. All depend
->     on "put_device" of the error path in error cases.
-> 
-> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with the MM TYPE")
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On the other hand, I have the feeling that we may want something
+a bit less aggressive than this for machines that are slightly
+less constrained, in particular when a single kernel needs to
+scale from 64MB to 512MB, which can happen e.g. on OpenWRT.
+I have seen a number of reports over the years that suggest
+that new kernels handle fragmentation and low memory worse than
+old ones, and it would be great to improve that again.
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+I can imagine those machines wanting to use sysfs in general
+but not for the slab caches, so having a separate knob to
+configure out the sysfs stuff could be useful without having
+to go all the way to SLUB_TINY.
 
+For the options that trade off performance against lower
+fragmentation (MIN/MAX_PARTIAL, KMALLOC_RECLAIM, percpu
+slabs), I wonder if it's possible to have a boot time
+default based on the amount of RAM per CPU to have a better
+tuned system on most cases, rather than having to go
+to one extreme or the other at compile time.
 
-> ---
->   drivers/iommu/mtk_iommu.c | 27 ++++++++++++++++++++-------
->   1 file changed, 20 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 38112ad87d70..912322494bc0 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -1055,8 +1055,10 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   		u32 id;
->   
->   		larbnode = of_parse_phandle(dev->of_node, "mediatek,larbs", i);
-> -		if (!larbnode)
-> -			return -EINVAL;
-> +		if (!larbnode) {
-> +			ret = -EINVAL;
-> +			goto err_larbdev_put;
-> +		}
->   
->   		if (!of_device_is_available(larbnode)) {
->   			of_node_put(larbnode);
-> @@ -1069,14 +1071,16 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   
->   		plarbdev = of_find_device_by_node(larbnode);
->   		of_node_put(larbnode);
-> -		if (!plarbdev)
-> -			return -ENODEV;
-> +		if (!plarbdev) {
-> +			ret = -ENODEV;
-> +			goto err_larbdev_put;
-> +		}
-> +		data->larb_imu[id].dev = &plarbdev->dev;
->   
->   		if (!plarbdev->dev.driver) {
-> -			platform_device_put(plarbdev);
-> -			return -EPROBE_DEFER;
-> +			ret = -EPROBE_DEFER;
-> +			goto err_larbdev_put;
->   		}
-> -		data->larb_imu[id].dev = &plarbdev->dev;
->   
->   		component_match_add(dev, match, component_compare_dev, &plarbdev->dev);
->   		platform_device_put(plarbdev);
-> @@ -1111,6 +1115,15 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   		return -EINVAL;
->   	}
->   	return 0;
-> +
-> +err_larbdev_put:
-> +	/* id may be not linear mapping, loop whole the array */
-> +	for (i = MTK_LARB_NR_MAX - 1; i >= 0; i++) {
-> +		if (!data->larb_imu[i].dev)
-> +			continue;
-> +		put_device(data->larb_imu[i].dev);
-> +	}
-> +	return ret;
->   }
->   
->   static int mtk_iommu_probe(struct platform_device *pdev)
+    Arnd
+
+https://openwrt.org/toh/views/toh_standard_all?datasrt=target&dataflt%5B0%5D=availability_%3DAvailable%202021
