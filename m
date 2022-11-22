@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27106337F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E76C16337FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbiKVJIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:08:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
+        id S233207AbiKVJIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiKVJH4 (ORCPT
+        with ESMTP id S233122AbiKVJIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:07:56 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB5213E3C;
-        Tue, 22 Nov 2022 01:07:55 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id fz10so8885740qtb.3;
-        Tue, 22 Nov 2022 01:07:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+me+gK92AeljrWBvAVG/MPMCTgxhzzYX45cfGkqB9FI=;
-        b=P8uJvE6M453q/yaKyiUoqkYAq38q7RROsYrI8WSGSahQ+P9lP8q+8LttjtzI0DXy4B
-         DWZ/5q30+0mfwEbfOPYxYDx6b9xEFjxQSM0fWaPijhuVVw4xL4C6nys1/M1CnUZdROV+
-         JfgT0pLoFZXtqNDbRQrHUZu8eidDnAHEJF7sIheQQKIbmtdktzr2lmEB6P7xrjNB7Z6m
-         3vMQC5H5ZOM9MKhoYAVYE11WKywZu/gAHEJaQeCCnYZaHClW7+s0UrEqLV25v5IcRQQK
-         Su5cTB7MCwIlRv+ZKJkNLaBB540cRI/WE6u1pp6LeOyar2xFebZ5HEFDbZkYMgG8fQfb
-         Sa3Q==
-X-Gm-Message-State: ANoB5pm0XkHEdsnH0lHSV2H+QxWy4LGyGGiRRCeTvqMa7RJ77MHSz8Pn
-        KcSW/RwB1N5zJpZe7o+ezsy/aAEKw61b2Q==
-X-Google-Smtp-Source: AA0mqf6AL1ZlFa3kiRXsCQnyXAu3JFQ2OdTNRM52D6hFwZUWTf3EfEQo5NWRT2xotyBNK/iQMZmUTw==
-X-Received: by 2002:a05:622a:5a15:b0:3a5:3388:4089 with SMTP id fy21-20020a05622a5a1500b003a533884089mr20598633qtb.601.1669108073884;
-        Tue, 22 Nov 2022 01:07:53 -0800 (PST)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id de13-20020a05620a370d00b006e99290e83fsm9936515qkb.107.2022.11.22.01.07.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 01:07:53 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3691e040abaso137949847b3.9;
-        Tue, 22 Nov 2022 01:07:52 -0800 (PST)
-X-Received: by 2002:a05:690c:b81:b0:37e:6806:a5f9 with SMTP id
- ck1-20020a05690c0b8100b0037e6806a5f9mr5473386ywb.47.1669108072643; Tue, 22
- Nov 2022 01:07:52 -0800 (PST)
+        Tue, 22 Nov 2022 04:08:05 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B3513E3C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:08:03 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-314-HiSSCabqNqq1AfhFkRhZFw-1; Tue, 22 Nov 2022 09:08:01 +0000
+X-MC-Unique: HiSSCabqNqq1AfhFkRhZFw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 09:07:59 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Tue, 22 Nov 2022 09:07:59 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Elliott, Robert (Servers)'" <elliott@hpe.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
+Thread-Topic: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
+Thread-Index: AQHY+XHqfLLvXNGxcESumjNg7U4Mn65BZh+AgAjYNxCAAG7pIA==
+Date:   Tue, 22 Nov 2022 09:07:59 +0000
+Message-ID: <7a0e89ad75334d90ba5b9c0623ed573b@AcuMS.aculab.com>
+References: <20221103042740.6556-1-elliott@hpe.com>
+ <20221116041342.3841-1-elliott@hpe.com>
+ <20221116041342.3841-11-elliott@hpe.com> <Y3TF7/+DejcnN0eV@zx2c4.com>
+ <MW5PR84MB1842625D9ECAF4F6244F558BAB0D9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <MW5PR84MB1842625D9ECAF4F6244F558BAB0D9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20221122030555.26612-1-yuehaibing@huawei.com>
-In-Reply-To: <20221122030555.26612-1-yuehaibing@huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Nov 2022 10:07:41 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVjzL5PSBYKfE05xcCVMX+LTwCDNq0iWk-z2WAFyDZ4mw@mail.gmail.com>
-Message-ID: <CAMuHMdVjzL5PSBYKfE05xcCVMX+LTwCDNq0iWk-z2WAFyDZ4mw@mail.gmail.com>
-Subject: Re: [PATCH -next] crypto: ccree - Fix section mismatch due to cc_debugfs_global_fini()
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     gilad@benyossef.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, cuigaosheng1@huawei.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 4:12 AM YueHaibing <yuehaibing@huawei.com> wrote:
-> cc_debugfs_global_fini() is marked with __exit now, however it is used
-> in __init ccree_init() for cleanup. Remove the __exit annotation to fix
-> build warning:
->
-> WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in reference: init_module (section: .init.text) -> cc_debugfs_global_fini (section: .exit.text)
->
-> Fixes: 4f1c596df706 ("crypto: ccree - Remove debugfs when platform_driver_register failed")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+RnJvbTogRWxsaW90dCwgUm9iZXJ0DQo+IFNlbnQ6IDIyIE5vdmVtYmVyIDIwMjIgMDU6MDYNCi4u
+Lg0KPiBTaW5jZSBlbnVtIGRvZXNuJ3QgZ3VhcmFudGVlIGFueSBwYXJ0aWN1bGFyIHR5cGUsIHRo
+b3NlIHZhcmlhdGlvbnMNCj4gdXBzZXQgdGhlIG1pbigpIG1hY3JvLiBtaW5fdCgpIGlzIG5lY2Vz
+c2FyeSB0byBlbGltaW5hdGUgdGhlDQo+IGNvbXBpbGVyIHdhcm5pbmcuDQoNClllcywgbWluKCkg
+aXMgZnVuZGFtZW50YWxseSBicm9rZW4uIG1pbl90KCkgaXNuJ3QgcmVhbGx5IGEgc29sdXRpb24u
+DQpJIHRoaW5rIG1pbigpIG5lZWRzIHRvIGluY2x1ZGUgc29tZXRoaW5nIGxpa2U6DQoNCiNkZWZp
+bmUgbWluKGEsIGIpIFwNCglfX2J1aWx0aW5fY29uc3RhbnQoYikgJiYgKGIpICsgMHUgPD0gTUFY
+X0lOVCA/IFwNCgkJKChhKSA8IChpbnQpKGIpID8gKGEpIDogKGludCkoYikpIDogXA0KCQkuLi4N
+Cg0KU28gaW4gdGhlIGNvbW1vbiBjYXNlIHdoZXJlICdiJyBpcyBhIHNtYWxsIGNvbnN0YW50IGlu
+dGVnZXIgaXQNCmRvZXNuJ3QgbWF0dGVyIHdoZXRoZXIgdGhlIGlzIGl0IHNpZ25lZCBvciB1bnNp
+Z25lZC4NCg0KSSBtaWdodCB0cnkgY29tcGlsaW5nIGEga2VybmVsIHdoZXJlIG1pbl90KCkgZG9l
+cyB0aGF0IGluc3RlYWQNCm9mIHRoZSBjYXN0cyAtIGp1c3QgdG8gc2VlIGhvdyBtYW55IG9mIHRo
+ZSBjYXN0cyBhcmUgYWN0dWFsbHkNCm5lZWRlZC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQg
+QWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVz
+LCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
