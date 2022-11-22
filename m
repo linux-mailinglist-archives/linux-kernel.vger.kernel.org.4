@@ -2,161 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C248C633E8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14CE633E95
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbiKVOJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
+        id S233577AbiKVOMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233725AbiKVOJV (ORCPT
+        with ESMTP id S232572AbiKVOMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:09:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA5713D14;
-        Tue, 22 Nov 2022 06:07:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8002461724;
-        Tue, 22 Nov 2022 14:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B899AC433C1;
-        Tue, 22 Nov 2022 14:07:35 +0000 (UTC)
-Message-ID: <4d3ef082-f7b3-2b6e-6fcf-5f991ffe14e9@xs4all.nl>
-Date:   Tue, 22 Nov 2022 15:07:33 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH RFC 16/19] mm/frame-vector: remove FOLL_FORCE usage
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tue, 22 Nov 2022 09:12:20 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2121.outbound.protection.outlook.com [40.107.113.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA17B95
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:12:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XsMF2nKZLjb5KZrsxckN2ysfEYafWvSAYMSlAdkaBbMNKMJEv7ujsZFKHtbiu0wM8jZ11ypbB530K94QSmPiiNHBde1K3Pls+34H0qqTlVI1Y13VWsCORjIXkQhfVH/rt0iSMXnv9MVCGqAKvVHucxwvAlIKifAXbk/uQJspO9PBXs/i2RSvuWbHy2jVN6GCsZtItwNrLDa+AqApKXef24A3c/klVX7TfAA9ZUaWhGXwp7kDHrXzf/zb/pVWD/kcbvS+L+RUp3dJPAZ9C4xHp5UwbJa5xz7pjwzVgSoPfxwrQaBev4yV1OmIVj28OoXqysnscuzqGfeozadD7pRfjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S9qVmWHR98x8o+pJfo2aVUgx9NWfGuPIXnHxohrjKRY=;
+ b=nFXLpp++P9ltdiRpPxqMbvs1KobG27JKsYK+hhD81wu0ixkYg3IJS7iRJVo7YTGX50vvomH9giRiB1CKL6AcXWEAnUc2gOIPJxkvuZtqLMwVDbwARIikw0bvbUmwcN1GaGUTI9t4/JWpX5fOagjuqHtAtgcL64MhS7pL4qhGC+JF+ODDbr/GmZkSSZSHF2/jv+L5RrUZKvs7jKiMWoNs4H/mtobmXROAB5bQzexqH/yC4y9CXJlgqtHztLJ1NGemtZ/zoH22wybd0rTRnog5w9YKzZ8HLc1s0GNBQMWpXymiZXrMAnNPLDrK8CxYS+xekKwfPRUVzxnh0S0XJrEhYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S9qVmWHR98x8o+pJfo2aVUgx9NWfGuPIXnHxohrjKRY=;
+ b=XfOxchjWA+LqAHrP/NKHhayhbECe4VskXclCQPUzkvmWFisbIKkqnSaD3GRHo3HmmLA120WHHaLdjEPMmddgibBRyJ2/c+N8kGnR31f7T5adLOezTSuLki5MitemRKTi+Oe0PGQfBvma5uqg7BDc46Oeg9Y9yN9QAnoaxd0lLM4=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYWPR01MB8347.jpnprd01.prod.outlook.com (2603:1096:400:160::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
+ 2022 14:12:16 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::2cfb:38d2:d52e:c8a3]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::2cfb:38d2:d52e:c8a3%5]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
+ 14:12:16 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+CC:     Nathan Chancellor <nathan@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20221107161740.144456-1-david@redhat.com>
- <20221107161740.144456-17-david@redhat.com>
- <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
- <6175d780-3307-854c-448a-8e6c7ad0772c@xs4all.nl>
- <6ace6cd4-3e13-8ec1-4c2a-49e2e14e81a6@redhat.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <6ace6cd4-3e13-8ec1-4c2a-49e2e14e81a6@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
+Thread-Topic: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
+Thread-Index: AQHY+w/c1mbDSQruokW0nryDLsaO8q5IAM6AgADd3QCAAHSNgIAAGLsAgADeswCAALfCAA==
+Date:   Tue, 22 Nov 2022 14:12:16 +0000
+Message-ID: <OS0PR01MB59226915D333B47338B0239C860D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20221118053102.500216-1-anshuman.khandual@arm.com>
+ <Y3pS5fdZ3MdLZ00t@dev-arch.thelio-3990X>
+ <fd67eca3-59f4-4455-e3db-ba853c3f949b@arm.com>
+ <Y3tuxzl54BvG406t@FVFF77S0Q05N.cambridge.arm.com>
+ <5b69ff03-1694-bae6-3312-a63273be4073@arm.com>
+ <05b6ea24-1135-bcaf-a24e-c0bcbf14101e@arm.com>
+In-Reply-To: <05b6ea24-1135-bcaf-a24e-c0bcbf14101e@arm.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB8347:EE_
+x-ms-office365-filtering-correlation-id: 337814c4-72c9-46cb-8b95-08dacc938f45
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Hu8KNm7EzKYysRJjP76d842zmoKxeyNFbL2eNHTxf90xnnNxllJo33GUc/+tPMuXmdIiaLd1B0RcVQ5pkSNSCJKaSNU3Za8VCTvQpUMqXf4zARkqx+AmXFavSiDPWD4v3hvw36cGD4SwDQlZ0pLLsErBxZ7MiVJJ+lozcDcgTzbItzxn+cPdExHWL5oPpVC25YcujhDUao73mMtM6eJF1KjUT83FxQP9OPgLYjRp4G7ahYe/blh90w+/hXB7gKn7bj3Wdj0eVKKUs2do3dYeftbLMmxNXU7AhP62LLrcT/iBuqYDUIWyb+6Y7m4Qdg0P6E7gihFm5uUotAjV0PMsZrsidCpv+0duZS4vvNf56KJjtROleqhDAIxjGUKw9Y4WpFcP665kqJ4qLzbxbmbbMWm94GOkQcmyc4ZMGX5eT97SBmRZvD7ECFhcZ6U+JadCr032nPMbRr6+Z7WoZA6CqHEn5ZaaMZoUrvVIYRJ8q0SCLHw4VRVkGTHvHVTzNwPcjHBGWHLwKWjXMWG28MiCh9wi/UhAeJdlAInyOd5PjJRc0CqbLFRz0mzTkLE6yoJ3Hvb0G9cT7gR/1XkHs9poiMcCONbFZhO1or3Xp7gEYGWM8fBInyP31Bct7XfD6zC7avsXzF0UpDUVvn/VLQAv/NGPBx+sdLO/rdD9Ibf3EgiCOLtVdJ4ewzj9CoJdgQxr/HrSBpPJ139FzVt5RlSNuAkj7K8lQnAfQnfvEQZz5vI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(376002)(39860400002)(366004)(451199015)(110136005)(33656002)(53546011)(7416002)(7696005)(6506007)(26005)(316002)(9686003)(8936002)(54906003)(52536014)(64756008)(5660300002)(66556008)(76116006)(4326008)(8676002)(41300700001)(66446008)(186003)(38100700002)(122000001)(2906002)(55016003)(83380400001)(4001150100001)(38070700005)(66946007)(66476007)(86362001)(966005)(478600001)(45080400002)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?RYywq2NVJ7ur9YdUes8pjnqPaJBlem22ttvYWxEu4ERTqjFjg9nVYnMBI3?=
+ =?iso-8859-1?Q?aEzU4Yhb5yMasE8M8m7ENqAhm4nrAKeSFFnThA+xg8Jf4zFzyJtzMrWwCj?=
+ =?iso-8859-1?Q?7StlRx+62cv55c64rDF8b/IsJz6T1a4LIZV29jTbLVZOBJnvoYsET+1j22?=
+ =?iso-8859-1?Q?5Zwd4W4HCQbk+QxP08lEUn3Xv68RbRK4HWmdYDCU767riOLrfadehdFHJP?=
+ =?iso-8859-1?Q?Ww3D7I4bzz/nDJc5pXkiWtHN22yjtFMDYLvq1TA0/eBmUgPZgmwQtfY3eo?=
+ =?iso-8859-1?Q?/6q5ONV3qhJxuLUc+upT+PTWjWHZIoWq1Km2+zeO9GCdoPb22LNjM79KXH?=
+ =?iso-8859-1?Q?aKdNlvpsmxv16DjSWSbdGg9e8f2O2nkeeha1gUeP/mk3zGql6+n1DKYW3J?=
+ =?iso-8859-1?Q?RaTSiEfqir5tAyZh2JtpQ6efeeGp0FF56SqEP7vZLixK5FKzhhUtjufBEk?=
+ =?iso-8859-1?Q?+5NnWtRB5lMGOroBagM7a81p23DRDv2nYwHxyczzxTscLHeM2Y6oAxwepx?=
+ =?iso-8859-1?Q?R1cdmXlcFmIA6DNO3pfc4SRMZaqDdIdyUIN1R6a3sie+i54QAmyTXnakF5?=
+ =?iso-8859-1?Q?mSD1kUD24DnquI6xdKlGq+2/i8B5En9HWtvI8KmSbOhUwplcQwmfxXKzJd?=
+ =?iso-8859-1?Q?dQnYSGUMwWvE+rC48JADVXUjPihWEYGGYM5xXw3pjad5v81ao3i1XHWTy6?=
+ =?iso-8859-1?Q?tn1cbUloM+lHh9A8HGgxa2rt7sOY7jdMJApl1MFYxr3KKiY/UU8Pqib1gT?=
+ =?iso-8859-1?Q?nFPYMpp71jDKfp+L/yNgbVYgzJCnGol4pbufn3tf0P4UaxhEmCUKgybpJO?=
+ =?iso-8859-1?Q?8BuV7ZTyiEdQV9vNecIvToQ79ZZril5GAELXevBpniL7XlaL7ExD/0g4IZ?=
+ =?iso-8859-1?Q?KV3UjcdFHRFJDlcv0pgRp0bOEblj3Ou0wuRXiQWnFywN3VCIQmPVPk24Wh?=
+ =?iso-8859-1?Q?sgc21wx7u1R37fIAjv/QOTRnUr6bpQ4UVcBS4+Ap7fj/mlLWQD7CskPrfv?=
+ =?iso-8859-1?Q?VDu5ZuTi68t84dV8WbzqupFtg4fvWJglrOUWkFpLT4L0KNrwzylX5nTJRu?=
+ =?iso-8859-1?Q?Oa4CU16Km63xUs+O0+CoDkRTCB52LnzvhaaqjOyTlVrTH47UIIgt8/D2Z6?=
+ =?iso-8859-1?Q?OienACeY0m87AxWfF1o8VNKJYFocteC8/qszk39Cq3vsbqErZD0ulkccQR?=
+ =?iso-8859-1?Q?Qwel0hWAIv0RFivN7mjW7jV/hbAJXI2O2+6ieIU3EGE4IHFtkJs4RdYvip?=
+ =?iso-8859-1?Q?NLT0DmmZ8lT4mCL9YddHMF1z/7Im21ItFc/50GIVy7WIWpB3fnn0gQEGmS?=
+ =?iso-8859-1?Q?V/gBr1VTyjg3hXr0ztfyjzJMJDUPUb5Sy3Xk6T7Js5yY+0Mn3ohE/vEAwj?=
+ =?iso-8859-1?Q?F5WJqHBfNlZqt2xDHsFSWmUyS+DY4d8WvFI0mg65d0ikq2pu2EhhkAdbAB?=
+ =?iso-8859-1?Q?NgcfcG82iOJXpLgYBMWoQCGBa+B/b2zsJdiKgfASv/9mHoBhTR0faHZ2Nf?=
+ =?iso-8859-1?Q?J3DpvKBicGkCzACF+F9KfYfAOHmcVgw134L/olhDrXWTXmA5IExftuu1oC?=
+ =?iso-8859-1?Q?m0gXLS5GSYK4E8Tp8SsYt1B46tARimjSgH7CR5sLEI2VptMSjJ12qOOlov?=
+ =?iso-8859-1?Q?1qfo/8EHZsYIl8FmQ2tK2FFJSCsvrN8NHu4UEMY7rJRgmFKcgNYKy83w?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 337814c4-72c9-46cb-8b95-08dacc938f45
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 14:12:16.1836
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4tyty2riXUYEGiB+znyG+jbVHiK5oG6RKlF/v6qmdisINDWWhBLx2bQOGdhg0MmQ/zRw6TvFKhLTrtyMklKZxTpXpxQFQjtxaaPoLHT6tXc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB8347
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 13:38, David Hildenbrand wrote:
-> On 22.11.22 13:25, Hans Verkuil wrote:
->> Hi Tomasz, David,
->>
->> On 11/8/22 05:45, Tomasz Figa wrote:
->>> Hi David,
->>>
->>> On Tue, Nov 8, 2022 at 1:19 AM David Hildenbrand <david@redhat.com> wrote:
->>>>
->>>> FOLL_FORCE is really only for debugger access. According to commit
->>>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
->>>> writable"), the pinned pages are always writable.
->>>
->>> Actually that patch is only a workaround to temporarily disable
->>> support for read-only pages as they seemed to suffer from some
->>> corruption issues in the retrieved user pages. We expect to support
->>> read-only pages as hardware input after. That said, FOLL_FORCE doesn't
->>> sound like the right thing even in that case, but I don't know the
->>> background behind it being added here in the first place. +Hans
->>> Verkuil +Marek Szyprowski do you happen to remember anything about it?
->>
->> I tracked the use of 'force' all the way back to the first git commit
->> (2.6.12-rc1) in the very old video-buf.c. So it is very, very old and the
->> reason is lost in the mists of time.
->>
->> I'm not sure if the 'force' argument of get_user_pages() at that time
->> even meant the same as FOLL_FORCE today. From what I can tell it has just
->> been faithfully used ever since, but I have my doubt that anyone understands
->> the reason behind it since it was never explained.
->>
->> Looking at this old LWN article https://lwn.net/Articles/28548/ suggests
->> that it might be related to calling get_user_pages for write buffers
->> (non-zero write argument) where you also want to be able to read from the
->> buffer. That is certainly something that some drivers need to do post-capture
->> fixups.
->>
->> But 'force' was also always set for read buffers, and I don't know if that
->> was something that was actually needed, or just laziness.
->>
->> I assume that removing FOLL_FORCE from 'FOLL_FORCE|FOLL_WRITE' will still
->> allow drivers to read from the buffer?
-> 
-> Yes. The only problematic corner case I can imagine is if someone has a 
-> VMA without write permissions (no PROT_WRITE/VM_WRITE) and wants to pin 
-> user space pages as a read buffer. We'd specify now FOLL_WRITE without 
-> FOLL_FORCE and GUP would reject that: write access without write 
-> permissions is invalid.
+Hi All,
 
-I do not believe this will be an issue.
+> Subject: Re: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
+>=20
+>=20
+>=20
+> On 11/21/22 19:26, Robin Murphy wrote:
+> > On 2022-11-21 12:27, Mark Rutland wrote:
+> >> On Mon, Nov 21, 2022 at 11:00:42AM +0530, Anshuman Khandual wrote:
+> >>> Hello Nathan,
+> >>>
+> >>> Thanks for the report.
+> >>>
+> >>> On 11/20/22 21:46, Nathan Chancellor wrote:
+> >>>> Hi Anshuman,
+> >>
+> >>>> I just bisected a boot failure in our QEMU-based continuous
 
-> 
-> There would be no way around "fixing" this implementation to not specify 
-> FOLL_WRITE when only reading from user-space pages. Not sure what the 
-> implications are regarding that corruption that was mentioned in 
-> 707947247e95.
+This patch created boot failure on RZ/G2L platforms as well.
+Reverting the patch fixed the boot failure.
 
-Before 707947247e95 the FOLL_WRITE flag was only set for write buffers
-(i.e. video capture, DMA_FROM_DEVICE), not for read buffers (video output,
-DMA_TO_DEVICE). In the video output case there should never be any need
-for drivers to write to the buffer to the best of my knowledge.
+Cheers,
+Biju
 
-But I have had some complaints about that commit that it causes problems
-in some scenarios, and it has been on my todo list for quite some time now
-to dig deeper into this. I probably should prioritize this for this or
-next week.
-
-> 
-> Having said that, I assume such a scenario is unlikely -- but you might 
-> know better how user space usually uses this interface. There would be 
-> three options:
-> 
-> 1) Leave the FOLL_FORCE hack in for now, which I *really* want to avoid.
-> 2) Remove FOLL_FORCE and see if anybody even notices (this patch) and
->     leave the implementation as is for now.
-> 3) Remove FOLL_FORCE and fixup the implementation to only specify
->     FOLL_WRITE if the pages will actually get written to.
-> 
-> 3) would most probably ideal, however, I am no expert on that code and 
-> can't do it (707947247e95 confuses me). So naive me would go with 2) first.
-> 
-
-Option 3 would be best. And 707947247e95 confuses me as well, and I actually
-wrote it :-) I am wondering whether it was addressed at the right level, but
-as I said, I need to dig a bit deeper into this.
-
-Regards,
-
-	Hans
+> >>>> integration setup to this change as commit 9ed2b4616d4e ("arm64/mm:
+> >>>> Drop redundant
+> >>>> BUG_ON(!pgtable_alloc)") in the arm64 tree. There is no output so
+> >>>> the panic clearly happens early at boot. If I move back to the
+> >>>> previous commit and add a WARN_ON() like so:
+> >>>>
+> >>>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c index
+> >>>> d386033a074c..9280a92ff920 100644
+> >>>> --- a/arch/arm64/mm/mmu.c
+> >>>> +++ b/arch/arm64/mm/mmu.c
+> >>>> @@ -383,6 +383,7 @@ static void __create_pgd_mapping_locked(pgd_t
+> >>>> *pgdir, phys_addr_t phys,
+> >>>> =A0=A0=A0=A0=A0 phys &=3D PAGE_MASK;
+> >>>> =A0=A0=A0=A0=A0 addr =3D virt & PAGE_MASK;
+> >>>> =A0=A0=A0=A0=A0 end =3D PAGE_ALIGN(virt + size);
+> >>>> +=A0=A0=A0 WARN_ON(!pgtable_alloc);
+> >>>> =A0 =A0=A0=A0=A0=A0 do {
+> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 next =3D pgd_addr_end(addr, end);
+> >>>>
+> >>>> I do see some stacktraces. I have attached the boot log from QEMU.
+> >>>>
+> >>>> If there is any additional information I can provide or patches I
+> >>>> can test, I am more than happy to do so.
+> >>>
+> >>> There are couple of instances, where __create_pgd_mapping() function
+> >>> gets called without a valid pgtable alloc function (NULL is passed
+> >>> on instead), as it is not expected to allocate page table pages,
+> >>> during the mapping process. The following change after this patch
+> should solve the reported problem.
+> >>>
+> >>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c index
+> >>> 9ea8e9039992..a00563122fcb 100644
+> >>> --- a/arch/arm64/mm/mmu.c
+> >>> +++ b/arch/arm64/mm/mmu.c
+> >>> @@ -42,6 +42,7 @@
+> >>> =A0 #define NO_BLOCK_MAPPINGS=A0=A0=A0=A0=A0 BIT(0)
+> >>> =A0 #define NO_CONT_MAPPINGS=A0=A0=A0=A0=A0=A0 BIT(1)
+> >>> =A0 #define NO_EXEC_MAPPINGS=A0=A0=A0=A0=A0=A0 BIT(2)=A0 /* assumes F=
+EAT_HPDS is not
+> >>> used */
+> >>> +#define NO_ALLOC_MAPPINGS=A0=A0=A0=A0=A0 BIT(3)=A0 /* does not alloc=
+ate page
+> >>> +table pages */
+> >>> =A0 =A0 int idmap_t0sz __ro_after_init;
+> >>> =A0 @@ -380,7 +381,7 @@ static void __create_pgd_mapping_locked(pgd_t
+> >>> *pgdir, phys_addr_t phys,
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0 phys &=3D PAGE_MASK;
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0 addr =3D virt & PAGE_MASK;
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0 end =3D PAGE_ALIGN(virt + size);
+> >>> -=A0=A0=A0=A0=A0=A0 BUG_ON(!pgtable_alloc);
+> >>> +=A0=A0=A0=A0=A0=A0 BUG_ON(!(flags & NO_ALLOC_MAPPINGS) && !pgtable_a=
+lloc);
+> >>> =A0 =A0=A0=A0=A0=A0=A0=A0=A0 do {
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 next =3D pgd_addr_en=
+d(addr, end); @@ -453,7 +454,7 @@
+> >>> static void __init create_mapping_noalloc(phys_addr_t phys, unsigned
+> >>> long virt,
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return;
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0 }
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0 __create_pgd_mapping(init_mm.pgd, phys, virt=
+, size, prot,
+> >>> NULL,
+> >>> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0 NO_CONT_MAPPINGS);
+> >>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0 NO_CONT_MAPPINGS | NO_ALLOC_MAPPINGS);
+> >>> =A0 }
+> >>> =A0 =A0 void __init create_pgd_mapping(struct mm_struct *mm, phys_add=
+r_t
+> >>> phys, @@ -481,7 +482,7 @@ static void
+> >>> update_mapping_prot(phys_addr_t phys, unsigned long virt,
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0 }
+> >>> =A0 =A0=A0=A0=A0=A0=A0=A0=A0 __create_pgd_mapping(init_mm.pgd, phys, =
+virt, size, prot,
+> >>> NULL,
+> >>> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0 NO_CONT_MAPPINGS);
+> >>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0 NO_CONT_MAPPINGS | NO_ALLOC_MAPPINGS);
+> >>> =A0 =A0=A0=A0=A0=A0=A0=A0=A0 /* flush the TLBs after updating live ke=
+rnel mappings */
+> >>> =A0=A0=A0=A0=A0=A0=A0=A0 flush_tlb_kernel_range(virt, virt + size);
+> >>
+> >> This is now more complicated than what we had originally, and it
+> >> doesn't catch the case where the caller sets NO_ALLOC_MAPPINGS but
+> >> the callee ends up needing to perform an allocation, which the old
+> code would have caught.
+> >
+> > Well, it's still "caught" as such - all that BUG_ON(!pgtable_alloc)
+> does in these cases is encode the source location in the backtrace, vs.
+> having to decode it (if necessary) from the LR in a backtrace from
+> immediately dereferencing pgtable_alloc(). If that happens before the
+> user has a console up then the difference is moot anyway.
+>=20
+> Agreed, also the fact that certain callers are sure about no page table
+> page allocation would be required (hence they just pass "NULL" for
+> pgtable_alloc function), needs to be notified appropriately when page
+> page table creation stumbles upon a pxd_none().
+>=20
+> if (pxd_none(pmd)) {
+> 	BUG_ON(flags & NO_ALLOC_MAPPINGS);
+> }
+>=20
+> Although there are might be an argument that all erstwhile
+> BUG_ON(!pgtable_alloc) has replacements with BUG_ON(flags &
+> NO_ALLOC_MAPPINGS), but there is a subtle difference.
+> It captures the fact (in a rather structured manner), that caller made a
+> choice with NO_ALLOC_MAPPINGS but called __create_pgd_mapping() on a
+> page table, where intermediate page table page alloc would still be
+> required. IMHO adding that explicit structure here via the new flag
+> NO_ALLOC_MAPPINGS makes sense.
+>=20
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> https://jpn01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Flists.=
+i
+> nfradead.org%2Fmailman%2Flistinfo%2Flinux-arm-
+> kernel&amp;data=3D05%7C01%7Cbiju.das.jz%40bp.renesas.com%7Cbcd488ff5f5c44=
+a
+> aaf3708dacc387479%7C53d82571da1947e49cb4625a166a4a2a%7C0%7C0%7C638046840
+> 104902697%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLC
+> JBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DF%2B3%2F2E583sYk=
+S
+> Z2bYIUN6HmHO7aGD5KT2EuGCE8MY2w%3D&amp;reserved=3D0
