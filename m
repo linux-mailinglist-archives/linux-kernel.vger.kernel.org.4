@@ -2,222 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F3F63333F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D744633340
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 03:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiKVC0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 21:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S232680AbiKVC0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 21:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiKVCZp (ORCPT
+        with ESMTP id S232675AbiKVC0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:25:45 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDDEF60A9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:21:55 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3a7081e3b95so27247227b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DKbxaJtTyZO5Z9ZBbZTMOsOtk3yKuoTVReeAVGJ3Pdw=;
-        b=th40tW4wJgE8ZiaU/N3/Vp/zUV3VRt5UMK0PdcOPvQHtQP2r/uyRVg0+OO5SlBIcQC
-         jws9pp8MNuXe4Tdy0WIAs8zTg18CNBl9qIqzEuxRbUhiHcHEB1+BVhMCCq8zRb5l2NH7
-         LI9dCeopLGYOyUDchySF3vlWK2NmFiSreav5Ti8C6PO9iry70Du6sNSWK+12+1638g/8
-         iIy6Uylx15vNePLram5wH1FQjOjZFb382lZ5JQ8EbvOh9GFkaEL2x5MP+UIZui0LF4v/
-         CJzHTw3pV5UULKOtO66iJpIzm5PjlLCMgVVg2xs7UWrmuBuA691D6TI71Pg2psEwuZwL
-         kZrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DKbxaJtTyZO5Z9ZBbZTMOsOtk3yKuoTVReeAVGJ3Pdw=;
-        b=mgr+j8Fks5TbdTjwR2OL/GlCaNWKVXPdma2El/tmHcv5oxTUeA8nVrQFrhXINVCkLg
-         xMHE/+yV/7pCk2dWG8NzXxMl8RCxpa/2wM/Ws6HPZBLDFDneMqrYSnZdp/lJhY/IngO8
-         RnhivANN3ZVZqwFe8eAOEe0yyqW2RBc2B1bTtr79Rd9MmGNfJaI4vrI4gjVlkhKw21eW
-         truzg6IrhiJ6OKxDjHawCgXLB4OINGRhohh4Z9Z3XBx4tX6LnYJgQkt/a+UrfIxrA+Y4
-         I+1fdA0AxeRETGAPi+Y6IxmBTl5J6VRh0kXHJFoQ989RUAHWs+4xHPIOMq6O7bbE8zp/
-         +w5Q==
-X-Gm-Message-State: ANoB5pnJk3caYpy8D2VxPxrEMAFLxBzaO/vO7r8hfqkLt/i8+loWjTR2
-        zvIPxuQ4A4zNIZaTt+FnO4BsOWrasfLKwQcHCFm0fw==
-X-Google-Smtp-Source: AA0mqf6ObbGFOG0xl7JeJ2WAVW0SXydm9VOOQCDq40H+EH4fN1M84S3y4P3BkTpJTxJHwIE4iR7GZri9IbvoRetEYZE=
-X-Received: by 2002:a81:7b89:0:b0:388:dd9b:f3ee with SMTP id
- w131-20020a817b89000000b00388dd9bf3eemr2279367ywc.164.1669083714099; Mon, 21
- Nov 2022 18:21:54 -0800 (PST)
+        Mon, 21 Nov 2022 21:26:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A6AE1235
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 18:23:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35138B818E7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:23:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F244C433D6;
+        Tue, 22 Nov 2022 02:23:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669083781;
+        bh=I7YL3bCCeJLisRqnPwuXs7B4Zp+B67ITumrFT7w6sqg=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=gi8ir3+/8iN5kIl4rz24XcNBNG2WqmFDqg06GajceHVzR0sDg9jmi9lhyYuA65fDE
+         4cfm5SAdTEY1q/1B1nJv4X/rUvLMWUAdR+TljW3ZjxWnYZpsFMfbf6Nwtgeqm7bGeO
+         QnOhi9dvdfdtP4f8KNPVw+PCgmCJNY+HpgwoXngiQbBaUtUTttlV/UAi7vLUXKdCJr
+         c9xdlDf8nzJw7ClZSDLsOQAjJ0dfLfPMfqU15gtYxKju97fDHx+AJA9YODDPayNRf1
+         VNtOEwJycXqWe8SQui6NMbfYeNAPvPXdcImVOCrrLxVLC/X0ONswdBp7g0TAvcA4UY
+         x/WsplDl5gEOw==
+Date:   Mon, 21 Nov 2022 18:22:59 -0800 (PST)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Dominique Martinet <asmadeus@codewreck.org>
+cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] 9p/xen: do not memcpy header into req->rc
+In-Reply-To: <20221122001025.119121-1-asmadeus@codewreck.org>
+Message-ID: <alpine.DEB.2.22.394.2211211822510.1049131@ubuntu-linux-20-04-desktop>
+References: <20221122001025.119121-1-asmadeus@codewreck.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-2-davidgow@google.com>
-In-Reply-To: <20221119081252.3864249-2-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 21 Nov 2022 18:21:43 -0800
-Message-ID: <CAGS_qxqAUiMfKe2ksnqQtyWv0BWYLA4_uGqpu76d=Oh42mAUgQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] kunit: Use the static key when retrieving the
- current test
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sadiya Kazi <sadiyakazi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 12:13 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> In order to detect if a KUnit test is running, and to access its
-> context, the 'kunit_test' member of the current task_struct is used.
-> Usually, this is accessed directly or via the kunit_fail_current_task()
-> function.
->
-> In order to speed up the case where no test is running, add a wrapper,
-> kunit_get_current_test(), which uses the static key to fail early.
-> Equally, Speed up kunit_fail_current_test() by using the static key.
->
-> This should make it convenient for code to call this
-> unconditionally in fakes or error paths, without worrying that this will
-> slow the code down significantly.
->
-> If CONFIG_KUNIT=n (or m), this compiles away to nothing. If
-> CONFIG_KUNIT=y, it will compile down to a NOP (on most architectures) if
-> no KUnit test is currently running.
->
-> Note that kunit_get_current_test() does not work if KUnit is built as a
-> module. This mirrors the existing restriction on kunit_fail_current_test().
->
-> Note that the definition of kunit_fail_current_test() still wraps an
-> empty, inline function if KUnit is not built-in. This is to ensure that
-> the printf format string __attribute__ will still work.
->
-> Also update the documentation to suggest users use the new
-> kunit_get_current_test() function, update the example, and to describe
-> the behaviour when KUnit is disabled better.
->
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Sadiya Kazi <sadiyakazi@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
+On Tue, 22 Nov 2022, Dominique Martinet wrote:
+> while 'h' is packed and can be assumed to match the request payload,
+> req->rc is a struct p9_fcall which is not packed and that memcpy
+> could be wrong.
+> 
+> Fix this by copying each fields individually instead.
+> 
+> Reported-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+> Suggested-by: Stefano Stabellini <sstabellini@kernel.org>
+> Link: https://lkml.kernel.org/r/alpine.DEB.2.22.394.2211211454540.1049131@ubuntu-linux-20-04-desktop
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-Looks good to me, but some small optional nits about the Documentation.
 
-I'm a bit sad that the kunit_fail_current_test() macro is now a bit
-more complicated (has two definitions).
-Optional: perhaps it's long enough now that we should have a comment
-after the #endif, i.e.
-#endif   /* IS_BUILTIN(CONFIG_KUNIT) */
-
-<snip>
-
->
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 2737863ef365..e70014b82350 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -625,17 +625,21 @@ as shown in next section: *Accessing The Current Test*.
->  Accessing The Current Test
->  --------------------------
->
-> -In some cases, we need to call test-only code from outside the test file.
-> -For example, see example in section *Injecting Test-Only Code* or if
-> -we are providing a fake implementation of an ops struct. Using
-> -``kunit_test`` field in ``task_struct``, we can access it via
-> -``current->kunit_test``.
-> +In some cases, we need to call test-only code from outside the test file,
-> +for example,  when providing a fake implementation of a function, or to fail
-
-nit: there are two spaces after "for example, "
-
-Personal preference: I'd rather keep "For example," as the start of a
-new sentence.
-
-> +any current test from within an error handler.
-> +We can do this via the ``kunit_test`` field in ``task_struct``, which we can
-> +access using the ``kunit_get_current_test`` function in ``kunit/test-bug.h``.
-
-Personal preference: kunit_get_current_test()
-IMO that would make it easier to pick up when the reader is quickly
-scanning over.
-
->
-> -The example below includes how to implement "mocking":
-> +``kunit_get_current_test`` requires KUnit be built-in to the kernel, i.e.
-> +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
-> +or no test is currently running, in which case it will quickly return ``NULL``.
-
-I find this sentence a bit confusing.
-
-I think it's trying to convey that
-* it can be called no matter how the kernel is built or what cmdline
-args are given
-* but it doesn't work properly for CONFIG_KUNIT=m
-* for CONFIG_KUNIT=n, it's a static inline func that just returns NULL
-* when booting with `kunit.enabled=0`, it's fast (thanks to static keys)
-
-But the current wording basically says "the func requires
-CONFIG_KUNIT=y" then says it's safe to call it even if CONFIG_KUNIT=n.
-It feels a bit whiplashy.
-
-Should this be reworded to say the function can be used regardless of
-whether KUnit is enabled but add a `note` block about how it doesn't
-properly for CONFIG_KUNIT=m?
-
-> +
-> +The example below uses this to implement a "mock" implementation of a function, ``foo``:
->
->  .. code-block:: c
->
-> -       #include <linux/sched.h> /* for current */
-> +       #include <kunit/test-bug.h> /* for kunit_get_current_test */
->
->         struct test_data {
->                 int foo_result;
-> @@ -644,7 +648,7 @@ The example below includes how to implement "mocking":
->
->         static int fake_foo(int arg)
->         {
-> -               struct kunit *test = current->kunit_test;
-> +               struct kunit *test = kunit_get_current_test();
->                 struct test_data *test_data = test->priv;
->
->                 KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
-> @@ -675,7 +679,7 @@ Each test can have multiple resources which have string names providing the same
->  flexibility as a ``priv`` member, but also, for example, allowing helper
->  functions to create resources without conflicting with each other. It is also
->  possible to define a clean up function for each resource, making it easy to
-> -avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/test.rst.
-> +avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/resource.rst.
-
-Oops, thanks for cleaning this up.
-I guess I forgot to update this when splitting out resource.rst or my
-change raced with the rewrite of this file.
-
->
->  Failing The Current Test
->  ------------------------
-> @@ -703,3 +707,6 @@ structures as shown below:
->         static void my_debug_function(void) { }
->         #endif
->
-> +Note that ``kunit_fail_current_test`` requires KUnit be built-in to the kernel, i.e.
-> +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
-> +or no test is currently running, but will do nothing.
-
-This is the same wording as above.
-I think it's clearer since what it's trying to convey is simpler, so
-it's probably fine.
-
-But if we do end up thinking of a good way to reword the previous bit,
-we might want to reword it here too.
+> ---
+> Follow up from the previous xen patch's review.
+> 
+> This isn't an immediate fix so I don't think this one should be rushed
+> in with the rest of the overflow fixes -- I'll let this sit a bit in
+> -next after reviews.
+> 
+>  net/9p/trans_xen.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
+> index 4665215bc98b..e8e3f54a837e 100644
+> --- a/net/9p/trans_xen.c
+> +++ b/net/9p/trans_xen.c
+> @@ -216,7 +216,9 @@ static void p9_xen_response(struct work_struct *work)
+>  			goto recv_error;
+>  		}
+>  
+> -		memcpy(&req->rc, &h, sizeof(h));
+> +		req->rc.size = h.size;
+> +		req->rc.id = h.id;
+> +		req->rc.tag = h.tag;
+>  		req->rc.offset = 0;
+>  
+>  		masked_cons = xen_9pfs_mask(cons, XEN_9PFS_RING_SIZE(ring));
+> -- 
+> 2.35.1
+> 
