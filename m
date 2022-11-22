@@ -2,162 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB73633E44
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D646C633E45
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiKVN7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
+        id S233946AbiKVOA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbiKVN73 (ORCPT
+        with ESMTP id S232586AbiKVOAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:59:29 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on0600.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe1f::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B543F663D3;
-        Tue, 22 Nov 2022 05:59:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HNvajJ25ljzOt2yLRbjMjgrAtE0SRLj5B7D6aZg/bSHjDVcP2CtNcEycshQchQtPBb95fwoS/ICvDFmmrPYnsEI2MpS7bK0zBkoQKEeqP3SXXNRrXJC7wzgTnuYXSnTZXizTlPzCZvNSHy9WEtqqZN3dHgZ5UVVwacVunr1RDG+a0Q9pxzzQ+bzw3h31vM1F8cfMly3k+Ia4kObGjYKMl4JLGZWvJus8VVPTH/JA9KCF4E3KE73sD02BbZ4UvwoHn5i2dZ1fzwzzOe74rtcFOkGzz1cIPy006WrJIPsDfnoaZDPNVgMrKt7AXW+OAEz4uEqKXAkQYuQr4fVlqQ4g6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EDHUYX7/oB/73BfSqAvKJYtMYLndoiviZ8fPoaT5uvs=;
- b=g6f4BAHVJjDLUIXH6KKxQVkS9oNV0NTnCQetoV/aB50Rx2SmKGPmsYafcUgxUgU9tM3WvCFwMp2cCSNbFaLQKaQI0r5yeuHAjYTovp+odzrpMTvi102d7Zfw/gZhvc+OVlTjM2TLLV7AXkiwTZ27V+moSgXLnhjMokujGYm8nrd3VQkQ1dCLWylPpkQr9VQBu4cjKxgZDK0hTMJQUdr+unQzo0Xn5GdvZKrRYYVIJFMrskRgU6hca6vs3RPdLHLG0jh0JB6gigDx2sZBN7y+A7M61Hm5pRJv4EZ3Q/2ZnEsEyJYT7EH91iVsXniU+/TuNgQVo0CqlAkyhi7qbOYK2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EDHUYX7/oB/73BfSqAvKJYtMYLndoiviZ8fPoaT5uvs=;
- b=AzDBRuJXcNdWW1e6th1UNBF9Tnz5kpf6mlksacHI9N+G/4S7DaVg+YiHYqlGMaoBQuFhUV4xRsVCK149ZwjtDGfVZ7rEhAHByMIeUvSC8Azch2EMUWwzWwGH6IQ+WbZT1B4ErSm655P46m9TNsjviUA8V2FObHs2mybtgR7sioiiJCJHkumZkBhOtmELi3CjenZpu+jvgFOtUaiWF7cqU680HV25RYWvfKiHCfprZVlNm67SGxXFD2L5RioJmXwiRjDPuoNjNcPGQmSBBe+DAlHj1I0M8FtbzL6ROFDNIDsHMh79JOuQD+wO+uojA/uIK6o9JzWdsMYPw4RtmlIFTw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by DU2PR04MB8744.eurprd04.prod.outlook.com
- (2603:10a6:10:2e2::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Tue, 22 Nov
- 2022 13:59:20 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::14eb:6506:8510:875f]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::14eb:6506:8510:875f%7]) with mapi id 15.20.5834.011; Tue, 22 Nov 2022
- 13:59:20 +0000
-Message-ID: <3f50021f-2dbf-4e5e-d85f-bf41a02b6b6a@suse.com>
-Date:   Tue, 22 Nov 2022 14:59:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Prarit Bhargava <prarit@redhat.com>, pmladek@suse.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>
-References: <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
- <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
- <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
- <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
- <Y3Jg8X7qv2AKPU1J@bombadil.infradead.org>
- <5467e66d-55de-ca8f-c1ae-ffe6efe7290d@redhat.com>
- <Y3Pol5H4kJioAV9W@bombadil.infradead.org>
- <c2e841b7-e2b3-09f9-8187-328131d72c5d@redhat.com>
- <049a8f8a-baf8-744d-6250-575fc0dc533e@suse.com>
- <Y3vLbDAeILx7gJPT@bombadil.infradead.org>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <Y3vLbDAeILx7gJPT@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0154.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:98::9) To AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16)
+        Tue, 22 Nov 2022 09:00:25 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11A0866CB6;
+        Tue, 22 Nov 2022 06:00:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 217861FB;
+        Tue, 22 Nov 2022 06:00:29 -0800 (PST)
+Received: from [10.57.3.106] (unknown [10.57.3.106])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 185633F73D;
+        Tue, 22 Nov 2022 06:00:19 -0800 (PST)
+Message-ID: <57315669-e6e7-08b8-a252-bc35d4fecc01@arm.com>
+Date:   Tue, 22 Nov 2022 14:00:18 +0000
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|DU2PR04MB8744:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f02c376-925c-449c-1bca-08dacc91c0a3
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5UwsC9OKDOuXJPfMpRI9q04YLAWqwWqUCww+i3ztUo09eXJ0v0RfD8wixo6XYrJDPacrszSDS8lR0GB1saGdx6m/WYEMqLfr5ixkSqQNtXrhE9ez+E7MsUbMhvDdTxoWdGzScvMZNN/Y/behhoBLkyKVZPbtWhCAgWcZF3JHOOdblHpWioNJxBZmCMe79gkB4A2utZ29pXjZHB2G2+2pErRxAvtn+qVsN7nDDa7cX9yi7XH+KsIwFCfTfFaj4ROYzk/5WfbeL+op/8Ra3JKNqu5JvlNPGKzVaq6rrzof/AsLaD5YoI3kq6hygMONyMqpcofFltcHv5n10QotczbxwDeMPEUe8t5uZW+xbFrXe+iDnKHOLitemNt4sXOza8TE5eTxFg4Gw/guMC8ohynxHoWNZlnoFcvVajTs3qomtXyy74p4yQy6YHzybbHPwhdZfWBNAuIODTwSSmChQ0GPKzzhsccluIHpXr8QO7eJEnbJlfjXBKyZ890lBCmlzgn8JzcpYAP9pW6kaoI6f/JvkQTWwfv1VwE6D8d8v6F3hLI2t+5LA9Ga2HIE5Ue1LsxVupG4icZeBgMnbyuVsHnKss+Ak+L8FxUf+pXs143I8qKXiSDbSn43pc6Xi1KKbfrjCqsaYtkyU64V0B/UlabHboRZXYMnMV0GFtodQPmJDKZONoiWht0AHtx8EUWEh/zJcBWYQw+moj/A6gaIEt6lsZMgXiCwZmqpOsugnQa4A6Acovd30mTv8x8tBj/CDiKy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199015)(6486002)(6506007)(966005)(6512007)(53546011)(55236004)(26005)(186003)(36756003)(2906002)(478600001)(2616005)(38100700002)(31696002)(86362001)(31686004)(8936002)(41300700001)(66556008)(66946007)(66476007)(44832011)(8676002)(5660300002)(4326008)(54906003)(6916009)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2dFNklkcDJ0YWg0RjNoazJGVytNWFdKcXNhL0lWdWZZTHBPNkJTOWd0RXc3?=
- =?utf-8?B?RThEQjR0SkVrRmdJazljZ2hsd0FFZERlY0pvVmZKeFBWRmMzOFZuNGpuaFBs?=
- =?utf-8?B?MHRYK0NSOVRCQ21acXRmYlZpVGpXTDBpRzNuL21DSE9JSmM5Yng0d3F0NnA1?=
- =?utf-8?B?ZG81aUNrT1RZcTloblNZdWhmNXVzM0N6ZGt1Zmg1ZkZqOWZWclJLME5lTW5m?=
- =?utf-8?B?VndxWFc1c1J6Tis4SENyT3F0WnFUKzBmU1hvTzUvalB6OTk1aUtLN3NOR2Zs?=
- =?utf-8?B?KzIwQUdYV3FYb2p1RThkRllwdG1pM085cHpIc3NSV0JCVVZ6SmJzeElKVGlK?=
- =?utf-8?B?eGNidjBoMHpvWENXSTk0YlROekFsNXNkd0Y5ZkxlTlVsY25XZ1U3Q004aG5o?=
- =?utf-8?B?S3lWc2ladHArM3lGblF2ZC8wb1JsdUtrRGNDRGdXM1kwOWNqeFlSK2pIRUE5?=
- =?utf-8?B?cnAyWEgrU3VaSElMNXk2dUJxS1I2Zm1xamo1UUFsdi9oeXdCZjlmWmgwVCtv?=
- =?utf-8?B?Wm5jRkhiMUFyYWpINE5pT1hrVmZ5OXdBc2ZXZkxDNk5FMGtMOElFbWExSVhO?=
- =?utf-8?B?d2dIRUtzUmgwdmVtUnBsSkdkOHVTbllXRWtvUDUwcTh5UitRV0Zld1Urd3hm?=
- =?utf-8?B?aUJQeGdTMDdXMnZCYityTHJEMDArcUkwOFc3Z0c3S3JlWUxOZVZicVBDZmgx?=
- =?utf-8?B?RXE1ekxiMHQyT1duNDZDbmJ4VjR2aTMwU05IbEpWdVVvdnh0SVpxUDlJSity?=
- =?utf-8?B?bThKcjQ5TWNPcjVQeVBTcDBjbGtCaUZ2VUVIUHVYd0pLT0IvYy94VkxBcHpz?=
- =?utf-8?B?WHFzNUJBNHNVc0ZzTGQ1Tm94YTArSE11WDJWVGpoTzBFMGx3cG9xbStDeWJy?=
- =?utf-8?B?ZzBPZDN1UEd1UVlNYS9BdlA4bjJGbDlCbU5icTMxOWtwSEhSMWt3VEpFUnV4?=
- =?utf-8?B?amdkTnhid05aUGRiaHl5UUNadFlIRUtWd0wyZ2Q1cFZYOVR4RDUvdmZkTXU0?=
- =?utf-8?B?a0RUZXZYcmc3WW12SFBtdlAyUmMya1ZUR0NiMmp4bFliRVYrbmVrZlRwSGE0?=
- =?utf-8?B?WjFOa1RXZlB6dG1tQ3NqWGJBV0EyUWpOc3FreHo0dks3WUwwMVBJaTRaYjgz?=
- =?utf-8?B?Z1F0aytZclI2M2pGUzV0WHdqRHIwT2R4a1h2YmIyNHRVdnVLMVRVMEFteUpN?=
- =?utf-8?B?NUQ3M25ZYlllQ3dwcE9tM0JGL1IvWnBJeW1iWHA2SG82R012YjgwSVhpOFpv?=
- =?utf-8?B?SFNlMTdnZWhJcUlMM25yMDdzWDRrY0F4Q3loQnF2cHFRYWVlaFByREVWb1Fm?=
- =?utf-8?B?VzJSeFpCYjJTSUQxY0VUVTlyREgrdG1kTytuS3NwMXM2bFVCVUVkbWFJVk1p?=
- =?utf-8?B?OEZrakw0NmlkajhjMlo4VkxEVnh5UGhNUUJENXZlWVZobElzc2R4ZTVueXI2?=
- =?utf-8?B?djd6bVdaTStQTytLZ0RuNEhvQ2l3a1FKSHBxbTBrTlJrdUhxbXRnUjFobFkr?=
- =?utf-8?B?dE8zeVZKZlZTWkpFNi9pM1BSV1B3Ykx4ZW00UWhQMDQ0NHkrUDI1TDh1allO?=
- =?utf-8?B?dS9IVDlPZW8vczdNZjRaRkxNTUlGRUZmRCtSSHJrWHJWUmlwdzBNR2J3UFpk?=
- =?utf-8?B?dXpQb1lzUm56eTJlbGYwTWkremZDbnJzbDhodXhoMkV5eHByNVBkQzcxMDRr?=
- =?utf-8?B?TzQwZCt2eGNjd3grM2g1OFd2UmkrYm8rK3V0YjNQYlZXY3FtWkRyZE16bCtx?=
- =?utf-8?B?OE5FdHVlMW1pMU1YdHdFSlJnd2JyaEg4eHcvdmpNdHR5T2FWMk1ha3J1WnhW?=
- =?utf-8?B?WlFjOTF0YmlIWDVSek9IVTRXL1Y1MVBidVBFZ1BFVmlHMVVYR0pEQ2NqV1Rr?=
- =?utf-8?B?OFR4cWw0ayttbjNoenA0WW5nakRFcGNnRjlTN2VQTGlTcW9sbkVaVW9zTU4w?=
- =?utf-8?B?T2h3YmRCWEZJMXRpS3Axb0thd1I0Y2FlVEF6QjNZZTc1K3ROSllPSkd3Q0lr?=
- =?utf-8?B?eno0YXNpVnVVbGdBK3Y5TU1KcCtsQktYNEZuL0x3djNkSWkvVTZUdWcyU2Fu?=
- =?utf-8?B?ODI2THA2bkcxY2I5bHk3eEtnbWYzeGx0YXQzZFc0QWVSNjExekQzNFNYYTBF?=
- =?utf-8?Q?liLar6QBml2YbFTOHbKCT5jFI?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f02c376-925c-449c-1bca-08dacc91c0a3
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2022 13:59:20.3085
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Uu6WxfxgiK7feBzWwRTuy0y2SUX9d+NFqAKFPqQANoe7t+xPyjf1IrI+AC7VN2ItQgJeLxkm9/jNBQtE+lh+RQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8744
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [External] : [RFC PATCH v2 1/6] perf vendor events arm64: Add
+ topdown L1 metrics for neoverse-n2
+Content-Language: en-US
+To:     John Garry <john.g.garry@oracle.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Ian Rogers <irogers@google.com>
+References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1668411720-3581-2-git-send-email-renyu.zj@linux.alibaba.com>
+ <590ff032-d271-48ee-a4d8-141cc070c335@oracle.com>
+ <f3823c3e-d45e-40ce-1981-e726b4b6be62@linux.alibaba.com>
+ <f6e26e2d-2f10-e973-6c9f-47594da2fc99@oracle.com>
+ <cd016aa9-d43d-c585-0b77-a2e112777ec1@linux.alibaba.com>
+ <abebb42b-62c1-30d7-ad9a-5fbf6c0edce1@oracle.com>
+ <d904734a-e7c1-ca8e-7705-63fc4864ac4f@linux.alibaba.com>
+ <75c4f0e6-3f28-a748-e891-7be6016ca28e@oracle.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <75c4f0e6-3f28-a748-e891-7be6016ca28e@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 20:03, Luis Chamberlain wrote:
-> To be clear I don't care about the patch mentioned in the above URL, I care
-> about this:
+
+
+On 21/11/2022 17:55, John Garry wrote:
+> On 21/11/2022 15:17, Jing Zhang wrote:
+>> I'm sorry that I misunderstood the purpose of putting metric as
+>> arch_std_event at first,
+>> and now it works after the modification over your suggestion.
+>>
+>> But there are also a few questions:
+>>
+>> 1. The value of the slot in the topdownL1 is various in different
+>> architectures, for example,
+>> the slot is 5 on neoverse-n2. If I put topdownL1 metric as
+>> arch_std_event, then I need to
+>> specify the slot to 5 in n2. I can specify slot values in metric like
+>> below, but is there any
+>> other concise way to do this?
+>>
+>> diff --git
+>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>> index 8ff1dfe..b473baf 100644
+>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>> @@ -1,4 +1,23 @@
+>> [
+>> +       {
+>> +               "MetricExpr": "5",
+>> +               "PublicDescription": "A pipeline slot represents the
+>> hardware resources needed to process one uOp",
+>> +               "BriefDescription": "A pipeline slot represents the
+>> hardware resources needed to process one uOp",
+>> +               "MetricName": "slot"
 > 
-> https://lkml.kernel.org/r/d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com
-> [...]
+> Ehhh....I'm not sure if that is a good idea. Ian or anyone else have an
+> opinion on this? It is possible to reuse metrics, so it should work, but...
 > 
-> Petr, you had mentioned in the commit log for your second patch in this
-> thread that your change fixes a regression. What I asked for was for a
-> patch that fixes that regression alone first so we can send to stable.
-> So what issue is that alternative patch fixing?
+> One problem is that "slot" would show up as a metric, which you would
+> not want.
+> 
+> Alternatively I was going to suggest that you can overwrite specific std
+> arch event attributes. So for example of frontend_bound, you could have:
 
-This alternative patch fixes the discussed regression with failing inserts of
-acpi_cpufreq and pcc_cpufreq delaying boot. As mentioned, the situation can in
-the worst case prevent udev from loading drivers for other devices and might
-cause timeouts of services waiting on them and subsequently a failed boot.
+I would agree with not having this and just hard coding the 5 wherever
+it's needed. Once we have a few different sets of metrics in place maybe
+we can start to look at deduplication, but for now I don't see the value.
 
-The patch attempts a different solution for the problem that 6e6de3dee51a was
-trying to solve. Rather than waiting for the unloading to complete, it returns
-a different error code (-EBUSY) for modules in the GOING state. This should
-avoid the error situation that was described in 6e6de3dee51a (user space
-attempting to load a dependent module because the -EEXIST error code would
-suggest to user space that the first module had been loaded successfully),
-while avoiding the delay issue too.
+> 
+> + b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+> @@ -0,0 +1,30 @@
+> [
+>     {
+>     "ArchStdEvent": "FRONTEND_BOUND",
+>         "MetricExpr": "(stall_slot_frontend - cpu_cycles) / (5 *
+> cpu_cycles)",
+>     },
+> 
+>> +       }
+>> +       {
+>> +               "ArchStdEvent": "FRONTEND_BOUND"
+>> +       },
+>> +       {
+>> +               "ArchStdEvent": "BACKEND_BOUND"
+>> +       },
+>> +       {
+>> +               "ArchStdEvent": "WASTED"
+>> +       },
+>> +       {
+>> +               "ArchStdEvent": "RETIRING"
+>> +       },
+>>
+>>
+>> 2. Should I add the topdownL1 metric to
+>> tools/perf/pmu-event/recommended.json,
+>> or create a new json file to place the general metric?
+> 
+> It would not belong in recommended.json as that is specifically for
+> arch-recommended events. It would really just depend on where the value
+> comes from, i.e. arm arm or sbsa.
+> 
 
-Petr
+For what we're going to publish shortly we'll be generating a
+metrics.json file for each CPU. It will be autogenerated so I don't
+think duplication will be an issue and I'm expecting that there will be
+differences in the topdown metrics between CPUs anyway. So I would also
+vote to not put it in recommended.json
+
+>>
+>> Looking forward to your reply.
+> 
