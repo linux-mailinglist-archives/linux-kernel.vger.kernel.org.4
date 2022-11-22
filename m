@@ -2,149 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F81633887
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B718663388F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbiKVJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
+        id S232868AbiKVJdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbiKVJcX (ORCPT
+        with ESMTP id S232402AbiKVJdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:32:23 -0500
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C832B4E42D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:32:22 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id bj12so34330243ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:32:22 -0800 (PST)
+        Tue, 22 Nov 2022 04:33:33 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5404C644C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:33:32 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id c15so8901670qtw.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:33:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0GDJhfeb/mlDuXgY9TptD7saYe6PZinj6F8K2HKaeU=;
+        b=Yh5afxIF4nlJ5tGvdSmhfMKs2zILGlBSVIL6Dq8svTLaZHbiVmfrTeSTd8e+VFVvst
+         3erxOjcuLZe1zhu4vW5V2FMYdoqnAyzGkmSS116EBggRl4QM2sJmFknFJXbXyQe/QgUI
+         jartFLar8+ghwZmgy2UPOsDpCVGvHLnrwgpr8lTj2kDN/LztPZP9s4j5rs6eA62W3XCS
+         XomsQLw4VX5GCBbdWgFTc2M88EcFeyEBemXHdHoGfHWJmV3whtY014IHkiRYExZSASq6
+         RSCpprBqiuPj8HU71hKDjHKiFHtYJZuydkXMf1qj4o//thj4EMkxAiA4/tBWhPv01ekX
+         Unuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mExqMfrB7+6cODsWTqQo+eyVaSKptOKkOmzcem/xvUg=;
-        b=qFe43MhW9t83JkNFLR72wnOa+6xiOBOpP5BCOShAxQVrsmNR3QsSnRpLoHjNamJ05e
-         1eGnKmj8Vve5PCaLwwMNpM4NQi7nmFpfphL7Y0fMK9iFb6WJrChSnZaVJVCwot+2HPYB
-         XpbwqOAwNuXk03Z96moOmtj3BMUNxjU4k9MvnD7RnXldx7A1DvseYvxMnTXefCKMcuBA
-         /GUO7Q9wxCGjE/EOhuqhqM4CtYjuptVCryUFcfce6dHlyAyAxDgnHKoYMGN634s41EI9
-         KgO9paPhiMU1dX4rMB/P9Pf/Y8Ula4GTQtqAQRQ/OVkO20a3iZXOw3mDVGXPAVY2rp2A
-         tgXA==
-X-Gm-Message-State: ANoB5pngDf5Qd2OqcYZqdXdqLzHnWyHkDZPGO8dBPvbASHQwW1Afq8dc
-        alE+TwFHFhTRQak5vcDYiWa9dFuFWsOFOw==
-X-Google-Smtp-Source: AA0mqf6YyZ7DnYa05HH+z16/XW0Bx5sKZZE5OQb2hvJUEkABqzyHkVyqxr28CFBq2okvHgNBJgU1RA==
-X-Received: by 2002:a17:906:f252:b0:7ae:4236:bfb5 with SMTP id gy18-20020a170906f25200b007ae4236bfb5mr17970265ejb.428.1669109541312;
-        Tue, 22 Nov 2022 01:32:21 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id lb13-20020a170907784d00b0072a881b21d8sm5846268ejc.119.2022.11.22.01.32.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 01:32:20 -0800 (PST)
-Message-ID: <c1136a51-2eea-8ebd-784e-2d165ac6fed3@kernel.org>
-Date:   Tue, 22 Nov 2022 10:32:19 +0100
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0GDJhfeb/mlDuXgY9TptD7saYe6PZinj6F8K2HKaeU=;
+        b=mgW0ApnpZiz+MUR+IUAoTKJYvkDaNwlzqrt1VYcAHB35ABbvgPFX2s0sA8Rq76dYAd
+         7vhPw+gHatJX7ZI8SRdvtxxSeITbsx+2vm77xK/+A0g3ELYwJApSgec4igvvOGoKaCYl
+         XHBiNZ02V/AbtGvIjMslvTW2zFG4LdBelajiSyfgFFFzxm64HOhDpKDC2+JLD7o/FK1s
+         YCYSfdnuUJXnkl9WF3iy4pWXxEjoomSvbQ3m5TcJXEdUsDAedIM+GEU/2Jq0ic578w8m
+         yyMHeTKyStTc2EympKMyLOFlNFQCFQhuDHEuHLiywafsQ+7Dvsyv6avzVgcvHqDeBmQq
+         LE0g==
+X-Gm-Message-State: ANoB5plEJtepIf/Kk4vnmRYVQlpgBJlX4oFSEXcdbm+Ukyv87rQNvHZW
+        OZQAKZb0TftpqbWt4qshCmT4xkIBoFtM5A==
+X-Google-Smtp-Source: AA0mqf54sB+Y5VKy2px/uKlEV8Zla8rGrgID1JcbJZtAIcoGIvncgsDgYkhDbtN2sgc7G9bAfT7YEw==
+X-Received: by 2002:a05:622a:4d94:b0:3a5:fb6c:d96a with SMTP id ff20-20020a05622a4d9400b003a5fb6cd96amr21306888qtb.185.1669109611343;
+        Tue, 22 Nov 2022 01:33:31 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id t20-20020a05620a451400b006ceb933a9fesm10089200qkp.81.2022.11.22.01.33.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 01:33:30 -0800 (PST)
+Date:   Tue, 22 Nov 2022 01:33:27 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 2/3] mm,thp,rmap: subpages_mapcount COMPOUND_MAPPED if
+ PMD-mapped
+In-Reply-To: <20221121130900.xb224cesbzfptldo@box.shutemov.name>
+Message-ID: <cdf37e1a-598f-4ec0-3f3f-13acd9acc994@google.com>
+References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <25a09a7a-81a9-e9c2-7567-c94ce18ac2@google.com> <20221121130900.xb224cesbzfptldo@box.shutemov.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
-References: <20221114114344.18650-1-jirislaby@kernel.org>
- <20221114114344.18650-19-jirislaby@kernel.org> <87a64qo4th.ffs@tglx>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 18/46] entry, lto: Mark raw_irqentry_exit_cond_resched()
- as __visible
-In-Reply-To: <87a64qo4th.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 17. 11. 22, 0:30, Thomas Gleixner wrote:
-> On Mon, Nov 14 2022 at 12:43, Jiri Slaby wrote:
->> Symbols referenced from assembler (either directly or e.f. from
+On Mon, 21 Nov 2022, Kirill A. Shutemov wrote:
+> On Fri, Nov 18, 2022 at 01:14:17AM -0800, Hugh Dickins wrote:
+> > Can the lock_compound_mapcount() bit_spin_lock apparatus be removed now?
+> > Yes.  Not by atomic64_t or cmpxchg games, those get difficult on 32-bit;
+> > but if we slightly abuse subpages_mapcount by additionally demanding that
+> > one bit be set there when the compound page is PMD-mapped, then a cascade
+> > of two atomic ops is able to maintain the stats without bit_spin_lock.
 > 
-> from assembler? I'm not aware that the assembler references anything.
+> Yay! New home for PageDoubleMap()! :P
 
-"""
-Noun assembler
+:) You only asked for one bit for PageDoubleMap, I've been greedier;
+so it's not surprising if it has worked out better now.
 
-assembler (countable and uncountable, plural assemblers)
+...
 
-1.  (programming, countable) A program that reads source code written in 
-assembly language and produces executable machine code, possibly 
-together with information needed by linkers, debuggers and other tools.
-
-2. (computer languages, informal, chiefly uncountable) Assembly language.
-
-     I wrote that program in assembler.
-""" [1]
-
-I refer in the above to 2. You refer to 1.
-
-In some languages, incl. mine, we don't distinguish between the two. 
-It's always assembler. Yet, that might confuse you, even though it's 
-correct as you can see above. I can switch to mode 1 (assembler and 
-assembly) for sure.
-
-[1] https://en.wiktionary.org/wiki/assembler
-
-> Also what does e.f. mean? Did you want to write e.g.?
-
-Yes, my and my spellchecker's bad.
-
->> DEFINE_STATIC_KEY()) need to be global and visible in gcc LTO because
->> they could end up in a different object file than the assembler. This
+> Jokes aside, looks neat.
 > 
-> than the assembler? Are we shipping the assembler in an object file?
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Nope, see above.
+Thanks; but I'm very glad that Linus expressed his dissatisfaction
+with the first implementation, this one does feel much better.
 
->> can lead to linker errors without this patch.
 > 
-> git grep -i 'this patch' Documentation/process/
-
-Sorry, I don't understand, care to elaborate? None of the lines from the 
-output seems to match the case here.
-
->> So mark raw_irqentry_exit_cond_resched() as __visible.
+> As always few minor nits below.
+...
+> > @@ -893,8 +902,12 @@ static inline int total_mapcount(struct page *page)
+> >  
+> >  static inline bool folio_large_is_mapped(struct folio *folio)
+> >  {
+> > -	return atomic_read(folio_mapcount_ptr(folio)) +
+> > -		atomic_read(folio_subpages_mapcount_ptr(folio)) >= 0;
+> > +	/*
+> > +	 * Reading folio_mapcount_ptr() below could be omitted if hugetlb
+> > +	 * participated in incrementing subpages_mapcount when compound mapped.
+> > +	 */
+> > +	return atomic_read(folio_mapcount_ptr(folio)) >= 0 ||
+> > +		atomic_read(folio_subpages_mapcount_ptr(folio)) > 0;
 > 
-> And all that tells me what? I know what you want to say, but it's not
-> there.
+> Maybe check folio_subpages_mapcount_ptr() first? It would avoid
+> folio_mapcount_ptr() read for everything, but hugetlb.
+
+Okay: I'm not convinced, but don't mind switching those around: done.
+
+> > --- a/mm/debug.c
+> > +++ b/mm/debug.c
+> > @@ -97,7 +97,7 @@ static void __dump_page(struct page *page)
+> >  		pr_warn("head:%p order:%u compound_mapcount:%d subpages_mapcount:%d compound_pincount:%d\n",
+> >  				head, compound_order(head),
+> >  				head_compound_mapcount(head),
+> > -				head_subpages_mapcount(head),
+> > +				head_subpages_mapcount(head) & SUBPAGES_MAPPED,
 > 
->    Symbols in different compilation units which are referenced from
->    assembly code either directly or indirectly, e.g. from
->    DEFINE_STATIC_KEY(), must be marked visible for GCC based LTO builds.
-> 
->    Add the missing __visible annotation to raw_irqentry_exit_cond_resched().
-> 
-> See?
-> 
-> There is no 'global' because it's obvious that a symbol in a different
-> compilation unit must be global to be resolvable. It's also obvious that
-> code in different compilation units ends up in different object files.
+> Looks like applying the SUBPAGES_MAPPED mask belong to the
+> head_subpages_mapcount() helper, not to the caller.
 
-It's not about different compilation units. It's about different partitions.
+Yes, that would be more consistent, helper function doing the massage.
+Done.  __dump_page() then remains unchanged, but free_tail_pages_check()
+uses subpages_mapcount_ptr(head_page) to check the whole field is zero.
 
-> So stating that it's a 'must' to have such symbols marked visible is
-> good enough for an argument because that tells the reader that this is a
-> mandatory requirement for an GCC based LTO build.
+v2 coming up - thanks.
 
-My bad that I failed to explain properly in the commit log. But we are 
-working on throwing all this __visible thing away. Agreed, that it's 
-ridiculous/absurd.
-
-thanks,
--- 
-js
-suse labs
-
+Hugh
