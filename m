@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9309F63393A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184A9633960
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbiKVJ6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
+        id S230111AbiKVKKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233434AbiKVJ6j (ORCPT
+        with ESMTP id S229449AbiKVKKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:58:39 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943801CB0C;
-        Tue, 22 Nov 2022 01:58:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669111106; x=1700647106;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ub2ULHl6Lnt9vs3IfOcNn6hW23qKp2CpnI2lQIsoK2c=;
-  b=j7vpYC73i410jNReDdzDOefATfZdJ2cfq9CioKyew0mkjcs3/Szvn7L/
-   yZzpbeU30lI9bju0mEkOx2IRfXAU3BVajmDcaoEVSVF9fCT+/JYzFswcx
-   jpq8NNEGRnsnMiYROeQ1hsgH8Iw6suF76AUU441AGIl329Q3wv2JCAKOp
-   8vWr8A6V4OusA2Hkd7HPPCbEw2jFuOUJR+1a7x0lFrAXjdC5BcZe1LogR
-   dKMOW5OHFKb2iG+Cd8cUZeB8h3x9mtULRoWRjsb7wvDrbGvUYpQZ0lRdU
-   y3wUT9R6yFoT+eCloVJZFfqflrsciVbhTs/prAMD1/oaIA62JkaNCeyt5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="311408086"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="311408086"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 01:58:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="783788444"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="783788444"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 22 Nov 2022 01:58:22 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 22 Nov 2022 11:58:22 +0200
-Date:   Tue, 22 Nov 2022 11:58:22 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        Benson Leung <bleung@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH 1/2] usb: typec: Add helper to get partner device struct
-Message-ID: <Y3ydPqkxxQCSGGp7@kuha.fi.intel.com>
-References: <20221121201337.2772216-1-pmalani@chromium.org>
- <20221121201337.2772216-2-pmalani@chromium.org>
+        Tue, 22 Nov 2022 05:10:12 -0500
+X-Greylist: delayed 548 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 02:10:10 PST
+Received: from mx2.securetransport.de (mx2.securetransport.de [188.68.39.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FA2545A3D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:10:10 -0800 (PST)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.securetransport.de (Postfix) with ESMTPSA id B7A935E8AB;
+        Tue, 22 Nov 2022 11:00:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1669111209;
+        bh=gdo4vgWV8tXNuK/w1oRYXeG/YbiAC9Xkv0incWmwWPA=;
+        h=From:To:CC:Subject:Date:From;
+        b=CnYh0QcxCL0AUHn2PJFVyzpcsVUUV4l7cW96wyZXwCj3oPgfJqr8ym3dP1ge4iea1
+         /WiDzVtwGEotIfpkZBt4uXkhcGGBEXHMMoKuKy63uC+m90Vgr0Yh5t6PN4jnW9BTnP
+         I8xpyUgi0N003wA7LoshBNjHwmY2a/dky1WK3WTPrOwBEM0bjB3Rj43VTJaHSS6fNQ
+         z9xYtOm+FTsyAma4qe2o25FJ9CPWQLtm/+XJGCnVMnZFSjNQ6YORNOpSpiH+/uEJ53
+         Dala/yAKrKDlx+0xCTa14KYsIg6+/3fHwGvZNyZJcHv+mOrJseBUCIFhKP9/MR2E0a
+         tIRlJdLJZgRwg==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.20; Tue, 22 Nov 2022 11:00:00 +0100
+Received: from localhost.localdomain (172.16.51.2) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.20 via Frontend Transport; Tue, 22 Nov 2022 10:59:59 +0100
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To:     <linux-arm-kernel@lists.infradead.org>
+CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        "Support Opensource" <support.opensource@diasemi.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>,
+        <kernel@dh-electronics.com>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/3] mfd: da9062: Make the use of IRQ optional
+Date:   Tue, 22 Nov 2022 10:58:30 +0100
+Message-ID: <20221122095833.3957-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121201337.2772216-2-pmalani@chromium.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prashant,
+For the core functionality of the MFD DA9061/62 IRQ isn't needed. This
+series removes the requirement for an IRQ. This is done by modifing the
+MFD driver and regulator driver to setup the device without IRQ. This
+makes the DA9061/62 chip useable for designs which haven't connected
+the IRQ pin.
 
-On Mon, Nov 21, 2022 at 08:13:35PM +0000, Prashant Malani wrote:
-> +/**
-> + * typec_partner_to_dev - Get the device struct of a USB Type-C partner.
-> + * @partner: USB Type-C Partner
-> + *
-> + * Returns a pointer to the device struct or NULL.
-> + */
-> +struct device *typec_partner_to_dev(struct typec_partner *partner)
-> +{
-> +	return partner ? &partner->dev : NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(typec_partner_to_dev);
+I tested it with a DHCOM i.MX6ULL, which is powered by a DA9061.
 
-Let's not loose the protection around these devices unless there is no
-other way, and in this case there is.
+In this series, the DT binding file is also adapted.
 
-Please just create a wrapper for usb_power_delivery_register() instead:
-
-struct usb_power_delivery *
-typec_partner_usb_power_delivery_register(struct typec_partner *partner,
-                                          struct usb_power_delivery_desc *desc)
-{
-        return usb_power_delivery_register(&partner->dev, desc);
-}
-EXPORT_SYMBOL_GPL(typec_partner_usb_power_delivery_register);
-
-thanks,
+Christoph Niedermaier (3):
+  dt-bindings: mfd: da9062: Move IRQ to optional properties
+  mfd: da9062: Remove IRQ requirement
+  regulator: da9062: Make the use of IRQ optional
+---
+Cc: Support Opensource <support.opensource@diasemi.com>
+Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: kernel@dh-electronics.com
+Cc: linux-kernel@vger.kernel.org
+To: linux-arm-kernel@lists.infradead.org
+---
+ Documentation/devicetree/bindings/mfd/da9062.txt | 11 +--
+ drivers/mfd/da9062-core.c                        | 98 ++++++++++++++++++------
+ drivers/regulator/da9062-regulator.c             |  7 +-
+ 3 files changed, 82 insertions(+), 34 deletions(-)
 
 -- 
-heikki
+2.11.0
+
