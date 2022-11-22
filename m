@@ -2,287 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF11463340E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDA263340F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiKVDmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S232167AbiKVDmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbiKVDmO (ORCPT
+        with ESMTP id S232187AbiKVDm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:42:14 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDF727CE8;
-        Mon, 21 Nov 2022 19:42:12 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NGVMr3vBLzqSrS;
-        Tue, 22 Nov 2022 11:38:16 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 11:42:10 +0800
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 22 Nov 2022 11:42:09 +0800
-Message-ID: <d7593559-060e-e8e6-5746-6dc63c487027@huawei.com>
-Date:   Tue, 22 Nov 2022 11:42:09 +0800
+        Mon, 21 Nov 2022 22:42:28 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65213D93
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:42:26 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id d192so13227313pfd.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:42:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AptSfaygHWZ6DJuwqcME0BS6j60WJD3D2GSMZmjS0iI=;
+        b=DpSgZ5Mms4nVtop5BPuClMCwDJZqnFZrxxGyEjuUGMUeayLoFaOrapYYFcDWKUV7W+
+         LH8VlUgWhA/u/nF6uiIixkqv1+i6rp9E54GPOHhM7h3uuZ+fpV2qb+q6luUSeyBl3cgF
+         KvgqZMk9WQa6fk8SluhrHqtcvxxRBY4ObaOoE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AptSfaygHWZ6DJuwqcME0BS6j60WJD3D2GSMZmjS0iI=;
+        b=lD6ea8c1ya66uNfe7ba6O7EiMk9DYmI13x2WCStSqNgTfpEbrZsDZI10zzHwkb1YZC
+         1fYQzUrflZvm/k8vGDcpZt0C0teXBYYFEBv6mg5PXQKLTRBZYLtra/se6uagBeigy3ii
+         eQ14LY5QsNYke2rYWjIm+D9FoG/hNhHVqN8IS14BqlO21TaPO69CpXA5+6/AMzyFUhb4
+         Y/32+DwsnjCFaGnrF/rsVEoKDtnkldhaBUU4tZorS5cJPTmPlsk4SE+oxDFiH5gAxcbX
+         k3KMTS+OdiaUcrlsrQG9t4uv0OJawXQGyMQP12VAhV2G+VEaey8sFJn5K9BhLn/bk/fm
+         6JAw==
+X-Gm-Message-State: ANoB5pmY9KBdBxVcvYx2PhmvaTwQHHz5Ou6fb4qZQONEPiTPGwB74a67
+        EAb5zRpuSnsSUp44i/K5q0P0FQ==
+X-Google-Smtp-Source: AA0mqf6h3Trq07ulGD7Jl9vpfTiBEXj+K33xYktk0xDOZmwxPrg2Y4mBXv5YfbRMIyHR9QLoNq70Ww==
+X-Received: by 2002:a05:6a00:338c:b0:56b:a319:7b52 with SMTP id cm12-20020a056a00338c00b0056ba3197b52mr3135785pfb.21.1669088545928;
+        Mon, 21 Nov 2022 19:42:25 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b0017f5ba1fffasm6051055pln.297.2022.11.21.19.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 19:42:25 -0800 (PST)
+Date:   Tue, 22 Nov 2022 12:42:20 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        minchan@kernel.org, ngupta@vflare.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y3xFHIgkiZNYCbHi@google.com>
+References: <20221119001536.2086599-1-nphamcs@gmail.com>
+ <20221119001536.2086599-7-nphamcs@gmail.com>
+ <Y3wwuMSy8YC86QAi@google.com>
+ <Y3w+C8ClzP6VbqrA@cmpxchg.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC] ACPI: PCC: Support shared interrupt for multiple subspaces
-To:     Robbie King <robbiek@xsightlabs.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
-        <wanghuiqiang@huawei.com>, <huangdaode@huawei.com>,
-        <tanxiaofei@huawei.com>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20221027155323.7xmpjfrh7qmil6o3@bogus>
- <f0c408a6-cd94-4963-d4d7-e7d08b6150be@huawei.com>
- <20221031104036.bv6a7i6hxrmtpj23@bogus>
- <925f360d-e6b3-6004-de22-f39eaa86a750@huawei.com>
- <d0b178d3-a036-399f-fb0c-bb7f8c52995c@xsightlabs.com>
- <20221104151530.44sms3fnarqnvvsl@bogus>
- <ca35058d-1f40-3f85-9e2d-bfb29c8625cb@xsightlabs.com>
- <09e0a108-9f22-a9a0-2145-a81936745887@huawei.com>
- <3b28294a-1e2b-140a-8462-5014ba893cc5@xsightlabs.com>
- <1156ef89-20a4-7e7e-6205-c68e21a9bb36@huawei.com>
- <a7119a55-9e7a-b27f-4969-2c6bef764011@xsightlabs.com>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <a7119a55-9e7a-b27f-4969-2c6bef764011@xsightlabs.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3w+C8ClzP6VbqrA@cmpxchg.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On (22/11/21 22:12), Johannes Weiner wrote:
+> On Tue, Nov 22, 2022 at 11:15:20AM +0900, Sergey Senozhatsky wrote:
+> > On (22/11/18 16:15), Nhat Pham wrote:
+> > > +
+> > > +static int zs_zpool_shrink(void *pool, unsigned int pages,
+> > > +			unsigned int *reclaimed)
+> > > +{
+> > > +	unsigned int total = 0;
+> > > +	int ret = -EINVAL;
+> > > +
+> > > +	while (total < pages) {
+> > > +		ret = zs_reclaim_page(pool, 8);
+> > > +		if (ret < 0)
+> > > +			break;
+> > > +		total++;
+> > > +	}
+> > > +
+> > > +	if (reclaimed)
+> > > +		*reclaimed = total;
+> > > +
+> > > +	return ret;
+> > > +}
+> > 
+> > A silly question: why do we need a retry loop in zs_reclaim_page()?
+> 
+> Individual objects in a zspage can be busy (swapped in simultaneously
+> for example), which will prevent the zspage from being freed. Zswap
+> currently requests reclaim of one backend page at a time (another
+> project...), so if we don't retry we're not meeting the reclaim goal
+> and cause rejections for new stores.
 
-在 2022/11/22 0:59, Robbie King 写道:
-> On 11/19/2022 2:32 AM, lihuisong (C) wrote:
->> 在 2022/11/18 2:09, Robbie King 写道:
->>> On 11/7/2022 1:24 AM, lihuisong (C) wrote:
->>>> 在 2022/11/4 23:39, Robbie King 写道:
->>>>> On 11/4/2022 11:15 AM, Sudeep Holla wrote:
->>>>>> On Fri, Nov 04, 2022 at 11:04:22AM -0400, Robbie King wrote:
->>>>>>> Hello Huisong, your raising of the shared interrupt issue is very timely, I
->>>>>>> am working to implement "Extended PCC subspaces (types 3 and 4)" using PCC
->>>>>>> on the ARM RDN2 reference platform as a proof of concept, and encountered
->>>>>>> this issue as well.  FWIW, I am currently testing using Sudeep's patch with
->>>>>>> the "chan_in_use" flag removed, and so far have not encountered any issues.
->>>>>>>
->>>>>> Interesting, do you mean the patch I post in this thread but without the
->>>>>> whole chan_in_use flag ?
->>>>> That's right, diff I'm running with is attached to end of message.
->>>> Hello Robbie, In multiple subspaces scenario, there is a problem
->>>> that OS doesn't know which channel should respond to the interrupt
->>>> if no this chan_in_use flag. If you have not not encountered any
->>>> issues in this case, it may be related to your register settings.
->>>>
->>> Hi Huisong, apologies, I see your point now concerning multiple subspaces.
->>>
->>> I have started stress testing where I continuously generate both requests
->>> and notifications as quickly as possible, and unfortunately found an issue
->>> even with the original chan_in_use patch.  I first had to modify the patch
->>> to get the type 4 channel notifications to function at all, essentially
->>> ignoring the chan_in_use flag for that channel.  With that change, I still
->>> hit my original stress issue, where the pcc_mbox_irq function did not
->>> correctly ignore an interrupt for the type 3 channel.
->>>
->>> The issue occurs when a request from AP to SCP over the type 3 channel is
->>> outstanding, and simultaneously the SCP initiates a notification over the
->>> type 4 channel.  Since the two channels share an interrupt, both handlers
->>> are invoked.
->>>
->>> I've tried to draw out the state of the channel status "free" bits along
->>> with the AP and SCP function calls involved.
->>>
->>> type 3
->>> ------
->>>
->>>   (1)pcc.c:pcc_send_data()
->>>         |                         (5) mailbox.c:mbox_chan_receive_data()
->>> _______v                      (4)pcc.c:pcc_mbox_irq()
->>> free   \_________________________________________
->>>
->>>                                ^
->>> type 4                        ^
->>> ------                        ^
->>> _____________________
->>> free                 \_____________________________
->>>                       ^        ^
->>>                       |        |
->>> (2)mod_smt.c:smt_transmit()   |
->>>                                |
->>> (3)mod_mhu2.c:raise_interrupt()
->>>
->>> The sequence of events are:
->>>
->>> 1) OS initiates request to SCP by clearing FREE in status and ringing SCP doorbell
->>> 2) SCP initiates notification by filling shared memory and clearing FREE in status
->>> 3) SCP notifies OS by ringing OS doorbell
->>> 4) OS first invokes interrupt handler for type 3 channel
->>>
->>>     At this step, the issue is that "val" from reading status (i.e. CommandCompleteCheck)
->>>     is zero (SCP has not responded yet) so the code below falls through and continues
->>>     to processes the interrupt as if the request has been acknowledged by the SCP.
->>>
->>>      if (val) { /* Ensure GAS exists and value is non-zero */
->>>          val &= pchan->cmd_complete.status_mask;
->>>          if (!val)
->>>              return IRQ_NONE;
->>>      }
->>>
->>>     The chan_in_use flag does not address this because the channel is indeed in use.
->>>
->>> 5) ACPI:PCC client kernel module is incorrectly notified that response data is
->>>     available
->> Indeed, chan_in_use flag is invalid for type4.
-> Thinking about this some more, I believe there is a need for the chan_in_use flag
-> for the type 4 channels.  If there are multiple SCP to AP channels sharing an
-> interrupt, and the PCC client code chooses to acknowledge the transfer from
-> process level (i.e. call mbox_send outside of the mbox_chan_received_data callback),
-> then I believe a window exists where the callback could be invoked twice for the
-> same SCP to AP channel.  I've attached a diff.
-I don't understand your concern. type4 need to set command complete bit and
-ring doorbell after processing mbox_chan_received_data callback. I think it
-is ok without chan_in_use flag.
+What I meant was: if zs_reclaim_page() makes only partial progress
+with the current LRU tail zspage and returns -EAGAIN, then we just
+don't increment `total` and continue looping in zs_zpool_shrink().
+On each iteration zs_reclaim_page() picks the new LRU tail (if any)
+and tries to write it back.
 
-Here's what I think:
-For type4, set the command complete bit to 1 by default in platform.
-Clear the command complete when do platform notification.
-If a given channel detects the command complete bit is 0, it should respond
-the interrupt, otherwise there is nothing to do.
+> The number 8 is cribbed from zbud and z3fold.
 
-I put all points we discussed into the RFC V2 patch. Let's go to V2 to 
-discuss.
->
->>> I added the following fix (applied on top of Sudeep's original patch for clarity)
->>> for the issue above which solved the stress test issue.  I've changed the interrupt
->>> handler to explicitly verify that the status value matches the mask for type 3
->>> interrupts before acknowledging them.  Conversely, a type 4 channel verifies that
->>> the status value does *not* match the mask, since in this case we are functioning
->>> as the recipient, not the initiator.
->>>
->>> One concern is that since this fundamentally changes handling of the channel status,
->>> that existing platforms could be impacted.
->> [snip]
->>> +    /*
->>> +     * When we control data flow on the channel, we expect
->>> +     * to see the mask bit(s) set by the remote to indicate
->>> +     * the presence of a valid response.  When we do not
->>> +     * control the flow (i.e. type 4) the opposite is true.
->>> +     */
->>> +    if (pchan->is_controller)
->>> +        cmp = pchan->cmd_complete.status_mask;
->>> +    else
->>> +        cmp = 0;
->>> +
->>> +    val &= pchan->cmd_complete.status_mask;
->>> +    if (cmp != val)
->>> +        return IRQ_NONE;
->>>
->> We don't have to use the pchan->cmd_complete.status_mask as above.
->>
->> For the communication from AP to SCP, if this channel is in use, command
->> complete bit is 1 indicates that the command being executed has been
->> completed.
->> For the communication from SCP to AP, if this channel is in use, command
->> complete bit is 0 indicates that the bit has been cleared and OS should
->> response the interrupt.
->>
->> So you concern should be gone if we do as following approach:
->> "
->> val &= pchan->cmd_complete.status_mask;
->> need_rsp_irq = pchan->is_controller ? val != 0 : val == 0;
->> if (!need_rsp_irq)
->>      return IRQ_NONE
->> "
->>
->> This may depend on the default value of the command complete register
->> for each channel(must be 1, means that the channel is free for use).
->> It is ok for type3 because of chan_in_use flag, while something needs
->> to do in platform or OS for type4.
->>> ret = pcc_chan_reg_read(&pchan->error, &val);
->>>       if (ret)
->>> @@ -704,6 +717,9 @@ static int pcc_mbox_probe(struct platform_device *pdev)
->>>           pcc_mbox_channels[i].con_priv = pchan;
->>>           pchan->chan.mchan = &pcc_mbox_channels[i];
->>>
->>> +        pchan->is_controller =
->>> +            (pcct_entry->type != ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE);
->>> +
->> This definition does not apply to all types because type1 and type2
->> support bidirectional communication.
->>
->>> if (pcct_entry->type == ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE &&
->>>               !pcc_mbox_ctrl->txdone_irq) {
->>>               pr_err("Plaform Interrupt flag must be set to 1");
->>>
->> I put all points we discussed into the following modifcation.
->> Robbie, can you try it again for type 4 and see what else needs to be
->> done?
->>
->> Regards,
->> Huisong
->>
-> Thanks Huisong, I ran my current stress test scenario against your diff
-> with no issues (I did have to manually merge due to a tabs to spaces issue
-> which may be totally on my end, still investigating).
->
-> Here is the proposed change to support chan_in_use for type 4 (which I've
-> also successfully tested with).  I think I have solved the tabs to spaces
-> issue for my sent messages, apologies if that's not the case.
->
-> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-> index 057e00ee83c8..d4fcc913a9a8 100644
-> --- a/drivers/mailbox/pcc.c
-> +++ b/drivers/mailbox/pcc.c
-> @@ -292,7 +292,7 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
->   	int ret;
->
->   	pchan = chan->con_priv;
-> -	if (pchan->mesg_dir == PCC_ONLY_AP_TO_SCP && !pchan->chan_in_use)
-> +	if (!pchan->chan_in_use)
->   		return IRQ_NONE;
->
->   	ret = pcc_chan_reg_read(&pchan->cmd_complete, &val);
-> @@ -320,8 +320,16 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
->   		goto out;
->   	}
->
-> +	/*
-> +	 * Clearing in_use before RX callback allows calls to mbox_send
-> +	 * (which sets in_use) within the callback so SCP to AP channels
-> +	 * can acknowledge transfer within IRQ context
-> +	 */
-> +	if (pchan->cmd_complete.gas)
-> +		pchan->chan_in_use = false;
-> +
->   	mbox_chan_received_data(chan, NULL);
-> -	rc = IRQ_HANDLED;
-> +	return IRQ_HANDLED;
->
->   out:
->   	if (pchan->cmd_complete.gas)
-> @@ -772,6 +780,8 @@ static int pcc_mbox_probe(struct platform_device *pdev)
->   			goto err;
->   		}
->   		pcc_set_chan_mesg_dir(pchan, pcct_entry->type);
-> +		if (pchan->mesg_dir == PCC_ONLY_SCP_TO_AP)
-> +			pchan->chan_in_use = true;
->
->   		if (pcc_mbox_ctrl->txdone_irq) {
->   			rc = pcc_parse_subspace_irq(pchan, pcct_entry);
->
-> .
+OK.
