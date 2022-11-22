@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40251633D5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8342633D63
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233741AbiKVNRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S233495AbiKVNRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233691AbiKVNQ4 (ORCPT
+        with ESMTP id S233569AbiKVNRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:16:56 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21BCE49;
-        Tue, 22 Nov 2022 05:16:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669123016; x=1700659016;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jt1CUqgeOpQd7tpbxtZzW4+aRWARSRwhtrbZwOcfz0g=;
-  b=KggZqIB1aPpeh8Ce21B0xjnMyKJHZHSjZTT07QpawjrSkj2wHH5KIfPO
-   EOTbJxJFE1jh92PRfw9vgfnOutgvtxm2Px9RN0AtKFA7o2n2EoZZLmErZ
-   PjM9vbbGG73qv7ahIXTYHiOmT1gl5WL7QC2FyOCTNwK0tfN2YI0sW5TI9
-   MTz5uF4G24+cNspAwHfEIcwzB+KkeNIjkXXO4WPp1KT5AWQYHWZDwp2Ql
-   c7qhXqED/8YtPI1bgy6JLyHJUkr1GgR6SRwizYND9qyc7pfsmH1OhPGSK
-   jZggTYa1EnVJ4Dh5+vONTKr4XTEP0Y1TUgDbX+2/vZRa7npi7lFE46G1Z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="375954199"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="375954199"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 05:16:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="730389472"
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="730389472"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Nov 2022 05:16:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxT8t-00FqKL-0H;
-        Tue, 22 Nov 2022 15:16:51 +0200
-Date:   Tue, 22 Nov 2022 15:16:50 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djrscally@gmail.com, heikki.krogerus@linux.intel.com,
-        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org
-Subject: Re: [PATCH v2] device property: fix of node refcount leak in
- fwnode_graph_get_next_endpoint()
-Message-ID: <Y3zLwj/G/E3kZsJE@smile.fi.intel.com>
-References: <20221122120039.760773-1-yangyingliang@huawei.com>
- <Y3zGjLsDmVv0ErVR@smile.fi.intel.com>
- <75602dce-0780-e51a-c8c9-d1820ddf3e2b@huawei.com>
+        Tue, 22 Nov 2022 08:17:49 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD4EBC2B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:17:46 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id b29so14309471pfp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:17:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Px5PFcbBcn5kKKxwkSdASImn/3PTZhLKqsWw3Vdjrd0=;
+        b=pkZg3MALBkgNlhuxmzZN3kNu35Fe4iW2g/ojUC2OxXPVlBzOxvsSNsuuIMtoQQbITo
+         daP+yIqfhkBvEZro+AZ01RV66RFbYcLlfrgeO0/HRtwJLT4ZwM4V3RUMI5LAEaot+bsI
+         uf8NhZSrHdqyX5oC7vGlZYtGFOobRCvW704aAmSk3VLUy6pB2l94GyKe/uXo5KKY+oud
+         /bZrK0Qlum3iyJYyWxENMejzQwY5ICDUs3rOuu5m4OAXuLa7oWw9SvuwFBCW5k9Oh3KP
+         dwPliZyl02ZQ7rSGkTfrsrhCA2NSDaTBRjnjo7ekwHZ3dva4+lJ1jcsqMGJ4cXMPCjuy
+         jhqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Px5PFcbBcn5kKKxwkSdASImn/3PTZhLKqsWw3Vdjrd0=;
+        b=PMwhD9+GTXq6oKFvK/h9B1hlwOF0s1Qpa8UIyo5h4UkaDT9lVv3JgoW7riAC1k6Olc
+         ibuLRC1dK4l0p1q8G14Cz78XUuWzYdoOTeNX+iiWGhhOY0YQrG6CrcYb+mx0H18S9PoS
+         hiTQF0BVNedXe9MkQw/R+KPPruXQnmGBjrV7JDYJV3oPpYNH0tzY4WAXgj15GVO7j9Hm
+         5zCblSQR/diMVFeJgTfG1nR7HeEzjfOvGCXVWZqoa54/mrmbAJupoqPzwaRm+3SNXJDz
+         nhn4Luqpqm0LRZzgA4hqrNBfqahahlW+WRKoDCYIfY7fPzacHMF2uL7OkX+BpsLWmdK/
+         P74w==
+X-Gm-Message-State: ANoB5pkDN/gffl+x24ixGbpo6FJt+dkVYmFNIJIKsBjTlrFR5afNe4cO
+        vUHegjzdNWBg2R7QrLlRWR4BMw==
+X-Google-Smtp-Source: AA0mqf6V/B5zSapMpHlFVtbuZGXiZ1CptoqfnNyOiDaIdhdaBxM1kAuQPg9elHW5MRCOxE9RXq/7vg==
+X-Received: by 2002:a05:6a00:2908:b0:56b:d738:9b with SMTP id cg8-20020a056a00290800b0056bd738009bmr4021107pfb.61.1669123065947;
+        Tue, 22 Nov 2022 05:17:45 -0800 (PST)
+Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id n10-20020a6563ca000000b0043a18cef977sm9123052pgv.13.2022.11.22.05.17.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 05:17:45 -0800 (PST)
+Message-ID: <be5617fe-d332-447a-b836-bec9a6c6d42d@daynix.com>
+Date:   Tue, 22 Nov 2022 22:17:41 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75602dce-0780-e51a-c8c9-d1820ddf3e2b@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] igb: Allocate MSI-X vector when testing
+Content-Language: en-US
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yan Vugenfirer <yan@daynix.com>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>
+References: <20221122121312.57741-1-akihiko.odaki@daynix.com>
+ <Y3y9dbBUYi5j3Qre@boxer>
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <Y3y9dbBUYi5j3Qre@boxer>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 09:12:41PM +0800, Yang Yingliang wrote:
-> On 2022/11/22 20:54, Andy Shevchenko wrote:
-> > On Tue, Nov 22, 2022 at 08:00:39PM +0800, Yang Yingliang wrote:
-
-...
-
-> > It seems too complicated for the simple fix.
-> > 
-> > As I said, just drop const qualifier and add fwnode_handle_get() in the 'else'
-> > branch. This will allow you to drop if (prev) at the end.
+On 2022/11/22 21:15, Maciej Fijalkowski wrote:
+> On Tue, Nov 22, 2022 at 09:13:12PM +0900, Akihiko Odaki wrote:
+>> Allocate MSI-X vector when testing interrupts, otherwise the tests will
+>> not work.
 > 
-> fwnode is const, fwnode_handle_get doesn't accept this type.
+> Hi,
+> 
+> can you say a bit more about why current code was broken? And also what is
+> the current result of that ethtool test?
+> 
+> Also this is a fix, please provide Fixes: tag and route it to net tree.
 
-I'm talking about parent.
+Hi, I have just sent v2, please check it out.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Regarding Fixes: tag, I couldn't tell when the bug appeared. The 
+modified function, igb_intr_test() lacked the interrupt allocation code 
+from the start. My guess is that some code in igb_reset() or after the 
+function had code to allocate interrupts in the past and later removed. 
+But I couldn't find such code.
 
+Regards,
+Akihiko Odaki
 
+> 
+>>
+>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>> ---
+>>   drivers/net/ethernet/intel/igb/igb_ethtool.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+>> index e5f3e7680dc6..ff911af16a4b 100644
+>> --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
+>> +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+>> @@ -1413,6 +1413,8 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
+>>   			*data = 1;
+>>   			return -1;
+>>   		}
+>> +		wr32(E1000_IVAR_MISC, E1000_IVAR_VALID << 8);
+>> +		wr32(E1000_EIMS, BIT(0));
+>>   	} else if (adapter->flags & IGB_FLAG_HAS_MSI) {
+>>   		shared_int = false;
+>>   		if (request_irq(irq,
+>> -- 
+>> 2.38.1
+>>
