@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1ADC6331CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57A06331D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbiKVBEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:04:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S232102AbiKVBE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231946AbiKVBEZ (ORCPT
+        with ESMTP id S231956AbiKVBE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:04:25 -0500
+        Mon, 21 Nov 2022 20:04:26 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F7C11A12;
-        Mon, 21 Nov 2022 17:04:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C42C1C901;
+        Mon, 21 Nov 2022 17:04:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13F7F6151F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75F0061511;
         Tue, 22 Nov 2022 01:04:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3228FC43154;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D5FC43156;
         Tue, 22 Nov 2022 01:04:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1669079063;
-        bh=JDkX7Fc0DOy+yBhbkuqH9S9Ejfgbk7JA8huLd1R6z8Q=;
+        bh=QNpGjRTwvCwUOFj/pR6pze23etHEHGqQMnnOZBmIHF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ERo9qt7uO7GVBBnrX8o2yXKM/JykcLBdKAbt/RQK4nUKXF1KXqh6rH97v9r5k9ZXA
-         WumeDeAgQ6u2DwTKhLbgEUQi9W/b1FOGQkAEq75C51k0vVc6/BAUAIEWz/HBMK4vI5
-         l0puY9/6h3ocIVuzk2IqMT5KJCe+V61HRQok8UROZEnccnPyNxpaauTlmY/L4CEmXY
-         9hfAa7Osg5YjfWoq7Y0ORylTq6OuP+ZtK1SsgJyIGpu/HQWPMGq/ce3G253xKj4Ctz
-         NVDwNSK7+OAzWB7T5QrsS8ecsRwC2aSLbLC1ByBPcM7Uiq7FBYS8zMeUuF27bmV1bV
-         iYx8FNDVQU4bw==
+        b=fjaKQJ3eSDwRn22hicp3w41Zl2GWI3YjHGmDWDJVyAPiyxrZOPD78A4UgUF/RxlKB
+         mXGO2rgS6XfFXotIqbsRqz4o+pd1q/Hs692e4No5+HTCd0nOByQWtv9EHTTE1hc24X
+         CFJQp86yxs1lzaKlkx+DuntsELItJ0tfxyeN6coVE+eJQ+MD+thR7MIPPb4Ie090Xp
+         UZm6mR87a4Top0HJCaCJNNz08fh8MG6AgBOxWL2doq4PriTEJZZbwiURgI4Xy6Flqh
+         qn4dfosyXjLIxsH4W3GBjX+5zNJCur7P2JuBr9Pit8CDSkARL0mDq5+BiumQOmTzzD
+         nUWm6MnXK4CZA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8954E5C155D; Mon, 21 Nov 2022 17:04:22 -0800 (PST)
+        id 8B2805C1695; Mon, 21 Nov 2022 17:04:22 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Uladzislau Rezki <urezki@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 rcu 13/16] workqueue: Make queue_rcu_work() use call_rcu_flush()
-Date:   Mon, 21 Nov 2022 17:04:18 -0800
-Message-Id: <20221122010421.3799681-13-paulmck@kernel.org>
+        rostedt@goodmis.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org, "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH v2 rcu 14/16] rxrpc: Use call_rcu_flush() instead of call_rcu()
+Date:   Mon, 21 Nov 2022 17:04:19 -0800
+Message-Id: <20221122010421.3799681-14-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20221122010408.GA3799268@paulmck-ThinkPad-P17-Gen-1>
 References: <20221122010408.GA3799268@paulmck-ThinkPad-P17-Gen-1>
@@ -59,7 +63,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uladzislau Rezki <urezki@gmail.com>
+From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 
 Earlier commits in this series allow battery-powered systems to build
 their kernels with the default-disabled CONFIG_RCU_LAZY=y Kconfig option.
@@ -99,34 +103,39 @@ to call_rcu() being lazy with call_rcu_flush() for the few places
 where laziness is inappropriate.
 
 And another call_rcu() instance that cannot be lazy is the one
-in queue_rcu_work(), given that callers to queue_rcu_work() are
-not necessarily OK with long delays.
+in rxrpc_kill_connection(), which sometimes does a wakeup
+that should not be unduly delayed.
 
-Therefore, make queue_rcu_work() use call_rcu_flush() in order to revert
-to the old behavior.
+Therefore, make rxrpc_kill_connection() use call_rcu_flush() in order
+to revert to the old behavior.
 
-Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Marc Dionne <marc.dionne@auristor.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: <linux-afs@lists.infradead.org>
+Cc: <netdev@vger.kernel.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/workqueue.c | 2 +-
+ net/rxrpc/conn_object.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 7cd5f5e7e0a1b..b4b0e828b529e 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
+diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
+index 22089e37e97f0..fdcfb509cc443 100644
+--- a/net/rxrpc/conn_object.c
++++ b/net/rxrpc/conn_object.c
+@@ -253,7 +253,7 @@ void rxrpc_kill_connection(struct rxrpc_connection *conn)
+ 	 * must carry a ref on the connection to prevent us getting here whilst
+ 	 * it is queued or running.
+ 	 */
+-	call_rcu(&conn->rcu, rxrpc_destroy_connection);
++	call_rcu_flush(&conn->rcu, rxrpc_destroy_connection);
+ }
  
- 	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
- 		rwork->wq = wq;
--		call_rcu(&rwork->rcu, rcu_work_rcufn);
-+		call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
- 		return true;
- 	}
- 
+ /*
 -- 
 2.31.1.189.g2e36527f23
 
