@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E25563381B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90FF63381C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233218AbiKVJOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S233280AbiKVJOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233262AbiKVJN5 (ORCPT
+        with ESMTP id S233318AbiKVJOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:13:57 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FA2B70;
-        Tue, 22 Nov 2022 01:13:54 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id BEE8424E;
-        Tue, 22 Nov 2022 10:13:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669108432;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=plum5bpGKf5YbsOXaR3ZRwg3M/Z81EXK5S/OvM4cVME=;
-        b=qYxEdPbaOaHsnp6nfQ6IxonRBxVMFYHRbuYTr2UIqVoZOWG/R3O1LY1nHREJ5WujTeU6Zi
-        wpkgCxGUhORwqsnJVGJFdKCvista9pqCnLRsOobS8DaMthuOGEaPNrIgzcCawvJirssVQQ
-        v+2Rp5scDO5vK9ezMvtHmYBe9eWOMpfLhkFrOkg+9AVnKwocpdHlyJdM2Ppah7+DlL30JP
-        Iv6WfP7Gbr0O0QjcoHnyNb2M0HFVVv0R+eyLhFwbmta7guR4hWBKHUUZgA8d+uTTyQApbU
-        Xln9NRJnwWx7LnvCsT5kjI7ssBFOJmTEbcW8gghcoNx8Tc728Yz5IJaAt1s4hg==
+        Tue, 22 Nov 2022 04:14:25 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D46A490A2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:14:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669108463; x=1700644463;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dyyb6T2FF4wNQFOAKOH3RVlIgz0ShxAYmBVBgL6goeo=;
+  b=BimsSOpmMZ+KzoeqPNuaXCY7x4Cf82k8hOmUOnWra1OiSX4AMRssSbbC
+   j6+2avilPblFgNL+tnfc18D+9RRWPhNFNlRHvKxgIrXwvZMXr2jgPxhq3
+   LSRUcA7gbmJ7TpAR8cYMz7mNp+fy2R7QyTDrU+9wKcn0ggGcXPoTc16Og
+   ab8T+RQPmXLX5WzMnNG2+O6osIZDYDAam0BzgsA1SAjDMFFPxWJ6yyXoW
+   PrVB2gHN2o/eWFD3VGWFxzgM6aUec8M0p4oZ9k5zwFBjF5pxnpAtDPTY7
+   xwPLm6ALcVa+a0G70zY9TFJyu344vuCNM49lMiP8xXdYpRK0cQXHOUmMt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="340639755"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="340639755"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 01:14:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="672419094"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="672419094"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 22 Nov 2022 01:14:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oxPM9-00FgsZ-24;
+        Tue, 22 Nov 2022 11:14:17 +0200
+Date:   Tue, 22 Nov 2022 11:14:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>
+Cc:     bigeasy@linutronix.de, robh@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-lgm-soc@maxlinear.com
+Subject: Re: [PATCH v3 4/4] x86/of: Add support for boot time interrupt
+ delivery mode configuration
+Message-ID: <Y3yS6fCIl+0nsbOj@smile.fi.intel.com>
+References: <cover.1669100394.git.rtanwar@maxlinear.com>
+ <c62b81d5b91514e905d97e37feff6920f598e0ac.1669100394.git.rtanwar@maxlinear.com>
 MIME-Version: 1.0
-Date:   Tue, 22 Nov 2022 10:13:52 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     afaerber@suse.de, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, festevam@gmail.com,
-        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        liviu.dudau@arm.com, lorenzo.pieralisi@arm.com, mani@kernel.org,
-        nicolas.ferre@microchip.com, richard.genoud@gmail.com,
-        s.hauer@pengutronix.de, shawnguo@kernel.org, sudeep.holla@arm.com,
-        tklauser@distanz.ch, vz@mleia.com
-Subject: Re: [PATCH v5 2/3] tty: serial: use uart_port_tx() helper
-In-Reply-To: <ca8e1e8c-fe50-ca94-7cb8-9044f8cc16d0@kernel.org>
-References: <20221004104927.14361-3-jirislaby@kernel.org>
- <20221121202724.1708460-1-michael@walle.cc>
- <f95ef7b7-cc23-9fed-5d05-1aa66aaeb86a@kernel.org>
- <0ef4f1e6d92601a39fe0d1c316506c12@walle.cc>
- <325fdfbf37b155c41e2b45bcddd96e9b@walle.cc>
- <0faeb934-a2c9-fcc2-6961-d3f1bbf37fa2@kernel.org>
- <ca8e1e8c-fe50-ca94-7cb8-9044f8cc16d0@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <83ed1b1bf6770488219a708f8fa32503@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c62b81d5b91514e905d97e37feff6920f598e0ac.1669100394.git.rtanwar@maxlinear.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,93 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-11-22 09:25, schrieb Jiri Slaby:
-> On 22. 11. 22, 9:23, Jiri Slaby wrote:
->> On 22. 11. 22, 9:18, Michael Walle wrote:
->>> Am 2022-11-22 09:09, schrieb Michael Walle:
->>>> Hi,
->>>> 
->>>> Am 2022-11-22 08:02, schrieb Jiri Slaby:
->>>>> On 21. 11. 22, 21:27, Michael Walle wrote:
->>>>>> This will break serial output for the userspace on my board
->>>>>> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt*dts). The 
->>>>>> uart_port_tx()
->>>>>> helper will call __port->ops->stop_tx(__port) if 
->>>>>> uart_circ_chars_pending()
->>>>>> returns 0. But the code above, doesn't do that. In fact, removing 
->>>>>> the
->>>>>> stop_tx() call in the helper macro, will fix the console output.
->>>>>> 
->>>>>> Any ideas how to fix that?
->>>>> 
->>>>> Hm, so ATMEL_US_TXRDY is removed from tx_done_mask in stop_tx, but 
->>>>> not
->>>>> added back in start_tx. So the tx interrupt is never handled (the 
->>>>> tx
->>>>> tasklet is not scheduled to send the queue chars) in
->>>>> atmel_handle_transmit().
->>>>> 
->>>>> Any chance, the below fixes it?
->>>>> 
->>>>> diff --git a/drivers/tty/serial/atmel_serial.c
->>>>> b/drivers/tty/serial/atmel_serial.c
->>>>> index 11bf2466390e..395370e0c77b 100644
->>>>> --- a/drivers/tty/serial/atmel_serial.c
->>>>> +++ b/drivers/tty/serial/atmel_serial.c
->>>>> @@ -596,6 +596,8 @@ static void atmel_start_tx(struct uart_port 
->>>>> *port)
->>>>>                 /* re-enable PDC transmit */
->>>>>                 atmel_uart_writel(port, ATMEL_PDC_PTCR, 
->>>>> ATMEL_PDC_TXTEN);
->>>>> 
->>>>> +       atmel_port->tx_done_mask |= ATMEL_US_TXRDY;
->>>>> +
->>>>>         /* Enable interrupts */
->>>>>         atmel_uart_writel(port, ATMEL_US_IER, 
->>>>> atmel_port->tx_done_mask);
->>>>> 
->>>>> 
->>>>> thanks,
->>>> 
->>>> Unfortunately, that doesn't help. Btw, some characters are 
->>>> transmitted:
->>>> 
->>>> 
->>>> [    6.219356] Key type dns_resolver registered
->>>> [    6.223679] Registering SWP/SWPB emulation handler
->>>> [    6.247530] Loading compiled-in X.509 certificates
->>>> [    6.288467] Freeing unused kernel image (initmem) memory: 1024K
->>>> [    6.297789] Run /init as init process
->>>> WbSOROSOSOSOSOStarting linuxptp system clock synchronization: O
->>>> 
->>>> -michael
->>> 
->>> But you made me look at atmel_stop_tx() and there is this:
->>> 
->>>         /*
->>>      * Disable the transmitter.
->>>      * This is mandatory when DMA is used, otherwise the DMA buffer
->>>      * is fully transmitted.
->>>      */
->>>      atmel_uart_writel(port, ATMEL_US_CR, ATMEL_US_TXDIS);
->>> 
->>> Removing that write, will also fix the problem. Could it be, that
->>> the transmit is still active (via DMA) but the driver will call
->>> tx_stop() and then stop the transmission in the background?
->> 
->> Yes, that was exactly the next step to try. The datasheet doesn't tell 
->> much what happens when TXDIS is written while the characters are 
->> transmitted.
+On Tue, Nov 22, 2022 at 03:39:10PM +0800, Rahul Tanwar wrote:
+> Presently, init/boot time interrupt delivery mode is enumerated
+> only for ACPI enabled systems by parsing MADT table or for older
+> systems by parsing MP table. But for OF based x86 systems, it is
+> assumed & hardcoded to legacy PIC mode. This is a bug for
+> platforms which are OF based but do not use 8259 compliant legacy
+> PIC interrupt controller. Such platforms can not even boot because
+> of this bug/hardcoding.
 > 
-> Side note: your usart doesn't use dma. It's PIO (hence all that
-> uart_tx_helper()). And the attached patch doesn't touch TXDIS for
-> non-DMA case. I.e. it should transmit the final character (and nothing
-> more).
+> Fix this bug by adding support for configuration of init time
+> interrupt delivery mode for x86 OF based systems by introducing a
+> new optional boolean property 'intel,virtual-wire-mode' for
+> interrupt-controller node of local APIC. This property emulates
+> IMCRP Bit 7 of MP feature info byte 2 of MP floating pointer
+> structure.
+> 
+> Defaults to legacy PIC mode if absent. Configures it to virtual
+> wire compatibility mode if present.
 
-ok ;)
+> Fixes: 3879a6f32948 ("x86: dtb: Add early parsing of IO_APIC")
 
-expect from "s/id_dma/is_dma/", this patch works. thanks!
+If it was never working, there is nothing to fix.
+OTOH, without Cc: stable@ this is up to stable maintainers to
+backport.
 
--michael
+
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+I definitely haven't suggested this fix.
+
+...
+
+The code looks good to me.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
