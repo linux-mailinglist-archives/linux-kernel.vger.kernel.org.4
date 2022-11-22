@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E141633DE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9302633DE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbiKVNjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
+        id S233848AbiKVNkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233767AbiKVNjp (ORCPT
+        with ESMTP id S233836AbiKVNjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:39:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668782B608
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:39:41 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxTUt-00053x-17; Tue, 22 Nov 2022 14:39:35 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxTUr-005rZi-0s; Tue, 22 Nov 2022 14:39:33 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxTUr-000o66-6F; Tue, 22 Nov 2022 14:39:33 +0100
-Date:   Tue, 22 Nov 2022 14:39:33 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 3/7] pwm: lpss: Include headers we are the direct user
- of
-Message-ID: <20221122133933.iwo76w4h6wuvp3v4@pengutronix.de>
-References: <20221117110806.65470-1-andriy.shevchenko@linux.intel.com>
- <20221117110806.65470-4-andriy.shevchenko@linux.intel.com>
+        Tue, 22 Nov 2022 08:39:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD3B59FE6;
+        Tue, 22 Nov 2022 05:39:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9EA7B819ED;
+        Tue, 22 Nov 2022 13:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 557BEC43470;
+        Tue, 22 Nov 2022 13:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669124388;
+        bh=bAhkPmpXqz2tFgI523IWjd0wI9fHjPVBJ+d3LM6chXU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dPtI3XTfZ+GXeh7ghtt9lRdvV7euOHLo5WUTqNWNmfdOgx9PJ4ID1AmZ6CPEoAvET
+         8OpbOactRW1fKwcfflpIEtWAOqQoXaX0NZ7YefNP6CDij2VsRXSXGDEUSTKMwtZyBu
+         Ed1Tewc8Mq0vP3zLkj0FpQ9ojKlEFz0BpUgeUZ7yKQbBOOyHc6rbFtkhdL9Urta8un
+         4TRwLtcbHZtBnJp+diJayiETtHWVL9eD6nmuyXoXoWzKIiJzdGECNLcO4SwZlO2K//
+         drZhox4NOBsAg9V3DXEs/TdUA0aqxACv16zmFN2g9I3SiB41sEiJGSeZRAwmIyVioy
+         kFAl9C/luuqBg==
+Received: by mail-lf1-f42.google.com with SMTP id g12so23632788lfh.3;
+        Tue, 22 Nov 2022 05:39:48 -0800 (PST)
+X-Gm-Message-State: ANoB5plicwdItKEI33M8wqXHHWSJjHOUkDWif4C9ULh5JvNM8uREWydY
+        9ZNN8P5wNZDlw4zHoBdNZkUX120KdJRRPxJ7xvI=
+X-Google-Smtp-Source: AA0mqf46UEJFNPXFwvfOsEYYZp/AJYJPYPw2s9cT/PGT5cOmy93kGtPcgNJvFpcL5IiI4gBligWcB1CLgtplRZNBEnc=
+X-Received: by 2002:a05:6512:3c89:b0:4a2:bfd2:b218 with SMTP id
+ h9-20020a0565123c8900b004a2bfd2b218mr7757722lfv.228.1669124386229; Tue, 22
+ Nov 2022 05:39:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="spgoam2ad4ovh5w3"
-Content-Disposition: inline
-In-Reply-To: <20221117110806.65470-4-andriy.shevchenko@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221118133239.2515648-1-Jason@zx2c4.com> <20221118133239.2515648-6-Jason@zx2c4.com>
+In-Reply-To: <20221118133239.2515648-6-Jason@zx2c4.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 22 Nov 2022 14:39:34 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEQNuGXoHaL3xEEXE5V8QhV75xP7J9oGn+cnL=Aog+J8Q@mail.gmail.com>
+Message-ID: <CAMj1kXEQNuGXoHaL3xEEXE5V8QhV75xP7J9oGn+cnL=Aog+J8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] efi: random: refresh non-volatile random seed when
+ RNG is initialized
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-efi@vger.kernel.org, linux-crypto@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,47 +62,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 18 Nov 2022 at 14:34, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> EFI has a rather unique benefit that it has access to some limited
+> non-volatile storage, where the kernel can store a random seed. Register
+> a notification for when the RNG is initialized, and at that point, store
+> a new random seed.
+>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  drivers/firmware/efi/efi.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
 
---spgoam2ad4ovh5w3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Not sure why I don't see v3 in my inbox. In any case,
 
-On Thu, Nov 17, 2022 at 01:08:02PM +0200, Andy Shevchenko wrote:
-> For the sake of integrity, include headers we are the direct
-> user of.
->=20
-> Replace the inclusion of device.h by a forward declaration
-> of struct device plus a (cheaper) of types.h as device.h is
-> an expensive include (measured in compiler effort).
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Thierry Reding <thierry.reding@gmail.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+for this patch, or the one with the varname wide string literal used
+in place instead of via a CPP macro.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---spgoam2ad4ovh5w3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN80RIACgkQwfwUeK3K
-7Anwlwf/X0mQrjZEBJBew2lvyjqHmjokQ9g/NMPI/ULfXPOSrYsXbAU9jsxS5T0D
-ZaD3KiXILev/WQSyeHZGvGNwSwoDqXy3mZBcOApnODNoAGByn9uTeQ9ZvQNU/Q3O
-VTIZfibXZ+cW5gGm2jwiXEso88q3bRL1AVGVl3jKc90EOGzL6JHIIJ3rKkS6sMB6
-dlQxI4yJk+p1M6Bub0pqGUkX84lmr/cZmj/ux8csIs497NLddcGJP4vUk9X0I6gU
-4T5J5jLfv1o0tBrlvL+gm0AX/Qh0VDxVoI2fmwuO7m8TmaIZvlAhNvCwYhQzR5Dt
-OzcW+goKERG+JeHQ8ZbVGZHuxMCqrg==
-=5n0N
------END PGP SIGNATURE-----
-
---spgoam2ad4ovh5w3--
+> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+> index f12cc29bd4b8..f8edf6164833 100644
+> --- a/drivers/firmware/efi/efi.c
+> +++ b/drivers/firmware/efi/efi.c
+> @@ -337,6 +337,24 @@ static void __init efi_debugfs_init(void)
+>  static inline void efi_debugfs_init(void) {}
+>  #endif
+>
+> +static void refresh_nv_rng_seed(struct work_struct *work)
+> +{
+> +       u8 seed[EFI_RANDOM_SEED_SIZE];
+> +
+> +       get_random_bytes(seed, sizeof(seed));
+> +       efi.set_variable(LINUX_EFI_RANDOM_NV_SEED_VAR, &LINUX_EFI_RANDOM_SEED_TABLE_GUID,
+> +                        EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS |
+> +                        EFI_VARIABLE_RUNTIME_ACCESS, sizeof(seed), seed);
+> +       memzero_explicit(seed, sizeof(seed));
+> +}
+> +static int refresh_nv_rng_seed_notification(struct notifier_block *nb, unsigned long action, void *data)
+> +{
+> +       static DECLARE_WORK(work, refresh_nv_rng_seed);
+> +       schedule_work(&work);
+> +       return 0;
+> +}
+> +static struct notifier_block refresh_nv_rng_seed_nb = { .notifier_call = refresh_nv_rng_seed_notification };
+> +
+>  /*
+>   * We register the efi subsystem with the firmware subsystem and the
+>   * efivars subsystem with the efi subsystem, if the system was booted with
+> @@ -413,6 +431,7 @@ static int __init efisubsys_init(void)
+>                 platform_device_register_simple("efi_secret", 0, NULL, 0);
+>  #endif
+>
+> +       execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
+>         return 0;
+>
+>  err_remove_group:
+> --
+> 2.38.1
+>
