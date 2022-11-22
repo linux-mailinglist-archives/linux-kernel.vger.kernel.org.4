@@ -2,131 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EC7633DC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C11E633EFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbiKVNcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        id S234072AbiKVObb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbiKVNch (ORCPT
+        with ESMTP id S233952AbiKVObM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:32:37 -0500
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1959C74;
-        Tue, 22 Nov 2022 05:32:33 -0800 (PST)
-Date:   Tue, 22 Nov 2022 13:32:28 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1669123951; x=1669383151;
-        bh=pMgyj6309dziadQUAmdkN8/52Ea7gPzJRy2Jf1geJQ0=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=mjtT6EgCEwE8+XuS8+w0R+4ofsX1V819BBmdonEiDDR39lUerGE3a+lF9NFEYql9J
-         tGaDwLhfACpoopmLOVgzncL0p5dyhK1jyYBZ6l0HZjgEpI2zK0Y3rxHBsHm0ghxde9
-         DvuWbrFAFqodjCN5qwGn4VKZ1YYy9Nq2R9cJxE8MgPrIccQRmtLt888aKgYczzYYho
-         aZhg0KlT5ka0m38acxmUVZ0roCtZeRFtOZiI2YLenbqGvsayE5Jq/k/PDP3zSayjB2
-         eyuZH/N87Dtc9Puezvty+hmpf0EPCLD5KlMZt/l7+MK1aiKBNCs6hLvj7bsxFmSbq4
-         Gxp/Bfyjh/7Zw==
-To:     linux-kernel@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [RESEND PATCH v5 4/4] dts: arm64: qcom: msm8916-acer-a1-724: Add touchscreen
-Message-ID: <20221122133141.258357-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20221122132816.257717-1-linmengbo0689@protonmail.com>
-References: <20221122132816.257717-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Tue, 22 Nov 2022 09:31:12 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5C96AED5;
+        Tue, 22 Nov 2022 06:31:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=wwK1w0+91VyguQf6bkuN05BbJdwqncc33oWAjgq88to=; b=cWFBDVu7Z4yOUp25p3/Rhx9Bdl
+        jXtrRVKBSjhnWmi0UBLDnpAlDvXqGeWjL/lxbSKH+uqaeAwWzcbHIrtkhECJxYdDZpE4RliW2Gh4x
+        0/f3g9/x1wbiB9QUTEvtOjTOqAUc4SO/040zHb8itMT2OK3t5HlVE3jD1cD2lrhtmpvhhnSLWJnbZ
+        s/WcYjk5HX14UrkxoX6LpW5vikmrG3MVrL2vaLT0p8q7fLHd9kSpgnZPPaTI21DWwW9pUcTLSWM9E
+        hoFQtO+kfOmLkrxuBnmDqqu6KrhXivaaMip3Jlygj/6+1rpd4WB4L9vQGppRnXC27E08J5D7zPV2w
+        wG1mgrmQ==;
+Received: from [177.102.6.147] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oxTOp-006y6v-Gr; Tue, 22 Nov 2022 14:33:19 +0100
+Message-ID: <eaba1a1a-31cd-932f-277c-267699d7be30@igalia.com>
+Date:   Tue, 22 Nov 2022 10:33:12 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3 08/11] EDAC/altera: Skip the panic notifier if kdump is
+ loaded
+Content-Language: en-US
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        linux-edac@vger.kernel.org, bp@alien8.de
+Cc:     kexec@lists.infradead.org, pmladek@suse.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-9-gpiccoli@igalia.com>
+ <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
+In-Reply-To: <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A1-724 uses a Focaltech FT5446 touchscreen that is connected to blsp_i2c5.
-Add it to the device tree.
-
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
----
- .../boot/dts/qcom/msm8916-acer-a1-724.dts     | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts b/arch/arm64/=
-boot/dts/qcom/msm8916-acer-a1-724.dts
-index bea0d022dd9a..5b216107f69b 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-@@ -81,6 +81,30 @@ magnetometer@12 {
- =09};
- };
-=20
-+&blsp_i2c5 {
-+=09status =3D "okay";
-+
-+=09touchscreen@38 {
-+=09=09/* Actually ft5446 */
-+=09=09compatible =3D "edt,edt-ft5406";
-+=09=09reg =3D <0x38>;
-+
-+=09=09interrupt-parent =3D <&msmgpio>;
-+=09=09interrupts =3D <13 IRQ_TYPE_LEVEL_LOW>;
-+
-+=09=09reset-gpios =3D <&msmgpio 12 GPIO_ACTIVE_LOW>;
-+
-+=09=09vcc-supply =3D <&pm8916_l16>;
-+=09=09iovcc-supply =3D <&pm8916_l6>;
-+
-+=09=09touchscreen-size-x =3D <720>;
-+=09=09touchscreen-size-y =3D <1280>;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&touchscreen_default>;
-+=09};
-+};
-+
- &blsp1_uart2 {
- =09status =3D "okay";
- };
-@@ -245,6 +269,24 @@ gpio_keys_default: gpio-keys-default-state {
- =09=09bias-pull-up;
- =09};
-=20
-+=09touchscreen_default: touchscreen-default-state {
-+=09=09reset-pins {
-+=09=09=09pins =3D "gpio12";
-+=09=09=09function =3D "gpio";
-+
-+=09=09=09drive-strength =3D <2>;
-+=09=09=09bias-disable;
-+=09=09};
-+
-+=09=09touchscreen-pins {
-+=09=09=09pins =3D "gpio13";
-+=09=09=09function =3D "gpio";
-+
-+=09=09=09drive-strength =3D <2>;
-+=09=09=09bias-pull-up;
-+=09=09};
-+=09};
-+
- =09usb_id_default: usb-id-default-state {
- =09=09pins =3D "gpio110";
- =09=09function =3D "gpio";
---=20
-2.30.2
+On 18/09/2022 11:10, Guilherme G. Piccoli wrote:
+> On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
+>> The altera_edac panic notifier performs some data collection with
+>> regards errors detected; such code relies in the regmap layer to
+>> perform reads/writes, so the code is abstracted and there is some
+>> risk level to execute that, since the panic path runs in atomic
+>> context, with interrupts/preemption and secondary CPUs disabled.
+>>
+>> Users want the information collected in this panic notifier though,
+>> so in order to balance the risk/benefit, let's skip the altera panic
+>> notifier if kdump is loaded. While at it, remove a useless header
+>> and encompass a macro inside the sole ifdef block it is used.
+>>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: Petr Mladek <pmladek@suse.com>
+>> Cc: Tony Luck <tony.luck@intel.com>
+>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+>> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+>>
+>> ---
+>>
+>> V3:
+>> - added the ack tag from Dinh - thanks!
+>> - had a good discussion with Boris about that in V2 [0],
+>> hopefully we can continue and reach a consensus in this V3.
+>> [0] https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
+>>
+>> V2:
+>> - new patch, based on the discussion in [1].
+>> [1] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
+>>
+>> [...]
+> 
+> Hi Dinh, Tony, Boris - sorry for the ping.
+> 
+> Appreciate reviews on this one - Dinh already ACKed the patch but Boris
+> raised some points in the past version [0], so any opinions or
+> discussions are welcome!
 
 
+Hi folks, monthly ping heheh
+Apologies for the re-pings, please let me know if there is anything
+required to move on this patch.
+
+Cheers,
+
+
+Guilherme
+
+
+P.S. I've been trimming the huge CC list in the series, done it here as
+well.
