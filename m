@@ -2,47 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD867634AB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF9F634AB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233677AbiKVXJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 18:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S235275AbiKVXJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 18:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiKVXJE (ORCPT
+        with ESMTP id S235214AbiKVXJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 18:09:04 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D7CB7017;
-        Tue, 22 Nov 2022 15:08:58 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 68DFE1C09DB; Wed, 23 Nov 2022 00:08:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1669158536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GI2Ao1YqhqfVzFF9Hmgl8saIhBJq+Op5pO2DH3V+ATc=;
-        b=HDD6E1tmXtPABW9ZhoYTHGxiZauYH+pPH3M3EJUh2mAamz0zi6mDrgk+P55nJRO6vAHJQF
-        MQqXP7WsQdDE1FNulV18PGRBRX2AV4Jpqjf2FQOSq++4ObGA1nHcbYiOGsjDiOOJHMRkDz
-        /DqW5IdvQaGrjdzx8qtBRJ4os7RVJo0=
-Date:   Wed, 23 Nov 2022 00:08:55 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] leds: leds-wm831x-status: init chip_pdata before access
-Message-ID: <Y31Wh3z/QU6NWZ68@duo.ucw.cz>
-References: <20221122204837.11611-1-skhan@linuxfoundation.org>
- <Y305hfVdhs9zwOi/@duo.ucw.cz>
- <a77c38d1-1633-5421-6fab-6886b642fe66@linuxfoundation.org>
+        Tue, 22 Nov 2022 18:09:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6391C495A;
+        Tue, 22 Nov 2022 15:09:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 461D0B81D4B;
+        Tue, 22 Nov 2022 23:09:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923E5C433D6;
+        Tue, 22 Nov 2022 23:09:07 +0000 (UTC)
+Date:   Tue, 22 Nov 2022 18:09:05 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Song Shuai <suagrfillet@gmail.com>
+Subject: [PATCH] ftrace: Avoid needless updates of the ftrace function call
+Message-ID: <20221122180905.737b6f52@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="x4sEWpz0m1JkPymp"
-Content-Disposition: inline
-In-Reply-To: <a77c38d1-1633-5421-6fab-6886b642fe66@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,45 +43,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
---x4sEWpz0m1JkPymp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Song Shuai reported:
 
-On Tue 2022-11-22 15:39:35, Shuah Khan wrote:
-> On 11/22/22 14:05, Pavel Machek wrote:
-> > Hi!
-> >=20
-> > > wm831x_status_probe() accesses status from chip_pdata before
-> > > initializing it. Fix it.
-> > >=20
-> > > Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> >=20
-> > Does it? ARRAY_SIZE() will be compile-time constant, no?
-> >=20
-> > What is the bug? Did you test the code?
-> >=20
->=20
-> Is ARRAY_SIZE() safe when accessing the status chip_pdata->status?
-> I wasn't sure. If so, this change isn't necessary.
+    The list func (ftrace_ops_list_func) will be patched first
+    before the transition between old and new calls are set,
+    which fixed the race described in this commit `59338f75`.
 
-I think so. Feel free to quite C standard to prove me wrong :-).
+    While ftrace_trace_function changes from the list func to a
+    ftrace_ops func, like unregistering the klp_ops to leave the only
+    global_ops in ftrace_ops_list, the ftrace_[regs]_call will be
+    replaced with the list func although it already exists. So there
+    should be a condition to avoid this.
 
-Best regards,
-								Pavel
+And suggested using another variable to keep track of what the ftrace
+function is set to. But this could be simplified by using a helper
+function that does the same with a static variable.
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+Link: https://lore.kernel.org/lkml/20221026132039.2236233-1-suagrfillet@gmail.com/
 
---x4sEWpz0m1JkPymp
-Content-Type: application/pgp-signature; name="signature.asc"
+Reported-by: Song Shuai <suagrfillet@gmail.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/ftrace.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 65a5d36463e0..d04552c0c275 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -2763,6 +2763,19 @@ void __weak ftrace_arch_code_modify_post_process(void)
+ {
+ }
+ 
++static int update_ftrace_func(ftrace_func_t func)
++{
++	static ftrace_func_t save_func;
++
++	/* Avoid updating if it hasn't changed */
++	if (func == save_func)
++		return 0;
++
++	save_func = func;
++
++	return ftrace_update_ftrace_func(func);
++}
++
+ void ftrace_modify_all_code(int command)
+ {
+ 	int update = command & FTRACE_UPDATE_TRACE_FUNC;
+@@ -2783,7 +2796,7 @@ void ftrace_modify_all_code(int command)
+ 	 * traced.
+ 	 */
+ 	if (update) {
+-		err = ftrace_update_ftrace_func(ftrace_ops_list_func);
++		err = update_ftrace_func(ftrace_ops_list_func);
+ 		if (FTRACE_WARN_ON(err))
+ 			return;
+ 	}
+@@ -2799,7 +2812,7 @@ void ftrace_modify_all_code(int command)
+ 		/* If irqs are disabled, we are in stop machine */
+ 		if (!irqs_disabled())
+ 			smp_call_function(ftrace_sync_ipi, NULL, 1);
+-		err = ftrace_update_ftrace_func(ftrace_trace_function);
++		err = update_ftrace_func(ftrace_trace_function);
+ 		if (FTRACE_WARN_ON(err))
+ 			return;
+ 	}
+-- 
+2.35.1
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY31WhwAKCRAw5/Bqldv6
-8k76AJ9rMhV61HT+oU3PrDTjKlwjBHxh0ACghvisv1NhzFrW//h09qSKpeGsxY0=
-=x3py
------END PGP SIGNATURE-----
-
---x4sEWpz0m1JkPymp--
