@@ -2,119 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA706347EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA420634801
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbiKVURu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S234143AbiKVUTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:19:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234775AbiKVURp (ORCPT
+        with ESMTP id S233701AbiKVUTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:17:45 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4152DDE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:17:41 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id y4so14746604plb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:17:41 -0800 (PST)
+        Tue, 22 Nov 2022 15:19:42 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764DE27FE4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:19:41 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id q83so17003537oib.10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:19:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fOGHLP5HIj9i23WKx8F5fFOZNnqfBffKUE8KWY64clY=;
-        b=NzS91rjsOTy4kDCWDLyGmvr/liq0C+vIn2YjV7FPq/+cVzAyEUBzFgeBbzmM0vCVV/
-         Y+iw3mdzeZeuWffmnbFvxcH2BksFpC6t5Fyggd/KXkRP/EITa9rqx6cMOQ9+wGoz91/j
-         OVqTCPzqQZSDVS16WuvYwfmJ7QgcEpvttLaBcXeCJgaLi9qDwnl1qgpjK2gp0+3kvQQG
-         /mIrAG/w1qw1D7RFPu2V0lET6GHsd8sD3mcatlRrY/L3YkkDCu+/KEtC/arvJ5/+0HSr
-         Y8L1g6NUlRa7OMA9O6QfvUcUd3k1j1T0kVhad4BkwxWF43mdVjBtDCyvOQDMcWX3U9kc
-         9x7A==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JJeM2QZ9j6Bl1KYDD45QbX15tSP8xUPz8dxNHtRGie0=;
+        b=SJhuMMaSp6msJ0PsB556c5ah3uZu7a10YngHgwsZfuGDB8+IF/LJYOqzGIhX52Sqnh
+         acj5Uc5MxbBqHpuvgO/xmEsUWBOXnTL9JOwQmaT4jWTgAYV8Zf/vt4UFcQx7lPJOyCex
+         y81jzFq1ki8KZ+JPC9h/sjVY4plAq19ncn+IccWU0PzEpSNsk1FXhp44fZvll2ffWsRz
+         Vz1ZzxFiAIOh97C7LqM0knQbx+mo59/ByP/U7J5Q2HXKa8BzC9Mtu6NlEgAUR2+Tj2l9
+         OL2xSSxY6WsL0FGRgRLj6ByyizeMe1cqwJmp6pttKjVEFi5kchTfcPhiv3Vbu5CdOMOb
+         azww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fOGHLP5HIj9i23WKx8F5fFOZNnqfBffKUE8KWY64clY=;
-        b=HEMga9gluY+EtzJklxInhSQwgrEQY2Df5G2a4rhDxMTTTsws4Upjlu8eSQtjoIMCag
-         hOw9zV0+RvX1qlV0MY2onaKg1A8P/svtBhtO//VRIbgRosiu3g4BzMhmvs4NcIIkobhA
-         azk0wMBCjerz8KoeCeLEbnSxRpgkb6jS3frUnri+gQj8pHjTRyDgGqYGZIJOdrDwxazu
-         b1j0SMePU75uvZJ/ANxHg1WCRmcVFMlzUPLiRBd4J/ObdOQ1vE3qfP8ND9pMHwZ50wVJ
-         9XyCf1VTtKWexuWBUjWTETJqf8yeruzoGCqBdTzpJ4y7lTk+IWYYeOusgNZkPvuN5r+5
-         wG2g==
-X-Gm-Message-State: ANoB5pnVt0+L4prBPQHCTG+C89AVHTzdwsM/gKEYvqy8pG9/ZMqiFniK
-        wfPCRzM029HCIPJwHhRU3vc=
-X-Google-Smtp-Source: AA0mqf5/yZRUWfzUlv412lMPgmSdCkAtoLh+djHTvtSi4lmtwQ3l5XgkObKKpA/+gUDC4sw7olEwdQ==
-X-Received: by 2002:a17:902:cccd:b0:186:fd58:c706 with SMTP id z13-20020a170902cccd00b00186fd58c706mr5786135ple.4.1669148261037;
-        Tue, 22 Nov 2022 12:17:41 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:bb3])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090264cf00b00188f9534a3esm11050639pli.87.2022.11.22.12.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 12:17:40 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 22 Nov 2022 10:17:39 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v5 3/5] workqueue: Make too_many_workers() return the
- worker excess
-Message-ID: <Y30uY/Y8pffIhrUp@slm.duckdns.org>
-References: <20221122192937.2386494-1-vschneid@redhat.com>
- <20221122192937.2386494-4-vschneid@redhat.com>
+        bh=JJeM2QZ9j6Bl1KYDD45QbX15tSP8xUPz8dxNHtRGie0=;
+        b=TFReexyD+nyj57o21+0EQyLYn6w2i7abcWwlTMFt3JMb56wvfLoGos5HHgNnhU75Rh
+         JNGL0FfczNqNBfKwgyIUMO5djkib0NYWXYd9EbyF29PFY1rBzYMM5BlbqQiovDSUiRav
+         fp2KOFBohiNVIE+xwwJCrBkKCwrXfs1YYFQegJJ3TOtnDGQilbmz9fy5KIwaweCwkhpz
+         glsToPvCNudoydUxV0yaBeshM7c4QdutgPJ9BDQPuZ5BYrwJgpifU5ftq41SHQs6tifg
+         BrsS72GQNMjY5nrX4rZocFOODdB6aSxxGJLiAMnMhfOVqbF1ro/pE9fhqUZnur468UA/
+         A0og==
+X-Gm-Message-State: ANoB5pnbnkvySEI/MSMH3UqPo55YpPafgUZGO48R7t9l0mYul7dcxMcl
+        C+wMys1oNxUO+dhRiBp6BY9FKkWpElkyq4ZJx/dW2g==
+X-Google-Smtp-Source: AA0mqf6ZAbjJ7gQ7mlzp85IXiOHOKc/bQHBSbghmcmvRAlU5CeViWuctX+g7H3VZdwHKT6naUZDnNUpPqjg627seies=
+X-Received: by 2002:a54:441a:0:b0:35a:4390:1b8b with SMTP id
+ k26-20020a54441a000000b0035a43901b8bmr2549926oiw.122.1669148380657; Tue, 22
+ Nov 2022 12:19:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122192937.2386494-4-vschneid@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
+ <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com> <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 22 Nov 2022 15:19:28 -0500
+Message-ID: <CA+GJov7v8hbJ6A2ehfpZvG3+e181D0JrJRYDTQc9_QMM4G0HQA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
+To:     Daniel Latypov <dlatypov@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, isabbasso@riseup.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Nov 22, 2022 at 12:14 PM Daniel Latypov <dlatypov@google.com> wrote=
+:
+>
+> On Tue, Nov 22, 2022 at 1:17 AM Anders Roxell <anders.roxell@linaro.org> =
+wrote:
+> >
+> > On Mon, 21 Nov 2022 at 19:48, Rae Moar <rmoar@google.com> wrote:
+> > >
+> > > Change KUnit test output to better comply with KTAP v1 specifications
+> > > found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
+> > > 1) Use "KTAP version 1" instead of "TAP version 14" as test output he=
+ader
+> > > 2) Remove '-' between test number and test name on test result lines
+> > > 2) Add KTAP version lines to each subtest header as well
+> > >
+> > > Note that the new KUnit output still includes the =E2=80=9C# Subtest=
+=E2=80=9D line now
+> > > located after the KTAP version line. This does not completely match t=
+he
+> > > KTAP v1 spec but since it is classified as a diagnostic line, it is n=
+ot
+> > > expected to be disruptive or break any existing parsers. This
+> > > =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
+> > > (https://testanything.org/tap-version-14-specification.html)
+> > > and it is used to define the test name before the results.
+> > >
+> > > Original output:
+> > >
+> > >  TAP version 14
+> > >  1..1
+> > >    # Subtest: kunit-test-suite
+> > >    1..3
+> > >    ok 1 - kunit_test_1
+> > >    ok 2 - kunit_test_2
+> > >    ok 3 - kunit_test_3
+> > >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+> > >  # Totals: pass:3 fail:0 skip:0 total:3
+> > >  ok 1 - kunit-test-suite
+> > >
+> > > New output:
+> > >
+> > >  KTAP version 1
+> > >  1..1
+> > >    KTAP version 1
+> > >    # Subtest: kunit-test-suite
+> > >    1..3
+> > >    ok 1 kunit_test_1
+> > >    ok 2 kunit_test_2
+> > >    ok 3 kunit_test_3
+> > >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+> > >  # Totals: pass:3 fail:0 skip:0 total:3
+> > >  ok 1 kunit-test-suite
+> > >
+> > > Signed-off-by: Rae Moar <rmoar@google.com>
+> > > Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> > > Reviewed-by: David Gow <davidgow@google.com>
+> >
+> > I tried this patch, see the full boot log [1] and I can still see some
+> >  tests that output the "old" format with 'ok 1 - kunit_test_1', for exa=
+mple
+> >
+> > ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+> >
+> > Isn't this something that should be converted too?
 
-On Tue, Nov 22, 2022 at 07:29:35PM +0000, Valentin Schneider wrote:
-...
-> The function currently returns true when
->   (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO >= nr_busy
-> thus, the desired number of idle workers is expressed by
->   (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO == nr_busy - 1
-> IOW
->    nr_idle == ((nr_busy - 1) / MAX_IDLE_WORKERS_RATIO) + 2
-> +/* How many idle workers should we get rid of, if any? */
-> +static unsigned int worker_cull_count(struct worker_pool *pool)
+Hello! Sorry for missing that. You are definitely right. Those results shou=
+ld
+be converted as well.
 
-Can we name it nr_workers_to_cull()?
+>
+> Yes, thanks for catching that.
+> That's what I get from only looking over the diff this time since I
+> thought I remembered the code...
+>
+> We also want this diff to fix a) debugfs, b) subtests.
+>
+> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+> index 1048ef1b8d6e..de0ee2e03ed6 100644
+> --- a/lib/kunit/debugfs.c
+> +++ b/lib/kunit/debugfs.c
+> @@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file
+> *seq, void *v)
+>         kunit_suite_for_each_test_case(suite, test_case)
+>                 debugfs_print_result(seq, suite, test_case);
+>
+> -       seq_printf(seq, "%s %d - %s\n",
+> +       seq_printf(seq, "%s %d %s\n",
+>                    kunit_status_to_ok_not_ok(success), 1, suite->name);
+>         return 0;
+>  }
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 19344cb501c5..c9d57a1d9524 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -556,7 +556,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+>
+>                                 kunit_log(KERN_INFO, &test,
+>                                           KUNIT_SUBTEST_INDENT
+> KUNIT_SUBTEST_INDENT
+> -                                         "%s %d - %s",
+> +                                         "%s %d %s",
+>
+> kunit_status_to_ok_not_ok(test.status),
+>                                           test.param_index + 1, param_des=
+c);
+>
+> Daniel
 
->  {
->  	bool managing = pool->flags & POOL_MANAGER_ACTIVE;
->  	int nr_idle = pool->nr_idle + managing; /* manager is considered idle */
->  	int nr_busy = pool->nr_workers - nr_idle;
->  
-> -	return nr_idle > 2 && (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO >= nr_busy;
-> +	lockdep_assert_held(&pool->lock);
-> +
-> +	/*
-> +	 * We keep at least 2 spare idle workers, but overall aim to keep at
-> +	 * most (1 / MAX_IDLE_WORKERS_RATIO) workers idle.
-> +	 */
-> +	return max(0, nr_idle - 2 - ((nr_busy - 1) / MAX_IDLE_WORKERS_RATIO));
+Thanks Daniel!
 
-I think we can do away with the subtraction on nr_busy. I don't think it'd
-make any material difference, so maybe we can do:
+I think that should do the trick with the addition of adding the "KTAP
+version 1" line, which you can do with the following diff:
 
-        return max(0, nr_idle - 2 - nr_busy / MAX_IDLE_WORKERS_RATIO);
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c9d57a1d9524..1c9d8d962d67 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -543,6 +543,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+                        /* Get initial param. */
+                        param_desc[0] =3D '\0';
+                        test.param_value =3D
+test_case->generate_params(NULL, param_desc);
++                       kunit_log(KERN_INFO, &test,
+KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
++                                 "KTAP version 1\n");
+                        kunit_log(KERN_INFO, &test,
+KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+                                  "# Subtest: %s", test_case->name);
 
-Thanks.
+Going to run through some more examples to make sure this version
+works otherwise I will make a v3 with the addition of fixing any merge
+conflicts.
 
--- 
-tejun
+Rae
