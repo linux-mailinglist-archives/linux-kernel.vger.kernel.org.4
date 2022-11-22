@@ -2,168 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E866633565
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B39663356C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiKVGhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 01:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48420 "EHLO
+        id S232034AbiKVGlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 01:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKVGhi (ORCPT
+        with ESMTP id S229450AbiKVGla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 01:37:38 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BA56356
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 22:37:35 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id y4so12736891plb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 22:37:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c6nEzvRMqkEoaAWST80S3Bt5GCknL1xuC4oMibyvkh8=;
-        b=X8lz3R6KuIPbAa9xJs09TMxgQ67PyPXHpxyQt3ICa55h+zNm7zl05/tkdJRImGv/dL
-         AVeZUbNJzJ6NESVqnv14Qv5DIZubGpQiWvsiHE5yQzyX1xD+NqxeuLzyp32PlzSSveC1
-         MVGKwaGwz8lIgKvTgt8VXiHh1W4vhEqnQ9Lqo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c6nEzvRMqkEoaAWST80S3Bt5GCknL1xuC4oMibyvkh8=;
-        b=QlEjMub3rmcejvOQ9dhQkrVWuvh5egiyG+3ZEirZkkccSbAPLLSNVjJGIkqIBICpoo
-         PeWHDzKMhw+XB2uZU7aeDqKJbKUVcdFlChfjueSzN0RwTSda3H3N0PLGoHbAOifmnPJ9
-         q3P5hsKffBI20bfFhpJY9j2sNNFe59Qy0HTn7PZKW8og2+wHSCUBlp6S5CpeLAD3o3Iz
-         8p3XUaArRhAAFmOwm7bAsUUjeUmsq+aCN7E+srQYwOYuVdUNVuWFek9OLtOsG2vpyBZa
-         gpaqFz1ZyaouiW1lq5wQDKprSVt6CWCkBq1gyXvJH27OK/2LpLp30X/LqIhIAY5XNDSp
-         44tQ==
-X-Gm-Message-State: ANoB5pkluRMBDsgjZs/sJLYfAZqCnmpaWC0JwBkRaIHJYwmJIlp2kQzq
-        Xa1T/PgZdwGWQLZC2m5zSPLjsA==
-X-Google-Smtp-Source: AA0mqf4me3LmE5Ydwmvho1icfTJxdfYUlmZsQmKxWcn7KJMIT1xrasqsj7WHV/d3azBoJ9/iaoi3Vw==
-X-Received: by 2002:a17:90b:1282:b0:214:1804:d96b with SMTP id fw2-20020a17090b128200b002141804d96bmr23650840pjb.90.1669099055073;
-        Mon, 21 Nov 2022 22:37:35 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
-        by smtp.gmail.com with ESMTPSA id y65-20020a626444000000b0056d73ef41fdsm9809385pfb.75.2022.11.21.22.37.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 22:37:34 -0800 (PST)
-Date:   Tue, 22 Nov 2022 15:37:29 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v6 6/6] zsmalloc: Implement writeback mechanism for
- zsmalloc
-Message-ID: <Y3xuKXmNjs87q3AW@google.com>
-References: <20221119001536.2086599-1-nphamcs@gmail.com>
- <20221119001536.2086599-7-nphamcs@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221119001536.2086599-7-nphamcs@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 01:41:30 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677E013E2A;
+        Mon, 21 Nov 2022 22:41:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669099289; x=1700635289;
+  h=from:to:cc:subject:date:message-id;
+  bh=2QTFR6pA76qtLbEvHKg0kOdamheSUPyeYEN0H8o4nAg=;
+  b=mdjWgp7DW/cDxDT3qvrhH8BCCZmbTn9hFmklAr27l/pUmy0Iryln+YLV
+   /vNeBNSvxvb2pUwjUK34bYX6ZV0lpf7kuDWBnZyN4pOatIajqoO6KVgT0
+   Ys5/Hyfuw6RllAPDxfv01f/89LPV5vVfM32FWdCYeZfUrqsZZJ80XIl2T
+   iq7I5GLFiWBfn1c8rsQ7Pd2XS2vHbfMbOz85fRLIcAe0Uq2e/9nyC6RV4
+   tagxOlOyN08WH6qANl7vGZiQApzowDKP+KhYp4jRvYtGzR/6o3MgQrFQr
+   XdByk3zdFN9zd1fiwQcK2ZZtywxV2/T1Tgm6OtPTLt8ilEH/55Lpa1Zqy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="294136315"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="294136315"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 22:41:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="766238292"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="766238292"
+Received: from p12ill01gohweish.png.intel.com ([10.88.229.16])
+  by orsmga004.jf.intel.com with ESMTP; 21 Nov 2022 22:41:24 -0800
+From:   "Goh, Wei Sheng" <wei.sheng.goh@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>,
+        Ahmad Tarmizi Noor Azura <noor.azura.ahmad.tarmizi@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Goh Wei Sheng <wei.sheng.goh@intel.com>
+Subject: [PATCH net v2] net: stmmac: Set MAC's flow control register to reflect current settings
+Date:   Tue, 22 Nov 2022 14:39:35 +0800
+Message-Id: <20221122063935.6741-1-wei.sheng.goh@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/18 16:15), Nhat Pham wrote:
-[..]
-> +static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
-> +{
-> +	int i, obj_idx, ret = 0;
-> +	unsigned long handle;
-> +	struct zspage *zspage;
-> +	struct page *page;
-> +	enum fullness_group fullness;
-> +
-> +	/* Lock LRU and fullness list */
-> +	spin_lock(&pool->lock);
-> +	if (list_empty(&pool->lru)) {
-> +		spin_unlock(&pool->lock);
-> +		return -EINVAL;
-> +	}
-> +
-> +	for (i = 0; i < retries; i++) {
-> +		struct size_class *class;
-> +
-> +		zspage = list_last_entry(&pool->lru, struct zspage, lru);
-> +		list_del(&zspage->lru);
-> +
-> +		/* zs_free may free objects, but not the zspage and handles */
-> +		zspage->under_reclaim = true;
-> +
-> +		class = zspage_class(pool, zspage);
-> +		fullness = get_fullness_group(class, zspage);
-> +
-> +		/* Lock out object allocations and object compaction */
-> +		remove_zspage(class, zspage, fullness);
-> +
-> +		spin_unlock(&pool->lock);
-> +
-> +		/* Lock backing pages into place */
-> +		lock_zspage(zspage);
-> +
-> +		obj_idx = 0;
-> +		page = zspage->first_page;
-> +		while (1) {
-> +			handle = find_alloced_obj(class, page, &obj_idx);
-> +			if (!handle) {
-> +				page = get_next_page(page);
-> +				if (!page)
-> +					break;
-> +				obj_idx = 0;
-> +				continue;
-> +			}
-> +
-> +			/*
-> +			 * This will write the object and call zs_free.
-> +			 *
-> +			 * zs_free will free the object, but the
-> +			 * under_reclaim flag prevents it from freeing
-> +			 * the zspage altogether. This is necessary so
-> +			 * that we can continue working with the
-> +			 * zspage potentially after the last object
-> +			 * has been freed.
-> +			 */
-> +			ret = pool->zpool_ops->evict(pool->zpool, handle);
-> +			if (ret)
-> +				goto next;
-> +
-> +			obj_idx++;
-> +		}
-> +
-> +next:
-> +		/* For freeing the zspage, or putting it back in the pool and LRU list. */
-> +		spin_lock(&pool->lock);
-> +		zspage->under_reclaim = false;
-> +
-> +		if (!get_zspage_inuse(zspage)) {
-> +			/*
-> +			 * Fullness went stale as zs_free() won't touch it
-> +			 * while the page is removed from the pool. Fix it
-> +			 * up for the check in __free_zspage().
-> +			 */
-> +			zspage->fullness = ZS_EMPTY;
-> +
-> +			__free_zspage(pool, class, zspage);
-> +			spin_unlock(&pool->lock);
-> +			return 0;
-> +		}
-> +
-> +		putback_zspage(class, zspage);
-> +		list_add(&zspage->lru, &pool->lru);
-> +		unlock_zspage(zspage);
+Currently, pause frame register GMAC_RX_FLOW_CTRL_RFE is not updated
+correctly when 'ethtool -A <IFACE> autoneg off rx off tx off' command
+is issued. This fix ensures the flow control change is reflected directly
+in the GMAC_RX_FLOW_CTRL_RFE register.
 
-We probably better to cond_resched() somewhere here. Or in zs_zpool_shrink()
-loop.
+Fixes: 46f69ded988d ("net: stmmac: Use resolved link config in mac_link_up()")
+Cc: <stable@vger.kernel.org> # 5.10.x
+Signed-off-by: Goh, Wei Sheng <wei.sheng.goh@intel.com>
+Signed-off-by: Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c |  3 +++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 12 ++++++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-> +	}
-> +
-> +	spin_unlock(&pool->lock);
-> +	return -EAGAIN;
-> +}
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+index c25bfecb4a2d..369db308b1dd 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+@@ -748,6 +748,9 @@ static void dwmac4_flow_ctrl(struct mac_device_info *hw, unsigned int duplex,
+ 	if (fc & FLOW_RX) {
+ 		pr_debug("\tReceive Flow-Control ON\n");
+ 		flow |= GMAC_RX_FLOW_CTRL_RFE;
++	} else {
++		pr_debug("\tReceive Flow-Control OFF\n");
++		flow &= ~GMAC_RX_FLOW_CTRL_RFE;
+ 	}
+ 	writel(flow, ioaddr + GMAC_RX_FLOW_CTRL);
+ 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 8273e6a175c8..ab7f48f32f5b 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -1061,8 +1061,16 @@ static void stmmac_mac_link_up(struct phylink_config *config,
+ 		ctrl |= priv->hw->link.duplex;
+ 
+ 	/* Flow Control operation */
+-	if (tx_pause && rx_pause)
+-		stmmac_mac_flow_ctrl(priv, duplex);
++	if (rx_pause && tx_pause)
++		priv->flow_ctrl = FLOW_AUTO;
++	else if (rx_pause && !tx_pause)
++		priv->flow_ctrl = FLOW_RX;
++	else if (!rx_pause && tx_pause)
++		priv->flow_ctrl = FLOW_TX;
++	else
++		priv->flow_ctrl = FLOW_OFF;
++
++	stmmac_mac_flow_ctrl(priv, duplex);
+ 
+ 	if (ctrl != old_ctrl)
+ 		writel(ctrl, priv->ioaddr + MAC_CTRL_REG);
+-- 
+2.17.1
+
