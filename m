@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1895633228
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F52463322C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbiKVBbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
+        id S232097AbiKVBc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiKVBbQ (ORCPT
+        with ESMTP id S232018AbiKVBcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 20:31:16 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB56FB70C6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:31:15 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id b131so15654615yba.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:31:15 -0800 (PST)
+        Mon, 21 Nov 2022 20:32:53 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBA226AF1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:32:51 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id l15so8475642qtv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 17:32:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IYRjBqU3ZoHV4i/knmVPjtRYVyj2wBtBdprE9kY1bXY=;
-        b=g5eszoEulUfrD1WqxBnLIM3gUgku3IJD6GBT91ItK1iQ3CxkGoNjn4a2GWvTpmdSFi
-         lVPxF9/dWFtr1nFuFXhSuZJw4FsGD+qKgco89uA/o5CL0rOWhS6iLjHimnSuvw+Zbr3M
-         hd9XngwctwS8u8UKW5cxJm3NuK1i1QaV6Ff5SoqsmPl2knL0bPLiF4P3bruDRLe+ZoBX
-         L/9ygwEcgsHydEymZYpk6EmBs2aPgOYUl33sXvPNl77s93ZF6cTkx57vBtmi9Z2wHKdN
-         2iT20/pBA0ALqF1gCn54EBl5r80A+JsvDMLC+Y4DhkhDE/AKhjh2aazXYzDejfWdkeCy
-         JNew==
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W1WA2y8g5fhQuZnwMdhaIJwo0CEHJPMSKTSLaNEoLOM=;
+        b=h8qYltXZdrvwN5p1AA9AAY9YC7IjoIPByGxTfBvZd7L1Cnio697HypHyozFeHG4sUj
+         05blWC79g0AC1gIuZhplB56hjCYx0gqfq8mNMgulNtc6QsXEwFmmROqjqz4RJ/fMxOIV
+         5KGAC8QEOOqFLRkQmwBFqsexDLlgxo8StA6E+q9mO9dE/LndqKX9x6cQVmJI5c7xcfNR
+         1DeZoH72UQo3iP4ex1wYSb9Vm0bgBqMbDDZr63OKbS1nvojupZ7xHueGfEMpLVeCcCFW
+         YQ0I7xuDdCh3hijs/pjvTTnfugtsC/883gqWnG83L4ZhfAOvykF9usszbQgR8pQC8LbD
+         ar/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IYRjBqU3ZoHV4i/knmVPjtRYVyj2wBtBdprE9kY1bXY=;
-        b=HoDzpzLlE2bzrYjEQPcD4oMs3ENpH4yyd5pb+p9y4pvJcmw3wo03/L20u6UJBBZ95I
-         cd5ZsIPfH2GunlMv/pysmRLTo0IjUJCX+WR2XRbnoWIfiObCFgal1We/RjWrH/6zQKEM
-         wtekat4TEsAUsMB53wiKh4HQ7wx/IAF8+XLBk+Dthl+sWkTosMcn1MRRe+g69EZrZ+EI
-         ge6WS7wZ6jcOSeUNr/hnt/aESFXIk5JDJxkAUljOuD1bNwkWWgd9lE85f5EuSawrUyvK
-         H4t2aDAxgQrgledyZwnX5pJZkTohETRvJ6rIgbmMI8kkNWdqGrdFdVTjo0CXPEivqgRq
-         QsJQ==
-X-Gm-Message-State: ANoB5plLxx2EFlrnsba4IGgNvhu46Gkoye2NLrp7aZUOEDvM9sD0Y9kv
-        6SD2p7Y7TUSEpQgRT638VoO0PiBO59JJ0r0qWjbbQw==
-X-Google-Smtp-Source: AA0mqf4BKdfRzMVGdYVC78GLj287VlFFPylImBY9mMzZlCVRzwhU/woID2KDtu9GDCYShjObFVE7+ndAAu8aVAdZGaQ=
-X-Received: by 2002:a25:d2cf:0:b0:6cf:e761:43e1 with SMTP id
- j198-20020a25d2cf000000b006cfe76143e1mr20115372ybg.650.1669080674817; Mon, 21
- Nov 2022 17:31:14 -0800 (PST)
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W1WA2y8g5fhQuZnwMdhaIJwo0CEHJPMSKTSLaNEoLOM=;
+        b=Ta2G4B7kmOhabBOW7xMTCxIh2L8ypVH4uaA5tHVvXIzwrUJBnOei4salt1RbGKos7w
+         xuy4Oy6P9vVJaVpWW0QT9JvcPlrY0IMzwG4Zyv5izpRV0qhn8fFqxb2go9is72shMkrd
+         vxLac3ocTxUp/VYI/WhteLXkc3dBMPvsOLtJV7g4R3gv2ZCP0tr/myGnX2WTI4z4B6FO
+         NqJ92U6daQ+EiUbA0qe7Oy+E/RfbklK40QTv6Vni2nmjLuFB5lnByjrwrwz5p+uS3NDE
+         XhGZfxpVIGLdTM5R+cSICope7LA/+6mYKXw9k9TlC+B0ct4QhQDl0qz4S0Ik/hjX7I3e
+         hhQw==
+X-Gm-Message-State: ANoB5pkBlg/6hMJ8xNeYTTloTpfAAahBETRXj9DgqK2df6Ra/xX8NhDR
+        KD2eyxKipIeRU5FXZhEDXhgmBw==
+X-Google-Smtp-Source: AA0mqf54wtZs225FHFwy4u2vNw7pAUL37boEkl/v7zKM5DRyM++jr9L4yfp17P5dR13GSwjWzHut/g==
+X-Received: by 2002:ac8:1003:0:b0:398:27cc:8c31 with SMTP id z3-20020ac81003000000b0039827cc8c31mr6935732qti.416.1669080770069;
+        Mon, 21 Nov 2022 17:32:50 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id bw6-20020a05622a098600b003988b3d5280sm7557076qtb.70.2022.11.21.17.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 17:32:49 -0800 (PST)
+Date:   Mon, 21 Nov 2022 17:32:38 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Johannes Weiner <hannes@cmpxchg.org>
+cc:     Shakeel Butt <shakeelb@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 0/3] mm,thp,rmap: rework the use of subpages_mapcount
+In-Reply-To: <Y3vI58VtjiAkorUX@cmpxchg.org>
+Message-ID: <b6c842f-6656-447c-b743-3fe6629d2b47@google.com>
+References: <5f52de70-975-e94f-f141-543765736181@google.com> <c4b8485b-1f26-1a5f-bdf-c6c22611f610@google.com> <20221121165938.oid3pemsfkaeq3ws@google.com> <Y3vI58VtjiAkorUX@cmpxchg.org>
 MIME-Version: 1.0
-References: <20221119081252.3864249-1-davidgow@google.com>
-In-Reply-To: <20221119081252.3864249-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 21 Nov 2022 17:31:03 -0800
-Message-ID: <CAGS_qxqyyH-v4wMJyD1phPP2YA5_6L98C-t4cJtt_SYsSvR3Ag@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] kunit: Provide a static key to check if KUnit is
- actively running tests
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,44 +88,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 12:13 AM David Gow <davidgow@google.com> wrote:
->
-> KUnit does a few expensive things when enabled. This hasn't been a
-> problem because KUnit was only enabled on test kernels, but with a few
-> people enabling (but not _using_) KUnit on production systems, we need a
-> runtime way of handling this.
->
-> Provide a 'kunit_running' static key (defaulting to false), which allows
-> us to hide any KUnit code behind a static branch. This should reduce the
-> performance impact (on other code) of having KUnit enabled to a single
-> NOP when no tests are running.
->
-> Note that, while it looks unintuitive, tests always run entirely within
-> __kunit_test_suites_init(), so it's safe to decrement the static key at
-> the end of this function, rather than in __kunit_test_suites_exit(),
-> which is only there to clean up results in debugfs.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+On Mon, 21 Nov 2022, Johannes Weiner wrote:
+> On Mon, Nov 21, 2022 at 04:59:38PM +0000, Shakeel Butt wrote:
+> > On Fri, Nov 18, 2022 at 01:08:13AM -0800, Hugh Dickins wrote:
+> > > Linus was underwhelmed by the earlier compound mapcounts series:
+> > > this series builds on top of it (as in next-20221117) to follow
+> > > up on his suggestions - except rmap.c still using lock_page_memcg(),
+> > > since I hesitate to steal the pleasure of deletion from Johannes.
+> > 
+> > Is there a plan to remove lock_page_memcg() altogether which I missed? I
+> > am planning to make lock_page_memcg() a nop for cgroup-v2 (as it shows
+> > up in the perf profile on exit path) but if we are removing it then I
+> > should just wait.
+> 
+> We can remove it for rmap at least, but we might be able to do more.
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+I hope the calls from mm/rmap.c can be deleted before deciding the
+bigger picture for lock_page_memcg() itself; getting rid of it would
+be very nice, but it has always had a difficult job to do (and you've
+devoted lots of good effort to minimizing it).
 
-I didn't know anything about the static key support in the kernel
-before this patch.
-But from what I read and saw of other uses, this looks good to me.
+> 
+> Besides rmap, we're left with the dirty and writeback page transitions
+> that wrt cgroups need to be atomic with NR_FILE_DIRTY and NR_WRITEBACK.
+> 
+> Looking through the various callsites, I think we can delete it from
+> setting and clearing dirty state, as we always hold the page lock (or
+> the pte lock in some instances of folio_mark_dirty). Both of these are
+> taken from the cgroup side, so we're good there.
+> 
+> I think we can also remove it when setting writeback, because those
+> sites have the page locked as well.
+> 
+> That leaves clearing writeback. This can't hold the page lock due to
+> the atomic context, so currently we need to take lock_page_memcg() as
+> the lock of last resort.
+> 
+> I wonder if we can have cgroup take the xalock instead: writeback
+> ending on file pages always acquires the xarray lock. Swap writeback
+> currently doesn't, but we could make it so (swap_address_space).
 
-One small question/nit about how we declare the key below.
+It's a little bit of a regression to have to take that lock when
+ending writeback on swap (compared with the rcu_read_lock() of almost
+every lock_page_memcg()); but I suppose if swap had been doing that
+all along, like the normal page cache case, I would not be complaining.
 
-<snip>
+> 
+> The only thing that gives me pause is the !mapping check in
+> __folio_end_writeback. File and swapcache pages usually have mappings,
+> and truncation waits for writeback to finish before axing
+> page->mapping. So AFAICS this can only happen if we call end_writeback
+> on something that isn't under writeback - in which case the test_clear
+> will fail and we don't update the stats anyway. But I want to be sure.
+> 
+> Does anybody know from the top of their heads if a page under
+> writeback could be without a mapping in some weird cornercase?
 
-> +/* Static key: true if any KUnit tests are currently running */
-> +extern struct static_key_false kunit_running;
+End of writeback has been a persistent troublemaker, in several ways;
+I forget whether we are content with it now or not.
 
-Is there any documented preference between this and
-  DECLARE_STATIC_KEY_FALSE(kunit_running);
-?
+I would not trust whatever I think OTOH of that !mapping case, but I
+was deeper into it two years ago, and find myself saying "Can mapping be
+NULL? I don't see how, but allow for that with a WARN_ON_ONCE()" in a
+patch I posted then (but it didn't go in, we went in another direction).
 
-I see 89 instances of this macro and 45 of `extern struct static_key_false`.
-So I'd vote for the macro since it seems like the newer approach and
-more common.
+I'm pretty sure it never warned once for me, but I probably wasn't doing
+enough to test it.  And IIRC I did also think that the !mapping check had
+perhaps been copied from a related function, one where it made more sense.
 
-Daniel
+It's also worth noting that the two stats which get decremented there,
+NR_WRITEBACK and NR_ZONE_WRITE_PENDING, are two of the three which we
+have commented "Skip checking stats known to go negative occasionally"
+in mm/vmstat.c: I never did come up with a convincing explanation for
+that (Roman had his explanation, but I wasn't quite convinced).
+Maybe it would just be wrong to touch them if mapping were NULL.
+
+> 
+> If we could ensure that the NR_WRITEBACK decs are always protected by
+> the xalock, we could grab it from mem_cgroup_move_account(), and then
+> kill lock_page_memcg() altogether.
+
+I suppose so (but I still feel grudging about the xalock for swap).
+
+Hugh
