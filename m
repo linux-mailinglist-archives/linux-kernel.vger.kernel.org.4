@@ -2,129 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9363C634026
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A6263402A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiKVP1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S232613AbiKVP14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233996AbiKVP1B (ORCPT
+        with ESMTP id S233156AbiKVP1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:27:01 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BB160E90
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:27:00 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id b29so14650108pfp.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3eN8PG1tu0zv6ECYGZ0bUFaylUuOM6J9ZGH6Fn6kJHo=;
-        b=MF2ry8jCjEfJSczD2TlSQRhxgxw/769GkaMOON9oAkxuEIN97YK7PZjef+RkvUqmn6
-         c7AjFerXB1PJT2u2UzDPulK7aXgB17t38IkHEMHHKIogmM4cbG1WwJK6iglP6/5mXOrt
-         JmUu/ADf6amE5NTKz6Npi0hz37SGswSnxd+WcFtY0rB4YMUuwQ2w+DwouTzl4kNxpGZr
-         CrgSBr2d6j1OSLNtjFltNveJZwLExs/unNW9lRX31lK/abl95eV/kH0TDAvbWCtkhje9
-         EkbTVXMgxMLewSuaN4hKU4P4MDuGb074N7xhcU37E00p2MKSPiBCSK+7zoaWT6ce5axZ
-         o2ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3eN8PG1tu0zv6ECYGZ0bUFaylUuOM6J9ZGH6Fn6kJHo=;
-        b=7DNRiFcKn62eVJU/zYUJOP/LtFv+l03SGnFvSITL0Ar6810JPcBAvQ7Yty4swvxQ7R
-         11v1E8t7MzR8hcxGd45KxHDf0P7XiJUwv55xX1+Q9Z4S45hLcgt1KgkOBG0wQ30xGhQu
-         1EQoa2jDVDjhbXwZNN+GlocMQAyDoQQUSLetyOQeeOkJD+sXL1fgBlITs4e1UXx+fhiJ
-         Unk6KV1N6AyfRc5VJwH6XEtwzcDK9n+DTnB+8uPIfjJWVelKX1Usts489CNY/DEAT3Dz
-         8JVqOEmwEOSvYfj0Q5ULLbDRI32cY3V3oxQbWfgiB2AfQMpL5IW1ndgI6ldQkq6Dbbu1
-         wNsw==
-X-Gm-Message-State: ANoB5pkATP4yAY3rq+M6zYmnJKzn3LTyg1rBUsP3ccoLSyNzurBG/d9C
-        bfrcX5LMD03MOwo+yngLP7ibabxkaMx9qg==
-X-Google-Smtp-Source: AA0mqf62k0bqINVN7BK4sgHzvRy7LZL/c5HZpP1IiynzWyp5FdyrjeP2xnyMjAcErD7lncdNpbEc4w==
-X-Received: by 2002:a62:5e41:0:b0:56b:db09:a235 with SMTP id s62-20020a625e41000000b0056bdb09a235mr6211427pfb.20.1669130820272;
-        Tue, 22 Nov 2022 07:27:00 -0800 (PST)
-Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id m9-20020a170902f64900b00176d218889esm12161633plg.228.2022.11.22.07.26.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 07:26:59 -0800 (PST)
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH v2] igbvf: Regard vf reset nack as success
-Date:   Wed, 23 Nov 2022 00:26:30 +0900
-Message-Id: <20221122152630.76190-1-akihiko.odaki@daynix.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 22 Nov 2022 10:27:52 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E608E6A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:27:49 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669130867;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9J6kHO0AGc0+BKAMdnuPyQkVRH1YnWCEE6DJYfiBZt4=;
+        b=U4h4SKthzt0oiIfxFxr/UWls6HI9rW7TbNlbeWyKEU8cCLFIuPxzaOMwilRco5UJl9HHNf
+        yGn8wf7OokByxhoZxqtgqHW0FmjW2/6tnn8VPzVbzpE6IctLgKbmjh3P5Gqe0ejAk4+o8K
+        HPX80SWuRpH1CzGZRwZtXtjFNMAreHqK6loqtgJf0oQn1WhqAXjtQS0Q/ccO/IHvFzA0Mq
+        SJaY8/tCuLr13n+mZaGmOCGouQCDEfM+q0+D0Sbqc6k7xWGERaISYwmgjfqog3vlTFnEVn
+        uudkECRDjksMWTF2dO4cVjBPAFMoiCXZknkvcvqD2Au5UILeJrwW8d0KBaigxg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669130867;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9J6kHO0AGc0+BKAMdnuPyQkVRH1YnWCEE6DJYfiBZt4=;
+        b=s+zCgtdBlYvjw/siI4T6dQMbUFyLkT+Rkf57vhntvTiBY5BWFSlwWTH/XhYaYb99BQUZwN
+        2EZJX0GjwpRtdKCw==
+To:     paulmck@kernel.org
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: next-20221122: tinyconfig: ppc n s390:
+ kernel/printk/printk.c:95:1: error: type specifier missing, defaults to
+ 'int'; ISO C99 and later do not support implicit int
+ [-Werror,-Wimplicit-int]
+In-Reply-To: <20221122144839.GI4001@paulmck-ThinkPad-P17-Gen-1>
+References: <CA+G9fYvCWwndXdsvuW7iJ25wgfN6_iMY-OC_z6ufSwiJkzFFMw@mail.gmail.com>
+ <87o7szoyij.fsf@jogness.linutronix.de>
+ <20221122144839.GI4001@paulmck-ThinkPad-P17-Gen-1>
+Date:   Tue, 22 Nov 2022 16:33:39 +0106
+Message-ID: <87leo3ovpw.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vf reset nack actually represents the reset operation itself is
-performed but no address is assigned. Therefore, e1000_reset_hw_vf
-should fill the "perm_addr" with the zero address and return success on
-such an occasion. This prevents its callers in netdev.c from saying PF
-still resetting, and instead allows them to correctly report that no
-address is assigned.
+On 2022-11-22, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+>> @paulmck: Do you have a problem with permanently activating CONFIG_SRCU?
+>
+> The people wanting it separate back in the day were those wanting very
+> tiny kernels.  I have not heard from them in a long time, so maybe it
+> is now OK to just make SRCU unconditional.
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- drivers/net/ethernet/intel/igbvf/vf.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+Who decides this? Or maybe I should create a semaphore-based Variant of
+console_srcu_read_lock()/console_srcu_read_unlock() for the
+"!CONFIG_PRINTK && !CONFIG_SRCU" case?
 
-diff --git a/drivers/net/ethernet/intel/igbvf/vf.c b/drivers/net/ethernet/intel/igbvf/vf.c
-index b8ba3f94c363..2691ae2a8002 100644
---- a/drivers/net/ethernet/intel/igbvf/vf.c
-+++ b/drivers/net/ethernet/intel/igbvf/vf.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright(c) 2009 - 2018 Intel Corporation. */
- 
-+#include <linux/etherdevice.h>
-+
- #include "vf.h"
- 
- static s32 e1000_check_for_link_vf(struct e1000_hw *hw);
-@@ -131,11 +133,18 @@ static s32 e1000_reset_hw_vf(struct e1000_hw *hw)
- 		/* set our "perm_addr" based on info provided by PF */
- 		ret_val = mbx->ops.read_posted(hw, msgbuf, 3);
- 		if (!ret_val) {
--			if (msgbuf[0] == (E1000_VF_RESET |
--					  E1000_VT_MSGTYPE_ACK))
-+			switch (msgbuf[0]) {
-+			case E1000_VF_RESET | E1000_VT_MSGTYPE_ACK:
- 				memcpy(hw->mac.perm_addr, addr, ETH_ALEN);
--			else
-+				break;
-+
-+			case E1000_VF_RESET | E1000_VT_MSGTYPE_NACK:
-+				eth_zero_addr(hw->mac.perm_addr);
-+				break;
-+
-+			default:
- 				ret_val = -E1000_ERR_MAC_INIT;
-+			}
- 		}
- 	}
- 
--- 
-2.38.1
-
+John
