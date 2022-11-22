@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE70634448
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFA063444C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234639AbiKVTFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S234765AbiKVTGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234693AbiKVTFT (ORCPT
+        with ESMTP id S234759AbiKVTGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:05:19 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2812F8A142
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:05:16 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id s18so9130638qvo.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:05:16 -0800 (PST)
+        Tue, 22 Nov 2022 14:06:16 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9008CFFB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:05:57 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id y83so1854335yby.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:05:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=cloudflare.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V113i9op2pduVlxmzasvaIEvnqTrh+10a7z1AWq+aEg=;
-        b=DBN3eB8VZE6euKV0t6YywqYDdM8aZxRa6ITHKBt4yJZC3AJTs9exx/n7bFt9NNjUKr
-         5CjoFGf2TLv9zR78cgumEbZbl8oR5DgMThLgtJ+KaaaS3gzcFVHTEufJFWw782w3jmc1
-         /99JGLlaeNSdOl+n1kP9dtSZgkJV+TFm5U9I0=
+        bh=UH8CULqws8EURCcGLdD3MqO4szk6ZDfTwbWJ1BRasAg=;
+        b=aHU/4rTLIP2Roaj3oaDqTP6BsSgt/v+o233yVnztvkFamUnTqO8lqNGVxX/atHUwpT
+         0pwGoQ2WKh6tm6+rl6WR91tXJ/1tcpEPv3HIXZCPN6kJbNQzq6rIT91BX3dv+tQCuXjy
+         BMucSc5zV6VYfU/4Qe5UZ0aJpEz7PT7LlfCmc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=V113i9op2pduVlxmzasvaIEvnqTrh+10a7z1AWq+aEg=;
-        b=EFThtIzdqKQP6igH+R8GTHmQPB1WDz3UEWDnypdH+fe2LaPDeXhmrQ+ACBq4+/6eYY
-         xEp7SfADdU2szs+US78tZoHASCpUmp9rjmaVY8AMA4qU8gjKqSU7EdLy/2X9qOHd+QjY
-         py9LHDCHnlbFCyO3BuwHqXbQ7bmANGTuv+1N4igoO2h+aagpJRtJvgj+hnRuTWaj+mVP
-         NtyqdmID2oHqBUnFyA0nKH18/q965GgyxyhWi4eZOgdEPGor5aktxN9k6jXL2aNa3hnV
-         jnbZhcdi7Y+JVjbGcFL75c7Ob2ldJ7Jfdk8Iufpr74P4b+LrEwFK0t29acFBl3kisBoy
-         JWvg==
-X-Gm-Message-State: ANoB5pkhgpaFX9MmymT4dWEIDamRAJMgq+Fv9DQncyHg5aJkWqNx8q9P
-        BusOR5tEB26aWj1Vp/uIyskSLipJmttZcTjZVnHsgl77TIw=
-X-Google-Smtp-Source: AA0mqf4+8dUqlIgr/8H6RT8a2TGpmcGq48sFYZ4zLYA7vHnHmcToY6FLgEsJDVQJxOqoXpyoHy4JHeCWbd8mcGxWiSE=
-X-Received: by 2002:ad4:4c03:0:b0:4bc:182e:78c2 with SMTP id
- bz3-20020ad44c03000000b004bc182e78c2mr4883234qvb.2.1669143915309; Tue, 22 Nov
- 2022 11:05:15 -0800 (PST)
+        bh=UH8CULqws8EURCcGLdD3MqO4szk6ZDfTwbWJ1BRasAg=;
+        b=pfggOrQFqAlIwuaElxf6x6tXeV74z3ReFJf2DuVS3yohXH1RW3dDHSnTVLcRgSyrVX
+         5ZzOpjOetrCW3bC9IlGbdjvZbGk5Uaf7KdojBZuomaR8btFXRVKpR+Frwb0MYZF/i2aY
+         eRd0jLhSXEnCsYSQQO/Cy6GPQk3qWAaunUFjim0lXOKl4r1DBIuGfKN31Npb3i2efB5F
+         +UyOUUcyENAS5BaD6Ft7BhYo2eEgFvO5xEKFQYWCggbNoYw4Pid12IIQDX6WWHXu66sX
+         JjJQIqpwVPy8bF1siYWb1OxUQK2ghWK4uqABkb4/WU8i3xjeSF02qaNdj8hSkkXy2n3W
+         G+hg==
+X-Gm-Message-State: ANoB5pnIyZKyg6zVO5Q//yUj4NRbZum/p1hV0+fA35bqFOd+kBTffrSW
+        UN2dGAKNv5EmpEX/JisBJXgiulXU6E1w6ZUaBg7it7AMl07rsg==
+X-Google-Smtp-Source: AA0mqf7/yUBMx4gWYxYMHUbZsapsTGO89vB5gRJDkAiIq8XymkZLdq2rSWqnQyXHdKsRkb9Mz4W6p0JLVWhoWo9hIQk=
+X-Received: by 2002:a25:1a57:0:b0:6ca:468d:18fe with SMTP id
+ a84-20020a251a57000000b006ca468d18femr5482863yba.224.1669143956921; Tue, 22
+ Nov 2022 11:05:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20221121201337.2772216-1-pmalani@chromium.org>
- <20221121201337.2772216-2-pmalani@chromium.org> <Y3ydPqkxxQCSGGp7@kuha.fi.intel.com>
-In-Reply-To: <Y3ydPqkxxQCSGGp7@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 22 Nov 2022 11:05:04 -0800
-Message-ID: <CACeCKaeCA3+0BVyUO72HvUbV7mcjEcGT4uXnA2X8=CUdjdtOuQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: typec: Add helper to get partner device struct
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        Benson Leung <bleung@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>
+References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
+ <CAOUHufbQ_JjW=zXEi10+=LQOREOPHrK66Rqayr=sFUH_tQbW1w@mail.gmail.com>
+In-Reply-To: <CAOUHufbQ_JjW=zXEi10+=LQOREOPHrK66Rqayr=sFUH_tQbW1w@mail.gmail.com>
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Tue, 22 Nov 2022 11:05:46 -0800
+Message-ID: <CABWYdi3aOtJuMe4Z=FFzBb3iR6Cc9k8G2swSuZ_GDnaESuE_EQ@mail.gmail.com>
+Subject: Re: Low TCP throughput due to vmpressure with swap enabled
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
+        kernel-team <kernel-team@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,32 +79,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
-
-Thanks for reviewing the patch.
-
-On Tue, Nov 22, 2022 at 1:58 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Tue, Nov 22, 2022 at 10:59 AM Yu Zhao <yuzhao@google.com> wrote:
 >
-> Let's not loose the protection around these devices unless there is no
-> other way, and in this case there is.
+> On Mon, Nov 21, 2022 at 5:53 PM Ivan Babrou <ivan@cloudflare.com> wrote:
+> >
+> > Hello,
+> >
+> > We have observed a negative TCP throughput behavior from the following commit:
+> >
+> > * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
+> >
+> > It landed back in 2016 in v4.5, so it's not exactly a new issue.
+> >
+> > The crux of the issue is that in some cases with swap present the
+> > workload can be unfairly throttled in terms of TCP throughput.
+> >
+> > I am able to reproduce this issue in a VM locally on v6.1-rc6 with 8
+> > GiB of RAM with zram enabled.
 >
-> Please just create a wrapper for usb_power_delivery_register() instead:
+> Hi Ivan,
 >
-> struct usb_power_delivery *
-> typec_partner_usb_power_delivery_register(struct typec_partner *partner,
->                                           struct usb_power_delivery_desc *desc)
-> {
->         return usb_power_delivery_register(&partner->dev, desc);
-> }
-> EXPORT_SYMBOL_GPL(typec_partner_usb_power_delivery_register);
+> If it's not too much trouble, could you try again with the following?
+>   CONFIG_LRU_GEN=y
+>   CONFIG_LRU_GEN_ENABLED=y
+>
+> I haven't tried it myself. But I'll fix whatever doesn't work for you,
+> since your team is on the top of my customer list :)
 
-Sounds good. I'll send a v2 with the above change as patch 1 (instead
-of the current patch 1).
+We don't have it in production, since there we have 5.15 LTS (our
+kernel team is testing v6.1).
 
-I will list you as the "Suggested-by" tag (but please let me know if
-you'd like attribution stated differently).
-
-Thanks again!
-
--Prashant
+I do have it enabled in my VM running v6.1-rc6 where I was able to
+replicate this, so it doesn't seem to help.
