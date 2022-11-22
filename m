@@ -2,164 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18BF633CA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC9E633CBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbiKVMhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S232702AbiKVMkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbiKVMho (ORCPT
+        with ESMTP id S232835AbiKVMjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:37:44 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0302F13DE5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:37:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=cNXoS8rK3xdXYHntjExdlYL5Xqo/UM8xFFchEuZahf8=; b=EaYGanzfFaL4Bx00RjIVqndAU6
-        InhoUYCHsw745V6+pRgDH8/YgglXGx3G2QWlYq0by+AW6X/+diRoEwKhIBGNjt8Z6w+3kBdmAI8NB
-        FnwmATxbGFZurrrET4bhqemtn75ouzH0nBtnIOBKXZQ7UiTnEzKKOMgX9oM0kM+JeL778fVRTUJ19
-        B7yKDep3XUU7PUeGESfzWTnfoFitjbzEhvvbMF1jJjER5BXi6bE377iLDgDeh1bPcJAvADb4jr5bh
-        ZQoHM0azouNctW5Nsaq9iy1flA/mtL3OyjzLCV49PljnZSfUFP/LeJR39rtZiQRHVTMRatSDIbPJn
-        +8SAco6w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxSWi-006MRl-RQ; Tue, 22 Nov 2022 12:37:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3A242300244;
-        Tue, 22 Nov 2022 13:37:17 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 17D452D694B12; Tue, 22 Nov 2022 13:37:17 +0100 (CET)
-Date:   Tue, 22 Nov 2022 13:37:17 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
-        Paul McKenney <paulmck@kernel.org>
-Subject: Re: [PATCH-tip] sched: Don't call kfree() in do_set_cpus_allowed()
-Message-ID: <Y3zCfQCpBu8aBy6O@hirez.programming.kicks-ass.net>
-References: <20221118193302.522399-1-longman@redhat.com>
- <Y3tVPjAjE9OFRLaP@hirez.programming.kicks-ass.net>
- <601640d0-9dc2-a060-e165-c8efac54aa34@redhat.com>
+        Tue, 22 Nov 2022 07:39:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701A85C75E
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:38:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669120723;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TlBwJNp/jitu4dnjNvCRWCp8vuWXGMZrB45QP9OtTb4=;
+        b=IpzmBLNyACs49jY7lgm++c8lhjtDTgOXfwTpMANdyIWb3BfgSbDCeyxhy1qhFETXdDsd0G
+        An5awmOQ49LKZxGh5izikymF4VR9bXLTXwERrsalSCWWgRSGPg0Pw+ndj60IUPIGdPJpKh
+        EWzeYEpE3ou6yA2Us7yJHfSCe5bm1GU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-96-b0nCF3xvPYmhRf_P-xM_Wg-1; Tue, 22 Nov 2022 07:38:42 -0500
+X-MC-Unique: b0nCF3xvPYmhRf_P-xM_Wg-1
+Received: by mail-wm1-f70.google.com with SMTP id c126-20020a1c3584000000b003cfffcf7c1aso8682643wma.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:38:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TlBwJNp/jitu4dnjNvCRWCp8vuWXGMZrB45QP9OtTb4=;
+        b=GXaxuqe/Nyvhxiyj4tqRnw5d+ouMSzYhHNfJ2SSQ/RB8w8fprnC/Xgr8LoozjCIB1K
+         ovSFY8X4bMCEpk98ZnxQjXuCVEUp7gUs54kP3k3ft+c6E2ILv2NLZQ6XBxZ1JqcdHnYR
+         ziksznBKwTiauLiTG/ONZNxYUrZlgp0Aa3/wPazy74OXZ/ihn5Zfu+6yXd1aXqL/9s+0
+         AKjj7unRplNvtxj8KL/PgKMsXVoC5bACm4DWA6/iqeZ6QAGiSxRrIgFZC70/gdHvENUk
+         QK0ybu6QP2j+FcpIm7bHgn1K37MfyPnh76zfB3GaoA3EMxKl588qZjmwsf6jYqjChRCk
+         XxWw==
+X-Gm-Message-State: ANoB5pmnx50cjTDwrJdFb40wQA6STnLCv5Uyw8HjvZ/8VPwfX8Re/7OP
+        I0JQXvt1zJMuD8n5tERCZWOZ+rKK7enEfck/bUd8wsiqJPOlYCGh9UTu1bjKOoweciCnHud3huq
+        M+to5ZuKk7YNUkRV/JRtSU4qN
+X-Received: by 2002:adf:e844:0:b0:241:bfc9:5975 with SMTP id d4-20020adfe844000000b00241bfc95975mr6721654wrn.605.1669120721068;
+        Tue, 22 Nov 2022 04:38:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7FQCDctLOc6CMomYnGKvCTF1tBw+hwXPXd04O7+t428MWI9RvMvJ15rLs2ESKiQpMYCXYY+g==
+X-Received: by 2002:adf:e844:0:b0:241:bfc9:5975 with SMTP id d4-20020adfe844000000b00241bfc95975mr6721629wrn.605.1669120720555;
+        Tue, 22 Nov 2022 04:38:40 -0800 (PST)
+Received: from ?IPV6:2003:cb:c706:c300:b066:75e3:f1d2:b69b? (p200300cbc706c300b06675e3f1d2b69b.dip0.t-ipconnect.de. [2003:cb:c706:c300:b066:75e3:f1d2:b69b])
+        by smtp.gmail.com with ESMTPSA id e18-20020a5d5952000000b00236883f2f5csm13821707wri.94.2022.11.22.04.38.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 04:38:40 -0800 (PST)
+Message-ID: <6ace6cd4-3e13-8ec1-4c2a-49e2e14e81a6@redhat.com>
+Date:   Tue, 22 Nov 2022 13:38:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <601640d0-9dc2-a060-e165-c8efac54aa34@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221107161740.144456-1-david@redhat.com>
+ <20221107161740.144456-17-david@redhat.com>
+ <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
+ <6175d780-3307-854c-448a-8e6c7ad0772c@xs4all.nl>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC 16/19] mm/frame-vector: remove FOLL_FORCE usage
+In-Reply-To: <6175d780-3307-854c-448a-8e6c7ad0772c@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:04:33AM -0500, Waiman Long wrote:
+On 22.11.22 13:25, Hans Verkuil wrote:
+> Hi Tomasz, David,
 > 
-> On 11/21/22 05:38, Peter Zijlstra wrote:
-> > On Fri, Nov 18, 2022 at 02:33:02PM -0500, Waiman Long wrote:
-> > > Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
-> > > do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
-> > > set. Unfortunately, some of the callers of do_set_cpus_allowed()
-> > 'some' ? There's only 3 or so, which one triggers this?
+> On 11/8/22 05:45, Tomasz Figa wrote:
+>> Hi David,
+>>
+>> On Tue, Nov 8, 2022 at 1:19 AM David Hildenbrand <david@redhat.com> wrote:
+>>>
+>>> FOLL_FORCE is really only for debugger access. According to commit
+>>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+>>> writable"), the pinned pages are always writable.
+>>
+>> Actually that patch is only a workaround to temporarily disable
+>> support for read-only pages as they seemed to suffer from some
+>> corruption issues in the retrieved user pages. We expect to support
+>> read-only pages as hardware input after. That said, FOLL_FORCE doesn't
+>> sound like the right thing even in that case, but I don't know the
+>> background behind it being added here in the first place. +Hans
+>> Verkuil +Marek Szyprowski do you happen to remember anything about it?
 > 
-> It happenned at __kthread_bind_mask() where do_set_cpus_allowed() is called
-> with pi_lock held.
+> I tracked the use of 'force' all the way back to the first git commit
+> (2.6.12-rc1) in the very old video-buf.c. So it is very, very old and the
+> reason is lost in the mists of time.
 > 
-> [ 1084.820105]  <TASK>
-> [ 1084.820110]  dump_stack_lvl+0x57/0x81
-> [ 1084.820117]  check_noncircular+0x103/0x120
-> [ 10[ 1084.820160]  lock_acquire+0xba/0x230
-> [ 1084.820164]  ? kfree+0x10f/0x380
-> [ 1084.820172]  ? do_set_cpus_allowed+0x40/0x60
-> [ 1084.820181]  rt_spin_lock+0x27/0xe0
-> [ 1084.820184]  ? kfree+0x10f/0x380
-> [ 1084.820188]  kfree+0x10f/0x380
-> [ 1084.820195]  do_set_cpus_allowed+0x40/0x60
-> [ 1084.820203]  kthread_bind_mask+0x4a/0x70
-> [ 1084.820211]  create_worker+0xfb/0x1a0
-> [ 1084.820220]  worker_thread+0x2e3/0x3c0
-> [ 1084.820226]  ? process_one_work+0x450/0x450
-> [ 1084.820230]  kthread+0x111/0x130
-> [ 1084.820236]  ? kthread_complete_and_exit+0x20/0x20
-> [ 1084.820244]  ret_from_fork+0x22/0x30
-> [ 1084.820258]  </TASK>
-> [ 1084.820260] BUG: sleeping function called from invalid context at
-> kernel/locking/spinlock_rt.c:46
+> I'm not sure if the 'force' argument of get_user_pages() at that time
+> even meant the same as FOLL_FORCE today. From what I can tell it has just
+> been faithfully used ever since, but I have my doubt that anyone understands
+> the reason behind it since it was never explained.
 > 
-> It shows up with PREEMPT_RT kernel.
+> Looking at this old LWN article https://lwn.net/Articles/28548/ suggests
+> that it might be related to calling get_user_pages for write buffers
+> (non-zero write argument) where you also want to be able to read from the
+> buffer. That is certainly something that some drivers need to do post-capture
+> fixups.
+> 
+> But 'force' was also always set for read buffers, and I don't know if that
+> was something that was actually needed, or just laziness.
+> 
+> I assume that removing FOLL_FORCE from 'FOLL_FORCE|FOLL_WRITE' will still
+> allow drivers to read from the buffer?
 
-Oh, I see ..
+Yes. The only problematic corner case I can imagine is if someone has a 
+VMA without write permissions (no PROT_WRITE/VM_WRITE) and wants to pin 
+user space pages as a read buffer. We'd specify now FOLL_WRITE without 
+FOLL_FORCE and GUP would reject that: write access without write 
+permissions is invalid.
 
-> Maybe. One thing that I am not clear about is why user_cpus_ptr is set in
-> the first place.
+There would be no way around "fixing" this implementation to not specify 
+FOLL_WRITE when only reading from user-space pages. Not sure what the 
+implications are regarding that corruption that was mentioned in 
+707947247e95.
 
-Perhaps someone set an affinity on kthreadd ?
+Having said that, I assume such a scenario is unlikely -- but you might 
+know better how user space usually uses this interface. There would be 
+three options:
 
-But I'm thinking this exact problem is also possible (rather more likely
-even) with select_fallback_rq() that too holds pi_lock (which account
-for both other users of this function).
+1) Leave the FOLL_FORCE hack in for now, which I *really* want to avoid.
+2) Remove FOLL_FORCE and see if anybody even notices (this patch) and
+    leave the implementation as is for now.
+3) Remove FOLL_FORCE and fixup the implementation to only specify
+    FOLL_WRITE if the pages will actually get written to.
 
-Bah.
+3) would most probably ideal, however, I am no expert on that code and 
+can't do it (707947247e95 confuses me). So naive me would go with 2) first.
 
-And the allocation is just the one long in size (for small configs)
-which is just enough space for a single linked list like you had.
+-- 
+Thanks,
 
-Urgh.
+David / dhildenb
 
-The below is yuck too, and I'm not sure Paul wants us to use
-kvfree_call_rcu() without its wrapper.
-
----
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 78b2d5cabcc5..0d0af0fc7fcf 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2606,7 +2606,12 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
- 	};
- 
- 	__do_set_cpus_allowed(p, &ac);
--	kfree(ac.user_mask);
-+	/*
-+	 * Because this is called with p->pi_lock held, it is not possible
-+	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
-+	 * kfree_rcu().
-+	 */
-+	kvfree_call_rcu((struct rcu_head *)ac.user_mask, (rcu_callback_t)0);
- }
- 
- int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-@@ -8196,7 +8201,7 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
- 	struct affinity_context ac;
- 	struct cpumask *user_mask;
- 	struct task_struct *p;
--	int retval;
-+	int retval, size;
- 
- 	rcu_read_lock();
- 
-@@ -8229,7 +8234,11 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
- 	if (retval)
- 		goto out_put_task;
- 
--	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
-+	/*
-+	 * See do_set_cpus_allowed() for the rcu_head usage.
-+	 */
-+	size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
-+	user_mask = kmalloc(size, GFP_KERNEL);
- 	if (!user_mask) {
- 		retval = -ENOMEM;
- 		goto out_put_task;
