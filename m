@@ -2,81 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799D5634346
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 19:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411F6634357
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 19:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbiKVSHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 13:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
+        id S234448AbiKVSJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 13:09:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232800AbiKVSHR (ORCPT
+        with ESMTP id S234465AbiKVSJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 13:07:17 -0500
-Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D679170A2E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 10:07:15 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id xXfroj0BLM75kxXfroW5jJ; Tue, 22 Nov 2022 19:07:14 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 22 Nov 2022 19:07:14 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <68d4ef1d-ce51-133f-3974-613da458ea40@wanadoo.fr>
-Date:   Tue, 22 Nov 2022 19:07:11 +0100
+        Tue, 22 Nov 2022 13:09:15 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F2C7CB8D;
+        Tue, 22 Nov 2022 10:09:12 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id jn7so12569245plb.13;
+        Tue, 22 Nov 2022 10:09:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KRMhYB9UPO2WtEP0UfvsFBZ6e6YdwWgScP76/C9Yycs=;
+        b=M+5E7ETSufWPx+E2mZBDiYBpsWvhg9NS+0oud8xN7L+y/ywZzwWx/9Yk/wEeBqhXWv
+         7HrtF9k+BVmfh30B3TvMo3srXrtTKrKImB11ADbg1f6WsBv8/+LRwJRqE2Q2ZoycdkUM
+         yVYfNaFdBfvZtt0zDSu2yVoH73SydK6cyBkNUXm1Xvd8zNFMJAs2SwlqDJbo++OFjXNf
+         yJNhBwgY6ZC8S79K4yR70xw96ZczaPZj9p6nLble4XdItCPmSGZ/FyJbZVjHQ1/2TECb
+         4W2ozvOAxBJZkfCy7UCiNbT9O5FjRR1FKuS74TUBYfJMPe0ds2AH3L+N7xW4T2fSVNyO
+         J3Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KRMhYB9UPO2WtEP0UfvsFBZ6e6YdwWgScP76/C9Yycs=;
+        b=en4BCtfh+3sJ6myaPGF149TuHOgHhjfTKoBlzMNi2PZbmg9SZ/FNhU1MfYCdd+Zc2m
+         r2/Eac6v1ZDZiuomSzTcJqsPeEoggMuD1IriMbf6yp0G1MG56/Lto2NwP+xGX9D8qIZl
+         qSm68MFoVd435+aSKoEM7G/r01oQGY1/k04paipz6vimT0uE9Vb4c7PX2GZZbfbvXu1p
+         YNtP37vqLPxcsL4IVCzkEIuz8xn4feu4OszatT72reipjfygsKxsUsU0hmHe4EpYGd3F
+         GQ2CoIfwQoYpqa8h/DznGPu/AuqoWEeIUDs//eXRT2nW8G5vartb29kXaTksj6eJ6uOK
+         HKlQ==
+X-Gm-Message-State: ANoB5pkxT3A2rKcG5+jUfD1PIuWKb0Y3WfM0FiN7H6GvqvGJEay9WJOS
+        RQlj30LopA6yEZ2QIcgu5C8g3qhodzX4STnwC/g=
+X-Google-Smtp-Source: AA0mqf4AGbu14xUfrouQH/rCMsj54a7vqxbpp4i6D4+jiZZqOK8c52s9h5B66FphmMpWdVoYct8FUOYE5AJyW6IBqDc=
+X-Received: by 2002:a17:90a:4147:b0:214:2214:869e with SMTP id
+ m7-20020a17090a414700b002142214869emr33794590pjg.76.1669140552412; Tue, 22
+ Nov 2022 10:09:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] libnvdimm: Add check for nd_dax_alloc
-Content-Language: fr
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, dave.jiang@intel.com, ira.weiny@intel.com
-Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221122023350.29128-1-jiasheng@iscas.ac.cn>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221122023350.29128-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1669013346.git.Sandor.yu@nxp.com> <be4532b834109595b0fbf3562bf072caf2852a01.1669013346.git.Sandor.yu@nxp.com>
+In-Reply-To: <be4532b834109595b0fbf3562bf072caf2852a01.1669013346.git.Sandor.yu@nxp.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 22 Nov 2022 15:08:54 -0300
+Message-ID: <CAOMZO5AwwyZofwQNRnamNiLcj74HayNgocKsKx9epNGm8O-8-A@mail.gmail.com>
+Subject: Re: [PATCH v4 01/10] drm: bridge: cadence: convert mailbox functions
+ to macro functions
+To:     Sandor Yu <Sandor.yu@nxp.com>
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kishon@ti.com, vkoul@kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, alexander.stein@ew.tq-group.com,
+        kernel@pengutronix.de, linux-imx@nxp.com, oliver.brown@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 22/11/2022 à 03:33, Jiasheng Jiang a écrit :
-> As the nd_dax_alloc may return NULL pointer,
-> it should be better to add check for the return
-> value, as same as the one in nd_dax_create().
-> 
-> Fixes: c5ed9268643c ("libnvdimm, dax: autodetect support")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->   drivers/nvdimm/dax_devs.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/nvdimm/dax_devs.c b/drivers/nvdimm/dax_devs.c
-> index 7f4a9d28b670..9efe62b95dd8 100644
-> --- a/drivers/nvdimm/dax_devs.c
-> +++ b/drivers/nvdimm/dax_devs.c
-> @@ -106,6 +106,8 @@ int nd_dax_probe(struct device *dev, struct nd_namespace_common *ndns)
->   
->   	nvdimm_bus_lock(&ndns->dev);
->   	nd_dax = nd_dax_alloc(nd_region);
-> +	if (!nd_dax)
-> +		return -ENOMEM;
->   	nd_pfn = &nd_dax->nd_pfn;
->   	dax_dev = nd_pfn_devinit(nd_pfn, ndns);
->   	nvdimm_bus_unlock(&ndns->dev);
+Hi Sandor,
 
-Hi,
+On Mon, Nov 21, 2022 at 4:27 AM Sandor Yu <Sandor.yu@nxp.com> wrote:
+>
+> Mailbox access functions could be share to other mhdp driver and
+> HDP-TX HDMI/DP PHY drivers, move those functions to head file
+> include/drm/bridge/cdns-mhdp-mailbox.h and convert them to
+> macro functions.
 
-Based on 6.1-rc6 ([1]), the error handling is already in place just 
-after the nvdimm_bus_unlock() call.
-
-CJ
-
-[1]: 
-https://elixir.bootlin.com/linux/v6.1-rc6/source/drivers/nvdimm/dax_devs.c#L112
+What is the reason for converting the functions to macro?
