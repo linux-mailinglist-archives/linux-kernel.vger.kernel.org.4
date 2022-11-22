@@ -2,78 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBEA633AA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1463D633AA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbiKVK4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S232774AbiKVK6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:58:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiKVK4h (ORCPT
+        with ESMTP id S232577AbiKVK6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:56:37 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5412AE1F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:56:35 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:4821:1ba5:2638:5c3a])
-        by albert.telenet-ops.be with bizsmtp
-        id nNwZ2800A5WXlCv06NwZjj; Tue, 22 Nov 2022 11:56:33 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oxQx6-001C3A-OH; Tue, 22 Nov 2022 11:56:32 +0100
-Date:   Tue, 22 Nov 2022 11:56:32 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     linux-staging@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-um@lists.infradead.org
-Subject: Re: Build regressions/improvements in v6.1-rc6
-In-Reply-To: <20221122105054.4062213-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2211221154280.284524@ramsan.of.borg>
-References: <CAHk-=wjKJyzfJmOzBdEOqCFRc8Fh-rdGM4tvMXfW0WXbbHwV0w@mail.gmail.com> <20221122105054.4062213-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 22 Nov 2022 05:58:35 -0500
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE02D1E716
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=NFmQ4BHqkfYXHJbxs2dTDkAt9Y6OhHoJPxA7yM9/MD0=; b=jX5AbsTOTPWw97x7bnntdg6Lmp
+        wB9CV0UkXgWqIYIaWdWNtep50iCxoweH1Bw3Z70pmgb4IxkMp5QinylflkFiG3BNkwKZ0gNXJePmy
+        TMD+pd2zOCgszFCscGuEbG3QvEm1A8LHOBhbgyHhnHL23kXjm+35L6utQZdbSohCgkQBN9m1HwJKY
+        p3vUAd8asloTPM1xYK5C77OfwdVmdIhWGuvS5tqiC2WJ0Aa+VM1+L8XxFEHuwqtp3I+xBETBK92Gt
+        EQJDp2lX0duL0dQKb4VfKjEZ99Ds+zFajwSt51i3UrJmmU8nvX9Ftdd7kRUMIUATCyx9mOcnUbfh0
+        +Os/QOg0uega6pFpISltbZbbz4sV8/8LniCX0ZKk3ARcrGSunOVnGVlag+qdNd9LB3hWXLp7a+23q
+        Cq37lwRVvlw9Ul64L/j5AKuFB6bm3cbVqZSX7VWAAKYDToJAAMkErg51GiYXYGhSrKzh2THVmtybA
+        z91ZYNE79pKVpAGwKNHvJho5QPcb7PF4NtdWpvLp9X0subBbxFFGMaSG3qZsABydiiioq+DkPnnks
+        aVSQ+aodqK63mpX6dew2cX3sLzR2kuA4CQz3vPqdz8xdo1qBf6bLDEL8aQAwDiQBRIbC1qVOUTOAn
+        HySKBI6Z0bFFvWYzBIzabnxCviroZ135WgCC3tu4M=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Stefano Stabellini <sstabellini@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] 9p/xen: do not memcpy header into req->rc
+Date:   Tue, 22 Nov 2022 11:58:26 +0100
+Message-ID: <2044434.5qkcZKU06U@silver>
+In-Reply-To: <20221122001025.119121-1-asmadeus@codewreck.org>
+References: <20221122001025.119121-1-asmadeus@codewreck.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022, Geert Uytterhoeven wrote:
-> JFYI, when comparing v6.1-rc6[1] to v6.1-rc5[3], the summaries are:
->  - build errors: +6/-0
+On Tuesday, November 22, 2022 1:10:25 AM CET Dominique Martinet wrote:
+> while 'h' is packed and can be assumed to match the request payload,
+> req->rc is a struct p9_fcall which is not packed and that memcpy
+> could be wrong.
+> 
+> Fix this by copying each fields individually instead.
+> 
+> Reported-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+> Suggested-by: Stefano Stabellini <sstabellini@kernel.org>
+> Link: https://lkml.kernel.org/r/alpine.DEB.2.22.394.2211211454540.1049131@ubuntu-linux-20-04-desktop
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> ---
 
-   + /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]:  => 239:34
+Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
 
-sh4-gcc11/sh-allmodconfig (in cvm_oct_free_hw_memory())
+> Follow up from the previous xen patch's review.
+> 
+> This isn't an immediate fix so I don't think this one should be rushed
+> in with the rest of the overflow fixes -- I'll let this sit a bit in
+> -next after reviews.
+> 
+>  net/9p/trans_xen.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
+> index 4665215bc98b..e8e3f54a837e 100644
+> --- a/net/9p/trans_xen.c
+> +++ b/net/9p/trans_xen.c
+> @@ -216,7 +216,9 @@ static void p9_xen_response(struct work_struct *work)
+>  			goto recv_error;
+>  		}
+>  
+> -		memcpy(&req->rc, &h, sizeof(h));
+> +		req->rc.size = h.size;
+> +		req->rc.id = h.id;
+> +		req->rc.tag = h.tag;
+>  		req->rc.offset = 0;
+>  
+>  		masked_cons = xen_9pfs_mask(cons, XEN_9PFS_RING_SIZE(ring));
+> 
 
-   + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer:  => 94:18
-   + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]:  => 1934:1
 
-um-x86_64/um-all{mod,yes}config (in kfd_cpumask_to_apic_id())
 
-   + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function):  => 149:37
-   + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor':  => 149:22
-   + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]:  => 150:1
 
-um-x86_64/um-allyesconfig
-
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/eb7081409f94a9a8608593d0fb63a1aa3d6f95d8/ (all 149 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/094226ad94f471a9f19e8f8e7140a09c2625abaa/ (all 149 configs)
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
