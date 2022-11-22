@@ -2,273 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38A46333A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFC963339C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbiKVDAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S231939AbiKVDAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiKVDAs (ORCPT
+        with ESMTP id S231593AbiKVDAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:00:48 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6301DDE3;
-        Mon, 21 Nov 2022 19:00:46 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8B633890;
-        Tue, 22 Nov 2022 04:00:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669086043;
-        bh=Z5nJ8q0xaYleeoTP9dGIkZ/5BZsSiq7N4M/09+3v7TE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uwg14CrsCvoLYn1GybJu1yEasa8M/aCDZgmTv/ayiWL59b7EkjIxalTfIzBv9Yjmi
-         EV6AHH+QkiEuC1CfV4EWnqmOa9722eZNVg6iwaw/VggLENkG7FlLAYCUa5J++HRRbH
-         q8OS/ObpjnT+i3vawFvsIywPZZYJeRS9ueVMJhJ4=
-Date:   Tue, 22 Nov 2022 05:00:28 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Subject: Re: [PATCH v1 4/8] arm64: dts: renesas: r8a779g0: Add display
- related data
-Message-ID: <Y3w7TLxwWKez8IVu@pendragon.ideasonboard.com>
-References: <20221117122547.809644-1-tomi.valkeinen@ideasonboard.com>
- <20221117122547.809644-5-tomi.valkeinen@ideasonboard.com>
- <166869741913.50677.3537704052215375530@Monstersaurus>
+        Mon, 21 Nov 2022 22:00:42 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42CF1D0FD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:00:41 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so12728291pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 19:00:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wHFDUHtOwvUbApX56IPf0JK3BcogReTYpXne7oiLh6g=;
+        b=HsHhTLxPGSX/SOQLa8i0mclVgaAony/uoIqSiNk2F7aUqm3oOvFR4+hqrJeWKeA8kP
+         0ev+UlYSci2yUYxBYTcHi/07bQFHH0vf5Pp6rNi78LMk6kGatA4cfPszA84RKTU0O+gA
+         xwlHUTY52a76c0t0mqgbv+/6Yc8+9PpHYpKkI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wHFDUHtOwvUbApX56IPf0JK3BcogReTYpXne7oiLh6g=;
+        b=Ms8nkw5y8ftneQKvQjc/pqGCRWEM+E9tIHoDbh+VpQWthueElal2GGbEu3P9Qq60dQ
+         Xf0Y1PXOD7YHhUBpJvSNEu/rGZRzc4QSNLwma1De1425PVetopHZ8IYYJ+/iXC5MIUHr
+         5KYj9JpEdyCabmFtA3ejcXpF2LNM7PU6LfZRrIvDaHsmnS1v9+FdS8P/MKytFZCwrTjP
+         URZXTHs28sUPkKeMqHWturAHYwU6LNHRZvo9x8pIoMC1xg/ziF6H2XaU1pp0GREnZNGe
+         QiLrR8YKCtDh3Kuo8B24H4hGr4K68Fcnu/bsK8gbJvhGVvV29edLPwiYRqs+v2omMkpq
+         4Jcg==
+X-Gm-Message-State: ANoB5pkz3lUl5V9toa9wGKnxuDH53PeM1pON9kLd8/idyia8AWEqlQpn
+        UDEnz/orkWdXxDKCFqLwxAwSoA==
+X-Google-Smtp-Source: AA0mqf6ssW5PeKYQMBjucgUacUesrALiKSjEBDiNYRmO/H0eoDAdfWODXNQS/1qb7eR9vXjF1Udllg==
+X-Received: by 2002:a17:902:6b89:b0:179:eaa8:9113 with SMTP id p9-20020a1709026b8900b00179eaa89113mr1725905plk.55.1669086041198;
+        Mon, 21 Nov 2022 19:00:41 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:e258:71ac:37b7:2d52])
+        by smtp.gmail.com with ESMTPSA id a14-20020a170902710e00b0018703bf3ec9sm10525755pll.61.2022.11.21.19.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 19:00:40 -0800 (PST)
+Date:   Tue, 22 Nov 2022 12:00:36 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Alexey Romanov <avromanov@sberdevices.ru>, minchan@kernel.org,
+        senozhatsky@chromium.org, ngupta@vflare.org,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
+        ddrokosov@sberdevices.ru
+Subject: Re: [RFC PATCH v1 0/4] Introduce merge identical pages mechanism
+Message-ID: <Y3w7VP5CKvm6XmoJ@google.com>
+References: <20221121190020.66548-1-avromanov@sberdevices.ru>
+ <Y3vjQ7VJYUEWl2uc@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <166869741913.50677.3537704052215375530@Monstersaurus>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3vjQ7VJYUEWl2uc@cmpxchg.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 03:03:39PM +0000, Kieran Bingham wrote:
-> Quoting Tomi Valkeinen (2022-11-17 12:25:43)
-> > From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> > 
-> > Add DT nodes for components needed to get the DSI output working:
-> > - FCPv
-> > - VSPd
-> > - DU
-> > - DSI
-> > 
-> > Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> > ---
-> >  arch/arm64/boot/dts/renesas/r8a779g0.dtsi | 129 ++++++++++++++++++++++
-> >  1 file changed, 129 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-> > index 45d8d927ad26..31d4930c5adc 100644
-> > --- a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-> > +++ b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-> > @@ -1207,6 +1207,135 @@ prr: chipid@fff00044 {
-> >                         compatible = "renesas,prr";
-> >                         reg = <0 0xfff00044 0 4>;
-> >                 };
+On (22/11/21 15:44), Johannes Weiner wrote:
+> This looks pretty great.
 > 
-> I think these nodes are supposed to be in sort order based on the
-> register address in memory.
+> However, I'm curious why it's specific to zram, and not part of
+> zsmalloc? That way zswap would benefit as well, without having to
+> duplicate the implementation. This happened for example with
+> page_same_filled() and zswap_is_page_same_filled().
 > 
-> Disregarding sort order, I'll review the node contents.
-> 
-> I would probably s/data/nodes/ in $SUBJECT too.
-> 
-> > +
-> > +               fcpvd0: fcp@fea10000 {
-> > +                       compatible = "renesas,fcpv";
-> > +                       reg = <0 0xfea10000 0 0x200>;
-> > +                       clocks = <&cpg CPG_MOD 508>;
-> > +                       power-domains = <&sysc R8A779G0_PD_ALWAYS_ON>;
-> > +                       resets = <&cpg 508>;
-> > +               };
-> > +
-> > +               fcpvd1: fcp@fea11000 {
-> > +                       compatible = "renesas,fcpv";
-> > +                       reg = <0 0xfea11000 0 0x200>;
-> > +                       clocks = <&cpg CPG_MOD 509>;
-> > +                       power-domains = <&sysc R8A779G0_PD_ALWAYS_ON>;
-> > +                       resets = <&cpg 509>;
-> > +               };
-> 
-> I'm intrigued at the length of 0x200 as I only see 3 registers up to
-> 0x0018 ..
-> 
-> But all existing platforms with fcpv* set 0x200 ... so lets cargo cult it up... :-)
-> 
-> > +
-> > +               vspd0: vsp@fea20000 {
-> > +                       compatible = "renesas,vsp2";
-> > +                       reg = <0 0xfea20000 0 0x5000>;
-> 
-> """
-> Below are the base addresses of each VSP unit. VSPX has 32Kbyte address
-> space. VSPD has 28Kbyte address space.
-> """
-> 
-> Hrm : 28K is 0x7000
-> 
-> RPf n OSD CLUT Table: H’4000 + H’0400*n to H’43fc + H’0400*n
-> 
->  0x43fc+(0x400*5)
-> 	22524	[0x57fc]
-> 
-> So this needs to be /at least/ 0x6000 (Would 0x5800 be odd?) and perhaps as it clearly states
-> 28k, we should just set it to 0x7000.
+> It's zsmalloc's job to store content efficiently, so couldn't this
+> feature (just like the page_same_filled one) be an optimization that
+> zsmalloc does transparently for all its users?
 
-I'd go for 0x7000 indeed.
+Yea, that's a much needed functionality, but things may be "complicated".
+We had that KSM-ish thing in the past in zram. Very briefly as we quickly
+found out that the idea was patented by some company in China and we couldn't
+figure our if it was safe to land that code upstream. So we ended up dropping
+the patches.
 
-> > +                       interrupts = <GIC_SPI 546 IRQ_TYPE_LEVEL_HIGH>;
-> > +                       clocks = <&cpg CPG_MOD 830>;
-> > +                       power-domains = <&sysc R8A779G0_PD_ALWAYS_ON>;
-> > +                       resets = <&cpg 830>;
-> > +
-> > +                       renesas,fcp = <&fcpvd0>;
-> > +               };
-> > +
-> > +               vspd1: vsp@fea28000 {
-> > +                       compatible = "renesas,vsp2";
-> > +                       reg = <0 0xfea28000 0 0x5000>;
-> 
-> Same here of course (reg = <0 0xfea28000 0 0x7000>)
-> 
-> > +                       interrupts = <GIC_SPI 551 IRQ_TYPE_LEVEL_HIGH>;
-> > +                       clocks = <&cpg CPG_MOD 831>;
-> > +                       power-domains = <&sysc R8A779G0_PD_ALWAYS_ON>;
-> > +                       resets = <&cpg 831>;
-> > +
-> > +                       renesas,fcp = <&fcpvd1>;
-> > +               };
-> > +
-> > +               du: display@feb00000 {
-> > +                       compatible = "renesas,du-r8a779g0";
-> > +                       reg = <0 0xfeb00000 0 0x40000>;
-> > +                       interrupts = <GIC_SPI 523 IRQ_TYPE_LEVEL_HIGH>,
-> > +                                    <GIC_SPI 524 IRQ_TYPE_LEVEL_HIGH>;
-> > +                       clocks = <&cpg CPG_MOD 411>;
-> > +                       clock-names = "du.0";
-> > +                       power-domains = <&sysc R8A779G0_PD_ALWAYS_ON>;
-> > +                       resets = <&cpg 411>;
-> > +                       reset-names = "du.0";
-> > +                       renesas,vsps = <&vspd0 0>, <&vspd1 0>;
-> > +
-> > +                       status = "disabled";
-> > +
-> > +                       ports {
-> > +                               #address-cells = <1>;
-> > +                               #size-cells = <0>;
-> > +
-> > +                               port@0 {
-> > +                                       reg = <0>;
-> > +                                       du_out_dsi0: endpoint {
-> > +                                               remote-endpoint = <&dsi0_in>;
-> > +                                       };
-> > +                               };
-> > +
-> > +                               port@1 {
-> > +                                       reg = <1>;
-> > +                                       du_out_dsi1: endpoint {
-> > +                                               remote-endpoint = <&dsi1_in>;
-> > +                                       };
-> > +                               };
-> > +                       };
-> > +               };
-> > +
-> > +               dsi0: dsi-encoder@fed80000 {
-> > +                       compatible = "renesas,r8a779g0-dsi-csi2-tx";
-> > +                       reg = <0 0xfed80000 0 0x10000>;
-> > +                       power-domains = <&sysc R8A779G0_PD_ALWAYS_ON>;
-> > +                       clocks = <&cpg CPG_MOD 415>,
-> > +                                <&cpg CPG_CORE R8A779G0_CLK_DSIEXT>,
-> > +                                <&cpg CPG_CORE R8A779G0_CLK_DSIREF>;
-> > +                       clock-names = "fck", "dsi", "pll";
-> > +                       resets = <&cpg 415>;
-> 
-> blank line here to separate it, and highlight that it's disabled? (Like
-> is done for DU?
-> 
-> > +                       status = "disabled";
-> > +
-> > +                       ports {
-> > +                               #address-cells = <1>;
-> > +                               #size-cells = <0>;
-> > +
-> > +                               port@0 {
-> > +                                       reg = <0>;
-> > +                                       dsi0_in: endpoint {
-> > +                                               remote-endpoint = <&du_out_dsi0>;
-> > +                                       };
-> > +                               };
-> > +
-> > +                               port@1 {
-> > +                                       reg = <1>;
-> > +                               };
-> > +                       };
-> > +               };
-> > +
-> > +               dsi1: dsi-encoder@fed90000 {
-> > +                       compatible = "renesas,r8a779g0-dsi-csi2-tx";
-> > +                       reg = <0 0xfed90000 0 0x10000>;
-> > +                       power-domains = <&sysc R8A779G0_PD_ALWAYS_ON>;
-> > +                       clocks = <&cpg CPG_MOD 416>,
-> > +                                <&cpg CPG_CORE R8A779G0_CLK_DSIEXT>,
-> > +                                <&cpg CPG_CORE R8A779G0_CLK_DSIREF>;
-> > +                       clock-names = "fck", "dsi", "pll";
-> > +                       resets = <&cpg 416>;
-> 
-> Same.
-> 
-> With the VSPD register ranges increased accordingly:
-> 
-> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> 
-> > +                       status = "disabled";
-> > +
-> > +                       ports {
-> > +                               #address-cells = <1>;
-> > +                               #size-cells = <0>;
-> > +
-> > +                               port@0 {
-> > +                                       reg = <0>;
-> > +                                       dsi1_in: endpoint {
-> > +                                               remote-endpoint = <&du_out_dsi1>;
-> > +                                       };
-> > +                               };
-> > +
-> > +                               port@1 {
-> > +                                       reg = <1>;
-> > +                               };
-> > +                       };
-> > +               };
-> > +
+https://lore.kernel.org/lkml/1494556204-25796-1-git-send-email-iamjoonsoo.kim@lge.com/
 
-Extra blank line.
+> Would it make sense to hook this up to a shrinker?
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> >         };
-> >  
-> >         timer {
-
--- 
-Regards,
-
-Laurent Pinchart
+Hmm, ratelimited perhaps. We most likely don't want to scan the whole pool
+every time a shrinker calls us (which can be quite often).
