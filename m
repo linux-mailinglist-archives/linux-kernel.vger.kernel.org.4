@@ -2,259 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1AB63352C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DA463352A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 07:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbiKVGU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 01:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S231147AbiKVGUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 01:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKVGUy (ORCPT
+        with ESMTP id S229468AbiKVGU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 01:20:54 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFB52D768;
-        Mon, 21 Nov 2022 22:20:45 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.98.54]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M2fM1-1ousrZ3p9j-004Edz; Tue, 22 Nov 2022 07:20:15 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        Tue, 22 Nov 2022 01:20:27 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4192B616;
+        Mon, 21 Nov 2022 22:20:25 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.159.196])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 082133C0C9;
-        Tue, 22 Nov 2022 07:20:13 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id DF42A1D3; Tue, 22 Nov 2022 07:20:10 +0100 (CET)
-Date:   Tue, 22 Nov 2022 07:20:10 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] kbuild: warn objects shared among multiple modules
-Message-ID: <Y3xqGhVXAladyxfg@bergen.fjasle.eu>
-References: <20221118191551.66448-1-masahiroy@kernel.org>
- <20221118191551.66448-2-masahiroy@kernel.org>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 80CE73FA82;
+        Tue, 22 Nov 2022 06:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669098024;
+        bh=nygFvcCyEa3LQ0HMu22VlGtyNHOIl6bbcNe2rVT6CC0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=UGwtQGzD6AaLz7y76fkaSksLivBzoOPNdiCEnoHah3MIda/cMtMEAfpWru8JF5A7/
+         dhAFZn3IFh79cU2frI9uOeAc1JGgg/5TSMqXUaH+SQrhEzh7mbrOOfvE8m4i0PALuq
+         AWy770kRoc1G6lUUr5JUDLJON1sTUrfLmUj6cxynA0ZHvj114ieyzK3trdzuuoAvLe
+         za1DroiKBQSUrzNMdj7BU049sSnIcYjFMJEnReoWkjqlPJvGng3tKGGPJUXKYpxU9k
+         XSNj+ySobO62I38sV/pG8rQ9aUc2IH+jvRcaTjPaanC5hS0q7FU2uEgoT2pvjg4oCK
+         TL5MUnLynMxdQ==
+Message-ID: <3fbf707a-fc9e-18c6-dc40-ec266bd524e5@canonical.com>
+Date:   Mon, 21 Nov 2022 22:20:20 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HDHNqeNCmU9MyyfY"
-Content-Disposition: inline
-In-Reply-To: <20221118191551.66448-2-masahiroy@kernel.org>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:zbUCQwvMaCZqtljLJA/QwYwp/KwQ/fPw3UNPZOjTNZKLs/MWXMs
- YLpA3cl1vk0ETouTf7hkJrhr++UyEIyk44MrU1sOCJeXz4GIhNr/Po14636am1VqE0K/sz6
- 0XFgEgB8Tbv0F1EPEILMFynUeN9dTA/dB5ph+iCuF6HbDUWN5h802JGkw1TMyZAwP0X5+Lk
- el70jpdjnF840QPYGXvOw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4I4PArsRhHE=:mXgf1OtDhbnKEMgQfR4vMU
- c59MsldGHYguWscPBlyY7T4feHckg0HkIhJjXHcuDn9VhlqSBmVj0iBDvPc8bEdB1AEBBKxAn
- p6feUp5vt/zdvSToco9gYQhb9IzDtfMBsjlzCNwVK7yAekAs5eaJiNWzYpRXmSnRKwJmCsKqi
- VX6xEghjvV5vcyvdtfQILGD16Yq//ebpigI6U7VyEBhrUH786T0FApst6+6Xbl8bUFbx68q16
- F1xjoPjFTyvNuXY2JYECcPShnG25QIflWe95SH7ismtZPu593i+8SN0zf3Y8EMDnpb7D4qLHE
- AYQ0gtiVIntMr/9J9MlKu4iK0Aya4oU4rgqfdy4WQuzzD3r2PSNvtMpDEaHVZgsP+6Ec25J3N
- Cu7L02TmzKE5q6RGnSuOrRtT4sZ/wVkkNtqr0ft4EkEqAPjjtrDZzvoU7DjB3e3pw0rLIc8sr
- 17BsJWAB0khzScSULCGgA5LfAZhEpEkfDdRKgZQrXSnKsagxogR8XYshp/76Bn9EWPrq0xxSZ
- X2URUhJhONsYLbK8SRamKTR4YgvVZJxpzIrbc5qUA4EnvVR8uiWZ19HO1jIcfs1nBvFlIf8FI
- DvdQ1WLvzaxzO89GoLbzfeOXGgtIqe/Yb+f7TtEuuHNn7nUH9jO+EHQVs5Jfsu78UILD5K1Et
- sKvoLcjhDq7Au6rU99XCeTC29YZhpAVPY6Sv+cndp4xQy+6ZKZgVYU/NuzvLRsdedTqyW1p9j
- HdgmsO31pqEMqbYr032GtxR2mtUUfLcjUj4J+Ds+kBIxbrhhdT7iGKnwpXlKiIUlXBsNifdDv
- 1r9C750
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 2/2] apparmor: test: make static symbols visible during
+ kunit testing
+Content-Language: en-US
+To:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
+        davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, tales.aparecida@gmail.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, apparmor@lists.ubuntu.com
+References: <20221102175959.2921063-1-rmoar@google.com>
+ <20221102175959.2921063-3-rmoar@google.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20221102175959.2921063-3-rmoar@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---HDHNqeNCmU9MyyfY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat 19 Nov 2022 04:15:51 GMT, Masahiro Yamada wrote:
-> If an object is shared among multiple modules, amd some of them are
-
-amd -> and
-
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-
-> configured as 'm', but the others as 'y', the shared object is built
-> as modular, then linked to the modules and vmlinux. This is a potential
-> issue because the expected CFLAGS are different between modules and
-> builtins.
->=20
-> Commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects")
-> reported that this could be even more fatal in some cases such as
-> Clang LTO.
->=20
-> That commit fixed lib/zlib/zstd_{compress,decompress}, but there are
-> still more instances of breakage.
->=20
-> This commit adds a W=3D1 warning for shared objects, so that the kbuild
-> test robot, which provides build tests with W=3D1, will avoid a new
-> breakage slipping in.
->=20
-> Quick compile tests on v6.1-rc4 detected the following:
->=20
-> scripts/Makefile.build:252: ./drivers/block/rnbd/Makefile: rnbd-common.o =
-is added to multiple modules: rnbd-client rnbd-server
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: =
-cn10k_cpt.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: =
-otx2_cptlf.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: =
-otx2_cpt_mbox_common.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/edac/Makefile: skx_common.o is adde=
-d to multiple modules: i10nm_edac skx_edac
-> scripts/Makefile.build:252: ./drivers/gpu/drm/bridge/imx/Makefile: imx-ld=
-b-helper.o is added to multiple modules: imx8qm-ldb imx8qxp-ldb
-> scripts/Makefile.build:252: ./drivers/mfd/Makefile: rsmu_core.o is added =
-to multiple modules: rsmu-i2c rsmu-spi
-> scripts/Makefile.build:252: ./drivers/mtd/tests/Makefile: mtd_test.o is a=
-dded to multiple modules: mtd_nandbiterrs mtd_oobtest mtd_pagetest mtd_read=
-test mtd_speedtest mtd_stresstest mtd_subpagetest mtd_torturetest
-> scripts/Makefile.build:252: ./drivers/net/dsa/ocelot/Makefile: felix.o is=
- added to multiple modules: mscc_felix mscc_seville
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: cn23xx_pf_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: cn23xx_vf_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: cn66xx_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: cn68xx_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: lio_core.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: lio_ethtool.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: octeon_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: octeon_droq.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: octeon_mailbox.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: octeon_mem_ops.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: octeon_nic.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: request_manager.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefi=
-le: response_manager.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/dpaa2/Makefi=
-le: dpaa2-mac.o is added to multiple modules: fsl-dpaa2-eth fsl-dpaa2-switch
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/dpaa2/Makefi=
-le: dpmac.o is added to multiple modules: fsl-dpaa2-eth fsl-dpaa2-switch
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefi=
-le: enetc_cbdr.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefi=
-le: enetc_ethtool.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefi=
-le: enetc.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefil=
-e: hns3_common/hclge_comm_cmd.o is added to multiple modules: hclge hclgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefil=
-e: hns3_common/hclge_comm_rss.o is added to multiple modules: hclge hclgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefil=
-e: hns3_common/hclge_comm_tqp_stats.o is added to multiple modules: hclge h=
-clgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/marvell/octeontx2/nic/=
-Makefile: otx2_dcbnl.o is added to multiple modules: rvu_nicpf rvu_nicvf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/marvell/octeontx2/nic/=
-Makefile: otx2_devlink.o is added to multiple modules: rvu_nicpf rvu_nicvf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_ale.=
-o is added to multiple modules: keystone_netcp keystone_netcp_ethss ti_cpsw=
- ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_etht=
-ool.o is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_priv=
-=2Eo is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_sl.o=
- is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: davinci_c=
-pdma.o is added to multiple modules: ti_cpsw ti_cpsw_new ti_davinci_emac
-> scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile=
-: common.o is added to multiple modules: intel_skl_int3472_discrete intel_s=
-kl_int3472_tps68470
-> scripts/Makefile.build:252: ./sound/soc/codecs/Makefile: wcd-clsh-v2.o is=
- added to multiple modules: snd-soc-wcd9335 snd-soc-wcd934x snd-soc-wcd938x
->=20
-> Once all the warnings are fixed, it can become an error irrespective of
-> W=3D option.
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On 11/2/22 10:59, Rae Moar wrote:
+> Use macros, VISIBLE_IF_KUNIT and EXPORT_SYMBOL_IF_KUNIT, to allow
+> static symbols to be conditionally set to be visible during KUnit
+> testing. Remove the need to include testing file in the implementation
+> file. Provide example of how static symbols can be dealt with in
+> testing.
+> 
+> Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
->=20
-> Changes in v2:
->   - Add drivers/block/rnbd/Makefile for commit log
->=20
->  scripts/Makefile.build | 6 ++++++
->  1 file changed, 6 insertions(+)
->=20
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 37cf88d076e8..799df12b53f3 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -222,6 +222,10 @@ endif
-> =20
->  cmd_check_local_export =3D $(srctree)/scripts/check-local-export $@
-> =20
-> +ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
-> +cmd_warn_shared_object =3D $(if $(word 2, $(modname-multi)),$(warning $(=
-kbuild-file): $*.o is added to multiple modules: $(modname-multi)))
-> +endif
+>   security/apparmor/Kconfig                 |  4 +-
+>   security/apparmor/Makefile                |  2 +
+>   security/apparmor/include/policy_unpack.h | 50 ++++++++++++++++
+>   security/apparmor/policy_unpack.c         | 72 +++++++----------------
+>   security/apparmor/policy_unpack_test.c    |  5 ++
+>   5 files changed, 80 insertions(+), 53 deletions(-)
+> 
+> diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
+> index cb3496e00d8a..f334e7cccf2d 100644
+> --- a/security/apparmor/Kconfig
+> +++ b/security/apparmor/Kconfig
+> @@ -106,8 +106,8 @@ config SECURITY_APPARMOR_PARANOID_LOAD
+>   	  Disabling the check will speed up policy loads.
+>   
+>   config SECURITY_APPARMOR_KUNIT_TEST
+> -	bool "Build KUnit tests for policy_unpack.c" if !KUNIT_ALL_TESTS
+> -	depends on KUNIT=y && SECURITY_APPARMOR
+> +	tristate "Build KUnit tests for policy_unpack.c" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT && SECURITY_APPARMOR
+>   	default KUNIT_ALL_TESTS
+>   	help
+>   	  This builds the AppArmor KUnit tests.
+> diff --git a/security/apparmor/Makefile b/security/apparmor/Makefile
+> index ff23fcfefe19..6a92428375eb 100644
+> --- a/security/apparmor/Makefile
+> +++ b/security/apparmor/Makefile
+> @@ -8,6 +8,8 @@ apparmor-y := apparmorfs.o audit.o capability.o task.o ipc.o lib.o match.o \
+>                 resource.o secid.o file.o policy_ns.o label.o mount.o net.o
+>   apparmor-$(CONFIG_SECURITY_APPARMOR_HASH) += crypto.o
+>   
+> +obj-$(CONFIG_SECURITY_APPARMOR_KUNIT_TEST) += policy_unpack_test.o
 > +
->  define rule_cc_o_c
->  	$(call cmd_and_fixdep,cc_o_c)
->  	$(call cmd,gen_ksymdeps)
-> @@ -231,6 +235,7 @@ define rule_cc_o_c
->  	$(call cmd,gen_objtooldep)
->  	$(call cmd,gen_symversions_c)
->  	$(call cmd,record_mcount)
-> +	$(call cmd,warn_shared_object)
->  endef
-> =20
->  define rule_as_o_S
-> @@ -239,6 +244,7 @@ define rule_as_o_S
->  	$(call cmd,check_local_export)
->  	$(call cmd,gen_objtooldep)
->  	$(call cmd,gen_symversions_S)
-> +	$(call cmd,warn_shared_object)
->  endef
-> =20
->  # Built-in and composite module parts
-> --=20
-> 2.34.1
+>   clean-files := capability_names.h rlim_names.h net_names.h
+>   
+>   # Build a lower case string table of address family names
+> diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/include/policy_unpack.h
+> index eb5f7d7f132b..a963687bcc9b 100644
+> --- a/security/apparmor/include/policy_unpack.h
+> +++ b/security/apparmor/include/policy_unpack.h
+> @@ -48,6 +48,43 @@ enum {
+>   	AAFS_LOADDATA_NDENTS		/* count of entries */
+>   };
+>   
+> +/*
+> + * The AppArmor interface treats data as a type byte followed by the
+> + * actual data.  The interface has the notion of a named entry
+> + * which has a name (AA_NAME typecode followed by name string) followed by
+> + * the entries typecode and data.  Named types allow for optional
+> + * elements and extensions to be added and tested for without breaking
+> + * backwards compatibility.
+> + */
+> +
+> +enum aa_code {
+> +	AA_U8,
+> +	AA_U16,
+> +	AA_U32,
+> +	AA_U64,
+> +	AA_NAME,		/* same as string except it is items name */
+> +	AA_STRING,
+> +	AA_BLOB,
+> +	AA_STRUCT,
+> +	AA_STRUCTEND,
+> +	AA_LIST,
+> +	AA_LISTEND,
+> +	AA_ARRAY,
+> +	AA_ARRAYEND,
+> +};
+> +
+> +/*
+> + * aa_ext is the read of the buffer containing the serialized profile.  The
+> + * data is copied into a kernel buffer in apparmorfs and then handed off to
+> + * the unpack routines.
+> + */
+> +struct aa_ext {
+> +	void *start;
+> +	void *end;
+> +	void *pos;		/* pointer to current position in the buffer */
+> +	u32 version;
+> +};
+> +
 
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+hrmmm, I prefer these symbols to be only available to the unpack code but can
+live with them being more widely available.
 
---HDHNqeNCmU9MyyfY
-Content-Type: application/pgp-signature; name="signature.asc"
+>   /*
+>    * struct aa_loaddata - buffer of policy raw_data set
+>    *
+> @@ -126,4 +163,17 @@ static inline void aa_put_loaddata(struct aa_loaddata *data)
+>   		kref_put(&data->count, aa_loaddata_kref);
+>   }
+>   
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +bool inbounds(struct aa_ext *e, size_t size);
+> +size_t unpack_u16_chunk(struct aa_ext *e, char **chunk);
+> +bool unpack_X(struct aa_ext *e, enum aa_code code);
+> +bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name);
+> +bool unpack_u32(struct aa_ext *e, u32 *data, const char *name);
+> +bool unpack_u64(struct aa_ext *e, u64 *data, const char *name);
+> +size_t unpack_array(struct aa_ext *e, const char *name);
+> +size_t unpack_blob(struct aa_ext *e, char **blob, const char *name);
+> +int unpack_str(struct aa_ext *e, const char **string, const char *name);
+> +int unpack_strdup(struct aa_ext *e, char **string, const char *name);
 
------BEGIN PGP SIGNATURE-----
+So this is a problem. If this symbols are going to be visible outside of the
+unpack code they need to be prefixed with aa_ to help avoid collisions with
+other kernel code.
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmN8ahYACgkQB1IKcBYm
-EmnxXA/7Biajb0rFzOI7VQvYixV47wyOfxNAb+evRlN84CeruhaR71mLAg2NZQ6H
-SjAF1e/OLYuk3JhUK3XKYJ+1nFOG/8oP88cOCEmOjzW3f93iBNLhCHao1tSxCoOT
-trx5kk2kEQjWX2pJgnhe/nOJmuO3KcgtYIRyEJqqFwbfHq0bHCcHYP1rU1CiTGGE
-ipEOjcMPkD4kxO9OqPrj4SJnn0ahwQY8tmwSTIwUUOzvWrAW1r2osIaMDk10eO/I
-TLyxo8IDZ9Hi3rh+ifLzfFw147EfV4a574NwUH7gcuMzr3BOtz8iXVIzsoffzZdb
-LVXiU4JhO+T5XphTo0EQfEbl/LOvi6ivjt1uAtDH2/TA9Syr3dx3SsgsKYJLex2+
-nP5DAoLklgSQdksdm1g0cshStotyqstcDjCtkEL3YshVUy6bS+i72zJO61MCjfSM
-x2yQweXmV72IQSrhkX9Rc2xzd7r7j66bwOujhCwggEhY4pYIedYFfpVwsTJxuHUg
-0TgTCUvtAwj50FUGdeYCjuOCmdrOYiKUe0vvAZXP3yD8bWlYXuj8BrWXwM+XRaAn
-T2DDK/rLHOIK0uVxsKcCsHKmjYbmdTVPqD2k+tlctbswi0HWB95hOEP6OuNQWceY
-zcBySlnT+jc7FgrBwymz7OFrqQ7OJbLQ9gBnb7QSgFjtv8uC8FI=
-=Y7+9
------END PGP SIGNATURE-----
+> +#endif
+> +
+>   #endif /* __POLICY_INTERFACE_H */
+> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
+> index 55d31bac4f35..c23aa70349aa 100644
+> --- a/security/apparmor/policy_unpack.c
+> +++ b/security/apparmor/policy_unpack.c
+> @@ -14,6 +14,7 @@
+>    */
+>   
+>   #include <asm/unaligned.h>
+> +#include <kunit/visibility.h>
+>   #include <linux/ctype.h>
+>   #include <linux/errno.h>
+>   #include <linux/zlib.h>
+> @@ -37,43 +38,6 @@
+>   #define v7	7
+>   #define v8	8	/* full network masking */
+>   
+> -/*
+> - * The AppArmor interface treats data as a type byte followed by the
+> - * actual data.  The interface has the notion of a named entry
+> - * which has a name (AA_NAME typecode followed by name string) followed by
+> - * the entries typecode and data.  Named types allow for optional
+> - * elements and extensions to be added and tested for without breaking
+> - * backwards compatibility.
+> - */
+> -
+> -enum aa_code {
+> -	AA_U8,
+> -	AA_U16,
+> -	AA_U32,
+> -	AA_U64,
+> -	AA_NAME,		/* same as string except it is items name */
+> -	AA_STRING,
+> -	AA_BLOB,
+> -	AA_STRUCT,
+> -	AA_STRUCTEND,
+> -	AA_LIST,
+> -	AA_LISTEND,
+> -	AA_ARRAY,
+> -	AA_ARRAYEND,
+> -};
+> -
+> -/*
+> - * aa_ext is the read of the buffer containing the serialized profile.  The
+> - * data is copied into a kernel buffer in apparmorfs and then handed off to
+> - * the unpack routines.
+> - */
+> -struct aa_ext {
+> -	void *start;
+> -	void *end;
+> -	void *pos;		/* pointer to current position in the buffer */
+> -	u32 version;
+> -};
+> -
+>   /* audit callback for unpack fields */
+>   static void audit_cb(struct audit_buffer *ab, void *va)
+>   {
+> @@ -199,10 +163,11 @@ struct aa_loaddata *aa_loaddata_alloc(size_t size)
+>   }
+>   
+>   /* test if read will be in packed data bounds */
+> -static bool inbounds(struct aa_ext *e, size_t size)
+> +VISIBLE_IF_KUNIT bool inbounds(struct aa_ext *e, size_t size)
+>   {
+>   	return (size <= e->end - e->pos);
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(inbounds);
+>   
+>   static void *kvmemdup(const void *src, size_t len)
+>   {
+> @@ -220,7 +185,7 @@ static void *kvmemdup(const void *src, size_t len)
+>    *
+>    * Returns: the size of chunk found with the read head at the end of the chunk.
+>    */
+> -static size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
+> +VISIBLE_IF_KUNIT size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
+>   {
+>   	size_t size = 0;
+>   	void *pos = e->pos;
+> @@ -239,9 +204,10 @@ static size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
+>   	e->pos = pos;
+>   	return 0;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_u16_chunk);
+>   
+>   /* unpack control byte */
+> -static bool unpack_X(struct aa_ext *e, enum aa_code code)
+> +VISIBLE_IF_KUNIT bool unpack_X(struct aa_ext *e, enum aa_code code)
+>   {
+>   	if (!inbounds(e, 1))
+>   		return false;
+> @@ -250,6 +216,7 @@ static bool unpack_X(struct aa_ext *e, enum aa_code code)
+>   	e->pos++;
+>   	return true;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_X);
+>   
+>   /**
+>    * unpack_nameX - check is the next element is of type X with a name of @name
+> @@ -267,7 +234,7 @@ static bool unpack_X(struct aa_ext *e, enum aa_code code)
+>    *
+>    * Returns: false if either match fails, the read head does not move
+>    */
+> -static bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
+> +VISIBLE_IF_KUNIT bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
+>   {
+>   	/*
+>   	 * May need to reset pos if name or type doesn't match
+> @@ -296,6 +263,7 @@ static bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
+>   	e->pos = pos;
+>   	return false;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_nameX);
+>   
+>   static bool unpack_u8(struct aa_ext *e, u8 *data, const char *name)
+>   {
+> @@ -315,7 +283,7 @@ static bool unpack_u8(struct aa_ext *e, u8 *data, const char *name)
+>   	return false;
+>   }
+>   
+> -static bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
+> +VISIBLE_IF_KUNIT bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
+>   {
+>   	void *pos = e->pos;
+>   
+> @@ -332,8 +300,9 @@ static bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
+>   	e->pos = pos;
+>   	return false;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_u32);
+>   
+> -static bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
+> +VISIBLE_IF_KUNIT bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
+>   {
+>   	void *pos = e->pos;
+>   
+> @@ -350,8 +319,9 @@ static bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
+>   	e->pos = pos;
+>   	return false;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_u64);
+>   
+> -static size_t unpack_array(struct aa_ext *e, const char *name)
+> +VISIBLE_IF_KUNIT size_t unpack_array(struct aa_ext *e, const char *name)
+>   {
+>   	void *pos = e->pos;
+>   
+> @@ -368,8 +338,9 @@ static size_t unpack_array(struct aa_ext *e, const char *name)
+>   	e->pos = pos;
+>   	return 0;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_array);
+>   
+> -static size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
+> +VISIBLE_IF_KUNIT size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
+>   {
+>   	void *pos = e->pos;
+>   
+> @@ -390,8 +361,9 @@ static size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
+>   	e->pos = pos;
+>   	return 0;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_blob);
+>   
+> -static int unpack_str(struct aa_ext *e, const char **string, const char *name)
+> +VISIBLE_IF_KUNIT int unpack_str(struct aa_ext *e, const char **string, const char *name)
+>   {
+>   	char *src_str;
+>   	size_t size = 0;
+> @@ -413,8 +385,9 @@ static int unpack_str(struct aa_ext *e, const char **string, const char *name)
+>   	e->pos = pos;
+>   	return 0;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_str);
+>   
+> -static int unpack_strdup(struct aa_ext *e, char **string, const char *name)
+> +VISIBLE_IF_KUNIT int unpack_strdup(struct aa_ext *e, char **string, const char *name)
+>   {
+>   	const char *tmp;
+>   	void *pos = e->pos;
+> @@ -432,6 +405,7 @@ static int unpack_strdup(struct aa_ext *e, char **string, const char *name)
+>   
+>   	return res;
+>   }
+> +EXPORT_SYMBOL_IF_KUNIT(unpack_strdup);
+>   
+Again if the symbols are going to be exported they need the aa_ prefix
 
---HDHNqeNCmU9MyyfY--
+But I am not sure this is worth doing, exporting a lot of symbols just so the
+test code can be built as a module doesn't seem worth it to me.
+
+>   
+>   /**
+> @@ -1251,7 +1225,3 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
+>   
+>   	return error;
+>   }
+> -
+> -#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
+> -#include "policy_unpack_test.c"
+> -#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
+> diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+> index 0a969b2e03db..3474fe2cd922 100644
+> --- a/security/apparmor/policy_unpack_test.c
+> +++ b/security/apparmor/policy_unpack_test.c
+> @@ -4,6 +4,7 @@
+>    */
+>   
+>   #include <kunit/test.h>
+> +#include <kunit/visibility.h>
+>   
+>   #include "include/policy.h"
+>   #include "include/policy_unpack.h"
+> @@ -43,6 +44,8 @@
+>   #define TEST_ARRAY_BUF_OFFSET \
+>   	(TEST_NAMED_ARRAY_BUF_OFFSET + 3 + strlen(TEST_ARRAY_NAME) + 1)
+>   
+> +MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
+> +
+>   struct policy_unpack_fixture {
+>   	struct aa_ext *e;
+>   	size_t e_size;
+> @@ -605,3 +608,5 @@ static struct kunit_suite apparmor_policy_unpack_test_module = {
+>   };
+>   
+>   kunit_test_suite(apparmor_policy_unpack_test_module);
+> +
+> +MODULE_LICENSE("GPL");
+
