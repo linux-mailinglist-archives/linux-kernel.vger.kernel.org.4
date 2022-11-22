@@ -2,91 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14386634911
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC465634910
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 22:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbiKVVSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 16:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S233935AbiKVVSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 16:18:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234853AbiKVVSQ (ORCPT
+        with ESMTP id S234134AbiKVVSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 16:18:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8916F7FC36
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:17:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669151841;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JPDjHDoH9++mlr8p4OfANKSJGcFV53l1p3BKiJIXBZM=;
-        b=BJPknkh1fcCy0+0s3Bq5nuumo16yL6nwls4Mc5pQ8lWczSjJqzy1yELYC8mis5c45l+keP
-        KuVpvS/wTcMitLDvo7eepcjPNS76MgcZKusghhvDZ2qgffAx/CJTw5rTAs9k/Z9RwHwWBx
-        UQsF9xtw9IMPjsJlqO4ztmObNKmNyUc=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-8-672_SluTP2u617xqxu5Dxg-1; Tue, 22 Nov 2022 16:17:20 -0500
-X-MC-Unique: 672_SluTP2u617xqxu5Dxg-1
-Received: by mail-qt1-f197.google.com with SMTP id bb32-20020a05622a1b2000b003a56991a048so15428658qtb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 13:17:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JPDjHDoH9++mlr8p4OfANKSJGcFV53l1p3BKiJIXBZM=;
-        b=RRn7ExNLYLZYrhRP6rLB5JGmL+0Lm9+AQLdnHT4n+ecL7GWeW/jlOtxS2CTAP0xIaC
-         TYBbvOjtjZpuMUWQryHUpP4POscgww1t93Z627utKctcW3h5kzr9iGhQoLpn+krc7SQA
-         pcX20oKOQHKuABeOmzQ2U/PJT13OUl6KQvzyxHvpdCoMxZAs1SZUOK+43VT3PTBnDvqN
-         I/NZTC10ux8vKT26uRHqHO2zcUoZtWIeQRnxMoP6IoI+44p2/Jjl8zxrgOjgbjz/ZY4b
-         VdgHX2uD1HKOgoghVlO4m7o/e4DjvREIXvE7tTwcEeIh+fgk1zAW/Ld+7iLAbrmWDZHn
-         xcnQ==
-X-Gm-Message-State: ANoB5pk51pqcVajasyX61VvlbN252kPERew+OUfa8uJGqx0fFVzcEL5C
-        AbsjtEOZ6PLYfefVsLeaMpU54/nyEiRXXu8QiaFlkpTCtcYeVdT1767/qwvKPtqg3oD0+w3k+gU
-        xKDafBp7daSCA/Ri3Ux2dYCXa
-X-Received: by 2002:ac8:5992:0:b0:3a6:7a7:b39d with SMTP id e18-20020ac85992000000b003a607a7b39dmr5282265qte.193.1669151839808;
-        Tue, 22 Nov 2022 13:17:19 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5OvGFE5yed5LhSLIPAGzfqX2bLLJl26JcHCQp691LGevPKIPVFf668USmFEfU3Js/EOoNdGA==
-X-Received: by 2002:ac8:5992:0:b0:3a6:7a7:b39d with SMTP id e18-20020ac85992000000b003a607a7b39dmr5282247qte.193.1669151839591;
-        Tue, 22 Nov 2022 13:17:19 -0800 (PST)
-Received: from [192.168.33.110] (c-73-19-232-221.hsd1.tn.comcast.net. [73.19.232.221])
-        by smtp.gmail.com with ESMTPSA id u20-20020a05620a0c5400b006cf8fc6e922sm10904600qki.119.2022.11.22.13.17.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 13:17:18 -0800 (PST)
-Message-ID: <96fd10f0-45e8-c2c4-b197-d2809f800219@redhat.com>
-Date:   Tue, 22 Nov 2022 16:17:17 -0500
+        Tue, 22 Nov 2022 16:18:03 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9E88B849;
+        Tue, 22 Nov 2022 13:18:00 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NGxtX35Qsz4wgv;
+        Wed, 23 Nov 2022 08:17:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669151876;
+        bh=DJmz63qNR630cYU/2IgMgViIxyDoLfgrkG0RXDOwOk0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MXBu0UOhfmiJovFe5R3yZ7qeDDXVm7EtYseKDPnyt3eX6EPiytnTHiE4PlXeokcKe
+         sXttrjE9PrVXbUCsj4XPg4q+Yv3knS911ikfbviBu5MSZN5BKB7SF1I/ASAr315gM/
+         9SWCSkZI6W1XUXu04umwNoIlG+irKZ/eV6+6+mVF19ixZ3TFRCPc3EdbC8JQt78DiJ
+         Xr37SKeQ18u8oeJSrpzh8SmEsEbJiKIcuHh8aPLrIQFnD41ZU1V57NT5QugGvQRJ1h
+         BA5oRWbze41gdPKJTftSpstfOtUOShY6RmQ+Os9OSt47z7t9RqMPr4GEP1Ziza4j5m
+         9o092AZhwc2bA==
+Date:   Wed, 23 Nov 2022 08:17:26 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Boris Burkov <boris@bur.io>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the btrfs tree
+Message-ID: <20221123081726.140b18d1@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net-next 2/2] bonding: fix link recovery in mode 2 when
- updelay is nonzero
-Content-Language: en-US
-To:     Nikolay Aleksandrov <razor@blackwall.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Jay Vosburgh <j.vosburgh@gmail.com>
-Cc:     Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <cover.1668800711.git.jtoppins@redhat.com>
- <cb89b92af89973ee049a696c362b4a2abfdd9b82.1668800711.git.jtoppins@redhat.com>
- <38fbc36783d583f805f30fb3a55a8a87f67b59ac.camel@redhat.com>
- <1fe036eb-5207-eccd-0cb3-aa22f5d130ce@redhat.com>
- <5718ba71a8755040f61ed7b2f688b1067ca56594.camel@redhat.com>
- <e1150971-ec16-0421-a13a-d6d2a0a66348@redhat.com>
- <0e7bb31c-ca92-dac2-4d29-5eb2d3327b26@blackwall.org>
- <840d6f2a-abc9-c5d3-d1d3-3862e479509a@blackwall.org>
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <840d6f2a-abc9-c5d3-d1d3-3862e479509a@blackwall.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: multipart/signed; boundary="Sig_/vA8zu+Z/rKVRpXW4_6DoXzh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,72 +51,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 16:15, Nikolay Aleksandrov wrote:
-> On 22/11/2022 23:12, Nikolay Aleksandrov wrote:
->> On 22/11/2022 17:37, Jonathan Toppins wrote:
->>> On 11/22/22 09:45, Paolo Abeni wrote:
->>>> On Tue, 2022-11-22 at 08:36 -0500, Jonathan Toppins wrote:
->>>>> On 11/22/22 05:59, Paolo Abeni wrote:
->>>>>> Hello,
->>>>>>
->>>>>> On Fri, 2022-11-18 at 15:30 -0500, Jonathan Toppins wrote:
->>>>>>> Before this change when a bond in mode 2 lost link, all of its slaves
->>>>>>> lost link, the bonding device would never recover even after the
->>>>>>> expiration of updelay. This change removes the updelay when the bond
->>>>>>> currently has no usable links. Conforming to bonding.txt section 13.1
->>>>>>> paragraph 4.
->>>>>>>
->>>>>>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
->>>>>>
->>>>>> Why are you targeting net-next? This looks like something suitable to
->>>>>> the -net tree to me. If, so could you please include a Fixes tag?
->>>>>>
->>>>>> Note that we can add new self-tests even via the -net tree.
->>>>>>
->>>>>
->>>>> I could not find a reasonable fixes tag for this, hence why I targeted
->>>>> the net-next tree.
->>>>
->>>> When in doubt I think it's preferrable to point out a commit surely
->>>> affected by the issue - even if that is possibly not the one
->>>> introducing the issue - than no Fixes as all. The lack of tag will make
->>>> more difficult the work for stable teams.
->>>>
->>>> In this specific case I think that:
->>>>
->>>> Fixes: 41f891004063 ("bonding: ignore updelay param when there is no active slave")
->>>>
->>>> should be ok, WDYT? if you agree would you mind repost for -net?
->>>>
->>>> Thanks,
->>>>
->>>> Paolo
->>>>
->>>
->>> Yes that looks like a good one. I will repost to -net a v2 that includes changes to reduce the number of icmp echos sent before failing the test.
->>>
->>> Thanks,
->>> -Jon
->>>
->>
->> One minor nit - could you please change "mode 2" to "mode balance-xor" ?
->> It saves reviewers some grepping around the code to see what is mode 2.
->> Obviously one has to dig in the code to see how it's affected, but still
->> it is a bit more understandable. It'd be nice to add more as to why the link is not recovered,
->> I get it after reading the code, but it would be nice to include a more detailed explanation in the
->> commit message as well.
->>
->> Thanks,
->>   Nik
->>
-> 
-> Ah, I just noticed I'm late to the party. :)
-> Nevermind my comments, no need for a v3.
-> 
+--Sig_/vA8zu+Z/rKVRpXW4_6DoXzh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If there are other issues with v2. I will gladly include these comments 
-in a v3.
+Hi all,
 
-Thanks,
--Jon
+In commit
 
+  e60fd7bf12f2 ("btrfs: fix improper error handling in btrfs_unlink")
+
+Fixes tag
+
+  Fixes: 6a1d44efb9d0 ("btrfs: setup qstr from dentrys using fscrypt helper=
+")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: aa8270bea38f ("btrfs: setup qstr from dentrys using fscrypt helper")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vA8zu+Z/rKVRpXW4_6DoXzh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN9PGcACgkQAVBC80lX
+0GwAtAf+JMJA+gUijkDC0D/aSTr2HLbpIY0HL+V0JtT9n0+gQzaluXTg4d22B8eh
+oguFB/YvUypc9Se8UUUBbBCef1lk4xPxWsEyelzXCDIwiVri5PC8QafY1keqpyGq
+Q6gQNpkaC5fJ3C8Y4sc5hji6sjiW6IvCxQndWdjMm2mkVe3bi6nweuLGe0Vy5F42
+x/XVckjuUjiuBKL1IADiT3c4uR5juFoI5yuF6mHWH4XOKtSOc8FO0dZLHE5o9PsN
+En15QyIdtBJEKOfEn0v7TAJcCHermqZhCnLUsiqRZcv55HTEXMcLhr+ExoXyaWr9
+DT3+6SfXMuC9MVZJ8r2L97EOvDexlw==
+=++x2
+-----END PGP SIGNATURE-----
+
+--Sig_/vA8zu+Z/rKVRpXW4_6DoXzh--
