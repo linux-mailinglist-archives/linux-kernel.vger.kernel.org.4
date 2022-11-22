@@ -2,123 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3936348B3
+	by mail.lfdr.de (Postfix) with ESMTP id 462356348B2
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234102AbiKVUst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S234515AbiKVUsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbiKVUsa (ORCPT
+        with ESMTP id S235128AbiKVUsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Nov 2022 15:48:30 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676EC6B3B2;
-        Tue, 22 Nov 2022 12:48:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j4M8fjhFYUpFD300F9uomjPhl0LxS3SEIFFecyH881K3fsYnWnl9YuXe9ztvnZbUZeQ45drqGN7Jt9cHeKsm3f00QuU9jFlXr8W13L0OA2MsVxKG6SigTJeFjE+a4jMQqEDfJS1fZtZnBbrbU6D6CsOCugL6nDD+SHPOSMu9Cx6pMvTPpyNBgfdVU9jwPHBo9qOfUXApIp9GSrwzdXi3hncK1YQv7UIvoSAhsKQZnaU1d2nBwgcfsOAE4wDX7Wr3XQRD/fT/d+CW0VwQC3hrYTL2H4qtzuDEoayVmTEd/Pg9T24QIlI0ZRAVDpsT+s5zlJJMUZUh8BapHOiPTSNnjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mrjWvhFeCBifuDySHpepxlB4fT8lax/zJL0vBGf297w=;
- b=HaBVwZ7e3SlEfhdulHaUD02nZiVBH8xsPnQc+zvYsg2LUufKhlyggdI9JtoqEA1wRcM6p60SQOkcCsA4YDDbcVi9l+ZpW0R2r/pw9oZQS3KleiCco2XjuCh1ege0yaTcA5Z7IILdGpU1pLWTc6sjvxndpugZQA/3LBnl2RqLa7wik811l8nlbQHVs6LrZSICOc9EslaLFuGdOHhYuBGk07T7tAdL6afbGaYgyKsHnocp8OLJv5Ez5+QdGImI5fNWzHg+nOOoqZ24Ic4+0wBP/ZU7AH1Nb+ieLfLbfAL+msh2m6vbiqB3nwRvWeV409doxHsc3wcO4/m78xTxc93RsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mrjWvhFeCBifuDySHpepxlB4fT8lax/zJL0vBGf297w=;
- b=CXhNPn26BvEjM/uWEXj2kwUnPj/vrWGjr1Ry+AdlvKWFQJfULUI+n36w/gU0maugke40/nWXNeaOhuQEf+0pFbPYQwSEce1lnTPmGuuiPzXnzMUF6k2995UiKASWTgBYMcv90Q0D6qJeiSErcI1F31JV4zAAZup6LdCFcQHYrOA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by DS7PR12MB5791.namprd12.prod.outlook.com (2603:10b6:8:76::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 20:48:11 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::4da8:e3eb:20eb:f00]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::4da8:e3eb:20eb:f00%2]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
- 20:48:11 +0000
-Message-ID: <5750d157-43dd-6f3d-1407-f41af3cff207@amd.com>
-Date:   Tue, 22 Nov 2022 14:48:09 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 00/17] x86: head_64.S spring cleaning
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>
-References: <20221122161017.2426828-1-ardb@kernel.org>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20221122161017.2426828-1-ardb@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR03CA0006.namprd03.prod.outlook.com
- (2603:10b6:208:2d::19) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444ED1C9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:48:28 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 6so15051686pgm.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQ4il4WCPkNns9UB7hYX0PSzg5JhITm8H9TsWBohCps=;
+        b=1fnX0Z4rNDw3WqW7vxA09Nvzwl604ChRAQDY326MTPWvgOWsIg9zOYQXUVcDfRFQcG
+         GMK2za3OoxZSU4iAbDaPm2HH/xuJUYw+xIAfsHc4Tg5QCr5CvenylZaIg8MP3H5F4q7c
+         ByHy6lQP98I0X6BkktI1gt2TubmQmdioHQoqYsULG/DAkrxYa6RF8pm0YOxo7OvTx5j0
+         EDQk+ZkyYNY59jtwVsGHRGlCxmeHciOt8Efxwa5lJVI1DHjM5PQQ++0XcNlkwwz6LEKk
+         b7DKgD6oD99TIw+f+o7HSMe2KeRXVUu4XZuB/sXSzwsZA1G8BWMrS2oacO8E/aHIPjYl
+         K/Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQ4il4WCPkNns9UB7hYX0PSzg5JhITm8H9TsWBohCps=;
+        b=5Wp+m7L8G2cKqLNe/qN1/ZD6s+5zmAJwcBJZ7E/y22uRZvvZc/1/HELucaXZ4nB2RP
+         5PRlGB3HmUZ3zyihhaIWtajm5mkdxdxEUOnj0i29oMfKPKAuR+HngRX+3ihRYNvu919l
+         H0k3Rm+hJfVTx9ZmSXBlQwExIIe9oeSxNwnnlfmSoE1Hk0oq6/ltD5pc5hoT9oIeFZFT
+         Lc717UEEkHbOjrGEZmZ8DYmtQ4utTtmpV9mRfVtjpxtD6cCXedzrYoIfSdsn3U9xyao+
+         GSgvamCxW8Hna6m43VZcS079Tvjn6rSvnIigv4Tnh0Aa8oLMHmXu8xptFAN+B6rlL5GM
+         mObw==
+X-Gm-Message-State: ANoB5pmfFHbFYr2FXQ7hShyWQPQyz4Nqi7gbWAtJoDYsL++2kycwG7Rs
+        oLCwoyamWUn7nNxhcWCzhqGkTQ==
+X-Google-Smtp-Source: AA0mqf4kN1U4OHLHbJ789kCmBZLZ4vW6PKsHiJnp5W2dY4sK+ojJihZwT+uTMhpuv+/LcZAoirBvZQ==
+X-Received: by 2002:a05:6a00:16c6:b0:573:65d4:a104 with SMTP id l6-20020a056a0016c600b0057365d4a104mr16579849pfc.85.1669150107446;
+        Tue, 22 Nov 2022 12:48:27 -0800 (PST)
+Received: from localhost ([75.172.139.56])
+        by smtp.gmail.com with ESMTPSA id a13-20020aa794ad000000b0056ba02feda1sm11442823pfl.94.2022.11.22.12.48.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 12:48:26 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Nishanth Menon <nm@ti.com>, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, nfrayer@baylibre.com,
+        Santosh Shilimkar <ssantosh@kernel.org>
+Cc:     Nishanth Menon <nm@ti.com>, glaroque@baylibre.com
+Subject: Re: [PATCH v6 0/2] soc: ti: k3-socinfo: Add module build support to
+ the k3 socinfo driver
+In-Reply-To: <166906774215.20855.4956750581421635106.b4-ty@ti.com>
+References: <20221117095419.171906-1-nfrayer@baylibre.com>
+ <166906774215.20855.4956750581421635106.b4-ty@ti.com>
+Date:   Tue, 22 Nov 2022 12:48:26 -0800
+Message-ID: <7ha64iaf6t.fsf@baylibre.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|DS7PR12MB5791:EE_
-X-MS-Office365-Filtering-Correlation-Id: 416c5672-91de-4a01-d547-08dacccade79
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +XoyBgmKHlta1AYnJqgMWrr/s8nIuMBTGVp41310ZoWP6BdVnj7zzmt2D+1wuPecIbiaZah3sOCkw3hR4QQpiQfKOZY05HJPyPHoLFeI0NSTUTk+qrActsM3CIEY3ycHmnyOaxeEOPJPYOEBEzE/wa6v/J25vn+v7GEKRO6dZ8Trmp6VIrSj8p2/JCegkbV6DxGXou0OgV/6ZVCJyGdAlLZ82vgVHqdNR520BleoqUCQnZLQJPBHJZHKqFG9qDi/tnVgxbx2LjKpBdUaFncnF7YyOquaQrTJqQTaRBqDbu8sW5TroS8H78/KdweMi7dBoeJ5N7O4FijYld/bgigmWt7Xn2CcQAYqYBWl+TRwi9Fd7zTgqggudm5cIjihKOEhj88Z9KonkP5DCXQe17y4XIDmu+RIhJJzSleRNtu9sW3ofEkJwiPvGivhVNGVMY9XhcaCKiMzMOK62aIGzq0FmONmu8NH3QkIuy0bHhef3fG8ly2Uv/pwOOw2TXdifRkDL7ja9SyLl5cFk5jRBlzYJZkCcUZ+V5l2lIp+Qp7RJxn5wS/1EDjIuRRbAt66XRalD10bGSMNRwBTtD7z7HHhyAmMDAg77QoyZHZDnlMPPJedgzlbqtnYfUHMETwfoeQOVIMznMbAe09UhbcMh5Ems/9nl2H0HkYCuk2EBClJDhP22dWpSFSqKXBYOBSv47eQeltaQN6mRUHzIEHJekzZcayBNJ7EjSj1FeCU+ZlwFp4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(136003)(396003)(366004)(451199015)(36756003)(31686004)(8936002)(2906002)(41300700001)(5660300002)(66476007)(66946007)(86362001)(8676002)(4326008)(83380400001)(66556008)(31696002)(316002)(54906003)(53546011)(6512007)(26005)(6506007)(478600001)(186003)(2616005)(6486002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXdLY09ac2c4UGUwQVg0U0tRcTdQdE5nWHYxOW9WYTFvT1NyWGRRdm5id0dD?=
- =?utf-8?B?T2k2MEF3aTEwUExFemNJUklLVVRMKzllZTdTZG0zeWpaYXVZSmhhYnY0S3FJ?=
- =?utf-8?B?dXhTSWZkTExDeEFjTXBKc0ZsYlord3phM1FOU0xUUHorbzl4SVROMzJLeisr?=
- =?utf-8?B?WjV5aURhT3J6VVBLZUtBeTJWd1gyVitwUnpZVEw2a1BBbFhENW1OV2lJb1ll?=
- =?utf-8?B?WW1KalB2Tmpkcys3eEJocC9ZYzRXamhzZnlvYXBvbFBnbGJkZHBxNjRtT2tT?=
- =?utf-8?B?K3oxeFREVjNuQWVRMFRuMzJCSTVES2hNRHowYzh4c1E4TG51bVJkdjhHWVlt?=
- =?utf-8?B?NkhCR25Tc1h4WXU0WkJQWm5XOHplQXhtWU8yd2ZWVldSbWRDV05qbWJoRTVB?=
- =?utf-8?B?ZzhWU2dWdVB5ZWQxSEpYaFdLQTlSNWVhNzkvbHoxNFozRFNuaUVaREtRVnZt?=
- =?utf-8?B?dlZFRVdkQTRzU0ZIcUw1RU1saUJsWVluVVQ1SVlxd3ZjMEtoR05UMkc4clYx?=
- =?utf-8?B?cnVXTzdGN0ZvcGNsR0VLNmwwWE1yN1lWWFlBWWUvZ25iWWlwSmtKMFhhbEMr?=
- =?utf-8?B?UVdlY1o4WGxXMDMyMkF5WmNNRVNUZnd4cmVzZ2dheE15cjNibmFYYjJLRDU1?=
- =?utf-8?B?TDF6Qm44VE9nT3UvaXBLcVYvc1FlYUlyK25xZWxZVEFSdlA4T2JrUktCM0xL?=
- =?utf-8?B?V21FS09yUlk5eWFNNDY3dWZSVng1VTQxem0zV2FYbEhDMnRZYkNRWXR2cElr?=
- =?utf-8?B?OWcyRUNsM1lvc2pqUzAySHoydVBvTFlHTjVFNlpJamFFcHJkV3FSN3VPelps?=
- =?utf-8?B?dGY5dEE2d1YyeEZLemdOYTR1T3hDcWZpV1N2Sk9SRG9oa2crMldLcWlUbE9S?=
- =?utf-8?B?VCtXS2VSOFo2L1FQWmNucmVRb3BYSi9PMEh6bkhrSDFVNXFHekQwa0h6OTlP?=
- =?utf-8?B?c0pVSFlpQUxhSlRlaklCTjk3NUFnMVFrdm9WcmtGdWpoQ0puaDZYczg3c1pw?=
- =?utf-8?B?dFF5cjlWOTF1MVdnVlFVRFl2NVVmMGdMOEhXN1ZrN1BPV3MvL2prNmVBek4w?=
- =?utf-8?B?YTVWUE4vTTZPcEZrcmEvMXhVN0ZHL2JnL3dsT2pYSXhHUktpZGhOOTcwREE0?=
- =?utf-8?B?SHdERllYV1dVNGQ1RkttWXJheUxaYkpaNjg1dUVRVGxuUklyZ2tDSEtYbmZR?=
- =?utf-8?B?UTBHWDUvNlp1QnB4R3pvR0VHNWYzazNpVWhmK0JMKzN4cjV1c0J0eWhmOVpM?=
- =?utf-8?B?YU5Bd3dxRmZpb2N2bGJ1L1ZmdW1GN0dnUmxUcHNWNmtWeWVVcTROTDc5aHc5?=
- =?utf-8?B?cFUxSzRIc3BJVDNEaUZJS2hvb3hrUkphWExZSVl1U3dDZ2drbWFKWEJPOGZS?=
- =?utf-8?B?N2VGeFUvT0JhU0xJS0o0QUpRR1Z2eTlvcUc4WTY0SUZnY2FkbjZiTGExNXBJ?=
- =?utf-8?B?R2ZUK3N5T2EySFcxOXQzTE5WdSt5cTJCQmEzNDVCd1VONG9oV3JOaGNTaWxw?=
- =?utf-8?B?U2Z2SGVqS0xHNXdEeEF0Y1pUQ2kvUktpRzY1WUQwaXhpT2JHd2FTeXlxeDlB?=
- =?utf-8?B?SW9WTE8zdnJyNXFRVldYeEVmV1crbC9vcmIvVDh1d1QvRCttSUNKbWlKc0lD?=
- =?utf-8?B?OENWcEtVQlNWSjdtOVI1QVdUQ05YalRSWkNSUk9KZXQzcDRkRVVmcExSdUh2?=
- =?utf-8?B?WFlmUUsyeFh4N3dTbHZmd01oYklKdXkxR3RyYllFZU9mVUpNYUJVL1RkQ0Rw?=
- =?utf-8?B?cTFkMUo4MmhFaFNPZWZqL0srQWp5cFJ6OXk1azNNOEd0SXhJRG5TTmh1ZFFv?=
- =?utf-8?B?bXVvSG4za0M4dEV5c2pEcnVzbVJtUDF6WUlobVVWVUtTY3poU1dXeFF6ZFJx?=
- =?utf-8?B?aUpHQnc0OFhEMlhiYU9JSDI0YUJOL2hPckdTQnZ4emJLTGtKM1E3Y2dqWld2?=
- =?utf-8?B?VkhVM1lOc3lSWHhSWTlZTG5nWDZIMm41RFhsWmdCWS9KK09OYVVnOEpBMGsz?=
- =?utf-8?B?WGZFSW9ZalBMV2pHY1pEeFNGWWtOMkYwTElleVhZSlFnMU9Bd3pEUU5JK1FZ?=
- =?utf-8?B?eGt6RjU0NFhJSDFLWlRZZ0liNVE5TGpRV2ZZT1krRlhOK25Na2VscEFnSFJw?=
- =?utf-8?Q?vW8JeZQfYvWKyEFH9aUoSLLme?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 416c5672-91de-4a01-d547-08dacccade79
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2022 20:48:11.6845
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7tkZpk8AN9x5TOATje5Tl4a/fMfJoBEtvytAjs3mg3kye4J3TNdDcn/8LK79gGak8cgq7yt6CIhAiRu138mtgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5791
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,91 +71,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 10:10, Ard Biesheuvel wrote:
-> After doing some cleanup work on the EFI code in head_64.S, the mixed
-> mode code in particular, I noticed that the memory encryption pieces
-> could use some attention as well, so I cleaned that up too.
-> 
-> Changes since v2:
-> - add some clarifying comments to the EFI mixed mode changes
-> - include patch to make the EFI handover protocol optional that was sent
->    out separately before
-> - rebase onto tip/master
-> 
-> Changes since v1:
-> - at Boris's request, split the patches into smaller ones that are
->    easier to review
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Michael Roth <michael.roth@amd.com>
+Hi Nishanth,
 
-This causes an SEV guest to blow up on boot in the early boot code. It
-looks like the stack pointer is not valid and it triple faults on a pushq
-instruction (pushq $__KERNEL_CS in arch/x86/boot/compressed/head_64.S of
-startup_64).
+Nishanth Menon <nm@ti.com> writes:
 
-Here is the Qemu register dump:
-RAX=00000000029cc260 RBX=ffffffffdd98c000 RCX=0000000000000010 RDX=0000000000000002
-RSI=000000003dec1000 RDI=0000000000000000 RBP=ffffffffdb000000 RSP=ffffffffde36e000
-R8 =000000003dec1410 R9 =000000003dec13fc R10=000000000000006c R11=0000000000000000
-R12=0000000000000000 R13=0000000000000001 R14=0000000000000004 R15=000000003eacdf44
-RIP=0000000002000263 RFL=00200002 [-------] CPL=0 II=0 A20=1 SMM=0 HLT=0
-ES =0000 0000000000000000 00000000 00000000
-CS =0038 0000000000000000 ffffffff 00a09b00 DPL=0 CS64 [-RA]
-SS =0000 0000000000000000 00000000 00000000
-DS =0000 0000000000000000 00000000 00000000
-FS =0000 0000000000000000 00000000 00000000
-GS =0000 0000000000000000 00000000 00000000
-LDT=0000 0000000000000000 0000ffff 00008200 DPL=0 LDT
-TR =0000 0000000000000000 0000ffff 00008b00 DPL=0 TSS64-busy
-GDT=     00000000029cc270 0000002f
-IDT=     000000003f55e018 00000fff
-CR0=80010033 CR2=ffffffffde36dff8 CR3=000000003fc01000 CR4=00000668
-DR0=0000000000000000 DR1=0000000000000000 DR2=0000000000000000 DR3=0000000000000000
-DR6=00000000ffff0ff0 DR7=0000000000000400
-EFER=0000000000000d00
+> Hi Nicolas Frayer,
+>
+> On Thu, 17 Nov 2022 10:54:17 +0100, Nicolas Frayer wrote:
+>> In order for the TI K3 SoC info driver to be built as a module, the
+>> following changes have been made:
+>> - Converted memory allocations to devm and added the remove callback
+>> - Added necessary code to build the driver as a module
+>> 
+>> v2->v3:
+>> dropped module conversion part of this series while other driver
+>> dependencies on socinfo are worked out.
+>> A dependency issue is introduced by changing subsys_initcall()
+>> to module_platform_driver(). Some drivers using the socinfo information
+>> probe before the socinfo driver itself and it makes their probe fail.
+>> 
+>> [...]
+>
+> I have applied the following to branch ti-drivers-soc-next on [1].
+> Thank you!
+
+Sorry for the churn here, but I think these need to be reverted.
+
+We've discoverd some more complexities/issues when socinfo is modular,
+and I think the socinfo core code needs some work before this can
+actually work reliably for all socinfo users.
+
+Basically, I think we need to finish converting all the socinfo users to
+modules before we can be sure of all the corner cases when socinfo
+itself is a module.
+
+Sorry about this churn, but I think it's better to be a bit conservative
+here and revert before this lands in mainline.
 
 Thanks,
-Tom
 
-> 
-> Ard Biesheuvel (17):
->    x86/compressed: efi-mixed: rename efi_thunk_64.S to efi-mixed.S
->    x86/compressed: efi-mixed: move 32-bit entrypoint code into .text
->      section
->    x86/compressed: efi-mixed: move bootargs parsing out of 32-bit startup
->      code
->    x86/compressed: efi-mixed: move efi32_pe_entry into .text section
->    x86/compressed: efi-mixed: move efi32_entry out of head_64.S
->    x86/compressed: efi-mixed: move efi32_pe_entry() out of head_64.S
->    x86/compressed: efi: merge multiple definitions of image_offset into
->      one
->    x86/compressed: efi-mixed: simplify IDT/GDT preserve/restore
->    x86/compressed: avoid touching ECX in startup32_set_idt_entry()
->    x86/compressed: pull global variable ref up into startup32_load_idt()
->    x86/compressed: move startup32_load_idt() into .text section
->    x86/compressed: move startup32_load_idt() out of head_64.S
->    x86/compressed: move startup32_check_sev_cbit() into .text
->    x86/compressed: move startup32_check_sev_cbit() out of head_64.S
->    x86/compressed: adhere to calling convention in
->      get_sev_encryption_bit()
->    x86/compressed: only build mem_encrypt.S if AMD_MEM_ENCRYPT=y
->    efi: x86: Make the deprecated EFI handover protocol optional
-> 
->   arch/x86/Kconfig                        |  17 +
->   arch/x86/boot/compressed/Makefile       |   8 +-
->   arch/x86/boot/compressed/efi_mixed.S    | 351 ++++++++++++++++++++
->   arch/x86/boot/compressed/efi_thunk_64.S | 195 -----------
->   arch/x86/boot/compressed/head_32.S      |   4 -
->   arch/x86/boot/compressed/head_64.S      | 303 +----------------
->   arch/x86/boot/compressed/mem_encrypt.S  | 152 ++++++++-
->   arch/x86/boot/header.S                  |   2 +-
->   arch/x86/boot/tools/build.c             |   2 +
->   drivers/firmware/efi/libstub/x86-stub.c |   2 +-
->   10 files changed, 533 insertions(+), 503 deletions(-)
->   create mode 100644 arch/x86/boot/compressed/efi_mixed.S
->   delete mode 100644 arch/x86/boot/compressed/efi_thunk_64.S
-> 
+Kevin
