@@ -2,107 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E54633111
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 00:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1AD633116
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiKUX6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 18:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S231512AbiKVABJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:01:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbiKUX5x (ORCPT
+        with ESMTP id S229739AbiKVABH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:57:53 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC6D554F2;
-        Mon, 21 Nov 2022 15:57:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669075069; x=1700611069;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ttMStxsbDlpMEs1D2wUgm8OuQh/Ime21MOFXRosoXV4=;
-  b=iGsIpxgSk69LxRvCs7aQJbg+brvTXpv4/eAVI1egitYvyCeZRTOQU/8/
-   nB61p/R6GQ7zbvVP1KhsMjSn9yyOfiAhl+pUYCj9e7EpUNJkam2KdSBnZ
-   uMN92IGt9xI0UfXWfSOO28ZtvdP2IwupKKUhh26orqJ0AW1JfoXlgZuT/
-   sDve7nht8lz3qTo1AwznK2x6XY7iahz85uaMqyJRiZhglnnJIlHhWb+hZ
-   szSXM/CFWYtGqMLMCcBoyYD+nd8pLpRGuO+q5DXgRxrWESxf6P/2Nrfek
-   ZioCmdgxRHffmrUzALdOQ0VcfgZnPu30x+T2WwwtmhlvXWuDoRec9RZe7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="301237765"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="301237765"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 15:57:49 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="730201151"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="730201151"
-Received: from dylanhol-mobl.amr.corp.intel.com (HELO [10.212.242.103]) ([10.212.242.103])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 15:57:47 -0800
-Message-ID: <42bb1385-0c7f-6a87-43bb-ea4b12c48427@linux.intel.com>
-Date:   Mon, 21 Nov 2022 15:57:45 -0800
+        Mon, 21 Nov 2022 19:01:07 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA8D60DE;
+        Mon, 21 Nov 2022 16:01:06 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 2D9713200955;
+        Mon, 21 Nov 2022 19:01:04 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 21 Nov 2022 19:01:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1669075263; x=1669161663; bh=GK
+        SMfwfa6pvS7PvzoP8mseYARhi9iWIxIIuJD0eitWc=; b=orVuwZMczxVq2gUe/a
+        dop2fVTslC2Cy5fdFaM3NxzXZvAyYUL/XjiDWBAe4k1v8CTuaFsSppcG2QOzOY+Z
+        LSb8GcdQyEgLCWELb5clRk158apyliXJ3UTFcCRbyNE6dPaVfwf+ZZ2aajFD3ZE3
+        grNDEmobQEQEmnZ5LoTVOYj+tAWiBUA1LQkWlcXG+RMzE2T5k74BNhP5ix197oc0
+        DUkXlvPqafIJAUUMTPR+kvbdg1+sQQG5D2SeFCBqnJsqB0xFjcDapsdL0vv6ywZO
+        0Bx4fadysR7WK1z5LlLJ4G3ZgXM/K7N0ShKtRvDiy8VGxACVhbCrvGupVHkoP3XW
+        D/vQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669075263; x=1669161663; bh=GKSMfwfa6pvS7PvzoP8mseYARhi9
+        iWIxIIuJD0eitWc=; b=tgdJZIruVcbtfE3KGqPvwv8H8u/bNfLZYWisPp2Ue39V
+        /wbZTZM3/edKRRtx6ZpkXB3USIV3S2NMzSIRUpJkxphuMvvkKpzz8zj4rrp1EGK/
+        8Ffk8xhbWrSCUQEMDCZ3egxbnk/pQIsW5E0OggNpb0Gf/sT1b5tro6XvDhCl134g
+        K9dwutKll5XwH6151CVf4vlTtMroOkQDIHY1rp3g3hQEDcVBJguijXSTnSTP9GqT
+        RP2DSsP7h4llzQjW+B6+ZGiC0f6Wt7nKoRXflYNycHaV9ZUu8Q8vNcRl0495tMSN
+        DT8JnoqnbiCzbJu3dCiZqryWe3SxR0yivK+BqCeeeg==
+X-ME-Sender: <xms:PhF8Y3SCGTQi_61VHIM9A4-hn0uWzKWI-z6KneGf0vAvrTLsrhWi7g>
+    <xme:PhF8Y4zf9jzU_8nQS1WbudCdeKn20i-GjDvGh0edCsylpg86aUpn2zUvCWbIvIBX8
+    Y9zcS0RFNkVH9FbX-U>
+X-ME-Received: <xmr:PhF8Y81OZTbfz2dUI28sE9eYIULnQi6ZhlTtiw7oipLtpp7h2-BrWMZTqB69d77_c8ACCg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheejgddujecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:PhF8Y3Anzt0AXzs1x20pdIZ_13BamP2A7Iz1zg5YAaJOSXuCGP2IVQ>
+    <xmx:PhF8YwgvuV9QJdATtuHdVd8qy2LP5Anznui6cfbU-M01uathlkjLNw>
+    <xmx:PhF8Y7rSYO6aKj5YlemT-DAsbaywQyPzeekmgHVhstgr67CCmlyX1g>
+    <xmx:PxF8Y4SFPnPXaMwaMfDg1gwvPeU77-DDo0jq_xVdqanSgjX3ITHN0g>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Nov 2022 19:01:01 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 576EE109A30; Tue, 22 Nov 2022 03:01:00 +0300 (+03)
+Date:   Tue, 22 Nov 2022 03:01:00 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        brijesh.singh@amd.com, dan.j.williams@intel.com,
+        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
+        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
+        kys@microsoft.com, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+Message-ID: <20221122000100.bizske6iltfgdwcu@box.shutemov.name>
+References: <20221121195151.21812-1-decui@microsoft.com>
+ <20221121195151.21812-3-decui@microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v7 02/20] x86/virt/tdx: Detect TDX during kernel boot
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <aaee2d5332a97c840ad401ba935842a998a877ec.1668988357.git.kai.huang@intel.com>
- <3e4644e4-d939-7f15-02e1-a6be1ed7f932@linux.intel.com>
- <827adb3d1610f43ce71b1491db8c680dbe095035.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <827adb3d1610f43ce71b1491db8c680dbe095035.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121195151.21812-3-decui@microsoft.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/21/22 1:37 AM, Huang, Kai wrote:
->> Also why is this global variable? At least in this patch, there seems to
->> be no use case.
-> Platform_tdx_enabled() uses tdx_keyid_num to determine whether TDX is enabled by
-> BIOS.
+On Mon, Nov 21, 2022 at 11:51:47AM -0800, Dexuan Cui wrote:
+> GHCI spec for TDX 1.0 says that the MapGPA call may fail with the R10
+> error code = TDG.VP.VMCALL_RETRY (1), and the guest must retry this
+> operation for the pages in the region starting at the GPA specified
+> in R11.
 > 
-> Also, in the changlog I can add "both initializing the TDX module and creating
-> TDX guest will need to use TDX private KeyID".
+> When a TDX guest runs on Hyper-V, Hyper-V returns the retry error
+> when hyperv_init() -> swiotlb_update_mem_attributes() ->
+> set_memory_decrypted() decrypts up to 1GB of swiotlb bounce buffers.
 > 
-> But I also have a comment saying something similar around ...
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> ---
+>  arch/x86/coco/tdx/tdx.c | 65 +++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 59 insertions(+), 6 deletions(-)
 > 
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 3fee96931ff5..46971cc7d006 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -20,6 +20,8 @@
+>  /* TDX hypercall Leaf IDs */
+>  #define TDVMCALL_MAP_GPA		0x10001
+>  
+> +#define TDVMCALL_STATUS_RETRY		1
+> +
+>  /* MMIO direction */
+>  #define EPT_READ	0
+>  #define EPT_WRITE	1
+> @@ -52,6 +54,25 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
+>  	return __tdx_hypercall(&args, 0);
+>  }
+>  
+> +static inline u64 _tdx_hypercall_output_r11(u64 fn, u64 r12, u64 r13, u64 r14,
+> +					    u64 r15, u64 *r11)
+> +{
+> +	struct tdx_hypercall_args args = {
+> +		.r10 = TDX_HYPERCALL_STANDARD,
+> +		.r11 = fn,
+> +		.r12 = r12,
+> +		.r13 = r13,
+> +		.r14 = r14,
+> +		.r15 = r15,
+> +	};
+> +
+> +	u64 ret;
+> +
+> +	ret = __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
+> +	*r11 = args.r11;
+> +	return ret;
+> +}
+> +
 
-I am asking about the tdx_keyid_start. It mainly used in detect_tdx(). Maybe you
-declared it as global as a preparation for next patches. But it is not explained
-in change log.
+I'm not convinced it deserves a separate helper for one user.
+Does it look that ugly if tdx_map_gpa() uses __tdx_hypercall() directly?
+
+>  /* Called from __tdx_hypercall() for unrecoverable failure */
+>  void __tdx_hypercall_failed(void)
+>  {
+> @@ -691,6 +712,43 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
+>  	return true;
+>  }
+>  
+> +/*
+> + * Notify the VMM about page mapping conversion. More info about ABI
+> + * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> + * section "TDG.VP.VMCALL<MapGPA>"
+> + */
+> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+> +{
+> +	u64 ret, r11;
+> +
+> +	while (1) {
+
+Endless? Maybe an upper limit if no progress?
+
+> +		ret = _tdx_hypercall_output_r11(TDVMCALL_MAP_GPA, start,
+> +						end - start, 0, 0, &r11);
+> +		if (!ret)
+> +			break;
+> +
+> +		if (ret != TDVMCALL_STATUS_RETRY)
+> +			break;
+> +
+> +		/*
+> +		 * The guest must retry the operation for the pages in the
+> +		 * region starting at the GPA specified in R11. Make sure R11
+> +		 * contains a sane value.
+> +		 */
+> +		if ((r11 & ~cc_mkdec(0)) < (start & ~cc_mkdec(0)) ||
+> +		    (r11 & ~cc_mkdec(0)) >= (end  & ~cc_mkdec(0)))
+> +			return false;
+
+Emm. All of them suppose to have shared bit set, why not compare directly
+without cc_mkdec() dance?
+
+> +
+> +		start = r11;
+> +
+> +		/* Set the shared (decrypted) bit. */
+> +		if (!enc)
+> +			start |= cc_mkdec(0);
+> +	}
+> +
+> +	return !ret;
+> +}
+> +
+>  /*
+>   * Inform the VMM of the guest's intent for this physical page: shared with
+>   * the VMM or private to the guest.  The VMM is expected to change its mapping
+> @@ -707,12 +765,7 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  		end   |= cc_mkdec(0);
+>  	}
+>  
+> -	/*
+> -	 * Notify the VMM about page mapping conversion. More info about ABI
+> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> -	 * section "TDG.VP.VMCALL<MapGPA>"
+> -	 */
+> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
+> +	if (!tdx_map_gpa(start, end, enc))
+>  		return false;
+>  
+>  	/* private->shared conversion  requires only MapGPA call */
+> -- 
+> 2.25.1
+> 
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+  Kiryl Shutsemau / Kirill A. Shutemov
