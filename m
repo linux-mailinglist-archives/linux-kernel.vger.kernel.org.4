@@ -2,195 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ADC633119
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D5463311E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbiKVABg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S230070AbiKVAJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiKVAB0 (ORCPT
+        with ESMTP id S229624AbiKVAJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:01:26 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FFE1D30E;
-        Mon, 21 Nov 2022 16:01:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669075285; x=1700611285;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=KU/CRJB7Vj28ZaeK9I1pB2j2Ru6zyl9zX8tH9IWzeZE=;
-  b=XNfRikY9WpToJR9S1SwKkkkoRZQGuEM+O6QVgViSnNHTcejOGRz+PveN
-   ohyLnuefgyNEIQVqmot7eam/tFEey1YnQHNw14rr3cmcX5hs0Mbsj7Fbd
-   obfRadZ1e1d+ukk7Hx1ULpXGBBRa4TbgNhNZseU6nx+nE/bdqGedVLYH7
-   ZpQKeobIgP6AfTq5Wzcojv7sVij+QFz104/B6yySoR0Ctxk+Qm/t1pzPr
-   V0OQ+CPIN5hJOuHOmOHqKpEp5MTZqWlFscUE0hv9LrWY2b3vy5YpxkD6R
-   EUDI2vj8ZEGnH17ilGnhbK8yQQNhJ1hmoNzoXGjCHVjB/dJQbruTRYflO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="314839358"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="314839358"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 16:01:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="635353758"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="635353758"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2022 16:01:24 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 16:01:24 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 21 Nov 2022 16:01:24 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 21 Nov 2022 16:01:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VW0qOXWF5/4iY7olSvwK4XifbM973ja4kW2Eg1sUHIukRVKQQCkMdSPB0vH2fUiU1lGj8h0/vRZoN9NlazQgehYkZtltzS3M8o5OROElV0PY9Aa2XD0Yl4cz3dJFTjcsC3VlUmIS4I0gbJRLegkKzN4J/8D/yK6SSyd2D53T2wII0VjPgRJRQehbwaOtaLfkiZUEIwbTjvcgmIt1ZEKbRBWBjiWhz6+U3JBM8bIKz2Dnsi+M8DS8zydMMjmcNWjAwzebZ9NzlHglDhvctuT9IULRQfW1wecEh/L0X2uRCjSuZVRMMNFGAn361e0lyVDn6bsV62p3SnrJdaMAhuDE/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KU/CRJB7Vj28ZaeK9I1pB2j2Ru6zyl9zX8tH9IWzeZE=;
- b=IHGn550tfEGQySpCkuqcS6Ae9B2mMDHGJTRxa9WOQ7ubLZScnNijvraZ0AkXKLqxTuzFy4g5vKTHkwtSsiTXhh7orD1VIEqJI4rmSXvc7FbncHxwXQBK1Ain5T+CbMsEOzKNL/9fI185RQSheRtIGdbuMuxQy6OViudcz3LSF42FVHFjcvQjC/r9toBqlx+4Rs1WCeStiog0KpViL07jBMzRjRezXMYCrRRQPpKuz3EbUkkzDHHS1NGjqHeb/1Kx4/NoGQ+OhysAeOfphN1FCwGkCijgCEKjkE/oDi0IFsYiAf9DlMBjI5KRkLXdFgqTQWECoP/ZU2L/xmL8X1k/QA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by DM6PR11MB4593.namprd11.prod.outlook.com (2603:10b6:5:2a3::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 00:01:19 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
- 00:01:19 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v7 01/20] x86/tdx: Define TDX supported page sizes as
- macros
-Thread-Topic: [PATCH v7 01/20] x86/tdx: Define TDX supported page sizes as
- macros
-Thread-Index: AQHY/T28NJwJCQ29uEGaaLK5clcXr65KDO+AgAADrAA=
-Date:   Tue, 22 Nov 2022 00:01:19 +0000
-Message-ID: <9e27993791738d37e9aa650e982a7230500b913e.camel@intel.com>
-References: <cover.1668988357.git.kai.huang@intel.com>
-         <d6c6e664c445e9ccf1528625f0e21bbb8471d35f.1668988357.git.kai.huang@intel.com>
-         <6260c853-3c6c-7302-677e-1910918c69b7@intel.com>
-In-Reply-To: <6260c853-3c6c-7302-677e-1910918c69b7@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DM6PR11MB4593:EE_
-x-ms-office365-filtering-correlation-id: dc9ad6ab-6d82-4a4a-7eee-08dacc1caf2d
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nGGjlTq8opyjYkyLJYpCxIDx5Y5wK1I04RlzeqCipCbjsHMk+9E2UbBRti/zhCIBbiSFVljow8O+2XxbATg7aH6hIjcEyVcYL53y+jL1s1qtE2JkVr7Lc70gR8tepktPhU+TdYfKmNV93GKUnwU2Gvzt5aH6j3bWxF0gX7v/OiIz5NOMKPc6dcg//QBjuXeSKv0JT4J+m2eUR1X4C0rK7q+XLII7jH5c9D9rfiwGrZUGMTJBwv1gxTGeS20DR9YEUZXjvyuMlfTRJD9jCSonmuGOluTZ9JVzWb3LUSf1qk1mr1gVT0ijTXyIDs0OvSz+tAaOJzOOL+rU6kP6I/WG8g16fzUppXpQahFIUoLt4Y7ZpwrcDg4/XJhHx8lk81JL7wT6DZAzwhP7q1R7f0/NevVGzP/EYlXQ/1JA+Z55HFBLY/5yT/JZwgCOqqa30AKmXVr1sixMTgTawz857ZdVQJYFNQxn8pbDkizDJfUN8XVRXDGdA2jl2UmMHMzWFI3mJgWdbqlD5bnA98YypEjMR0bgVl7piScdHI/4sh7whdSchsXbanZa5p7wVtlesdBhyT+hJYlzD+5o1lyl8NwuhrzGaxOmWVDNatySts4/8jddQCHAwyuS7m4gpwVB6dcVWvrGj7UNjPreaUmDhh7Q4VNaQIB2fA5NVBXpl7TgzuiogldKQF94GHj6z9w2/Hhn1BdDy1aNck0aV7U1e6PM8g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199015)(36756003)(86362001)(38070700005)(64756008)(76116006)(4744005)(5660300002)(7416002)(2906002)(4001150100001)(26005)(2616005)(186003)(6512007)(122000001)(38100700002)(82960400001)(53546011)(91956017)(54906003)(66556008)(6486002)(71200400001)(6506007)(41300700001)(8936002)(66476007)(110136005)(66446008)(66946007)(4326008)(478600001)(8676002)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TUd2bDJMRC9nMjd2WEo0VkVteERINy9aZm0rUE9CbCtMUHlndXY3RXhveWlU?=
- =?utf-8?B?bUl1UndiWDJBMHlsS0VTYlJUUkNQWTJMZ0loMmU1NFJxdjgzUjRxbEFBbWNZ?=
- =?utf-8?B?QmZkR1ZscWxnY28zS3ZLSFhBL21UQnUxT005eUJvczNoZGR0V2l4R2J3MlNP?=
- =?utf-8?B?SXY3a0FSaXBWVVRwQVFqSlhZR0h5ZW1CMEM5OVZwSGJPd1I1R1g1ZTVYek83?=
- =?utf-8?B?bnlaeXQzNjBPUVFuM1ptUEtxM2I3ZnJNN0lzdXplQytGdlNORnlCcUJUdkFK?=
- =?utf-8?B?TzR5WHpvdG5oUmNUUERTLzMyd0RHUFJ6RUVVMTZxNTgyVk42ZGNCbEJhWDV3?=
- =?utf-8?B?eHlYSFFoTjFrY01GT0xXZTNhbkloQXA5UzdJVVpLRjVzTTJQZzFuL2YwZno4?=
- =?utf-8?B?bVF6Tzg1N2xwWWQxRkdwYS9hanhWaXB4NDVPbGFucERneXMyTlhGWDd3Vi90?=
- =?utf-8?B?M0liTWdyamJJcFNvMkRLKy9WazBKbzRaVk9iQzJlSytQbkVBTGQ3VWp0ODFE?=
- =?utf-8?B?QWxILzVlWGQrSVZzYUFEa3dla1l3Mk5XSGZWcW1Pem9kQVNoZklGTlpycmUx?=
- =?utf-8?B?YWdEcHBKOFdCZzRlSHl6aCtFaVQ0Sk0rLzArZFIycVJuUm1PcStaRExkQjRH?=
- =?utf-8?B?NmdZekR2ZEprdElFUzcyczVYQmQ4YWtpdUpWMC92bFZ3MVVsYmFtSVlkcjRl?=
- =?utf-8?B?NHAwaFZkZ0tRcXBGWll4RDh4WEpiQ1ZwSUV0RlFOS0FySGZWbjF6MGJ0Z2ZD?=
- =?utf-8?B?eExoQmFiQWw4VjJGUHlXVklsb1hMd2tmTVhlZHljTFN5ZCtMZFl1K1pqejlJ?=
- =?utf-8?B?QkZNNWNwcjlmN1JNUmU2RmVoUmlJMmR4Zk9rV0xlQlFYVE9MT3dERm45Znha?=
- =?utf-8?B?Unp3OWR5NnZUbW5LSE1qL1RaaGJaUUZvWW9UYXNiREMyYmVjY2RoTUFIcWJm?=
- =?utf-8?B?QkZMZEhUaXpJY0ZjRDAxanVXeUdhb2JWbm9ETW5mMVM0dEw0dWlnRUwyWWZs?=
- =?utf-8?B?Q0ExOUdTSkN5NWVtWXJtNDFHSDgrRjFxUmxGWXlKLzRESEg1RENsbDJRbmZ3?=
- =?utf-8?B?TlJ6ekZrTVZKazEyVE9mbXVtSXYyY3I3dmQrTGVqRE8vMy9ab1AxSHBoZndJ?=
- =?utf-8?B?TExXcU9UMmFLbTBnL2tDQ3hvQkNwRUxsSk1QRDkwKzdmQkh4dzZwbWVoYjkv?=
- =?utf-8?B?eDNkV0hrUjFnNEllUDg2cWpicms1Zkc0T1BJUzlXczU1eTVuOWxFVmhQbkVj?=
- =?utf-8?B?VGwzeUduNEkxZy9CWFVRa2U1b2pyMEt2eFQvZE5DQ0J0WUlzNGRHaVNxc25V?=
- =?utf-8?B?L1Q4dklsYTJjSDgxbjhWNlFrOE52UWs5eVBEQm5qVk1hMWJ4VUJEbkFGQVhM?=
- =?utf-8?B?K25rT3BJMkRvK1ovSDFrTDZWSmN1TGhVS3NucytnWjBNSlVRMFBGSU5YdjNi?=
- =?utf-8?B?a0RvMVV6YzdhT1BNTXBHbVh3QzJBRmhWSXdUQlU3ajkyZnhDNWN6RW4wZFVS?=
- =?utf-8?B?Q282U0pRZC8wQjlRMGNrRERNakpTWHlteko4cTlpZmI0eHBDQTE2YVBKcVFy?=
- =?utf-8?B?bGtZb3BuZFg1TUVHaVFQY0xSUzRINDV2ZmdtT1hKTmRnN0xJdW9MS0pWT2VV?=
- =?utf-8?B?RkwxcHFrcWZtdHZUZ3JabWpKbWpvSDBGcUFKS0ZvRXZFRVlHTVNIUjcxTlVU?=
- =?utf-8?B?K2NUNWxWMk9rNmkwZmJzTjFUeTNtYWlTQVFDeTI1Ym5XVko0S01icGEwdHk2?=
- =?utf-8?B?ZzkyeEV3MGUzZHNIUXRJZ3Jka1NGSzYxaVVtb2J1L2Y0c3l1cE9DcGFWOUhi?=
- =?utf-8?B?MDJ1Zi9Ec3pDZFp2N1pjM0wwd1g3ZHRMTzU4RndDb09Mbm5YcEhIOHlOSHJ3?=
- =?utf-8?B?VzEyN0tSTGkydmg0a2FBTFRNLzBVZGhXWkZtSDIwMFp0cWpXbEljOUYyczJq?=
- =?utf-8?B?MHJLajY2bWc4eEs0T3NzYzdVVTdwcFVvT1hRT05OQmpGcUM0OXpYWU5UL3pj?=
- =?utf-8?B?cG9xWDBTRTdrK09FU2RqNjBoZ3U4MlBNa3g3N09lS0ZoMGhEYTc0STM4c2Na?=
- =?utf-8?B?TFpQSzFYVGI1Y1o5U2Z4aUVWSWxPUGMzcHVoUHhUd25WSWxFLzkyL3c5ZCsx?=
- =?utf-8?B?NW9YMEVwbjhGMzNvR2FFbVM1dC9WT0VUTmF6ZG1pdlRpOUF2T01qTmJXdjJ0?=
- =?utf-8?B?WHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DF26DBDE4D2DBE4E812D0972742C18F8@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 21 Nov 2022 19:09:04 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A397692B49
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:09:02 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so15719749pjs.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:09:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uKZLqRGf8BJZDh7jHE36jyMimT2zwRKVGJSlSOPTg+U=;
+        b=wQZOIJONcXbHkFZq1G9+Bpu8n0iCVTwZ7lvZrD5WcJphzDlJUz7sExbOZuOqaLexNr
+         oIPGcBT7Mc0PdoZ27QztOPUyPA9Et98Y8Ek/QPpLUPJ9YB448175QKBwIuqa/nUOUQDt
+         OgF8zWAj2CxQhsQWRUg1g+ztNWifkgeeiP/Ek05OwR4MHL4GUsHbOl5jyDvMr3apb+n4
+         kSprFu0hqOwVFO8pWA4EuVUhk4ZZCNwijjn7/dQSYmascGJIKxzw7d7PRao5aDjPJKta
+         CNH5550NIlaxs0eGS4O98OhX8ht1zpYxs+k2FLV2UtfbXEvKmfJv18dshu4eaZADbFy+
+         D75g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uKZLqRGf8BJZDh7jHE36jyMimT2zwRKVGJSlSOPTg+U=;
+        b=geuZgUdFH4k0aCrOAVPXBnbt4jxIUGJrxKXAldZCDTdO1P084/Xfbw4WweUrxhImqm
+         vvVe7UaUBG/VeCbAgjQRWUwy5pGJMYSr4vZhlYP/AuHJgG6x04isAVMGRGbQs2Vs1bEi
+         4eClOYPYEzKf8zq/BuJk64BVqqh/PgW+xRDZ3KpyHvvai6EnjnCayVqbv1MF/gpQa5N3
+         ReA/ln8KCBPvygCs4Vt5Dnqi86F0P57Ar3jQnIB5jgs3Nd2Jt44IaBAiFG5i5vmQNyqw
+         A2qjm4CPAXUepD7AuP4TDl0nGWKhmJoPtvCN0ZJ41lpdM4EMnoyloOnxN2fkmVRN6YZO
+         9ebA==
+X-Gm-Message-State: ANoB5pnFg0L5fKbsm3v4EVI1Rg+3Bfel+POuC8fvok05KIk+zPhbSMmr
+        fzvDWANQW16iJmY/QXDsKMP23A==
+X-Google-Smtp-Source: AA0mqf7M4ltKeAX+jDnV5k1VqRATMO6szxw65EoAXC+2gMC+LMZRb/5GoMTuKt/Ai1V1AsAKWC6sFw==
+X-Received: by 2002:a17:90a:dd82:b0:212:fdb1:720b with SMTP id l2-20020a17090add8200b00212fdb1720bmr29143847pjv.66.1669075742029;
+        Mon, 21 Nov 2022 16:09:02 -0800 (PST)
+Received: from localhost ([75.172.139.56])
+        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b001873aa85e1fsm10211035pln.305.2022.11.21.16.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 16:09:01 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Walker Chen <walker.chen@starfivetech.com>,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/4] soc: starfive: Add StarFive JH71XX pmu driver
+In-Reply-To: <20221118133216.17037-4-walker.chen@starfivetech.com>
+References: <20221118133216.17037-1-walker.chen@starfivetech.com>
+ <20221118133216.17037-4-walker.chen@starfivetech.com>
+Date:   Mon, 21 Nov 2022 16:09:00 -0800
+Message-ID: <7hedtvam03.fsf@baylibre.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc9ad6ab-6d82-4a4a-7eee-08dacc1caf2d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 00:01:19.5866
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZU1h8KtGvhuHVtM/sBJSW+pEKncK43lsxYvfIaqSzmMw70uDD/9g5junx82JXDpx2CfxC9jo/aliZDbTi8OLoA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4593
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTExLTIxIGF0IDE1OjQ4IC0wODAwLCBIYW5zZW4sIERhdmUgd3JvdGU6DQo+
-IE9uIDExLzIwLzIyIDE2OjI2LCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4gKy8qDQo+ID4gKyAqIFRE
-WCBzdXBwb3J0ZWQgcGFnZSBzaXplcyAoNEsvMk0vMUcpLg0KPiA+ICsgKg0KPiA+ICsgKiBUaG9z
-ZSB2YWx1ZXMgYXJlIHBhcnQgb2YgdGhlIFREWCBtb2R1bGUgQUJJLiAgRG8gbm90IGNoYW5nZSB0
-aGVtLg0KPiA+ICsgKi8NCj4gPiArI2RlZmluZSBURFhfUFNfNEsJMA0KPiA+ICsjZGVmaW5lIFRE
-WF9QU18yTQkxDQo+ID4gKyNkZWZpbmUgVERYX1BTXzFHCTINCj4gDQo+IFRoYXQgY29tbWVudCBj
-YW4ganVzdCBiZToNCj4gDQo+IC8qIFREWCBzdXBwb3J0ZWQgcGFnZSBzaXplcyBmcm9tIHRoZSBU
-RFggbW9kdWxlIEFCSS4gKi8NCj4gDQo+IEkgdGhpbmsgZm9sa3MgdW5kZXJzdGFuZCB0aGF0IHRo
-ZSBrZXJuZWwgY2FuJ3Qgd2lsbHkgbmlsbHkgY2hhbmdlIEFCSQ0KPiB2YWx1ZXMuDQoNClRoYW5r
-cy4gIFdpbGwgZG8uDQo=
+Hi Walker,
+
+Walker Chen <walker.chen@starfivetech.com> writes:
+
+> Add generic power domain driver for the StarFive JH71XX SoC.
+>
+> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+
+A bit more detail about the features power domain hardware would be
+helpful for reviewers.  I'm assuming there's no public documenation for
+this, but if there is, a link to that would be great also.
+
+[...]
+
+> diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh71xx_pmu.c
+> new file mode 100644
+> index 000000000000..e6c0083d166e
+> --- /dev/null
+> +++ b/drivers/soc/starfive/jh71xx_pmu.c
+> @@ -0,0 +1,380 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * StarFive JH71XX Power Domain Controller Driver
+> + *
+> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> + */
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <dt-bindings/power/jh7110-power.h>
+> +
+> +/* register offset */
+> +#define HW_EVENT_TURN_ON_MASK		0x04
+> +#define HW_EVENT_TURN_OFF_MASK		0x08
+> +#define SW_TURN_ON_POWER_MODE		0x0C
+> +#define SW_TURN_OFF_POWER_MODE		0x10
+> +#define SW_ENCOURAGE			0x44
+> +#define PMU_INT_MASK			0x48
+> +#define PCH_BYPASS			0x4C
+> +#define PCH_PSTATE			0x50
+> +#define PCH_TIMEOUT			0x54
+> +#define LP_TIMEOUT			0x58
+> +#define HW_TURN_ON_MODE			0x5C
+> +#define CURR_POWER_MODE			0x80
+> +#define PMU_EVENT_STATUS		0x88
+> +#define PMU_INT_STATUS			0x8C
+> +
+> +/* sw encourage cfg */
+> +#define SW_MODE_ENCOURAGE_EN_LO		0x05
+> +#define SW_MODE_ENCOURAGE_EN_HI		0x50
+> +#define SW_MODE_ENCOURAGE_DIS_LO	0x0A
+> +#define SW_MODE_ENCOURAGE_DIS_HI	0xA0
+> +#define SW_MODE_ENCOURAGE_ON		0xFF
+> +
+> +/* pmu int status */
+> +#define PMU_INT_SEQ_DONE		BIT(0)
+> +#define PMU_INT_HW_REQ			BIT(1)
+> +#define PMU_INT_SW_FAIL			GENMASK(3, 2)
+> +#define PMU_INT_HW_FAIL			GENMASK(5, 4)
+> +#define PMU_INT_PCH_FAIL		GENMASK(8, 6)
+> +#define PMU_INT_FAIL_MASK		(PMU_INT_SW_FAIL | \
+> +					PMU_INT_HW_FAIL | \
+> +					PMU_INT_PCH_FAIL)
+> +#define PMU_INT_ALL_MASK		(PMU_INT_SEQ_DONE | \
+> +					PMU_INT_HW_REQ | \
+> +					PMU_INT_FAIL_MASK)
+> +
+> +#define DELAY_US			10
+> +#define TIMEOUT_US			100000
+
+Where do these delay/timeout numbers come from?  Is this just based one
+experimentation, or is this something described by the HW docs.  Please
+add some comments.
+
+> +
+> +struct starfive_power_dev {
+> +	struct generic_pm_domain genpd;
+> +	struct starfive_pmu *power;
+> +	uint32_t mask;
+> +};
+> +
+> +struct starfive_pmu {
+> +	void __iomem *base;
+> +	spinlock_t lock;
+> +	int irq;
+> +	struct device *pdev;
+> +	struct starfive_power_dev *dev;
+> +	struct genpd_onecell_data genpd_data;
+> +	struct generic_pm_domain **genpd;
+> +};
+> +
+> +struct starfive_pmu_data {
+> +	const char * const name;
+> +	uint8_t bit;
+> +	unsigned int flags;
+> +};
+> +
+> +static void __iomem *pmu_base;
+> +
+> +static inline void pmu_writel(u32 val, u32 offset)
+> +{
+> +	writel(val, pmu_base + offset);
+> +}
+
+You use writel() in this helper, but __raw_writel() throughout the rest
+of the driver.  If that's intentional, you should explain a bit more
+about why.  If not, please make it consistent.
+
+If you're going to use a wrapper/helper, you should use it throughout.
+But in this case, I'm not sure it's adding anything to readability.  In
+fact, it's only adding confusion since you don't use it for most of the
+register accesses.
+
+> +void starfive_pmu_hw_event_turn_on(u32 mask)
+> +{
+> +	pmu_writel(mask, HW_EVENT_TURN_ON_MASK);
+> +}
+> +EXPORT_SYMBOL(starfive_pmu_hw_event_turn_on);
+> +
+> +void starfive_pmu_hw_event_turn_off(u32 mask)
+> +{
+> +	pmu_writel(mask, HW_EVENT_TURN_OFF_MASK);
+> +}
+> +EXPORT_SYMBOL(starfive_pmu_hw_event_turn_off);
+
+This looks wrong.  Why are you allowing external users to power on/off the
+domains?  The sate of the domain should be managed by the PM core (and
+runtime PM use-counts etc.) allowing external users to change the domain
+state is going to lead to the PM core being confused about the state of
+the domain.
+
+> +static int starfive_pmu_get_state(struct starfive_power_dev *pmd, bool *is_on)
+> +{
+> +	struct starfive_pmu *pmu = pmd->power;
+> +
+> +	if (!pmd->mask) {
+> +		*is_on = false;
+> +		return -EINVAL;
+> +	}
+> +
+> +	*is_on = __raw_readl(pmu->base + CURR_POWER_MODE) & pmd->mask;
+> +
+> +	return 0;
+> +}
+> +
+> +static int starfive_pmu_set_state(struct starfive_power_dev *pmd, bool on)
+> +{
+> +	struct starfive_pmu *pmu = pmd->power;
+> +	unsigned long flags;
+> +	uint32_t val;
+> +	uint32_t mode;
+> +	uint32_t encourage_lo;
+> +	uint32_t encourage_hi;
+> +	bool is_on;
+> +	int ret;
+> +
+> +	if (!pmd->mask)
+> +		return -EINVAL;
+> +
+> +	if (is_on == on) {
+
+Comparing an uninitialzed stack variable to 'on'?
+
+> +		dev_info(pmu->pdev, "pm domain [%s] is already %sable status.\n",
+> +				pmd->genpd.name, on ? "en" : "dis");
+
+Using dev_info() will probably make this a bit verbose.  I'd suggest
+dev_dbg() for this kind of message.
+
+> +		return 0;
+> +	}
+> +
+> +	spin_lock_irqsave(&pmu->lock, flags);
+> +
+> +	if (on) {
+> +		mode = SW_TURN_ON_POWER_MODE;
+> +		encourage_lo = SW_MODE_ENCOURAGE_EN_LO;
+> +		encourage_hi = SW_MODE_ENCOURAGE_EN_HI;
+> +	} else {
+> +		mode = SW_TURN_OFF_POWER_MODE;
+> +		encourage_lo = SW_MODE_ENCOURAGE_DIS_LO;
+> +		encourage_hi = SW_MODE_ENCOURAGE_DIS_HI;
+> +	}
+> +
+> +	__raw_writel(pmd->mask, pmu->base + mode);
+> +
+> +	/* write SW_ENCOURAGE to make the configuration take effect */
+> +	__raw_writel(SW_MODE_ENCOURAGE_ON, pmu->base + SW_ENCOURAGE);
+> +	__raw_writel(encourage_lo, pmu->base + SW_ENCOURAGE);
+> +	__raw_writel(encourage_hi, pmu->base + SW_ENCOURAGE);
+
+This "encourage" feature is peculiar.  What happens if you do not do
+this?  Does it take a lot longer for the domain to change state? or does
+it not change at all?  In the absence of HW specs, a bit of description
+here would be helpful.
+
+> +	spin_unlock_irqrestore(&pmu->lock, flags);
+> +
+> +	if (on) {
+> +		ret = readl_poll_timeout_atomic(pmu->base + CURR_POWER_MODE, val,
+> +						val & pmd->mask, DELAY_US,
+> +						TIMEOUT_US);
+> +		if (ret) {
+> +			dev_err(pmu->pdev, "%s: failed to power on\n", pmd->genpd.name);
+> +			return -ETIMEDOUT;
+> +		}
+> +	} else {
+> +		ret = readl_poll_timeout_atomic(pmu->base + CURR_POWER_MODE, val,
+> +						!(val & pmd->mask), DELAY_US,
+> +						TIMEOUT_US);
+> +		if (ret) {
+> +			dev_err(pmu->pdev, "%s: failed to power off\n", pmd->genpd.name);
+> +			return -ETIMEDOUT;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int starfive_pmu_on(struct generic_pm_domain *genpd)
+> +{
+> +	struct starfive_power_dev *pmd = container_of(genpd,
+> +		struct starfive_power_dev, genpd);
+> +
+> +	return starfive_pmu_set_state(pmd, true);
+> +}
+> +
+> +static int starfive_pmu_off(struct generic_pm_domain *genpd)
+> +{
+> +	struct starfive_power_dev *pmd = container_of(genpd,
+> +		struct starfive_power_dev, genpd);
+> +
+> +	return starfive_pmu_set_state(pmd, false);
+> +}
+> +
+> +static void starfive_pmu_int_enable(struct starfive_pmu *pmu, u32 mask, bool enable)
+> +{
+> +	u32 val = __raw_readl(pmu->base + PMU_INT_MASK);
+> +
+> +	if (enable)
+> +		val &= ~mask;
+> +	else
+> +		val |= mask;
+> +
+> +	__raw_writel(val, pmu->base + PMU_INT_MASK);
+> +}
+> +
+> +static irqreturn_t starfive_pmu_interrupt(int irq, void *data)
+> +{
+> +	struct starfive_pmu *pmu = data;
+> +	unsigned long flags;
+> +	u32 val;
+> +
+> +	spin_lock_irqsave(&pmu->lock, flags);
+
+I don't think you need to spinlock in the interrupt itself, as
+interrupts will already be disabled, and this handler is not
+IRQF_SHARED.
+
+> +	val = __raw_readl(pmu->base + PMU_INT_STATUS);
+> +
+> +	if (val & PMU_INT_SEQ_DONE)
+> +		dev_dbg(pmu->pdev, "sequence done.\n");
+> +	if (val & PMU_INT_HW_REQ)
+> +		dev_dbg(pmu->pdev, "hardware encourage requestion.\n");
+> +	if (val & PMU_INT_SW_FAIL)
+> +		dev_err(pmu->pdev, "software encourage fail.\n");
+> +	if (val & PMU_INT_HW_FAIL)
+> +		dev_err(pmu->pdev, "hardware encourage fail.\n");
+> +	if (val & PMU_INT_PCH_FAIL)
+> +		dev_err(pmu->pdev, "p-channel fail event.\n");
+> +
+> +	/* clear interrupts */
+> +	__raw_writel(val, pmu->base + PMU_INT_STATUS);
+> +	__raw_writel(val, pmu->base + PMU_EVENT_STATUS);
+> +
+> +	spin_unlock_irqrestore(&pmu->lock, flags);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+
+[...]
+
+Kevin
