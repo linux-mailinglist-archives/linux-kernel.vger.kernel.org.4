@@ -2,45 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6050633FE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC2D633FE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbiKVPNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
+        id S233435AbiKVPOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbiKVPNq (ORCPT
+        with ESMTP id S232626AbiKVPOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:13:46 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C598E248E0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 07:13:45 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oxUxx-0004aj-Cj; Tue, 22 Nov 2022 16:13:41 +0100
-Message-ID: <075d8c0f-5448-73aa-bd3f-0d4e1216e87f@leemhuis.info>
-Date:   Tue, 22 Nov 2022 16:13:40 +0100
+        Tue, 22 Nov 2022 10:14:20 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBA2248F0;
+        Tue, 22 Nov 2022 07:14:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669130060; x=1700666060;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=r2krHQGmMwXskHlRA/gzgQj5fk0U4oZy2ymf007Yg90=;
+  b=Om3ssplW7cuvyeHGz7LLUt/fEAbe2FNPK9nC8cZwsSlwaEwrVeC8aSZc
+   +SZnGkMHcJ0RRdpsZXZoXCjHhJfDfy7u9c0Ti/EXBRGaDTX5gG3GHy2Pf
+   6LfUu1XjvivRQhqkiU9RSp7YA8huLtkNcQqi5uJZQevsVyzuApNRMiDCH
+   ctsVRaCL04Koj9X3H328yOF8Fx7PPWzvVp0xc2pCD1NdrXsbXW3j7zMJp
+   J2o0MEhAoY/rt+HaemD5wDbcugyI+/ajCKC9xbBg1SwwKHqdJj7VXpKNR
+   GZHy6GVn2JpP8PFlEX/5dj/LniKuOCIx2GehDZWLpBMkjYzJB7gtdM0hD
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="375979955"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="375979955"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:14:17 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="886568675"
+X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
+   d="scan'208";a="886568675"
+Received: from lcano-mobl1.amr.corp.intel.com (HELO [10.255.231.75]) ([10.255.231.75])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 07:14:15 -0800
+Message-ID: <52b2be9b-defd-63ce-4cb2-96cd624a95a6@intel.com>
+Date:   Tue, 22 Nov 2022 07:14:14 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] ARM: at91: fix build for SAMA5D3 w/o L2 cache
-Content-Language: en-US, de-DE
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <b7f8dacc-5e1f-0eb2-188e-3ad9a9f7613d@axentia.se>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <b7f8dacc-5e1f-0eb2-188e-3ad9a9f7613d@axentia.se>
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
+ error
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com,
+        tony.luck@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
+ <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669130025;94552674;
-X-HE-SMSGID: 1oxUxx-0004aj-Cj
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,58 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+On 11/22/22 01:13, Peter Zijlstra wrote:
+> On Mon, Nov 21, 2022 at 01:26:28PM +1300, Kai Huang wrote:
+>> +/*
+>> + * Call the SEAMCALL on all online CPUs concurrently.  Caller to check
+>> + * @sc->err to determine whether any SEAMCALL failed on any cpu.
+>> + */
+>> +static void seamcall_on_each_cpu(struct seamcall_ctx *sc)
+>> +{
+>> +	on_each_cpu(seamcall_smp_call_function, sc, true);
+>> +}
+> 
+> Suppose the user has NOHZ_FULL configured, and is already running
+> userspace that will terminate on interrupt (this is desired feature for
+> NOHZ_FULL), guess how happy they'll be if someone, on another parition,
+> manages to tickle this TDX gunk?
 
-On 12.11.22 16:40, Peter Rosin wrote:
-> The L2 cache is present on the newer SAMA5D2 and SAMA5D4 families, but
-> apparently not for the older SAMA5D3. At least not always.
-> 
-> Solves a build-time regression with the following symptom:
-> 
-> sama5.c:(.init.text+0x48): undefined reference to `outer_cache'
-> 
-> Fixes: 3b5a7ca7d252 ("ARM: at91: setup outer cache .write_sec() callback if needed")
-> Signed-off-by: Peter Rosin <peda@axentia.se>
+Yeah, they'll be none too happy.
 
-Clément Léger and Claudiu Beznea: what's up here? Is there a particular
-reason why this patch did get any feedback from you by now? It's ten
-days old and Peter already sent a kind of reminder a few days ago.
+But, what do we do?
 
-Reminder, ideally this regression should be fixed by now. For details
-see the section "Prioritize work on fixing regressions"  in
-Documentation/process/handling-regressions.rst (
-https://docs.kernel.org/process/handling-regressions.html )
+There are technical solutions like detecting if NOHZ_FULL is in play and
+refusing to initialize TDX.  There are also non-technical solutions like
+telling folks in the documentation that they better modprobe kvm early
+if they want to do TDX, or their NOHZ_FULL apps will pay.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+We could also force the TDX module to be loaded early in boot before
+NOHZ_FULL is in play, but that would waste memory on TDX metadata even
+if TDX is never used.
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
-> ---
->  arch/arm/mach-at91/sama5.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Hi!
-> 
-> I'm not sure this is the correct solution? Maybe SAMA5D3 should bring
-> in CONFIG_OUTER_CACHE unconditionally instead? But that seems like a
-> bigger change, and not just a tweak of the regressing commit...
-> 
-> Cheers,
-> Peter
-> 
-> diff --git a/arch/arm/mach-at91/sama5.c b/arch/arm/mach-at91/sama5.c
-> index 67ed68fbe3a5..bf2b5c6a18c6 100644
-> --- a/arch/arm/mach-at91/sama5.c
-> +++ b/arch/arm/mach-at91/sama5.c
-> @@ -26,7 +26,7 @@ static void sama5_l2c310_write_sec(unsigned long val, unsigned reg)
->  static void __init sama5_secure_cache_init(void)
->  {
->  	sam_secure_init();
-> -	if (sam_linux_is_optee_available())
-> +	if (IS_ENABLED(CONFIG_OUTER_CACHE) && sam_linux_is_optee_available())
->  		outer_cache.write_sec = sama5_l2c310_write_sec;
->  }
->  
+How do NOHZ_FULL folks deal with late microcode updates, for example?
+Those are roughly equally disruptive to all CPUs.
