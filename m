@@ -2,160 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4926337D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E699B6337D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 10:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbiKVJDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 04:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S233044AbiKVJDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 04:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiKVJDP (ORCPT
+        with ESMTP id S233052AbiKVJDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 04:03:15 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF957B4BD;
-        Tue, 22 Nov 2022 01:03:06 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 1C08624E337;
-        Tue, 22 Nov 2022 17:03:05 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
- 2022 17:03:05 +0800
-Received: from [192.168.125.106] (113.72.144.23) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
- 2022 17:03:04 +0800
-Message-ID: <b4afb821-f899-a2b6-46e1-a31b5e3f974e@starfivetech.com>
-Date:   Tue, 22 Nov 2022 17:02:50 +0800
+        Tue, 22 Nov 2022 04:03:12 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B049FD2D5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:03:07 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id g12so23626479wrs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 01:03:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WlO7g4Lsw0W29NZcE0ra/AJVqpRBqZGwpRSfI2r7w5Y=;
+        b=XHn2YtjbLOJMoShQ8Uuzur7XQJyv9rqI/IfrS/8/o24iIBnkbh1vaoC1ZCUmfR+W5k
+         pR9cuxus/C9I5QoH4SuyXLUTEw0vDOKujndGzluBpFR1wU5MWxB+PGFxfLbzOjWSNGLy
+         LUtJHT02Z9pN5gCXFEBXY78s2tpJ9omwPiUbXfxCHmrcQW0742Hq0VvR8TYsLHg8YVkE
+         K240BL4nTxQxAAg2snoDSeJPwPfvwYTRFZHxjkJnUTFO9ioR9I1zmQEdALS7e/2Y/SEH
+         t8RNEoJvnXxpH56Fo7S3LJ6ip5AImo/i54tk1N9TIwsTVCgqx9JaT4HZNZTvXcJdcJm5
+         U6Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WlO7g4Lsw0W29NZcE0ra/AJVqpRBqZGwpRSfI2r7w5Y=;
+        b=kL36mMX3O8TFGZV+fo/NqJzS+JItgiXoN/kifrwkh2iBVOz44zCPOJkF4VoC1MFPXD
+         Seq264z3ZvmpraM1THInrPCD5kDexZkKGhckYsgOuukrVIavZmwYaOm8btdpLQlioFjT
+         0lxu74Ycuom8UtiSqatAvqRzL7nsxy4vF7AmCup+VH58HXDH3WW4ZPO3Qx3XwdNjPbpx
+         JvY6kEhn56UZdCXsP911DuemIYEXt7s+aLlHkQzX8G8GSFdDKX5JxS6JdEJMRigb7+rN
+         3l+cBGMFcYvo8u2qzn1Jxv43boDw9PR3jmhAp0L+RcnWOGiC01ISykBVBEAvn1vsyY0Z
+         6NWQ==
+X-Gm-Message-State: ANoB5plOdwst+osRrg6IHx4DzV7wnhsnozzn9sSpGqAZ6il9XrAF2he8
+        RH8yBILZW2jz4pg/l20Vhf58+yzSNx5iJ9ZF
+X-Google-Smtp-Source: AA0mqf68rXUfFCPbiYFPRAEVP2GsE6Sh7ZlYje0Rb53NCB/Hi0QUvgnkvfPQfNOqxHzkmQm0uYYymw==
+X-Received: by 2002:a5d:5744:0:b0:236:b7c6:7ef9 with SMTP id q4-20020a5d5744000000b00236b7c67ef9mr1729027wrw.10.1669107785740;
+        Tue, 22 Nov 2022 01:03:05 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id l12-20020a05600c2ccc00b003cf54b77bfesm21296686wmc.28.2022.11.22.01.03.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 01:03:05 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     broonie@kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] hwmon: (pmbus/core): Implement regulator get_status
+Date:   Tue, 22 Nov 2022 10:03:02 +0100
+Message-Id: <20221122090302.3053092-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 5/8] soc: sifive: ccache: Add StarFive JH7110 support
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
- <20221118011714.70877-6-hal.feng@starfivetech.com> <Y3dwdXExRRltyp8A@spud>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <Y3dwdXExRRltyp8A@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.144.23]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 19:45:57 +0800, Conor Dooley wrote:
-> Hey Emil/Hal,
-> 
-> On Fri, Nov 18, 2022 at 09:17:11AM +0800, Hal Feng wrote:
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> > 
-> > This adds support for the StarFive JH7110 SoC which also
-> > features this SiFive cache controller.
-> > 
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > ---
-> >  arch/riscv/Kconfig.socs            | 1 +
-> >  drivers/soc/Makefile               | 2 +-
-> >  drivers/soc/sifive/Kconfig         | 2 +-
-> >  drivers/soc/sifive/sifive_ccache.c | 1 +
-> >  4 files changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> > index 69774bb362d6..5a40e05f8cab 100644
-> > --- a/arch/riscv/Kconfig.socs
-> > +++ b/arch/riscv/Kconfig.socs
-> > @@ -22,6 +22,7 @@ config SOC_STARFIVE
-> >  	bool "StarFive SoCs"
-> >  	select PINCTRL
-> >  	select RESET_CONTROLLER
-> > +	select SIFIVE_CCACHE
-> 
-> Please no. I am trying to get rid of these selects + I cannot figure out
-> why this driver is so important that you *need* to select it. Surely the
-> SoC is useable without it> 
-> Is this a hang over from your vendor tree that uses the driver to do
-> non-coherent stuff for the jh7100?
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-I have tested that the board can successfully boot up without the cache
-driver. The `select` can be removed for JH7110. @Emil, what do you think
-of this?
+Add get_status for pmbus_regulator_ops.
 
-> 
-> >  	select SIFIVE_PLIC
-> >  	help
-> >  	  This enables support for StarFive SoC platform hardware.
-> > diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-> > index 69ba6508cf2c..534669840858 100644
-> > --- a/drivers/soc/Makefile
-> > +++ b/drivers/soc/Makefile
-> > @@ -26,7 +26,7 @@ obj-y				+= qcom/
-> >  obj-y				+= renesas/
-> >  obj-y				+= rockchip/
-> >  obj-$(CONFIG_SOC_SAMSUNG)	+= samsung/
-> > -obj-$(CONFIG_SOC_SIFIVE)	+= sifive/
-> > +obj-y				+= sifive/
-> 
-> This bit is fine.
-> 
-> >  obj-y				+= sunxi/
-> >  obj-$(CONFIG_ARCH_TEGRA)	+= tegra/
-> >  obj-y				+= ti/
-> > diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
-> > index ed4c571f8771..e86870be34c9 100644
-> > --- a/drivers/soc/sifive/Kconfig
-> > +++ b/drivers/soc/sifive/Kconfig
-> > @@ -1,6 +1,6 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  
-> > -if SOC_SIFIVE
-> > +if SOC_SIFIVE || SOC_STARFIVE
-> 
-> As I suppose is this - but hardly scalable. I suppose it doesn't really
-> matter.
-> 
-> >  config SIFIVE_CCACHE
-> >  	bool "Sifive Composable Cache controller"
-> > diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
-> > index 1c171150e878..9489d1a90fbc 100644
-> > --- a/drivers/soc/sifive/sifive_ccache.c
-> > +++ b/drivers/soc/sifive/sifive_ccache.c
-> > @@ -107,6 +107,7 @@ static const struct of_device_id sifive_ccache_ids[] = {
-> >  	{ .compatible = "sifive,fu540-c000-ccache" },
-> >  	{ .compatible = "sifive,fu740-c000-ccache" },
-> >  	{ .compatible = "sifive,ccache0" },
-> > +	{ .compatible = "starfive,jh7110-ccache" },
-> 
-> Per my second reply to the previous patch, I am not sure why you do not
-> just have a fallback compatible in the binding/dt for the fu740 ccache
-> since you appear to have identical configuration?
+---
+Changes:
+- use lock throughout the function
+- Avoid line continuation upto 100 column
+- Optimize use of & and | operator
+- Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
+  respective status register for fault.
+- Report regulator current status.
+- Utilize get_error_flag to check for regulator errors.
 
-Yeah, I will use the compatible of fu740 and modify this patch.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 41 ++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Best regards,
-Hal
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 7ec04934747e..5df2aee549e6 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2851,6 +2851,46 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+ 	return 0;
+ }
+ 
++static int pmbus_regulator_get_status(struct regulator_dev *rdev)
++{
++	struct device *dev = rdev_get_dev(rdev);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	u8 page = rdev_get_id(rdev);
++	int status, ret;
++
++	mutex_lock(&data->update_lock);
++	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
++	if (status < 0) {
++		ret = status;
++		goto unlock;
++	}
++
++	if (status & PB_STATUS_OFF) {
++		ret = REGULATOR_STATUS_OFF;
++		goto unlock;
++	}
++
++	/* If regulator is ON & reports power good then return ON */
++	if (!(status & PB_STATUS_POWER_GOOD_N)) {
++		ret = REGULATOR_STATUS_ON;
++		goto unlock;
++	}
++
++	if (rdev->desc->ops->get_error_flags)
++		ret = rdev->desc->ops->get_error_flags(rdev, &status);
++
++	if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
++	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP))
++		ret = REGULATOR_STATUS_ERROR;
++	else
++		ret = REGULATOR_STATUS_UNDEFINED;
++
++unlock:
++	mutex_unlock(&data->update_lock);
++	return ret;
++}
++
+ static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -2991,6 +3031,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+ 	.disable = pmbus_regulator_disable,
+ 	.is_enabled = pmbus_regulator_is_enabled,
+ 	.get_error_flags = pmbus_regulator_get_error_flags,
++	.get_status = pmbus_regulator_get_status,
+ 	.get_voltage = pmbus_regulator_get_voltage,
+ 	.set_voltage = pmbus_regulator_set_voltage,
+ 	.list_voltage = pmbus_regulator_list_voltage,
+
+base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
+-- 
+2.37.3
+
