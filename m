@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EBD633B97
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F74633BD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbiKVLla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S233572AbiKVLxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKVLlH (ORCPT
+        with ESMTP id S232440AbiKVLxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:41:07 -0500
-X-Greylist: delayed 564 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 03:37:44 PST
-Received: from mx3.securetransport.de (mx3.securetransport.de [IPv6:2a01:4f8:c0c:92be::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37F78625C;
-        Tue, 22 Nov 2022 03:37:42 -0800 (PST)
+        Tue, 22 Nov 2022 06:53:03 -0500
+X-Greylist: delayed 585 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 03:52:57 PST
+Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CDC9167C0;
+        Tue, 22 Nov 2022 03:52:53 -0800 (PST)
 Received: from mail.dh-electronics.com (unknown [77.24.89.57])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx3.securetransport.de (Postfix) with ESMTPSA id 531D15DD10;
-        Tue, 22 Nov 2022 12:27:43 +0100 (CET)
+        by mx4.securetransport.de (Postfix) with ESMTPSA id 582B67204BB;
+        Tue, 22 Nov 2022 12:42:45 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1669116464;
-        bh=8/lYw5t8KVGdCGz3sBccwQdnUa9KfbHtq+gHAmljXRw=;
+        s=dhelectronicscom; t=1669117365;
+        bh=2ZV0bTDb7qgkQDDGXEMdO4IEDitBFvE2cMMeUtDgqK8=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=syHbcX26vg5ddaQCyAlo0kJwWPcA+kHdJB3QnUUTevDz4R0D9z2tcDStSN6+grwS7
-         TUNH6xInqy20ys2ssn+4jhnnSDO7BFO5Pn2DZfJ3ruYxMK4CEPeup21KYiSDRznDx0
-         fR8o8QU7MFRUNT2V1SdWTgKKhyaQ9Ltd+4d9VCsf21NT7Ci62YHldEylniu3fH7ozw
-         n37nc+F/tuu4D/h9MosdlKhoM93iW2kfD4j3U4tbg0neIE8NLiLiKpGSYUrNg1NyuJ
-         zLgs4E5FGO1VV0iN/Dc/lhTCIq+zs4QxnQGIpjQkQpatmK2PqGdT1/ZFWAt7deZzKq
-         DVhHtTo0u96nQ==
+        b=TnjAuy6HNThxX8BxOJ6PJ1rLq6P8Bd+IagVBhxojTdee3uzR3yFS4KhAJ0+ruQAa4
+         JzUVWuC39Hw0too9T3fj4oNMzH16h5QBSYUWIQ1GrwazrOfezI/rTDnZVITm4p7IUx
+         TSjKEWfcZRpXnyMgf0P0bLtwxsjHBk5gAF27w77IQDJkgttT4guOXnIeiqKjnc68BD
+         uOBrhdZzUFk2Z0cwvcmVFHh5dZW+nysU/BUu9CxXqWBxGFtDbQQFP0ibn6TVeYCUET
+         PdlEp16wDstM5RfDt8dh58ZaHly3av8uTB6MN4Ot9nuLVCLYg69s6WUf8Z2qQkqIjk
+         c6fRRTdUPKhEg==
 Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
  DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Tue, 22 Nov 2022 12:12:34 +0100
+ 15.2.1118.20; Tue, 22 Nov 2022 12:12:35 +0100
 Received: from localhost.localdomain (172.16.51.2) by
  DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20 via Frontend Transport; Tue, 22 Nov 2022 12:12:34 +0100
+ 15.2.1118.20 via Frontend Transport; Tue, 22 Nov 2022 12:12:35 +0100
 From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        "Support Opensource" <support.opensource@diasemi.com>,
-        Lee Jones <lee@kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
         Marek Vasut <marex@denx.de>, <kernel@dh-electronics.com>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH] dt-bindings: mfd: da9062: Correct file name for watchdog
-Date:   Tue, 22 Nov 2022 12:11:23 +0100
-Message-ID: <20221122111124.6828-2-cniedermaier@dh-electronics.com>
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH] dt-bindings: mmc: Make comment on wakeup-source less confusing
+Date:   Tue, 22 Nov 2022 12:11:24 +0100
+Message-ID: <20221122111124.6828-3-cniedermaier@dh-electronics.com>
 X-Mailer: git-send-email 2.11.0
 X-klartext: yes
 In-Reply-To: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
@@ -65,35 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the watchdog file name with the name currently in use.
+The current comment on wakeup-source is a bit confusing, because it isn't
+clear at first sight which property is actually deprecated.
+Change the comment to one that is less confusing.
 
 Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 ---
-Cc: Support Opensource <support.opensource@diasemi.com>
-Cc: Lee Jones <lee@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc: Marek Vasut <marex@denx.de>
 Cc: kernel@dh-electronics.com
+Cc: linux-mmc@vger.kernel.org
 Cc: devicetree@vger.kernel.org
 To: linux-kernel@vger.kernel.org
 ---
- Documentation/devicetree/bindings/mfd/da9062.txt | 2 +-
+ Documentation/devicetree/bindings/mmc/mmc-controller.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/da9062.txt b/Documentation/devicetree/bindings/mfd/da9062.txt
-index bab0d0e66cb3..e96629eb9f48 100644
---- a/Documentation/devicetree/bindings/mfd/da9062.txt
-+++ b/Documentation/devicetree/bindings/mfd/da9062.txt
-@@ -85,7 +85,7 @@ Sub-nodes:
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+index 802e3ca8be4d..a921442c6c1d 100644
+--- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
++++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+@@ -293,7 +293,7 @@ properties:
+     description:
+       SDIO only. Preserves card power during a suspend/resume cycle.
  
- - onkey : See ../input/da9062-onkey.txt
- 
--- watchdog: See ../watchdog/da9062-watchdog.txt
-+- watchdog: See ../watchdog/da9062-wdt.txt
- 
- - thermal : See ../thermal/da9062-thermal.txt
- 
+-  # Deprecated: enable-sdio-wakeup
++  # Use wakeup-source instead of the deprecated enable-sdio-wakeup
+   wakeup-source:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description:
 -- 
 2.11.0
 
