@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9614963447F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F466634484
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbiKVTZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S233936AbiKVT1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKVTZd (ORCPT
+        with ESMTP id S234749AbiKVT1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:25:33 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C887FF21;
-        Tue, 22 Nov 2022 11:25:32 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id n186so16862400oih.7;
-        Tue, 22 Nov 2022 11:25:32 -0800 (PST)
+        Tue, 22 Nov 2022 14:27:16 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9C4903AB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:27:11 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id b2so11651254iof.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:27:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=09Fo0rR4StbdjPIIvlInIxSHew0e7ivCTP8R8vAEZ3Y=;
-        b=mUndDyNeXjHl/vP19NQ4bwpklc7wS/EV0Ci39R6mCfU+ZxAnNdZbU/36cdmGRifMcN
-         xzeEa2uMwqa1dKwsoh3qKVaQkCDmsxgHNYC1mpbtCEZIt4ZZ7OGdgdd3YEbaWrhFwIuK
-         4o45IeQ1Tmek/Jd6QWrtBJCLbIIYrJIOE6ClTzK7IauSF9VT5Yg3QoZQrObyxKe6yn0/
-         jqejpCxPOIp4DtUn8CMbZjKoP/Mo+yyarmZni20JTDTVHkSIPapnC7r/X0y/3Cxa8N1F
-         QvLN5GuMo+1ycb9EzV5h7bXZL/BA6gUFkbIzlxNz1zbJ+cvYGRARg3GuyBdgcx5qrnWQ
-         IckQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TXMVpP/J9ZV2xnke78gO8ON5t1nj5k7NV9PauokTolQ=;
+        b=aGAD4qKzDpr/yDoUltWa21YPUrwXh9aOjLXdRENY4gvLcRuzdL9Lo3dEP3mEOeBx3t
+         V8H4Ekl03oYfQWhVkM/J3/LKZ7fTb5tDgICgrtDUkAflAtzY8GdZXcdikp7w7BFdbomn
+         60o47RkItfUCGbjrXbD3UxDuI0ZzlruHcE5ZjCF5feB6NNsmMWqax21cZuiu8FosvEW6
+         T5Qpqds4ZcHxk1c/6zSnZi2CqKR9rGf97C6hE6Ig09sKi2vuM5DKSl8zlVVgR0LxM2oC
+         vqq20sS8cpJtxg2RibGrYiTcJUt0CUOpwRBXMepOdy3R6ZRLP3UW77IsYL//W3kkxkck
+         HGhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=09Fo0rR4StbdjPIIvlInIxSHew0e7ivCTP8R8vAEZ3Y=;
-        b=GInXFDXWz7Sk4S1UTP1A7x5CItkAoVvi2zW3Lw15YWhfbsKcYonOVBowgHtpfUCk6Y
-         qRpt3mQ3SVbvGM4Gt1JezsNbl3fCEr7KogR9efF11mnSg7tEkvGLA4RbHIcWgUd51h7G
-         6EPEfixNC6Sk/G4xTIZmCbxWW8HME1RmyMw4k7VneAlc1DZVsOgxUWI6ovlJIj/xpulC
-         SuOzhgYej7H16gkA27kLmvOePmvaahgOYXUar1FHB5+XGCKbZb66WqoSCVMcM5iQLcNm
-         vrMlL52MHmXwywilpghSf4TNOZBuwaRQBFnLZuYEQHnUSX2Ovvv1P8a0Evc4q/C1hE3E
-         uZTQ==
-X-Gm-Message-State: ANoB5pnCGGdqp3iD/LuPd1uoTw5pK94ux+DHDFDWu5pS8VW8TSG/2C90
-        AmdQ4mkEQjJfXkqSfRYJ1Vbf/YuCoiE=
-X-Google-Smtp-Source: AA0mqf6jwoymerXoL3TKr2O+FS3QfhwQkUTlFpCJoSPC9VFX60OhX6Tz5DTTYZX6ZvM7zf1RHow7+A==
-X-Received: by 2002:a54:4399:0:b0:355:bceb:2606 with SMTP id u25-20020a544399000000b00355bceb2606mr7342032oiv.188.1669145131637;
-        Tue, 22 Nov 2022 11:25:31 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i11-20020a9d53cb000000b00667ff6b7e9esm6491267oth.40.2022.11.22.11.25.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 11:25:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <25b37a72-4415-2ed5-0415-040af174a70a@roeck-us.net>
-Date:   Tue, 22 Nov 2022 11:25:29 -0800
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TXMVpP/J9ZV2xnke78gO8ON5t1nj5k7NV9PauokTolQ=;
+        b=o/CZP7VCVpbklFfnmnacbJLGhH0R3AGxd+NUy5j3Kzv88PwNYK9L8NINkaP5hjQvh9
+         xif/hH0+Bfol5CX+274H4oFKRxsPxSz2Z56dp+OS7Q3afwPJmMVWhLYtN7FFxTdndCyT
+         fbxuAtOsBRqN2BRRs1DVJFJ6Udv/o3dx9yE01yr1xfQkQT1X0V7rjTkGiohKsF3apd+s
+         Fp4sg+zmtcULqxP9RiNX6msBJJx/VC5DfNnmttnOFOvFq1R2HwtdfibkBIWOM1sM1Ey6
+         M3Ecc4ItVNHlJrWUgNChWKXc/dMZaUF4xWzsAKqR6uu/EKzatnobFOCNqiHr0zqEeVAr
+         HvkQ==
+X-Gm-Message-State: ANoB5plBrhCHyOZ0+zafWorMoiOSm7r3WwMaXpAAvc+akBYt+Nn+TxLc
+        HkQbebE651CcQ1n6ShEQ1YuopjRdWcNwWdh3
+X-Google-Smtp-Source: AA0mqf5p5J6iH+E0K7O+igDruDem7Jyg3WAiHN0ukE+i6G7bdwdGIxCVp32D3GNz/bcYb97TSNFPoA==
+X-Received: by 2002:a02:c492:0:b0:375:c128:72a6 with SMTP id t18-20020a02c492000000b00375c12872a6mr11713349jam.151.1669145230892;
+        Tue, 22 Nov 2022 11:27:10 -0800 (PST)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id k5-20020a026605000000b0037477c3d04asm5428049jac.130.2022.11.22.11.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 11:27:10 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
+        linux-kernel@vger.kernel.org, asml.silence@gmail.com
+In-Reply-To: <be4ba4b.5d44.184a0a406a4.Coremail.linma@zju.edu.cn>
+References: <be4ba4b.5d44.184a0a406a4.Coremail.linma@zju.edu.cn>
+Subject: Re: [PATCH v2] io_uring/filetable: fix file reference underflow
+Message-Id: <166914522977.324391.10873052802740618844.b4-ty@kernel.dk>
+Date:   Tue, 22 Nov 2022 12:27:09 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <20221121122932.2493174-1-Naresh.Solanki@9elements.com>
- <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v7 1/4] dt-bindings: hwmon: fan: Add fan binding to schema
-In-Reply-To: <20221121122932.2493174-2-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-28747
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,99 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 04:29, Naresh Solanki wrote:
-> Add common fan properties bindings to a schema.
+On Wed, 23 Nov 2022 02:40:15 +0800 (GMT+08:00), Lin Ma wrote:
+> There is an interesting reference bug when -ENOMEM occurs in calling of
+> io_install_fixed_file(). KASan report like below:
 > 
-> Bindings for fan controllers can reference the common schema for the
-> fan
+> [   14.057131] ==================================================================
+> [   14.059161] BUG: KASAN: use-after-free in unix_get_socket+0x10/0x90
+> [   14.060975] Read of size 8 at addr ffff88800b09cf20 by task kworker/u8:2/45
+> [   14.062684]
+> [   14.062768] CPU: 2 PID: 45 Comm: kworker/u8:2 Not tainted 6.1.0-rc4 #1
+> [   14.063099] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [   14.063666] Workqueue: events_unbound io_ring_exit_work
+> [   14.063936] Call Trace:
+> [   14.064065]  <TASK>
+> [   14.064175]  dump_stack_lvl+0x34/0x48
+> [   14.064360]  print_report+0x172/0x475
+> [   14.064547]  ? _raw_spin_lock_irq+0x83/0xe0
+> [   14.064758]  ? __virt_addr_valid+0xef/0x170
+> [   14.064975]  ? unix_get_socket+0x10/0x90
+> [   14.065167]  kasan_report+0xad/0x130
+> [   14.065353]  ? unix_get_socket+0x10/0x90
+> [   14.065553]  unix_get_socket+0x10/0x90
+> [   14.065744]  __io_sqe_files_unregister+0x87/0x1e0
+> [   14.065989]  ? io_rsrc_refs_drop+0x1c/0xd0
+> [   14.066199]  io_ring_exit_work+0x388/0x6a5
+> [   14.066410]  ? io_uring_try_cancel_requests+0x5bf/0x5bf
+> [   14.066674]  ? try_to_wake_up+0xdb/0x910
+> [   14.066873]  ? virt_to_head_page+0xbe/0xbe
+> [   14.067080]  ? __schedule+0x574/0xd20
+> [   14.067273]  ? read_word_at_a_time+0xe/0x20
+> [   14.067492]  ? strscpy+0xb5/0x190
+> [   14.067665]  process_one_work+0x423/0x710
+> [   14.067879]  worker_thread+0x2a2/0x6f0
+> [   14.068073]  ? process_one_work+0x710/0x710
+> [   14.068284]  kthread+0x163/0x1a0
+> [   14.068454]  ? kthread_complete_and_exit+0x20/0x20
+> [   14.068697]  ret_from_fork+0x22/0x30
+> [   14.068886]  </TASK>
+> [   14.069000]
+> [   14.069088] Allocated by task 289:
+> [   14.069269]  kasan_save_stack+0x1e/0x40
+> [   14.069463]  kasan_set_track+0x21/0x30
+> [   14.069652]  __kasan_slab_alloc+0x58/0x70
+> [   14.069899]  kmem_cache_alloc+0xc5/0x200
+> [   14.070100]  __alloc_file+0x20/0x160
+> [   14.070283]  alloc_empty_file+0x3b/0xc0
+> [   14.070479]  path_openat+0xc3/0x1770
+> [   14.070689]  do_filp_open+0x150/0x270
+> [   14.070888]  do_sys_openat2+0x113/0x270
+> [   14.071081]  __x64_sys_openat+0xc8/0x140
+> [   14.071283]  do_syscall_64+0x3b/0x90
+> [   14.071466]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   14.071791]
+> [   14.071874] Freed by task 0:
+> [   14.072027]  kasan_save_stack+0x1e/0x40
+> [   14.072224]  kasan_set_track+0x21/0x30
+> [   14.072415]  kasan_save_free_info+0x2a/0x50
+> [   14.072627]  __kasan_slab_free+0x106/0x190
+> [   14.072858]  kmem_cache_free+0x98/0x340
+> [   14.073075]  rcu_core+0x427/0xe50
+> [   14.073249]  __do_softirq+0x110/0x3cd
+> [   14.073440]
+> [   14.073523] Last potentially related work creation:
+> [   14.073801]  kasan_save_stack+0x1e/0x40
+> [   14.074017]  __kasan_record_aux_stack+0x97/0xb0
+> [   14.074264]  call_rcu+0x41/0x550
+> [   14.074436]  task_work_run+0xf4/0x170
+> [   14.074619]  exit_to_user_mode_prepare+0x113/0x120
+> [   14.074858]  syscall_exit_to_user_mode+0x1d/0x40
+> [   14.075092]  do_syscall_64+0x48/0x90
+> [   14.075272]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   14.075529]
+> [   14.075612] Second to last potentially related work creation:
+> [   14.075900]  kasan_save_stack+0x1e/0x40
+> [   14.076098]  __kasan_record_aux_stack+0x97/0xb0
+> [   14.076325]  task_work_add+0x72/0x1b0
+> [   14.076512]  fput+0x65/0xc0
+> [   14.076657]  filp_close+0x8e/0xa0
+> [   14.076825]  __x64_sys_close+0x15/0x50
+> [   14.077019]  do_syscall_64+0x3b/0x90
+> [   14.077199]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   14.077448]
+> [   14.077530] The buggy address belongs to the object at ffff88800b09cf00
+> [   14.077530]  which belongs to the cache filp of size 232
+> [   14.078105] The buggy address is located 32 bytes inside of
+> [   14.078105]  232-byte region [ffff88800b09cf00, ffff88800b09cfe8)
+> [   14.078685]
+> [   14.078771] The buggy address belongs to the physical page:
+> [   14.079046] page:000000001bd520e7 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88800b09de00 pfn:0xb09c
+> [   14.079575] head:000000001bd520e7 order:1 compound_mapcount:0 compound_pincount:0
+> [   14.079946] flags: 0x100000000010200(slab|head|node=0|zone=1)
+> [   14.080244] raw: 0100000000010200 0000000000000000 dead000000000001 ffff88800493cc80
+> [   14.080629] raw: ffff88800b09de00 0000000080190018 00000001ffffffff 0000000000000000
+> [   14.081016] page dumped because: kasan: bad access detected
+> [   14.081293]
+> [   14.081376] Memory state around the buggy address:
+> [   14.081618]  ffff88800b09ce00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> [   14.081974]  ffff88800b09ce80: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+> [   14.082336] >ffff88800b09cf00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> [   14.082690]                                ^
+> [   14.082909]  ffff88800b09cf80: fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc
+> [   14.083266]  ffff88800b09d000: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
+> [   14.083622] ==================================================================
 > 
-> child nodes:
-> 
->    patternProperties:
->      "^fan@[0-2]":
->        type: object
->        $ref: fan-common.yaml#
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->   .../devicetree/bindings/hwmon/fan-common.yaml | 47 +++++++++++++++++++
->   1 file changed, 47 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> new file mode 100644
-> index 000000000000..0535d37624cc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common fan properties
-> +
-> +maintainers:
-> +  - Naresh Solanki <naresh.solanki@9elements.com>
-> +
-> +properties:
-> +  max-rpm:
-> +    description:
-> +      Max RPM supported by fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  min-rpm:
-> +    description:
-> +      Min RPM supported by fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pulses-per-revolution:
-> +    description:
-> +      The number of pulse from fan sensor per revolution.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  target-rpm:
-> +    description:
-> +      Target RPM the fan should be configured during driver probe.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pwms:
-> +    description:
-> +      PWM provider.
-> +
-> +  label:
-> +    description:
-> +      Optional fan label
-> +
-> +  fan-supply:
-> +    description:
-> +      Power supply for fan.
-> +
-> +additionalProperties: true
-> +
-> +...
+> [...]
 
-Still, from my second reply to v6:
+Applied, thanks!
 
- > Another property which is definitely missing and needed
- > will be DC vs. PWM control. That is currently pwm[1-*]_mode
- > in sysfs attributes, but it is really a fan attribute.
- >
- > Many fans are DC controlled, so this property is absolutely
- > necessary.
+[1/1] io_uring/filetable: fix file reference underflow
+      commit: b4255aa5c6aa8f7e1a74627e7df008563be7938c
 
-Plus, with DC control there is no pwm. It would be absolutely wrong
-to declare that a fan controller MUST be pwm based.
+Best regards,
+-- 
+Jens Axboe
 
-Ultimately, there are three types of fan controllers:
-
-- PWM control, such as MAX6639
-- DC control, such as MAX6620 or MAX6650/6651
-- Configurable, such as MAX1669 or pretty much all fan controllers
-   included in SuperIO chips
-
-Generic fan control bindings simply _have_ to take this into account.
-
-Guenter
 
