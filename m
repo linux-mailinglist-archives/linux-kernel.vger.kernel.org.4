@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB7F633BEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EB2633B9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 12:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbiKVL4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 06:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S233016AbiKVLnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 06:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbiKVL4n (ORCPT
+        with ESMTP id S232132AbiKVLln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 06:56:43 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A4425C52
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:56:43 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id y5-20020a056602120500b006cf628c14ddso6948429iot.15
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:56:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k6KL60JRVFUuWneu7vnb+xiDyNkxZWMW6/O2rgIIB4s=;
-        b=fCjE68eSm5Vo3ft+LUfw9UALvNxmQ6x5vtjCf/Uvq63B+i69uy4AW3l6m3nrYmtCl6
-         C0RRsk0QWSYtsllcE6BqoGUPQ+25XVvitwXjtAXOkaFZrvFZYT1hZsAYMIeQIp0KgJRW
-         SmpbO6D+MbqEVu007W/TFoSkIjfots2mmFEdyUIjoVZ0Dz4YIpiMB7Y9gPssdG+4Phrr
-         R1iBBncy8FGXyC8lbBDeK70ByU7B2ru0kcHMXUQAcuJrZe9EOa58l1ZZQ3sobiIbli2o
-         40kqYYCjdmyNL7jYtC1cNXu3kUcvSaZwREkQngjlRNPfkHOxSqNuyf9xCOZo5689X3Or
-         SZ4A==
-X-Gm-Message-State: ANoB5pn6bvYobBl0X/syZsIBo1Rk6+MwpB5wyTcdUdVXTjSgacoZvUzZ
-        GDWHIkih/3pbzHygxPdOgMfbPBW1HcjEVRMVYTHBMwP8NIUA
-X-Google-Smtp-Source: AA0mqf4RUulN7NbwGV+q2t01Xu34QUSq7DfbfAcrVvifYtAJ0yS8wX0NiQdA7Mytga6ntN37WrF0oM/ywyiTsYFFD+eM1Sc6bAGo
+        Tue, 22 Nov 2022 06:41:43 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E878614C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 03:38:56 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NGj1r6f3yz15MpM;
+        Tue, 22 Nov 2022 19:38:24 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 19:38:54 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 22 Nov 2022 19:38:53 +0800
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>
+CC:     <linux-kernel@vger.kernel.org>, <yangyingliang@huawei.com>,
+        <wangxiongfeng2@huawei.com>
+Subject: [PATCH] watchdog: sp5100_tco: Fix PCI device refcount leak
+Date:   Tue, 22 Nov 2022 19:56:51 +0800
+Message-ID: <20221122115651.33877-1-wangxiongfeng2@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3f06:b0:363:aa8f:e316 with SMTP id
- ck6-20020a0566383f0600b00363aa8fe316mr10496009jab.238.1669118202337; Tue, 22
- Nov 2022 03:56:42 -0800 (PST)
-Date:   Tue, 22 Nov 2022 03:56:42 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000089deb205ee0ddd58@google.com>
-Subject: [syzbot] WARNING in btrfs_chunk_alloc
-From:   syzbot <syzbot+e8e56d5d31d38b5b47e7@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+for_each_pci_dev() is implemented by pci_get_device(). The comment of
+pci_get_device() says that it will increase the reference count for the
+returned pci_dev and also decrease the reference count for the input
+pci_dev @from if it is not NULL.
 
-syzbot found the following issue on:
+If we break out for_each_pci_dev() loop with pdev not NULL, we need to
+call pci_dev_put() to decrease the reference count. Add the missing
+pci_dev_put() in error path of sp5100_tco_init() and also when we unload
+module.
 
-HEAD commit:    eb7081409f94 Linux 6.1-rc6
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16aec855880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5db36e7087dcccae
-dashboard link: https://syzkaller.appspot.com/bug?extid=e8e56d5d31d38b5b47e7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160ec4c3880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13940efd880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/12e9c825ff47/disk-eb708140.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/107e5e091c9e/vmlinux-eb708140.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/605ab211617d/bzImage-eb708140.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/4d429a6dc170/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e8e56d5d31d38b5b47e7@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 45 at fs/btrfs/block-group.c:3535 do_chunk_alloc fs/btrfs/block-group.c:3535 [inline]
-WARNING: CPU: 1 PID: 45 at fs/btrfs/block-group.c:3535 btrfs_chunk_alloc.cold+0x1a7/0x329 fs/btrfs/block-group.c:3777
-Modules linked in:
-CPU: 1 PID: 45 Comm: kworker/u4:3 Not tainted 6.1.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: events_unbound btrfs_async_reclaim_metadata_space
-RIP: 0010:do_chunk_alloc fs/btrfs/block-group.c:3535 [inline]
-RIP: 0010:btrfs_chunk_alloc.cold+0x1a7/0x329 fs/btrfs/block-group.c:3777
-Code: 89 c7 89 c6 88 44 24 4f e8 5d 2e c7 f7 45 84 ff 0f 84 6e 01 00 00 e8 df 31 c7 f7 44 89 f6 48 c7 c7 c0 5c 98 8a e8 fb a4 f2 ff <0f> 0b e9 10 ff ff ff e8 c4 31 c7 f7 48 8b 54 24 38 b8 ff ff 37 00
-RSP: 0018:ffffc90000d6fa70 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 00000000ffffffe4 RCX: 0000000000000000
-RDX: ffff888018452080 RSI: ffffffff8164973c RDI: fffff520001adf40
-RBP: ffff88807bed9800 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffff888075d88898
-R13: ffff888020971000 R14: ffffffffffffffe4 R15: 0000000075d88801
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa773a78250 CR3: 000000007d62e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- flush_space+0x9ce/0xe90 fs/btrfs/space-info.c:769
- btrfs_async_reclaim_metadata_space+0x53f/0xc00 fs/btrfs/space-info.c:1083
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x669/0x1090 kernel/workqueue.c:2436
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-
+Fixes: 15e28bf13008 ("watchdog: Add support for sp5100 chipset TCO")
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/watchdog/sp5100_tco.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+index fb426b7d81da..f00f26f90444 100644
+--- a/drivers/watchdog/sp5100_tco.c
++++ b/drivers/watchdog/sp5100_tco.c
+@@ -599,7 +599,7 @@ static int __init sp5100_tco_init(void)
+ 
+ 	err = platform_driver_register(&sp5100_tco_driver);
+ 	if (err)
+-		return err;
++		goto put_dev;
+ 
+ 	sp5100_tco_platform_device =
+ 		platform_device_register_simple(TCO_DRIVER_NAME, -1, NULL, 0);
+@@ -612,6 +612,8 @@ static int __init sp5100_tco_init(void)
+ 
+ unreg_platform_driver:
+ 	platform_driver_unregister(&sp5100_tco_driver);
++put_dev:
++	pci_dev_put(sp5100_tco_pci);
+ 	return err;
+ }
+ 
+@@ -619,6 +621,7 @@ static void __exit sp5100_tco_exit(void)
+ {
+ 	platform_device_unregister(sp5100_tco_platform_device);
+ 	platform_driver_unregister(&sp5100_tco_driver);
++	pci_dev_put(sp5100_tco_pci);
+ }
+ 
+ module_init(sp5100_tco_init);
+-- 
+2.20.1
+
