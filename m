@@ -2,296 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DE5634867
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F06B63486C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 21:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbiKVUj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 15:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S234900AbiKVUjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 15:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234809AbiKVUjS (ORCPT
+        with ESMTP id S234320AbiKVUjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:39:18 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AF1697EA
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:39:16 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-352e29ff8c2so151581217b3.21
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 12:39:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSER/B4DnSDEXzptnYVRvY0Bxd0pX06XJiUIMZfJs1c=;
-        b=Q8CGtJa+O00lg9Tqtd2xc0jsOMGOiJJRQKDl+HbQ4+RJuR4NE+I2vLParTPRJyK9dV
-         HeSYxODpIYH636a5cGLJjdX3SPGMLDqJjaFcJ39VsuEELq4DgDIZX//2wGqsFd51QSJ+
-         AZM/FTrtKnbmUqDMcYElZ3IbHtiXrin84UOmwRdMpGISPBEI8woUDxAgbVU4ym/RyNK7
-         VWuGFbedYwWGh89zIthlnJvT8GU/8qlI9jP4fZERGstjvqu1lGm4VzeB6c1hICq2esGq
-         a6HaxwII49NO4LMfOWNuAy3MP55sIxndD9RIDojCzutzGpi9VdKps5EppZgBJUct3an9
-         k1NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSER/B4DnSDEXzptnYVRvY0Bxd0pX06XJiUIMZfJs1c=;
-        b=aMS0hs/aCTOXXbbpCdmg9nn71/RBa5QRfveLYwMiEQnk5GijH0yvqHfw/rmaREvH7N
-         JTge7WMlI1VprfmPDcIVaHiCGYgJJLCHhGEly5hzyhA40WgXufDgG75aJSjz3R1tj5kQ
-         wTU4z2oBbkknUFmsLmdyCPWOrutbc6WozCL2vAXf+RsxzXxdo4gurcplQif425vA48Vr
-         ouGm9vnzjQnNbjjqqSc7bzL31cC4riv4zZjItMdyGEGncdCq4vzZwpAQHU5K6hzuqWsO
-         VMQSgumuIEuyiemv6ksdDvNOpi0pB3ENz21KkVxszsUBpr8ZRtLMv/o2znttBKtuLIOE
-         pcNA==
-X-Gm-Message-State: ANoB5plmx14KtiGvtvLxCI94Ibs4LfZodTKqhjatB9shjkLuoyDMPIQK
-        oPno04d9Vi/h+o7UlZRF7VTo8CWzNxZt1mv4KA==
-X-Google-Smtp-Source: AA0mqf4rBzz34OSjlmhy6Kp1YPYM6391YLcoHMTdxwaIamF8cf36s4tqpIAJnSTaCKofEyXGnjd+9drhPZkA134Pwg==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2d4:203:b7d0:497d:abe4:3e6f])
- (user=almasrymina job=sendgmr) by 2002:a25:7450:0:b0:6ee:8d5a:3bca with SMTP
- id p77-20020a257450000000b006ee8d5a3bcamr4305851ybc.300.1669149555882; Tue,
- 22 Nov 2022 12:39:15 -0800 (PST)
-Date:   Tue, 22 Nov 2022 12:38:48 -0800
-In-Reply-To: <20221122203850.2765015-1-almasrymina@google.com>
-Mime-Version: 1.0
-References: <20221122203850.2765015-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221122203850.2765015-4-almasrymina@google.com>
-Subject: [RFC PATCH v1 4/4] mm: Add nodes= arg to memory.demote
-From:   Mina Almasry <almasrymina@google.com>
-To:     Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 15:39:47 -0500
+X-Greylist: delayed 89243 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 12:39:45 PST
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F49D6B389;
+        Tue, 22 Nov 2022 12:39:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1669149584;
+        bh=NMAzq6XfftXBO/HcXtHhXgm94OkSYYLzbKGIA8GTwns=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HNJIv2GjMVFd9tDS8gYrOg891v+d73j3fKDi3kX4ZtGeQksXPxrrtu2eoZ/vDzyqn
+         iCBHEj6eYWyhaqjgfG1yp5W1vIVzs3f6pKcuQ5JLvF9na0NZAcMj5Hc8SSePQB5CDi
+         a0NT2fao5Nc/6DRUUJPrBsgmNLLauhZuLM6VXLDvlQxsFYE6ily5ShWquJB77fqCL/
+         TYXS1E1+QVkLHhFigwHNWZFqz8VCmJFoiSiQY5vTw6x8YpGwqyN279ZHQIu3GP8wRI
+         o0EmXOFxJTZEQlzz+DDPOWs3c5qgO49IauUCIBKftztTIpoiOYTH+Za4XQEZR8pQfS
+         zbTnUwcnW8W8Q==
+Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NGx2S1mzgzXDR;
+        Tue, 22 Nov 2022 15:39:44 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH 00/30] RSEQ node id and mm concurrency id extensions
+Date:   Tue, 22 Nov 2022 15:39:02 -0500
+Message-Id: <20221122203932.231377-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nodes= arg instructs the kernel to only scan the given nodes for
-demotion. For example use cases, consider a 3 tier memory system:
+Extend the rseq ABI to expose NUMA node ID, mm_cid, and mm_numa_cid
+fields.
 
-nodes 0,1 -> top tier
-nodes 2,3 -> second tier
-nodes 4,5 -> third tier
+The NUMA node ID field allows implementing a faster getcpu(2) in libc.
 
-echo "1m nodes=2,3" > memory.demote
+The per-memory-map concurrency id (mm_cid) [1] allows ideal scaling
+(down or up) of user-space per-cpu data structures. The concurrency ids
+allocated within a memory map are tracked by the scheduler, which takes
+into account the number of concurrently running threads, thus implicitly
+considering the number of threads, the cpu affinity, the cpusets
+applying to those threads, and the number of logical cores on the
+system.
 
-This instructs the kernel to attempt to demote 1m memory in the second tier
-to the third, which can be desirable according to the userspace policy
-if the second tier is filling up and there is available memory on the
-third tier.
+The NUMA-aware concurrency id (mm_numa_cid) is similar to the mm_cid,
+except that it keeps track of the NUMA node ids with which each cid has
+been associated. On NUMA systems, when a NUMA-aware concurrency ID is
+observed by user-space to be associated with a NUMA node, it is
+guaranteed to never change NUMA node unless a kernel-level NUMA
+configuration change happens. This is useful for NUMA-aware per-cpu data
+structures running in environments where a process or a set of processes
+belonging to cpuset are pinned to a set of cores which belong to a
+subset of the system's NUMA nodes.
 
-echo "1m" > memory.demote
+This series is based on tip/sched/core
+commit 52b33d87b9197 ("sched/psi: Use task->psi_flags to clear in CPU migration")
 
-Instructs the kernel to attempt to demote 1m of memory (regardless of
-which tier the memory is currently on).
+Thanks,
 
-echo "1m nodes=0,1"
+Mathieu
 
-Instructs the kernel to demote memory from the top tier nodes, which can
-be desirable according to the userspace policy if there is pressure on
-the top tiers.
+[1] was previously known as vcpu_id in earlier versions of this patch set.
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- include/linux/swap.h |  3 ++-
- mm/memcontrol.c      | 64 ++++++++++++++++++++++++++++++++++++--------
- mm/vmscan.c          |  4 ++-
- 3 files changed, 58 insertions(+), 13 deletions(-)
+Mathieu Desnoyers (30):
+  selftests/rseq: Fix: Fail thread registration when CONFIG_RSEQ=n
+  rseq: Introduce feature size and alignment ELF auxiliary vector
+    entries
+  rseq: Introduce extensible rseq ABI
+  rseq: Extend struct rseq with numa node id
+  selftests/rseq: Use ELF auxiliary vector for extensible rseq
+  selftests/rseq: Implement rseq numa node id field selftest
+  sched: Introduce per-memory-map concurrency ID
+  rseq: Extend struct rseq with per-memory-map concurrency ID
+  selftests/rseq: Remove RSEQ_SKIP_FASTPATH code
+  selftests/rseq: Implement rseq mm_cid field support
+  selftests/rseq: x86: Template memory ordering and percpu access mode
+  selftests/rseq: arm: Template memory ordering and percpu access mode
+  selftests/rseq: arm64: Template memory ordering and percpu access mode
+  selftests/rseq: mips: Template memory ordering and percpu access mode
+  selftests/rseq: ppc: Template memory ordering and percpu access mode
+  selftests/rseq: s390: Template memory ordering and percpu access mode
+  selftests/rseq: riscv: Template memory ordering and percpu access mode
+  selftests/rseq: Implement basic percpu ops mm_cid test
+  selftests/rseq: Implement parametrized mm_cid test
+  selftests/rseq: parametrized test: Report/abort on negative
+    concurrency ID
+  tracing/rseq: Add mm_cid field to rseq_update
+  lib: Implement find_{first,next,nth}_notandnot_bit,
+    find_first_andnot_bit
+  cpumask: Implement cpumask_{first,next}_{not,}andnot
+  sched: NUMA-aware per-memory-map concurrency ID
+  rseq: Extend struct rseq with per-memory-map NUMA-aware Concurrency ID
+  selftests/rseq: x86: Implement rseq_load_u32_u32
+  selftests/rseq: Implement mm_numa_cid accessors in headers
+  selftests/rseq: Implement numa node id vs mm_numa_cid invariant test
+  selftests/rseq: Implement mm_numa_cid tests
+  tracing/rseq: Add mm_numa_cid field to rseq_update
 
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index f768171c2dc2..e195ee5f8efb 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -425,7 +425,8 @@ extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
- extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
- 						  unsigned long nr_pages,
- 						  gfp_t gfp_mask,
--						  unsigned int reclaim_options);
-+						  unsigned int reclaim_options,
-+						  nodemask_t nodemask);
- extern unsigned long mem_cgroup_shrink_node(struct mem_cgroup *mem,
- 						gfp_t gfp_mask, bool noswap,
- 						pg_data_t *pgdat,
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 427c79e467eb..cce446348358 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -63,6 +63,7 @@
- #include <linux/resume_user_mode.h>
- #include <linux/psi.h>
- #include <linux/seq_buf.h>
-+#include <linux/parser.h>
- #include "internal.h"
- #include <net/sock.h>
- #include <net/ip.h>
-@@ -2392,7 +2393,8 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
- 		psi_memstall_enter(&pflags);
- 		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
- 							gfp_mask,
--							MEMCG_RECLAIM_DEFAULT);
-+							MEMCG_RECLAIM_DEFAULT,
-+							NODE_MASK_ALL);
- 		psi_memstall_leave(&pflags);
- 	} while ((memcg = parent_mem_cgroup(memcg)) &&
- 		 !mem_cgroup_is_root(memcg));
-@@ -2683,7 +2685,8 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ fs/binfmt_elf.c                               |    5 +
+ fs/exec.c                                     |    4 +
+ include/linux/cpumask.h                       |   60 +
+ include/linux/find.h                          |  123 +-
+ include/linux/mm.h                            |   43 +
+ include/linux/mm_types.h                      |  109 +-
+ include/linux/sched.h                         |   12 +
+ include/trace/events/rseq.h                   |    9 +-
+ include/uapi/linux/auxvec.h                   |    2 +
+ include/uapi/linux/rseq.h                     |   31 +
+ init/Kconfig                                  |    4 +
+ kernel/fork.c                                 |   11 +-
+ kernel/ptrace.c                               |    2 +-
+ kernel/rseq.c                                 |   73 +-
+ kernel/sched/core.c                           |   49 +
+ kernel/sched/sched.h                          |  192 +++
+ kernel/signal.c                               |    2 +
+ lib/find_bit.c                                |   42 +
+ tools/testing/selftests/rseq/.gitignore       |    9 +
+ tools/testing/selftests/rseq/Makefile         |   34 +-
+ .../testing/selftests/rseq/basic_numa_test.c  |  117 ++
+ .../selftests/rseq/basic_percpu_ops_test.c    |   58 +-
+ tools/testing/selftests/rseq/basic_test.c     |    4 +
+ tools/testing/selftests/rseq/compiler.h       |    6 +
+ tools/testing/selftests/rseq/param_test.c     |  181 ++-
+ tools/testing/selftests/rseq/rseq-abi.h       |   31 +
+ tools/testing/selftests/rseq/rseq-arm-bits.h  |  505 +++++++
+ tools/testing/selftests/rseq/rseq-arm.h       |  707 +---------
+ .../testing/selftests/rseq/rseq-arm64-bits.h  |  392 ++++++
+ tools/testing/selftests/rseq/rseq-arm64.h     |  532 +-------
+ .../testing/selftests/rseq/rseq-bits-reset.h  |   11 +
+ .../selftests/rseq/rseq-bits-template.h       |   51 +
+ tools/testing/selftests/rseq/rseq-mips-bits.h |  462 +++++++
+ tools/testing/selftests/rseq/rseq-mips.h      |  652 +--------
+ tools/testing/selftests/rseq/rseq-ppc-bits.h  |  454 +++++++
+ tools/testing/selftests/rseq/rseq-ppc.h       |  629 +--------
+ .../testing/selftests/rseq/rseq-riscv-bits.h  |  410 ++++++
+ tools/testing/selftests/rseq/rseq-riscv.h     |  541 +-------
+ tools/testing/selftests/rseq/rseq-s390-bits.h |  474 +++++++
+ tools/testing/selftests/rseq/rseq-s390.h      |  501 +------
+ tools/testing/selftests/rseq/rseq-skip.h      |   65 -
+ tools/testing/selftests/rseq/rseq-x86-bits.h  | 1036 ++++++++++++++
+ tools/testing/selftests/rseq/rseq-x86.h       | 1204 +----------------
+ tools/testing/selftests/rseq/rseq.c           |   91 +-
+ tools/testing/selftests/rseq/rseq.h           |  258 +++-
+ .../testing/selftests/rseq/run_param_test.sh  |    5 +
+ 46 files changed, 5532 insertions(+), 4661 deletions(-)
+ create mode 100644 tools/testing/selftests/rseq/basic_numa_test.c
+ create mode 100644 tools/testing/selftests/rseq/rseq-arm-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-arm64-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-bits-reset.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-bits-template.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-mips-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-ppc-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-riscv-bits.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-s390-bits.h
+ delete mode 100644 tools/testing/selftests/rseq/rseq-skip.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-x86-bits.h
 
- 	psi_memstall_enter(&pflags);
- 	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
--						    gfp_mask, reclaim_options);
-+						    gfp_mask, reclaim_options,
-+						    NODE_MASK_ALL);
- 	psi_memstall_leave(&pflags);
+-- 
+2.25.1
 
- 	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
-@@ -3504,7 +3507,8 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
-
- 		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
- 					memsw ? MEMCG_RECLAIM_NO_SWAP :
--						MEMCG_RECLAIM_DEFAULT)) {
-+						MEMCG_RECLAIM_DEFAULT,
-+						NODE_MASK_ALL)) {
- 			ret = -EBUSY;
- 			break;
- 		}
-@@ -3615,7 +3619,8 @@ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
- 			return -EINTR;
-
- 		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
--						  MEMCG_RECLAIM_DEFAULT))
-+						  MEMCG_RECLAIM_DEFAULT,
-+						  NODE_MASK_ALL))
- 			nr_retries--;
- 	}
-
-@@ -6408,7 +6413,8 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
- 		}
-
- 		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
--					GFP_KERNEL, MEMCG_RECLAIM_DEFAULT);
-+					GFP_KERNEL, MEMCG_RECLAIM_DEFAULT,
-+					NODE_MASK_ALL);
-
- 		if (!reclaimed && !nr_retries--)
- 			break;
-@@ -6457,7 +6463,8 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
-
- 		if (nr_reclaims) {
- 			if (!try_to_free_mem_cgroup_pages(memcg, nr_pages - max,
--					GFP_KERNEL, MEMCG_RECLAIM_DEFAULT))
-+					GFP_KERNEL, MEMCG_RECLAIM_DEFAULT,
-+					NODE_MASK_ALL))
- 				nr_reclaims--;
- 			continue;
- 		}
-@@ -6612,7 +6619,8 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
-
- 		reclaimed = try_to_free_mem_cgroup_pages(memcg,
- 						nr_to_reclaim - nr_reclaimed,
--						GFP_KERNEL, reclaim_options);
-+						GFP_KERNEL, reclaim_options,
-+						NODE_MASK_ALL);
-
- 		if (!reclaimed && !nr_retries--)
- 			return -EAGAIN;
-@@ -6623,6 +6631,16 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
- 	return nbytes;
- }
-
-+enum {
-+	MEMORY_DEMOTE_NODES = 0,
-+	MEMORY_DEMOTE_NULL,
-+};
-+
-+static const match_table_t if_tokens = {
-+	{ MEMORY_DEMOTE_NODES, "nodes=%s" },
-+	{ MEMORY_DEMOTE_NULL, NULL },
-+};
-+
- static ssize_t memory_demote(struct kernfs_open_file *of, char *buf,
- 			     size_t nbytes, loff_t off)
- {
-@@ -6631,11 +6649,35 @@ static ssize_t memory_demote(struct kernfs_open_file *of, char *buf,
- 	unsigned long nr_to_demote, nr_demoted = 0;
- 	unsigned int reclaim_options = MEMCG_RECLAIM_ONLY_DEMOTE;
- 	int err;
-+	char *old_buf, *start;
-+	substring_t args[MAX_OPT_ARGS];
-+	int token;
-+	char value[256];
-+	nodemask_t nodemask = NODE_MASK_ALL;
-
- 	buf = strstrip(buf);
--	err = page_counter_memparse(buf, "", &nr_to_demote);
--	if (err)
--		return err;
-+	old_buf = buf;
-+	nr_to_demote = memparse(buf, &buf) / PAGE_SIZE;
-+	if (buf == old_buf)
-+		return -EINVAL;
-+
-+	buf = strstrip(buf);
-+
-+	while ((start = strsep(&buf, " ")) != NULL) {
-+		if (!strlen(start))
-+			continue;
-+		token = match_token(start, if_tokens, args);
-+		match_strlcpy(value, args, sizeof(value));
-+		switch (token) {
-+		case MEMORY_DEMOTE_NODES:
-+			err = nodelist_parse(value, nodemask);
-+			if (err < 0)
-+				return -EINVAL;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+	}
-
- 	while (nr_demoted < nr_to_demote) {
- 		unsigned long demoted;
-@@ -6645,7 +6687,7 @@ static ssize_t memory_demote(struct kernfs_open_file *of, char *buf,
-
- 		demoted = try_to_free_mem_cgroup_pages(
- 			memcg, nr_to_demote - nr_demoted, GFP_KERNEL,
--			reclaim_options);
-+			reclaim_options, nodemask);
-
- 		if (!demoted && !nr_retries--)
- 			return -EAGAIN;
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index d7e509b3f07f..df5ade259b3a 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -6719,7 +6719,8 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
- unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
- 					   unsigned long nr_pages,
- 					   gfp_t gfp_mask,
--					   unsigned int reclaim_options)
-+					   unsigned int reclaim_options,
-+					   nodemask_t nodemask)
- {
- 	unsigned long nr_reclaimed;
- 	unsigned int noreclaim_flag;
-@@ -6734,6 +6735,7 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
- 		.may_unmap = 1,
- 		.may_swap = !!(reclaim_options & MEMCG_RECLAIM_MAY_SWAP),
- 		.proactive = !!(reclaim_options & MEMCG_RECLAIM_PROACTIVE),
-+		.nodemask = &nodemask,
- 	};
- 	/*
- 	 * Traverse the ZONELIST_FALLBACK zonelist of the current node to put
---
-2.38.1.584.g0f3c55d4c2-goog
