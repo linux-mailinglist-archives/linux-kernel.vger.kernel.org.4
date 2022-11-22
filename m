@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DC663319E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA88C6331A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbiKVAu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
+        id S231593AbiKVAxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbiKVAuy (ORCPT
+        with ESMTP id S231758AbiKVAxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:50:54 -0500
-Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EF96DCC6;
-        Mon, 21 Nov 2022 16:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1669078249;
-        bh=r7bV6NQJ0Wvg7aEH2rmGraNpQaJqHjO8I3T/UZsCtQ0=;
-        h=From:To:Cc:Subject:Date;
-        b=KVhhElW2KkbyuGg9cMxGeRqhum4PUlhQQHt5S4GwshJzOO6MqYIr9uSCDtZ2AymtK
-         EO3pC/QkdBoHMMHdBhkZIrpeqYPDtp2d3f4g2DoA9nc6vGcWcJJUcntAYibBO452lE
-         kkm9obY7CEE4XkfEhjYPk5uS1YEh/QVnNPFUSBUM=
-Received: from rtoax.. ([111.199.191.46])
-        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-        id CAB98EC2; Tue, 22 Nov 2022 08:50:43 +0800
-X-QQ-mid: xmsmtpt1669078243t4jp9xxjs
-Message-ID: <tencent_1FA6904156E8E599CAE4ABDBE80F22830106@qq.com>
-X-QQ-XMAILINFO: N+tZcXNNUKPO2gWmkXq1HkL3q4fP8lwxYooYr02spnchOJOorAbd4TuYfw6Ls+
-         s3R0erl5Efn3NAC8Y4waUl9rpw9QHbf+SUQlQ7gVlwNdHFaQbGryYdg3QjFKvN9tKUV/RslECtmE
-         0Dqh1F7Z4Eu23ro5RC+eUKbR5An4KJ0d7vR4uM2A7QxYFin8qgU6eCjJaSwu/hDNdEU2VTG8TJ/u
-         mY6TAckoP6bPqbcJ9eQ6uBSrT5feJmWw3UJ+01M8qWs7jqQOI2oAlQtq+Ko+spta9AbGgK/YrZDY
-         0KhCRnQCq3MHWA0KgGZhQfrqtDm7P8IXo2ncbMApanqguD1NwqX69Y1kkWqeujxm1oaFeTPo5HH1
-         5fWHG58CJ35E97Ekq8DAKn/DSwijk+OVUeCn110+TuVo4e44NdH3321tFS0MfNX2AaS/Q1VVTvkq
-         R1AR87gp6iYZ++GjLI4GhQfztU46o5btHS5ykS4rZjnXkiDXlVYEvj1eQKzvxgdT3f107zUwmmOD
-         WObyf+rPH0yaXvmux78+3PJD/Gee9J73WeBf2DrR1DOdI3RxeUCMhxt2Ms57ee6P8ACcG8OoxJqL
-         rZkG+2esXe3ILkS/Xn2m6jFnrC0f+bxfMsZ7lTHfn6W4ryqBVYPwrRKk83U6I8bRSERRKY5ZmMAs
-         PbSu3yYMmI1CiHtk6mvL07yfwwxQmAec4GodELENWGCFmu8inRNLcKTsGQtl+o8+1hQ0RZ0itDeF
-         dVkr4s3fPNNC/6D/LCKFKq9zPtzvqY5KVGrWXz9lznjgaJXn5ybslx4lMyjwcAoDLyhL7q3EPZIy
-         jDG/CO5vk3NsQdrENLzV2lVb/OUCs0mY5O4txYYfsptWWuTwa1jWOcRJbL8+TwabsK3LRfY1vDcN
-         AzV3oDQLpwk84yRDouGkUrLqP5YsbIniMLPEZpXIZgrm1jdTaJZzxXJYpXlDGgh+6HLP4tW0w6nP
-         JxZEn4gkcZ9lQXremnFooZ+xMgyHBP9+RnfSnL9mcS3E9/XMgZiPS4ySq4op0CaNx6XJPZ9Lk8GQ
-         YrO3zoUQ==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     void@manifault.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        corbet@lwn.net, daniel@iogearbox.net, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, rongtao@cestc.cn, rtoax@foxmail.com,
-        sdf@google.com, song@kernel.org, yhs@fb.com
-Subject: [PATCH bpf-next v4] docs/bpf: Update btf selftests program and add link
-Date:   Tue, 22 Nov 2022 08:50:42 +0800
-X-OQ-MSGID: <20221122005042.4712-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 19:53:37 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AB9DEAEE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:53:35 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NGQjn3KKtz4y0vF;
+        Tue, 22 Nov 2022 08:53:33 +0800 (CST)
+Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
+        by mse-fl1.zte.com.cn with SMTP id 2AM0rO5p080247;
+        Tue, 22 Nov 2022 08:53:24 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Tue, 22 Nov 2022 08:53:25 +0800 (CST)
+Date:   Tue, 22 Nov 2022 08:53:25 +0800 (CST)
+X-Zmail-TransId: 2b04637c1d85ffffffffda7cd3f2
+X-Mailer: Zmail v1.0
+Message-ID: <202211220853259244666@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <akpm@linux-foundation.org>
+Cc:     <wuchi.zero@gmail.com>, <axboe@kernel.dk>,
+        <colin.i.king@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHJlbGF5OiB1c2Ugc3Ryc2NweSgpIGlzIG1vcmUgcm9idXN0IGFuZCBzYWZlcg==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2AM0rO5p080247
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 637C1D8D.000 by FangMail milter!
+X-FangMail-Envelope: 1669078413/4NGQjn3KKtz4y0vF/637C1D8D.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 637C1D8D.000/4NGQjn3KKtz4y0vF
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+From: Xu Panda <xu.panda@zte.com.cn>
 
-commit c64779e24e88("selftests/bpf: Merge most of test_btf into
-test_progs") rename selftests/bpf btf test from 'test_btf.c' to
-'prog_tests/btf.c'.
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL terminated strings.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
 ---
-v4: v3 -> v4
-    s/bpf/BPF
-v3: v2 -> v3
-    s/Kernel bpf selftest/The kernel BPF selftest
-    s/provides extensive/provides an extensive
-    https://lore.kernel.org/lkml/tencent_C597352AB3AF24A35A88CC06A3421E590B08@qq.com/
-v2: https://lore.kernel.org/lkml/tencent_114656E8259D0AEA2BDB6810E29241995006@qq.com/
-v1: https://lore.kernel.org/lkml/tencent_7F84D04F96EBE594CAD5EBD12815A2B00106@qq.com/
----
- Documentation/bpf/btf.rst | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ kernel/relay.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index cf8722f96090..7cd7c5415a99 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -1062,4 +1062,9 @@ format.::
- 7. Testing
- ==========
- 
--Kernel bpf selftest `test_btf.c` provides extensive set of BTF-related tests.
-+The kernel BPF selftest `tools/testing/selftests/bpf/prog_tests/btf.c`_
-+provides an extensive set of BTF-related tests.
-+
-+.. Links
-+.. _tools/testing/selftests/bpf/prog_tests/btf.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/prog_tests/btf.c
+diff --git a/kernel/relay.c b/kernel/relay.c
+index d7edc934c56d..0a3d2e702001 100644
+--- a/kernel/relay.c
++++ b/kernel/relay.c
+@@ -507,7 +507,7 @@ struct rchan *relay_open(const char *base_filename,
+ 	chan->private_data = private_data;
+ 	if (base_filename) {
+ 		chan->has_base_filename = 1;
+-		strlcpy(chan->base_filename, base_filename, NAME_MAX);
++		strscpy(chan->base_filename, base_filename, NAME_MAX);
+ 	}
+ 	chan->cb = cb;
+ 	kref_init(&chan->kref);
+@@ -578,7 +578,7 @@ int relay_late_setup_files(struct rchan *chan,
+ 	if (!chan || !base_filename)
+ 		return -EINVAL;
+
+-	strlcpy(chan->base_filename, base_filename, NAME_MAX);
++	strscpy(chan->base_filename, base_filename, NAME_MAX);
+
+ 	mutex_lock(&relay_channels_mutex);
+ 	/* Is chan already set up? */
 -- 
-2.38.1
-
+2.15.2
