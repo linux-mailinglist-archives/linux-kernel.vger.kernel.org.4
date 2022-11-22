@@ -2,102 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B96A363397E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6306F633989
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiKVKPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41808 "EHLO
+        id S232704AbiKVKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiKVKOy (ORCPT
+        with ESMTP id S232389AbiKVKQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:14:54 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D2C4091A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669112093; x=1700648093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=86po1vYlzKPga3udNVhclmk5bZovkKD7bFTPvYi7fK8=;
-  b=bRBqexpfgYDpZgjaqUKLtjCR1saG292xTMxanHxdhrCwH9tCk0d+/59o
-   DzWmwGfwGOL0ZfZHxRcH8O+94nb4zVjkQ5+eXNbRZ1fkiQJbyazQ/pTkQ
-   QKbWzZQOqL9nvO8PXiKQDuRqW27/nT51ypxFFmpSWOgNnVc8gC/FPsw3X
-   O5XbANp0P0gFKdn07XHVfVGXuAc2GCbwCdIhEp/VYhdo6TEk2JKaDClpQ
-   SvC7FfODc5VJJ30qUcYLAIx7hV0cIB25tU97b+FCojpVfy4lhH+PUzTLm
-   HD4YCfZi8C+totDBR8WV++KdyXj/m57eKKO/oEZ4iMheb4ULtYofpUDs+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="311411119"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="311411119"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 02:14:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="710144283"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="710144283"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Nov 2022 02:14:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxQIf-00Fhtm-2Z;
-        Tue, 22 Nov 2022 12:14:45 +0200
-Date:   Tue, 22 Nov 2022 12:14:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rahul Tanwar <rtanwar@maxlinear.com>
-Cc:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
-Subject: Re: [PATCH v3 0/4] x86/of: Fix a bug in x86 arch OF support
-Message-ID: <Y3yhFWQ7NHMArO74@smile.fi.intel.com>
-References: <cover.1669100394.git.rtanwar@maxlinear.com>
- <Y3yTxRAVSOJTMuUu@smile.fi.intel.com>
- <a7a1b539-bd69-0227-ea93-b90f2e3ef2cd@maxlinear.com>
+        Tue, 22 Nov 2022 05:16:30 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C163FBB6;
+        Tue, 22 Nov 2022 02:16:24 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 37BC624DE73;
+        Tue, 22 Nov 2022 18:16:22 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 18:16:22 +0800
+Received: from [192.168.125.106] (113.72.144.23) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 18:16:21 +0800
+Message-ID: <b57bdf1c-19f4-3d70-7618-16817669abc5@starfivetech.com>
+Date:   Tue, 22 Nov 2022 18:16:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7a1b539-bd69-0227-ea93-b90f2e3ef2cd@maxlinear.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 4/8] dt-bindings: sifive,ccache0: Support StarFive
+ JH7110 SoC
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-5-hal.feng@starfivetech.com> <Y3duiJguYE6VrVLP@spud>
+ <Y3dvCPP1g0LzzHFO@spud>
+ <a5193e23-efe1-fa65-15de-d53b80b87d63@starfivetech.com>
+ <Y3yRTuo69JUsfLqk@wendy>
+ <0f9e423e-37c0-a838-bf25-f9b6784a31d0@starfivetech.com>
+ <Y3yd+tfFl4yvXOx6@wendy>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <Y3yd+tfFl4yvXOx6@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.23]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 09:49:04AM +0000, Rahul Tanwar wrote:
-> On 22/11/2022 5:18 pm, Andy Shevchenko wrote:
-> > On Tue, Nov 22, 2022 at 03:39:06PM +0800, Rahul Tanwar wrote:
+On Tue, 22 Nov 2022 10:01:30 +0000, Conor Dooley wrote:
+> On Tue, Nov 22, 2022 at 05:55:57PM +0800, Hal Feng wrote:
+> > On Tue, 22 Nov 2022 09:07:26 +0000, Conor Dooley wrote:
+> > > On Tue, Nov 22, 2022 at 04:40:23PM +0800, Hal Feng wrote:
+> > > > On Fri, 18 Nov 2022 19:39:52 +0800, Conor Dooley wrote:
+> > > > > On Fri, Nov 18, 2022 at 11:37:50AM +0000, Conor Dooley wrote:
+> > > > > > On Fri, Nov 18, 2022 at 09:17:10AM +0800, Hal Feng wrote:
+> > > > > > > From: Emil Renner Berthing <kernel@esmil.dk>
+> > > > > > > 
+> > > > > > > This cache controller is also used on the StarFive JH7110 SoC.
+> > > > > > 
+> > > > > > "... and configured identically to that of the FU740"?
+> > > > > > Anyways,
+> > > > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > > 
+> > > > > Actually, after looking at the next patch - why can you not fall back to
+> > > > > the fu740 one since you appear to have the same configuration as it?
+> > > > 
+> > > > Right, I will drop this patch and use "sifive,fu740-c000-ccache" as
+> > > > compatible in dts.
+> > > 
+> > > Uh, that's not quite what I was suggesting. Rather than using that one
+> > > in isolation, you can do the following in your dt:
+> > > "starfive,jh7110-ccache", "sifive,fu740-c000-ccache"
+> > > 
+> > > And then in the driver we need to make no changes - unless down the line
+> > > we find some sort of issue that requires special handling etc. There's
+> > > no harm in having a "starfive,jh7110-ccache" IMO.
 > > 
-> >> Rahul Tanwar (4):
-> >>    x86/of: Convert Intel's APIC bindings to YAML schema
-> >>    x86/of: Introduce new optional bool property for lapic
+> > Just like what microchip did as blow?
+
+below
+
 > > 
-> > You need properly prefix the first two patches. I guess it's something like
-> > "dt-bindings: x86: ioapic:".
-> > 
+> > Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml:
+> > properties:
+> >   compatible:
+> >     oneOf:
+> >       - items:
+> >           - enum:
+> >               - sifive,ccache0
+> >               - sifive,fu540-c000-ccache
+> >               - sifive,fu740-c000-ccache
+> >               - starfive,jh7110-ccache
+> >           - const: cache
+> >       - items:
+> >           - const: microchip,mpfs-ccache
+> >           - const: sifive,fu540-c000-ccache
+> >           - const: cache
 > 
-> Yes, i just checked the git log of devicetree.c and used same prefixes 
-> here. Thanks for correcting it. I will update it.
+> No, I don't think this is correct either. You'd do something like:
+> 
+> >       - items:
+> >           - const: starfive,jh7110-ccache
+> >           - const: sifive,fu740-c000-ccache
+> >           - const: cache
 
-Moreover the Cc list in those patches is quite wrong.
+Yeah, this is what I mean. Thanks.
 
-I recommend to utilize my "smart" script [1] for sending series.
-(You may take an idea from it how to prepare the Cc list close to proper one)
+Best regards,
+Hal
 
-[1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> 
+> And then the driver needs no changes.
 
