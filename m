@@ -2,242 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F056D6342EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394DA6342F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 18:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234623AbiKVRqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 12:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S234633AbiKVRsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 12:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234544AbiKVRpv (ORCPT
+        with ESMTP id S234527AbiKVRqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 12:45:51 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8019083E8C;
-        Tue, 22 Nov 2022 09:45:10 -0800 (PST)
-Message-ID: <20221122173648.905642518@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669139107;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=gLm+gmP0TNvnfR1qBgbuyBoK4dp/86Lr9+9waFntgGQ=;
-        b=Z8kspEIOfKATJs3UcxRwM2k75pgP9SyKsjso6xmQ4Gb8pZbon41jWgoAn6o8RHzM+IGTf7
-        p71csn/qeHc1mBbaeWIxnQYZlDzz9EDLqDC0NBdbQ61oGgJUezFHRGibwIvkmupI8ePAuT
-        l987Iz3GI1+ECpkdUZtHqbgeiD5zLneNUj+DUMXcql5asx9DTwuV+eDjGkpl2Z7raTPxzz
-        beF9khE+7WLElTgYyuTCA8Z02O0zGv5bAGSL4/aVYXnwSkHGcAtBBetm9gJ+ioUj6vozzQ
-        Bb/EA5AnPFXyRgOTWjXlGjEJNkH9HIPqDQU186sDSEmvSxfbASyrxxERX2O4sg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669139107;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=gLm+gmP0TNvnfR1qBgbuyBoK4dp/86Lr9+9waFntgGQ=;
-        b=6yNDs5N38sDa/es5IbFSeFCswzyh3jR8EEkQ1PCdia7bpV8wtTy3hONJV982ayPuvg/3OR
-        j5Z9vcP7HRjoTYBA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: [patch V2 14/17] timers: Add shutdown mechanism to the internal functions
-References: <20221122171312.191765396@linutronix.de>
+        Tue, 22 Nov 2022 12:46:46 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626B485140;
+        Tue, 22 Nov 2022 09:45:22 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id s12so21648046edd.5;
+        Tue, 22 Nov 2022 09:45:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1kvyvrTAV03KH98x7yl5DC5qgb1BxRhc/RtXT1WiA70=;
+        b=pIuZMaX2Jd4Bw2gypcQR7WA13ZnhbEqJYrk++MybA3dC0e4Itx/IJ12B2i6PyRZFc0
+         p2+fswIc+6CFcrfqV0VZtglngibHruTu2tr0dV8XOfJMwpZrlXKZsq5YsSyhSZ+onlum
+         4g6YbScJJnhf2c0N/+9AQcLkxGqcKf2Ghg1NnkCiT6P5fcCS5mYLZ0aZltwv50ahhXxs
+         6ueqPQDgNfiuR/Spxn6y2PAcOpaikjL1Wxcqqe9TyBj1ab5uK10etMDz3IYxgVqXrh6f
+         nBQATcXE4ZzyeN2m4NQYOGdasJgZgWhO9VWX1qKH5P11FxhbGzVRV0JSIZLkewURwfuH
+         z+5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1kvyvrTAV03KH98x7yl5DC5qgb1BxRhc/RtXT1WiA70=;
+        b=6MAtMccgG58HiLJdx51URsSi+CS5b6CA9BJBArPcydyPNo7sGqAIY79Xr4a+UYVf8D
+         Xi6pMOEauECyHO/EObrTm1OjipyMw3CWVtkwk0lYY1aY2Bi19+maszYtIjwMmhdeNZNr
+         XMvoXdJz8zNAo7V7kBNfwqQOeCSJ2FhViOnJ6Im2HDuJxzFVxsqv10D3TiCnBLlygo8r
+         z3OFTUUQ7FOMaBc5hjXH3mW8WBm4mFykqWuluYMblHY7wrn818Eb+D4UCBOb+KYcgW92
+         zc7ylrbEdBbUyPuAEBm4uV5ex2OS/UxhMNLb9z5S7E+fYv2tzRA5pNcB8Igrv/9k+AGD
+         Q5VA==
+X-Gm-Message-State: ANoB5pmrGENhQRbuRUAPIX3Ek/AYgeioUIjBMT9FJLV47UhNEI3jxF1o
+        Dgrv7CKDxXlQJ1OmR6qPkgC+Um3M10HJoX/GPzU=
+X-Google-Smtp-Source: AA0mqf6dJW3ChCPPweQE2YWTi2TVUhpIDsuR+7bEvATh41AM5qFCSfIyeMkCvx2USRII3EWwgspuxz9BH4JnzRKuvtM=
+X-Received: by 2002:a05:6402:4a:b0:461:aa10:cb0c with SMTP id
+ f10-20020a056402004a00b00461aa10cb0cmr22258618edu.383.1669139121338; Tue, 22
+ Nov 2022 09:45:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 22 Nov 2022 18:45:06 +0100 (CET)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122213040.4128105-1-haowenchao@huawei.com> <11003745-2b2d-30cf-bf87-798f5175ae09@oracle.com>
+In-Reply-To: <11003745-2b2d-30cf-bf87-798f5175ae09@oracle.com>
+From:   Wenchao Hao <haowenchao22@gmail.com>
+Date:   Wed, 23 Nov 2022 01:45:08 +0800
+Message-ID: <CAOptpSO23ex6p=AOvjC1h1xc1ZxznLt211hufVrrS8NDVbHjrw@mail.gmail.com>
+Subject: Re: [PATCH] scsi:iscsi: Record session's startup mode in kernel
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     Wenchao Hao <haowenchao@huawei.com>, Lee Duncan <lduncan@suse.com>,
+        Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liuzhiqiang26@huawei.com,
+        linfeilong@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tearing down timers which have circular dependencies to other
-functionality, e.g. workqueues, where the timer can schedule work and work
-can arm timers is not trivial.
+On Wed, Nov 23, 2022 at 1:27 AM Mike Christie
+<michael.christie@oracle.com> wrote:
+>
+> On 11/22/22 3:30 PM, Wenchao Hao wrote:
+> > There are 3 iscsi session's startup mode which are onboot, manual and
+> > automatic. We can boot from iSCSI disks with help of dracut's service
+> > in initrd, which would set node's startup mode to onboot, then create
+> > iSCSI sessions.
+> >
+> > While the configure of onboot mode is recorded in file of initrd stage
+> > and would be lost when switch to rootfs. Even if we update the startup
+> > mode to onboot by hand after switch to rootfs, it is possible that the
+> > configure would be covered by another discovery command.
+> >
+> > root would be mounted on iSCSI disks when boot from iSCSI disks, if the
+> > sessions is logged out, the related disks would be removed, which would
+> > cause the whole system halt.
+>
+> The userspace tools check for this already don't they? Running iscsiadm
+> on the root disk returns a failure and message about it being in use.
+>
 
-In those cases it is desired to shutdown the timer in a way which prevents
-rearming of the timer. The mechanism to do so it to set timer->function to
-NULL and use this as an indicator for the timer arming functions to ignore
-the (re)arm request.
+It seems we did not check.
 
-Add a shutdown argument to the relevant internal functions which makes the
-actual deactivation code set timer->function to NULL which in turn prevents
-rearming of the timer.
+> Userspace can check the session's disks and see if they are mounted and
+> what they are being used for.
 
-Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
-Link: https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
----
-V2: Add missing commata (Steven)
----
- kernel/time/timer.c |   64 ++++++++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 55 insertions(+), 9 deletions(-)
+It's hard to check if iSCSI disk is in used. If iSCSI disk is used to
+build multipath device mapper,
+, and lvm is built on these dm devices, the root is mounted on these
+lvm devices, like following:
 
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1297,14 +1297,21 @@ void add_timer_on(struct timer_list *tim
- EXPORT_SYMBOL_GPL(add_timer_on);
- 
- /**
-- * __timer_delete - Internal function: Deactivate a timer.
-+ * __timer_delete - Internal function: Deactivate a timer
-  * @timer:	The timer to be deactivated
-+ * @shutdown:	If true, this indicates that the timer is about to be
-+ *		shutdown permanently.
-+ *
-+ * If @shutdown is true then @timer->function is set to NULL under the
-+ * timer base lock which prevents further rearming of the time. In that
-+ * case any attempt to rearm @timer after this function returns will be
-+ * silently ignored.
-  *
-  * Return:
-  * * %0 - The timer was not pending
-  * * %1 - The timer was pending and deactivated
-  */
--static int __timer_delete(struct timer_list *timer)
-+static int __timer_delete(struct timer_list *timer, bool shutdown)
- {
- 	struct timer_base *base;
- 	unsigned long flags;
-@@ -1312,9 +1319,22 @@ static int __timer_delete(struct timer_l
- 
- 	debug_assert_init(timer);
- 
--	if (timer_pending(timer)) {
-+	/*
-+	 * If @shutdown is set then the lock has to be taken whether the
-+	 * timer is pending or not to protect against a concurrent rearm
-+	 * which might hit between the lockless pending check and the lock
-+	 * aquisition. By taking the lock it is ensured that such a newly
-+	 * enqueued timer is dequeued and cannot end up with
-+	 * timer->function == NULL in the expiry code.
-+	 *
-+	 * If timer->function is currently executed, then this makes sure
-+	 * that the callback cannot requeue the timer.
-+	 */
-+	if (timer_pending(timer) || shutdown) {
- 		base = lock_timer_base(timer, &flags);
- 		ret = detach_if_pending(timer, base, true);
-+		if (shutdown)
-+			timer->function = NULL;
- 		raw_spin_unlock_irqrestore(&base->lock, flags);
- 	}
- 
-@@ -1338,20 +1358,31 @@ EXPORT_SYMBOL(timer_delete);
-  */
- int timer_delete(struct timer_list *timer)
- {
--	return __timer_delete(timer);
-+	return __timer_delete(timer, false);
- }
- EXPORT_SYMBOL(timer_delete);
- 
- /**
-  * __try_to_del_timer_sync - Internal function: Try to deactivate a timer
-  * @timer:	Timer to deactivate
-+ * @shutdown:	If true, this indicates that the timer is about to be
-+ *		shutdown permanently.
-+ *
-+ * If @shutdown is true then @timer->function is set to NULL under the
-+ * timer base lock which prevents further rearming of the timer. Any
-+ * attempt to rearm @timer after this function returns will be silently
-+ * ignored.
-+ *
-+ * This function cannot guarantee that the timer cannot be rearmed
-+ * right after dropping the base lock if @shutdown is false. That
-+ * needs to be prevented by the calling code if necessary.
-  *
-  * Return:
-  * * %0  - The timer was not pending
-  * * %1  - The timer was pending and deactivated
-  * * %-1 - The timer callback function is running on a different CPU
-  */
--static int __try_to_del_timer_sync(struct timer_list *timer)
-+static int __try_to_del_timer_sync(struct timer_list *timer, bool shutdown)
- {
- 	struct timer_base *base;
- 	unsigned long flags;
-@@ -1363,6 +1394,8 @@ static int __try_to_del_timer_sync(struc
- 
- 	if (base->running_timer != timer)
- 		ret = detach_if_pending(timer, base, true);
-+	if (shutdown)
-+		timer->function = NULL;
- 
- 	raw_spin_unlock_irqrestore(&base->lock, flags);
- 
-@@ -1387,7 +1420,7 @@ static int __try_to_del_timer_sync(struc
-  */
- int try_to_del_timer_sync(struct timer_list *timer)
- {
--	return __try_to_del_timer_sync(timer);
-+	return __try_to_del_timer_sync(timer, false);
- }
- EXPORT_SYMBOL(try_to_del_timer_sync);
- 
-@@ -1468,12 +1501,25 @@ static inline void del_timer_wait_runnin
-  * __timer_delete_sync - Internal function: Deactivate a timer and wait
-  *			 for the handler to finish.
-  * @timer:	The timer to be deactivated
-+ * @shutdown:	If true, @timer->function will be set to NULL under the
-+ *		timer base lock which prevents rearming of @timer
-+ *
-+ * If @shutdown is not set the timer can be rearmed later. If the timer can
-+ * be rearmed concurrently, i.e. after dropping the base lock then the
-+ * return value is meaningless.
-+ *
-+ * If @shutdown is set then @timer->function is set to NULL under timer
-+ * base lock which prevents rearming of the timer. Any attempt to rearm
-+ * a shutdown timer is silently ignored.
-+ *
-+ * If the timer should be reused after shutdown it has to be initialized
-+ * again.
-  *
-  * Return:
-  * * %0	- The timer was not pending
-  * * %1	- The timer was pending and deactivated
-  */
--static int __timer_delete_sync(struct timer_list *timer)
-+static int __timer_delete_sync(struct timer_list *timer, bool shutdown)
- {
- 	int ret;
- 
-@@ -1503,7 +1549,7 @@ static int __timer_delete_sync(struct ti
- 		lockdep_assert_preemption_enabled();
- 
- 	do {
--		ret = __try_to_del_timer_sync(timer);
-+		ret = __try_to_del_timer_sync(timer, shutdown);
- 
- 		if (unlikely(ret < 0)) {
- 			del_timer_wait_running(timer);
-@@ -1555,7 +1601,7 @@ static int __timer_delete_sync(struct ti
-  */
- int timer_delete_sync(struct timer_list *timer)
- {
--	return __timer_delete_sync(timer);
-+	return __timer_delete_sync(timer, false);
- }
- EXPORT_SYMBOL(timer_delete_sync);
- 
+sde                                       8:64   0   60G  0 disk
+=E2=94=94=E2=94=80360014051a174917ce514486bca53b324 253:4    0   60G  0 mpa=
+th
+  =E2=94=9C=E2=94=80lvm-root                     253:0    0 38.3G  0 lvm   =
+/
+  =E2=94=9C=E2=94=80lvm-swap                   253:1    0  2.1G  0 lvm   [S=
+WAP]
+  =E2=94=94=E2=94=80lvm-home                  253:2    0 18.7G  0 lvm   /ho=
+me
 
+It's too coupling to check these dm devices.
