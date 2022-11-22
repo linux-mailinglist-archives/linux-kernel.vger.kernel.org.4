@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226BC634449
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE70634448
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234740AbiKVTFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S234639AbiKVTFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234700AbiKVTFV (ORCPT
+        with ESMTP id S234693AbiKVTFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:05:21 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD418CFF6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=YOKduRxqOQ+ggRn/s0wpQfzORzZWr0CzU1FGkX5EVD0=; b=XARQrOWmHsmbi/5rMRbRZ09CRO
-        2+oqzluHVHcGiSh6iOg4vwK2ACwy5Zqc+WRY0ZzP6BcyEkpVyUFVZdpQyDmWiL8iUnco+eSz/Nq4f
-        Y3koU5xlQjmQzKyAqyGMxZLRT0/b9s09u6q5cGiQ7zBFaLz9Z9YH4vqiFp/hWKLCbcLNzPMFUiPWI
-        rzvQNyLNBfq7A12zNwXHfg3aKEm8xPzmM6sSntE5pb+6RkmZ4/BFXVyJ1ZQgj3neSiQr5wAOGswAn
-        g6G3Lx4PhCcfig1gD0HWZqTP2RTqtOrVNN2A8B4kZ9TeFaYb+4WXt2O2ozloooluoobatWQsprLfj
-        uTUHpFaA==;
-Received: from [177.34.169.227] (helo=bowie..)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oxYZy-007AP3-4U; Tue, 22 Nov 2022 20:05:10 +0100
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Oded Gabbay <ogabbay@kernel.org>
-Cc:     Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Wambui Karuga <wambui@karuga.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-Subject: [PATCH 6/6] drm/todo: update the debugfs clean up task
-Date:   Tue, 22 Nov 2022 16:03:14 -0300
-Message-Id: <20221122190314.185015-7-mcanal@igalia.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221122190314.185015-1-mcanal@igalia.com>
-References: <20221122190314.185015-1-mcanal@igalia.com>
+        Tue, 22 Nov 2022 14:05:19 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2812F8A142
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:05:16 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id s18so9130638qvo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:05:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=V113i9op2pduVlxmzasvaIEvnqTrh+10a7z1AWq+aEg=;
+        b=DBN3eB8VZE6euKV0t6YywqYDdM8aZxRa6ITHKBt4yJZC3AJTs9exx/n7bFt9NNjUKr
+         5CjoFGf2TLv9zR78cgumEbZbl8oR5DgMThLgtJ+KaaaS3gzcFVHTEufJFWw782w3jmc1
+         /99JGLlaeNSdOl+n1kP9dtSZgkJV+TFm5U9I0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V113i9op2pduVlxmzasvaIEvnqTrh+10a7z1AWq+aEg=;
+        b=EFThtIzdqKQP6igH+R8GTHmQPB1WDz3UEWDnypdH+fe2LaPDeXhmrQ+ACBq4+/6eYY
+         xEp7SfADdU2szs+US78tZoHASCpUmp9rjmaVY8AMA4qU8gjKqSU7EdLy/2X9qOHd+QjY
+         py9LHDCHnlbFCyO3BuwHqXbQ7bmANGTuv+1N4igoO2h+aagpJRtJvgj+hnRuTWaj+mVP
+         NtyqdmID2oHqBUnFyA0nKH18/q965GgyxyhWi4eZOgdEPGor5aktxN9k6jXL2aNa3hnV
+         jnbZhcdi7Y+JVjbGcFL75c7Ob2ldJ7Jfdk8Iufpr74P4b+LrEwFK0t29acFBl3kisBoy
+         JWvg==
+X-Gm-Message-State: ANoB5pkhgpaFX9MmymT4dWEIDamRAJMgq+Fv9DQncyHg5aJkWqNx8q9P
+        BusOR5tEB26aWj1Vp/uIyskSLipJmttZcTjZVnHsgl77TIw=
+X-Google-Smtp-Source: AA0mqf4+8dUqlIgr/8H6RT8a2TGpmcGq48sFYZ4zLYA7vHnHmcToY6FLgEsJDVQJxOqoXpyoHy4JHeCWbd8mcGxWiSE=
+X-Received: by 2002:ad4:4c03:0:b0:4bc:182e:78c2 with SMTP id
+ bz3-20020ad44c03000000b004bc182e78c2mr4883234qvb.2.1669143915309; Tue, 22 Nov
+ 2022 11:05:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221121201337.2772216-1-pmalani@chromium.org>
+ <20221121201337.2772216-2-pmalani@chromium.org> <Y3ydPqkxxQCSGGp7@kuha.fi.intel.com>
+In-Reply-To: <Y3ydPqkxxQCSGGp7@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 22 Nov 2022 11:05:04 -0800
+Message-ID: <CACeCKaeCA3+0BVyUO72HvUbV7mcjEcGT4uXnA2X8=CUdjdtOuQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: typec: Add helper to get partner device struct
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        chrome-platform@lists.linux.dev,
+        Benson Leung <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The structs drm_debugfs_info and drm_debugfs_entry introduced a new
-debugfs structure to DRM, centered on drm_device instead of drm_minor.
-Therefore, remove the tasks related to create a new device-centered
-debugfs structure and add a new task to replace the use of
-drm_debugfs_create_files() for the use of drm_debugfs_add_file() and
-drm_debugfs_add_files().
+Hi Heikki,
 
-Signed-off-by: Maíra Canal <mcanal@igalia.com>
----
- Documentation/gpu/todo.rst | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+Thanks for reviewing the patch.
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index b2c6aaf1edf2..f64abf69f341 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -508,17 +508,14 @@ Clean up the debugfs support
- 
- There's a bunch of issues with it:
- 
--- The drm_info_list ->show() function doesn't even bother to cast to the drm
--  structure for you. This is lazy.
-+- Convert drivers to support the drm_debugfs_add_files() function instead of
-+  the drm_debugfs_create_files() function.
- 
- - We probably want to have some support for debugfs files on crtc/connectors and
-   maybe other kms objects directly in core. There's even drm_print support in
-   the funcs for these objects to dump kms state, so it's all there. And then the
-   ->show() functions should obviously give you a pointer to the right object.
- 
--- The drm_info_list stuff is centered on drm_minor instead of drm_device. For
--  anything we want to print drm_device (or maybe drm_file) is the right thing.
--
- - The drm_driver->debugfs_init hooks we have is just an artifact of the old
-   midlayered load sequence. DRM debugfs should work more like sysfs, where you
-   can create properties/files for an object anytime you want, and the core
-@@ -527,8 +524,6 @@ There's a bunch of issues with it:
-   this (together with the drm_minor->drm_device move) would allow us to remove
-   debugfs_init.
- 
--Previous RFC that hasn't landed yet: https://lore.kernel.org/dri-devel/20200513114130.28641-2-wambui.karugax@gmail.com/
--
- Contact: Daniel Vetter
- 
- Level: Intermediate
--- 
-2.38.1
+On Tue, Nov 22, 2022 at 1:58 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Let's not loose the protection around these devices unless there is no
+> other way, and in this case there is.
+>
+> Please just create a wrapper for usb_power_delivery_register() instead:
+>
+> struct usb_power_delivery *
+> typec_partner_usb_power_delivery_register(struct typec_partner *partner,
+>                                           struct usb_power_delivery_desc *desc)
+> {
+>         return usb_power_delivery_register(&partner->dev, desc);
+> }
+> EXPORT_SYMBOL_GPL(typec_partner_usb_power_delivery_register);
 
+Sounds good. I'll send a v2 with the above change as patch 1 (instead
+of the current patch 1).
+
+I will list you as the "Suggested-by" tag (but please let me know if
+you'd like attribution stated differently).
+
+Thanks again!
+
+-Prashant
