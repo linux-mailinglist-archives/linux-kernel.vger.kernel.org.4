@@ -2,165 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5381B6344B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254876344BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 20:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiKVTh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 14:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S234156AbiKVTjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 14:39:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbiKVThz (ORCPT
+        with ESMTP id S233356AbiKVTjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:37:55 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB4B220FE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:37:54 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id d6so25049958lfs.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 11:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9AgAZ70TrtdzOoBdfiah///XbtqvmKlASUxc0HY4vfg=;
-        b=PPusKsb75SMY/Pl8RNjMt0TEs608oGnvVRmD1no7NYu9GmKsxFm1Hn0YGi0sCT2SDT
-         4Iws8zh5UkoPU8t989AySG8Kb4Ziki8ppBI2gYsrUEuNmViGo5t4GeIkEw50+MrAAaAe
-         UshKght/wjdAKP2K324GTWMCkYfnzJPYs9QedYivQ+vzEcdVswjuMDNcCaDz85XxU/qO
-         wXuCziS3KuhCeAgzmfsHI+3wc8gsPaXwMU8St4YT3SYpbsq2O53V6SfgCH0ExSaEQHxy
-         1gM+KPnryXNI6ceg0obzRNJROLuOkKAZOBMUbKjgG6nq2XZVihiQ9sRyVsUHzm/k0+So
-         JsMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9AgAZ70TrtdzOoBdfiah///XbtqvmKlASUxc0HY4vfg=;
-        b=Ci++PmnWtW0ulZuCQT8dKdYctQd91fHKjgZtnLOT1yUJmF05DZCJFFbsDYW6jC+jih
-         mYMmykg3KpqCY3VIV02T9PZLmehNpQLSf+nrFCvrQurCAXOP666TcWHSepsgdmmFO49p
-         ukJa556NB+R/7JTQEZK3KFeGRUGtCpAXavgUk3tPu+UUJYglupsm0RG4MA8+rDUSJNq1
-         2AV+aL76/ul0z0J95HVEcI3+x2I8ZJCxfvJVY29IPmr6aPH6BnKGkeoG6c5vYeOYd1Fo
-         d+t0wtwN2WRAdo96PMXK1CAKlT33A/5eogtYHz2ZTSMS2bIHYHmUW18zQr0nM6VDaMMC
-         YWsg==
-X-Gm-Message-State: ANoB5pmM8iT+kRmsauiCfTm5sirHM0ACeks9KLYrV/npL40uRe7Yk0Hs
-        oRGJGoV38i36OqHtwZtSFXUcDebMWsHDf+5InEG1eg==
-X-Google-Smtp-Source: AA0mqf6lJbsg3Mf7sHEAxAHI68jovsObt9+78eaUvEuy5xlubIQAjvmFRd8VQdqJoWKfaqIqgG9D7QYeKRcddA3QBJk=
-X-Received: by 2002:a19:384c:0:b0:494:7055:b085 with SMTP id
- d12-20020a19384c000000b004947055b085mr4857802lfj.109.1669145872368; Tue, 22
- Nov 2022 11:37:52 -0800 (PST)
-MIME-Version: 1.0
-From:   Ackerley Tng <ackerleytng@google.com>
-Date:   Tue, 22 Nov 2022 11:37:41 -0800
-Message-ID: <CAEvNRgG0u_DoaTYntu18cSb=ceDDeKKNZdfTPuqp6Q_dmJLiVg@mail.gmail.com>
-Subject: Re: [PATCH v10 047/108] KVM: x86/tdp_mmu: Don't zap private pages for
- unsupported cases
-To:     isaku.yamahata@intel.com
-Cc:     David Matlack <dmatlack@google.com>,
-        Erdem Aktas <erdemaktas@google.com>, isaku.yamahata@gmail.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, Sagi Shahar <sagis@google.com>,
-        sean.j.christopherson@intel.com,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 22 Nov 2022 14:39:39 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2A56F361;
+        Tue, 22 Nov 2022 11:39:33 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AMJK7WV017593;
+        Tue, 22 Nov 2022 19:39:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=fqhpTDfxPyVsir4ev5LuPPWGRFEF13TzcH6YSeaIS1w=;
+ b=G8jWBqLWFXqTpQG4r8K6SdMRQ4noTGA6bfNY+J6/goD0528M16WU1j6TlPKJkKmyT92n
+ /6c56pqCLyVysAoIQRp/H4T700K2I+ku8ugUPdm2uKyKwTWN8fdGAYQuzt205sX+cec6
+ vZp+XSAI9rU+z+ikPrdt92pyAeVBud/+FCVkhPH/jRISrFlFxLiG5/NGnv9UnkfwKicw
+ 4qA9X5ljUADUqDk+Bt4zpJbNsHZz4H+PgUQ0AjdlAPko0NisSaELQ5rVW2fq3pVDscGU
+ OhGoxB4w0l7yvWJWl2pQrp70mAbRAT2PRxzgX8kb984NeEPpZx0sAlGwOFED9mI2HkfG PA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0xw7jkej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 19:39:17 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AMIKP8C015701;
+        Tue, 22 Nov 2022 19:39:17 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0xw7jkeb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 19:39:17 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AMJZgYa022314;
+        Tue, 22 Nov 2022 19:39:16 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma02dal.us.ibm.com with ESMTP id 3kxpsabj2p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Nov 2022 19:39:16 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AMJdF4q5702386
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Nov 2022 19:39:15 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E121058068;
+        Tue, 22 Nov 2022 19:39:14 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B36E5805C;
+        Tue, 22 Nov 2022 19:39:13 +0000 (GMT)
+Received: from sig-9-65-239-173.ibm.com (unknown [9.65.239.173])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Nov 2022 19:39:13 +0000 (GMT)
+Message-ID: <9ef25f1b8621dab8b3cd4373bf6ce1633daae70e.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Make a copy of sig and digest in
+ asymmetric_verify()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Tue, 22 Nov 2022 14:39:12 -0500
+In-Reply-To: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
+References: <20221104122023.1750333-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MbnRLYy7-EevjB-8VMKuWNDJgxCXgM9n
+X-Proofpoint-ORIG-GUID: If9WOnpDCGHW3lfXstBPeOmVhSCG9zlM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-22_11,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ adultscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211220152
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Subject: Re: [PATCH v10 047/108] KVM: x86/tdp_mmu: Don't zap private
-pages for unsupported cases
+Hi Roberto,
 
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
->
-> TDX supports only write-back(WB) memory type for private memory
-> architecturally so that (virtualized) memory type change doesn't make sense
-> for private memory.  Also currently, page migration isn't supported for TDX
-> yet. (TDX architecturally supports page migration. it's KVM and kernel
-> implementation issue.)
->
-> Regarding memory type change (mtrr virtualization and lapic page mapping
-> change), pages are zapped by kvm_zap_gfn_range().  On the next KVM page
-> fault, the SPTE entry with a new memory type for the page is populated.
-> Regarding page migration, pages are zapped by the mmu notifier. On the next
-> KVM page fault, the new migrated page is populated.  Don't zap private
-> pages on unmapping for those two cases.
->
-> When deleting/moving a KVM memory slot, zap private pages. Typically
-> tearing down VM.  Don't invalidate private page tables. i.e. zap only leaf
-> SPTEs for KVM mmu that has a shared bit mask. The existing
-> kvm_tdp_mmu_invalidate_all_roots() depends on role.invalid with read-lock
-> of mmu_lock so that other vcpu can operate on KVM mmu concurrently.  It
-> marks the root page table invalid and zaps SPTEs of the root page
-> tables. The TDX module doesn't allow to unlink a protected root page table
-> from the hardware and then allocate a new one for it. i.e. replacing a
-> protected root page table.  Instead, zap only leaf SPTEs for KVM mmu with a
-> shared bit mask set.
->
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c     | 85 ++++++++++++++++++++++++++++++++++++--
->  arch/x86/kvm/mmu/tdp_mmu.c | 24 ++++++++---
->  arch/x86/kvm/mmu/tdp_mmu.h |  5 ++-
->  3 files changed, 103 insertions(+), 11 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index faf69774c7ce..0237e143299c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1577,8 +1577,38 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
->  if (kvm_memslots_have_rmaps(kvm))
->  flush = kvm_handle_gfn_range(kvm, range, kvm_zap_rmap);
->
-> - if (is_tdp_mmu_enabled(kvm))
-> - flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
-> + if (is_tdp_mmu_enabled(kvm)) {
-> + bool zap_private;
+On Fri, 2022-11-04 at 13:20 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
+> mapping") requires that both the signature and the digest resides in the
+> linear mapping area.
+> 
+> However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
+> stack support"), made it possible to move the stack in the vmalloc area,
+> which could make the requirement of the first commit not satisfied anymore.
+> 
+> If CONFIG_SG=y and CONFIG_VMAP_STACK=y, the following BUG() is triggered:
 
-We should initialize zap_private to true, otherwise zap_private is
-uninitialized in call
+^CONFIG_DEBUG_SG
 
-    kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, zap_private)
+> 
+> [  467.077359] kernel BUG at include/linux/scatterlist.h:163!
+> [  467.077939] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> 
+> [...]
+> 
+> [  467.095225] Call Trace:
+> [  467.096088]  <TASK>
+> [  467.096928]  ? rcu_read_lock_held_common+0xe/0x50
+> [  467.097569]  ? rcu_read_lock_sched_held+0x13/0x70
+> [  467.098123]  ? trace_hardirqs_on+0x2c/0xd0
+> [  467.098647]  ? public_key_verify_signature+0x470/0x470
+> [  467.099237]  asymmetric_verify+0x14c/0x300
+> [  467.099869]  evm_verify_hmac+0x245/0x360
+> [  467.100391]  evm_inode_setattr+0x43/0x190
+> 
+> The failure happens only for the digest, as the pointer comes from the
+> stack, and not for the signature, which instead was allocated by
+> vfs_getxattr_alloc().
 
-if the condition
+Only after enabling CONFIG_DEBUG_SG does EVM fail.
 
-    if (kvm_slot_can_be_private(range->slot)) {
+> 
+> Fix this by making a copy of both in asymmetric_verify(), so that the
+> linear mapping requirement is always satisfied, regardless of the caller.
 
-evaluates to false.
+As only EVM is affected, it would make more sense to limit the change
+to EVM.
 
-> +
-> + if (kvm_slot_can_be_private(range->slot)) {
-> + if (range->flags & KVM_GFN_RANGE_FLAGS_RESTRICTED_MEM)
-> + /*
-> + * For private slot, the callback is triggered
-> + * via falloc.  Mode can be allocation or punch
-> + * hole.  Because the private-shared conversion
-> + * is done via
-> + * KVM_MEMORY_ENCRYPT_REG/UNREG_REGION, we can
-> + * ignore the request from restrictedmem.
-> + */
-> + return flush;
-> + else if (range->flags & KVM_GFN_RANGE_FLAGS_SET_MEM_ATTR) {
-> + if (range->attr == KVM_MEM_ATTR_SHARED)
-> + zap_private = true;
-> + else {
-> + WARN_ON_ONCE(range->attr != KVM_MEM_ATTR_PRIVATE);
-> + zap_private = false;
-> + }
-> + } else
-> + /*
-> + * kvm_unmap_gfn_range() is called via mmu
-> + * notifier.  For now page migration for private
-> + * page isn't supported yet, don't zap private
-> + * pages.
-> + */
-> + zap_private = false;
-> + }
-> + flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, zap_private);
-> + }
->
->  return flush;
->  }
+-- 
+thanks,
+
+Mimi
+
