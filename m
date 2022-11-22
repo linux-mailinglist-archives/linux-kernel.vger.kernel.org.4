@@ -2,300 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A3B633FBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 875F6633FBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 16:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbiKVPBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 10:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S233907AbiKVPCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 10:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234142AbiKVPAy (ORCPT
+        with ESMTP id S234301AbiKVPCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:00:54 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70905E9F0;
-        Tue, 22 Nov 2022 07:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669129202; x=1700665202;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aWK/w3O8H43VBVicVuiR2cJT/wFQ8uPk13PWRF6aQ9M=;
-  b=hIJdQrq1R2B9DscxmNIeifmxPza7kkMU//JrCUkd+SCjlN+EOeQ2wpA8
-   2hmd5PLmHGLDNjfU7cWdm0qKV3IHIxrxW5xAxEyc3nO5XYr3RfeOhV4Ih
-   kD0MHP7o7I5dS1QtMbhWQxbPKfLkrvraUwtoGqDgx1ubu5n2Kpj+j9qXz
-   68Wszzr4kJmEp2jThtxtYSQKVo71z1/+AmsGCXbf3xHGV2qolcH4WW9iR
-   kNYY0AsFJiOCAo49F5SRWEw6rwSxXyOxsvN3Uyeub8BvYE6cg26w9LDm3
-   1oji+4ODWkxmPyLtB0YC8M0N5AVUoXXsA7nossI+2BmVAcTPOVBIOSn7V
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="200931761"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 08:00:02 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 07:59:57 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 22 Nov 2022 07:59:53 -0700
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Steen Hegelund <steen.hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Casper Andersson" <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Subject: [PATCH net-next 4/4] net: microchip: sparx5: Add VCAP filter keys KUNIT test
-Date:   Tue, 22 Nov 2022 15:59:38 +0100
-Message-ID: <20221122145938.1775954-5-steen.hegelund@microchip.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221122145938.1775954-1-steen.hegelund@microchip.com>
-References: <20221122145938.1775954-1-steen.hegelund@microchip.com>
+        Tue, 22 Nov 2022 10:02:03 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2718B0B;
+        Tue, 22 Nov 2022 07:00:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=+NFpLSd8ScOHEVd4DHTztoyZ+UkB3J/9rUIzBb7GyY0=;
+        t=1669129239; x=1670338839; b=M4XN9XK1W5a0FSbzeMQpJI7YfGc4KLqku3aIDcoSTviF46U
+        Tjum65SNwV7blxEtkrq70yR1nrlawSGN8RPBRrlaCaQfmfCeBussv6sdgC16zA/JACLvFXglfLGti
+        tyZWeutUSS1t1EL/sf6k/2f4VDe8Kz8dJ8mXHOXIChu2IoRZdI6mxvfX7y6tK8d55o0udNvYnB48l
+        2jkzWhsLco2GCmx3+5zD1AIW1CD/OoEJYSFfeNj5THvmhRamLOzBGllFz3UNBwfvpUOIuD+tQ210r
+        +ftThAwGnUT1rqyknPaGbddy03l14pUZgPE9iJw1rvEzPUXEM/k62gNvbQwIgisQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1oxUlH-006Ngc-2Z;
+        Tue, 22 Nov 2022 16:00:35 +0100
+Message-ID: <021efb6c9295402cf05406bb319c441c0b0229b3.camel@sipsolutions.net>
+Subject: Re: Build regressions/improvements in v6.1-rc6
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-um@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
+Date:   Tue, 22 Nov 2022 16:00:34 +0100
+In-Reply-To: <CADnq5_PvouSKugXxJXqkVeZf+kbP8+hhUKFgVALSO=MOW3jzvA@mail.gmail.com>
+References: <CAHk-=wjKJyzfJmOzBdEOqCFRc8Fh-rdGM4tvMXfW0WXbbHwV0w@mail.gmail.com>
+         <20221122105054.4062213-1-geert@linux-m68k.org>
+         <alpine.DEB.2.22.394.2211221154280.284524@ramsan.of.borg>
+         <CADnq5_PvouSKugXxJXqkVeZf+kbP8+hhUKFgVALSO=MOW3jzvA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This tests the filtering of keys, either dropping unsupported keys or
-dropping keys specified in a list.
+On Tue, 2022-11-22 at 08:55 -0500, Alex Deucher wrote:
+> >=20
+> >    + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called=
+ object is not a function or function pointer:  =3D> 94:18
+> >    + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: e=
+rror: control reaches end of non-void function [-Werror=3Dreturn-type]:  =
+=3D> 1934:1
+> >=20
+> > um-x86_64/um-all{mod,yes}config (in kfd_cpumask_to_apic_id())
+>=20
+> Presumably cpu_data is not defined on um-x86_64?  Does it even make
+> sense to build drivers on um-x86_64?
 
-Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
----
- .../ethernet/microchip/vcap/vcap_api_kunit.c  | 194 ++++++++++++++++++
- 1 file changed, 194 insertions(+)
+Drivers in general yes ;-)
 
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-index 875068e484c9..76a31215ebfb 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-@@ -1954,6 +1954,198 @@ static void vcap_api_next_lookup_advanced_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, true, ret);
- }
- 
-+static void vcap_api_filter_unsupported_keys_test(struct kunit *test)
-+{
-+	struct vcap_admin admin = {
-+		.vtype = VCAP_TYPE_IS2,
-+	};
-+	struct vcap_rule_internal ri = {
-+		.admin = &admin,
-+		.vctrl = &test_vctrl,
-+		.data.keyset = VCAP_KFS_MAC_ETYPE,
-+	};
-+	enum vcap_key_field keylist[] = {
-+		VCAP_KF_TYPE,
-+		VCAP_KF_LOOKUP_FIRST_IS,
-+		VCAP_KF_ARP_ADDR_SPACE_OK_IS,  /* arp keys are not in keyset */
-+		VCAP_KF_ARP_PROTO_SPACE_OK_IS,
-+		VCAP_KF_ARP_LEN_OK_IS,
-+		VCAP_KF_ARP_TGT_MATCH_IS,
-+		VCAP_KF_ARP_SENDER_MATCH_IS,
-+		VCAP_KF_ARP_OPCODE_UNKNOWN_IS,
-+		VCAP_KF_ARP_OPCODE,
-+		VCAP_KF_8021Q_DEI_CLS,
-+		VCAP_KF_8021Q_PCP_CLS,
-+		VCAP_KF_8021Q_VID_CLS,
-+		VCAP_KF_L2_MC_IS,
-+		VCAP_KF_L2_BC_IS,
-+	};
-+	enum vcap_key_field expected[] = {
-+		VCAP_KF_TYPE,
-+		VCAP_KF_LOOKUP_FIRST_IS,
-+		VCAP_KF_8021Q_DEI_CLS,
-+		VCAP_KF_8021Q_PCP_CLS,
-+		VCAP_KF_8021Q_VID_CLS,
-+		VCAP_KF_L2_MC_IS,
-+		VCAP_KF_L2_BC_IS,
-+	};
-+	struct vcap_client_keyfield *ckf, *next;
-+	bool ret;
-+	int idx;
-+
-+	/* Add all keys to the rule */
-+	INIT_LIST_HEAD(&ri.data.keyfields);
-+	for (idx = 0; idx < ARRAY_SIZE(keylist); idx++) {
-+		ckf = kzalloc(sizeof(*ckf), GFP_KERNEL);
-+		if (ckf) {
-+			ckf->ctrl.key = keylist[idx];
-+			list_add_tail(&ckf->ctrl.list, &ri.data.keyfields);
-+		}
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, 14, ARRAY_SIZE(keylist));
-+
-+	/* Drop unsupported keys from the rule */
-+	ret = vcap_filter_rule_keys(&ri.data, NULL, 0, true);
-+
-+	KUNIT_EXPECT_EQ(test, 0, ret);
-+
-+	/* Check remaining keys in the rule */
-+	idx = 0;
-+	list_for_each_entry_safe(ckf, next, &ri.data.keyfields, ctrl.list) {
-+		KUNIT_EXPECT_EQ(test, expected[idx], ckf->ctrl.key);
-+		list_del(&ckf->ctrl.list);
-+		kfree(ckf);
-+		++idx;
-+	}
-+	KUNIT_EXPECT_EQ(test, 7, idx);
-+}
-+
-+static void vcap_api_filter_keylist_test(struct kunit *test)
-+{
-+	struct vcap_admin admin = {
-+		.vtype = VCAP_TYPE_IS0,
-+	};
-+	struct vcap_rule_internal ri = {
-+		.admin = &admin,
-+		.vctrl = &test_vctrl,
-+		.data.keyset = VCAP_KFS_NORMAL_7TUPLE,
-+	};
-+	enum vcap_key_field keylist[] = {
-+		VCAP_KF_TYPE,
-+		VCAP_KF_LOOKUP_FIRST_IS,
-+		VCAP_KF_LOOKUP_GEN_IDX_SEL,
-+		VCAP_KF_LOOKUP_GEN_IDX,
-+		VCAP_KF_IF_IGR_PORT_MASK_SEL,
-+		VCAP_KF_IF_IGR_PORT_MASK,
-+		VCAP_KF_L2_MC_IS,
-+		VCAP_KF_L2_BC_IS,
-+		VCAP_KF_8021Q_VLAN_TAGS,
-+		VCAP_KF_8021Q_TPID0,
-+		VCAP_KF_8021Q_PCP0,
-+		VCAP_KF_8021Q_DEI0,
-+		VCAP_KF_8021Q_VID0,
-+		VCAP_KF_8021Q_TPID1,
-+		VCAP_KF_8021Q_PCP1,
-+		VCAP_KF_8021Q_DEI1,
-+		VCAP_KF_8021Q_VID1,
-+		VCAP_KF_8021Q_TPID2,
-+		VCAP_KF_8021Q_PCP2,
-+		VCAP_KF_8021Q_DEI2,
-+		VCAP_KF_8021Q_VID2,
-+		VCAP_KF_L2_DMAC,
-+		VCAP_KF_L2_SMAC,
-+		VCAP_KF_IP_MC_IS,
-+		VCAP_KF_ETYPE_LEN_IS,
-+		VCAP_KF_ETYPE,
-+		VCAP_KF_IP_SNAP_IS,
-+		VCAP_KF_IP4_IS,
-+		VCAP_KF_L3_FRAGMENT_TYPE,
-+		VCAP_KF_L3_FRAG_INVLD_L4_LEN,
-+		VCAP_KF_L3_OPTIONS_IS,
-+		VCAP_KF_L3_DSCP,
-+		VCAP_KF_L3_IP6_DIP,
-+		VCAP_KF_L3_IP6_SIP,
-+		VCAP_KF_TCP_UDP_IS,
-+		VCAP_KF_TCP_IS,
-+		VCAP_KF_L4_SPORT,
-+		VCAP_KF_L4_RNG,
-+	};
-+	enum vcap_key_field droplist[] = {
-+		VCAP_KF_8021Q_TPID1,
-+		VCAP_KF_8021Q_PCP1,
-+		VCAP_KF_8021Q_DEI1,
-+		VCAP_KF_8021Q_VID1,
-+		VCAP_KF_8021Q_TPID2,
-+		VCAP_KF_8021Q_PCP2,
-+		VCAP_KF_8021Q_DEI2,
-+		VCAP_KF_8021Q_VID2,
-+		VCAP_KF_L3_IP6_DIP,
-+		VCAP_KF_L3_IP6_SIP,
-+		VCAP_KF_L4_SPORT,
-+		VCAP_KF_L4_RNG,
-+	};
-+	enum vcap_key_field expected[] = {
-+		VCAP_KF_TYPE,
-+		VCAP_KF_LOOKUP_FIRST_IS,
-+		VCAP_KF_LOOKUP_GEN_IDX_SEL,
-+		VCAP_KF_LOOKUP_GEN_IDX,
-+		VCAP_KF_IF_IGR_PORT_MASK_SEL,
-+		VCAP_KF_IF_IGR_PORT_MASK,
-+		VCAP_KF_L2_MC_IS,
-+		VCAP_KF_L2_BC_IS,
-+		VCAP_KF_8021Q_VLAN_TAGS,
-+		VCAP_KF_8021Q_TPID0,
-+		VCAP_KF_8021Q_PCP0,
-+		VCAP_KF_8021Q_DEI0,
-+		VCAP_KF_8021Q_VID0,
-+		VCAP_KF_L2_DMAC,
-+		VCAP_KF_L2_SMAC,
-+		VCAP_KF_IP_MC_IS,
-+		VCAP_KF_ETYPE_LEN_IS,
-+		VCAP_KF_ETYPE,
-+		VCAP_KF_IP_SNAP_IS,
-+		VCAP_KF_IP4_IS,
-+		VCAP_KF_L3_FRAGMENT_TYPE,
-+		VCAP_KF_L3_FRAG_INVLD_L4_LEN,
-+		VCAP_KF_L3_OPTIONS_IS,
-+		VCAP_KF_L3_DSCP,
-+		VCAP_KF_TCP_UDP_IS,
-+		VCAP_KF_TCP_IS,
-+	};
-+	struct vcap_client_keyfield *ckf, *next;
-+	bool ret;
-+	int idx;
-+
-+	/* Add all keys to the rule */
-+	INIT_LIST_HEAD(&ri.data.keyfields);
-+	for (idx = 0; idx < ARRAY_SIZE(keylist); idx++) {
-+		ckf = kzalloc(sizeof(*ckf), GFP_KERNEL);
-+		if (ckf) {
-+			ckf->ctrl.key = keylist[idx];
-+			list_add_tail(&ckf->ctrl.list, &ri.data.keyfields);
-+		}
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, 38, ARRAY_SIZE(keylist));
-+
-+	/* Drop listed keys from the rule */
-+	ret = vcap_filter_rule_keys(&ri.data, droplist, ARRAY_SIZE(droplist),
-+				    false);
-+
-+	KUNIT_EXPECT_EQ(test, 0, ret);
-+
-+	/* Check remaining keys in the rule */
-+	idx = 0;
-+	list_for_each_entry_safe(ckf, next, &ri.data.keyfields, ctrl.list) {
-+		KUNIT_EXPECT_EQ(test, expected[idx], ckf->ctrl.key);
-+		list_del(&ckf->ctrl.list);
-+		kfree(ckf);
-+		++idx;
-+	}
-+	KUNIT_EXPECT_EQ(test, 26, idx);
-+}
-+
- static struct kunit_suite vcap_api_rule_remove_test_suite = {
- 	.name = "VCAP_API_Rule_Remove_Testsuite",
- 	.test_cases = vcap_api_rule_remove_test_cases,
-@@ -1984,6 +2176,8 @@ static struct kunit_suite vcap_api_rule_counter_test_suite = {
- static struct kunit_case vcap_api_support_test_cases[] = {
- 	KUNIT_CASE(vcap_api_next_lookup_basic_test),
- 	KUNIT_CASE(vcap_api_next_lookup_advanced_test),
-+	KUNIT_CASE(vcap_api_filter_unsupported_keys_test),
-+	KUNIT_CASE(vcap_api_filter_keylist_test),
- 	{}
- };
- 
--- 
-2.38.1
+This driver, probably not.
+
+But the issue is that a lot of drivers "depends on X86_64" or such,
+where only "X86" is the arch symbol. You could add "X86 && X86_64" to
+really build on x86 64-bit only.
+
+I didn't check this driver, but this has mostly popped up since UM got
+PCI support some time ago (which I added.)
+
+johannes
+
 
