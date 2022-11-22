@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D4E6331D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ADC6331CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 02:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiKVBE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 20:04:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S231844AbiKVBEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 20:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiKVBEZ (ORCPT
+        with ESMTP id S231946AbiKVBEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Nov 2022 20:04:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AD615FF5;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F7C11A12;
         Mon, 21 Nov 2022 17:04:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1301E6151A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13F7F6151F;
         Tue, 22 Nov 2022 01:04:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F617C43155;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3228FC43154;
         Tue, 22 Nov 2022 01:04:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1669079063;
-        bh=wpD5zzzo6w7p3WOWI5WdmBr7p4BboEaBNwhD+AKKK+A=;
+        bh=JDkX7Fc0DOy+yBhbkuqH9S9Ejfgbk7JA8huLd1R6z8Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PK1gNZVJ0kcEPvGy8l9MHsEaFYI4887MGYxjwddokCvV+5CR0pd79fl0p1glOCGRn
-         0UZ933OfAr+4Gq4dPyQQ4ggYYy7ccvWAq7u3GjOOQ7+zHHDtLvQye8pH8M+W0mlL9y
-         sPKNHqGeUQX6wHnzugWH1EkLj7EBiasEKdjqPfB+3Mn6fRhazpJViEPEdVXvGMH8Mp
-         8V3kgK6niSFEXIPG0ggFZbhKEYuigziC8Lr+NN51KI8fNT4wMU7AyIBoB+ybCdNHHm
-         eL1fFHymyVCC6ufBOz1XhfkVZUFfGDaG9XQKwLeKE7dV3bVxproQTa3yKrUxKkYe2e
-         wEDKHMa+wadsw==
+        b=ERo9qt7uO7GVBBnrX8o2yXKM/JykcLBdKAbt/RQK4nUKXF1KXqh6rH97v9r5k9ZXA
+         WumeDeAgQ6u2DwTKhLbgEUQi9W/b1FOGQkAEq75C51k0vVc6/BAUAIEWz/HBMK4vI5
+         l0puY9/6h3ocIVuzk2IqMT5KJCe+V61HRQok8UROZEnccnPyNxpaauTlmY/L4CEmXY
+         9hfAa7Osg5YjfWoq7Y0ORylTq6OuP+ZtK1SsgJyIGpu/HQWPMGq/ce3G253xKj4Ctz
+         NVDwNSK7+OAzWB7T5QrsS8ecsRwC2aSLbLC1ByBPcM7Uiq7FBYS8zMeUuF27bmV1bV
+         iYx8FNDVQU4bw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8788A5C1523; Mon, 21 Nov 2022 17:04:22 -0800 (PST)
+        id 8954E5C155D; Mon, 21 Nov 2022 17:04:22 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, Uladzislau Rezki <urezki@gmail.com>,
         Joel Fernandes <joel@joelfernandes.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 rcu 12/16] scsi/scsi_error: Use call_rcu_flush() instead of call_rcu()
-Date:   Mon, 21 Nov 2022 17:04:17 -0800
-Message-Id: <20221122010421.3799681-12-paulmck@kernel.org>
+Subject: [PATCH v2 rcu 13/16] workqueue: Make queue_rcu_work() use call_rcu_flush()
+Date:   Mon, 21 Nov 2022 17:04:18 -0800
+Message-Id: <20221122010421.3799681-13-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20221122010408.GA3799268@paulmck-ThinkPad-P17-Gen-1>
 References: <20221122010408.GA3799268@paulmck-ThinkPad-P17-Gen-1>
@@ -99,37 +98,35 @@ feedback at the 2022 Linux Plumbers Conference shifted the approach
 to call_rcu() being lazy with call_rcu_flush() for the few places
 where laziness is inappropriate.
 
-And another call_rcu() instance that cannot be lazy is the one in the
-scsi_eh_scmd_add() function.  Leaving this instance lazy results in
-unacceptably slow boot times.
+And another call_rcu() instance that cannot be lazy is the one
+in queue_rcu_work(), given that callers to queue_rcu_work() are
+not necessarily OK with long delays.
 
-Therefore, make scsi_eh_scmd_add() use call_rcu_flush() in order to
-revert to the old behavior.
+Therefore, make queue_rcu_work() use call_rcu_flush() in order to revert
+to the old behavior.
 
-Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: <linux-scsi@vger.kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- drivers/scsi/scsi_error.c | 2 +-
+ kernel/workqueue.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 6995c89792300..634672e67c81f 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -312,7 +312,7 @@ void scsi_eh_scmd_add(struct scsi_cmnd *scmd)
- 	 * Ensure that all tasks observe the host state change before the
- 	 * host_failed change.
- 	 */
--	call_rcu(&scmd->rcu, scsi_eh_inc_host_failed);
-+	call_rcu_flush(&scmd->rcu, scsi_eh_inc_host_failed);
- }
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 7cd5f5e7e0a1b..b4b0e828b529e 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
  
- /**
+ 	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+ 		rwork->wq = wq;
+-		call_rcu(&rwork->rcu, rcu_work_rcufn);
++		call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+ 		return true;
+ 	}
+ 
 -- 
 2.31.1.189.g2e36527f23
 
