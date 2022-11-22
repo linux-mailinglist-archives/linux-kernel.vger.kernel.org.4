@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBBD633963
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE1663396B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 11:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbiKVKKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 05:10:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
+        id S233038AbiKVKLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 05:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbiKVKKq (ORCPT
+        with ESMTP id S233085AbiKVKK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:10:46 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8344251326
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:10:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669111845; x=1700647845;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U5YfMCZGtbIuv3f07XMWHQcbDPvM3htvz+fo05zaqDE=;
-  b=b7SF6zWzmDgDOk6J8LWHckcY3BDUfbOVu9SwanFpHSY4btErbw/bf+vS
-   altbrRJ/8gLxt7z1d70YRtCoiV8eVtfteLDMluGLJ/Mlb41XCkN/WE2/z
-   6OaQdSojECm/fDqOyTjw3GGlJW8z/RT2d7STvQb70FNolerQQmzOOdDZZ
-   OOnOlesiy67Sen6zuqSebG5H8X6ySpEUppvmfkGhYu3GvLxGMMrNYBVmx
-   NEOZRL31QnLVmOvk97XbBmFc8pqOOmvh2tquAo1WccqqCR9GkY4xaIEG/
-   2ORr7h/u+LI2QC5/swDs7IvxPdDID3HW/DO1YuztM37/kXEAQFsNHP4bO
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="315601040"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="315601040"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 02:10:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="710143501"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="710143501"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Nov 2022 02:10:42 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxQEi-00Fhpz-0S;
-        Tue, 22 Nov 2022 12:10:40 +0200
-Date:   Tue, 22 Nov 2022 12:10:39 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rahul Tanwar <rtanwar@maxlinear.com>
-Cc:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
-Subject: Re: [PATCH v3 4/4] x86/of: Add support for boot time interrupt
- delivery mode configuration
-Message-ID: <Y3ygH0Oe8K0saF+S@smile.fi.intel.com>
-References: <cover.1669100394.git.rtanwar@maxlinear.com>
- <c62b81d5b91514e905d97e37feff6920f598e0ac.1669100394.git.rtanwar@maxlinear.com>
- <Y3yS6fCIl+0nsbOj@smile.fi.intel.com>
- <e5028335-97f9-dd88-09e9-9036b55e7642@maxlinear.com>
+        Tue, 22 Nov 2022 05:10:59 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F09853EC9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:10:58 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id a22-20020a17090a6d9600b0021896eb5554so7882807pjk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 02:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9Ffx34EpUvz/wk2V0TkLGpQPfUVhIxoixoNZG+R5yhU=;
+        b=TVN5V6A7gjqPVkAUn4JbFNorOWRrBKFn7ykWEJFI2TJyoLwiq9OSTR31A7QwxM/sgq
+         KMg0c+/ECORPxlNsN7/S07SNEgU7QXb2cUDS2ry1M5DkXy0wp3y18EEdHQvJYEmYK/Rl
+         C4OS51EMJa4XoawksMYV/Cf9b5L1ulCHoVN65dRBkBMOIDHvmj8jN2tkIGErvk/9QZG8
+         vsxqY2OPl5wDk2T4Ja6eJ0XKeO3maMTXu6xlKRLV5URoxFCGq+WOl6szvf11N02f8hpi
+         B34fRWv1L4KyL4bhKSwrv1dEOgWY/rFh3gVsHIVXnfFcWQUalNUho/A+qyH5hiABzQ8l
+         F42w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9Ffx34EpUvz/wk2V0TkLGpQPfUVhIxoixoNZG+R5yhU=;
+        b=DB3a6To2fe/zy5h9QQEDFtJR/74u9vCHuLNvX7akmMwxoo+2bPJPRJgMLZ5fcjq9Fc
+         H9+zpB0Qs1wNevs4TnChynicKq0+0VFhZtZw+SACA++I5X2hO419UMEeyiXVEfPmEkjB
+         yd7lCLAqPdfYsuhWmuxSc+bSlij6jXFzrEjb0v517aY9VFIccVip+ucYTTjk18yylShO
+         t97IQZOplLDoKlEjAaxCQGIJZyd2LNo62B//U8lNgBw3VwY5Wy7p6mBxRBRollfI8pCG
+         p1AeXA8LCopxXluu08eKAEE7COjkY/F2xyeMaG5u+rRa49F4+14k5ws9gXwUzlDHRTrf
+         Vg9Q==
+X-Gm-Message-State: ANoB5pktCkxJ++nsaFxqK8kyqap1JZtjhBGQ11W2bd+OWsFP36BiMQN6
+        BoKwe738g0IdE2GnO2U6FLiKNPRxPtCEjOJc7fc=
+X-Google-Smtp-Source: AA0mqf7EWECK5efgWxORmvkHfTeEiAaT/+7tYzpwh78/RlRBi/8M0vH9zW9E6QMP8gG5GC3WkLfXJn+8uC6/tjmYfu8=
+X-Received: by 2002:a17:902:6847:b0:183:6555:38ef with SMTP id
+ f7-20020a170902684700b00183655538efmr6778345pln.157.1669111858051; Tue, 22
+ Nov 2022 02:10:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5028335-97f9-dd88-09e9-9036b55e7642@maxlinear.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220923100149.2647325-1-suagrfillet@gmail.com>
+In-Reply-To: <20220923100149.2647325-1-suagrfillet@gmail.com>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Tue, 22 Nov 2022 10:10:46 +0000
+Message-ID: <CAAYs2=hx49ahtY3pe1z241Vd1mRNZjc-oigubmKy0aGqg6T8ag@mail.gmail.com>
+Subject: Re: [PATCH RESEND] riscv : select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+To:     Guo Ren <guoren@kernel.org>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu
+Cc:     guoren@linux.alibaba.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 09:45:29AM +0000, Rahul Tanwar wrote:
-> On 22/11/2022 5:14 pm, Andy Shevchenko wrote:
-> > On Tue, Nov 22, 2022 at 03:39:10PM +0800, Rahul Tanwar wrote:
+Song Shuai <suagrfillet@gmail.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=8823=E6=97=
+=A5=E5=91=A8=E4=BA=94 10:03=E5=86=99=E9=81=93=EF=BC=9A
+>
+> riscv now uses -fpatchable-function-entry with dynamic ftrace after
+> the `afc76b8b8` commit, which means recordmcount shouldn't be called
+> to create the __mcount_loc section before the vmlinux linking.
+>
+> We should select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY to tell
+> Makefile not to run recordmcount.
+>
+Hi,Guo:
 
-...
+Can this patch squeeze into your v3 series ?
 
-> >> Fixes: 3879a6f32948 ("x86: dtb: Add early parsing of IO_APIC")
-> > 
-> > If it was never working, there is nothing to fix.
-> > OTOH, without Cc: stable@ this is up to stable maintainers to
-> > backport.
-> 
-> Agree, will remove fixes tag..
-
-Don't forget to update cover letter and messages accordingly.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Song
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> ---
+>  arch/riscv/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index c22f58155948..25db8cea876a 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -246,6 +246,7 @@ config ARCH_RV64I
+>         select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-=
+fpatchable-function-entry=3D8)
+>         select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+>         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+> +       select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FTRA=
+CE
+>         select HAVE_FUNCTION_GRAPH_TRACER
+>         select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+>         select SWIOTLB if MMU
+> --
+> 2.20.1
+>
