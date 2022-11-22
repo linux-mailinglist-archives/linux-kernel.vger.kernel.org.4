@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F314633C39
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D82B633C32
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 13:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbiKVMOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 07:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S233633AbiKVMOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 07:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbiKVMOi (ORCPT
+        with ESMTP id S232970AbiKVMO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:14:38 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E0B30553;
-        Tue, 22 Nov 2022 04:14:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669119278; x=1700655278;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2iUJ6MdJMZ9QlczJ7Cl1gn/iA/sB8KkCg0L+jD78/hw=;
-  b=KqegwyE6aWcwQpu18jsaRNFCbmAOI9RFN0g5XoliZaadh5ZaFkcMrmUX
-   oS+2nZUWyhgxyJsejj6Au/1+MR3HBWku3+JS5dWnEqBXTelzIjrrhql5N
-   VqxqqqqFCRtc4K3QArhVc01yJc5m5CLNqMyHT/O3WNfdBXkifNxRcpPcc
-   TD2y5PuWzGsucvgnfHqUf9rAuPUKRmKhpZpFNsgxm2LkcJeALYXy6uytk
-   WtHQPFjI3d7xN6/ZHLAzqSlX51v0J7Wqusc/8qNBtHui+y+VacPLb3gO9
-   K8gNBCg3JI5VgnTI6pYf70E9kN8cYPwte2ABrKnXHdwJ2bbzOz+jkazRa
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="340669177"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="340669177"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 04:14:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="730373146"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="730373146"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Nov 2022 04:14:27 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AMCEQxo009047;
-        Tue, 22 Nov 2022 12:14:26 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "Keller, Jacob E" <jacob.e.keller@intel.com>,
-        Tom Rix <trix@redhat.com>, Marco Bonelli <marco@mebeim.net>,
-        Edward Cree <ecree@solarflare.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] ethtool: avoiding integer overflow in ethtool_phys_id()
-Date:   Tue, 22 Nov 2022 13:14:00 +0100
-Message-Id: <20221122121400.420417-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221122065423.19458-1-korotkov.maxim.s@gmail.com>
-References: <20221122065423.19458-1-korotkov.maxim.s@gmail.com>
+        Tue, 22 Nov 2022 07:14:29 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C167512A8A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 04:14:24 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id A5DD65FD11;
+        Tue, 22 Nov 2022 15:14:21 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1669119261;
+        bh=QsZAzuI9qBQHnlaxynSPsWNk5m9eu8gwQdPWrQGY0OI=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=pQjf9JAdqM4OgHzn+B5B9bAW63aFd1bKK54xEfxZiFwe5ClZhIrmS+ERR77j3d5gH
+         q8JFNNSC7JnVz2SAcRBPnZzYKAdNrMjC14SRRJ7WlOYQFyLE12yXiKKDXWNAkouzzd
+         UZmEndhKwc+Ne/4WMTbyw3bVrAQ/y2/S2gZJFY6SOqPRP+iPMSlpNcLpOIGUI4tgsV
+         aoaj7Lm/oqyPFdsNDCs8spmR5GtU7TC2BcD1uZqg6kRCI2H9RSAHmhGhPiA8TJc2Rn
+         La4w6eb+xq/Rcp6PY9YFJ7aW6Ct23tBMGTu70VNQp3l6gvUzssJRwlRgNF+pRkevbe
+         VQS00m0DaIJog==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 22 Nov 2022 15:14:19 +0300 (MSK)
+From:   Aleksey Romanov <AVRomanov@sberdevices.ru>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+CC:     Johannes Weiner <hannes@cmpxchg.org>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "ngupta@vflare.org" <ngupta@vflare.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "Dmitry Rokosov" <DDRokosov@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/4] Introduce merge identical pages mechanism
+Thread-Topic: [RFC PATCH v1 0/4] Introduce merge identical pages mechanism
+Thread-Index: AQHY/duSaivivX4eVEi4n5R4teXteK5JpjKAgABo/ACAAAH8AIAAmLKA
+Date:   Tue, 22 Nov 2022 12:14:19 +0000
+Message-ID: <20221122121413.ssieckg523urj37h@cab-wsm-0029881.lan>
+References: <20221121190020.66548-1-avromanov@sberdevices.ru>
+ <Y3vjQ7VJYUEWl2uc@cmpxchg.org> <Y3w7VP5CKvm6XmoJ@google.com>
+ <Y3w8/q/HoSbqamoD@google.com>
+In-Reply-To: <Y3w8/q/HoSbqamoD@google.com>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9FF7E9E2A2A16F438D29FD93C6512969@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/11/22 08:14:00 #20597802
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Date: Tue, 22 Nov 2022 09:54:23 +0300
+Hello!
 
-> The value of an arithmetic expression "n * id.data" is subject
-> to possible overflow due to a failure to cast operands to a larger data
-> type before performing arithmetic. Used macro for multiplication instead
-> operator for avoiding overflow.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
-> ---
->  net/ethtool/ioctl.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-> index 6a7308de192d..f845e8be4d7c 100644
-> --- a/net/ethtool/ioctl.c
-> +++ b/net/ethtool/ioctl.c
-> @@ -2007,7 +2007,8 @@ static int ethtool_phys_id(struct net_device *dev, void __user *useraddr)
->  	} else {
->  		/* Driver expects to be called at twice the frequency in rc */
->  		int n = rc * 2, interval = HZ / n;
-> -		u64 count = n * id.data, i = 0;
-> +		u64 count = mul_u32_u32(n,id.data);
+On Tue, Nov 22, 2022 at 12:07:42PM +0900, Sergey Senozhatsky wrote:
+> On (22/11/22 12:00), Sergey Senozhatsky wrote:
+> > On (22/11/21 15:44), Johannes Weiner wrote:
+> > > This looks pretty great.
+> > >=20
+> > > However, I'm curious why it's specific to zram, and not part of
+> > > zsmalloc? That way zswap would benefit as well, without having to
+> > > duplicate the implementation. This happened for example with
+> > > page_same_filled() and zswap_is_page_same_filled().
+> > >=20
+> > > It's zsmalloc's job to store content efficiently, so couldn't this
+> > > feature (just like the page_same_filled one) be an optimization that
+> > > zsmalloc does transparently for all its users?
+> >=20
+> > Yea, that's a much needed functionality, but things may be "complicated=
+".
+> > We had that KSM-ish thing in the past in zram. Very briefly as we quick=
+ly
+> > found out that the idea was patented by some company in China and we co=
+uldn't
+> > figure our if it was safe to land that code upstream. So we ended up dr=
+opping
+> > the patches.
+> >=20
+> > https://lore.kernel.org/lkml/1494556204-25796-1-git-send-email-iamjoons=
+oo.kim@lge.com/
+>=20
+> IIRC that was patent in question:
+>=20
+> https://patentimages.storage.googleapis.com/e2/66/9e/0ddbfae5c182ac/US997=
+7598.pdf
 
-                                         ^^
+I think the patent is talking about "mapping the virtual address" (like
+in KSM). But zram works with the "handle" abstraction, which is a boxed
+pointer to the required object. I think my implementation and the patent
+is slightly different.=20
 
-Meh, you forgot to put a space after the comma :s
+Also, the patent speaks of "compressing" pages. In this case, we can add
+zs_merge() function (like zs_compact()), that is, remove the merge logic
+at the allocator level. zsmalloc doesn't say anything about what objects
+it can work with. Implementation at the zsmalloc level is possible,
+though more complicated that at the zram level.=20
 
-Other than that (please add it to a v3):
+I believe that we can implement at least one of the options I proposed.
 
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+What do you think?
 
-> +		u64 i = 0;
->  
->  		do {
->  			rtnl_lock();
-> -- 
-> 2.17.1
-
-Thanks,
-Olek
+--=20
+Thank you,
+Alexey=
