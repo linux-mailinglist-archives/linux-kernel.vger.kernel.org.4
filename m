@@ -2,95 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DEF633F24
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B372F633F25
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbiKVOlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S232730AbiKVOlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:41:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiKVOl0 (ORCPT
+        with ESMTP id S233058AbiKVOlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:41:26 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFEF6B22C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:41:24 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id z18so20901823edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:41:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9Kacw5FrPZZ3AdW9d8qAJ/kGPVPvKgJmlT/4YyZBVx8=;
-        b=eMW459fMFldVshj3WV+ihtUTZnN2/2Hj68P41SlaqDDiVW1hhAWBX0UC5DRobZqGCP
-         /o2moQdFpE7zKyynoZQqpKGvskmLYvyw1ySQqT7VUDyYANvGI/KnSQCX4kXiTpN1TBYs
-         914g4PnWap5OJDSgzWDCCgkuPvasp8UlkBmkk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Kacw5FrPZZ3AdW9d8qAJ/kGPVPvKgJmlT/4YyZBVx8=;
-        b=f75qMUTnDMrdc3xqYSOsEqKFteo2xC/PFtJbYgm3/id7SBIh+xazGQdoUwrNY1mqeM
-         4qyvIq0Ar5HuIa7cstgDhv38j8lE4AgHcRO3X2oHqzrQR0p24b892Bdg/v7miFwEyahB
-         3EULVpXFwHjLNm0nPlFlk23eKRVgQxxfdaHmbcgtEG7molBgu7DnqFjqcJsMzMDQfNzK
-         mDxV0QjgK998DEncapNhxvbmd7IBwRNwk+PWKGZXGSOtdKnfDGso/anLoGKdOaSyg3Lc
-         IA7rinJ0sBtfYIZNz88REo2ssuJplfOze77G+bYap8P2bPSG6UM21j0XuNWt+Kt1WnC9
-         vJfA==
-X-Gm-Message-State: ANoB5pkRox7Eaz03E7OAUKHeNPNxE4l2Ax6kSqyfwTfs9KC3dkbDKMxt
-        tJGoRNi0zwsPmnpGFiKvl9GN3M7KKKgB5w==
-X-Google-Smtp-Source: AA0mqf45QBsCoAXSHHBUHYZ7dwpofHSYAG7JNRqA1tuzcnNIyNfvrmjTgFwdQCNZjxFH/v19IZ+I8w==
-X-Received: by 2002:a05:6402:3203:b0:467:b8c9:a7fa with SMTP id g3-20020a056402320300b00467b8c9a7famr5581006eda.25.1669128083250;
-        Tue, 22 Nov 2022 06:41:23 -0800 (PST)
-Received: from [192.168.1.149] ([80.208.71.65])
-        by smtp.gmail.com with ESMTPSA id b10-20020a1709063caa00b0078907275a44sm6058819ejh.42.2022.11.22.06.41.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 06:41:22 -0800 (PST)
-Message-ID: <d8e3b536-06ac-2346-3fe1-90ed2fb1127d@rasmusvillemoes.dk>
-Date:   Tue, 22 Nov 2022 15:41:21 +0100
+        Tue, 22 Nov 2022 09:41:39 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195286B21D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:41:37 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B95F21F85D;
+        Tue, 22 Nov 2022 14:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669128095; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LmN1hwBs4+4uTRkpp4eNPSMHGUAlw5RApBOUSqclOpE=;
+        b=cJv41sKF6Vg9wsPD41beCiNeYxTaW11IO3hDU5UrYISuaUr42uKJqjZxNlmWnnSrdyMrhz
+        jrpQGqM1U7GifY2v4h69cgGWfx08c4i9DfpmDe/8vicjzpAsIPdUTURgICFEIBggBPLXvm
+        5wD/a6iaEm4MJ5gr1jOeK0kAFWYr9cY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669128095;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LmN1hwBs4+4uTRkpp4eNPSMHGUAlw5RApBOUSqclOpE=;
+        b=J5Zo1Tta+a6RkSwZizIk9ZqKU3vBjVfZkGzOmoALJBGsReW2wnfy87ABaGYhPWLKRaSwJW
+        x9TfPawEZ+9KN3BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 708B213AA1;
+        Tue, 22 Nov 2022 14:41:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iknKGZ/ffGMFegAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 22 Nov 2022 14:41:35 +0000
+Date:   Tue, 22 Nov 2022 15:41:34 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Lee Jones <lee@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        "Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.neuschaefer@gmx.net>
+Subject: [PATCH] mfd: Drop obsolete dependencies on COMPILE_TEST
+Message-ID: <20221122154134.58a7a18b@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] iio: adc128s052: add proper .data members in
- adc128_of_match table
-Content-Language: en-US, da
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Javier Arteaga <javier@emutex.com>,
-        Dan O'Donovan <dan@emutex.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nicola Lunghi <nicola.lunghi@emutex.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221115132324.1078169-1-linux@rasmusvillemoes.dk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221115132324.1078169-1-linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 14.23, Rasmus Villemoes wrote:
-> Prior to commit bd5d54e4d49d ("iio: adc128s052: add ACPI _HID
-> AANT1280"), the driver unconditionally used spi_get_device_id() to get
-> the index into the adc128_config array.
-> 
-> However, with that commit, OF-based boards now incorrectly treat all
-> supported sensors as if they are an adc128s052, because all the .data
-> members of the adc128_of_match table are implicitly 0. Our board,
-> which has an adc122s021, thus exposes 8 channels whereas it really
-> only has two.
-> 
-> Fixes: bd5d54e4d49d ("iio: adc128s052: add ACPI _HID AANT1280")
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> ---
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-Ping. Any chance this could be picked up before the merge window for 6.2
-opens?
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
+
+As a minor optimization, this also lets us drop of_match_ptr(), as we
+now know what it will resolve to, we might as well save cpp some work.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Lee Jones <lee@kernel.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: "Jonathan Neusch=C3=A4fer" <j.neuschaefer@gmx.net>
+---
+ drivers/mfd/Kconfig          |   16 ++++++++--------
+ drivers/mfd/motorola-cpcap.c |    2 +-
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+--- linux-6.0.orig/drivers/mfd/Kconfig
++++ linux-6.0/drivers/mfd/Kconfig
+@@ -794,7 +794,7 @@ config MFD_MAX14577
+ config MFD_MAX77620
+ 	bool "Maxim Semiconductor MAX77620 and MAX20024 PMIC Support"
+ 	depends on I2C=3Dy
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select MFD_CORE
+ 	select REGMAP_I2C
+ 	select REGMAP_IRQ
+@@ -809,7 +809,7 @@ config MFD_MAX77620
+ config MFD_MAX77650
+ 	tristate "Maxim MAX77650/77651 PMIC Support"
+ 	depends on I2C
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select MFD_CORE
+ 	select REGMAP_I2C
+ 	select REGMAP_IRQ
+@@ -824,7 +824,7 @@ config MFD_MAX77650
+ config MFD_MAX77686
+ 	tristate "Maxim Semiconductor MAX77686/802 PMIC Support"
+ 	depends on I2C
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select MFD_CORE
+ 	select REGMAP_I2C
+ 	select REGMAP_IRQ
+@@ -853,7 +853,7 @@ config MFD_MAX77693
+ config MFD_MAX77714
+ 	tristate "Maxim Semiconductor MAX77714 PMIC Support"
+ 	depends on I2C
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select MFD_CORE
+ 	select REGMAP_I2C
+ 	help
+@@ -973,7 +973,7 @@ config EZX_PCAP
+ config MFD_CPCAP
+ 	tristate "Support for Motorola CPCAP"
+ 	depends on SPI
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select MFD_CORE
+ 	select REGMAP_SPI
+ 	select REGMAP_IRQ
+@@ -998,7 +998,7 @@ config MFD_VIPERBOARD
+=20
+ config MFD_NTXEC
+ 	tristate "Netronix embedded controller (EC)"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	depends on I2C
+ 	select REGMAP_I2C
+ 	select MFD_CORE
+@@ -1172,7 +1172,7 @@ config MFD_RN5T618
+ config MFD_SEC_CORE
+ 	tristate "Samsung Electronics PMIC Series Support"
+ 	depends on I2C=3Dy
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select MFD_CORE
+ 	select REGMAP_I2C
+ 	select REGMAP_IRQ
+@@ -2018,7 +2018,7 @@ config MFD_STPMIC1
+ config MFD_STMFX
+ 	tristate "Support for STMicroelectronics Multi-Function eXpander (STMFX)"
+ 	depends on I2C
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select MFD_CORE
+ 	select REGMAP_I2C
+ 	help
+--- linux-6.0.orig/drivers/mfd/motorola-cpcap.c
++++ linux-6.0/drivers/mfd/motorola-cpcap.c
+@@ -296,7 +296,7 @@ static int cpcap_probe(struct spi_device
+ 	struct cpcap_ddata *cpcap;
+ 	int ret;
+=20
+-	match =3D of_match_device(of_match_ptr(cpcap_of_match), &spi->dev);
++	match =3D of_match_device(cpcap_of_match, &spi->dev);
+ 	if (!match)
+ 		return -ENODEV;
+=20
+
+--=20
+Jean Delvare
+SUSE L3 Support
