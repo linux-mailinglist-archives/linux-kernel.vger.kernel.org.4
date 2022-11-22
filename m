@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2385F633DCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7729633DD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 14:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbiKVNgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 08:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S231998AbiKVNhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 08:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233809AbiKVNfw (ORCPT
+        with ESMTP id S233906AbiKVNgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 08:35:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5AC51C26
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:35:51 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxTR4-0004Q1-Ha; Tue, 22 Nov 2022 14:35:38 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxTR1-005rZK-1b; Tue, 22 Nov 2022 14:35:35 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxTR1-000o5d-AE; Tue, 22 Nov 2022 14:35:35 +0100
-Date:   Tue, 22 Nov 2022 14:35:34 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-iio@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH 567/606] staging: iio: ad5933: Convert to i2c's
- .probe_new()
-Message-ID: <20221122133534.zoosrjjszpgmgb64@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-568-uwe@kleine-koenig.org>
- <Y3y/DxNp+cYu7GTH@kroah.com>
+        Tue, 22 Nov 2022 08:36:51 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299F465872
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:36:32 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id c15so9232267qtw.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 05:36:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=timesys-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UkNEKCQ16FMxkrHYVFQf6e8K188fnshAA38kAxfjKU8=;
+        b=QbuTusYomnVJaeY21Fj9W3eEOnRQHuFxac07KrLEArsmb7jkYaQSErevjsEaN4Sq2G
+         CIZVgJQNaHT881QEt5m63hClrwgqJ01bRQmosMGCcwhvOGULLxeeXAyLqNFekczB3WZu
+         7cdg9BnUXcReStZAz1y54TGgN0tgFmtdIfqcUj7KLvjeMOkHwC7vug25ZD6uIrurAt7D
+         5Vf70H+2NwReKirgfuB9DBztExfJ/VL3hOja1ExyW7CZAkyDVUMVYdu6/7rMbJUCq7Hr
+         0fhwfqnXoQxhxTJSkv4zkSmp4Li2BqxpK7u0wYpRhj7krnRVcm++WIzHLQ1qiDYPNDpt
+         Moag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UkNEKCQ16FMxkrHYVFQf6e8K188fnshAA38kAxfjKU8=;
+        b=ZtTygndh0QVEHsM5eeFCfY/50udGon8UElpnu8q2o5rRnQ97AisMf67m2861dKvle/
+         +980eaOVJLHn9Ri6/N73nVtuB0KFHowj/4fssuPvg3lA7gfil7eD7M7DSMzvyACotoA3
+         IuJOv0SDYLvTLRnwgQVVb/SWZjWIrZ3GBcolEZbszIL/W1f6TBxWensdwyzM/IVd/uBx
+         4XNQLdDgfGgCY8Z0W+Y8mj/wfjgzFy6BruXOygnJdB9TSvDOWOEu4tIQjbNnwdAjqDHT
+         oNc8ivOSqaGCk7j+EruNEdNikpA/hj0z30YTmR+zgwZqkT8No7GiygGHwwnsJQ3AVznk
+         FvFg==
+X-Gm-Message-State: ANoB5pnr4X62poWtCjZ3eRZ4TCywj3GG1IxIVi4W7KYO7LZAUVMvkEue
+        p/xBbo+X7/ELL9nnyvu3IlxWEGlko7jQiA==
+X-Google-Smtp-Source: AA0mqf6D3HygNB0CzVApEgtr3ebu7Oqjj0W7lPeYhyi3Eb3MHz34bc0OLNP942A3sEpLJ2u+k892dw==
+X-Received: by 2002:ac8:7216:0:b0:3a5:fbf9:1f40 with SMTP id a22-20020ac87216000000b003a5fbf91f40mr4806012qtp.323.1669124191317;
+        Tue, 22 Nov 2022 05:36:31 -0800 (PST)
+Received: from nathan-ideapad.. (d-75-76-18-234.oh.cpe.breezeline.net. [75.76.18.234])
+        by smtp.gmail.com with ESMTPSA id az20-20020a05620a171400b006ec771d8f89sm10223517qkb.112.2022.11.22.05.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 05:36:31 -0800 (PST)
+From:   Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Cc:     greg.malysa@timesys.com, nathan.morrison@timesys.com,
+        p.yadav@ti.com, vigneshr@ti.com,
+        vadivel.muruganx.ramuthevar@intel.com,
+        grmoore@opensource.altera.com, lftan@altera.com,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] spi: cadence-quadspi: Properly pass buswidth through to underlying SPI subsystem via buswidth_override_bits instead of mode_bits.
+Date:   Tue, 22 Nov 2022 08:35:50 -0500
+Message-Id: <20221122133551.91536-1-nathan.morrison@timesys.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ulcjetf4btcckz7d"
-Content-Disposition: inline
-In-Reply-To: <Y3y/DxNp+cYu7GTH@kroah.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While trying to enable Octal SPI mode, it was observed that
+SPI_RX_OCTAL/SPI_TX_OCTAL were not propagating into the spi_device
+spi->mode setting.  This was causing the SPI device to always
+operate in 1x mode instead of the desired 8x mode.
 
---ulcjetf4btcckz7d
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hello Greg,
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 447230547945..c92a95bdaa05 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1589,7 +1589,7 @@ static int cqspi_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "spi_alloc_master failed\n");
+ 		return -ENOMEM;
+ 	}
+-	master->mode_bits = SPI_RX_QUAD | SPI_RX_DUAL;
++	master->buswidth_override_bits = SPI_RX_QUAD | SPI_RX_DUAL;
+ 	master->mem_ops = &cqspi_mem_ops;
+ 	master->mem_caps = &cqspi_mem_caps;
+ 	master->dev.of_node = pdev->dev.of_node;
+@@ -1686,7 +1686,7 @@ static int cqspi_probe(struct platform_device *pdev)
+ 			cqspi->wr_delay = 50 * DIV_ROUND_UP(NSEC_PER_SEC,
+ 						cqspi->master_ref_clk_hz);
+ 		if (ddata->hwcaps_mask & CQSPI_SUPPORTS_OCTAL)
+-			master->mode_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
++			master->buswidth_override_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
+ 		if (!(ddata->quirks & CQSPI_DISABLE_DAC_MODE))
+ 			cqspi->use_direct_mode = true;
+ 		if (ddata->quirks & CQSPI_SUPPORT_EXTERNAL_DMA)
+-- 
+2.30.2
 
-On Tue, Nov 22, 2022 at 01:22:39PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Nov 18, 2022 at 11:45:01PM +0100, Uwe Kleine-K=F6nig wrote:
-> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> > that explicitly in the probe function.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >  drivers/staging/iio/impedance-analyzer/ad5933.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/staging/iio/impedance-analyzer/ad5933.c b/drivers/=
-staging/iio/impedance-analyzer/ad5933.c
-> > index f177b20f0f2d..b3152f7153fb 100644
-> > --- a/drivers/staging/iio/impedance-analyzer/ad5933.c
-> > +++ b/drivers/staging/iio/impedance-analyzer/ad5933.c
-> > @@ -674,9 +674,9 @@ static void ad5933_clk_disable(void *data)
-> >  	clk_disable_unprepare(st->mclk);
-> >  }
-> > =20
-> > -static int ad5933_probe(struct i2c_client *client,
-> > -			const struct i2c_device_id *id)
-> > +static int ad5933_probe(struct i2c_client *client)
-> >  {
-> > +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
->=20
-> Breaks the build in my tree as this function is not in Linus's tree yet
-> :(
-
-As pointed out in the cover letter[1] you want to make sure that
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client_d=
-evice_id_helper-immutable
-
-is part of your tree first. So either pull that into your tree, or wait
-until this hits Linus's tree.
-
-Best regards
-Uwe
-
-[1] https://lore.kernel.org/linux-kernel/20221118224540.619276-1-uwe@kleine=
--koenig.org
-    (It wasn't sent to every thread participant because that would have
-    been too many.)
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ulcjetf4btcckz7d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN80CAACgkQwfwUeK3K
-7Al35ggAnqzvJT6O1dZcuSdZThRtBdo5YPsZq63WDB/TRDChLUiYlceIBo9rzETz
-t3nH4M6MjjxnOWepddEk/P2hqOl7Bw6h9oarQZvWf2sYdHtoqRkPoSthUjz+glrB
-UWDIIA5F4SeaXakKujDbz4YcIHsEXnnnWuut10edAIkeMWgwIvZzN/sJNXF2pvrh
-QVU7kpB5yWmp0O5ieU3itSPAHwWb4FQFWWi35AS0tJOYQpOuKoHT+HrcYBWKq/mf
-nK3ijGYIRwRVgIDlS6F9tRtoU3eAFJ4ctnztSwoNcZ0giVZbHWoCOIK0WaAlDqNS
-JSXk/So3urvJXWDkg+4T7xEuwZVfxA==
-=mV0I
------END PGP SIGNATURE-----
-
---ulcjetf4btcckz7d--
