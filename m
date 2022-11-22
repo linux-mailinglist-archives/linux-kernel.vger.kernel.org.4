@@ -2,64 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9406333FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5376333FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 04:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiKVDes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 22:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S232119AbiKVDfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 22:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKVDep (ORCPT
+        with ESMTP id S232242AbiKVDfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:34:45 -0500
-X-Greylist: delayed 211 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Nov 2022 19:34:43 PST
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07A86639E;
-        Mon, 21 Nov 2022 19:34:42 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowAB3fPBGQ3xjhY6wAA--.12802S2;
-        Tue, 22 Nov 2022 11:34:30 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, michal.simek@xilinx.com, harini.katakam@amd.com,
-        xuhaoyue1@hisilicon.com, huangjunxian6@hisilicon.com,
-        wangqing@vivo.com, christophe.jaillet@wanadoo.fr,
-        yangyingliang@huawei.com, chenhao288@hisilicon.com
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH] NTB: ntb_tool: Add check for devm_kcalloc
-Date:   Tue, 22 Nov 2022 11:34:29 +0800
-Message-Id: <20221122033429.5831-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 21 Nov 2022 22:35:06 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34827275D8;
+        Mon, 21 Nov 2022 19:35:03 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id z1so9462195qkl.9;
+        Mon, 21 Nov 2022 19:35:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7I/A0iqrxZCljCTmfRtDGpoHSH6u01y29lbjq53MCQ=;
+        b=ohhrabe+FDlS5639l+JpnC2ukjAMdb6bfuAIpTGswwg+DwmaBlvLdh7657mErGy9JW
+         pDXaUaYDFF0QsQYXJCE7pMP+IgxJ8A3MZZiQYTgP9RJsjHQK6+Bc++LrpdpSvlChCBhC
+         +XN97u/oTIhOOfr+ZOIKHpoqtAhqhXZ6lg6Rj/xpP+q/SwosP+uXmB4Qx1SlWilXs64Z
+         26mcqCQmR75sYPEKxq47fGVmrrEoNeo9ezI2rjzo3mAyZXmdbhHBbzsyb/SDRSdUQ+R/
+         QNsyVq3gk0kNjmVnH0Ie/9L+cLx3dCffvr2yYcrAocmd0Vz92yhkgA3PFzC5Kc+CZNa8
+         fajw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z7I/A0iqrxZCljCTmfRtDGpoHSH6u01y29lbjq53MCQ=;
+        b=tlx5lyoWXSwEpEdz6UBY7RC/EvroA9U7iea33dwg6cQsUAOR7VeYrF+sDKKDgc4BmR
+         yIRYMdBdq3MkBnv8yTBeAFcUfoonIVpbm5l4atqBClc2mlc9VRo2pLHL8EFYLKvOX5rR
+         VKvmsMOczpoFdhxQP+V1mEC72GmlHRyw2skLxtJ02SkQ4wGCkqevzVK2dYud3p/mKsOy
+         Qe88caIbeDpU9H3Y3dGy9riPmaDsx6MKUbIx4ms5I9q2gES7ML/3IoareHR6YvRGgjoP
+         44G1exhGWP0s5sn8N4ViLcWebSjlhM9fUb/D+BP+QdQBUtyg0cv7oWaRDExGkwHiWw4h
+         dy6A==
+X-Gm-Message-State: ANoB5pmATExUXtYsQUEskchMTeA3aLYgb8wnvpvitfTIEgVk47RhdCyM
+        yEgGMZbPgMIS2fPR9iEJwW8=
+X-Google-Smtp-Source: AA0mqf7DEZaU8K9xSgLXBQyX0gczNViTgga48HCdIAXxJznceIB20mDBw3Dzm9i1lYIDxTOTzuC8Eg==
+X-Received: by 2002:a37:8883:0:b0:6fa:93b1:8b6f with SMTP id k125-20020a378883000000b006fa93b18b6fmr19496035qkd.357.1669088102328;
+        Mon, 21 Nov 2022 19:35:02 -0800 (PST)
+Received: from debian-BULLSEYE-live-builder-AMD64 (h96-61-90-13.cntcnh.broadband.dynamic.tds.net. [96.61.90.13])
+        by smtp.gmail.com with ESMTPSA id o22-20020ac872d6000000b00399edda03dfsm7537642qtp.67.2022.11.21.19.35.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 19:35:01 -0800 (PST)
+Date:   Mon, 21 Nov 2022 22:34:59 -0500
+From:   Eric Whitney <enwlinux@gmail.com>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH v2 2/3] ext4: record error when detect abnormal
+ 'i_reserved_data_blocks'
+Message-ID: <Y3xDY4GVAF+eKAqY@debian-BULLSEYE-live-builder-AMD64>
+References: <20221121121434.1061725-1-yebin@huaweicloud.com>
+ <20221121121434.1061725-3-yebin@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAB3fPBGQ3xjhY6wAA--.12802S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYS7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
-        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72
-        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
-        M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUShFxUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121121434.1061725-3-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, I sent the wrong email.
-Please ignore it.
+* Ye Bin <yebin@huaweicloud.com>:
+> From: Ye Bin <yebin10@huawei.com>
+> 
+> If 'i_reserved_data_blocks' is not cleared which mean something wrong with
+> code, free space accounting is likely wrong, according to Jan Kara's advice
+> use ext4_error() to record this abnormal let fsck to repair and also we can
+> capture this issue.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>  fs/ext4/super.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 0690e2e0b74d..3d30007502a4 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -1387,10 +1387,9 @@ static void ext4_destroy_inode(struct inode *inode)
+>  	}
+>  
+>  	if (EXT4_I(inode)->i_reserved_data_blocks)
+> -		ext4_msg(inode->i_sb, KERN_ERR,
 
-Jiang
+Per the coding standard, IIRC, the string should not be split across lines
+for "greppability", so it should remain as is.  It's always good to run
+checkpatch to catch stuff like this.
 
+> -			 "Inode %lu (%p): i_reserved_data_blocks (%u) not cleared!",
+> -			 inode->i_ino, EXT4_I(inode),
+> -			 EXT4_I(inode)->i_reserved_data_blocks);
+> +		ext4_error(inode->i_sb, "Inode %lu (%p) i_reserved_data_blocks"
+> +			   " (%u) not cleared!", inode->i_ino, EXT4_I(inode),
+> +			   EXT4_I(inode)->i_reserved_data_blocks);
+>  }
+>  
+>  static void init_once(void *foo)
+
+This is an improvement over the first version.  If i_reserved_data_blocks is
+non-zero, something is definitely broken, but it's perhaps less likely to
+indicate file system damage than if it hits zero while there are still
+outstanding delayed blocks (handled well elsewhere).  So, it's not clear
+we need to escalate handling this case but it doesn't hurt, either.
+
+Eric
+
+> -- 
+> 2.31.1
+> 
