@@ -2,112 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73819633F97
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01780633F99
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 15:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234155AbiKVO6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 09:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S234133AbiKVO6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 09:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234069AbiKVO5s (ORCPT
+        with ESMTP id S234069AbiKVO6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:57:48 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10826F34A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 06:55:42 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oxUgJ-0007MS-Db; Tue, 22 Nov 2022 15:55:27 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oxUgJ-0007yC-5z; Tue, 22 Nov 2022 15:55:27 +0100
-Date:   Tue, 22 Nov 2022 15:55:27 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Po-Hao Huang <phhuang@realtek.com>
-Cc:     linux-wireless@vger.kernel.org, Ping-Ke Shih <pkshih@realtek.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        netdev@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        linux-kernel@vger.kernel.org, Viktor Petrenko <g0000ga@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Po-Hao Huang <phhuang@realtek.com>,
-        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>
-Subject: Re: [PATCH v3 00/11] RTW88: Add support for USB variants
-Message-ID: <20221122145527.GA29978@pengutronix.de>
-References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
+        Tue, 22 Nov 2022 09:58:25 -0500
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B41707720C;
+        Tue, 22 Nov 2022 06:55:56 -0800 (PST)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 22 Nov 2022 22:55:46
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.14.30.50]
+Date:   Tue, 22 Nov 2022 22:55:46 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "Jinlong Chen" <nickyc975@zju.edu.cn>
+To:     axboe@kernel.dk
+Cc:     hch@lst.de, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] elevator: printk a warning if switching to a new io
+ scheduler fails
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <d51ed0fb457db7a4f9cbb0dbce36d534e22be457.1669126766.git.nickyc975@zju.edu.cn>
+References: <cover.1669126766.git.nickyc975@zju.edu.cn>
+ <d51ed0fb457db7a4f9cbb0dbce36d534e22be457.1669126766.git.nickyc975@zju.edu.cn>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122145226.4065843-1-s.hauer@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <17ab2daa.5b5b.1849fd681f2.Coremail.nickyc975@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgD3_6vy4nxjLJVgCQ--.57835W
+X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgECB1ZdtcivzQABsT
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 03:52:15PM +0100, Sascha Hauer wrote:
-> This is the third round of adding support for the USB variants to the
-> RTW88 driver. There are a few changes to the last version which make it
-> worth looking at this version.
-> 
-> First of all RTL8723du and RTL8821cu are tested working now. The issue
-> here was that the txdesc checksum calculation was wrong. I found the
-> correct calculation in various downstream drivers found on github.
-> 
-> The second big issue was that TX packet aggregation was wrong. When
-> aggregating packets each packet start has to be aligned to eight bytes.
-> The necessary alignment was added to the total URB length before
-> checking if there is another packet to aggregate, so the URB length
-> included that padding after the last packet, which is wrong.  Fixing
-> this makes the driver work much more reliably.
-> 
-> I added all people to Cc: who showed interest in this driver and I want
-> to welcome you for testing and reviewing.
-
-There still is a problem with the RTL8822cu chipset I have here.  When
-using NetworkManager I immediately lose the connection to the AP after
-it has been connected:
-
-[  376.213846] wlan0: authenticate with 76:83:c2:ce:81:b1
-[  380.085463] wlan0: send auth to 76:83:c2:ce:81:b1 (try 1/3)
-[  380.091446] wlan0: authenticated
-[  380.108864] wlan0: associate with 76:83:c2:ce:81:b1 (try 1/3)
-[  380.136448] wlan0: RX AssocResp from 76:83:c2:ce:81:b1 (capab=0x1411 status=0 aid=2)
-[  380.202955] wlan0: associated
-[  380.268140] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
-[  380.275328] wlan0: Connection to AP 76:83:c2:ce:81:b1 lost
-
-That doesn't happen when using plain wpa_supplicant. This seems to go
-down to cd96e22bc1da ("rtw88: add beacon filter support"). After being
-connected I get a BCN_FILTER_CONNECTION_LOSS beacon. Plain
-wpa_supplicant seems to go another code patch and doesn't activate
-connection quality monitoring.
-
-The connection to the AP works fluently also with NetworkManager though
-when I just ignore the BCN_FILTER_CONNECTION_LOSS beacon.
-
-Any idea what may be wrong here?
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+PiAKPiBwcmludGsgYSB3YXJuaW5nIHRvIGluZGljYXRlIHRoYXQgdGhlIGlvIHNjaGVkdWxlciBo
+YXMgYmVlbiBzZXQgdG8gbm9uZQo+IGlmIHN3aXRjaGluZyB0byBhIG5ldyBpbyBzY2hlZHVsZXIg
+ZmFpbHMuCj4gCj4gU2lnbmVkLW9mZi1ieTogSmlubG9uZyBDaGVuIDxuaWNreWM5NzVAemp1LmVk
+dS5jbj4KPiAtLS0KPiAgYmxvY2svZWxldmF0b3IuYyB8IDYgKysrKysrCj4gIDEgZmlsZSBjaGFu
+Z2VkLCA2IGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvYmxvY2svZWxldmF0b3IuYyBi
+L2Jsb2NrL2VsZXZhdG9yLmMKPiBpbmRleCAwMWFhOWYzOGYyMmUuLjFmYTQ1NzE3YjFkNiAxMDA2
+NDQKPiAtLS0gYS9ibG9jay9lbGV2YXRvci5jCj4gKysrIGIvYmxvY2svZWxldmF0b3IuYwo+IEBA
+IC02ODMsNiArNjgzLDEyIEBAIGludCBlbGV2YXRvcl9zd2l0Y2goc3RydWN0IHJlcXVlc3RfcXVl
+dWUgKnEsIHN0cnVjdCBlbGV2YXRvcl90eXBlICpuZXdfZSkKPiAgb3V0X3VuZnJlZXplOgo+ICAJ
+YmxrX21xX3VucXVpZXNjZV9xdWV1ZShxKTsKPiAgCWJsa19tcV91bmZyZWV6ZV9xdWV1ZShxKTsK
+PiArCj4gKwlpZiAocmV0KSB7Cj4gKwkJcHJfd2FybigiZWx2OiBzd2l0Y2ggdG8gXCIlc1wiIGZh
+aWxlZCwgZmFsbGluZyBiYWNrIHRvIFwibm9uZVwiXG4iLAo+ICsJCQluZXdfZS0+ZWxldmF0b3Jf
+bmFtZSk7Cj4gKwl9Cj4gKwo+ICAJcmV0dXJuIHJldDsKPiAgfQo+ICAKCkhpLCBKZW5zIQoKVGhp
+cyBwYXRjaCBpcyBzdWdnZXN0ZWQgYnkgQ2hyaXN0b3BoLCBidXQgSSBmb3Jnb3QgdG8gYWRkIHRo
+ZSBTdWdnZXN0ZWQtYnkKdGFnLiBXb3VsZCB5b3UgcGxlYXNlIGFkZCAiU3VnZ2VzdGVkLWJ5OiBD
+aHJpc3RvcGggSGVsbHdpZyA8aGNoQGxzdC5kZT4iCmlmIHlvdSBhcHBseSB0aGUgcGF0Y2g/CgpU
+aGFua3MhCkppbmxvbmcgQ2hlbgo=
