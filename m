@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4B3633146
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EFE63314F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Nov 2022 01:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbiKVAWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Nov 2022 19:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S231536AbiKVAYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Nov 2022 19:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiKVAWC (ORCPT
+        with ESMTP id S229625AbiKVAY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Nov 2022 19:22:02 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6889E09F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:22:01 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id j6-20020a4ab1c6000000b004809a59818cso2045619ooo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Nov 2022 16:22:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ioT5HWkxXrDzWROXcjL6RfDxD0eZFMTpXcJlr218K8=;
-        b=iYjmeDp35xqIzxQZueXI5DTZPLBzYLZ5PAM/AQvCGEF1SjrTAhxQ6zziaTWWvV5ylD
-         gm9NdiH5PB24JSy6RsceIWUrOZkmtw1Yn8f+tLuh5EqgCZvzvNDQb4LcyMdSMx85yr42
-         aPkH2xlJPnvcO8lJA6xc3okcK5790tK9JWuOU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8ioT5HWkxXrDzWROXcjL6RfDxD0eZFMTpXcJlr218K8=;
-        b=YA/0frB2+jwah2gskXgyz1+ebe7wi6p1PifgWf1P7BnGX1X0XIkwDLQ38hLdAw8eGH
-         mzcLIx/K1oG9CWLBEUfayMcpt5QtIV4I++oQHmhJW80uuAndJJVO9IHASOO4ok8mi7+a
-         lY197Wx0BD+lKhUq5cyI1/wgeHoKHasy5qbz9plW/NbqCKON2G8z491qt16R3cBTsU89
-         NwkEfnhsTC1OyD5XuMGimKrI9Z4yijIrtY8swx+38057NalwKXYdnDvUA7blk90bnur+
-         q31aksZ1xGnl4/2vY8l8Qx1S0UWcQ1btZV1xDFrVRHirCCWVi9noKBo0Dg5hv+IYK3F/
-         wuEg==
-X-Gm-Message-State: ANoB5pm10vR9cAHHm4O8BU+eZFVXlZeqJGFxOZq38PXxtqdWNPiWiU6Q
-        5UbPRXiE7FGpGAGsV7sHUxuJyKkZHIF+V3ehGtGy
-X-Google-Smtp-Source: AA0mqf69iXsrfeMApN6Ed6GVXofzCFLsgz2m/ukM8nkoRc34SK82vu0kCeRUJLZFgn6GaFZOJI/wj/Sa/2LuzKCMrVI=
-X-Received: by 2002:a4a:c58a:0:b0:49f:4297:5612 with SMTP id
- x10-20020a4ac58a000000b0049f42975612mr1713954oop.13.1669076520677; Mon, 21
- Nov 2022 16:22:00 -0800 (PST)
+        Mon, 21 Nov 2022 19:24:27 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87092BEB42;
+        Mon, 21 Nov 2022 16:24:26 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 5100032009B5;
+        Mon, 21 Nov 2022 19:24:24 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 21 Nov 2022 19:24:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1669076663; x=1669163063; bh=Je
+        9S5pZ8EyiMqK1xbe6/5zr4qNlvKvr93DChjxiAVt4=; b=PrgW4w+9T36uTagTcG
+        DjuC/DKB/qod8O6Ab5ag9KRtZ6RQtKP/iuauByNe51gZ28Im2l2Sgx4MtQr4W0QU
+        6c9JYOMzl1zQA0hT8J6sNApeVInfSRACqKgpxF6nNmexDm3R9CtLlcfUYmkuku2+
+        62iXPO01NV17lZiO68Lv7t9KpXe+/jOoKhdC/0ce/1HgMlbF+II7pBfYi19XlZLb
+        S+gotbNeB6q38ZT1E3+gVD39RpJeuQkbSfnw5JIYXlbZpinnFrhd74zAasVFqF/O
+        w6gnVR2bwl0W+ReRnd8v+p4ylyIp+ZUl6M4VWSH3Z+n3IJM3NacgoGgI9h5gY635
+        OR9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669076663; x=1669163063; bh=Je9S5pZ8EyiMqK1xbe6/5zr4qNlv
+        Kvr93DChjxiAVt4=; b=bCORFpPvnGwyahVwCiYhm+8wPJG9H/WawgxDZU6Uf9qQ
+        KfL+5SLRXQ9emqLalBhYvrVbKiHv6Fhf3rg4IzE2RTL2yHWw8oDh+7bLA5aC8TAf
+        OTwTUqReBTozxETh7x4jHlIAbPYhfRQ3b2/4OzNFQyTiTL40kGYf1rgK7NInN3SZ
+        5c1C5Y89Rc/ZiDgat75rMWctdksayTEeMsVYCbPrJsEt8k1MtOSJCoAXYTJBRXLs
+        WtFwlSo8gvMAY2fOU16DA1jxe8KuKntX5gzdHC4yeoSUMv72C2xIKvUkZ8892KHz
+        RQYD9LDAMkVggVOmy0ckCTU5n+0EyHkTr89cBz0eyg==
+X-ME-Sender: <xms:txZ8Y6rOINf9Iu_Fb0mqmBuJpwiSITipXIGsstg6SRqGCS0-9Q-UsA>
+    <xme:txZ8Y4rWUkssecG44BQoEz47swOHK52mowVHyzYVDv7Yk_AOiQRz0OhakY5YxyIdW
+    dUA1ddLBJiNoMaavpo>
+X-ME-Received: <xmr:txZ8Y_OsnenBAjXRxDiRcpIidUwjd8eSQPDk4dsLeH_5T3XRSfCRYPiGafG8aKymsEFIKQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheejgddvvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:txZ8Y55hbJDgu8qyI8jfliGsdlH637Dw3TKDt1S0QpLzc8HmdgD2WA>
+    <xmx:txZ8Y55IxRuShIiK28Dj3rgl_BN-VTiLLVWXWE65TJkjKghQ5iDvKg>
+    <xmx:txZ8Y5h7zIjLVBTVQreLo8y0UGay1WyZJkO027Jt9qsdqEyY01csnA>
+    <xmx:txZ8Y4LTB_Q6VYtprrdunhn5sZZM0TzRsoE1dQw2DrTqIU6bQ77OUA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Nov 2022 19:24:23 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id A7279109A30; Tue, 22 Nov 2022 03:24:21 +0300 (+03)
+Date:   Tue, 22 Nov 2022 03:24:21 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        brijesh.singh@amd.com, dan.j.williams@intel.com,
+        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
+        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
+        kys@microsoft.com, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Message-ID: <20221122002421.qg4h47cjoc2birvb@box.shutemov.name>
+References: <20221121195151.21812-1-decui@microsoft.com>
+ <20221121195151.21812-4-decui@microsoft.com>
 MIME-Version: 1.0
-References: <20220718170205.2972215-1-atishp@rivosinc.com> <20220718170205.2972215-5-atishp@rivosinc.com>
- <Y2uuQ4wH4dU98K2b@curiosity>
-In-Reply-To: <Y2uuQ4wH4dU98K2b@curiosity>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 21 Nov 2022 16:21:49 -0800
-Message-ID: <CAOnJCUJogprsp+D2ZH7yEEPr-LOp801LrYTwjg0EEoKaYfPV-Q@mail.gmail.com>
-Subject: Re: [RFC 4/9] RISC-V: KVM: Improve privilege mode filtering for perf
-To:     Sergey Matyukevich <geomatsi@gmail.com>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121195151.21812-4-decui@microsoft.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 5:42 AM Sergey Matyukevich <geomatsi@gmail.com> wrote:
->
-> Hi Atish,
->
-> > Currently, the host driver doesn't have any method to identify if the
-> > requested perf event is from kvm or bare metal. As KVM runs in HS
-> > mode, there are no separate hypervisor privilege mode to distinguish
-> > between the attributes for guest/host.
-> >
-> > Improve the privilege mode filtering by using the event specific
-> > config1 field.
->
-> ... [snip]
->
-> > +static unsigned long pmu_sbi_get_filter_flags(struct perf_event *event)
-> > +{
-> > +     unsigned long cflags = 0;
-> > +     bool guest_events = false;
-> > +
-> > +     if (event->attr.config1 & RISCV_KVM_PMU_CONFIG1_GUEST_EVENTS)
-> > +             guest_events = true;
-> > +     if (event->attr.exclude_kernel)
-> > +             cflags |= guest_events ? SBI_PMU_CFG_FLAG_SET_VSINH : SBI_PMU_CFG_FLAG_SET_SINH;
->
-> IIUC we should inhibit host counting if we want guest events:
->                 cflags |= guest_events ? SBI_PMU_CFG_FLAG_SET_SINH : SBI_PMU_CFG_FLAG_SET_VSINH;
->
+On Mon, Nov 21, 2022 at 11:51:48AM -0800, Dexuan Cui wrote:
+> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
+> allocates buffers using vzalloc(), and needs to share the buffers with the
+> host OS by calling set_memory_decrypted(), which is not working for
+> vmalloc() yet. Add the support by handling the pages one by one.
 
-guest_events indicate that the user in the guest VM is configured to
-exclude the kernel i.e. the guest kernel which
-is running in VS mode.
-That's why, we have to set  SBI_PMU_CFG_FLAG_SET_VSINH
+Why do you use vmalloc here in the first place?
 
-To inhibit host counting, the user needs to specify exclude_host
-and/or exclude_hv which happens below as well.
+Will you also adjust direct mapping to have shared bit set?
 
-> > +     if (event->attr.exclude_user)
-> > +             cflags |= guest_events ? SBI_PMU_CFG_FLAG_SET_VUINH : SBI_PMU_CFG_FLAG_SET_UINH;
->
-> Same here.
->
+If not, we will have problems with load_unaligned_zeropad() when it will
+access shared pages via non-shared mapping.
 
-Same explanation as above.
+If direct mapping is adjusted, we will get direct mapping fragmentation.
 
-> > +     if (guest_events && event->attr.exclude_hv)
-> > +             cflags |= SBI_PMU_CFG_FLAG_SET_SINH;
-> > +     if (event->attr.exclude_host)
-> > +             cflags |= SBI_PMU_CFG_FLAG_SET_UINH | SBI_PMU_CFG_FLAG_SET_SINH;
-> > +     if (event->attr.exclude_guest)
-> > +             cflags |= SBI_PMU_CFG_FLAG_SET_VSINH | SBI_PMU_CFG_FLAG_SET_VUINH;
-> > +
-> > +     return cflags;
-> > +}
->
-> Regards,
-> Sergey
-
-
+Maybe tap into swiotlb buffer using DMA API?
 
 -- 
-Regards,
-Atish
+  Kiryl Shutsemau / Kirill A. Shutemov
