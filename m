@@ -2,97 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5221635C60
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC36635C58
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237212AbiKWMEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S237392AbiKWMFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiKWMEh (ORCPT
+        with ESMTP id S237145AbiKWMFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:04:37 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506E062F6;
-        Wed, 23 Nov 2022 04:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-ID:Content-Description;
-        bh=5JMIrXWfVVUBawjQhTsB12rkc3V2fqv2OGN2cVRUBRs=; b=TN91uAo4CNv5C7fEtaNVdRScjZ
-        r8YBSVaWiMa+2ppar+coZcihrgglWDIJfTsLSaQwpUhf1rVEmcd9kLzW+lXPH6AYxvX3dyTwXxv1x
-        RbvYqzICSadoDgk2up5jwHMyZl4vSrPKOgTmiSFPFOkXKFD/VNmT3ZkuxETK/dTX6VQu+2OBedXun
-        QfvLoZZ9UCnkzlfqSe9uGPcdnsDWWR2c0vhOxejyjs2JoSjgn1QZ1qHA91tVW3WTM0hplyFJRx2WI
-        MKkNKP5+0FMvgjSWMD7G4Y7GKMU8RBa/Buf+T5sUGCT0+61+MnakBdfUCQRcyNmQ3VKs/gwLHOril
-        B1CvOObg==;
-Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1oxoUU-0007F2-2m;
-        Wed, 23 Nov 2022 12:04:34 +0000
-Date:   Wed, 23 Nov 2022 12:04:33 +0000
-From:   John Keeping <john@metanate.com>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     linux-usb@vger.kernel.org,
-        Fabien Chouteau <fabien.chouteau@barco.com>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 2/3] usb: gadget: f_hid: fix refcount leak on error path
-Message-ID: <Y34MUUyOSgwLWQA+@donbot>
-References: <20221122123523.3068034-1-john@metanate.com>
- <20221122123523.3068034-3-john@metanate.com>
- <dcd180f6-7769-3bc5-403f-8960e922bb50@collabora.com>
+        Wed, 23 Nov 2022 07:05:08 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749A215FE2;
+        Wed, 23 Nov 2022 04:05:06 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id vv4so33002323ejc.2;
+        Wed, 23 Nov 2022 04:05:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MdkN33eqdBW8OFqoAkyIS40FmG3oWWH+dzPo/Vz7+AA=;
+        b=IwVLuZWWCilVb/mBFTdCkpJ/FyKCtl9qhLxekbfU3z6dSIbpf5HaE5M7yhDhpHR+Tl
+         Phudcd9OSkRwijiEw/baWROlfEKW9FdwH6B7Syq014lQMA54GfmjMV+AOXvds7sbuWf3
+         Zuaki/kU7fiFL2Z8Dj36y+wQBuxN/uC80aHsISXdWCzF6DSRxMQsu7sYq/5oM+t+G/Jm
+         p2lfngOI3XWaqkJyzgFvxkiOJxObGbiLTt2UNRqXOV4lL69TuMcSVgmjCqNj1YRFJ6Sa
+         t69NBYYsQdWuLVZhegvYJdSYa8m+8npCWow47ilp0RyKpnlTFmSvCk+iqxGQTxJgCGUy
+         vyWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MdkN33eqdBW8OFqoAkyIS40FmG3oWWH+dzPo/Vz7+AA=;
+        b=M+fKECkUrYo/8u8f8HPu13Yd2vA0bOy2tLPHTonzzvVGJbyqKxNp2Hd1WQnXZG8JF/
+         PZp8xzM7HN9xnHHPRQwq4HVSrT3kpipEH0iBeJvhyQ5DSNy5JhZdQIdkpohjLywMN6pV
+         W3Vv5CBGksQntBoThf8EwktXf+UQXqqUtbWjIInpISHG/zP/3eky9iQb9i/p3vx0DtLZ
+         By/MesNTBg5JSfV52O/6r8AeYnvDQnl1huwcLwnPrnsC9VjA4gsY0ujG22TzGzywm0Vm
+         y+M2niEUfkNCaP5Lmf3Y0/61eO/sSyaC0Ffon2JGrbUlIF7fKNrcuSxG4YqoJPKS+Paj
+         Au5A==
+X-Gm-Message-State: ANoB5plTQ94MhntdzP9aG8gUoBx/hOccYSpVOL7JIWObMTYBpTmpsv0g
+        DiSo9oyXruCaYDekjCu/YdM=
+X-Google-Smtp-Source: AA0mqf52SQi4DYO4SRXhGUeSpqmBH7rHMNwq6edg3z6Jqk+RvDG0nj7w9SzccS7/ZLjWV4Gkkes7sg==
+X-Received: by 2002:a17:907:98ea:b0:7ae:c1af:89af with SMTP id ke10-20020a17090798ea00b007aec1af89afmr7595669ejc.550.1669205104775;
+        Wed, 23 Nov 2022 04:05:04 -0800 (PST)
+Received: from [10.20.0.7] ([37.120.217.162])
+        by smtp.gmail.com with ESMTPSA id b14-20020a17090636ce00b007a8de84ce36sm7166227ejc.206.2022.11.23.04.05.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 04:05:04 -0800 (PST)
+Message-ID: <33348300-b3a7-af67-5729-8d0471aff2dc@gmail.com>
+Date:   Wed, 23 Nov 2022 13:05:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dcd180f6-7769-3bc5-403f-8960e922bb50@collabora.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 0/4] firmware: Add support for Qualcomm UEFI Secure
+ Application
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <dfd07f84-c4bd-a18c-2263-49f999f2934c@linaro.org>
+ <f42539d0-c2a3-a2b2-c35b-b7a5904b376f@gmail.com>
+ <1085c75e-fd12-f432-8893-b58f7c3a7cab@linaro.org>
+Content-Language: en-US
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <1085c75e-fd12-f432-8893-b58f7c3a7cab@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 12:55:14PM +0100, Andrzej Pietrasiewicz wrote:
-> W dniu 22.11.2022 o 13:35, John Keeping pisze:
-> > When failing to allocate report_desc, opts->refcnt has already been
-> > incremented so it needs to be decremented to avoid leaving the options
-> > structure permanently locked.
-> > 
-> > Fixes: 21a9476a7ba8 ("usb: gadget: hid: add configfs support")
-> > Signed-off-by: John Keeping <john@metanate.com>
-> 
-> I'd personally place the bugfix before patches 1 and 3, but anyway
+Hi,
 
-Patch 1 is also a bugfix, I ordered 1 & 2 based on the order of the
-commits in the Fixes: tags.
+On 11/23/22 12:22, Srinivas Kandagatla wrote:
+> Hi Max,
+> 
+> On 02/08/2022 14:22, Maximilian Luz wrote:
+>>
+>>
+>> On 8/2/22 13:51, Srinivas Kandagatla wrote:
 
-> Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+[...]
+
+>>> I think its worth exploring if uefisecapp can talk smcinvoke.
+>>> I can ping Qualcomm engineers to see if that is doable.
+>>
+>> I think that would be great! Thanks!
+> Sorry for such a long delay to reply to this,
 > 
-> > ---
-> >   drivers/usb/gadget/function/f_hid.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> > index 8b8bbeaa27cb..6be6009f911e 100644
-> > --- a/drivers/usb/gadget/function/f_hid.c
-> > +++ b/drivers/usb/gadget/function/f_hid.c
-> > @@ -1292,6 +1292,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
-> >   						 GFP_KERNEL);
-> >   		if (!hidg->report_desc) {
-> >   			put_device(&hidg->dev);
-> > +			--opts->refcnt;
-> >   			mutex_unlock(&opts->lock);
-> >   			return ERR_PTR(-ENOMEM);
-> >   		}
+> here is what I have.
 > 
+> Access to TA using SCM calls remain valid and it will continue to work till SM8550 and probably after that if the TA is *NOT* loaded using smcinvoke for some reasons.
+> 
+> But overall by default on all new SoCs after sm8550 all the access to TA is only done via smcinvoke, and the underlying scm call that are used in this patchset will not be supported anymore.
+> 
+>  From SM8550, we will need to move this driver to a proper TEE client kernel driver.
+> 
+> So, with that in mind, I would suggest that we carefully name the compatibles based on SoC rather than generic ones.
+
+Thanks! That makes sense.
+
+Regards,
+Max
