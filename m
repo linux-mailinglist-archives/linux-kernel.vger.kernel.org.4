@@ -2,41 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B53636113
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E527636103
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238093AbiKWOFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
+        id S238397AbiKWOD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238477AbiKWOFJ (ORCPT
+        with ESMTP id S238351AbiKWODi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:05:09 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3B5C745
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:01:14 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NHN4M152WzJns8;
-        Wed, 23 Nov 2022 21:57:55 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 22:01:11 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <joel@jms.id.au>, <andrew@aj.id.au>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] soc: aspeed: Fix memory leak issue in aspeed_socinfo_init()
-Date:   Wed, 23 Nov 2022 21:58:08 +0800
-Message-ID: <20221123135808.171048-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 23 Nov 2022 09:03:38 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DA6E5E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:58:45 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so1350174wmg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:58:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=b1Quh2S4Mqiz+mnmyB9nbm+e1ppPa6f3UhLHFNBAwqA=;
+        b=RtArgD6+Z8rmyrUSFbh8yCVa5eEuQ0iy1z/3lv/Pmpd0w0tSDdpujqmsSNJX0x4mmd
+         WIqT4YBwZWrDyaCzY1bdpaGY+t7jMv9Pmu8HJe4Ndtz5E587A2I0rUl3lg5TwjHg/xPH
+         yYn/G0QQkQ52ZgshAgQCyG0Ebv3wSa1WZWYBwjQJxwIssdAKD9kSMNAAuet4myzGnmBB
+         RIfNzvIIMxrxOIKnK6F0MMkFixiH8KV09xVtHfISjKrgPaerVMMXn6TFlMfNteX48vha
+         Ly17fqLt5ylR2IGFfF3VVsfXofaivmpU9lSqRo2pxgwVH54gPAxL/HT55x90YlejspCV
+         GZUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b1Quh2S4Mqiz+mnmyB9nbm+e1ppPa6f3UhLHFNBAwqA=;
+        b=2FpjvDGHF2UaYgARNBYXJnn9DV+hhzav67oOAGbpJVCAxm+h3PLl7ITW/3O+bAYlZ9
+         YXWrb4fj99maQeofZWnCYLsMLnyuWPdCxWLALSo4o3r5hMkgItS5O2KWpkYMBjRri2dq
+         1PJSXgq8Ae7n7jOw22nm6P7sVQaRmOfb4lwRU/H7iU+B1bXl0dYusvXtOhanlqon8l8v
+         HlJiODGJ8xK8iGJm+JKHxcpuCGLxYnejtWdAMjjzwIAkTm6FAHL71WVFiCaG1M1fT4lU
+         zEQbABJEU1sLMi4a3lrTK/HQfvq+4Vt7k1E8nfVFo/XB3x47v3uymHSPG7M7/0QAi68s
+         Psiw==
+X-Gm-Message-State: ANoB5pnt044t7ElvSI4+E6YZTHX4voPh6RCp03SLiADHkwr3Jcpe6H2o
+        CQlST1ctb+HFyRHX/5+3zt1b9g==
+X-Google-Smtp-Source: AA0mqf4VrPbtxMqRs2lUsgDIfzAcYJfq1GzhGZj+v9rkaPfsGzHMCFlz1vXX8UzjKJAqIn3aEELWwg==
+X-Received: by 2002:a05:600c:4f55:b0:3cf:729b:d4b4 with SMTP id m21-20020a05600c4f5500b003cf729bd4b4mr14142344wmq.48.1669211923651;
+        Wed, 23 Nov 2022 05:58:43 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
+        by smtp.gmail.com with ESMTPSA id y10-20020a5d620a000000b002366dd0e030sm16751799wru.68.2022.11.23.05.58.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 05:58:43 -0800 (PST)
+Date:   Wed, 23 Nov 2022 14:58:42 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [RFC 6/9] RISC-V: KVM: Add SBI PMU extension support
+Message-ID: <20221123135842.uyw46kbybgb7unm2@kamzik>
+References: <20220718170205.2972215-1-atishp@rivosinc.com>
+ <20220718170205.2972215-7-atishp@rivosinc.com>
+ <20221101142631.du54p4kyhlgf54cr@kamzik>
+ <CAOnJCUJfakcoiWh4vFk5_BcTKfoSDbx+wtmh7MW4cPYog7q4BQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOnJCUJfakcoiWh4vFk5_BcTKfoSDbx+wtmh7MW4cPYog7q4BQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,28 +80,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If soc_device_register() fails, @attrs->machine may have allocated
-string, it should be freed before return error, otherwise will cause
-memory leak issue, fix it.
+On Tue, Nov 22, 2022 at 03:08:34PM -0800, Atish Patra wrote:
+> On Tue, Nov 1, 2022 at 7:26 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> >
+> > On Mon, Jul 18, 2022 at 10:02:02AM -0700, Atish Patra wrote:
+...
+> > > +static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> > > +                                unsigned long *out_val,
+> > > +                                struct kvm_cpu_trap *utrap,
+> > > +                                bool *exit)
+> > > +{
+> > > +     int ret = -EOPNOTSUPP;
+> > > +     struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+> > > +     unsigned long funcid = cp->a6;
+> > > +     uint64_t temp;
+> >
+> > I think we need something like
+> >
+> >    if (!vcpu_to_pmu(vcpu)->enabled)
+> >       return -EOPNOTSUPP;
+> >
+> > here. Where 'enabled' is only true when we successfully initialize
+> > the pmu. And, successful initialization depends on
+> 
+> Yes. I have added the flag. But should we do the check here or
+> respective function
+> as a paranoia sanity check ?
 
-Fixes: e0218dca5787 ("soc: aspeed: Add soc info driver")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- drivers/soc/aspeed/aspeed-socinfo.c | 1 +
- 1 file changed, 1 insertion(+)
+I think something like above that returns a not-supported error should be
+in all the entry points, like the top level SBI call handler. Functions
+that should never be called unless the PMU is active could have WARNs
+added for sanity checks.
 
-diff --git a/drivers/soc/aspeed/aspeed-socinfo.c b/drivers/soc/aspeed/aspeed-socinfo.c
-index 1ca140356a08..3f759121dc00 100644
---- a/drivers/soc/aspeed/aspeed-socinfo.c
-+++ b/drivers/soc/aspeed/aspeed-socinfo.c
-@@ -137,6 +137,7 @@ static int __init aspeed_socinfo_init(void)
- 
- 	soc_dev = soc_device_register(attrs);
- 	if (IS_ERR(soc_dev)) {
-+		kfree(attrs->machine);
- 		kfree(attrs->soc_id);
- 		kfree(attrs->serial_number);
- 		kfree(attrs);
--- 
-2.17.1
+> 
+> > IS_ENABLED(CONFIG_RISCV_PMU_SBI) and
+> 
+> Why do we need to guard under CONFIG_RISCV_PMU_SBI ?
+> vcpu_sbi_pmu.c is only compiled under CONFIG_RISCV_PMU_SBI
+> 
+> If CONFIG_RISCV_PMU_SBI is not enabled, probe function will return failure.
 
+You're right. We don't need explicit config checks for things that can't
+exist without the config.
+
+> 
+> In fact, I think we should also add the pmu enabled check in the probe function
+> itself. Probe function(kvm_sbi_ext_pmu_probe) should only true when
+> both vcpu_to_pmu(vcpu)->enabled and
+> riscv_isa_extension_available(NULL, SSCOFPMF) are true.
+> 
+> Thoughts?
+
+Agreed.
+
+> 
+> > riscv_isa_extension_available(NULL, SSCOFPMF) as well as not
+> > failing other things. And, KVM userspace should be able to
+> > disable the pmu, which keep enabled from being set as well.
+> >
+> We already have provisions for disabling sscofpmf from guests via ISA
+> one reg interface.
+> Do you mean disable the entire PMU from userspace ?
+
+Yes. We may need to configure a VM without a PMU to increase its
+migratability, workaround errata, or just for testing/debugging purposes.
+
+> 
+> Currently, ARM64 enables pmu from user space using device control APIs
+> on vcpu fd.
+> Are you suggesting we should do something like that ?
+
+Yes. Although choosing which KVM API should be used could probably be
+thought-out again. x86 uses VM ioctls.
+
+> 
+> If PMU needs to have device control APIs (either via vcpu fd or its
+> own), we can retrieve
+> the hpmcounter width and count from there as well.
+
+Right. We need to decide how the VM/VCPU + PMU user interface should look.
+A separate PMU device, like arm64 has, sounds good, but the ioctl
+sequences for initialization may get more tricky.
+
+Thanks,
+drew
