@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B83C636251
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4669463624D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237626AbiKWOt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        id S237515AbiKWOtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237580AbiKWOtQ (ORCPT
+        with ESMTP id S237484AbiKWOtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:49:16 -0500
+        Wed, 23 Nov 2022 09:49:14 -0500
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264306CA12;
-        Wed, 23 Nov 2022 06:49:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093AF74A83;
+        Wed, 23 Nov 2022 06:49:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669214954; x=1700750954;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6CaDzmwprgLasCtAjji0nqGgQ6qOSWdVD2cInwSVDOE=;
-  b=P5vnlveyz4nNZzzJ/MQgHJOvUpWYDjlnFsFExWsTsy6GUdHXkeKoAozL
-   HHjGuw8LcB+1tJhgjjIyuA/Ga9cYu0WrUnYFKVe8nqL4sRrsqIoa/rK0H
-   5OvoW2/4SPLObauGFQ6GP7yk6CsgQQ7bhzNFDrvL2SiD40R8n9R5Njoqt
-   z2/kONs+QEIJFJSWXI0C59K+/yh50Dd+isUyAjKk3dMqkSamd2ZE/hkUC
-   HcuxWmZBxZ4US64jL6y9RH0m+LOjsjwRqUQJWAiXPKGU3cgk3QHRmFbNb
-   IfDFRcWi3I2jh14eMRKClfpxMuBfTdSJbvGwatRrnH51rq/4qLP74AMlL
+  t=1669214951; x=1700750951;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PZw/qx/VCBuHt8kLTtD2kAjtrp/ndgtSgsymsuc6HUA=;
+  b=b94MSyV6Z3VbT8k4JYhSSkUqY7+WLa3Fth1u8DJFhCIB0Yl1ZDtJgzl7
+   vkoosvAr/k4/0X7DTa0S7fnBy9s/PHtIwmyNu2u3mJfmh/ceN+GrFBN53
+   84iq5BOEk4Cr/a/Do5s+wcVe6NwjddSUZ3YiREmiUR6oaaUB5LXi9WHfL
+   hussW35TGAucXEty9DXmJvGJXux6q30N5BaOYpRooWycO5bI0XhKzUceP
+   pXJhimV92n7JQbRbBBTW/gpyVImGvVMJfxLq4wm2V7s5tZt/ffaEVms5p
+   C6JQ55osYLQZ1LAKnEmA09FIlYe3SsYcJVnIeTq9a7G5ZenIqFGYxPCaj
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="376225212"
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="376225198"
 X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="376225212"
+   d="scan'208";a="376225198"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 06:48:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="635936973"
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="635936969"
 X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="635936973"
+   d="scan'208";a="635936969"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga007.jf.intel.com with ESMTP; 23 Nov 2022 06:48:37 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 80918128; Wed, 23 Nov 2022 16:49:03 +0200 (EET)
+        id 9096CB7; Wed, 23 Nov 2022 16:49:03 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Jakob Koschel <jakobkoschel@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -56,12 +56,13 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Kevin Cernekee <cernekee@gmail.com>,
         Mathias Nyman <mathias.nyman@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jani Nikula <jani.nikula@intel.com>
-Subject: [PATCH v4 1/4] i915: Move list_count() to list.h for broader use
-Date:   Wed, 23 Nov 2022 16:48:58 +0200
-Message-Id: <20221123144901.40493-1-andriy.shevchenko@linux.intel.com>
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v4 2/4] usb: gadget: hid: Convert to use list_count()
+Date:   Wed, 23 Nov 2022 16:48:59 +0200
+Message-Id: <20221123144901.40493-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221123144901.40493-1-andriy.shevchenko@linux.intel.com>
+References: <20221123144901.40493-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,77 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the existing users, and definitely will be new ones, want to
-count existing nodes in the list. Provide a generic API for that by
-moving code from i915 to list.h.
+The list API now provides the list_count() to help with counting
+existing nodes in the list. Utilise it.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Jani Nikula <jani.nikula@intel.com>
 ---
-v4: fixed prototype when converting to static inline
-v3: added tag (Jani), changed to be static inline (Mike)
-v2: dropped the duplicate code in i915 (LKP)
- drivers/gpu/drm/i915/gt/intel_engine_cs.c | 13 +------------
- include/linux/list.h                      | 15 +++++++++++++++
- 2 files changed, 16 insertions(+), 12 deletions(-)
+v4: no change
+v3: fixed typo in the commit message (Fabio)
+v2: no change
+ drivers/usb/gadget/legacy/hid.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-index c33e0d72d670..b96c8217743c 100644
---- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-+++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
-@@ -2094,17 +2094,6 @@ static void print_request_ring(struct drm_printer *m, struct i915_request *rq)
- 	}
- }
- 
--static unsigned long list_count(struct list_head *list)
--{
--	struct list_head *pos;
--	unsigned long count = 0;
--
--	list_for_each(pos, list)
--		count++;
--
--	return count;
--}
--
- static unsigned long read_ul(void *p, size_t x)
+diff --git a/drivers/usb/gadget/legacy/hid.c b/drivers/usb/gadget/legacy/hid.c
+index 1187ee4f316a..6196c3456e0b 100644
+--- a/drivers/usb/gadget/legacy/hid.c
++++ b/drivers/usb/gadget/legacy/hid.c
+@@ -133,14 +133,11 @@ static struct usb_configuration config_driver = {
+ static int hid_bind(struct usb_composite_dev *cdev)
  {
- 	return *(unsigned long *)(p + x);
-@@ -2279,7 +2268,7 @@ void intel_engine_dump(struct intel_engine_cs *engine,
- 	spin_lock_irqsave(&engine->sched_engine->lock, flags);
- 	engine_dump_active_requests(engine, m);
+ 	struct usb_gadget *gadget = cdev->gadget;
+-	struct list_head *tmp;
+ 	struct hidg_func_node *n = NULL, *m, *iter_n;
+ 	struct f_hid_opts *hid_opts;
+-	int status, funcs = 0;
+-
+-	list_for_each(tmp, &hidg_func_list)
+-		funcs++;
++	int status, funcs;
  
--	drm_printf(m, "\tOn hold?: %lu\n",
-+	drm_printf(m, "\tOn hold?: %zu\n",
- 		   list_count(&engine->sched_engine->hold));
- 	spin_unlock_irqrestore(&engine->sched_engine->lock, flags);
++	funcs = list_count(&hidg_func_list);
+ 	if (!funcs)
+ 		return -ENODEV;
  
-diff --git a/include/linux/list.h b/include/linux/list.h
-index 61762054b4be..632a298c7018 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -655,6 +655,21 @@ static inline void list_splice_tail_init(struct list_head *list,
- 	     !list_is_head(pos, (head)); \
- 	     pos = n, n = pos->prev)
- 
-+/**
-+ * list_count - count nodes in the list
-+ * @head:	the head for your list.
-+ */
-+static inline size_t list_count(struct list_head *head)
-+{
-+	struct list_head *pos;
-+	size_t count = 0;
-+
-+	list_for_each(pos, head)
-+		count++;
-+
-+	return count;
-+}
-+
- /**
-  * list_entry_is_head - test if the entry points to the head of the list
-  * @pos:	the type * to cursor
 -- 
 2.35.1
 
