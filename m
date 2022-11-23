@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC286636679
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F6F63667C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238747AbiKWRDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
+        id S237454AbiKWRFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238417AbiKWRDr (ORCPT
+        with ESMTP id S236452AbiKWRFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:03:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8726B11C20
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:03:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E259B821D1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84193C433B5;
-        Wed, 23 Nov 2022 17:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669223019;
-        bh=m9XRdTo1RKmcs2mxaIv6FBSHv+6lgqotVqiNHoXrWdc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KIsPk3EyOIxwWCYLSnt73pV3xqGkyYI625biqcGf6DZOEwcTFpFfPyetoe4qgcmD0
-         9B/nQKKjGeOJznrCyFEEO1diQUnxBXnB1OS6/fbbMC/f2cbaKCEMACyE0zoK8+mYM0
-         XcAVCDy9AP+95u/VmUv7e9UOtIlbvf+lsM1MqifC9asQqh36Bv2oEQstSSVEA3Z1G0
-         NqWF28lvWXIWqsmuGepb4eM5KYVoRaDd8iFOwPKPYOCW3rWm7zxwikrcM5o1uVt5Kk
-         V4K7KnlBJ+4e8mcPyqzJPxAZzmnpbtrI1trv1tOMUNdDliSVXHqCoY1aC08XKiGU7F
-         voULg1tMcGajA==
-Date:   Wed, 23 Nov 2022 09:03:37 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: objtool warning for next-20221118
-Message-ID: <20221123170337.keacggyvn4ykbtsw@treble>
-References: <20221121040736.GA3738360@paulmck-ThinkPad-P17-Gen-1>
- <Y3thrQxfcvZSXFlr@hirez.programming.kicks-ass.net>
- <20221121145215.GF4001@paulmck-ThinkPad-P17-Gen-1>
- <20221122051605.4hcbslwxez2trdvt@treble>
- <Y3yJxQJ9DwxTx7km@hirez.programming.kicks-ass.net>
- <20221123012350.kelmmadh65lyswqz@treble>
- <Y33gAiFP2IpVdxJu@hirez.programming.kicks-ass.net>
- <2255c45f-d8ba-3f32-9d99-737ad3040dd7@citrix.com>
+        Wed, 23 Nov 2022 12:05:09 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DFC6868D;
+        Wed, 23 Nov 2022 09:05:08 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id f3so17291221pgc.2;
+        Wed, 23 Nov 2022 09:05:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EztbpzZ3Kt/PihSs3M5nNP63NaXEehzBdLCvtUKvG5E=;
+        b=RKa7MkTVo23uF7O9o9uVprUaLAkBBOnLupy8+9eq20WsELWHC3gn7EWXE5QZZKHWgE
+         W5gpisnVSt2PfdQ7o92wW2ZgQOV2rO1+3Vp37Ti4G1tz2xNLFT7FdKUezFaDTEydRocP
+         6J6urHkFaCS43MXSYtQP6FWwUqNcuGr90JoGwco/EBCVJCXNfQi0jRRzoEeIzgbNgwQ+
+         fiL7/oB351BuHm4WO7aOCpXQ88TnjwPch218oKonZo8m81RUIAsKhRr4oThK/j4x/Pfd
+         v+z6sXCqjjMEyf55xjUOAgWso7nGWdw00Lk/NqavHQsNO6YNwSU5UbZKd6YcuEoisdD1
+         vX7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EztbpzZ3Kt/PihSs3M5nNP63NaXEehzBdLCvtUKvG5E=;
+        b=iPTvwqhL98lPsVbMsa9xUKuC5JbhaQKY+JfgwoX89VE4mmSmzrkTtDJBzt1AHmGEl2
+         59EbU9Zq/UPJjghGeihzqLd6SygfTGE6h8eI1xqIeFCJqLnuaj+C/wn6KonyJTMGj7/v
+         A5jJzEtU/NoxuJh0AjIx+7+eJ7MpMKqH0szkcmp1wffL4E1vvC9oVwn30Hj0lckEcI2k
+         uCo8RRiI789DQRY6qWeCFqfgWLmyfQi+7Guae2detdsw1C99O2WF2YHd8kFROOBWxUkb
+         kYNHgV5xOBVPEloqaS5flJ22VhF3rC+OAtS5P80mPz1Xnz56v7i5CBT+JhUKhUZEcere
+         1zXw==
+X-Gm-Message-State: ANoB5pnjVH2WeOdfQdiRRBmy0OmC11J/iuOt6qTDp/RMupfN/YnWuxbm
+        qO2qakS3L9Nej5f3AbSqw0I=
+X-Google-Smtp-Source: AA0mqf5w0WRAp1P0Br3o1b8NnntWzk1RV7xP89lexxIhdmhmFM0mnvmmoPBFNvQkNB/JYx4CfnIbLg==
+X-Received: by 2002:a63:ec10:0:b0:477:b359:f03c with SMTP id j16-20020a63ec10000000b00477b359f03cmr5533123pgh.32.1669223107325;
+        Wed, 23 Nov 2022 09:05:07 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 124-20020a620482000000b0057294f480casm13327967pfe.97.2022.11.23.09.05.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 09:05:06 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 23 Nov 2022 07:05:05 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "haifeng.xu" <haifeng.xu@shopee.com>
+Cc:     longman@redhat.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
+Message-ID: <Y35Swdpq+rJe+Tu3@slm.duckdns.org>
+References: <20221123082157.71326-1-haifeng.xu@shopee.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2255c45f-d8ba-3f32-9d99-737ad3040dd7@citrix.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123082157.71326-1-haifeng.xu@shopee.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:52:09AM +0000, Andrew Cooper wrote:
-> > Well, if you return from arch_cpu_idle_dead() you're back in the idle
-> > loop -- exactly where you would be if you were to bootstrap the whole
-> > CPU -- provided you have it remember the whole state (easier with a
-> > vCPU).
-
-play_dead() really needs sane semantics.  Not only does it introduce a
-surprise to the offlining code in do_idle(), it also skips the entire
-hotplug state machine.  Not sure if that introduces any bugs, but at the
-very least it's subtle and surprising.
-
-> > But maybe I'm missing something, lets add Xen folks on.
+On Wed, Nov 23, 2022 at 08:21:57AM +0000, haifeng.xu wrote:
+> When change the 'cpuset.mems' under some cgroup, system will hung
+> for a long time. From the dmesg, many processes or theads are
+> stuck in fork/exit. The reason is show as follows.
 > 
-> Calling VCPUOP_down on oneself always succeeds, but all it does is
-> deschedule the vCPU.
+> thread A:
+> cpuset_write_resmask /* takes cpuset_rwsem */
+>   ...
+>     update_tasks_nodemask
+>       mpol_rebind_mm /* waits mmap_lock */
 > 
-> It can be undone at a later point by a different vcpu issuing VCPUOP_up
-> against the previously-downed CPU, at which point the vCPU gets rescheduled.
+> thread B:
+> worker_thread
+>   ...
+>     cpuset_migrate_mm_workfn
+>       do_migrate_pages /* takes mmap_lock */
 > 
-> This is why the VCPUOP_down hypercall returns normally.  All state
-> really is intact.
+> thread C:
+> cgroup_procs_write /* takes cgroup_mutex and cgroup_threadgroup_rwsem */
+>   ...
+>     cpuset_can_attach
+>       percpu_down_write /* waits cpuset_rwsem */
 > 
-> As for what Linux does, this is how xen_pv_cpu_up() currently behaves. 
-> If you want to make Xen behave more everything else, then bug a BUG()
-> after VCPUOP_down, and adjust xen_pv_cpu_up() to skip its initialised
-> check and always use VCPUOP_initialise to bring the vCPU back online.
+> Once update the nodemasks of cpuset, thread A wakes up thread B to
+> migrate mm. But when thread A iterates through all tasks, including
+> child threads and group leader, it has to wait the mmap_lock which
+> has been take by thread B. Unfortunately, thread C wants to migrate
+> tasks into cgroup at this moment, it must wait thread A to release
+> cpuset_rwsem. If thread B spends much time to migrate mm, the
+> fork/exit which acquire cgroup_threadgroup_rwsem also need to
+> wait for a long time.
+> 
+> There is no need to migrate the mm of child threads which is
+> shared with group leader. 
 
-Or we could do what sev_es_play_dead() does and just call start_cpu0()
-after the hypercall returns?
+This is only a problem in cgroup1 and cgroup1 doesn't require the threads of
+a given task to be in the same cgroup. I don't think you can optimize it
+this way.
 
-Though, start_cpu0() seems very suspect, it just uses the stack of the
-idle task of whatever CPU happened to be last brought up via cpu_up().
-Which means we now have two idle tasks sharing the same stack?  How is
-start_cpu0() not broken???
+Thanks.
 
 -- 
-Josh
+tejun
