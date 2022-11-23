@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEF0636A9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27457636AAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237441AbiKWUOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S237939AbiKWUQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235486AbiKWUOC (ORCPT
+        with ESMTP id S235668AbiKWUQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:14:02 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF09BCAB;
-        Wed, 23 Nov 2022 12:14:00 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ha10so8884260ejb.3;
-        Wed, 23 Nov 2022 12:14:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1UyFy5Drye4uBDXMkB6oFaPbJiRKFehIbLKezTRaZmo=;
-        b=YI9BrK5aA2o9y1J1/iG3EG/zL3T4BSwOkjW6ukianRmlbfo5q2KxX4JjrPoB2lGwl9
-         LDJ+tfuSRb5TkXE6GtBss6dczu8GwJW6SL2cGRgt3jCacyMnEkAFGj2MF7pmG/LsPOhD
-         9oQh6Vmr8MEKECg8EkbXP4ruUgzilW04RmyFPp5ZZu6eWQ/DDXG9ocqHvmD8UXfVhoGE
-         FKzf3UPvLfX93hdtFVb7mz50/aAdT1urRA6RVyfMFMbfRSVuhGRt4nldKUIgsbKxE9+G
-         enWGg+o4A1D6GblcUaik6+DZrB83Wos6McYxFqiiyQ9BWVC27qtfZCIGk6R8zQQARuAY
-         CIpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1UyFy5Drye4uBDXMkB6oFaPbJiRKFehIbLKezTRaZmo=;
-        b=bgNlZz0xqKTpCAw8MYaI2G1oMK4b0AFmGJwK6KaiknLnaZ1JNaQumoqzN+ki5LsIso
-         8rpYvH5iseRsZXCxLoQgUpv/+EXfsaa4QQ+3Cgd9kxZLSxVlbkLV8IUtcvO/SBwKUZkM
-         nCyY49qb/Odx3BU5U5txbnWZSg0bLrIIWB65gW/6jXPCmggPUzLWQ+aYTpg4Gy03rDEh
-         yybZ+KkmxXyCPJJlbB5U4j6Ia3cnVVkFTe17C0Ovau59eU/PIzup8qpXo1xUkU/z9AfJ
-         O+31LJipMGy1cnvMxHio9mPpGBNy2kn2PCtNyOcGOvhq8aBXe+FYq7ASAtIK/lthdmmq
-         LvDg==
-X-Gm-Message-State: ANoB5plZHVEmlyM9plw4CAIfbQp0Ul/U1OCvhZFh83lX9YeHcluzEac+
-        xDZideSwyNNwZOk7nQ8QmBBPkRlz8tmKmgARzOk=
-X-Google-Smtp-Source: AA0mqf5F17GGSffbGy3BvG2UOX3tDyNGk+5NF7l+Uw4Yk21/CigF6vqJPyNaUknoNsP+323hIcxGpEu2k2WMxgoPnGA=
-X-Received: by 2002:a17:906:34d0:b0:78d:c16e:dfc9 with SMTP id
- h16-20020a17090634d000b0078dc16edfc9mr25447270ejb.327.1669234438938; Wed, 23
- Nov 2022 12:13:58 -0800 (PST)
+        Wed, 23 Nov 2022 15:16:06 -0500
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52B86A75E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:16:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669234561; bh=q7y8qz7WnRTekbSyTmq303ezVvyMqwg3OkXXsHNN7BQ=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=GDtvZV7W+OCDt2TWV7k9Ies9jiLF5sAhTo2dQYpKrTFntBDC9TW8L1YfxyV5quzYk4EBR3mU1EGlM5ETzOxvmeCq1EvDzmIbC1EFGuShHcQ6C3dg/tv69GUJDdIuYgsdAGHFgPCgjCoNZHZnJnfs8R7hjQuM5C+EBQjlg4GNqWAi9Bl7zUkgXhEI7N06rQZKHlNMOJpX64Rqs94LLNbAiJmI5jPIOvtPsgtOgdDp0EDpxRr6L3wRJzHcEOp3wJXaB3K+/ofzvthIhTnxlCHa/LtmjKcIAVKtflXdKsGRzwoxztPO0VOLyEbhruFwnQhiXKu/rg9xkAPBUPg23WbNrw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669234561; bh=VZyi8Wj2D8QiV81kZCgROgg7rjTIjP32MWKr2XQS7a/=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=YJUPZN7wwN7r/39qNps4G94kI7/t1BOjWbmwV46T9GkjFPgg7EmZsfEYDqnmLxefYNiybW56MUqeW62+KMG79oNTnNPJgAgHmLvTPyT94erc5zMO94unP0Q4GOV80lGYVncha0CsQADvcB2iygUI5GAyojGTlAyVdgNh8ATxbtpYnTO3BkyazQl+DU0s2p8jdPuda3+t3+KSa9BD9vtQOPgf50yzvTl5a9cnVVy50iMdjW0hQo3p8y6SBu27jLAr8Z5pwTcLTyZpFWXeH8K5ZTcmPhZqUcWcIbn8aab94Tzi+ME8apZQ3Oeg06tcrWEqT7WxM2CDZxpqxjJlP9XK+w==
+X-YMail-OSG: bslc1sUVM1n5.uFFiCBfpeIOgovbPH0CNvAkgxMtLLFX6wYF.cS.hL6cI8NzPkj
+ OYfxwMbNEBkFBniMsvZ7POo7yaK04cjFJw8Vm7xPyDVdPTEYMy5tTsbXtgDP731bsBd0Hjx7Ztmn
+ MCC_Ez_u2O58caVyg2sdYEjiPhcDK5Nva_LgUdXtZ38aRJSDXeBzFt2UF9zTZxKcYolJ_nBUl0Kv
+ .hu58bUdZ6O1Lz9cmNeVDC3hX2ESqeXycqibiMiiCUQ0axKQRoHnqbJdqpjRceTULxNkJyMmBfvH
+ S4HNdz0Fbj1zDXvGZ91U9Aa70yPQ9Bq5FGyZYq5HbMPcQwstbtfFjtsbHsTRZ8ObGg84Y37Rtli_
+ BoJO9NF4bEVEXAkwc6kr34HuNTcyJ1RgHoE3yPJTew__MFc11P9RTzNlzrFv08t6RP49GxwND5qB
+ oePxAESgAabCVjQbprhqnk81lc2wQGDTMoAN9HuU7xndWC9tAfYPFwcjgjA8gp5jGr3abnskBit5
+ 1rYsR3PmV9FmTBTBDjctWQZPHyv1sVgLnXIr8nOSsBF_XRqK64w9NKrlc41YDKdmD9rlyqzIgCr9
+ 5shusfT8ZlUVoRbxugY7dn2fj4ZFng77wFMGD7KUQtQi0ehjvQQnNUeyPRs6SWM7K.9OzzBFPbQD
+ YmKp4Xa5qmqH3pKtlvxg1n993J0KgpOS.ZO87xv8d_tFoeNDSZNUGrrJ4jSh5gogCeKteoX5gZuq
+ Az.eQBgfTe.js5PrHkV0ID11YbtiOT3f2QsW0RwmKDzKboS.3TBRUuNtkFnZywiNh1BwAXCohSNg
+ xGZ4vi_O5xtCMgfp3.GSwRQfal6lv7fssBvh8jQr_D0DoMguwwk2V0AoU6bvc0IQpdpnYHDKzjey
+ 2HJYq6NuvvYVgXg9jprrtMLplKpk1isdUhW3m4giI0CVMAkKT0WkQ8YIifzi1Lovae3ZpQPsgnlv
+ w01_C3sCV5_3zVV.AEFP6OkGv1gOvJgVuqUIJi0aKSlwAqDuc1oY9oamJOWgHZGrt5WXSIDC3aRT
+ oQoIYAvi8ff9Py_3XsnJ2rAbbYkJh3rQusfAipdcJIJGsSfZxQT4LHtOMTFGyU8f1599LvlMdZQA
+ TQmDfGMuQOaxNxsnS02kYQPrmqQIx3RhYjFuAWcQ7YpBscfGbgX4PNP7VQErsm074BWmCjKDT.v4
+ J4HbyYZGa4g.sW1R5i97Kuf74a.0IiIgydxKmgUYBbklxkG8i4dSbcJ4F4Jt0ViKpogJwDeUZOgC
+ db06UMl1SDSn2aSOV6WThU9zozh_q6XBJpUCUMK5oR.tL7oL3iRDDhBjjUaCEEBRPTi.Hf6erF.y
+ o.dWBBSKmjKEE.XqLk_TIk9GpLX4EJlgB5jxFMFIS72RgJ1jPRTac8VBDBUVahmoAnXqVqLk6kbj
+ wD_84xVx2HD3dDP7aZVKBeEvgEXeYhpXd2EaOEvHbYlnBFxVsw5YheW7LedQeecJbl2XEHBY12bB
+ zAENIbOYAV_NubifonzUhbUM7knlpg6PuF6v2rokfv3sL4kix88ST4vkD2P6Ts_EufH5girs0YDb
+ QKLd1ko1rTy0HEVNxhldjwmI7akB7wKGL6c006WxKcL9xmzbUOOuHFszto0en.wBpR8_h9xor7QS
+ uiHukMQl9xnddPsPeUwgipZjmariNyncDgLdnHBJ06R4jLKaHMPPmnQPrOllkd5fFoZRIsPMLvmA
+ qJVM_MMF3cZjDOkeTooH3nM4T7CiGFM6eS_uTEas4cuUOCesDYxPLEaiFIxaCeRKgoa1m4d4gQJu
+ BEGkBdgCqcFoO8h_IRTxT7q1hOocfT30E2kybnCn2rT4Z492yrDx.VwwEecPycPMyoQMFqE21prt
+ YmPWdrT5MbVSxGEpDE5ONLlj6u_.ooB7iw6HLSu8UBE7368RK6_LTuQleIedZ5AlRFM1mV_ooIu0
+ HwEcg7vdC8y.aivSYgBcGEm1CFLQy7fga5StFIeTvoZFHn63odi0l_9Qg1IqTGjopq3xAuf.KRPq
+ xDjHbyn3jeVYzYSAa1o3Wa39Y5y4MbAR1CstddiLmOLseso96cv2d0kSaaQ6jA.9oJqWYhxjC8Kf
+ tL4WQrQtqSMzMbDGIQxTGaxrcUQlsg6mTE.0R8o9LRTuHDtFCDZZXAEmVe9kKnMprD7bxMOMLxSA
+ A4r2aYU4RD_tHhMh9WUqfaaMAxWQQ9K2dW0DYD0cyLRCikU0npBnubzTKpoVMB9E1AztjgKr.Hlk
+ yxUZJeQ16wuzBx64nv14PR8hjvSJ.DLgWfJsP8Ap3dx5hOSXHhbsrY9Zj8T.42mav.qHETHrmEoe
+ M91qfcc0GnorvI0fNQnr5OYlemw--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 23 Nov 2022 20:16:01 +0000
+Received: by hermes--production-bf1-5878955b5f-686fw (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1f948ceb8dae6e5827701d3d40d1a9c3;
+          Wed, 23 Nov 2022 20:15:57 +0000 (UTC)
+From:   Casey Schaufler <casey@schaufler-ca.com>
+To:     casey.schaufler@intel.com, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org
+Cc:     casey@schaufler-ca.com, jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Subject: [PATCH v3 0/9] LSM: Three basic syscalls
+Date:   Wed, 23 Nov 2022 12:15:43 -0800
+Message-Id: <20221123201552.7865-1-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
- <20221103155756.687789-4-benjamin.tissoires@redhat.com> <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
- <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com>
-In-Reply-To: <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 23 Nov 2022 12:13:47 -0800
-Message-ID: <CAADnVQ+kE+EJ9LAfwge9ksC0LR8r+ShQNYi5g-MDajufXq8Yxw@mail.gmail.com>
-Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+References: <20221123201552.7865-1-casey.ref@schaufler-ca.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,99 +76,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 6:53 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> Hi Jon,
->
-> On Wed, Nov 23, 2022 at 2:25 PM Jon Hunter <jonathanh@nvidia.com> wrote:
-> >
-> >
-> > On 03/11/2022 15:57, Benjamin Tissoires wrote:
-> > > Declare an entry point that can use fmod_ret BPF programs, and
-> > > also an API to access and change the incoming data.
-> > >
-> > > A simpler implementation would consist in just calling
-> > > hid_bpf_device_event() for any incoming event and let users deal
-> > > with the fact that they will be called for any event of any device.
-> > >
-> > > The goal of HID-BPF is to partially replace drivers, so this situation
-> > > can be problematic because we might have programs which will step on
-> > > each other toes.
-> > >
-> > > For that, we add a new API hid_bpf_attach_prog() that can be called
-> > > from a syscall and we manually deal with a jump table in hid-bpf.
-> > >
-> > > Whenever we add a program to the jump table (in other words, when we
-> > > attach a program to a HID device), we keep the number of time we added
-> > > this program in the jump table so we can release it whenever there are
-> > > no other users.
-> > >
-> > > HID devices have an RCU protected list of available programs in the
-> > > jump table, and those programs are called one after the other thanks
-> > > to bpf_tail_call().
-> > >
-> > > To achieve the detection of users losing their fds on the programs we
-> > > attached, we add 2 tracing facilities on bpf_prog_release() (for when
-> > > a fd is closed) and bpf_free_inode() (for when a pinned program gets
-> > > unpinned).
-> > >
-> > > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >
-> > ...
-> >
-> > > +static int __init hid_bpf_init(void)
-> > > +{
-> > > +     int err;
-> > > +
-> > > +     /* Note: if we exit with an error any time here, we would entirely break HID, which
-> > > +      * is probably not something we want. So we log an error and return success.
-> > > +      *
-> > > +      * This is not a big deal: the syscall allowing to attach a BPF program to a HID device
-> > > +      * will not be available, so nobody will be able to use the functionality.
-> > > +      */
-> > > +
-> > > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &hid_bpf_kfunc_set);
-> > > +     if (err) {
-> > > +             pr_warn("error while setting HID BPF tracing kfuncs: %d", err);
-> > > +             return 0;
-> > > +     }
-> > > +
-> > > +     err = hid_bpf_preload_skel();
-> > > +     if (err) {
-> > > +             pr_warn("error while preloading HID BPF dispatcher: %d", err);
-> > > +             return 0;
-> > > +     }
-> > > +
-> > > +     /* register syscalls after we are sure we can load our preloaded bpf program */
-> > > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &hid_bpf_syscall_kfunc_set);
-> > > +     if (err) {
-> > > +             pr_warn("error while setting HID BPF syscall kfuncs: %d", err);
-> > > +             return 0;
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> >
-> >
-> > We have a kernel test that checks for new warning and error messages on
-> > boot and with this change I am now seeing the following error message on
-> > our Tegra platforms ...
-> >
-> >   WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
-> >
-> > I have a quick look at the code, but I can't say I am familiar with
-> > this. So I wanted to ask if a way to fix this or avoid this? I see the
-> > code returns 0, so one option would be to make this an informational or
-> > debug print.
->
-> I am not in favor of debug in that case, because I suspect it'll hide
-> too much when getting a bug report. Informational could do, yes.
->
-> However, before that, I'd like to dig a little bit more on why it is
-> failing. I thought arm64 now has support of tracing bpf programs, so I
-> would not expect this to fail.
+Add three system calls for the Linux Security Module ABI.
 
-Unfortunately the patches to add support for such tracing bpf progs got stuck.
-Florent/Mark can probably share the latest status.
+lsm_get_self_attr() provides the security module specific attributes
+that have previously been visible in the /proc/self/attr directory.
+For each security module that uses the specified attribute on the
+current process the system call will return an LSM identifier and
+the value of the attribute. The LSM and attribute identifier values
+are defined in include/uapi/linux/lsm.h
+
+lsm_module_list() provides the LSM identifiers, in order, of the
+security modules that are active on the system. This has been
+available in the securityfs file /sys/kernel/security/lsm.
+
+lsm_set_self_attr() changes the specified LSM attribute. Only one
+attribute can be changed at a time, and then only if the specified
+security module allows the change.
+
+Patch 0001 changes the LSM registration from passing the name
+of the module to passing a lsm_id structure that contains the
+name of the module and adds an LSM identifier number to the lsm_id
+structure.
+Patch 0002 adds an attribute identifier to the lsm_id.
+Patch 0003 adds the registered lsm_ids to a table.
+Patch 0004 changes security_[gs]etprocattr() to use LSM IDs instead
+of LSM names.
+Patch 0005 implements lsm_get_self_attr().
+Patch 0006 implements lsm_module_list().
+Patch 0007 implements lsm_set_self_attr().
+Patch 0008 wires up the syscalls.
+Patch 0009 implements selftests for the three new syscalls.
+
+https://github.com/cschaufler/lsm-stacking.git#lsm-syscall-6.1-rc5-v3
+
+v3: Add lsm_set_self_attr().
+    Rename lsm_self_attr() to lsm_get_self_attr().
+    Provide the values only for a specifed attribute in
+    lsm_get_self_attr().
+    Add selftests for the three new syscalls.
+    Correct some parameter checking.
+
+v2: Use user-interface safe data types.
+    Remove "reserved" LSM ID values.
+    Improve kerneldoc comments
+    Include copyright dates
+    Use more descriptive name for LSM counter
+    Add documentation
+    Correct wireup errors
+
+Casey Schaufler (9):
+  LSM: Identify modules by more than name
+  LSM: Identify the process attributes for each module
+  LSM: Maintain a table of LSM attribute data
+  proc: Use lsmids instead of lsm names for attrs
+  LSM: lsm_get_self_attr syscall for LSM self attributes
+  LSM: Create lsm_module_list system call
+  LSM: lsm_set_self_attr syscall for LSM self attributes
+  LSM: wireup Linux Security Module syscalls
+  LSM: selftests for Linux Security Module infrastructure syscalls
+
+ Documentation/userspace-api/index.rst         |   1 +
+ Documentation/userspace-api/lsm.rst           |  70 ++++
+ arch/alpha/kernel/syscalls/syscall.tbl        |   3 +
+ arch/arm/tools/syscall.tbl                    |   3 +
+ arch/arm64/include/asm/unistd32.h             |   6 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   3 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   3 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   3 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   3 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   3 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   3 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   3 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   3 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   3 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   3 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   3 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   3 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   3 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   3 +
+ fs/proc/base.c                                |  29 +-
+ fs/proc/internal.h                            |   2 +-
+ include/linux/lsm_hooks.h                     |  18 +-
+ include/linux/security.h                      |  29 +-
+ include/linux/syscalls.h                      |   6 +
+ include/uapi/asm-generic/unistd.h             |  11 +-
+ include/uapi/linux/lsm.h                      |  65 ++++
+ kernel/sys_ni.c                               |   5 +
+ security/Makefile                             |   1 +
+ security/apparmor/lsm.c                       |   9 +-
+ security/bpf/hooks.c                          |  13 +-
+ security/commoncap.c                          |   8 +-
+ security/landlock/cred.c                      |   2 +-
+ security/landlock/fs.c                        |   2 +-
+ security/landlock/ptrace.c                    |   2 +-
+ security/landlock/setup.c                     |   6 +
+ security/landlock/setup.h                     |   1 +
+ security/loadpin/loadpin.c                    |   9 +-
+ security/lockdown/lockdown.c                  |   8 +-
+ security/lsm_syscalls.c                       | 264 ++++++++++++++
+ security/safesetid/lsm.c                      |   9 +-
+ security/security.c                           |  37 +-
+ security/selinux/hooks.c                      |  11 +-
+ security/smack/smack_lsm.c                    |   9 +-
+ security/tomoyo/tomoyo.c                      |   9 +-
+ security/yama/yama_lsm.c                      |   8 +-
+ .../arch/mips/entry/syscalls/syscall_n64.tbl  |   3 +
+ .../arch/powerpc/entry/syscalls/syscall.tbl   |   3 +
+ .../perf/arch/s390/entry/syscalls/syscall.tbl |   3 +
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   3 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/lsm/Makefile          |  13 +
+ tools/testing/selftests/lsm/config            |   2 +
+ .../selftests/lsm/lsm_get_self_attr_test.c    | 268 ++++++++++++++
+ .../selftests/lsm/lsm_module_list_test.c      | 149 ++++++++
+ .../selftests/lsm/lsm_set_self_attr_test.c    | 328 ++++++++++++++++++
+ 55 files changed, 1424 insertions(+), 47 deletions(-)
+ create mode 100644 Documentation/userspace-api/lsm.rst
+ create mode 100644 include/uapi/linux/lsm.h
+ create mode 100644 security/lsm_syscalls.c
+ create mode 100644 tools/testing/selftests/lsm/Makefile
+ create mode 100644 tools/testing/selftests/lsm/config
+ create mode 100644 tools/testing/selftests/lsm/lsm_get_self_attr_test.c
+ create mode 100644 tools/testing/selftests/lsm/lsm_module_list_test.c
+ create mode 100644 tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+
+-- 
+2.38.1
+
