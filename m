@@ -2,217 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3FB636194
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 208B9636195
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:23:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238013AbiKWOXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S238368AbiKWOXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238807AbiKWOWZ (ORCPT
+        with ESMTP id S239016AbiKWOXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:22:25 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2B07AF5F;
-        Wed, 23 Nov 2022 06:21:51 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHNbD276FzHw6Z;
-        Wed, 23 Nov 2022 22:21:12 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 22:21:49 +0800
-Received: from [10.174.178.220] (10.174.178.220) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 22:21:48 +0800
-Message-ID: <3a2ba8f0-3a86-36cf-cafd-969298594830@huawei.com>
-Date:   Wed, 23 Nov 2022 22:21:47 +0800
+        Wed, 23 Nov 2022 09:23:03 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0CC1004F;
+        Wed, 23 Nov 2022 06:22:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669213372; x=1700749372;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ixa95dAdHlMX4D4FM87G4YI/hP0ckAp6HL/glipwILE=;
+  b=eNRsZPCbQXuEedx4/V92H0L/U0ruZ9QD2nUbIe153JbVvL8h/1rGDEad
+   IgFoDeSG013y+Rgk0CvjMpoGdfrXbG1VUFQGGnahcL+7dZlf4r2R3NWMy
+   SlMZ/8OYBOipQbTBYHvs91Tc7HijXTedgDhy3mVdeKSKIrY8OMn7yNeo/
+   lq7qnnZrDcI3sn7RcCQIiLjTbj/YfTRhszIUIMBLWjTFRWoUlzfFmzLN6
+   yiDTHZX/l9JyNVXI7mmVVBMRKkwOA8SIRruLGwxcvjgO6iVLFVz8NNzUn
+   LsF/OJ/9fgw0Ow9a5yEJiRx6ccbO4DcCqKzeGE9iVE6EaFb6FJzLQLid1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="293782812"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="293782812"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 06:22:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="710601733"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="710601733"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Nov 2022 06:22:49 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2ANEMlcc012150;
+        Wed, 23 Nov 2022 14:22:47 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next v3 7/7] net: lan966x: Add support for XDP_REDIRECT
+Date:   Wed, 23 Nov 2022 15:22:41 +0100
+Message-Id: <20221123142241.480973-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221122213724.exqdhdxujvgtojxq@soft-dev3-1>
+References: <20221121212850.3212649-1-horatiu.vultur@microchip.com> <20221121212850.3212649-8-horatiu.vultur@microchip.com> <20221122120430.419770-1-alexandr.lobakin@intel.com> <20221122213724.exqdhdxujvgtojxq@soft-dev3-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v6] scsi:iscsi: Fix multiple iscsi session unbind event
- sent to userspace
-Content-Language: en-US
-To:     Mike Christie <michael.christie@oracle.com>,
-        Wenchao Hao <haowenchao22@gmail.com>
-CC:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linfeilong@huawei.com>
-References: <20221108014414.3510940-1-haowenchao@huawei.com>
- <ad54a5dc-b18f-e0e6-4391-1214e5729562@oracle.com>
- <89692b2b-90f7-e8e8-fa77-f14dbe996b72@huawei.com>
- <418c7f6f-0bc3-45bb-2abf-e866df6f4b62@oracle.com>
- <CAOptpSO6=sUPUwgj1og8088djiNA=Bw9um0p024L=0Gb=-ja5w@mail.gmail.com>
- <856ccad2-19a4-32b4-b41f-5a230a55ee30@oracle.com>
-From:   Wenchao Hao <haowenchao@huawei.com>
-In-Reply-To: <856ccad2-19a4-32b4-b41f-5a230a55ee30@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggpeml500005.china.huawei.com (7.185.36.59) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/23 2:15, Mike Christie wrote:
-> On 11/22/22 11:29 AM, Wenchao Hao wrote:
->> On Wed, Nov 23, 2022 at 1:04 AM Mike Christie
->> <michael.christie@oracle.com> wrote:
->>>
->>> On 11/21/22 8:17 AM, Wenchao Hao wrote:
->>>> And the function looks like following after change:
->>>>
->>>> static void __iscsi_unbind_session(struct work_struct *work)
->>>> {
->>>>       struct iscsi_cls_session *session =
->>>>                       container_of(work, struct iscsi_cls_session,
->>>>                                    unbind_work);
->>>>       struct Scsi_Host *shost = iscsi_session_to_shost(session);
->>>>       struct iscsi_cls_host *ihost = shost->shost_data;
->>>>       unsigned long flags;
->>>>       unsigned int target_id;
->>>>
->>>>       ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
->>>>
->>>>       /* Prevent new scans and make sure scanning is not in progress */
->>>>       mutex_lock(&ihost->mutex);
->>>>       spin_lock_irqsave(&session->lock, flags);
->>>>       if (session->target_state != ISCSI_SESSION_TARGET_SCANNED) {
->>>
->>> What was the reason for not checking for ALLOCATED and freeing the ida
->>> in that case?
->>>
->>
->> target_state would be in "ALLOCATED" state if iscsid died after add
->> session successfully.
->> When iscsid restarted, if the session's target_state is "ALLOCATED",
->> it should scan
->> the session and the target_state would switch to "SCANNED".
->>
->> So I think we would not call in __iscsi_unbind_session() with
->> session's target_state
->> is ALLOCATED.
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Tue, 22 Nov 2022 22:37:24 +0100
+
+> The 11/22/2022 13:04, Alexander Lobakin wrote:
+> > 
+> > From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > Date: Mon, 21 Nov 2022 22:28:50 +0100
+> > 
+> > > Extend lan966x XDP support with the action XDP_REDIRECT. This is similar
+> > > with the XDP_TX, so a lot of functionality can be reused.
+> > >
+> > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > > ---
+> > >  .../ethernet/microchip/lan966x/lan966x_fdma.c | 83 +++++++++++++++----
+> > >  .../ethernet/microchip/lan966x/lan966x_main.c |  1 +
+> > >  .../ethernet/microchip/lan966x/lan966x_main.h | 10 ++-
+> > >  .../ethernet/microchip/lan966x/lan966x_xdp.c  | 31 ++++++-
+> > >  4 files changed, 109 insertions(+), 16 deletions(-)
+
+[...]
+
+> > I suggest carefully inspecting this struct with pahole (or by just
+> > printkaying its layout/sizes/offsets at runtime) and see if there's
+> > any holes and how it could be optimized.
+> > Also, it's just my personal preference, but it's not that unpopular:
+> > I don't trust bools inside structures as they may surprise with
+> > their sizes or alignment depending on the architercture. Considering
+> > all the blah I wrote, I'd define it as:
+> > 
+> > struct lan966x_tx_dcb_buf {
+> >         dma_addr_t dma_addr;            // can be 8 bytes on 32-bit plat
+> >         struct net_device *dev;         // ensure natural alignment
+> >         struct sk_buff *skb;
+> >         struct xdp_frame *xdpf;
+> >         u32 len;
+> >         u32 xdp_ndo:1;                  // put all your booleans here in
+> >         u32 used:1;                     // one u32
+> >         ...
+> > };
 > 
-> Makes sense for the normal case.
+> Thanks for the suggestion. I make sure not that this struct will not
+> have any holes.
+> Can it be a rule of thumb, that every time when a new member is added to
+> a struct, to make sure that it doesn't introduce any holes?
+
+Yass, it's always good to do a quick check each time you're making
+changes in a structure. This can prevent not only from excessive
+memory usage, but most important from performance hits when some
+hot field gets pushed out of the cacheline the field was in
+previously.
+Minimizing holes and using `u32 :1` vs `bool` for flags is more of
+my personal preference, but it's kinda backed by experience, so I
+treat it as something worth sharing :D
+
 > 
-> The only issue is when __iscsi_unbind_session is called via
-> iscsi_remove_session for the cases where userspace didn't do
-> the  UNBIND event. Some tools don't do unbind or open-iscsi
-> sometimes doesn't if the session is down. We will leak the ida,
-> so you need some code to handle that.
+> > 
+> > BTW, we usually do union { skb, xdpf } since they're mutually
+> > exclusive. And to distinguish between XDP and regular Tx you can use
+> > one more bit/bool. This can also come handy later when you add XSk
+> > support (you will be adding it, right? Please :P).
 > 
-> .
+> I think I will take this battle at later point when I will add XSK :)
+> After I finish with this patch series, I will need to focus on some VCAP
+> support for lan966x.
 
-Sorry, I did not take this condition in consideration. I would change
-the __iscsi_unbind_session as following:
+Sure!
 
-1. do not check if target_id is ISCSI_MAX_TARGET
-2. define remove_target and default set to true, if target_state is ALLOCATED, then set
-   it to false and continue the unbind flow; else if target_state not SCANNED, just return.
-3. set target_state to ISCSI_SESSION_TARGET_UNBOUND after is sent to avoid potential race condition.
+> And maybe after that I will be able to add XSK. Because I need to look
+> more at this XSK topic as I have looked too much on it before but I heard
+> a lot of great things about it :)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index cd3db9684e52..9264c75ad9ea 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1960,31 +1960,40 @@ static void __iscsi_unbind_session(struct work_struct *work)
-        struct iscsi_cls_host *ihost = shost->shost_data;
-        unsigned long flags;
-        unsigned int target_id;
-+       bool remove_target = true;
- 
-        ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
- 
-        /* Prevent new scans and make sure scanning is not in progress */
-        mutex_lock(&ihost->mutex);
-        spin_lock_irqsave(&session->lock, flags);
--       if (session->target_id == ISCSI_MAX_TARGET) {
-+       if (session->target_state == ISCSI_SESSION_TARGET_ALLOCATED) {
-+               remove_target = false;
-+       } else if (session->target_state != ISCSI_SESSION_TARGET_SCANNED) {
-                spin_unlock_irqrestore(&session->lock, flags);
-                mutex_unlock(&ihost->mutex);
--               goto unbind_session_exit;
-+               ISCSI_DBG_TRANS_SESSION(session, "Skipping target unbinding: Session is unbound/unbinding.\n");
-+               return;
-        }
- 
-+       session->target_state = ISCSI_SESSION_TARGET_UNBINDING;
-        target_id = session->target_id;
-        session->target_id = ISCSI_MAX_TARGET;
-        spin_unlock_irqrestore(&session->lock, flags);
-        mutex_unlock(&ihost->mutex);
- 
--       scsi_remove_target(&session->dev);
-+       if (remove_target)
-+               scsi_remove_target(&session->dev);
- 
-        if (session->ida_used)
-                ida_free(&iscsi_sess_ida, target_id);
- 
--unbind_session_exit:
-        iscsi_session_event(session, ISCSI_KEVENT_UNBIND_SESSION);
-        ISCSI_DBG_TRANS_SESSION(session, "Completed target removal\n");
-+
-+       spin_lock_irqsave(&session->lock, flags);
-+       session->target_state = ISCSI_SESSION_TARGET_UNBOUND;
-+       spin_unlock_irqrestore(&session->lock, flags);
- }
+Depends on the real usecases of the hardware. But always good to see
+more drivers supporting it :>
 
-And the function would be:
+> 
+> > 
+> > >       int len;
+> > >       dma_addr_t dma_addr;
+> > >       bool used;
+> > 
+> > [...]
+> > 
+> > > --
+> > > 2.38.0
+> > 
+> > Thanks,
+> > Olek
+> 
+> -- 
+> /Horatiu
 
-static void __iscsi_unbind_session(struct work_struct *work)
-{
-	struct iscsi_cls_session *session =
-			container_of(work, struct iscsi_cls_session,
-				     unbind_work);
-	struct Scsi_Host *shost = iscsi_session_to_shost(session);
-	struct iscsi_cls_host *ihost = shost->shost_data;
-	unsigned long flags;
-	unsigned int target_id;
-	bool remove_target = true;
-
-	ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
-
-	/* Prevent new scans and make sure scanning is not in progress */
-	mutex_lock(&ihost->mutex);
-	spin_lock_irqsave(&session->lock, flags);
-	if (session->target_state == ISCSI_SESSION_TARGET_ALLOCATED) {
-		remove_target = false;
-	} else if (session->target_state != ISCSI_SESSION_TARGET_SCANNED) {
-		spin_unlock_irqrestore(&session->lock, flags);
-		mutex_unlock(&ihost->mutex);
-		ISCSI_DBG_TRANS_SESSION(session, "Skipping target unbinding: Session is unbound/unbinding.\n");
-		return;
-	}
-
-	session->target_state = ISCSI_SESSION_TARGET_UNBINDING;
-	target_id = session->target_id;
-	session->target_id = ISCSI_MAX_TARGET;
-	spin_unlock_irqrestore(&session->lock, flags);
-	mutex_unlock(&ihost->mutex);
-
-	if (remove_target)
-		scsi_remove_target(&session->dev);
-
-	if (session->ida_used)
-		ida_free(&iscsi_sess_ida, target_id);
-
-	iscsi_session_event(session, ISCSI_KEVENT_UNBIND_SESSION);
-	ISCSI_DBG_TRANS_SESSION(session, "Completed target removal\n");
-
-	spin_lock_irqsave(&session->lock, flags);
-	session->target_state = ISCSI_SESSION_TARGET_UNBOUND;
-	spin_unlock_irqrestore(&session->lock, flags);
-}
-
+Thanks,
+Olek
