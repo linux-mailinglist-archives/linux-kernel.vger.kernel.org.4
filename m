@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AB56356FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10CC63572C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbiKWJh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S237974AbiKWJim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238002AbiKWJhD (ORCPT
+        with ESMTP id S237865AbiKWJiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:37:03 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882D210AD04
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:34:19 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id s8so27316179lfc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:34:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u8s2q4f5w/4IPeNoebI+nh7g4r0oLg4pQUjqS5WFRYk=;
-        b=FLRmBljcZFVd3iH3NW/n9fV3NPM5BxVX81sqR6LZ5RbeAjwAUUACbw7bpAZTUCkHbg
-         UbLObKsVx6nYalwPse7wmcQC25HSwU38xJ//YSSuY3Vksu8EV5v5XbGXI6+cbOvQDyYx
-         my4KGi161b0Pitcm7UZF0+yxoQ5eKEEisxE1HLR3Q47rHpGxWxJChp7fnH49Ey6Zrdyc
-         Bh5td7XP54jj5mPNPbrbsqYpl0XmY5dugMm9p2q31pwT4wIbIGUCTMIvqfz7l4WUTJ8v
-         ptI8vjj1FYlKgmvDZYPmWU+2/54FuurMfxTrl/VXOSfvxMVdeWLqu5m/SzeDXPJ+uy/R
-         jQKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u8s2q4f5w/4IPeNoebI+nh7g4r0oLg4pQUjqS5WFRYk=;
-        b=8EhivpKApH2GEhaMtK8NCBRRgUVdYTnWau0rjCKSsONsDNgvTVy8AaRoKffX2xTBPb
-         tp6qiO1GddddEyAUFKfgPaTpRl4UkBNWrSEc+julySWkKeP/q6reO7fz8Xsf5AvwsE0t
-         PHhjicXjpHFyzbeTp8v2adlE6XaL970FewahbG93pa8TrJJ19GtdV+dcfpyxoArL+9MF
-         7Qyxst6jXJYJ3+EBaxpXQFGooY55wg9mYxUZ4QDGrg6P3JJ/tjn8QcIZbTzADPGIeOOt
-         ObmNL1XSwjKhc2U6EqhxlL9JWLFsUo9ldDZFUpk0Z6lgx1BGd7AxF2aX29ZbwTz00rlH
-         Z7Pw==
-X-Gm-Message-State: ANoB5pl3RIIA+OsMJa1eYpokfyc+dn8gLAYAUtL3LzBqutZYsyV0SCmp
-        NJ8nycBWx6SFD4LwCDWX8aIl5w==
-X-Google-Smtp-Source: AA0mqf7D378yEUBmE+4xmSMMT7l3z+IL8SiWvdALDT0ayiY7awFjMZCumei8TeFsYJZZ0ZLkVaiH9g==
-X-Received: by 2002:a05:6512:258a:b0:4a2:27f0:46a5 with SMTP id bf10-20020a056512258a00b004a227f046a5mr4360007lfb.611.1669196057899;
-        Wed, 23 Nov 2022 01:34:17 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s5-20020a056512314500b004a1e7216131sm2806605lfi.116.2022.11.23.01.34.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 01:34:17 -0800 (PST)
-Message-ID: <e63e5377-f726-7c04-61d5-9e39ae5c2ad9@linaro.org>
-Date:   Wed, 23 Nov 2022 10:34:16 +0100
+        Wed, 23 Nov 2022 04:38:23 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D7E64570
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:36:06 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AN7bePZ029400;
+        Wed, 23 Nov 2022 03:35:55 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=wHed+5qsoNRfgm5HzbV5rq5eqU2Eoij756sk0MFjYTc=;
+ b=lMrWZLPDNBeOKrD9JKdE87iemvauRqrpbUbZsVfxThc2+2bdU2sVMDkmYSQ1Di9tYQ4i
+ EPFHKea5tGRK9e3yJdv/Q9Z3lgIaR/GTmwFAYjrAimhB5QRbKf5da+UpJzvWswEEFcj7
+ E+ynamyYDaRkR4ja5p4WofhRsY7q1JjTjaYh36nqNdmOdOF0K/Gv3KTHiOuBhXxp2qRG
+ U8l1XCwOD8GQx7AiSHSHW13J/jDjlzALLaByAycm7glZvugxSmeHXo1bdsq/jZoY02Dr
+ demBpFz0dZ8dJXCtGAfaGb5Kj99RjwdROrDiUFxU36WTL91SRqp9dELO0DkVsqsvEQGo jQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3kxwe6vpa5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 03:35:55 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 23 Nov
+ 2022 03:35:47 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.20 via Frontend Transport; Wed, 23 Nov 2022 03:35:47 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 6EE11477;
+        Wed, 23 Nov 2022 09:35:47 +0000 (UTC)
+Date:   Wed, 23 Nov 2022 09:35:47 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+CC:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
+        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] soundwire: bus_type: Avoid lockdep assert in
+ sdw_drv_probe()
+Message-ID: <20221123093547.GC105268@ediswmail.ad.cirrus.com>
+References: <20221121162453.1834170-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 07/14] dt-bindings: clock: Add StarFive JH7110 system
- and always-on clock definitions
-Content-Language: en-US
-To:     Hal Feng <hal.feng@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-References: <20221118010627.70576-1-hal.feng@starfivetech.com>
- <20221118010627.70576-8-hal.feng@starfivetech.com>
- <4d1fbddc-ee8b-1ab3-d1a9-8496bda3f668@linaro.org>
- <1db979d5-1fb6-f3c9-8ce0-e3e2e23e5d14@starfivetech.com>
- <f59e53b0-0915-e8e9-7e49-05ca6a9eac95@linaro.org>
- <c0050210-0b87-3b30-913a-a2b1e757ba15@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c0050210-0b87-3b30-913a-a2b1e757ba15@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221121162453.1834170-1-rf@opensource.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: iGXtesuZiytKFN4IDNvRloRAlC8H0Xi2
+X-Proofpoint-GUID: iGXtesuZiytKFN4IDNvRloRAlC8H0Xi2
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 09:04, Hal Feng wrote:
-
->>>> Filename based / the same as compatible (or bindings filename).
->>>
->>> Should I split this file into two files for "SYSCRG" and "AONCRG", which
->>> maybe named as "starfive-jh7110-sys.h" and "starfive-jh7110-aon.h". Ditto
->>> for the patch 8.
->>
->> Does not have to be, but anyway naming must follow compatible naming, so
->> vendor,soc-device.
+On Mon, Nov 21, 2022 at 04:24:52PM +0000, Richard Fitzgerald wrote:
+> Don't hold sdw_dev_lock while calling the peripheral driver
+> probe() and remove() callbacks.
 > 
-> Can I name it "starfive,jh7110-crg.h"? This file is included in
-> starfive,jh7110-syscrg.yaml and starfive,jh7110-aoncrg.yaml.
+> Holding sdw_dev_lock around the probe() and remove() calls
+> causes a theoretical mutex inversion which lockdep will
+> assert on. The peripheral driver probe will probably register
+> a soundcard, which will take ALSA and ASoC locks. During
+> normal operation a runtime resume suspend can be triggered
+> while these locks are held and will then take sdw_dev_lock.
+> 
+> It's not necessary to hold sdw_dev_lock when calling the
+> probe() and remove(), it is only used to prevent the bus core
+> calling the driver callbacks if there isn't a driver or the
+> driver is removing.
+> 
+> If sdw_dev_lock is held while setting and clearing the
+> 'probed' flag this is sufficient to guarantee the safety of
+> callback functions.
+> 
+> The potential race of a bus event happening while probe() is
+> executing is the same as the existing race of the bus event
+> handler taking the mutex first and processing the event
+> before probe() can run. In both cases the event has already
+> happened before the driver is probed and ready to accept
+> callbacks.
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> ---
 
-Sounds ok.
+Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Best regards,
-Krzysztof
-
+Thanks,
+Charles
